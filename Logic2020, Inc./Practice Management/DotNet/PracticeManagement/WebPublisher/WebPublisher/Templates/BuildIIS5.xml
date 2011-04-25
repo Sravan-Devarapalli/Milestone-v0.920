@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Run">
+
+  <PropertyGroup>
+    <OutputFolder>%Build_Path%</OutputFolder>
+    <InputFolder>%Sources_Path%</InputFolder>
+    <CompilationDebug />
+    <CustomErrorsMode />
+    <ContentEditorsEmail />
+    <AdministratorsEmail />
+    <DeploymentFolder>%Ouput_Path%</DeploymentFolder>
+    <VirtualDirectory>%Virtual_Folder_Name%</VirtualDirectory>
+    <SDCPath>%Sdc_Path%</SDCPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  
+  <Import Project="$(SDCPath)\Microsoft.Sdc.Common.tasks"/>
+
+  <UsingTask TaskName="Microsoft.Sdc.Tasks.Web.WebSite.DeleteVirtualDirectory" AssemblyFile="Microsoft.Sdc.Tasks.dll" />
+  <UsingTask TaskName="Microsoft.Sdc.Tasks.Web.WebSite.CreateVirtualDirectory" AssemblyFile="Microsoft.Sdc.Tasks.dll" />
+
+  <Target Name="Clean">
+    <ItemGroup>
+      <BinFiles Include="bin\*.*" />
+    </ItemGroup>
+    <Delete Files="@(BinFiles)" ContinueOnError="true"/>
+  </Target>
+
+  <Target Name="Compile" DependsOnTargets="Clean">
+    <MSBuild Projects="$(InputFolder)" />
+  </Target>
+
+  <Target Name="Publish">
+    <RemoveDir Directories="$(OutputFolder)\" ContinueOnError="true" />
+    <MSBuild Projects="$(InputFolder)"
+             Targets="ResolveReferences;_CopyWebApplication"
+             Properties="WebProjectOutputDir=$(OutputFolder);OutDir=$(WebProjectOutputDir)\" />
+  </Target>
+
+  <Target Name="Run">
+    <CallTarget Targets="Compile" />
+    <CallTarget Targets="Publish" />
+    <CallTarget Targets="Deploy" />
+  </Target>
+
+  <Target Name="Deploy">
+    <RemoveDir Directories="$(DeploymentFolder)" ContinueOnError="true" />
+    <ItemGroup>
+      <DeploymentFiles Include="$(OutputFolder)\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(DeploymentFiles)"
+          DestinationFolder="$(DeploymentFolder)\%(RecursiveDir)" />
+
+    <WebDirectoryDelete VirtualDirectoryName="$(VirtualDirectory)" ContinueOnError="true" />
+    <WebDirectoryCreate VirtualDirectoryName="$(VirtualDirectory)" VirtualDirectoryPhysicalPath="$(DeploymentFolder)" />
+
+
+  </Target>
+</Project>
