@@ -91,8 +91,9 @@ namespace PraticeManagement
 
                 else
                 {
-                    Cache[OPPORTUNITIES_LIST_KEY] = ServiceCallers.Custom.Opportunity(c => c.OpportunityListAllShort(new OpportunityListContext { ActiveClientsOnly = true }));
-                    return Cache[OPPORTUNITIES_LIST_KEY] as Opportunity[];
+                    var result = ServiceCallers.Custom.Opportunity(c => c.OpportunityListAllShort(new OpportunityListContext { ActiveClientsOnly = true }));
+                    Cache[OPPORTUNITIES_LIST_KEY] = result;
+                    return result;
                 }
 
             }
@@ -149,7 +150,9 @@ namespace PraticeManagement
                 Cache.Remove(OPPORTUNITY_KEY);
                 Cache.Remove(OPPORTUNITIES_LIST_KEY);
             }
-            OpportunityDataSouce();
+
+            BindOpportunitiesData();
+
             if (!IsPostBack)
             {
                 DataHelper.FillClientList(ddlClient, string.Empty);
@@ -162,11 +165,14 @@ namespace PraticeManagement
                 {
                     lvOpportunities.SelectedIndex = SelectedIndex.Value;
                 }
-                BindData();
+
+                LoadOpportunityDetails();
+
                 activityLog.OpportunityId = OpportunityId;
             }
 
             mlConfirmation.ClearMessage();
+
             // Security
             InitSecurity();
 
@@ -221,7 +227,7 @@ namespace PraticeManagement
             }
             lblTotalOpportunities.Text = lvOpportunities.Items.Count.ToString();
             lblCurrentOpportunity.Text = Convert.ToString(lvOpportunities.SelectedIndex + 1);
-
+            lvOpportunities.DataBind();
             activityLog.OpportunityId = OpportunityId;
             activityLog.Update();
         }
@@ -239,7 +245,7 @@ namespace PraticeManagement
             lvOpportunities.SelectedIndex = lvOpportunities.SelectedIndex - 1;
 
             if (IsPostBack && Page.IsValid)
-                BindData();
+                LoadOpportunityDetails();
         }
 
         public void imgBtnNext_OnClick(object sender, EventArgs e)
@@ -251,7 +257,7 @@ namespace PraticeManagement
             lvOpportunities.SelectedIndex = lvOpportunities.SelectedIndex + 1;
 
             if (IsPostBack && Page.IsValid)
-                BindData();
+                LoadOpportunityDetails();
         }
 
         public void lvOpportunities_SelectedIndexChanging(object sender, ListViewSelectEventArgs e)
@@ -264,8 +270,7 @@ namespace PraticeManagement
 
 
             if (IsPostBack && Page.IsValid)
-                BindData();
-
+                LoadOpportunityDetails();
         }
 
         public void imgBtnFirst_OnClick(object sender, EventArgs e)
@@ -275,11 +280,11 @@ namespace PraticeManagement
                 return;
             }
 
-            if(lvOpportunities.Items.Count>0)
-            lvOpportunities.SelectedIndex = 0;
+            if (lvOpportunities.Items.Count > 0)
+                lvOpportunities.SelectedIndex = 0;
 
             if (IsPostBack && Page.IsValid)
-                BindData();
+                LoadOpportunityDetails();
         }
 
         public void imgBtnLast_OnClick(object sender, EventArgs e)
@@ -290,13 +295,13 @@ namespace PraticeManagement
             }
 
             if (lvOpportunities.Items.Count > 0)
-                lvOpportunities.SelectedIndex = lvOpportunities.Items.Count-1;
+                lvOpportunities.SelectedIndex = lvOpportunities.Items.Count - 1;
 
             if (IsPostBack && Page.IsValid)
-                BindData();
+                LoadOpportunityDetails();
         }
 
-        public void BindData()
+        public void LoadOpportunityDetails()
         {
             lvOpportunities.DataBind();
             hdnOpportunityId.Value = lvOpportunities.SelectedValue.ToString();
@@ -313,7 +318,7 @@ namespace PraticeManagement
 
         #endregion
 
-        private void OpportunityDataSouce()
+        private void BindOpportunitiesData()
         {
             lvOpportunities.DataSource = OpportunitiesList;
         }
@@ -322,7 +327,7 @@ namespace PraticeManagement
         {
             var notes = ServiceCallers.Custom.Milestone(c => c.NoteListByTargetId(Convert.ToInt32(OpportunityId), 4));
             lvNotes.DataSource = notes;
-            lvNotes.DataBind();            
+            lvNotes.DataBind();
         }
 
         private void InitSecurity()
@@ -461,14 +466,34 @@ namespace PraticeManagement
                 ClearDirty();
 
                 if (IsPostBack && Page.IsValid)
-                    BindData();
+                {
+                    LoadOpportunityDetails();
+                }
             }
 
             if (Page.IsValid)
             {
-                OpportunityDataSouce();
+                BindOpportunitiesData();
                 lvOpportunities.DataBind();
+                lvOpportunities.SelectedIndex = GetSelectedIndex(OpportunityId.Value);
             }
+
+
+        }
+
+        private int GetSelectedIndex(int OpportunityId)
+        {
+            foreach (ListViewDataItem item in lvOpportunities.Items)
+            {
+                Label lblOpportunityName = item.FindControl("lblOpportunityName") as Label;
+                
+                if (lblOpportunityName.Attributes["OpportunityID"] == OpportunityId.ToString())
+                {
+                    return item.DisplayIndex;
+                }
+            }
+
+            return 0;
         }
 
         protected void btnCancelChanges_Click(object sender, EventArgs e)
@@ -476,7 +501,7 @@ namespace PraticeManagement
             if (IsDirty)
             {
                 ClearDirty();
-                BindData();
+                LoadOpportunityDetails();
                 tbNote.Text = "";
             }
         }
@@ -484,22 +509,21 @@ namespace PraticeManagement
         protected void btnAttachToProject_Click(object sender, EventArgs e)
         {
             int clientId;
-            bool isInt = int.TryParse(ddlClient.SelectedValue, out clientId);
 
-            if (isInt)
+            if (int.TryParse(ddlClient.SelectedValue, out clientId))
             {
                 var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, true));
                 DataHelper.FillListDefault(ddlProjects, "Select Project ...", projects, false, "Id", "DetailedProjectTitle");
 
-                ddlProjects.SelectedIndex =
-                 ddlProjects.Items.IndexOf(
-                     ddlProjects.Items.FindByValue(
-                         Opportunity.ProjectId != null && Opportunity.ProjectId.HasValue
-                             ? Opportunity.ProjectId.Value.ToString()
-                             : string.Empty));
-            }
+                if (ddlProjects.Items.Count == 1)
+                {
+                    ddlProjects.Items[0].Enabled = true;
+                }
 
-            if (ddlProjects.Items != null && ddlProjects.Items.Count == 0)
+                ddlProjects.SelectedValue = (Opportunity.ProjectId.HasValue) ? Opportunity.ProjectId.Value.ToString() : string.Empty;
+
+            }
+            else if (ddlProjects.Items != null && ddlProjects.Items.Count == 0)
             {
                 ddlProjects.Items.Add(new ListItem() { Text = "Select Project ...", Value = "" });
             }
@@ -682,7 +706,7 @@ namespace PraticeManagement
         {
             var opportunityPriorities = DataHelper.GetOpportunityPrioritiesListAll();
             lvOpportunityPriorities.DataSource = opportunityPriorities;
-            lvOpportunityPriorities.DataBind(); 
+            lvOpportunityPriorities.DataBind();
         }
 
         private void PopulateSalesPersonDropDown()
@@ -794,7 +818,7 @@ namespace PraticeManagement
             }
             catch
             {
-                return  string.Empty;
+                return string.Empty;
             }
         }
 
@@ -812,7 +836,7 @@ namespace PraticeManagement
         {
             if (NoteText.Length > 70)
             {
-                for (int i = 10; i < NoteText.Length; i=i+10)
+                for (int i = 10; i < NoteText.Length; i = i + 10)
                 {
                     NoteText = NoteText.Insert(i, WordBreak);
                 }
