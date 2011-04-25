@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ConfigurationService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd4" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IConfigurationService_GetAllEmailTemplates_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllEmailTemplates" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_GetAllEmailTemplates_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllEmailTemplatesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_EmailTemplateGetByName_InputMessage">
+    <wsdl:part name="parameters" element="tns:EmailTemplateGetByName" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_EmailTemplateGetByName_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EmailTemplateGetByNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_UpdateEmailTemplate_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateEmailTemplate" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_UpdateEmailTemplate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateEmailTemplateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_AddEmailTemplate_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddEmailTemplate" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_AddEmailTemplate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddEmailTemplateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_DeleteEmailTemplate_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteEmailTemplate" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_DeleteEmailTemplate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteEmailTemplateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_CheckProjectedProjects_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckProjectedProjects" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_CheckProjectedProjects_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckProjectedProjectsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_GetEmailData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetEmailData" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_GetEmailData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetEmailDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_CheckProjectedProjectsByHireDate_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckProjectedProjectsByHireDate" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_CheckProjectedProjectsByHireDate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckProjectedProjectsByHireDateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_GetCompanyLogoData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanyLogoData" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_GetCompanyLogoData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanyLogoDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_SaveCompanyLogoData_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveCompanyLogoData" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_SaveCompanyLogoData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveCompanyLogoDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_SaveResourceKeyValuePairs_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveResourceKeyValuePairs" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_SaveResourceKeyValuePairs_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveResourceKeyValuePairsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_SaveResourceKeyValuePairItem_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveResourceKeyValuePairItem" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_SaveResourceKeyValuePairItem_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveResourceKeyValuePairItemResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_GetResourceKeyValuePairs_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetResourceKeyValuePairs" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_GetResourceKeyValuePairs_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetResourceKeyValuePairsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_VerifySMTPSettings_InputMessage">
+    <wsdl:part name="parameters" element="tns:VerifySMTPSettings" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_VerifySMTPSettings_OutputMessage">
+    <wsdl:part name="parameters" element="tns:VerifySMTPSettingsResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IConfigurationService">
+    <wsdl:operation name="GetAllEmailTemplates">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetAllEmailTemplates" message="tns:IConfigurationService_GetAllEmailTemplates_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/GetAllEmailTemplatesResponse" message="tns:IConfigurationService_GetAllEmailTemplates_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EmailTemplateGetByName">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/EmailTemplateGetByName" message="tns:IConfigurationService_EmailTemplateGetByName_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/EmailTemplateGetByNameResponse" message="tns:IConfigurationService_EmailTemplateGetByName_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateEmailTemplate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/UpdateEmailTemplate" message="tns:IConfigurationService_UpdateEmailTemplate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/UpdateEmailTemplateResponse" message="tns:IConfigurationService_UpdateEmailTemplate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddEmailTemplate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/AddEmailTemplate" message="tns:IConfigurationService_AddEmailTemplate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/AddEmailTemplateResponse" message="tns:IConfigurationService_AddEmailTemplate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteEmailTemplate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/DeleteEmailTemplate" message="tns:IConfigurationService_DeleteEmailTemplate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/DeleteEmailTemplateResponse" message="tns:IConfigurationService_DeleteEmailTemplate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckProjectedProjects">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/CheckProjectedProjects" message="tns:IConfigurationService_CheckProjectedProjects_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/CheckProjectedProjectsResponse" message="tns:IConfigurationService_CheckProjectedProjects_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmailData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetEmailData" message="tns:IConfigurationService_GetEmailData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/GetEmailDataResponse" message="tns:IConfigurationService_GetEmailData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckProjectedProjectsByHireDate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/CheckProjectedProjectsByHireDate" message="tns:IConfigurationService_CheckProjectedProjectsByHireDate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/CheckProjectedProjectsByHireDateResponse" message="tns:IConfigurationService_CheckProjectedProjectsByHireDate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCompanyLogoData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetCompanyLogoData" message="tns:IConfigurationService_GetCompanyLogoData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/GetCompanyLogoDataResponse" message="tns:IConfigurationService_GetCompanyLogoData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveCompanyLogoData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/SaveCompanyLogoData" message="tns:IConfigurationService_SaveCompanyLogoData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/SaveCompanyLogoDataResponse" message="tns:IConfigurationService_SaveCompanyLogoData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveResourceKeyValuePairs">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/SaveResourceKeyValuePairs" message="tns:IConfigurationService_SaveResourceKeyValuePairs_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/SaveResourceKeyValuePairsResponse" message="tns:IConfigurationService_SaveResourceKeyValuePairs_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveResourceKeyValuePairItem">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/SaveResourceKeyValuePairItem" message="tns:IConfigurationService_SaveResourceKeyValuePairItem_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/SaveResourceKeyValuePairItemResponse" message="tns:IConfigurationService_SaveResourceKeyValuePairItem_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetResourceKeyValuePairs">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetResourceKeyValuePairs" message="tns:IConfigurationService_GetResourceKeyValuePairs_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/GetResourceKeyValuePairsResponse" message="tns:IConfigurationService_GetResourceKeyValuePairs_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="VerifySMTPSettings">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/VerifySMTPSettings" message="tns:IConfigurationService_VerifySMTPSettings_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/VerifySMTPSettingsResponse" message="tns:IConfigurationService_VerifySMTPSettings_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IConfigurationService" type="tns:IConfigurationService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetAllEmailTemplates">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/GetAllEmailTemplates" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EmailTemplateGetByName">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/EmailTemplateGetByName" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateEmailTemplate">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/UpdateEmailTemplate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddEmailTemplate">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/AddEmailTemplate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteEmailTemplate">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/DeleteEmailTemplate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckProjectedProjects">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/CheckProjectedProjects" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmailData">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/GetEmailData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckProjectedProjectsByHireDate">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/CheckProjectedProjectsByHireDate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCompanyLogoData">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/GetCompanyLogoData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveCompanyLogoData">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/SaveCompanyLogoData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveResourceKeyValuePairs">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/SaveResourceKeyValuePairs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveResourceKeyValuePairItem">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/SaveResourceKeyValuePairItem" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResourceKeyValuePairs">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/GetResourceKeyValuePairs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerifySMTPSettings">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/VerifySMTPSettings" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ConfigurationService">
+    <wsdl:port name="BasicHttpBinding_IConfigurationService" binding="tns:BasicHttpBinding_IConfigurationService">
+      <soap:address location="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
