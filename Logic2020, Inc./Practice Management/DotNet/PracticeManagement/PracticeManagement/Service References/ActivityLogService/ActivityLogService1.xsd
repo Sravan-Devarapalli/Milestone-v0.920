@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://ws60/PracticeManagementService/ActivityLogService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+  <xs:complexType name="ActivityLogSelectContext">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="EndDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="MilestoneId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="OpportunityId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="PersonId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ProjectId" nillable="true" type="xs:int" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Source" type="q1:ActivityEventSource" />
+      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ActivityLogSelectContext" nillable="true" type="tns:ActivityLogSelectContext" />
+</xs:schema>
