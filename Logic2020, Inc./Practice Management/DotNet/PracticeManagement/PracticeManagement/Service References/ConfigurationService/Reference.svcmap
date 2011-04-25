@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="28eab207-9e95-4c07-9035-29a26e6e6a5d" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost/PracticeManagementService/ConfigurationService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="ConfigurationService55.xsd" MetadataType="Schema" ID="f53d5e3c-2337-43dc-aca4-a5c509d51aad" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd3" />
+    <MetadataFile FileName="ConfigurationService57.xsd" MetadataType="Schema" ID="48188c0a-993b-4d8a-96cf-068389e96563" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd1" />
+    <MetadataFile FileName="ConfigurationService11.disco" MetadataType="Disco" ID="34689720-a402-451d-b005-251562d34e61" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?disco" />
+    <MetadataFile FileName="ConfigurationService56.xsd" MetadataType="Schema" ID="135e9e30-3bbf-432f-bbb7-373a1cb6efe7" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd4" />
+    <MetadataFile FileName="ConfigurationService11.wsdl" MetadataType="Wsdl" ID="e6ffd529-0df2-435d-bc63-8c8d7b24360e" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?wsdl" />
+    <MetadataFile FileName="ConfigurationService7.xsd" MetadataType="Schema" ID="7bff4da3-cc45-4622-b1ab-9d68e7e7e16c" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd5" />
+    <MetadataFile FileName="ConfigurationService58.xsd" MetadataType="Schema" ID="2149f3c1-fff8-4289-b717-bd14ed6495ed" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd0" />
+    <MetadataFile FileName="ConfigurationService59.xsd" MetadataType="Schema" ID="d76bde8c-131a-4de9-9382-e0e369f45b61" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd2" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
