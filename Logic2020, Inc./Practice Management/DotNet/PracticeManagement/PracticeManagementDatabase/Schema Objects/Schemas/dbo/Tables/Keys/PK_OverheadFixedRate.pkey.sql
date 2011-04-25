@@ -1,0 +1,4 @@
+﻿ALTER TABLE [dbo].[OverheadFixedRate]
+    ADD CONSTRAINT [PK_OverheadFixedRate] PRIMARY KEY CLUSTERED ([OverheadFixedRateId] ASC) WITH (IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF);
+
+
