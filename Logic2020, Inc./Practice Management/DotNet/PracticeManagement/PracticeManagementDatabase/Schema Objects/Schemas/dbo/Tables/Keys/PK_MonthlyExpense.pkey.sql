@@ -1,0 +1,4 @@
+﻿ALTER TABLE [dbo].[MonthlyExpense]
+    ADD CONSTRAINT [PK_MonthlyExpense] PRIMARY KEY CLUSTERED ([MonthlyExpenseId] ASC) WITH (IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF);
+
+
