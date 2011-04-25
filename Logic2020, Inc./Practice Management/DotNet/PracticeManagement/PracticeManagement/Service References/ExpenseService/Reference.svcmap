@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="01214877-8a09-4711-b83d-0a2317df7ab7" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost/PracticeManagementService/ExpenseService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="ExpenseService1.disco" MetadataType="Disco" ID="6d10450e-ed21-46dc-aa9d-a63ffa3b6183" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/ExpenseService.svc?disco" />
+    <MetadataFile FileName="ExpenseService1.xsd" MetadataType="Schema" ID="f174766b-d8a3-49a5-94f0-7b6c3cc8d291" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/ExpenseService.svc?xsd=xsd0" />
+    <MetadataFile FileName="ExpenseService2.xsd" MetadataType="Schema" ID="a322feb8-8dd0-4387-840e-80828043babf" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/ExpenseService.svc?xsd=xsd1" />
+    <MetadataFile FileName="ExpenseService1.wsdl" MetadataType="Wsdl" ID="0353e81b-ab37-42b7-8627-b3cc94e7a0b2" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/ExpenseService.svc?wsdl" />
+    <MetadataFile FileName="ExpenseService3.xsd" MetadataType="Schema" ID="6d248a26-749e-4cc4-b4df-8500977069c6" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/ExpenseService.svc?xsd=xsd3" />
+    <MetadataFile FileName="ExpenseService4.xsd" MetadataType="Schema" ID="1e913fe8-c00c-4da1-85e5-84e02c40ba4d" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/ExpenseService.svc?xsd=xsd2" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+    <ExtensionFile FileName="configuration913.svcinfo" Name="configuration91.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
