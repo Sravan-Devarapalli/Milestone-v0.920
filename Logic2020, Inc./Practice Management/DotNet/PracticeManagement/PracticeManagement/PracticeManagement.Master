@@ -1,0 +1,207 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="PracticeManagement.master.cs" Inherits="PraticeManagement.PracticeManagement" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <asp:ContentPlaceHolder ID="title" runat="server"></asp:ContentPlaceHolder>
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+    <link rel="Stylesheet" href="<%# ResolveClientUrl("~/Css/PracticeManagement.css") %>" />
+    <!--[if IE]>
+    <link rel="Stylesheet" href="<%# ResolveClientUrl("~/Css/PracticeManagementIE.css") %>" />
+    <![endif]-->
+    <script type="text/javascript" src='<%# ResolveClientUrl("~/Scripts/Cookie.js") %>'></script>
+    <script type="text/javascript">
+        function checkDirtyBase() {
+            if (showDialod()) {
+                __doPostBack("<%# this.UniqueID %>", "");
+                return true;
+            }
+
+            return false;
+        }
+    </script>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <table cellpadding="0" cellspacing="0" border="0" class="layout">
+		<tr>
+			<td valign="top" class="pageBody">
+				<AjaxControlToolkit:ToolkitScriptManager ID="scriptManager" runat="server" 
+					LoadScriptsBeforeUI="true" CombineScripts="True" EnablePageMethods="True" 
+					ScriptMode="Release" EnableScriptLocalization="False">
+					<Scripts>
+						<asp:ScriptReference Name="MicrosoftAjax.js" Path="~/Scripts/MicrosoftAjax.js" />
+					</Scripts>
+				</AjaxControlToolkit:ToolkitScriptManager>
+				<asp:HiddenField ID="hidDirtyData" runat="server" />
+				<asp:HiddenField ID="hidDoSaveDirty" runat="server" />
+				<asp:HiddenField ID="hidAllowContinueWithoutSave" runat="server" />
+				<asp:Literal ID="ltrScript" runat="server" Mode="PassThrough" EnableViewState="false">
+				<script type="text/javascript">//<!--
+					function setDirty()
+					{{
+						var hid = document.getElementById("{0}");
+						hid.value = "{2}";
+					}}
+					
+					function getDirty()
+					{{
+						var hid = document.getElementById("{0}");
+						return hid.value == "{2}";
+					}}
+					
+					function clearDirty()
+					{{
+						var hid = document.getElementById("{0}");
+						hid.value = "{3}";
+						hid = document.getElementById("{1}");
+						hid.value = "{3}";
+					}}
+					
+					function getAllowContinueWithoutSave()
+					{{
+						var hid = document.getElementById("{4}");
+						var result = hid.value == "{2}";
+						if (!result) alert("You cannot continue while some data are not saved.");
+						return result;
+					}}
+
+					var clientValidateFunc = null;
+
+					function showDialod()
+					{{
+						if (getDirty())
+						{{
+							var hid = document.getElementById("{1}");
+							result = confirm("Some data isn't saved. Click Ok to Save the data or Cancel to continue without saving.");
+							hid.value = result ? "{2}" : "{3}";
+							return result;
+						}}
+						
+						return false;
+					}}										
+					
+					function confirmSaveDirty(ignoreAllowContinueWithoutSave)
+					{{
+						var result = true;
+						if (getDirty())
+						{{
+							var hid = document.getElementById("{1}");
+							result = confirm("Some data isn't saved. Click Ok to Save the data or Cancel to continue without saving.");
+							hid.value = result ? "{2}" : "{3}";
+						}}
+						
+						return (result || ignoreAllowContinueWithoutSave || getAllowContinueWithoutSave()) && (!result || typeof(clientValidateFunc) != "function" || clientValidateFunc());
+					}}
+				//-->
+				</script> </asp:Literal>
+				<asp:Literal runat="server" EnableViewState="false" ID="TabsScriptBlock" Mode="PassThrough">
+		            <style type="text/css">
+			            .tab-visible{
+				            display: block;
+			            }
+            			
+			            .tab-invisible{
+				            display: none;
+			            }
+		            </style> </asp:Literal>
+				<script type="text/javascript">//<!--  		    
+					function showInProcessImage(divWait, divContainer) {                    
+						// get the bounds of both the container and the image  
+						var containerBounds = Sys.UI.DomElement.getBounds(divContainer); 
+						var imgBounds = Sys.UI.DomElement.getBounds(divWait);  
+		              
+						// figure out where to position the element (the center of the container)  
+						var x = containerBounds.x +   
+								Math.round(containerBounds.width / 2) - Math.round(imgBounds.width / 2);  
+						var y = containerBounds.y +   
+								Math.round(containerBounds.height / 2) - Math.round(imgBounds.height / 2);  
+		              
+						// set the position of the in progress image  
+						Sys.UI.DomElement.setLocation(divWait, x, y);  
+		                  
+						// finally un-hide it  
+						divWait.style.visibility = 'visible';
+						divWait.style.display = 'block';
+					}  
+		              
+					function hideInProcessImage(divWait) {  
+						divWait.style.visibility = 'hidden';
+						divWait.style.display = 'none';
+					}  
+				//-->
+				</script>
+				<table border="0" cellpadding="0" cellspacing="0" width="100%">
+					<tr>
+						<td valign="middle" style="width: 108pt">
+							<asp:HyperLink ID="hlHome" runat="server"><asp:Image ID="imgLogo" CssClass="" ImageUrl="~/Controls/CompanyLogoImage.ashx" style="width: 108pt;" runat="server" /></asp:HyperLink>
+						</td>
+						<td valign="middle" nowrap="nowrap">
+							<h1>
+								<asp:ContentPlaceHolder ID="header" runat="server"></asp:ContentPlaceHolder>
+							</h1>
+						</td>
+						<td align="right" valign="middle" nowrap="nowrap">
+							<asp:LoginView ID="loginView" runat="server">
+								<LoggedInTemplate>
+									Welcome&nbsp;<asp:Label ID="lblUserFirstName" runat="server" EnableViewState="false"></asp:Label>&nbsp;<asp:Label ID="lblUserLastName" runat="server" EnableViewState="false"></asp:Label>
+								</LoggedInTemplate>
+							</asp:LoginView>
+							<asp:LoginStatus ID="loginStatus" runat="server" LoginText="" 
+								LogoutAction="RedirectToLoginPage" onloggingout="loginStatus_LoggingOut" />
+							<div ID="dvBecomeUser" runat="server" visible="false" style="display:block">
+                                <asp:LinkButton ID="lbBecomeUser" runat="server" OnClick="lbBecomeUser_Click">Become User</asp:LinkButton>
+                                <asp:DropDownList ID="ddlBecomeUserList" runat="server" AutoPostBack="true" visible="false">
+                                </asp:DropDownList>
+                                <asp:LinkButton ID="lbBecomeUserOk" runat="server" OnClick="lbBecomeUserOk_Click" visible="false">Ok</asp:LinkButton>
+							</div>
+						</td>
+					</tr>
+				</table>
+				<asp:SiteMapDataSource ID="smdsMain" runat="server" EnableViewState="False" 
+					ShowStartingNode="False"/>
+				<asp:Menu ID="siteMenu" runat="server" DataSourceID="smdsMain" CssClass="siteMenu"
+					Orientation="Horizontal"
+					 MaximumDynamicDisplayLevels="0" StaticDisplayLevels="1" 
+					StaticHoverStyle-BorderStyle="Solid" StaticHoverStyle-BorderWidth="2" 
+					StaticHoverStyle-BorderColor="Red" StaticSubMenuIndent="8px" BorderStyle="None" >
+					<StaticMenuStyle BorderStyle="None" />
+					<StaticMenuItemStyle CssClass="siteMenuItem" BorderStyle="None" 
+                        BorderWidth="0px" />
+					<StaticItemTemplate>					
+                       <asp:HyperLink ID="btnPersonLink" runat="server" NavigateUrl='<%# Eval("NavigateUrl") %>'
+                                Text='<%# Eval("Text") %>' onclick="javascript:checkDirtyBase()" />
+					</StaticItemTemplate>
+				</asp:Menu>
+                <asp:Menu ID="smdsSubMenu" runat="server" 
+                    DataSourceID="PmSiteMap" 
+                    StaticDisplayLevels="1" 
+                    Orientation="Horizontal">
+                    <StaticMenuItemStyle 
+                        ItemSpacing="5" 
+                        BorderStyle="None" 
+                        HorizontalPadding="10"
+                        BackColor="#E9F0F6"
+                        Font-Bold="true"  />
+                    <StaticMenuStyle 
+                        BorderStyle="None" 
+                        Height="40"/>
+                </asp:Menu>
+                <asp:SiteMapDataSource ID="PmSiteMap" runat="server"  
+                    StartingNodeOffset="1" ShowStartingNode="false" />
+				<asp:ContentPlaceHolder ID="body" runat="server"></asp:ContentPlaceHolder>
+			</td>
+		</tr>
+		<tr>
+			<td valign="bottom" class="pageFooter">
+				<asp:ContentPlaceHolder ID="footer" runat="server">
+				</asp:ContentPlaceHolder>
+				<span class="Copyright">&copy; Logic 20/20, Inc. Patent Pending - All Rights Reserved.</span>
+			</td>
+		</tr>
+	</table>
+    </form>
+</body>
+</html>
+
