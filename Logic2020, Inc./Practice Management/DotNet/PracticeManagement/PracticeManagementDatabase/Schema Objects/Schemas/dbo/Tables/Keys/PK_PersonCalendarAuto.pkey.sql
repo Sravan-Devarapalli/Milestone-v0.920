@@ -1,0 +1,4 @@
+﻿ALTER TABLE [dbo].[PersonCalendarAuto]
+    ADD CONSTRAINT [PK_PersonCalendarAuto] PRIMARY KEY CLUSTERED ([Date] ASC, [PersonId] ASC) WITH (IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF);
+
+
