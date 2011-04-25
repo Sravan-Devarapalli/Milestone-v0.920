@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="4fa4b532-622c-4770-a454-25a43bbf0034" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost/PracticeManagementService/PersonService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="PersonService1.xsd" MetadataType="Schema" ID="7480c2ac-ad8d-4be7-a2f5-b7c47c5002bf" SourceId="1" SourceUrl="http://xpanatoliyl.eq.local/PracticeManagementService/PersonService.svc?xsd=xsd2" />
+    <MetadataFile FileName="PersonService.xsd" MetadataType="Schema" ID="10eeea25-d85e-4e6c-880a-848b58f47a21" SourceId="1" SourceUrl="http://xpanatoliyl.eq.local/PracticeManagementService/PersonService.svc?xsd=xsd0" />
+    <MetadataFile FileName="PersonService.wsdl" MetadataType="Wsdl" ID="d957fb3c-9b74-42c8-95f7-9a268fdde732" SourceId="1" SourceUrl="http://xpanatoliyl.eq.local/PracticeManagementService/PersonService.svc?wsdl" />
+    <MetadataFile FileName="PersonService4.xsd" MetadataType="Schema" ID="8feba8a8-b8d9-46c8-acb9-9f8d2622053f" SourceId="1" SourceUrl="http://xpanatoliyl.eq.local/PracticeManagementService/PersonService.svc?xsd=xsd4" />
+    <MetadataFile FileName="PersonService3.xsd" MetadataType="Schema" ID="c2aac969-14d3-46f3-a7b8-5fb84e27c96c" SourceId="1" SourceUrl="http://xpanatoliyl.eq.local/PracticeManagementService/PersonService.svc?xsd=xsd3" />
+    <MetadataFile FileName="PersonService.disco" MetadataType="Disco" ID="18670c9b-4f80-46a6-83b9-f625fcc2ba35" SourceId="1" SourceUrl="http://xpanatoliyl.eq.local/PracticeManagementService/PersonService.svc?disco" />
+    <MetadataFile FileName="PersonService2.xsd" MetadataType="Schema" ID="97430407-8fbe-45ab-9fe1-55b59bf0a17c" SourceId="1" SourceUrl="http://xpanatoliyl.eq.local/PracticeManagementService/PersonService.svc?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
