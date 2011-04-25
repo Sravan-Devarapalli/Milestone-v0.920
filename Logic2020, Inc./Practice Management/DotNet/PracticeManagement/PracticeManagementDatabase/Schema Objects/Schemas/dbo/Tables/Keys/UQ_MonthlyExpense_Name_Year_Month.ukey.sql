@@ -1,0 +1,4 @@
+﻿ALTER TABLE [dbo].[MonthlyExpense]
+    ADD CONSTRAINT [UQ_MonthlyExpense_Name_Year_Month] UNIQUE NONCLUSTERED ([Name] ASC, [Year] ASC, [Month] ASC) WITH (IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF) ON [PRIMARY];
+
+
