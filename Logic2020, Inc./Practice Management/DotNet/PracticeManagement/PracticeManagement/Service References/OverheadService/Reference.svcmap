@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="4877e60b-a1ba-4d63-872e-77ebff22470c" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost/PracticeManagementService/OverheadService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="OverheadService3.xsd" MetadataType="Schema" ID="d0cf292f-41e5-4a10-9401-47d27460c74f" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd1" />
+    <MetadataFile FileName="OverheadService4.xsd" MetadataType="Schema" ID="416f2f66-9be9-45b4-9247-1bea0b6351b8" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd0" />
+    <MetadataFile FileName="OverheadService5.xsd" MetadataType="Schema" ID="d80c4ae1-7365-4768-9760-273f4cfe8486" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd3" />
+    <MetadataFile FileName="OverheadService6.xsd" MetadataType="Schema" ID="e152f5f4-cb40-4c1f-a817-920fe245b069" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd2" />
+    <MetadataFile FileName="OverheadService1.disco" MetadataType="Disco" ID="735fa9e9-d2b6-4b36-945f-3f26f61c11a1" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OverheadService.svc?disco" />
+    <MetadataFile FileName="OverheadService1.wsdl" MetadataType="Wsdl" ID="cf74fff6-531f-4614-88ef-24b56a157a4e" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OverheadService.svc?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+    <ExtensionFile FileName="configuration913.svcinfo" Name="configuration91.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
