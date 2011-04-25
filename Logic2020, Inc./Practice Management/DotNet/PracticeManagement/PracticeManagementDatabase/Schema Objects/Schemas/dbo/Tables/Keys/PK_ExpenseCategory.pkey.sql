@@ -1,0 +1,4 @@
+﻿ALTER TABLE [dbo].[ExpenseCategory]
+    ADD CONSTRAINT [PK_ExpenseCategory] PRIMARY KEY CLUSTERED ([ExpenseCategoryId] ASC) WITH (IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF);
+
+
