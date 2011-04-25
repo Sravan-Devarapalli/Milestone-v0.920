@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="099e2430-a063-4e87-a213-dd6903e4af55" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost/PracticeManagementService/ConfigurationService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="ConfigurationService3.xsd" MetadataType="Schema" ID="fb24fba6-4b70-45a7-9ff6-c1cfc2aec3b7" SourceId="1" SourceUrl="http://ws63.ua.akvelon.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd4" />
+    <MetadataFile FileName="ConfigurationService.xsd" MetadataType="Schema" ID="440a905a-c4c4-4ee4-808c-ef2d0f1c1769" SourceId="1" SourceUrl="http://ws63.ua.akvelon.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd2" />
+    <MetadataFile FileName="ConfigurationService31.xsd" MetadataType="Schema" ID="22f5316f-1b91-4164-a8f6-30c6026998b9" SourceId="1" SourceUrl="http://ws63.ua.akvelon.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd3" />
+    <MetadataFile FileName="ConfigurationService2.xsd" MetadataType="Schema" ID="d3400cfc-9acc-44e7-9bde-e5a400215495" SourceId="1" SourceUrl="http://ws63.ua.akvelon.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd0" />
+    <MetadataFile FileName="ConfigurationService1.xsd" MetadataType="Schema" ID="85627cb4-83f3-4e7d-a096-a4f2fef7b43c" SourceId="1" SourceUrl="http://ws63.ua.akvelon.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd1" />
+    <MetadataFile FileName="ConfigurationService.wsdl" MetadataType="Wsdl" ID="8a71ff66-1b1c-4364-83bc-1ca7f73cd724" SourceId="1" SourceUrl="http://ws63.ua.akvelon.com/PracticeManagementService/ConfigurationService.svc?wsdl" />
+    <MetadataFile FileName="ConfigurationService.disco" MetadataType="Disco" ID="89f7951f-ac4d-441a-8fe5-fc4008159eb1" SourceId="1" SourceUrl="http://ws63.ua.akvelon.com/PracticeManagementService/ConfigurationService.svc?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
