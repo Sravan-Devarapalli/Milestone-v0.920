@@ -1,0 +1,4 @@
+﻿ALTER TABLE [dbo].[MilestonePerson]
+    ADD CONSTRAINT [UN_MilestonePerson] UNIQUE NONCLUSTERED ([MilestoneId] ASC, [PersonId] ASC) WITH (IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF) ON [PRIMARY];
+
+
