@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataTransferObjects" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://ws60/PracticeManagementService/ExpenseService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="ArrayOfExpenseBasis">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ExpenseBasis" nillable="true" type="tns:ExpenseBasis" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfExpenseBasis" nillable="true" type="tns:ArrayOfExpenseBasis" />
+  <xs:complexType name="ExpenseBasis">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ExpenseBasis" nillable="true" type="tns:ExpenseBasis" />
+  <xs:complexType name="ArrayOfWeekPaidOption">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="WeekPaidOption" nillable="true" type="tns:WeekPaidOption" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfWeekPaidOption" nillable="true" type="tns:ArrayOfWeekPaidOption" />
+  <xs:complexType name="WeekPaidOption">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="WeekPaidOption" nillable="true" type="tns:WeekPaidOption" />
+  <xs:complexType name="MonthlyExpense">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ExpenseBasis" nillable="true" type="tns:ExpenseBasis" />
+      <xs:element minOccurs="0" name="ExpenseCategory" nillable="true" type="tns:ExpenseCategory" />
+      <xs:element minOccurs="0" name="MaxMonth" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="MinMonth" type="xs:dateTime" />
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="MonthlyAmount" nillable="true" type="q1:ArrayOfKeyValueOfdateTimedecimal" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OldName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="WeekPaidOption" nillable="true" type="tns:WeekPaidOption" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MonthlyExpense" nillable="true" type="tns:MonthlyExpense" />
+  <xs:complexType name="ExpenseCategory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ExpenseCategory" nillable="true" type="tns:ExpenseCategory" />
+  <xs:complexType name="ArrayOfMonthlyExpense">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MonthlyExpense" nillable="true" type="tns:MonthlyExpense" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMonthlyExpense" nillable="true" type="tns:ArrayOfMonthlyExpense" />
+</xs:schema>
