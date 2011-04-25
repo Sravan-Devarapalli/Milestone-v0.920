@@ -1,0 +1,598 @@
+﻿html, body
+{
+	height: 100%;
+}
+
+body
+{
+	font-family: Verdana, Arial;
+	font-size: 12px;
+	margin: 0px;
+	padding: 0px;
+}
+
+form
+{
+	height: 100%;
+	width: 100%;
+}
+
+h1
+{
+	font-size: 20pt;
+	color: #0C187A;
+	font-weight:normal;
+}
+
+table
+{
+	border-collapse: collapse;
+	border-color: Gray;
+	border-width: 1px;
+}
+
+table.layout
+{
+	border-color: inherit;
+	border-width: 0px;
+	width: 100%;
+}
+
+td.pageBody
+{
+	padding: 8px;
+}
+
+td.pageFooter
+{
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-bottom: 4px;
+}
+
+th
+{
+	background-color: Silver;
+	border-color: Gray;
+	border-width: 1px;
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+td
+{
+	border-color: Gray;
+	border-width: 1px;
+}
+
+.ToolBarSeparator
+{
+	background-color: orange;
+	height: 3px;
+}
+
+TABLE.timeEntry
+{
+	/* width: 100%; */
+}
+
+TABLE.timeEntry INPUT
+{
+	width: 50px;
+}
+
+TABLE.timeEntry SELECT
+{
+	width: 100%;
+}
+
+TABLE.siteMenu, #ctl00_siteMenu
+{
+	background-color:#E9F0F6;	
+	border-width:0px;	
+	border-collapse: collapse;
+}
+
+TABLE.siteMenu TD TABLE
+{	
+	border-color:#E9F0F6;
+	border-width:0px;		
+	font-size:14px;
+	font-family:Arial bold,Arial,Helvetica,sans-serif;
+	font-weight:bold;
+}
+TABLE.siteMenu TD
+{    
+	padding-top:0px;
+	padding-bottom:0px;
+	color: #000000;
+}
+TD.NoBorder, TH.NoBorder
+{
+	border: none 0px Transparent;
+	background-color: Transparent;
+}
+
+.siteMenuItem TD
+{
+	/* border-left: solid 2px orange; */
+	border-right: solid 2px orange;
+	padding-top:1px;
+	padding-bottom:1px;
+	padding-right: 8px;
+}
+
+span.siteMenuItem
+{
+	/* border-left: solid 2px orange; */
+	border: solid 1px orange;
+	padding-left: 5px;
+	padding-right: 5px;
+	text-align: center;
+}
+
+.siteMenu a
+{
+	text-decoration:none;
+	margin-left: 16px;
+}
+
+.siteMenu a:hover, .siteMenu a:active, .siteMenu a:focus, .siteMenu label.block:hover {
+background:#D6D6D6 none repeat scroll 0%;
+color:#000000;
+}
+
+.siteMenu a:link, .siteMenu a:visited, .siteMenu label.block
+{ 
+color:#000000;
+display:block;
+}
+
+.WholeWidth
+{
+	width: 100%;
+}
+
+.vScroll
+{
+	overflow: scroll;
+	overflow-x: hidden;
+	height: 350px;
+}
+
+.bScroll
+{
+	overflow: scroll;
+	height: 450px;
+	/*width: 1077px;*/
+}
+
+TABLE.Switcher
+{
+}
+
+TABLE.SwitcherPerson
+{
+	margin-bottom: 4px;
+}
+
+TABLE.Switcher TD, TABLE.SwitcherPerson TD
+{
+	width: 160px;
+	height: 30px;
+	text-align: center;
+	vertical-align: middle;
+	border-bottom: solid 2px gray;
+}
+
+TD.SelectedSwitch
+{
+	border-left: solid 1px gray;
+	border-right: solid 1px gray;
+	border-top: solid 1px gray;
+	background-color: lime;
+}
+
+TABLE.PersonForm
+{
+	width: 770px;
+}
+
+.PersonMultiView
+{
+	vertical-align: top;
+}
+
+.SliderBehavior
+{
+	visibility: hidden;
+}
+
+TABLE.CalendarTable
+{
+	border-collapse: collapse;
+}
+
+TABLE.CalendarTable A
+{
+	color: Black;
+}
+
+TR.HeadRow TD
+{
+	font-weight: bold;
+	font-size: larger;
+	border-top: solid 1px gray;
+}
+
+TABLE.CalendarTable TD
+{
+	vertical-align: top;
+	text-align: center;
+	padding: 4px 4px 4px 4px;
+}
+
+DIV.DayOff
+{
+	height: 24px;
+	width: 24px;
+	background-color: #FF3300;
+}
+
+DIV.DayOn
+{
+	height: 24px;
+	width: 24px;
+	background-color: Transparent;
+}
+
+DIV.CompanyDayOff
+{
+	height: 24px;
+	width: 24px;
+	background-color: #66FF99;
+}
+
+DIV.CompanyDayOn
+{
+	height: 24px;
+	width: 24px;
+	background-color: #FF99CC;
+}
+
+DIV.DayGrayed
+{
+	height: 24px;
+	width: 24px;
+	background-color: ButtonFace;
+	color: Gray;
+}
+
+DIV.DayGrayed SPAN
+{
+	color: Gray;
+}
+
+.Copyright
+{
+	font-size: 10px;
+}
+
+.Revenue
+{
+	color:#0F5A00;
+}
+
+.Cogs
+{
+	color: Maroon;
+}
+
+.Margin
+{
+	color: Purple;
+}
+
+.Bench
+{
+	color: Red;
+}
+
+.ProjectedProject
+{
+	background-color: #FFFFD7;
+}
+
+.ExperimentalProject
+{
+	background-color: #EEFFFF;
+}
+
+.CompletedProject
+{
+	background-color: #FFEEEE;
+}
+
+.ProjectDetailBlackLarge
+{
+	color:Black;
+	font-weight: bold;
+	font-size:large;
+}
+
+.ProjectDetailBlue
+{
+	color:#1F4586;
+	font-weight: bold;
+	font-size:inherit;
+}
+
+.TopSpace
+{
+	vertical-align: bottom;
+}
+
+TD.ValidationCell
+{
+	width: 25px;
+}
+
+TABLE.CompPerfTable
+{
+	/*table-layout: fixed;*/
+	font-family: Calibri, Verdana, Arial;
+	font-size: 10pt;
+}
+
+.bScroll TABLE TD
+{
+	border-width: 1px;
+	border-color: Gray;
+}
+
+TR.CompPerfHeader
+{
+	text-align: center;
+	background-color: Silver;
+	font-weight: bold;
+}
+
+TD.CompPerfClient
+{
+	width: 120px;
+}
+
+TD.CompPerfProjectNumber
+{
+	width: 90px;
+}
+
+TD.CompPerfProject
+{
+	width: 160px;
+	min-width: 160px;
+}
+
+TD.CompPerfPeriod
+{
+	width: 80px;
+	min-width:80px;
+	text-align:center;
+}
+
+TD.CompPerfMonthSummary
+{
+	width: 90px;
+	min-width:90px;
+}
+
+TD.CompPerfTotalSummary
+{
+	width: 130px;
+	min-width:130px;
+}
+
+TR.CompPerfDataHeader TD, TR.CompPerfDataHeader TH
+{
+	width: 90px;
+	border: solid 1px gray;
+}
+
+TD.CompPerfData
+{
+	width: 90px;
+	/*text-align: right;*/
+	padding: 2px 2px 2px 2px;
+}
+
+TR.CompPerfData TD, TR.CompPerfData TH
+{
+	width: 90px;
+	border: solid 1px gray;
+	padding: 2px 2px 2px 2px;
+	/*text-align: right;*/
+}
+
+TD.CompPerfDataTitle, TH.CompPerfDataTitle, TR.CompPerfDataTitle TD, TR.CompPerfDataTitle TH
+{
+	width: 535px;
+	text-align: center;
+}
+
+SPAN.found
+{
+	color: Black;
+	font-weight: bold;
+	background-color: #FFFF99;
+	text-decoration: underline;
+}
+
+/* need to compensate scroll bar*/
+.bScroll TABLE TD.CompPerfTotalSummary
+{
+	width: 112px;
+	min-width:112px;
+}
+
+TD.totals 
+{	
+	text-align: right;
+	font-weight:bold;	
+}
+
+TD.overheadDetails
+{
+	border:1px solid gray;
+	white-space:nowrap;			
+}
+
+/*  Project Name Cell ToolTip style */
+TD.CompPerfProject DIV.ToolTip
+{
+	display: none;
+	z-index: 3; 
+	background-color: #DDD; 
+	border: thin solid navy;
+}
+
+/* Mini report styles */
+DIV.MiniReport
+{
+	width: 0px;
+	height: 0px;
+	position: absolute;
+	background-color: White;
+	overflow: hidden;
+	vertical-align: top;
+	border: none;
+}
+
+DIV.MiniReport TABLE
+{
+	width: 248px;
+}
+
+DIV.MiniReport TD
+{
+	vertical-align: top;
+	text-align: left;
+}
+
+.Loading
+{
+	height: 24px;
+	background-image: url(../Images/loading.gif);
+	background-repeat: no-repeat;
+}
+
+TABLE.PermissionChart TD, TABLE.PermissionChart TH
+{
+	border: solid 1px gray;
+	font-size: 10px;
+}
+
+.watermarked {
+	background-color:#F0F8FF;
+	border:1px solid #BEBEBE;
+	color:gray;
+	padding:2px 0 0 2px;
+}
+
+.pnlTimeEntryCss
+{
+	background: lightGrey;
+}
+
+.time-entry-bar-total-hours
+{
+    width:5%;
+    text-align: center;
+}
+
+.te-bar-header
+{
+    background: lightgrey;
+    font-weight: bold;    
+}
+
+.time-entry-bar-single-te
+{
+   /* padding-left: 3px;*/
+	text-align: center;
+	vertical-align : middle;
+	width:8%;
+}
+
+.tem-filter-title-cell
+{
+	background: lightGrey;
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+.tem-filter-control-cell
+{
+	padding-left: 10px;
+	background: #F1F1F1;
+}
+
+.tem-filter-space-cell
+{
+	width: 25px;
+}
+
+.tem-grid-date-cell
+{
+	white-space: nowrap;
+}
+
+.tem-filter-row
+{
+	height: 25px;
+	vertical-align: middle;
+}
+
+
+.tem-filter-table
+{
+	border: 0px;
+	border-collapse: separate;
+}
+
+
+.declined-row
+{
+	font-size: 80%;
+	color: Gray;
+}
+
+.declined-row a
+{
+	color: Gray;
+}
+
+.modalBackground {
+    background-color:Gray;
+    opacity:0.7;
+}
+
+.time-entry-bar-project-milestones-select-Normal
+{
+    width: 100%;
+}
+.time-entry-bar-time-types-select-Normal
+{
+    width: 100%;
+}
+    
+.time-entry-bar-project-milestones-select-Extended
+{
+    width: 100%;
+}
+    
+.time-entry-bar-time-types-select-Extended
+{
+    width: 100%;
+}   
