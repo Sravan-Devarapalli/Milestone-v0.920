@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="04864201-2851-4f2b-a85c-e8765e059211" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost/PracticeManagementService/AuthService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="AuthService1.xsd" MetadataType="Schema" ID="5e2304ec-b90e-42de-8a07-07973c898448" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/AuthService.svc?xsd=xsd0" />
+    <MetadataFile FileName="AuthService1.wsdl" MetadataType="Wsdl" ID="f86fcf95-e80a-4325-b2d8-94fc82bb39a5" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/AuthService.svc?wsdl" />
+    <MetadataFile FileName="AuthService2.xsd" MetadataType="Schema" ID="38a1cbcd-aac4-4fa9-89f4-a27533bcaf49" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/AuthService.svc?xsd=xsd1" />
+    <MetadataFile FileName="AuthService1.disco" MetadataType="Disco" ID="3dedc257-08ce-4aef-8949-7ec46b65429d" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/AuthService.svc?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+    <ExtensionFile FileName="configuration913.svcinfo" Name="configuration91.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
