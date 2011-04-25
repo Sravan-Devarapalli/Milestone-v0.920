@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TimeEntryService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://ws60/PracticeManagementService/TimeEntryService.svc?xsd=xsd2" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://ws60/PracticeManagementService/TimeEntryService.svc?xsd=xsd0" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://ws60/PracticeManagementService/TimeEntryService.svc?xsd=xsd1" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
+      <xsd:import schemaLocation="http://ws60/PracticeManagementService/TimeEntryService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://ws60/PracticeManagementService/TimeEntryService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://ws60/PracticeManagementService/TimeEntryService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
+      <xsd:import schemaLocation="http://ws60/PracticeManagementService/TimeEntryService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CompositeObjects" />
+      <xsd:import schemaLocation="http://ws60/PracticeManagementService/TimeEntryService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/System" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ITimeEntryService_GetAllTimeTypes_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllTimeTypes" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetAllTimeTypes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllTimeTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_RemoveTimeType_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveTimeType" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_RemoveTimeType_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveTimeTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_UpdateTimeType_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateTimeType" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_UpdateTimeType_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateTimeTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_AddTimeType_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddTimeType" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_AddTimeType_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddTimeTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_RemoveTimeEntryById_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveTimeEntryById" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_RemoveTimeEntryById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveTimeEntryByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_RemoveTimeEntry_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveTimeEntry" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_RemoveTimeEntry_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveTimeEntryResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_AddTimeEntry_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddTimeEntry" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_AddTimeEntry_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddTimeEntryResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_UpdateTimeEntry_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateTimeEntry" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_UpdateTimeEntry_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateTimeEntryResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_ConstructAndUpdateTimeEntry_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConstructAndUpdateTimeEntry" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_ConstructAndUpdateTimeEntry_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConstructAndUpdateTimeEntryResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetTimeEntriesForPerson_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTimeEntriesForPerson" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetTimeEntriesForPerson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTimeEntriesForPersonResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetTimeEntriesProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTimeEntriesProject" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetTimeEntriesProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTimeEntriesProjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetTimeEntriesPerson_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTimeEntriesPerson" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetTimeEntriesPerson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTimeEntriesPersonResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetCurrentMilestones_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCurrentMilestones" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetCurrentMilestones_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCurrentMilestonesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetAllTimeEntries_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllTimeEntries" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetAllTimeEntries_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllTimeEntriesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_ToggleIsCorrect_InputMessage">
+    <wsdl:part name="parameters" element="tns:ToggleIsCorrect" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_ToggleIsCorrect_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ToggleIsCorrectResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_ToggleIsReviewed_InputMessage">
+    <wsdl:part name="parameters" element="tns:ToggleIsReviewed" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_ToggleIsReviewed_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ToggleIsReviewedResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_ToggleIsChargeable_InputMessage">
+    <wsdl:part name="parameters" element="tns:ToggleIsChargeable" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_ToggleIsChargeable_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ToggleIsChargeableResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetAllTimeEntryProjects_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllTimeEntryProjects" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetAllTimeEntryProjects_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllTimeEntryProjectsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetAllTimeEntryMilestones_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllTimeEntryMilestones" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetAllTimeEntryMilestones_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllTimeEntryMilestonesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetAllTimeEntryPersons_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllTimeEntryPersons" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetAllTimeEntryPersons_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllTimeEntryPersonsResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ITimeEntryService">
+    <wsdl:operation name="GetAllTimeTypes">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetAllTimeTypes" message="tns:ITimeEntryService_GetAllTimeTypes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetAllTimeTypesResponse" message="tns:ITimeEntryService_GetAllTimeTypes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveTimeType">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/RemoveTimeType" message="tns:ITimeEntryService_RemoveTimeType_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/RemoveTimeTypeResponse" message="tns:ITimeEntryService_RemoveTimeType_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTimeType">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/UpdateTimeType" message="tns:ITimeEntryService_UpdateTimeType_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/UpdateTimeTypeResponse" message="tns:ITimeEntryService_UpdateTimeType_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddTimeType">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/AddTimeType" message="tns:ITimeEntryService_AddTimeType_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/AddTimeTypeResponse" message="tns:ITimeEntryService_AddTimeType_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveTimeEntryById">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/RemoveTimeEntryById" message="tns:ITimeEntryService_RemoveTimeEntryById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/RemoveTimeEntryByIdResponse" message="tns:ITimeEntryService_RemoveTimeEntryById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveTimeEntry">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/RemoveTimeEntry" message="tns:ITimeEntryService_RemoveTimeEntry_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/RemoveTimeEntryResponse" message="tns:ITimeEntryService_RemoveTimeEntry_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddTimeEntry">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/AddTimeEntry" message="tns:ITimeEntryService_AddTimeEntry_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/AddTimeEntryResponse" message="tns:ITimeEntryService_AddTimeEntry_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTimeEntry">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/UpdateTimeEntry" message="tns:ITimeEntryService_UpdateTimeEntry_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/UpdateTimeEntryResponse" message="tns:ITimeEntryService_UpdateTimeEntry_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConstructAndUpdateTimeEntry">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/ConstructAndUpdateTimeEntry" message="tns:ITimeEntryService_ConstructAndUpdateTimeEntry_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/ConstructAndUpdateTimeEntryResponse" message="tns:ITimeEntryService_ConstructAndUpdateTimeEntry_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeEntriesForPerson">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesForPerson" message="tns:ITimeEntryService_GetTimeEntriesForPerson_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesForPersonResponse" message="tns:ITimeEntryService_GetTimeEntriesForPerson_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeEntriesProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesProject" message="tns:ITimeEntryService_GetTimeEntriesProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesProjectResponse" message="tns:ITimeEntryService_GetTimeEntriesProject_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeEntriesPerson">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesPerson" message="tns:ITimeEntryService_GetTimeEntriesPerson_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesPersonResponse" message="tns:ITimeEntryService_GetTimeEntriesPerson_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCurrentMilestones">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetCurrentMilestones" message="tns:ITimeEntryService_GetCurrentMilestones_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetCurrentMilestonesResponse" message="tns:ITimeEntryService_GetCurrentMilestones_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTimeEntries">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntries" message="tns:ITimeEntryService_GetAllTimeEntries_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntriesResponse" message="tns:ITimeEntryService_GetAllTimeEntries_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ToggleIsCorrect">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/ToggleIsCorrect" message="tns:ITimeEntryService_ToggleIsCorrect_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/ToggleIsCorrectResponse" message="tns:ITimeEntryService_ToggleIsCorrect_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ToggleIsReviewed">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/ToggleIsReviewed" message="tns:ITimeEntryService_ToggleIsReviewed_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/ToggleIsReviewedResponse" message="tns:ITimeEntryService_ToggleIsReviewed_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ToggleIsChargeable">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/ToggleIsChargeable" message="tns:ITimeEntryService_ToggleIsChargeable_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/ToggleIsChargeableResponse" message="tns:ITimeEntryService_ToggleIsChargeable_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTimeEntryProjects">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryProjects" message="tns:ITimeEntryService_GetAllTimeEntryProjects_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryProjectsResponse" message="tns:ITimeEntryService_GetAllTimeEntryProjects_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTimeEntryMilestones">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryMilestones" message="tns:ITimeEntryService_GetAllTimeEntryMilestones_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryMilestonesResponse" message="tns:ITimeEntryService_GetAllTimeEntryMilestones_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTimeEntryPersons">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryPersons" message="tns:ITimeEntryService_GetAllTimeEntryPersons_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryPersonsResponse" message="tns:ITimeEntryService_GetAllTimeEntryPersons_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_ITimeEntryService" type="tns:ITimeEntryService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetAllTimeTypes">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/GetAllTimeTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveTimeType">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/RemoveTimeType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTimeType">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/UpdateTimeType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddTimeType">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/AddTimeType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveTimeEntryById">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/RemoveTimeEntryById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveTimeEntry">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/RemoveTimeEntry" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddTimeEntry">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/AddTimeEntry" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTimeEntry">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/UpdateTimeEntry" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConstructAndUpdateTimeEntry">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/ConstructAndUpdateTimeEntry" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeEntriesForPerson">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/GetTimeEntriesForPerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeEntriesProject">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/GetTimeEntriesProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeEntriesPerson">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/GetTimeEntriesPerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCurrentMilestones">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/GetCurrentMilestones" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTimeEntries">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/GetAllTimeEntries" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ToggleIsCorrect">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/ToggleIsCorrect" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ToggleIsReviewed">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/ToggleIsReviewed" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ToggleIsChargeable">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/ToggleIsChargeable" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTimeEntryProjects">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/GetAllTimeEntryProjects" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTimeEntryMilestones">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/GetAllTimeEntryMilestones" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTimeEntryPersons">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/GetAllTimeEntryPersons" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TimeEntryService">
+    <wsdl:port name="BasicHttpBinding_ITimeEntryService" binding="tns:BasicHttpBinding_ITimeEntryService">
+      <soap:address location="http://ws60/PracticeManagementService/TimeEntryService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
