@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="fc9b91a3-a35d-466d-8124-f0d6bb5941d0" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost/PracticeManagementService/ActivityLogService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="ActivityLogService1.xsd" MetadataType="Schema" ID="fd63b072-ec3a-4ee1-ae8e-ed9eb258c3c2" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/ActivityLogService.svc?xsd=xsd2" />
+    <MetadataFile FileName="ActivityLogService2.xsd" MetadataType="Schema" ID="99d731e3-8f94-45a8-b493-902504e4f442" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/ActivityLogService.svc?xsd=xsd3" />
+    <MetadataFile FileName="ActivityLogService3.xsd" MetadataType="Schema" ID="81e2d6ef-c085-48de-84fd-6315d8feddb4" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/ActivityLogService.svc?xsd=xsd0" />
+    <MetadataFile FileName="ActivityLogService4.xsd" MetadataType="Schema" ID="a050a1e9-814a-42a8-a71f-02c257fee67e" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/ActivityLogService.svc?xsd=xsd1" />
+    <MetadataFile FileName="ActivityLogService5.xsd" MetadataType="Schema" ID="ac938cc4-0825-4633-b94d-ce5d70d88768" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/ActivityLogService.svc?xsd=xsd4" />
+    <MetadataFile FileName="ActivityLogService1.wsdl" MetadataType="Wsdl" ID="d6e79497-56ac-4d7a-8b3d-52651d6b1309" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/ActivityLogService.svc?wsdl" />
+    <MetadataFile FileName="ActivityLogService1.disco" MetadataType="Disco" ID="1281c27e-9711-41ab-a974-957ddc68c734" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/ActivityLogService.svc?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+    <ExtensionFile FileName="configuration913.svcinfo" Name="configuration91.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
