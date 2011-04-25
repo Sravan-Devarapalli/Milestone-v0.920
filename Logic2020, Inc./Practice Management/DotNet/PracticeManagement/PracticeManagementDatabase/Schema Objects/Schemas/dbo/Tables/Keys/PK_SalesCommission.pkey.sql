@@ -1,0 +1,4 @@
+﻿ALTER TABLE [dbo].[Commission]
+    ADD CONSTRAINT [PK_SalesCommission] PRIMARY KEY CLUSTERED ([CommissionId] ASC) WITH (IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF);
+
+
