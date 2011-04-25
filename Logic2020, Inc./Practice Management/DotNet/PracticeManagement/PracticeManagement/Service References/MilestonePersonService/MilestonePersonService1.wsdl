@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MilestonePersonService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://server4.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://server4.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://server4.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://server4.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://server4.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
+      <xsd:import schemaLocation="http://server4.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IMilestonePersonService_GetMilestonePersonListByProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestonePersonListByProject" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_GetMilestonePersonListByProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestonePersonListByProjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_GetMilestonePersonListByProjectWithoutPay_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestonePersonListByProjectWithoutPay" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_GetMilestonePersonListByProjectWithoutPay_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestonePersonListByProjectWithoutPayResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_GetConsultantMilestones_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetConsultantMilestones" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_GetConsultantMilestones_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetConsultantMilestonesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_GetMilestonePersonListByMilestone_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestonePersonListByMilestone" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_GetMilestonePersonListByMilestone_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestonePersonListByMilestoneResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_GetMilestonePersonListByPerson_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestonePersonListByPerson" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_GetMilestonePersonListByPerson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestonePersonListByPersonResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_GetMilestonePersonDetail_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestonePersonDetail" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_GetMilestonePersonDetail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestonePersonDetailResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_CheckTimeEntriesForMilestonePerson_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckTimeEntriesForMilestonePerson" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_CheckTimeEntriesForMilestonePerson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckTimeEntriesForMilestonePersonResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_SaveMilestonePerson_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveMilestonePerson" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_SaveMilestonePerson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveMilestonePersonResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_DeleteMilestonePerson_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteMilestonePerson" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_DeleteMilestonePerson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteMilestonePersonResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_GetMilestonePersonListByMilestoneNoFinancials_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestonePersonListByMilestoneNoFinancials" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_GetMilestonePersonListByMilestoneNoFinancials_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestonePersonListByMilestoneNoFinancialsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_CalculateMilestonePersonFinancials_InputMessage">
+    <wsdl:part name="parameters" element="tns:CalculateMilestonePersonFinancials" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_CalculateMilestonePersonFinancials_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CalculateMilestonePersonFinancialsResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IMilestonePersonService">
+    <wsdl:operation name="GetMilestonePersonListByProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByProject" message="tns:IMilestonePersonService_GetMilestonePersonListByProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByProjectResponse" message="tns:IMilestonePersonService_GetMilestonePersonListByProject_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestonePersonListByProjectWithoutPay">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByProjectWithoutPay" message="tns:IMilestonePersonService_GetMilestonePersonListByProjectWithoutPay_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByProjectWithoutPayResponse" message="tns:IMilestonePersonService_GetMilestonePersonListByProjectWithoutPay_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetConsultantMilestones">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestonePersonService/GetConsultantMilestones" message="tns:IMilestonePersonService_GetConsultantMilestones_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestonePersonService/GetConsultantMilestonesResponse" message="tns:IMilestonePersonService_GetConsultantMilestones_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestonePersonListByMilestone">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByMilestone" message="tns:IMilestonePersonService_GetMilestonePersonListByMilestone_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByMilestoneResponse" message="tns:IMilestonePersonService_GetMilestonePersonListByMilestone_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestonePersonListByPerson">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByPerson" message="tns:IMilestonePersonService_GetMilestonePersonListByPerson_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByPersonResponse" message="tns:IMilestonePersonService_GetMilestonePersonListByPerson_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestonePersonDetail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonDetail" message="tns:IMilestonePersonService_GetMilestonePersonDetail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonDetailResponse" message="tns:IMilestonePersonService_GetMilestonePersonDetail_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckTimeEntriesForMilestonePerson">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestonePersonService/CheckTimeEntriesForMilestonePerson" message="tns:IMilestonePersonService_CheckTimeEntriesForMilestonePerson_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestonePersonService/CheckTimeEntriesForMilestonePersonResponse" message="tns:IMilestonePersonService_CheckTimeEntriesForMilestonePerson_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveMilestonePerson">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestonePersonService/SaveMilestonePerson" message="tns:IMilestonePersonService_SaveMilestonePerson_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestonePersonService/SaveMilestonePersonResponse" message="tns:IMilestonePersonService_SaveMilestonePerson_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMilestonePerson">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestonePersonService/DeleteMilestonePerson" message="tns:IMilestonePersonService_DeleteMilestonePerson_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestonePersonService/DeleteMilestonePersonResponse" message="tns:IMilestonePersonService_DeleteMilestonePerson_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestonePersonListByMilestoneNoFinancials">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByMilestoneNoFinancials" message="tns:IMilestonePersonService_GetMilestonePersonListByMilestoneNoFinancials_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByMilestoneNoFinancialsResponse" message="tns:IMilestonePersonService_GetMilestonePersonListByMilestoneNoFinancials_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CalculateMilestonePersonFinancials">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestonePersonService/CalculateMilestonePersonFinancials" message="tns:IMilestonePersonService_CalculateMilestonePersonFinancials_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestonePersonService/CalculateMilestonePersonFinancialsResponse" message="tns:IMilestonePersonService_CalculateMilestonePersonFinancials_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IMilestonePersonService" type="tns:IMilestonePersonService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetMilestonePersonListByProject">
+      <soap:operation soapAction="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestonePersonListByProjectWithoutPay">
+      <soap:operation soapAction="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByProjectWithoutPay" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetConsultantMilestones">
+      <soap:operation soapAction="http://tempuri.org/IMilestonePersonService/GetConsultantMilestones" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestonePersonListByMilestone">
+      <soap:operation soapAction="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByMilestone" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestonePersonListByPerson">
+      <soap:operation soapAction="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByPerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestonePersonDetail">
+      <soap:operation soapAction="http://tempuri.org/IMilestonePersonService/GetMilestonePersonDetail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckTimeEntriesForMilestonePerson">
+      <soap:operation soapAction="http://tempuri.org/IMilestonePersonService/CheckTimeEntriesForMilestonePerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveMilestonePerson">
+      <soap:operation soapAction="http://tempuri.org/IMilestonePersonService/SaveMilestonePerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMilestonePerson">
+      <soap:operation soapAction="http://tempuri.org/IMilestonePersonService/DeleteMilestonePerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestonePersonListByMilestoneNoFinancials">
+      <soap:operation soapAction="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByMilestoneNoFinancials" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculateMilestonePersonFinancials">
+      <soap:operation soapAction="http://tempuri.org/IMilestonePersonService/CalculateMilestonePersonFinancials" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MilestonePersonService">
+    <wsdl:port name="BasicHttpBinding_IMilestonePersonService" binding="tns:BasicHttpBinding_IMilestonePersonService">
+      <soap:address location="http://server4.ggk.com/PracticeManagementService/MilestonePersonService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
