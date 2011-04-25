@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="77ac8793-6060-49b4-ae9b-1db65fb52f06" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>false</ReferenceAllAssemblies>
+    <ReferencedAssemblies>
+      <ReferencedAssembly AssemblyName="System.Web" />
+    </ReferencedAssemblies>
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost/PracticeManagementService/MembershipService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="MembershipService1.xsd" MetadataType="Schema" ID="70ac1e28-8b03-4368-bab5-f040c3224378" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/MembershipService.svc?xsd=xsd3" />
+    <MetadataFile FileName="MembershipService1.wsdl" MetadataType="Wsdl" ID="41c3a2f5-0fc1-40af-afee-f79b85500ea1" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/MembershipService.svc?wsdl" />
+    <MetadataFile FileName="MembershipService2.xsd" MetadataType="Schema" ID="6408db6f-8b71-4173-8808-20a36acb9e6f" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/MembershipService.svc?xsd=xsd0" />
+    <MetadataFile FileName="MembershipService1.disco" MetadataType="Disco" ID="c3bc43c4-3d81-4b6d-8f25-dc20b7eb45c0" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/MembershipService.svc?disco" />
+    <MetadataFile FileName="MembershipService3.xsd" MetadataType="Schema" ID="93b65b23-9985-47eb-a7d8-4915be8d6b4e" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/MembershipService.svc?xsd=xsd2" />
+    <MetadataFile FileName="MembershipService4.xsd" MetadataType="Schema" ID="4707207e-d637-4ed4-8fa1-6863b6da214d" SourceId="1" SourceUrl="http://ws60/PracticeManagementService/MembershipService.svc?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+    <ExtensionFile FileName="configuration913.svcinfo" Name="configuration91.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
