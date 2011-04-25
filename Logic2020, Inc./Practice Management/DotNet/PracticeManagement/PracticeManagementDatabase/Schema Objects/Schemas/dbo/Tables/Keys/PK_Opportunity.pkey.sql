@@ -1,0 +1,4 @@
+﻿ALTER TABLE [dbo].[Opportunity]
+    ADD CONSTRAINT [PK_Opportunity] PRIMARY KEY CLUSTERED ([OpportunityId] ASC) WITH (IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF);
+
+
