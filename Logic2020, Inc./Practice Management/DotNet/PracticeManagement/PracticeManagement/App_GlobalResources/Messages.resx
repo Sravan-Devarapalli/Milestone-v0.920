@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AmountThreeDigits" xml:space="preserve">
+    <value>A number with 3 decimal digits is allowed for the Amount.</value>
+  </data>
+  <data name="AmountTwoDigits" xml:space="preserve">
+    <value>A number with 2 decimal digits is allowed for the Amount.</value>
+  </data>
+  <data name="DateRangeMessage" xml:space="preserve">
+    <value>A date must be between {0} and {1}.</value>
+  </data>
+  <data name="DuplicateEmail" xml:space="preserve">
+    <value>A person with this email already exists. Please review existing users to make sure there isn't a duplicate entry, and enter a different email address if necessary.</value>
+  </data>
+  <data name="DuplicateUserName" xml:space="preserve">
+    <value>Username already exists. Please enter a different user name.</value>
+  </data>
+  <data name="InvalidAnswer" xml:space="preserve">
+    <value>The password retrieval answer provided is invalid. Please check the value and try again.</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>The e-mail address provided is invalid. Please check the value and try again.</value>
+  </data>
+  <data name="InvalidMilestoneId" xml:space="preserve">
+    <value>The Milestone ID was not specified properly.</value>
+  </data>
+  <data name="InvalidMonthNumber" xml:space="preserve">
+    <value>The month number must be between {0} and {1}.</value>
+  </data>
+  <data name="InvalidNumberOfYears" xml:space="preserve">
+    <value>The number of years must be a positive integer which is not greater then the current year.</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>The password provided is invalid. Please enter a valid password value.</value>
+  </data>
+  <data name="InvalidQuestion" xml:space="preserve">
+    <value>The password retrieval question provided is invalid. Please check the value and try again.</value>
+  </data>
+  <data name="InvalidUserName" xml:space="preserve">
+    <value>The user name provided is invalid. Please check the value and try again.</value>
+  </data>
+  <data name="InvalidYearNumber" xml:space="preserve">
+    <value>The year must be between {0} and {1}.</value>
+  </data>
+  <data name="ProviderError" xml:space="preserve">
+    <value>The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator.</value>
+  </data>
+  <data name="SessionStateUnavailable" xml:space="preserve">
+    <value>Session state is unavailable here.</value>
+  </data>
+  <data name="UnableCalculateCods" xml:space="preserve">
+    <value>Please save the data to view the result.</value>
+  </data>
+  <data name="UserRejected" xml:space="preserve">
+    <value>The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator.</value>
+  </data>
+  <data name="btnUpdateTE_CommandValue" xml:space="preserve">
+    <value>Update time entry: there's no such command.</value>
+    <comment>btnUpdateTE_CommandValue description</comment>
+  </data>
+  <data name="Exception_ErrorAddindTimeEntry" xml:space="preserve">
+    <value>Error while adding time entry: {0}</value>
+    <comment>ShowErrorMessageValue description</comment>
+  </data>
+  <data name="Exception_ErrorUpdatingTimeEntry" xml:space="preserve">
+    <value>Error while updating time entry: {0}</value>
+  </data>
+  <data name="Exception_NoSuchCommand" xml:space="preserve">
+    <value>No such command</value>
+  </data>
+  <data name="TimeEntryAddedSuccessfully" xml:space="preserve">
+    <value>Time entry added successfully.</value>
+  </data>
+  <data name="TimeEntryUpdatedSuccessfully" xml:space="preserve">
+    <value>Time entry updated successfully.</value>
+  </data>
+  <data name="PersonIsNotAssgned" xml:space="preserve">
+    <value>This person is not assigned to any milestones during the period selected.</value>
+  </data>
+  <data name="InvalidMilestoneDate" xml:space="preserve">
+    <value>Time entry date for this project-milestone should be between {0} and {1}</value>
+  </data>
+  <data name="ManagerSet" xml:space="preserve">
+    <value>Default line manager is set.</value>
+  </data>
+  <data name="NotAllowedToRecordTE" xml:space="preserve">
+    <value>Only active persons are allowed to allowed to record time entries. Please contact your administrator for more details.</value>
+  </data>
+  <data name="UnableToFindDateIndex" xml:space="preserve">
+    <value>Trying to enter activity for the date {0} (Start: {1}, End: {2}). Check if it's not a vacation or a day-off.</value>
+  </data>
+  <data name="VacationIncluded" xml:space="preserve">
+    <value>* Please note that this person has {0} vacation day(s) scheduled during the period you have selected. These vacation days have not been considered in the calculations on this page.</value>
+  </data>
+  <data name="ProjectsListSecure" xml:space="preserve">
+    <value>Other projects also exist for this client, but your permissions do not allow you to see them.</value>
+  </data>
+  <data name="PersonDetail_custTerminationDateMustBeEmpty" xml:space="preserve">
+    <value>The Termination Date for Active person must be Empty</value>
+  </data>
+  <data name="DesignatePersonAsManager" xml:space="preserve">
+    <value>The following people designate this person as their manager: {0}.&amp;nbsp; Please select a new manager for all people previously using this person as their manager.</value>
+  </data>
+  <data name="WhatIfError" xml:space="preserve">
+    <value>Unable to calculate values. Please check, if the person has active compensation record.</value>
+  </data>
+  <data name="RecruiterIsNotInTheList" xml:space="preserve">
+    <value>You are not in the recruiters list. Make sure that your recruiting commission is active.</value>
+  </data>
+  <data name="PersonsStartGreaterMilestoneStart" xml:space="preserve">
+    <value>Persons highlighted in red have their start dates greater than the milestone start date.</value>
+  </data>
+  <data name="MilestoneSavedMessage" xml:space="preserve">
+    <value>Milestone saved successfully.</value>
+  </data>
+  <data name="CannotModifyMilestonePerson" xml:space="preserve">
+    <value>Cannot {0} milesone person details because there (s)he has reported hours related to it.</value>
+  </data>
+  <data name="MilestonePersonSaved" xml:space="preserve">
+    <value>Milestone person details saved successfully.</value>
+  </data>
+  <data name="SavedDetailsConfirmation" xml:space="preserve">
+    <value>{0} details are saved successfully.</value>
+  </data>
+  <data name="DataSavedSuccessfully" xml:space="preserve">
+    <value>Data saved successfully</value>
+  </data>
+</root>
