@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="DefaultRecruiterCommissionService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://server4.ggk.com/PracticeManagementService/DefaultRecruiterCommissionService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://server4.ggk.com/PracticeManagementService/DefaultRecruiterCommissionService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://server4.ggk.com/PracticeManagementService/DefaultRecruiterCommissionService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IDefaultRecruiterCommissionService_DefaultRecruiterCommissionListByPerson_InputMessage">
+    <wsdl:part name="parameters" element="tns:DefaultRecruiterCommissionListByPerson" />
+  </wsdl:message>
+  <wsdl:message name="IDefaultRecruiterCommissionService_DefaultRecruiterCommissionListByPerson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DefaultRecruiterCommissionListByPersonResponse" />
+  </wsdl:message>
+  <wsdl:message name="IDefaultRecruiterCommissionService_DefaultRecruiterCommissionGetByPersonDate_InputMessage">
+    <wsdl:part name="parameters" element="tns:DefaultRecruiterCommissionGetByPersonDate" />
+  </wsdl:message>
+  <wsdl:message name="IDefaultRecruiterCommissionService_DefaultRecruiterCommissionGetByPersonDate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DefaultRecruiterCommissionGetByPersonDateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IDefaultRecruiterCommissionService_DefaultRecruiterCommissionGetById_InputMessage">
+    <wsdl:part name="parameters" element="tns:DefaultRecruiterCommissionGetById" />
+  </wsdl:message>
+  <wsdl:message name="IDefaultRecruiterCommissionService_DefaultRecruiterCommissionGetById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DefaultRecruiterCommissionGetByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IDefaultRecruiterCommissionService_DefaultRecruiterCommissionSave_InputMessage">
+    <wsdl:part name="parameters" element="tns:DefaultRecruiterCommissionSave" />
+  </wsdl:message>
+  <wsdl:message name="IDefaultRecruiterCommissionService_DefaultRecruiterCommissionSave_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DefaultRecruiterCommissionSaveResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IDefaultRecruiterCommissionService">
+    <wsdl:operation name="DefaultRecruiterCommissionListByPerson">
+      <wsdl:input wsaw:Action="http://tempuri.org/IDefaultRecruiterCommissionService/DefaultRecruiterCommissionListByPerson" message="tns:IDefaultRecruiterCommissionService_DefaultRecruiterCommissionListByPerson_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IDefaultRecruiterCommissionService/DefaultRecruiterCommissionListByPersonResponse" message="tns:IDefaultRecruiterCommissionService_DefaultRecruiterCommissionListByPerson_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DefaultRecruiterCommissionGetByPersonDate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IDefaultRecruiterCommissionService/DefaultRecruiterCommissionGetByPersonDate" message="tns:IDefaultRecruiterCommissionService_DefaultRecruiterCommissionGetByPersonDate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IDefaultRecruiterCommissionService/DefaultRecruiterCommissionGetByPersonDateResponse" message="tns:IDefaultRecruiterCommissionService_DefaultRecruiterCommissionGetByPersonDate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DefaultRecruiterCommissionGetById">
+      <wsdl:input wsaw:Action="http://tempuri.org/IDefaultRecruiterCommissionService/DefaultRecruiterCommissionGetById" message="tns:IDefaultRecruiterCommissionService_DefaultRecruiterCommissionGetById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IDefaultRecruiterCommissionService/DefaultRecruiterCommissionGetByIdResponse" message="tns:IDefaultRecruiterCommissionService_DefaultRecruiterCommissionGetById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DefaultRecruiterCommissionSave">
+      <wsdl:input wsaw:Action="http://tempuri.org/IDefaultRecruiterCommissionService/DefaultRecruiterCommissionSave" message="tns:IDefaultRecruiterCommissionService_DefaultRecruiterCommissionSave_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IDefaultRecruiterCommissionService/DefaultRecruiterCommissionSaveResponse" message="tns:IDefaultRecruiterCommissionService_DefaultRecruiterCommissionSave_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IDefaultRecruiterCommissionService" type="tns:IDefaultRecruiterCommissionService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="DefaultRecruiterCommissionListByPerson">
+      <soap:operation soapAction="http://tempuri.org/IDefaultRecruiterCommissionService/DefaultRecruiterCommissionListByPerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DefaultRecruiterCommissionGetByPersonDate">
+      <soap:operation soapAction="http://tempuri.org/IDefaultRecruiterCommissionService/DefaultRecruiterCommissionGetByPersonDate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DefaultRecruiterCommissionGetById">
+      <soap:operation soapAction="http://tempuri.org/IDefaultRecruiterCommissionService/DefaultRecruiterCommissionGetById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DefaultRecruiterCommissionSave">
+      <soap:operation soapAction="http://tempuri.org/IDefaultRecruiterCommissionService/DefaultRecruiterCommissionSave" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DefaultRecruiterCommissionService">
+    <wsdl:port name="BasicHttpBinding_IDefaultRecruiterCommissionService" binding="tns:BasicHttpBinding_IDefaultRecruiterCommissionService">
+      <soap:address location="http://server4.ggk.com/PracticeManagementService/DefaultRecruiterCommissionService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
