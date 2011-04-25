@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MilestoneService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/MilestoneService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/MilestoneService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/MilestoneService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/MilestoneService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IMilestoneService_SaveDefaultMilestone_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveDefaultMilestone" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_SaveDefaultMilestone_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveDefaultMilestoneResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_GetDefaultMilestone_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDefaultMilestone" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_GetDefaultMilestone_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDefaultMilestoneResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_MilestoneListByProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:MilestoneListByProject" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_MilestoneListByProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MilestoneListByProjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_GetMilestoneDetail_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestoneDetail" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_GetMilestoneDetail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestoneDetailResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_SaveMilestoneDetail_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveMilestoneDetail" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_SaveMilestoneDetail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveMilestoneDetailResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_DeleteMilestone_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteMilestone" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_DeleteMilestone_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteMilestoneResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_MilestoneMove_InputMessage">
+    <wsdl:part name="parameters" element="tns:MilestoneMove" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_MilestoneMove_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MilestoneMoveResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_MilestoneMoveEnd_InputMessage">
+    <wsdl:part name="parameters" element="tns:MilestoneMoveEnd" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_MilestoneMoveEnd_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MilestoneMoveEndResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_MilestoneClone_InputMessage">
+    <wsdl:part name="parameters" element="tns:MilestoneClone" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_MilestoneClone_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MilestoneCloneResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_GetMilestoneById_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestoneById" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_GetMilestoneById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestoneByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_GetMilestoneDataById_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestoneDataById" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_GetMilestoneDataById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestoneDataByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_AddProjectExpense_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddProjectExpense" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_AddProjectExpense_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddProjectExpenseResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_RemoveProjectExpense_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveProjectExpense" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_RemoveProjectExpense_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveProjectExpenseResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_UpdateProjectExpense_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateProjectExpense" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_UpdateProjectExpense_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateProjectExpenseResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_NoteListByTargetId_InputMessage">
+    <wsdl:part name="parameters" element="tns:NoteListByTargetId" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_NoteListByTargetId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:NoteListByTargetIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_NoteInsert_InputMessage">
+    <wsdl:part name="parameters" element="tns:NoteInsert" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_NoteInsert_OutputMessage">
+    <wsdl:part name="parameters" element="tns:NoteInsertResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_NoteUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:NoteUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_NoteUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:NoteUpdateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_NoteDelete_InputMessage">
+    <wsdl:part name="parameters" element="tns:NoteDelete" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_NoteDelete_OutputMessage">
+    <wsdl:part name="parameters" element="tns:NoteDeleteResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_GetProjectExpenseById_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectExpenseById" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_GetProjectExpenseById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectExpenseByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_GetProjectExpensesForMilestone_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectExpensesForMilestone" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_GetProjectExpensesForMilestone_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectExpensesForMilestoneResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IMilestoneService">
+    <wsdl:operation name="SaveDefaultMilestone">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/SaveDefaultMilestone" message="tns:IMilestoneService_SaveDefaultMilestone_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/SaveDefaultMilestoneResponse" message="tns:IMilestoneService_SaveDefaultMilestone_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDefaultMilestone">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/GetDefaultMilestone" message="tns:IMilestoneService_GetDefaultMilestone_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/GetDefaultMilestoneResponse" message="tns:IMilestoneService_GetDefaultMilestone_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MilestoneListByProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/MilestoneListByProject" message="tns:IMilestoneService_MilestoneListByProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/MilestoneListByProjectResponse" message="tns:IMilestoneService_MilestoneListByProject_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestoneDetail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/GetMilestoneDetail" message="tns:IMilestoneService_GetMilestoneDetail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/GetMilestoneDetailResponse" message="tns:IMilestoneService_GetMilestoneDetail_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveMilestoneDetail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/SaveMilestoneDetail" message="tns:IMilestoneService_SaveMilestoneDetail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/SaveMilestoneDetailResponse" message="tns:IMilestoneService_SaveMilestoneDetail_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMilestone">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/DeleteMilestone" message="tns:IMilestoneService_DeleteMilestone_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/DeleteMilestoneResponse" message="tns:IMilestoneService_DeleteMilestone_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MilestoneMove">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/MilestoneMove" message="tns:IMilestoneService_MilestoneMove_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/MilestoneMoveResponse" message="tns:IMilestoneService_MilestoneMove_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MilestoneMoveEnd">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/MilestoneMoveEnd" message="tns:IMilestoneService_MilestoneMoveEnd_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/MilestoneMoveEndResponse" message="tns:IMilestoneService_MilestoneMoveEnd_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MilestoneClone">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/MilestoneClone" message="tns:IMilestoneService_MilestoneClone_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/MilestoneCloneResponse" message="tns:IMilestoneService_MilestoneClone_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestoneById">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/GetMilestoneById" message="tns:IMilestoneService_GetMilestoneById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/GetMilestoneByIdResponse" message="tns:IMilestoneService_GetMilestoneById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestoneDataById">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/GetMilestoneDataById" message="tns:IMilestoneService_GetMilestoneDataById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/GetMilestoneDataByIdResponse" message="tns:IMilestoneService_GetMilestoneDataById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddProjectExpense">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/AddProjectExpense" message="tns:IMilestoneService_AddProjectExpense_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/AddProjectExpenseResponse" message="tns:IMilestoneService_AddProjectExpense_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveProjectExpense">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/RemoveProjectExpense" message="tns:IMilestoneService_RemoveProjectExpense_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/RemoveProjectExpenseResponse" message="tns:IMilestoneService_RemoveProjectExpense_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateProjectExpense">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/UpdateProjectExpense" message="tns:IMilestoneService_UpdateProjectExpense_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/UpdateProjectExpenseResponse" message="tns:IMilestoneService_UpdateProjectExpense_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NoteListByTargetId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/NoteListByTargetId" message="tns:IMilestoneService_NoteListByTargetId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/NoteListByTargetIdResponse" message="tns:IMilestoneService_NoteListByTargetId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NoteInsert">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/NoteInsert" message="tns:IMilestoneService_NoteInsert_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/NoteInsertResponse" message="tns:IMilestoneService_NoteInsert_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NoteUpdate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/NoteUpdate" message="tns:IMilestoneService_NoteUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/NoteUpdateResponse" message="tns:IMilestoneService_NoteUpdate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NoteDelete">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/NoteDelete" message="tns:IMilestoneService_NoteDelete_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/NoteDeleteResponse" message="tns:IMilestoneService_NoteDelete_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectExpenseById">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/GetProjectExpenseById" message="tns:IMilestoneService_GetProjectExpenseById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/GetProjectExpenseByIdResponse" message="tns:IMilestoneService_GetProjectExpenseById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectExpensesForMilestone">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/GetProjectExpensesForMilestone" message="tns:IMilestoneService_GetProjectExpensesForMilestone_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/GetProjectExpensesForMilestoneResponse" message="tns:IMilestoneService_GetProjectExpensesForMilestone_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IMilestoneService" type="tns:IMilestoneService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="SaveDefaultMilestone">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/SaveDefaultMilestone" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDefaultMilestone">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/GetDefaultMilestone" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MilestoneListByProject">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/MilestoneListByProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestoneDetail">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/GetMilestoneDetail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveMilestoneDetail">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/SaveMilestoneDetail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMilestone">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/DeleteMilestone" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MilestoneMove">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/MilestoneMove" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MilestoneMoveEnd">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/MilestoneMoveEnd" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MilestoneClone">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/MilestoneClone" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestoneById">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/GetMilestoneById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestoneDataById">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/GetMilestoneDataById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddProjectExpense">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/AddProjectExpense" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveProjectExpense">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/RemoveProjectExpense" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateProjectExpense">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/UpdateProjectExpense" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NoteListByTargetId">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/NoteListByTargetId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NoteInsert">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/NoteInsert" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NoteUpdate">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/NoteUpdate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NoteDelete">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/NoteDelete" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectExpenseById">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/GetProjectExpenseById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectExpensesForMilestone">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/GetProjectExpensesForMilestone" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MilestoneService">
+    <wsdl:port name="BasicHttpBinding_IMilestoneService" binding="tns:BasicHttpBinding_IMilestoneService">
+      <soap:address location="http://system66.ggk.com/PracticeManagementService/MilestoneService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
