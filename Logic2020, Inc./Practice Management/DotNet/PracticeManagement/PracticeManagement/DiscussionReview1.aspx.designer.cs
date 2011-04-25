@@ -13,13 +13,13 @@ namespace PraticeManagement {
     public partial class DiscussionReview1 {
         
         /// <summary>
-        /// upTopBarPane control.
+        /// upOpportunityDetail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upTopBarPane;
+        protected global::System.Web.UI.UpdatePanel upOpportunityDetail;
         
         /// <summary>
         /// imgBtnFirst control.
@@ -121,15 +121,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.HtmlControls.HtmlTableCell columnOpportunityList;
         
         /// <summary>
-        /// upOpportunityList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upOpportunityList;
-        
-        /// <summary>
         /// lvOpportunities control.
         /// </summary>
         /// <remarks>
@@ -137,15 +128,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ListView lvOpportunities;
-        
-        /// <summary>
-        /// upOpportunityDetail control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upOpportunityDetail;
         
         /// <summary>
         /// lblReadOnlyWarning control.
@@ -724,15 +706,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.ListView lvOpportunityPriorities;
         
         /// <summary>
-        /// lpOpportunityDetails control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.LoadingProgress lpOpportunityDetails;
-        
-        /// <summary>
         /// hdnValueChanged control.
         /// </summary>
         /// <remarks>
@@ -749,15 +722,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlAttachToProject;
-        
-        /// <summary>
-        /// upnlAttachToProject control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upnlAttachToProject;
         
         /// <summary>
         /// ddlProjects control.
@@ -785,6 +749,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancel;
+        
+        /// <summary>
+        /// lpOpportunityDetails control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.LoadingProgress lpOpportunityDetails;
     }
 }
 
