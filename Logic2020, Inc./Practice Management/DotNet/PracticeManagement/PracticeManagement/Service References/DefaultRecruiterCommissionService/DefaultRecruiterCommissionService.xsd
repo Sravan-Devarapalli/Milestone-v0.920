@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataTransferObjects" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://xpanatoliyl.eq.local/PracticeManagementService/DefaultRecruiterCommissionService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="ArrayOfDefaultRecruiterCommission">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DefaultRecruiterCommission" nillable="true" type="tns:DefaultRecruiterCommission" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDefaultRecruiterCommission" nillable="true" type="tns:ArrayOfDefaultRecruiterCommission" />
+  <xs:complexType name="DefaultRecruiterCommission">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CommissionHeaderId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Items" nillable="true" type="tns:ArrayOfDefaultRecruiterCommissionItem" />
+      <xs:element minOccurs="0" name="PersonId" type="xs:int" />
+      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="TextLine" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DefaultRecruiterCommission" nillable="true" type="tns:DefaultRecruiterCommission" />
+  <xs:complexType name="ArrayOfDefaultRecruiterCommissionItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DefaultRecruiterCommissionItem" nillable="true" type="tns:DefaultRecruiterCommissionItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDefaultRecruiterCommissionItem" nillable="true" type="tns:ArrayOfDefaultRecruiterCommissionItem" />
+  <xs:complexType name="DefaultRecruiterCommissionItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Amount" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="CommissionHeaderId" type="xs:int" />
+      <xs:element minOccurs="0" name="HoursToCollect" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DefaultRecruiterCommissionItem" nillable="true" type="tns:DefaultRecruiterCommissionItem" />
+  <xs:complexType name="PracticeManagementCurrency">
+    <xs:annotation>
+      <xs:appinfo>
+        <IsValueType xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsValueType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FormatStyle" type="tns:NumberFormatStyle" />
+      <xs:element minOccurs="0" name="Value" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PracticeManagementCurrency" nillable="true" type="tns:PracticeManagementCurrency" />
+  <xs:simpleType name="NumberFormatStyle">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="General" />
+      <xs:enumeration value="Negative" />
+      <xs:enumeration value="Revenue" />
+      <xs:enumeration value="Cogs">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Margin">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">8</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Total">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">16</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="NumberFormatStyle" nillable="true" type="tns:NumberFormatStyle" />
+</xs:schema>
