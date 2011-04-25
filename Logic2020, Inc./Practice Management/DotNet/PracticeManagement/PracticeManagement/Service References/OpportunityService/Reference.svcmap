@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="9d41f808-dc79-4ff6-946f-c164b7c1fdd6" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost/PracticeManagementService/OpportunityService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="OpportunityService1.disco" MetadataType="Disco" ID="93c9e7bc-3853-440d-908a-9fb4ac40347f" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?disco" />
+    <MetadataFile FileName="OpportunityService10.xsd" MetadataType="Schema" ID="fb47b67f-4f58-497b-9293-1271cfebef09" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd4" />
+    <MetadataFile FileName="OpportunityService11.xsd" MetadataType="Schema" ID="03fdf7b2-781b-485a-a0dd-3daa196e9d26" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd5" />
+    <MetadataFile FileName="OpportunityService12.xsd" MetadataType="Schema" ID="e1a1b0f1-16a1-43d3-ab9c-e084f8c99d81" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd2" />
+    <MetadataFile FileName="OpportunityService1.wsdl" MetadataType="Wsdl" ID="d66ac2ee-80b3-4b46-83ff-ce6b9a92ac5a" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?wsdl" />
+    <MetadataFile FileName="OpportunityService13.xsd" MetadataType="Schema" ID="6d266d97-d96a-4edb-80ab-e28d0369c09b" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd0" />
+    <MetadataFile FileName="OpportunityService14.xsd" MetadataType="Schema" ID="8ca9ef9c-d20f-4ee7-8d22-ccdeb6258e7b" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd1" />
+    <MetadataFile FileName="OpportunityService16.xsd" MetadataType="Schema" ID="3cc1a123-8ca7-4ce3-8f5c-2b9f78b4ca7d" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd3" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
