@@ -1,0 +1,2561 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Permissions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:dns="urn:Microsoft.VisualStudio.Data.Schema.Permissions" Version="1.0" xmlns="urn:Microsoft.VisualStudio.Data.Schema.Permissions">
+  <PermissionStatement Action="GRANT">
+    <Permission>CONNECT</Permission>
+    <Grantee>dbo</Grantee>
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>CONNECT</Permission>
+    <Grantee>PracticeManagementUser</Grantee>
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>CONNECT</Permission>
+    <Grantee>setuptest</Grantee>
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>CONNECT</Permission>
+    <Grantee>murka</Grantee>
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OpportunityExcelSet" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Membership_UpdateUserInfo" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestoneInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Membership_ChangePasswordQuestionAndAnswer" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="TimeEntryInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectListAllMultiParameters_batch" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_UsersInRoles_GetRolesForUser" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Membership_GetUserByEmail" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePersonListByProjectShort" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Membership_LockUser" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ExpenseCategory" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectsListByClient" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OpportunityGetById" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_UsersInRoles_RemoveUsersFromRoles" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="FinancialsListByProjectPeriodTotal" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_UsersInRoles_GetUsersInRoles" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ExpenseBasis" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="FinancialsListByProjectPeriod" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PermissionsGetAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Membership_FindUsersByName" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="FinancialsGetByMilestonePersonEntry" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PermissionsGetAllowedClients" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Membership_FindUsersByEmail" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="WeekPaidOption" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="FinancialsGetByMilestonePerson" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PermissionsGetAllowedGroups" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Membership_UnlockUser" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePersonEntryListByMilestonePersonId" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_FinancialsListByProjectPeriodTotal" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PermissionsGetAllowedPracticeManagers" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Users_DeleteUser" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MonthlyExpense" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_FinancialsListByProjectPeriod" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PermissionsGetAllowedPractices" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OpportunityTransitionInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="vw_aspnet_Applications" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="DefaultRecruiterCommissionHeaderInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonListBenchExpense_fast" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Profile_GetProperties" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PermissionsGetAllowedSalespersons" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OpportunityInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Membership_GetNumberOfUsersOnline" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonListBenchExpense_details" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Profile_SetProperties" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PermissionsSet" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OpportunityTransitionGetByOpportunity" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Applications_CreateApplication" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectListAllMultiParameters" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Profile_DeleteProfiles" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PermissionsSetClients" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Roles_GetAllRoles" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Profile_DeleteInactiveProfiles" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PermissionsSetGroups" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OpportunityListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Membership_GetAllUsers" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Profile_GetNumberOfInactiveProfiles" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PermissionsSetPracticeManagers" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestoneUpdate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_AnyDataInTables" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Profile_GetProfiles" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PermissionsSetPractices" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestoneDelete" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Membership_GetPassword" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PermissionsSetSalespersons" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonListSalesperson" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Membership_SetPassword" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Project" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Project" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Project" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Project" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PermissionsSetAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonListPracticeManager" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Membership_ResetPassword" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OpportunityConvertToProject" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Membership_GetPasswordWithFormat" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Roles_DeleteRole" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Roles_RoleExists" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectGroupListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_UsersInRoles_FindUsersInRole" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectSearchText" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_UsersInRoles_AddUsersToRoles" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectBillingInfo" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectBillingInfo" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectBillingInfo" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectBillingInfo" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OpportunityStatusListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PracticeListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonListRecruiter" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OpportunityTransitionStatusListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_MilestonePerson" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonEnsureIntegrity" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Membership_GetUserByUserId" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Personalization_GetApplicationId" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_RecruiterComissionWithDays" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="vw_aspnet_Users" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Paths_CreatePath" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_OpportunityHistory" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Users_CreateUser" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="GetNumberProjectedHours" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_PersonalizationAllUsers_GetPageSettings" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="GetOpportunityHistory" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="vw_aspnet_MembershipUsers" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="FinancialsGetByProject" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_PersonalizationAllUsers_ResetPageSettings" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonRoleListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="FinancialsGetByMilestone" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_PersonalizationAllUsers_SetPageSettings" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePersonInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="GetNumberAvaliableHours" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_PersonalizationPerUser_GetPageSettings" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Client" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Client" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Client" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Client" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="GetWeeklyUtilization" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_PersonalizationPerUser_ResetPageSettings" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ActivityLogListByPeriod" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestoneMove" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_PersonalizationPerUser_SetPageSettings" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="GetDefaultHoursPerDay" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ActivityLogGetCount" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_RegisterSchemaVersion" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ConsultantUtilizationReport" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_PersonalizationAdministration_DeleteAllState" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="GetNumberWorkingDays" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_UnRegisterSchemaVersion" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Today" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_PersonalizationAdministration_ResetSharedState" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="GetNumberHolidayDays" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_CheckSchemaVersion" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="GetHoursPerYear" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_PersonalizationAdministration_ResetUserState" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="WorkDaysCompanyNumber" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="GetFutureDate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_PersonalizationAdministration_FindState" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonStatsGetByMonth" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonWorkDaysNumber" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_PersonalizationAdministration_GetCountOfState" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="GetCurrentPayType" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MembershipDelete" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="GetDaysInMonth" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_WebEvent_LogEvent" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="SeniorityListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="RecruiterGet" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="DefaultRecruiterCommissionCleanup" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePersonDeleteEntries" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="RecruiterInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestoneMoveEnd" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectBillingInfoGetById" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="RecruiterReactivate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="GetNumberHolidayDaysWithWeekends" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="BilledTime" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="BilledTime" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="BilledTime" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="BilledTime" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectBillingInfoDelete" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Calendar" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Calendar" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Calendar" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Calendar" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectBillingInfoSave" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="RecruiterInactivate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_MilestoneLight" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ExpenseCategoryInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MakeNumberFromDate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="CommissionType" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="CommissionType" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="CommissionType" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="CommissionType" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="TimeEntriesAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MonthlyExpenseSaveItem" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectStatus" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectStatus" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectStatus" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectStatus" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ExpenseCategoryDelete" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MakeDate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ExpenseCategoryUpdate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PracticeUpdate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadRateType" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadRateType" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadRateType" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadRateType" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ExpenseCategoryListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PracticeInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="vw_aspnet_Roles" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ExpenseBasisListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="FinancialsGetByMilestonePersonPeriod" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="WeekPaidOptionListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="vw_aspnet_UsersInRoles" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MonthlyExpenseListByName" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="GetOverlappingPlacementDays" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadFixedRateTimescale" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadFixedRateTimescale" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadFixedRateTimescale" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadFixedRateTimescale" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="TimeTypeDelete" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MonthlyExpenseDeleteItem" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="SessionLogUnprepare" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="SessionLogPrepare" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Person" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Person" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Person" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Person" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonStatusListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePersonListByMilestone" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="RecruiterCommission" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="RecruiterCommission" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="RecruiterCommission" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="RecruiterCommission" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePersonDelete" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="TimeTypeUpdate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="TimeTypeInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadFixedRate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadFixedRate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadFixedRate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadFixedRate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Practice" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Practice" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Practice" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Practice" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonOverheadByTimescale" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePersonGetByMilestonePerson" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OpportunityUpdate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePersonListByProjectMonth" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="WorkDaysPersonNumber" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadAdministration" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadAdministration" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadAdministration" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadAdministration" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="DefaultRecruiterCommissionGetByPersonDate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePersonListByProjectPerson" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonSetDefaultManager" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="DefaultRecruiterCommissionListByPerson" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePersonListOverheadByPerson" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonListAllShort" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Timescale" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Timescale" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Timescale" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Timescale" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="DefaultRecruiterCommissionGetById" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="TimeEntryUpdate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Setup_RestorePermissions" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ConsultantUtilizationWeekly" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePersonListByPerson" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PracticeDelete" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Pay" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Pay" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Pay" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Pay" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonExcelSet" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Setup_RemoveAllRoleMembers" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectUpdate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="DefaultComissionDelete" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonOverheadByPerson" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="DefaultComissionSave" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="DefaultComissionGetByPerson" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PaySave" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="IsSomeonesManager" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_Pay" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="SetNewManager" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonGetCount" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PayGetCurrentByPerson" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PayGetHistoryByPerson" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectedWorkloadGetByPerson" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PayGetByPersonStartDate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_PersonCalendar" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="CalendarGet" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="DefaultRecruiterCommissionHeaderUpdate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="vw_aspnet_Profiles" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ClientUpdate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_OverheadFixedRateTimescale" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="DefaultCommission" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="DefaultCommission" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="DefaultCommission" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="DefaultCommission" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ClientListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Membership_CreateUser" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ClientInactivate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonListAllForMilestone" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ClientInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadFixedRateGetById" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="GetDatabaseVersion" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ClientReactivate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePersonEntryInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ClientGetById" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadFixedRateListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestoneClone" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ConsultantMilestones" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_Project" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Roles_CreateRole" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePersonGetByMilestonePersonId" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_PersonPayRetrospective" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_Opportunity" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ClientListAllForProject" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="CalendarUpdate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectsCountByClient" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonDelete" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_MilestonePersonSchedule" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MonthlyExpenseListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_MilestonePersonLight" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ComputeMonthSalary" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectGetById" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_MilestonePersonHours" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectStatusListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_MilestoneHours" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_MilestonePersonMonthHours" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_MilestoneRevenueRetrospective" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonSetStatus" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="CompensationCoversMilestone" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="TimeTypeGetAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_FinancialsRetrospective" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonListBenchExpense" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_PersonOverhead" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonListSubordinates" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectSetStatus" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="TimeEntryToggleIsReviewed" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_PersonOverheadRetrospective" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonGetById" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="TimeEntryToggleIsCorrect" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_Milestone" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonGetByAlias" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="CommissionSet" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="TimeEntryToggleIsChargeable" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectedWorkloadGetByProject" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonListAllSeniorityFilter" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="CommissionGetByProjectType" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="TimeEntryRemove" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectedWorkloadGetByMilestone" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_PersonProjectCommission" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Commission" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Commission" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Commission" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Commission" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="DefaultRecruiterCommissionItemUpdate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_MilestonePersonExpense" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MakeDefaultRecruiterCommissionText" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="TimeEntryAllPersons" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="DefaultRecruiterCommissionItemInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="TimeEntryAllMilestones" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="DefaultRecruiterCommissionDeleteItems" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_TimeEntries" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="DefaultRecruiterCommissionItemList" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonTimeEntries" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonGetCountActive" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="RecruiterCommissionListByRecruitId" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePersonActivity" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonUpdate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="RecruiterCommissionSave" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MarginType" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MarginType" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MarginType" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MarginType" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="PersonOneOffList" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="RecruiterCommissionDelete" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestoneListByProject" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_OverheadFixedRate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestoneGetById" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectInactivate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadRateTypeGetById" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_MilestonePersonVacations" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectReactivate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadRateTypeListAll" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePersonListByProject" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadFixedRateUpdate" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadFixedRateInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadTimescaleListByOverheadId" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectGroup" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectGroup" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>REFERENCES</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectGroup" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectGroup" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectGroup" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="TimescaleGetById" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePerson" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePerson" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePerson" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePerson" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="v_Person" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectGroupRenameByClient" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadTimescaleSet" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectGroupInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="vw_aspnet_WebPartState_Paths" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="OverheadTimescaleRemove" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="ProjectGroupDelete" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="vw_aspnet_WebPartState_Shared" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Membership_UpdateUser" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="vw_aspnet_WebPartState_User" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_Membership_GetUserByName" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>DELETE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Milestone" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>INSERT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Milestone" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Milestone" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>UPDATE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="Milestone" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="MilestonePersonEntryCreateProgrammatically" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="UserActivityLogInsert" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>PracticeManager</Grantee>
+    <Object Name="aspnet_UsersInRoles_IsUserInRole" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Profile_FullAccess</Grantee>
+    <Object Name="aspnet_Profile_DeleteProfiles" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Profile_FullAccess</Grantee>
+    <Object Name="aspnet_Profile_DeleteInactiveProfiles" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Profile_BasicAccess</Grantee>
+    <Object Name="aspnet_Profile_GetProperties" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Profile_BasicAccess</Grantee>
+    <Object Name="aspnet_Profile_SetProperties" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Profile_ReportingAccess</Grantee>
+    <Object Name="aspnet_Profile_GetNumberOfInactiveProfiles" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Profile_ReportingAccess</Grantee>
+    <Object Name="aspnet_Profile_GetProfiles" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>aspnet_Profile_ReportingAccess</Grantee>
+    <Object Name="vw_aspnet_Profiles" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Personalization_FullAccess</Grantee>
+    <Object Name="aspnet_PersonalizationAdministration_DeleteAllState" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Personalization_FullAccess</Grantee>
+    <Object Name="aspnet_PersonalizationAdministration_ResetSharedState" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Personalization_FullAccess</Grantee>
+    <Object Name="aspnet_PersonalizationAdministration_ResetUserState" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Personalization_BasicAccess</Grantee>
+    <Object Name="aspnet_Personalization_GetApplicationId" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Personalization_BasicAccess</Grantee>
+    <Object Name="aspnet_Paths_CreatePath" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Personalization_BasicAccess</Grantee>
+    <Object Name="aspnet_PersonalizationAllUsers_GetPageSettings" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Personalization_BasicAccess</Grantee>
+    <Object Name="aspnet_PersonalizationAllUsers_ResetPageSettings" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Personalization_BasicAccess</Grantee>
+    <Object Name="aspnet_PersonalizationAllUsers_SetPageSettings" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Personalization_BasicAccess</Grantee>
+    <Object Name="aspnet_PersonalizationPerUser_GetPageSettings" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Personalization_BasicAccess</Grantee>
+    <Object Name="aspnet_PersonalizationPerUser_ResetPageSettings" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Personalization_BasicAccess</Grantee>
+    <Object Name="aspnet_PersonalizationPerUser_SetPageSettings" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Personalization_ReportingAccess</Grantee>
+    <Object Name="aspnet_PersonalizationAdministration_FindState" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_Personalization_ReportingAccess</Grantee>
+    <Object Name="aspnet_PersonalizationAdministration_GetCountOfState" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>aspnet_Personalization_ReportingAccess</Grantee>
+    <Object Name="vw_aspnet_WebPartState_Paths" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>aspnet_Personalization_ReportingAccess</Grantee>
+    <Object Name="vw_aspnet_WebPartState_Shared" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>SELECT</Permission>
+    <Grantee>aspnet_Personalization_ReportingAccess</Grantee>
+    <Object Name="vw_aspnet_WebPartState_User" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+  <PermissionStatement Action="GRANT">
+    <Permission>EXECUTE</Permission>
+    <Grantee>aspnet_WebEvent_FullAccess</Grantee>
+    <Object Name="aspnet_WebEvent_LogEvent" Schema="dbo" Type="OBJECT" />
+    <Grantor>dbo</Grantor>
+  </PermissionStatement>
+</Permissions>
