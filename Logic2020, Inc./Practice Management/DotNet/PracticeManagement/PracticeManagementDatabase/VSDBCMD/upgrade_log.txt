@@ -1,0 +1,16 @@
+Database upgrade has failed if you see this message. This might be lack of MSI installation permissions. 
+Try to run installation manually.
+
+To run it manually:
+1. Run CMD
+2. Type the following:
+	updatedb.bat <servername> <databasename> "<setup folder path>"
+		<servername> - database server name
+		<databasename> - database name, the one that will be upgraded
+		<setup folder path> - path to the setup folder (without trailing slash)
+
+Example: 
+	updatedb.bat (local) pm_jun_30 d:\PRMA\Trash\Setup
+		(local) - server name
+		pm_jun_30 - database name
+		d:\PRMA\Trash\Setup - folder MSI was installed to
