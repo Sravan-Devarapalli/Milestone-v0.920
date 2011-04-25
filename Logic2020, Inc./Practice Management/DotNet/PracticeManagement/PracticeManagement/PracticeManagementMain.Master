@@ -1,0 +1,236 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="PracticeManagementMain.master.cs" Inherits="PraticeManagement.PracticeManagementMain" %>
+<%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Menu" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <asp:ContentPlaceHolder ID="title" runat="server"></asp:ContentPlaceHolder>
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+    <link rel="Stylesheet" href="<%# ResolveClientUrl("~/Css/style.css") %>" />
+    <!--[if IE]>
+    <link rel="Stylesheet" href="<%# ResolveClientUrl("~/Css/style-ie7.css") %>" />
+    <![endif]-->
+    <script type="text/javascript" src='<%# ResolveClientUrl("~/Scripts/Cookie.js") %>'></script>
+    <script type="text/javascript">
+        function checkDirtyBase() {
+            if (showDialod()) {
+                __doPostBack("<%# this.UniqueID %>", "");
+                return true;
+            }
+
+            return false;
+        }
+
+        function checkDirtyWithRedirect(url) {
+            if ((document.location.pathname.match("/OpportunityDetail.aspx") != null && getDirty()) ||
+                showDialod()) {
+                __doPostBack("__Page", url);
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <AjaxControlToolkit:ToolkitScriptManager ID="scriptManager" runat="server" 
+					LoadScriptsBeforeUI="true" CombineScripts="False" EnablePageMethods="True" 
+					ScriptMode="Release" EnableScriptLocalization="False">
+					<Scripts>
+						<asp:ScriptReference Name="MicrosoftAjax.js" Path="~/Scripts/MicrosoftAjax.js" />
+					</Scripts>
+	</AjaxControlToolkit:ToolkitScriptManager>
+	<asp:HiddenField ID="hidDirtyData" runat="server" />
+	<asp:HiddenField ID="hidDoSaveDirty" runat="server" />
+	<asp:HiddenField ID="hidAllowContinueWithoutSave" runat="server" />
+	<asp:Literal ID="ltrScript" runat="server" Mode="PassThrough" EnableViewState="false">
+				<script type="text/javascript">//<!--
+					function setDirty()
+					{{
+						var hid = document.getElementById("{0}");
+						hid.value = "{2}";
+					}}
+					
+					function getDirty()
+					{{
+						var hid = document.getElementById("{0}");
+						return hid.value == "{2}";
+					}}
+					
+					function clearDirty()
+					{{
+						var hid = document.getElementById("{0}");
+						hid.value = "{3}";
+						hid = document.getElementById("{1}");
+						hid.value = "{3}";
+					}}
+					
+					function getAllowContinueWithoutSave()
+					{{
+						var hid = document.getElementById("{4}");
+						var result = hid.value == "{2}";
+						if (!result) alert("You cannot continue while some data are not saved.");
+						return result;
+					}}
+
+					var clientValidateFunc = null;
+
+					function showDialod()
+					{{
+						if (getDirty())
+						{{
+							var hid = document.getElementById("{1}");
+							var result = confirm("Some data isn't saved. Click Ok to Save the data or Cancel to continue without saving.");
+							hid.value = result ? "{2}" : "{3}";
+							return result;
+						}}
+						
+						return false;
+					}}
+
+                    function showDialodWhenRequired() 
+                    {{
+                        if (getDirty()) 
+                        {{
+                                var hid = document.getElementById("{1}");
+                                var result = confirm("Some data isn't saved. Click Ok to Save the data or Cancel to continue without saving.");
+                                hid.value = result ? "{2}" : "{3}";
+                                return result;
+                        }}
+
+                        return -1;
+                    }}	                   								
+					
+					function confirmSaveDirty(ignoreAllowContinueWithoutSave)
+					{{
+						var result = true;
+						if (getDirty())
+						{{
+							var hid = document.getElementById("{1}");
+							result = confirm("Some data isn't saved. Click Ok to Save the data or Cancel to continue without saving.");
+							hid.value = result ? "{2}" : "{3}";
+						}}
+						
+						return (result || ignoreAllowContinueWithoutSave || getAllowContinueWithoutSave()) && (!result || typeof(clientValidateFunc) != "function" || clientValidateFunc());
+					}}
+				//-->
+				</script> </asp:Literal>
+	<asp:Literal runat="server" EnableViewState="false" ID="TabsScriptBlock" Mode="PassThrough">
+        <style type="text/css">
+            .tab-visible{
+	            display: block;
+            }
+			
+            .tab-invisible{
+	            display: none;
+            }
+        </style> </asp:Literal>
+	<script type="text/javascript">				    //<!--  		    
+	    function showInProcessImage(divWait, divContainer) {
+	        // get the bounds of both the container and the image  
+	        var containerBounds = Sys.UI.DomElement.getBounds(divContainer);
+	        var imgBounds = Sys.UI.DomElement.getBounds(divWait);
+
+	        // figure out where to position the element (the center of the container)  
+	        var x = containerBounds.x +
+					Math.round(containerBounds.width / 2) - Math.round(imgBounds.width / 2);
+	        var y = containerBounds.y +
+					Math.round(containerBounds.height / 2) - Math.round(imgBounds.height / 2);
+
+	        // set the position of the in progress image  
+	        Sys.UI.DomElement.setLocation(divWait, x, y);
+
+	        // finally un-hide it  
+	        divWait.style.visibility = 'visible';
+	        divWait.style.display = 'block';
+	    }
+
+	    function hideInProcessImage(divWait) {
+	        divWait.style.visibility = 'hidden';
+	        divWait.style.display = 'none';
+	    }
+	    //-->
+	</script>
+				
+	<div class="wrapper">
+        <div class="right-shadow"></div>
+	    <div class="header">
+		    <asp:HyperLink ID="hlHome" runat="server"><asp:Image ID="imgLogo" CssClass="main-logo" ImageUrl="~/Controls/CompanyLogoImage.ashx" runat="server" /></asp:HyperLink>
+		    <asp:ContentPlaceHolder ID="header" runat="server" Visible="false"></asp:ContentPlaceHolder>
+		    <div class="serv-info">
+                <div class="date"><%= DateTime.Now.ToLongDateString() %></div>
+			    <div class="authent"><asp:LoginView ID="loginView" runat="server">
+					<LoggedInTemplate>
+						Welcome,&nbsp;<asp:Label ID="lblUserName" runat="server" EnableViewState="false" />
+					</LoggedInTemplate>
+				    </asp:LoginView>
+				    <asp:LoginStatus ID="loginStatus" runat="server" LoginText="" LogoutAction="RedirectToLoginPage"  onloggingout="loginStatus_LoggingOut"  />
+			    </div>
+                <div class="changePassword">
+                 <asp:HyperLink ID="hlnkChangePassword" runat="server" NavigateUrl="~/ChangePassword.aspx"  Visible="false"
+                    Text="Change Password" ToolTip="Change Password"></asp:HyperLink>
+                    </div>
+		    </div>
+		    <div class="top-shadow">
+				<div class="top-shadow-left"></div>
+				<div class="top-shadow-right"></div>
+				<div class="top-shadow-middle"></div>
+				<div class="clear0"></div>
+			</div>
+	    </div>
+	    <div class="holder">
+			<div class="top-menu" >
+			<asp:SiteMapDataSource ID="smdsMain" runat="server" EnableViewState="False" ShowStartingNode="False"/>
+			<ext:CssFriendlyMenu ID="siteMenu" runat="server" DataSourceID="smdsMain" cssselectorclass="main-menu"
+					Orientation="Horizontal"
+					 MaximumDynamicDisplayLevels="0" StaticDisplayLevels="1" 
+					StaticHoverStyle-BorderStyle="None" StaticHoverStyle-BorderWidth="0" 
+					StaticSubMenuIndent="8px" BorderStyle="None">
+				<StaticMenuStyle BorderStyle="None" />
+				<StaticMenuItemStyle CssClass="siteMenuItem" BorderStyle="None" 
+                    BorderWidth="0px" />
+                    <StaticHoverStyle BorderWidth="0px" BorderStyle="None"></StaticHoverStyle>
+				<StaticItemTemplate>					
+                   <asp:HyperLink ID="btnPersonLink" runat="server" NavigateUrl='<%#  DataBinder.Eval (Container.DataItem, "NavigateUrl") %>'
+                            onclick="return checkDirtyWithRedirect(this.href);"><span><%# DataBinder.Eval(Container.DataItem, "Text")%></span></asp:HyperLink>
+                    </StaticItemTemplate>
+                </ext:CssFriendlyMenu>
+                <ext:CssFriendlyMenu ID="smdsSubMenu" runat="server" DataSourceID="PmSiteMap" OnMenuItemDataBound="smdsSubMenu_OnMenuItemDataBound"
+                    StaticDisplayLevels="1" Orientation="Horizontal" CssClassPrefix="main-sub-menu">
+                    <StaticMenuStyle BorderStyle="None" />
+                    <StaticItemTemplate>
+                        <asp:HyperLink ID="hlkSubmenuItem" runat="server" NavigateUrl='<%#  DataBinder.Eval (Container.DataItem, "NavigateUrl") %>'
+                            onclick="return checkDirtyWithRedirect(this.href);"><%# DataBinder.Eval(Container.DataItem, "Text")%></asp:HyperLink>
+                    </StaticItemTemplate>
+                </ext:CssFriendlyMenu>
+                <asp:SiteMapDataSource ID="PmSiteMap" runat="server" StartingNodeOffset="1" ShowStartingNode="false" />
+                <br id="topMenuBreak" runat ="server" visible="false" />
+            </div>
+            <div class="main-content">
+                <asp:ContentPlaceHolder ID="body" runat="server">
+                </asp:ContentPlaceHolder>
+            </div>
+        </div>
+    </div>
+    <div class="footer-wrap">
+        <div class="footer-left">
+        </div>
+        <div class="footer-right">
+        </div>
+        <div class="footer">
+            <asp:ContentPlaceHolder ID="footer" runat="server">
+            </asp:ContentPlaceHolder>
+            <div class="powered">
+                Powered by: <a href="#" class="icon"></a>
+            </div>
+            <span>&copy; Logic 20/20, Inc. Patent Pending - All Rights Reserved.</span>
+            <div class="clear0">
+            </div>
+        </div>
+    </div>
+    </form>
+</body>
+</html>
+
