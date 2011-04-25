@@ -1,0 +1,59 @@
+﻿body
+{
+	font-family: Verdana, Arial;
+	font-size: 12px;
+}
+
+table
+{
+	border-collapse: collapse;
+	border-color: Gray;
+	border-width: 1px;
+}
+
+th
+{
+	background-color: Silver;
+	border-color: Gray;
+	border-width: 1px;
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+td
+{
+	border-color: Gray;
+	border-width: 1px;
+}
+
+INPUT
+{
+	border-bottom-style: solid;
+	border-width: 1px;
+	border-color: Gray;
+}
+
+TABLE.timeEntry
+{
+	/* width: 100%; */
+}
+
+TABLE.timeEntry INPUT
+{
+	width: 51px;
+}
+
+TABLE.timeEntry SELECT
+{
+	width: 100%;
+}
+
+TABLE.timeEntryRight TD, TD.timeEntryRight
+{
+	width: 55px;
+	text-align: right;
+	font-style: italic;
+}
+
