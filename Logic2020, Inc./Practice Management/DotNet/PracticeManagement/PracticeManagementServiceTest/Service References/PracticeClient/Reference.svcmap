@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="c4811df7-8a01-4b69-aa68-4297e2f39d88" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost/PracticeManagementService/PracticeService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="PracticeService.disco" MetadataType="Disco" ID="8da7aa6c-1ca8-4910-8d37-e7d0400e41c1" SourceId="1" SourceUrl="http://xpanatoliyl.eq.local/PracticeManagementService/PracticeService.svc?disco" />
+    <MetadataFile FileName="PracticeService.xsd" MetadataType="Schema" ID="9afe13b8-fdee-43bb-9bc3-9a73cd07eb51" SourceId="1" SourceUrl="http://xpanatoliyl.eq.local/PracticeManagementService/PracticeService.svc?xsd=xsd2" />
+    <MetadataFile FileName="PracticeService1.xsd" MetadataType="Schema" ID="b8eb3e80-a433-41fc-b05f-6f4d9c2e0695" SourceId="1" SourceUrl="http://xpanatoliyl.eq.local/PracticeManagementService/PracticeService.svc?xsd=xsd1" />
+    <MetadataFile FileName="PracticeService2.xsd" MetadataType="Schema" ID="e9401060-4bf1-47a0-aa2e-de06a9d34e77" SourceId="1" SourceUrl="http://xpanatoliyl.eq.local/PracticeManagementService/PracticeService.svc?xsd=xsd0" />
+    <MetadataFile FileName="PracticeService.wsdl" MetadataType="Wsdl" ID="42aaf473-1b1d-439e-83f3-0ee344f670e5" SourceId="1" SourceUrl="http://xpanatoliyl.eq.local/PracticeManagementService/PracticeService.svc?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
