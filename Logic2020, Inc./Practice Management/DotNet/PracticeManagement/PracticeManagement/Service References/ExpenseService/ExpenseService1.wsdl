@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ExpenseService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://ws60/PracticeManagementService/ExpenseService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://ws60/PracticeManagementService/ExpenseService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://ws60/PracticeManagementService/ExpenseService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://ws60/PracticeManagementService/ExpenseService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IExpenseService_GetExpenseBasisList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetExpenseBasisList" />
+  </wsdl:message>
+  <wsdl:message name="IExpenseService_GetExpenseBasisList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetExpenseBasisListResponse" />
+  </wsdl:message>
+  <wsdl:message name="IExpenseService_GetWeekPaidOptionList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetWeekPaidOptionList" />
+  </wsdl:message>
+  <wsdl:message name="IExpenseService_GetWeekPaidOptionList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetWeekPaidOptionListResponse" />
+  </wsdl:message>
+  <wsdl:message name="IExpenseService_GetExpenseDetail_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetExpenseDetail" />
+  </wsdl:message>
+  <wsdl:message name="IExpenseService_GetExpenseDetail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetExpenseDetailResponse" />
+  </wsdl:message>
+  <wsdl:message name="IExpenseService_SaveExpenseItemDetail_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveExpenseItemDetail" />
+  </wsdl:message>
+  <wsdl:message name="IExpenseService_SaveExpenseItemDetail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveExpenseItemDetailResponse" />
+  </wsdl:message>
+  <wsdl:message name="IExpenseService_DeleteMonthlyExpense_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteMonthlyExpense" />
+  </wsdl:message>
+  <wsdl:message name="IExpenseService_DeleteMonthlyExpense_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteMonthlyExpenseResponse" />
+  </wsdl:message>
+  <wsdl:message name="IExpenseService_MonthlyExpenseListAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:MonthlyExpenseListAll" />
+  </wsdl:message>
+  <wsdl:message name="IExpenseService_MonthlyExpenseListAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MonthlyExpenseListAllResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IExpenseService">
+    <wsdl:operation name="GetExpenseBasisList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IExpenseService/GetExpenseBasisList" message="tns:IExpenseService_GetExpenseBasisList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IExpenseService/GetExpenseBasisListResponse" message="tns:IExpenseService_GetExpenseBasisList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetWeekPaidOptionList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IExpenseService/GetWeekPaidOptionList" message="tns:IExpenseService_GetWeekPaidOptionList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IExpenseService/GetWeekPaidOptionListResponse" message="tns:IExpenseService_GetWeekPaidOptionList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetExpenseDetail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IExpenseService/GetExpenseDetail" message="tns:IExpenseService_GetExpenseDetail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IExpenseService/GetExpenseDetailResponse" message="tns:IExpenseService_GetExpenseDetail_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveExpenseItemDetail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IExpenseService/SaveExpenseItemDetail" message="tns:IExpenseService_SaveExpenseItemDetail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IExpenseService/SaveExpenseItemDetailResponse" message="tns:IExpenseService_SaveExpenseItemDetail_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMonthlyExpense">
+      <wsdl:input wsaw:Action="http://tempuri.org/IExpenseService/DeleteMonthlyExpense" message="tns:IExpenseService_DeleteMonthlyExpense_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IExpenseService/DeleteMonthlyExpenseResponse" message="tns:IExpenseService_DeleteMonthlyExpense_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MonthlyExpenseListAll">
+      <wsdl:input wsaw:Action="http://tempuri.org/IExpenseService/MonthlyExpenseListAll" message="tns:IExpenseService_MonthlyExpenseListAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IExpenseService/MonthlyExpenseListAllResponse" message="tns:IExpenseService_MonthlyExpenseListAll_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IExpenseService" type="tns:IExpenseService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetExpenseBasisList">
+      <soap:operation soapAction="http://tempuri.org/IExpenseService/GetExpenseBasisList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetWeekPaidOptionList">
+      <soap:operation soapAction="http://tempuri.org/IExpenseService/GetWeekPaidOptionList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetExpenseDetail">
+      <soap:operation soapAction="http://tempuri.org/IExpenseService/GetExpenseDetail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveExpenseItemDetail">
+      <soap:operation soapAction="http://tempuri.org/IExpenseService/SaveExpenseItemDetail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMonthlyExpense">
+      <soap:operation soapAction="http://tempuri.org/IExpenseService/DeleteMonthlyExpense" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MonthlyExpenseListAll">
+      <soap:operation soapAction="http://tempuri.org/IExpenseService/MonthlyExpenseListAll" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ExpenseService">
+    <wsdl:port name="BasicHttpBinding_IExpenseService" binding="tns:BasicHttpBinding_IExpenseService">
+      <soap:address location="http://ws60/PracticeManagementService/ExpenseService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
