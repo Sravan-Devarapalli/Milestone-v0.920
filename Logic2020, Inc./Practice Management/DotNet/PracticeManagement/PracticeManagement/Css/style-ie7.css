@@ -1,0 +1,25 @@
+/* ---- styles for ie7 ---- */
+
+.filer-header, .ajax__tab_header { margin-bottom: -1px;}
+ 
+
+.buttons-block { height: 1%;}
+
+.ie-only-visible {display: block;}
+
+.ie-grscrl-hider {
+	margin-right: 22px;
+}
+
+TR.CompPerfHeader td .ie-bg, .CompPerfTable th .ie-bg {
+	white-space: nowrap;
+	position: static;
+}
+
+.summary TD.CompPerfTotalSummary .cell-pad {
+	padding-right: 30px;
+}
+
+.page-hscroll-wrapper {
+	top:-10px;
+}
