@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceDefinition name="PMWebAzureService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
+  <WebRole name="PracticeManagement" vmsize="Medium">
+    <Sites>
+      <Site name="Web">
+        <Bindings>
+          <Binding name="HttpIn" endpointName="HttpsEndpoint" />
+          <Binding name="Endpoint1" endpointName="HttpEndpoint" />
+        </Bindings>
+      </Site>
+      <Site name="WebService" physicalDirectory="..\PracticeManagementService">
+        <Bindings>
+          <Binding name="Endpoint1" endpointName="ServiceEndpoint" />
+        </Bindings>
+      </Site>
+    </Sites>
+    <Endpoints>
+      <InputEndpoint name="HttpsEndpoint" protocol="https" port="443" certificate="Practice.logic2020.com" />
+      <InputEndpoint name="HttpEndpoint" protocol="http" port="80" />
+      <InputEndpoint name="ServiceEndpoint" protocol="http" port="8080" />
+    </Endpoints>
+    <Imports>
+      <Import moduleName="Diagnostics" />
+    </Imports>
+    <Certificates>
+      <Certificate name="Practice.logic2020.com" storeLocation="LocalMachine" storeName="My" />
+    </Certificates>
+    <ConfigurationSettings>
+      <Setting name="HasHttpsEndPoint" />
+      <Setting name="MilestonePersonServiceClient" />
+      <Setting name="ActivityLogServiceClient" />
+      <Setting name="CalendarServiceClient" />
+      <Setting name="ClientServiceClient" />
+      <Setting name="ExpenseCategoryServiceClient" />
+      <Setting name="ExpenseServiceClient" />
+      <Setting name="MilestoneServiceClient" />
+      <Setting name="OpportunityServiceClient" />
+      <Setting name="OverheadServiceClient" />
+      <Setting name="PersonRoleServiceClient" />
+      <Setting name="PersonServiceClient" />
+      <Setting name="PersonStatusServiceClient" />
+      <Setting name="PracticeServiceClient" />
+      <Setting name="ProjectGroupServiceClient" />
+      <Setting name="ProjectServiceClient" />
+      <Setting name="ProjectStatusServiceClient" />
+      <Setting name="TimeEntryServiceClient" />
+      <Setting name="TimescaleServiceClient" />
+      <Setting name="ConfigurationServiceClient" />
+      <Setting name="DefaultRecruiterCommissionServiceClient" />
+      <Setting name="DefaultCommissionServiceClient" />
+      <Setting name="MembershipServiceClient" />
+      <Setting name="RoleServiceClient" />
+      <Setting name="AuthServiceClient" />
+      <Setting name="EnableSSL" />
+      <Setting name="senioritySeparationRangeValue" />
+      <Setting name="ShowWithoutDirector" />
+    </ConfigurationSettings>
+  </WebRole>
+</ServiceDefinition>
