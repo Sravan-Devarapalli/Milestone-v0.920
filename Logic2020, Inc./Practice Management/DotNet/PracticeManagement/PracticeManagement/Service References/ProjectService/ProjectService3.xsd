@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://l3acp3p.logic2020.com/PracticeManagementService/ProjectService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+  <xs:element name="GetProjectListAll">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetProjectListAllResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectListAllResult" nillable="true" type="q1:ArrayOfProject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetProjectList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="clientId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="showProjected" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showCompleted" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showActive" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showExperimental" type="xs:boolean" />
+        <xs:element minOccurs="0" name="periodStart" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="periodEnd" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="salespersonId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="practiceManagerId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="practiceId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="projectGroupId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="includeCurentYearFinancials" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetProjectListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectListResult" nillable="true" type="q2:ArrayOfProject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetBenchList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="periodStart" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="periodEnd" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetBenchListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetBenchListResult" nillable="true" type="q3:ArrayOfProject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetProjectListByClient">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="clientId" type="xs:int" />
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetProjectListByClientResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectListByClientResult" nillable="true" type="q4:ArrayOfProject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectSearchText">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="looked" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectSearchTextResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ProjectSearchTextResult" nillable="true" type="q5:ArrayOfProject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetProjectDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="projectId" type="xs:int" />
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetProjectDetailResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectDetailResult" nillable="true" type="q6:Project" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveProjectDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="project" nillable="true" type="q7:Project" />
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveProjectDetailResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SaveProjectDetailResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MonthMiniReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="month" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MonthMiniReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="MonthMiniReportResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PersonStartsReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="salespersonId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="practiceManagerId" nillable="true" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PersonStartsReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonStartsReportResult" nillable="true" type="q8:ArrayOfPersonStats" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
