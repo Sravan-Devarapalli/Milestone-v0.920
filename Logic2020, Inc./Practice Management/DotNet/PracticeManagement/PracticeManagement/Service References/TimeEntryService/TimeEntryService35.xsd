@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://system66.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+  <xs:complexType name="TimeTypeRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsDefault" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TimeTypeRecord" nillable="true" type="tns:TimeTypeRecord" />
+  <xs:complexType name="ArrayOfTimeTypeRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TimeTypeRecord" nillable="true" type="tns:TimeTypeRecord" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTimeTypeRecord" nillable="true" type="tns:ArrayOfTimeTypeRecord" />
+  <xs:complexType name="TimeEntryRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ActualHours" type="xs:double" />
+      <xs:element minOccurs="0" name="EntryDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ForecastedHours" type="xs:double" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsCorrect" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsReviewed" type="tns:ReviewStatus" />
+      <xs:element minOccurs="0" name="MilestoneDate" type="xs:dateTime" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ModifiedBy" nillable="true" type="q1:Person" />
+      <xs:element minOccurs="0" name="ModifiedDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Note" nillable="true" type="xs:string" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ParentMilestonePersonEntry" nillable="true" type="q2:MilestonePersonEntry" />
+      <xs:element minOccurs="0" name="TimeType" nillable="true" type="tns:TimeTypeRecord" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TimeEntryRecord" nillable="true" type="tns:TimeEntryRecord" />
+  <xs:simpleType name="ReviewStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Pending" />
+      <xs:enumeration value="Approved" />
+      <xs:enumeration value="Declined" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ReviewStatus" nillable="true" type="tns:ReviewStatus" />
+  <xs:complexType name="ArrayOfTimeEntryRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TimeEntryRecord" nillable="true" type="tns:TimeEntryRecord" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTimeEntryRecord" nillable="true" type="tns:ArrayOfTimeEntryRecord" />
+  <xs:complexType name="TimeEntryHours">
+    <xs:sequence>
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Calendar" nillable="true" type="q3:CalendarItem" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TimeEntryHours" nillable="true" type="tns:TimeEntryHours" />
+  <xs:complexType name="TimeEntrySums">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="TotalActualHours" type="xs:double" />
+      <xs:element minOccurs="0" name="TotalForecastedHours" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TimeEntrySums" nillable="true" type="tns:TimeEntrySums" />
+</xs:schema>
