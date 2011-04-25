@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ProjectService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://server2.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://server2.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://server2.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://server2.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://server2.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd4" />
+      <xsd:import schemaLocation="http://server2.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IProjectService_ProjectGetById_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectGetById" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_ProjectGetById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectGetByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectBillingInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectBillingInfo" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectBillingInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectBillingInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectsComputedFinancials_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectsComputedFinancials" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectsComputedFinancials_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectsComputedFinancialsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectMilestonesFinancials_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectMilestonesFinancials" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectMilestonesFinancials_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectMilestonesFinancialsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_ProjectCountByClient_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectCountByClient" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_ProjectCountByClient_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectCountByClientResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectListAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectListAll" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectListAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectListAllResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_ListProjectsByClient_InputMessage">
+    <wsdl:part name="parameters" element="tns:ListProjectsByClient" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_ListProjectsByClient_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ListProjectsByClientResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_ListProjectsByClientShort_InputMessage">
+    <wsdl:part name="parameters" element="tns:ListProjectsByClientShort" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_ListProjectsByClientShort_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ListProjectsByClientShortResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_ListProjectsByClientWithSort_InputMessage">
+    <wsdl:part name="parameters" element="tns:ListProjectsByClientWithSort" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_ListProjectsByClientWithSort_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ListProjectsByClientWithSortResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CloneProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:CloneProject" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CloneProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CloneProjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectListCustom_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectListCustom" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectListCustom_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectListCustomResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectList" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectListResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_ProjectListAllMultiParameters_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectListAllMultiParameters" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_ProjectListAllMultiParameters_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectListAllMultiParametersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectListWithFinancials_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectListWithFinancials" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectListWithFinancials_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectListWithFinancialsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectListGroupByPracticeManagers_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectListGroupByPracticeManagers" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectListGroupByPracticeManagers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectListGroupByPracticeManagersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetBenchList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBenchList" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetBenchList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBenchListResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetBenchListWithoutBenchTotalAndAdminCosts_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBenchListWithoutBenchTotalAndAdminCosts" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetBenchListWithoutBenchTotalAndAdminCosts_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBenchListWithoutBenchTotalAndAdminCostsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectListByClient_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectListByClient" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectListByClient_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectListByClientResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_ProjectSearchText_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectSearchText" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_ProjectSearchText_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectSearchTextResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectDetail_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectDetail" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectDetail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectDetailResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectDetailWithoutMilestones_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectDetailWithoutMilestones" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectDetailWithoutMilestones_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectDetailWithoutMilestonesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_SaveProjectDetail_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveProjectDetail" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_SaveProjectDetail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveProjectDetailResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_MonthMiniReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:MonthMiniReport" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_MonthMiniReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MonthMiniReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_PersonStartsReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:PersonStartsReport" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_PersonStartsReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PersonStartsReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectId" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_PersonBudgetListByYear_InputMessage">
+    <wsdl:part name="parameters" element="tns:PersonBudgetListByYear" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_PersonBudgetListByYear_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PersonBudgetListByYearResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_PracticeBudgetListByYear_InputMessage">
+    <wsdl:part name="parameters" element="tns:PracticeBudgetListByYear" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_PracticeBudgetListByYear_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PracticeBudgetListByYearResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CategoryItemBudgetSave_InputMessage">
+    <wsdl:part name="parameters" element="tns:CategoryItemBudgetSave" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CategoryItemBudgetSave_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CategoryItemBudgetSaveResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CalculateBudgetForPersons_InputMessage">
+    <wsdl:part name="parameters" element="tns:CalculateBudgetForPersons" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CalculateBudgetForPersons_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CalculateBudgetForPersonsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CalculateBudgetForPractices_InputMessage">
+    <wsdl:part name="parameters" element="tns:CalculateBudgetForPractices" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CalculateBudgetForPractices_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CalculateBudgetForPracticesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CategoryItemsSaveFromXML_InputMessage">
+    <wsdl:part name="parameters" element="tns:CategoryItemsSaveFromXML" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CategoryItemsSaveFromXML_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CategoryItemsSaveFromXMLResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IProjectService">
+    <wsdl:operation name="ProjectGetById">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectGetById" message="tns:IProjectService_ProjectGetById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectGetByIdResponse" message="tns:IProjectService_ProjectGetById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectBillingInfo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectBillingInfo" message="tns:IProjectService_GetProjectBillingInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectBillingInfoResponse" message="tns:IProjectService_GetProjectBillingInfo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectsComputedFinancials">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectsComputedFinancials" message="tns:IProjectService_GetProjectsComputedFinancials_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectsComputedFinancialsResponse" message="tns:IProjectService_GetProjectsComputedFinancials_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectMilestonesFinancials">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectMilestonesFinancials" message="tns:IProjectService_GetProjectMilestonesFinancials_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectMilestonesFinancialsResponse" message="tns:IProjectService_GetProjectMilestonesFinancials_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ProjectCountByClient">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectCountByClient" message="tns:IProjectService_ProjectCountByClient_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectCountByClientResponse" message="tns:IProjectService_ProjectCountByClient_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectListAll">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectListAll" message="tns:IProjectService_GetProjectListAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectListAllResponse" message="tns:IProjectService_GetProjectListAll_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ListProjectsByClient">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ListProjectsByClient" message="tns:IProjectService_ListProjectsByClient_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ListProjectsByClientResponse" message="tns:IProjectService_ListProjectsByClient_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ListProjectsByClientShort">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ListProjectsByClientShort" message="tns:IProjectService_ListProjectsByClientShort_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ListProjectsByClientShortResponse" message="tns:IProjectService_ListProjectsByClientShort_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ListProjectsByClientWithSort">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ListProjectsByClientWithSort" message="tns:IProjectService_ListProjectsByClientWithSort_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ListProjectsByClientWithSortResponse" message="tns:IProjectService_ListProjectsByClientWithSort_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CloneProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CloneProject" message="tns:IProjectService_CloneProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CloneProjectResponse" message="tns:IProjectService_CloneProject_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectListCustom">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectListCustom" message="tns:IProjectService_GetProjectListCustom_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectListCustomResponse" message="tns:IProjectService_GetProjectListCustom_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectList" message="tns:IProjectService_GetProjectList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectListResponse" message="tns:IProjectService_GetProjectList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ProjectListAllMultiParameters">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectListAllMultiParameters" message="tns:IProjectService_ProjectListAllMultiParameters_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectListAllMultiParametersResponse" message="tns:IProjectService_ProjectListAllMultiParameters_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectListWithFinancials">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectListWithFinancials" message="tns:IProjectService_GetProjectListWithFinancials_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectListWithFinancialsResponse" message="tns:IProjectService_GetProjectListWithFinancials_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectListGroupByPracticeManagers">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectListGroupByPracticeManagers" message="tns:IProjectService_GetProjectListGroupByPracticeManagers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectListGroupByPracticeManagersResponse" message="tns:IProjectService_GetProjectListGroupByPracticeManagers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBenchList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetBenchList" message="tns:IProjectService_GetBenchList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetBenchListResponse" message="tns:IProjectService_GetBenchList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBenchListWithoutBenchTotalAndAdminCosts">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetBenchListWithoutBenchTotalAndAdminCosts" message="tns:IProjectService_GetBenchListWithoutBenchTotalAndAdminCosts_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetBenchListWithoutBenchTotalAndAdminCostsResponse" message="tns:IProjectService_GetBenchListWithoutBenchTotalAndAdminCosts_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectListByClient">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectListByClient" message="tns:IProjectService_GetProjectListByClient_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectListByClientResponse" message="tns:IProjectService_GetProjectListByClient_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ProjectSearchText">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectSearchText" message="tns:IProjectService_ProjectSearchText_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectSearchTextResponse" message="tns:IProjectService_ProjectSearchText_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectDetail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectDetail" message="tns:IProjectService_GetProjectDetail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectDetailResponse" message="tns:IProjectService_GetProjectDetail_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectDetailWithoutMilestones">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectDetailWithoutMilestones" message="tns:IProjectService_GetProjectDetailWithoutMilestones_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectDetailWithoutMilestonesResponse" message="tns:IProjectService_GetProjectDetailWithoutMilestones_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveProjectDetail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/SaveProjectDetail" message="tns:IProjectService_SaveProjectDetail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/SaveProjectDetailResponse" message="tns:IProjectService_SaveProjectDetail_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MonthMiniReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/MonthMiniReport" message="tns:IProjectService_MonthMiniReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/MonthMiniReportResponse" message="tns:IProjectService_MonthMiniReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PersonStartsReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/PersonStartsReport" message="tns:IProjectService_PersonStartsReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/PersonStartsReportResponse" message="tns:IProjectService_PersonStartsReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectId" message="tns:IProjectService_GetProjectId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectIdResponse" message="tns:IProjectService_GetProjectId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PersonBudgetListByYear">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/PersonBudgetListByYear" message="tns:IProjectService_PersonBudgetListByYear_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/PersonBudgetListByYearResponse" message="tns:IProjectService_PersonBudgetListByYear_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PracticeBudgetListByYear">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/PracticeBudgetListByYear" message="tns:IProjectService_PracticeBudgetListByYear_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/PracticeBudgetListByYearResponse" message="tns:IProjectService_PracticeBudgetListByYear_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CategoryItemBudgetSave">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CategoryItemBudgetSave" message="tns:IProjectService_CategoryItemBudgetSave_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CategoryItemBudgetSaveResponse" message="tns:IProjectService_CategoryItemBudgetSave_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CalculateBudgetForPersons">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CalculateBudgetForPersons" message="tns:IProjectService_CalculateBudgetForPersons_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CalculateBudgetForPersonsResponse" message="tns:IProjectService_CalculateBudgetForPersons_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CalculateBudgetForPractices">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CalculateBudgetForPractices" message="tns:IProjectService_CalculateBudgetForPractices_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CalculateBudgetForPracticesResponse" message="tns:IProjectService_CalculateBudgetForPractices_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CategoryItemsSaveFromXML">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CategoryItemsSaveFromXML" message="tns:IProjectService_CategoryItemsSaveFromXML_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CategoryItemsSaveFromXMLResponse" message="tns:IProjectService_CategoryItemsSaveFromXML_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IProjectService" type="tns:IProjectService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ProjectGetById">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/ProjectGetById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectBillingInfo">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectBillingInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectsComputedFinancials">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectsComputedFinancials" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectMilestonesFinancials">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectMilestonesFinancials" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProjectCountByClient">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/ProjectCountByClient" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectListAll">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectListAll" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListProjectsByClient">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/ListProjectsByClient" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListProjectsByClientShort">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/ListProjectsByClientShort" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListProjectsByClientWithSort">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/ListProjectsByClientWithSort" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CloneProject">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/CloneProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectListCustom">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectListCustom" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectList">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProjectListAllMultiParameters">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/ProjectListAllMultiParameters" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectListWithFinancials">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectListWithFinancials" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectListGroupByPracticeManagers">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectListGroupByPracticeManagers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBenchList">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetBenchList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBenchListWithoutBenchTotalAndAdminCosts">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetBenchListWithoutBenchTotalAndAdminCosts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectListByClient">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectListByClient" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProjectSearchText">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/ProjectSearchText" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectDetail">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectDetail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectDetailWithoutMilestones">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectDetailWithoutMilestones" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveProjectDetail">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/SaveProjectDetail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MonthMiniReport">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/MonthMiniReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PersonStartsReport">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/PersonStartsReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectId">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PersonBudgetListByYear">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/PersonBudgetListByYear" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PracticeBudgetListByYear">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/PracticeBudgetListByYear" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CategoryItemBudgetSave">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/CategoryItemBudgetSave" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculateBudgetForPersons">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/CalculateBudgetForPersons" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculateBudgetForPractices">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/CalculateBudgetForPractices" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CategoryItemsSaveFromXML">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/CategoryItemsSaveFromXML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ProjectService">
+    <wsdl:port name="BasicHttpBinding_IProjectService" binding="tns:BasicHttpBinding_IProjectService">
+      <soap:address location="http://server2.ggk.com/PracticeManagementService/ProjectService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
