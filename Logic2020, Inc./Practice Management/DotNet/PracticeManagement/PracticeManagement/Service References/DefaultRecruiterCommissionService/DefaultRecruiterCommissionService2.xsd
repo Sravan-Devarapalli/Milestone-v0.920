@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://xpanatoliyl.eq.local/PracticeManagementService/DefaultRecruiterCommissionService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+  <xs:element name="DefaultRecruiterCommissionListByPerson">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="personId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DefaultRecruiterCommissionListByPersonResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="DefaultRecruiterCommissionListByPersonResult" nillable="true" type="q1:ArrayOfDefaultRecruiterCommission" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DefaultRecruiterCommissionGetByPersonDate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="personId" type="xs:int" />
+        <xs:element minOccurs="0" name="date" nillable="true" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DefaultRecruiterCommissionGetByPersonDateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="DefaultRecruiterCommissionGetByPersonDateResult" nillable="true" type="q2:DefaultRecruiterCommission" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DefaultRecruiterCommissionGetById">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="commissionHeaderId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DefaultRecruiterCommissionGetByIdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="DefaultRecruiterCommissionGetByIdResult" nillable="true" type="q3:DefaultRecruiterCommission" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DefaultRecruiterCommissionSave">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="commission" nillable="true" type="q4:DefaultRecruiterCommission" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DefaultRecruiterCommissionSaveResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
