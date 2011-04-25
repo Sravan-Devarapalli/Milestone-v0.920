@@ -1,0 +1,4 @@
+﻿ALTER TABLE [dbo].[PermissionTarget]
+    ADD CONSTRAINT [PK_PermissionTarget] PRIMARY KEY CLUSTERED ([PermissionTypeID] ASC) WITH (IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF);
+
+
