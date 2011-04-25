@@ -1,0 +1,334 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7177AF0B-588F-4CD2-A174-5E2488DBD636}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PracticeManagementService</RootNamespace>
+    <AssemblyName>PracticeManagementService</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <SccProjectName>SurroundSCMScci</SccProjectName>
+    <SccLocalPath>..\..</SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>MSSCCI:Surround SCM</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Staging|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\PracticeManagementService.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>PracticeManagementStrongNameKey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>C:\Program Files\Windows Azure SDK\v1.3\bin\runtimes\base\Microsoft.WindowsAzure.ServiceRuntime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Extensions.Design, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CalendarService.svc" />
+    <Content Include="ClientService.svc" />
+    <Content Include="DefaultCommissionService.svc" />
+    <Content Include="DefaultRecruiterCommissionService.svc" />
+    <Content Include="MilestonePersonService.svc" />
+    <Content Include="MilestoneService.svc" />
+    <Content Include="OverheadService.svc" />
+    <Content Include="PersonService.svc" />
+    <Content Include="PracticeService.svc" />
+    <Content Include="ProjectService.svc" />
+    <Content Include="ProjectStatusService.svc" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActivityLogService.svc.cs">
+      <DependentUpon>ActivityLogService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Messages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="AuthService.svc.cs">
+      <DependentUpon>AuthService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="CalendarService.svc.cs">
+      <DependentUpon>CalendarService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="ClientService.svc.cs">
+      <DependentUpon>ClientService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationService.svc.cs">
+      <DependentUpon>ConfigurationService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="CustomMembershipProvider.cs" />
+    <Compile Include="Mail\FileDeliveryProvider.cs" />
+    <Compile Include="IConfigurationService.cs" />
+    <Compile Include="IEMailDeliveryProvider.cs" />
+    <Compile Include="IProjectGroupService.cs" />
+    <Compile Include="ITimeEntryService.cs" />
+    <Compile Include="Mail\EmailMessageDeliveryProvider.cs" />
+    <Compile Include="PasswordGeneratorUtility.cs" />
+    <Compile Include="ProjectGroupService.svc.cs">
+      <DependentUpon>ProjectGroupService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="ServiceConstants.cs" />
+    <Compile Include="DefaultCommissionService.svc.cs">
+      <DependentUpon>DefaultCommissionService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="DefaultRecruiterCommissionService.svc.cs">
+      <DependentUpon>DefaultRecruiterCommissionService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="ExpenseCategoryService.svc.cs">
+      <DependentUpon>ExpenseCategoryService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="ExpenseService.svc.cs">
+      <DependentUpon>ExpenseService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="IActivityLogService.cs" />
+    <Compile Include="IAuthService.cs" />
+    <Compile Include="ICalendarService.cs" />
+    <Compile Include="IClientService.cs" />
+    <Compile Include="IDefaultCommissionService.cs" />
+    <Compile Include="IDefaultRecruiterCommissionService.cs" />
+    <Compile Include="IExpenseCategoryService.cs" />
+    <Compile Include="IExpenseService.cs" />
+    <Compile Include="IMembershipService.cs" />
+    <Compile Include="IMilestonePersonService.cs" />
+    <Compile Include="IMilestoneService.cs" />
+    <Compile Include="IOpportunityService.cs" />
+    <Compile Include="IOverheadService.cs" />
+    <Compile Include="IPersonRoleService.cs" />
+    <Compile Include="IPersonService.cs" />
+    <Compile Include="IPersonStatusService.cs" />
+    <Compile Include="IPracticeService.cs" />
+    <Compile Include="IProjectService.cs" />
+    <Compile Include="IProjectStatusService.cs" />
+    <Compile Include="IRoleService.cs" />
+    <Compile Include="ITimescaleService.cs" />
+    <Compile Include="MailUtil.cs" />
+    <Compile Include="MembershipService.svc.cs">
+      <DependentUpon>MembershipService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="MilestonePersonService.svc.cs">
+      <DependentUpon>MilestonePersonService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="MilestoneService.svc.cs">
+      <DependentUpon>MilestoneService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="OpportunityService.svc.cs">
+      <DependentUpon>OpportunityService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="OverheadService.svc.cs">
+      <DependentUpon>OverheadService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="PersonRateCalculator.cs" />
+    <Compile Include="PersonRoleService.svc.cs">
+      <DependentUpon>PersonRoleService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="PersonService.svc.cs">
+      <DependentUpon>PersonService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="PersonStatusService.svc.cs">
+      <DependentUpon>PersonStatusService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="PracticeService.svc.cs">
+      <DependentUpon>PracticeService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectRateCalculator.cs" />
+    <Compile Include="ProjectService.svc.cs">
+      <DependentUpon>ProjectService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectStatusService.svc.cs">
+      <DependentUpon>ProjectStatusService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoleService.svc.cs">
+      <DependentUpon>RoleService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsHelper.cs" />
+    <Compile Include="TimeEntryService.svc.cs">
+      <DependentUpon>TimeEntryService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="TimescaleService.svc.cs">
+      <DependentUpon>TimescaleService.svc</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClientDAL\DataAccess.csproj">
+      <Project>{EDB5F24C-B46B-46B3-B7F7-644BC9DA8648}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataTransferObjects\DataTransferObjects.csproj">
+      <Project>{848EAE46-9397-439B-86BC-5799B366EF61}</Project>
+      <Name>DataTransferObjects</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\Messages.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Messages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+      <CustomToolNamespace>PracticeManagementService.Resources</CustomToolNamespace>
+    </Content>
+    <Content Include="ExpenseCategoryService.svc" />
+    <Content Include="ExpenseService.svc" />
+    <Content Include="PersonRoleService.svc" />
+    <Content Include="PersonStatusService.svc" />
+    <Content Include="TimescaleService.svc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AuthService.svc" />
+    <Content Include="MembershipService.svc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="RoleService.svc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ActivityLogService.svc" />
+    <Content Include="AuthenticationService.svc" />
+    <Content Include="ConfigurationService.svc" />
+    <Content Include="OpportunityService.svc" />
+    <Content Include="ProjectGroupService.svc" />
+    <Content Include="TimeEntryService.svc" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.Staging.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.STGAzure.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.ProdAzure.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PracticeManagementStrongNameKey.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>3331</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
