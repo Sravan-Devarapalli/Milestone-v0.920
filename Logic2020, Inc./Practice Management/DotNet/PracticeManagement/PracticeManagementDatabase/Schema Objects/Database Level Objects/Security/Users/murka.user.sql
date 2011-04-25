@@ -1,0 +1,3 @@
+﻿CREATE USER [murka] WITHOUT LOGIN;
+
+
