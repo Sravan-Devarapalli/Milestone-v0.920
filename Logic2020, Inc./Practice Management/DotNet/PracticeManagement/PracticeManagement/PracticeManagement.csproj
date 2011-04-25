@@ -1,0 +1,2506 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1C760F31-B468-4F6B-AB45-7EF0BB7CAB9B}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PraticeManagement</RootNamespace>
+    <AssemblyName>PraticeManagement</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <SccProjectName>SurroundSCMScci</SccProjectName>
+    <SccLocalPath>..\..</SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>MSSCCI:Surround SCM</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Staging|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\PraticeManagement.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GGK|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\PraticeManagement.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>PracticeManagementStrongNameKey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit">
+      <HintPath>Third Party Tools\AjaxControlToolkit\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>C:\Program Files\Windows Azure SDK\v1.3\bin\runtimes\base\Microsoft.WindowsAzure.ServiceRuntime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Design" />
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.DataVisualization, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Extensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Controls\Configuration\SmtpPopSetUpControl.ascx" />
+    <Content Include="Controls\Opportunities\OpportunityListControl.ascx" />
+    <Content Include="Controls\Opportunities\ProposedResources.ascx" />
+    <Content Include="DiscussionReview1.aspx" />
+    <Content Include="DiscussionReview2.aspx" />
+    <Content Include="GuestPages\ChangePasswordError.aspx" />
+    <Content Include="Images\alert_Icon.png" />
+    <Content Include="Images\arrow-down.png" />
+    <Content Include="Images\arrow-First.png" />
+    <Content Include="Images\arrow-Last.png" />
+    <Content Include="Images\arrow-Next.png" />
+    <Content Include="Images\arrow-Previous.png" />
+    <Content Include="Images\arrow-up.png" />
+    <Content Include="Images\grayedArrow-First.png" />
+    <Content Include="Images\grayedArrow-Last.png" />
+    <Content Include="Images\grayedArrow-Next.png" />
+    <Content Include="Images\grayedArrow-Previous.png" />
+    <Content Include="RevenueGoals.aspx" />
+    <Content Include="Controls\BudgetEntries.ascx" />
+    <Content Include="Controls\ClientListControl.ascx" />
+    <Content Include="Controls\DefaultMilestoneSettingControl.ascx" />
+    <Content Include="Controls\ExpenseCategoryListControl.ascx" />
+    <Content Include="Controls\ExpenseListControl.ascx" />
+    <Content Include="Controls\Generic\Filtering\OpportunityFilter.ascx" />
+    <Content Include="Controls\Generic\Filtering\PersonReportFilter.ascx" />
+    <Content Include="Controls\Generic\RecentNotes.ascx" />
+    <EmbeddedResource Include="Controls\Generic\SearchHighlighting\SearchHighlightingExtender.js" />
+    <EmbeddedResource Include="Controls\Generic\ScrollableDropdown\ScrollableDropdownExtender.js" />
+    <Content Include="Controls\MilestonePersons\MilestonePersonFinancials.ascx" />
+    <Content Include="Controls\PersonListControl.ascx" />
+    <Content Include="Controls\PersonOverheadCalculationControl.ascx" />
+    <Content Include="Controls\Reports\UTilTimelineFilter.ascx" />
+    <Content Include="Controls\TimeEntry\TimeEntriesByProject.ascx" />
+    <Content Include="DefaultMilestoneSetting.aspx" />
+    <Content Include="EmailTemplates.aspx" />
+    <Content Include="Financial.aspx" />
+    <Content Include="GroupBy.aspx" />
+    <Content Include="Images\balloon-ellipsis.png" />
+    <Content Include="Images\balloon-plus.png" />
+    <Content Include="Images\cp-header-bg_45.png" />
+    <Content Include="Images\Dropdown_Arrow.png" />
+    <Content Include="Images\edit.png" />
+    <Content Include="Images\footer-bg-left.png" />
+    <Content Include="Images\footer-bg-right.png" />
+    <Content Include="Images\logo_logic.png" />
+    <Content Include="Images\MinusIcon.png" />
+    <Content Include="Images\PlusIcon.png" />
+    <Content Include="Images\top-shadow-left.png" />
+    <Content Include="Images\top-shadow-right.png" />
+    <Content Include="Images\Transparent.png" />
+    <Content Include="Images\trash-icon.gif" />
+    <Content Include="Images\wrapper-left-bg-wide.png" />
+    <Content Include="Images\wrapper-right-bg-20.png" />
+    <Content Include="Practices.aspx" />
+    <Content Include="ReportsPage.aspx" />
+    <Content Include="Reports\ConsultantUtilTimeLineReport.aspx" />
+    <Content Include="Reports\TimeEntriesByPerson.aspx" />
+    <Content Include="Reports\TimeEntriesByProject.aspx" />
+    <Content Include="Reports\Xslt\RecentNoteItem.xslt" />
+    <Content Include="Sandbox\ScrollingDropdownTest.aspx" />
+    <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.4.1.js" />
+    <Content Include="Scripts\jquery.blockUI.js" />
+    <Content Include="Scripts\ScrollinDropDown.js" />
+    <Content Include="SecuritySetting.aspx" />
+    <Content Include="Service References\ActivityLogService\ActivityLogService.disco" />
+    <Content Include="Controls\CompanyLogoImage.ashx" />
+    <None Include="PracticeManagementStrongNameKey.snk" />
+    <None Include="Properties\DataSources\DataTransferObjects.CompanyLogo1.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.TimeEntryPersonProjects.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.TimeEntryProjectPerson.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.DefaultMilestone.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.EmailData.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Financials.MilestonePersonComputedFinancials.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.OpportunityPriority.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ProjectsGroupedByPerson.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ProjectsGroupedByPractice.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.TimeEntry.TimeEntrySums.datasource" />
+    <None Include="Service References\ActivityLogService\ActivityLogService1.disco" />
+    <None Include="Service References\AuthService\AuthService1.disco" />
+    <Content Include="Service References\CalendarService\CalendarService.disco" />
+    <None Include="Service References\ActivityLogService\ActivityLogService.wsdl" />
+    <None Include="Service References\ActivityLogService\ActivityLogService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ActivityLogService\ActivityLogService1.wsdl" />
+    <None Include="Service References\ActivityLogService\ActivityLogService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ActivityLogService\ActivityLogService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ActivityLogService\ActivityLogService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ActivityLogService\ActivityLogService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ActivityLogService\ActivityLogService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AuthService\AuthService1.wsdl" />
+    <None Include="Service References\AuthService\AuthService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AuthService\AuthService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalendarService\CalendarService1.wsdl" />
+    <None Include="Service References\CalendarService\CalendarService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalendarService\CalendarService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalendarService\CalendarService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ClientService\ClientService.wsdl" />
+    <None Include="Service References\ClientService\ClientService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ClientService\ClientService1.wsdl" />
+    <None Include="Service References\ClientService\ClientService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ClientService\ClientService2.wsdl" />
+    <None Include="Service References\ClientService\ClientService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ClientService\ClientService3.wsdl" />
+    <None Include="Service References\ClientService\ClientService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ClientService\ClientService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ClientService\ClientService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ClientService\ClientService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService11.wsdl" />
+    <None Include="Service References\ConfigurationService\ConfigurationService55.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService56.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService57.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService58.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService59.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DefaultCommissionService\DefaultCommissionService1.wsdl" />
+    <None Include="Service References\DefaultCommissionService\DefaultCommissionService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DefaultCommissionService\DefaultCommissionService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DefaultCommissionService\DefaultCommissionService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService1.wsdl" />
+    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ExpenseCategoryService\ExpenseCategoryService1.wsdl" />
+    <None Include="Service References\ExpenseCategoryService\ExpenseCategoryService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ExpenseCategoryService\ExpenseCategoryService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ExpenseCategoryService\ExpenseCategoryService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ExpenseCategoryService\ExpenseCategoryService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ExpenseService\ExpenseService1.wsdl" />
+    <None Include="Service References\ExpenseService\ExpenseService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ExpenseService\ExpenseService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ExpenseService\ExpenseService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ExpenseService\ExpenseService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MembershipService\MembershipService.wsdl" />
+    <None Include="Service References\MembershipService\MembershipService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MembershipService\MembershipService1.wsdl" />
+    <None Include="Service References\MembershipService\MembershipService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MembershipService\MembershipService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MembershipService\MembershipService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MembershipService\MembershipService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestonePersonService\MilestonePersonService1.wsdl" />
+    <None Include="Service References\MilestonePersonService\MilestonePersonService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestonePersonService\MilestonePersonService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestonePersonService\MilestonePersonService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestonePersonService\MilestonePersonService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestonePersonService\MilestonePersonService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestonePersonService\MilestonePersonService8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestoneService\MilestoneService1.wsdl" />
+    <None Include="Service References\MilestoneService\MilestoneService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestoneService\MilestoneService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestoneService\MilestoneService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestoneService\MilestoneService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService1.wsdl" />
+    <None Include="Service References\OpportunityService\OpportunityService10.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService12.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService13.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService14.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService16.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OverheadService\OverheadService1.wsdl" />
+    <None Include="Service References\OverheadService\OverheadService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OverheadService\OverheadService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OverheadService\OverheadService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OverheadService\OverheadService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PersonRoleService\PersonRoleService1.wsdl" />
+    <None Include="Service References\PersonRoleService\PersonRoleService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PersonRoleService\PersonRoleService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PersonRoleService\PersonRoleService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PersonStatusService\PersonStatusService1.wsdl" />
+    <None Include="Service References\PersonStatusService\PersonStatusService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PersonStatusService\PersonStatusService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PersonStatusService\PersonStatusService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectGroupService\ProjectGroupService210.wsdl" />
+    <None Include="Service References\ProjectGroupService\ProjectGroupService211.wsdl" />
+    <None Include="Service References\ProjectGroupService\ProjectGroupService315.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectGroupService\ProjectGroupService316.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectGroupService\ProjectGroupService317.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService1.wsdl" />
+    <None Include="Service References\ProjectService\ProjectService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService14.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService15.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService16.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService17.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService18.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectStatusService\ProjectStatusService1.wsdl" />
+    <None Include="Service References\ProjectStatusService\ProjectStatusService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectStatusService\ProjectStatusService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectStatusService\ProjectStatusService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RoleService\RoleService1.wsdl" />
+    <None Include="Service References\RoleService\RoleService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RoleService\RoleService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RoleService\RoleService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\PraticeManagement.TimeEntryService.TimeEntriesGroupedByPerson.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\TimeEntryService\PraticeManagement.TimeEntryService.TimeEntriesGroupedByProject.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\TimeEntryService\PraticeManagement.TimeEntryService.TimeEntriesGroupedByTimeEntryHours.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService.wsdl" />
+    <None Include="Service References\TimeEntryService\TimeEntryService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService10.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService19.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService2.wsdl" />
+    <None Include="Service References\TimeEntryService\TimeEntryService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService20.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService21.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService22.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService23.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService24.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService25.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService26.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService27.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService28.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService3.wsdl" />
+    <None Include="Service References\TimeEntryService\TimeEntryService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService9.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DefaultCommissionService\DefaultCommissionService1.disco" />
+    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService1.disco" />
+    <None Include="Service References\ExpenseCategoryService\ExpenseCategoryService1.disco" />
+    <None Include="Service References\ExpenseService\ExpenseService1.disco" />
+    <None Include="Service References\MembershipService\MembershipService1.disco" />
+    <None Include="Service References\OverheadService\OverheadService1.disco" />
+    <None Include="Service References\PersonRoleService\PersonRoleService1.disco" />
+    <None Include="Service References\PersonStatusService\PersonStatusService1.disco" />
+    <None Include="Service References\ProjectStatusService\ProjectStatusService1.disco" />
+    <None Include="Service References\RoleService\RoleService1.disco" />
+    <None Include="Service References\CalendarService\CalendarService1.disco" />
+    <Content Include="Service References\ClientService\ClientService.disco" />
+    <None Include="Service References\ClientService\ClientService1.disco" />
+    <None Include="Service References\ConfigurationService\ConfigurationService11.disco" />
+    <Content Include="Service References\MembershipService\MembershipService.disco" />
+    <None Include="Service References\TimeEntryService\configuration91.svcinfo" />
+    <None Include="Service References\TimeEntryService\configuration.svcinfo" />
+    <None Include="Service References\TimeEntryService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
+    <None Include="Service References\TimeEntryService\TimeEntryService2.disco" />
+    <None Include="Service References\TimeEntryService\TimeEntryService3.disco" />
+    <None Include="Service References\TimescaleService\TimescaleService1.disco" />
+    <None Include="Service References\ProjectGroupService\ProjectGroupService15.disco" />
+    <None Include="Service References\MilestoneService\MilestoneService2.disco" />
+    <None Include="Service References\ProjectService\ProjectService1.disco" />
+    <None Include="Service References\OpportunityService\OpportunityService1.disco" />
+    <None Include="Service References\TimeEntryService\TimeEntryService.disco" />
+    <Content Include="TimeEntrySetting.aspx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Staging.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.GGK.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.STGAzure.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.ProdAzure.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Service References\TimescaleService\TimescaleService1.wsdl" />
+    <None Include="Service References\TimescaleService\TimescaleService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimescaleService\TimescaleService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActivityLog.aspx.cs">
+      <DependentUpon>ActivityLog.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ActivityLog.aspx.designer.cs">
+      <DependentUpon>ActivityLog.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Configuration\SmtpPopSetUpControl.ascx.cs">
+      <DependentUpon>SmtpPopSetUpControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Configuration\SmtpPopSetUpControl.ascx.designer.cs">
+      <DependentUpon>SmtpPopSetUpControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Opportunities\OpportunityListControl.ascx.cs">
+      <DependentUpon>OpportunityListControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Opportunities\OpportunityListControl.ascx.designer.cs">
+      <DependentUpon>OpportunityListControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Opportunities\ProposedResources.ascx.cs">
+      <DependentUpon>ProposedResources.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Opportunities\ProposedResources.ascx.designer.cs">
+      <DependentUpon>ProposedResources.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="DiscussionReview1.aspx.cs">
+      <DependentUpon>DiscussionReview1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DiscussionReview1.aspx.designer.cs">
+      <DependentUpon>DiscussionReview1.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DiscussionReview2.aspx.cs">
+      <DependentUpon>DiscussionReview2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DiscussionReview2.aspx.designer.cs">
+      <DependentUpon>DiscussionReview2.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GuestPages\ChangePasswordError.aspx.cs">
+      <DependentUpon>ChangePasswordError.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GuestPages\ChangePasswordError.aspx.designer.cs">
+      <DependentUpon>ChangePasswordError.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RevenueGoals.aspx.cs">
+      <DependentUpon>RevenueGoals.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RevenueGoals.aspx.designer.cs">
+      <DependentUpon>RevenueGoals.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Calendar.aspx.cs">
+      <DependentUpon>Calendar.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Calendar.aspx.designer.cs">
+      <DependentUpon>Calendar.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ClientDetails.aspx.cs">
+      <DependentUpon>ClientDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClientDetails.aspx.designer.cs">
+      <DependentUpon>ClientDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CompanyPerfomanceServ.asmx.cs">
+      <DependentUpon>CompanyPerfomanceServ.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Configuration\BrandingConfigurationManager.cs" />
+    <Compile Include="Configuration\ConsReportColoring\ConsReportColoringElement.cs" />
+    <Compile Include="Configuration\ConsReportColoring\ConsReportColoringElementCollection.cs" />
+    <Compile Include="Configuration\ConsReportColoring\ConsReportColoringElementSection.cs" />
+    <Compile Include="Configuration\LocationDescriptionConfigurationSection.cs" />
+    <Compile Include="Configuration\MileStoneConfigurationManager.cs" />
+    <Compile Include="Configuration\TimeEntryConfiguration.cs" />
+    <Compile Include="Configuration\UrlRoleMappingElement.cs" />
+    <Compile Include="Configuration\UrlRoleMappingElementCollection.cs" />
+    <Compile Include="Configuration\UrlRoleMappingElementSection.cs" />
+    <Compile Include="Controls\ActivityLogControl.ascx.cs">
+      <DependentUpon>ActivityLogControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ActivityLogControl.ascx.designer.cs">
+      <DependentUpon>ActivityLogControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BillingInfo.ascx.cs">
+      <DependentUpon>BillingInfo.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\BillingInfo.ascx.designer.cs">
+      <DependentUpon>BillingInfo.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BrandingSettingsControl.ascx.cs">
+      <DependentUpon>BrandingSettingsControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\BrandingSettingsControl.ascx.designer.cs">
+      <DependentUpon>BrandingSettingsControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BudgetEntries.ascx.cs">
+      <DependentUpon>BudgetEntries.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\BudgetEntries.ascx.designer.cs">
+      <DependentUpon>BudgetEntries.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CascadingMsdd.cs" />
+    <Compile Include="Controls\ClientListControl.ascx.cs">
+      <DependentUpon>ClientListControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ClientListControl.ascx.designer.cs">
+      <DependentUpon>ClientListControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Clients\ClientGroups.ascx.cs">
+      <DependentUpon>ClientGroups.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Clients\ClientGroups.ascx.designer.cs">
+      <DependentUpon>ClientGroups.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Clients\ClientProjects.ascx.cs">
+      <DependentUpon>ClientProjects.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Clients\ClientProjects.ascx.designer.cs">
+      <DependentUpon>ClientProjects.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CompanyLogoImage.ashx.cs">
+      <DependentUpon>CompanyLogoImage.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CompanyPerformanceFilterSettings.cs" />
+    <Compile Include="Controls\CompanyPerformanceState.cs" />
+    <Compile Include="Controls\Configuration\DefaultUser.ascx.cs">
+      <DependentUpon>DefaultUser.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Configuration\DefaultUser.ascx.designer.cs">
+      <DependentUpon>DefaultUser.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Configuration\EmailTemplates.ascx.cs">
+      <DependentUpon>EmailTemplates.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Configuration\EmailTemplates.ascx.designer.cs">
+      <DependentUpon>EmailTemplates.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Configuration\PracticeItem.ascx.cs">
+      <DependentUpon>PracticeItem.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Configuration\PracticeItem.ascx.designer.cs">
+      <DependentUpon>PracticeItem.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Configuration\Practices.ascx.cs">
+      <DependentUpon>Practices.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Configuration\Practices.ascx.designer.cs">
+      <DependentUpon>Practices.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Configuration\PracticesHelper.cs" />
+    <Compile Include="Controls\DatePicker.ascx.cs">
+      <DependentUpon>DatePicker.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\DatePicker.ascx.designer.cs">
+      <DependentUpon>DatePicker.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DefaultMilestoneSettingControl.ascx.cs">
+      <DependentUpon>DefaultMilestoneSettingControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\DefaultMilestoneSettingControl.ascx.designer.cs">
+      <DependentUpon>DefaultMilestoneSettingControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ExpenseCategoryListControl.ascx.cs">
+      <DependentUpon>ExpenseCategoryListControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ExpenseCategoryListControl.ascx.designer.cs">
+      <DependentUpon>ExpenseCategoryListControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ExpenseListControl.ascx.cs">
+      <DependentUpon>ExpenseListControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ExpenseListControl.ascx.designer.cs">
+      <DependentUpon>ExpenseListControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Generic\BecomeUser.ascx.cs">
+      <DependentUpon>BecomeUser.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Generic\BecomeUser.ascx.designer.cs">
+      <DependentUpon>BecomeUser.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Generic\Buttons\CancelAndReturnButton.cs" />
+    <Compile Include="Controls\Generic\Buttons\IsCorrectImageButton.cs" />
+    <Compile Include="Controls\Generic\Buttons\MultistateImageButton.cs" />
+    <Compile Include="Controls\Generic\Buttons\IsChargeableImageButton.cs" />
+    <Compile Include="Controls\Generic\Buttons\ShadowedHyperlink.cs" />
+    <Compile Include="Controls\Generic\Buttons\ShadowedTextButton.cs" />
+    <Compile Include="Controls\Generic\Filtering\OpportunityFilter.ascx.cs">
+      <DependentUpon>OpportunityFilter.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Generic\Filtering\OpportunityFilter.ascx.designer.cs">
+      <DependentUpon>OpportunityFilter.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Generic\Filtering\OpportunityFilterObject.cs" />
+    <Compile Include="Controls\Generic\Filtering\PersonReportFilter.ascx.cs">
+      <DependentUpon>PersonReportFilter.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Generic\Filtering\PersonReportFilter.ascx.designer.cs">
+      <DependentUpon>PersonReportFilter.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Generic\FormattedLabel.cs" />
+    <Compile Include="Controls\Generic\LoadingProgress.ascx.cs">
+      <DependentUpon>LoadingProgress.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Generic\LoadingProgress.ascx.designer.cs">
+      <DependentUpon>LoadingProgress.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Generic\Notes.ascx.cs">
+      <DependentUpon>Notes.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Generic\Notes.ascx.designer.cs">
+      <DependentUpon>Notes.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Generic\OpportunityList.ascx.cs">
+      <DependentUpon>OpportunityList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Generic\OpportunityList.ascx.designer.cs">
+      <DependentUpon>OpportunityList.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Generic\RecentNotes.ascx.cs">
+      <DependentUpon>RecentNotes.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Generic\RecentNotes.ascx.designer.cs">
+      <DependentUpon>RecentNotes.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Generic\ScrollableDropdown\ScrollableDropdownExtender.cs" />
+    <Compile Include="Controls\Generic\SearchHighlighting\SearchHighlightingExtender.cs" />
+    <Compile Include="Controls\Generic\StyledUpdateProgress.cs" />
+    <Compile Include="Controls\Generic\DirtyState\DirtyExtender.cs" />
+    <Compile Include="Controls\Generic\ElementDisabler\ElementDisablerExtender.cs" />
+    <Compile Include="Controls\Generic\Filtering\DateInterval.ascx.cs">
+      <DependentUpon>DateInterval.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Generic\Filtering\DateInterval.ascx.designer.cs">
+      <DependentUpon>DateInterval.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Generic\Filtering\Option.ascx.cs">
+      <DependentUpon>Option.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Generic\Filtering\Option.ascx.designer.cs">
+      <DependentUpon>Option.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Generic\Filtering\RealInterval.ascx.cs">
+      <DependentUpon>RealInterval.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Generic\Filtering\RealInterval.ascx.designer.cs">
+      <DependentUpon>RealInterval.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Generic\Filtering\SingleOption.cs" />
+    <Compile Include="Controls\Generic\Filtering\TERFilter.ascx.cs">
+      <DependentUpon>TERFilter.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Generic\Filtering\TERFilter.ascx.designer.cs">
+      <DependentUpon>TERFilter.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Generic\Filtering\TextAlike.ascx.cs">
+      <DependentUpon>TextAlike.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Generic\Filtering\TextAlike.ascx.designer.cs">
+      <DependentUpon>TextAlike.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Generic\FormatedTextBox.cs" />
+    <Compile Include="Controls\Generic\Buttons\ReviewStatusImageButton.cs" />
+    <Compile Include="Controls\Generic\SelectCutOff\SelectCutOffExtender.cs" />
+    <Compile Include="Controls\Generic\Sorting\MultisortExtender\MultisortExtender.cs" />
+    <Compile Include="Controls\Generic\Sorting\MultisortExtender\MultisortExtenderDesigner.cs" />
+    <Compile Include="Controls\Generic\StyledUpdatePanel.cs" />
+    <Compile Include="Controls\Generic\TotalCalculator\TotalCalculatorExtender.cs" />
+    <Compile Include="Controls\Menu\CssFriendlyMenu.cs" />
+    <Compile Include="Controls\Menu\MenuAdapter.cs" />
+    <Compile Include="Controls\Adapters\WebControlAdapterExtender.cs" />
+    <Compile Include="Controls\MessageLabel.ascx.cs">
+      <DependentUpon>MessageLabel.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\MessageLabel.ascx.designer.cs">
+      <DependentUpon>MessageLabel.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MilestonePersons\ActualHoursPeriod.cs" />
+    <Compile Include="Controls\MilestonePersons\CumulativeActivity.ascx.cs">
+      <DependentUpon>CumulativeActivity.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\MilestonePersons\CumulativeActivity.ascx.designer.cs">
+      <DependentUpon>CumulativeActivity.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MilestonePersons\CumulativeDailyActivity.ascx.cs">
+      <DependentUpon>CumulativeDailyActivity.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\MilestonePersons\CumulativeDailyActivity.ascx.designer.cs">
+      <DependentUpon>CumulativeDailyActivity.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MilestonePersons\DatePeriodBase.cs" />
+    <Compile Include="Controls\MilestonePersons\MilestonePersonActivity.ascx.cs">
+      <DependentUpon>MilestonePersonActivity.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\MilestonePersons\MilestonePersonActivity.ascx.designer.cs">
+      <DependentUpon>MilestonePersonActivity.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MilestonePersons\MilestonePersonFinancials.ascx.cs">
+      <DependentUpon>MilestonePersonFinancials.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\MilestonePersons\MilestonePersonFinancials.ascx.designer.cs">
+      <DependentUpon>MilestonePersonFinancials.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MilestonePersons\ProjectedHoursPeriod.cs" />
+    <Compile Include="Controls\MilestonePersons\RegressionHoursPeriod.cs" />
+    <Compile Include="Controls\MilestonePersons\TotalProjectedHoursPeriod.cs" />
+    <Compile Include="Controls\Milestones\MilestonePersonList.ascx.cs">
+      <DependentUpon>MilestonePersonList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Milestones\MilestonePersonList.ascx.designer.cs">
+      <DependentUpon>MilestonePersonList.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NavigatingEventArgs.cs" />
+    <Compile Include="Controls\PersonListControl.ascx.cs">
+      <DependentUpon>PersonListControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\PersonListControl.ascx.designer.cs">
+      <DependentUpon>PersonListControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PersonOverheadCalculationControl.ascx.cs">
+      <DependentUpon>PersonOverheadCalculationControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\PersonOverheadCalculationControl.ascx.designer.cs">
+      <DependentUpon>PersonOverheadCalculationControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PracticeManagementFilterControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\UTilTimelineFilter.ascx.cs">
+      <DependentUpon>UTilTimelineFilter.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\UTilTimelineFilter.ascx.designer.cs">
+      <DependentUpon>UTilTimelineFilter.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TimeEntry\TimeEntriesByProject.ascx.cs">
+      <DependentUpon>TimeEntriesByProject.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\TimeEntry\TimeEntriesByProject.ascx.designer.cs">
+      <DependentUpon>TimeEntriesByProject.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="DefaultMilestoneSetting.aspx.cs">
+      <DependentUpon>DefaultMilestoneSetting.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DefaultMilestoneSetting.aspx.designer.cs">
+      <DependentUpon>DefaultMilestoneSetting.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EmailTemplates.aspx.cs">
+      <DependentUpon>EmailTemplates.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EmailTemplates.aspx.designer.cs">
+      <DependentUpon>EmailTemplates.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Financial.aspx.cs">
+      <DependentUpon>Financial.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Financial.aspx.designer.cs">
+      <DependentUpon>Financial.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GroupBy.aspx.cs">
+      <DependentUpon>GroupBy.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GroupBy.aspx.designer.cs">
+      <DependentUpon>GroupBy.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Practices.aspx.cs">
+      <DependentUpon>Practices.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Practices.aspx.designer.cs">
+      <DependentUpon>Practices.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReportsPage.aspx.cs">
+      <DependentUpon>ReportsPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReportsPage.aspx.designer.cs">
+      <DependentUpon>ReportsPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ConsultantUtilTimeLineReport.aspx.cs">
+      <DependentUpon>ConsultantUtilTimeLineReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ConsultantUtilTimeLineReport.aspx.designer.cs">
+      <DependentUpon>ConsultantUtilTimeLineReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\TimeEntriesByPerson.aspx.cs">
+      <DependentUpon>TimeEntriesByPerson.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\TimeEntriesByPerson.aspx.designer.cs">
+      <DependentUpon>TimeEntriesByPerson.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\TimeEntriesByProject.aspx.cs">
+      <DependentUpon>TimeEntriesByProject.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\TimeEntriesByProject.aspx.designer.cs">
+      <DependentUpon>TimeEntriesByProject.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sandbox\ScrollingDropdownTest.aspx.cs">
+      <DependentUpon>ScrollingDropdownTest.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sandbox\ScrollingDropdownTest.aspx.designer.cs">
+      <DependentUpon>ScrollingDropdownTest.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SecuritySetting.aspx.cs">
+      <DependentUpon>SecuritySetting.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SecuritySetting.aspx.designer.cs">
+      <DependentUpon>SecuritySetting.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\TimeEntryService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="TimeEntrySetting.aspx.cs">
+      <DependentUpon>TimeEntrySetting.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TimeEntrySetting.aspx.designer.cs">
+      <DependentUpon>TimeEntrySetting.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\ActivityLogHelper.cs" />
+    <Compile Include="Utils\ExtensionMethods.cs" />
+    <Compile Include="Utils\OpportunitiesHelper.cs" />
+    <Compile Include="Controls\Opportunities\OpportunityTransitionEditor.ascx.cs">
+      <DependentUpon>OpportunityTransitionEditor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Opportunities\OpportunityTransitionEditor.ascx.designer.cs">
+      <DependentUpon>OpportunityTransitionEditor.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Opportunities\PrevNextOpportunity.ascx.cs">
+      <DependentUpon>PrevNextOpportunity.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Opportunities\PrevNextOpportunity.ascx.designer.cs">
+      <DependentUpon>PrevNextOpportunity.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Opportunities\ViewProjectExtender\ViewProjectExtender.cs" />
+    <Compile Include="Controls\PersonInfo.ascx.cs">
+      <DependentUpon>PersonInfo.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\PersonInfo.ascx.designer.cs">
+      <DependentUpon>PersonInfo.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Persons\PersonChangedEventArguments.cs" />
+    <Compile Include="Controls\Persons\PersonChooser.ascx.cs">
+      <DependentUpon>PersonChooser.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Persons\PersonChooser.ascx.designer.cs">
+      <DependentUpon>PersonChooser.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Persons\PersonProjects.ascx.cs">
+      <DependentUpon>PersonProjects.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Persons\PersonProjects.ascx.designer.cs">
+      <DependentUpon>PersonProjects.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PracticeManagementUserControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ProjectExpenses\ProjectExpenseHelper.cs" />
+    <Compile Include="Controls\ProjectExpenses\ProjectExpensesControl.ascx.cs">
+      <DependentUpon>ProjectExpensesControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ProjectExpenses\ProjectExpensesControl.ascx.designer.cs">
+      <DependentUpon>ProjectExpensesControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectNameCellRounded.ascx.cs">
+      <DependentUpon>ProjectNameCellRounded.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ProjectNameCellRounded.ascx.designer.cs">
+      <DependentUpon>ProjectNameCellRounded.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Projects\ProjectFinancials.ascx.cs">
+      <DependentUpon>ProjectFinancials.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Projects\ProjectFinancials.ascx.designer.cs">
+      <DependentUpon>ProjectFinancials.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Projects\ProjectMilestonesFinancials.ascx.cs">
+      <DependentUpon>ProjectMilestonesFinancials.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Projects\ProjectMilestonesFinancials.ascx.designer.cs">
+      <DependentUpon>ProjectMilestonesFinancials.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Projects\ProjectPersons.ascx.cs">
+      <DependentUpon>ProjectPersons.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Projects\ProjectPersons.ascx.designer.cs">
+      <DependentUpon>ProjectPersons.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\BenchCosts.ascx.cs">
+      <DependentUpon>BenchCosts.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\BenchCosts.ascx.designer.cs">
+      <DependentUpon>BenchCosts.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\BenchReport.ascx.cs">
+      <DependentUpon>BenchReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\BenchReport.ascx.designer.cs">
+      <DependentUpon>BenchReport.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\CommissionsAndRates.ascx.cs">
+      <DependentUpon>CommissionsAndRates.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\CommissionsAndRates.ascx.designer.cs">
+      <DependentUpon>CommissionsAndRates.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ConsultantMilestones.ascx.cs">
+      <DependentUpon>ConsultantMilestones.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ConsultantMilestones.ascx.designer.cs">
+      <DependentUpon>ConsultantMilestones.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ConsultantsReport.ascx.cs">
+      <DependentUpon>ConsultantsReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ConsultantsReport.ascx.designer.cs">
+      <DependentUpon>ConsultantsReport.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ConsultantsReportFilter.ascx.cs">
+      <DependentUpon>ConsultantsReportFilter.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ConsultantsReportFilter.ascx.designer.cs">
+      <DependentUpon>ConsultantsReportFilter.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ConsultantsWeeklyReport.ascx.cs">
+      <DependentUpon>ConsultantsWeeklyReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ConsultantsWeeklyReport.ascx.designer.cs">
+      <DependentUpon>ConsultantsWeeklyReport.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\PersonStats.ascx.cs">
+      <DependentUpon>PersonStats.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\PersonStats.ascx.designer.cs">
+      <DependentUpon>PersonStats.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ProjectsReportsBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ReportsHelper.cs" />
+    <Compile Include="Controls\ScrollingDropDown.cs" />
+    <Compile Include="Controls\RestrictionPanel.ascx.cs">
+      <DependentUpon>RestrictionPanel.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\RestrictionPanel.ascx.designer.cs">
+      <DependentUpon>RestrictionPanel.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SerializationHelper.cs" />
+    <Compile Include="Controls\TimeEntry\ReadyToUpdateTeArguments.cs" />
+    <Compile Include="Controls\TimeEntry\SingleTimeEntry.ascx.cs">
+      <DependentUpon>SingleTimeEntry.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\TimeEntry\SingleTimeEntry.ascx.designer.cs">
+      <DependentUpon>SingleTimeEntry.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TimeEntry\TeGrid.cs" />
+    <Compile Include="Controls\TimeEntry\TeGridCell.cs" />
+    <Compile Include="Controls\TimeEntry\TeGridRow.cs" />
+    <Compile Include="Controls\TimeEntry\TimeEntries.ascx.cs">
+      <DependentUpon>TimeEntries.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\TimeEntry\TimeEntries.ascx.designer.cs">
+      <DependentUpon>TimeEntries.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TimeEntry\TimeEntryBar.ascx.cs">
+      <DependentUpon>TimeEntryBar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\TimeEntry\TimeEntryBar.ascx.designer.cs">
+      <DependentUpon>TimeEntryBar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TimeEntry\TimeEntryBarHeader.ascx.cs">
+      <DependentUpon>TimeEntryBarHeader.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\TimeEntry\TimeEntryBarHeader.ascx.designer.cs">
+      <DependentUpon>TimeEntryBarHeader.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TimeEntry\TimeEntryManagement.ascx.cs">
+      <DependentUpon>TimeEntryManagement.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\TimeEntry\TimeEntryManagement.ascx.designer.cs">
+      <DependentUpon>TimeEntryManagement.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TimeEntry\WeekChangedEventArguments.cs" />
+    <Compile Include="Controls\TimeEntry\WeekSelector.ascx.cs">
+      <DependentUpon>WeekSelector.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\TimeEntry\WeekSelector.ascx.designer.cs">
+      <DependentUpon>WeekSelector.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="DefaultRecruitingCommissionDetail.aspx.cs">
+      <DependentUpon>DefaultRecruitingCommissionDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DefaultRecruitingCommissionDetail.aspx.designer.cs">
+      <DependentUpon>DefaultRecruitingCommissionDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Events\ErrorEventArgs.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="GridViewExportUtil.cs" />
+    <Compile Include="GuestPages\AccessDenied.aspx.cs">
+      <DependentUpon>AccessDenied.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GuestPages\AccessDenied.aspx.designer.cs">
+      <DependentUpon>AccessDenied.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Controls.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Controls.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Messages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ChangePassword.aspx.cs">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ChangePassword.aspx.designer.cs">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GuestPages\PageHasBeenRemoved.aspx.cs">
+      <DependentUpon>PageHasBeenRemoved.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GuestPages\PageHasBeenRemoved.aspx.designer.cs">
+      <DependentUpon>PageHasBeenRemoved.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ClientList.aspx.cs">
+      <DependentUpon>ClientList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClientList.aspx.designer.cs">
+      <DependentUpon>ClientList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DetailedUtilizationReportBaseItem.cs" />
+    <Compile Include="Objects\DetailedUtilizationReportMilestoneItem.cs" />
+    <Compile Include="Objects\DetailedUtilizationReportOpportunityItem.cs" />
+    <Compile Include="OldAndObsoleteCompanyCalendar.aspx.cs">
+      <DependentUpon>OldAndObsoleteCompanyCalendar.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OldAndObsoleteCompanyCalendar.aspx.designer.cs">
+      <DependentUpon>OldAndObsoleteCompanyCalendar.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CompanyPerformance.aspx.cs">
+      <DependentUpon>CompanyPerformance.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CompanyPerformance.aspx.designer.cs">
+      <DependentUpon>CompanyPerformance.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CompensationDetail.aspx.cs">
+      <DependentUpon>CompensationDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CompensationDetail.aspx.designer.cs">
+      <DependentUpon>CompensationDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Configuration\TermConfigurationElement.cs" />
+    <Compile Include="Configuration\TermConfigurationElementCollection.cs" />
+    <Compile Include="Configuration\TermsConfigurationSection.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controls\CalendarLegend.ascx.cs">
+      <DependentUpon>CalendarLegend.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\CalendarLegend.ascx.designer.cs">
+      <DependentUpon>CalendarLegend.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ControlNotFoundException.cs" />
+    <Compile Include="Controls\DataHelper.cs" />
+    <Compile Include="Controls\GrossMarginComputing.ascx.cs">
+      <DependentUpon>GrossMarginComputing.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\GrossMarginComputing.ascx.designer.cs">
+      <DependentUpon>GrossMarginComputing.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MonthCalendar.ascx.cs">
+      <DependentUpon>MonthCalendar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\MonthCalendar.ascx.designer.cs">
+      <DependentUpon>MonthCalendar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MonthPicker.ascx.cs">
+      <DependentUpon>MonthPicker.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\MonthPicker.ascx.designer.cs">
+      <DependentUpon>MonthPicker.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PersonnelCompensation.ascx.cs">
+      <DependentUpon>PersonnelCompensation.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\PersonnelCompensation.ascx.designer.cs">
+      <DependentUpon>PersonnelCompensation.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PracticeFilter.ascx.cs">
+      <DependentUpon>PracticeFilter.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\PracticeFilter.ascx.designer.cs">
+      <DependentUpon>PracticeFilter.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PracticeManagementPageBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ProjectInfo.ascx.cs">
+      <DependentUpon>ProjectInfo.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ProjectInfo.ascx.designer.cs">
+      <DependentUpon>ProjectInfo.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectNameCell.ascx.cs">
+      <DependentUpon>ProjectNameCell.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ProjectNameCell.ascx.designer.cs">
+      <DependentUpon>ProjectNameCell.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RecruiterInfo.ascx.cs">
+      <DependentUpon>RecruiterInfo.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\RecruiterInfo.ascx.designer.cs">
+      <DependentUpon>RecruiterInfo.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\VisibilitySwitch.cs" />
+    <Compile Include="Controls\WhatIf.ascx.cs">
+      <DependentUpon>WhatIf.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\WhatIf.ascx.designer.cs">
+      <DependentUpon>WhatIf.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ExpenseCategoryList.aspx.cs">
+      <DependentUpon>ExpenseCategoryList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ExpenseCategoryList.aspx.designer.cs">
+      <DependentUpon>ExpenseCategoryList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ExpenseDetail.aspx.cs">
+      <DependentUpon>ExpenseDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ExpenseDetail.aspx.designer.cs">
+      <DependentUpon>ExpenseDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ExpenseList.aspx.cs">
+      <DependentUpon>ExpenseList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ExpenseList.aspx.designer.cs">
+      <DependentUpon>ExpenseList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GuestPages\InternalError.aspx.cs">
+      <DependentUpon>InternalError.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GuestPages\InternalError.aspx.designer.cs">
+      <DependentUpon>InternalError.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MarginTest.aspx.cs">
+      <DependentUpon>MarginTest.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MarginTest.aspx.designer.cs">
+      <DependentUpon>MarginTest.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MilestoneDetail.aspx.cs">
+      <DependentUpon>MilestoneDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MilestoneDetail.aspx.designer.cs">
+      <DependentUpon>MilestoneDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Mobile\CompanyPerformance.aspx.cs">
+      <DependentUpon>CompanyPerformance.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Mobile\CompanyPerformance.aspx.designer.cs">
+      <DependentUpon>CompanyPerformance.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OpportunityDetail.aspx.cs">
+      <DependentUpon>OpportunityDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OpportunityDetail.aspx.designer.cs">
+      <DependentUpon>OpportunityDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OpportunityList.aspx.cs">
+      <DependentUpon>OpportunityList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OpportunityList.aspx.designer.cs">
+      <DependentUpon>OpportunityList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OpportunityNumberHandler.cs" />
+    <Compile Include="OverheadDetail.aspx.cs">
+      <DependentUpon>OverheadDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OverheadDetail.aspx.designer.cs">
+      <DependentUpon>OverheadDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GuestPages\PageNotFound.aspx.cs">
+      <DependentUpon>PageNotFound.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GuestPages\PageNotFound.aspx.designer.cs">
+      <DependentUpon>PageNotFound.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PersonDetail.aspx.cs">
+      <DependentUpon>PersonDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PersonDetail.aspx.designer.cs">
+      <DependentUpon>PersonDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PersonList.aspx.cs">
+      <DependentUpon>PersonList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PersonList.aspx.designer.cs">
+      <DependentUpon>PersonList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OldAndObsoletePersonMargin.aspx.cs">
+      <DependentUpon>OldAndObsoletePersonMargin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OldAndObsoletePersonMargin.aspx.designer.cs">
+      <DependentUpon>OldAndObsoletePersonMargin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PracticeManagement.Master.cs">
+      <DependentUpon>PracticeManagement.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PracticeManagement.Master.designer.cs">
+      <DependentUpon>PracticeManagement.Master</DependentUpon>
+    </Compile>
+    <Compile Include="PracticeManagementMain.Master.cs">
+      <DependentUpon>PracticeManagementMain.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PracticeManagementMain.Master.designer.cs">
+      <DependentUpon>PracticeManagementMain.Master</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectDetail.aspx.cs">
+      <DependentUpon>ProjectDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProjectDetail.aspx.designer.cs">
+      <DependentUpon>ProjectDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MilestonePersonDetail.aspx.cs">
+      <DependentUpon>MilestonePersonDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MilestonePersonDetail.aspx.designer.cs">
+      <DependentUpon>MilestonePersonDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectNumberHandler.cs" />
+    <Compile Include="Projects.aspx.cs">
+      <DependentUpon>Projects.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Projects.aspx.designer.cs">
+      <DependentUpon>Projects.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectSearch.aspx.cs">
+      <DependentUpon>ProjectSearch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProjectSearch.aspx.designer.cs">
+      <DependentUpon>ProjectSearch.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PersonOverheadCalculation.aspx.cs">
+      <DependentUpon>PersonOverheadCalculation.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PersonOverheadCalculation.aspx.designer.cs">
+      <DependentUpon>PersonOverheadCalculation.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports.aspx.cs">
+      <DependentUpon>Reports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports.aspx.designer.cs">
+      <DependentUpon>Reports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Bench.aspx.cs">
+      <DependentUpon>Bench.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Bench.aspx.designer.cs">
+      <DependentUpon>Bench.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\BenchCosts.aspx.cs">
+      <DependentUpon>BenchCosts.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\BenchCosts.aspx.designer.cs">
+      <DependentUpon>BenchCosts.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\CommissionsAndRates.aspx.cs">
+      <DependentUpon>CommissionsAndRates.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\CommissionsAndRates.aspx.designer.cs">
+      <DependentUpon>CommissionsAndRates.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\PersonStats.aspx.cs">
+      <DependentUpon>PersonStats.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\PersonStats.aspx.designer.cs">
+      <DependentUpon>PersonStats.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\UtilizationTable.aspx.cs">
+      <DependentUpon>UtilizationTable.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\UtilizationTable.aspx.designer.cs">
+      <DependentUpon>UtilizationTable.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\UtilizationTimeline.aspx.cs">
+      <DependentUpon>UtilizationTimeline.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\UtilizationTimeline.aspx.designer.cs">
+      <DependentUpon>UtilizationTimeline.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sandbox\TotalsTest.aspx.cs">
+      <DependentUpon>TotalsTest.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sandbox\TotalsTest.aspx.designer.cs">
+      <DependentUpon>TotalsTest.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Security\PermissionDiffeneceItem.cs" />
+    <Compile Include="Security\PracticeManagementMembershipProvider.cs" />
+    <Compile Include="Security\PracticeManagementRoleProvider.cs" />
+    <Compile Include="Security\PracticeManagementRoleProviderBase.cs" />
+    <Compile Include="Security\SeniorityAnalyzer.cs" />
+    <Compile Include="Service References\ActivityLogService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\AuthService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\CalendarService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\ClientService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\ConfigurationService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\DefaultCommissionService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\DefaultRecruiterCommissionService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\ExpenseCategoryService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\ExpenseService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\MembershipService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\MilestonePersonService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\MilestoneService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\OpportunityService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\OverheadService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\PersonRoleService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\PersonService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\PersonStatusService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\PracticeService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\ProjectGroupService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\ProjectService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\ProjectStatusService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\RoleService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\TimescaleService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="ServiceCallers.cs" />
+    <Compile Include="set_user.aspx.cs">
+      <DependentUpon>set_user.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="set_user.aspx.designer.cs">
+      <DependentUpon>set_user.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TimeEntry.aspx.cs">
+      <DependentUpon>TimeEntry.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TimeEntry.aspx.designer.cs">
+      <DependentUpon>TimeEntry.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\TimeEntryReport.aspx.cs">
+      <DependentUpon>TimeEntryReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\TimeEntryReport.aspx.designer.cs">
+      <DependentUpon>TimeEntryReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\GeneralConfiguration.aspx.cs">
+      <DependentUpon>GeneralConfiguration.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\GeneralConfiguration.aspx.designer.cs">
+      <DependentUpon>GeneralConfiguration.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\Calendar.cs" />
+    <Compile Include="Utils\Coloring.cs" />
+    <Compile Include="Utils\Generic.cs" />
+    <Compile Include="Utils\Logging.cs" />
+    <Compile Include="Utils\ProjectHelper.cs" />
+    <Compile Include="Utils\SettingsHelper.cs" />
+    <Compile Include="Utils\TimeEntryHelper.cs" />
+    <Compile Include="Utils\UrlResolverUtil.cs" />
+    <Compile Include="Utils\WCFClientUtility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ClientList.aspx" />
+    <Content Include="CompanyPerformance.aspx" />
+    <Content Include="Controls\PersonnelCompensation.ascx" />
+    <Content Include="Controls\PracticeFilter.ascx" />
+    <Content Include="Css\PracticeManagement.css" />
+    <Content Include="MilestoneDetail.aspx" />
+    <Content Include="PersonDetail.aspx" />
+    <Content Include="PersonList.aspx" />
+    <Content Include="OldAndObsoletePersonMargin.aspx" />
+    <Content Include="PracticeManagement.Master" />
+    <Content Include="ProjectDetail.aspx" />
+    <Content Include="MilestonePersonDetail.aspx" />
+    <Content Include="PersonOverheadCalculation.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Controls\MonthPicker.ascx" />
+    <Content Include="Images\calendar.gif" />
+    <Content Include="Images\next.gif" />
+    <Content Include="Images\previous.gif" />
+    <None Include="Properties\DataSources\DataTransferObjects.Client.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Person.datasource" />
+    <Content Include="Web.sitemap">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataTransferObjects\DataTransferObjects.csproj">
+      <Project>{848EAE46-9397-439B-86BC-5799B366EF61}</Project>
+      <Name>DataTransferObjects</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\Messages.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Messages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Properties\DataSources\DataTransferObjects.Practice.datasource" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ActivityLog.aspx" />
+    <Content Include="Calendar.aspx" />
+    <Content Include="ClientDetails.aspx" />
+    <Content Include="CompanyPerfomanceServ.asmx" />
+    <Content Include="Controls\ActivityLogControl.ascx" />
+    <Content Include="Controls\BillingInfo.ascx" />
+    <Content Include="Controls\BrandingSettingsControl.ascx" />
+    <Content Include="Controls\Clients\ClientGroups.ascx" />
+    <Content Include="Controls\Clients\ClientProjects.ascx" />
+    <Content Include="Controls\Configuration\DefaultUser.ascx" />
+    <Content Include="Controls\Configuration\EmailTemplates.ascx" />
+    <Content Include="Controls\Configuration\PracticeItem.ascx" />
+    <Content Include="Controls\Configuration\Practices.ascx" />
+    <Content Include="Controls\DatePicker.ascx" />
+    <EmbeddedResource Include="Controls\Generic\DirtyState\DirtyExtender.js" />
+    <EmbeddedResource Include="Controls\Generic\ElementDisabler\ElementDisablerExtender.js" />
+    <Content Include="Controls\Generic\BecomeUser.ascx" />
+    <Content Include="Controls\Generic\Filtering\DateInterval.ascx" />
+    <Content Include="Controls\Generic\Filtering\Option.ascx" />
+    <Content Include="Controls\Generic\Filtering\RealInterval.ascx" />
+    <Content Include="Controls\Generic\Filtering\TERFilter.ascx" />
+    <Content Include="Controls\Generic\Filtering\TextAlike.ascx" />
+    <EmbeddedResource Include="Controls\Generic\Sorting\MultisortExtender\MultisortExtender.js" />
+    <EmbeddedResource Include="Controls\Generic\SelectCutOff\SelectCutOffExtender.js" />
+    <Content Include="Controls\Generic\LoadingProgress.ascx" />
+    <Content Include="Controls\Generic\Notes.ascx" />
+    <Content Include="Controls\Generic\OpportunityList.ascx" />
+    <EmbeddedResource Include="Controls\Generic\TotalCalculator\TotalCalculatorExtender.js" />
+    <Content Include="Controls\MessageLabel.ascx" />
+    <Content Include="Controls\MilestonePersons\CumulativeActivity.ascx" />
+    <Content Include="Controls\MilestonePersons\CumulativeDailyActivity.ascx" />
+    <Content Include="Controls\MilestonePersons\MilestonePersonActivity.ascx" />
+    <Content Include="Controls\Milestones\MilestonePersonList.ascx" />
+    <Content Include="Controls\Opportunities\OpportunityTransitionEditor.ascx" />
+    <Content Include="Controls\Opportunities\PrevNextOpportunity.ascx" />
+    <EmbeddedResource Include="Controls\Opportunities\ViewProjectExtender\ViewProjectExtender.js" />
+    <Content Include="Controls\PersonInfo.ascx" />
+    <Content Include="Controls\Persons\PersonChooser.ascx" />
+    <Content Include="Controls\Persons\PersonProjects.ascx" />
+    <Content Include="Controls\ProjectExpenses\ProjectExpensesControl.ascx" />
+    <Content Include="Controls\ProjectNameCellRounded.ascx" />
+    <Content Include="Controls\Projects\ProjectFinancials.ascx" />
+    <Content Include="Controls\Projects\ProjectMilestonesFinancials.ascx" />
+    <Content Include="Controls\Projects\ProjectPersons.ascx" />
+    <Content Include="Controls\Reports\BenchCosts.ascx" />
+    <Content Include="Controls\Reports\BenchReport.ascx" />
+    <Content Include="Controls\Reports\CommissionsAndRates.ascx" />
+    <Content Include="Controls\Reports\ConsultantMilestones.ascx" />
+    <Content Include="Controls\Reports\ConsultantsReport.ascx" />
+    <Content Include="Controls\Reports\ConsultantsReportFilter.ascx" />
+    <Content Include="Controls\Reports\ConsultantsWeeklyReport.ascx" />
+    <Content Include="Controls\Reports\PersonStats.ascx" />
+    <Content Include="Controls\RestrictionPanel.ascx" />
+    <Content Include="Controls\TimeEntry\SingleTimeEntry.ascx" />
+    <Content Include="Controls\TimeEntry\TimeEntries.ascx" />
+    <Content Include="Controls\TimeEntry\TimeEntryBar.ascx" />
+    <Content Include="Controls\TimeEntry\TimeEntryBarHeader.ascx" />
+    <Content Include="Controls\TimeEntry\TimeEntryManagement.ascx" />
+    <Content Include="Controls\TimeEntry\WeekSelector.ascx" />
+    <Content Include="Css\BrowserSpecific\IEMenu6.css" />
+    <Content Include="Css\DetailsView.css" />
+    <Content Include="Css\Menu.css" />
+    <Content Include="Css\PracticeManagementIE.css" />
+    <Content Include="Css\style-ie7.css" />
+    <Content Include="Css\style.css" />
+    <Content Include="Css\TreeView.css" />
+    <Content Include="DefaultRecruitingCommissionDetail.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="GuestPages\AccessDenied.aspx" />
+    <Content Include="App_GlobalResources\Controls.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Controls.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ChangePassword.aspx" />
+    <Content Include="GuestPages\PageHasBeenRemoved.aspx" />
+    <Content Include="Images\add-btn.png" />
+    <Content Include="Images\p-scroll-bg.png" />
+    <Content Include="Images\page-scroll-arrows-bg.png" />
+    <Content Include="Images\top-menu-bg-h-25.png" />
+    <Content Include="Images\top-menu-bg-h-40.png" />
+    <Content Include="Images\top-menu-bg-h-50.png" />
+    <Content Include="OldAndObsoleteCompanyCalendar.aspx" />
+    <Content Include="CompensationDetail.aspx" />
+    <Content Include="Controls\CalendarLegend.ascx" />
+    <Content Include="Controls\GrossMarginComputing.ascx" />
+    <Content Include="Controls\MonthCalendar.ascx" />
+    <Content Include="Controls\ProjectInfo.ascx" />
+    <Content Include="Controls\ProjectNameCell.ascx" />
+    <Content Include="Controls\RecruiterInfo.ascx" />
+    <Content Include="Controls\WhatIf.ascx" />
+    <Content Include="ExpenseCategoryList.aspx" />
+    <Content Include="ExpenseDetail.aspx" />
+    <Content Include="ExpenseList.aspx" />
+    <Content Include="Images\accepted_16.png" />
+    <Content Include="Images\add-btn-clients.png" />
+    <Content Include="Images\add-btn-expense.png" />
+    <Content Include="Images\add-btn-group.png" />
+    <Content Include="Images\add-btn-milestone.png" />
+    <Content Include="Images\add-btn-oportunity.png" />
+    <Content Include="Images\add-btn-overhead.png" />
+    <Content Include="Images\add-btn-person.png" />
+    <Content Include="Images\add-btn-project.png" />
+    <Content Include="Images\add-project.png" />
+    <Content Include="Images\add_16.png" />
+    <Content Include="Images\ajax-loader.gif" />
+    <Content Include="Images\body-bg.png" />
+    <Content Include="Images\body-bg2.png" />
+    <Content Include="Images\bottom-shadow.png" />
+    <Content Include="Images\button-add-group.png" />
+    <Content Include="Images\button-add.png" />
+    <Content Include="Images\button-plus.png" />
+    <Content Include="Images\close_16.png" />
+    <Content Include="Images\collapse.jpg" />
+    <Content Include="Images\collapse.png" />
+    <Content Include="Images\cp-header-bg.png" />
+    <Content Include="Images\cp-header-div.png" />
+    <Content Include="Images\custom-logo.png" />
+    <Content Include="Images\declined_16.png" />
+    <Content Include="Images\details_16.png" />
+    <Content Include="Images\edit2_16.png" />
+    <Content Include="Images\edit_16.png" />
+    <Content Include="Images\expand.jpg" />
+    <Content Include="Images\footer-bg.png" />
+    <Content Include="Images\hint.png" />
+    <Content Include="Images\holder-bg.png" />
+    <Content Include="Images\icon-check.png" />
+    <Content Include="Images\icon-delete.png" />
+    <Content Include="Images\icon-edit.png" />
+    <Content Include="Images\loading.gif" />
+    <Content Include="Images\logic2020.png" />
+    <Content Include="Images\logic2020_logo.gif" />
+    <Content Include="Images\logo.gif" />
+    <Content Include="GuestPages\InternalError.aspx" />
+    <Content Include="Images\mini-close.gif" />
+    <Content Include="Images\mini-close.png" />
+    <Content Include="Images\modal-close.png" />
+    <Content Include="Images\no.png" />
+    <Content Include="Images\pending_16.png" />
+    <Content Include="Images\project-indicator.png" />
+    <Content Include="Images\sort-arrow.png" />
+    <Content Include="Images\SortAsc.GIF" />
+    <Content Include="Images\SortDesc.GIF" />
+    <Content Include="Images\top-menu-bg.png" />
+    <Content Include="Images\top-shadow.png" />
+    <Content Include="Images\tt-bbor.png" />
+    <Content Include="Images\tt-lb.png" />
+    <Content Include="Images\tt-lbor.png" />
+    <Content Include="Images\tt-lt.png" />
+    <Content Include="Images\tt-rb.png" />
+    <Content Include="Images\tt-rbor.png" />
+    <Content Include="Images\tt-rt.png" />
+    <Content Include="Images\tt-tail.png" />
+    <Content Include="Images\tt-tbor.png" />
+    <Content Include="Images\Unsorted.gif" />
+    <Content Include="Images\warning_16.png" />
+    <Content Include="Images\wrapper-bg.png" />
+    <Content Include="Images\yes.png" />
+    <Content Include="Login.aspx" />
+    <Content Include="MarginTest.aspx" />
+    <Content Include="Mobile\CompanyPerformance.aspx" />
+    <Content Include="OpportunityDetail.aspx" />
+    <Content Include="OpportunityList.aspx" />
+    <Content Include="OverheadDetail.aspx" />
+    <Content Include="GuestPages\PageNotFound.aspx" />
+    <Content Include="Projects.aspx" />
+    <Content Include="ProjectSearch.aspx" />
+    <Content Include="Reports.aspx" />
+    <Content Include="Reports\Bench.aspx" />
+    <Content Include="Reports\BenchCosts.aspx" />
+    <Content Include="Reports\CommissionsAndRates.aspx" />
+    <Content Include="Reports\PersonStats.aspx" />
+    <Content Include="Reports\UtilizationTable.aspx" />
+    <Content Include="Reports\UtilizationTimeline.aspx" />
+    <Content Include="Reports\Xslt\ActivityLogChanges.xslt" />
+    <Content Include="Reports\Xslt\ActivityLogItem.xslt" />
+    <Content Include="Reports\Xslt\MonthMiniReport.xslt" />
+    <Content Include="PracticeManagementMain.Master" />
+    <Content Include="App_Browsers\CSSFriendlyAdapters.browser" />
+    <None Include="Properties\DataSources\DataTransferObjects.ActivityLogItem.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.BillingInfo.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.EmailTemplate.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.MilestonePersonEntry.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Note.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Opportunity.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.OpportunityStatus.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.OpportunityTransition.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.OpportunityTransitionStatus.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.PersonPermission.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.PersonStats.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ProjectExpense.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ProjectGroup.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Seniority.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.TimeEntry.TimeEntry.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.TimeEntry.TimeEntryRecord.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.TimeEntry.TimeType.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.TimeEntry.TimeTypeRecord.datasource" />
+    <None Include="Properties\DataSources\System.Data.DataSet.datasource" />
+    <None Include="Properties\DataSources\System.Web.Security.MembershipUser.datasource" />
+    <None Include="Properties\DataSources\System.Web.Security.MembershipUserCollection.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ExpenseBasis.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.MonthlyExpense.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.WeekPaidOption.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ExpenseCategory.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.PersonRole.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Timescale.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.PersonStatus.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ComputedFinancials.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ComputedFinancialsEx.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ComputedRate.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Pay.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.PersonRate.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ProjectStatus.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.CalendarItem.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.MilestonePerson.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.DefaultCommission.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.OverheadFixedRate.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.OverheadRateType.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.PersonOverhead.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.DefaultRecruiterCommission.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Milestone.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Project.datasource" />
+    <Content Include="Sandbox\TotalsTest.aspx" />
+    <Content Include="Scripts\AdapterUtils.js" />
+    <Content Include="Scripts\CascadingDropDownBehavior.js" />
+    <Content Include="Scripts\Cookie.js" />
+    <None Include="Service References\ActivityLogService\ActivityLogService11.wsdl" />
+    <None Include="Service References\ActivityLogService\ActivityLogService11.xsd" />
+    <None Include="Service References\ActivityLogService\ActivityLogService12.xsd" />
+    <None Include="Service References\ActivityLogService\ActivityLogService13.xsd" />
+    <None Include="Service References\ActivityLogService\ActivityLogService14.xsd" />
+    <None Include="Service References\ActivityLogService\configuration91.svcinfo" />
+    <None Include="Service References\ActivityLogService\configuration.svcinfo" />
+    <None Include="Service References\ActivityLogService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\AuthService\AuthService11.wsdl" />
+    <None Include="Service References\AuthService\AuthService22.xsd" />
+    <None Include="Service References\AuthService\AuthService23.xsd" />
+    <None Include="Service References\AuthService\configuration91.svcinfo" />
+    <None Include="Service References\AuthService\configuration.svcinfo" />
+    <None Include="Service References\AuthService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\CalendarService\CalendarService.wsdl" />
+    <None Include="Service References\CalendarService\CalendarService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalendarService\CalendarService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalendarService\CalendarService11.wsdl" />
+    <None Include="Service References\CalendarService\CalendarService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalendarService\CalendarService33.xsd" />
+    <None Include="Service References\CalendarService\CalendarService34.xsd" />
+    <None Include="Service References\CalendarService\CalendarService35.xsd" />
+    <None Include="Service References\CalendarService\configuration91.svcinfo" />
+    <None Include="Service References\CalendarService\configuration.svcinfo" />
+    <None Include="Service References\CalendarService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\ClientService\ClientService22.wsdl" />
+    <None Include="Service References\ClientService\ClientService23.wsdl" />
+    <None Include="Service References\ClientService\ClientService44.xsd" />
+    <None Include="Service References\ClientService\ClientService45.xsd" />
+    <None Include="Service References\ClientService\ClientService46.xsd" />
+    <None Include="Service References\ClientService\ClientService47.xsd" />
+    <None Include="Service References\ClientService\configuration91.svcinfo" />
+    <None Include="Service References\ClientService\configuration.svcinfo" />
+    <None Include="Service References\ClientService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\DefaultCommissionService\configuration91.svcinfo" />
+    <None Include="Service References\DefaultCommissionService\configuration.svcinfo" />
+    <None Include="Service References\DefaultCommissionService\DefaultCommissionService11.wsdl" />
+    <None Include="Service References\DefaultCommissionService\DefaultCommissionService33.xsd" />
+    <None Include="Service References\DefaultCommissionService\DefaultCommissionService34.xsd" />
+    <None Include="Service References\DefaultCommissionService\DefaultCommissionService35.xsd" />
+    <None Include="Service References\DefaultCommissionService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\DefaultRecruiterCommissionService\configuration91.svcinfo" />
+    <None Include="Service References\DefaultRecruiterCommissionService\configuration.svcinfo" />
+    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService11.wsdl" />
+    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService33.xsd" />
+    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService34.xsd" />
+    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService35.xsd" />
+    <None Include="Service References\DefaultRecruiterCommissionService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\ExpenseCategoryService\configuration91.svcinfo" />
+    <None Include="Service References\ExpenseCategoryService\configuration.svcinfo" />
+    <None Include="Service References\ExpenseCategoryService\ExpenseCategoryService11.wsdl" />
+    <None Include="Service References\ExpenseCategoryService\ExpenseCategoryService44.xsd" />
+    <None Include="Service References\ExpenseCategoryService\ExpenseCategoryService45.xsd" />
+    <None Include="Service References\ExpenseCategoryService\ExpenseCategoryService46.xsd" />
+    <None Include="Service References\ExpenseCategoryService\ExpenseCategoryService47.xsd" />
+    <None Include="Service References\ExpenseCategoryService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\ExpenseService\configuration91.svcinfo" />
+    <None Include="Service References\ExpenseService\configuration.svcinfo" />
+    <None Include="Service References\ExpenseService\ExpenseService11.wsdl" />
+    <None Include="Service References\ExpenseService\ExpenseService44.xsd" />
+    <None Include="Service References\ExpenseService\ExpenseService45.xsd" />
+    <None Include="Service References\ExpenseService\ExpenseService46.xsd" />
+    <None Include="Service References\ExpenseService\ExpenseService47.xsd" />
+    <None Include="Service References\ExpenseService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\MembershipService\configuration91.svcinfo" />
+    <None Include="Service References\MembershipService\configuration.svcinfo" />
+    <None Include="Service References\MembershipService\MembershipService11.wsdl" />
+    <None Include="Service References\MembershipService\MembershipService44.xsd" />
+    <None Include="Service References\MembershipService\MembershipService45.xsd" />
+    <None Include="Service References\MembershipService\MembershipService46.xsd" />
+    <None Include="Service References\MembershipService\MembershipService47.xsd" />
+    <None Include="Service References\MembershipService\PraticeManagement.MembershipService.MembershipCreateStatus.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\MembershipService\PraticeManagement.MembershipService.MembershipPasswordFormat.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\MembershipService\PraticeManagement.MembershipService.MembershipUser.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\MembershipService\PraticeManagement.MembershipService.MembershipUserCollection.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\MembershipService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\MilestonePersonService\configuration91.svcinfo" />
+    <None Include="Service References\MilestonePersonService\configuration.svcinfo" />
+    <None Include="Service References\MilestonePersonService\MilestonePersonService11.wsdl" />
+    <None Include="Service References\MilestonePersonService\MilestonePersonService44.xsd" />
+    <None Include="Service References\MilestonePersonService\MilestonePersonService45.xsd" />
+    <None Include="Service References\MilestonePersonService\MilestonePersonService46.xsd" />
+    <None Include="Service References\MilestonePersonService\MilestonePersonService47.xsd" />
+    <None Include="Service References\MilestonePersonService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\MilestoneService\MilestoneService.wsdl" />
+    <None Include="Service References\MilestoneService\MilestoneService.xsd" />
+    <None Include="Service References\MilestoneService\MilestoneService1.xsd" />
+    <None Include="Service References\MilestoneService\MilestoneService2.xsd" />
+    <None Include="Service References\MilestoneService\MilestoneService3.xsd" />
+    <None Include="Service References\MilestoneService\configuration91.svcinfo" />
+    <None Include="Service References\MilestoneService\configuration.svcinfo" />
+    <None Include="Service References\MilestoneService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService.wsdl" />
+    <None Include="Service References\OpportunityService\OpportunityService.xsd" />
+    <None Include="Service References\OpportunityService\OpportunityService1.xsd" />
+    <None Include="Service References\OpportunityService\OpportunityService15.xsd" />
+    <None Include="Service References\OpportunityService\OpportunityService2.xsd" />
+    <None Include="Service References\OpportunityService\OpportunityService3.xsd" />
+    <None Include="Service References\OpportunityService\OpportunityService4.xsd" />
+    <None Include="Service References\OpportunityService\OpportunityService42.xsd" />
+    <None Include="Service References\OpportunityService\OpportunityService43.xsd" />
+    <None Include="Service References\OpportunityService\OpportunityService5.xsd" />
+    <None Include="Service References\OpportunityService\OpportunityService6.xsd" />
+    <None Include="Service References\OpportunityService\OpportunityService7.xsd" />
+    <None Include="Service References\OpportunityService\OpportunityService8.xsd" />
+    <None Include="Service References\OpportunityService\OpportunityService9.xsd" />
+    <None Include="Service References\OverheadService\configuration91.svcinfo" />
+    <None Include="Service References\OverheadService\configuration.svcinfo" />
+    <None Include="Service References\OverheadService\OverheadService11.wsdl" />
+    <None Include="Service References\OverheadService\OverheadService44.xsd" />
+    <None Include="Service References\OverheadService\OverheadService45.xsd" />
+    <None Include="Service References\OverheadService\OverheadService46.xsd" />
+    <None Include="Service References\OverheadService\OverheadService47.xsd" />
+    <None Include="Service References\OverheadService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\PersonRoleService\configuration91.svcinfo" />
+    <None Include="Service References\PersonRoleService\configuration.svcinfo" />
+    <None Include="Service References\PersonRoleService\PersonRoleService11.wsdl" />
+    <None Include="Service References\PersonRoleService\PersonRoleService33.xsd" />
+    <None Include="Service References\PersonRoleService\PersonRoleService34.xsd" />
+    <None Include="Service References\PersonRoleService\PersonRoleService35.xsd" />
+    <None Include="Service References\PersonRoleService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\PersonService\Arrays.xsd" />
+    <None Include="Service References\PersonService\DataTransferObjects.ContextObjects.xsd" />
+    <None Include="Service References\PersonService\DataTransferObjects.xsd" />
+    <None Include="Service References\PersonService\PersonService.wsdl" />
+    <None Include="Service References\PersonService\PersonService.xsd" />
+    <None Include="Service References\PersonService\PersonService1.xsd" />
+    <None Include="Service References\PersonService\PersonService2.xsd" />
+    <None Include="Service References\PersonService\PersonService3.xsd" />
+    <None Include="Service References\PersonService\PersonService4.xsd" />
+    <None Include="Service References\PersonService\service.wsdl" />
+    <None Include="Service References\PersonService\service.xsd" />
+    <None Include="Service References\PersonService\service1.xsd" />
+    <None Include="Service References\PersonService\service2.xsd" />
+    <None Include="Service References\PersonService\System.xsd" />
+    <None Include="Service References\PersonStatusService\configuration91.svcinfo" />
+    <None Include="Service References\PersonStatusService\configuration.svcinfo" />
+    <None Include="Service References\PersonStatusService\PersonStatusService11.wsdl" />
+    <None Include="Service References\PersonStatusService\PersonStatusService33.xsd" />
+    <None Include="Service References\PersonStatusService\PersonStatusService34.xsd" />
+    <None Include="Service References\PersonStatusService\PersonStatusService35.xsd" />
+    <None Include="Service References\PersonStatusService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\PracticeService\configuration91.svcinfo" />
+    <None Include="Service References\PracticeService\configuration.svcinfo" />
+    <None Include="Service References\PracticeService\PracticeService.wsdl" />
+    <None Include="Service References\PracticeService\PracticeService.xsd" />
+    <None Include="Service References\PracticeService\PracticeService1.wsdl" />
+    <None Include="Service References\PracticeService\PracticeService1.xsd" />
+    <None Include="Service References\PracticeService\PracticeService11.wsdl" />
+    <None Include="Service References\PracticeService\PracticeService2.xsd" />
+    <None Include="Service References\PracticeService\PracticeService3.xsd" />
+    <None Include="Service References\PracticeService\PracticeService34.xsd" />
+    <None Include="Service References\PracticeService\PracticeService35.xsd" />
+    <None Include="Service References\PracticeService\PracticeService36.xsd" />
+    <None Include="Service References\PracticeService\PracticeService37.xsd" />
+    <None Include="Service References\PracticeService\PracticeService4.xsd" />
+    <None Include="Service References\PracticeService\PracticeService5.xsd" />
+    <None Include="Service References\PracticeService\PracticeService6.xsd" />
+    <None Include="Service References\PracticeService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\ProjectGroupService\configuration91.svcinfo" />
+    <None Include="Service References\ProjectGroupService\configuration.svcinfo" />
+    <None Include="Service References\ProjectGroupService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService.wsdl" />
+    <None Include="Service References\ProjectService\ProjectService.xsd" />
+    <None Include="Service References\ProjectService\ProjectService11.xsd" />
+    <None Include="Service References\ProjectService\ProjectService12.xsd" />
+    <None Include="Service References\ProjectService\ProjectService13.xsd" />
+    <None Include="Service References\ProjectService\ProjectService2.xsd" />
+    <None Include="Service References\ProjectService\ProjectService3.xsd" />
+    <None Include="Service References\ProjectService\ProjectService5.xsd" />
+    <None Include="Service References\ProjectService\ProjectService6.xsd" />
+    <None Include="Service References\ProjectService\ProjectService7.xsd" />
+    <None Include="Service References\ProjectStatusService\configuration91.svcinfo" />
+    <None Include="Service References\ProjectStatusService\configuration.svcinfo" />
+    <None Include="Service References\ProjectStatusService\ProjectStatusService11.wsdl" />
+    <None Include="Service References\ProjectStatusService\ProjectStatusService33.xsd" />
+    <None Include="Service References\ProjectStatusService\ProjectStatusService34.xsd" />
+    <None Include="Service References\ProjectStatusService\ProjectStatusService35.xsd" />
+    <None Include="Service References\ProjectStatusService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\RoleService\configuration91.svcinfo" />
+    <None Include="Service References\RoleService\configuration.svcinfo" />
+    <None Include="Service References\RoleService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\RoleService\RoleService11.wsdl" />
+    <None Include="Service References\RoleService\RoleService33.xsd" />
+    <None Include="Service References\RoleService\RoleService34.xsd" />
+    <None Include="Service References\RoleService\RoleService35.xsd" />
+    <None Include="Service References\TimescaleService\configuration91.svcinfo" />
+    <None Include="Service References\TimescaleService\configuration.svcinfo" />
+    <None Include="Service References\TimescaleService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\OpportunityService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\PersonService\PersonService.disco" />
+    <None Include="Service References\PersonService\configuration91.svcinfo" />
+    <None Include="Service References\PersonService\configuration.svcinfo" />
+    <None Include="Service References\PersonService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService.disco" />
+    <None Include="Service References\ProjectService\configuration91.svcinfo" />
+    <None Include="Service References\ProjectService\configuration.svcinfo" />
+    <None Include="Service References\ProjectService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\ActivityLogService\ActivityLogService11.disco" />
+    <None Include="Service References\ActivityLogService\configuration912.svcinfo" />
+    <None Include="Service References\AuthService\AuthService11.disco" />
+    <None Include="Service References\AuthService\configuration912.svcinfo" />
+    <None Include="Service References\TimescaleService\TimescaleService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimescaleService\TimescaleService33.xsd" />
+    <None Include="Service References\TimescaleService\TimescaleService34.xsd" />
+    <None Include="Service References\TimescaleService\TimescaleService35.xsd" />
+    <None Include="Service References\TimescaleService\TimescaleService11.disco" />
+    <None Include="Service References\TimescaleService\configuration912.svcinfo" />
+    <None Include="Service References\CalendarService\CalendarService11.disco" />
+    <None Include="Service References\CalendarService\configuration912.svcinfo" />
+    <None Include="Service References\ClientService\ClientService11.disco" />
+    <None Include="Service References\ClientService\configuration912.svcinfo" />
+    <None Include="Service References\DefaultCommissionService\DefaultCommissionService11.disco" />
+    <None Include="Service References\DefaultCommissionService\configuration912.svcinfo" />
+    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService11.disco" />
+    <None Include="Service References\DefaultRecruiterCommissionService\configuration912.svcinfo" />
+    <None Include="Service References\ExpenseCategoryService\ExpenseCategoryService11.disco" />
+    <None Include="Service References\ExpenseCategoryService\configuration912.svcinfo" />
+    <None Include="Service References\ExpenseService\ExpenseService11.disco" />
+    <None Include="Service References\ExpenseService\configuration912.svcinfo" />
+    <None Include="Service References\MembershipService\MembershipService11.disco" />
+    <None Include="Service References\MembershipService\configuration912.svcinfo" />
+    <None Include="Service References\MilestonePersonService\MilestonePersonService11.disco" />
+    <None Include="Service References\MilestonePersonService\configuration912.svcinfo" />
+    <None Include="Service References\OverheadService\OverheadService11.disco" />
+    <None Include="Service References\OverheadService\configuration912.svcinfo" />
+    <None Include="Service References\PersonRoleService\PersonRoleService11.disco" />
+    <None Include="Service References\PersonRoleService\configuration912.svcinfo" />
+    <None Include="Service References\PersonStatusService\PersonStatusService11.disco" />
+    <None Include="Service References\PracticeService\PracticeService11.disco" />
+    <None Include="Service References\PracticeService\configuration912.svcinfo" />
+    <None Include="Service References\ProjectStatusService\ProjectStatusService11.disco" />
+    <None Include="Service References\ProjectStatusService\configuration912.svcinfo" />
+    <None Include="Service References\RoleService\RoleService11.disco" />
+    <None Include="Service References\RoleService\configuration912.svcinfo" />
+    <None Include="Service References\ActivityLogService\configuration913.svcinfo" />
+    <None Include="Service References\TimescaleService\configuration913.svcinfo" />
+    <None Include="Service References\AuthService\configuration913.svcinfo" />
+    <None Include="Service References\CalendarService\configuration913.svcinfo" />
+    <None Include="Service References\ClientService\configuration913.svcinfo" />
+    <None Include="Service References\DefaultCommissionService\configuration913.svcinfo" />
+    <None Include="Service References\DefaultRecruiterCommissionService\configuration913.svcinfo" />
+    <None Include="Service References\ExpenseCategoryService\configuration913.svcinfo" />
+    <None Include="Service References\ExpenseService\configuration913.svcinfo" />
+    <None Include="Service References\MembershipService\configuration913.svcinfo" />
+    <None Include="Service References\MilestonePersonService\configuration913.svcinfo" />
+    <None Include="Service References\OverheadService\configuration913.svcinfo" />
+    <None Include="Service References\PersonRoleService\configuration913.svcinfo" />
+    <None Include="Service References\PracticeService\configuration913.svcinfo" />
+    <None Include="Service References\ProjectStatusService\configuration913.svcinfo" />
+    <None Include="Service References\RoleService\configuration913.svcinfo" />
+    <Content Include="Scripts\MenuAdapter.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\sorttable.js" />
+    <None Include="Service References\ConfigurationService\configuration91.svcinfo" />
+    <None Include="Service References\ConfigurationService\configuration.svcinfo" />
+    <None Include="Service References\ConfigurationService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\OpportunityService\configuration.svcinfo" />
+    <None Include="Service References\OpportunityService\configuration91.svcinfo" />
+    <Content Include="Scripts\TreeViewAdapter.js" />
+    <Content Include="Service References\OpportunityService\OpportunityService.disco" />
+    <None Include="Service References\PracticeService\PracticeService1.disco" />
+    <Content Include="Service References\PracticeService\PracticeService.disco" />
+    <Content Include="set_user.aspx" />
+    <Content Include="Third Party Tools\Css Adapters\CSSFriendly.dll" />
+    <Content Include="TimeEntry.aspx" />
+    <Content Include="Reports\TimeEntryReport.aspx" />
+    <Content Include="Config\GeneralConfiguration.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\ActivityLogService\" />
+    <WCFMetadataStorage Include="Service References\AuthService\" />
+    <WCFMetadataStorage Include="Service References\CalendarService\" />
+    <WCFMetadataStorage Include="Service References\ClientService\" />
+    <WCFMetadataStorage Include="Service References\ConfigurationService\" />
+    <WCFMetadataStorage Include="Service References\DefaultCommissionService\" />
+    <WCFMetadataStorage Include="Service References\DefaultRecruiterCommissionService\" />
+    <WCFMetadataStorage Include="Service References\ExpenseCategoryService\" />
+    <WCFMetadataStorage Include="Service References\ExpenseService\" />
+    <WCFMetadataStorage Include="Service References\MembershipService\" />
+    <WCFMetadataStorage Include="Service References\MilestonePersonService\" />
+    <WCFMetadataStorage Include="Service References\MilestoneService\" />
+    <WCFMetadataStorage Include="Service References\OpportunityService\" />
+    <WCFMetadataStorage Include="Service References\OverheadService\" />
+    <WCFMetadataStorage Include="Service References\PersonRoleService\" />
+    <WCFMetadataStorage Include="Service References\PersonService\" />
+    <WCFMetadataStorage Include="Service References\PersonStatusService\" />
+    <WCFMetadataStorage Include="Service References\PracticeService\" />
+    <WCFMetadataStorage Include="Service References\ProjectGroupService\" />
+    <WCFMetadataStorage Include="Service References\ProjectService\" />
+    <WCFMetadataStorage Include="Service References\ProjectStatusService\" />
+    <WCFMetadataStorage Include="Service References\RoleService\" />
+    <WCFMetadataStorage Include="Service References\TimeEntryService\" />
+    <WCFMetadataStorage Include="Service References\TimescaleService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="MemberPages\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>3087</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+    <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
+  </PropertyGroup>
+</Project>
