@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="PMWebAzureService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="2" osVersion="*">
+  <Role name="PracticeManagement">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="HasHttpsEndPoint" value="true" />
+      <Setting name="MilestonePersonServiceClient" value="http://65.52.29.57:8080/MilestonePersonService.svc" />
+      <Setting name="ActivityLogServiceClient" value="http://65.52.29.57:8080/ActivityLogService.svc" />
+      <Setting name="CalendarServiceClient" value="http://65.52.29.57:8080/CalendarService.svc" />
+      <Setting name="ClientServiceClient" value="http://65.52.29.57:8080/ClientService.svc" />
+      <Setting name="ExpenseCategoryServiceClient" value="http://65.52.29.57:8080/ExpenseCategoryService.svc" />
+      <Setting name="ExpenseServiceClient" value="http://65.52.29.57:8080/ExpenseService.svc" />
+      <Setting name="MilestoneServiceClient" value="http://65.52.29.57:8080/MilestoneService.svc" />
+      <Setting name="OpportunityServiceClient" value="http://65.52.29.57:8080/OpportunityService.svc" />
+      <Setting name="OverheadServiceClient" value="http://65.52.29.57:8080/OverheadService.svc" />
+      <Setting name="PersonRoleServiceClient" value="http://65.52.29.57:8080/PersonRoleService.svc" />
+      <Setting name="PersonServiceClient" value="http://65.52.29.57:8080/PersonService.svc" />
+      <Setting name="PersonStatusServiceClient" value="http://65.52.29.57:8080/PersonStatusService.svc" />
+      <Setting name="PracticeServiceClient" value="http://65.52.29.57:8080/PracticeService.svc" />
+      <Setting name="ProjectGroupServiceClient" value="http://65.52.29.57:8080/ProjectGroupService.svc" />
+      <Setting name="ProjectServiceClient" value="http://65.52.29.57:8080/ProjectService.svc" />
+      <Setting name="ProjectStatusServiceClient" value="http://65.52.29.57:8080/ProjectStatusService.svc" />
+      <Setting name="TimeEntryServiceClient" value="http://65.52.29.57:8080/TimeEntryService.svc" />
+      <Setting name="TimescaleServiceClient" value="http://65.52.29.57:8080/TimescaleService.svc" />
+      <Setting name="ConfigurationServiceClient" value="http://65.52.29.57:8080/ConfigurationService.svc" />
+      <Setting name="DefaultRecruiterCommissionServiceClient" value="http://65.52.29.57:8080/DefaultRecruiterCommissionService.svc" />
+      <Setting name="DefaultCommissionServiceClient" value="http://65.52.29.57:8080/DefaultCommissionService.svc" />
+      <Setting name="MembershipServiceClient" value="http://65.52.29.57:8080/MembershipService.svc" />
+      <Setting name="RoleServiceClient" value="http://65.52.29.57:8080/RoleService.svc" />
+      <Setting name="AuthServiceClient" value="http://65.52.29.57:8080/AuthService.svc" />
+      <Setting name="EnableSSL" value="false" />
+      <Setting name="senioritySeparationRangeValue" value="19" />
+      <Setting name="ShowWithoutDirector" value="true"/>
+    </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="Practice.logic2020.com" thumbprint="D6B00262CE72E6908C478EBEC234F495404BD60A" thumbprintAlgorithm="sha1" />
+    </Certificates>
+  </Role>
+</ServiceConfiguration>
