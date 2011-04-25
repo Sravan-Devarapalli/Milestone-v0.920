@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="dea1a042-2dd7-4ac7-a4ea-7927636ec1b7" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost/PracticeManagementService/ConfigurationService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="ConfigurationService.wsdl" MetadataType="Wsdl" ID="0ba32961-dc1a-4979-8324-a4362a744bbf" SourceId="1" SourceUrl="http://ws168.ua.akvelon.com/PracticeManagementService/ConfigurationService.svc?wsdl" />
+    <MetadataFile FileName="ConfigurationService.xsd" MetadataType="Schema" ID="46a14cca-3977-45e8-9eb3-ee13baa9090a" SourceId="1" SourceUrl="http://ws168.ua.akvelon.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd0" />
+    <MetadataFile FileName="ConfigurationService.disco" MetadataType="Disco" ID="dc409a12-0a59-476c-ae26-cb59b482e89f" SourceId="1" SourceUrl="http://ws168.ua.akvelon.com/PracticeManagementService/ConfigurationService.svc?disco" />
+    <MetadataFile FileName="ConfigurationService1.xsd" MetadataType="Schema" ID="7abfcb3e-7a4e-4afd-aa8a-0fbb386022fa" SourceId="1" SourceUrl="http://ws168.ua.akvelon.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd1" />
+    <MetadataFile FileName="ConfigurationService2.xsd" MetadataType="Schema" ID="44582a75-7508-4309-9505-bbb6a6776be8" SourceId="1" SourceUrl="http://ws168.ua.akvelon.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd2" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
