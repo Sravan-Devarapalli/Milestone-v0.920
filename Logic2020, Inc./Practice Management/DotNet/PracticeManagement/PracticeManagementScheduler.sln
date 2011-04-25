@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PRMAProjectedEmailNotifier", "PracticeManagementTasks\PRMAProjectedEmailNotifier\PRMAProjectedEmailNotifier.csproj", "{461ACD7E-FFAC-47CF-8198-6C75855ABC4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticeManagementScheduler", "PracticeManagementScheduler\PracticeManagementScheduler.csproj", "{35C6DBD3-607C-4149-86ED-0E4ACFE08B99}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PracticeManagementSchedulerSetup", "PracticeManagementSchedulerSetup\PracticeManagementSchedulerSetup.vdproj", "{BD0E32EF-C0E6-40CD-A14A-EA5BB7627E46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HireDateExpiredEmailNotifier", "PracticeManagementTasks\HireDateExpiredEmailNotifier\HireDateExpiredEmailNotifier.csproj", "{6E78319E-15C1-4783-9128-2D0E27258E83}"
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 5
+		SccProjectName0 = SurroundSCMScci
+		SccLocalPath0 = ..\\..
+		SccProvider0 = MSSCCI:Surround\u0020SCM
+		SccProjectFilePathRelativizedFromConnection0 = PRMA\\Solution\\
+		SccProjectUniqueName1 = PracticeManagementScheduler\\PracticeManagementScheduler.csproj
+		SccLocalPath1 = ..\\..
+		SccProjectFilePathRelativizedFromConnection1 = PRMA\\Solution\\PracticeManagementScheduler\\
+		SccProjectUniqueName2 = PracticeManagementTasks\\PRMAProjectedEmailNotifier\\PRMAProjectedEmailNotifier.csproj
+		SccLocalPath2 = ..\\..
+		SccProjectFilePathRelativizedFromConnection2 = PRMA\\Solution\\PracticeManagementTasks\\PRMAProjectedEmailNotifier\\
+		SccProjectUniqueName3 = PracticeManagementSchedulerSetup\\PracticeManagementSchedulerSetup.vdproj
+		SccLocalPath3 = ..\\..
+		SccProjectFilePathRelativizedFromConnection3 = PRMA\\Solution\\PracticeManagementSchedulerSetup\\
+		SccProjectUniqueName4 = PracticeManagementTasks\\HireDateExpiredEmailNotifier\\HireDateExpiredEmailNotifier.csproj
+		SccLocalPath4 = PracticeManagementTasks\\HireDateExpiredEmailNotifier
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{461ACD7E-FFAC-47CF-8198-6C75855ABC4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{461ACD7E-FFAC-47CF-8198-6C75855ABC4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{461ACD7E-FFAC-47CF-8198-6C75855ABC4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{461ACD7E-FFAC-47CF-8198-6C75855ABC4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35C6DBD3-607C-4149-86ED-0E4ACFE08B99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35C6DBD3-607C-4149-86ED-0E4ACFE08B99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35C6DBD3-607C-4149-86ED-0E4ACFE08B99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35C6DBD3-607C-4149-86ED-0E4ACFE08B99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD0E32EF-C0E6-40CD-A14A-EA5BB7627E46}.Debug|Any CPU.ActiveCfg = Debug
+		{BD0E32EF-C0E6-40CD-A14A-EA5BB7627E46}.Release|Any CPU.ActiveCfg = Release
+		{6E78319E-15C1-4783-9128-2D0E27258E83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E78319E-15C1-4783-9128-2D0E27258E83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E78319E-15C1-4783-9128-2D0E27258E83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E78319E-15C1-4783-9128-2D0E27258E83}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+
