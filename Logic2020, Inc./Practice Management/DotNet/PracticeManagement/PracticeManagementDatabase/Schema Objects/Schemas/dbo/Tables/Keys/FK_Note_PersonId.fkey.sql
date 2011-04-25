@@ -1,0 +1,4 @@
+﻿ALTER TABLE [dbo].[Note]
+    ADD CONSTRAINT [FK_Note_PersonId] FOREIGN KEY ([PersonId]) REFERENCES [dbo].[Person] ([PersonId]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
