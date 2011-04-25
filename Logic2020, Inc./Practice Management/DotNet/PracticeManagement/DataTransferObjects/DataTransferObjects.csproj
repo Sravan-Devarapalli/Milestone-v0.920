@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{848EAE46-9397-439B-86BC-5799B366EF61}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DataTransferObjects</RootNamespace>
+    <AssemblyName>DataTransferObjects</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SurroundSCMScci</SccProjectName>
+    <SccLocalPath>..\..</SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>MSSCCI:Surround SCM</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Staging|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Staging\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\DataTransferObjects.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>PracticeManagementStrongNameKey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>C:\Program Files\Windows Azure SDK\v1.3\bin\runtimes\base\Microsoft.WindowsAzure.ServiceRuntime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActivityEventSource.cs" />
+    <Compile Include="ActivityLogItem.cs" />
+    <Compile Include="BilledTime.cs" />
+    <Compile Include="BillingInfo.cs" />
+    <Compile Include="CalendarItem.cs" />
+    <Compile Include="CategoryItemBudget.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="Commission.cs" />
+    <Compile Include="CommissionType.cs" />
+    <Compile Include="CompanyLogo.cs" />
+    <Compile Include="CompositeObjects\GroupedTimeEntries.cs" />
+    <Compile Include="CompositeObjects\TimeEntriesGroupedByPersonProject.cs" />
+    <Compile Include="ComputedFinancials.cs" />
+    <Compile Include="ComputedFinancialsEx.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="ContextObjects\ActivityLogSelectContext.cs" />
+    <Compile Include="ContextObjects\BenchReportContext.cs" />
+    <Compile Include="ContextObjects\ConsultantMilestonesContext.cs" />
+    <Compile Include="ContextObjects\ConsultantTableReportContext.cs" />
+    <Compile Include="ContextObjects\ConsultantReportContextBase.cs" />
+    <Compile Include="ContextObjects\ConsultantTimelineReportContext.cs" />
+    <Compile Include="ContextObjects\OpportunitySortingContext.cs" />
+    <Compile Include="ContextObjects\EmailContext.cs" />
+    <Compile Include="ContextObjects\OpportunityListContext.cs" />
+    <Compile Include="ContextObjects\ProjectCloningContext.cs" />
+    <Compile Include="ContextObjects\TimeEntryPersonReportContext.cs" />
+    <Compile Include="ContextObjects\TimeEntryProjectReportContext.cs" />
+    <Compile Include="ContextObjects\TimeEntrySelectContext.cs" />
+    <Compile Include="DataAccessFault.cs" />
+    <Compile Include="DatePoint.cs" />
+    <Compile Include="DefaultComission.cs" />
+    <Compile Include="DefaultMilestone.cs" />
+    <Compile Include="DefaultRecruiterCommission.cs" />
+    <Compile Include="DefaultRecruiterCommissionItem.cs" />
+    <Compile Include="Email.cs" />
+    <Compile Include="EmailData.cs" />
+    <Compile Include="EmailTemplate.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="ErrorCode.cs" />
+    <Compile Include="ExpenseBasis.cs" />
+    <Compile Include="ExpenseBasisType.cs" />
+    <Compile Include="ExpenseCategory.cs" />
+    <Compile Include="Financials\ComputedFinancialsBase.cs" />
+    <Compile Include="Financials\MilestonePersonComputedFinancials.cs" />
+    <Compile Include="IActivityPeriod.cs" />
+    <Compile Include="IDataTransferObjectManipulator.cs" />
+    <Compile Include="IIdNameObject.cs" />
+    <Compile Include="MilestonePerson.cs" />
+    <Compile Include="MilestonePersonEntry.cs" />
+    <Compile Include="MonthlyExpense.cs" />
+    <Compile Include="Note.cs" />
+    <Compile Include="NoteTarget.cs" />
+    <Compile Include="NumberFormatStyle.cs" />
+    <Compile Include="Opportunity.cs" />
+    <Compile Include="OpportunityComparer.cs" />
+    <Compile Include="OpportunityPriority.cs" />
+    <Compile Include="OpportunityStatus.cs" />
+    <Compile Include="OpportunityStatusType.cs" />
+    <Compile Include="OpportunityTransition.cs" />
+    <Compile Include="OpportunityTransitionStatus.cs" />
+    <Compile Include="OpportunityTransitionStatusType.cs" />
+    <Compile Include="OverheadFixedRate.cs" />
+    <Compile Include="OverheadRateType.cs" />
+    <Compile Include="OverheadRateTypes.cs" />
+    <Compile Include="PersonOverhead.cs" />
+    <Compile Include="PersonPermission.cs" />
+    <Compile Include="PersonRate.cs" />
+    <Compile Include="PersonRole.cs" />
+    <Compile Include="PersonSeniorityType.cs" />
+    <Compile Include="PersonStats.cs" />
+    <Compile Include="PersonStatus.cs" />
+    <Compile Include="PersonStatusType.cs" />
+    <Compile Include="PracticeManagementCurrency.cs" />
+    <Compile Include="PracticeManagerHistory.cs" />
+    <Compile Include="ProjectComparer.cs" />
+    <Compile Include="ProjectExpense.cs" />
+    <Compile Include="ProjectGroup.cs" />
+    <Compile Include="ProjectsGroupedByDirector.cs" />
+    <Compile Include="ProjectStatus.cs" />
+    <Compile Include="ProjectStatusType.cs" />
+    <Compile Include="Quadruple.cs" />
+    <Compile Include="RevenueType.cs" />
+    <Compile Include="Seniority.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="SMTPSettings.cs" />
+    <Compile Include="TimeEntry\ReviewStatus.cs" />
+    <Compile Include="TimeEntry\TimeEntryHours.cs" />
+    <Compile Include="TimeEntry\TimeEntryRecord.cs" />
+    <Compile Include="TimeEntry\TimeEntryRole.cs" />
+    <Compile Include="TimeEntry\TimeEntrySums.cs" />
+    <Compile Include="TimeEntry\TimeTypeRecord.cs" />
+    <Compile Include="Timescale.cs" />
+    <Compile Include="TimescaleType.cs" />
+    <Compile Include="Milestone.cs" />
+    <Compile Include="Pay.cs" />
+    <Compile Include="Person.cs" />
+    <Compile Include="Practice.cs" />
+    <Compile Include="Project.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecruiterCommission.cs" />
+    <Compile Include="RateType.cs" />
+    <Compile Include="Triple.cs" />
+    <Compile Include="UserCredentials.cs" />
+    <Compile Include="Utils\Generic.cs" />
+    <Compile Include="WeekPaidOption.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DTOClasses.cd" />
+    <None Include="PracticeManagementStrongNameKey.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
