@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3A11DFC2-88F8-4EF1-8CC6-C57DD5FC34AF}"
+	ProjectSection(SolutionItems) = preProject
+		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
+		PRMA TEST.vsmdi = PRMA TEST.vsmdi
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PRMA TEST", "PRMA TEST.csproj", "{5F3E6FA3-6418-46BE-B698-AC340E6DE88E}"
+EndProject
+Global
+	GlobalSection(SurroundSCMIntegrationSolutionProperties) = preSolution
+		SurroundSCMIntegrationSolutionIsControlled = True
+		SurroundSCMIntegrationSolutionBindings = Logic2020, Inc./Practice Management/DotNet/PracticeManagement
+		SurroundNumberOfProjects = 2
+		SurroundSCMIntegrationProjectName0 = Solution Items
+		SurroundSCMIntegrationProjectUniqueName0 = PRMA TEST.sln
+		SurroundSCMIntegrationProjectPath0 = Logic2020, Inc./Practice Management/DotNet/PracticeManagement
+		SurroundSCMIntegrationProjectName1 = PRMA TEST
+		SurroundSCMIntegrationProjectUniqueName1 = PRMA TEST.csproj
+		SurroundSCMIntegrationProjectPath1 = Logic2020, Inc./Practice Management/DotNet/PracticeManagement
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = PRMA TEST.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5F3E6FA3-6418-46BE-B698-AC340E6DE88E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F3E6FA3-6418-46BE-B698-AC340E6DE88E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F3E6FA3-6418-46BE-B698-AC340E6DE88E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F3E6FA3-6418-46BE-B698-AC340E6DE88E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+
