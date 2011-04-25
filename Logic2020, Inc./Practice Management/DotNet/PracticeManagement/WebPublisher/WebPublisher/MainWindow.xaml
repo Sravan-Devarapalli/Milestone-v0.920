@@ -1,0 +1,182 @@
+﻿<Window x:Class="WebPublisher.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:WebPublisher"
+    xmlns:sett="clr-namespace:WebPublisher.Settings"
+    xmlns:my="clr-namespace:WebPublisher.Bindings.Models"
+    xmlns:dw="clr-namespace:WebPublisher.Bindings.Behaviours"
+    xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+    Title="Web Publisher" Height="390" Width="650" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" Closing="Window_Closing" Loaded="Window_Loaded">
+    <Window.Resources>
+        <ResourceDictionary>
+            <!-- Load this specific theme because the Aero theme for CheckBox has issues. -->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/PresentationFramework.Royale;V3.0.0.0;31bf3856ad364e35;component/themes/royale.normalcolor.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <local:DatabaseSettings x:Key="dbSettings"/>
+            <sett:SettingsManager  x:Key="cfgSettings"/>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <StackPanel Orientation="Vertical">
+        <TabControl Name="tcPublishProperties">
+            <TabItem Header="General" Name="tiGeneralSettings">
+                <Grid>
+                    <RichTextBox Name="rtbLogArea" Height="294" Width="617" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Web" Name="tiWebSettings">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <ListBox Name="lbWebSites" Height="187" Width="348" 
+                                 SelectionChanged="lbWebSites_SelectionChanged" 
+                                 ItemsSource="{Binding WebSites}"
+                                >
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListBoxItem}">
+                                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                                    <Setter Property="FontWeight" Value="Normal" />
+                                    <Setter Property="dw:CheckBoxViewItem.IsChecked" Value="{Binding IsChecked}" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.Resources>
+                                <HierarchicalDataTemplate DataType="{x:Type sett:WebInstanceElement}" 
+                                          ItemsSource="{Binding Default}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox Focusable="False" IsChecked="{Binding Include}" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding SiteUrl}"/>
+                                        <TextBlock Text="/"/>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+                            </ListBox.Resources>
+                        </ListBox>
+                                 
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Name="lblVirtualPath">Virtual Name:</Label>
+                                <TextBox Height="23" Name="txtVirtualPath" Width="180" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="8,0,0,0" Width="255">
+                                <Label Name="lblVirtualFolder">Virtual Path:</Label>
+                                <TextBox Height="23" Name="txtVirtualFolder" Width="149" Text=""/>
+                                <Button Height="23" Name="btnOutputPathSelector" Width="30" Click="btnOutputPathSelector_Click">...</Button>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="31,0,0,0">
+                                <Label Name="lblSiteUrl">Site Url:</Label>
+                                <TextBox Height="23" Name="txtSiteUrl" Width="179" Text=""/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="26,0,0,0" Width="228">
+                                <Label Name="lblSources">Sources:</Label>
+                                <TextBox Height="23" Name="txtSources" Width="143" Text="" IsEnabled="False"/>
+                                <Button Height="23" Name="btnPathSelector" Width="30" Click="btnPathSelector_Click">...</Button>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0" Width="228">
+                                <Label Name="lblSiteName">Site Name:</Label>
+                                <TextBox Height="23" Name="txtSiteName" Width="143" Text=""/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Height="27" Name="btnAddNew" Width="60" Click="btnAddNew_Click">Add New</Button> 
+                        <Button Height="27" Name="btnSave" Width="60" Click="btnSave_Click">Save</Button>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Database" Name="tiDatabaseSettings">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Name="spDatabaseName" VerticalAlignment="Top" Orientation="Horizontal" >
+                        <StackPanel Orientation="Horizontal" DataContext="{StaticResource dbSettings}">
+                            <Label Height="28" Name="lblServerName">Server Name:</Label>
+                            <TextBox Height="23" Name="tbServerName" Width="142" Text="{Binding Path=ServerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                        <StackPanel  Orientation="Horizontal">
+                            <Label Height="28" Name="lblInstanceName">Instance Name:</Label>
+                            <TextBox Height="23" Name="tbInstanceName" Width="142">
+                                <TextBox.Text>
+                                    <Binding Source="{StaticResource dbSettings}" Path="InstanceName" UpdateSourceTrigger="PropertyChanged" />
+                                </TextBox.Text>
+                            </TextBox>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Name="spDBPath" VerticalAlignment="Top" Orientation="Horizontal" >
+                        <Label Height="28" Name="lblSQLPath">Sql Data Path:</Label>
+                        <TextBox Height="23" Name="tbSqlDataPath" Width="268">
+                            <TextBox.Text>
+                                <Binding Source="{StaticResource dbSettings}" Path="SqlDataPath" UpdateSourceTrigger="PropertyChanged" />
+                            </TextBox.Text>
+                        </TextBox>
+                        <Button Height="23" Name="btnSqlPathSelector" Width="30" Click="btnSqlPathSelector_Click">...</Button>
+                    </StackPanel>
+                    <StackPanel Name="spUserName" VerticalAlignment="Top" Orientation="Horizontal" >
+                        <StackPanel Orientation="Horizontal" DataContext="{StaticResource dbSettings}">
+                            <Label Height="28" Name="lblUserName">User Name:</Label>
+                            <TextBox Height="23" Name="tbUserName" Width="142" Text="{Binding Path=UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                        <StackPanel  Orientation="Horizontal">
+                            <Label Height="28" Name="lblPasswordName">Password:</Label>
+                            <TextBox Height="23" Name="tbPasswordName" Width="142">
+                                <TextBox.Text>
+                                    <Binding Source="{StaticResource dbSettings}" Path="Password" UpdateSourceTrigger="PropertyChanged" />
+                                </TextBox.Text>
+                            </TextBox>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel  Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" DataContext="{StaticResource dbSettings}">
+                            <Label Height="28" Name="lblDatabaseName">Output Database Name:</Label>
+                            <TextBox Height="23" Name="tbDatabaseName" Width="142" Text="{Binding Path=DatabaseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <CheckBox x:Name="cbUpdateExisting" IsEnabled="False" ToolTip="Coming Soon">Update existing</CheckBox>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                        <TreeView x:Name="tree" ItemsSource="{Binding Scripts}" Height="208" 
+                                  dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" Width="381" dd:DragDrop.DropHandler="{Binding}">
+                            <TreeView.ItemContainerStyle>
+                                <Style TargetType="{x:Type TreeViewItem}">
+                                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                                    <Setter Property="dw:CheckBoxViewItem.IsChecked" Value="{Binding IsChecked}" />
+                                    <Setter Property="FontWeight" Value="Normal" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TreeView.ItemContainerStyle>
+                            <TreeView.Resources>
+                                <HierarchicalDataTemplate DataType="{x:Type my:SqlScriptsViewModel}" 
+                                          ItemsSource="{Binding Children}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox Focusable="False" IsChecked="{Binding IsChecked}" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding Name}" FontSize="12"/>
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+                                
+                            </TreeView.Resources>
+                        </TreeView>
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Height="23" Name="btnAddScripts" Width="75" Click="btnAddScripts_Click">Add</Button>
+                                <Button Height="23" Name="btnDeleteScripts" Width="75" Click="btnDeleteScripts_Click">Delete</Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+        <StackPanel Orientation="Horizontal">
+            <Button Content="Start Publising" Click="Button_Click" />
+        </StackPanel>
+    </StackPanel>
+</Window>
+
