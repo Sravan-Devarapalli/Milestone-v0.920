@@ -189,9 +189,9 @@ namespace PracticeManagementService
                 result, periodStart, periodEnd);
 
             ComputedFinancialsDAL.LoadTotalFinancialsPeriodForProjects(
-                result, 
-                includeCurentYearFinancials ? currentYearStart : periodStart, 
-                includeCurentYearFinancials ? currentYearEnd : periodEnd);
+                result,
+                includeCurentYearFinancials ? System.Data.SqlTypes.SqlDateTime.MinValue.Value : periodStart, 
+                includeCurentYearFinancials ? DateTime.MaxValue : periodEnd); //For getting GrandTotal OR selected period Total
 
             MilestonePersonDAL.LoadMilestonePersonListForProject(result);
 
