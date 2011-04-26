@@ -112,6 +112,33 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Image imgLast;
         
         /// <summary>
+        /// divResultDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divResultDescription;
+        
+        /// <summary>
+        /// lblSaved control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblSaved;
+        
+        /// <summary>
+        /// lblError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblError;
+        
+        /// <summary>
         /// columnOpportunityList control.
         /// </summary>
         /// <remarks>
@@ -589,15 +616,6 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.ActivityLogControl activityLog;
         
         /// <summary>
-        /// mlConfirmation control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.MessageLabel mlConfirmation;
-        
-        /// <summary>
         /// hdnOpportunityId control.
         /// </summary>
         /// <remarks>
@@ -607,24 +625,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.HiddenField hdnOpportunityId;
         
         /// <summary>
-        /// btnSave control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSave;
-        
-        /// <summary>
-        /// btnCancelChanges control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancelChanges;
-        
-        /// <summary>
         /// custOpportunityNotSaved control.
         /// </summary>
         /// <remarks>
@@ -632,6 +632,51 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator custOpportunityNotSaved;
+        
+        /// <summary>
+        /// ltrWonConvertInvalid control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrWonConvertInvalid;
+        
+        /// <summary>
+        /// divPriorityDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divPriorityDescription;
+        
+        /// <summary>
+        /// lblClose control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblClose;
+        
+        /// <summary>
+        /// lvOpportunityPriorities control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ListView lvOpportunityPriorities;
+        
+        /// <summary>
+        /// mlConfirmation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.MessageLabel mlConfirmation;
         
         /// <summary>
         /// vsumOpportunity control.
@@ -670,40 +715,22 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.ValidationSummary vsumHasPersons;
         
         /// <summary>
-        /// ltrWonConvertInvalid control.
+        /// btnSave control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltrWonConvertInvalid;
+        protected global::System.Web.UI.WebControls.Button btnSave;
         
         /// <summary>
-        /// divPriorityDescription control.
+        /// btnCancelChanges control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divPriorityDescription;
-        
-        /// <summary>
-        /// lblClose control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblClose;
-        
-        /// <summary>
-        /// lvOpportunityPriorities control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView lvOpportunityPriorities;
+        protected global::System.Web.UI.WebControls.Button btnCancelChanges;
         
         /// <summary>
         /// hdnValueChanged control.
