@@ -84,7 +84,7 @@ namespace PraticeManagement
         private const string ReportCellIdFormat = "cellReport{0}";
 
         private const string TotalHeaderFormat = "Total ({0})";
-        private const string CurrentYearText = "current year";
+        private const string EntireProjectPeriod = "Entire Project Period";
         private const string SelectedText = "selected";
         private const string STR_SortExpression = "SortExpression";
         private const string STR_SortDirection = "SortDirection";
@@ -1189,7 +1189,7 @@ namespace PraticeManagement
             if (!IsPostBack || Page.IsValid)
                 AddMonthColumn(row, periodStart, monthsInPeriod, NumberOfFixedColumns);
 
-            string totalHeaderText = string.Format(TotalHeaderFormat, chbPeriodOnly.Checked ? SelectedText : CurrentYearText);
+            string totalHeaderText = string.Format(TotalHeaderFormat, chbPeriodOnly.Checked ? SelectedText : EntireProjectPeriod);
             var div = new Panel() { CssClass = CompPerfHeaderDivCssClass };
             div.Controls.Add(new Label() { Text = totalHeaderText });
 
