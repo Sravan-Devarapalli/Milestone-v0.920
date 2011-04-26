@@ -184,6 +184,10 @@ namespace PraticeManagement
             {
                 btnSave.Attributes.Remove("disabled");
             }
+
+            lblSaved.Text = string.Empty;
+            lblError.Text = string.Empty;
+            divResultDescription.Style["display"] = "none";
         }
 
         protected void Page_Prerender(object sender, EventArgs e)
@@ -230,6 +234,7 @@ namespace PraticeManagement
             lvOpportunities.DataBind();
             activityLog.OpportunityId = OpportunityId;
             activityLog.Update();
+
         }
 
         #endregion
@@ -246,6 +251,7 @@ namespace PraticeManagement
 
             if (IsPostBack && Page.IsValid)
                 LoadOpportunityDetails();
+
         }
 
         public void imgBtnNext_OnClick(object sender, EventArgs e)
@@ -258,6 +264,7 @@ namespace PraticeManagement
 
             if (IsPostBack && Page.IsValid)
                 LoadOpportunityDetails();
+
         }
 
         public void lvOpportunities_SelectedIndexChanging(object sender, ListViewSelectEventArgs e)
@@ -271,6 +278,7 @@ namespace PraticeManagement
 
             if (IsPostBack && Page.IsValid)
                 LoadOpportunityDetails();
+
         }
 
         public void imgBtnFirst_OnClick(object sender, EventArgs e)
@@ -299,6 +307,7 @@ namespace PraticeManagement
 
             if (IsPostBack && Page.IsValid)
                 LoadOpportunityDetails();
+
         }
 
         public void LoadOpportunityDetails()
@@ -458,17 +467,20 @@ namespace PraticeManagement
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
+            divResultDescription.Style["display"] = "inline";
+
             bool IsSavedWithoutErrors = ValidateAndSave();
             activityLog.Update();
             if (IsSavedWithoutErrors)
             {
                 mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Opportunity"));
                 ClearDirty();
-
                 if (IsPostBack && Page.IsValid)
                 {
                     LoadOpportunityDetails();
                 }
+
+                ScriptManager.RegisterClientScriptBlock(upOpportunityDetail, upOpportunityDetail.GetType(), "", "FadeOutLabel()", true);
             }
 
             if (Page.IsValid)
@@ -477,8 +489,6 @@ namespace PraticeManagement
                 lvOpportunities.DataBind();
                 lvOpportunities.SelectedIndex = GetSelectedIndex(OpportunityId.Value);
             }
-
-
         }
 
         private int GetSelectedIndex(int OpportunityId)
@@ -486,7 +496,7 @@ namespace PraticeManagement
             foreach (ListViewDataItem item in lvOpportunities.Items)
             {
                 Label lblOpportunityName = item.FindControl("lblOpportunityName") as Label;
-                
+
                 if (lblOpportunityName.Attributes["OpportunityID"] == OpportunityId.ToString())
                 {
                     return item.DisplayIndex;
@@ -533,6 +543,11 @@ namespace PraticeManagement
 
         public void lvOpportunities_OnDataBound(object sender, EventArgs e)
         {
+            FocusToSelectedItem();
+        }
+
+        private void FocusToSelectedItem()
+        {
             if (lvOpportunities.Items[lvOpportunities.SelectedIndex].FindControl("imgTransparent") != null)
             {
                 lvOpportunities.Items[lvOpportunities.SelectedIndex].FindControl("imgTransparent").Focus();
@@ -562,6 +577,8 @@ namespace PraticeManagement
 
                         retValue = true;
                         ClearDirty();
+                        lblSaved.Text = "Saved";
+
                         Cache.Remove(OPPORTUNITY_KEY);
                         Cache.Remove(OPPORTUNITIES_LIST_KEY);
                         Cache.Remove(PreviousReportContext_Key);
@@ -573,6 +590,12 @@ namespace PraticeManagement
                         throw;
                     }
                 }
+            }
+            else
+            {
+                dpEndDate.ErrorMessage = string.Empty;
+                dpStartDate.ErrorMessage = string.Empty;
+                lblError.Text = "Error";
             }
 
             return retValue;
