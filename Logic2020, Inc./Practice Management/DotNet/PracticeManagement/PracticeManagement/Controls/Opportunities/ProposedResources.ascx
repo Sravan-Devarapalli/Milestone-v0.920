@@ -97,14 +97,8 @@
 <tr style="background-color: #e2ebff">
     <td colspan="6" style="width: 100%; padding-left: 4px;">
         <div style="text-align: center; padding: 4px 0px 4px 0px;">
-            Select one or more resources from the list of Potential resources below and click
-            the "Add" button to note them as Proposed for this Opportunity.<br />
-            Potential Resources appearing in <b>bold</b> are ones that currently appear as underutilized/available
-            according to the
-            <asp:HyperLink ID="hlnkBenchReport" runat="server" Text="Bench report" NavigateUrl="~/Reports/Bench.aspx"
-                Target="_blank"></asp:HyperLink>
-            .
-            <asp:Image ID="hintDate" runat="server" ImageUrl="~/Images/hint.png" ToolTip="Choosing a Start and End Date for the Opportunity, even loosely, will result in a much more accurate idea of which Potential Resources are available for this Opportunity." />
+            Select from the list of Potential resources below and click the "Add" button to
+            note them as Proposed for this Opportunity.<asp:Image ID="hintDate" runat="server" ImageUrl="~/Images/hint.png" ToolTip="Choosing a Start and End Date for the Opportunity, even loosely, will result in a much more accurate idea of which Potential Resources are available for this Opportunity." />
         </div>
     </td>
 </tr>
@@ -125,27 +119,24 @@
             </tr>
             <tr style="padding-left: 20px; padding-top: 2px;">
                 <td style="padding-right: 20px; padding-top: 2px; width: 45%">
-                    <div class="cbfloatRight" style="height: 100px; width: 100%; overflow-y: scroll; border:1px solid black;
-                        background: white; padding-left: 3px;">
-                        <asp:CheckBoxList ID="cblPotentialResources" runat="server" Height="100px" Width="100%" 
+                    <div class="cbfloatRight" style="height: 100px; width: 100%; overflow-y: scroll;
+                        border: 1px solid black; background: white; padding-left: 3px;">
+                        <asp:CheckBoxList ID="cblPotentialResources" runat="server" Height="100px" Width="100%"
                             BackColor="White" AutoPostBack="false" DataTextField="Name" DataValueField="id"
                             CellPadding="3" OnDataBound="cblPotentialResources_DataBound">
                         </asp:CheckBoxList>
                     </div>
                 </td>
                 <td valign="middle" align="center" style="width: 10%">
-                    <asp:Button ID="btnAdd" runat="server"  OnClick="btnAdd_Click"
-                        Text="Add =>" /><br />
+                    <asp:Button ID="btnAdd" runat="server" OnClick="btnAdd_Click" Text="Add =>" /><br />
                     <br />
-                    <asp:Button ID="btnRemove" runat="server" 
-                        OnClick="btnRemove_Click" Text="<= Remove" />
+                    <asp:Button ID="btnRemove" runat="server" OnClick="btnRemove_Click" Text="<= Remove" />
                 </td>
                 <td style="padding-left: 20px; padding-top: 2px; vertical-align: top; width: 45%">
-                    <div class="cbfloatRight" style="height: 100px; width: 100%; overflow-y: scroll; border:1px solid black;
-                        background: white;">
+                    <div class="cbfloatRight" style="height: 100px; width: 100%; overflow-y: scroll;
+                        border: 1px solid black; background: white;">
                         <asp:CheckBoxList ID="cblProposedResources" runat="server" AutoPostBack="false" BackColor="White"
-                             Width="100%" DataTextField="Name" DataValueField="id"
-                            CellPadding="4" OnDataBound="cblProposedResources_DataBound">
+                            Width="100%" DataTextField="Name" DataValueField="id" CellPadding="4" OnDataBound="cblProposedResources_DataBound">
                         </asp:CheckBoxList>
                     </div>
                 </td>
