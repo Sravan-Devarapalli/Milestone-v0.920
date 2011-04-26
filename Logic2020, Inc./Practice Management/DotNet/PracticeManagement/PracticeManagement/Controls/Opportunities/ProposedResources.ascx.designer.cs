@@ -40,15 +40,6 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::System.Web.UI.WebControls.HiddenField hdnProposedResources;
         
         /// <summary>
-        /// hlnkBenchReport control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink hlnkBenchReport;
-        
-        /// <summary>
         /// hintDate control.
         /// </summary>
         /// <remarks>
