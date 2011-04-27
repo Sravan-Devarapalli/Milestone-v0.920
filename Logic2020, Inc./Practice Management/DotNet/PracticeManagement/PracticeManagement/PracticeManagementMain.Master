@@ -7,11 +7,14 @@
 <head runat="server">
     <asp:ContentPlaceHolder ID="title" runat="server"></asp:ContentPlaceHolder>
     <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+    <script type="text/javascript" src='<%# ResolveClientUrl("~/Scripts/jquery-1.4.1.js") %>'></script>
     <link rel="Stylesheet" href="<%# ResolveClientUrl("~/Css/style.css") %>" />
     <!--[if IE]>
     <link rel="Stylesheet" href="<%# ResolveClientUrl("~/Css/style-ie7.css") %>" />
     <![endif]-->
+    <link rel="Stylesheet" href="<%# ResolveClientUrl("~/Css/DynamicMenu.css") %>" />
     <script type="text/javascript" src='<%# ResolveClientUrl("~/Scripts/Cookie.js") %>'></script>
+    <script type="text/javascript" src='<%# ResolveClientUrl("~/Scripts/corpNav.js") %>'></script>
     <script type="text/javascript">
         function checkDirtyBase() {
             if (showDialod()) {
@@ -181,34 +184,16 @@
 			</div>
 	    </div>
 	    <div class="holder">
-			<div class="top-menu" >
+			<div class="top-menu"  style="z-index:1000 !important; position:relative;">
 			<asp:SiteMapDataSource ID="smdsMain" runat="server" EnableViewState="False" ShowStartingNode="False"/>
-			<ext:CssFriendlyMenu ID="siteMenu" runat="server" DataSourceID="smdsMain" cssselectorclass="main-menu"
-					Orientation="Horizontal"
-					 MaximumDynamicDisplayLevels="0" StaticDisplayLevels="1" 
-					StaticHoverStyle-BorderStyle="None" StaticHoverStyle-BorderWidth="0" 
-					StaticSubMenuIndent="8px" BorderStyle="None">
-				<StaticMenuStyle BorderStyle="None" />
-				<StaticMenuItemStyle CssClass="siteMenuItem" BorderStyle="None" 
-                    BorderWidth="0px" />
-                    <StaticHoverStyle BorderWidth="0px" BorderStyle="None"></StaticHoverStyle>
-				<StaticItemTemplate>					
-                   <asp:HyperLink ID="btnPersonLink" runat="server" NavigateUrl='<%#  DataBinder.Eval (Container.DataItem, "NavigateUrl") %>'
-                            onclick="return checkDirtyWithRedirect(this.href);"><span><%# DataBinder.Eval(Container.DataItem, "Text")%></span></asp:HyperLink>
-                    </StaticItemTemplate>
-                </ext:CssFriendlyMenu>
-                <ext:CssFriendlyMenu ID="smdsSubMenu" runat="server" DataSourceID="PmSiteMap" OnMenuItemDataBound="smdsSubMenu_OnMenuItemDataBound"
-                    StaticDisplayLevels="1" Orientation="Horizontal" CssClassPrefix="main-sub-menu">
-                    <StaticMenuStyle BorderStyle="None" />
-                    <StaticItemTemplate>
-                        <asp:HyperLink ID="hlkSubmenuItem" runat="server" NavigateUrl='<%#  DataBinder.Eval (Container.DataItem, "NavigateUrl") %>'
-                            onclick="return checkDirtyWithRedirect(this.href);"><%# DataBinder.Eval(Container.DataItem, "Text")%></asp:HyperLink>
-                    </StaticItemTemplate>
-                </ext:CssFriendlyMenu>
-                <asp:SiteMapDataSource ID="PmSiteMap" runat="server" StartingNodeOffset="1" ShowStartingNode="false" />
-                <br id="topMenuBreak" runat ="server" visible="false" />
+                <div id="navItems">
+                    <ul>
+                        <asp:Literal ID="ltrlMenu" runat="server" Mode="PassThrough" EnableViewState="false">
+                        </asp:Literal>
+                    </ul>            
+                </div>
             </div>
-            <div class="main-content">
+            <div class="main-content" style="z-index:-1000 !important;">
                 <asp:ContentPlaceHolder ID="body" runat="server">
                 </asp:ContentPlaceHolder>
             </div>
