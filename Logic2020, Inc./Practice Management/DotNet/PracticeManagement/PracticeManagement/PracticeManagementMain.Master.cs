@@ -12,11 +12,18 @@ using PraticeManagement.Controls;
 using System.Web;
 using System.Web.UI.HtmlControls;
 using System.Drawing;
+using System.Linq;
+using System.Collections;
 
 namespace PraticeManagement
 {
     public partial class PracticeManagementMain : MasterPage, IPostBackEventHandler
     {
+        public const string Level1MenuItemTemplate = " <li class='l1' id='{2}'><a title='{0}' style='' {3}>{0}</a>{1}</li>";
+        public const string Level2MenuItemTemplate = " <dd id='{2}'  class='l3'> <a title='{0}' {3}>{0}</a>{1}</dd>";
+        public const string Level3MenuItemTemplate = "<a  {1} >{0}</a>";
+        public const string AnchorTagpropertiestemplate = " href = '{0}' onclick='return checkDirtyWithRedirect(this.href);'";
+
         #region Properties
 
         /// <summary>
@@ -82,7 +89,7 @@ namespace PraticeManagement
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+
             if (!string.IsNullOrEmpty(HttpContext.Current.User.Identity.Name))
             {
                 hlnkChangePassword.Visible = true;
@@ -100,6 +107,9 @@ namespace PraticeManagement
                               bool.TrueString,
                               bool.FalseString,
                               hidAllowContinueWithoutSave.ClientID);
+
+            ltrlMenu.Text = GetMenuHtml();
+
             if (!Page.IsPostBack)
             {
                 var mapping = UrlRoleMappingElementSection.Current;
@@ -107,12 +117,106 @@ namespace PraticeManagement
                     hlHome.NavigateUrl = mapping.Mapping.FindFirstUrl(
                         Roles.GetRolesForUser(Page.User.Identity.Name));
             }
-           
+
+        }
+
+        private string GetMenuHtml()
+        {
+            string htmltext = string.Empty;
+            foreach (SiteMapNode item in ((System.Web.SiteMapNodeCollection)(smdsMain.Provider.RootNode.ChildNodes)))
+            {
+                htmltext += GetLevel1MenuItemHtml(item);
+            }
+            return htmltext;
+        }
+
+        private string GetLevel1MenuItemHtml(SiteMapNode item)
+        {
+            if (CheckChildsExists(item, 1))
+            {
+                return string.Format(Level1MenuItemTemplate, item.Title, "<dl class='l2'>" + GetLevel2MenuItemHtml(item) + "</dl>", item.Title.Replace(' ', '_'), string.Empty);
+            }
+            else if (item.Description == "Show url")
+            {
+                return string.Format(Level1MenuItemTemplate, item.Title, string.Empty, item.Title.Replace(' ', '_'),
+                    string.Format(AnchorTagpropertiestemplate, item.Url)
+                    );
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        private bool CheckChildsExists(SiteMapNode item, int level)
+        {
+            bool result = false;
+            if (level > 1)
+            {
+                result = (item.ChildNodes.Count > 0);
+            }
+            else
+            {
+                foreach (SiteMapNode childItem in item.ChildNodes)
+                {
+                    if (childItem.ChildNodes.Count > 0 || childItem.Description == "Show url")
+                    {
+                        result = true;
+                        break;
+                    }
+                }
+            }
+            return result;
+        }
+
+        private string GetLevel2MenuItemHtml(SiteMapNode item)
+        {
+            string htmltext = string.Empty;
+            foreach (SiteMapNode level2Item in item.ChildNodes)
+            {
+                if (level2Item.Title == "Group By..." || level2Item.Title == "Revenue Goals")
+                {
+                    var person = DataHelper.CurrentPerson;
+                    //Only persons with the Director seniority and up should be able to see/access Group by Director view.
+                    if (person == null || person.Seniority.Id > 35)
+                    {
+                        continue;
+                    }
+                }
+                if (CheckChildsExists(level2Item, 2))
+                {
+                    htmltext += string.Format(Level2MenuItemTemplate, level2Item.Title, GetLevel3MenuItemHtml(level2Item), level2Item.Title.Replace(' ', '_') + level2Item.ParentNode.Title.Replace(' ', '_'), string.Empty);
+                }
+                else if (level2Item.Description == "Show url")
+                {
+
+                    htmltext += string.Format(Level2MenuItemTemplate, level2Item.Title, string.Empty, level2Item.Title.Replace(' ', '_'),
+                        string.Format(AnchorTagpropertiestemplate, level2Item.Url)
+                        );
+                }
+            }
+            return htmltext;
+        }
+
+        private string GetLevel3MenuItemHtml(SiteMapNode level2Item)
+        {
+            string htmltext = string.Empty;
+            foreach (SiteMapNode level3Item in level2Item.ChildNodes)
+            {
+
+                htmltext += string.Format(Level3MenuItemTemplate, level3Item.Title,
+                    (!level3Item.Url.Contains("Temp.aspx")) ? (string.Format(AnchorTagpropertiestemplate, level3Item.Url)) : string.Empty);
+            }
+            if (level2Item.ChildNodes.Count > 0)
+            {
+                htmltext = "<div class='flyout'>" + htmltext + "</div>";
+            }
+            return htmltext;
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            siteMenu.Visible = Request.IsAuthenticated;
+            //siteMenu.Visible = Request.IsAuthenticated;
 
             var person = DataHelper.CurrentPerson;
             if (person != null)
@@ -155,47 +259,47 @@ namespace PraticeManagement
 
         private void setCssForMenu()
         {
-            string nodeTitle = null;
-            SiteMapNode selectedNode = null;
+            //string nodeTitle = null;
+            //SiteMapNode selectedNode = null;
 
-            if (smdsSubMenu != null && smdsSubMenu.Controls != null && smdsSubMenu.Controls.Count > 0)
-            {
-                nodeTitle = this.smdsSubMenu.SelectedValue;
+            //if (smdsSubMenu != null && smdsSubMenu.Controls != null && smdsSubMenu.Controls.Count > 0)
+            //{
+            //    nodeTitle = this.smdsSubMenu.SelectedValue;
 
-                if (nodeTitle != string.Empty)
-                {
-                    selectedNode = smdsMain.Provider.CurrentNode;
-                    var rootNode = smdsMain.Provider.GetParentNode(selectedNode);
+            //    if (nodeTitle != string.Empty)
+            //    {
+            //        selectedNode = smdsMain.Provider.CurrentNode;
+            //        var rootNode = smdsMain.Provider.GetParentNode(selectedNode);
 
-                    if (rootNode.Title == "Reports")
-                    {
-                        topMenuBreak.Visible = true;
-                    }
-                    if (siteMenu != null && siteMenu.Controls != null && siteMenu.Controls.Count > 0)
-                    {
-                        MenuItem item2 = (siteMenu as Menu).FindItem(rootNode.Title);
-                        if (item2 != null)
-                            item2.Selected = true;
-                    }
-                }
-                else if (siteMenu != null && siteMenu.Controls != null && siteMenu.Controls.Count > 0)
-                {
-                    nodeTitle = this.siteMenu.SelectedValue;
+            //        if (rootNode.Title == "Reports")
+            //        {
+            //            topMenuBreak.Visible = true;
+            //        }
+            //        if (siteMenu != null && siteMenu.Controls != null && siteMenu.Controls.Count > 0)
+            //        {
+            //            MenuItem item2 = (siteMenu as Menu).FindItem(rootNode.Title);
+            //            if (item2 != null)
+            //                item2.Selected = true;
+            //        }
+            //    }
+            //    else if (siteMenu != null && siteMenu.Controls != null && siteMenu.Controls.Count > 0)
+            //    {
+            //        nodeTitle = this.siteMenu.SelectedValue;
 
-                    if (nodeTitle == "Configuration" || nodeTitle == "Projects" || nodeTitle == "Opportunities")
-                    {
-                        MenuItem item2 = (this.smdsSubMenu as Menu).Items[0];
-                        if (item2 != null)
-                            item2.Selected = true;
-                    }
-                    else if (nodeTitle == "Reports")
-                    {
-                        topMenuBreak.Visible = true;
-                    }
-                }
-                
-                
-            }
+            //        if (nodeTitle == "Configuration" || nodeTitle == "Projects" || nodeTitle == "Opportunities")
+            //        {
+            //            MenuItem item2 = (this.smdsSubMenu as Menu).Items[0];
+            //            if (item2 != null)
+            //                item2.Selected = true;
+            //        }
+            //        else if (nodeTitle == "Reports")
+            //        {
+            //            topMenuBreak.Visible = true;
+            //        }
+            //    }
+
+
+            //}
         }
 
         protected void logImpersonateLogin(string oldUserName, string newUserName)
@@ -262,11 +366,16 @@ namespace PraticeManagement
             }
         }
 
+        protected void siteMenu_OnMenuItemDataBound(object sender, MenuEventArgs e)
+        {
+            var item = e.Item;
+        }
+
 
         public Unit GetItemWidth(MenuItemTemplateContainer container)
         {
-            int  width = 0;
-            MenuItem item = (MenuItem)container.DataItem;                       
+            int width = 0;
+            MenuItem item = (MenuItem)container.DataItem;
             if (!string.IsNullOrEmpty(item.Text))
             {
                 SizeF size = Graphics.FromImage(new Bitmap(1, 1)).MeasureString(item.Text, new Font("Arial", 11));
@@ -276,7 +385,7 @@ namespace PraticeManagement
                 if (width < 80)
                 {
                     width = 80;
-                } 
+                }
             }
             return Unit.Pixel(width);
         }
