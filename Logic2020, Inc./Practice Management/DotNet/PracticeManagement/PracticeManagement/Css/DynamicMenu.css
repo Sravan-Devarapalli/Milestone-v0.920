@@ -1,0 +1,127 @@
+﻿
+.navSection table
+{
+    margin-top: 10px;
+    margin-right: 40px;
+    margin-left: auto;
+}
+.navSection ul
+{
+    display: inline-block;
+    width: 411px;
+    margin: 0;
+    padding: 0;
+}
+.l1
+{
+    float: left;
+    width: 137px;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+    color: #2a4753;
+    z-index: 10;
+}
+.l1hover
+{
+    padding-bottom: 6px;
+    background: url('../images/bg_corpnav_bottom.png') no-repeat bottom;
+}
+li.l1 a
+{
+    display: block;
+    width: 137px;
+    height: 34px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    white-space: normal;
+    color: white;
+    font-weight: bold;
+    font-size: 13px;
+    text-decoration: none;
+}
+li.l1 a:hover
+{
+    color: #2a4753;
+}
+.l2
+{
+    display: none;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    max-width: 135px;
+    height: auto;
+    z-index: 200;
+}
+.liBG
+{
+    background: url('../images/bg_corpnav_top.png') no-repeat center;
+    color: #2a4753;
+}
+.l2 dd
+{
+    display: inline-block;
+    width: 135px;
+    margin: 0;
+    background: url('../images/bg_corpnav_mid.png') repeat-y;
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+}
+.l2 dd a
+{
+    float: left;
+    display: block;
+    background-image: none;
+    width: 105px;
+    height: auto;
+    margin: 0 5px;
+    padding: 5px 10px;
+    text-align: left;
+    font-size: 12px;
+    line-height: 15px;
+    color: #5a8293;
+    text-decoration: none;
+}
+.l2 dd a:hover
+{
+    background-color: #e0e7eb;
+    color: #2a4753;
+}
+.ddBG
+{
+    background-color: #e0e7eb;
+}
+.l2 dd div.flyout
+{
+    float: left;
+    position: absolute;
+    display: none;
+    min-width: 135px;
+    margin: 0;
+    padding: 0;
+    left: 130px;
+    padding-bottom: 5px;
+    width: auto;
+    background: #e0e7eb;
+}
+.l2 dd div.flyout a
+{
+    color: #5a8293;
+    display: block;
+    white-space: normal;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    width: 130px;
+}
+.l2 dd div.flyout a:hover
+{
+    color: #2a4753;
+}
+#navItems
+{
+    height: 50px;
+    display: inline-block;
+}
+
