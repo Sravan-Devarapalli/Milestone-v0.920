@@ -373,7 +373,13 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnSaveReport_OnClick(object sender, EventArgs e)
         {
+            SaveFilters();
+            lblMessage.Text = "Report Filter details are saved succeessfully.";
+            lblMessage.ForeColor = Color.Green;
+        }
 
+        public void SaveFilters()
+        {
             Dictionary<string, string> reportFilterDictionary = new Dictionary<string, string>();
 
             reportFilterDictionary.Add(Constants.ResourceKeys.StartDateKey, BegPeriod.ToString());
@@ -394,9 +400,6 @@ namespace PraticeManagement.Controls.Reports
             reportFilterDictionary.Add(Constants.ResourceKeys.EndDateKey, EndPeriod.ToString());
 
             DataHelper.SaveResourceKeyValuePairs(SettingsType.Reports, reportFilterDictionary);
-
-            lblMessage.Text = "Report Filter details are saved succeessfully.";
-            lblMessage.ForeColor = Color.Green;
         }
     }
 }
