@@ -123,9 +123,35 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Config\ActivityLog.aspx" />
+    <Content Include="Config\BecomeUser.aspx" />
+    <Content Include="Config\Branding.aspx" />
+    <Content Include="Config\Clients.aspx" />
+    <Content Include="Config\Commissions.aspx" />
+    <Content Include="Config\CompanyHolidays.aspx" />
+    <Content Include="Config\ConsultantUtilTimelineReport.aspx" />
+    <Content Include="Config\DefaultLineManager.aspx" />
+    <Content Include="Config\DefaultTimeEntryProject.aspx" />
+    <Content Include="Config\ExpenseCategories.aspx" />
+    <Content Include="Config\Expenses.aspx" />
+    <Content Include="Config\General.aspx" />
+    <Content Include="Config\Help.aspx" />
+    <Content Include="Config\Notes.aspx" />
+    <Content Include="Config\OpportunityPriorities.aspx" />
+    <Content Include="Config\Overheads.aspx" />
+    <Content Include="Config\Persons.aspx" />
+    <Content Include="Config\PracticeAreas.aspx" />
+    <Content Include="Config\RevenueGoals.aspx" />
+    <Content Include="Config\SecurityRoles.aspx" />
+    <Content Include="Config\SeniorityLevels.aspx" />
+    <Content Include="Config\SiteMap.aspx" />
+    <Content Include="Config\SMTPSetup.aspx" />
+    <Content Include="Config\SupportLink.aspx" />
+    <Content Include="Config\TimeTypes.aspx" />
     <Content Include="Controls\Configuration\SmtpPopSetUpControl.ascx" />
     <Content Include="Controls\Opportunities\OpportunityListControl.ascx" />
     <Content Include="Controls\Opportunities\ProposedResources.ascx" />
+    <Content Include="Css\DynamicMenu.css" />
     <Content Include="DiscussionReview1.aspx" />
     <Content Include="DiscussionReview2.aspx" />
     <Content Include="GuestPages\ChangePasswordError.aspx" />
@@ -136,6 +162,9 @@
     <Content Include="Images\arrow-Next.png" />
     <Content Include="Images\arrow-Previous.png" />
     <Content Include="Images\arrow-up.png" />
+    <Content Include="Images\bg_corpnav_bottom.png" />
+    <Content Include="Images\bg_corpnav_mid.png" />
+    <Content Include="Images\bg_corpnav_top.png" />
     <Content Include="Images\grayedArrow-First.png" />
     <Content Include="Images\grayedArrow-Last.png" />
     <Content Include="Images\grayedArrow-Next.png" />
@@ -183,6 +212,7 @@
     <Content Include="Reports\TimeEntriesByProject.aspx" />
     <Content Include="Reports\Xslt\RecentNoteItem.xslt" />
     <Content Include="Sandbox\ScrollingDropdownTest.aspx" />
+    <Content Include="Scripts\corpNav.js" />
     <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.1.js" />
     <Content Include="Scripts\jquery.blockUI.js" />
@@ -631,6 +661,181 @@
     </Compile>
     <Compile Include="ActivityLog.aspx.designer.cs">
       <DependentUpon>ActivityLog.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\ActivityLog.aspx.cs">
+      <DependentUpon>ActivityLog.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\ActivityLog.aspx.designer.cs">
+      <DependentUpon>ActivityLog.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\BecomeUser.aspx.cs">
+      <DependentUpon>BecomeUser.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\BecomeUser.aspx.designer.cs">
+      <DependentUpon>BecomeUser.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Branding.aspx.cs">
+      <DependentUpon>Branding.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\Branding.aspx.designer.cs">
+      <DependentUpon>Branding.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Clients.aspx.cs">
+      <DependentUpon>Clients.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\Clients.aspx.designer.cs">
+      <DependentUpon>Clients.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Commissions.aspx.cs">
+      <DependentUpon>Commissions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\Commissions.aspx.designer.cs">
+      <DependentUpon>Commissions.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\CompanyHolidays.aspx.cs">
+      <DependentUpon>CompanyHolidays.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\CompanyHolidays.aspx.designer.cs">
+      <DependentUpon>CompanyHolidays.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\ConsultantUtilTimelineReport.aspx.cs">
+      <DependentUpon>ConsultantUtilTimelineReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\ConsultantUtilTimelineReport.aspx.designer.cs">
+      <DependentUpon>ConsultantUtilTimelineReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\DefaultLineManager.aspx.cs">
+      <DependentUpon>DefaultLineManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\DefaultLineManager.aspx.designer.cs">
+      <DependentUpon>DefaultLineManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\DefaultTimeEntryProject.aspx.cs">
+      <DependentUpon>DefaultTimeEntryProject.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\DefaultTimeEntryProject.aspx.designer.cs">
+      <DependentUpon>DefaultTimeEntryProject.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\ExpenseCategories.aspx.cs">
+      <DependentUpon>ExpenseCategories.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\ExpenseCategories.aspx.designer.cs">
+      <DependentUpon>ExpenseCategories.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Expenses.aspx.cs">
+      <DependentUpon>Expenses.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\Expenses.aspx.designer.cs">
+      <DependentUpon>Expenses.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\General.aspx.cs">
+      <DependentUpon>General.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\General.aspx.designer.cs">
+      <DependentUpon>General.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Help.aspx.cs">
+      <DependentUpon>Help.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\Help.aspx.designer.cs">
+      <DependentUpon>Help.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Notes.aspx.cs">
+      <DependentUpon>Notes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\Notes.aspx.designer.cs">
+      <DependentUpon>Notes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\OpportunityPriorities.aspx.cs">
+      <DependentUpon>OpportunityPriorities.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\OpportunityPriorities.aspx.designer.cs">
+      <DependentUpon>OpportunityPriorities.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Overheads.aspx.cs">
+      <DependentUpon>Overheads.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\Overheads.aspx.designer.cs">
+      <DependentUpon>Overheads.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Persons.aspx.cs">
+      <DependentUpon>Persons.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\Persons.aspx.designer.cs">
+      <DependentUpon>Persons.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\PracticeAreas.aspx.cs">
+      <DependentUpon>PracticeAreas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\PracticeAreas.aspx.designer.cs">
+      <DependentUpon>PracticeAreas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\RevenueGoals.aspx.cs">
+      <DependentUpon>RevenueGoals.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\RevenueGoals.aspx.designer.cs">
+      <DependentUpon>RevenueGoals.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\SecurityRoles.aspx.cs">
+      <DependentUpon>SecurityRoles.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\SecurityRoles.aspx.designer.cs">
+      <DependentUpon>SecurityRoles.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\SeniorityLevels.aspx.cs">
+      <DependentUpon>SeniorityLevels.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\SeniorityLevels.aspx.designer.cs">
+      <DependentUpon>SeniorityLevels.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\SiteMap.aspx.cs">
+      <DependentUpon>SiteMap.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\SiteMap.aspx.designer.cs">
+      <DependentUpon>SiteMap.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\SMTPSetup.aspx.cs">
+      <DependentUpon>SMTPSetup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\SMTPSetup.aspx.designer.cs">
+      <DependentUpon>SMTPSetup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\SupportLink.aspx.cs">
+      <DependentUpon>SupportLink.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\SupportLink.aspx.designer.cs">
+      <DependentUpon>SupportLink.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\TimeTypes.aspx.cs">
+      <DependentUpon>TimeTypes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\TimeTypes.aspx.designer.cs">
+      <DependentUpon>TimeTypes.aspx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Configuration\SmtpPopSetUpControl.ascx.cs">
       <DependentUpon>SmtpPopSetUpControl.ascx</DependentUpon>
