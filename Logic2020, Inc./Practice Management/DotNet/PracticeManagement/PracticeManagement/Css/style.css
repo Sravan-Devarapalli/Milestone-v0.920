@@ -424,6 +424,8 @@ ul.main-sub-menu li:hover a
 .main-content
 {
     padding: 10px;
+    display:inline-block;
+    width:98%
 }
 
 /*a.add-project {
@@ -1983,10 +1985,11 @@ table.PaddingClass td
     padding-top: 2px;
     padding-bottom: 2px;
     padding-left: 0px !important;
-    padding-right:0px !important;;
+    padding-right: 0px !important;
 }
 
 .position_top
 {
-    position:static;
-   }
+    position: static;
+}
+
