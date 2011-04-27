@@ -157,40 +157,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.SiteMapDataSource smdsMain;
         
         /// <summary>
-        /// siteMenu control.
+        /// ltrlMenu control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Menu.CssFriendlyMenu siteMenu;
-        
-        /// <summary>
-        /// smdsSubMenu control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.Menu.CssFriendlyMenu smdsSubMenu;
-        
-        /// <summary>
-        /// PmSiteMap control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.SiteMapDataSource PmSiteMap;
-        
-        /// <summary>
-        /// topMenuBreak control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl topMenuBreak;
+        protected global::System.Web.UI.WebControls.Literal ltrlMenu;
         
         /// <summary>
         /// body control.
