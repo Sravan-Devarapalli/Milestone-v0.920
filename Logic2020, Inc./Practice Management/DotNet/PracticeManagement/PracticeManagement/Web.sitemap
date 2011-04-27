@@ -2,42 +2,81 @@
 <siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
   <siteMapNode url="" roles="*">
     <siteMapNode url="~/Projects.aspx" title="Projects" description="Company Performance page" >
-      <siteMapNode url="~/Projects.aspx?from=sub_toolbar" title="Summary" description="Company Performance page" />
-      <siteMapNode url="~/GroupBy.aspx" title="Group By..." />
-      <siteMapNode url="~/RevenueGoals.aspx" title="Revenue Goals" />
+      <siteMapNode url="~/Projects.aspx?from=sub_toolbar" title="Summary" description="Show url" />
+      <siteMapNode url="~/GroupBy.aspx" title="Group By..."  description="Show url"/>
+      <siteMapNode url="~/RevenueGoals.aspx" title="Revenue Goals" description="Show url" />
     </siteMapNode>
     <siteMapNode url="~/OpportunityList.aspx" title="Opportunities" description="Opportunity List page" >
-      <siteMapNode url="~/OpportunityList.aspx?from=OpportunityList" title="Summary" description="Opportunity List page" />
-      <siteMapNode url="~/DiscussionReview1.aspx" title="Discussion Review 1" description="Opportunities - Discussion Review 1" />
-      <siteMapNode url="~/DiscussionReview2.aspx" title="Discussion Review 2" description="Opportunities - Discussion Review 2" />
-    </siteMapNode> 
-    <siteMapNode url="~/Reports.aspx" title="Reports" description="Reports">
-      <siteMapNode url="~/Reports/Bench.aspx?from=sub_toolbar" title="Bench" />
-      <siteMapNode url="~/Reports/UtilizationTable.aspx" title="Consultants Util. Table" />
-      <siteMapNode url="~/Reports/UtilizationTimeline.aspx" title="Consultants Util. Timeline" />
-      <siteMapNode url="~/Reports/TimeEntryReport.aspx" title="Generic Time Entry" roles="Administrator" />
-      <siteMapNode url="~/Reports/TimeEntriesByProject.aspx?from=reports" title="Time Entry by Project" roles="Administrator" />
-      <siteMapNode url="~/Reports/TimeEntriesByPerson.aspx?from=reports" title="Time Entry by Person" roles="Administrator" />
-      <siteMapNode url="~/Reports/CommissionsAndRates.aspx" title="Commissions and Rates" roles="Administrator" />
-      <siteMapNode url="~/Reports/BenchCosts.aspx" title="Bench Costs" roles="Administrator" />
-      <siteMapNode url="~/Reports/PersonStats.aspx" title="Person Stats" roles="Administrator" />
+      <siteMapNode url="~/OpportunityList.aspx?from=OpportunityList" title="Summary" description="Show url" />
+      <siteMapNode url="~/DiscussionReview1.aspx" title="Discussion Review 1" description="Show url" />
+      <siteMapNode url="~/DiscussionReview2.aspx" title="Discussion Review 2" description="Show url" />
     </siteMapNode>
-    <siteMapNode url="~/TimeEntry.aspx" title="Time Entry" description="Time Entry records">
-      <siteMapNode url="~/Reports/TimeEntryReport.aspx?from=timeentry" title="Generic Time Entry Report" roles="Administrator" />
-      <siteMapNode url="~/Reports/TimeEntriesByProject.aspx" title="Time Entry by Project Report" roles="Administrator" />
-      <siteMapNode url="~/Reports/TimeEntriesByPerson.aspx" title="Time Entry by Person Report" roles="Administrator" />
+    <siteMapNode url="Temp.aspx?from=Reports" title="Reports" description="Reports">
+      <siteMapNode url="Temp.aspx?from=Reports_Financial" title="Financial">
+        <siteMapNode url="~/Reports/CommissionsAndRates.aspx?from=Financial" title="Commissions and Rates" roles="Administrator" />
+        <siteMapNode url="Temp.aspx?from=Financials_Expenses" title="Expenses" description="Expenses"  />
+        <siteMapNode url="~/Reports/PersonStats.aspx?from=Financial" title="Person Stats" roles="Administrator"  />
+      </siteMapNode>
+      <siteMapNode url="Temp.aspx?from=Resources" title="Resources" >
+        <siteMapNode url="~/Reports/Bench.aspx" title="Bench" description="Show url" />
+        <siteMapNode url="~/Reports/BenchCosts.aspx" title="Bench Costs" roles="Administrator" description="Show url" />
+        <siteMapNode url="~/Reports/CommissionsAndRates.aspx" title="Commissions and Rates" roles="Administrator"  description="Show url" />
+        <siteMapNode url="~/Reports/UtilizationTable.aspx" title="Consultants Util. Table" description="Show url" />
+        <siteMapNode url="~/Reports/UtilizationTimeline.aspx" title="Consultants Util. Timeline" description="Show url" />
+        <siteMapNode url="~/Reports/PersonStats.aspx" title="Person Stats" roles="Administrator" description="Show url" />
+      </siteMapNode>
+      <siteMapNode url="Temp.aspx?from=Time Entry" title="Time Entry">
+        <siteMapNode url="~/Reports/TimeEntryReport.aspx" title="Generic Time Entry" roles="Administrator"  description="Show url"/>
+        <siteMapNode url="~/Reports/TimeEntriesByProject.aspx?from=reports" title="Time Entry by Project" roles="Administrator" description="Show url" />
+        <siteMapNode url="~/Reports/TimeEntriesByPerson.aspx?from=reports" title="Time Entry by Person"  description="Show url" />
+      </siteMapNode>
     </siteMapNode>
-    <siteMapNode url="~/Calendar.aspx" title="Calendar" description="Company Calendar page" /> 
-    <siteMapNode url="~/MarginTest.aspx" title="Margin Test" description="Margin Test" />
-    <siteMapNode url="~/Config/GeneralConfiguration.aspx" title="Configuration" description="System configuration" >
-      <siteMapNode url="~/Config/GeneralConfiguration.aspx?Tabindex=0" title="Company Resources" description="Company Resources"  />
-      <siteMapNode url="~/EmailTemplates.aspx" title="Email" description="Email Templates page"  />
-      <siteMapNode url="~/Financial.aspx" title="Financial" description="Financial Page" />
-      <siteMapNode url="~/ReportsPage.aspx" title="Reports" description="Reports" />
-      <siteMapNode url="~/SecuritySetting.aspx" title="Security" description="Security Setting" />
-      <siteMapNode url="~/TimeEntrySetting.aspx" title="Time Entry" description="Time Entry"/>
-      <siteMapNode url="~/ActivityLog.aspx" title="Troubleshooting" description="Troubleshooting" />
+    <siteMapNode url="~/TimeEntry.aspx?from=sub_toolbar" title="Time Tracking" description="Time Entry records">
+      <siteMapNode url="~/TimeEntry.aspx" title="Time Entry" description="Show url" />
+      <siteMapNode url="~/Calendar.aspx" title="Calendar" description="Show url"  />
+    </siteMapNode>
+    <siteMapNode url="~/MarginTest.aspx" title="Margin Test" description="Show url" />
+    <siteMapNode url="Temp.aspx?from=Configuration" title="Configuration" description="System configuration"  >
+      <siteMapNode url="Temp.aspx?from=Company_Resources" title="Company Resources" description="Company Resources">
+        <siteMapNode url="~/Config/Branding.aspx" title="Branding/Logo" description="Branding/Logo"  />
+        <siteMapNode url="~/Config/Clients.aspx" title="Clients" description="Client List"  />
+        <siteMapNode url="~/Config/DefaultLineManager.aspx" title="Default Line Manager" description="Default Line Manager"  />
+        <siteMapNode url="~/Config/OpportunityPriorities.aspx" title="Opportunity Priorities" description="Opportunity Priorities"  />
+        <siteMapNode url="~/Config/Persons.aspx" title="Persons" description="Person List"  />
+        <siteMapNode url="~/Config/PracticeAreas.aspx" title="Practice Areas" description="Practice Areas"  />
+      </siteMapNode>
+      <siteMapNode url="Temp.aspx?from=Email" title="E-Mail" description="E-Mail Templates page"  >
+        <siteMapNode url="~/Config/SMTPSetup.aspx" title="SMTP Setup" description="SMTP Setup Settings"  />
+        <siteMapNode url="~/EmailTemplates.aspx" title="E-Mail Templates" description="E-Mail Templates"  />
+      </siteMapNode>
+      <siteMapNode url="Temp.aspx?from=Financials" title="Financials" description="Financials" >
+        <siteMapNode url="~/Config/Commissions.aspx" title="Commissions" description="Commissions"  />
+        <siteMapNode url="~/Config/Expenses.aspx?from=Financial" title="Expenses" description="Expenses"  />
+        <siteMapNode url="~/Config/ExpenseCategories.aspx" title="Expense Categories" description="Expense Categories"  />
+        <siteMapNode url="~/Config/Overheads.aspx" title="Overheads" description="Overhead List"  />
+        <siteMapNode url="~/Config/RevenueGoals.aspx" title="Revenue Goals" description="Revenue Goals"  />
+      </siteMapNode>
+      <siteMapNode url="Temp.aspx?from=ConfigurationReports" title="Reports" description="Reports" >
+        <siteMapNode url="~/Config/ConsultantUtilTimelineReport.aspx" title="Consultant Util Timeline Report" description="Consultant Util Timeline Report"  />
+      </siteMapNode>
+      <siteMapNode url="Temp.aspx?from=Security" title="Security" description="Security Setting" >
+        <siteMapNode url="~/Config/General.aspx" title="General" description="General"  />
+        <siteMapNode url="~/Config/SecurityRoles.aspx" title="Security Roles" description="Security Roles"  />
+        <siteMapNode url="~/Config/SeniorityLevels.aspx" title="Seniority Levels" description="Seniority Levels"  />
+      </siteMapNode>
+      <siteMapNode url="Temp.aspx?from=Time_Tracking" title="Time Tracking" description="Time Entry">
+        <siteMapNode url="~/Config/CompanyHolidays.aspx" title="Company Holidays" description="Company Holidays"  />
+        <siteMapNode url="~/Config/Notes.aspx" title="Notes" description="Notes"  />
+        <siteMapNode url="~/Config/TimeTypes.aspx" title="Time Types" description="TimeTypes"  />
+      </siteMapNode>
+      <siteMapNode url="Temp.aspx?from=Troubleshooting" title="Troubleshooting" description="Troubleshooting">
+        <siteMapNode url="~/Config/ActivityLog.aspx" title="Activity Log" description="Activity Log"  />
+        <siteMapNode url="~/Config/BecomeUser.aspx" title="Become User" description="Become User"  />
+        <siteMapNode url="~/Config/Help.aspx" title="Help" description="Help"  />
+        <siteMapNode url="~/Config/SiteMap.aspx" title="Site Map" description="Site Map"  />
+        <siteMapNode url="~/Config/SupportLink.aspx" title="Support Link" description="Support Link"  />
+      </siteMapNode>
     </siteMapNode>
   </siteMapNode>
 </siteMap>
- 
+
