@@ -40,10 +40,10 @@ namespace PraticeManagement
                         }
 
                         var li = new ListItem(
-                            string.Format("{1}, {0} ({2}, {3}) {4}", 
+                            string.Format("{1}, {0} ({2}, {3}) {4}",
                                 person.FirstName, person.LastName,
                                 person.Seniority.Name, person.Seniority.Id,
-                                userRoles), 
+                                userRoles),
                             person.Alias);
 
                         ddlUsers.Items.Add(li);
@@ -74,6 +74,24 @@ namespace PraticeManagement
             lblBecameUser.Text = message;
 
             Response.Redirect(ResolveClientUrl("~/set_user.aspx"));
+        }
+
+        protected void menu_OnMenuItemDataBound(object sender, MenuEventArgs e)
+        {
+            var item = e.Item;
+            if (item.NavigateUrl.Contains("Temp.aspx"))
+            {
+                item.NavigateUrl = string.Empty;
+                //if ((((System.Web.SiteMapNode)(item.DataItem)).ChildNodes).Count == 0)
+                //{
+                //    item.DataItem = false;
+                //}
+            }
+
+            if (item.ToolTip.ToLower() == "show url")
+            {
+                item.ToolTip = item.Text;
+            }
         }
     }
 }
