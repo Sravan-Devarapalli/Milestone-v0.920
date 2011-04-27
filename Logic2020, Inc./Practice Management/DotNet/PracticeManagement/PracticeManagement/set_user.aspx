@@ -12,7 +12,7 @@
         <asp:Label ID="lblBecameUser" runat="server" ForeColor="Green"></asp:Label>        
         <p>
         Go to:
-        <asp:Menu ID="menu" runat="server" DataSourceID="odsSiteMap" StaticDisplayLevels="3" />
+        <asp:Menu ID="menu" runat="server" DataSourceID="odsSiteMap" StaticDisplayLevels="3" OnMenuItemDataBound="menu_OnMenuItemDataBound" />
         </p>
         <asp:SiteMapDataSource ID="odsSiteMap" runat="server" />
 </asp:Content>
