@@ -13,14 +13,13 @@
     </siteMapNode>
     <siteMapNode url="Temp.aspx?from=Reports" title="Reports" description="Reports">
       <siteMapNode url="Temp.aspx?from=Reports_Financial" title="Financial">
+        <siteMapNode url="~/Reports/BenchCosts.aspx" title="Bench Costs" roles="Administrator" description="Show url" />
         <siteMapNode url="~/Reports/CommissionsAndRates.aspx?from=Financial" title="Commissions and Rates" roles="Administrator" />
         <siteMapNode url="Temp.aspx?from=Financials_Expenses" title="Expenses" description="Expenses"  />
         <siteMapNode url="~/Reports/PersonStats.aspx?from=Financial" title="Person Stats" roles="Administrator"  />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Resources" title="Resources" >
         <siteMapNode url="~/Reports/Bench.aspx" title="Bench" description="Show url" />
-        <siteMapNode url="~/Reports/BenchCosts.aspx" title="Bench Costs" roles="Administrator" description="Show url" />
-        <siteMapNode url="~/Reports/CommissionsAndRates.aspx" title="Commissions and Rates" roles="Administrator"  description="Show url" />
         <siteMapNode url="~/Reports/UtilizationTable.aspx" title="Consultants Util. Table" description="Show url" />
         <siteMapNode url="~/Reports/UtilizationTimeline.aspx" title="Consultants Util. Timeline" description="Show url" />
         <siteMapNode url="~/Reports/PersonStats.aspx" title="Person Stats" roles="Administrator" description="Show url" />
