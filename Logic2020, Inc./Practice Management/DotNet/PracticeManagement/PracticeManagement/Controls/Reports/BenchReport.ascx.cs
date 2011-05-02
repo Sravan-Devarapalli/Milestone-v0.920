@@ -16,7 +16,7 @@ namespace PraticeManagement.Controls.Reports
         private const string Ascending = "Ascending";
         private const string ReportContextKey = "ReportContext";
         private const string BenchListKey = "BenchList";
-        
+
 
         private BenchReportContext ReportContext
         {
@@ -81,15 +81,7 @@ namespace PraticeManagement.Controls.Reports
 
         private IEnumerable<Project> GetBenchList()
         {
-            var benchList = ReportsHelper.GetBenchList(ReportContext.Start,
-                                                        ReportContext.End,
-                                                        ReportContext.ActivePersons,
-                                                        ReportContext.ProjectedPersons,
-                                                        ReportContext.ActiveProjects,
-                                                        ReportContext.ProjectedProjects,
-                                                        ReportContext.ExperimentalProjects,
-                                                        ReportContext.UserName,
-                                                        ReportContext.PracticeIds);
+            var benchList = ReportsHelper.GetBenchListWithoutBenchTotalAndAdminCosts(ReportContext);
 
             return benchList.ToList<Project>().FindAll(p => (p.Practice != null
                                                              && !string.IsNullOrEmpty(p.Practice.Name)
@@ -331,7 +323,7 @@ namespace PraticeManagement.Controls.Reports
         protected void custPeriod_ServerValidate(object sender, ServerValidateEventArgs args)
         {
             args.IsValid = ((mpEndDate.SelectedYear - mpStartDate.SelectedYear) * Constants.Dates.LastMonth +
-                            (mpEndDate.SelectedMonth - mpStartDate.SelectedMonth + 1))> 0;
+                            (mpEndDate.SelectedMonth - mpStartDate.SelectedMonth + 1)) > 0;
         }
     }
 }
