@@ -31,7 +31,7 @@
     <div class="buttons-block">
         <table class="WholeWidth">
             <tr>
-                <td align="left" style="width: 20px">
+                <td align="left" style="width: 25px">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
                         ImageControlID="btnExpandCollapseFilter" CollapsedImage="~/Images/expand.jpg"
                         ExpandedImage="~/Images/collapse.jpg" CollapseControlID="btnExpandCollapseFilter"
@@ -123,6 +123,10 @@
                             <td style="width: 250px; border-bottom: 1px solid black;">
                                 Practice Area
                             </td>
+                            <td rowspan="3" valign="middle" align="center" style="padding-left: 30px;">
+                                <asp:CheckBox ID="chbIncludeOverHeads" Text="Include Overheads in Calculations" runat="server"
+                                    Checked="true" onclick="EnableResetButton();"/>
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -182,6 +186,9 @@
                     <div style="padding: 10px 0px 10px 0px;">
                         <asp:CheckBox ID="chbSeperateInternalExternal" runat="server" Text="Separate Internal and External Practices into Separate Tables"
                             Checked="true" onclick="EnableResetButton();" />
+                        <br />
+                        <asp:CheckBox ID="chbIncludeZeroCostEmps" Text="Include Employees with Zero Sum Costs"
+                            runat="server" Checked="false" onclick="EnableResetButton();" />
                     </div>
                 </ContentTemplate>
             </ajaxToolkit:TabPanel>
