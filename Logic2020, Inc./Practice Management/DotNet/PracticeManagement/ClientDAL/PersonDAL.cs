@@ -1339,6 +1339,9 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectedProjects, context.ProjectedProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ExperimentalProjects, context.ExperimentalProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.CompletedProjects, context.CompletedProjects);
+                if (context.IncludeOverheads.HasValue)
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IncludeOverheads, context.IncludeOverheads.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IncludeZeroCostEmployees, context.IncludeZeroCostEmployees);
                 if (context.PracticeIds != null)
                 {
                     command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, context.PracticeIds);
@@ -2425,7 +2428,7 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
                 command.Parameters.AddWithValue(UserNameParam, userName);
-               // command.Parameters.AddWithValue(PasswordFormatParam, passwordFormat);
+                // command.Parameters.AddWithValue(PasswordFormatParam, passwordFormat);
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 connection.Open();
@@ -2454,7 +2457,7 @@ namespace DataAccess
 
                 connection.Open();
                 command.ExecuteNonQuery();
-                 
+
             }
         }
 
@@ -2530,7 +2533,7 @@ namespace DataAccess
             }
 
             return result;
-        
+
         }
     }
 }
