@@ -18,40 +18,11 @@ namespace PraticeManagement.Controls
         private const string PersonKey = "PersonValue";
         private const string HorsPerWeekDefaultValue = "40";
         private const string BillRateDefaultValue = "120";
-        private const string SalesCommissionLineText = "Sales Commission (SCPH)";
+        //private const string SalesCommissionLineText = "Sales Commission (SCPH)";
         private const string MLFText = "Minimum Load Factor (MLF)";
         private const string LoggedInPersonSalesCommissionKey = "LoggedInPersonSalesCommission";
         private Regex validatePercentage =
             new Regex("(\\d+\\.?\\d*)%?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-        public DefaultCommission LoggedInPersonSalesCommission
-        {
-            get
-            {
-                if (Session[LoggedInPersonSalesCommissionKey] != null)
-                {
-                    return Session[LoggedInPersonSalesCommissionKey] as DefaultCommission;
-                }
-                else
-                {
-                    var person = DataHelper.CurrentPerson;
-                    if (person.Id.HasValue)
-                    {
-                        using (var service = new DefaultCommissionService.DefaultCommissionServiceClient())
-                        {
-                            var salesCommission = service.DefaultSalesCommissionByPerson(person.Id.Value);
-                            if (salesCommission == null)
-                            {
-                                salesCommission = new DefaultCommission { FractionOfMargin = 0, TypeOfCommission = CommissionType.Sales };
-                            }
-                            Session[LoggedInPersonSalesCommissionKey] = salesCommission;
-                            return salesCommission;
-                        }
-                    }
-                    return null;
-                }
-            }
-        }
 
         public Person Person
         {
@@ -65,28 +36,6 @@ namespace PraticeManagement.Controls
                 if (value != null)
                 {
                     txtClientDiscount.Text = "0%";
-                    using (var service = new DefaultCommissionService.DefaultCommissionServiceClient())
-                    {
-                        var salesCommissionAvailabe = false;
-                        if (value.Id.HasValue)
-                        {
-                            var salesCommission = service.DefaultSalesCommissionByPerson(value.Id.Value);
-                            if (salesCommission != null)
-                            {
-                                txtDefaultSalesCommission.Text = salesCommission.FractionOfMargin.ToString() + "%";
-                                salesCommissionAvailabe = true;
-                            }
-                            else if (LoggedInPersonSalesCommission != null)
-                            {
-                                txtDefaultSalesCommission.Text = LoggedInPersonSalesCommission.FractionOfMargin.ToString() + "%";
-                                salesCommissionAvailabe = true;
-                            }
-                        }
-                        if (!salesCommissionAvailabe)
-                        {
-                            txtDefaultSalesCommission.Text = "0%";
-                        }
-                    }
                     DisplayCalculatedRate();
                 }
             }
@@ -138,18 +87,18 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public decimal DefaultSalesCommission
-        {
-            get
-            {
+        //public decimal DefaultSalesCommission
+        //{
+        //    get
+        //    {
 
-                decimal tempDefaultSalesCommission = 0.0M; // Default Sales Commission 
-                Match m = validatePercentage.Match(txtDefaultSalesCommission.Text);
-                decimal.TryParse(m.Groups[1].Captures[0].Value, out tempDefaultSalesCommission);
-                tempDefaultSalesCommission = (tempDefaultSalesCommission / 100);
-                return tempDefaultSalesCommission;
-            }
-        }
+        //        decimal tempDefaultSalesCommission = 0.0M; // Default Sales Commission 
+                //Match m = validatePercentage.Match(txtDefaultSalesCommission.Text);
+                //decimal.TryParse(m.Groups[1].Captures[0].Value, out tempDefaultSalesCommission);
+                //tempDefaultSalesCommission = (tempDefaultSalesCommission / 100);
+        //        return tempDefaultSalesCommission;
+        //    }
+        //}
 
         public decimal ClientDiscount
         {
@@ -262,15 +211,15 @@ namespace PraticeManagement.Controls
             }
         }
 
-        protected void txtDefaultSalesCommission_TextChanged(object sender, EventArgs e)
-        {
-            Page.Validate("ComputeRate");
-            if (Page.IsValid && Person != null && validatePercentage.IsMatch(txtDefaultSalesCommission.Text))
-            {
-                DisplayCalculatedRate();
-                //DisplayFromTargetMargin();
-            }
-        }
+        //protected void txtDefaultSalesCommission_TextChanged(object sender, EventArgs e)
+        //{
+        //    Page.Validate("ComputeRate");
+        //    if (Page.IsValid && Person != null && validatePercentage.IsMatch(txtDefaultSalesCommission.Text))
+        //    {
+        //        DisplayCalculatedRate();
+        //        //DisplayFromTargetMargin();
+        //    }
+        //}
 
         protected void txtClientDiscount_TextChanged(object sender, EventArgs e)
         {
@@ -307,7 +256,7 @@ namespace PraticeManagement.Controls
                         tmpPerson.OverheadList = null;
 
                         ComputedFinancialsEx rate =
-                            serviceClient.CalculateProposedFinancialsPersonTargetMargin(tmpPerson, targetMargin, hoursPerWeek, DefaultSalesCommission, ClientDiscount,IsMarginTestPage);
+                            serviceClient.CalculateProposedFinancialsPersonTargetMargin(tmpPerson, targetMargin, hoursPerWeek, ClientDiscount,IsMarginTestPage);
 
                         DisplayRate(rate);
 
@@ -349,7 +298,7 @@ namespace PraticeManagement.Controls
                     Person tmpPerson = Person;
                     tmpPerson.OverheadList = null;
 
-                    ComputedFinancialsEx rate = serviceClient.CalculateProposedFinancialsPerson(tmpPerson, billRate, hoursPerWeek, DefaultSalesCommission, ClientDiscount, IsMarginTestPage);
+                    ComputedFinancialsEx rate = serviceClient.CalculateProposedFinancialsPerson(tmpPerson, billRate, hoursPerWeek, ClientDiscount, IsMarginTestPage);
 
                     DisplayRate(rate);
 
@@ -377,13 +326,7 @@ namespace PraticeManagement.Controls
                 string.Format(Constants.Formatting.PercentageFormat, rate.TargetMarginWithoutRecruiting);
 
             var overheads = rate.OverheadList;
-            var SaleCommissionOverHead = overheads.Find(oh => oh.Name == SalesCommissionLineText);
-            var mlf = overheads.Find(oh => oh.Name == MLFText);
-            if (SaleCommissionOverHead != null)
-            {
-                overheads.Remove(SaleCommissionOverHead);
-                overheads.Insert(overheads.Count(), SaleCommissionOverHead);
-            }
+            var mlf = overheads.Find(oh => oh.Name == MLFText);            
             if (mlf != null)
             {
                 overheads.Remove(mlf);
