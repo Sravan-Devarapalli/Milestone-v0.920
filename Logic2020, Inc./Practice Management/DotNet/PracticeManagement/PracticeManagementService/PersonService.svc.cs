@@ -680,10 +680,10 @@ namespace PracticeManagementService
         /// <param name="proposedHoursPerWeek">A proposed work week duration.</param>
         /// <param name="proposedRate">A proposed person's hourly rate.</param>
         /// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
-        public ComputedFinancialsEx CalculateProposedFinancials(int personId, decimal proposedRate, decimal proposedHoursPerWeek, decimal defaultSalesCommission, decimal clientDiscount)
+        public ComputedFinancialsEx CalculateProposedFinancials(int personId, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount)
         {
             PersonRateCalculator calculator = new PersonRateCalculator(personId, true);
-            return calculator.CalculateProposedFinancials(proposedRate, proposedHoursPerWeek, defaultSalesCommission, clientDiscount);
+            return calculator.CalculateProposedFinancials(proposedRate, proposedHoursPerWeek, clientDiscount);
         }
 
         /// <summary>
@@ -693,11 +693,11 @@ namespace PracticeManagementService
         /// <param name="proposedHoursPerWeek">A proposed work week duration.</param>
         /// <param name="proposedRate">A proposed person's hourly rate.</param>
         /// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
-        public ComputedFinancialsEx CalculateProposedFinancialsPerson(Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal defaultSalesCommission, decimal clientDiscount, bool isMarginTestPage)
+        public ComputedFinancialsEx CalculateProposedFinancialsPerson(Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage)
         {
             PersonRateCalculator calculator = GetCalculatorForProposedFinancials(person, proposedRate, proposedHoursPerWeek, isMarginTestPage);
 
-            return calculator.CalculateProposedFinancials(proposedRate, proposedHoursPerWeek, defaultSalesCommission, clientDiscount);
+            return calculator.CalculateProposedFinancials(proposedRate, proposedHoursPerWeek, clientDiscount);
         }
 
         /// <summary>
@@ -707,10 +707,10 @@ namespace PracticeManagementService
         /// <param name="proposedHoursPerWeek">A proposed work week duration.</param>
         /// <param name="proposedRate">A proposed person's hourly rate.</param>
         /// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
-        public ComputedFinancialsEx CalculateProposedFinancialsPersonTargetMargin(Person person, decimal targetMargin, decimal proposedHoursPerWeek, decimal defaultSalesCommission, decimal clientDiscount, bool isMarginTestPage)
+        public ComputedFinancialsEx CalculateProposedFinancialsPersonTargetMargin(Person person, decimal targetMargin, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage)
         {
             PersonRateCalculator calculator = GetCalculatorForProposedFinancials(person, 0M, proposedHoursPerWeek, isMarginTestPage);
-            return calculator.CalculateProposedFinancialsTargetMargin(targetMargin, proposedHoursPerWeek, defaultSalesCommission, clientDiscount);
+            return calculator.CalculateProposedFinancialsTargetMargin(targetMargin, proposedHoursPerWeek,clientDiscount);
         }
 
         private static PersonRateCalculator GetCalculatorForProposedFinancials(Person person, decimal proposedRate, decimal proposedHoursPerWeek, bool isMarginTestPage)
