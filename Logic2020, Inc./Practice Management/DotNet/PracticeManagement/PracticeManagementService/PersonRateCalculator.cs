@@ -277,7 +277,7 @@ namespace PracticeManagementService
         /// <param name="proposedRate">A proposed hourly bill rate.</param>
         /// <param name="proposedHoursPerWeek">A number of the billed hours per week.</param>
         /// <returns>A <see cref="ComputedFinancialsEx"/> object.</returns>
-        public ComputedFinancialsEx CalculateProposedFinancials(decimal proposedRate, decimal proposedHoursPerWeek, decimal defaultSalesCommission, decimal clientDiscount)
+        public ComputedFinancialsEx CalculateProposedFinancials(decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount)
         {
             ComputedFinancialsEx financials = new ComputedFinancialsEx();
 
@@ -329,14 +329,11 @@ namespace PracticeManagementService
             financials.SemiCOGS = financials.SemiLoadedHourlyRate.Value * proposedHoursPerWeek * WeeksPerMonth;
             financials.SemiCOGSWithoutRecruiting = financials.SemiLoadedHourlyRateWithoutRecruiting.Value * proposedHoursPerWeek * WeeksPerMonth;
 
-            financials.SalesCommission = (financials.RevenueNet - financials.SemiCOGS) * defaultSalesCommission;
-            financials.SaleCommissionPerHour = financials.SalesCommission / (proposedHoursPerWeek * WeeksPerMonth);
-
             var MLFOverhead = financials.OverheadList.Find(OH => OH.IsMLF);
             if (MLFOverhead != null)
             {
                 MLFOverhead.HourlyValue = MLFOverhead.Rate * rawHourlyRate.HourlyValue / 100;
-                var FLHRWithoutMLF = financials.SemiLoadedHourlyRate + financials.SaleCommissionPerHour;
+                var FLHRWithoutMLF = financials.SemiLoadedHourlyRate;
                 var FLHRWithMLF = rawHourlyRate.HourlyValue + MLFOverhead.HourlyValue;
                 if (FLHRWithoutMLF > FLHRWithMLF)
                 {
@@ -351,7 +348,7 @@ namespace PracticeManagementService
             }
             else
             {
-                financials.LoadedHourlyRate = financials.SemiLoadedHourlyRate + financials.SaleCommissionPerHour;
+                financials.LoadedHourlyRate = financials.SemiLoadedHourlyRate;
             }
             var loadedHourlyRateWithoutRecruiting = financials.LoadedHourlyRate - (RecruitingOverhead != null ? RecruitingOverhead.HourlyValue : 0);
 
@@ -362,18 +359,18 @@ namespace PracticeManagementService
             financials.GrossMargin = financials.RevenueNet - financials.Cogs;
             financials.MarginWithoutRecruiting = financials.Revenue - financials.CogsWithoutRecruiting;
 
-            if (MLFOverhead != null && MLFOverhead.HourlyValue > 0)
-            {
-                financials.SalesCommission = financials.GrossMargin * defaultSalesCommission;
-                financials.SaleCommissionPerHour = financials.SalesCommission / (proposedHoursPerWeek * WeeksPerMonth);
-            }
+            //if (MLFOverhead != null && MLFOverhead.HourlyValue > 0)
+            //{
+            //    financials.SalesCommission = financials.GrossMargin * defaultSalesCommission;
+            //    financials.SaleCommissionPerHour = financials.SalesCommission / (proposedHoursPerWeek * WeeksPerMonth);
+            //}
 
             // Add a sales commission overhead
-            PersonOverhead salesCommission = new PersonOverhead();
-            salesCommission.Name = Resources.Messages.SalesCommissionTitle;
-            salesCommission.HoursToCollect = 1;
-            salesCommission.Rate = salesCommission.HourlyValue = financials.SaleCommissionPerHour;
-            Person.OverheadList.Add(salesCommission);
+            //PersonOverhead salesCommission = new PersonOverhead();
+            //salesCommission.Name = Resources.Messages.SalesCommissionTitle;
+            //salesCommission.HoursToCollect = 1;
+            //salesCommission.Rate = salesCommission.HourlyValue = financials.SaleCommissionPerHour;
+            //Person.OverheadList.Add(salesCommission);
 
             financials.OverheadList.Insert(0, rawHourlyRate);
 
@@ -386,7 +383,7 @@ namespace PracticeManagementService
         /// <param name="targetMargin">The Target Margin in percentage.</param>
         /// <param name="proposedHoursPerWeek">A number of the billed hours per week.</param>
         /// <returns>A <see cref="ComputedFinancialsEx"/> object.</returns>
-        public ComputedFinancialsEx CalculateProposedFinancialsTargetMargin(decimal targetMargin, decimal proposedHoursPerWeek, decimal defaultSalesCommission, decimal clientDiscount)
+        public ComputedFinancialsEx CalculateProposedFinancialsTargetMargin(decimal targetMargin, decimal proposedHoursPerWeek, decimal clientDiscount)
         {
             // Determine the first approximation
             decimal proposedRate = CalculateCogs(proposedHoursPerWeek, 0M);
@@ -395,12 +392,12 @@ namespace PracticeManagementService
                 (proposedRate * targetMargin) / (100M * WeeksPerMonth * proposedHoursPerWeek);
             proposedRate =
                 //CalculateCogs(proposedHoursPerWeek, proposedRate * Constants.Finacials.DefaultSalesCommission);
-                CalculateCogs(proposedHoursPerWeek, proposedRate * defaultSalesCommission);
+                CalculateCogs(proposedHoursPerWeek, 0M);
             proposedRate =
                 proposedRate / (WeeksPerMonth * proposedHoursPerWeek) +
                 (proposedRate * targetMargin) / (100M * WeeksPerMonth * proposedHoursPerWeek);
 
-            ComputedFinancialsEx financials = CalculateProposedFinancials(proposedRate, proposedHoursPerWeek, defaultSalesCommission, clientDiscount);
+            ComputedFinancialsEx financials = CalculateProposedFinancials(proposedRate, proposedHoursPerWeek, clientDiscount);
 
             int iterationNumber = MaxIterationNumber;
             while (iterationNumber > 0 && (Math.Abs(targetMargin - financials.TargetMargin) > RateCalculationThreshold))
@@ -408,7 +405,7 @@ namespace PracticeManagementService
                 // Removing recalculated overheads.
                 var vacationOverhead = Person.OverheadList.Find(oh => oh.Name == Resources.Messages.VacationOverheadName);
                 var rawHourlyRate = Person.OverheadList.Find(oh => oh.Name == Resources.Messages.RawHourlyRateTitle);
-                var salesCommission = Person.OverheadList.Find(oh => oh.Name == Resources.Messages.SalesCommissionTitle);
+                //var salesCommission = Person.OverheadList.Find(oh => oh.Name == Resources.Messages.SalesCommissionTitle);
                 if (vacationOverhead != null)
                 {
                     Person.OverheadList.Remove(vacationOverhead);  // remove the Vacation Overhead
@@ -418,15 +415,15 @@ namespace PracticeManagementService
                 {
                     Person.OverheadList.Remove(rawHourlyRate); // remove the Raw Hourly Rate
                 }
-                if (salesCommission != null)
-                {
-                    Person.OverheadList.Remove(salesCommission); // remove a sales commission overhead
-                }
+                //if (salesCommission != null)
+                //{
+                //    Person.OverheadList.Remove(salesCommission); // remove a sales commission overhead
+                //}
 
                 proposedRate +=
                     financials.Cogs * (targetMargin - financials.TargetMargin) /
                     (100M * WeeksPerMonth * proposedHoursPerWeek * RateCalculationSteps);
-                financials = CalculateProposedFinancials(proposedRate, proposedHoursPerWeek, defaultSalesCommission, clientDiscount);
+                financials = CalculateProposedFinancials(proposedRate, proposedHoursPerWeek, clientDiscount);
 
                 iterationNumber--;
             }
