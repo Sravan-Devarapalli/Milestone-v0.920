@@ -14,7 +14,7 @@ BEGIN
 	-- Declare the return variable here
 	DECLARE @HoursInPeriod decimal(18,2)
 
-	select @HoursInPeriod = SUM(mp.HoursPerDay * mp.VacationDays + mp.ExpectedHours)
+	select @HoursInPeriod = SUM(mp.ExpectedHours)
 	from v_MilestonePerson mp 
 	where mp.MilestonePersonId=@MilestonePersonId
 	
