@@ -247,6 +247,8 @@
             public const string ExperimentalProjects = "ExperimentalProjects";
             public const string CompletedProjects = "CompletedProjects";
             public const string InternalProjects = "InternalProjects";
+            public const string IncludeOverheads = "@IncludeOverheads";
+            public const string IncludeZeroCostEmployees = "@IncludeZeroCostEmployees";
             public const string Granularity = DaysForward;
             public const string Period = Step;
             public const string Start = StartDate;
