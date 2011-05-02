@@ -63,7 +63,6 @@
         <xs:element minOccurs="0" name="personId" type="xs:int" />
         <xs:element minOccurs="0" name="proposedRate" type="xs:decimal" />
         <xs:element minOccurs="0" name="proposedHoursPerWeek" type="xs:decimal" />
-        <xs:element minOccurs="0" name="defaultSalesCommission" type="xs:decimal" />
         <xs:element minOccurs="0" name="clientDiscount" type="xs:decimal" />
       </xs:sequence>
     </xs:complexType>
@@ -81,7 +80,6 @@
         <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q8:Person" />
         <xs:element minOccurs="0" name="proposedRate" type="xs:decimal" />
         <xs:element minOccurs="0" name="proposedHoursPerWeek" type="xs:decimal" />
-        <xs:element minOccurs="0" name="defaultSalesCommission" type="xs:decimal" />
         <xs:element minOccurs="0" name="clientDiscount" type="xs:decimal" />
         <xs:element minOccurs="0" name="isMarginTestPage" type="xs:boolean" />
       </xs:sequence>
@@ -100,7 +98,6 @@
         <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q10:Person" />
         <xs:element minOccurs="0" name="targetMargin" type="xs:decimal" />
         <xs:element minOccurs="0" name="proposedHoursPerWeek" type="xs:decimal" />
-        <xs:element minOccurs="0" name="defaultSalesCommission" type="xs:decimal" />
         <xs:element minOccurs="0" name="clientDiscount" type="xs:decimal" />
         <xs:element minOccurs="0" name="isMarginTestPage" type="xs:boolean" />
       </xs:sequence>
