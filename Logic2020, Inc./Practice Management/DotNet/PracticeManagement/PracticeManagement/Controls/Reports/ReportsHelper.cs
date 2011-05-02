@@ -45,6 +45,11 @@ namespace PraticeManagement.Controls.Reports
             return ServiceCallers.Custom.Project(c => c.GetBenchList(context));
         }
 
+        public static Project[] GetBenchListWithoutBenchTotalAndAdminCosts(BenchReportContext context)
+        {
+            return ServiceCallers.Custom.Project(c => c.GetBenchListWithoutBenchTotalAndAdminCosts(context));
+        }
+
 
         public static DataSet GetConsultantsTableReport(DateTime start, DateTime end, bool activePersons,
                                                         bool projectedPersons, bool activeProjects,
