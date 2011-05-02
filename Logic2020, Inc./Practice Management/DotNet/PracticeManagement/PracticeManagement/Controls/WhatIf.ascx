@@ -247,7 +247,7 @@
                             &nbsp;
                         </td>
                     </tr>
-                    <tr id="trDefaultSalesCommission" runat="server" visible="true">
+                    <%--<tr id="trDefaultSalesCommission" runat="server" visible="true">
                         <td colspan="2">
                             Sales Commission
                         </td>
@@ -268,12 +268,12 @@
                         </td>
                         <td colspan="2">
                         </td>
-                    </tr>
-                    <tr>
+                    </tr>--%>
+                    <%--<tr>
                         <td colspan="6">
                             &nbsp;
                         </td>
-                    </tr>
+                    </tr>--%>
                     <tr id="tr1" runat="server" visible="true">
                         <td colspan="2">
                             Client Discount (optional)
