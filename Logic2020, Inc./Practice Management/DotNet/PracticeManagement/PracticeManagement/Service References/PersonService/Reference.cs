@@ -30,16 +30,16 @@ namespace PraticeManagement.PersonService {
         DataTransferObjects.MilestonePerson GetPersonRate(DataTransferObjects.MilestonePerson milestonePerson);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/CalculateProposedFinancials", ReplyAction="http://tempuri.org/IPersonService/CalculateProposedFinancialsResponse")]
-        DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancials(int personId, decimal proposedRate, decimal proposedHoursPerWeek, decimal defaultSalesCommission, decimal clientDiscount);
+        DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancials(int personId, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/CalculateProposedFinancialsPerson", ReplyAction="http://tempuri.org/IPersonService/CalculateProposedFinancialsPersonResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancialsPerson(DataTransferObjects.Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal defaultSalesCommission, decimal clientDiscount, bool isMarginTestPage);
+        DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancialsPerson(DataTransferObjects.Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/CalculateProposedFinancialsPersonTargetMargin", ReplyAction="http://tempuri.org/IPersonService/CalculateProposedFinancialsPersonTargetMarginRe" +
             "sponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancialsPersonTargetMargin(DataTransferObjects.Person person, decimal targetMargin, decimal proposedHoursPerWeek, decimal defaultSalesCommission, decimal clientDiscount, bool isMarginTestPage);
+        DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancialsPersonTargetMargin(DataTransferObjects.Person person, decimal targetMargin, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPayment", ReplyAction="http://tempuri.org/IPersonService/GetPaymentResponse")]
         DataTransferObjects.Pay GetPayment(int personId, System.DateTime startDate);
@@ -230,16 +230,16 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetPersonRate(milestonePerson);
         }
         
-        public DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancials(int personId, decimal proposedRate, decimal proposedHoursPerWeek, decimal defaultSalesCommission, decimal clientDiscount) {
-            return base.Channel.CalculateProposedFinancials(personId, proposedRate, proposedHoursPerWeek, defaultSalesCommission, clientDiscount);
+        public DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancials(int personId, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount) {
+            return base.Channel.CalculateProposedFinancials(personId, proposedRate, proposedHoursPerWeek, clientDiscount);
         }
         
-        public DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancialsPerson(DataTransferObjects.Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal defaultSalesCommission, decimal clientDiscount, bool isMarginTestPage) {
-            return base.Channel.CalculateProposedFinancialsPerson(person, proposedRate, proposedHoursPerWeek, defaultSalesCommission, clientDiscount, isMarginTestPage);
+        public DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancialsPerson(DataTransferObjects.Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage) {
+            return base.Channel.CalculateProposedFinancialsPerson(person, proposedRate, proposedHoursPerWeek, clientDiscount, isMarginTestPage);
         }
         
-        public DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancialsPersonTargetMargin(DataTransferObjects.Person person, decimal targetMargin, decimal proposedHoursPerWeek, decimal defaultSalesCommission, decimal clientDiscount, bool isMarginTestPage) {
-            return base.Channel.CalculateProposedFinancialsPersonTargetMargin(person, targetMargin, proposedHoursPerWeek, defaultSalesCommission, clientDiscount, isMarginTestPage);
+        public DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancialsPersonTargetMargin(DataTransferObjects.Person person, decimal targetMargin, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage) {
+            return base.Channel.CalculateProposedFinancialsPersonTargetMargin(person, targetMargin, proposedHoursPerWeek, clientDiscount, isMarginTestPage);
         }
         
         public DataTransferObjects.Pay GetPayment(int personId, System.DateTime startDate) {
