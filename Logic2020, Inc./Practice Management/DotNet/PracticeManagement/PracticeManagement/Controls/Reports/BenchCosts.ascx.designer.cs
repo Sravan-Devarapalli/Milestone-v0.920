@@ -157,6 +157,15 @@ namespace PraticeManagement.Controls.Reports {
         protected global::AjaxControlToolkit.TabPanel tpMainFilters;
         
         /// <summary>
+        /// chbIncludeOverHeads control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbIncludeOverHeads;
+        
+        /// <summary>
         /// cbActivePersons control.
         /// </summary>
         /// <remarks>
@@ -245,6 +254,15 @@ namespace PraticeManagement.Controls.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chbSeperateInternalExternal;
+        
+        /// <summary>
+        /// chbIncludeZeroCostEmps control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbIncludeZeroCostEmps;
         
         /// <summary>
         /// lblExternalPractices control.
