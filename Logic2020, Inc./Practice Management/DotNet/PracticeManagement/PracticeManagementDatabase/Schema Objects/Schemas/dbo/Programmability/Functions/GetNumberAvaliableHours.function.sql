@@ -19,16 +19,10 @@ AS BEGIN
 
    IF dbo.GetCurrentPayType(@PersonId) = 2 
    BEGIN	
-		WITH    DefaultHours
-				  AS ( SELECT   Date,
-								dbo.GetDefaultHoursPerDay(PersonId, Date) AS defhrs
-					   FROM     dbo.v_PersonCalendar
-					   WHERE    Date BETWEEN @startDate AND @endDate
-								AND @PersonId = PersonId
-								AND DayOff = 0
-					 )
-			SELECT  @res = SUM(defhrs)
-			FROM    DefaultHours
+
+			SELECT  @res = 8 *(SELECT   COUNT(*)  FROM     dbo.v_PersonCalendar  
+								WHERE    Date BETWEEN @startDate AND @endDate 
+										AND @PersonId = PersonId AND DayOff = 0)
 	END 
     ELSE
 		SET @res = ISNULL(dbo.GetNumberProjectedHours(@PersonId, @startDate, @endDate, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects,@InternalProjects), 0)
