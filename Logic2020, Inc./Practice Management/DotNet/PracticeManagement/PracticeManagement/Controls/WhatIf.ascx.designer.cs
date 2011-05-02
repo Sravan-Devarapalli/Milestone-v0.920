@@ -265,51 +265,6 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.Label lblTargetMarginWithoutRecruiting;
         
         /// <summary>
-        /// trDefaultSalesCommission control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow trDefaultSalesCommission;
-        
-        /// <summary>
-        /// txtDefaultSalesCommission control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDefaultSalesCommission;
-        
-        /// <summary>
-        /// lblDefaultSalesCommission control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblDefaultSalesCommission;
-        
-        /// <summary>
-        /// cvDefaultSalesCommission control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvDefaultSalesCommission;
-        
-        /// <summary>
-        /// reqDefaultSalesCommision control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqDefaultSalesCommision;
-        
-        /// <summary>
         /// tr1 control.
         /// </summary>
         /// <remarks>
