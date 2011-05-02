@@ -87,7 +87,7 @@ AS
 	CTEFinancials
 	AS
 	(
-		SELECT ISNULL(DC.FractionOfMargin,0) [SalesCommissionFraction],--To do need to convert to amount as it's %,
+		SELECT 
 			   ISNULL(CASE
 				   WHEN pay.Timescale IN (1, 3)
 				   THEN pay.Amount
@@ -154,8 +154,6 @@ AS
 		LEFT JOIN [dbo].[v_OverheadFixedRateTimescale] OVH
 				ON OVH.TimescaleId = pay.Timescale AND cal.Date BETWEEN OVH.StartDate 
 				AND ISNULL(OVH.EndDate, dbo.GetFutureDate()) AND OVH.Inactive = 0
-		LEFT JOIN dbo.DefaultCommission AS DC ON DC.PersonId = P.PersonId AND DC.type = 1
-													AND cal.Date BETWEEN DC.StartDate AND DC.EndDate
 		 WHERE DATEPART(DW, cal.[Date]) NOT IN(1,7)
 		 AND cal.Date BETWEEN @StartDateLocal AND @EndDateLocal
 		AND (p.PersonStatusId = 1 AND @ActivePersonsLocal = 1
@@ -171,22 +169,14 @@ AS
 					pay.BonusHoursToCollect,
 					pay.BonusAmount,
 					pay.VacationDays,
-					HY.HoursInYear,
-					DC.FractionOfMargin
+					HY.HoursInYear 
 	),
 	CTEFLHRDaily
 	AS
 	(
 		SELECT 
-			--(HourlyRate+OverHeadAmount)*40*4.2 SCOGS,
-			--@DefaultBillRate*40*4.2 Revenue,
-			--(HourlyRate+OverHeadAmount)+((@DefaultBillRate-(HourlyRate+OverHeadAmount))* [SalesCommissionFraction]) ,--SLHR+SCPH
-	
-			CASE WHEN ((HourlyRate+OverHeadAmount+BonusRate+RecruitingCommissionRate+VacationRate)+
-						((@DefaultBillRate-(HourlyRate+OverHeadAmount+BonusRate+RecruitingCommissionRate+VacationRate))* [SalesCommissionFraction]*0.01))
-						>HourlyRate+MLFOverheadRate
-				 THEN ((HourlyRate+OverHeadAmount+BonusRate+RecruitingCommissionRate+VacationRate)+
-						((@DefaultBillRate-(HourlyRate+OverHeadAmount+BonusRate+RecruitingCommissionRate+VacationRate))* [SalesCommissionFraction]*0.01))
+			CASE WHEN (HourlyRate+OverHeadAmount+BonusRate+RecruitingCommissionRate+VacationRate) >HourlyRate+MLFOverheadRate
+				 THEN (HourlyRate+OverHeadAmount+BonusRate+RecruitingCommissionRate+VacationRate)
 				 ELSE HourlyRate+MLFOverheadRate
 				 END FLHR,
 			HourlyRate,
