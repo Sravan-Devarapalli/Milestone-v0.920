@@ -378,7 +378,7 @@ namespace PracticeManagementService
 		/// <param name="proposedRate">A proposed person's hourly rate.</param>
 		/// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
 		[OperationContract]
-        ComputedFinancialsEx CalculateProposedFinancials(int personId, decimal proposedRate, decimal proposedHoursPerWeek, decimal defaultSalesCommission, decimal clientDiscount);
+        ComputedFinancialsEx CalculateProposedFinancials(int personId, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount);
 
 		/// <summary>
 		/// Calculates the person's rate.
@@ -388,7 +388,7 @@ namespace PracticeManagementService
 		/// <param name="proposedRate">A proposed person's hourly rate.</param>
 		/// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
 		[OperationContract]
-        ComputedFinancialsEx CalculateProposedFinancialsPerson(Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal defaultSalesCommission, decimal clientDiscount, bool isMarginTestPage);
+        ComputedFinancialsEx CalculateProposedFinancialsPerson(Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage);
 
 		/// <summary>
 		/// Calculates the person's rate.
@@ -398,7 +398,7 @@ namespace PracticeManagementService
 		/// <param name="proposedHoursPerWeek">A proposed work week duration.</param>
 		/// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
 		[OperationContract]
-        ComputedFinancialsEx CalculateProposedFinancialsPersonTargetMargin(Person person, decimal targetMargin, decimal proposedHoursPerWeek, decimal defaultSalesCommission, decimal clientDiscount, bool isMarginTestPage);
+        ComputedFinancialsEx CalculateProposedFinancialsPersonTargetMargin(Person person, decimal targetMargin, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage);
 
 		/// <summary>
 		/// Pertieves a payment for the specified person.
