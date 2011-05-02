@@ -35,17 +35,6 @@
                 Bonus Hourly Expense
             </td>
         </tr>
-        <%--<tr>
-            <td style="no-wrap" nowrap="nowrap">
-                CH
-            </td>
-            <td>
-                &nbsp;=&nbsp;
-            </td>
-            <td style="no-wrap" nowrap="nowrap">
-                Company Holidays (per Year)
-            </td>
-        </tr>--%>
         <tr>
             <td style="no-wrap" nowrap="nowrap">
                 FCOGS
@@ -114,17 +103,6 @@
         </tr>
         <tr>
             <td style="no-wrap" nowrap="nowrap">
-                MGM-S
-            </td>
-            <td>
-                &nbsp;=&nbsp;
-            </td>
-            <td style="no-wrap" nowrap="nowrap">
-                Monthly Gross Margin (Semi)
-            </td>
-        </tr>
-        <tr>
-            <td style="no-wrap" nowrap="nowrap">
                 MGR
             </td>
             <td>
@@ -169,61 +147,6 @@
         </tr>
         <tr>
             <td style="no-wrap" nowrap="nowrap">
-                SC%
-            </td>
-            <td>
-                &nbsp;=&nbsp;
-            </td>
-            <td style="no-wrap">
-                Sales Commission Percentage
-            </td>
-        </tr>
-        <tr>
-            <td style="no-wrap" nowrap="nowrap">
-                SCOGS
-            </td>
-            <td>
-                &nbsp;=&nbsp;
-            </td>
-            <td style="no-wrap" nowrap="nowrap">
-                Semi-COGS (based on SLHR)
-            </td>
-        </tr>
-        <tr>
-            <td style="no-wrap" nowrap="nowrap">
-                SCPH
-            </td>
-            <td>
-                &nbsp;=&nbsp;
-            </td>
-            <td style="no-wrap" nowrap="nowrap">
-                Sales Commission per Hour
-            </td>
-        </tr>
-        <tr>
-            <td style="no-wrap" nowrap="nowrap">
-                SCPM
-            </td>
-            <td>
-                &nbsp;=&nbsp;
-            </td>
-            <td style="no-wrap" nowrap="nowrap">
-                Sales Commission per Month
-            </td>
-        </tr>
-        <tr>
-            <td style="no-wrap" nowrap="nowrap">
-                SLHR
-            </td>
-            <td>
-                &nbsp;=&nbsp;
-            </td>
-            <td style="no-wrap" nowrap="nowrap">
-                Semi-Loaded Hourly Rate
-            </td>
-        </tr>
-        <tr>
-            <td style="no-wrap" nowrap="nowrap">
                 VD
             </td>
             <td>
@@ -260,17 +183,6 @@
                 [Bonus] / HPY
             </td>
         </tr>
-        <%--<tr>
-            <td style="no-wrap" nowrap="nowrap" valign="top">
-                CH
-            </td>
-            <td valign="top">
-                &nbsp;=&nbsp;
-            </td>
-            <td style="no-wrap">
-                Defined on/by Company Calendar
-            </td>
-        </tr>--%>
         <tr>
             <td style="no-wrap" nowrap="nowrap">
                 FCOGS
@@ -280,17 +192,6 @@
             </td>
             <td style="no-wrap" nowrap="nowrap">
                 FLHR * HPW * 4.2
-            </td>
-        </tr>
-        <tr>
-            <td style="no-wrap" nowrap="nowrap">
-                FLHR
-            </td>
-            <td>
-                &nbsp;=&nbsp;
-            </td>
-            <td style="no-wrap" nowrap="nowrap">
-                [SLHR + SCPH]
             </td>
         </tr>
         <tr>
@@ -317,17 +218,6 @@
         </tr>
         <tr>
             <td style="no-wrap" nowrap="nowrap">
-                MGM-S
-            </td>
-            <td>
-                &nbsp;=&nbsp;
-            </td>
-            <td style="no-wrap" nowrap="nowrap">
-                MGR - SCOGS
-            </td>
-        </tr>
-        <tr>
-            <td style="no-wrap" nowrap="nowrap">
                 MGR
             </td>
             <td>
@@ -345,7 +235,7 @@
                 &nbsp;=&nbsp;
             </td>
             <td style="no-wrap" nowrap="nowrap">
-                <a target="_blank" href="Financial.aspx?ActiveTabIndex=3">Defined in Overheads</a>
+                <a target="_blank" href="Config/Overheads.aspx">Defined in Overheads</a>
             </td>
         </tr>
         <tr>
@@ -383,40 +273,7 @@
         </tr>
         <tr>
             <td style="no-wrap" nowrap="nowrap">
-                SCOGS
-            </td>
-            <td>
-                &nbsp;=&nbsp;
-            </td>
-            <td style="no-wrap" nowrap="nowrap">
-                SLHR * HPW * 4.2
-            </td>
-        </tr>
-        <tr>
-            <td style="no-wrap" nowrap="nowrap">
-                SCPH
-            </td>
-            <td>
-                &nbsp;=&nbsp;
-            </td>
-            <td style="no-wrap" nowrap="nowrap">
-                SCPM / (HPW * 4.2)
-            </td>
-        </tr>
-        <tr>
-            <td style="no-wrap" nowrap="nowrap">
-                SCPM
-            </td>
-            <td>
-                &nbsp;=&nbsp;
-            </td>
-            <td style="no-wrap" nowrap="nowrap">
-                [MGM-S * SC%]
-            </td>
-        </tr>
-        <tr>
-            <td style="no-wrap" nowrap="nowrap">
-                SLHR
+                FLHR
             </td>
             <td>
                 &nbsp;=&nbsp;
