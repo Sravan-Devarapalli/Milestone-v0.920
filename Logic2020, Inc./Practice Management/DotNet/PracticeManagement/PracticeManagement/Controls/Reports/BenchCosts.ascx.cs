@@ -39,7 +39,9 @@ namespace PraticeManagement.Controls.Reports
                         ExperimentalProjects = chbExperimentalProjects.Checked,
                         CompletedProjects = chbCompletedProjects.Checked,
                         UserName = DataHelper.CurrentPerson.Alias,
-                        PracticeIds = string.IsNullOrEmpty(cblPractices.SelectedItems) ? string.Empty : cblPractices.SelectedItems
+                        PracticeIds = string.IsNullOrEmpty(cblPractices.SelectedItems) ? string.Empty : cblPractices.SelectedItems,
+                        IncludeOverheads = chbIncludeOverHeads.Checked,
+                        IncludeZeroCostEmployees = chbIncludeZeroCostEmps.Checked
                     };
                     ViewState[ReportContextKey] = reportContext;
                 }
@@ -335,15 +337,7 @@ namespace PraticeManagement.Controls.Reports
 
         private IEnumerable<Project> GetBenchList()
         {
-            var benchList = PopulateBenchRollOffDatesGrid(ReportsHelper.GetBenchList(ReportContext.Start,
-                                              ReportContext.End,
-                                              ReportContext.ActivePersons,
-                                              ReportContext.ProjectedPersons,
-                                              ReportContext.ActiveProjects,
-                                              ReportContext.ProjectedProjects,
-                                              ReportContext.ExperimentalProjects,
-                                              ReportContext.UserName,
-                                              ReportContext.PracticeIds));
+            var benchList = ReportsHelper.GetBenchListWithoutBenchTotalAndAdminCosts(ReportContext);
             return benchList.ToList<Project>().FindAll(p => (p.Practice != null
                                                             && !string.IsNullOrEmpty(p.Practice.Name)
                                                             && !string.IsNullOrEmpty(p.ProjectNumber)
@@ -520,7 +514,9 @@ namespace PraticeManagement.Controls.Reports
             cbProjectedPersons.Checked = true;
             chbActiveProjects.Checked = chbProjectedProjects.Checked = chbProjectedProjects.Checked = true;
             chbExperimentalProjects.Checked = false;
-
+            chbIncludeZeroCostEmps.Checked = false;
+            chbIncludeOverHeads.Checked = true;
+            chbSeperateInternalExternal.Checked = true;
             ReportContext = null;
             BenchList = null;
 
