@@ -1,7 +1,7 @@
 ﻿-- =============================================
 -- Description:	List all persons that have some bench time
 -- =============================================
-CREATE PROCEDURE dbo.PersonListBenchExpense
+CREATE PROCEDURE [dbo].[PersonListBenchExpense]
 (
 	@StartDate   DATETIME,
 	@EndDate     DATETIME,
@@ -11,7 +11,9 @@ CREATE PROCEDURE dbo.PersonListBenchExpense
 	@ProjectedProjects BIT = 1,
 	@ExperimentalProjects BIT = 1,
 	@CompletedProjects BIT = 1,
-	@PracticeIds NVARCHAR(4000) = NULL
+	@PracticeIds NVARCHAR(4000) = NULL,
+	@IncludeOverheads BIT = 1,
+	@IncludeZeroCostEmployees BIT = 0
 )
 AS
 	SET NOCOUNT ON
@@ -40,23 +42,39 @@ AS
 			@CompletedProjectsLocal = @CompletedProjects,
 			@PracticeIdsLocal=@PracticeIds 
 
-	;WITH CTERNOD
+	DECLARE @DefaultMilestoneId INT
+	SELECT @DefaultMilestoneId  = (SELECT  TOP 1 MilestoneId
+									FROM [dbo].[DefaultMilestoneSetting])
+
+
+	;WITH PersonBenchHoursDaily
 	AS
-	(
+	( 
 		SELECT  p.PersonId,
 				cal.Date,
-				SUM(CAST(ISNULL((ms.HoursPerDay * mp.MilestoneHourlyRevenue *(1-mp.Discount/100)), 0) AS DECIMAL(18,2))) AS RNOD
+				8 - SUM(ISNULL(MPE.HoursPerDay,0)) BenchHours
 		FROM dbo.Person AS p
 		INNER JOIN dbo.PersonCalendarAuto AS cal 
-			ON cal.Date BETWEEN p.HireDate AND ISNULL(p.TerminationDate, dbo.GetFutureDate())
-					AND P.PersonId = cal.PersonId
+			ON cal.Date BETWEEN p.HireDate AND ISNULL(p.TerminationDate, dbo.GetFutureDate()) 
+								AND cal.personId = P.PersonId
+		LEFT JOIN MilestonePerson MP 
+			ON MP.PersonId = P.PersonId AND MP.MilestoneId <> @DefaultMilestoneId
+		LEFT JOIN Milestone M 
+			ON M.MilestoneId = MP.MilestoneId
+		LEFT JOIN Project proj 
+			ON proj.ProjectId = M.ProjectId
+					AND(proj.ProjectStatusId = 2 AND @ProjectedProjectsLocal = 1
+					OR proj.ProjectStatusId = 3 AND @ActiveProjectsLocal = 1
+					OR proj.ProjectStatusId = 5 AND @ExperimentalProjectsLocal = 1
+					OR proj.ProjectStatusId = 4 AND @CompletedProjectsLocal = 1
+					)
+		LEFT JOIN MilestonePersonEntry MPE 
+			ON MPE.MilestonePersonId = MP.MilestonePersonId 
+			AND cal.Date BETWEEN MPE.StartDate AND MPE.EndDate
 		LEFT JOIN dbo.Practice AS pr 
 			ON p.DefaultPractice = pr.PracticeId
-		LEFT JOIN dbo.v_MilestonePersonSchedule AS ms 
-			ON ms.PersonId = p.PersonId AND ms.Date = cal.Date
-		LEFT JOIN dbo.v_MilestonePerson AS mp 
-			ON mp.PersonId = p.PersonId AND ms.MilestoneId = mp.MilestoneId AND mp.StartDate = ms.EntryStartDate
-		WHERE cal.Date BETWEEN @StartDateLocal AND @EndDateLocal
+		WHERE   DATEPART(DW, cal.[Date]) NOT IN(1,7)
+		 AND	cal.Date BETWEEN @StartDateLocal AND @EndDateLocal
 			AND (p.PersonStatusId = 1 AND @ActivePersonsLocal = 1
 				 OR p.PersonStatusId = 3 AND @ProjectedPersonsLocal = 1)
 			AND (@PracticeIdsLocal IS NULL 
@@ -64,11 +82,6 @@ AS
 											 FROM [dbo].[ConvertStringListIntoTable] (@PracticeIdsLocal)
 											 )
 				)
-				AND (mp.ProjectStatusId = 2 AND @ProjectedProjectsLocal = 1
-					OR mp.ProjectStatusId = 3 AND @ActiveProjectsLocal = 1
-					OR mp.ProjectStatusId = 5 AND @ExperimentalProjectsLocal = 1
-					OR mp.ProjectStatusId = 4 AND @CompletedProjectsLocal = 1
-					)
 		GROUP BY p.PersonId,cal.Date
 	),
 	CTEFinancials
@@ -143,7 +156,7 @@ AS
 				AND ISNULL(OVH.EndDate, dbo.GetFutureDate()) AND OVH.Inactive = 0
 		LEFT JOIN dbo.DefaultCommission AS DC ON DC.PersonId = P.PersonId AND DC.type = 1
 													AND cal.Date BETWEEN DC.StartDate AND DC.EndDate
-		 WHERE cal.DayOff = 0 
+		 WHERE DATEPART(DW, cal.[Date]) NOT IN(1,7)
 		 AND cal.Date BETWEEN @StartDateLocal AND @EndDateLocal
 		AND (p.PersonStatusId = 1 AND @ActivePersonsLocal = 1
 			 OR p.PersonStatusId = 3 AND @ProjectedPersonsLocal = 1)
@@ -176,19 +189,12 @@ AS
 						((@DefaultBillRate-(HourlyRate+OverHeadAmount+BonusRate+RecruitingCommissionRate+VacationRate))* [SalesCommissionFraction]*0.01))
 				 ELSE HourlyRate+MLFOverheadRate
 				 END FLHR,
-				 --CONVERT(DECIMAL(18,2),((@DefaultBillRate-(HourlyRate+OverHeadAmount))* [SalesCommissionFraction]*0.01)) SCPH,
+			HourlyRate,
 			PersonId,
 			Date,
-			CASE WHEN Timescale != 2 THEN 1 ELSE 2 END Timescale
-			--SalesCommissionFraction,
-			--HourlyRate,
-			--OverHeadAmount,
-			--BonusRate,
-			--RecruitingCommissionRate,
-			--VacationRate,
-			--MLFOverheadRate
+			CASE WHEN Timescale != 2 THEN 1 ELSE 2 END Timescale,
+			RANK() OVER (PARTITION BY  PersonId, YEAR(Date), MONTH(Date) ORDER BY (CASE WHEN Timescale != 2 THEN 1 ELSE 2 END ) DESC)  AS RowNumber
 		FROM CTEFinancials
-
 	)
 
 	SELECT FLHRD.PersonId,
@@ -203,14 +209,16 @@ AS
 			P.PersonStatusId,
 			p.SeniorityId,
 			PersonStatusName = (SELECT Name FROM dbo.PersonStatus AS ps WHERE ps.PersonStatusId = p.PersonStatusId),
-			MAX(FLHRD.Timescale) Timescale,
-			ISNULL(SUM(R.RNOD),0) Revenue,
-			ISNULL(SUM(FLHRD.FLHR*8),0) COGS,
-			(ISNULL(SUM(R.RNOD),0) - ISNULL(SUM(FLHRD.FLHR*8),0)) Margin
+			FLHRD.Timescale  Timescale,
+			0.0 Revenue,
+			0.0 COGS,
+			CASE WHEN (-1*ISNULL(SUM((CASE @IncludeOverheads WHEN 1 THEN FLHRD.FLHR ELSE FLHRD.HourlyRate END) *(CASE WHEN R.BenchHours >0 Then R.BenchHours ELSE 0 END)),0))>0 THEN 0
+			ELSE (-1*ISNULL(SUM((CASE @IncludeOverheads WHEN 1 THEN FLHRD.FLHR ELSE FLHRD.HourlyRate END) *(CASE WHEN R.BenchHours >0 Then R.BenchHours ELSE 0 END)),0)) END Margin
 	FROM CTEFLHRDaily FLHRD
-	LEFT JOIN  CTERNOD R ON R.[Date] = FLHRD.Date AND R.PersonId = FLHRD.PersonId
+	JOIN  PersonBenchHoursDaily R ON R.[Date] = FLHRD.Date AND R.PersonId = FLHRD.PersonId
 	JOIN Person P ON FLHRD.PersonId = P.PersonId
 	LEFT JOIN Practice pr ON P.DefaultPractice = pr.PracticeId
+	WHERE FLHRD.RowNumber = 1
 	GROUP BY FLHRD.PersonId,
 				YEAR(FLHRD.Date),
 				MONTH(FLHRD.Date),
@@ -221,11 +229,10 @@ AS
 				p.HireDate,
 				p.TerminationDate,
 				p.PersonStatusId,
-				p.SeniorityId
-	HAVING ISNULL(SUM(R.RNOD),0) < 
-			ISNULL(SUM(FLHRD.FLHR*8),0)   
+				p.SeniorityId,
+				FLHRD.Timescale
+	HAVING (SUM(ISNULL(R.BenchHours,0)) > 0 OR @IncludeZeroCostEmployees = 1)
 	ORDER BY FLHRD.PersonId, p.LastName, p.FirstName, YEAR(FLHRD.Date), MONTH(FLHRD.Date)
-
 
 	/*
 Person Status:
