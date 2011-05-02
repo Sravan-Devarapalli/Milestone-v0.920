@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Serialization;
+using System.ComponentModel;
 
 namespace DataTransferObjects.ContextObjects
 {
@@ -9,9 +10,16 @@ namespace DataTransferObjects.ContextObjects
     {
         [DataMember]
         public string UserName { get; set; }
-        
+
         [DataMember]
         public string PracticeIds { get; set; }
+
+        [DataMember]
+        [DefaultValue(true)]
+        public bool? IncludeOverheads { get; set; }
+
+        [DataMember]
+        public bool IncludeZeroCostEmployees { get; set; }
     }
 }
 
