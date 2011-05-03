@@ -13,7 +13,8 @@ CREATE PROCEDURE [dbo].[PersonListBenchExpense]
 	@CompletedProjects BIT = 1,
 	@PracticeIds NVARCHAR(4000) = NULL,
 	@IncludeOverheads BIT = 1,
-	@IncludeZeroCostEmployees BIT = 0
+	@IncludeZeroCostEmployees BIT = 0,
+	@TimeScaleIds NVARCHAR(1000) = NULL
 )
 AS
 	SET NOCOUNT ON
@@ -30,7 +31,8 @@ AS
 		@ProjectedProjectsLocal BIT,
 		@ExperimentalProjectsLocal BIT,
 		@CompletedProjectsLocal BIT,
-		@PracticeIdsLocal NVARCHAR(4000) = NULL
+		@PracticeIdsLocal NVARCHAR(4000) = NULL,
+		@TimeScaleIdsLocal NVARCHAR(1000) = NULL
 		
 	SELECT  @StartDateLocal=@StartDate,
 			@EndDateLocal=@EndDate,
@@ -40,7 +42,8 @@ AS
 			@ProjectedProjectsLocal=@ProjectedProjects,
 			@ExperimentalProjectsLocal=@ExperimentalProjects,
 			@CompletedProjectsLocal = @CompletedProjects,
-			@PracticeIdsLocal=@PracticeIds 
+			@PracticeIdsLocal=@PracticeIds,
+			@TimeScaleIdsLocal = @TimeScaleIds 
 
 	DECLARE @DefaultMilestoneId INT
 	SELECT @DefaultMilestoneId  = (SELECT  TOP 1 MilestoneId
@@ -213,7 +216,11 @@ AS
 	JOIN  PersonBenchHoursDaily R ON R.[Date] = FLHRD.Date AND R.PersonId = FLHRD.PersonId
 	JOIN Person P ON FLHRD.PersonId = P.PersonId
 	LEFT JOIN Practice pr ON P.DefaultPractice = pr.PracticeId
-	WHERE FLHRD.RowNumber = 1
+	WHERE FLHRD.RowNumber = 1 
+		  AND (@TimeScaleIdsLocal IS NULL 
+					OR  FLHRD.Timescale IN(SELECT ResultId 
+											 FROM [dbo].[ConvertStringListIntoTable] (@TimeScaleIdsLocal)
+											 ))
 	GROUP BY FLHRD.PersonId,
 				YEAR(FLHRD.Date),
 				MONTH(FLHRD.Date),
