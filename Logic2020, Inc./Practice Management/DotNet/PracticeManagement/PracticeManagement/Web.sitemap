@@ -30,7 +30,7 @@
         <siteMapNode url="~/Reports/TimeEntriesByPerson.aspx?from=reports" title="Time Entry by Person"  description="Show url" />
       </siteMapNode>
     </siteMapNode>
-    <siteMapNode url="~/TimeEntry.aspx?from=sub_toolbar" title="Time Tracking" description="Time Entry records">
+    <siteMapNode url="~/TimeEntry.aspx?from=sub_toolbar" title="Time" description="Time Entry records">
       <siteMapNode url="~/TimeEntry.aspx" title="Time Entry" description="Show url" />
       <siteMapNode url="~/Calendar.aspx" title="Calendar" description="Show url"  />
     </siteMapNode>
