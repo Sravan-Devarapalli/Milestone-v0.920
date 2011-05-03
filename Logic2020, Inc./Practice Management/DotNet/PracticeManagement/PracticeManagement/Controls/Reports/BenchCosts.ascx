@@ -28,7 +28,7 @@
     }
 </style>
 <div class="filters">
-    <div class="buttons-block">
+    <div class="filter-section-color">
         <table class="WholeWidth">
             <tr>
                 <td align="left" style="width: 25px">
@@ -55,7 +55,15 @@
                 <td style="width: 115px;" align="left">
                     <uc:MonthPicker ID="mpEndDate" runat="server" AutoPostBack="false" OnClientChange="EnableResetButton();" />
                 </td>
-                <td style="width: 20px;" align="left">
+                <td style="width: 10px !important;" align="left">
+                    <asp:CheckBox ID="chbIncludeOverHeads" runat="server" Style="width: 10px !important;"
+                        Checked="true" onclick="EnableResetButton();" TextAlign="Left" />
+                </td>
+                <td align="left">
+                    <asp:Label ID="lblOverheads" Style="white-space: nowrap;" Text="Include Overheads in Calculations"
+                        runat="server" />
+                </td>
+                <td style="width: 5px;" align="left">
                     <asp:CustomValidator ID="custPeriod" runat="server" ErrorMessage="The Period Start must be less than or equal to the Period End"
                         ToolTip="The Period Start must be less than or equal to the Period End" Text="*"
                         EnableClientScript="false" OnServerValidate="custPeriod_ServerValidate" ValidationGroup="Filter"
@@ -80,7 +88,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="8" align="left" style="padding-top: 5px;">
+                <td colspan="9" align="left" style="padding-top: 5px;">
                     <asp:ValidationSummary ID="ValSumFilter" runat="server" ValidationGroup="Filter" />
                 </td>
             </tr>
@@ -115,6 +123,11 @@
                             </td>
                             <td style="width: 30px;">
                             </td>
+                            <td style="width: 150px; border-bottom: 1px solid black;" valign="top">
+                                Pay Type
+                            </td>
+                            <td style="width: 30px;">
+                            </td>
                             <td style="width: 250px; border-bottom: 1px solid black;" colspan="2" valign="top">
                                 Project Type
                             </td>
@@ -123,15 +136,24 @@
                             <td style="width: 250px; border-bottom: 1px solid black;">
                                 Practice Area
                             </td>
-                            <td rowspan="3" valign="middle" align="center" style="padding-left: 30px;">
-                                <asp:CheckBox ID="chbIncludeOverHeads" Text="Include Overheads in Calculations" runat="server"
-                                    Checked="true" onclick="EnableResetButton();"/>
+                            <td>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <asp:CheckBox ID="cbActivePersons" runat="server" Text="Active Persons" Checked="True"
                                     onclick="EnableResetButton();" />
+                            </td>
+                            <td>
+                            </td>
+                            <td class="floatRight" style="padding-top: 5px; padding-left: 3px;">
+                                <cc2:ScrollingDropDown ID="cblPayType" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
+                                    onclick="scrollingDropdown_onclick('cblPayType','Pay Type')" BackColor="White"
+                                    CellPadding="3" NoItemsType="Nothing" SetDirty="False" Width="200px" DropDownListType="Pay Type"
+                                    Height="100px" BorderWidth="0" />
+                                <ext:ScrollableDropdownExtender ID="sdePayType" runat="server" TargetControlID="cblPayType"
+                                    Width="200px" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                                </ext:ScrollableDropdownExtender>
                             </td>
                             <td>
                             </td>
@@ -148,7 +170,7 @@
                             <td class="floatRight" style="padding-top: 5px; padding-left: 3px;">
                                 <cc2:ScrollingDropDown ID="cblPractices" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
                                     onclick="scrollingDropdown_onclick('cblPractices','Practice Area')" BackColor="White"
-                                    CellPadding="3" NoItemsType="Nothing" SetDirty="False" Width="350px" DropDownListType="Practice Area"
+                                    CellPadding="3" NoItemsType="Nothing" SetDirty="False" Width="290px" DropDownListType="Practice Area"
                                     Height="220px" BorderWidth="0" />
                                 <ext:ScrollableDropdownExtender ID="sdePractices" runat="server" TargetControlID="cblPractices"
                                     Width="250px" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png">
@@ -159,6 +181,10 @@
                             <td>
                                 <asp:CheckBox ID="cbProjectedPersons" runat="server" Text="Projected Persons" Checked="true"
                                     onclick="EnableResetButton();" />
+                            </td>
+                            <td>
+                            </td>
+                            <td>
                             </td>
                             <td>
                             </td>
