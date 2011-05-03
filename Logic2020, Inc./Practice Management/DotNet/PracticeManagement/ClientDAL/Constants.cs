@@ -364,6 +364,7 @@
             public const string SalespersonIdsParam = "@SalespersonIds";
             public const string SalespersonIdParam = "@SalespersonId";
             public const string PracticeIdsParam = "@PracticeIds";
+            public const string TimeScaleIdsParam = "@TimeScaleIds";
             public const string PracticeIdParam = "@PracticeId";
             public const string ProjectGroupIdsParam = "@ProjectGroupIds";
             public const string ProjectGroupIdParam = "@ProjectGroupId";
