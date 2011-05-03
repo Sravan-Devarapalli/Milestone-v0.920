@@ -89,6 +89,7 @@ namespace PraticeManagement
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            SetPageTitle();
 
             if (!string.IsNullOrEmpty(HttpContext.Current.User.Identity.Name))
             {
@@ -118,6 +119,14 @@ namespace PraticeManagement
                         Roles.GetRolesForUser(Page.User.Identity.Name));
             }
 
+        }
+
+        private void SetPageTitle()
+        {
+            string pagePath = ((System.Web.UI.TemplateControl)(Page)).AppRelativeVirtualPath;
+            string pageName = pagePath.Substring(2, pagePath.Length - 7);
+            lblCurrentPage.Text = pageName.Replace('/', '-'); 
+            //lblCurrentPage.Text = Page.Header.Title;
         }
 
         private string GetMenuHtml()
