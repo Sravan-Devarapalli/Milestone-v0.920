@@ -85,6 +85,24 @@ namespace PraticeManagement.Controls.Reports {
         protected global::PraticeManagement.Controls.MonthPicker mpEndDate;
         
         /// <summary>
+        /// chbIncludeOverHeads control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbIncludeOverHeads;
+        
+        /// <summary>
+        /// lblOverheads control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblOverheads;
+        
+        /// <summary>
         /// custPeriod control.
         /// </summary>
         /// <remarks>
@@ -157,15 +175,6 @@ namespace PraticeManagement.Controls.Reports {
         protected global::AjaxControlToolkit.TabPanel tpMainFilters;
         
         /// <summary>
-        /// chbIncludeOverHeads control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chbIncludeOverHeads;
-        
-        /// <summary>
         /// cbActivePersons control.
         /// </summary>
         /// <remarks>
@@ -173,6 +182,24 @@ namespace PraticeManagement.Controls.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox cbActivePersons;
+        
+        /// <summary>
+        /// cblPayType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblPayType;
+        
+        /// <summary>
+        /// sdePayType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdePayType;
         
         /// <summary>
         /// chbActiveProjects control.
