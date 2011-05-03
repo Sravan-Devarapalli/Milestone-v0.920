@@ -52,25 +52,30 @@ AS
 	( 
 		SELECT  p.PersonId,
 				cal.Date,
-				8 - SUM(ISNULL(MPE.HoursPerDay,0)) BenchHours
+				8 - SUM(ISNULL(Temp.HoursPerDay,0)) BenchHours
 		FROM dbo.Person AS p
 		INNER JOIN dbo.PersonCalendarAuto AS cal 
 			ON cal.Date BETWEEN p.HireDate AND ISNULL(p.TerminationDate, dbo.GetFutureDate()) 
 								AND cal.personId = P.PersonId
-		LEFT JOIN MilestonePerson MP 
-			ON MP.PersonId = P.PersonId AND MP.MilestoneId <> @DefaultMilestoneId
-		LEFT JOIN Milestone M 
-			ON M.MilestoneId = MP.MilestoneId
-		LEFT JOIN Project proj 
-			ON proj.ProjectId = M.ProjectId
-					AND(proj.ProjectStatusId = 2 AND @ProjectedProjectsLocal = 1
-					OR proj.ProjectStatusId = 3 AND @ActiveProjectsLocal = 1
-					OR proj.ProjectStatusId = 5 AND @ExperimentalProjectsLocal = 1
-					OR proj.ProjectStatusId = 4 AND @CompletedProjectsLocal = 1
-					)
-		LEFT JOIN MilestonePersonEntry MPE 
-			ON MPE.MilestonePersonId = MP.MilestonePersonId 
-			AND cal.Date BETWEEN MPE.StartDate AND MPE.EndDate
+		LEFT JOIN(
+					SELECT MP.PersonId,
+							MPE.StartDate,
+							MPE.EndDate,
+							MPE.HoursPerDay
+					FROM MilestonePerson MP 
+					JOIN Milestone M 
+						ON M.MilestoneId = MP.MilestoneId AND MP.MilestoneId <> @DefaultMilestoneId
+					JOIN Project proj 
+						ON proj.ProjectId = M.ProjectId
+								AND(proj.ProjectStatusId = 2 AND @ProjectedProjectsLocal = 1
+								OR proj.ProjectStatusId = 3 AND @ActiveProjectsLocal = 1
+								OR proj.ProjectStatusId = 5 AND @ExperimentalProjectsLocal = 1
+								OR proj.ProjectStatusId = 4 AND @CompletedProjectsLocal = 1
+								) AND proj.ProjectStatusId NOT IN(6,1)
+					JOIN MilestonePersonEntry MPE 
+						ON MPE.MilestonePersonId = MP.MilestonePersonId
+						) Temp 
+		ON Temp.PersonId = P.PersonId AND cal.Date BETWEEN Temp.StartDate AND Temp.EndDate
 		LEFT JOIN dbo.Practice AS pr 
 			ON p.DefaultPractice = pr.PracticeId
 		WHERE   DATEPART(DW, cal.[Date]) NOT IN(1,7)
