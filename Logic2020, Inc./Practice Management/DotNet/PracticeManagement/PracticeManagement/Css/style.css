@@ -731,6 +731,14 @@ tr.tb-header td
     border-bottom: 1px solid #eef2fc;
 }
 
+.filter-section-color
+{
+    padding: 10px;
+    background-color: #d4dff8;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #eef2fc;
+}
+
 .floatRight input
 {
     float: right;
