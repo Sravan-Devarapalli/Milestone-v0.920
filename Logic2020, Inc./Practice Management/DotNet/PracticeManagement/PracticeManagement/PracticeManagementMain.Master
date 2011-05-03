@@ -192,8 +192,13 @@
                         </asp:Literal>
                     </ul>            
                 </div>
-            </div>
-            <div class="main-content" style="z-index:-1000 !important;">
+                 <div style="height:20px;  vertical-align: middle; ">
+                    <asp:Label ID="lblCurrentPage" runat="server" Font-Bold="true" 
+                        style="white-space:nowrap; background-color: #e2ebff; padding:4px;">
+                    </asp:Label>
+                </div>
+            </div>           
+            <div class="main-content" style="z-index:-1000 !important; background-color: #e2ebff; margin-left:9px;">                
                 <asp:ContentPlaceHolder ID="body" runat="server">
                 </asp:ContentPlaceHolder>
             </div>
