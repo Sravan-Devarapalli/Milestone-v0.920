@@ -20,6 +20,9 @@ namespace DataTransferObjects.ContextObjects
 
         [DataMember]
         public bool IncludeZeroCostEmployees { get; set; }
+
+        [DataMember]
+        public string TimeScaleIds { get; set; }
     }
 }
 
