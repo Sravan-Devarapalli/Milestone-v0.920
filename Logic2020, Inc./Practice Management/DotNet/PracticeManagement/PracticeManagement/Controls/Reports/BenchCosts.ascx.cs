@@ -41,7 +41,9 @@ namespace PraticeManagement.Controls.Reports
                         UserName = DataHelper.CurrentPerson.Alias,
                         PracticeIds = string.IsNullOrEmpty(cblPractices.SelectedItems) ? string.Empty : cblPractices.SelectedItems,
                         IncludeOverheads = chbIncludeOverHeads.Checked,
-                        IncludeZeroCostEmployees = chbIncludeZeroCostEmps.Checked
+                        IncludeZeroCostEmployees = chbIncludeZeroCostEmps.Checked,
+                        TimeScaleIds = string.IsNullOrEmpty(cblPayType.SelectedItems) ? string.Empty : cblPayType.SelectedItems
+                        
                     };
                     ViewState[ReportContextKey] = reportContext;
                 }
@@ -82,6 +84,7 @@ namespace PraticeManagement.Controls.Reports
             }
 
         }
+
         protected void btnSortConsultant_Click(object sender, EventArgs e)
         {
             var sortOrder = gvBenchCosts.Attributes[ConsultantNameSortOrder];
@@ -259,9 +262,17 @@ namespace PraticeManagement.Controls.Reports
             {
 
                 DataHelper.FillPracticeList(this.cblPractices, Resources.Controls.AllPracticesText);
+                DataHelper.FillTimescaleList(this.cblPayType, Resources.Controls.AllTypes);
+
+                SelectAllItems(this.cblPayType);
+                AddAttributesToCheckBoxes(this.cblPayType);
+
                 SelectAllItems(this.cblPractices);
                 AddAttributesToCheckBoxes(this.cblPractices);
-                DatabindGrid();
+                //DatabindGrid();
+                lblExternalPractices.Visible = false;
+                hrDirectorAndPracticeSeperator.Visible = false;
+                lblInternalPractices.Visible = false;
             }
             if (hdnFiltersChanged.Value == "false")
             {
@@ -458,6 +469,14 @@ namespace PraticeManagement.Controls.Reports
             ReportContext = null;
             BenchList = null;
             DatabindGrid();
+
+            if (chbSeperateInternalExternal.Checked)
+            {
+                lblExternalPractices.Visible = true;
+                hrDirectorAndPracticeSeperator.Visible = true;
+                lblInternalPractices.Visible = true;
+            }
+
             gvBenchCosts.Attributes[ConsultantNameSortOrder] = Descending;
             gvBenchCosts.Attributes[PracticeSortOrder] = Ascending;
             gvBenchCosts.Attributes[StatusSortOrder] = Ascending;
@@ -506,6 +525,7 @@ namespace PraticeManagement.Controls.Reports
         protected void btnResetFilter_Click(object sender, EventArgs e)
         {
             SelectAllItems(cblPractices);
+            SelectAllItems(cblPayType);
             mpStartDate.SelectedYear = DateTime.Today.Year;
             mpStartDate.SelectedMonth = DateTime.Today.Month;
             mpEndDate.SelectedYear = DateTime.Today.Year;
