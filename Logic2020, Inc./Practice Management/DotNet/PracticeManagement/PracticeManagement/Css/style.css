@@ -423,8 +423,8 @@ ul.main-sub-menu li:hover a
 
 .main-content
 {
-    padding: 10px;
-    display:inline-block;
+    padding: 8px 4px 8px 4px;
+    /*display:inline-block;*/
     width:98%
 }
 
