@@ -1347,6 +1347,11 @@ namespace DataAccess
                     command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, context.PracticeIds);
                 }
 
+                if (context.TimeScaleIds != null)
+                {
+                    command.Parameters.AddWithValue(Constants.ParameterNames.TimeScaleIdsParam, context.TimeScaleIds);
+                }
+
                 connection.Open();
 
                 using (SqlDataReader reader = command.ExecuteReader())
