@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
   <siteMapNode url="" roles="*">
-    <siteMapNode url="Temp.aspx?from=Projects" title="Projects" description="Company Performance page" >
+    <siteMapNode url="~/Projects.aspx?from=toolbar" title="Projects" description="Company Performance page" >
       <siteMapNode url="~/Projects.aspx" title="Summary" description="Show url" />
       <siteMapNode url="~/GroupBy.aspx" title="Group By..."  description="Show url"/>
       <siteMapNode url="~/RevenueGoals.aspx" title="Revenue Goals" description="Show url" />
     </siteMapNode>
-    <siteMapNode url="Temp.aspx?from=Opportunities" title="Opportunities" description="Opportunity List page" >
+    <siteMapNode url="~/OpportunityList.aspx?from=toolbar" title="Opportunities" description="Opportunity List page" >
       <siteMapNode url="~/OpportunityList.aspx" title="Summary" description="Show url" />
       <siteMapNode url="~/DiscussionReview1.aspx" title="Discussion Review 1" description="Show url" />
       <siteMapNode url="~/DiscussionReview2.aspx" title="Discussion Review 2" description="Show url" />
