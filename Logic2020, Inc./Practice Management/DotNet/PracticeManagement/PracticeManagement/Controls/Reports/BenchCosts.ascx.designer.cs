@@ -94,15 +94,6 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.WebControls.CheckBox chbIncludeOverHeads;
         
         /// <summary>
-        /// lblOverheads control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblOverheads;
-        
-        /// <summary>
         /// custPeriod control.
         /// </summary>
         /// <remarks>
@@ -119,6 +110,15 @@ namespace PraticeManagement.Controls.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator custPeriodLengthLimit;
+        
+        /// <summary>
+        /// lblOverheads control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblOverheads;
         
         /// <summary>
         /// btnUpdateView control.
