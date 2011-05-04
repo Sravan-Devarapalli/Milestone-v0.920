@@ -123,10 +123,50 @@ namespace PraticeManagement
 
         private void SetPageTitle()
         {
-            string pagePath = ((System.Web.UI.TemplateControl)(Page)).AppRelativeVirtualPath;
-            string pageName = pagePath.Substring(2, pagePath.Length - 7);
-            lblCurrentPage.Text = pageName.Replace('/', '-'); 
-            //lblCurrentPage.Text = Page.Header.Title;
+            string pagetitle = GetPageTitle(smdsMain.Provider.RootNode, string.Empty, Request.RawUrl);
+            if (!string.IsNullOrEmpty(pagetitle))
+            {
+                lblCurrentPage.Text = pagetitle;
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(Page.Header.Title))
+                {
+                    string pagetTitle = Page.Header.Title.Replace("Practice Management - ", string.Empty);
+                    if (pagetTitle != "Welcome to Practice Management")
+                    {
+                        lblCurrentPage.Text = pagetTitle;
+                        return;
+                    }
+                }
+                lblCurrentPage.Text = string.Empty;
+            }
+        }
+
+        private string GetPageTitle(SiteMapNode siteMapNode, string pageNavPath, string url)
+        {
+
+            if (url.Contains(siteMapNode.Url) && !string.IsNullOrEmpty(siteMapNode.Url))
+            {
+                return pageNavPath + (string.IsNullOrEmpty(pageNavPath) ? siteMapNode.Title : " / " + siteMapNode.Title);
+            }
+            else if (siteMapNode.ChildNodes.Count > 0)
+            {
+                foreach (SiteMapNode node in siteMapNode.ChildNodes)
+                {
+                    var tempstring = pageNavPath + (string.IsNullOrEmpty(pageNavPath) ? string.Empty : " / ") + siteMapNode.Title;
+                    var pageNavPathLocal = GetPageTitle(node, tempstring, url);
+                    if (!string.IsNullOrEmpty(pageNavPathLocal))
+                    {
+                        return pageNavPathLocal;
+                    }
+                }
+                return string.Empty;
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         private string GetMenuHtml()
