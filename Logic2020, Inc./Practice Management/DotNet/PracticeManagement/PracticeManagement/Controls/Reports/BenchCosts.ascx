@@ -59,10 +59,6 @@
                     <asp:CheckBox ID="chbIncludeOverHeads" runat="server" Style="width: 10px !important;"
                         Checked="true" onclick="EnableResetButton();" TextAlign="Left" />
                 </td>
-                <td align="left">
-                    <asp:Label ID="lblOverheads" Style="white-space: nowrap;" Text="Include Overheads in Calculations"
-                        runat="server" />
-                </td>
                 <td style="width: 5px;" align="left">
                     <asp:CustomValidator ID="custPeriod" runat="server" ErrorMessage="The Period Start must be less than or equal to the Period End"
                         ToolTip="The Period Start must be less than or equal to the Period End" Text="*"
@@ -72,8 +68,12 @@
                         ErrorMessage="The period length must be not more than {0} months." Text="*" EnableClientScript="false"
                         Display="Dynamic" OnServerValidate="custPeriodLengthLimit_ServerValidate" ValidationGroup="Filter"></asp:CustomValidator>
                 </td>
+                <td align="left" style="width:200px;">
+                    <asp:Label ID="lblOverheads" Style="white-space: nowrap;" Text="Include Overheads in Calculations"
+                        runat="server" />
+                </td>
                 <td align="right">
-                    <table>
+                    <table style="width:250px;">
                         <tr>
                             <td>
                                 <asp:Button ID="btnUpdateView" runat="server" Text="Update View" Width="100px" OnClick="btnUpdateView_Click"
