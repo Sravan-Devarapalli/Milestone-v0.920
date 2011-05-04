@@ -32,7 +32,9 @@ AS
 		@ExperimentalProjectsLocal BIT,
 		@CompletedProjectsLocal BIT,
 		@PracticeIdsLocal NVARCHAR(4000) = NULL,
-		@TimeScaleIdsLocal NVARCHAR(1000) = NULL
+		@TimeScaleIdsLocal NVARCHAR(1000) = NULL,
+		@IncludeOverheadsLocal BIT,
+		@IncludeZeroCostEmployeesLocal	BIT
 		
 	SELECT  @StartDateLocal=@StartDate,
 			@EndDateLocal=@EndDate,
@@ -43,12 +45,29 @@ AS
 			@ExperimentalProjectsLocal=@ExperimentalProjects,
 			@CompletedProjectsLocal = @CompletedProjects,
 			@PracticeIdsLocal=@PracticeIds,
-			@TimeScaleIdsLocal = @TimeScaleIds 
+			@TimeScaleIdsLocal = @TimeScaleIds,
+			@IncludeOverheadsLocal = @IncludeOverheads,
+			@IncludeZeroCostEmployeesLocal =@IncludeZeroCostEmployees 
 
 	DECLARE @DefaultMilestoneId INT
 	SELECT @DefaultMilestoneId  = (SELECT  TOP 1 MilestoneId
 									FROM [dbo].[DefaultMilestoneSetting])
 
+	DECLARE @PracticeIdsTable TABLE
+	(
+		PracticeId INT
+	)
+	INSERT INTO @PracticeIdsTable
+	SELECT ResultId 
+	FROM [dbo].[ConvertStringListIntoTable] (@PracticeIdsLocal)
+	
+	DECLARE @TimeScaleIdsTable TABLE
+	(
+		TimeScaleId INT
+	)
+	INSERT INTO @TimeScaleIdsTable
+	SELECT ResultId 
+	FROM [dbo].[ConvertStringListIntoTable] (@TimeScaleIdsLocal)
 
 	;WITH PersonBenchHoursDaily
 	AS
@@ -163,13 +182,12 @@ AS
 				ON OVH.TimescaleId = pay.Timescale AND cal.Date BETWEEN OVH.StartDate 
 				AND ISNULL(OVH.EndDate, dbo.GetFutureDate()) AND OVH.Inactive = 0
 		 WHERE DATEPART(DW, cal.[Date]) NOT IN(1,7)
-		 AND cal.Date BETWEEN @StartDateLocal AND @EndDateLocal
-		AND (p.PersonStatusId = 1 AND @ActivePersonsLocal = 1
-			 OR p.PersonStatusId = 3 AND @ProjectedPersonsLocal = 1)
-		AND (@PracticeIdsLocal IS NULL 
-				OR p.DefaultPractice IN (SELECT ResultId 
-										 FROM [dbo].[ConvertStringListIntoTable] (@PracticeIdsLocal)
-										 ))
+				AND cal.Date BETWEEN @StartDateLocal AND @EndDateLocal
+				AND (p.PersonStatusId = 1 AND @ActivePersonsLocal = 1
+					OR p.PersonStatusId = 3 AND @ProjectedPersonsLocal = 1)
+				AND (@PracticeIdsLocal IS NULL 
+					OR p.DefaultPractice IN (SELECT PracticeId FROM @PracticeIdsTable)
+					)
 		 GROUP BY P.PersonId,
 					cal.Date, 
 					pay.Timescale,
@@ -191,6 +209,7 @@ AS
 			PersonId,
 			Date,
 			CASE WHEN Timescale != 2 THEN 1 ELSE 2 END Timescale,
+			 Timescale TimescaleId,
 			RANK() OVER (PARTITION BY  PersonId, YEAR(Date), MONTH(Date) ORDER BY (CASE WHEN Timescale != 2 THEN 1 ELSE 2 END ) DESC)  AS RowNumber
 		FROM CTEFinancials
 	)
@@ -210,17 +229,16 @@ AS
 			FLHRD.Timescale  Timescale,
 			0.0 Revenue,
 			0.0 COGS,
-			CASE WHEN (-1*ISNULL(SUM((CASE @IncludeOverheads WHEN 1 THEN FLHRD.FLHR ELSE FLHRD.HourlyRate END) *(CASE WHEN R.BenchHours >0 Then R.BenchHours ELSE 0 END)),0))>0 THEN 0
-			ELSE (-1*ISNULL(SUM((CASE @IncludeOverheads WHEN 1 THEN FLHRD.FLHR ELSE FLHRD.HourlyRate END) *(CASE WHEN R.BenchHours >0 Then R.BenchHours ELSE 0 END)),0)) END Margin
+			CASE WHEN (-1*ISNULL(SUM((CASE @IncludeOverheadsLocal WHEN 1 THEN FLHRD.FLHR ELSE FLHRD.HourlyRate END) *(CASE WHEN R.BenchHours >0 Then R.BenchHours ELSE 0 END)),0))>0 THEN 0
+			ELSE (-1*ISNULL(SUM((CASE @IncludeOverheadsLocal WHEN 1 THEN FLHRD.FLHR ELSE FLHRD.HourlyRate END) *(CASE WHEN R.BenchHours >0 Then R.BenchHours ELSE 0 END)),0)) END Margin
 	FROM CTEFLHRDaily FLHRD
 	JOIN  PersonBenchHoursDaily R ON R.[Date] = FLHRD.Date AND R.PersonId = FLHRD.PersonId
 	JOIN Person P ON FLHRD.PersonId = P.PersonId
 	LEFT JOIN Practice pr ON P.DefaultPractice = pr.PracticeId
-	WHERE FLHRD.RowNumber = 1 
-		  AND (@TimeScaleIdsLocal IS NULL 
-					OR  FLHRD.Timescale IN(SELECT ResultId 
-											 FROM [dbo].[ConvertStringListIntoTable] (@TimeScaleIdsLocal)
-											 ))
+	WHERE FLHRD.RowNumber = 1    
+	AND (@TimeScaleIdsLocal IS NULL 
+					OR  FLHRD.TimescaleId IN  (SELECT TimeScaleId FROM @TimeScaleIdsTable)
+					)
 	GROUP BY FLHRD.PersonId,
 				YEAR(FLHRD.Date),
 				MONTH(FLHRD.Date),
@@ -233,27 +251,25 @@ AS
 				p.PersonStatusId,
 				p.SeniorityId,
 				FLHRD.Timescale
-	HAVING (SUM(ISNULL(R.BenchHours,0)) > 0 OR @IncludeZeroCostEmployees = 1)
+	HAVING (SUM(ISNULL(R.BenchHours,0)) > 0 OR @IncludeZeroCostEmployeesLocal = 1)
 	ORDER BY FLHRD.PersonId, p.LastName, p.FirstName, YEAR(FLHRD.Date), MONTH(FLHRD.Date)
 
 	/*
 Person Status:
 
 PersonStatusId	Name
-1	Active
-2	Terminated
-3	Projected
-4	Inactive
-
-
+1				Active
+2				Terminated
+3				Projected
+4				Inactive
 
 Project Status:
 
 ProjectStatusId	Name
-1	Inactive
-2	Projected
-3	Active
-4	Completed
-5	Experimental
+1				Inactive
+2				Projected
+3				Active
+4				Completed
+5				Experimental
 	*/
 
