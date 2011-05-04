@@ -43,7 +43,7 @@ namespace PraticeManagement.Controls.Reports
                         IncludeOverheads = chbIncludeOverHeads.Checked,
                         IncludeZeroCostEmployees = chbIncludeZeroCostEmps.Checked,
                         TimeScaleIds = string.IsNullOrEmpty(cblPayType.SelectedItems) ? string.Empty : cblPayType.SelectedItems
-                        
+
                     };
                     ViewState[ReportContextKey] = reportContext;
                 }
@@ -265,10 +265,7 @@ namespace PraticeManagement.Controls.Reports
                 DataHelper.FillTimescaleList(this.cblPayType, Resources.Controls.AllTypes);
 
                 SelectAllItems(this.cblPayType);
-                AddAttributesToCheckBoxes(this.cblPayType);
-
                 SelectAllItems(this.cblPractices);
-                AddAttributesToCheckBoxes(this.cblPractices);
                 //DatabindGrid();
                 lblExternalPractices.Visible = false;
                 hrDirectorAndPracticeSeperator.Visible = false;
@@ -282,6 +279,8 @@ namespace PraticeManagement.Controls.Reports
             {
                 btnResetFilter.Attributes.Remove("disabled");
             }
+            AddAttributesToCheckBoxes(this.cblPayType);
+            AddAttributesToCheckBoxes(this.cblPractices);
         }
 
         private void DatabindGrid()
@@ -468,8 +467,8 @@ namespace PraticeManagement.Controls.Reports
         {
             ReportContext = null;
             BenchList = null;
+            divBenchCostsInternal.Visible = gvBenchCosts.Visible = true;
             DatabindGrid();
-
             if (chbSeperateInternalExternal.Checked)
             {
                 lblExternalPractices.Visible = true;
@@ -540,10 +539,11 @@ namespace PraticeManagement.Controls.Reports
             ReportContext = null;
             BenchList = null;
 
-            DatabindGrid();
-            gvBenchCosts.Attributes[ConsultantNameSortOrder] = Descending;
-            gvBenchCosts.Attributes[PracticeSortOrder] = Ascending;
-            gvBenchCosts.Attributes[StatusSortOrder] = Ascending;
+            //DatabindGrid();
+            //gvBenchCosts.Attributes[ConsultantNameSortOrder] = Descending;
+            //gvBenchCosts.Attributes[PracticeSortOrder] = Ascending;
+            //gvBenchCosts.Attributes[StatusSortOrder] = Ascending;
+            divBenchCostsInternal.Visible = lblExternalPractices.Visible = gvBenchCosts.Visible = false;
             hdnFiltersChanged.Value = "false";
             btnResetFilter.Attributes.Add("disabled", "true");
         }
