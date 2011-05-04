@@ -144,6 +144,10 @@
         function FadeOutLabel() {
             $("#" + "<%= lblSaved.ClientID%>").fadeOut(10000);
             document.getElementById("<%= lblSaved.ClientID%>").value = "";
+            var divResultDescription = $("#" + "<%= divResultDescription.ClientID%>");
+            setTimeout(function () {
+                divResultDescription.hide();
+            }, 10000);
         }
 
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
@@ -879,7 +883,7 @@
                                     </div>
                                     <table style="width: 100%; background: #e2ebff;">
                                         <tr>
-                                            <td style="padding: 4px; height:35px; width: 64%;">
+                                            <td style="padding: 4px; height: 35px; width: 64%;">
                                                 <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
                                                 <asp:ValidationSummary ID="vsumOpportunity" runat="server" ValidationGroup="Opportunity"
                                                     EnableClientScript="false" HeaderText="Please fill required fields to save an opportunity." />
@@ -890,16 +894,16 @@
                                                 <asp:ValidationSummary ID="vsumHasPersons" runat="server" ValidationGroup="HasPersons"
                                                     DisplayMode="BulletList" EnableClientScript="false" HeaderText="Unable to convert opportunity due to the following errors:" />
                                             </td>
-                                            <td style="padding: 4px; height:35px; width: 13%;">
+                                            <td style="padding: 4px; height: 35px; width: 13%;">
                                                 <asp:Button ID="btnSave" runat="server" Text="Save Changes" OnClick="btnSave_Click" />
                                             </td>
-                                            <td style="padding: 4px; height:35px; width: 13%;">
+                                            <td style="padding: 4px; height: 35px; width: 13%;">
                                                 <asp:Button ID="btnCancelChanges" runat="server" Text="Cancel Changes" OnClientClick="if(getDirty()){return true;}else{return false;}"
                                                     OnClick="btnCancelChanges_Click" />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3" style="padding: 4px; width: 100%;" >
+                                            <td colspan="3" style="padding: 4px; width: 100%;">
                                             </td>
                                         </tr>
                                     </table>
