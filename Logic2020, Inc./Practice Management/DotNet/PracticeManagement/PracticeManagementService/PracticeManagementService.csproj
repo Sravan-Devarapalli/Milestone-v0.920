@@ -102,6 +102,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AttachmentService.asmx" />
     <Content Include="CalendarService.svc" />
     <Content Include="ClientService.svc" />
     <Content Include="DefaultCommissionService.svc" />
@@ -125,6 +126,10 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="AttachmentService.asmx.cs">
+      <DependentUpon>AttachmentService.asmx</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="AuthService.svc.cs">
       <DependentUpon>AuthService.svc</DependentUpon>
