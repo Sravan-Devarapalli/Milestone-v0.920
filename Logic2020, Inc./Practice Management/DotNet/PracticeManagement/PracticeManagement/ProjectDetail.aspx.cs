@@ -13,6 +13,11 @@ using PraticeManagement.DefaultCommissionService;
 using PraticeManagement.ProjectService;
 using PraticeManagement.Utils;
 using BillingInfo = DataTransferObjects.BillingInfo;
+using System.Text;
+using System.IO;
+using System.Web;
+using System.Drawing;
+using PraticeManagement.AttachmentService;
 
 namespace PraticeManagement
 {
@@ -22,6 +27,7 @@ namespace PraticeManagement
 
         private const string ProjectIdFormat = "projectId={0}";
         private const string ProjectKey = "Project";
+        private const string ProjectAttachmentHandlerUrl = "~/Controls/Projects/ProjectAttachmentHandler.ashx?ProjectId={0}&FileName={1}";
 
         #endregion
 
@@ -416,6 +422,38 @@ namespace PraticeManagement
 
         }
 
+        protected void cvProjectAttachment_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = true;
+            if (fuProjectAttachment.HasFile)
+            {
+                string extension = System.IO.Path.GetExtension(fuProjectAttachment.FileName);
+                if (!(extension.ToLowerInvariant() == ".pdf"))
+                {
+                    args.IsValid = false;
+                }
+            }
+        }
+
+        protected void cvalidatorProjectAttachment_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = true;
+            if (fuProjectAttachment.HasFile)
+            {
+                string extension = System.IO.Path.GetExtension(fuProjectAttachment.FileName);
+                if (extension.ToLowerInvariant() == ".pdf")
+                {
+                    int size = Convert.ToInt32(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Project, "AttachmentFileSize"));
+                    if (fuProjectAttachment.PostedFile.ContentLength > size)
+                    {
+                        cvalidatorProjectAttachment.ErrorMessage = "File Must be less than " + size + " Bytes.";
+                        cvalidatorProjectAttachment.ToolTip = "File Must be less than " + size + " Bytes.";
+                        args.IsValid = false;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Determines whether the project status can be changed to or from the specified value by a non-administrator.
         /// </summary>
@@ -500,20 +538,28 @@ namespace PraticeManagement
 
         private int SaveData()
         {
+            AttachmentService.ProjectAttachment attachment = PopulateProjectAttachment();
+
             Project project = new Project();
             PopulateData(project);
             using (ProjectServiceClient serviceClient = new ProjectServiceClient())
             {
                 try
                 {
-                    return serviceClient.SaveProjectDetail(project, User.Identity.Name);
+                    int result = serviceClient.SaveProjectDetail(project, User.Identity.Name);
+
+                    AttachmentService.AttachmentService svc = new AttachmentService.AttachmentService();
+                    svc.SaveProjectAttachment(attachment, result);
+                 
+                    return result;
                 }
-                catch (CommunicationException)
+                catch (CommunicationException ex)
                 {
                     serviceClient.Abort();
                     throw;
                 }
             }
+            
         }
 
         protected override void Display()
@@ -534,9 +580,7 @@ namespace PraticeManagement
             }
             else
             {
-                //gvPeople.Visible = false;
-                //gvPeople.DataBind();
-
+                
                 // Default values for new projects.
                 bool userIsAdministrator =
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
@@ -651,6 +695,12 @@ namespace PraticeManagement
 
                 ddlDirector.SelectedValue = selectedDirector.Value;
             }
+
+            if (project.Attachment != null && !string.IsNullOrEmpty(project.Attachment.AttachmentFileName))
+            {
+                hlnkProjectAttachment.Text = project.Attachment.AttachmentFileName;
+                hlnkProjectAttachment.NavigateUrl = string.Format(ProjectAttachmentHandlerUrl, project.Id.ToString(), project.Attachment.AttachmentFileName);
+            }
         }
 
         private void PopulateSalesPersonDropDown()
@@ -694,7 +744,6 @@ namespace PraticeManagement
                     ddlProjectManager.SelectedValue = managerId;
             }
         }
-
 
         private void DisplayPracticeManagementCommissions(Project project)
         {
@@ -818,6 +867,19 @@ namespace PraticeManagement
             project.BillingInfo = billingInfo.Info;
             if (ddlDirector.SelectedIndex > 0)
                 project.Director = new Person { Id = int.Parse(ddlDirector.SelectedValue) };
+                        
+        }
+
+        private AttachmentService.ProjectAttachment PopulateProjectAttachment()
+        {
+            if (fuProjectAttachment.HasFile)
+            {
+                AttachmentService.ProjectAttachment attachment = new AttachmentService.ProjectAttachment();
+                attachment.AttachmentFileName = fuProjectAttachment.FileName;
+                attachment.AttachmentData = fuProjectAttachment.FileBytes;
+                return attachment;
+            }
+            return null;
         }
 
         private void PopulatePracticeManagementCommission(Project project)
@@ -904,6 +966,7 @@ namespace PraticeManagement
 
             ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
         }
+
 
         #endregion
 
