@@ -221,6 +221,7 @@
     <Content Include="SecuritySetting.aspx" />
     <Content Include="Service References\ActivityLogService\ActivityLogService.disco" />
     <Content Include="Controls\CompanyLogoImage.ashx" />
+    <Content Include="Controls\Projects\ProjectAttachmentHandler.ashx" />
     <None Include="PracticeManagementStrongNameKey.snk" />
     <None Include="Properties\DataSources\DataTransferObjects.CompanyLogo1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.TimeEntryPersonProjects.datasource" />
@@ -232,6 +233,10 @@
     <None Include="Properties\DataSources\DataTransferObjects.ProjectsGroupedByPerson.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.ProjectsGroupedByPractice.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.TimeEntry.TimeEntrySums.datasource" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Service References\ActivityLogService\ActivityLogService1.disco" />
     <None Include="Service References\AuthService\AuthService1.disco" />
     <Content Include="Service References\CalendarService\CalendarService.disco" />
@@ -622,6 +627,7 @@
     <None Include="Service References\OpportunityService\OpportunityService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService.disco" />
     <Content Include="TimeEntrySetting.aspx" />
+    <None Include="Web References\AttachmentService\AttachmentService.disco" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -653,6 +659,11 @@
     </None>
     <None Include="Service References\TimescaleService\TimescaleService5.xsd">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AttachmentService\AttachmentService.wsdl" />
+    <None Include="Web References\AttachmentService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -859,6 +870,9 @@
     <Compile Include="Controls\Opportunities\ProposedResources.ascx.designer.cs">
       <DependentUpon>ProposedResources.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Projects\ProjectAttachmentHandler.ashx.cs">
+      <DependentUpon>ProjectAttachmentHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="DiscussionReview1.aspx.cs">
       <DependentUpon>DiscussionReview1.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -879,6 +893,11 @@
     </Compile>
     <Compile Include="GuestPages\ChangePasswordError.aspx.designer.cs">
       <DependentUpon>ChangePasswordError.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Reports\Expenses.aspx.cs">
       <DependentUpon>Expenses.aspx</DependentUpon>
@@ -2030,6 +2049,11 @@
     <Compile Include="Utils\TimeEntryHelper.cs" />
     <Compile Include="Utils\UrlResolverUtil.cs" />
     <Compile Include="Utils\WCFClientUtility.cs" />
+    <Compile Include="Web References\AttachmentService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ClientList.aspx" />
@@ -2684,6 +2708,22 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="MemberPages\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://localhost/PracticeManagementService/AttachmentService.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\AttachmentService\</RelPath>
+      <UpdateFromURL>http://localhost/PracticeManagementService/AttachmentService.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>PraticeManagement_AttachmentService_AttachmentService</CachedSettingsPropName>
+    </WebReferenceUrl>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
