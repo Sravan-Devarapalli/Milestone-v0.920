@@ -193,6 +193,7 @@ namespace DataAccess
         private const string PayPersonIdColumn = "PayPersonId";
         private const string PracticeNameColumn = "PracticeName";
         private const string IsMinimumLoadFactorColumn = "IsMinimumLoadFactor";
+        private const string TimeScaleChangeStatusColumn = "TimeScaleChangeStatus";
 
         #endregion
 
@@ -1524,6 +1525,7 @@ namespace DataAccess
                 int timescaleIndex = reader.GetOrdinal(TimescaleColumn);
                 int practiceNameIndex = reader.GetOrdinal(PracticeNameColumn);
                 int IsCompanyInternalIndex = reader.GetOrdinal(Constants.ParameterNames.IsCompanyInternal);
+                int timeScaleChangeStatusIndex = reader.GetOrdinal(TimeScaleChangeStatusColumn);
 
                 int? currentId = null;
                 while (reader.Read())
@@ -1564,7 +1566,8 @@ namespace DataAccess
                                              Revenue = reader.GetDecimal(revenueIndex),
                                              Cogs = reader.GetDecimal(cogsIndex),
                                              GrossMargin = reader.GetDecimal(marginIndex),
-                                             Timescale = (TimescaleType)reader.GetInt32(timescaleIndex)
+                                             Timescale = (TimescaleType)reader.GetInt32(timescaleIndex),
+                                             TimescaleChangeStatus = reader.GetInt32(timeScaleChangeStatusIndex)
                                          };
 
                     person.Status = new PersonStatus
