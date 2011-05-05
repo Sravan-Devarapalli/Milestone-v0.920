@@ -145,6 +145,12 @@ namespace DataTransferObjects
         [DataMember]
         public TimescaleType Timescale { get; set; }
 
+        /// <summary>
+        /// Used in bench costs page for bench persons.
+        /// </summary>
+        [DataMember]
+        public int TimescaleChangeStatus { get; set; }
+
         #endregion
 
         #region Calculated Values
