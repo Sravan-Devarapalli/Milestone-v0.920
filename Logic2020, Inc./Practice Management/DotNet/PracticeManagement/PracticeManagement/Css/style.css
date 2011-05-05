@@ -1056,20 +1056,19 @@ TD .spacing
 .pr-indicator
 {
     display: block;
-    height: 9px;
-    width: 9px;
+    height: 10px;
+    width: 10px;
     background-position: 0px 0px;
     background-repeat: no-repeat;
     background-image: url(../images/project-indicator.png);
     margin: 0px 0px 0px 5px;
 }
-
-.pr-internal
+.ActiveProjectWithoutSOW
 {
     display: block;
-    height: 9px;
-    width: 9px;
-    background-position: 0px -36px;
+    height: 10px;
+    width: 10px;
+    background-position: 0px -60px;
     background-repeat: no-repeat;
     background-image: url(../images/project-indicator.png);
     margin: 0px 0px 0px 5px;
@@ -1077,10 +1076,10 @@ TD .spacing
 
 .ProjectedProject
 {
-    background-position: 0px -27px;
+    background-position: 0px -30px;
     display: block;
-    height: 9px;
-    width: 9px;
+    height: 10px;
+    width: 10px;
     background-repeat: no-repeat;
     background-image: url(../images/project-indicator.png);
     margin: 0px 0px 0px 5px;
@@ -1088,20 +1087,20 @@ TD .spacing
 
 .ExperimentalProject
 {
-    background-position: 0px -18px;
+    background-position: 0px -20px;
     display: block;
-    height: 9px;
-    width: 9px;
+    height: 10px;
+    width: 10px;
     background-repeat: no-repeat;
     background-image: url(../images/project-indicator.png);
     margin: 0px 0px 0px 5px;
 }
 .CompletedProject
 {
-    background-position: 0px -9px;
+    background-position: 0px -10px;
     display: block;
-    height: 9px;
-    width: 9px;
+    height: 10px;
+    width: 10px;
     background-repeat: no-repeat;
     background-image: url(../images/project-indicator.png);
     margin: 0px 0px 0px 5px;
@@ -1110,8 +1109,8 @@ TD .spacing
 .AciveOpportunity
 {
     display: block;
-    height: 9px;
-    width: 9px;
+    height: 10px;
+    width: 10px;
     background-position: 0px 0px;
     background-repeat: no-repeat;
     background-image: url(../images/project-indicator.png);
@@ -1119,37 +1118,37 @@ TD .spacing
 
 .InactiveOpportunity
 {
-    background-position: 0px -27px;
+    background-position: 0px -30px;
     display: block;
-    height: 9px;
-    width: 9px;
+    height: 10px;
+    width: 10px;
     background-repeat: no-repeat;
     background-image: url(../images/project-indicator.png);
 }
 .WonOpportunity
 {
-    background-position: 0px -18px;
+    background-position: 0px -20px;
     display: block;
-    height: 9px;
-    width: 9px;
+    height: 10px;
+    width: 10px;
     background-repeat: no-repeat;
     background-image: url(../images/project-indicator.png);
 }
 .LostOpportunity
 {
-    background-position: 0px -9px;
+    background-position: 0px -10px;
     display: block;
-    height: 9px;
-    width: 9px;
+    height: 10px;
+    width: 10px;
     background-repeat: no-repeat;
     background-image: url(../images/project-indicator.png);
 }
 .ExperimentalOpportunity
 {
-    background-position: 0px -45px;
+    background-position: 0px -50px;
     display: block;
-    height: 9px;
-    width: 9px;
+    height: 10px;
+    width: 10px;
     background-repeat: no-repeat;
     background-image: url(../images/project-indicator.png);
 }
