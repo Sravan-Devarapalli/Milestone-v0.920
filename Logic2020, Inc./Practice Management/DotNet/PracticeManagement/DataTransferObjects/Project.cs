@@ -42,24 +42,24 @@ namespace DataTransferObjects
     }
 
     /// <summary>
-	/// Data Transfer Object for a Project entity
-	/// </summary>
-	[DataContract]
-	[Serializable]
-	[DebuggerDisplay("DataTransferObjects.Project; Name = {Name}")]
-	public class Project : IEquatable<Project>, IIdNameObject
-	{
-		#region Properties
+    /// Data Transfer Object for a Project entity
+    /// </summary>
+    [DataContract]
+    [Serializable]
+    [DebuggerDisplay("DataTransferObjects.Project; Name = {Name}")]
+    public class Project : IEquatable<Project>, IIdNameObject
+    {
+        #region Properties
 
-		/// <summary>
-		/// Gets or sets an unique identifier of the project int the system.
-		/// </summary>
-		[DataMember]
-		public int? Id
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets an unique identifier of the project int the system.
+        /// </summary>
+        [DataMember]
+        public int? Id
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets or sets an OpportunityId of the related Opportunity.
@@ -82,55 +82,55 @@ namespace DataTransferObjects
         }
 
 
-		/// <summary>
-		/// Gets or sets a reference to the client the project intended for.
-		/// </summary>
-		[DataMember]
-		public Client Client
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a reference to the client the project intended for.
+        /// </summary>
+        [DataMember]
+        public Client Client
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets a discount for the project.
-		/// </summary>
-		[DataMember]
-		public decimal Discount
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a discount for the project.
+        /// </summary>
+        [DataMember]
+        public decimal Discount
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets terms for the project.
-		/// </summary>
-		[DataMember]
-		public int Terms
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets terms for the project.
+        /// </summary>
+        [DataMember]
+        public int Terms
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets a name for the project.
-		/// </summary>
-		[DataMember]
-		public string Name
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a name for the project.
+        /// </summary>
+        [DataMember]
+        public string Name
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets a project's practice.
-		/// </summary>
-		[DataMember]
-		public Practice Practice
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a project's practice.
+        /// </summary>
+        [DataMember]
+        public Practice Practice
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets or sets a Project Number for the <see cref="Project"/>.
@@ -142,35 +142,35 @@ namespace DataTransferObjects
             set;
         }
 
-		/// <summary>
-		/// Gets or sets a project's Start Date.
-		/// </summary>
-		[DataMember]
-		public DateTime? StartDate
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a project's Start Date.
+        /// </summary>
+        [DataMember]
+        public DateTime? StartDate
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets a project's End Date.
-		/// </summary>
-		[DataMember]
-		public DateTime? EndDate
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a project's End Date.
+        /// </summary>
+        [DataMember]
+        public DateTime? EndDate
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets a list of the <see cref="Milestone"/>s for the <see cref="Project"/>.
-		/// </summary>
-		[DataMember]
-		public List<Milestone> Milestones
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a list of the <see cref="Milestone"/>s for the <see cref="Project"/>.
+        /// </summary>
+        [DataMember]
+        public List<Milestone> Milestones
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets or sets a list of the <see cref="MilestonePerson"/>s for the <see cref="Project"/>.
@@ -182,86 +182,86 @@ namespace DataTransferObjects
             set;
         }
 
-		/// <summary>
-		/// Gets or sets a project's sales commission
-		/// </summary>
-		[DataMember]
-		public List<Commission> SalesCommission
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a project's sales commission
+        /// </summary>
+        [DataMember]
+        public List<Commission> SalesCommission
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets a project's management commission.
-		/// </summary>
-		[DataMember]
-		public Commission ManagementCommission
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a project's management commission.
+        /// </summary>
+        [DataMember]
+        public Commission ManagementCommission
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets a <see cref="Project"/> status.
-		/// </summary>
-		[DataMember]
-		public ProjectStatus Status
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a <see cref="Project"/> status.
+        /// </summary>
+        [DataMember]
+        public ProjectStatus Status
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets the <see cref="Project"/>'s computed interest values.
-		/// </summary>
-		[DataMember]
-		public ComputedFinancials ComputedFinancials
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets the <see cref="Project"/>'s computed interest values.
+        /// </summary>
+        [DataMember]
+        public ComputedFinancials ComputedFinancials
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets a list of the projected financial indicators for the interest period.
-		/// </summary>
-		[DataMember]
-		public Dictionary<DateTime, ComputedFinancials> ProjectedFinancialsByMonth
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a list of the projected financial indicators for the interest period.
+        /// </summary>
+        [DataMember]
+        public Dictionary<DateTime, ComputedFinancials> ProjectedFinancialsByMonth
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets a Practice Manager Commission for the project.
-		/// </summary>
-		[DataMember]
-		[Obsolete]
-		public PracticeManagementCurrency PracticeManagerCommission
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a Practice Manager Commission for the project.
+        /// </summary>
+        [DataMember]
+        [Obsolete]
+        public PracticeManagementCurrency PracticeManagerCommission
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets an access level for the project.
-		/// </summary>
-		[DataMember]
-		public Seniority AccessLevel
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets an access level for the project.
+        /// </summary>
+        [DataMember]
+        public Seniority AccessLevel
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets a billing info for the project.
-		/// </summary>
-		[DataMember]
-		public BillingInfo BillingInfo
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a billing info for the project.
+        /// </summary>
+        [DataMember]
+        public BillingInfo BillingInfo
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets or sets a project manager for the project.
@@ -273,20 +273,20 @@ namespace DataTransferObjects
             set;
         }
 
-		/// <summary>
-		/// Gets or sets a bayer name.
-		/// </summary>
-		[DataMember]
-		public string BuyerName
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a bayer name.
+        /// </summary>
+        [DataMember]
+        public string BuyerName
+        {
+            get;
+            set;
+        }
 
-	    /// <summary>
-	    /// Gets or sets a project Group.
-	    /// </summary>
-	    [DataMember]
+        /// <summary>
+        /// Gets or sets a project Group.
+        /// </summary>
+        [DataMember]
         public ProjectGroup Group
         {
             get;
@@ -303,40 +303,43 @@ namespace DataTransferObjects
             set;
         }
         /// <summary>
-		/// Gets a default start date for a new milestone.
-		/// </summary>
-		public DateTime MilestoneDefaultStartDate
-		{
-			get
-			{
-				return Milestones != null && Milestones.Count > 0 ?
-					Milestones.Max(milestone => milestone.ProjectedDeliveryDate).AddDays(1) :
-					DateTime.Today;
-			}
-		}
+        /// Gets a default start date for a new milestone.
+        /// </summary>
+        public DateTime MilestoneDefaultStartDate
+        {
+            get
+            {
+                return Milestones != null && Milestones.Count > 0 ?
+                    Milestones.Max(milestone => milestone.ProjectedDeliveryDate).AddDays(1) :
+                    DateTime.Today;
+            }
+        }
 
         /// <summary>
         /// Milestones in this project are chargeable by default.
         /// </summary>
         [DataMember]
-        public bool IsChargeable { get; set; }              
+        public bool IsChargeable { get; set; }
 
-		#endregion
+        [DataMember]
+        public ProjectAttachment Attachment { get; set; }
+
+        #endregion
 
         #region Formatting
 
-	    public string DetailedProjectTitle
-	    {
-	        get
-	        {
-                return 
+        public string DetailedProjectTitle
+        {
+            get
+            {
+                return
                     String.Format(Constants.Formatting.ProjectDetailedNameFormat,
                                  ProjectNumber,
                                  Client.Name,
                                  BuyerName,
                                  Name);
-	        }
-	    }
+            }
+        }
 
         public string ProjectNameNumber
         {
