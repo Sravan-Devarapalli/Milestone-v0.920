@@ -606,8 +606,10 @@ namespace PraticeManagement
             string currentUrl = Request.Url.AbsoluteUri;
             if (!SelectedId.HasValue && OpportunityId.HasValue)
             {
-
-                return currentUrl.Substring(0, currentUrl.IndexOf('?')) + "?id=" + OpportunityId.Value + "&returnTo=OpportunityList.aspx";
+                if (currentUrl.IndexOf('?') > -1)
+                    return currentUrl.Substring(0, currentUrl.IndexOf('?')) + "?id=" + OpportunityId.Value + "&returnTo=OpportunityList.aspx";
+                else
+                    return currentUrl + "?id=" + OpportunityId.Value;
             }
             else
                 return currentUrl;
