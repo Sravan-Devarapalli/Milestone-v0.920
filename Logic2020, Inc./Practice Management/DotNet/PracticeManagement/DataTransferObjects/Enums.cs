@@ -19,7 +19,9 @@ namespace DataTransferObjects
         [EnumMember]
         Reports = 1,
         [EnumMember]
-        SMTP = 2
+        SMTP = 2,
+        [EnumMember]
+        Project = 3,
     }
 }
 
