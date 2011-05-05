@@ -2,11 +2,13 @@
 <siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
   <siteMapNode url="" roles="*">
     <siteMapNode url="~/Projects.aspx?from=toolbar" title="Projects" description="Company Performance page" >
+      <siteMapNode url="~/ProjectDetail.aspx" title="Add Project" description="Show url" />
       <siteMapNode url="~/Projects.aspx" title="Summary" description="Show url" />
       <siteMapNode url="~/GroupBy.aspx" title="Group By..."  description="Show url"/>
       <siteMapNode url="~/RevenueGoals.aspx" title="Revenue Goals" description="Show url" />
     </siteMapNode>
     <siteMapNode url="~/OpportunityList.aspx?from=toolbar" title="Opportunities" description="Opportunity List page" >
+      <siteMapNode url="~/OpportunityDetail.aspx" title="Add Opportunity" description="Show url" />
       <siteMapNode url="~/OpportunityList.aspx" title="Summary" description="Show url" />
       <siteMapNode url="~/DiscussionReview1.aspx" title="Discussion Review 1" description="Show url" />
       <siteMapNode url="~/DiscussionReview2.aspx" title="Discussion Review 2" description="Show url" />
@@ -15,7 +17,7 @@
       <siteMapNode url="Temp.aspx?from=Reports_Financial" title="Financial">
         <siteMapNode url="~/Reports/BenchCosts.aspx" title="Bench Costs" roles="Administrator" description="Show url" />
         <siteMapNode url="~/Reports/CommissionsAndRates.aspx?from=Financial" title="Commissions and Rates" roles="Administrator" />
-        <siteMapNode url="Temp.aspx?from=Financials_Expenses" title="Expenses" description="Expenses"  />
+        <siteMapNode url="~/Reports/Expenses.aspx" title="Expenses" description="Expenses"/>
         <siteMapNode url="~/Reports/PersonStats.aspx?from=Financial" title="Person Stats" roles="Administrator"  />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Resources" title="Resources" >
@@ -24,7 +26,7 @@
         <siteMapNode url="~/Reports/UtilizationTimeline.aspx" title="Consultants Util. Timeline" description="Show url" />
         <siteMapNode url="~/Reports/PersonStats.aspx" title="Person Stats" roles="Administrator" description="Show url" />
       </siteMapNode>
-      <siteMapNode url="Temp.aspx?from=Time Entry" title="Time Entry">
+      <siteMapNode url="Temp.aspx?from=Time Entry" title="Time">
         <siteMapNode url="~/Reports/TimeEntryReport.aspx" title="Generic Time Entry" roles="Administrator"  description="Show url"/>
         <siteMapNode url="~/Reports/TimeEntriesByProject.aspx?from=reports" title="Time Entry by Project" roles="Administrator" description="Show url" />
         <siteMapNode url="~/Reports/TimeEntriesByPerson.aspx?from=reports" title="Time Entry by Person"  description="Show url" />
@@ -50,7 +52,7 @@
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Financials" title="Financials" description="Financials" >
         <siteMapNode url="~/Config/Commissions.aspx" title="Commissions" description="Commissions"  />
-        <siteMapNode url="~/Config/Expenses.aspx?from=Financial" title="Expenses" description="Expenses"  />
+        <siteMapNode url="~/Config/Expenses.aspx" title="Expenses" description="Expenses"  />
         <siteMapNode url="~/Config/ExpenseCategories.aspx" title="Expense Categories" description="Expense Categories"  />
         <siteMapNode url="~/Config/Overheads.aspx" title="Overheads" description="Overhead List"  />
         <siteMapNode url="~/Config/RevenueGoals.aspx" title="Revenue Goals" description="Revenue Goals"  />
@@ -63,9 +65,10 @@
         <siteMapNode url="~/Config/SecurityRoles.aspx" title="Security Roles" description="Security Roles"  />
         <siteMapNode url="~/Config/SeniorityLevels.aspx" title="Seniority Levels" description="Seniority Levels"  />
       </siteMapNode>
-      <siteMapNode url="Temp.aspx?from=Time_Tracking" title="Time Tracking" description="Time Entry">
+      <siteMapNode url="Temp.aspx?from=Time_Tracking" title="Time" description="Time">
         <siteMapNode url="~/Config/CompanyHolidays.aspx" title="Company Holidays" description="Company Holidays"  />
         <siteMapNode url="~/Config/Notes.aspx" title="Notes" description="Notes"  />
+        <siteMapNode url="~/DefaultMilestoneSetting.aspx" title="Default Time Entry Project" description="Default Time Entry Project"  />
         <siteMapNode url="~/Config/TimeTypes.aspx" title="Time Types" description="TimeTypes"  />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Troubleshooting" title="Troubleshooting" description="Troubleshooting">
