@@ -938,6 +938,7 @@ namespace DataAccess
                     int projectGroupIdIndex = -1;
                     int projectGroupNameIndex = -1;
                     int groupInUseIndex = -1;
+                    int attachmentFileNameIndex = -1;
                     try
                     {
                         projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
@@ -966,6 +967,15 @@ namespace DataAccess
                     catch
                     {
                         salesPersonNameIndex = -1;
+                    }
+
+                    try
+                    {
+                        attachmentFileNameIndex = reader.GetOrdinal(Constants.ColumnNames.FileName);
+                    }
+                    catch
+                    {
+                        attachmentFileNameIndex = -1;
                     }
 
                     while (reader.Read())
@@ -1019,6 +1029,17 @@ namespace DataAccess
                                 project.SalesPersonName = string.Empty;
                             }
                         }
+                        if (attachmentFileNameIndex >= 0)
+                        {
+                            try
+                            {
+                                project.Attachment = new ProjectAttachment { AttachmentFileName = reader.GetString(attachmentFileNameIndex) };
+                            }
+                            catch
+                            {
+                            }
+                        }
+
                         project.Client = new Client
                                              {
                                                  Id = reader.GetInt32(clientIdIndex),
@@ -1639,6 +1660,71 @@ namespace DataAccess
             }
             return monthNode;
         }
+
+        public static void SaveProjectAttachmentData(ProjectAttachment attachment, int projectId)
+        {
+            
+             var connection = new SqlConnection(DataSourceHelper.DataConnection);
+           
+
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.SaveProjectAttachment, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.AttachmentFileName, !string.IsNullOrEmpty(attachment.AttachmentFileName) ? (object)attachment.AttachmentFileName : DBNull.Value);
+                command.Parameters.Add(Constants.ParameterNames.AttachmentData, SqlDbType.VarBinary, -1);
+                command.Parameters[Constants.ParameterNames.AttachmentData].Value = attachment.AttachmentData != null ? (object)attachment.AttachmentData : DBNull.Value;
+
+                connection.Open();
+                command.ExecuteNonQuery();
+
+            }
+        }
+
+        public static byte[] GetProjectAttachmentData(int projectId)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.GetProjectAttachmentData, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+
+                    connection.Open();
+
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    try
+                    {
+                        Byte[] AttachmentData = null;
+
+                        if (reader.HasRows)
+                        {
+                            int AttachmentDataIndex = reader.GetOrdinal(Constants.ColumnNames.AttachmentDataColumn);
+
+
+                            while (reader.Read())
+                            {
+                                AttachmentData = (byte[])reader[AttachmentDataIndex];
+                            }
+                        }
+
+                        return AttachmentData;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+            }
+
+
+        }
+       
     }
 }
 
