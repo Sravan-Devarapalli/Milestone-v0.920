@@ -105,9 +105,7 @@ AS
 			AND (p.PersonStatusId = 1 AND @ActivePersonsLocal = 1
 				 OR p.PersonStatusId = 3 AND @ProjectedPersonsLocal = 1)
 			AND (@PracticeIdsLocal IS NULL 
-					OR p.DefaultPractice IN (SELECT ResultId 
-											 FROM [dbo].[ConvertStringListIntoTable] (@PracticeIdsLocal)
-											 )
+					OR p.DefaultPractice IN (SELECT PracticeId FROM @PracticeIdsTable)
 				)
 		GROUP BY p.PersonId,cal.Date
 	),
@@ -210,10 +208,16 @@ AS
 			Date,
 			CASE WHEN Timescale != 2 THEN 1 ELSE 2 END Timescale,
 			 Timescale TimescaleId,
-			RANK() OVER (PARTITION BY  PersonId, YEAR(Date), MONTH(Date) ORDER BY (CASE WHEN Timescale != 2 THEN 1 ELSE 2 END ) DESC)  AS RowNumber
+			MAX(Date) OVER (PARTITION BY PersonId, YEAR(Date), MONTH(Date), (CASE WHEN Timescale != 2 THEN 1 ELSE 2 END )) TimeScaleMaxDate,
+			MIN(Date) OVER (PARTITION BY PersonId, YEAR(Date), MONTH(Date), (CASE WHEN Timescale != 2 THEN 1 ELSE 2 END )) TimeScaleMinDate,
+			MAX(Date) OVER(PARTITION BY PersonId, YEAR(Date), MONTH(Date)) MonthMaxDate,
+			MIN(Date) OVER(PARTITION BY PersonId, YEAR(Date), MONTH(Date)) MonthMinDate
 		FROM CTEFinancials
-	)
+	),
 
+CTEMonthlyFinancials
+AS
+(
 	SELECT FLHRD.PersonId,
 			P.LastName,
 			P.FirstName,
@@ -230,15 +234,20 @@ AS
 			0.0 Revenue,
 			0.0 COGS,
 			CASE WHEN (-1*ISNULL(SUM((CASE @IncludeOverheadsLocal WHEN 1 THEN FLHRD.FLHR ELSE FLHRD.HourlyRate END) *(CASE WHEN R.BenchHours >0 Then R.BenchHours ELSE 0 END)),0))>0 THEN 0
-			ELSE (-1*ISNULL(SUM((CASE @IncludeOverheadsLocal WHEN 1 THEN FLHRD.FLHR ELSE FLHRD.HourlyRate END) *(CASE WHEN R.BenchHours >0 Then R.BenchHours ELSE 0 END)),0)) END Margin
+			ELSE (-1*ISNULL(SUM((CASE @IncludeOverheadsLocal WHEN 1 THEN FLHRD.FLHR ELSE FLHRD.HourlyRate END) *(CASE WHEN R.BenchHours >0 Then R.BenchHours ELSE 0 END)),0)) END Margin,
+			SUM(ISNULL(R.BenchHours,0)) MonthBenchHours,
+			RANK() OVER (PARTITION BY  FLHRD.PersonId, YEAR(FLHRD.Date), MONTH(FLHRD.Date) ORDER BY (CASE WHEN Timescale != 2 THEN 1 ELSE 2 END ) DESC)  AS RowNumber,
+			TimeScaleMaxDate,
+			TimeScaleMinDate,
+			MonthMaxDate,
+			MonthMinDate
 	FROM CTEFLHRDaily FLHRD
 	JOIN  PersonBenchHoursDaily R ON R.[Date] = FLHRD.Date AND R.PersonId = FLHRD.PersonId
 	JOIN Person P ON FLHRD.PersonId = P.PersonId
 	LEFT JOIN Practice pr ON P.DefaultPractice = pr.PracticeId
-	WHERE FLHRD.RowNumber = 1    
-	AND (@TimeScaleIdsLocal IS NULL 
-					OR  FLHRD.TimescaleId IN  (SELECT TimeScaleId FROM @TimeScaleIdsTable)
-					)
+	WHERE   (@TimeScaleIdsLocal IS NULL 
+			OR  FLHRD.TimescaleId IN  (SELECT TimeScaleId FROM @TimeScaleIdsTable)
+		)
 	GROUP BY FLHRD.PersonId,
 				YEAR(FLHRD.Date),
 				MONTH(FLHRD.Date),
@@ -250,11 +259,48 @@ AS
 				p.TerminationDate,
 				p.PersonStatusId,
 				p.SeniorityId,
-				FLHRD.Timescale
-	HAVING (SUM(ISNULL(R.BenchHours,0)) > 0 OR @IncludeZeroCostEmployeesLocal = 1)
-	ORDER BY FLHRD.PersonId, p.LastName, p.FirstName, YEAR(FLHRD.Date), MONTH(FLHRD.Date)
+				FLHRD.Timescale,
+				TimeScaleMaxDate,
+				TimeScaleMinDate,
+				MonthMaxDate,
+				MonthMinDate
+	--HAVING (SUM(ISNULL(R.BenchHours,0)) > 0 OR @IncludeZeroCostEmployeesLocal = 1)
+	
+)
 
-	/*
+SELECT  PersonId,
+		LastName,
+		FirstName,
+		PracticeName,
+		IsCompanyInternal,
+		HireDate,
+		TerminationDate,
+		[Month],
+		MonthEnd,
+		PersonStatusId,
+		SeniorityId,
+		PersonStatusName,
+		Timescale,
+		Revenue,
+		COGS,
+		Margin,
+		CASE WHEN TimeScaleMinDate = MonthMinDate AND  TimeScaleMaxDate = MonthMaxDate THEN  0 -- No change of time scale
+			 WHEN TimeScaleMinDate = MonthMinDate AND TimeScaleMaxDate < MonthMaxDate  THEN 1  -- Salary  to $- hourly
+			 WHEN TimeScaleMinDate > MonthMinDate AND TimeScaleMaxDate = MonthMaxDate THEN 2 -- $- hourly to Salary
+			 ELSE 3 END -- Multiple switchins between Salary  and $- hourly
+			 AS TimeScaleChangeStatus
+			
+FROM 
+(SELECT DISTINCT MF1.*
+FROM CTEMonthlyFinancials MF1
+JOIN CTEMonthlyFinancials MF2
+ON MF1.PersonId = MF2.PersonId  AND MF2.RowNumber = 1
+		AND (MF2.MonthBenchHours > 0 OR @IncludeZeroCostEmployeesLocal = 1)
+WHERE MF1.RowNumber = 1
+		) Temp
+
+ ORDER BY  PersonId, [Month]
+/*
 Person Status:
 
 PersonStatusId	Name
