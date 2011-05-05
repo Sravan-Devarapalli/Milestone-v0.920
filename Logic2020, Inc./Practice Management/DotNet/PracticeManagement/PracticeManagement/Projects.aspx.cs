@@ -394,10 +394,16 @@ namespace PraticeManagement
                     // Determine whether to display the project in the list.
                     rowVisible = IsProjectVisible(project);
 
+
                     string cssClass = ProjectHelper.GetIndicatorClassByStatusId(project.Status.Id);
                     /*row.Attributes["class"] = row.Attributes["class"] == AlternatingRowCssClass ?
                                                 string.IsNullOrEmpty(cssClass) ? row.Attributes["class"] : string.Format("{0} {1}", cssClass, AlternatingRowCssClass) :
                                                 cssClass;*/
+
+                    if (project.Status.Id == 3 && project.Attachment == null)
+                    {
+                        cssClass = "ActiveProjectWithoutSOW";
+                    }
 
                     SeniorityAnalyzer personListAnalyzer = null;
 
