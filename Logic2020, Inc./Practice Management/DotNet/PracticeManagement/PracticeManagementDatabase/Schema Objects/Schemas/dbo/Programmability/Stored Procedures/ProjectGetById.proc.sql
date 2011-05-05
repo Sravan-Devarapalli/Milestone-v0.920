@@ -48,10 +48,12 @@ AS
 		   p.DirectorLastName,
 		   p.DirectorFirstName,
 		   pg.Name AS GroupName,
-		   1 InUse
+		   1 InUse,
+		   pa.[FileName]
 	  FROM dbo.v_Project AS p
 	  INNER JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	  INNER JOIN Person AS person ON p.PracticeManagerId = person.PersonId
+	  LEFT JOIN dbo.ProjectAttachment AS pa ON p.ProjectId = pa.ProjectId
 	  WHERE p.ProjectId = @ProjectId
        AND (   (@SalespersonId IS NULL AND @PracticeManagerId IS NULL)
 	        OR EXISTS (SELECT 1
