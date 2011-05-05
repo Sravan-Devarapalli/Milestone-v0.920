@@ -362,9 +362,12 @@ namespace PraticeManagement.Controls.Reports
             {
                 var project = e.Row.DataItem as Project;
                 bool rowVisible = false;
-
                 if (project != null)
                 {
+
+                    if (project.Id.HasValue && project.Id.Value == 3834)
+                    {
+                    }
                     var monthBegin =
                         new DateTime(ReportContext.Start.Year,
                             ReportContext.Start.Month,
@@ -422,10 +425,60 @@ namespace PraticeManagement.Controls.Reports
                                         if (interestValue.Value.Timescale == TimescaleType.Salary)
                                         {
                                             list.Add(Convert.ToDecimal(interestValue.Value.GrossMargin));
+                                            if (interestValue.Value.GrossMargin.Value == 0M)
+                                            {
+                                                e.Row.Cells[i].Attributes.Add("style", "color:green;");
+                                            }
                                         }
                                         else
                                         {
                                             list.Add(e.Row.Cells[i].Text);
+                                        }
+                                        string superScriptContent = string.Empty;
+                                        if (project.StartDate.HasValue
+                                            && project.StartDate.Value.Year == interestValue.Key.Year
+                                            && project.StartDate.Value.Month == interestValue.Key.Month
+                                            )
+                                        {
+                                            superScriptContent = "1";
+                                        }
+                                        if (project.EndDate.HasValue
+                                            && project.EndDate.Value.Year == interestValue.Key.Year
+                                            && project.EndDate.Value.Month == interestValue.Key.Month)
+                                        {
+                                            superScriptContent += (string.IsNullOrEmpty(superScriptContent) ? string.Empty : ",") + "2";
+                                        }
+                                        if (interestValue.Value.TimescaleChangeStatus > 0)
+                                        {
+                                            switch (interestValue.Value.TimescaleChangeStatus)
+                                            {
+                                                case 1: superScriptContent += (string.IsNullOrEmpty(superScriptContent) ? string.Empty : ",") + "3";
+                                                    break;
+                                                case 2:
+                                                case 3: superScriptContent += (string.IsNullOrEmpty(superScriptContent) ? string.Empty : ",") + "4";
+                                                    break;
+                                                default: break;
+                                            }
+                                        }
+                                        if (!string.IsNullOrEmpty(superScriptContent))
+                                        {
+                                            if (interestValue.Value.Timescale == TimescaleType.Salary)
+                                            {
+                                                if (interestValue.Value.GrossMargin.Value == 0M)
+                                                {
+                                                    e.Row.Cells[i].Text = "<span style='color:green;'>0.00" + "<sup style='font-size:11px;'>" + superScriptContent + "</sup></span>";
+                                                }
+                                                else
+                                                {
+                                                    e.Row.Cells[i].Text = "<span style='color:red;'>" + interestValue.Value.GrossMargin.ToString() +
+                                                                            "<sup style='font-size:11px;'>" + superScriptContent + "</sup></span>";
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                e.Row.Cells[i].Text += "<sup style='font-size:11px;'>" + superScriptContent + "</sup>";
+                                            }
                                         }
                                     }
                                     else
