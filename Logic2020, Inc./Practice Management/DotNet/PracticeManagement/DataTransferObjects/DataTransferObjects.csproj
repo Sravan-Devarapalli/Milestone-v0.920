@@ -177,6 +177,7 @@
     <Compile Include="PersonStatusType.cs" />
     <Compile Include="PracticeManagementCurrency.cs" />
     <Compile Include="PracticeManagerHistory.cs" />
+    <Compile Include="ProjectAttachment.cs" />
     <Compile Include="ProjectComparer.cs" />
     <Compile Include="ProjectExpense.cs" />
     <Compile Include="ProjectGroup.cs" />
