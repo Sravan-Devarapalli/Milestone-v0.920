@@ -247,6 +247,42 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CompareValidator compClientDiscount;
         
         /// <summary>
+        /// fuProjectAttachment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload fuProjectAttachment;
+        
+        /// <summary>
+        /// cvProjectAttachment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvProjectAttachment;
+        
+        /// <summary>
+        /// cvalidatorProjectAttachment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvalidatorProjectAttachment;
+        
+        /// <summary>
+        /// hlnkProjectAttachment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink hlnkProjectAttachment;
+        
+        /// <summary>
         /// lbOpportunity control.
         /// </summary>
         /// <remarks>
