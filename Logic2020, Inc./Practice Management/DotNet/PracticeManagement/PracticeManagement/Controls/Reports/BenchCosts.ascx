@@ -68,12 +68,12 @@
                         ErrorMessage="The period length must be not more than {0} months." Text="*" EnableClientScript="false"
                         Display="Dynamic" OnServerValidate="custPeriodLengthLimit_ServerValidate" ValidationGroup="Filter"></asp:CustomValidator>
                 </td>
-                <td align="left" style="width:200px;">
+                <td align="left" style="width: 200px;">
                     <asp:Label ID="lblOverheads" Style="white-space: nowrap;" Text="Include Overheads in Calculations"
                         runat="server" />
                 </td>
                 <td align="right">
-                    <table style="width:250px;">
+                    <table style="width: 250px;">
                         <tr>
                             <td>
                                 <asp:Button ID="btnUpdateView" runat="server" Text="Update View" Width="100px" OnClick="btnUpdateView_Click"
@@ -219,6 +219,42 @@
                 </ContentTemplate>
             </ajaxToolkit:TabPanel>
         </AjaxControlToolkit:TabContainer>
+    </asp:Panel>
+</div>
+<div class="buttons-block" style="padding-left: 15px">
+    <div style="padding-bottom: 10px">
+        <ajaxToolkit:CollapsiblePanelExtender ID="cpeLegend" runat="Server" TargetControlID="pnlLegend"
+            ImageControlID="btnExpandLegend" CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg"
+            CollapseControlID="btnExpandLegend" ExpandControlID="btnExpandLegend" Collapsed="True"
+            TextLabelID="lblLegend" />
+        <asp:Image ID="btnExpandLegend" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Legend" />
+        &nbsp;<asp:Label ID="lblLegend" runat="server" Text="Legend" />
+    </div>
+    <asp:Panel ID="pnlLegend" runat="server">
+        <table>
+            <tr>
+                <td style="padding-bottom: 5px;">
+                    <sup style='font-size:11px;'>1</sup> - Person was hired during this month.
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-bottom: 5px;">
+                    <sup style='font-size:11px;'>2</sup> - Person was terminated during this month.
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-bottom: 5px;">
+                    <sup style='font-size:11px;'>3</sup> - Person was changed from salaried to hourly compensation during this
+                    month.
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-bottom: 5px;">
+                    <sup style='font-size:11px;'>4</sup> - Person was changed from hourly to salaried compensation during this
+                    month.
+                </td>
+            </tr>
+        </table>
     </asp:Panel>
 </div>
 <br />
