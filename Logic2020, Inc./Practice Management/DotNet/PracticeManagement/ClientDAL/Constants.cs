@@ -9,6 +9,7 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string FileName = "FileName";
             public const string HoursInPeriod = "HoursInPeriod";
             public const string ProjectDiscount = "ProjectDiscount";
             public const string GrossHourlyBillRate = "GrossHourlyBillRate";
@@ -139,6 +140,7 @@
             public const string CogsColumn = "Cogs";
             public const string VacationHours = "VacationHours";
             public const string ProjectIdColumn = "ProjectId";
+            public const string AttachmentDataColumn = "AttachmentData";
             public const string ClientIdColumn = "ClientId";
             public const string DiscountColumn = "Discount";
             public const string TermsColumn = "Terms";
@@ -230,6 +232,8 @@
         /// </summary>
         public class ParameterNames
         {
+            public const string AttachmentFileName = "@FileName";            
+            public const string AttachmentData = "@AttachmentData";
             public const string OpportunityTransitionId = ColumnNames.OpportunityTransitionId;
             public const string TargetPerson = "@TargetPersonId";
             public const string NoteTargetId = "@NoteTargetId";
@@ -580,6 +584,7 @@
                 public const string ProjectGetById = "dbo.ProjectGetById";
                 public const string ProjectInsert = "dbo.ProjectInsert";
                 public const string ProjectUpdate = "dbo.ProjectUpdate";
+                public const string SaveProjectAttachment = "dbo.SaveProjectAttachment";
                 public const string ProjectSetStatus = "dbo.ProjectSetStatus";
                 public const string ProjectSearchText = "dbo.ProjectSearchText";
                 public const string CloneProject = "dbo.CloneProject";
@@ -591,6 +596,7 @@
                 public const string CategoryItemListByCategoryType = "dbo.CategoryItemListByCategoryType";
                 public const string CalculateBudgetForCategoryItems = "dbo.CalculateBudgetForCategoryItems";
                 public const string CategoryItemsSaveFromXML = "dbo.CategoryItemsSaveFromXML";
+                public const string GetProjectAttachmentData = "dbo.GetProjectAttachmentData";
             }
 
             public class MilestonePerson
