@@ -169,6 +169,7 @@
     <Content Include="Images\grayedArrow-Last.png" />
     <Content Include="Images\grayedArrow-Next.png" />
     <Content Include="Images\grayedArrow-Previous.png" />
+    <Content Include="Reports\Expenses.aspx" />
     <Content Include="RevenueGoals.aspx" />
     <Content Include="Controls\BudgetEntries.ascx" />
     <Content Include="Controls\ClientListControl.ascx" />
@@ -878,6 +879,13 @@
     </Compile>
     <Compile Include="GuestPages\ChangePasswordError.aspx.designer.cs">
       <DependentUpon>ChangePasswordError.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Expenses.aspx.cs">
+      <DependentUpon>Expenses.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Expenses.aspx.designer.cs">
+      <DependentUpon>Expenses.aspx</DependentUpon>
     </Compile>
     <Compile Include="RevenueGoals.aspx.cs">
       <DependentUpon>RevenueGoals.aspx</DependentUpon>
