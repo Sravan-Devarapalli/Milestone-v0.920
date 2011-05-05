@@ -21,6 +21,7 @@
     Project Details
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
+    <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
     <script type="text/javascript">
         function checkDirty(target, entityId) {
             if (showDialod()) {
@@ -29,6 +30,20 @@
             }
 
             return false;
+        }
+
+        function ShowPrompt() {
+            var hlnk = document.getElementById('<%= hlnkProjectAttachment.ClientID %>');
+            if (!(hlnk.href == "")) {
+                var result = confirm("SOW already exists for this project. Click Ok to replace the file or Cancel to continue without replacing.");
+                if (result == true) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            return true;
         }
     </script>
     <style type="text/css">
@@ -164,7 +179,7 @@
                                             AutoPostBack="true">
                                         </asp:DropDownList>
                                     </td>
-                                    <td colspan="2" style="white-space:nowrap">
+                                    <td colspan="2" style="white-space: nowrap">
                                         Practice Area
                                     </td>
                                     <td colspan="3">
@@ -190,7 +205,7 @@
                                     </td>
                                     <td>
                                     </td>
-                                    <td style="white-space:nowrap;">
+                                    <td style="white-space: nowrap;">
                                         Client Director
                                     </td>
                                     <td>
@@ -250,6 +265,25 @@
                                             ToolTip="A number with 2 decimal digits is allowed for the Client Discount."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="Project"
                                             Operator="DataTypeCheck" Type="Currency"></asp:CompareValidator>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Attach SOW
+                                    </td>
+                                    <td colspan="3" style="white-space:nowrap;">
+                                        <asp:FileUpload ID="fuProjectAttachment" BackColor="White" onchange="setDirty();"  onclick="return ShowPrompt();" 
+                                            runat="server" Width="375px"  Size="56" />
+                                        <asp:CustomValidator ID="cvProjectAttachment" runat="server" ControlToValidate="fuProjectAttachment"
+                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvProjectAttachment_OnServerValidate"
+                                            ValidationGroup="Project" Text="*" ToolTip="File Format must be PDF."
+                                            ErrorMessage="File Format must be PDF."></asp:CustomValidator>
+                                        <asp:CustomValidator ID="cvalidatorProjectAttachment" runat="server" ControlToValidate="fuProjectAttachment"
+                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvalidatorProjectAttachment_OnServerValidate"
+                                            ValidationGroup="Project" Text="*"></asp:CustomValidator>
+                                    </td>
+                                    <td colspan="5" style="padding-left:20px;">
+                                        <asp:HyperLink ID="hlnkProjectAttachment" runat="server"></asp:HyperLink>
                                     </td>
                                 </tr>
                                 <tr>
@@ -462,6 +496,9 @@
                 </tr>
             </table>
         </ContentTemplate>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="btnSave" />
+        </Triggers>
     </asp:UpdatePanel>
     <asp:ObjectDataSource ID="odsActivePersons" runat="server" SelectMethod="PersonListAllShort"
         TypeName="PraticeManagement.PersonService.PersonServiceClient">
