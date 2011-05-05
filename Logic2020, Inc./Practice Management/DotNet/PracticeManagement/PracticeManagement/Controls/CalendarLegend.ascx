@@ -9,7 +9,7 @@
             ExpandControlID="btnExpandCollapseFilter" Collapsed="True" TextLabelID="lblFilter" />
         <asp:Label ID="lblFilter" runat="server" Text="Legend" />&nbsp;
         <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg"
-            ToolTip="Expand Filters" />
+            ToolTip="Expand Legend" />
     </div>
     <asp:Panel CssClass="filters" ID="pnlFilters" runat="server">
         <table>
