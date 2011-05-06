@@ -22,22 +22,13 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::System.Web.UI.WebControls.HiddenField hdnOpportunityIdValue;
         
         /// <summary>
-        /// hdnPotentialResources control.
+        /// hdnProposedPersonIdsList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnPotentialResources;
-        
-        /// <summary>
-        /// hdnProposedResources control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnProposedResources;
+        protected global::System.Web.UI.WebControls.HiddenField hdnProposedPersonIdsList;
         
         /// <summary>
         /// hintDate control.
@@ -76,22 +67,13 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::System.Web.UI.WebControls.CheckBoxList cblPotentialResources;
         
         /// <summary>
-        /// btnAdd control.
+        /// divProposedResources control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAdd;
-        
-        /// <summary>
-        /// btnRemove control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnRemove;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divProposedResources;
         
         /// <summary>
         /// cblProposedResources control.
