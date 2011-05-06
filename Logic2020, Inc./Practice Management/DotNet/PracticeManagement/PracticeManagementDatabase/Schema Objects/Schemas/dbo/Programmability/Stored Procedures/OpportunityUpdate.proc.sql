@@ -16,11 +16,12 @@ CREATE PROCEDURE [dbo].[OpportunityUpdate]
 	@SendOut               NVARCHAR(512),
 	@OpportunityId         INT,
 	@UserLogin             NVARCHAR(255),
-    @ProjectId                 INT,
-    @OpportunityIndex          INT,
-	@OwnerId	       INT = NULL,
-	@GroupId	       INT,
-	@EstimatedRevenue  DECIMAL(18,2) 
+    @ProjectId             INT,
+    @OpportunityIndex      INT,
+	@OwnerId			   INT = NULL,
+	@GroupId			   INT,
+	@EstimatedRevenue	   DECIMAL(18,2),
+	@PersonIdList          NVARCHAR(MAX)
 )
 AS
 BEGIN
@@ -130,7 +131,21 @@ BEGIN
 				@PersonId = @PersonId,
 				@NoteText = @NoteText
 		END
+		
+		IF(@PersonIdList IS NOT NULL)
+		BEGIN
+			DELETE op
+			FROM OpportunityPersons op
+			LEFT JOIN [dbo].[ConvertStringListIntoTable] (@PersonIdList) AS p 
+			ON op.OpportunityId = @OpportunityId AND op.PersonId = p.ResultId
+			WHERE p.ResultId IS NULL and OP.OpportunityId = @OpportunityId
+
+			INSERT INTO OpportunityPersons
+			SELECT @OpportunityId ,P.ResultId
+			FROM [dbo].[ConvertStringListIntoTable] (@PersonIdList) AS p 
+			LEFT JOIN OpportunityPersons op
+			ON p.ResultId = op.PersonId AND op.OpportunityId=@OpportunityId
+			WHERE op.PersonId IS NULL 
+		END
 END
-
-
 
