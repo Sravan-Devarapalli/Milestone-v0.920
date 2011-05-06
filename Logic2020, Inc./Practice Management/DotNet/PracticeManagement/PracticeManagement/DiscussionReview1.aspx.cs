@@ -117,18 +117,6 @@ namespace PraticeManagement
             }
         }
 
-        private int? SelectedIndex
-        {
-            get
-            {
-                string index = Request.QueryString["index"];
-                int result;
-                if (!int.TryParse(index, out result))
-                    return null;
-                return result;
-            }
-        }
-
         private bool HasProposedPersons
         {
             get
@@ -158,17 +146,12 @@ namespace PraticeManagement
                 DataHelper.FillClientList(ddlClient, string.Empty);
                 DataHelper.FillSalespersonListOnlyActive(ddlSalesperson, string.Empty);
                 DataHelper.FillOpportunityStatusList(ddlStatus, string.Empty);
-
                 DataHelper.FillPracticeListOnlyActive(ddlPractice, string.Empty);
-
-                if (SelectedIndex.HasValue)
-                {
-                    lvOpportunities.SelectedIndex = SelectedIndex.Value;
-                }
 
                 LoadOpportunityDetails();
 
                 activityLog.OpportunityId = OpportunityId;
+
             }
 
             mlConfirmation.ClearMessage();
@@ -234,7 +217,9 @@ namespace PraticeManagement
             lvOpportunities.DataBind();
             activityLog.OpportunityId = OpportunityId;
             activityLog.Update();
-
+            upActivityLog.Update();
+            upTopBarPane.Update();
+            UpdatePanel1.Update();
         }
 
         #endregion
@@ -293,6 +278,7 @@ namespace PraticeManagement
 
             if (IsPostBack && Page.IsValid)
                 LoadOpportunityDetails();
+
         }
 
         public void imgBtnLast_OnClick(object sender, EventArgs e)
@@ -308,7 +294,10 @@ namespace PraticeManagement
             if (IsPostBack && Page.IsValid)
                 LoadOpportunityDetails();
 
+
         }
+
+        #endregion
 
         public void LoadOpportunityDetails()
         {
@@ -320,16 +309,20 @@ namespace PraticeManagement
                 FillControls();
 
             BindNotesData();
-
-            ucProposedResources.FillProposedResources();
-            ucProposedResources.FillPotentialResources();
+            PopulateProposedResources();
         }
 
-        #endregion
+        private void PopulateProposedResources()
+        {
+            ucProposedResources.FillProposedResources();
+            ucProposedResources.FillPotentialResources();
+            upProposedResources.Update();
+        }
 
         private void BindOpportunitiesData()
         {
             lvOpportunities.DataSource = OpportunitiesList;
+            upOpportunityList.Update();
         }
 
         private void BindNotesData()
@@ -337,6 +330,7 @@ namespace PraticeManagement
             var notes = ServiceCallers.Custom.Milestone(c => c.NoteListByTargetId(Convert.ToInt32(OpportunityId), 4));
             lvNotes.DataSource = notes;
             lvNotes.DataBind();
+            upNotes.Update();
         }
 
         private void InitSecurity()
@@ -455,7 +449,7 @@ namespace PraticeManagement
                                                                               User.Identity.Name, HasProposedPersons);
 
                     Response.Redirect(
-                            Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri + "?index=" + lvOpportunities.SelectedIndex));
+                            Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri));
                 }
                 catch (CommunicationException)
                 {
@@ -463,6 +457,20 @@ namespace PraticeManagement
                     throw;
                 }
             }
+        }
+
+        protected void ddlClient_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ddlClientGroup.Items.Clear();
+            if(!(ddlClient.SelectedIndex == 0))
+            {
+                int clientId = Convert.ToInt32(ddlClient.SelectedItem.Value);
+                var groups = ServiceCallers.Custom.Group(client => client.GroupListAll(clientId, null));
+                groups = groups.AsQueryable().Where(g => (g.IsActive == true)).ToArray();
+                DataHelper.FillListDefault(ddlClientGroup, string.Empty, groups, false);   
+            }
+
+            upOpportunityDetail.Update();
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
@@ -480,7 +488,7 @@ namespace PraticeManagement
                     LoadOpportunityDetails();
                 }
 
-                ScriptManager.RegisterClientScriptBlock(upOpportunityDetail, upOpportunityDetail.GetType(), "", "FadeOutLabel()", true);
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "", "FadeOutLabel()", true);
             }
 
             if (Page.IsValid)
@@ -488,6 +496,7 @@ namespace PraticeManagement
                 BindOpportunitiesData();
                 lvOpportunities.DataBind();
                 lvOpportunities.SelectedIndex = GetSelectedIndex(OpportunityId.Value);
+
             }
         }
 
@@ -509,11 +518,12 @@ namespace PraticeManagement
         protected void btnCancelChanges_Click(object sender, EventArgs e)
         {
             if (IsDirty)
-            {
+            {                
                 ClearDirty();
                 LoadOpportunityDetails();
                 tbNote.Text = "";
             }
+            btnSave.Enabled = false;
         }
 
         protected void btnAttachToProject_Click(object sender, EventArgs e)
@@ -583,6 +593,7 @@ namespace PraticeManagement
                         Cache.Remove(OPPORTUNITIES_LIST_KEY);
                         Cache.Remove(PreviousReportContext_Key);
                         Cache.Remove(DistinctPotentialBoldPersons_Key);
+                        btnSave.Enabled = false;
                     }
                     catch (CommunicationException ex)
                     {
@@ -604,6 +615,12 @@ namespace PraticeManagement
         protected override void Display()
         {
             FillControls();
+            if (Opportunity != null)
+            {
+                var groups = ServiceCallers.Custom.Group(client => client.GroupListAll(Opportunity.Client.Id, null));
+                groups = groups.AsQueryable().Where(g => (g.IsActive == true)).ToArray();
+                DataHelper.FillListDefault(ddlClientGroup, string.Empty, groups, false);
+            }
         }
 
         private void FillControls()
@@ -618,6 +635,9 @@ namespace PraticeManagement
                     PopulateControls(opportunity);
 
                     UpdateState(opportunity);
+
+                    upOpportunityDetail.Update();
+                    upDescription.Update();
                 }
             }
         }
@@ -707,6 +727,7 @@ namespace PraticeManagement
                         opportunity.Client != null && opportunity.Client.Id.HasValue
                             ? opportunity.Client.Id.Value.ToString()
                             : string.Empty));
+
             ddlPriority.SelectedIndex =
                 ddlPriority.Items.IndexOf(
                     ddlPriority.Items.FindByValue(opportunity.Priority.ToString()));
@@ -780,11 +801,18 @@ namespace PraticeManagement
 
         private void PopulateClientGroupDropDown()
         {
-            cddClientGroups.ContextKey = Opportunity.Group != null && Opportunity.Group.Id.HasValue
-                                             ? Opportunity.Group.Id.Value.ToString()
-                                             : "-1";
-            if (cddClientGroups.ContextKey == "-1")
-                cddClientGroups.SelectedValue = string.Empty;
+            if (Opportunity.Group != null && Opportunity.Group.Id.HasValue)
+            {
+                ListItem selectedGroup = ddlClientGroup.Items.FindByValue(Opportunity.Group.Id.ToString());
+                if (selectedGroup == null)
+                {
+                    selectedGroup = new ListItem(Opportunity.Group.Name, Opportunity.Group.Id.ToString());
+                    ddlClientGroup.Items.Add(selectedGroup);
+                    ddlClientGroup.SortByText();
+                }
+
+                ddlClientGroup.SelectedValue = selectedGroup.Value;
+            }
         }
 
         private void PopulateData(Opportunity opportunity)
@@ -830,6 +858,8 @@ namespace PraticeManagement
 
             if (dfOwner.SelectedManager != null)
                 opportunity.Owner = dfOwner.SelectedManager;
+
+            opportunity.ProposedPersonIdList = ucProposedResources.GetProposedPersonsIdsList();
         }
 
         protected static string GetFormattedEstimatedRevenue(Decimal? estimatedRevenue)
@@ -847,9 +877,9 @@ namespace PraticeManagement
 
         protected static string GetTruncatedOpportunityName(String Name)
         {
-            if (Name.Length > 27)
+            if (Name.Length > 32)
             {
-                Name = Name.Substring(0, 25) + "..";
+                Name = Name.Substring(0, 30) + "..";
             }
 
             return Name;
