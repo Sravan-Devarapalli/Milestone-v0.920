@@ -441,6 +441,10 @@ namespace DataAccess
                     Constants.ParameterNames.GroupIdParam,
                     opportunity.Group == null ? (object)DBNull.Value : opportunity.Group.Id);
 
+                command.Parameters.AddWithValue(
+                    Constants.ParameterNames.PersonIdListParam,
+                    opportunity.ProposedPersonIdList == null ? (object)DBNull.Value : opportunity.ProposedPersonIdList);
+
                 try
                 {
                     connection.Open();
