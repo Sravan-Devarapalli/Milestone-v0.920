@@ -156,11 +156,11 @@
         }
 
     </script>
-    <asp:UpdatePanel ID="upOpportunityDetail" runat="server">
-        <ContentTemplate>
-            <table class="CompPerfTable WholeWidth">
-                <tr>
-                    <td colspan="2" style="background: #e2ebff; width: 100%; border-bottom: 1px solid black;">
+    <table class="CompPerfTable WholeWidth">
+        <tr>
+            <td colspan="2" style="background: #e2ebff; width: 100%; border-bottom: 1px solid black;">
+                <asp:UpdatePanel ID="upTopBarPane" UpdateMode="Conditional" runat="server">
+                    <ContentTemplate>
                         <table style="width: 100%; background: #e2ebff; text-align: center;">
                             <tr align="center">
                                 <td align="center" style="width: 100%; text-align: center;" colspan="4">
@@ -230,12 +230,16 @@
                                 </td>
                             </tr>
                         </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top" id="columnOpportunityList" runat="server" style="border-right: 2px solid black;
-                        width: 28%;">
-                        <div style="overflow-y: scroll; height: 832px">
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" id="columnOpportunityList" runat="server" style="border-right: 2px solid black;
+                width: 28%;">
+                <asp:UpdatePanel ID="upOpportunityList" UpdateMode="Conditional" runat="server">
+                    <ContentTemplate>
+                        <div style="overflow-y: scroll; height: 848px">
                             <asp:ListView ID="lvOpportunities" runat="server" SelectedIndex="0" DataKeyNames="Id"
                                 OnSelectedIndexChanging="lvOpportunities_SelectedIndexChanging" OnDataBound="lvOpportunities_OnDataBound">
                                 <LayoutTemplate>
@@ -347,11 +351,21 @@
                                 </EmptyDataTemplate>
                             </asp:ListView>
                         </div>
-                    </td>
-                    <td style="border-left: 2px solid black; padding-left: 5px; width: 72%;" valign="top">
-                        <table>
-                            <tr>
-                                <td>
+                    </ContentTemplate>
+                    <Triggers>
+                        <asp:AsyncPostBackTrigger ControlID="btnSave" />
+                        <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
+                        <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
+                        <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
+                    </Triggers>
+                </asp:UpdatePanel>
+            </td>
+            <td style="border-left: 2px solid black; padding-left: 5px; width: 72%;" valign="top">
+                <table>
+                    <tr>
+                        <td>                           
+                            <asp:UpdatePanel ID="upOpportunityDetail" UpdateMode="Conditional" runat="server">
+                                <ContentTemplate>
                                     <asp:Label ID="lblReadOnlyWarning" runat="server" ForeColor="Red" Visible="false">Since you are not the designated owner of this opportunity, you will not be able to make any changes.</asp:Label>
                                     <table style="padding-left: 5px;" class="PaddingClass WholeWidth">
                                         <tr style="height: 30px;">
@@ -389,6 +403,11 @@
                                                             <asp:RequiredFieldValidator ID="reqEndDate" runat="server" ControlToValidate="dpEndDate"
                                                                 ErrorMessage="End date is required to add Proposed Resources to project." ToolTip="End date is required to add Proposed Resources to project."
                                                                 ValidationGroup="HasPersons" Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>
+                                                            <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpEndDate"
+                                                                ControlToCompare="dpStartDate" ErrorMessage="The Projected End must be greater or equal to the Projected Start."
+                                                                ToolTip="The Projected End must be greate or equals to the Projected Start."
+                                                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                                                Operator="GreaterThanEqual" Type="Date" ValidationGroup="Opportunity"></asp:CompareValidator>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -443,13 +462,9 @@
                                                 <table width="100%">
                                                     <tr>
                                                         <td style="width: 97%">
-                                                            <asp:DropDownList ID="ddlClient" Width="100%" runat="server" onchange="EnableSaveButton();setDirty();"
+                                                            <asp:DropDownList ID="ddlClient" Width="100%" runat="server" AutoPostBack="true"
+                                                                onchange="EnableSaveButton();setDirty();" OnSelectedIndexChanged="ddlClient_SelectedIndexChanged"
                                                                 CssClass="WholeWidth" />
-                                                            <ajax:CascadingDropDown ID="cddClientGroups" runat="server" ParentControlID="ddlClient"
-                                                                TargetControlID="ddlClientGroup" Category="Group" LoadingText="Loading Groups..."
-                                                                EmptyText="No Groups found" EmptyValue="-1" ScriptPath="Scripts/CascadingDropDownBehavior.js"
-                                                                ServicePath="CompanyPerfomanceServ.asmx" ServiceMethod="GetDdlProjectGroupContents"
-                                                                UseContextKey="true" PromptText=" " PromptValue="-1" />
                                                         </td>
                                                         <td style="width: 3%">
                                                             <asp:RequiredFieldValidator ID="reqClient" runat="server" ControlToValidate="ddlClient"
@@ -621,15 +636,25 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    <br style="height: 1px;" />
-                                    <ajax:TabContainer ID="tcOpportunityDetails" runat="server" CssClass="CustomTabStyle"
-                                        ActiveTabIndex="0">
-                                        <ajax:TabPanel ID="tpDescription" runat="server">
-                                            <HeaderTemplate>
-                                                <span class="bg"><a href="#"><span>Description</span></a></span>
-                                            </HeaderTemplate>
-                                            <ContentTemplate>
-                                                <div>
+                                </ContentTemplate>
+                                <Triggers>
+                                    <asp:AsyncPostBackTrigger ControlID="btnSave" />
+                                    <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
+                                    <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
+                                    <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
+                                </Triggers>
+                            </asp:UpdatePanel>
+                            <br style="height: 1px;" />
+                            <ajax:TabContainer ID="tcOpportunityDetails" runat="server" CssClass="CustomTabStyle"
+                                ActiveTabIndex="0">
+                                <ajax:TabPanel ID="tpDescription" runat="server">
+                                    <HeaderTemplate>
+                                        <span class="bg"><a href="#"><span>Description</span></a></span>
+                                    </HeaderTemplate>
+                                    <ContentTemplate>
+                                        <div style="width: 99%; height: 310px; padding-left: 4px; padding-right: 4px; overflow-y: auto;">
+                                            <asp:UpdatePanel ID="upDescription" UpdateMode="Conditional" runat="server">
+                                                <ContentTemplate>
                                                     <table class="WholeWidth">
                                                         <tr>
                                                             <td style="text-align: right">
@@ -650,6 +675,18 @@
                                                                 <br />
                                                             </td>
                                                         </tr>
+                                                    </table>
+                                                </ContentTemplate>
+                                                <Triggers>
+                                                    <asp:AsyncPostBackTrigger ControlID="btnSave" />
+                                                    <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
+                                                    <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
+                                                    <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
+                                                </Triggers>
+                                            </asp:UpdatePanel>
+                                            <asp:UpdatePanel ID="upNotes" UpdateMode="Conditional" runat="server">
+                                                <ContentTemplate>
+                                                    <table class="WholeWidth">
                                                         <tr>
                                                             <td style="padding: 2px 0px 2px 4px;">
                                                                 <b>Recent Notes</b>
@@ -793,40 +830,75 @@
                                                                 </table>
                                                             </td>
                                                         </tr>
-                                                        <uc:ProposedResources ID="ucProposedResources" runat="server" hintDateVisible="true" />
-                                                        <tr>
-                                                            <td align="center" style="padding: 10px 0px 0px 4px; width: 100%;">
-                                                                <asp:Button ID="btnConvertToProject" runat="server" Text="Convert This Opportunity To Project"
-                                                                    OnClick="btnConvertToProject_Click" OnClientClick="if (!confirmSaveDirty(true)) return false;" />&nbsp;
-                                                                <asp:Image ID="hintConvertProject" runat="server" ImageUrl="~/Images/hint.png" ToolTip="When this button is clicked, Practice Management will attempt to create a new Project with the basic information already contained in this Opportunity. If any Proposed Resources have been selected, they will be attached to the new Project as well. " />
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="center" style="padding: 6px 0px 0px 0px; width: 100%;">
-                                                                <asp:Button ID="btnAttachToProject" runat="server" Text="Attach This Opportunity to Existing Project"
-                                                                    OnClick="btnAttachToProject_Click" ToolTip="Attach This Opportunity to Existing Project" />
-                                                                <asp:HiddenField ID="hdnField" runat="server" />
-                                                                <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachToProject" runat="server" TargetControlID="hdnField"
-                                                                    CancelControlID="btnCancel" BackgroundCssClass="modalBackground" PopupControlID="pnlAttachToProject"
-                                                                    DropShadow="false" />
-                                                            </td>
-                                                        </tr>
                                                     </table>
-                                                </div>
-                                            </ContentTemplate>
-                                        </ajax:TabPanel>
-                                        <ajax:TabPanel ID="tpHistory" runat="server" Visible="true">
-                                            <HeaderTemplate>
-                                                <span class="bg"><a href="#"><span>History</span></a></span>
-                                            </HeaderTemplate>
+                                                </ContentTemplate>
+                                            </asp:UpdatePanel>
+                                        </div>
+                                    </ContentTemplate>
+                                </ajax:TabPanel>
+                                <ajax:TabPanel ID="tpHistory" runat="server" Visible="true">
+                                    <HeaderTemplate>
+                                        <span class="bg"><a href="#"><span>History</span></a></span>
+                                    </HeaderTemplate>
+                                    <ContentTemplate>
+                                        <asp:UpdatePanel ID="upActivityLog" UpdateMode="Conditional" runat="server">
                                             <ContentTemplate>
-                                                <div style="width: 99%; height: 500px; padding-left: 4px; padding-right: 4px; overflow-y: auto;">
+                                                <div style="width: 99%; height: 310px; padding-left: 4px; padding-right: 4px; overflow-y: auto;">
                                                     <uc:ActivityLogControl runat="server" ID="activityLog" DisplayDropDownValue="Opportunity"
                                                         DateFilterValue="Year" ShowDisplayDropDown="false" ShowProjectDropDown="false" />
                                                 </div>
                                             </ContentTemplate>
-                                        </ajax:TabPanel>
-                                    </ajax:TabContainer>
+                                            <Triggers>
+                                                <asp:AsyncPostBackTrigger ControlID="btnSave" />
+                                                <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
+                                                <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
+                                                <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
+                                            </Triggers>
+                                        </asp:UpdatePanel>
+                                    </ContentTemplate>
+                                </ajax:TabPanel>
+                            </ajax:TabContainer>
+                            <table class="WholeWidth" style="background: #e2ebff;">
+                                <tr>
+                                    <td style="padding-left: 8px; padding-right: 8px;">
+                                        <asp:UpdatePanel ID="upProposedResources" UpdateMode="Conditional" runat="server">
+                                            <ContentTemplate>
+                                                <table class="WholeWidth" style="width: 99%;">
+                                                    <uc:ProposedResources ID="ucProposedResources" runat="server" hintDateVisible="true" />
+                                                </table>
+                                            </ContentTemplate>
+                                            <Triggers>
+                                                <asp:AsyncPostBackTrigger ControlID="btnSave" />
+                                                <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
+                                                <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
+                                                <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
+                                            </Triggers>
+                                        </asp:UpdatePanel>
+                                    </td>
+                                </tr>
+                            </table>
+                            <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server">
+                                <ContentTemplate>
+                                 <asp:HiddenField ID="hdnValueChanged" Value="false" runat="server" />
+                                    <table class="WholeWidth" style="background: #e2ebff;">
+                                        <tr>
+                                            <td align="center" style="padding: 10px 0px 0px 4px; width: 100%;">
+                                                <asp:Button ID="btnConvertToProject" runat="server" Text="Convert This Opportunity To Project"
+                                                    OnClick="btnConvertToProject_Click" OnClientClick="if (!confirmSaveDirty(true)) return false;" />&nbsp;
+                                                <asp:Image ID="hintConvertProject" runat="server" ImageUrl="~/Images/hint.png" ToolTip="When this button is clicked, Practice Management will attempt to create a new Project with the basic information already contained in this Opportunity. If any Proposed Resources have been selected, they will be attached to the new Project as well. " />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center" style="padding: 6px 0px 0px 0px; width: 100%;">
+                                                <asp:Button ID="btnAttachToProject" runat="server" Text="Attach This Opportunity to Existing Project"
+                                                    OnClick="btnAttachToProject_Click" ToolTip="Attach This Opportunity to Existing Project" />
+                                                <asp:HiddenField ID="hdnField" runat="server" />
+                                                <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachToProject" runat="server" TargetControlID="hdnField"
+                                                    CancelControlID="btnCancel" BackgroundCssClass="modalBackground" PopupControlID="pnlAttachToProject"
+                                                    DropShadow="false" />
+                                            </td>
+                                        </tr>
+                                    </table>
                                     <asp:HiddenField ID="hdnOpportunityId" runat="server" />
                                     <div style="background-color: #e2ebff; padding: 2px;">
                                         <asp:CustomValidator ID="custOpportunityNotSaved" runat="server" ErrorMessage="The opportunity must be saved at first."
@@ -907,61 +979,53 @@
                                             </td>
                                         </tr>
                                     </table>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-            <asp:HiddenField ID="hdnValueChanged" Value="false" runat="server" />
-            <asp:Panel ID="pnlAttachToProject" runat="server" BackColor="White" BorderColor="Black"
-                CssClass="ConfirmBoxClass" Style="display: none" BorderWidth="2px">
-                <table width="100%">
-                    <tr style="background-color: Gray; height: 27px;">
-                        <td align="center" style="white-space: nowrap; font-size: 14px; width: 100%">
-                            Attach This Opportunity to Existing Project
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            &nbsp;
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center" style="padding: 6px 6px 2px 2px;">
-                            <asp:DropDownList ID="ddlProjects" runat="server" AppendDataBoundItems="true" onchange="setDirty();"
-                                AutoPostBack="false" Style="width: 350px">
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            &nbsp;
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center" style="padding: 6px 6px 2px 2px; white-space: nowrap;">
-                            <asp:Button ID="btnAttach" runat="server" Text="Attach" OnClick="btnSave_Click" />
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <asp:Button ID="btnCancel" runat="server" Text="Cancel" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            &nbsp;
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
                         </td>
                     </tr>
                 </table>
-            </asp:Panel>
-        </ContentTemplate>
-        <Triggers>
-            <asp:AsyncPostBackTrigger ControlID="lvOpportunities" EventName="SelectedIndexChanging" />
-            <asp:AsyncPostBackTrigger ControlID="imgBtnNext" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="imgBtnPrevious" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="imgBtnFirst" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="imgBtnLast" EventName="Click" />
-        </Triggers>
-    </asp:UpdatePanel>
+            </td>
+        </tr>
+    </table>
+    <asp:Panel ID="pnlAttachToProject" runat="server" BackColor="White" BorderColor="Black"
+        CssClass="ConfirmBoxClass" Style="display: none" BorderWidth="2px">
+        <table width="100%">
+            <tr style="background-color: Gray; height: 27px;">
+                <td align="center" style="white-space: nowrap; font-size: 14px; width: 100%">
+                    Attach This Opportunity to Existing Project
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td align="center" style="padding: 6px 6px 2px 2px;">
+                    <asp:DropDownList ID="ddlProjects" runat="server" AppendDataBoundItems="true" onchange="setDirty();"
+                        AutoPostBack="false" Style="width: 350px">
+                    </asp:DropDownList>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td align="center" style="padding: 6px 6px 2px 2px; white-space: nowrap;">
+                    <asp:Button ID="btnAttach" runat="server" Text="Attach" OnClick="btnSave_Click" />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+            </tr>
+        </table>
+    </asp:Panel>
     <uc:LoadingProgress ID="lpOpportunityDetails" runat="server" />
 </asp:Content>
 
