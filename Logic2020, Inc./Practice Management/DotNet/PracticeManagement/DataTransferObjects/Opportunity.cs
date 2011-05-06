@@ -270,6 +270,13 @@ namespace DataTransferObjects
 
         }
 
+        [DataMember]
+        public string ProposedPersonIdList
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         #region Formatting
