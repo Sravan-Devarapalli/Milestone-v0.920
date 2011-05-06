@@ -13,13 +13,13 @@ namespace PraticeManagement {
     public partial class DiscussionReview1 {
         
         /// <summary>
-        /// upOpportunityDetail control.
+        /// upTopBarPane control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upOpportunityDetail;
+        protected global::System.Web.UI.UpdatePanel upTopBarPane;
         
         /// <summary>
         /// imgBtnFirst control.
@@ -148,6 +148,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.HtmlControls.HtmlTableCell columnOpportunityList;
         
         /// <summary>
+        /// upOpportunityList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upOpportunityList;
+        
+        /// <summary>
         /// lvOpportunities control.
         /// </summary>
         /// <remarks>
@@ -155,6 +164,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ListView lvOpportunities;
+        
+        /// <summary>
+        /// upOpportunityDetail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upOpportunityDetail;
         
         /// <summary>
         /// lblReadOnlyWarning control.
@@ -220,6 +238,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqEndDate;
         
         /// <summary>
+        /// compEndDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compEndDate;
+        
+        /// <summary>
         /// txtOpportunityName control.
         /// </summary>
         /// <remarks>
@@ -272,15 +299,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlClient;
-        
-        /// <summary>
-        /// cddClientGroups control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.CascadingDropDown cddClientGroups;
         
         /// <summary>
         /// reqClient control.
@@ -472,6 +490,15 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.TabPanel tpDescription;
         
         /// <summary>
+        /// upDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upDescription;
+        
+        /// <summary>
         /// custOppDesciption control.
         /// </summary>
         /// <remarks>
@@ -488,6 +515,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDescription;
+        
+        /// <summary>
+        /// upNotes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upNotes;
         
         /// <summary>
         /// lvNotes control.
@@ -544,6 +580,42 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator cvLen;
         
         /// <summary>
+        /// tpHistory control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel tpHistory;
+        
+        /// <summary>
+        /// upActivityLog control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upActivityLog;
+        
+        /// <summary>
+        /// activityLog control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.ActivityLogControl activityLog;
+        
+        /// <summary>
+        /// upProposedResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upProposedResources;
+        
+        /// <summary>
         /// ucProposedResources control.
         /// </summary>
         /// <remarks>
@@ -551,6 +623,24 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Opportunities.ProposedResources ucProposedResources;
+        
+        /// <summary>
+        /// UpdatePanel1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
+        
+        /// <summary>
+        /// hdnValueChanged control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnValueChanged;
         
         /// <summary>
         /// btnConvertToProject control.
@@ -596,24 +686,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.ModalPopupExtender mpeAttachToProject;
-        
-        /// <summary>
-        /// tpHistory control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.TabPanel tpHistory;
-        
-        /// <summary>
-        /// activityLog control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.ActivityLogControl activityLog;
         
         /// <summary>
         /// hdnOpportunityId control.
@@ -731,24 +803,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancelChanges;
-        
-        /// <summary>
-        /// hdnValueChanged control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnValueChanged;
-        
-        /// <summary>
-        /// hdnSaveClicked control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnSaveClicked;
         
         /// <summary>
         /// pnlAttachToProject control.
