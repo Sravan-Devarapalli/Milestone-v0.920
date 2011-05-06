@@ -99,7 +99,7 @@ namespace PraticeManagement.Controls.Opportunities
             {
                 Cache[PreviousReportContext_Key] = value;
             }
-           
+
         }
 
         private List<string> DistinctPotentialBoldPersons
@@ -172,53 +172,18 @@ namespace PraticeManagement.Controls.Opportunities
             return clientList.ToString();
         }
 
-        protected void btnAdd_Click(object sender, EventArgs e)
+        public string GetProposedPersonsIdsList()
         {
-            var selectedList = GetSelectedItems(cblPotentialResources, cblProposedResources);
-            if (!string.IsNullOrEmpty(selectedList))
-            {
-                using (var serviceClient = new OpportunityServiceClient())
-                {
-                    serviceClient.OpportunityPersonInsert(OpportunityId.Value, selectedList);
-                }
-            }
-
-            FillProposedResources();
-            cblPotentialResources.DataBind();
-        }
-
-        protected void btnRemove_Click(object sender, EventArgs e)
-        {
-            var selectedList = GetSelectedItems(cblProposedResources);
-
-            using (var serviceClient = new OpportunityServiceClient())
-            {
-                serviceClient.OpportunityPersonDelete(OpportunityId.Value, selectedList);
-            }
-
-            FillProposedResources();
-            cblPotentialResources.DataBind();
+            return hdnProposedPersonIdsList.Value;
         }
 
         public void cblPotentialResources_DataBound(object sender, EventArgs e)
-        {
-            List<string> distinctPotentialBoldPersons = GetDistinctPotentialBoldPersons();
-
+        {           
             foreach (ListItem item in cblPotentialResources.Items)
             {
                 item.Selected = false;
                 item.Enabled = true;
 
-                //item.Attributes["onclick"] = "SethdnPotentialResourcesValueToTrue();";
-
-                foreach (string name in distinctPotentialBoldPersons)
-                {
-                    if (item.Text == name)
-                    {
-                        item.Attributes["style"] = "font-weight:bold;";
-                        break;
-                    }
-                }
                 foreach (ListItem item2 in cblProposedResources.Items)
                 {
                     if (item2.Value == item.Value)
@@ -229,27 +194,50 @@ namespace PraticeManagement.Controls.Opportunities
                     }
                 }
             }
+        }
 
+        public void AddAttributesAndBoldPotentialResourcesPersons()
+        {
+            List<string> distinctPotentialBoldPersons = GetDistinctPotentialBoldPersons();
+
+            foreach (ListItem item in cblPotentialResources.Items)
+            {
+                item.Attributes["PersonId"] = item.Value;
+
+                foreach (string name in distinctPotentialBoldPersons)
+                {
+                    if (item.Text == name)
+                    {
+                        item.Attributes["style"] = "font-weight:bold;";
+                        break;
+                    }
+                }
+            }
         }
 
         public void cblProposedResources_DataBound(object sender, EventArgs e)
         {
-            //foreach (ListItem item in cblProposedResources.Items)
-            //{
-            //    item.Attributes["onclick"] = "SethdnProposedResourcesValueToTrue();";
-            //}
+
+        }
+
+        private void AddAttributesTocblProposedResources()
+        {
+            foreach (ListItem item in cblProposedResources.Items)
+            {
+                item.Attributes["PersonId"] = item.Value;
+            }
         }
 
         private List<string> GetDistinctPotentialBoldPersons()
         {
             if (
-                PreviousReportContext != null && 
+                PreviousReportContext != null &&
                 DistinctPotentialBoldPersons != null &&
                 PreviousReportContext.Start == ReportContext.Start &&
                 PreviousReportContext.End == ReportContext.End &&
                 PreviousReportContext.ActivePersons == ReportContext.ActivePersons &&
                 PreviousReportContext.ProjectedPersons == ReportContext.ProjectedPersons &&
-                PreviousReportContext.ActiveProjects == ReportContext.ActiveProjects  &&
+                PreviousReportContext.ActiveProjects == ReportContext.ActiveProjects &&
                 PreviousReportContext.ProjectedProjects == ReportContext.ProjectedProjects &&
                 PreviousReportContext.ExperimentalProjects == ReportContext.ExperimentalProjects &&
                 PreviousReportContext.UserName == ReportContext.UserName &&
@@ -307,7 +295,8 @@ namespace PraticeManagement.Controls.Opportunities
 
         protected void Page_Prerender(object sender, EventArgs e)
         {
-
+                AddAttributesTocblProposedResources();
+                AddAttributesAndBoldPotentialResourcesPersons();
         }
 
         public void FillPotentialResources()
@@ -327,3 +316,4 @@ namespace PraticeManagement.Controls.Opportunities
         }
     }
 }
+
