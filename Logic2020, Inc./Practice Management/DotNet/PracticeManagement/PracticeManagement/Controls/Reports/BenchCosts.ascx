@@ -118,16 +118,6 @@
                     </style>
                     <table cellpadding="5" cellspacing="2" border="0">
                         <tr align="center">
-                            <td style="width: 125px; border-bottom: 1px solid black;" valign="top">
-                                Person Status
-                            </td>
-                            <td style="width: 30px;">
-                            </td>
-                            <td style="width: 150px; border-bottom: 1px solid black;" valign="top">
-                                Pay Type
-                            </td>
-                            <td style="width: 30px;">
-                            </td>
                             <td style="width: 250px; border-bottom: 1px solid black;" colspan="2" valign="top">
                                 Project Type
                             </td>
@@ -140,23 +130,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <asp:CheckBox ID="cbActivePersons" runat="server" Text="Active Persons" Checked="True"
-                                    onclick="EnableResetButton();" />
-                            </td>
-                            <td>
-                            </td>
-                            <td class="floatRight" style="padding-top: 5px; padding-left: 3px;">
-                                <cc2:ScrollingDropDown ID="cblPayType" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
-                                    onclick="scrollingDropdown_onclick('cblPayType','Pay Type')" BackColor="White"
-                                    CellPadding="3" NoItemsType="Nothing" SetDirty="False" Width="200px" DropDownListType="Pay Type"
-                                    Height="100px" BorderWidth="0" />
-                                <ext:ScrollableDropdownExtender ID="sdePayType" runat="server" TargetControlID="cblPayType"
-                                    Width="200px" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png">
-                                </ext:ScrollableDropdownExtender>
-                            </td>
-                            <td>
-                            </td>
                             <td>
                                 <asp:CheckBox ID="chbActiveProjects" runat="server" AutoPostBack="false" Checked="True"
                                     onclick="EnableResetButton();" Text="Active" ToolTip="Include active projects into report" />
@@ -178,16 +151,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <asp:CheckBox ID="cbProjectedPersons" runat="server" Text="Projected Persons" Checked="true"
-                                    onclick="EnableResetButton();" />
-                            </td>
-                            <td>
-                            </td>
-                            <td>
-                            </td>
-                            <td>
-                            </td>
                             <td>
                                 <asp:CheckBox ID="chbProjectedProjects" runat="server" AutoPostBack="false" Checked="True"
                                     Text="Projected" ToolTip="Include projected projects into report" onclick="EnableResetButton();" />
