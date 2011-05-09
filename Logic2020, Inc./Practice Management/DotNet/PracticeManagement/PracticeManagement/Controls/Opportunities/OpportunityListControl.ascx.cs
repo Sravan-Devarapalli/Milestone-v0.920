@@ -9,6 +9,9 @@ using DataTransferObjects;
 using PraticeManagement.Utils;
 using System.Web.UI.HtmlControls;
 using AjaxControlToolkit;
+using System.Text;
+using PraticeManagement.OpportunityService;
+using PraticeManagement.Controls.Generic.Filtering;
 
 namespace PraticeManagement.Controls.Opportunities
 {
@@ -30,8 +33,6 @@ namespace PraticeManagement.Controls.Opportunities
         private const string Watermarker = "watermarker";
 
         public bool AllowAutoRedirectToDetails { get; set; }
-
-        public OpportunityListFilterMode FilterMode { get; set; }
 
         public int? TargetPersonId { get; set; }
 
@@ -89,11 +90,9 @@ namespace PraticeManagement.Controls.Opportunities
 
         public Opportunity[] GetOpportunities()
         {
-            return
-                FilterMode == OpportunityListFilterMode.GenericFilter ?
-                DataHelper.GetFilteredOpportunities()
-                :
-                DataHelper.GetOpportunitiesForTargetPerson(TargetPersonId);
+
+            return DataHelper.GetFilteredOpportunitiesForDiscussionReview2();
+
         }
 
         protected void lvOpportunities_Sorting(object sender, ListViewSortEventArgs e)
@@ -175,13 +174,29 @@ namespace PraticeManagement.Controls.Opportunities
                                 SortDirection.ToString() == SortDirection.Ascending.ToString() ? "up" : "down");
         }
 
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                ResetControls();
+                InitFilter();
+                FireFilterOptionsChanged();
+            }
+        }
+
         public void DatabindOpportunities()
         {
+            if (!IsPostBack)
+            {
+                var potentialPersons = ServiceCallers.Custom.Person(c => c.GetPersonListByStatusList("1,3", null));
+                cblPotentialResources.DataSource = potentialPersons.OrderBy(c => c.LastName);
+                cblPotentialResources.DataBind();
+            }
             var opportunities = GetOpportunities();
             lvOpportunities.DataSource = opportunities;
             lvOpportunities.DataBind();
+            lblOpportunitiesCount.Text = string.Format(lblOpportunitiesCount.Text, opportunities.Length);
 
-            updProposedResources.Visible = false;
             //  IsPostBack here means that method is called on postback
             //      so it means that it's coming from search and we should redirect if there's the only result
             if (IsPostBack && lvOpportunities.Items.Count == 1 && AllowAutoRedirectToDetails)
@@ -193,13 +208,6 @@ namespace PraticeManagement.Controls.Opportunities
             }
         }
 
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            if (!IsPostBack)
-            {
-                updProposedResources.Visible = false;
-            }
-        }
 
         protected string GetOpportunityDetailsLink(int opportunityId, int index)
         {
@@ -398,7 +406,7 @@ namespace PraticeManagement.Controls.Opportunities
                         int noteId = ServiceCallers.Custom.Milestone(client => client.NoteInsert(note));
 
                         txtNote.Attributes[NoteId] = noteId.ToString();
-                       
+
                         EditedOpportunityList.Add(opportunityId, txtNote.Text);
 
                         EditedOpportunityNoteIdList.Add(opportunityId, noteId);
@@ -422,91 +430,93 @@ namespace PraticeManagement.Controls.Opportunities
             args.IsValid = length > 0 && length <= 2000;
         }
 
-        protected void btnOppotunity_Click(object sender, EventArgs e)
+
+        protected void lvOpportunities_OnItemDataBound(object sender, ListViewItemEventArgs e)
         {
-            LinkButton btnOpportunityNumber = sender as LinkButton;
-            ListViewItem row = btnOpportunityNumber.NamingContainer as ListViewItem;
-
-            Button btn = row.FindControl("btnOpportunity")as Button; ;
-            ucProposedResources.OpportunityId = int.Parse(btn.Text);
-            updProposedResources.Update();
-            updProposedResources.Visible = true;
-
-            
-            int RowIndex = lvOpportunities.Items.IndexOf(row as ListViewDataItem);
-
-            HtmlTableRow SelectedRow = row.FindControl("trOpportunity") as HtmlTableRow;
-            SelectedRow.Style.Add("background-color", "#e2ebff");
-
-            if (!string.IsNullOrEmpty(hdnPreviouslyClickedRowIndex.Value))
+            if (e.Item.ItemType == ListViewItemType.DataItem)
             {
-                int previousRowIndex = Convert.ToInt32(hdnPreviouslyClickedRowIndex.Value);
-                if (previousRowIndex != RowIndex)
+                var datalist = e.Item.FindControl("dtlProposedPersons") as DataList;
+                var hdnProposedPersonsIndexes = e.Item.FindControl("hdnProposedPersonsIndexes") as HiddenField;
+                var oppty = (e.Item as ListViewDataItem).DataItem as Opportunity;
+                if (oppty != null && oppty.ProposedPersons != null)
                 {
-                    TextBox txtNote = lvOpportunities.Items[previousRowIndex].FindControl(NoteTextBoxID) as TextBox;
-                    TextBoxWatermarkExtender extender = lvOpportunities.Items[previousRowIndex].FindControl(Watermarker) as TextBoxWatermarkExtender;
-                    extender.BehaviorID = "behavior";
-                    HtmlTableRow previouslySelectedRow = lvOpportunities.Items[previousRowIndex].FindControl("trOpportunity") as HtmlTableRow;
-                    previouslySelectedRow.Style.Add("background-color", "");
+                    datalist.DataSource = oppty.ProposedPersons;
+                    datalist.DataBind();
                 }
-            }
-
-            hdnPreviouslyClickedRowIndex.Value = RowIndex.ToString();
-            TextBox txtNoteBox = ((Control)row).FindControl(NoteTextBoxID) as TextBox;
-            TextBoxWatermarkExtender extender1 = ((Control)row).FindControl(Watermarker) as TextBoxWatermarkExtender;
-            extender1.BehaviorID = string.Empty;
-            ucProposedResources.FillProposedResources();
-            ucProposedResources.FillPotentialResources();
-        }
-
-        public bool SaveAllNotes()
-        {
-            Page.Validate(valsum.ValidationGroup);
-            if (Page.IsValid)
-            {
-                foreach (ListViewItem item in lvOpportunities.Items)
+                if (oppty.ProposedPersons != null)
                 {
-                    TextBoxWatermarkExtender extender1 = item.FindControl(Watermarker) as TextBoxWatermarkExtender;
-                    extender1.BehaviorID = "";
-                    TextBox txtNote = item.FindControl(NoteTextBoxID) as TextBox;
-
-                    if (!string.IsNullOrEmpty(txtNote.Text) &&
-                        txtNote.Text != extender1.WatermarkText)
+                    hdnProposedPersonsIndexes.Value = GetPersonsIndexesString(oppty.ProposedPersons, cblPotentialResources);
+                }
+                if (!string.IsNullOrEmpty(oppty.OutSideResources))
+                {
+                    var hdnOutSideResources = e.Item.FindControl("hdnOutSideResources") as HiddenField;
+                    var ltrlOutSideResources = e.Item.FindControl("ltrlOutSideResources") as Literal;
+                    hdnOutSideResources.Value = oppty.OutSideResources;
+                    if (!string.IsNullOrEmpty(oppty.OutSideResources) && oppty.OutSideResources[oppty.OutSideResources.Length - 1] == ';')
                     {
-                        int opportunityId = int.Parse(txtNote.Attributes[OpportunityIdValue]);
-
-                        bool isSaved = EditedOpportunityList.Keys.Any(k => k == opportunityId);
-
-                        if (!isSaved)
-                        {
-                            var note = new Note
-                            {
-                                Author = new Person
-                                {
-                                    Id = DataHelper.CurrentPerson.Id
-                                },
-                                CreateDate = DateTime.Now,
-                                NoteText = txtNote.Text,
-                                Target = NoteTarget.Opportunity,
-                                TargetId = opportunityId
-                            };
-
-                            int noteId = ServiceCallers.Custom.Milestone(client => client.NoteInsert(note));
-
-                            txtNote.Attributes[NoteId] = noteId.ToString();
-
-                            EditedOpportunityList.Add(opportunityId, txtNote.Text);
-
-                            EditedOpportunityNoteIdList.Add(opportunityId, noteId);
-                        }
+                        oppty.OutSideResources = oppty.OutSideResources.Substring(0, oppty.OutSideResources.Length - 1);
                     }
-
+                    ltrlOutSideResources.Text = oppty.OutSideResources.Replace(";", "<br/>");
                 }
-
-                return true;
             }
-            return false;
         }
-        
+
+        private string GetPersonsIndexesString(List<Person> persons, CheckBoxList cblPotentialResources)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var person in persons)
+            {
+
+                if (person.Id.HasValue)
+                {
+                    var item = cblPotentialResources.Items.FindByValue(person.Id.Value.ToString());
+                    if (item != null)
+                    {
+                        sb.Append(cblPotentialResources.Items.IndexOf(
+                                         cblPotentialResources.Items.FindByValue(person.Id.Value.ToString())
+                                                                     ).ToString()
+                                   );
+                        sb.Append(',');
+                    }
+                }
+            }
+            return sb.ToString();
+        }
+
+        protected void btnSaveProposedResources_OnClick(object sender, EventArgs e)
+        {
+            int opportunityId;
+            if (Int32.TryParse(hdnCurrentOpportunityId.Value, out opportunityId))
+            {
+                var selectedList = GetProposedResources();
+
+                using (var serviceClient = new OpportunityServiceClient())
+                {
+                    serviceClient.OpportunityPersonInsert(opportunityId, selectedList, hdnProposedOutSideResources.Value);
+                }
+            }
+            hdnCurrentOpportunityId.Value = hdnProposedResourceIndexes.Value = string.Empty;
+        }
+
+        private string GetProposedResources()
+        {
+            //GetProposedResources
+            var clientList = new StringBuilder();
+            var indexStrings = hdnProposedResourceIndexes.Value.Split(',');
+
+            foreach (var indexstring in indexStrings)
+            {
+                int index;
+                if (Int32.TryParse(indexstring, out index))
+                {
+                    clientList.Append(cblPotentialResources.Items[index].Value).Append(',');
+                }
+            }
+
+            return clientList.ToString();
+        }
+
+
     }
 }
