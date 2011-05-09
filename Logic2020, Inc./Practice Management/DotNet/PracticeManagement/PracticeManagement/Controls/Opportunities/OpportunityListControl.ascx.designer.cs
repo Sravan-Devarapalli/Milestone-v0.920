@@ -22,6 +22,15 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::System.Web.UI.UpdatePanel UpdatePanel1;
         
         /// <summary>
+        /// lblOpportunitiesCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblOpportunitiesCount;
+        
+        /// <summary>
         /// lvOpportunities control.
         /// </summary>
         /// <remarks>
@@ -40,22 +49,67 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::System.Web.UI.WebControls.HiddenField hdnPreviouslyClickedRowIndex;
         
         /// <summary>
-        /// updProposedResources control.
+        /// cblPotentialResources control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel updProposedResources;
+        protected global::System.Web.UI.WebControls.CheckBoxList cblPotentialResources;
         
         /// <summary>
-        /// ucProposedResources control.
+        /// txtOutSideResources control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Opportunities.ProposedResources ucProposedResources;
+        protected global::System.Web.UI.WebControls.TextBox txtOutSideResources;
+        
+        /// <summary>
+        /// wmOutSideResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TextBoxWatermarkExtender wmOutSideResources;
+        
+        /// <summary>
+        /// hdnCurrentOpportunityId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnCurrentOpportunityId;
+        
+        /// <summary>
+        /// hdnProposedResourceIndexes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnProposedResourceIndexes;
+        
+        /// <summary>
+        /// hdnProposedOutSideResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnProposedOutSideResources;
+        
+        /// <summary>
+        /// btnSaveProposedResourcesHidden control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSaveProposedResourcesHidden;
         
         /// <summary>
         /// valsum control.
