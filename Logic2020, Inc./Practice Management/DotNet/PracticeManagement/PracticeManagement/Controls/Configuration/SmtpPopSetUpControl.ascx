@@ -52,7 +52,7 @@
                                     <asp:RangeValidator ID="rangPortNumber" runat="server" ControlToValidate="txtPortNumber"
                                         ErrorMessage="The Port Number must be  between 0 and 65535." ToolTip="The Port Number must be  between 0 and 65535."
                                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                        MinimumValue="0" MaximumValue="15000" Type="Integer" ValidationGroup="SmtpSetUp"></asp:RangeValidator>
+                                        MinimumValue="0" MaximumValue="65535" Type="Integer" ValidationGroup="SmtpSetUp"></asp:RangeValidator>
                                 </div>
                             </td>
                         </tr>
