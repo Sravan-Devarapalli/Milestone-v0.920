@@ -1334,9 +1334,15 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.Start, context.Start);
                 command.Parameters.AddWithValue(Constants.ParameterNames.End, context.End);
-                command.Parameters.AddWithValue(Constants.ParameterNames.ActivePersons, context.ActivePersons);
+                if (context.ActivePersons.HasValue)
+                {
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ActivePersons, context.ActivePersons.Value);
+                }
                 command.Parameters.AddWithValue(Constants.ParameterNames.ActiveProjects, context.ActiveProjects);
-                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectedPersons, context.ProjectedPersons);
+                if (context.ProjectedPersons.HasValue)
+                {
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectedPersons, context.ProjectedPersons.Value);
+                }
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectedProjects, context.ProjectedProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ExperimentalProjects, context.ExperimentalProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.CompletedProjects, context.CompletedProjects);
@@ -1346,11 +1352,6 @@ namespace DataAccess
                 if (context.PracticeIds != null)
                 {
                     command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, context.PracticeIds);
-                }
-
-                if (context.TimeScaleIds != null)
-                {
-                    command.Parameters.AddWithValue(Constants.ParameterNames.TimeScaleIdsParam, context.TimeScaleIds);
                 }
 
                 connection.Open();
