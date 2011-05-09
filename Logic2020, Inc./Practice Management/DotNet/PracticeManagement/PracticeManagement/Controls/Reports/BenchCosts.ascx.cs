@@ -32,8 +32,6 @@ namespace PraticeManagement.Controls.Reports
                     {
                         Start = mpStartDate.MonthBegin,
                         End = mpEndDate.MonthEnd,
-                        ActivePersons = cbActivePersons.Checked,
-                        ProjectedPersons = cbProjectedPersons.Checked,
                         ActiveProjects = chbActiveProjects.Checked,
                         ProjectedProjects = chbProjectedProjects.Checked,
                         ExperimentalProjects = chbExperimentalProjects.Checked,
@@ -41,9 +39,7 @@ namespace PraticeManagement.Controls.Reports
                         UserName = DataHelper.CurrentPerson.Alias,
                         PracticeIds = string.IsNullOrEmpty(cblPractices.SelectedItems) ? string.Empty : cblPractices.SelectedItems,
                         IncludeOverheads = chbIncludeOverHeads.Checked,
-                        IncludeZeroCostEmployees = chbIncludeZeroCostEmps.Checked,
-                        TimeScaleIds = string.IsNullOrEmpty(cblPayType.SelectedItems) ? string.Empty : cblPayType.SelectedItems
-
+                        IncludeZeroCostEmployees = chbIncludeZeroCostEmps.Checked 
                     };
                     ViewState[ReportContextKey] = reportContext;
                 }
@@ -262,9 +258,6 @@ namespace PraticeManagement.Controls.Reports
             {
 
                 DataHelper.FillPracticeList(this.cblPractices, Resources.Controls.AllPracticesText);
-                DataHelper.FillTimescaleList(this.cblPayType, Resources.Controls.AllTypes);
-
-                SelectAllItems(this.cblPayType);
                 SelectAllItems(this.cblPractices);
                 //DatabindGrid();
                 lblExternalPractices.Visible = false;
@@ -279,7 +272,6 @@ namespace PraticeManagement.Controls.Reports
             {
                 btnResetFilter.Attributes.Remove("disabled");
             }
-            AddAttributesToCheckBoxes(this.cblPayType);
             AddAttributesToCheckBoxes(this.cblPractices);
         }
 
@@ -577,13 +569,10 @@ namespace PraticeManagement.Controls.Reports
         protected void btnResetFilter_Click(object sender, EventArgs e)
         {
             SelectAllItems(cblPractices);
-            SelectAllItems(cblPayType);
             mpStartDate.SelectedYear = DateTime.Today.Year;
             mpStartDate.SelectedMonth = DateTime.Today.Month;
             mpEndDate.SelectedYear = DateTime.Today.Year;
             mpEndDate.SelectedMonth = DateTime.Today.Month;
-            cbActivePersons.Checked = true;
-            cbProjectedPersons.Checked = true;
             chbActiveProjects.Checked = chbProjectedProjects.Checked = chbProjectedProjects.Checked = true;
             chbExperimentalProjects.Checked = false;
             chbIncludeZeroCostEmps.Checked = false;
