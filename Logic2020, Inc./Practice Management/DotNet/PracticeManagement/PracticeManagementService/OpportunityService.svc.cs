@@ -56,7 +56,9 @@ namespace PracticeManagementService
         /// <returns>A list of the <see cref = "Opportunity" /> objects.</returns>
         public List<Opportunity> OpportunityListAll(OpportunityListContext context)
         {
-            return OpportunityDAL.OpportunityListAll(context);
+            var opportunities = OpportunityDAL.OpportunityListAll(context);
+            OpportunityDAL.FillProposedPersons(opportunities);
+            return opportunities;
         }
 
         public List<Opportunity> OpportunityListAllShort(OpportunityListContext context)
@@ -178,9 +180,9 @@ namespace PracticeManagementService
         ///</summary>
         ///<param name="opportunityId">An ID of the opportunity</param>
         ///<param name="personId">An Id of the person</param>
-        public void OpportunityPersonInsert(int opportunityId, string personIdList)
+        public void OpportunityPersonInsert(int opportunityId, string personIdList, string outSideResources)
         {
-            OpportunityDAL.OpportunityPersonInsert(opportunityId, personIdList);
+            OpportunityDAL.OpportunityPersonInsert(opportunityId, personIdList, outSideResources);
         }
 
         ///<summary>
