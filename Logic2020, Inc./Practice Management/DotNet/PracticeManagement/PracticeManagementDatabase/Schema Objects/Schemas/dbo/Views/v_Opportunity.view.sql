@@ -34,7 +34,8 @@ AS
 	       r.Name AS PracticeName,
 		   own.PersonId AS 'OwnerId',
 		   prowner.PersonId AS 'PracticeManagerId',
-		   own.PersonStatusId AS 'OwnerStatusId'
+		   own.PersonStatusId AS 'OwnerStatusId',
+		   o.OutSideResources
 	  FROM dbo.Opportunity AS o
 	       INNER JOIN dbo.Client AS c ON o.ClientId = c.ClientId
 	       LEFT JOIN dbo.Person AS p ON o.SalespersonId = p.PersonId
