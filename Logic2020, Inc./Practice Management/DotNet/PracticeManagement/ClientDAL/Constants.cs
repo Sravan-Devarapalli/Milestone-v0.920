@@ -147,6 +147,7 @@
             public const string NameColumn = "Name";
             public const string PracticeManagerIdColumn = "PracticeManagerId";
             public const string EstimatedRevenueColumn = "EstimatedRevenue";
+            public const string OutSideResourcesColumn = "OutSideResources";
             public const string PracticeManagerFirstNameColumn = "PracticeManagerFirstName";
             public const string PracticeManagerLastNameColumn = "PracticeManagerLastName";
             public const string PracticeIdColumn = "PracticeId";
@@ -348,6 +349,7 @@
             public const string MilestoneIdParam = "@MilestoneId";
             public const string PersonIdParam = "@PersonId";
             public const string PersonIdListParam = "@PersonIdList";
+            public const string OutSideResourcesParam = "@OutSideResources";
             public const string StartDateParam = "@StartDate";
             public const string EndDateParam = "@EndDate";
             public const string YearParam = "@Year";
@@ -420,6 +422,7 @@
             public const string HasPersons = "@HasPersons";
             public const string CategoryItemsXMLParam = "@CategoryItemsXML";
             public const string IsOnlyActiveAndProjective = "@IsOnlyActiveAndProjective";
+            public const string OpportunityIdsParam = "@OpportunityIds";
 
         }
 
@@ -646,6 +649,7 @@
                 public const string OpportunityPersonInsert = "dbo.OpportunityPersonInsert";
                 public const string OpportunityPersonDelete = "dbo.OpportunityPersonDelete";
                 public const string OpportunityPrioritiesListAll = "dbo.OpportunityPrioritiesListAll";
+                public const string GetPersonsByOpportunityIds = "dbo.GetPersonsByOpportunityIds";
             }
         }
 
