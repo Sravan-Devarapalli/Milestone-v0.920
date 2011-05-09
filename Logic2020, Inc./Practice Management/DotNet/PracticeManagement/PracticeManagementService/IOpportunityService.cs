@@ -131,7 +131,7 @@ namespace PracticeManagementService
         ///<param name="opportunityId">An ID of the opportunity</param>
         ///<param name="personId">An Id of the person</param>
         [OperationContract]
-        void OpportunityPersonInsert(int opportunityId, string personIdList);
+        void OpportunityPersonInsert(int opportunityId, string personIdList,string outSideResources);
 
         ///<summary>
         /// Deletes proposed person from the Opportunity
