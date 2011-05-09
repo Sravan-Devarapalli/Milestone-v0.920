@@ -277,6 +277,18 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public List<Person> ProposedPersons
+        {
+            set;
+            get;
+        }
+        [DataMember]
+        public string OutSideResources
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Formatting
