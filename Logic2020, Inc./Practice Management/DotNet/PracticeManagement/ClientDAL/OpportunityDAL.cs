@@ -7,6 +7,7 @@ using DataAccess.Other;
 using DataTransferObjects;
 using System.Data.SqlTypes;
 using DataTransferObjects.ContextObjects;
+using System.Linq;
 
 namespace DataAccess
 {
@@ -73,7 +74,7 @@ namespace DataAccess
                     return result;
                 }
             }
-            
+
         }
 
         public static List<Opportunity> OpportunityListAllShort(OpportunityListContext context)
@@ -110,10 +111,10 @@ namespace DataAccess
                     var opportunityPriority =
                         new OpportunityPriority
                         {
-                           
+
                             Priority = reader.GetString(priorityIndex),
                             Description = reader.GetString(descriptionIdIndex)
-                           
+
                         };
 
                     result.Add(opportunityPriority);
@@ -545,13 +546,23 @@ namespace DataAccess
                 var groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
                 var practManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeManagerIdColumn);
                 int EstimatedRevenueiIndex = -1;
+                int OutSideResourcesIndex = -1;
                 try
                 {
                     EstimatedRevenueiIndex = reader.GetOrdinal(Constants.ColumnNames.EstimatedRevenueColumn);
+
                 }
                 catch
                 {
                     EstimatedRevenueiIndex = -1;
+                }
+                try
+                {
+                    OutSideResourcesIndex = reader.GetOrdinal(Constants.ColumnNames.OutSideResourcesColumn);
+                }
+                catch
+                {
+                    OutSideResourcesIndex = -1;
                 }
 
                 while (reader.Read())
@@ -559,90 +570,98 @@ namespace DataAccess
                     // Reading the item
                     var opportunity =
                         new Opportunity
+                        {
+                            Id = reader.GetInt32(opportunityIdIndex),
+                            Name = reader.GetString(nameIndex),
+                            Description =
+                                !reader.IsDBNull(descriptionIndex) ? reader.GetString(descriptionIndex) : null,
+                            OpportunityNumber = reader.GetString(opportunityNumberIndex),
+                            ProjectedStartDate =
+                                !reader.IsDBNull(projectedStartDateIndex)
+                                    ? (DateTime?)reader.GetDateTime(projectedStartDateIndex)
+                                    : null,
+                            ProjectedEndDate =
+                                !reader.IsDBNull(projectedEndDateIndex)
+                                    ? (DateTime?)reader.GetDateTime(projectedEndDateIndex)
+                                    : null,
+                            BuyerName =
+                                !reader.IsDBNull(buyerNameIndex) ? reader.GetString(buyerNameIndex) : null,
+                            CreateDate = reader.GetDateTime(createDateIndex),
+                            Priority = reader.GetString(priorityIndex)[0],
+                            Pipeline =
+                                !reader.IsDBNull(pipelineIndex) ? reader.GetString(pipelineIndex) : null,
+                            Proposed =
+                                !reader.IsDBNull(proposedIndex) ? reader.GetString(proposedIndex) : null,
+                            SendOut =
+                                !reader.IsDBNull(sendOutIndex) ? reader.GetString(sendOutIndex) : null,
+                            Client = new Client
                             {
-                                Id = reader.GetInt32(opportunityIdIndex),
-                                Name = reader.GetString(nameIndex),
-                                Description =
-                                    !reader.IsDBNull(descriptionIndex) ? reader.GetString(descriptionIndex) : null,
-                                OpportunityNumber = reader.GetString(opportunityNumberIndex),
-                                ProjectedStartDate =
-                                    !reader.IsDBNull(projectedStartDateIndex)
-                                        ? (DateTime?)reader.GetDateTime(projectedStartDateIndex)
-                                        : null,
-                                ProjectedEndDate =
-                                    !reader.IsDBNull(projectedEndDateIndex)
-                                        ? (DateTime?)reader.GetDateTime(projectedEndDateIndex)
-                                        : null,
-                                BuyerName =
-                                    !reader.IsDBNull(buyerNameIndex) ? reader.GetString(buyerNameIndex) : null,
-                                CreateDate = reader.GetDateTime(createDateIndex),
-                                Priority = reader.GetString(priorityIndex)[0],
-                                Pipeline =
-                                    !reader.IsDBNull(pipelineIndex) ? reader.GetString(pipelineIndex) : null,
-                                Proposed =
-                                    !reader.IsDBNull(proposedIndex) ? reader.GetString(proposedIndex) : null,
-                                SendOut =
-                                    !reader.IsDBNull(sendOutIndex) ? reader.GetString(sendOutIndex) : null,
-                                Client = new Client
-                                             {
-                                                 Id = reader.GetInt32(clientIdIndex),
-                                                 Name = reader.GetString(clientNameIndex)
-                                             },
-                                Status = new OpportunityStatus
-                                             {
-                                                 Id = reader.GetInt32(opportunityStatusIdIndex),
-                                                 Name = reader.GetString(opportunityStatusNameIndex)
-                                             },
-                                Salesperson =
-                                    !reader.IsDBNull(salespersonIdIndex)
-                                        ? new Person
-                                              {
-                                                  Id = reader.GetInt32(salespersonIdIndex),
-                                                  FirstName = reader.GetString(salespersonFirstNameIndex),
-                                                  LastName = reader.GetString(salespersonLastNameIndex),
-                                                  Status = !reader.IsDBNull(salespersonStatusIndex) ? new PersonStatus { Name = reader.GetString(salespersonStatusIndex) } : null
-                                              }
-                                        : null,
-                                Practice =
-                                    new Practice
+                                Id = reader.GetInt32(clientIdIndex),
+                                Name = reader.GetString(clientNameIndex)
+                            },
+                            Status = new OpportunityStatus
+                            {
+                                Id = reader.GetInt32(opportunityStatusIdIndex),
+                                Name = reader.GetString(opportunityStatusNameIndex)
+                            },
+                            Salesperson =
+                                !reader.IsDBNull(salespersonIdIndex)
+                                    ? new Person
+                                    {
+                                        Id = reader.GetInt32(salespersonIdIndex),
+                                        FirstName = reader.GetString(salespersonFirstNameIndex),
+                                        LastName = reader.GetString(salespersonLastNameIndex),
+                                        Status = !reader.IsDBNull(salespersonStatusIndex) ? new PersonStatus { Name = reader.GetString(salespersonStatusIndex) } : null
+                                    }
+                                    : null,
+                            Practice =
+                                new Practice
+                                {
+                                    Id = reader.GetInt32(practiceIdIndex),
+                                    Name = reader.GetString(practiceNameIndex),
+                                    PracticeOwner = new Person
+                                    {
+                                        Id = reader.GetInt32(practManagerIdIndex)
+                                    }
+                                },
+                            LastUpdate = reader.GetDateTime(lastUpdateIndex),
+                            ProjectId =
+                                !reader.IsDBNull(projectId) ? (int?)reader.GetInt32(projectId) : null,
+                            OpportunityIndex =
+                                !reader.IsDBNull(opportunityIndex) ? (int?)reader.GetInt32(opportunityIndex) : null,
+                            OpportunityRevenueType = (RevenueType)reader.GetInt32(revenueTypeIndex),
+                            Owner =
+                                !reader.IsDBNull(ownerIdIndex)
+                                    ? new Person
+                                    {
+                                        Id = reader.GetInt32(ownerIdIndex),
+                                        LastName = !reader.IsDBNull(ownerLastNameIndex) ? reader.GetString(ownerLastNameIndex) : null,
+                                        FirstName = !reader.IsDBNull(ownerFirstNameIndex) ? reader.GetString(ownerFirstNameIndex) : null,
+                                        Status = !reader.IsDBNull(ownerStatusIndex) ? new PersonStatus() { Name = reader.GetString(ownerStatusIndex) } : null
+                                    }
+                                    : null,
+                            Group = !reader.IsDBNull(groupIdIndex)
+                                        ? new ProjectGroup
                                         {
-                                            Id = reader.GetInt32(practiceIdIndex),
-                                            Name = reader.GetString(practiceNameIndex),
-                                            PracticeOwner = new Person
-                                                                {
-                                                                    Id = reader.GetInt32(practManagerIdIndex)
-                                                                }
-                                        },
-                                LastUpdate = reader.GetDateTime(lastUpdateIndex),
-                                ProjectId =
-                                    !reader.IsDBNull(projectId) ? (int?)reader.GetInt32(projectId) : null,
-                                OpportunityIndex =
-                                    !reader.IsDBNull(opportunityIndex) ? (int?)reader.GetInt32(opportunityIndex) : null,
-                                OpportunityRevenueType = (RevenueType)reader.GetInt32(revenueTypeIndex),
-                                Owner =
-                                    !reader.IsDBNull(ownerIdIndex)
-                                        ? new Person
-                                        {
-                                            Id = reader.GetInt32(ownerIdIndex),
-                                            LastName = !reader.IsDBNull(ownerLastNameIndex) ? reader.GetString(ownerLastNameIndex) : null,
-                                            FirstName = !reader.IsDBNull(ownerFirstNameIndex) ? reader.GetString(ownerFirstNameIndex) : null,
-                                            Status = !reader.IsDBNull(ownerStatusIndex) ? new PersonStatus() { Name = reader.GetString(ownerStatusIndex) } : null
+                                            Id = reader.GetInt32(groupIdIndex),
+                                            Name = reader.GetString(groupNameIndex)
                                         }
-                                        : null,
-                                Group = !reader.IsDBNull(groupIdIndex)
-                                            ? new ProjectGroup
-                                                  {
-                                                      Id = reader.GetInt32(groupIdIndex),
-                                                      Name = reader.GetString(groupNameIndex)
-                                                  }
-                                            : null
-                            };
+                                        : null
+                        };
 
                     if (EstimatedRevenueiIndex > -1)
                     {
                         if (!reader.IsDBNull(EstimatedRevenueiIndex))
                         {
                             opportunity.EstimatedRevenue = reader.GetDecimal(EstimatedRevenueiIndex);
+                        }
+                    }
+
+                    if (OutSideResourcesIndex > -1)
+                    {
+                        if (!reader.IsDBNull(OutSideResourcesIndex))
+                        {
+                            opportunity.OutSideResources = reader.GetString(OutSideResourcesIndex);
                         }
                     }
 
@@ -682,6 +701,64 @@ namespace DataAccess
                     return null;
                 }
             }
+        }
+
+        public static void FillProposedPersons(List<Opportunity> opportunities)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.GetPersonsByOpportunityIds, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    var opportunityIds = DataTransferObjects.Utils.Generic.EnumerableToCsv
+                                    (from id in opportunities where id.Id.HasValue select id, id => id.Id.Value);
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityIdsParam, opportunityIds);
+
+                    connection.Open();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        ReadAndAttachPersonsToOpportunities(reader, opportunities);
+                    }
+                }
+            }
+        }
+
+        private static void ReadAndAttachPersonsToOpportunities(SqlDataReader reader, List<Opportunity> opportunities)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int OpportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
+                Opportunity CurrentOpportunity = null;
+
+                while (reader.Read())
+                {
+
+                    var opportunityId = reader.GetInt32(OpportunityIdIndex);
+                    if (CurrentOpportunity == null || CurrentOpportunity.Id.Value != opportunityId)
+                    {
+                        CurrentOpportunity = opportunities.Find(opty => opty.Id.HasValue && opty.Id.Value == opportunityId);
+                        CurrentOpportunity.ProposedPersons = new List<Person>();
+                    }
+
+                    var personId = reader.GetInt32(personIdIndex);
+
+                    var person = new Person
+                    {
+                        Id = personId,
+                        FirstName = reader.GetString(firstNameIndex),
+                        LastName = reader.GetString(lastNameIndex)
+                    };
+
+                    CurrentOpportunity.ProposedPersons.Add(person);
+                }
+            }
+
         }
 
         public static List<Person> GetOpportunityPersons(int opportunityId)
@@ -770,7 +847,7 @@ namespace DataAccess
             return res;
         }
 
-        public static void OpportunityPersonInsert(int opportunityId, string personIdList)
+        public static void OpportunityPersonInsert(int opportunityId, string personIdList,string outSideResources)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.OpportunityPersonInsert, connection))
@@ -780,6 +857,7 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityIdParam, opportunityId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdListParam, personIdList);
+                command.Parameters.AddWithValue(Constants.ParameterNames.OutSideResourcesParam, outSideResources);
 
                 try
                 {
