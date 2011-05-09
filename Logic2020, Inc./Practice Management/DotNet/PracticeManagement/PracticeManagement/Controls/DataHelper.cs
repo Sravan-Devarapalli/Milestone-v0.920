@@ -58,7 +58,7 @@ namespace PraticeManagement.Controls
     /// <summary>
     /// Provides commonly used operations with the data.
     /// </summary>
-    public static class DataHelper 
+    public static class DataHelper
     {
         #region Constants
 
@@ -106,6 +106,20 @@ namespace PraticeManagement.Controls
                 ServiceCallers.Custom.Opportunity(c => c.OpportunityListAll(OpportunityFilter.Filter));
 
             var sortingFilter = Controls.Generic.OpportunityList.Filter;
+            var comp = new OpportunityComparer(sortingFilter);
+
+            if (comp.SortOrder != OpportunitySortOrder.None)
+                Array.Sort(opportunities, comp);
+
+            return opportunities;
+        }
+
+        public static Opportunity[] GetFilteredOpportunitiesForDiscussionReview2()
+        {
+            var opportunities =
+                ServiceCallers.Custom.Opportunity(c => c.OpportunityListAll(new OpportunityListContext { ActiveClientsOnly = false }
+                    ));
+            var sortingFilter = Controls.Opportunities.OpportunityListControl.Filter;
             var comp = new OpportunityComparer(sortingFilter);
 
             if (comp.SortOrder != OpportunitySortOrder.None)
