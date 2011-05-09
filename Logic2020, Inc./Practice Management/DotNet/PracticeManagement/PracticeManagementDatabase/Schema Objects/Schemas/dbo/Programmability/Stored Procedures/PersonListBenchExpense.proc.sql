@@ -5,16 +5,15 @@ CREATE PROCEDURE [dbo].[PersonListBenchExpense]
 (
 	@StartDate   DATETIME,
 	@EndDate     DATETIME,
-	@ActivePersons BIT = 1,
+	@ActivePersons BIT = NULL,
 	@ActiveProjects BIT = 1,
-	@ProjectedPersons BIT = 1,
+	@ProjectedPersons BIT = NULL,
 	@ProjectedProjects BIT = 1,
 	@ExperimentalProjects BIT = 1,
 	@CompletedProjects BIT = 1,
 	@PracticeIds NVARCHAR(4000) = NULL,
 	@IncludeOverheads BIT = 1,
-	@IncludeZeroCostEmployees BIT = 0,
-	@TimeScaleIds NVARCHAR(1000) = NULL
+	@IncludeZeroCostEmployees BIT = 0
 )
 AS
 	SET NOCOUNT ON
@@ -32,7 +31,6 @@ AS
 		@ExperimentalProjectsLocal BIT,
 		@CompletedProjectsLocal BIT,
 		@PracticeIdsLocal NVARCHAR(4000) = NULL,
-		@TimeScaleIdsLocal NVARCHAR(1000) = NULL,
 		@IncludeOverheadsLocal BIT,
 		@IncludeZeroCostEmployeesLocal	BIT
 		
@@ -45,7 +43,6 @@ AS
 			@ExperimentalProjectsLocal=@ExperimentalProjects,
 			@CompletedProjectsLocal = @CompletedProjects,
 			@PracticeIdsLocal=@PracticeIds,
-			@TimeScaleIdsLocal = @TimeScaleIds,
 			@IncludeOverheadsLocal = @IncludeOverheads,
 			@IncludeZeroCostEmployeesLocal =@IncludeZeroCostEmployees 
 
@@ -61,13 +58,7 @@ AS
 	SELECT ResultId 
 	FROM [dbo].[ConvertStringListIntoTable] (@PracticeIdsLocal)
 	
-	DECLARE @TimeScaleIdsTable TABLE
-	(
-		TimeScaleId INT
-	)
-	INSERT INTO @TimeScaleIdsTable
-	SELECT ResultId 
-	FROM [dbo].[ConvertStringListIntoTable] (@TimeScaleIdsLocal)
+	
 
 	;WITH PersonBenchHoursDaily
 	AS
@@ -102,8 +93,8 @@ AS
 			ON p.DefaultPractice = pr.PracticeId
 		WHERE   DATEPART(DW, cal.[Date]) NOT IN(1,7)
 		 AND	cal.Date BETWEEN @StartDateLocal AND @EndDateLocal
-			AND (p.PersonStatusId = 1 AND @ActivePersonsLocal = 1
-				 OR p.PersonStatusId = 3 AND @ProjectedPersonsLocal = 1)
+			AND ((p.PersonStatusId = 1 AND @ActivePersonsLocal = 1 OR @ActivePersonsLocal IS NULL)
+				 OR p.PersonStatusId = 3 AND @ProjectedPersonsLocal = 1 OR @ProjectedPersonsLocal IS NULL)
 			AND (@PracticeIdsLocal IS NULL 
 					OR p.DefaultPractice IN (SELECT PracticeId FROM @PracticeIdsTable)
 				)
@@ -245,9 +236,7 @@ AS
 	JOIN  PersonBenchHoursDaily R ON R.[Date] = FLHRD.Date AND R.PersonId = FLHRD.PersonId
 	JOIN Person P ON FLHRD.PersonId = P.PersonId
 	LEFT JOIN Practice pr ON P.DefaultPractice = pr.PracticeId
-	WHERE   (@TimeScaleIdsLocal IS NULL 
-			OR  FLHRD.TimescaleId IN  (SELECT TimeScaleId FROM @TimeScaleIdsTable)
-		)
+
 	GROUP BY FLHRD.PersonId,
 				YEAR(FLHRD.Date),
 				MONTH(FLHRD.Date),
