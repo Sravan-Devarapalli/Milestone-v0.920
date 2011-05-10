@@ -548,9 +548,10 @@ namespace PraticeManagement
                 {
                     int result = serviceClient.SaveProjectDetail(project, User.Identity.Name);
 
-                    AttachmentService.AttachmentService svc = new AttachmentService.AttachmentService();
+                    AttachmentService.AttachmentService svc = Utils.WCFClientUtility.GetAttachmentService();
+
                     svc.SaveProjectAttachment(attachment, result);
-                 
+
                     return result;
                 }
                 catch (CommunicationException ex)
@@ -559,7 +560,7 @@ namespace PraticeManagement
                     throw;
                 }
             }
-            
+
         }
 
         protected override void Display()
@@ -580,7 +581,7 @@ namespace PraticeManagement
             }
             else
             {
-                
+
                 // Default values for new projects.
                 bool userIsAdministrator =
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
@@ -867,7 +868,7 @@ namespace PraticeManagement
             project.BillingInfo = billingInfo.Info;
             if (ddlDirector.SelectedIndex > 0)
                 project.Director = new Person { Id = int.Parse(ddlDirector.SelectedValue) };
-                        
+
         }
 
         private AttachmentService.ProjectAttachment PopulateProjectAttachment()
