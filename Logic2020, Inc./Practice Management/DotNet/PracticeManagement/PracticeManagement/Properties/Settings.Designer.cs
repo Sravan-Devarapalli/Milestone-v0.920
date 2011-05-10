@@ -32,16 +32,6 @@ namespace PraticeManagement.Properties {
                 return ((string)(this["PraticeManagement_AttachmentService_AttachmentService"]));
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost/PracticeManagementService/AttachmentService.asmx")]
-        public string PraticeManagement_AttachmentService1_AttachmentService {
-            get {
-                return ((string)(this["PraticeManagement_AttachmentService1_AttachmentService"]));
-            }
-        }
     }
 }
 
