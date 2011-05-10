@@ -29,6 +29,7 @@ using PraticeManagement.MembershipService;
 using PraticeManagement.AuthService;
 using PraticeManagement.RoleService;
 using PraticeManagement.Utils;
+using System.Configuration;
 
 namespace PraticeManagement.MilestonePersonService
 {
@@ -368,8 +369,9 @@ namespace PraticeManagement.AuthService
 
 namespace PraticeManagement.Utils
 {
-    public class WCFClientUtility 
+    public class WCFClientUtility
     {
+
         private static MilestonePersonServiceClient GetMilestonePersonServiceClient()
         {
             var client = new MilestonePersonServiceClient();
@@ -633,11 +635,20 @@ namespace PraticeManagement.Utils
 
             return client;
         }
+        public static AttachmentService.AttachmentService GetAttachmentService()
+        {
+            var service = new AttachmentService.AttachmentService();
+            if (IsWebAzureRole())
+            {
+                service.Url = RoleEnvironment.GetConfigurationSettingValue("AttachmentServiceURL");
+            }
+            return service;
+        }
 
         public static EndpointAddress GetEndpointAddress(string serviceClientName)
         {
             string url = "";
-            switch(serviceClientName)
+            switch (serviceClientName)
             {
                 case "MilestonePersonServiceClient": url = GetClientUrl(serviceClientName);
                     break;
@@ -686,7 +697,7 @@ namespace PraticeManagement.Utils
                 case "AuthServiceClient": url = GetClientUrl(serviceClientName);
                     break;
                 case "RoleServiceClient": url = GetClientUrl(serviceClientName);
-                    break;                
+                    break;
             }
 
             return new EndpointAddress(url);
@@ -709,6 +720,18 @@ namespace PraticeManagement.Utils
             catch
             {
                 return false;
+            }
+        }
+
+        public static string GetConfigValue(string key)
+        {
+            if (IsWebAzureRole())
+            {
+                return RoleEnvironment.GetConfigurationSettingValue(key);
+            }
+            else
+            {
+                return ConfigurationManager.AppSettings[key];
             }
         }
     }
