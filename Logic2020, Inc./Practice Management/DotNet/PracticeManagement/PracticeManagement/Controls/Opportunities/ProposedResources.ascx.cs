@@ -85,6 +85,22 @@ namespace PraticeManagement.Controls.Opportunities
             }
         }
 
+        public bool Enabled
+        {
+            get
+            {
+                return cblProposedResources.Enabled;
+            }
+            set
+            {
+                if (!value)
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "DisableAddRemoveButtons", "DisableAddRemoveButtons();", true);
+                }
+                cblProposedResources.Enabled = cblPotentialResources.Enabled = value;
+            }
+        }
+
         private BenchReportContext PreviousReportContext
         {
             get
@@ -95,7 +111,7 @@ namespace PraticeManagement.Controls.Opportunities
                 }
                 return null;
             }
-            set 
+            set
             {
                 Cache[PreviousReportContext_Key] = value;
             }
@@ -178,7 +194,7 @@ namespace PraticeManagement.Controls.Opportunities
         }
 
         public void cblPotentialResources_DataBound(object sender, EventArgs e)
-        {           
+        {
             foreach (ListItem item in cblPotentialResources.Items)
             {
                 item.Selected = false;
@@ -295,8 +311,11 @@ namespace PraticeManagement.Controls.Opportunities
 
         protected void Page_Prerender(object sender, EventArgs e)
         {
+            if (Opportunity != null && Opportunity.Id.HasValue)
+            {
                 AddAttributesTocblProposedResources();
                 AddAttributesAndBoldPotentialResourcesPersons();
+            }
         }
 
         public void FillPotentialResources()
