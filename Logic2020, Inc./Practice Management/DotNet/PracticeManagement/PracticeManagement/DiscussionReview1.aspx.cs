@@ -148,6 +148,13 @@ namespace PraticeManagement
                 DataHelper.FillOpportunityStatusList(ddlStatus, string.Empty);
                 DataHelper.FillPracticeListOnlyActive(ddlPractice, string.Empty);
 
+                if (OpportunityId.HasValue)
+                {
+                    var groups = ServiceCallers.Custom.Group(client => client.GroupListAll(Opportunity.Client.Id, null));
+                    groups = groups.AsQueryable().Where(g => (g.IsActive == true)).ToArray();
+                    DataHelper.FillListDefault(ddlClientGroup, string.Empty, groups, false);
+                }
+
                 LoadOpportunityDetails();
 
                 activityLog.OpportunityId = OpportunityId;
@@ -462,12 +469,12 @@ namespace PraticeManagement
         protected void ddlClient_SelectedIndexChanged(object sender, EventArgs e)
         {
             ddlClientGroup.Items.Clear();
-            if(!(ddlClient.SelectedIndex == 0))
+            if (!(ddlClient.SelectedIndex == 0))
             {
                 int clientId = Convert.ToInt32(ddlClient.SelectedItem.Value);
                 var groups = ServiceCallers.Custom.Group(client => client.GroupListAll(clientId, null));
                 groups = groups.AsQueryable().Where(g => (g.IsActive == true)).ToArray();
-                DataHelper.FillListDefault(ddlClientGroup, string.Empty, groups, false);   
+                DataHelper.FillListDefault(ddlClientGroup, string.Empty, groups, false);
             }
 
             upOpportunityDetail.Update();
@@ -518,7 +525,7 @@ namespace PraticeManagement
         protected void btnCancelChanges_Click(object sender, EventArgs e)
         {
             if (IsDirty)
-            {                
+            {
                 ClearDirty();
                 LoadOpportunityDetails();
                 tbNote.Text = "";
@@ -547,8 +554,9 @@ namespace PraticeManagement
             {
                 ddlProjects.Items.Add(new ListItem() { Text = "Select Project ...", Value = "" });
             }
-
+            upAttachToProject.Update();
             mpeAttachToProject.Show();
+           
         }
 
         public void lvOpportunities_OnDataBound(object sender, EventArgs e)
@@ -615,12 +623,6 @@ namespace PraticeManagement
         protected override void Display()
         {
             FillControls();
-            if (Opportunity != null)
-            {
-                var groups = ServiceCallers.Custom.Group(client => client.GroupListAll(Opportunity.Client.Id, null));
-                groups = groups.AsQueryable().Where(g => (g.IsActive == true)).ToArray();
-                DataHelper.FillListDefault(ddlClientGroup, string.Empty, groups, false);
-            }
         }
 
         private void FillControls()
