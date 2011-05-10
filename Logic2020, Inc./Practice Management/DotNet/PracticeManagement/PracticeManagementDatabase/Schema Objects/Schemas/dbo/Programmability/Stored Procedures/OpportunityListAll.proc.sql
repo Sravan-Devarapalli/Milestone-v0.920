@@ -5,7 +5,8 @@
 	@ClientId        INT,
 	@SalespersonId   INT,
 	@TargetPersonId	 INT = NULL, -- Used to get all opportunities for a person
-	@CurrentId		 INT = NULL  -- Used to extract prev and next opportunities
+	@CurrentId		 INT = NULL,  -- Used to extract prev and next opportunities,
+	@IsDiscussionReview2	BIT=0
 )
 AS
 BEGIN
@@ -67,7 +68,9 @@ BEGIN
 		LEFT JOIN dbo.Person p ON o.OwnerId = p.PersonId
 		LEFT JOIN dbo.PersonStatus ps ON ps.PersonStatusId = o.SalespersonStatusId  
 		LEFT JOIN dbo.PersonStatus os ON os.PersonStatusId = o.OwnerStatusId  
-	WHERE (o.OpportunityStatusId = 1 OR @ActiveOnly = 0)
+	WHERE ((@IsDiscussionReview2 = 1 AND o.OpportunityStatusId = 1)
+			OR @IsDiscussionReview2 = 0 AND  (o.OpportunityStatusId = 1 OR @ActiveOnly = 0)
+			)
 		AND (o.ClientId = @ClientId OR @ClientId IS NULL)
 		AND (o.SalespersonId = @SalespersonId OR @SalespersonId IS NULL)
 		AND (o.Name LIKE @Looked OR o.Description LIKE @Looked OR o.ClientName LIKE @Looked OR o.OpportunityNumber LIKE @Looked OR o.BuyerName LIKE @Looked)	
