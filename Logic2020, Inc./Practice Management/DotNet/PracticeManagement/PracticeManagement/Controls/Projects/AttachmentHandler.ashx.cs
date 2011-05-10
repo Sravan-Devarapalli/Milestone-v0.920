@@ -18,7 +18,8 @@ namespace PraticeManagement.Controls.Projects
             string FileName = context.Request.QueryString["FileName"];
             byte[] attachmentData = null;
 
-            AttachmentService.AttachmentService svc = new AttachmentService.AttachmentService();
+            AttachmentService.AttachmentService svc = Utils.WCFClientUtility.GetAttachmentService();
+
             attachmentData = svc.GetProjectAttachmentData(projectId);
 
             context.Response.ContentType = "Application/pdf";
