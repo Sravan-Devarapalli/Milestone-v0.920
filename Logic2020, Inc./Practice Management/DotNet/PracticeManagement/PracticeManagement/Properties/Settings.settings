@@ -5,8 +5,5 @@
     <Setting Name="PraticeManagement_AttachmentService_AttachmentService" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://localhost/PracticeManagementService/AttachmentService.asmx</Value>
     </Setting>
-    <Setting Name="PraticeManagement_AttachmentService1_AttachmentService" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">http://localhost/PracticeManagementService/AttachmentService.asmx</Value>
-    </Setting>
   </Settings>
 </SettingsFile>
