@@ -32,6 +32,9 @@ namespace DataTransferObjects.ContextObjects
 
         [DataMember]
         public int? CurrentId { get; set; }
+
+        [DataMember]
+        public bool IsDiscussionReview2 { get; set; }
     }
 }
 
