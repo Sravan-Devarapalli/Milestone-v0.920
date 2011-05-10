@@ -117,7 +117,7 @@ namespace PraticeManagement.Controls
         public static Opportunity[] GetFilteredOpportunitiesForDiscussionReview2()
         {
             var opportunities =
-                ServiceCallers.Custom.Opportunity(c => c.OpportunityListAll(new OpportunityListContext { ActiveClientsOnly = false }
+                ServiceCallers.Custom.Opportunity(c => c.OpportunityListAll(new OpportunityListContext { IsDiscussionReview2 = true }
                     ));
             var sortingFilter = Controls.Opportunities.OpportunityListControl.Filter;
             var comp = new OpportunityComparer(sortingFilter);
