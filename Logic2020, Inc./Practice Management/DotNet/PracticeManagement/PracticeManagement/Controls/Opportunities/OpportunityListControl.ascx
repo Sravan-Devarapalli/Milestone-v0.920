@@ -12,13 +12,15 @@
 <script src="Scripts/jquery.blockUI.js" type="text/javascript"></script>
 <script type="text/javascript" language="javascript">
     var currenthdnProposedPersonsIndexesId = "";
-
+    var refreshMessageIdsFromLastRefresh = new Array();
     function ShowPotentialResourcesModal(image) {
         var refreshLableParentNode = image.parentNode.parentNode.children[0];
         refreshLableParentNode.children[refreshLableParentNode.children.length - 1].style.display = "";
         var hdnCurrentOpportunityId = document.getElementById('<%=hdnCurrentOpportunityId.ClientID %>');
         var attachedResourcesIndexes = image.parentNode.children[1].value.split(",");
         currenthdnProposedPersonsIndexesId = image.parentNode.children[1].id;
+        var refreshLableParentNode = image.parentNode.parentNode.children[0];
+        Array.add(refreshMessageIdsFromLastRefresh, refreshLableParentNode.children[refreshLableParentNode.children.length - 1].id);
         if (hdnCurrentOpportunityId.value != image.attributes["OpportunityId"].value) {
             var chkboxList = document.getElementById('<%=cblPotentialResources.ClientID %>');
             var chkboxes = chkboxList.getElementsByTagName('input');
@@ -64,10 +66,9 @@
     }
     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
     function endRequestHandle(sender, Args) {
-        if (currenthdnProposedPersonsIndexesId != '') {
-            var hdnProposedPersonsIndexes = document.getElementById(currenthdnProposedPersonsIndexesId);
-            var refreshLableParentNode = hdnProposedPersonsIndexes.parentNode.parentNode.children[0];
-            refreshLableParentNode.children[refreshLableParentNode.children.length - 1].style.display = "";
+        for (var i = 0; i < refreshMessageIdsFromLastRefresh.length; i++) {
+            var label = document.getElementById(refreshMessageIdsFromLastRefresh[i]);
+            label.style.display = "";
         }
     }
 </script>
@@ -135,7 +136,7 @@
                                 </div>
                             </td>
                             <td align="center" width="28%">
-                                <div class="ie-bg no-wrap">
+                                <div class="ie-bg no-wrap" style="color: Black;">
                                     Proposed Resources
                                 </div>
                             </td>
