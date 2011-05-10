@@ -273,6 +273,7 @@
             public const string CloneCommissions = "CloneCommissions";
             public const string ConsultantsCanAdjust = ColumnNames.ConsultantsCanAdjust;
             public const string CurrentId = "CurrentId";
+            public const string IsDiscussionReview2 = "@IsDiscussionReview2";
             public const string DefaultManagerId = "DefaultManagerId";
             public const string DefaultMpId = ColumnNames.DefaultMpId;
             public const string EndDate = ColumnNames.EndDate;
