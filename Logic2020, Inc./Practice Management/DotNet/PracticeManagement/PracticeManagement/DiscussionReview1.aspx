@@ -879,7 +879,7 @@
                             </table>
                             <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server">
                                 <ContentTemplate>
-                                 <asp:HiddenField ID="hdnValueChanged" Value="false" runat="server" />
+                                    <asp:HiddenField ID="hdnValueChanged" Value="false" runat="server" />
                                     <table class="WholeWidth" style="background: #e2ebff;">
                                         <tr>
                                             <td align="center" style="padding: 10px 0px 0px 4px; width: 100%;">
@@ -989,42 +989,46 @@
     </table>
     <asp:Panel ID="pnlAttachToProject" runat="server" BackColor="White" BorderColor="Black"
         CssClass="ConfirmBoxClass" Style="display: none" BorderWidth="2px">
-        <table width="100%">
-            <tr style="background-color: Gray; height: 27px;">
-                <td align="center" style="white-space: nowrap; font-size: 14px; width: 100%">
-                    Attach This Opportunity to Existing Project
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    &nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td align="center" style="padding: 6px 6px 2px 2px;">
-                    <asp:DropDownList ID="ddlProjects" runat="server" AppendDataBoundItems="true" onchange="setDirty();"
-                        AutoPostBack="false" Style="width: 350px">
-                    </asp:DropDownList>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    &nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td align="center" style="padding: 6px 6px 2px 2px; white-space: nowrap;">
-                    <asp:Button ID="btnAttach" runat="server" Text="Attach" OnClick="btnSave_Click" />
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    &nbsp;
-                </td>
-            </tr>
-        </table>
+        <asp:UpdatePanel ID="upAttachToProject" runat="server" UpdateMode="Conditional">
+            <ContentTemplate>
+                <table width="100%">
+                    <tr style="background-color: Gray; height: 27px;">
+                        <td align="center" style="white-space: nowrap; font-size: 14px; width: 100%">
+                            Attach This Opportunity to Existing Project
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="padding: 6px 6px 2px 2px;">
+                            <asp:DropDownList ID="ddlProjects" runat="server" AppendDataBoundItems="true" onchange="setDirty();"
+                                AutoPostBack="false" Style="width: 350px">
+                            </asp:DropDownList>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="padding: 6px 6px 2px 2px; white-space: nowrap;">
+                            <asp:Button ID="btnAttach" runat="server" Text="Attach" OnClick="btnSave_Click" />
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <asp:Button ID="btnCancel" runat="server" Text="Cancel" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+                </table>
+            </ContentTemplate>
+        </asp:UpdatePanel>
     </asp:Panel>
     <uc:LoadingProgress ID="lpOpportunityDetails" runat="server" />
 </asp:Content>
