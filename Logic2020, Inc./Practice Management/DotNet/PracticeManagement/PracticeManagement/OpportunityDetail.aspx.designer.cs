@@ -22,13 +22,13 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.Opportunities.PrevNextOpportunity prevNext;
         
         /// <summary>
-        /// upnlBody control.
+        /// upOpportunityDetail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upnlBody;
+        protected global::System.Web.UI.UpdatePanel upOpportunityDetail;
         
         /// <summary>
         /// lblReadOnlyWarning control.
@@ -58,6 +58,69 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Label lblLastUpdate;
         
         /// <summary>
+        /// dpStartDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.DatePicker dpStartDate;
+        
+        /// <summary>
+        /// reqStartDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqStartDate;
+        
+        /// <summary>
+        /// dpEndDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.DatePicker dpEndDate;
+        
+        /// <summary>
+        /// reqEndDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqEndDate;
+        
+        /// <summary>
+        /// compEndDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compEndDate;
+        
+        /// <summary>
+        /// txtOpportunityName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtOpportunityName;
+        
+        /// <summary>
+        /// reqOpportunityName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqOpportunityName;
+        
+        /// <summary>
         /// ddlStatus control.
         /// </summary>
         /// <remarks>
@@ -85,22 +148,31 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator custWonConvert;
         
         /// <summary>
-        /// txtOpportunityName control.
+        /// ddlClient control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtOpportunityName;
+        protected global::System.Web.UI.WebControls.DropDownList ddlClient;
         
         /// <summary>
-        /// reqOpportunityName control.
+        /// reqClient control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqOpportunityName;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqClient;
+        
+        /// <summary>
+        /// imgPriorityHint control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgPriorityHint;
         
         /// <summary>
         /// ddlPriority control.
@@ -121,33 +193,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqPriority;
         
         /// <summary>
-        /// ddlClient control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlClient;
-        
-        /// <summary>
-        /// cddClientGroups control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.CascadingDropDown cddClientGroups;
-        
-        /// <summary>
-        /// reqClient control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqClient;
-        
-        /// <summary>
         /// ddlClientGroup control.
         /// </summary>
         /// <remarks>
@@ -155,69 +200,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlClientGroup;
-        
-        /// <summary>
-        /// ddlSalesperson control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlSalesperson;
-        
-        /// <summary>
-        /// dfOwner control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.Configuration.DefaultUser dfOwner;
-        
-        /// <summary>
-        /// txtBuyerName control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtBuyerName;
-        
-        /// <summary>
-        /// reqBuyerName control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqBuyerName;
-        
-        /// <summary>
-        /// valregBuyerName control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator valregBuyerName;
-        
-        /// <summary>
-        /// ddlPractice control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlPractice;
-        
-        /// <summary>
-        /// reqPractice control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqPractice;
         
         /// <summary>
         /// txtEstRevenue control.
@@ -265,40 +247,85 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator custEstRevenue;
         
         /// <summary>
-        /// ddlProjects control.
+        /// ddlSalesperson control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlProjects;
+        protected global::System.Web.UI.WebControls.DropDownList ddlSalesperson;
         
         /// <summary>
-        /// cddClientProjects control.
+        /// reqSalesperson control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.CascadingDropDown cddClientProjects;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqSalesperson;
         
         /// <summary>
-        /// hlProject control.
+        /// dfOwner control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink hlProject;
+        protected global::PraticeManagement.Controls.Configuration.DefaultUser dfOwner;
         
         /// <summary>
-        /// extProjectView control.
+        /// cvDfOwnerRequired control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Opportunities.ViewProjectExtender.ViewProjectExtender extProjectView;
+        protected global::System.Web.UI.WebControls.CustomValidator cvDfOwnerRequired;
+        
+        /// <summary>
+        /// txtBuyerName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtBuyerName;
+        
+        /// <summary>
+        /// reqBuyerName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqBuyerName;
+        
+        /// <summary>
+        /// valregBuyerName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator valregBuyerName;
+        
+        /// <summary>
+        /// ddlPractice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlPractice;
+        
+        /// <summary>
+        /// reqPractice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqPractice;
         
         /// <summary>
         /// tcOpportunityDetails control.
@@ -319,6 +346,15 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.TabPanel tpDescription;
         
         /// <summary>
+        /// upDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upDescription;
+        
+        /// <summary>
         /// custOppDesciption control.
         /// </summary>
         /// <remarks>
@@ -337,67 +373,67 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.TextBox txtDescription;
         
         /// <summary>
-        /// nOpportunity control.
+        /// upNotes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.Notes nOpportunity;
+        protected global::System.Web.UI.UpdatePanel upNotes;
         
         /// <summary>
-        /// txtPipeline control.
+        /// lvNotes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPipeline;
+        protected global::System.Web.UI.WebControls.ListView lvNotes;
         
         /// <summary>
-        /// otePipeline control.
+        /// tbNote control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Opportunities.OpportunityTransitionEditor otePipeline;
+        protected global::System.Web.UI.WebControls.TextBox tbNote;
         
         /// <summary>
-        /// txtProposed control.
+        /// twNote control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtProposed;
+        protected global::AjaxControlToolkit.TextBoxWatermarkExtender twNote;
         
         /// <summary>
-        /// oteProposed control.
+        /// btnAddNote control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Opportunities.OpportunityTransitionEditor oteProposed;
+        protected global::System.Web.UI.WebControls.Button btnAddNote;
         
         /// <summary>
-        /// txtSendOut control.
+        /// rvNotes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSendOut;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rvNotes;
         
         /// <summary>
-        /// oteSendOut control.
+        /// cvLen control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Opportunities.OpportunityTransitionEditor oteSendOut;
+        protected global::System.Web.UI.WebControls.CustomValidator cvLen;
         
         /// <summary>
         /// tpHistory control.
@@ -409,6 +445,15 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.TabPanel tpHistory;
         
         /// <summary>
+        /// upActivityLog control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upActivityLog;
+        
+        /// <summary>
         /// activityLog control.
         /// </summary>
         /// <remarks>
@@ -418,76 +463,40 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.ActivityLogControl activityLog;
         
         /// <summary>
-        /// tpTools control.
+        /// upProposedResources control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.TabPanel tpTools;
+        protected global::System.Web.UI.UpdatePanel upProposedResources;
         
         /// <summary>
-        /// dpProjectedStartDate control.
+        /// ucProposedResources control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.DatePicker dpProjectedStartDate;
+        protected global::PraticeManagement.Controls.Opportunities.ProposedResources ucProposedResources;
         
         /// <summary>
-        /// reqProjectedStartDate control.
+        /// UpdatePanel1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqProjectedStartDate;
+        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
         
         /// <summary>
-        /// rngProjectStartDate control.
+        /// hdnValueChanged control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RangeValidator rngProjectStartDate;
-        
-        /// <summary>
-        /// dpProjectedEndDate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.DatePicker dpProjectedEndDate;
-        
-        /// <summary>
-        /// compProjectedEndDate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CompareValidator compProjectedEndDate;
-        
-        /// <summary>
-        /// reqProjectedEndDate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqProjectedEndDate;
-        
-        /// <summary>
-        /// rngProjectEndDate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RangeValidator rngProjectEndDate;
+        protected global::System.Web.UI.WebControls.HiddenField hdnValueChanged;
         
         /// <summary>
         /// btnConvertToProject control.
@@ -499,13 +508,40 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnConvertToProject;
         
         /// <summary>
-        /// mlConfirmation control.
+        /// hintConvertProject control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.MessageLabel mlConfirmation;
+        protected global::System.Web.UI.WebControls.Image hintConvertProject;
+        
+        /// <summary>
+        /// btnAttachToProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAttachToProject;
+        
+        /// <summary>
+        /// hdnField control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnField;
+        
+        /// <summary>
+        /// mpeAttachToProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeAttachToProject;
         
         /// <summary>
         /// hdnOpportunityId control.
@@ -517,24 +553,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.HiddenField hdnOpportunityId;
         
         /// <summary>
-        /// btnSave control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSave;
-        
-        /// <summary>
-        /// btnCancelAndReturn control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.Buttons.CancelAndReturnButton btnCancelAndReturn;
-        
-        /// <summary>
         /// custOpportunityNotSaved control.
         /// </summary>
         /// <remarks>
@@ -542,6 +560,51 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator custOpportunityNotSaved;
+        
+        /// <summary>
+        /// ltrWonConvertInvalid control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrWonConvertInvalid;
+        
+        /// <summary>
+        /// divPriorityDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divPriorityDescription;
+        
+        /// <summary>
+        /// lblClose control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblClose;
+        
+        /// <summary>
+        /// lvOpportunityPriorities control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ListView lvOpportunityPriorities;
+        
+        /// <summary>
+        /// mlConfirmation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.MessageLabel mlConfirmation;
         
         /// <summary>
         /// vsumOpportunity control.
@@ -571,22 +634,85 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.ValidationSummary vsumWonConvert;
         
         /// <summary>
-        /// ltrWonConvertInvalid control.
+        /// vsumHasPersons control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltrWonConvertInvalid;
+        protected global::System.Web.UI.WebControls.ValidationSummary vsumHasPersons;
         
         /// <summary>
-        /// LoadingProgress1 control.
+        /// btnSave control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.LoadingProgress LoadingProgress1;
+        protected global::System.Web.UI.WebControls.Button btnSave;
+        
+        /// <summary>
+        /// btnCancelChanges control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelChanges;
+        
+        /// <summary>
+        /// pnlAttachToProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlAttachToProject;
+        
+        /// <summary>
+        /// upAttachToProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upAttachToProject;
+        
+        /// <summary>
+        /// ddlProjects control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlProjects;
+        
+        /// <summary>
+        /// btnAttach control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAttach;
+        
+        /// <summary>
+        /// btnCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancel;
+        
+        /// <summary>
+        /// lpOpportunityDetails control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.LoadingProgress lpOpportunityDetails;
     }
 }
 
