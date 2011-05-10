@@ -46,6 +46,10 @@ namespace DataAccess
                                                 context.CurrentId.HasValue ? (object)context.CurrentId.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.TargetPerson,
                                                 (object)context.TargetPersonId ?? DBNull.Value);
+                if (context.IsDiscussionReview2)
+                {
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsDiscussionReview2, context.IsDiscussionReview2);
+                }
 
                 connection.Open();
                 using (var reader = command.ExecuteReader())
@@ -847,7 +851,7 @@ namespace DataAccess
             return res;
         }
 
-        public static void OpportunityPersonInsert(int opportunityId, string personIdList,string outSideResources)
+        public static void OpportunityPersonInsert(int opportunityId, string personIdList, string outSideResources)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.OpportunityPersonInsert, connection))
