@@ -32,6 +32,7 @@ namespace PraticeManagement
         private bool _userIsAdministrator;
         private bool _userIsRecruiter;
         private bool _userIsSalesperson;
+        private bool _userIsHR;
 
         #endregion
 
@@ -66,8 +67,9 @@ namespace PraticeManagement
                     {
                         try
                         {
-                            Cache[OPPORTUNITY_KEY] = serviceClient.GetById(OpportunityId.Value);
-                            return Cache[OPPORTUNITY_KEY] as Opportunity;
+                            var currentOpportunity = serviceClient.GetById(OpportunityId.Value);
+                            Cache[OPPORTUNITY_KEY] = currentOpportunity;
+                            return currentOpportunity;
                         }
                         catch (CommunicationException)
                         {
@@ -351,6 +353,8 @@ namespace PraticeManagement
                 roles.Contains(DataTransferObjects.Constants.RoleNames.SalespersonRoleName);
             _userIsRecruiter =
                 roles.Contains(DataTransferObjects.Constants.RoleNames.RecruiterRoleName);
+            _userIsHR =
+                roles.Contains(DataTransferObjects.Constants.RoleNames.HRRoleName);
         }
 
         protected void btnAddNote_Click(object sender, EventArgs e)
@@ -485,7 +489,6 @@ namespace PraticeManagement
             divResultDescription.Style["display"] = "inline";
 
             bool IsSavedWithoutErrors = ValidateAndSave();
-            activityLog.Update();
             if (IsSavedWithoutErrors)
             {
                 mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Opportunity"));
@@ -556,7 +559,7 @@ namespace PraticeManagement
             }
             upAttachToProject.Update();
             mpeAttachToProject.Show();
-           
+
         }
 
         public void lvOpportunities_OnDataBound(object sender, EventArgs e)
@@ -654,8 +657,10 @@ namespace PraticeManagement
             var canEdit = CanUserEditOpportunity(opportunity);
 
             var isStatusReadOnly =
-                !canEdit ||
-                (!_userIsAdministrator && !_userIsSalesperson && _userIsRecruiter);
+                 !canEdit ||
+                 (!_userIsAdministrator && !_userIsSalesperson && _userIsRecruiter) ||
+                 (!_userIsAdministrator && !_userIsSalesperson && _userIsHR); //#2817: this line is added asper requirement.
+
 
             txtOpportunityName.ReadOnly =
                   txtBuyerName.ReadOnly =
@@ -668,7 +673,8 @@ namespace PraticeManagement
                 ddlSalesperson.Enabled =
                 ddlPractice.Enabled =
                 btnSave.Enabled =
-                dfOwner.Enabled = canEdit;
+                dfOwner.Enabled =
+                ucProposedResources.Enabled = canEdit;
 
             btnConvertToProject.Enabled =
                 btnAttachToProject.Enabled = canEdit && !opportunity.ProjectId.HasValue;
@@ -703,7 +709,7 @@ namespace PraticeManagement
                 // or current is of the same practice
                 current.DefaultPractice != null && opportunity.Practice != null && current.DefaultPractice == opportunity.Practice);
 
-            return _userIsAdministrator || isOwnerOrPracticeManagerOrTheSamePractice || _userIsRecruiter || _userIsSalesperson;
+            return _userIsAdministrator || isOwnerOrPracticeManagerOrTheSamePractice || _userIsRecruiter || _userIsSalesperson || _userIsHR;//#2817: _userIsHR is added as per requirement.
         }
 
         private void PopulateControls(Opportunity opportunity)
