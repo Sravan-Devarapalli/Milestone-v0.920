@@ -54,6 +54,7 @@
       <Setting name="EnableSSL" />
       <Setting name="senioritySeparationRangeValue" />
       <Setting name="ShowWithoutDirector" />
+      <Setting name="AttachmentServiceURL"/>
     </ConfigurationSettings>
   </WebRole>
 </ServiceDefinition>
