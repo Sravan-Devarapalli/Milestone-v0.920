@@ -31,6 +31,15 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::System.Web.UI.WebControls.HiddenField hdnProposedPersonIdsList;
         
         /// <summary>
+        /// hlnkUtilization control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink hlnkUtilization;
+        
+        /// <summary>
         /// hintDate control.
         /// </summary>
         /// <remarks>
