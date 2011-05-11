@@ -4,7 +4,7 @@
     [ClientId]            INT            NOT NULL,
     [SalespersonId]       INT            NULL,
     [OpportunityStatusId] INT            NOT NULL,
-    [Priority]            CHAR (1)       NOT NULL,
+    [Priority]            CHAR (1)       NULL,
     [ProjectedStartDate]  DATETIME       NULL,
     [ProjectedEndDate]    DATETIME       NULL,
     [OpportunityNumber]   NVARCHAR (12)  NOT NULL,
@@ -22,7 +22,8 @@
     [GroupId]             INT            NULL,
     [LastUpdated]         DATETIME       NOT NULL,
 	[EstimatedRevenue]    DECIMAL(18, 2) NULL,
-	[OutSideResources]	  NVARCHAR(4000) NULL
+	[OutSideResources]	  NVARCHAR(4000) NULL,
+	PriorityId			  INT NOT NULL
 );
  
 
