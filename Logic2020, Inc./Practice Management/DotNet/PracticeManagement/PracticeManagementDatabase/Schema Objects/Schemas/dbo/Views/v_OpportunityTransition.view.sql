@@ -1,20 +1,22 @@
 ﻿
 CREATE VIEW [dbo].[v_OpportunityTransition]
 AS
-SELECT     dbo.OpportunityTransition.*, 
-			dbo.Opportunity.Name as 'OpportunityName', 
-			dbo.Opportunity.LastUpdated, 
-			dbo.Opportunity.ClientId, 
-			dbo.Opportunity.OpportunityNumber,
-			dbo.Opportunity.Priority,
-			dbo.Opportunity.OpportunityStatusId,
-			dbo.Client.Name AS 'ClientName',
-			stat.Name AS 'OpportunityTransitionStatusName'
-FROM         dbo.OpportunityTransition INNER JOIN
-					  dbo.OpportunityTransitionStatus as stat on stat.OpportunityTransitionStatusId = dbo.OpportunityTransition.OpportunityTransitionStatusId INNER JOIN
-                      dbo.Opportunity ON dbo.OpportunityTransition.OpportunityId = dbo.Opportunity.OpportunityId INNER JOIN
-                      dbo.Person ON dbo.OpportunityTransition.TargetPersonId = dbo.Person.PersonId INNER JOIN
-                      dbo.Client ON dbo.Opportunity.ClientId = dbo.Client.ClientId
+	SELECT     OT.*, 
+				O.Name as 'OpportunityName', 
+				O.LastUpdated, 
+				O.ClientId, 
+				O.OpportunityNumber,
+				OP.Priority,
+				O.OpportunityStatusId,
+				C.Name AS 'ClientName',
+				stat.Name AS 'OpportunityTransitionStatusName'
+	FROM  dbo.OpportunityTransition  as OT
+	INNER JOIN dbo.OpportunityTransitionStatus as stat on stat.OpportunityTransitionStatusId =OT.OpportunityTransitionStatusId
+	INNER JOIN dbo.Opportunity AS O ON OT.OpportunityId = O.OpportunityId
+	INNER JOIN dbo.Person AS P ON OT.TargetPersonId = P.PersonId 
+	INNER JOIN dbo.Client AS C ON O.ClientId = C.ClientId
+	INNER JOIN dbo.OpportunityPriorities OP ON O.PriorityId = OP.Id
+
 
 
 GO
