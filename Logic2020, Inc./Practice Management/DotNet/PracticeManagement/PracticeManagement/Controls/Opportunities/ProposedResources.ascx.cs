@@ -214,20 +214,20 @@ namespace PraticeManagement.Controls.Opportunities
 
         public void AddAttributesAndBoldPotentialResourcesPersons()
         {
-            List<string> distinctPotentialBoldPersons = GetDistinctPotentialBoldPersons();
+            //List<string> distinctPotentialBoldPersons = GetDistinctPotentialBoldPersons();
 
             foreach (ListItem item in cblPotentialResources.Items)
             {
                 item.Attributes["PersonId"] = item.Value;
 
-                foreach (string name in distinctPotentialBoldPersons)
-                {
-                    if (item.Text == name)
-                    {
-                        item.Attributes["style"] = "font-weight:bold;";
-                        break;
-                    }
-                }
+                //foreach (string name in distinctPotentialBoldPersons)
+                //{
+                //    if (item.Text == name)
+                //    {
+                //        item.Attributes["style"] = "font-weight:bold;";
+                //        break;
+                //    }
+                //}
             }
         }
 
