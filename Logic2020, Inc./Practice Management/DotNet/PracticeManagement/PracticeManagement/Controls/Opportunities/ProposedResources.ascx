@@ -124,10 +124,7 @@
     <td colspan="6" style="width: 100%; padding-left: 4px;">
         <div style="text-align: center; padding: 4px 0px 4px 0px;">
             Select from the list of Potential Resources below and click "Add" to note them as
-            Proposed for this Opportunity.Potential Resources appearing in <b>bold</b> are ones
-            that are currently appearing as less than fully
-            <asp:HyperLink ID="hlnkUtilization" Target="_blank" runat="server" Text="utilized"
-                NavigateUrl="~/Reports/UtilizationTimeline.aspx"></asp:HyperLink>.<asp:Image ID="hintDate"
+            Proposed for this Opportunity.<asp:Image ID="hintDate"
                     runat="server" ImageUrl="~/Images/hint.png" ToolTip="Choosing a Start and End Date for the Opportunity, even loosely, will result in a much more accurate idea of which Potential Resources are available for this Opportunity." />
         </div>
     </td>
