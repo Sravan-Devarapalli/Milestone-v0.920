@@ -125,6 +125,9 @@ namespace PraticeManagement
                 DataHelper.FillSalespersonListOnlyActive(ddlSalesperson, string.Empty);
                 DataHelper.FillOpportunityStatusList(ddlStatus, string.Empty);
                 DataHelper.FillPracticeListOnlyActive(ddlPractice, string.Empty);
+                DataHelper.FillOpportunityPrioritiesList(ddlPriority, string.Empty);
+
+                PopulatePriorityHint();
 
                 if (OpportunityId.HasValue)
                 {
@@ -309,7 +312,7 @@ namespace PraticeManagement
                 {
                     var projectId = serviceClient.ConvertOpportunityToProject(OpportunityId.Value,
                                                                               User.Identity.Name, HasProposedPersons);
-
+                
                     Response.Redirect(
                             Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri));
                 }
@@ -354,11 +357,36 @@ namespace PraticeManagement
         {
             if (IsDirty)
             {
+               
+                if (OpportunityId.HasValue)
+                {
+                    LoadOpportunityDetails();
+                }
+                else 
+                {
+                    ResetControls();
+                }
                 ClearDirty();
-                LoadOpportunityDetails();
                 tbNote.Text = "";
             }
             btnSave.Enabled = false;
+        }
+
+        private void ResetControls()
+        {
+            txtBuyerName.Text = string.Empty;
+            txtDescription.Text = string.Empty;
+            txtEstRevenue.Text = string.Empty;
+            txtOpportunityName.Text = string.Empty;
+            ddlClient.SelectedIndex = 0;
+            ddlClientGroup.SelectedIndex = 0;
+            ddlPractice.SelectedIndex = 0;
+            ddlPriority.SelectedIndex = 0;
+            ddlSalesperson.SelectedIndex = 0;
+            ddlStatus.SelectedIndex = 0;
+            dpStartDate.TextValue = string.Empty;
+            dpEndDate.TextValue = string.Empty;
+
         }
 
         protected void btnAttachToProject_Click(object sender, EventArgs e)
@@ -486,7 +514,7 @@ namespace PraticeManagement
                 ucProposedResources.Enabled = canEdit;
 
             btnConvertToProject.Enabled =
-                btnAttachToProject.Enabled = canEdit && !opportunity.ProjectId.HasValue;
+               btnAttachToProject.Enabled = canEdit && !opportunity.ProjectId.HasValue;
 
             ddlClientGroup.Visible = canEdit;
 
@@ -547,7 +575,7 @@ namespace PraticeManagement
 
             ddlPriority.SelectedIndex =
                 ddlPriority.Items.IndexOf(
-                    ddlPriority.Items.FindByValue(opportunity.Priority.ToString()));
+                    ddlPriority.Items.FindByValue(opportunity.PriorityId.ToString()));
 
             PopulateSalesPersonDropDown();
 
@@ -555,9 +583,7 @@ namespace PraticeManagement
 
             PopulateOwnerDropDown();
 
-            PopulateClientGroupDropDown();
-
-            PopulatePriorityHint();
+            PopulateClientGroupDropDown();           
 
             hdnValueChanged.Value = "false";
             btnSave.Attributes.Add("disabled", "true");
@@ -643,7 +669,13 @@ namespace PraticeManagement
                 dpEndDate.DateValue != DateTime.MinValue
                         ? (DateTime?)dpEndDate.DateValue
                         : null;
-            opportunity.Priority = ddlPriority.SelectedValue[0];
+
+            int priorityId;
+            if (int.TryParse(ddlPriority.SelectedValue, out priorityId))
+            {
+                opportunity.PriorityId = priorityId;
+            }
+
             opportunity.Description = txtDescription.Text;
             opportunity.BuyerName = txtBuyerName.Text;
 
