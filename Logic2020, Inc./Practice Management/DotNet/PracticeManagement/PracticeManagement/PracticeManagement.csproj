@@ -123,7 +123,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\ActivityLog.aspx" />
+    <Content Include="ActivityLog.aspx" />
     <Content Include="Config\BecomeUser.aspx" />
     <Content Include="Config\Branding.aspx" />
     <Content Include="Config\Clients.aspx" />
@@ -675,12 +675,12 @@
     <Compile Include="ActivityLog.aspx.designer.cs">
       <DependentUpon>ActivityLog.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Config\ActivityLog.aspx.cs">
-      <DependentUpon>ActivityLog.aspx</DependentUpon>
+    <Compile Include="ActivityLog_Old.aspx.cs">
+      <DependentUpon>ActivityLog_Old.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Config\ActivityLog.aspx.designer.cs">
-      <DependentUpon>ActivityLog.aspx</DependentUpon>
+    <Compile Include="ActivityLog_Old.aspx.designer.cs">
+      <DependentUpon>ActivityLog_Old.aspx</DependentUpon>
     </Compile>
     <Compile Include="Config\BecomeUser.aspx.cs">
       <DependentUpon>BecomeUser.aspx</DependentUpon>
@@ -2100,7 +2100,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.Practice.datasource" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ActivityLog.aspx" />
+    <Content Include="ActivityLog_Old.aspx" />
     <Content Include="Calendar.aspx" />
     <Content Include="ClientDetails.aspx" />
     <Content Include="CompanyPerfomanceServ.asmx" />
@@ -2758,3 +2758,4 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
+
