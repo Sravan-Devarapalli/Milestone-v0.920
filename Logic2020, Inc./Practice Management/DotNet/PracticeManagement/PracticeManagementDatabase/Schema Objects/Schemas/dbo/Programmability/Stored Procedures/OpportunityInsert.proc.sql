@@ -4,7 +4,7 @@
 	@ClientId              INT,
 	@SalespersonId         INT,
 	@OpportunityStatusId   INT,
-	@Priority              CHAR(1),
+	@PriorityId            INT,
 	@ProjectedStartDate    DATETIME,
 	@ProjectedEndDate      DATETIME,
 	@Description           NVARCHAR(MAX),
@@ -48,10 +48,10 @@ BEGIN
 		END
 
 		INSERT INTO dbo.Opportunity
-					(Name, ClientId, SalespersonId, OpportunityStatusId, Priority,
+					(Name, ClientId, SalespersonId, OpportunityStatusId, PriorityId,
 					 ProjectedStartDate, ProjectedEndDate, OpportunityNumber, Description, PracticeId, BuyerName,
 					 Pipeline, Proposed, SendOut, OpportunityIndex,  ProjectId, OwnerId, GroupId ,EstimatedRevenue)
-			 VALUES (@Name, @ClientId, @SalespersonId, @OpportunityStatusId, @Priority,
+			 VALUES (@Name, @ClientId, @SalespersonId, @OpportunityStatusId, @PriorityId,
 					 @ProjectedStartDate, @ProjectedEndDate, @OpportunityNumber, @Description, @PracticeId, @BuyerName,
 					 @Pipeline, @Proposed, @SendOut, @OpportunityIndex, @ProjectId, @OwnerId, @GroupId ,@EstimatedRevenue)
 
