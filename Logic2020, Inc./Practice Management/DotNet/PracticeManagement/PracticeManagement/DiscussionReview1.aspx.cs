@@ -149,6 +149,8 @@ namespace PraticeManagement
                 DataHelper.FillSalespersonListOnlyActive(ddlSalesperson, string.Empty);
                 DataHelper.FillOpportunityStatusList(ddlStatus, string.Empty);
                 DataHelper.FillPracticeListOnlyActive(ddlPractice, string.Empty);
+                DataHelper.FillOpportunityPrioritiesList(ddlPriority,string.Empty);
+                PopulatePriorityHint();
 
                 if (OpportunityId.HasValue)
                 {
@@ -738,7 +740,7 @@ namespace PraticeManagement
 
             ddlPriority.SelectedIndex =
                 ddlPriority.Items.IndexOf(
-                    ddlPriority.Items.FindByValue(opportunity.Priority.ToString()));
+                    ddlPriority.Items.FindByValue(opportunity.PriorityId.ToString()));
 
             PopulateSalesPersonDropDown();
 
@@ -746,9 +748,7 @@ namespace PraticeManagement
 
             PopulateOwnerDropDown();
 
-            PopulateClientGroupDropDown();
-
-            PopulatePriorityHint();
+            PopulateClientGroupDropDown();            
 
             hdnValueChanged.Value = "false";
             btnSave.Attributes.Add("disabled", "true");
@@ -834,7 +834,11 @@ namespace PraticeManagement
                 dpEndDate.DateValue != DateTime.MinValue
                         ? (DateTime?)dpEndDate.DateValue
                         : null;
-            opportunity.Priority = ddlPriority.SelectedValue[0];
+            int priorityId;
+            if (int.TryParse(ddlPriority.SelectedValue, out priorityId))
+            {
+                opportunity.PriorityId = priorityId;
+            }
             opportunity.Description = txtDescription.Text;
             opportunity.BuyerName = txtBuyerName.Text;
 
@@ -872,15 +876,7 @@ namespace PraticeManagement
 
         protected static string GetFormattedEstimatedRevenue(Decimal? estimatedRevenue)
         {
-            try
-            {
-                int result = (int)estimatedRevenue / 1000;
-                return result.ToString(DataTransferObjects.PracticeManagementCurrency.CurrencyLargeDisplayFormat) + "k";
-            }
-            catch
-            {
-                return string.Empty;
-            }
+            return estimatedRevenue.GetFormattedEstimatedRevenue();
         }
 
         protected static string GetTruncatedOpportunityName(String Name)
