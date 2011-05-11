@@ -3,8 +3,8 @@
 -- Create date: 2010-07-02
 -- Description:	Record opportunity changes to AL
 -- =============================================
-CREATE TRIGGER tr_Opportunity_Log
-   ON  dbo.Opportunity
+CREATE TRIGGER [dbo].[tr_Opportunity_Log]
+   ON  [dbo].[Opportunity]
    AFTER INSERT, UPDATE
 AS 
 BEGIN
@@ -21,7 +21,7 @@ BEGIN
 			   ,opp.SalespersonFirstName + ', ' + opp.SalespersonLastName as 'Salesperson'
 			   ,i.[OpportunityStatusId]
 			   ,opp.OpportunityStatusName
-			   ,i.[Priority]
+			   ,OP.[Priority]
 			   ,i.[ProjectedStartDate]
 			   ,i.[ProjectedEndDate]
 			   ,i.[OpportunityNumber]
@@ -42,6 +42,7 @@ BEGIN
 			   ,i.[LastUpdated]
 		  FROM inserted AS i
 		       INNER JOIN v_Opportunity as opp ON i.OpportunityId = opp.OpportunityId
+		       INNER JOIN OpportunityPriorities OP ON i.OpportunityId = Op.Id
 	),
 
 	OLD_VALUES AS
@@ -54,7 +55,7 @@ BEGIN
 			   ,opp.SalespersonFirstName + ', ' + opp.SalespersonLastName as 'Salesperson'
 			   ,d.[OpportunityStatusId]
 			   ,opp.OpportunityStatusName
-			   ,d.[Priority]
+			   ,OP.[Priority]
 			   ,d.[ProjectedStartDate]
 			   ,d.[ProjectedEndDate]
 			   ,d.[OpportunityNumber]
@@ -75,6 +76,7 @@ BEGIN
 			   ,d.[LastUpdated]
 		  FROM deleted AS d
 		       INNER JOIN v_Opportunity as opp ON d.OpportunityId = opp.OpportunityId
+		       INNER JOIN OpportunityPriorities OP ON d.OpportunityId = Op.Id
 	)
 
 	-- Log an activity
