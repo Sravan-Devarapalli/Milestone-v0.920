@@ -14,9 +14,9 @@ namespace DataTransferObjects.ContextObjects
         [DataMember]
         public DateTime Start { get; set; }
         [DataMember]
-        public bool? ActivePersons { get; set; }
+        public bool ActivePersons { get; set; }
         [DataMember]
-        public bool? ProjectedPersons { get; set; }
+        public bool ProjectedPersons { get; set; }
         [DataMember]
         public bool ActiveProjects { get; set; }
         [DataMember]
