@@ -5,7 +5,7 @@ CREATE PROCEDURE [dbo].[OpportunityUpdate]
 	@ClientId              INT,
 	@SalespersonId         INT,
 	@OpportunityStatusId   INT,
-	@Priority              CHAR(1),
+	@PriorityId            INT,
 	@ProjectedStartDate    DATETIME,
 	@ProjectedEndDate      DATETIME,
 	@Description           NVARCHAR(MAX),
@@ -27,25 +27,33 @@ AS
 BEGIN
 	SET NOCOUNT ON
 		DECLARE @PrevOpportunityStatusId INT
-		DECLARE @PrevPriority CHAR
+		DECLARE @PrevPriority NVARCHAR(255)
+		DECLARE @PrevPriorityId INT
 		DECLARE @PrevPipeline NVARCHAR(1000)
 		DECLARE @PrevProposed NVARCHAR(1000)
 		DECLARE @PrevSendOut NVARCHAR(1000)
+		DECLARE @CurrentPriority NVARCHAR(255)
 
 		SELECT @PrevOpportunityStatusId = o.OpportunityStatusId,
-			   @PrevPriority = o.Priority,
+			   @PrevPriority = OP.Priority,
+			   @PrevPriorityId = O.PriorityId,
 			   @PrevPipeline = o.Pipeline,
 			   @PrevProposed = o.Proposed,
 			   @PrevSendOut = o.SendOut
 		  FROM dbo.Opportunity AS o
+		  JOIN dbo.OpportunityPriorities AS OP ON Op.Id = o.PriorityId
 		 WHERE o.OpportunityId = @OpportunityId
+
+		 SELECT @CurrentPriority = Priority
+		 FROM dbo.OpportunityPriorities
+		 WHERE Id = @PriorityId
 
 		UPDATE dbo.Opportunity
 		   SET Name = @Name,
 			   ClientId = @ClientId,
 			   SalespersonId = @SalespersonId,
 			   OpportunityStatusId = @OpportunityStatusId,
-			   Priority = @Priority,
+			   PriorityId = @PriorityId,
 			   ProjectedStartDate = @ProjectedStartDate,
 			   ProjectedEndDate = @ProjectedEndDate,
 			   Description = @Description,
@@ -85,10 +93,10 @@ BEGIN
 		END
 
 		-- Determine if the priority was changed
-		IF @PrevPriority <> @Priority
+		IF @PrevPriorityId <> @PriorityId
 		BEGIN
 			-- Create a history record
-			SET @NoteText = 'Priority changed.  Was: ' + @PrevPriority + ' now: ' + @Priority
+			SET @NoteText = 'Priority changed.  Was: ' + @PrevPriority + ' now: ' + @CurrentPriority
 
 			EXEC dbo.OpportunityTransitionInsert @OpportunityId = @OpportunityId,
 				@OpportunityTransitionStatusId = 2 /* Notes */,
