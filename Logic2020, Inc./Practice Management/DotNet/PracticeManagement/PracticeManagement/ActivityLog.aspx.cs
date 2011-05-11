@@ -1,25 +1,21 @@
 ﻿using System;
-
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using PraticeManagement.Controls;
 
-namespace PraticeManagement
+namespace PraticeManagement.Config
 {
-	public partial class ActivityLog : PracticeManagementPageBase
-	{
-		protected void Page_Init(object sender, EventArgs e)
-		{
-		}
+    public partial class ActivityLog : PracticeManagementPageBase
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
 
-		protected void Page_Load(object sender, EventArgs e)
-		{
-			if (!IsPostBack)
-			{
-			}
-		}
-
+        }
         protected override void Display()
         {
         }
-	}
+    }
 }
-
