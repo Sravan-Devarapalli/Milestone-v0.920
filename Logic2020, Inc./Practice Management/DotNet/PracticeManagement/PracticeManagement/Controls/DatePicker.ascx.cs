@@ -25,6 +25,10 @@ namespace PraticeManagement.Controls
                 dateRangeVal.Enabled = DateValue > DateTime.MinValue;
                 return txtDate.Text;
             }
+            set
+            {
+                txtDate.Text = value;
+            }
         }
 
         /// <summary>
