@@ -6,7 +6,8 @@ AS
 	       o.ClientId,
 	       o.SalespersonId,
 	       o.OpportunityStatusId,
-	       o.Priority,
+	       OP.Priority,
+		   o.PriorityId,
 	       o.ProjectedStartDate,
 	       o.ProjectedEndDate,
 	       o.OpportunityNumber,
@@ -38,6 +39,7 @@ AS
 		   o.OutSideResources
 	  FROM dbo.Opportunity AS o
 	       INNER JOIN dbo.Client AS c ON o.ClientId = c.ClientId
+		   INNER JOIN dbo.OpportunityPriorities OP ON OP.Id = O.PriorityId
 	       LEFT JOIN dbo.Person AS p ON o.SalespersonId = p.PersonId
 		   LEFT JOIN dbo.Person AS own ON o.OwnerID = own.PersonId
 	       INNER JOIN dbo.OpportunityStatus AS s ON o.OpportunityStatusId = s.OpportunityStatusId
