@@ -2,8 +2,9 @@
 AS
 BEGIN
 	SET NOCOUNT ON
-	SELECT	Priority,
+	SELECT	Id,
+			Priority,
 			Description
-	FROM dbo.OpportunityPriorities
-	ORDER BY Priority
+	FROM dbo.OpportunityPriorities AS OP
+	ORDER BY OP.sortOrder
 END
