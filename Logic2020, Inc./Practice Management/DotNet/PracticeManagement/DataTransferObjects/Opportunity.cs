@@ -126,11 +126,22 @@ namespace DataTransferObjects
         /// Gets or sets an Opportunity Priority.
         /// </summary>
         [DataMember]
-        public char Priority
+        public string Priority
         {
             get;
             set;
         }
+
+        /// <summary>
+        /// Gets or sets an Opportunity PriorityId.
+        /// </summary>
+        [DataMember]
+        public int PriorityId
+        {
+            get;
+            set;
+        }
+
 
         /// <summary>
         /// Gets or sets a projected start date.
