@@ -65,5 +65,30 @@ namespace PraticeManagement.Utils
         }
 
         #endregion "DropDown Sorting Methods"
+
+        #region "Decimal Formatting"
+
+        public static string GetFormattedEstimatedRevenue(this Decimal? revenue)
+        {
+            try
+            {
+                if (revenue <= 999999)
+                {
+                    int result = (int)revenue / 1000;
+                    return result.ToString("$###,###,###,###,##0") + "k";
+                }
+                else
+                {
+                    Decimal result = (Decimal)revenue / 1000000;
+                    return result.ToString("$###,###,###,###,##0.0") + "m";
+                }
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        #endregion "Decimal Formatting"
     }
 }
