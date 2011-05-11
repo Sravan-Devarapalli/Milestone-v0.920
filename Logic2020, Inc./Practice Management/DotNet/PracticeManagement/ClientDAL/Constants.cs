@@ -191,6 +191,7 @@
             public const string SalespersonIdColumn = "SalespersonId";
             public const string OpportunityStatusIdColumn = "OpportunityStatusId";
             public const string PriorityColumn = "Priority";
+            public const string PriorityIdColumn = "PriorityId";
             public const string ProjectedStartDateColumn = "ProjectedStartDate";
             public const string ProjectedEndDateColumn = "ProjectedEndDate";
             public const string OpportunityNumberColumn = "OpportunityNumber";
@@ -400,6 +401,7 @@
             public const string ActiveOnlyParam = "@ActiveOnly";
             public const string OpportunityStatusIdParam = "@OpportunityStatusId";
             public const string PriorityParam = "@Priority";
+            public const string PriorityIdParam = "@PriorityId";
             public const string ProjectedStartDateParam = "@ProjectedStartDate";
             public const string ProjectedEndDateParam = "@ProjectedEndDate";
             public const string DescriptionParam = "@Description";
