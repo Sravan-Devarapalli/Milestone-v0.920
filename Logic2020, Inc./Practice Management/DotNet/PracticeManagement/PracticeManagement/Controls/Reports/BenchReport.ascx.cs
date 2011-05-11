@@ -248,7 +248,7 @@ namespace PraticeManagement.Controls.Reports
                         foreach (KeyValuePair<DateTime, ComputedFinancials> interestValue in
                             project.ProjectedFinancialsByMonth)
                         {
-                            if (IsInMonth(interestValue.Key, monthBegin, monthEnd) && interestValue.Value.GrossMargin.Value != 0M)
+                            if (IsInMonth(interestValue.Key, monthBegin, monthEnd))
                             {
                                 rowVisible = true;
 
