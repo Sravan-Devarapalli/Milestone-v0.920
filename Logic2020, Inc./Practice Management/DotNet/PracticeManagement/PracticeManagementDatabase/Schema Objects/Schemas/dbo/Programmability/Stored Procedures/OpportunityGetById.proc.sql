@@ -11,6 +11,7 @@ AS
 	       o.SalespersonId,
 	       o.OpportunityStatusId,
 	       o.Priority,
+		   o.PriorityId,
 	       o.ProjectedStartDate,
 	       o.ProjectedEndDate,
 	       o.OpportunityNumber,
