@@ -72,7 +72,7 @@
         <siteMapNode url="~/Config/TimeTypes.aspx" title="Time Types" description="TimeTypes"  />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Troubleshooting" title="Troubleshooting" description="Troubleshooting">
-        <siteMapNode url="~/Config/ActivityLog.aspx" title="Activity Log" description="Activity Log"  />
+        <siteMapNode url="~/ActivityLog.aspx" title="Activity Log" description="Activity Log"  />
         <siteMapNode url="~/Config/BecomeUser.aspx" title="Become User" description="Become User"  />
         <siteMapNode url="~/Config/Help.aspx" title="Help" description="Help"  />
         <siteMapNode url="~/Config/SiteMap.aspx" title="Site Map" description="Site Map"  />
