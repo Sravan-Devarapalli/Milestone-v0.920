@@ -3264,5 +3264,8 @@
     <NotInBuild Include="Schema Objects\Schemas\dbo\Tables\Indexes\UN_DefaultMilestoneSetting.sql">
       <SubType>NotInBuild</SubType>
     </NotInBuild>
+    <NotInBuild Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_Opportunity_PriorityId.sql">
+      <SubType>NotInBuild</SubType>
+    </NotInBuild>
   </ItemGroup>
 </Project>
