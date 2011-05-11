@@ -1846,6 +1846,14 @@ namespace PraticeManagement.Controls
                 }
             }
         }
+
+        public static void FillOpportunityPrioritiesList(DropDownList ddlPriority, string firstItemText)
+        {
+            OpportunityPriority[] priorities = DataHelper.GetOpportunityPrioritiesListAll();
+
+            FillListDefault(ddlPriority, firstItemText, priorities, false, "Id", "Priority");
+
+        }
     }
 }
 
