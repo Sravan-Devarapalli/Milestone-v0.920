@@ -118,6 +118,16 @@
                     </style>
                     <table cellpadding="5" cellspacing="2" border="0">
                         <tr align="center">
+                            <td style="width: 125px; border-bottom: 1px solid black;" valign="top">
+                                Person Status
+                            </td>
+                            <td style="width: 30px;">
+                            </td>
+                            <td style="width: 150px; border-bottom: 1px solid black;" valign="top">
+                                Pay Type
+                            </td>
+                            <td style="width: 30px;">
+                            </td>
                             <td style="width: 250px; border-bottom: 1px solid black;" colspan="2" valign="top">
                                 Project Type
                             </td>
@@ -130,6 +140,23 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>
+                                <asp:CheckBox ID="cbActivePersons" runat="server" Text="Active Persons" Checked="True"
+                                    onclick="EnableResetButton();" />
+                            </td>
+                            <td>
+                            </td>
+                            <td class="floatRight" style="padding-top: 5px; padding-left: 3px;">
+                                <cc2:ScrollingDropDown ID="cblPayType" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
+                                    onclick="scrollingDropdown_onclick('cblPayType','Pay Type')" BackColor="White"
+                                    CellPadding="3" NoItemsType="Nothing" SetDirty="False" Width="200px" DropDownListType="Pay Type"
+                                    Height="100px" BorderWidth="0" />
+                                <ext:ScrollableDropdownExtender ID="sdePayType" runat="server" TargetControlID="cblPayType"
+                                    Width="200px" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                                </ext:ScrollableDropdownExtender>
+                            </td>
+                            <td>
+                            </td>
                             <td>
                                 <asp:CheckBox ID="chbActiveProjects" runat="server" AutoPostBack="false" Checked="True"
                                     onclick="EnableResetButton();" Text="Active" ToolTip="Include active projects into report" />
@@ -151,6 +178,16 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>
+                                <asp:CheckBox ID="cbProjectedPersons" runat="server" Text="Projected Persons" Checked="true"
+                                    onclick="EnableResetButton();" />
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
                             <td>
                                 <asp:CheckBox ID="chbProjectedProjects" runat="server" AutoPostBack="false" Checked="True"
                                     Text="Projected" ToolTip="Include projected projects into report" onclick="EnableResetButton();" />
@@ -184,43 +221,6 @@
         </AjaxControlToolkit:TabContainer>
     </asp:Panel>
 </div>
-<div class="buttons-block" style="padding-left: 15px">
-    <div style="padding-bottom: 10px">
-        <ajaxToolkit:CollapsiblePanelExtender ID="cpeLegend" runat="Server" TargetControlID="pnlLegend"
-            ImageControlID="btnExpandLegend" CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg"
-            CollapseControlID="btnExpandLegend" ExpandControlID="btnExpandLegend" Collapsed="True"
-            TextLabelID="lblLegend" />
-        <asp:Image ID="btnExpandLegend" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Legend" />
-        &nbsp;<asp:Label ID="lblLegend" runat="server" Text="Legend" />
-    </div>
-    <asp:Panel ID="pnlLegend" runat="server">
-        <table>
-            <tr>
-                <td style="padding-bottom: 5px;">
-                    <sup style='font-size:11px;'>1</sup> - Person was hired during this month.
-                </td>
-            </tr>
-            <tr>
-                <td style="padding-bottom: 5px;">
-                    <sup style='font-size:11px;'>2</sup> - Person was terminated during this month.
-                </td>
-            </tr>
-            <tr>
-                <td style="padding-bottom: 5px;">
-                    <sup style='font-size:11px;'>3</sup> - Person was changed from salaried to hourly compensation during this
-                    month.
-                </td>
-            </tr>
-            <tr>
-                <td style="padding-bottom: 5px;">
-                    <sup style='font-size:11px;'>4</sup> - Person was changed from hourly to salaried compensation during this
-                    month.
-                </td>
-            </tr>
-        </table>
-    </asp:Panel>
-</div>
-<br />
 <div style="overflow: auto">
     <div style="padding-bottom: 10px;">
         <asp:Label ID="lblExternalPractices" runat="server" Style="font-weight: bold;" Text="Persons with External Practices"></asp:Label>
@@ -251,7 +251,7 @@
                     <asp:Label ID="lblPracticeName" runat="server" CssClass="wrap" Text='<%# Eval("Practice.Name") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField ItemStyle-Width="80px">
+            <asp:TemplateField ItemStyle-Width="80px" ItemStyle-HorizontalAlign="Center">
                 <HeaderTemplate>
                     <div class="ie-bg CompPerfDataTitle">
                         <asp:LinkButton ID="btnSortStatus" runat="server" OnClick="btnSortStatus_Click">Status</asp:LinkButton>
@@ -339,7 +339,7 @@
                         <asp:Label ID="lblPracticeName" runat="server" CssClass="wrap" Text='<%# Eval("Practice.Name") %>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField ItemStyle-Width="80px">
+                <asp:TemplateField ItemStyle-Width="80px" ItemStyle-HorizontalAlign="Center">
                     <HeaderTemplate>
                         <div class="ie-bg CompPerfDataTitle">
                             <asp:LinkButton ID="btnSortStatus" runat="server" OnClick="btnSortInternalStatus_Click">Status</asp:LinkButton>
@@ -397,5 +397,37 @@
         </asp:GridView>
     </div>
     <asp:HiddenField ID="hdnFiltersChanged" runat="server" Value="false" />
+</div>
+<br />
+<div class="buttons-block" style="padding-left: 15px">
+    <table>
+        <tr>
+            <td style="padding-bottom: 5px;">
+                <b>Legend</b>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-bottom: 5px;">
+                <sup style='font-size: 11px;'>1</sup> - Person was hired during this month.
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-bottom: 5px;">
+                <sup style='font-size: 11px;'>2</sup> - Person was terminated during this month.
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-bottom: 5px;">
+                <sup style='font-size: 11px;'>3</sup> - Person was changed from salaried to hourly
+                compensation during this month.
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-bottom: 5px;">
+                <sup style='font-size: 11px;'>4</sup> - Person was changed from hourly to salaried
+                compensation during this month.
+            </td>
+        </tr>
+    </table>
 </div>
 
