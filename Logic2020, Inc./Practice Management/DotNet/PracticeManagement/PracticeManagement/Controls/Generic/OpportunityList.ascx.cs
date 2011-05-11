@@ -184,15 +184,7 @@ namespace PraticeManagement.Controls.Generic
 
         protected static string GetFormattedEstimatedRevenue(Decimal? estimatedRevenue)
         {
-            try
-            {
-                int result = (int)estimatedRevenue / 1000;
-                return result.ToString(DataTransferObjects.PracticeManagementCurrency.CurrencyLargeDisplayFormat) + "k";
-            }
-            catch 
-            {
-                return string.Empty;
-            }
+            return estimatedRevenue.GetFormattedEstimatedRevenue();
         }
 
         protected static string GetRevenueTypeCaption(RevenueType type)
