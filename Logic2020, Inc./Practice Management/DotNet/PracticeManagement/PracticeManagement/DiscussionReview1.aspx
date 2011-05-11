@@ -285,7 +285,7 @@
                                                             <td colspan="2" style="width: 100%;">
                                                                 <asp:LinkButton ID="LinkButton4" CommandName="select" CssClass="selectLink" runat="server">
                                                                     <asp:Label ID="lblSalesPersonName" runat="server" Text='<%# Eval("Salesperson.LastName") %>'></asp:Label>&nbsp;&nbsp;-&nbsp;&nbsp;
-                                                                    <asp:Label ID="lblOwner" runat="server" Text='<%# Eval("Owner.LastName") %>'></asp:Label>
+                                                                    <asp:Label ID="lblBuyerName" runat="server" Text='<%# Eval("BuyerName") %>'></asp:Label>
                                                                 </asp:LinkButton>
                                                             </td>
                                                         </tr>
@@ -328,7 +328,7 @@
                                                     <td colspan="2" style="width: 100%;">
                                                         <asp:LinkButton ID="LinkButton4" CommandName="select" CssClass="selectLink" runat="server">
                                                             <asp:Label ID="lblSalesPersonName" runat="server" Text='<%# Eval("Salesperson.LastName") %>'></asp:Label>&nbsp;&nbsp;-&nbsp;&nbsp;
-                                                            <asp:Label ID="lblOwner" runat="server" Text='<%# Eval("Owner.LastName") %>'></asp:Label>
+                                                            <asp:Label ID="lblBuyerName" runat="server" Text='<%# Eval("BuyerName") %>'></asp:Label>
                                                         </asp:LinkButton>
                                                     </td>
                                                 </tr>
@@ -363,7 +363,7 @@
             <td style="border-left: 2px solid black; padding-left: 5px; width: 72%;" valign="top">
                 <table>
                     <tr>
-                        <td>                           
+                        <td>
                             <asp:UpdatePanel ID="upOpportunityDetail" UpdateMode="Conditional" runat="server">
                                 <ContentTemplate>
                                     <asp:Label ID="lblReadOnlyWarning" runat="server" ForeColor="Red" Visible="false">Since you are not the designated owner of this opportunity, you will not be able to make any changes.</asp:Label>
@@ -483,13 +483,7 @@
                                                     <tr>
                                                         <td style="width: 97%">
                                                             <asp:DropDownList ID="ddlPriority" runat="server" Width="100%" CssClass="WholeWidth"
-                                                                onchange="EnableSaveButton();setDirty();">
-                                                                <asp:ListItem Text="" Value=""></asp:ListItem>
-                                                                <asp:ListItem Text="A" Value="A"></asp:ListItem>
-                                                                <asp:ListItem Text="B" Value="B"></asp:ListItem>
-                                                                <asp:ListItem Text="C" Value="C"></asp:ListItem>
-                                                                <asp:ListItem Text="D" Value="D"></asp:ListItem>
-                                                            </asp:DropDownList>
+                                                                onchange="EnableSaveButton();setDirty();"></asp:DropDownList>
                                                         </td>
                                                         <td style="width: 3%">
                                                             <asp:RequiredFieldValidator ID="reqPriority" runat="server" ControlToValidate="ddlPriority"
@@ -935,8 +929,8 @@
                                                             <ItemTemplate>
                                                                 <tr>
                                                                     <td style="width: 100%; white-space: nowrap; padding-left: 2px;">
-                                                                        <asp:Label ID="lblPriority" Width="2%" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>&nbsp;-&nbsp;<asp:Label
-                                                                            ID="lblDescription" runat="server" Width="97%" Text='<%# Eval("Description") %>'></asp:Label>
+                                                                        <asp:Label ID="lblPriority" Width="5%" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>&nbsp;-&nbsp;<asp:Label
+                                                                            ID="lblDescription" runat="server" Width="95%" Text='<%# Eval("Description") %>'></asp:Label>
                                                                     </td>
                                                                 </tr>
                                                             </ItemTemplate>
