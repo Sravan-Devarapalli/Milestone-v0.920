@@ -120,6 +120,7 @@ BEGIN
 	-- Set opportunity status
 	UPDATE dbo.Opportunity
 	   SET OpportunityStatusId = 4 /* Won */
+	       ,ProjectId = @ProjectID
 	 WHERE OpportunityId = @OpportunityId
 
 	DECLARE @PersonId INT
