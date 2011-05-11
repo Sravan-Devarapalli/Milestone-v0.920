@@ -21,7 +21,7 @@ namespace PraticeManagement.Controls.Reports
         private const string ReportContextKey = "ReportContext";
         private const string BenchListKey = "BenchList";
         private const string UserIsAdminKey = "UserIsAdmin";
-
+        private Dictionary<DateTime, Decimal> monthlyTotals;
         private BenchReportContext ReportContext
         {
             get
@@ -32,6 +32,8 @@ namespace PraticeManagement.Controls.Reports
                     {
                         Start = mpStartDate.MonthBegin,
                         End = mpEndDate.MonthEnd,
+                        ActivePersons = cbActivePersons.Checked,
+                        ProjectedPersons = cbProjectedPersons.Checked,
                         ActiveProjects = chbActiveProjects.Checked,
                         ProjectedProjects = chbProjectedProjects.Checked,
                         ExperimentalProjects = chbExperimentalProjects.Checked,
@@ -39,7 +41,9 @@ namespace PraticeManagement.Controls.Reports
                         UserName = DataHelper.CurrentPerson.Alias,
                         PracticeIds = string.IsNullOrEmpty(cblPractices.SelectedItems) ? string.Empty : cblPractices.SelectedItems,
                         IncludeOverheads = chbIncludeOverHeads.Checked,
-                        IncludeZeroCostEmployees = chbIncludeZeroCostEmps.Checked 
+                        IncludeZeroCostEmployees = chbIncludeZeroCostEmps.Checked,
+                        TimeScaleIds = string.IsNullOrEmpty(cblPayType.SelectedItems) ? string.Empty : cblPayType.SelectedItems
+
                     };
                     ViewState[ReportContextKey] = reportContext;
                 }
@@ -66,6 +70,24 @@ namespace PraticeManagement.Controls.Reports
             {
                 ViewState[BenchListKey] = value;
             }
+        }
+
+
+        private Dictionary<DateTime, Decimal> MonthlyTotals
+        {
+            get
+            {
+                if (monthlyTotals == null)
+                {
+                    monthlyTotals = new Dictionary<DateTime, decimal>();
+                }
+                return monthlyTotals;
+            }
+            set
+            {
+                monthlyTotals = value;
+            }
+
         }
 
         private bool UserIsAdmin
@@ -258,6 +280,9 @@ namespace PraticeManagement.Controls.Reports
             {
 
                 DataHelper.FillPracticeList(this.cblPractices, Resources.Controls.AllPracticesText);
+                DataHelper.FillTimescaleList(this.cblPayType, Resources.Controls.AllTypes);
+
+                SelectAllItems(this.cblPayType);
                 SelectAllItems(this.cblPractices);
                 //DatabindGrid();
                 lblExternalPractices.Visible = false;
@@ -272,6 +297,7 @@ namespace PraticeManagement.Controls.Reports
             {
                 btnResetFilter.Attributes.Remove("disabled");
             }
+            AddAttributesToCheckBoxes(this.cblPayType);
             AddAttributesToCheckBoxes(this.cblPractices);
         }
 
@@ -413,6 +439,15 @@ namespace PraticeManagement.Controls.Reports
                                         e.Row.Cells[i].Text = (interestValue.Value.Timescale == TimescaleType.Salary ?
                                                                 Convert.ToDecimal(interestValue.Value.GrossMargin).ToString() :
                                                                 Resources.Controls.HourlyLabel);
+
+                                        if (!MonthlyTotals.Any(kvp => kvp.Key == monthBegin))
+                                        {
+                                            MonthlyTotals.Add(monthBegin, 0M);
+                                        }
+                                        if (interestValue.Value.Timescale == TimescaleType.Salary)
+                                        {
+                                            MonthlyTotals[monthBegin] += Convert.ToDecimal(e.Row.Cells[i].Text);
+                                        }
 
                                         if (interestValue.Value.Timescale == TimescaleType.Salary)
                                         {
@@ -569,10 +604,13 @@ namespace PraticeManagement.Controls.Reports
         protected void btnResetFilter_Click(object sender, EventArgs e)
         {
             SelectAllItems(cblPractices);
+            SelectAllItems(cblPayType);
             mpStartDate.SelectedYear = DateTime.Today.Year;
             mpStartDate.SelectedMonth = DateTime.Today.Month;
             mpEndDate.SelectedYear = DateTime.Today.Year;
             mpEndDate.SelectedMonth = DateTime.Today.Month;
+            cbActivePersons.Checked = true;
+            cbProjectedPersons.Checked = true;
             chbActiveProjects.Checked = chbProjectedProjects.Checked = chbProjectedProjects.Checked = true;
             chbExperimentalProjects.Checked = false;
             chbIncludeZeroCostEmps.Checked = false;
@@ -595,13 +633,17 @@ namespace PraticeManagement.Controls.Reports
             //BenchList
             GridView grid = (GridView)sender;
             GridViewRow footer = grid.FooterRow;
-
+            var monthBegin =
+                        new DateTime(ReportContext.Start.Year,
+                            ReportContext.Start.Month,
+                            Constants.Dates.FirstDay);
+            var perodLenth = GetPeriodLength();
             if (footer != null)
             {
                 footer.Cells[1].Text = "Grand Total :";
                 for (int i = 3; i < grid.Columns.Count; i++)
                 {
-                    Decimal total = 0;
+                    //Decimal total = 0;
                     foreach (GridViewRow row in grid.Rows)
                     {
                         if (row.RowType == DataControlRowType.DataRow)
@@ -611,17 +653,27 @@ namespace PraticeManagement.Controls.Reports
 
                             if (isDecimal)
                             {
-                                total += value;
+                                //total += value;
 
                                 row.Cells[i].Text = ((PracticeManagementCurrency)Convert.ToDecimal(row.Cells[i].Text)).ToString();
                             }
                             row.Cells[i].Style.Add("padding-right", "10px");
                         }
                     }
-                    footer.Cells[i].Text = ((PracticeManagementCurrency)total).ToString();
+                    if (i < (3 + perodLenth))
+                    {
+                        if (MonthlyTotals.Any(kvp => kvp.Key == monthBegin.AddMonths(i - 3)))
+                            footer.Cells[i].Text = ((PracticeManagementCurrency)MonthlyTotals[monthBegin.AddMonths(i - 3)]).ToString();
+                    }
+                    else if (i == grid.Columns.Count - 1)
+                    {
+
+                        footer.Cells[i].Text = ((PracticeManagementCurrency)MonthlyTotals.Values.Sum()).ToString();
+                    }
                     footer.Cells[i].HorizontalAlign = HorizontalAlign.Right;
                     footer.Cells[i].Style.Add("padding-right", "10px");
                 }
+                MonthlyTotals = null;
             }
         }
 
