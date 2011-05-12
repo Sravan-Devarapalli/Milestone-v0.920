@@ -149,7 +149,7 @@ namespace PraticeManagement
                 DataHelper.FillSalespersonListOnlyActive(ddlSalesperson, string.Empty);
                 DataHelper.FillOpportunityStatusList(ddlStatus, string.Empty);
                 DataHelper.FillPracticeListOnlyActive(ddlPractice, string.Empty);
-                DataHelper.FillOpportunityPrioritiesList(ddlPriority,string.Empty);
+                DataHelper.FillOpportunityPrioritiesList(ddlPriority, string.Empty);
                 PopulatePriorityHint();
                 FillGroupAndProjectDropDown();
 
@@ -305,7 +305,7 @@ namespace PraticeManagement
 
             if (lvOpportunities.Items.Count > 0)
                 lvOpportunities.SelectedIndex = 0;
-            
+
             if (IsPostBack && Page.IsValid)
             {
                 FillGroupAndProjectDropDown();
@@ -636,10 +636,10 @@ namespace PraticeManagement
                         lblSaved.Text = "Saved";
 
                         Cache.Remove(OPPORTUNITY_KEY);
-                        Cache.Remove(OPPORTUNITIES_LIST_KEY);
                         Cache.Remove(PreviousReportContext_Key);
                         Cache.Remove(DistinctPotentialBoldPersons_Key);
                         btnSave.Enabled = false;
+                        UpdateOpportunitiesList();
                     }
                     catch (CommunicationException ex)
                     {
@@ -656,6 +656,24 @@ namespace PraticeManagement
             }
 
             return retValue;
+        }
+
+        private void UpdateOpportunitiesList()
+        {
+            foreach (Opportunity item in OpportunitiesList)
+            {
+                if (item.Id.Value == Convert.ToInt32(lvOpportunities.SelectedValue))
+                {
+                    item.Priority = Opportunity.Priority;
+                    item.Client.Name = Opportunity.Client.Name;
+                    item.Group.Name = Opportunity.Group.Name;
+                    item.EstimatedRevenue = Opportunity.EstimatedRevenue;
+                    item.Name = Opportunity.Name;
+                    item.BuyerName = Opportunity.BuyerName;
+                    item.Salesperson.LastName = Opportunity.Salesperson.LastName;
+                    break;
+                }
+            }
         }
 
         protected override void Display()
