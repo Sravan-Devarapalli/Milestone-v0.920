@@ -666,11 +666,11 @@ namespace PraticeManagement
                 {
                     item.Priority = Opportunity.Priority;
                     item.Client.Name = Opportunity.Client.Name;
-                    item.Group.Name = Opportunity.Group.Name;
+                    item.Group.Name = Opportunity.Group != null ? Opportunity.Group.Name :string.Empty;
                     item.EstimatedRevenue = Opportunity.EstimatedRevenue;
                     item.Name = Opportunity.Name;
                     item.BuyerName = Opportunity.BuyerName;
-                    item.Salesperson.LastName = Opportunity.Salesperson.LastName;
+                    item.Salesperson.LastName = Opportunity.Salesperson != null ? Opportunity.Salesperson.LastName : string.Empty;
                     break;
                 }
             }
