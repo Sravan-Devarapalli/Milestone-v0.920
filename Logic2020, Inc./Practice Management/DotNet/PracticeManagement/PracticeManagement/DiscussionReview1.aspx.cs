@@ -151,18 +151,10 @@ namespace PraticeManagement
                 DataHelper.FillPracticeListOnlyActive(ddlPractice, string.Empty);
                 DataHelper.FillOpportunityPrioritiesList(ddlPriority,string.Empty);
                 PopulatePriorityHint();
-
-                if (OpportunityId.HasValue)
-                {
-                    var groups = ServiceCallers.Custom.Group(client => client.GroupListAll(Opportunity.Client.Id, null));
-                    groups = groups.AsQueryable().Where(g => (g.IsActive == true)).ToArray();
-                    DataHelper.FillListDefault(ddlClientGroup, string.Empty, groups, false);
-                }
+                FillGroupAndProjectDropDown();
 
                 LoadOpportunityDetails();
-
                 activityLog.OpportunityId = OpportunityId;
-
             }
 
             mlConfirmation.ClearMessage();
@@ -182,6 +174,25 @@ namespace PraticeManagement
             lblSaved.Text = string.Empty;
             lblError.Text = string.Empty;
             divResultDescription.Style["display"] = "none";
+        }
+
+        private void FillGroupAndProjectDropDown()
+        {
+            if (OpportunityId.HasValue)
+            {
+                var groups = ServiceCallers.Custom.Group(client => client.GroupListAll(Opportunity.Client.Id, null));
+                groups = groups.AsQueryable().Where(g => (g.IsActive == true)).ToArray();
+                DataHelper.FillListDefault(ddlClientGroup, string.Empty, groups, false);
+
+                var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(Opportunity.Client.Id, true));
+                DataHelper.FillListDefault(ddlProjects, "Select Project ...", projects, false, "Id", "DetailedProjectTitle");
+                if (ddlProjects.Items.Count == 1)
+                {
+                    ddlProjects.Items[0].Enabled = true;
+                }
+                upAttachToProject.Update();
+                upOpportunityDetail.Update();
+            }
         }
 
         protected void Page_Prerender(object sender, EventArgs e)
@@ -245,9 +256,12 @@ namespace PraticeManagement
             }
             lvOpportunities.SelectedIndex = lvOpportunities.SelectedIndex - 1;
 
-            if (IsPostBack && Page.IsValid)
-                LoadOpportunityDetails();
 
+            if (IsPostBack && Page.IsValid)
+            {
+                FillGroupAndProjectDropDown();
+                LoadOpportunityDetails();
+            }
         }
 
         public void imgBtnNext_OnClick(object sender, EventArgs e)
@@ -259,7 +273,10 @@ namespace PraticeManagement
             lvOpportunities.SelectedIndex = lvOpportunities.SelectedIndex + 1;
 
             if (IsPostBack && Page.IsValid)
+            {
+                FillGroupAndProjectDropDown();
                 LoadOpportunityDetails();
+            }
 
         }
 
@@ -273,8 +290,10 @@ namespace PraticeManagement
 
 
             if (IsPostBack && Page.IsValid)
+            {
+                FillGroupAndProjectDropDown();
                 LoadOpportunityDetails();
-
+            }
         }
 
         public void imgBtnFirst_OnClick(object sender, EventArgs e)
@@ -286,9 +305,12 @@ namespace PraticeManagement
 
             if (lvOpportunities.Items.Count > 0)
                 lvOpportunities.SelectedIndex = 0;
-
+            
             if (IsPostBack && Page.IsValid)
+            {
+                FillGroupAndProjectDropDown();
                 LoadOpportunityDetails();
+            }
 
         }
 
@@ -303,7 +325,10 @@ namespace PraticeManagement
                 lvOpportunities.SelectedIndex = lvOpportunities.Items.Count - 1;
 
             if (IsPostBack && Page.IsValid)
+            {
+                FillGroupAndProjectDropDown();
                 LoadOpportunityDetails();
+            }
 
 
         }
@@ -393,39 +418,45 @@ namespace PraticeManagement
         /// </summary>
         protected void btnConvertToProject_Click(object sender, EventArgs e)
         {
-            Page.Validate(vsumWonConvert.ValidationGroup);
-            if (!Page.IsValid)
+            Page.Validate(vsumOpportunity.ValidationGroup);
+            if (Page.IsValid)
             {
-                return;
-            }
-
-            var opportunity = Opportunity;
-
-            if (opportunity == null)
-            {
-                custOpportunityNotSaved.IsValid = false;
-            }
-            else if (CanUserEditOpportunity(opportunity))
-            {
-                if (!CheckForDirtyBehaviour())
+                Page.Validate(vsumWonConvert.ValidationGroup);
+                if (!Page.IsValid)
                 {
                     return;
                 }
 
-                Page.Validate(vsumWonConvert.ValidationGroup);
-                if (Page.IsValid)
+                var opportunity = Opportunity;
+
+                if (opportunity == null)
                 {
-                    if (HasProposedPersons)
+                    custOpportunityNotSaved.IsValid = false;
+                }
+                else if (CanUserEditOpportunity(opportunity))
+                {
+                    if (!CheckForDirtyBehaviour())
                     {
-                        Page.Validate(vsumHasPersons.ValidationGroup);
-                        if (Page.IsValid)
+                        return;
+                    }
+
+                    Page.Validate(vsumWonConvert.ValidationGroup);
+                    if (Page.IsValid)
+                    {
+                        ucProposedResources.FillProposedResources();
+                        upProposedResources.Update();
+                        if (HasProposedPersons)
+                        {
+                            Page.Validate(vsumHasPersons.ValidationGroup);
+                            if (Page.IsValid)
+                            {
+                                ConvertToProject();
+                            }
+                        }
+                        else
                         {
                             ConvertToProject();
                         }
-                    }
-                    else
-                    {
-                        ConvertToProject();
                     }
                 }
             }
@@ -475,20 +506,39 @@ namespace PraticeManagement
         protected void ddlClient_SelectedIndexChanged(object sender, EventArgs e)
         {
             ddlClientGroup.Items.Clear();
+            ddlProjects.Items.Clear();
+
             if (!(ddlClient.SelectedIndex == 0))
             {
-                int clientId = Convert.ToInt32(ddlClient.SelectedItem.Value);
-                var groups = ServiceCallers.Custom.Group(client => client.GroupListAll(clientId, null));
-                groups = groups.AsQueryable().Where(g => (g.IsActive == true)).ToArray();
-                DataHelper.FillListDefault(ddlClientGroup, string.Empty, groups, false);
-            }
+                int clientId;
 
+                if (int.TryParse(ddlClient.SelectedValue, out clientId))
+                {
+                    var groups = ServiceCallers.Custom.Group(client => client.GroupListAll(clientId, null));
+                    groups = groups.AsQueryable().Where(g => (g.IsActive == true)).ToArray();
+                    DataHelper.FillListDefault(ddlClientGroup, string.Empty, groups, false);
+
+                    var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, true));
+                    DataHelper.FillListDefault(ddlProjects, "Select Project ...", projects, false, "Id", "DetailedProjectTitle");
+
+                    if (ddlProjects.Items.Count == 1)
+                    {
+                        ddlProjects.Items[0].Enabled = true;
+                    }
+                }
+                else if (ddlProjects.Items != null && ddlProjects.Items.Count == 0)
+                {
+                    ddlProjects.Items.Add(new ListItem() { Text = "Select Project ...", Value = "" });
+                }
+            }
             upOpportunityDetail.Update();
+            upAttachToProject.Update();
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
             divResultDescription.Style["display"] = "inline";
+            upAttachToProject.Update();
 
             bool IsSavedWithoutErrors = ValidateAndSave();
             if (IsSavedWithoutErrors)
@@ -540,28 +590,11 @@ namespace PraticeManagement
 
         protected void btnAttachToProject_Click(object sender, EventArgs e)
         {
-            int clientId;
-
-            if (int.TryParse(ddlClient.SelectedValue, out clientId))
+            Page.Validate(vsumOpportunity.ValidationGroup);
+            if (Page.IsValid)
             {
-                var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, true));
-                DataHelper.FillListDefault(ddlProjects, "Select Project ...", projects, false, "Id", "DetailedProjectTitle");
-
-                if (ddlProjects.Items.Count == 1)
-                {
-                    ddlProjects.Items[0].Enabled = true;
-                }
-
-                ddlProjects.SelectedValue = (Opportunity.ProjectId.HasValue) ? Opportunity.ProjectId.Value.ToString() : string.Empty;
-
+                mpeAttachToProject.Show();
             }
-            else if (ddlProjects.Items != null && ddlProjects.Items.Count == 0)
-            {
-                ddlProjects.Items.Add(new ListItem() { Text = "Select Project ...", Value = "" });
-            }
-            upAttachToProject.Update();
-            mpeAttachToProject.Show();
-
         }
 
         public void lvOpportunities_OnDataBound(object sender, EventArgs e)
@@ -645,6 +678,7 @@ namespace PraticeManagement
 
                     upOpportunityDetail.Update();
                     upDescription.Update();
+                    upAttachToProject.Update();
                 }
             }
         }
@@ -748,10 +782,21 @@ namespace PraticeManagement
 
             PopulateOwnerDropDown();
 
-            PopulateClientGroupDropDown();            
+            PopulateClientGroupDropDown();
+
+            PopulateProjectsDropDown();
 
             hdnValueChanged.Value = "false";
             btnSave.Attributes.Add("disabled", "true");
+        }
+
+        private void PopulateProjectsDropDown()
+        {
+            ListItem selectedProject = ddlProjects.Items.FindByValue(Opportunity.ProjectId.ToString());
+            if (selectedProject != null)
+            {
+                ddlProjects.SelectedValue = selectedProject.Value;
+            }
         }
 
         private void PopulatePriorityHint()
