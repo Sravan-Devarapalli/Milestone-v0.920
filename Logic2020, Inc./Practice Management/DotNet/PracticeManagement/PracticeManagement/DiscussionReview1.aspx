@@ -483,7 +483,8 @@
                                                     <tr>
                                                         <td style="width: 97%">
                                                             <asp:DropDownList ID="ddlPriority" runat="server" Width="100%" CssClass="WholeWidth"
-                                                                onchange="EnableSaveButton();setDirty();"></asp:DropDownList>
+                                                                onchange="EnableSaveButton();setDirty();">
+                                                            </asp:DropDownList>
                                                         </td>
                                                         <td style="width: 3%">
                                                             <asp:RequiredFieldValidator ID="reqPriority" runat="server" ControlToValidate="ddlPriority"
@@ -974,6 +975,12 @@
                                         </tr>
                                     </table>
                                 </ContentTemplate>
+                                <Triggers>                                    
+                                    <asp:AsyncPostBackTrigger ControlID="btnSave" />
+                                    <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
+                                    <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
+                                    <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
+                                </Triggers>
                             </asp:UpdatePanel>
                         </td>
                     </tr>
@@ -1022,6 +1029,12 @@
                     </tr>
                 </table>
             </ContentTemplate>
+            <Triggers>
+                <asp:AsyncPostBackTrigger ControlID="btnSave" />
+                <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
+                <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
+                <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
+            </Triggers>
         </asp:UpdatePanel>
     </asp:Panel>
     <uc:LoadingProgress ID="lpOpportunityDetails" runat="server" />
