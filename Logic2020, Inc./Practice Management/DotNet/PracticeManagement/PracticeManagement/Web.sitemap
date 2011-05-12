@@ -8,7 +8,7 @@
       <siteMapNode url="~/RevenueGoals.aspx" title="Revenue Goals" description="Show url" />
     </siteMapNode>
     <siteMapNode url="~/OpportunityList.aspx?from=toolbar" title="Opportunities" description="Opportunity List page" >
-      <siteMapNode url="~/OpportunityDetail.aspx" title="Add Opportunity" description="Show url" />
+      <siteMapNode url="~/OpportunityDetail.aspx?from=sub_toolbar" title="Add Opportunity" description="Show url" />
       <siteMapNode url="~/OpportunityList.aspx" title="Summary" description="Show url" />
       <siteMapNode url="~/DiscussionReview1.aspx" title="Discussion Review 1" description="Show url" />
       <siteMapNode url="~/DiscussionReview2.aspx" title="Discussion Review 2" description="Show url" />
