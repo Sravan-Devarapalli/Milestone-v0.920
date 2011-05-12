@@ -623,6 +623,12 @@
                                             </tr>
                                         </table>
                                     </ContentTemplate>
+                                    <Triggers>
+                                        <asp:AsyncPostBackTrigger ControlID="btnSave" />
+                                        <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
+                                        <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
+                                        <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
+                                    </Triggers>
                                 </asp:UpdatePanel>
                             </div>
                         </ContentTemplate>
@@ -771,6 +777,12 @@
                             </tr>
                         </table>
                     </ContentTemplate>
+                    <Triggers>
+                        <asp:AsyncPostBackTrigger ControlID="btnSave" />
+                        <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
+                        <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
+                        <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
+                    </Triggers>
                 </asp:UpdatePanel>
             </td>
         </tr>
@@ -816,6 +828,12 @@
                     </tr>
                 </table>
             </ContentTemplate>
+            <Triggers>
+                <asp:AsyncPostBackTrigger ControlID="btnSave" />
+                <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
+                <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
+                <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
+            </Triggers>
         </asp:UpdatePanel>
     </asp:Panel>
     <uc:LoadingProgress ID="lpOpportunityDetails" runat="server" />
