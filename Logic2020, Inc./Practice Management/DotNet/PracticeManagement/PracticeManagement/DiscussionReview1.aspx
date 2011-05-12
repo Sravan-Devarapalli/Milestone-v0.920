@@ -953,7 +953,7 @@
                                             <td style="padding: 4px; height: 35px; width: 64%;">
                                                 <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
                                                 <asp:ValidationSummary ID="vsumOpportunity" runat="server" ValidationGroup="Opportunity"
-                                                    EnableClientScript="false" HeaderText="Please fill required fields to save an opportunity." />
+                                                    EnableClientScript="false" HeaderText="Error occurred while saving an opportunity." />
                                                 <asp:ValidationSummary ID="vsumOpportunityTransition" runat="server" ValidationGroup="OpportunityTransition"
                                                     DisplayMode="BulletList" EnableClientScript="false" HeaderText="Unable to proceed with opportunity transition due to the following errors:" />
                                                 <asp:ValidationSummary ID="vsumWonConvert" runat="server" ValidationGroup="WonConvert"
