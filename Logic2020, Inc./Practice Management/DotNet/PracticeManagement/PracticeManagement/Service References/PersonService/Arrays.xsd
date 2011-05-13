@@ -49,22 +49,4 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfint" nillable="true" type="tns:ArrayOfint" />
-  <xs:complexType name="ArrayOfKeyValueOfPersonArrayOfintrdkL8Uaz">
-    <xs:annotation>
-      <xs:appinfo>
-        <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
-      </xs:appinfo>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfPersonArrayOfintrdkL8Uaz">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" name="Key" nillable="true" type="q3:Person" />
-            <xs:element name="Value" nillable="true" type="tns:ArrayOfint" />
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfKeyValueOfPersonArrayOfintrdkL8Uaz" nillable="true" type="tns:ArrayOfKeyValueOfPersonArrayOfintrdkL8Uaz" />
 </xs:schema>
