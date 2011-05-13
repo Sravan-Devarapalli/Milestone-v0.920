@@ -32,7 +32,9 @@ AS
                 paytp.TimescaleId,
                 paytp.[Name] AS Timescale,
                 st.[Name],
-                dbo.GetWeeklyUtilization(@PersonId, @StartDate, 1, @DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects,@InternalProjects) AS wutil
+                dbo.GetWeeklyUtilization(@PersonId, @StartDate, 1, @DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects,@InternalProjects) AS wutil,
+				0 AS wutilAvg
+
         FROM    dbo.Person AS p
                 INNER JOIN dbo.PersonStatus AS st ON p.PersonStatusId = st.PersonStatusId
                 INNER JOIN dbo.Timescale AS paytp ON paytp.TimescaleId = dbo.GetCurrentPayType(@PersonId)
