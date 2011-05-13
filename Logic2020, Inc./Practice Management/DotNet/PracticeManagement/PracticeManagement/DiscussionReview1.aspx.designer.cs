@@ -157,6 +157,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.UpdatePanel upOpportunityList;
         
         /// <summary>
+        /// divOpportunityList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divOpportunityList;
+        
+        /// <summary>
         /// lvOpportunities control.
         /// </summary>
         /// <remarks>
@@ -589,6 +598,15 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.TabPanel tpHistory;
         
         /// <summary>
+        /// lnkHistory control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkHistory;
+        
+        /// <summary>
         /// upActivityLog control.
         /// </summary>
         /// <remarks>
@@ -598,13 +616,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.UpdatePanel upActivityLog;
         
         /// <summary>
-        /// activityLog control.
+        /// phActivityLog control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.ActivityLogControl activityLog;
+        protected global::System.Web.UI.WebControls.PlaceHolder phActivityLog;
         
         /// <summary>
         /// upProposedResources control.
@@ -805,15 +823,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnCancelChanges;
         
         /// <summary>
-        /// pnlAttachToProject control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlAttachToProject;
-        
-        /// <summary>
         /// upAttachToProject control.
         /// </summary>
         /// <remarks>
@@ -821,6 +830,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel upAttachToProject;
+        
+        /// <summary>
+        /// pnlAttachToProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlAttachToProject;
         
         /// <summary>
         /// ddlProjects control.
