@@ -206,6 +206,8 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public bool IsFreshRequest { get; set; }
+
         #endregion
 
         public DateFilterType DateFilterValue
@@ -226,7 +228,7 @@ namespace PraticeManagement.Controls
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            if (!IsPostBack || IsFreshRequest)
             {
                 FillEventList();
 
@@ -241,6 +243,14 @@ namespace PraticeManagement.Controls
             }
 
             InitXsltParams();
+        }
+
+        protected void Page_Prerender(object sender, EventArgs e)
+        {
+            if (IsFreshRequest)
+            {
+                Update();
+            }
         }
 
         private void FillEventList()
