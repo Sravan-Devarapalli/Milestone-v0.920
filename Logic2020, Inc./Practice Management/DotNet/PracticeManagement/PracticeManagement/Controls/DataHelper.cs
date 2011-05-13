@@ -292,19 +292,8 @@ namespace PraticeManagement.Controls
                     activeProjects, projectedProjects, experimentalProjects, internalProjects,
                     timescaleIds, practiceIdList, sortId, sortDirection, excludeInternalPractices, isSampleReport);
 
-            var sortedCons =
-                new List<Triple<Person, int[], int>>();
 
-            if (consultants != null)
-            {
-                sortedCons.AddRange(from pair in consultants
-                                    let avgLoad = Utils.Generic.AvgLoad(pair.Value, step)
-                                    where (avgLoad < avgUtil)
-                                    select new Triple<Person, int[], int>(pair.Key, pair.Value, avgLoad));
-
-                // sortedCons.Sort(Comp);
-            }
-            return sortedCons;
+            return consultants;
         }
 
         public static List<Triple<Person, int[], int>> ConsultantUtilizationDailyByPerson
@@ -327,21 +316,13 @@ namespace PraticeManagement.Controls
                 ExperimentalProjects = experimentalProjects
             };
 
-            var result = ServiceCallers.Custom.Person(
+            var consultants = ServiceCallers.Custom.Person(
                 client => client.ConsultantUtilizationDailyByPerson(personId, context));
+            var consultantsList = new List<Triple<DataTransferObjects.Person, int[], int>>();
+            if (consultants != null && consultants.Any())
+                consultantsList.AddRange(consultants);
 
-            var sortedCons =
-               new List<Triple<Person, int[], int>>();
-
-            if (result != null)
-            {
-                sortedCons.AddRange(from pair in result
-                                    let avgLoad = Utils.Generic.AvgLoad(pair.Value, 1)
-                                    select new Triple<Person, int[], int>(pair.Key, pair.Value, avgLoad));
-
-                // sortedCons.Sort(Comp);
-            }
-            return sortedCons;
+            return consultantsList;
         }
 
         public static List<DetailedUtilizationReportBaseItem> GetMilestonePersons(int personId, DateTime startDate, DateTime endDate, bool incActive, bool incProjected, bool incInternal, bool incExperimental)
