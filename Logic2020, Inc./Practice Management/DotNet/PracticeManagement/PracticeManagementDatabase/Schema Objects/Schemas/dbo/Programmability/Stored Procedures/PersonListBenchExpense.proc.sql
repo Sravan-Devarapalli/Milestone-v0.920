@@ -5,9 +5,9 @@ CREATE PROCEDURE [dbo].[PersonListBenchExpense]
 (
 	@StartDate   DATETIME,
 	@EndDate     DATETIME,
-	@ActivePersons BIT = 1,
+	@ActivePersons BIT = NULL,
 	@ActiveProjects BIT = 1,
-	@ProjectedPersons BIT = 1,
+	@ProjectedPersons BIT = NULL,
 	@ProjectedProjects BIT = 1,
 	@ExperimentalProjects BIT = 1,
 	@CompletedProjects BIT = 1,
@@ -69,47 +69,7 @@ AS
 	SELECT ResultId 
 	FROM [dbo].[ConvertStringListIntoTable] (@TimeScaleIdsLocal)
 
-	;WITH PersonBenchHoursDaily
-	AS
-	( 
-		SELECT  p.PersonId,
-				cal.Date,
-				8 - SUM(ISNULL(Temp.HoursPerDay,0)) BenchHours
-		FROM dbo.Person AS p
-		INNER JOIN dbo.PersonCalendarAuto AS cal 
-			ON cal.Date BETWEEN p.HireDate AND ISNULL(p.TerminationDate, dbo.GetFutureDate()) 
-								AND cal.personId = P.PersonId
-		LEFT JOIN(
-					SELECT MP.PersonId,
-							MPE.StartDate,
-							MPE.EndDate,
-							MPE.HoursPerDay
-					FROM MilestonePerson MP 
-					JOIN Milestone M 
-						ON M.MilestoneId = MP.MilestoneId AND MP.MilestoneId <> @DefaultMilestoneId
-					JOIN Project proj 
-						ON proj.ProjectId = M.ProjectId
-								AND(proj.ProjectStatusId = 2 AND @ProjectedProjectsLocal = 1
-								OR proj.ProjectStatusId = 3 AND @ActiveProjectsLocal = 1
-								OR proj.ProjectStatusId = 5 AND @ExperimentalProjectsLocal = 1
-								OR proj.ProjectStatusId = 4 AND @CompletedProjectsLocal = 1
-								) AND proj.ProjectStatusId NOT IN(6,1)
-					JOIN MilestonePersonEntry MPE 
-						ON MPE.MilestonePersonId = MP.MilestonePersonId
-						) Temp 
-		ON Temp.PersonId = P.PersonId AND cal.Date BETWEEN Temp.StartDate AND Temp.EndDate
-		LEFT JOIN dbo.Practice AS pr 
-			ON p.DefaultPractice = pr.PracticeId
-		WHERE   DATEPART(DW, cal.[Date]) NOT IN(1,7)
-		 AND	cal.Date BETWEEN @StartDateLocal AND @EndDateLocal
-			AND (p.PersonStatusId = 1 AND @ActivePersonsLocal = 1
-				 OR p.PersonStatusId = 3 AND @ProjectedPersonsLocal = 1)
-			AND (@PracticeIdsLocal IS NULL 
-					OR p.DefaultPractice IN (SELECT PracticeId FROM @PracticeIdsTable)
-				)
-		GROUP BY p.PersonId,cal.Date
-	),
-	CTEFinancials
+	;WITH  CTEFinancials
 	AS
 	(
 		SELECT 
@@ -181,8 +141,11 @@ AS
 				AND ISNULL(OVH.EndDate, dbo.GetFutureDate()) AND OVH.Inactive = 0
 		 WHERE DATEPART(DW, cal.[Date]) NOT IN(1,7)
 				AND cal.Date BETWEEN @StartDateLocal AND @EndDateLocal
-				AND (p.PersonStatusId = 1 AND @ActivePersonsLocal = 1
-					OR p.PersonStatusId = 3 AND @ProjectedPersonsLocal = 1)
+				AND ((p.PersonStatusId = 1 AND @ActivePersonsLocal = 1 )
+					 OR (p.PersonStatusId = 3 AND @ProjectedPersonsLocal = 1 )
+					 OR((@ActivePersonsLocal IS NULL AND  @ProjectedPersonsLocal IS NULL )
+					))
+				 AND P.PersonStatusId<>4
 				AND (@PracticeIdsLocal IS NULL 
 					OR p.DefaultPractice IN (SELECT PracticeId FROM @PracticeIdsTable)
 					)
@@ -213,7 +176,57 @@ AS
 			MAX(Date) OVER(PARTITION BY PersonId, YEAR(Date), MONTH(Date)) MonthMaxDate,
 			MIN(Date) OVER(PARTITION BY PersonId, YEAR(Date), MONTH(Date)) MonthMinDate
 		FROM CTEFinancials
-	),
+	)
+	,
+	
+	CTEFLHRAndBenchHoursDaily
+	AS
+	(
+		SELECT  f.FLHR,
+				f.HourlyRate,
+				f.PersonId,
+				f.Date,
+				f.Timescale,
+				f.TimescaleId,
+				f.TimeScaleMaxDate,
+				f.TimeScaleMinDate,
+				f.MonthMaxDate,
+				f.MonthMinDate,
+				8 - SUM(ISNULL(Temp.HoursPerDay,0)) BenchHours		
+		FROM CTEFLHRDaily f
+		LEFT JOIN(
+					SELECT MP.PersonId,
+							MPE.StartDate,
+							MPE.EndDate,
+							MPE.HoursPerDay
+					FROM MilestonePerson MP 
+					JOIN Milestone M 
+						ON M.MilestoneId = MP.MilestoneId AND MP.MilestoneId <> @DefaultMilestoneId
+					JOIN Project proj 
+						ON proj.ProjectId = M.ProjectId
+								AND(proj.ProjectStatusId = 2 AND @ProjectedProjectsLocal = 1
+								OR proj.ProjectStatusId = 3 AND @ActiveProjectsLocal = 1
+								OR proj.ProjectStatusId = 5 AND @ExperimentalProjectsLocal = 1
+								OR proj.ProjectStatusId = 4 AND @CompletedProjectsLocal = 1
+								) AND proj.ProjectStatusId NOT IN(6,1)
+					JOIN MilestonePersonEntry MPE 
+						ON MPE.MilestonePersonId = MP.MilestonePersonId
+						) Temp
+		ON Temp.PersonId = f.PersonId AND f.Date BETWEEN Temp.StartDate AND Temp.EndDate 
+		GROUP BY 
+				f.FLHR,
+				f.HourlyRate,
+				f.PersonId,
+				f.Date,
+				f.Timescale,
+				f.TimescaleId,
+				f.TimeScaleMaxDate,
+				f.TimeScaleMinDate,
+				f.MonthMaxDate,
+				f.MonthMinDate		
+ 
+	)
+	,
 
 CTEMonthlyFinancials
 AS
@@ -233,16 +246,15 @@ AS
 			FLHRD.Timescale  Timescale,
 			0.0 Revenue,
 			0.0 COGS,
-			CASE WHEN (-1*ISNULL(SUM((CASE @IncludeOverheadsLocal WHEN 1 THEN FLHRD.FLHR ELSE FLHRD.HourlyRate END) *(CASE WHEN R.BenchHours >0 Then R.BenchHours ELSE 0 END)),0))>0 THEN 0
-			ELSE (-1*ISNULL(SUM((CASE @IncludeOverheadsLocal WHEN 1 THEN FLHRD.FLHR ELSE FLHRD.HourlyRate END) *(CASE WHEN R.BenchHours >0 Then R.BenchHours ELSE 0 END)),0)) END Margin,
-			SUM(ISNULL(R.BenchHours,0)) MonthBenchHours,
+			CASE WHEN (-1*ISNULL(SUM((CASE @IncludeOverheadsLocal WHEN 1 THEN FLHRD.FLHR ELSE FLHRD.HourlyRate END) *(CASE WHEN FLHRD.BenchHours >0 Then FLHRD.BenchHours ELSE 0 END)),0))>0 THEN 0
+			ELSE (-1*ISNULL(SUM((CASE @IncludeOverheadsLocal WHEN 1 THEN FLHRD.FLHR ELSE FLHRD.HourlyRate END) *(CASE WHEN FLHRD.BenchHours >0 Then FLHRD.BenchHours ELSE 0 END)),0)) END Margin,
+			SUM(ISNULL(FLHRD.BenchHours,0)) MonthBenchHours,
 			RANK() OVER (PARTITION BY  FLHRD.PersonId, YEAR(FLHRD.Date), MONTH(FLHRD.Date) ORDER BY (CASE WHEN Timescale != 2 THEN 1 ELSE 2 END ) DESC)  AS RowNumber,
 			TimeScaleMaxDate,
 			TimeScaleMinDate,
 			MonthMaxDate,
 			MonthMinDate
-	FROM CTEFLHRDaily FLHRD
-	JOIN  PersonBenchHoursDaily R ON R.[Date] = FLHRD.Date AND R.PersonId = FLHRD.PersonId
+	FROM CTEFLHRAndBenchHoursDaily FLHRD
 	JOIN Person P ON FLHRD.PersonId = P.PersonId
 	LEFT JOIN Practice pr ON P.DefaultPractice = pr.PracticeId
 	WHERE   (@TimeScaleIdsLocal IS NULL 
@@ -318,4 +330,5 @@ ProjectStatusId	Name
 4				Completed
 5				Experimental
 	*/
+
 
