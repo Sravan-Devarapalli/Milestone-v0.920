@@ -176,6 +176,7 @@ namespace DataAccess
         private const string TimescaleColumn = "Timescale";
         private const string TimescaleIdColumn = "TimescaleId";
         private const string WeeklyUtilColumn = "wutil";
+        private const string AvgUtilColumn = "wutilAvg";
 
         private const string TargetIdColumn = "TargetId";
         private const string TargetTypeColumn = "TargetType";
@@ -364,7 +365,7 @@ namespace DataAccess
         /// Retrives consultans report
         /// </summary>
         /// <returns>An <see cref="Opportunity"/> object if found and null otherwise.</returns>
-        public static Dictionary<Person, int[]> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context)
+        public static List<Triple<Person, int[], int>> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(ConsultantUtilizationWeeklyProcedure, connection))
@@ -394,7 +395,7 @@ namespace DataAccess
             }
         }
 
-        public static Dictionary<Person, int[]> ConsultantUtilizationDailyByPerson(int personId, ConsultantTimelineReportContext context)
+        public static List<Triple<Person, int[], int>> ConsultantUtilizationDailyByPerson(int personId, ConsultantTimelineReportContext context)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(ConsultantUtilizationDailyByPersonProcedure, connection))
@@ -418,7 +419,7 @@ namespace DataAccess
         /// <summary>
         /// reads a dataset of persons into a collection
         /// </summary>
-        private static Dictionary<Person, int[]> GetPersonLoad(SqlCommand command)
+        private static List<Triple<Person, int[], int>> GetPersonLoad(SqlCommand command)
         {
             using (SqlDataReader reader = command.ExecuteReader())
             {
@@ -432,8 +433,9 @@ namespace DataAccess
                     int timescaleNameIndex = reader.GetOrdinal(TimescaleColumn);
                     int timescaleIdIndex = reader.GetOrdinal(TimescaleIdColumn);
                     int hireDateIndex = reader.GetOrdinal(HireDateColumn);
+                    int avgUtilIndex = reader.GetOrdinal(AvgUtilColumn);
 
-                    var res = new Dictionary<Person, int[]>();
+                    var res = new List<Triple<Person, int[],int>>();
                     while (reader.Read())
                     {
                         var person =
@@ -458,8 +460,8 @@ namespace DataAccess
                                 HireDate = (DateTime)reader[hireDateIndex]
                             };
                         int[] load = Utils.StringToIntArray((string)reader[weeklyLoadIndex]);
-
-                        res.Add(person, load);
+                        int avgUtil = reader.GetInt32(avgUtilIndex);
+                        res.Add(new Triple<Person, int[], int>(person, load, avgUtil));
                     }
 
                     return res;
