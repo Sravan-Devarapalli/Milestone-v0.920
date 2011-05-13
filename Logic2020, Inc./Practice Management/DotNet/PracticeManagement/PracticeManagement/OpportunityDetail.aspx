@@ -429,6 +429,8 @@
                         </table>
                     </ContentTemplate>
                     <Triggers>
+                        <asp:AsyncPostBackTrigger ControlID="btnAttach" />
+                        <asp:AsyncPostBackTrigger ControlID="btnCancel" />
                         <asp:AsyncPostBackTrigger ControlID="btnSave" />
                         <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
                         <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
@@ -469,6 +471,8 @@
                                         </table>
                                     </ContentTemplate>
                                     <Triggers>
+                                        <asp:AsyncPostBackTrigger ControlID="btnAttach" />
+                                        <asp:AsyncPostBackTrigger ControlID="btnCancel" />
                                         <asp:AsyncPostBackTrigger ControlID="btnSave" />
                                         <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
                                         <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
@@ -667,8 +671,7 @@
                                 <Triggers>
                                     <asp:AsyncPostBackTrigger ControlID="btnSave" />
                                     <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
-                                    <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
-                                    <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
+                                    <asp:AsyncPostBackTrigger ControlID="btnAttach" />
                                 </Triggers>
                             </asp:UpdatePanel>
                         </td>
@@ -782,15 +785,16 @@
                         <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
                         <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
                         <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
+                        <asp:AsyncPostBackTrigger ControlID="btnAttach" />
                     </Triggers>
                 </asp:UpdatePanel>
             </td>
         </tr>
     </table>
-    <asp:Panel ID="pnlAttachToProject" runat="server" BackColor="White" BorderColor="Black"
-        CssClass="ConfirmBoxClass" Style="display: none" BorderWidth="2px">
-        <asp:UpdatePanel ID="upAttachToProject" runat="server" UpdateMode="Conditional">
-            <ContentTemplate>
+    <asp:UpdatePanel ID="upAttachToProject" runat="server" UpdateMode="Conditional">
+        <ContentTemplate>
+            <asp:Panel ID="pnlAttachToProject" runat="server" BackColor="White" BorderColor="Black"
+                CssClass="ConfirmBoxClass" Style="display: none" BorderWidth="2px">
                 <table width="100%">
                     <tr style="background-color: Gray; height: 27px;">
                         <td align="center" style="white-space: nowrap; font-size: 14px; width: 100%">
@@ -827,15 +831,17 @@
                         </td>
                     </tr>
                 </table>
-            </ContentTemplate>
-            <Triggers>
-                <asp:AsyncPostBackTrigger ControlID="btnSave" />
-                <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
-                <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
-                <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
-            </Triggers>
-        </asp:UpdatePanel>
-    </asp:Panel>
+            </asp:Panel>
+        </ContentTemplate>
+        <Triggers>
+            <asp:AsyncPostBackTrigger ControlID="btnAttach" />
+            <asp:AsyncPostBackTrigger ControlID="btnCancel" />
+            <asp:AsyncPostBackTrigger ControlID="btnSave" />
+            <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
+            <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
+            <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
+        </Triggers>
+    </asp:UpdatePanel>
     <uc:LoadingProgress ID="lpOpportunityDetails" runat="server" />
 </asp:Content>
 
