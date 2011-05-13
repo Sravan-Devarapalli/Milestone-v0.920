@@ -78,12 +78,12 @@ namespace PracticeManagementService
         /// Retrives consultans report
         /// </summary>
         /// <returns>An <see cref="Opportunity"/> object if found and null otherwise.</returns>
-        public Dictionary<Person, int[]> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context)
+        public List<Triple<Person, int[], int>> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context)
         {
             return PersonDAL.GetConsultantUtilizationWeekly(context);
         }
 
-        public Dictionary<Person, int[]> ConsultantUtilizationDailyByPerson(int personId, ConsultantTimelineReportContext context)
+        public List<Triple<Person, int[], int>> ConsultantUtilizationDailyByPerson(int personId, ConsultantTimelineReportContext context)
         {
             return PersonDAL.ConsultantUtilizationDailyByPerson(personId, context);
         }
