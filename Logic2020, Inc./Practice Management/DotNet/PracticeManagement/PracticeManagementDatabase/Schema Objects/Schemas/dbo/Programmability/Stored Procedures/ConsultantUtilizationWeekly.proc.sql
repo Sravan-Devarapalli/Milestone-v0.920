@@ -36,17 +36,17 @@ AS
         ELSE IF(@SortId = 2) --Alphabetical  Pay Type
         BEGIN
 			SET @OrderBy = @OrderBy + ' paytp.[Name] DESC' +
-							', (SELECT AVG(ResultId) FROM [dbo].[ConvertStringListIntoTable](dbo.GetWeeklyUtilization(c.ConsId, @StartDate, @Step, @DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects)) WHERE (ResultId >= 0 AND @Step > 1) OR (ResultId > 0 AND @Step = 1)) ASC'
+							', (dbo.GetAvgUtilization(c.ConsId, @StartDate,@DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects)) ASC'
         END
         ELSE IF(@SortId = 3) --Alphabetical  Practice
         BEGIN
 			SET @OrderBy = @OrderBy + ' pr.[Name] DESC'  +
-						   ', (SELECT AVG(ResultId) FROM [dbo].[ConvertStringListIntoTable](dbo.GetWeeklyUtilization(c.ConsId, @StartDate, @Step, @DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects)) WHERE (ResultId >= 0 AND @Step > 1) OR (ResultId > 0 AND @Step = 1)) ASC'
+						   ', (dbo.GetAvgUtilization(c.ConsId, @StartDate,@DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects)) ASC'
         END
         ELSE
         BEGIN  --Average Utilization for Period
         
-			SET @OrderBy = @OrderBy + ' (SELECT AVG(ResultId) FROM [dbo].[ConvertStringListIntoTable](dbo.GetWeeklyUtilization(c.ConsId, @StartDate, @Step, @DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects)) WHERE (ResultId >= 0 AND @Step > 1) OR (ResultId > 0 AND @Step = 1)) '
+			SET @OrderBy = @OrderBy + '(dbo.GetAvgUtilization(c.ConsId, @StartDate,@DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects))'
 			SET @OrderBy = @OrderBy + @SortDirection + ' ,  p.LastName DESC'
         END
         
@@ -91,7 +91,8 @@ AS
                 paytp.TimescaleId,
                 paytp.[Name] AS Timescale,
                 st.[Name],
-                dbo.GetWeeklyUtilization(c.ConsId, @StartDate, @Step, @DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects) AS wutil
+                dbo.GetWeeklyUtilization(c.ConsId, @StartDate, @Step, @DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects) AS wutil,
+                dbo.GetAvgUtilization(c.ConsId, @StartDate,@DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects) AS wutilAvg
         FROM    dbo.Person AS p
                 INNER JOIN @CurrentConsultants AS c ON c.ConsId = p.PersonId
                 INNER JOIN dbo.PersonStatus AS st ON p.PersonStatusId = st.PersonStatusId
@@ -127,5 +128,3 @@ AS
 								 @ExcludeInternalPractices = @ExcludeInternalPractices
      
     END
-
-
