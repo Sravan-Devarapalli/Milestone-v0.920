@@ -24,14 +24,14 @@ namespace PraticeManagement.Controls.Reports
         private const int DEFAULT_STEP = 7;
         private const string NAME_FORMAT = "{0}, {1} ({2}/{3})";
         private const string NAME_FORMAT_WITH_DATES = "{0}, {1} ({2}): {3}-{4}";
-        private const string TITLE_FORMAT = "Consultant Utilization Report \n{0} to {1}\nFor {2} Persons; For {3} Projects\n{4}";
+        private const string TITLE_FORMAT = "Consultant Utilization Report \n{0} to {1}\nFor {2} Persons; For {3} Projects\n{4}\n\n*Utilization reflects person vacation time during this period.";
         private const string POSTBACK_FORMAT = "{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}";
         private const char DELIMITER = '+';
         private const string TOOLTIP_FORMAT = "{0}-{1} {2}";
         private const string FULL_MONTH_NAME_FORMAT = "MMMM, yyyy";
         private const string VACATION_TOOLTIP_FORMAT = "On vacation";
         private const string UTILIZATION_TOOLTIP_FORMAT = "U% = {0}";
-        private const string AVERAGE_UTIL_FORMAT = "~{0}%";
+        private const string AVERAGE_UTIL_FORMAT = "~{0}%*";
 
         #endregion
 
