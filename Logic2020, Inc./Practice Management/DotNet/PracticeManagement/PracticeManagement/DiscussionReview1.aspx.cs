@@ -151,10 +151,9 @@ namespace PraticeManagement
                 DataHelper.FillPracticeListOnlyActive(ddlPractice, string.Empty);
                 DataHelper.FillOpportunityPrioritiesList(ddlPriority, string.Empty);
                 PopulatePriorityHint();
-                FillGroupAndProjectDropDown();
 
                 LoadOpportunityDetails();
-                activityLog.OpportunityId = OpportunityId;
+                FillGroupAndProjectDropDown();
             }
 
             mlConfirmation.ClearMessage();
@@ -174,6 +173,26 @@ namespace PraticeManagement
             lblSaved.Text = string.Empty;
             lblError.Text = string.Empty;
             divResultDescription.Style["display"] = "none";
+
+            if (tcOpportunityDetails.ActiveTabIndex == 1)
+            {
+                LoadActivityLogControl();
+            }
+        }
+
+        private void LoadActivityLogControl()
+        {
+            phActivityLog.Controls.Clear();
+            ActivityLogControl activityLog = LoadControl("~/Controls/ActivityLogControl.ascx") as ActivityLogControl;
+            activityLog.ID = "activityLog";
+            activityLog.IsFreshRequest = true;
+            activityLog.OpportunityId = OpportunityId;
+            activityLog.DisplayDropDownValue = ActivityEventSource.Opportunity;
+            activityLog.DateFilterValue = DateFilterType.Year;
+            activityLog.ShowDisplayDropDown = false;
+            activityLog.ShowProjectDropDown = false;
+            phActivityLog.Controls.Add(activityLog);
+
         }
 
         private void FillGroupAndProjectDropDown()
@@ -237,9 +256,7 @@ namespace PraticeManagement
             lblTotalOpportunities.Text = lvOpportunities.Items.Count.ToString();
             lblCurrentOpportunity.Text = Convert.ToString(lvOpportunities.SelectedIndex + 1);
             lvOpportunities.DataBind();
-            activityLog.OpportunityId = OpportunityId;
-            activityLog.Update();
-            upActivityLog.Update();
+            
             upTopBarPane.Update();
             UpdatePanel1.Update();
         }
@@ -259,9 +276,14 @@ namespace PraticeManagement
 
             if (IsPostBack && Page.IsValid)
             {
-                FillGroupAndProjectDropDown();
                 LoadOpportunityDetails();
+                FillGroupAndProjectDropDown();
             }
+
+            FocusToSelectedItem();
+            clearActivityLogControls();
+
+           
         }
 
         public void imgBtnNext_OnClick(object sender, EventArgs e)
@@ -274,9 +296,12 @@ namespace PraticeManagement
 
             if (IsPostBack && Page.IsValid)
             {
-                FillGroupAndProjectDropDown();
                 LoadOpportunityDetails();
+                FillGroupAndProjectDropDown();
             }
+
+            FocusToSelectedItem();
+            clearActivityLogControls();
 
         }
 
@@ -291,9 +316,12 @@ namespace PraticeManagement
 
             if (IsPostBack && Page.IsValid)
             {
-                FillGroupAndProjectDropDown();
                 LoadOpportunityDetails();
+                FillGroupAndProjectDropDown();
             }
+            FocusToSelectedItem();
+
+            clearActivityLogControls();                        
         }
 
         public void imgBtnFirst_OnClick(object sender, EventArgs e)
@@ -308,9 +336,11 @@ namespace PraticeManagement
 
             if (IsPostBack && Page.IsValid)
             {
-                FillGroupAndProjectDropDown();
                 LoadOpportunityDetails();
+                FillGroupAndProjectDropDown();
             }
+            FocusToSelectedItem();
+            clearActivityLogControls();
 
         }
 
@@ -326,14 +356,20 @@ namespace PraticeManagement
 
             if (IsPostBack && Page.IsValid)
             {
-                FillGroupAndProjectDropDown();
                 LoadOpportunityDetails();
+                FillGroupAndProjectDropDown();
             }
-
-
+            FocusToSelectedItem();
+            clearActivityLogControls();
         }
 
         #endregion
+
+        private void clearActivityLogControls() 
+        {
+            phActivityLog.Controls.Clear();
+            upActivityLog.Update();
+        }
 
         public void LoadOpportunityDetails()
         {
@@ -461,6 +497,7 @@ namespace PraticeManagement
                 }
             }
         }
+
 
         public bool CheckForDirtyBehaviour()
         {
@@ -599,15 +636,11 @@ namespace PraticeManagement
 
         public void lvOpportunities_OnDataBound(object sender, EventArgs e)
         {
-            FocusToSelectedItem();
         }
 
         private void FocusToSelectedItem()
         {
-            if (lvOpportunities.Items[lvOpportunities.SelectedIndex].FindControl("imgTransparent") != null)
-            {
-                lvOpportunities.Items[lvOpportunities.SelectedIndex].FindControl("imgTransparent").Focus();
-            }
+            ScriptManager.RegisterClientScriptBlock(upOpportunityList, upOpportunityList.GetType(), "ScrollToImage", string.Format("ScrollToImage('{0}');", lvOpportunities.SelectedIndex), true);
         }
 
         protected override bool ValidateAndSave()
@@ -666,7 +699,16 @@ namespace PraticeManagement
                 {
                     item.Priority = Opportunity.Priority;
                     item.Client.Name = Opportunity.Client.Name;
-                    item.Group.Name = Opportunity.Group != null ? Opportunity.Group.Name :string.Empty;
+
+                    if (item.Group != null)
+                    {
+                        item.Group.Name = Opportunity.Group != null ? Opportunity.Group.Name : string.Empty;
+                    }
+                    else
+                    {
+                        item.Group = new ProjectGroup();
+                        item.Group.Name = Opportunity.Group != null ? Opportunity.Group.Name : string.Empty;
+                    }
                     item.EstimatedRevenue = Opportunity.EstimatedRevenue;
                     item.Name = Opportunity.Name;
                     item.BuyerName = Opportunity.BuyerName;
