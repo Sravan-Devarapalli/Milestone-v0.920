@@ -47,14 +47,14 @@ namespace PracticeManagementService
         /// </summary>
         /// <returns>An <see cref="Opportunity"/> object if found and null otherwise.</returns>
         [OperationContract]
-        Dictionary<Person, int[]> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context);
+        List<Triple<Person, int[], int>> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context);
 
         /// <summary>
         /// Retrieves a consultant's  daily report whose Oersin Id is given by personId.
         /// </summary>
         /// <returns>An <see cref="Opportunity"/> object if found and null otherwise.</returns>
         [OperationContract]
-        Dictionary<Person, int[]> ConsultantUtilizationDailyByPerson(int personId, ConsultantTimelineReportContext context);
+        List<Triple<Person, int[], int>> ConsultantUtilizationDailyByPerson(int personId, ConsultantTimelineReportContext context);
 
         /// <summary>
         /// Check's if there's compensation record covering milestone/
