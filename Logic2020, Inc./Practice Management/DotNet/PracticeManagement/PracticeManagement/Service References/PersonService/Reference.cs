@@ -99,10 +99,10 @@ namespace PraticeManagement.PersonService {
         System.Data.DataSet GetConsultantUtilizationReport(DataTransferObjects.ContextObjects.ConsultantTableReportContext context);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetConsultantUtilizationWeekly", ReplyAction="http://tempuri.org/IPersonService/GetConsultantUtilizationWeeklyResponse")]
-        System.Collections.Generic.Dictionary<DataTransferObjects.Person, int[]> GetConsultantUtilizationWeekly(DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context);
+        DataTransferObjects.Triple<DataTransferObjects.Person, int[], int>[] GetConsultantUtilizationWeekly(DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/ConsultantUtilizationDailyByPerson", ReplyAction="http://tempuri.org/IPersonService/ConsultantUtilizationDailyByPersonResponse")]
-        System.Collections.Generic.Dictionary<DataTransferObjects.Person, int[]> ConsultantUtilizationDailyByPerson(int personId, DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context);
+        DataTransferObjects.Triple<DataTransferObjects.Person, int[], int>[] ConsultantUtilizationDailyByPerson(int personId, DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/IsCompensationCoversMilestone", ReplyAction="http://tempuri.org/IPersonService/IsCompensationCoversMilestoneResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
@@ -310,11 +310,11 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetConsultantUtilizationReport(context);
         }
         
-        public System.Collections.Generic.Dictionary<DataTransferObjects.Person, int[]> GetConsultantUtilizationWeekly(DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context) {
+        public DataTransferObjects.Triple<DataTransferObjects.Person, int[], int>[] GetConsultantUtilizationWeekly(DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context) {
             return base.Channel.GetConsultantUtilizationWeekly(context);
         }
         
-        public System.Collections.Generic.Dictionary<DataTransferObjects.Person, int[]> ConsultantUtilizationDailyByPerson(int personId, DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context) {
+        public DataTransferObjects.Triple<DataTransferObjects.Person, int[], int>[] ConsultantUtilizationDailyByPerson(int personId, DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context) {
             return base.Channel.ConsultantUtilizationDailyByPerson(personId, context);
         }
         
