@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
 using PraticeManagement.PersonService;
@@ -71,7 +72,7 @@ namespace PraticeManagement.Controls.Reports
                 client => client.GetConsultantUtilizationReport(context));
         }
 
-        public static Dictionary<Person, int[]> GetConsultantsTimelineReport(
+        public static List<Triple<DataTransferObjects.Person, int[], int>> GetConsultantsTimelineReport(
             DateTime start, int granularity, int period,
             bool activePersons, bool projectedPersons, bool activeProjects,
             bool projectedProjects, bool experimentalProjects, bool internalProjects,
@@ -97,8 +98,15 @@ namespace PraticeManagement.Controls.Reports
                                   IsSampleReport = isSampleReport
                               };
 
-            return ServiceCallers.Custom.Person(
+            var consultants = ServiceCallers.Custom.Person(
                 client => client.GetConsultantUtilizationWeekly(context));
+            var consultantsList = new List<Triple<DataTransferObjects.Person, int[], int>>();
+            if (consultants != null && consultants.Any())
+            {
+                consultantsList.AddRange(consultants);
+            }
+
+            return consultantsList;
         }
     }
 }
