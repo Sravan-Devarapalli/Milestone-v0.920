@@ -379,7 +379,7 @@
   <xs:element name="GetConsultantUtilizationWeeklyResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetConsultantUtilizationWeeklyResult" nillable="true" type="q30:ArrayOfTripleOfPersonArrayOfintintfnyeTkk6" />
+        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetConsultantUtilizationWeeklyResult" nillable="true" type="q30:ArrayOfQuadrupleOfPersonArrayOfintintintlqlLCQKx" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
