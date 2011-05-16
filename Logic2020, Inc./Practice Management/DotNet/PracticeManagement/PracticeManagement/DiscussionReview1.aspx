@@ -9,7 +9,7 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajax" %>
 <%@ Register Src="~/Controls/Configuration/DefaultUser.ascx" TagPrefix="uc" TagName="DefaultUser" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Opportunities.ViewProjectExtender" %>
-<%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
+<%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %> 
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc" %>
@@ -263,7 +263,7 @@
                 width: 28%;">
                 <asp:UpdatePanel ID="upOpportunityList" UpdateMode="Conditional" runat="server">
                     <ContentTemplate>
-                        <div id="divOpportunityList" runat="server" style="overflow-y: scroll; height: 360px">
+                        <div id="divOpportunityList" runat="server" style="overflow-y: scroll; height: 848px">
                             <asp:ListView ID="lvOpportunities" runat="server" SelectedIndex="0" DataKeyNames="Id"
                                 OnSelectedIndexChanging="lvOpportunities_SelectedIndexChanging" OnDataBound="lvOpportunities_OnDataBound">
                                 <LayoutTemplate>
@@ -385,7 +385,7 @@
                 </asp:UpdatePanel>
             </td>
             <td style="border-left: 2px solid black; padding-left: 5px; width: 72%;" valign="top">
-                <div style="overflow-y: scroll; height: 360px">
+                <div style="overflow-y: scroll; height:848px">
                     <table>
                         <tr>
                             <td>
