@@ -31,8 +31,8 @@ namespace PraticeManagement.Controls.Reports
         private const string FULL_MONTH_NAME_FORMAT = "MMMM, yyyy";
         private const string VACATION_TOOLTIP_FORMAT = "On vacation";
         private const string UTILIZATION_TOOLTIP_FORMAT = "U% = {0}";
-        private const string AVERAGE_UTIL_FORMAT = "~{0}%*";
-
+        private const string AVERAGE_UTIL_FORMAT = "~{0}%";
+        private const string VACATION_AVERAGE_UTIL_FORMAT = "~{0}%*";
         #endregion
 
         #region Fields
@@ -193,8 +193,8 @@ namespace PraticeManagement.Controls.Reports
                     utf.ExperimentalProjects,
                     utf.InternalProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, SortDirection, utf.ExcludeInternalPractices);
 
-            foreach (var triple in report)
-                AddPerson(triple);
+            foreach (var quadruple in report)
+                AddPerson(quadruple);
 
             chart.Height = Resources.Controls.TimelineGeneralHeaderHeigth +
                            Resources.Controls.TimelineGeneralItemHeigth * report.Count +
@@ -233,27 +233,27 @@ namespace PraticeManagement.Controls.Reports
             horizAxis.IsLabelAutoFit = true;
             horizAxis.IsStartedFromZero = true;
 
-                if (utf.DetalizationSelectedValue == "1" || utf.DetalizationSelectedValue == "7")
-                {
-                    horizAxis.IntervalType = DateTimeIntervalType.Weeks;
-                    horizAxis.Interval = 1;
+            if (utf.DetalizationSelectedValue == "1" || utf.DetalizationSelectedValue == "7")
+            {
+                horizAxis.IntervalType = DateTimeIntervalType.Weeks;
+                horizAxis.Interval = 1;
 
-                    horizAxis.IntervalOffset = GetOffset(BegPeriod);
-                    horizAxis.IntervalOffsetType = DateTimeIntervalType.Days;
-                }
-                else if (utf.DetalizationSelectedValue == "14")
-                {
-                    horizAxis.IntervalType = DateTimeIntervalType.Weeks;
-                    horizAxis.Interval = 2;
+                horizAxis.IntervalOffset = GetOffset(BegPeriod);
+                horizAxis.IntervalOffsetType = DateTimeIntervalType.Days;
+            }
+            else if (utf.DetalizationSelectedValue == "14")
+            {
+                horizAxis.IntervalType = DateTimeIntervalType.Weeks;
+                horizAxis.Interval = 2;
 
-                    horizAxis.IntervalOffset = GetOffset(BegPeriod) == 0 ? 0 : GetOffset(BegPeriod) - 7;
-                    horizAxis.IntervalOffsetType = DateTimeIntervalType.Days;
-                }
-                else
-                {
-                    horizAxis.IntervalType = DateTimeIntervalType.Months;
-                    horizAxis.Interval = 1;
-                }
+                horizAxis.IntervalOffset = GetOffset(BegPeriod) == 0 ? 0 : GetOffset(BegPeriod) - 7;
+                horizAxis.IntervalOffsetType = DateTimeIntervalType.Days;
+            }
+            else
+            {
+                horizAxis.IntervalType = DateTimeIntervalType.Months;
+                horizAxis.Interval = 1;
+            }
             // Add month names
             var diff = EndPeriod.Subtract(BegPeriod);
             if (diff.Days > 31)
@@ -289,80 +289,80 @@ namespace PraticeManagement.Controls.Reports
         /// </summary>
         private void UpdateChartTitle()
         {
-                //  Add chart title
-                string personsPlaceHolder = string.Empty, projectsPlaceHolder = string.Empty, practicesPlaceHolder = string.Empty;
-                if (utf.ProjectedPersons && utf.ActivePersons)
-                {
-                    personsPlaceHolder = "All";
-                }
-                else if (utf.ActivePersons)
-                {
-                    personsPlaceHolder = "Active";
-                }
-                else if (utf.ProjectedPersons)
-                {
-                    personsPlaceHolder = "Projected";
-                }
-                else
-                {
-                    personsPlaceHolder = "No";
-                }
+            //  Add chart title
+            string personsPlaceHolder = string.Empty, projectsPlaceHolder = string.Empty, practicesPlaceHolder = string.Empty;
+            if (utf.ProjectedPersons && utf.ActivePersons)
+            {
+                personsPlaceHolder = "All";
+            }
+            else if (utf.ActivePersons)
+            {
+                personsPlaceHolder = "Active";
+            }
+            else if (utf.ProjectedPersons)
+            {
+                personsPlaceHolder = "Projected";
+            }
+            else
+            {
+                personsPlaceHolder = "No";
+            }
 
-                if (utf.ActiveProjects && utf.ProjectedProjects
-                    && utf.InternalProjects && utf.ExperimentalProjects)
-                {
-                    projectsPlaceHolder = "All";
-                }
-                else
-                {
-                    if (utf.ActiveProjects)
-                        projectsPlaceHolder = "Active";
+            if (utf.ActiveProjects && utf.ProjectedProjects
+                && utf.InternalProjects && utf.ExperimentalProjects)
+            {
+                projectsPlaceHolder = "All";
+            }
+            else
+            {
+                if (utf.ActiveProjects)
+                    projectsPlaceHolder = "Active";
 
-                    if (utf.ProjectedProjects)
+                if (utf.ProjectedProjects)
+                {
+                    if (string.IsNullOrEmpty(projectsPlaceHolder))
                     {
-                        if (string.IsNullOrEmpty(projectsPlaceHolder))
-                        {
-                            projectsPlaceHolder = "Projected";
-                        }
-                        else
-                        {
-                            projectsPlaceHolder += "/Projected";
-                        }
+                        projectsPlaceHolder = "Projected";
                     }
-                    if (utf.InternalProjects)
+                    else
                     {
-                        if (string.IsNullOrEmpty(projectsPlaceHolder))
-                        {
-                            projectsPlaceHolder = "Internal";
-                        }
-                        else
-                        {
-                            projectsPlaceHolder += "/Internal";
-                        }
-                    }
-                    if (utf.ExperimentalProjects)
-                    {
-                        if (string.IsNullOrEmpty(projectsPlaceHolder))
-                        {
-                            projectsPlaceHolder = "Experimental";
-                        }
-                        else
-                        {
-                            projectsPlaceHolder += "/Experimental";
-                        }
+                        projectsPlaceHolder += "/Projected";
                     }
                 }
-                if (string.IsNullOrEmpty(projectsPlaceHolder))
+                if (utf.InternalProjects)
                 {
-                    projectsPlaceHolder = "No";
+                    if (string.IsNullOrEmpty(projectsPlaceHolder))
+                    {
+                        projectsPlaceHolder = "Internal";
+                    }
+                    else
+                    {
+                        projectsPlaceHolder += "/Internal";
+                    }
                 }
+                if (utf.ExperimentalProjects)
+                {
+                    if (string.IsNullOrEmpty(projectsPlaceHolder))
+                    {
+                        projectsPlaceHolder = "Experimental";
+                    }
+                    else
+                    {
+                        projectsPlaceHolder += "/Experimental";
+                    }
+                }
+            }
+            if (string.IsNullOrEmpty(projectsPlaceHolder))
+            {
+                projectsPlaceHolder = "No";
+            }
 
-                chart.Titles.Add(
-                    string.Format(
-                        TITLE_FORMAT,
-                        BegPeriod.ToString("MM/dd/yyyy"),
-                        EndPeriod.ToString("MM/dd/yyyy"),
-                        personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText()));
+            chart.Titles.Add(
+                string.Format(
+                    TITLE_FORMAT,
+                    BegPeriod.ToString("MM/dd/yyyy"),
+                    EndPeriod.ToString("MM/dd/yyyy"),
+                    personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText()));
         }
 
         protected void Chart_Click(object sender, ImageMapEventArgs e)
@@ -497,22 +497,22 @@ namespace PraticeManagement.Controls.Reports
         /// 	Add person to the graph.
         /// </summary>
         /// <param name = "triple">Person - loads per range - average u%</param>
-        public void AddPerson(Triple<Person, int[], int> triple)
+        public void AddPerson(Quadruple<Person, int[], int, int> quadruple)
         {
-            var partsCount = triple.Second.Length;
-            var csv = FormCSV(triple.Second);
+            var partsCount = quadruple.Second.Length;
+            var csv = FormCSV(quadruple.Second);
             for (var w = 0; w < partsCount; w++)
             {
                 //  Add another range to the person's timeline
                 AddPersonRange(
-                    triple.First, //  Person
+                    quadruple.First, //  Person
                      w, //  Range index
-                    triple.Second[w], csv); //  U% for the period
+                    quadruple.Second[w], csv); //  U% for the period
 
             }
 
             //  Add axis label
-            AddLabel(triple.First, triple.Third);
+            AddLabel(quadruple.First, quadruple.Third, quadruple.Fourth);
 
             //  Increase persons counter
             _personsCount++;
@@ -534,7 +534,7 @@ namespace PraticeManagement.Controls.Reports
         /// </summary>
         /// <param name = "p">Person</param>
         /// <param name = "avg">Average load</param>
-        private void AddLabel(Person p, int avg)
+        private void AddLabel(Person p, int avg,int vacationDays)
         {
             //  Get labels collection
             var labels =
@@ -571,7 +571,7 @@ namespace PraticeManagement.Controls.Reports
                 labels.Add(
                     _personsCount - 0.49, // From position
                     _personsCount + 0.49, // To position
-                    FormatAvgPercentage(avg), // Formated person title
+                    FormatAvgPercentage(vacationDays ,avg), // Formated person title
                     0, // Index
                     LabelMarkStyle.None); // Mark style: none
 
@@ -640,8 +640,16 @@ namespace PraticeManagement.Controls.Reports
 
         #region Formatting
 
-        private static string FormatAvgPercentage(int avg)
+        private static string FormatAvgPercentage(int personVacationDays, int avg)
         {
+            if (personVacationDays > 0)
+            {
+                return
+                    string.Format(
+                        VACATION_AVERAGE_UTIL_FORMAT,
+                        avg);
+            }
+
             return
                 string.Format(
                     AVERAGE_UTIL_FORMAT,
