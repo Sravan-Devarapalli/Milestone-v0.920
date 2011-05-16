@@ -177,7 +177,7 @@ namespace DataAccess
         private const string TimescaleIdColumn = "TimescaleId";
         private const string WeeklyUtilColumn = "wutil";
         private const string AvgUtilColumn = "wutilAvg";
-
+        private const string PersonVactionDaysColumn = "PersonVactionDays";
         private const string TargetIdColumn = "TargetId";
         private const string TargetTypeColumn = "TargetType";
 
@@ -365,7 +365,7 @@ namespace DataAccess
         /// Retrives consultans report
         /// </summary>
         /// <returns>An <see cref="Opportunity"/> object if found and null otherwise.</returns>
-        public static List<Triple<Person, int[], int>> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context)
+        public static List<Quadruple<Person, int[], int,int>> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(ConsultantUtilizationWeeklyProcedure, connection))
@@ -391,7 +391,7 @@ namespace DataAccess
 
                 connection.Open();
 
-                return GetPersonLoad(command);
+                return GetPersonLoadWithVactionDays(command);
             }
         }
 
@@ -435,7 +435,7 @@ namespace DataAccess
                     int hireDateIndex = reader.GetOrdinal(HireDateColumn);
                     int avgUtilIndex = reader.GetOrdinal(AvgUtilColumn);
 
-                    var res = new List<Triple<Person, int[],int>>();
+                    var res = new List<Triple<Person, int[], int>>();
                     while (reader.Read())
                     {
                         var person =
@@ -462,6 +462,68 @@ namespace DataAccess
                         int[] load = Utils.StringToIntArray((string)reader[weeklyLoadIndex]);
                         int avgUtil = reader.GetInt32(avgUtilIndex);
                         res.Add(new Triple<Person, int[], int>(person, load, avgUtil));
+                    }
+
+                    return res;
+                }
+            }
+
+            return null;
+        }
+
+
+        /// <summary>
+        /// reads a dataset of persons into a collection
+        /// </summary>
+        private static List<Quadruple<Person, int[], int, int>> GetPersonLoadWithVactionDays(SqlCommand command)
+        {
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                if (reader.HasRows)
+                {
+                    int personStatusNameIndex = reader.GetOrdinal(NameColumn);
+                    int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+                    int lastNameIndex = reader.GetOrdinal(LastNameColumn);
+                    int employeeNumberIndex = reader.GetOrdinal(EmployeeNumberColumn);
+                    int weeklyLoadIndex = reader.GetOrdinal(WeeklyUtilColumn);
+                    int timescaleNameIndex = reader.GetOrdinal(TimescaleColumn);
+                    int timescaleIdIndex = reader.GetOrdinal(TimescaleIdColumn);
+                    int hireDateIndex = reader.GetOrdinal(HireDateColumn);
+                    int avgUtilIndex = reader.GetOrdinal(AvgUtilColumn);
+                    int personVacationDaysIndex = reader.GetOrdinal(PersonVactionDaysColumn);
+
+                    var res = new List<Quadruple<Person, int[], int, int>>();
+                    while (reader.Read())
+                    {
+                        var person =
+                            new Person
+                            {
+                                Id = (int)reader[PersonIdColumn],
+                                FirstName = (string)reader[firstNameIndex],
+                                LastName = (string)reader[lastNameIndex],
+                                EmployeeNumber = (string)reader[employeeNumberIndex],
+                                Status = new PersonStatus
+                                {
+                                    Id = (int)Enum.Parse(
+                                        typeof(PersonStatusType),
+                                        (string)reader[personStatusNameIndex]),
+                                    Name = (string)reader[personStatusNameIndex]
+                                },
+                                CurrentPay = new Pay
+                                {
+                                    TimescaleName = reader.GetString(timescaleNameIndex),
+                                    Timescale = (TimescaleType)reader.GetInt32(timescaleIdIndex)
+                                },
+                                HireDate = (DateTime)reader[hireDateIndex]
+                            };
+                        int[] load = Utils.StringToIntArray((string)reader[weeklyLoadIndex]);
+
+                        int avgUtil = reader.GetInt32(avgUtilIndex);
+
+                        int PersonVactionDays = reader.GetInt32(personVacationDaysIndex);
+
+
+                        res.Add(new Quadruple<Person, int[], int, int>(person, load, avgUtil, PersonVactionDays));
                     }
 
                     return res;
