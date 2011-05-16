@@ -99,7 +99,7 @@ namespace PraticeManagement.PersonService {
         System.Data.DataSet GetConsultantUtilizationReport(DataTransferObjects.ContextObjects.ConsultantTableReportContext context);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetConsultantUtilizationWeekly", ReplyAction="http://tempuri.org/IPersonService/GetConsultantUtilizationWeeklyResponse")]
-        DataTransferObjects.Triple<DataTransferObjects.Person, int[], int>[] GetConsultantUtilizationWeekly(DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context);
+        DataTransferObjects.Quadruple<DataTransferObjects.Person, int[], int, int>[] GetConsultantUtilizationWeekly(DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/ConsultantUtilizationDailyByPerson", ReplyAction="http://tempuri.org/IPersonService/ConsultantUtilizationDailyByPersonResponse")]
         DataTransferObjects.Triple<DataTransferObjects.Person, int[], int>[] ConsultantUtilizationDailyByPerson(int personId, DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context);
@@ -197,7 +197,7 @@ namespace PraticeManagement.PersonService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
-        
+       
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -310,7 +310,7 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetConsultantUtilizationReport(context);
         }
         
-        public DataTransferObjects.Triple<DataTransferObjects.Person, int[], int>[] GetConsultantUtilizationWeekly(DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context) {
+        public DataTransferObjects.Quadruple<DataTransferObjects.Person, int[], int, int>[] GetConsultantUtilizationWeekly(DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context) {
             return base.Channel.GetConsultantUtilizationWeekly(context);
         }
         
