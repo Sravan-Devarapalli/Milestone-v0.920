@@ -92,7 +92,8 @@ AS
                 paytp.[Name] AS Timescale,
                 st.[Name],
                 dbo.GetWeeklyUtilization(c.ConsId, @StartDate, @Step, @DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects) AS wutil,
-                dbo.GetAvgUtilization(c.ConsId, @StartDate,@DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects) AS wutilAvg
+                dbo.GetAvgUtilization(c.ConsId, @StartDate,@DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects) AS wutilAvg,
+                dbo.GetPersonVacationDays(c.ConsId,@StartDate,@DaysForward) PersonVactionDays
         FROM    dbo.Person AS p
                 INNER JOIN @CurrentConsultants AS c ON c.ConsId = p.PersonId
                 INNER JOIN dbo.PersonStatus AS st ON p.PersonStatusId = st.PersonStatusId
@@ -128,3 +129,4 @@ AS
 								 @ExcludeInternalPractices = @ExcludeInternalPractices
      
     END
+
