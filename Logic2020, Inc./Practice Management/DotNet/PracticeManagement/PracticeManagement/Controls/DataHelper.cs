@@ -268,7 +268,7 @@ namespace PraticeManagement.Controls
         /// <summary>
         /// Retrives consultans report: Person - load per range - avarage u%
         /// </summary>
-        public static List<Triple<Person, int[], int>> GetConsultantsWeeklyReport
+        public static List<Quadruple<Person, int[], int,int>> GetConsultantsWeeklyReport
             (DateTime startDate,
             int step,
             int duration,
