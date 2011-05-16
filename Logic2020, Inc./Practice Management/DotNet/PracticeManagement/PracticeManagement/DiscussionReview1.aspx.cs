@@ -153,7 +153,6 @@ namespace PraticeManagement
                 PopulatePriorityHint();
 
                 LoadOpportunityDetails();
-                FillGroupAndProjectDropDown();
             }
 
             mlConfirmation.ClearMessage();
@@ -256,7 +255,7 @@ namespace PraticeManagement
             lblTotalOpportunities.Text = lvOpportunities.Items.Count.ToString();
             lblCurrentOpportunity.Text = Convert.ToString(lvOpportunities.SelectedIndex + 1);
             lvOpportunities.DataBind();
-            
+
             upTopBarPane.Update();
             UpdatePanel1.Update();
         }
@@ -277,13 +276,12 @@ namespace PraticeManagement
             if (IsPostBack && Page.IsValid)
             {
                 LoadOpportunityDetails();
-                FillGroupAndProjectDropDown();
             }
 
             FocusToSelectedItem();
             clearActivityLogControls();
 
-           
+
         }
 
         public void imgBtnNext_OnClick(object sender, EventArgs e)
@@ -297,7 +295,6 @@ namespace PraticeManagement
             if (IsPostBack && Page.IsValid)
             {
                 LoadOpportunityDetails();
-                FillGroupAndProjectDropDown();
             }
 
             FocusToSelectedItem();
@@ -313,15 +310,13 @@ namespace PraticeManagement
             }
             lvOpportunities.SelectedIndex = e.NewSelectedIndex;
 
-
             if (IsPostBack && Page.IsValid)
             {
                 LoadOpportunityDetails();
-                FillGroupAndProjectDropDown();
             }
             FocusToSelectedItem();
 
-            clearActivityLogControls();                        
+            clearActivityLogControls();
         }
 
         public void imgBtnFirst_OnClick(object sender, EventArgs e)
@@ -337,7 +332,6 @@ namespace PraticeManagement
             if (IsPostBack && Page.IsValid)
             {
                 LoadOpportunityDetails();
-                FillGroupAndProjectDropDown();
             }
             FocusToSelectedItem();
             clearActivityLogControls();
@@ -357,7 +351,6 @@ namespace PraticeManagement
             if (IsPostBack && Page.IsValid)
             {
                 LoadOpportunityDetails();
-                FillGroupAndProjectDropDown();
             }
             FocusToSelectedItem();
             clearActivityLogControls();
@@ -365,7 +358,7 @@ namespace PraticeManagement
 
         #endregion
 
-        private void clearActivityLogControls() 
+        private void clearActivityLogControls()
         {
             phActivityLog.Controls.Clear();
             upActivityLog.Update();
@@ -376,10 +369,7 @@ namespace PraticeManagement
             lvOpportunities.DataBind();
             hdnOpportunityId.Value = lvOpportunities.SelectedValue.ToString();
             ucProposedResources.OpportunityId = OpportunityId;
-
-            if (IsPostBack)
-                FillControls();
-
+            FillControls();
             BindNotesData();
             PopulateProposedResources();
         }
@@ -719,8 +709,7 @@ namespace PraticeManagement
         }
 
         protected override void Display()
-        {
-            FillControls();
+        {            
         }
 
         private void FillControls()
@@ -841,6 +830,8 @@ namespace PraticeManagement
             PopulatePracticeDropDown();
 
             PopulateOwnerDropDown();
+
+            FillGroupAndProjectDropDown();
 
             PopulateClientGroupDropDown();
 
