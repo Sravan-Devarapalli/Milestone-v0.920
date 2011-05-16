@@ -72,7 +72,7 @@ namespace PraticeManagement.Controls.Reports
                 client => client.GetConsultantUtilizationReport(context));
         }
 
-        public static List<Triple<DataTransferObjects.Person, int[], int>> GetConsultantsTimelineReport(
+        public static List<Quadruple<DataTransferObjects.Person, int[], int,int>> GetConsultantsTimelineReport(
             DateTime start, int granularity, int period,
             bool activePersons, bool projectedPersons, bool activeProjects,
             bool projectedProjects, bool experimentalProjects, bool internalProjects,
@@ -100,7 +100,7 @@ namespace PraticeManagement.Controls.Reports
 
             var consultants = ServiceCallers.Custom.Person(
                 client => client.GetConsultantUtilizationWeekly(context));
-            var consultantsList = new List<Triple<DataTransferObjects.Person, int[], int>>();
+            var consultantsList = new List<Quadruple<DataTransferObjects.Person, int[], int,int>>();
             if (consultants != null && consultants.Any())
             {
                 consultantsList.AddRange(consultants);
