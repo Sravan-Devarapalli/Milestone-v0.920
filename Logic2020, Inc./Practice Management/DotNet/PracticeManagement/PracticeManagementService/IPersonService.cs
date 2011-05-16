@@ -47,7 +47,7 @@ namespace PracticeManagementService
         /// </summary>
         /// <returns>An <see cref="Opportunity"/> object if found and null otherwise.</returns>
         [OperationContract]
-        List<Triple<Person, int[], int>> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context);
+        List<Quadruple<Person, int[], int, int>> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context);
 
         /// <summary>
         /// Retrieves a consultant's  daily report whose Oersin Id is given by personId.
