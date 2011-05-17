@@ -34,7 +34,8 @@ AS
 		@PracticeIdsLocal NVARCHAR(4000) = NULL,
 		@TimeScaleIdsLocal NVARCHAR(1000) = NULL,
 		@IncludeOverheadsLocal BIT,
-		@IncludeZeroCostEmployeesLocal	BIT
+		@IncludeZeroCostEmployeesLocal	BIT,
+		@ApplyPersonStatusFilter	BIT
 		
 	SELECT  @StartDateLocal=@StartDate,
 			@EndDateLocal=@EndDate,
@@ -48,6 +49,11 @@ AS
 			@TimeScaleIdsLocal = @TimeScaleIds,
 			@IncludeOverheadsLocal = @IncludeOverheads,
 			@IncludeZeroCostEmployeesLocal =@IncludeZeroCostEmployees 
+
+	IF(@ActivePersonsLocal IS NULL AND  @ProjectedPersonsLocal IS NULL)
+	SELECT @ApplyPersonStatusFilter = 0
+	ELSE
+	SELECT @ApplyPersonStatusFilter = 1
 
 	DECLARE @DefaultMilestoneId INT
 	SELECT @DefaultMilestoneId  = (SELECT  TOP 1 MilestoneId
@@ -143,7 +149,7 @@ AS
 				AND cal.Date BETWEEN @StartDateLocal AND @EndDateLocal
 				AND ((p.PersonStatusId = 1 AND @ActivePersonsLocal = 1 )
 					 OR (p.PersonStatusId = 3 AND @ProjectedPersonsLocal = 1 )
-					 OR((@ActivePersonsLocal IS NULL AND  @ProjectedPersonsLocal IS NULL )
+					 OR(( @ApplyPersonStatusFilter = 0 AND P.PersonStatusId IN(1,2))
 					))
 				 AND P.PersonStatusId<>4
 				AND (@PracticeIdsLocal IS NULL 
