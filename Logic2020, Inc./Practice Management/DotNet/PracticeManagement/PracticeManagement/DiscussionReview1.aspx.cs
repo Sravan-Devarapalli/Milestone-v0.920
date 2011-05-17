@@ -141,6 +141,9 @@ namespace PraticeManagement
                 Cache.Remove(OPPORTUNITIES_LIST_KEY);
             }
 
+            // Security
+            InitSecurity();
+
             BindOpportunitiesData();
 
             if (!IsPostBack)
@@ -155,10 +158,7 @@ namespace PraticeManagement
                 LoadOpportunityDetails();
             }
 
-            mlConfirmation.ClearMessage();
-
-            // Security
-            InitSecurity();
+            mlConfirmation.ClearMessage();            
 
             if (hdnValueChanged.Value == "false")
             {
@@ -314,7 +314,7 @@ namespace PraticeManagement
             {
                 LoadOpportunityDetails();
             }
-            FocusToSelectedItem();
+            SetScrollPosition();
 
             clearActivityLogControls();
         }
@@ -631,6 +631,11 @@ namespace PraticeManagement
         private void FocusToSelectedItem()
         {
             ScriptManager.RegisterClientScriptBlock(upOpportunityList, upOpportunityList.GetType(), "ScrollToImage", string.Format("ScrollToImage('{0}');", lvOpportunities.SelectedIndex), true);
+        }
+
+        private void SetScrollPosition()
+        {
+            ScriptManager.RegisterClientScriptBlock(upOpportunityList, upOpportunityList.GetType(), "setScrollPos", "setScrollPos();", true);
         }
 
         protected override bool ValidateAndSave()
