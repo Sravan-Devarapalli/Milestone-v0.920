@@ -9,7 +9,7 @@ BEGIN
 	;WITH CTE
 	AS
 	(
-	SELECT ROW_NUMBER() OVER(PARTITION BY O.ClientName + isnull(O.BuyerName, '') ORDER BY O.Priority, O.SalespersonLastName) RowNumber,
+	SELECT ROW_NUMBER() OVER(PARTITION BY O.ClientName + isnull(O.BuyerName, '') ORDER BY OP.sortOrder, O.SalespersonLastName) RowNumber,
 		   o.OpportunityId,
 		   o.Name,
 		   o.Priority,
@@ -25,9 +25,11 @@ BEGIN
 		   p.LastName as 'OwnerLastName',
 		   p.FirstName as 'OwnerFirstName',
 		   o.EstimatedRevenue,
-		   o.BuyerName
+		   o.BuyerName,
+		   OP.sortOrder
 	FROM v_Opportunity AS o
 	LEFT JOIN dbo.Person p ON o.OwnerId = p.PersonId
+	INNER JOIN dbo.OpportunityPriorities AS op ON op.Id = o.PriorityId
 	WHERE o.OpportunityStatusId = 1 OR @ActiveOnly = 0
 	)
 	SELECT 
@@ -35,6 +37,6 @@ BEGIN
 		FROM CTE A
 		JOIN CTE B
 		ON A.ClientName =B.ClientName AND isnull(A.BuyerName, '')  = isnull(B.BuyerName, '') AND A.RowNumber=1
-		ORDER BY A.Priority,A.SalespersonLastName,B.ClientName,isnull(B.BuyerName, ''),B.Priority,B.SalespersonLastName
+		ORDER BY A.sortOrder,A.SalespersonLastName,B.ClientName,isnull(B.BuyerName, ''),B.sortOrder,B.SalespersonLastName
 
 END
