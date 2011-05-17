@@ -293,7 +293,7 @@ namespace PraticeManagement.Controls
                     timescaleIds, practiceIdList, sortId, sortDirection, excludeInternalPractices, isSampleReport);
 
 
-            return consultants;
+            return consultants.FindAll(Q => Q.Third < avgUtil);
         }
 
         public static List<Triple<Person, int[], int>> ConsultantUtilizationDailyByPerson
