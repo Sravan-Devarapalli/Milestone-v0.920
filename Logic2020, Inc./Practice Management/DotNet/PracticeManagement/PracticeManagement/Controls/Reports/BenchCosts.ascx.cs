@@ -276,7 +276,7 @@ namespace PraticeManagement.Controls.Reports
             {
 
                 DataHelper.FillPracticeList(this.cblPractices, Resources.Controls.AllPracticesText);
-                
+
                 SelectAllItems(this.cblPractices);
                 //DatabindGrid();
                 lblExternalPractices.Visible = false;
@@ -359,11 +359,12 @@ namespace PraticeManagement.Controls.Reports
         private IEnumerable<Project> GetBenchList()
         {
             var benchList = ReportsHelper.GetBenchListWithoutBenchTotalAndAdminCosts(ReportContext);
-            return benchList.ToList<Project>().FindAll(p => (p.Practice != null
+            var benchListTemp = benchList.ToList<Project>().FindAll(p => (p.Practice != null
                                                             && !string.IsNullOrEmpty(p.Practice.Name)
                                                             && !string.IsNullOrEmpty(p.ProjectNumber)
                                                             )
                                                      );
+            return benchListTemp.FindAll(p => p.ProjectedFinancialsByMonth.Values.Any(q =>q.GrossMargin.Value != 0M && q.Timescale == TimescaleType.Salary));
         }
 
         protected void gvBenchRollOffDates_RowDataBound(object sender, GridViewRowEventArgs e)
