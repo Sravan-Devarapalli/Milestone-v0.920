@@ -132,7 +132,8 @@ namespace PraticeManagement
                 userIsSalesPerson || userIsAdministrator;
             txtManagementCommission.ReadOnly = !userIsSalesPerson && !userIsAdministrator;
 
-            chbReceivesSalesCommission.Enabled = ddlSalesperson.Enabled = userIsAdministrator;
+            chbReceivesSalesCommission.Enabled = userIsAdministrator;
+            ddlSalesperson.Enabled = userIsAdministrator || userIsDirector;
 
             ddlProjectStatus.Enabled =
                 // add new project mode
@@ -613,7 +614,7 @@ namespace PraticeManagement
                     ddlProjectStatus.Enabled = false;
                 }
 
-                ddlSalesperson.Enabled = userIsAdministrator;
+                ddlSalesperson.Enabled = userIsAdministrator || userIsDirector;
             }
 
             UpdateSalesCommissionState();
