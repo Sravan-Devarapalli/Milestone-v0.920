@@ -78,7 +78,7 @@ namespace PracticeManagementService
         /// Retrives consultans report
         /// </summary>
         /// <returns>An <see cref="Opportunity"/> object if found and null otherwise.</returns>
-        public List<Quadruple<Person, int[], int,int>> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context)
+        public List<Quadruple<Person, int[], int, int>> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context)
         {
             return PersonDAL.GetConsultantUtilizationWeekly(context);
         }
@@ -139,11 +139,16 @@ namespace PracticeManagementService
             string looked,
             int? recruiterId,
             string userName,
-            string sortBy)
+            string sortBy,
+            int? timeScaleId,
+            bool projected,
+            bool terminated,
+            bool inactive,
+            char? alphabet)
         {
             PersonRateCalculator.VerifyPrivileges(userName, ref recruiterId);
             return
-                PersonDAL.PersonListFilteredWithCurrentPay(practice, !active, pageSize, pageNo, looked, DateTime.MinValue, DateTime.MinValue, recruiterId, null, sortBy);
+                PersonDAL.PersonListFilteredWithCurrentPay(practice, !active, pageSize, pageNo, looked, DateTime.MinValue, DateTime.MinValue, recruiterId, null, sortBy, timeScaleId, projected, terminated, inactive, alphabet);
         }
 
         /// <summary>
@@ -280,10 +285,10 @@ namespace PracticeManagementService
         /// <param name="recruiterId">Determines an ID of the recruiter to retrieve the recruits for.</param>
         /// <param name="userName">A current user.</param>
         /// <returns>The number of the persons those match with the specified conditions.</returns>
-        public int GetPersonCount(int? practice, bool active, string looked, int? recruiterId, string userName)
+        public int GetPersonCount(int? practice, bool active, string looked, int? recruiterId, string userName, int? timeScaleId, bool projected, bool terminated, bool inactive, char? alphabet)
         {
             PersonRateCalculator.VerifyPrivileges(userName, ref recruiterId);
-            return PersonDAL.PersonGetCount(practice, !active, looked, recruiterId);
+            return PersonDAL.PersonGetCount(practice, !active, looked, recruiterId, timeScaleId, projected, terminated, inactive, alphabet);
         }
 
         /// <summary>
@@ -710,7 +715,7 @@ namespace PracticeManagementService
         public ComputedFinancialsEx CalculateProposedFinancialsPersonTargetMargin(Person person, decimal targetMargin, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage)
         {
             PersonRateCalculator calculator = GetCalculatorForProposedFinancials(person, 0M, proposedHoursPerWeek, isMarginTestPage);
-            return calculator.CalculateProposedFinancialsTargetMargin(targetMargin, proposedHoursPerWeek,clientDiscount);
+            return calculator.CalculateProposedFinancialsTargetMargin(targetMargin, proposedHoursPerWeek, clientDiscount);
         }
 
         private static PersonRateCalculator GetCalculatorForProposedFinancials(Person person, decimal proposedRate, decimal proposedHoursPerWeek, bool isMarginTestPage)
