@@ -170,6 +170,7 @@
     <Content Include="Images\grayedArrow-Next.png" />
     <Content Include="Images\grayedArrow-Previous.png" />
     <Content Include="Images\People_icon.png" />
+    <Content Include="Images\trash-icon-Large.png" />
     <Content Include="Reports\Expenses.aspx" />
     <Content Include="RevenueGoals.aspx" />
     <Content Include="Controls\BudgetEntries.ascx" />
@@ -2758,4 +2759,3 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
-
