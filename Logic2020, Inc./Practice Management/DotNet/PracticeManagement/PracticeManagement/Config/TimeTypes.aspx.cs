@@ -29,21 +29,55 @@ namespace PraticeManagement.Config
             mlInsertStatus.ClearMessage();
         }
 
-        protected void btnInsertTimeType_Click(object sender, EventArgs e)
+        protected void ibtnInsertTimeType_Click(object sender, EventArgs e)
+        {
+            showPlusIcon(false);
+        }
+
+        private void showPlusIcon(bool showPlus)
+        {
+            ibtnInsertTimeType.Visible = showPlus;
+            ibtnInsert.Visible = ibtnCancel.Visible = tbNewTimeType.Visible = rbIsDefault.Visible = !showPlus;
+
+            if (!showPlus)
+            {
+                tbNewTimeType.Text = string.Empty;
+            }
+        }
+
+        protected void ibtnInsert_Click(object sender, EventArgs e)
         {
             try
             {
-                TimeEntryHelper.AddTimeType(tbNewTimeType.Text);
-                gvTimeTypes.DataBind();
+                if (Page.IsValid)
+                {
+                    TimeTypeRecord newTimeType = new TimeTypeRecord();
+                    newTimeType.Name = tbNewTimeType.Text;
+                    newTimeType.IsDefault = rbIsDefault.Checked;
 
-                HttpContext.Current.Cache[CacheKey] = InsertAction;
-                mlInsertStatus.ShowInfoMessage(Resources.Controls.TimeTypeAddedSuccessfully);
-                tbNewTimeType.Text = "New time type";
+                    using (var serviceClient = new TimeEntryServiceClient())
+                    {
+                        serviceClient.AddTimeType(newTimeType);
+                    }
+                    //TimeEntryHelper.AddTimeType(newTimeType);
+                    gvTimeTypes.DataBind();
+
+                    HttpContext.Current.Cache[CacheKey] = InsertAction;
+                    mlInsertStatus.ShowInfoMessage(Resources.Controls.TimeTypeAddedSuccessfully);
+                    tbNewTimeType.Text = "New time type";
+
+                    showPlusIcon(true);
+                }
             }
             catch (Exception ex)
             {
                 mlInsertStatus.ShowErrorMessage(ex.Message);
             }
+        }
+
+        protected void ibtnCancel_OnClick(object sender, EventArgs e)
+        {
+            showPlusIcon(true);
         }
 
         protected void odsTimeTypes_Updated(object sender, ObjectDataSourceStatusEventArgs e)
@@ -108,3 +142,4 @@ namespace PraticeManagement.Config
         }
     }
 }
+
