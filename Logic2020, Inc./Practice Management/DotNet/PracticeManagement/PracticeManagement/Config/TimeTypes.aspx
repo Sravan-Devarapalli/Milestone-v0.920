@@ -24,36 +24,38 @@
     <asp:UpdatePanel ID="upnlTimeTypes" runat="server">
         <ContentTemplate>
             <asp:GridView ID="gvTimeTypes" runat="server" DataSourceID="odsTimeTypes" DataKeyNames="Id"
-                BackColor="White" AutoGenerateColumns="False" OnRowDataBound="gvTimeTypes_RowDataBound"
+                Width="550px" BackColor="White" AutoGenerateColumns="False" OnRowDataBound="gvTimeTypes_RowDataBound"
                 CssClass="CompPerfTable" GridLines="None" EnableModelValidation="True" OnRowUpdating="gvTimeTypes_RowUpdating">
                 <Columns>
                     <asp:CommandField ShowEditButton="True" ButtonType="Image" EditImageUrl="~/Images/icon-edit.png"
                         UpdateImageUrl="~/Images/icon-check.png" CancelImageUrl="~/Images/no.png">
-                        <ItemStyle HorizontalAlign="Center" Width="50px" />
+                        <ItemStyle HorizontalAlign="Center" Width="10%" />
                     </asp:CommandField>
                     <asp:TemplateField>
+                        <ItemStyle HorizontalAlign="Left" Width="65%" Height="25px" />
                         <HeaderTemplate>
-                            <span class="bg"><a href="#"><span>Time Type Name</span></a> </span>
+                            <span class="bg">Time Type Name</span>
                         </HeaderTemplate>
                         <ItemTemplate>
                             <asp:Label ID="lblName" runat="server" Text='<%# Eval("Name") %>' />
                         </ItemTemplate>
                         <EditItemTemplate>
-                            <asp:TextBox ID="tbName" runat="server" Text='<%# Bind("Name") %>' Width="250" />
+                            <asp:TextBox ID="tbName" runat="server" Text='<%# Bind("Name") %>' Width="345px" />
                             <asp:RequiredFieldValidator ID="rvUpdatedTimeType" runat="server" ControlToValidate="tbName"
-                                ErrorMessage="Time Type Name is required" ToolTip="Time Type Name is required"
+                                Display="Dynamic" ErrorMessage="Time Type Name is required" ToolTip="Time Type Name is required"
                                 ValidationGroup="UpdateTimeType">*</asp:RequiredFieldValidator>
                             <asp:RegularExpressionValidator ID="regValUpdatedTimeType" ControlToValidate="tbName"
-                                runat="server" ValidationGroup="UpdateTimeType" ValidationExpression="^[\s\S]{0,50}$"
+                                Display="Dynamic" runat="server" ValidationGroup="UpdateTimeType" ValidationExpression="^[\s\S]{0,50}$"
                                 ErrorMessage="Time Type Name should not be more than 50 characters." ToolTip="Time Type Name should not be more than 50 characters.">*</asp:RegularExpressionValidator>
                             <asp:CustomValidator ID="cvUpdatedTimeTypeName" runat="server" ControlToValidate="tbName"
-                                ValidationGroup="UpdateTimeType" ErrorMessage="This time type already exists. Please enter a different time type."
+                                Display="Dynamic" ValidationGroup="UpdateTimeType" ErrorMessage="This time type already exists. Please enter a different time type."
                                 ToolTip="This time type already exists. Please enter a different time type.">*</asp:CustomValidator>
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
+                        <ItemStyle HorizontalAlign="Center" Width="20%" />
                         <HeaderTemplate>
-                            <span class="bg"><a href="#"><span>Is Default</span></a> </span>
+                            <span class="bg">Is Default</span>
                         </HeaderTemplate>
                         <ItemStyle HorizontalAlign="Center" CssClass="CompPerfProjectNumber" />
                         <ItemTemplate>
@@ -61,37 +63,48 @@
                                 Enabled="false" />
                         </ItemTemplate>
                         <EditItemTemplate>
-                            <asp:CheckBox ID="chbIsDefault" runat="server" Checked='<%# Bind("IsDefault") %>' />
+                            <asp:RadioButton ID="rbIsDefault" runat="server" Checked='<%# Bind("IsDefault") %>' />
+                            <%--<asp:CheckBox ID="chbIsDefault" runat="server" Checked='<%# Bind("IsDefault") %>' />--%>
                         </EditItemTemplate>
                     </asp:TemplateField>
-                    <asp:CommandField ShowDeleteButton="True" ButtonType="Image" DeleteImageUrl="~/Images/icon-delete.png">
-                        <ItemStyle HorizontalAlign="Center" Width="30px" />
+                    <asp:CommandField ShowDeleteButton="True" ButtonType="Image" DeleteText="Delete" DeleteImageUrl="~/Images/icon-delete.png">
+                        <ItemStyle HorizontalAlign="Center" Width="5%" />
                     </asp:CommandField>
                 </Columns>
                 <AlternatingRowStyle BackColor="#F9FAFF" />
             </asp:GridView>
             <p>
-                <table>
-                    <tr>
-                        <td>
-                            <asp:TextBox ID="tbNewTimeType" Text="New time type" runat="server" />
+                <table width="550px" style="background-color: White; padding-top:6px;">
+                    <tr style="background-color: #F9FAFF;  height: 30px;">
+                        <td align="center" valign="middle" style="width: 10%">
+                            <asp:ImageButton ID="ibtnInsertTimeType" runat="server" OnClick="ibtnInsertTimeType_Click"
+                                ImageUrl="~/Images/add_16.png" OnClientClick="hideSuccessMessage();" ToolTip="Add Time Type" />
+                            <asp:ImageButton ID="ibtnInsert" runat="server" ImageUrl="~/Images/icon-check.png"
+                                ToolTip="Confirm" Visible="false" OnClick="ibtnInsert_Click" OnClientClick="return hideSuccessMessage();"
+                                ValidationGroup="NewTimeType" />
+                            <asp:ImageButton ID="ibtnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="ibtnCancel_OnClick"
+                                ToolTip="Cancel" Visible="false" />
+                        </td>
+                        <td align="left" valign="middle" style="width: 65%">
+                            <asp:TextBox ID="tbNewTimeType" Style="width: 345px" Text="New time type" runat="server"
+                                Visible="false" />
                             <AjaxControlToolkit:TextBoxWatermarkExtender ID="watermarker" runat="server" TargetControlID="tbNewTimeType"
                                 WatermarkText="New time type" EnableViewState="false" WatermarkCssClass="watermarked" />
-                        </td>
-                        <td>
                             <asp:RequiredFieldValidator ID="rvNewTimeType" runat="server" ControlToValidate="tbNewTimeType"
-                                ErrorMessage="Name is required" ToolTip="Time Type Name is required" ValidationGroup="NewTimeType">*</asp:RequiredFieldValidator>
+                                Display="Dynamic" ErrorMessage="Name is required" ToolTip="Time Type Name is required"
+                                ValidationGroup="NewTimeType">*</asp:RequiredFieldValidator>
                             <asp:RegularExpressionValidator ID="regValTimeType" ControlToValidate="tbNewTimeType"
-                                runat="server" ValidationGroup="NewTimeType" ValidationExpression="[a-zA-Z\s]{0,50}$"
+                                Display="Dynamic" runat="server" ValidationGroup="NewTimeType" ValidationExpression="[a-zA-Z\s]{0,50}$"
                                 ErrorMessage="Time Type Name should have only alphabets and should not be more than 50 characters.">*</asp:RegularExpressionValidator>
                         </td>
-                        <td>
-                            <asp:ShadowedTextButton ID="btnInsertTimeType" runat="server" Text="Add Time Type"
-                                OnClick="btnInsertTimeType_Click" OnClientClick="hideSuccessMessage();" CssClass="add-btn"
-                                ValidationGroup="NewTimeType" />
+                        <td align="center" style="width: 20%">
+                            <asp:RadioButton ID="rbIsDefault" runat="server" Visible="false" />
+                        </td>
+                        <td style="width: 5%">
+                            &nbsp;
                         </td>
                         <tr>
-                            <td colspan="3">
+                            <td colspan="4">
                                 <asp:ValidationSummary ID="valsumTimeType" runat="server" ValidationGroup="NewTimeType" />
                                 <asp:ValidationSummary ID="valsumUpdateTimeType" runat="server" ValidationGroup="UpdateTimeType" />
                             </td>
