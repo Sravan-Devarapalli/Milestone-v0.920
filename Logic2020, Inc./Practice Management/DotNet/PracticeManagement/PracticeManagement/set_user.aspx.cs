@@ -21,7 +21,7 @@ namespace PraticeManagement
                     //var persons = serviceClient.PersonListAllShort(null, DateTime.MinValue, DateTime.MaxValue);
                     string userName = ConfigurationManager.AppSettings["AdminsEmail"];
                     var persons = serviceClient.GetPersonListWithCurrentPay(null, true, Int16.MaxValue, 0,
-                        string.Empty, null, userName, null);
+                        string.Empty, null, userName, null, null, false, false, false, null);
                     foreach (var person in persons)
                     {
                         var userRoles = string.Empty;
