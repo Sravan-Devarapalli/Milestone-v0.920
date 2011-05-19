@@ -28,6 +28,14 @@ namespace PraticeManagement.Controls.Configuration
 
         #region Properties
 
+        private PraticeManagement.Config.DefaultLineManager HostingPage
+        {
+            get
+            {
+                return ((PraticeManagement.Config.DefaultLineManager)Page);
+            }
+        }
+
         public bool AllowChange
         {
             get
@@ -169,6 +177,8 @@ namespace PraticeManagement.Controls.Configuration
             {
                 DataHelper.SetNewDefaultManager(SelectedManager);
                 mlMessage.ShowInfoMessage(Messages.ManagerSet);
+
+                HostingPage.ClearDirty();
             }
             catch (Exception exc)
             {
