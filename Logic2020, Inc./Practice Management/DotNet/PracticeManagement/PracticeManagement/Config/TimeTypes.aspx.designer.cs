@@ -31,6 +31,33 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.GridView gvTimeTypes;
         
         /// <summary>
+        /// ibtnInsertTimeType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton ibtnInsertTimeType;
+        
+        /// <summary>
+        /// ibtnInsert control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton ibtnInsert;
+        
+        /// <summary>
+        /// ibtnCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton ibtnCancel;
+        
+        /// <summary>
         /// tbNewTimeType control.
         /// </summary>
         /// <remarks>
@@ -67,13 +94,13 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator regValTimeType;
         
         /// <summary>
-        /// btnInsertTimeType control.
+        /// rbIsDefault control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedTextButton btnInsertTimeType;
+        protected global::System.Web.UI.WebControls.RadioButton rbIsDefault;
         
         /// <summary>
         /// valsumTimeType control.
