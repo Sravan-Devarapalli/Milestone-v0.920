@@ -46,7 +46,7 @@ namespace PraticeManagement
             var persons =
                 ServiceCallers.Custom.Person(
                     client => client.GetPersonListWithCurrentPay(
-                            null, true, int.MaxValue, 0, prefixText, null, DataHelper.CurrentPerson.Alias, null));
+                            null, true, int.MaxValue, 0, prefixText, null, DataHelper.CurrentPerson.Alias, null, null, false, false, false, null));
 
             return persons.Select(person =>
                 new CascadingDropDownNameValue(
