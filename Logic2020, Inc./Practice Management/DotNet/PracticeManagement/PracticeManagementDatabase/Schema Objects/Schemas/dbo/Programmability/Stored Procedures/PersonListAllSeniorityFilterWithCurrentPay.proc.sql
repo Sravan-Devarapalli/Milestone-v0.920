@@ -1,7 +1,7 @@
 CREATE PROCEDURE [dbo].[PersonListAllSeniorityFilterWithCurrentPay]
 (
 	@PracticeId    INT, 
-	@ShowAll       BIT,
+	@ShowAll       BIT,	--@ShowAll is reverse of Active
 	@PageSize      INT,
 	@PageNo        INT,
 	@Looked		   NVARCHAR(40),
@@ -9,7 +9,12 @@ CREATE PROCEDURE [dbo].[PersonListAllSeniorityFilterWithCurrentPay]
     @EndDate       DATETIME,
 	@RecruiterId   INT,
 	@MaxSeniorityLevel	INT,
-	@SortBy			NVARCHAR(225) = NULL
+	@SortBy			NVARCHAR(225) = NULL,
+	@TimescaleId	INT,
+	@Projected		BIT,
+	@Inactive		BIT,
+	@Terminated		BIT,
+	@Alphabet		NVARCHAR(5)
 )
 AS
 BEGIN
@@ -22,6 +27,11 @@ BEGIN
 		SET @Looked = '%' + RTRIM(@Looked) + '%'
 	ELSE
 		SET @Looked = '%'
+		
+	IF @Alphabet IS NOT NULL
+		SET @Alphabet = @Alphabet + '%'
+	ELSE
+		SET @Alphabet = '%'
 
     DECLARE @flags bit
     IF (@StartDate IS NULL) OR (@EndDate IS NULL)
@@ -109,27 +119,38 @@ BEGIN
 						) TS
 				 LEFT JOIN dbo.aspnet_Users U ON (U.UserName = P.Alias)
 				 LEFT JOIN dbo.aspnet_Membership M ON (U.UserId = M.UserId)
-				 WHERE (   ( p.PersonStatusId = 1 AND @ShowAll = 0 AND @PracticeId IS NULL )
-		                OR ( p.PersonStatusId = 1 AND @ShowAll = 0 AND @PracticeId = p.DefaultPractice)
-		                OR ( @ShowAll = 1 AND @PracticeId IS NULL )
-		                OR ( @ShowAll = 1 AND @PracticeId = p.DefaultPractice ) ) 
+				 WHERE (   (p.PersonStatusId = 1 AND @ShowAll = 0) 
+							OR (p.PersonStatusId = 2 AND @Terminated = 1)
+							OR (p.PersonStatusId = 3 AND @Projected = 1)
+							OR (p.PersonStatusId = 4 AND @Inactive = 1) 
+						) 
+		            AND ( p.DefaultPractice = @PracticeId OR @PracticeId IS NULL )
 					AND ( p.FirstName LIKE @Looked OR p.LastName LIKE @Looked OR p.EmployeeNumber LIKE @Looked )
 		            AND (   @RecruiterId IS NULL
 		                 OR EXISTS (SELECT 1
 		                              FROM dbo.RecruiterCommission AS c
 		                             WHERE c.RecruitId = p.PersonId AND c.RecruiterId = @RecruiterId))
+		            AND (	(TS.Timescale = @TimescaleId) OR @TimescaleId IS NULL	)
+		            AND ( p.LastName LIKE @Alphabet )
 					AND ((@MaxSeniorityLevel IS NULL) OR (@MaxSeniorityLevel >= p.SeniorityId))' + @OrderBy + '
 		       ) AS tmp
-		 WHERE tmp.rownum BETWEEN @FirstRecord AND @LastRecord - 1'
+		 WHERE ( (@FirstRecord !=0 AND tmp.rownum BETWEEN @FirstRecord AND @LastRecord - 1)
+				 OR @FirstRecord = 0 ) '
 		 
 
 		EXEC sp_executeSql 
 				@SqlQuery,		
 				N'@FirstRecord	INT, @LastRecord	INT, @Looked	NVARCHAR(40), @Now	DATETIME, 
-				@MaxSeniorityLevel	INT, @RecruiterId	INT, @PracticeId	INT, @ShowAll	BIT',				
+				@MaxSeniorityLevel	INT, @RecruiterId	INT, @PracticeId	INT, @ShowAll	BIT, @TimescaleId INT,
+				@Projected BIT, @Terminated BIT, @Inactive BIT, @Alphabet NVARCHAR(5)',				
 				@FirstRecord = @FirstRecord, @LastRecord = @LastRecord,
 				@RecruiterId = @RecruiterId, @PracticeId = @PracticeId, @Looked = @Looked,
-				@MaxSeniorityLevel = @MaxSeniorityLevel, @ShowAll = @ShowAll, @Now = @Now
+				@MaxSeniorityLevel = @MaxSeniorityLevel, @ShowAll = @ShowAll, @Now = @Now, @TimescaleId = @TimescaleId,
+				@Projected = @Projected, @Terminated = @Terminated, @Inactive = @Inactive, @Alphabet = @Alphabet
+				
 	END
+
+GO
+
 
 
