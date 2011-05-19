@@ -709,7 +709,7 @@ namespace PraticeManagement.Controls
                 {
                     Person[] persons = serviceClient.GetPersonListWithCurrentPay(null, true, Int16.MaxValue, 0,
                                                                    String.Empty, null,
-                                                                   Thread.CurrentPrincipal.Identity.Name, null);
+                                                                   Thread.CurrentPrincipal.Identity.Name, null, null, false, false, false, null);
                     control.Items.Clear();
                     if (persons.Length == 0)
                         control.Items.Add(new ListItem(Resources.Controls.NotAvailableText, null));
