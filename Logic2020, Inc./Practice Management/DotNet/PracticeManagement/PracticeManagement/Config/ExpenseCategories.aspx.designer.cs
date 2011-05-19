@@ -22,6 +22,60 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.GridView gvCategories;
         
         /// <summary>
+        /// ibtnInsertCategory control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton ibtnInsertCategory;
+        
+        /// <summary>
+        /// ibtnInsert control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton ibtnInsert;
+        
+        /// <summary>
+        /// ibtnCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton ibtnCancel;
+        
+        /// <summary>
+        /// txtNewCategoryName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNewCategoryName;
+        
+        /// <summary>
+        /// tbwmextender control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TextBoxWatermarkExtender tbwmextender;
+        
+        /// <summary>
+        /// reqNewCategoryName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqNewCategoryName;
+        
+        /// <summary>
         /// odsCategories control.
         /// </summary>
         /// <remarks>
@@ -58,31 +112,13 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.CustomValidator custDataAccessError;
         
         /// <summary>
-        /// txtNewCategoryName control.
+        /// msgLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtNewCategoryName;
-        
-        /// <summary>
-        /// reqNewCategoryName control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqNewCategoryName;
-        
-        /// <summary>
-        /// btnAddCategory control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedTextButton btnAddCategory;
+        protected global::System.Web.UI.WebControls.Label msgLabel;
         
         /// <summary>
         /// vsumNewCategory control.
