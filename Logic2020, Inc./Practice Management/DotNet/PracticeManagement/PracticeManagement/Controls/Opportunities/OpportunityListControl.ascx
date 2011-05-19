@@ -16,22 +16,25 @@
     function ShowPotentialResourcesModal(image) {
         var refreshLableParentNode = image.parentNode.parentNode.children[0];
         refreshLableParentNode.children[refreshLableParentNode.children.length - 1].style.display = "";
+        var savebutton = document.getElementById('btnSaveProposedResources');
         var hdnCurrentOpportunityId = document.getElementById('<%=hdnCurrentOpportunityId.ClientID %>');
         var attachedResourcesIndexes = image.parentNode.children[1].value.split(",");
         currenthdnProposedPersonsIndexesId = image.parentNode.children[1].id;
         var refreshLableParentNode = image.parentNode.parentNode.children[0];
         Array.add(refreshMessageIdsFromLastRefresh, refreshLableParentNode.children[refreshLableParentNode.children.length - 1].id);
-        if (hdnCurrentOpportunityId.value != image.attributes["OpportunityId"].value) {
-            var chkboxList = document.getElementById('<%=cblPotentialResources.ClientID %>');
-            var chkboxes = chkboxList.getElementsByTagName('input');
-            $find("wmBhOutSideResources").set_Text(image.parentNode.children[2].value);
-            for (var i = 0; i < chkboxes.length; i++) {
-                chkboxes[i].checked = false;
-                for (var j = 0; j < attachedResourcesIndexes.length; j++) {
-                    if (i == attachedResourcesIndexes[j] && attachedResourcesIndexes[j] != '') {
-                        chkboxes[i].checked = true;
-                        break;
-                    }
+
+        var chkboxList = document.getElementById('<%=cblPotentialResources.ClientID %>');
+        var chkboxes = chkboxList.getElementsByTagName('input');
+        $find("wmBhOutSideResources").set_Text(image.parentNode.children[2].value);
+        $find("wmbhSearchBox").set_Text('');
+        changeAlternateitemsForProposedResources();
+        for (var i = 0; i < chkboxes.length; i++) {
+            chkboxes[i].checked = false;
+            chkboxes[i].parentNode.style.display = "";
+            for (var j = 0; j < attachedResourcesIndexes.length; j++) {
+                if (i == attachedResourcesIndexes[j] && attachedResourcesIndexes[j] != '') {
+                    chkboxes[i].checked = true;
+                    break;
                 }
             }
         }
@@ -71,6 +74,47 @@
             label.style.display = "";
         }
     }
+    function filterPotentialResources(searchtextBox) {
+        var chkboxList = document.getElementById('<%=cblPotentialResources.ClientID %>');
+        var chkboxes = chkboxList.getElementsByTagName('input');
+        var searchText = searchtextBox.value.toLowerCase();
+        for (var i = 0; i < chkboxes.length; i++) {
+            var checkboxText = chkboxes[i].parentNode.children[1].innerHTML.toLowerCase();
+            if (checkboxText.length >= searchText.length && checkboxText.substr(0, searchText.length) == searchText) {
+                chkboxes[i].parentNode.style.display = "";
+            }
+            else {
+                chkboxes[i].parentNode.style.display = "none";
+            }
+        }
+        changeAlternateitemsForProposedResources();
+    }
+    function ClearProposedResources() {
+        var chkboxList = document.getElementById('<%=cblPotentialResources.ClientID %>');
+        var chkboxes = chkboxList.getElementsByTagName('input');
+        for (var i = 0; i < chkboxes.length; i++) {
+            chkboxes[i].checked = false;
+        }
+    }
+    function clearOutSideResources() {
+        $find("wmBhOutSideResources").set_Text('');
+    }
+    function changeAlternateitemsForProposedResources() {
+        var chkboxList = document.getElementById('<%=cblPotentialResources.ClientID %>');
+        var chkboxes = chkboxList.getElementsByTagName('input');
+        var index = 0;
+        for (var i = 0; i < chkboxes.length; i++) {
+            if (chkboxes[i].parentNode.style.display != "none") {
+                index++;
+                if ((index) % 2 == 0) {
+                    chkboxes[i].parentNode.style.backgroundColor = "#f9faff";
+                }
+                else {
+                    chkboxes[i].parentNode.style.backgroundColor = "";
+                }
+            }
+        }
+    }
 </script>
 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
     <ContentTemplate>
@@ -93,16 +137,16 @@
                                 <div class="ie-bg no-wrap">
                                 </div>
                             </td>
-                            <td width="4%">
-                                <div class="ie-bg no-wrap">
-                                    <asp:LinkButton ID="btnNumberSort" runat="server" Text="Opp. #" CommandName="Sort"
-                                        CssClass="arrow" CommandArgument="Number" />
+                            <td width="4%" align="center">
+                                <div class="ie-bg no-wrap" style="text-align: center;">
+                                    <asp:LinkButton ID="btnPrioritySort" runat="server" Text="Priority" CommandName="Sort"
+                                        CssClass="arrow" CommandArgument="Priority" Style="padding-left: 10px !important;" />
                                 </div>
                             </td>
-                            <td width="4%">
-                                <div class="ie-bg no-wrap">
-                                    <asp:LinkButton ID="btnPrioritySort" runat="server" Text="Priority" CommandName="Sort"
-                                        CssClass="arrow" CommandArgument="Priority" />
+                            <td width="4%" align="center">
+                                <div class="ie-bg no-wrap" style="text-align: center;">
+                                    <asp:LinkButton ID="btnStartDateSort" runat="server" Text="Start" CommandName="Sort"
+                                        CssClass="arrow" Style="padding-left: 10px !important;" CommandArgument="StartDate" />
                                 </div>
                             </td>
                             <td width="13%">
@@ -129,10 +173,10 @@
                                         CssClass="arrow" CommandArgument="Salesperson" />
                                 </div>
                             </td>
-                            <td align="left" width="10%">
-                                <div class="ie-bg no-wrap">
+                            <td align="center" width="10%">
+                                <div class="ie-bg no-wrap" style="text-align: center;">
                                     <asp:LinkButton ID="btnEstimatedRevenue" runat="server" Text="Est. Revenue" CommandName="Sort"
-                                        CssClass="arrow" CommandArgument="EstimatedRevenue" />
+                                        CssClass="arrow" Style="padding-left: 10px !important;" CommandArgument="EstimatedRevenue" />
                                 </div>
                             </td>
                             <td align="center" width="28%">
@@ -152,14 +196,14 @@
                                     ButtonProjectNameToolTip='<%# Eval("Status.Name") %>' ButtonCssClass='<%#PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClassByStatus((string)Eval("Status.Name"))%>' />
                             </div>
                         </td>
-                        <td align="left">
-                            <div class="cell-pad">
-                                <%# Eval("OpportunityNumber") %>
-                            </div>
-                        </td>
                         <td align="center">
                             <div class="cell-pad">
                                 <asp:Label ID="lblPriority" runat="server" Text='<%# Eval("Priority") %>' /></div>
+                        </td>
+                        <td align="left">
+                            <div class="cell-pad">
+                                <%# Eval("ProjectedStartDate") == null ? string.Empty : string.Format("{0:MMM} '{0:yy}", ((DateTime)Eval("ProjectedStartDate")))%>
+                            </div>
                         </td>
                         <td>
                             <div class="cell-pad">
@@ -221,14 +265,14 @@
                                     ButtonProjectNameToolTip='<%# Eval("Status.Name") %>' ButtonCssClass='<%#PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClassByStatus((string)Eval("Status.Name"))%>' />
                             </div>
                         </td>
-                        <td align="left">
-                            <div class="cell-pad">
-                                <%# Eval("OpportunityNumber") %>
-                            </div>
-                        </td>
                         <td align="center">
                             <div class="cell-pad">
                                 <asp:Label ID="lblPriority" runat="server" Text='<%# Eval("Priority") %>' /></div>
+                        </td>
+                        <td align="left">
+                            <div class="cell-pad">
+                                <%# Eval("ProjectedStartDate") == null ? string.Empty : string.Format("{0:MMM} '{0:yy}", ((DateTime)Eval("ProjectedStartDate")))%>
+                            </div>
                         </td>
                         <td>
                             <div class="cell-pad">
@@ -297,24 +341,40 @@
             <center>
                 <b>Potential Resources</b>
             </center>
+            <asp:TextBox ID="txtSearchBox" runat="server" Width="98%" Height="16px" Style="padding-bottom: 4px;
+                margin-bottom: 4px;" MaxLength="4000" onkeyup="filterPotentialResources(this);"></asp:TextBox>
+            <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmSearch" runat="server" TargetControlID="txtSearchBox"
+                WatermarkText="Begin typing here to filter the list of resources below." EnableViewState="false"
+                WatermarkCssClass="watermarkedtext" BehaviorID="wmbhSearchBox" />
             <div class="cbfloatRight" style="height: 250px; width: 350px; overflow-y: scroll;
                 border: 1px solid black; background: white; padding-left: 3px; text-align: left !important;">
-                <asp:CheckBoxList ID="cblPotentialResources" runat="server" Height="250px" Width="100%"
-                    BackColor="White" AutoPostBack="false" DataTextField="Name" DataValueField="id"
-                    CellPadding="3">
+                <asp:CheckBoxList ID="cblPotentialResources" runat="server" Width="100%" BackColor="White"
+                    AutoPostBack="false" DataTextField="Name" DataValueField="id" CellPadding="3">
                 </asp:CheckBoxList>
             </div>
-            <br />
-            <asp:TextBox ID="txtOutSideResources" runat="server" Width="97%" Height="18px" Style="padding-bottom: 4px;
-                margin-bottom: 4px;" MaxLength="4000"></asp:TextBox>
-            <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmOutSideResources" runat="server"
-                TargetControlID="txtOutSideResources" WatermarkText="Enter Other Name(s) here (optional), seperated by semi-colon."
-                EnableViewState="false" WatermarkCssClass="watermarkedtext" BehaviorID="wmBhOutSideResources" />
+            <div style="text-align: right; padding: 8px 0px 8px 0px">
+                <input type="button" value="Clear All" onclick="javascript:ClearProposedResources();" />
+            </div>
+            <table style="width: 100%">
+                <tr>
+                    <td style="width: 93% !important;">
+                        <asp:TextBox ID="txtOutSideResources" runat="server" Width="100%" Height="16px" Style="padding-bottom: 4px;
+                            margin-bottom: 4px;" MaxLength="4000"></asp:TextBox>
+                        <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmOutSideResources" runat="server"
+                            TargetControlID="txtOutSideResources" WatermarkText="Enter Other Names(s) (optional) separated by semi-colons."
+                            EnableViewState="false" WatermarkCssClass="watermarkedtext" BehaviorID="wmBhOutSideResources" />
+                    </td>
+                    <td align="right">
+                        <img id="imgtrash" src="Images/trash-icon-Large.png" onclick="clearOutSideResources();"
+                            style="cursor: pointer;padding-bottom:5px;" />
+                    </td>
+                </tr>
+            </table>
             <br />
             <table width="350px;">
                 <tr>
                     <td align="right">
-                        <input type="button" value="Save" onclick="javascript:saveProposedResources();" />
+                        <input type="button" id="btnSaveProposedResources" value="Save" onclick="javascript:saveProposedResources();" />
                         &nbsp;
                         <input type="button" value="Cancel" onclick="javascript:$.unblockUI();" />
                     </td>
