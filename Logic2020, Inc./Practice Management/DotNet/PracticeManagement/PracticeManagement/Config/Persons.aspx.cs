@@ -9,13 +9,24 @@ using DataTransferObjects;
 using PraticeManagement.Controls;
 using PraticeManagement.PersonService;
 using PraticeManagement.Utils;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+
 namespace PraticeManagement.Config
 {
     public partial class Persons : PracticeManagementPageBase
     {
+        #region Fields
+
+        private const string AllRecruiters = "All Recruiters";
         private const string EditRecordCommand = "EditRecord";
         private const string DESCENDING = "DESC";
+        private const string ViewStateSortColumnId = "SortColumnId";
+        private const string ViewStateSortExpression = "SortExpression";
+        private const string ViewStateSortDirection = "SortDirection";
+        private const string ViewingRecords = "Viewing {0} of {1} Records";
 
+        #endregion
 
         #region Properties
 
@@ -31,26 +42,135 @@ namespace PraticeManagement.Config
             }
         }
 
+        private char? Alphabet
+        {
+            get
+            {
+                char result;
+
+                if (char.TryParse(hdnAlphabet.Value, out result))
+                {
+                    return result;
+                }
+                else
+                {
+                    return null;
+                }
+                    
+            }
+        }
+
+        private string previousLetter
+        {
+            get
+            {
+                string value;
+
+                value = Session["PreviousLetter"] != null ? (string)Session["PreviousLetter"] : null;
+
+                return value;
+            }
+            set
+            {
+                Session["PreviousLetter"] = value;
+            }
+        }
+
+        private string GridViewSortColumnId
+        {
+            get
+            {
+                return (string)ViewState[ViewStateSortColumnId];
+            }
+            set
+            {
+                ViewState[ViewStateSortColumnId] = value;
+            }
+        }
+
+        private string PrevGridViewSortExpression
+        {
+            get
+            {
+                return (string)ViewState[ViewStateSortExpression];
+            }
+            set
+            {
+                ViewState[ViewStateSortExpression] = value;
+            }
+        }
+
+        private string GridViewSortDirection
+        {
+            get
+            {
+                return (string)ViewState[ViewStateSortDirection];
+            }
+            set
+            {
+                ViewState[ViewStateSortDirection] = value;
+            }
+        }
+
+        private int? PracticeId
+        {
+            get
+            {
+                int result;
+
+                if(int.TryParse(hdnPracticeId.Value, out result))
+                {
+                    return result;
+                }
+                else
+                    return null;
+            }
+        }
+
+        private int? PayTypeId
+        {
+            get
+            {
+                int result;
+
+                if(int.TryParse(hdnPayTypeId.Value, out result))
+                {
+                    return result;
+                }
+                else
+                    return null;
+            }
+        }
+
         #endregion Properties
+
+        #region Events And Methods
+
+        #region PageEvents
 
         protected void Page_Load(object sender, EventArgs e)
         {
             Display();
 
-            CurrentIndex = 0;
             if (!IsPostBack)
             {
+                CurrentIndex = 0;
+
                 bool userIsAdministrator =
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
                 bool userIsHR =
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.HRRoleName); //#2817: userIsHR is added as per  requirement.
 
                 // Recruiters should see a complete list their recruits
-                practiceFilter.ActiveOnly = userIsAdministrator || userIsHR; //#2817: userIsHR is added as per  requirement.
+                //practiceFilter.ActiveOnly = userIsAdministrator || userIsHR; //#2817: userIsHR is added as per  requirement.
+
+
+                personsFilter.Active = true;   //Always active on load
+                //personsFilter.Projected = personsFilter.Terminated = personsFilter.Inactive = !(userIsAdministrator || userIsHR);
 
                 DataHelper.FillRecruiterList(
                     ddlRecruiter,
-                    (userIsAdministrator || userIsHR) ? Resources.Controls.AnyRecruiterText : Resources.Controls.NotAvailableText,
+                    (userIsAdministrator || userIsHR) ? AllRecruiters : Resources.Controls.NotAvailableText,
                     null,
                     null);//#2817: userIsHR is added as per  requirement.
 
@@ -66,27 +186,226 @@ namespace PraticeManagement.Config
 
                     btnExportToExcel.Visible = false;
                 }
+
+                previousLetter = lnkbtnAll.ID;
+
+                gvPersons.Sort("LastName", SortDirection.Ascending);
+            }
+
+            AddAlphabetButtons();
+        }
+        
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+        }
+
+        #endregion
+
+        #region ControlEvents
+
+        protected void gvPersons_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == EditRecordCommand)
+            {
+                object args = e.CommandArgument;
+                Response.Redirect(GetPersonDetailsUrl(args));
             }
         }
 
-        protected void Page_PreRender(object sender, EventArgs e)
+        /// <summary>
+        /// Refreshes the data in the table after the filter was changed
+        /// </summary>
+        /// <param name="sebder"></param>
+        /// <param name="e"></param>
+        protected void personsFilter_FilterChanged(object sebder, EventArgs e)
         {
-            txtSearch.Focus();
+            Display();
         }
-        protected override void Display()
-        {
-        }
-
 
 
         /// <summary>
-        /// Retrives the data and display them in the table.
+        /// Searches the persons by first name or last name
         /// </summary>
-        protected void DisplayContent()
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void btnSearch_OnClick(object sender, EventArgs e)
         {
-            gvPersons.DataBind();
+            personsFilter.Active = true;
+            personsFilter.Projected = true;
+            personsFilter.Terminated = true;
+            personsFilter.Inactive = true;
+            Display();
+
+            if (gvPersons.Rows.Count == 1)
+            {
+                Person person = ((Person[])odsPersons.Select())[0];
+                Response.Redirect(
+                    Urls.GetPersonDetailsUrl(person, Request.Url.AbsoluteUri));
+            }
         }
 
+        protected void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            hdnLooked.Value = txtSearch.Text;
+            gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
+        }
+
+        protected void Alphabet_Clicked(object sender, EventArgs e)
+        {
+            CurrentIndex = 0;
+            if (previousLetter != null)
+            {
+                LinkButton previousLinkButton = (LinkButton)divAlphabeticalPaging.FindControl(previousLetter);
+                previousLinkButton.Font.Bold = false;
+            }
+
+            LinkButton alpha = (LinkButton)sender;
+            alpha.Font.Bold = true;
+            hdnAlphabet.Value = alpha.Text != "All" ? alpha.Text : null;
+            
+            previousLetter = alpha.ID;
+            gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
+        }
+
+        protected void UpdateView_Clicked(object sender, EventArgs e)
+        {
+            CurrentIndex = 0;
+            SetFilterValues();
+            gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
+        }
+
+        protected void ResetFilter_Clicked(object sender, EventArgs e)
+        {
+            ResetFilterControlsToDefault();
+            SetFilterValues();
+            gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
+            gvPersons.Sort("LastName", SortDirection.Ascending);
+        }
+
+        protected void DdlView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            gvPersons.PageSize = GetPageSize(((DropDownList)sender).SelectedValue);
+        }
+
+        protected void Previous_Clicked(object sender, EventArgs e)
+        {
+            if (CurrentIndex != null && CurrentIndex > 0)
+            {
+                CurrentIndex = (int)CurrentIndex - 1;
+            }
+        }
+
+        protected void Next_Clicked(object sender, EventArgs e)
+        {
+            if (CurrentIndex != null && gvPersons.Rows.Count != 0)
+            {
+                CurrentIndex = (int)CurrentIndex + 1;
+            }
+        }
+        
+        protected void btnExportToExcel_Click(object sender, EventArgs e)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    DataHelper.InsertExportActivityLogMessage("Person");
+
+                    DataSet excelData =
+                        serviceClient.PersonGetExcelSet();
+                    excelGrid.DataSource = excelData;
+                    excelGrid.DataMember = "excelDataTable";
+                    excelGrid.DataBind();
+                    excelGrid.Visible = true;
+                    GridViewExportUtil.Export("Person_List.xls", excelGrid);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        protected void gvPersons_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            CurrentIndex = this.gvPersons.PageIndex;
+
+
+            if (PrevGridViewSortExpression != e.SortExpression)
+            {
+                PrevGridViewSortExpression = e.SortExpression;
+                GridViewSortDirection = e.SortDirection.ToString();
+            }
+            else
+            {
+                GridViewSortDirection = GetSortDirection();
+            }
+
+            //GridViewSortColumnId = GetSortColumnId(e.SortExpression);
+        }
+
+        protected void gvPersons_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.Header)
+            {
+                var row = e.Row;
+
+                for (int i = 0; i < row.Cells.Count; i++)
+                {
+                    TableCell cell = row.Cells[i];
+
+                    if (cell.HasControls())
+                    {
+                        foreach (var ctrl in cell.Controls)
+                        {
+                            if (ctrl is LinkButton)
+                            {
+                                var lb = (LinkButton)ctrl;
+
+                                if (lb.CommandArgument == PrevGridViewSortExpression)
+                                {
+                                    lb.CssClass = "arrow";
+                                    lb.CssClass += string.Format(" sort-{0}", GridViewSortDirection == "Ascending" ? "up" : "down");
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void gvPersons_DataBound(object sender, EventArgs e)
+        {
+            this.gvPersons.PageIndex = (!CurrentIndex.HasValue ? 0 : CurrentIndex.Value);
+        }
+
+        protected void gvPersons_PageIndexChanged(object sender, EventArgs e)
+        {
+            CurrentIndex = this.gvPersons.PageIndex;
+        }
+
+        protected void gvPersons_PreRender(object sender, EventArgs e)
+        {
+            int currentRecords = gvPersons.Rows.Count;
+            int totalRecords = GetTotalRecords("-1");
+            lblRecords.Text = String.Format(ViewingRecords, currentRecords, totalRecords);
+
+            if (ddlView.SelectedValue == "-1")
+            {
+                lnkbtnPrevious.Enabled = lnkbtnNext.Enabled = false;
+            }
+            else
+            {
+                lnkbtnPrevious.Enabled = !(CurrentIndex == 0);
+                lnkbtnNext.Enabled = !((gvPersons.Rows.Count == 0) || (currentRecords == totalRecords) || (currentRecords < Convert.ToInt32(ddlView.SelectedValue)));
+            }
+        }
+
+        #endregion
+
+        #region StaticMethods
 
         /// <summary>
         /// Retrieves the number of records for the ObjectDataSource.
@@ -99,7 +418,7 @@ namespace PraticeManagement.Config
         /// <param name="recruiterId">The recruiter filter.</param>
         /// <returns>The total number of records to be paged.</returns>
         public static int GetPersonCount(int? practiceId, bool active, int pageSize, int pageNo, string looked,
-                                         string recruiterId)
+                                         string recruiterId, int? payTypeId, bool projected, bool terminated, bool inactive, char? alphabet)
         {
             //if (CurrentIndex != -1 && pageNo == 0)
             //{
@@ -117,7 +436,12 @@ namespace PraticeManagement.Config
                             active,
                             looked,
                             recruiter,
-                            Thread.CurrentPrincipal.Identity.Name);
+                            Thread.CurrentPrincipal.Identity.Name,
+                            payTypeId,
+                            projected,
+                            terminated,
+                            inactive,
+                            alphabet);
                 }
                 catch (FaultException<ExceptionDetail>)
                 {
@@ -142,12 +466,19 @@ namespace PraticeManagement.Config
         /// <returns>The list of the <see cref="Person"/> object for the specified data page.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static Person[] GetPersons(int? practiceId, bool active, int pageSize, int pageNo, string looked,
-                                          int startRow, int maxRows, string recruiterId, string sortBy)
+                                          int startRow, int maxRows, string recruiterId, string sortBy, int? payTypeId,
+                                            bool projected, bool terminated, bool inactive, char? alphabet)
         {
             //if (CurrentIndex != -1 && pageNo == 0)
             //{
             //    pageNo = CurrentIndex;
             //}
+
+            if (practiceId != null && practiceId == -1)
+            {
+                practiceId = null;
+            }
+
             using (var serviceClient = new PersonServiceClient())
             {
                 try
@@ -163,9 +494,15 @@ namespace PraticeManagement.Config
                             looked,
                             recruiter,
                             Thread.CurrentPrincipal.Identity.Name,
-                            sortBy);
+                            sortBy,
+                            payTypeId,
+                            projected,
+                            terminated,
+                            inactive,
+                            alphabet);
 
                     //Array.Sort(result, (x, y) => SortFunction(sortBy, x, y));
+
 
                     return result;
                 }
@@ -271,15 +608,6 @@ namespace PraticeManagement.Config
             return desc ? -result : result;
         }
 
-        protected void gvPersons_RowCommand(object sender, GridViewCommandEventArgs e)
-        {
-            if (e.CommandName == EditRecordCommand)
-            {
-                object args = e.CommandArgument;
-                Response.Redirect(GetPersonDetailsUrl(args));
-            }
-        }
-
         private static string GetPersonDetailsUrl(object args)
         {
             return string.Format(Constants.ApplicationPages.DetailRedirectFormat,
@@ -287,81 +615,125 @@ namespace PraticeManagement.Config
                                  args);
         }
 
+        #endregion
+
+        #region Methods
+        
+        protected override void Display()
+        {
+        }
+
+        private void AddAlphabetButtons()
+        {
+            if (divAlphabeticalPaging.HasControls())
+            {
+                for (int index = 65; index <= 65 + 25; index++)
+                {
+                    char alphabet = Convert.ToChar(index);
+                    string alphabetId = "lnkbtn" + alphabet;
+                    LinkButton Alphabet = (LinkButton)divAlphabeticalPaging.FindControl(alphabetId);
+                    divAlphabeticalPaging.Controls.Remove(Alphabet);
+                }
+            }
+
+            for (int index = 65; index <= 65 + 25; index++)
+            {
+                char alphabet = Convert.ToChar(index);
+                LinkButton Alphabet = new LinkButton();
+                Alphabet.ID = "lnkbtn" + alphabet;
+                Alphabet.Text = alphabet.ToString();
+                Alphabet.Font.Underline = false;
+                Alphabet.Style.Add("padding-left", "15px");
+                Alphabet.Click += new EventHandler(Alphabet_Clicked);
+
+                divAlphabeticalPaging.Controls.Add(Alphabet);
+            }
+        }
+
+
+        /// <summary>
+        /// Retrives the data and display them in the table.
+        /// </summary>
+        protected void DisplayContent()
+        {
+            gvPersons.DataBind();
+        }
+
         protected string GetPersonDetailsUrlWithReturn(object id)
         {
             return PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(GetPersonDetailsUrl(id), Request.Url.AbsoluteUri);
         }
-
-        /// <summary>
-        /// Refreshes the data in the table after the filter was changed
-        /// </summary>
-        /// <param name="sebder"></param>
-        /// <param name="e"></param>
-        protected void practiceFilter_FilterChanged(object sebder, EventArgs e)
+        
+        private string GetSortDirection()
         {
-            Display();
-        }
-
-
-        /// <summary>
-        /// Searches the persons by first name or last name
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected void btnSearch_OnClick(object sender, EventArgs e)
-        {
-            practiceFilter.ActiveOnly = false;
-            Display();
-
-            if (gvPersons.Rows.Count == 1)
+            switch (GridViewSortDirection)
             {
-                Person person = ((Person[])odsPersons.Select())[0];
-                Response.Redirect(
-                    Urls.GetPersonDetailsUrl(person, Request.Url.AbsoluteUri));
+                case "Ascending":
+                    GridViewSortDirection = "Descending";
+                    break;
+                case "Descending":
+                    GridViewSortDirection = "Ascending";
+                    break;
             }
+            return GridViewSortDirection;
+        }
+        
+        private void SetFilterValues()
+        {
+            hdnActive.Value = personsFilter.Active.ToString();
+            hdnPracticeId.Value = personsFilter.PracticeId.ToString();
+            hdnRecruiterId.Value = ddlRecruiter.SelectedValue;
+            hdnPayTypeId.Value = personsFilter.PayTypeId.ToString();
+            hdnProjected.Value = personsFilter.Projected.ToString();
+            hdnTerminated.Value = personsFilter.Terminated.ToString();
+            hdnInactive.Value = personsFilter.Inactive.ToString();
+            hdnLooked.Value = txtSearch.Text;
         }
 
-        protected void ddlRecruiter_SelectedIndexChanged(object sender, EventArgs e)
+        private void ResetFilterControlsToDefault()
         {
-            Display();
+            CheckBox activeOnly = (CheckBox)personsFilter.FindControl("chbShowActive");
+            DropDownList ddlFilter = (DropDownList)personsFilter.FindControl("ddlFilter");
+            DropDownList ddlPayType = (DropDownList)personsFilter.FindControl("ddlPayType");
+            CheckBox projected = (CheckBox)personsFilter.FindControl("chbProjected");
+            CheckBox terminated = (CheckBox)personsFilter.FindControl("chbTerminated");
+            CheckBox inactive = (CheckBox)personsFilter.FindControl("chbInactive");
+
+            ddlPayType.SelectedIndex = 0;
+            ddlFilter.SelectedIndex = 0;
+            activeOnly.Checked = true;
+            projected.Checked = terminated.Checked = inactive.Checked = false;
+            ddlRecruiter.SelectedIndex = 0;
+            txtSearch.Text = string.Empty;
         }
 
-        protected void btnExportToExcel_Click(object sender, EventArgs e)
+        private int GetPageSize(string view)
         {
-            using (var serviceClient = new PersonServiceClient())
+            int pageSize = GetTotalRecords(view);
+
+            return pageSize != 0 ? pageSize : 1;
+        }
+
+        private int GetTotalRecords(string view)
+        {
+            int pageSize = Convert.ToInt32(view);
+
+            if (pageSize == -1)
             {
-                try
-                {
-                    DataHelper.InsertExportActivityLogMessage("Person");
-
-                    DataSet excelData =
-                        serviceClient.PersonGetExcelSet();
-                    excelGrid.DataSource = excelData;
-                    excelGrid.DataMember = "excelDataTable";
-                    excelGrid.DataBind();
-                    excelGrid.Visible = true;
-                    GridViewExportUtil.Export("Person_List.xls", excelGrid);
-                }
-                catch (CommunicationException)
-                {
-                    serviceClient.Abort();
-                    throw;
-                }
+                pageSize = GetPersonCount(PracticeId,
+                                            Convert.ToBoolean(hdnActive.Value),
+                                            0,
+                                            1,
+                                            hdnLooked.Value,
+                                            hdnRecruiterId.Value,
+                                            PayTypeId,
+                                            Convert.ToBoolean(hdnProjected.Value),
+                                            Convert.ToBoolean(hdnTerminated.Value),
+                                            Convert.ToBoolean(hdnInactive.Value),
+                                            Alphabet);
             }
-        }
 
-        protected void gvPersons_Sort(object sender, GridViewSortEventArgs e)
-        {
-            CurrentIndex = this.gvPersons.PageIndex;
-        }
-
-        protected void gvPersons_DataBound(object sender, EventArgs e)
-        {
-            this.gvPersons.PageIndex = (!CurrentIndex.HasValue ? 0 : CurrentIndex.Value);
-        }
-        protected void gvPersons_PageIndexChanged(object sender, EventArgs e)
-        {
-            CurrentIndex = this.gvPersons.PageIndex;
+            return pageSize;
         }
 
         public string FormatDate(DateTime? date)
@@ -375,6 +747,10 @@ namespace PraticeManagement.Config
                 return string.Empty;
             }
         }
-    }
 
+        #endregion
+
+        #endregion
+    }
 }
+
