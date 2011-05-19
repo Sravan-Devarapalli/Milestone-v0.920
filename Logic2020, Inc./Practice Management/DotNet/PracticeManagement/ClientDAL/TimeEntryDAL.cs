@@ -68,6 +68,7 @@ namespace DataAccess
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.Name, timeType.Name);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsDefault, timeType.IsDefault);
 
                 connection.Open();
 
