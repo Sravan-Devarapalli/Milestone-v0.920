@@ -5,11 +5,24 @@
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="MessageLabel" TagPrefix="uc" %>
 <asp:UpdatePanel ID="updDefaultManager" runat="server" UpdateMode="Conditional">
     <ContentTemplate>
-        <asp:DropDownList ID="ddlActivePersons" runat="server" DataSourceID="odsPersons" onchange="setDirty();" Width="100%"
-            DataTextField="PersonLastFirstName" DataValueField="Id" OnDataBound="ddlActivePersons_OnDataBound"/>
-         <asp:LinkButton ID="btnSetDefault" runat="server" OnClick="btnSetDefault_Click" Visible="false">Set as def. line manager</asp:LinkButton>
+        <table width="100%">
+            <tr>
+                <td>
+                    <asp:DropDownList ID="ddlActivePersons" runat="server" DataSourceID="odsPersons"
+                        onchange="setDirty();" Width="100%" DataTextField="PersonLastFirstName" DataValueField="Id"
+                        OnDataBound="ddlActivePersons_OnDataBound" />
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:right;">
+                    <asp:Button ID="btnSetDefault" runat="server" OnClick="btnSetDefault_Click" Visible="false" CssClass="marginLineManager"
+                        Text="Save Line Manager" />
+                </td>
+            </tr>
+        </table>
+        <%--<asp:LinkButton ID="btnSetDefault" runat="server" OnClick="btnSetDefault_Click" Visible="false">Set as def. line manager</asp:LinkButton>--%>
         <asp:ObjectDataSource ID="odsPersons" runat="server" SelectMethod="PersonListShortByRoleAndStatus"
-            TypeName="PraticeManagement.PersonService.PersonServiceClient" OnSelecting ="odsPersons_OnSelecting"
+            TypeName="PraticeManagement.PersonService.PersonServiceClient" OnSelecting="odsPersons_OnSelecting"
             OnSelected="odsPersons_OnSelected" CacheDuration="5" EnableCaching="true">
             <SelectParameters>
                 <asp:Parameter DefaultValue="1" Name="statusId" Type="Int32" />
