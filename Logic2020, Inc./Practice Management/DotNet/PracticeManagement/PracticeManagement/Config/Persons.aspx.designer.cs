@@ -49,6 +49,51 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.Image btnExpandCollapseFilter;
         
         /// <summary>
+        /// txtSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSearch;
+        
+        /// <summary>
+        /// waterMarkTxtSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TextBoxWatermarkExtender waterMarkTxtSearch;
+        
+        /// <summary>
+        /// btnUpdateView control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnUpdateView;
+        
+        /// <summary>
+        /// btnResetFilter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnResetFilter;
+        
+        /// <summary>
+        /// ddlView control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlView;
+        
+        /// <summary>
         /// lnkAddPerson control.
         /// </summary>
         /// <remarks>
@@ -85,13 +130,13 @@ namespace PraticeManagement.Config {
         protected global::AjaxControlToolkit.TabPanel tpMainFilters;
         
         /// <summary>
-        /// practiceFilter control.
+        /// personsFilter control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.PracticeFilter practiceFilter;
+        protected global::PraticeManagement.Controls.PersonsFilter personsFilter;
         
         /// <summary>
         /// ddlRecruiter control.
@@ -103,49 +148,85 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.DropDownList ddlRecruiter;
         
         /// <summary>
-        /// tpSearch control.
+        /// hdnActive control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.TabPanel tpSearch;
+        protected global::System.Web.UI.WebControls.HiddenField hdnActive;
         
         /// <summary>
-        /// pnlSearch control.
+        /// hdnProjected control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlSearch;
+        protected global::System.Web.UI.WebControls.HiddenField hdnProjected;
         
         /// <summary>
-        /// txtSearch control.
+        /// hdnInactive control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSearch;
+        protected global::System.Web.UI.WebControls.HiddenField hdnInactive;
         
         /// <summary>
-        /// reqSearchText control.
+        /// hdnTerminated control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqSearchText;
+        protected global::System.Web.UI.WebControls.HiddenField hdnTerminated;
         
         /// <summary>
-        /// btnSearch control.
+        /// hdnPracticeId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSearch;
+        protected global::System.Web.UI.WebControls.HiddenField hdnPracticeId;
+        
+        /// <summary>
+        /// hdnPayTypeId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnPayTypeId;
+        
+        /// <summary>
+        /// hdnRecruiterId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnRecruiterId;
+        
+        /// <summary>
+        /// hdnLooked control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnLooked;
+        
+        /// <summary>
+        /// hdnAlphabet control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnAlphabet;
         
         /// <summary>
         /// gvPersons control.
@@ -173,6 +254,51 @@ namespace PraticeManagement.Config {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ObjectDataSource odsPersons;
+        
+        /// <summary>
+        /// lnkbtnPrevious control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkbtnPrevious;
+        
+        /// <summary>
+        /// divAlphabeticalPaging control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divAlphabeticalPaging;
+        
+        /// <summary>
+        /// lnkbtnAll control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkbtnAll;
+        
+        /// <summary>
+        /// lnkbtnNext control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkbtnNext;
+        
+        /// <summary>
+        /// lblRecords control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblRecords;
         
         /// <summary>
         /// btnExportToExcel control.
