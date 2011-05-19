@@ -18,7 +18,7 @@ namespace PraticeManagement.Config
         }
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            msgLabel.Text = string.Empty;
         }
         #region Fields
 
@@ -32,25 +32,6 @@ namespace PraticeManagement.Config
         {
             odsCategories.DataObjectTypeName = typeof(ExpenseCategory).AssemblyQualifiedName;
             odsCategories.TypeName = GetType().AssemblyQualifiedName;
-        }
-
-        protected void btnAddCategory_Click(object sender, EventArgs e)
-        {
-            Page.Validate(btnAddCategory.ValidationGroup);
-            if (Page.IsValid)
-            {
-                try
-                {
-                    SaveCategory(new ExpenseCategory() { Name = txtNewCategoryName.Text });
-
-                    txtNewCategoryName.Text = string.Empty;
-                    gvCategories.DataBind();
-                }
-                catch (FaultException<ExceptionDetail>)
-                {
-                    Page.Validate();
-                }
-            }
         }
 
         /// <summary>
@@ -76,6 +57,48 @@ namespace PraticeManagement.Config
             if (!Page.IsValid)
                 e.Cancel = true;
         }
+        
+        protected void ibtnInsertCategory_Click(object sender, EventArgs e)
+        {
+            showPlusIcon(false);
+        }
+
+        private void showPlusIcon(bool showPlus)
+        {
+            ibtnInsertCategory.Visible = showPlus;
+            ibtnInsert.Visible = ibtnCancel.Visible = txtNewCategoryName.Visible = !showPlus;
+
+            if (!showPlus)
+            {
+                txtNewCategoryName.Text = string.Empty;
+            }
+        }
+
+        protected void ibtnInsert_Clicked(object sender, EventArgs e)
+        {
+            Page.Validate(txtNewCategoryName.ValidationGroup);
+            if (Page.IsValid)
+            {
+                try
+                {
+                    SaveCategory(new ExpenseCategory() { Name = txtNewCategoryName.Text });
+
+                    //txtNewCategoryName.Text = string.Empty;
+                    gvCategories.DataBind();
+
+                    showPlusIcon(true);
+                }
+                catch (FaultException<ExceptionDetail> ex)
+                {
+                    msgLabel.Text = ex.Message;
+                }
+            }
+        }
+
+        protected void ibtnCancel_Clicked(object sender, EventArgs e)
+        {
+            showPlusIcon(true);
+        }
 
         #region Validation
 
@@ -92,7 +115,10 @@ namespace PraticeManagement.Config
                 internalException == null ||
                 internalException.Message == ErrorCode.ExpenseCategoryIsInUse.ToString();
 
-            custDataAccessError.ErrorMessage = custDataAccessError.ToolTip = internalException.Message;
+            if (internalException != null)
+            {
+                custDataAccessError.ErrorMessage = custDataAccessError.ToolTip = internalException.Message;
+            }
         }
         #endregion
 
@@ -195,3 +221,4 @@ namespace PraticeManagement.Config
         #endregion
     }
 }
+
