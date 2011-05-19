@@ -151,6 +151,7 @@
     <Content Include="Controls\Configuration\SmtpPopSetUpControl.ascx" />
     <Content Include="Controls\Opportunities\OpportunityListControl.ascx" />
     <Content Include="Controls\Opportunities\ProposedResources.ascx" />
+    <Content Include="Controls\PersonsFilter.ascx" />
     <Content Include="Css\DynamicMenu.css" />
     <Content Include="DiscussionReview1.aspx" />
     <Content Include="DiscussionReview2.aspx" />
@@ -871,6 +872,12 @@
     </Compile>
     <Compile Include="Controls\Opportunities\ProposedResources.ascx.designer.cs">
       <DependentUpon>ProposedResources.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PersonsFilter.ascx.cs">
+      <DependentUpon>PersonsFilter.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PersonsFilter.ascx.designer.cs">
+      <DependentUpon>PersonsFilter.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Projects\ProjectAttachmentHandler.ashx.cs">
       <DependentUpon>ProjectAttachmentHandler.ashx</DependentUpon>
