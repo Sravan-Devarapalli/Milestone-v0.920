@@ -3,8 +3,9 @@
 -- Create date: 2009-11-30
 -- Description:	Insert new time type
 -- =============================================
-CREATE PROCEDURE dbo.TimeTypeInsert
-	@Name VARCHAR(50)
+CREATE PROCEDURE [dbo].[TimeTypeInsert]
+	@Name VARCHAR(50),
+	@IsDefault BIT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -16,7 +17,17 @@ BEGIN
 		RAISERROR(@Error,16,1)
 		RETURN
 	END
+	
+	IF @IsDefault = 1
+	BEGIN
+		UPDATE TimeType
+		SET IsDefault = 0
+	END
 
-	INSERT INTO dbo.TimeType ([Name]) VALUES (@Name)
+	INSERT INTO dbo.TimeType ([Name],[IsDefault]) VALUES (@Name, @IsDefault)
 END
+
+GO
+
+
 
