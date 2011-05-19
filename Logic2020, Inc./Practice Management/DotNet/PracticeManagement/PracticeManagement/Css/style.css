@@ -2010,3 +2010,7 @@ table.PaddingClass td
     position: static;
 }
 
+.marginLineManager
+{
+    margin-top: 10px;
+}
