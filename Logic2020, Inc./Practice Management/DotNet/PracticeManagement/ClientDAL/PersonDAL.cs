@@ -78,6 +78,10 @@ namespace DataAccess
         private const string NewAliasParam = "@NewAlias";
         private const string EmailParam = "@Email";
         private const string PersonIdsParam = "@PersonIds";
+        private const string ProjectedParam = "@Projected";
+        private const string TerminatedParam = "@Terminated";
+        private const string InactiveParam = "@Inactive";
+        private const string AlphabetParam = "@Alphabet";
 
         #endregion
 
@@ -1193,7 +1197,12 @@ namespace DataAccess
             DateTime endDate,
             int? recruiterId,
             int? maxSeniorityLevel,
-            string sortBy)
+            string sortBy,
+            int? timeScaleId,
+            bool projected,
+            bool terminated,
+            bool inactive,
+            char? alphabet)
         {
             var personList = new List<Person>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -1226,6 +1235,12 @@ namespace DataAccess
                     {
                         command.Parameters.AddWithValue(SortByParam, sortBy);
                     }
+                    command.Parameters.AddWithValue(TimescaleIdParam,
+                                                    timeScaleId.HasValue ? (object)timeScaleId.Value : DBNull.Value);
+                    command.Parameters.AddWithValue(ProjectedParam, projected);
+                    command.Parameters.AddWithValue(TerminatedParam, terminated);
+                    command.Parameters.AddWithValue(InactiveParam, inactive);
+                    command.Parameters.AddWithValue(AlphabetParam, alphabet.HasValue ? (object)alphabet.Value : DBNull.Value);
 
                     connection.Open();
                     ReadPersonsWithCurrentPay(command, personList);
@@ -1660,7 +1675,7 @@ namespace DataAccess
         /// <param name="looked">List all <see cref="Person"/>s by search string that matches for first name or last name  .</param>
         /// <param name="recruiterId">Determines an ID of the recruiter to retrieve the recruits for.</param>
         /// <returns>The number of the persons those match with the specified conditions.</returns>
-        public static int PersonGetCount(int? practice, bool showAll, string looked, int? recruiterId)
+        public static int PersonGetCount(int? practice, bool showAll, string looked, int? recruiterId, int? timeScaleId, bool projected, bool terminated, bool inactive, char? alphabet)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(PersonGetCountProcedure, connection))
@@ -1677,6 +1692,12 @@ namespace DataAccess
                                                 !string.IsNullOrEmpty(looked) ? (object)looked : DBNull.Value);
                 command.Parameters.AddWithValue(RecruiterIdParam,
                                                 recruiterId.HasValue ? (object)recruiterId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(TimescaleIdParam,
+                                                timeScaleId.HasValue ? (object)timeScaleId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(ProjectedParam, projected);
+                command.Parameters.AddWithValue(TerminatedParam, terminated);
+                command.Parameters.AddWithValue(InactiveParam, inactive);
+                command.Parameters.AddWithValue(AlphabetParam, alphabet.HasValue ? (object)alphabet.Value : DBNull.Value);
 
                 connection.Open();
                 return (int)command.ExecuteScalar();
