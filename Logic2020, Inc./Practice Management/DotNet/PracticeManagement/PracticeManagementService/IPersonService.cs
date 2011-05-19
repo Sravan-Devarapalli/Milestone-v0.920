@@ -23,7 +23,7 @@ namespace PracticeManagementService
         [OperationContract]
         void SetAsDefaultManager(Person person);
 
-       /// <summary>
+        /// <summary>
         /// Checks if the person is a manager to somebody
         /// </summary>
         [OperationContract]
@@ -79,7 +79,7 @@ namespace PracticeManagementService
         /// <returns>A list of the <see cref="Opportunity"/> objects.</returns>
         [OperationContract]
         System.Data.DataSet PersonGetExcelSet();
-		/// <summary>
+        /// <summary>
         /// <summary>
         /// Gets all permissions for the given person
         /// </summary>
@@ -89,25 +89,25 @@ namespace PracticeManagementService
         PersonPermission GetPermissions(Person person);
 
         /// <summary>
-		/// Get all persons
-		/// </summary>
-		/// <param name="practice">identifies a practice to limit results</param>
-		/// <param name="active"><value>true</value> limits to active persons only</param>
-		/// <param name="looked">A text to be looked for.</param>
-		/// <param name="pageNo">Determines a page index to be retrieved.</param>
-		/// <param name="pageSize">Determines a page size to be retrieved.</param>
-		/// <param name="recruiterId">Determines an ID of the recruiter to retrieve the recruits for.</param>
-		/// <param name="userName">A current user.</param>
-		/// <returns>A list of <see cref="Person"/>s in the system matching filters</returns>
-		[OperationContract]
-		List<Person> GetPersonList(
-			int? practice,
-			bool active,
-			int pageSize,
-			int pageNo,
-			string looked,
-			int? recruiterId,
-			string userName);
+        /// Get all persons
+        /// </summary>
+        /// <param name="practice">identifies a practice to limit results</param>
+        /// <param name="active"><value>true</value> limits to active persons only</param>
+        /// <param name="looked">A text to be looked for.</param>
+        /// <param name="pageNo">Determines a page index to be retrieved.</param>
+        /// <param name="pageSize">Determines a page size to be retrieved.</param>
+        /// <param name="recruiterId">Determines an ID of the recruiter to retrieve the recruits for.</param>
+        /// <param name="userName">A current user.</param>
+        /// <returns>A list of <see cref="Person"/>s in the system matching filters</returns>
+        [OperationContract]
+        List<Person> GetPersonList(
+            int? practice,
+            bool active,
+            int pageSize,
+            int pageNo,
+            string looked,
+            int? recruiterId,
+            string userName);
 
         /// <summary>
         /// This method is used by only in PersonList.aspx, Set_user.aspx and DataHelper.cs. This will return 
@@ -131,31 +131,36 @@ namespace PracticeManagementService
             string looked,
             int? recruiterId,
             string userName,
-            string sortBy);
+            string sortBy,
+            int? timeScaleId,
+            bool projected,
+            bool terminated,
+            bool inactive,
+            char? alphabet);
 
-		/// <summary>
-		/// Get all persons able to work on Milestone
-		/// </summary>
-		/// <param name="practice">identifies a practice to limit results</param>
-		/// <param name="active"><value>true</value> limits to active persons only</param>        
-		/// <param name="pageNo">Determines a page index to be retrieved.</param>
-		/// <param name="pageSize">Determines a page size to be retrieved.</param>
-		/// <param name="startDate">Determines a start date when persons in the list must are available.</param>
-		/// <param name="endDate">Determines an end date when persons in the list must are available.</param>
-		/// <param name="recruiterId">Determines an ID of the recruiter to retrieve the recruits for.</param>
-		/// <param name="userName">A current user.</param>
-		/// <returns>A list of <see cref="Person"/>s in the system matching filters</returns>
-		[OperationContract]
+        /// <summary>
+        /// Get all persons able to work on Milestone
+        /// </summary>
+        /// <param name="practice">identifies a practice to limit results</param>
+        /// <param name="active"><value>true</value> limits to active persons only</param>        
+        /// <param name="pageNo">Determines a page index to be retrieved.</param>
+        /// <param name="pageSize">Determines a page size to be retrieved.</param>
+        /// <param name="startDate">Determines a start date when persons in the list must are available.</param>
+        /// <param name="endDate">Determines an end date when persons in the list must are available.</param>
+        /// <param name="recruiterId">Determines an ID of the recruiter to retrieve the recruits for.</param>
+        /// <param name="userName">A current user.</param>
+        /// <returns>A list of <see cref="Person"/>s in the system matching filters</returns>
+        [OperationContract]
         List<Person> GetPersonListActiveDate(
-			int? practice,
-			bool active,
-			int pageSize,
-			int pageNo,
-			string looked,
-			DateTime startDate,
-			DateTime endDate,
-			int? recruiterId,
-			string userName);
+            int? practice,
+            bool active,
+            int pageSize,
+            int pageNo,
+            string looked,
+            DateTime startDate,
+            DateTime endDate,
+            int? recruiterId,
+            string userName);
 
         /// <summary>
         /// Retrieves a short info on persons.
@@ -185,27 +190,27 @@ namespace PracticeManagementService
         /// <returns>A list of the <see cref="Person"/> objects</returns>
         [OperationContract]
         List<Person> PersonListShortByRoleAndStatus(int? statusId, string roleName);
-		/// <summary>
-		/// Retrieves a short info on persons who are not in the Administration practice.
-		/// </summary>
-		/// <param name="milestonePersonId">An ID of existing milestone-person association or null.</param>
-		/// <param name="startDate">Determines a start date when persons in the list must are available.</param>
-		/// <param name="endDate">Determines an end date when persons in the list must are available.</param>
-		/// <returns>A list of the <see cref="Person"/> objects.</returns>
-		[OperationContract]
-		List<Person> PersonListAllForMilestone(int? milestonePersonId, DateTime startDate, DateTime endDate);
+        /// <summary>
+        /// Retrieves a short info on persons who are not in the Administration practice.
+        /// </summary>
+        /// <param name="milestonePersonId">An ID of existing milestone-person association or null.</param>
+        /// <param name="startDate">Determines a start date when persons in the list must are available.</param>
+        /// <param name="endDate">Determines an end date when persons in the list must are available.</param>
+        /// <returns>A list of the <see cref="Person"/> objects.</returns>
+        [OperationContract]
+        List<Person> PersonListAllForMilestone(int? milestonePersonId, DateTime startDate, DateTime endDate);
 
-		/// <summary>
-		/// Calculates a number of <see cref="Person"/>s match with the specified conditions.
-		/// </summary>
-		/// <param name="practice">The <see cref="Person"/>'s default practice.</param>
-		/// <param name="showAll">List all <see cref="Person"/>s if true and the only active otherwise.</param>
-		/// <param name="looked">List all <see cref="Person"/>s by search string that matches for first name or last name  .</param>
-		/// <param name="recruiterId">Determines an ID of the recruiter to retrieve the recruits for.</param>
-		/// <param name="userName">A current user.</param>
-		/// <returns>The number of the persons those match with the specified conditions.</returns>
-		[OperationContract]
-		int GetPersonCount(int? practice, bool showAll, string looked, int? recruiterId, string userName);
+        /// <summary>
+        /// Calculates a number of <see cref="Person"/>s match with the specified conditions.
+        /// </summary>
+        /// <param name="practice">The <see cref="Person"/>'s default practice.</param>
+        /// <param name="showAll">List all <see cref="Person"/>s if true and the only active otherwise.</param>
+        /// <param name="looked">List all <see cref="Person"/>s by search string that matches for first name or last name  .</param>
+        /// <param name="recruiterId">Determines an ID of the recruiter to retrieve the recruits for.</param>
+        /// <param name="userName">A current user.</param>
+        /// <returns>The number of the persons those match with the specified conditions.</returns>
+        [OperationContract]
+        int GetPersonCount(int? practice, bool showAll, string looked, int? recruiterId, string userName, int? timeScaleId, bool projected, bool terminated, bool inactive, char? alphabet);
 
         /// <summary>
         /// Calculates a number of <see cref="Person"/>s working days in period.
@@ -215,22 +220,22 @@ namespace PracticeManagementService
         /// <param name="endDate">mileStone end date</param>
         /// <returns>The number of the persons working days in period.</returns>
         [OperationContract]
-        int GetPersonWorkDaysNumber(int personId, DateTime startDate, DateTime endDate);        
+        int GetPersonWorkDaysNumber(int personId, DateTime startDate, DateTime endDate);
 
-		/// <summary>
-		/// Lists all active persons who receive some recruiter commissions.
-		/// </summary>
-		/// <returns>The list of <see cref="Person"/> objects.</returns>
-		[OperationContract]
-		List<Person> GetRecruiterList(int? personId, DateTime? hireDate);
+        /// <summary>
+        /// Lists all active persons who receive some recruiter commissions.
+        /// </summary>
+        /// <returns>The list of <see cref="Person"/> objects.</returns>
+        [OperationContract]
+        List<Person> GetRecruiterList(int? personId, DateTime? hireDate);
 
-		/// <summary>
-		/// List the persons who recieve the sales commissions
-		/// </summary>
-		/// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
-		/// <returns>The list of the <see cref="Person"/> objects.</returns>
-		[OperationContract]
-		List<Person> GetSalespersonList(bool includeInactive);
+        /// <summary>
+        /// List the persons who recieve the sales commissions
+        /// </summary>
+        /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
+        /// <returns>The list of the <see cref="Person"/> objects.</returns>
+        [OperationContract]
+        List<Person> GetSalespersonList(bool includeInactive);
 
         /// <summary>
         /// List the persons who recieve the sales commissions
@@ -241,17 +246,17 @@ namespace PracticeManagementService
         [OperationContract]
         List<Person> PersonListSalesperson(Person person, bool inactives);
 
-		/// <summary>
-		/// List the persons who recieve the Practice Management commissions
-		/// </summary>
-		/// <param name="projectId">An ID of the project to the Practice Manager be selected for.</param>
-		/// <param name="endDate">An end date of the project the Practice Manager be selected for.</param>
-		/// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
-		/// <returns>
-		/// The list of <see cref="Person"/> objects applicable to be a practice manager for the project.
-		/// </returns>
-		[OperationContract]
-		List<Person> GetPracticeManagerList(int? projectId, DateTime? endDate, bool includeInactive);
+        /// <summary>
+        /// List the persons who recieve the Practice Management commissions
+        /// </summary>
+        /// <param name="projectId">An ID of the project to the Practice Manager be selected for.</param>
+        /// <param name="endDate">An end date of the project the Practice Manager be selected for.</param>
+        /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
+        /// <returns>
+        /// The list of <see cref="Person"/> objects applicable to be a practice manager for the project.
+        /// </returns>
+        [OperationContract]
+        List<Person> GetPracticeManagerList(int? projectId, DateTime? endDate, bool includeInactive);
 
         /// <summary>
         /// List the persons who recieve the Practice Management commissions
@@ -278,13 +283,13 @@ namespace PracticeManagementService
         [OperationContract]
         List<Person> PersonListPracticeManager(Person person, int? projectId, DateTime? endDate, bool includeInactive);
 
-		/// <summary>
-		/// Retrieves all subordinated persons for a specified practice manager.
-		/// </summary>
-		/// <param name="practiceManagerId">An ID of the parctice manager to teh data be retrieved for.</param>
-		/// <returns>The list of the <see cref="Person"/> objects.</returns>
-		[OperationContract]
-		List<Person> GetSubordinates(int practiceManagerId);
+        /// <summary>
+        /// Retrieves all subordinated persons for a specified practice manager.
+        /// </summary>
+        /// <param name="practiceManagerId">An ID of the parctice manager to teh data be retrieved for.</param>
+        /// <returns>The list of the <see cref="Person"/> objects.</returns>
+        [OperationContract]
+        List<Person> GetSubordinates(int practiceManagerId);
 
         /// <summary>
         /// Retrieves Person One-off List.
@@ -295,13 +300,13 @@ namespace PracticeManagementService
         [OperationContract]
         List<Person> GetOneOffList(DateTime today, string userName);
 
-		/// <summary>
+        /// <summary>
         /// Get a person
         /// </summary>
         /// <param name="personId">Id of the person to get</param>
         /// <returns>
-		/// Person matching <paramref name="personId"/>, or <value>null</value> if the person is not in the system
-		/// </returns>
+        /// Person matching <paramref name="personId"/>, or <value>null</value> if the person is not in the system
+        /// </returns>
         /// <remarks>
         /// Presumably the id is obtained form a previous call to GetPersonList but
         /// there is no system restriction on the value for the identifier in this call.
@@ -309,13 +314,13 @@ namespace PracticeManagementService
         [OperationContract]
         Person GetPersonDetail(int personId);
 
-		/// <summary>
-		/// Retrieves a <see cref="Person"/> by the Alias (email).
-		/// </summary>
-		/// <param name="alias">The EMail to search for.</param>
-		/// <returns>The <see cref="Person"/> object if found and null otherwise.</returns>
-		[OperationContract]
-		Person GetPersonByAlias(string alias);
+        /// <summary>
+        /// Retrieves a <see cref="Person"/> by the Alias (email).
+        /// </summary>
+        /// <param name="alias">The EMail to search for.</param>
+        /// <returns>The <see cref="Person"/> object if found and null otherwise.</returns>
+        [OperationContract]
+        Person GetPersonByAlias(string alias);
 
         // TODO: better define "if the person exists"  The id is new or zero, maybe?
         /// <summary>
@@ -329,99 +334,99 @@ namespace PracticeManagementService
         /// </remarks>
         /// <param name="currentUser">current logged in user name</param>       
         [OperationContract]
-		[FaultContract(typeof(DataAccessFault))]
+        [FaultContract(typeof(DataAccessFault))]
         int SavePersonDetail(Person person, string currentUser);
 
-		/// <summary>
-		/// Deactivates the specified person.
-		/// </summary>
-		/// <param name="person">The data for the person to be deactivated.</param>
-		[OperationContract]
-		void PersonInactivate(Person person);
+        /// <summary>
+        /// Deactivates the specified person.
+        /// </summary>
+        /// <param name="person">The data for the person to be deactivated.</param>
+        [OperationContract]
+        void PersonInactivate(Person person);
 
-		/// <summary>
-		/// Activates the specified person.
-		/// </summary>
-		/// <param name="person">The data for the person to be activated.</param>
-		[OperationContract]
-		void PersonReactivate(Person person);
+        /// <summary>
+        /// Activates the specified person.
+        /// </summary>
+        /// <param name="person">The data for the person to be activated.</param>
+        [OperationContract]
+        void PersonReactivate(Person person);
 
-		/// <summary>
-		/// Retrieves the list of the overheads for the specified person.
-		/// </summary>
-		/// <param name="personId">An ID of the person to retrive the data for.</param>
-		/// <returns>The list of the <see cref="PersonOverhead"/> objects.</returns>
-		[OperationContract]
-		List<PersonOverhead> GetPersonOverheadByPerson(int personId);
+        /// <summary>
+        /// Retrieves the list of the overheads for the specified person.
+        /// </summary>
+        /// <param name="personId">An ID of the person to retrive the data for.</param>
+        /// <returns>The list of the <see cref="PersonOverhead"/> objects.</returns>
+        [OperationContract]
+        List<PersonOverhead> GetPersonOverheadByPerson(int personId);
 
-		/// <summary>
-		/// Retrieves a list of overheads for the specified <see cref="Timescale"/>.
-		/// </summary>
-		/// <param name="timescale">The <see cref="Timescale"/> to retrive the data for.</param>
-		/// <returns>The list of the <see cref="PersonOverhead"/> objects.</returns>
-		[OperationContract]
-		List<PersonOverhead> GetPersonOverheadByTimescale(TimescaleType timescale);
+        /// <summary>
+        /// Retrieves a list of overheads for the specified <see cref="Timescale"/>.
+        /// </summary>
+        /// <param name="timescale">The <see cref="Timescale"/> to retrive the data for.</param>
+        /// <returns>The list of the <see cref="PersonOverhead"/> objects.</returns>
+        [OperationContract]
+        List<PersonOverhead> GetPersonOverheadByTimescale(TimescaleType timescale);
 
-		/// <summary>
-		/// Retrieves the person's rate.
-		/// </summary>
-		/// <param name="milestonePerson">The milestone-person association to the rate be calculated for.</param>
-		/// <returns>The <see cref="MilestonePerson"/> object with calculated data.</returns>
-		[OperationContract]
-		MilestonePerson GetPersonRate(MilestonePerson milestonePerson);
+        /// <summary>
+        /// Retrieves the person's rate.
+        /// </summary>
+        /// <param name="milestonePerson">The milestone-person association to the rate be calculated for.</param>
+        /// <returns>The <see cref="MilestonePerson"/> object with calculated data.</returns>
+        [OperationContract]
+        MilestonePerson GetPersonRate(MilestonePerson milestonePerson);
 
-		/// <summary>
-		/// Calculates the person's financials.
-		/// </summary>
-		/// <param name="personId">An ID of the <see cref="Person"/> to colculate the data for.</param>
-		/// <param name="proposedHoursPerWeek">A proposed work week duration.</param>
-		/// <param name="proposedRate">A proposed person's hourly rate.</param>
-		/// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
-		[OperationContract]
+        /// <summary>
+        /// Calculates the person's financials.
+        /// </summary>
+        /// <param name="personId">An ID of the <see cref="Person"/> to colculate the data for.</param>
+        /// <param name="proposedHoursPerWeek">A proposed work week duration.</param>
+        /// <param name="proposedRate">A proposed person's hourly rate.</param>
+        /// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
+        [OperationContract]
         ComputedFinancialsEx CalculateProposedFinancials(int personId, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount);
 
-		/// <summary>
-		/// Calculates the person's rate.
-		/// </summary>
-		/// <param name="person">A <see cref="Person"/> object to calculate the data for.</param>
-		/// <param name="proposedHoursPerWeek">A proposed work week duration.</param>
-		/// <param name="proposedRate">A proposed person's hourly rate.</param>
-		/// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
-		[OperationContract]
+        /// <summary>
+        /// Calculates the person's rate.
+        /// </summary>
+        /// <param name="person">A <see cref="Person"/> object to calculate the data for.</param>
+        /// <param name="proposedHoursPerWeek">A proposed work week duration.</param>
+        /// <param name="proposedRate">A proposed person's hourly rate.</param>
+        /// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
+        [OperationContract]
         ComputedFinancialsEx CalculateProposedFinancialsPerson(Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage);
 
-		/// <summary>
-		/// Calculates the person's rate.
-		/// </summary>
-		/// <param name="person">A <see cref="Person"/> object to calculate the data for.</param>
-		/// <param name="targetMargin">A Target Magin.</param>
-		/// <param name="proposedHoursPerWeek">A proposed work week duration.</param>
-		/// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
-		[OperationContract]
+        /// <summary>
+        /// Calculates the person's rate.
+        /// </summary>
+        /// <param name="person">A <see cref="Person"/> object to calculate the data for.</param>
+        /// <param name="targetMargin">A Target Magin.</param>
+        /// <param name="proposedHoursPerWeek">A proposed work week duration.</param>
+        /// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
+        [OperationContract]
         ComputedFinancialsEx CalculateProposedFinancialsPersonTargetMargin(Person person, decimal targetMargin, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage);
 
-		/// <summary>
-		/// Pertieves a payment for the specified person.
-		/// </summary>
-		/// <param name="personId">The <see cref="Person"/> to the data be retrieved for.</param>
-		/// <param name="startDate">The StartDate since the payment is active.</param>
-		/// <returns>The <see cref="Pay"/> object when found and null otherwise.</returns>
-		[OperationContract]
-		Pay GetPayment(int personId, DateTime startDate);
+        /// <summary>
+        /// Pertieves a payment for the specified person.
+        /// </summary>
+        /// <param name="personId">The <see cref="Person"/> to the data be retrieved for.</param>
+        /// <param name="startDate">The StartDate since the payment is active.</param>
+        /// <returns>The <see cref="Pay"/> object when found and null otherwise.</returns>
+        [OperationContract]
+        Pay GetPayment(int personId, DateTime startDate);
 
-		/// <summary>
-		/// Saves a payment data.
-		/// </summary>
-		/// <param name="pay">The <see cref="Pay"/> object to be saved.</param>
-		[OperationContract]
-		void SavePay(Pay pay);
+        /// <summary>
+        /// Saves a payment data.
+        /// </summary>
+        /// <param name="pay">The <see cref="Pay"/> object to be saved.</param>
+        [OperationContract]
+        void SavePay(Pay pay);
 
-		/// <summary>
-		/// Selects a list of the seniorities.
-		/// </summary>
-		/// <returns>A list of the <see cref="Seniority"/> objects.</returns>
-		[OperationContract]
-		List<Seniority> ListSeniorities();
+        /// <summary>
+        /// Selects a list of the seniorities.
+        /// </summary>
+        /// <returns>A list of the <see cref="Seniority"/> objects.</returns>
+        [OperationContract]
+        List<Seniority> ListSeniorities();
 
         /// <summary>
         /// Sets permissions for user
@@ -446,7 +451,7 @@ namespace PracticeManagementService
         /// <returns>List of subordinates</returns>
         [OperationContract]
         Person[] ListManagersSubordinates(Person person);
-        
+
         /// <summary>
         /// Retrives a short info on persons.
         /// </summary>
