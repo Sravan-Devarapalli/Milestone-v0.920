@@ -122,7 +122,7 @@ namespace PraticeManagement.PersonService {
         DataTransferObjects.Person[] GetPersonList(System.Nullable<int> practice, bool active, int pageSize, int pageNo, string looked, System.Nullable<int> recruiterId, string userName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListWithCurrentPay", ReplyAction="http://tempuri.org/IPersonService/GetPersonListWithCurrentPayResponse")]
-        DataTransferObjects.Person[] GetPersonListWithCurrentPay(System.Nullable<int> practice, bool active, int pageSize, int pageNo, string looked, System.Nullable<int> recruiterId, string userName, string sortBy);
+        DataTransferObjects.Person[] GetPersonListWithCurrentPay(System.Nullable<int> practice, bool active, int pageSize, int pageNo, string looked, System.Nullable<int> recruiterId, string userName, string sortBy, System.Nullable<int> timeScaleId, bool projected, bool terminated, bool inactive, System.Nullable<char> alphabet);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListActiveDate", ReplyAction="http://tempuri.org/IPersonService/GetPersonListActiveDateResponse")]
         DataTransferObjects.Person[] GetPersonListActiveDate(System.Nullable<int> practice, bool active, int pageSize, int pageNo, string looked, System.DateTime startDate, System.DateTime endDate, System.Nullable<int> recruiterId, string userName);
@@ -140,7 +140,7 @@ namespace PraticeManagement.PersonService {
         DataTransferObjects.Person[] PersonListAllForMilestone(System.Nullable<int> milestonePersonId, System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonCount", ReplyAction="http://tempuri.org/IPersonService/GetPersonCountResponse")]
-        int GetPersonCount(System.Nullable<int> practice, bool showAll, string looked, System.Nullable<int> recruiterId, string userName);
+        int GetPersonCount(System.Nullable<int> practice, bool showAll, string looked, System.Nullable<int> recruiterId, string userName, System.Nullable<int> timeScaleId, bool projected, bool terminated, bool inactive, System.Nullable<char> alphabet);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonWorkDaysNumber", ReplyAction="http://tempuri.org/IPersonService/GetPersonWorkDaysNumberResponse")]
         int GetPersonWorkDaysNumber(int personId, System.DateTime startDate, System.DateTime endDate);
@@ -197,7 +197,7 @@ namespace PraticeManagement.PersonService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
-       
+               
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -338,8 +338,8 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetPersonList(practice, active, pageSize, pageNo, looked, recruiterId, userName);
         }
         
-        public DataTransferObjects.Person[] GetPersonListWithCurrentPay(System.Nullable<int> practice, bool active, int pageSize, int pageNo, string looked, System.Nullable<int> recruiterId, string userName, string sortBy) {
-            return base.Channel.GetPersonListWithCurrentPay(practice, active, pageSize, pageNo, looked, recruiterId, userName, sortBy);
+        public DataTransferObjects.Person[] GetPersonListWithCurrentPay(System.Nullable<int> practice, bool active, int pageSize, int pageNo, string looked, System.Nullable<int> recruiterId, string userName, string sortBy, System.Nullable<int> timeScaleId, bool projected, bool terminated, bool inactive, System.Nullable<char> alphabet) {
+            return base.Channel.GetPersonListWithCurrentPay(practice, active, pageSize, pageNo, looked, recruiterId, userName, sortBy, timeScaleId, projected, terminated, inactive, alphabet);
         }
         
         public DataTransferObjects.Person[] GetPersonListActiveDate(System.Nullable<int> practice, bool active, int pageSize, int pageNo, string looked, System.DateTime startDate, System.DateTime endDate, System.Nullable<int> recruiterId, string userName) {
@@ -362,8 +362,8 @@ namespace PraticeManagement.PersonService {
             return base.Channel.PersonListAllForMilestone(milestonePersonId, startDate, endDate);
         }
         
-        public int GetPersonCount(System.Nullable<int> practice, bool showAll, string looked, System.Nullable<int> recruiterId, string userName) {
-            return base.Channel.GetPersonCount(practice, showAll, looked, recruiterId, userName);
+        public int GetPersonCount(System.Nullable<int> practice, bool showAll, string looked, System.Nullable<int> recruiterId, string userName, System.Nullable<int> timeScaleId, bool projected, bool terminated, bool inactive, System.Nullable<char> alphabet) {
+            return base.Channel.GetPersonCount(practice, showAll, looked, recruiterId, userName, timeScaleId, projected, terminated, inactive, alphabet);
         }
         
         public int GetPersonWorkDaysNumber(int personId, System.DateTime startDate, System.DateTime endDate) {
