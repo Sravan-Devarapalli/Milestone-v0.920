@@ -111,6 +111,10 @@ namespace PraticeManagement.Controls
             //{
             //    pageNo = CurrentIndex;
             //}
+
+            bool showAll = !active;
+            active = true;
+
             using (var serviceClient = new PersonServiceClient())
             {
                 try
@@ -123,7 +127,12 @@ namespace PraticeManagement.Controls
                             active,
                             looked,
                             recruiter,
-                            Thread.CurrentPrincipal.Identity.Name);
+                            Thread.CurrentPrincipal.Identity.Name,
+                            null,
+                            showAll,
+                            showAll,
+                            showAll,
+                            null);
                 }
                 catch (FaultException<ExceptionDetail>)
                 {
@@ -154,6 +163,10 @@ namespace PraticeManagement.Controls
             //{
             //    pageNo = CurrentIndex;
             //}
+
+            bool showAll = !active;
+            active = true;
+
             using (var serviceClient = new PersonServiceClient())
             {
                 try
@@ -169,7 +182,12 @@ namespace PraticeManagement.Controls
                             looked,
                             recruiter,
                             Thread.CurrentPrincipal.Identity.Name,
-                            sortBy);
+                            sortBy,
+                            null,
+                            showAll,
+                            showAll,
+                            showAll,
+                            null);
 
                     //Array.Sort(result, (x, y) => SortFunction(sortBy, x, y));
 
@@ -383,3 +401,4 @@ namespace PraticeManagement.Controls
         }
     }
 }
+
