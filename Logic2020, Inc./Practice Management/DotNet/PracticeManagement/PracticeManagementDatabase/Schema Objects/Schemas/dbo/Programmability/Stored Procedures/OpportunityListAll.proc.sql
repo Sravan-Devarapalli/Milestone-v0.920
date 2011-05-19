@@ -27,7 +27,10 @@ BEGIN
 	;WITH CTE
 	AS
 	(
-	SELECT ROW_NUMBER() OVER(PARTITION BY O.ClientName + isnull(O.BuyerName, '') ORDER BY CASE OP.sortOrder WHEN 0 THEN 1000 ELSE OP.sortOrder END, O.SalespersonLastName) RowNumber,
+		
+	SELECT ROW_NUMBER() OVER(PARTITION BY O.ClientName + isnull(O.BuyerName, '') 
+							ORDER BY CASE OP.sortOrder WHEN 0 THEN 1000 ELSE OP.sortOrder END, O.SalespersonLastName) RowNumber,
+							/* here sortOrder = 0 means 'PO' priority */
 			o.OpportunityId,
 			o.Name,		   
 			o.ClientId,
@@ -69,22 +72,24 @@ BEGIN
 		LEFT JOIN dbo.PersonStatus ps ON ps.PersonStatusId = o.SalespersonStatusId  
 		LEFT JOIN dbo.PersonStatus os ON os.PersonStatusId = o.OwnerStatusId 
 		INNER JOIN dbo.OpportunityPriorities AS op ON op.Id = o.PriorityId 
-	WHERE ((@IsDiscussionReview2 = 1 AND o.OpportunityStatusId = 1)
+		WHERE ((@IsDiscussionReview2 = 1 AND o.OpportunityStatusId = 1)
 			OR @IsDiscussionReview2 = 0 AND  (o.OpportunityStatusId = 1 OR @ActiveOnly = 0)
 			)
-		AND (o.ClientId = @ClientId OR @ClientId IS NULL)
-		AND (o.SalespersonId = @SalespersonId OR @SalespersonId IS NULL)
-		AND (o.Name LIKE @Looked OR o.Description LIKE @Looked OR o.ClientName LIKE @Looked OR o.OpportunityNumber LIKE @Looked OR o.BuyerName LIKE @Looked)	
-		AND (o.OpportunityId in (select ot.OpportunityId from OpportunityTransition ot where ot.TargetPersonId = @TargetPersonId) OR @TargetPersonId IS NULL)
+			AND (o.ClientId = @ClientId OR @ClientId IS NULL)
+			AND (o.SalespersonId = @SalespersonId OR @SalespersonId IS NULL)
+			AND (o.Name LIKE @Looked OR o.Description LIKE @Looked OR o.ClientName LIKE @Looked OR o.OpportunityNumber LIKE @Looked OR o.BuyerName LIKE @Looked)	
+			AND (o.OpportunityId in (select ot.OpportunityId from OpportunityTransition ot where ot.TargetPersonId = @TargetPersonId) OR @TargetPersonId IS NULL)
 		)
 		
 		SELECT 
 			B.*
 		FROM CTE A
-		JOIN CTE B
-		ON (A.ClientName =B.ClientName AND isnull(A.BuyerName, '')  = isnull(B.BuyerName, '') 
-			AND A.RowNumber=1 AND A.sortOrder!=0 AND B.SortOrder != 0 ) OR (A.OpportunityId = B.OpportunityId AND A.sortOrder=0)
+		JOIN CTE B	ON (A.ClientName =B.ClientName AND isnull(A.BuyerName, '')  = isnull(B.BuyerName, '') 
+							AND A.RowNumber=1 AND A.sortOrder!=0 AND B.SortOrder != 0 ) 
+					   OR (A.OpportunityId = B.OpportunityId AND A.sortOrder=0)
 		ORDER BY A.sortOrder,A.SalespersonLastName,B.ClientName,isnull(B.BuyerName, ''),B.sortOrder,B.SalespersonLastName
+
+		/* here sortOrder = 0 means 'PO' priority */
 		
 END
 
