@@ -11,5 +11,10 @@ namespace PraticeManagement.Config
         protected override void Display()
         {
         }
+
+        public new void ClearDirty()
+        {
+            base.ClearDirty();
+        }
     }
 }
