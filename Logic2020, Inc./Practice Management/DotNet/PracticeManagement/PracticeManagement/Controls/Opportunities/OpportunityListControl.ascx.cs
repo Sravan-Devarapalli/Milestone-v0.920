@@ -432,7 +432,7 @@ namespace PraticeManagement.Controls.Opportunities
                 var oppty = (e.Item as ListViewDataItem).DataItem as Opportunity;
                 if (oppty != null && oppty.ProposedPersons != null)
                 {
-                    datalist.DataSource = oppty.ProposedPersons;
+                    datalist.DataSource = oppty.ProposedPersons.OrderBy(person => person.LastName + person.FirstName);
                     datalist.DataBind();
                 }
                 if (oppty.ProposedPersons != null)
