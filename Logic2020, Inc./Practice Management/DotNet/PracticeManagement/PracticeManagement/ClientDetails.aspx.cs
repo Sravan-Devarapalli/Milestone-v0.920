@@ -112,15 +112,7 @@ namespace PraticeManagement
                         mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Client"));
                     }
 
-                    if (ClientId.HasValue)
-                    {
-                        var client = GetClient(id);
-                        if (client != null)
-                        {
-                            PopulateControls(client);
-                            InitActionControls(client == null || !client.Id.HasValue ? string.Empty : client.Id.Value.ToString());
-                        }
-                    }
+                    Redirect(Constants.ApplicationPages.ClientList);
                 }
             }
         }
