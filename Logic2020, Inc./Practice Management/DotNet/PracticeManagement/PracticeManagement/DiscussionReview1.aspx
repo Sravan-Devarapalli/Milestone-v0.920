@@ -289,7 +289,7 @@
                                         <td style="font-weight: bold; padding-right: 2px; padding-left: 2px; width: 5%;">
                                             <asp:LinkButton ID="lnkbtnPriority" CommandName="select" CssClass="selectLink" runat="server">
                                                 <div class="WholeWidth FixedHeight" style="vertical-align: middle; padding: 10px 2px 10px 2px;">
-                                                    <asp:Label ID="lblPriority" runat="server" Text='<%# Eval("Priority") %>'></asp:Label></div>
+                                                    <asp:Label ID="lblPriority" runat="server" Text='<%#  ((Opportunity) Container.DataItem).Priority.Priority %>'></asp:Label></div>
                                             </asp:LinkButton>
                                         </td>
                                         <td style="padding: 5px 0px 5px 0px; width: 95%;">
@@ -335,7 +335,7 @@
                                     <tr onclick="ShowHomeTab();if (!confirmSaveDirty(true)) return false;" style="background-color: #e2ebff;
                                         border-bottom: 1px solid black; padding: 2px 0px 2px 0px; width: 5%;">
                                         <td style="font-weight: bold; vertical-align: middle; padding-right: 4px; padding-left: 2px">
-                                            <asp:Label ID="lblPriority" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>
+                                            <asp:Label ID="lblPriority" runat="server" Text='<%#  ((Opportunity) Container.DataItem).Priority.Priority %>'></asp:Label>
                                         </td>
                                         <td style="padding: 5px 0px 5px 0px; width: 95%;">
                                             <table class="WholeWidth">
