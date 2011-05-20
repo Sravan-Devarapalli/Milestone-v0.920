@@ -21,6 +21,7 @@ namespace DataAccess
         private const string ClientListAllProcedure = "dbo.ClientListAll";
         private const string ClientGetByIdProcedure = "dbo.ClientGetById";
         private const string ClientListAllForProjectProcedure = "dbo.ClientListAllForProject";
+        private const string UpdateIsChargableForClientProcedure = "dbo.UpdateIsChargableForClient";
 
         #endregion
 
@@ -36,6 +37,7 @@ namespace DataAccess
         private const string ShowAllParam = "@ShowAll";
         private const string ProjectIdParam = "@ProjectId";
         private const string PersonIdParam = "@PersonId";
+        private const string IsChargeableParam = "@IsChargeable";
 
         #endregion
 
@@ -372,6 +374,23 @@ namespace DataAccess
         private static Client ReadClientBasic(SqlDataReader reader, string clientNameColumn)
         {
             return new Client { Id = (int)reader[ClientIdColumn], Name = (string)reader[clientNameColumn] };
+        }
+
+        public static void UpdateIsChargableForClient(int? clientId, bool isChargable)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(UpdateIsChargableForClientProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(ClientIdParam, clientId.Value);
+                    command.Parameters.AddWithValue(IsChargeableParam, isChargable);
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
         }
     }
 }
