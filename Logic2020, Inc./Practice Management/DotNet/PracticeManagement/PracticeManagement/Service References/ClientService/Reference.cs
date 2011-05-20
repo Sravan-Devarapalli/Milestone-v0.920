@@ -27,6 +27,9 @@ namespace PraticeManagement.ClientService {
         [System.ServiceModel.OperationContractAttribute(Action="http://www.logic2020.com/IClientService/ClientReactivate", ReplyAction="http://www.logic2020.com/IClientService/ClientReactivateResponse")]
         void ClientReactivate(DataTransferObjects.Client client);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://www.logic2020.com/IClientService/UpdateIsChargableForClient", ReplyAction="http://www.logic2020.com/IClientService/UpdateIsChargableForClientResponse")]
+        void UpdateIsChargableForClient(System.Nullable<int> clientId, bool isChargable);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://www.logic2020.com/IClientService/ClientListAll", ReplyAction="http://www.logic2020.com/IClientService/ClientListAllResponse")]
         DataTransferObjects.Client[] ClientListAll();
         
@@ -78,6 +81,10 @@ namespace PraticeManagement.ClientService {
         
         public void ClientReactivate(DataTransferObjects.Client client) {
             base.Channel.ClientReactivate(client);
+        }
+        
+        public void UpdateIsChargableForClient(System.Nullable<int> clientId, bool isChargable) {
+            base.Channel.UpdateIsChargableForClient(clientId, isChargable);
         }
         
         public DataTransferObjects.Client[] ClientListAll() {
