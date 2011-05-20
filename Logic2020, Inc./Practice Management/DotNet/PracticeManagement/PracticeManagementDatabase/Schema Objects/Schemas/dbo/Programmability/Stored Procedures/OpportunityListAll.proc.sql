@@ -37,6 +37,7 @@ BEGIN
 			o.SalespersonId,
 			o.OpportunityStatusId,
 			o.Priority,
+			op.sortOrder PrioritySortOrder,
 			o.ProjectedStartDate,
 			o.ProjectedEndDate,
 			o.OpportunityNumber,
