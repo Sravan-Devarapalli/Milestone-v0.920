@@ -158,7 +158,7 @@ namespace PraticeManagement
                 LoadOpportunityDetails();
             }
 
-            mlConfirmation.ClearMessage();            
+            mlConfirmation.ClearMessage();
 
             if (hdnValueChanged.Value == "false")
             {
@@ -714,7 +714,7 @@ namespace PraticeManagement
         }
 
         protected override void Display()
-        {            
+        {
         }
 
         private void FillControls()
@@ -828,7 +828,7 @@ namespace PraticeManagement
 
             ddlPriority.SelectedIndex =
                 ddlPriority.Items.IndexOf(
-                    ddlPriority.Items.FindByValue(opportunity.PriorityId.ToString()));
+                    ddlPriority.Items.FindByValue(opportunity.Priority.Id.ToString()));
 
             PopulateSalesPersonDropDown();
 
@@ -938,7 +938,7 @@ namespace PraticeManagement
             int priorityId;
             if (int.TryParse(ddlPriority.SelectedValue, out priorityId))
             {
-                opportunity.PriorityId = priorityId;
+                opportunity.Priority = new OpportunityPriority { Id = priorityId };
             }
             opportunity.Description = txtDescription.Text;
             opportunity.BuyerName = txtBuyerName.Text;
