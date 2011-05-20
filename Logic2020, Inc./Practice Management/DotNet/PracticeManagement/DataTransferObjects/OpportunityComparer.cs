@@ -101,7 +101,9 @@ namespace DataTransferObjects
                     result = 0;
                     break;
                 case OpportunitySortOrder.Priority:
-                    result = string.Compare(x.Priority.ToString(), y.Priority.ToString());
+
+                    result = (x.Priority != null ? x.Priority.SortOrder : 0).CompareTo(
+                        (y.Priority != null ? y.Priority.SortOrder : 0));
                     break;
                 case OpportunitySortOrder.OpportunityName:
                     result = string.Compare(x.Name, y.Name);
