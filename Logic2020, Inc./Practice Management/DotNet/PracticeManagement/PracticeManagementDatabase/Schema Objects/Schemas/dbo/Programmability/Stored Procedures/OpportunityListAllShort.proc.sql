@@ -13,6 +13,7 @@ BEGIN
 		   o.OpportunityId,
 		   o.Name,
 		   o.Priority,
+		   op.sortOrder PrioritySortOrder,
 		   o.ClientId,
 		   o.ClientName,
 		   o.OpportunityIndex,
