@@ -31,6 +31,7 @@ namespace PraticeManagement.Config
 
         protected void ibtnInsertTimeType_Click(object sender, EventArgs e)
         {
+            rbIsDefault.Checked = false;
             showPlusIcon(false);
         }
 
@@ -131,7 +132,7 @@ namespace PraticeManagement.Config
 
                 foreach (TimeTypeRecord timeType in timeTypesArray)
                 {
-                    if (timeType.Name == newTimeType)
+                    if (timeType.Name.ToLower() == newTimeType.ToLower())
                     {
                         return true;
                     }
