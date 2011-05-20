@@ -198,7 +198,7 @@
                         </td>
                         <td align="center">
                             <div class="cell-pad">
-                                <asp:Label ID="lblPriority" runat="server" Text='<%# Eval("Priority") %>' /></div>
+                                <asp:Label ID="lblPriority" runat="server" Text='<%# ((Opportunity) Container.DataItem).Priority.Priority %>' /></div>
                         </td>
                         <td align="left">
                             <div class="cell-pad">
@@ -242,7 +242,7 @@
                                             <div style="white-space: normal;">
                                                 <asp:Literal ID="ltrlOutSideResources" runat="server"></asp:Literal>
                                             </div>
-                                            <asp:Label ID="lblRefreshMessage" runat="server" Text="Please refresh to see new changes."
+                                            <asp:Label ID="lblRefreshMessage" runat="server" Text="Please &lt;a href='javascript:location.reload(true)'&gt;refresh&lt;/a&gt; to see new changes."
                                                 Style="display: none; font-style: italic;"></asp:Label>
                                         </td>
                                         <td style="width: 4%; white-space: normal;" align="right">
@@ -267,7 +267,7 @@
                         </td>
                         <td align="center">
                             <div class="cell-pad">
-                                <asp:Label ID="lblPriority" runat="server" Text='<%# Eval("Priority") %>' /></div>
+                                <asp:Label ID="lblPriority" runat="server" Text='<%#  ((Opportunity) Container.DataItem).Priority.Priority %>' /></div>
                         </td>
                         <td align="left">
                             <div class="cell-pad">
@@ -311,7 +311,7 @@
                                             <div style="white-space: normal;">
                                                 <asp:Literal ID="ltrlOutSideResources" runat="server"></asp:Literal>
                                             </div>
-                                            <asp:Label ID="lblRefreshMessage" runat="server" Text="Please refresh to see new changes."
+                                            <asp:Label ID="lblRefreshMessage" runat="server" Text="Please &lt;a href='javascript:location.reload(true)'&gt;refresh&lt;/a&gt; to see new changes."
                                                 Style="display: none; font-style: italic;"></asp:Label>
                                         </td>
                                         <td style="width: 4%; white-space: normal;" align="right">
@@ -366,7 +366,7 @@
                     </td>
                     <td align="right">
                         <img id="imgtrash" src="Images/trash-icon-Large.png" onclick="clearOutSideResources();"
-                            style="cursor: pointer;padding-bottom:5px;" />
+                            style="cursor: pointer; padding-bottom: 5px;" />
                     </td>
                 </tr>
             </table>
