@@ -40,6 +40,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="UpdateIsChargableForClient">
+      <soap:operation soapAction="http://www.logic2020.com/IClientService/UpdateIsChargableForClient" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="ClientListAll">
       <soap:operation soapAction="http://www.logic2020.com/IClientService/ClientListAll" style="document" />
       <wsdl:input>
