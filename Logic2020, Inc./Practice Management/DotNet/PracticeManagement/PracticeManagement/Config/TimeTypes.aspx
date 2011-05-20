@@ -27,10 +27,19 @@
                 Width="550px" BackColor="White" AutoGenerateColumns="False" OnRowDataBound="gvTimeTypes_RowDataBound"
                 CssClass="CompPerfTable" GridLines="None" EnableModelValidation="True" OnRowUpdating="gvTimeTypes_RowUpdating">
                 <Columns>
-                    <asp:CommandField ShowEditButton="True" ButtonType="Image" EditImageUrl="~/Images/icon-edit.png"
-                        UpdateImageUrl="~/Images/icon-check.png" CancelImageUrl="~/Images/no.png">
+                    <asp:TemplateField>
                         <ItemStyle HorizontalAlign="Center" Width="10%" />
-                    </asp:CommandField>
+                        <ItemTemplate>
+                            <asp:ImageButton ID="imgEdit" runat="server" CommandName="edit" ImageUrl="~/Images/icon-edit.png"
+                                ToolTip="Edit Time Type" />
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <asp:ImageButton ID="imgUpdate" runat="server" CommandName="update" ImageUrl="~/Images/icon-check.png"
+                                ToolTip="Confirm" />
+                            <asp:ImageButton ID="imgCancel" runat="server" CommandName="cancel" ImageUrl="~/Images/no.png"
+                                ToolTip="Cancel" />
+                        </EditItemTemplate>
+                    </asp:TemplateField>
                     <asp:TemplateField>
                         <ItemStyle HorizontalAlign="Left" Width="65%" Height="25px" />
                         <HeaderTemplate>
@@ -40,7 +49,7 @@
                             <asp:Label ID="lblName" runat="server" Text='<%# Eval("Name") %>' />
                         </ItemTemplate>
                         <EditItemTemplate>
-                            <asp:TextBox ID="tbName" runat="server" Text='<%# Bind("Name") %>' Width="345px" />
+                            <asp:TextBox ID="tbName" runat="server" Text='<%# Bind("Name") %>' Width="96%" />
                             <asp:RequiredFieldValidator ID="rvUpdatedTimeType" runat="server" ControlToValidate="tbName"
                                 Display="Dynamic" ErrorMessage="Time Type Name is required" ToolTip="Time Type Name is required"
                                 ValidationGroup="UpdateTimeType">*</asp:RequiredFieldValidator>
@@ -67,15 +76,20 @@
                             <%--<asp:CheckBox ID="chbIsDefault" runat="server" Checked='<%# Bind("IsDefault") %>' />--%>
                         </EditItemTemplate>
                     </asp:TemplateField>
-                    <asp:CommandField ShowDeleteButton="True" ButtonType="Image" DeleteText="Delete" DeleteImageUrl="~/Images/icon-delete.png">
+                    <asp:TemplateField>
                         <ItemStyle HorizontalAlign="Center" Width="5%" />
-                    </asp:CommandField>
+                        <ItemTemplate>
+                            <asp:ImageButton ID="imgDelete" runat="server" CommandName="delete" ImageUrl="~/Images/icon-delete.png"
+                                ToolTip="Delete Time Type" />
+                        </ItemTemplate>
+                        <EditItemTemplate></EditItemTemplate>
+                    </asp:TemplateField>
                 </Columns>
                 <AlternatingRowStyle BackColor="#F9FAFF" />
             </asp:GridView>
             <p>
-                <table width="550px" style="background-color: White; padding-top:6px;">
-                    <tr style="background-color: #F9FAFF;  height: 30px;">
+                <table width="550px" style="background-color: White; padding-top: 6px;">
+                    <tr style="background-color: #F9FAFF; height: 30px;">
                         <td align="center" valign="middle" style="width: 10%">
                             <asp:ImageButton ID="ibtnInsertTimeType" runat="server" OnClick="ibtnInsertTimeType_Click"
                                 ImageUrl="~/Images/add_16.png" OnClientClick="hideSuccessMessage();" ToolTip="Add Time Type" />
@@ -86,7 +100,7 @@
                                 ToolTip="Cancel" Visible="false" />
                         </td>
                         <td align="left" valign="middle" style="width: 65%">
-                            <asp:TextBox ID="tbNewTimeType" Style="width: 345px" Text="New time type" runat="server"
+                            <asp:TextBox ID="tbNewTimeType" Style="width: 96%" Text="New time type" runat="server"
                                 Visible="false" />
                             <AjaxControlToolkit:TextBoxWatermarkExtender ID="watermarker" runat="server" TargetControlID="tbNewTimeType"
                                 WatermarkText="New time type" EnableViewState="false" WatermarkCssClass="watermarked" />
