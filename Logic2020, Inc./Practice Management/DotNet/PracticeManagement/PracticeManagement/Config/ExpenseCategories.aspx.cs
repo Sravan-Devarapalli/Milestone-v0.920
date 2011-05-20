@@ -55,7 +55,40 @@ namespace PraticeManagement.Config
         {
             Page.Validate(this.vsumUpdate.ValidationGroup);
             if (!Page.IsValid)
+            {
                 e.Cancel = true;
+            }
+            else
+            {
+                string newExpenseCategory = e.NewValues["Name"].ToString().Trim();
+                string oldExpenseCategory = e.OldValues["Name"].ToString().Trim();
+
+                if (newExpenseCategory != oldExpenseCategory)
+                {
+                    if (IsExpenseCategoryAlreadyExisting(newExpenseCategory))
+                    {
+                        CustomValidator cvCategoryExists = gvCategories.Rows[e.RowIndex].FindControl("cvCategoryExists") as CustomValidator;
+                        cvCategoryExists.IsValid = false;
+                        e.Cancel = true;
+                    }
+                }
+            }
+        }
+
+        private bool IsExpenseCategoryAlreadyExisting(string newExpenseCategory)
+        {
+            using (var serviceClient = new ExpenseCategoryServiceClient())
+            {
+                ExpenseCategory[] categoryList = serviceClient.GetCategoryList();
+                foreach (ExpenseCategory item in categoryList)
+                {
+                    if (item.Name.ToLower() == newExpenseCategory.ToLower())
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
         
         protected void ibtnInsertCategory_Click(object sender, EventArgs e)
