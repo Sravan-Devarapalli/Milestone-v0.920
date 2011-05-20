@@ -78,6 +78,11 @@ namespace PracticeManagementService
             ClientDAL.ClientReactivate(client);
         }
 
+        public void UpdateIsChargableForClient(int? clientId, bool isChargable)
+        {
+            ClientDAL.UpdateIsChargableForClient(clientId, isChargable);
+        }
+
         /// <summary>
         /// List all active clients in the system
         /// </summary>
