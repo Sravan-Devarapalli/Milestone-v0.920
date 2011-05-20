@@ -48,6 +48,9 @@ namespace PracticeManagementService
         [OperationContract]
         void ClientReactivate(Client client);
 
+        [OperationContract]
+        void UpdateIsChargableForClient(int? clientId, bool isChargable);
+
         /// <summary>
         /// List all active clients in the system
         /// </summary>
