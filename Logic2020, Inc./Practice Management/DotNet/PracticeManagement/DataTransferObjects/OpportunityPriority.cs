@@ -30,6 +30,13 @@ namespace DataTransferObjects
             get;
             set;
         }
+
+        [DataMember]
+        public int SortOrder
+        {
+            get;
+            set;
+        }
     }
 }
 
