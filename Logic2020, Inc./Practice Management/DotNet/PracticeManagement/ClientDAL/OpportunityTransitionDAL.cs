@@ -177,7 +177,7 @@ namespace DataAccess
                                              Opportunity = new Opportunity
                                                                {
                                                                    Id = reader.GetInt32(opportunityIdIndex),
-                                                                   Priority = reader.GetString(opportunityPriorityIndex),
+                                                                   Priority = new OpportunityPriority{ Priority = reader.GetString(opportunityPriorityIndex)},
                                                                    Client = new Client { Name = reader.GetString(clientNameIndex) },
                                                                    OpportunityNumber = reader.GetString(opportunityNumberIndex),
                                                                    LastUpdate = reader.GetDateTime(opportunityLastUpdatedIndex),
