@@ -600,7 +600,7 @@ namespace PraticeManagement
 
             ddlPriority.SelectedIndex =
                 ddlPriority.Items.IndexOf(
-                    ddlPriority.Items.FindByValue(opportunity.PriorityId.ToString()));
+                ddlPriority.Items.FindByValue(opportunity.Priority == null ? "0" : opportunity.Priority.Id.ToString()));
 
             PopulateSalesPersonDropDown();
 
@@ -707,7 +707,7 @@ namespace PraticeManagement
             int priorityId;
             if (int.TryParse(ddlPriority.SelectedValue, out priorityId))
             {
-                opportunity.PriorityId = priorityId;
+                opportunity.Priority = new OpportunityPriority { Id = priorityId };
             }
 
             opportunity.Description = txtDescription.Text;
