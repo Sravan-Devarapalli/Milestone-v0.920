@@ -54,6 +54,19 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="UpdateIsChargableForClient">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="clientId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="isChargable" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateIsChargableForClientResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="ClientListAll">
     <xs:complexType>
       <xs:sequence />
