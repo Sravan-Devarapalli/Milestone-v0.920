@@ -4,75 +4,85 @@
 <%@ Import Namespace="System.Data" %>
 <%@ Register Src="~/Controls/ProjectNameCellRounded.ascx" TagName="ProjectNameCellRounded"
     TagPrefix="uc" %>
-
 <div id="opportunity-list">
-    <asp:ListView ID="lvOpportunities" runat="server" DataKeyNames="Id" onsorting="lvOpportunities_Sorting">
-        <layouttemplate>
-            <table id="lvProjects_table" runat="server" class="CompPerfTable WholeWidth">            
+    <asp:ListView ID="lvOpportunities" runat="server" DataKeyNames="Id" OnSorting="lvOpportunities_Sorting">
+        <LayoutTemplate>
+            <table id="lvProjects_table" runat="server" class="CompPerfTable WholeWidth">
                 <tr runat="server" id="lvHeader" class="CompPerfHeader">
                     <td width="1%">
-                        <div class="ie-bg no-wrap">                        
+                        <div class="ie-bg no-wrap">
                         </div>
                     </td>
                     <td width="4%">
                         <div class="ie-bg no-wrap">
-                            <asp:LinkButton ID="btnNumberSort" runat="server" Text="Opp. #" CommandName="Sort" CssClass="arrow" CommandArgument="Number"/>
+                            <asp:LinkButton ID="btnNumberSort" runat="server" Text="Opp. #" CommandName="Sort"
+                                CssClass="arrow" CommandArgument="Number" />
                         </div>
                     </td>
                     <td width="4%">
                         <div class="ie-bg no-wrap">
-                            <asp:LinkButton ID="btnPrioritySort" runat="server" Text="Priority" CommandName="Sort" CssClass="arrow" CommandArgument="Priority" />
+                            <asp:LinkButton ID="btnPrioritySort" runat="server" Text="Priority" CommandName="Sort"
+                                CssClass="arrow" CommandArgument="Priority" />
                         </div>
-                    </td> 
+                    </td>
                     <td width="15%">
                         <div class="ie-bg no-wrap">
-                            <asp:LinkButton ID="btnClientNameSort" runat="server" Text="Client - Group" CommandName="Sort" CssClass="arrow" CommandArgument="ClientName" />
+                            <asp:LinkButton ID="btnClientNameSort" runat="server" Text="Client - Group" CommandName="Sort"
+                                CssClass="arrow" CommandArgument="ClientName" />
                         </div>
                     </td>
-                    <td width="11%" >
+                    <td width="11%">
                         <div class="ie-bg no-wrap">
-                            <asp:LinkButton ID="btnBuyerNameSort" runat="server" Text="Buyer Name" CommandName="Sort" CssClass="arrow" CommandArgument="BuyerName"/>
+                            <asp:LinkButton ID="btnBuyerNameSort" runat="server" Text="Buyer Name" CommandName="Sort"
+                                CssClass="arrow" CommandArgument="BuyerName" />
                         </div>
                     </td>
                     <td width="25%">
-                        <div class="ie-bg no-wrap" style="white-space:nowrap">
-                            <asp:LinkButton ID="btnOpportunityNameSort" runat="server" Text="Opportunity Name" CommandName="Sort" CssClass="arrow" CommandArgument="OpportunityName"/>
+                        <div class="ie-bg no-wrap" style="white-space: nowrap">
+                            <asp:LinkButton ID="btnOpportunityNameSort" runat="server" Text="Opportunity Name"
+                                CommandName="Sort" CssClass="arrow" CommandArgument="OpportunityName" />
                         </div>
                     </td>
                     <td width="7%">
                         <div class="ie-bg no-wrap">
-                            <asp:LinkButton ID="btnSalespersonSort" runat="server" Text="Salesperson" CommandName="Sort" CssClass="arrow" CommandArgument="Salesperson"/>
+                            <asp:LinkButton ID="btnSalespersonSort" runat="server" Text="Salesperson" CommandName="Sort"
+                                CssClass="arrow" CommandArgument="Salesperson" />
                         </div>
                     </td>
-                     <td width="5%">
+                    <td width="5%">
                         <div class="ie-bg no-wrap">
-                            <asp:LinkButton ID="btnOwnerSort" runat="server" Text="Owner" CommandName="Sort" CssClass="arrow" CommandArgument="Owner"/>
+                            <asp:LinkButton ID="btnOwnerSort" runat="server" Text="Owner" CommandName="Sort"
+                                CssClass="arrow" CommandArgument="Owner" />
                         </div>
                     </td>
-                    <td align="center"  width="4%">
+                    <td align="center" width="4%">
                         <div class="ie-bg no-wrap">
-                            <asp:LinkButton ID="btnEstimatedRevenue" runat="server" Text="Est. Revenue" CommandName="Sort" CssClass="arrow" CommandArgument="EstimatedRevenue"/>
+                            <asp:LinkButton ID="btnEstimatedRevenue" runat="server" Text="Est. Revenue" CommandName="Sort"
+                                CssClass="arrow" CommandArgument="EstimatedRevenue" />
                         </div>
                     </td>
-                    <td width="4%" style="text-align:center;">
-                        <div class="ie-bg no-wrap" >
-                            <asp:LinkButton ID="btnCreateDateSort" runat="server" Text="Days Old" CommandName="Sort" CssClass="arrow" CommandArgument="CreateDate"/>
+                    <td width="4%" style="text-align: center;">
+                        <div class="ie-bg no-wrap">
+                            <asp:LinkButton ID="btnCreateDateSort" runat="server" Text="Days Old" CommandName="Sort"
+                                CssClass="arrow" CommandArgument="CreateDate" />
                         </div>
                     </td>
-                    <td width="4%" >
-                        <div class="ie-bg no-wrap" >
-                            <asp:LinkButton ID="btnLastUpdate" runat="server" Text="Last Change" CommandName="Sort" CssClass="arrow" CommandArgument="Updated"/>
+                    <td width="4%">
+                        <div class="ie-bg no-wrap">
+                            <asp:LinkButton ID="btnLastUpdate" runat="server" Text="Last Change" CommandName="Sort"
+                                CssClass="arrow" CommandArgument="Updated" />
                         </div>
                     </td>
                 </tr>
                 <tr runat="server" id="itemPlaceholder" />
             </table>
-        </layouttemplate>
-        <itemtemplate>
+        </LayoutTemplate>
+        <ItemTemplate>
             <tr>
                 <td>
                     <div class="cell-pad">
-                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25" ButtonProjectNameToolTip='<%# Eval("Status.Name") %>' ButtonCssClass='<%#PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClassByStatus((string)Eval("Status.Name"))%>'/>
+                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
+                            ButtonProjectNameToolTip='<%# Eval("Status.Name") %>' ButtonCssClass='<%#PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClassByStatus((string)Eval("Status.Name"))%>' />
                     </div>
                 </td>
                 <td>
@@ -81,8 +91,8 @@
                 </td>
                 <td align="center">
                     <div class="cell-pad">
-                        <asp:Label ID="lblPriority" runat="server" Text='<%# Eval("Priority") %>' /></div>
-                </td>            
+                        <asp:Label ID="lblPriority" runat="server" Text='<%# ((Opportunity) Container.DataItem).Priority.Priority %>' /></div>
+                </td>
                 <td>
                     <div class="cell-pad">
                         <asp:Label ID="lblClientName" runat="server" Text='<%# ((Opportunity) Container.DataItem).ClientAndGroup %>' /></div>
@@ -109,25 +119,26 @@
                         </asp:HyperLink>
                     </div>
                 </td>
-                <td align="right" style="padding-right:10px;">
+                <td align="right" style="padding-right: 10px;">
                     <div class="cell-pad">
                         <asp:Label ID="lblEstimatedRevenue" runat="server" Text='<%# GetFormattedEstimatedRevenue((Decimal?)Eval("EstimatedRevenue")) %>' /></div>
                 </td>
-                <td style="text-align:center;">
+                <td style="text-align: center;">
                     <div class="cell-pad">
                         <asp:Label ID="lblCreateDate" runat="server" Text='<%# GetDaysOld((DateTime)Eval("CreateDate"), true) %>' /></div>
                 </td>
-                <td style="text-align:right;">
-                    <div class="cell-pad" >
+                <td style="text-align: right;">
+                    <div class="cell-pad">
                         <asp:Label ID="lblLastUpdate" runat="server" Text='<%# GetDaysOld((DateTime)Eval("LastUpdate"), false) %>' /></div>
                 </td>
             </tr>
-        </itemtemplate>
-        <alternatingitemtemplate>
+        </ItemTemplate>
+        <AlternatingItemTemplate>
             <tr style="background: #F9FAFF;">
                 <td>
                     <div class="cell-pad">
-                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25" ButtonProjectNameToolTip='<%# Eval("Status.Name") %>' ButtonCssClass='<%#PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClassByStatus((string)Eval("Status.Name"))%>'/>
+                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
+                            ButtonProjectNameToolTip='<%# Eval("Status.Name") %>' ButtonCssClass='<%#PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClassByStatus((string)Eval("Status.Name"))%>' />
                     </div>
                 </td>
                 <td>
@@ -136,8 +147,8 @@
                 </td>
                 <td align="center">
                     <div class="cell-pad">
-                        <asp:Label ID="lblPriority" runat="server" Text='<%# Eval("Priority") %>' /></div>
-                </td>            
+                        <asp:Label ID="lblPriority" runat="server" Text='<%# ((Opportunity) Container.DataItem).Priority.Priority %>' /></div>
+                </td>
                 <td>
                     <div class="cell-pad">
                         <asp:Label ID="lblClientName" runat="server" Text='<%# ((Opportunity) Container.DataItem).ClientAndGroup %>' /></div>
@@ -164,27 +175,29 @@
                         </asp:HyperLink>
                     </div>
                 </td>
-                <td align="right" style="padding-right:10px;">
-                    <div class="cell-pad" >
+                <td align="right" style="padding-right: 10px;">
+                    <div class="cell-pad">
                         <asp:Label ID="lblEstimatedRevenue" runat="server" Text='<%# GetFormattedEstimatedRevenue((Decimal?)Eval("EstimatedRevenue")) %>' /></div>
                 </td>
-                <td style="text-align:center;">
+                <td style="text-align: center;">
                     <div class="cell-pad">
-                        <asp:Label ID="lblCreateDate" runat="server" Text='<%# GetDaysOld((DateTime)Eval("CreateDate"),true) %>' IsCreateDate="true" /></div>
+                        <asp:Label ID="lblCreateDate" runat="server" Text='<%# GetDaysOld((DateTime)Eval("CreateDate"),true) %>'
+                            IsCreateDate="true" /></div>
                 </td>
-                 <td style="text-align:right;">
+                <td style="text-align: right;">
                     <div class="cell-pad">
-                        <asp:Label ID="lblLastUpdate" runat="server" Text='<%# GetDaysOld((DateTime)Eval("LastUpdate"),false) %>' IsCreateDate="false" /></div>
+                        <asp:Label ID="lblLastUpdate" runat="server" Text='<%# GetDaysOld((DateTime)Eval("LastUpdate"),false) %>'
+                            IsCreateDate="false" /></div>
                 </td>
-           </tr>
-        </alternatingitemtemplate>
-        <emptydatatemplate> 
+            </tr>
+        </AlternatingItemTemplate>
+        <EmptyDataTemplate>
             <tr runat="server" id="EmptyDataRow">
                 <td>
                     No opportunities found.
                 </td>
             </tr>
-        </emptydatatemplate>
+        </EmptyDataTemplate>
     </asp:ListView>
     <%-- <asp:ObjectDataSource ID="odsOpportunities" runat="server" 
                 SelectMethod="GetOpportunities" EnableCaching="false" 
