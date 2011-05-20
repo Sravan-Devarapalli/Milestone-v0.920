@@ -32,6 +32,12 @@
   <wsdl:message name="IClientService_ClientReactivate_OutputMessage">
     <wsdl:part name="parameters" element="tns:ClientReactivateResponse" />
   </wsdl:message>
+  <wsdl:message name="IClientService_UpdateIsChargableForClient_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateIsChargableForClient" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_UpdateIsChargableForClient_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateIsChargableForClientResponse" />
+  </wsdl:message>
   <wsdl:message name="IClientService_ClientListAll_InputMessage">
     <wsdl:part name="parameters" element="tns:ClientListAll" />
   </wsdl:message>
@@ -72,6 +78,10 @@
     <wsdl:operation name="ClientReactivate">
       <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/ClientReactivate" message="tns:IClientService_ClientReactivate_InputMessage" />
       <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/ClientReactivateResponse" message="tns:IClientService_ClientReactivate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateIsChargableForClient">
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/UpdateIsChargableForClient" message="tns:IClientService_UpdateIsChargableForClient_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/UpdateIsChargableForClientResponse" message="tns:IClientService_UpdateIsChargableForClient_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ClientListAll">
       <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/ClientListAll" message="tns:IClientService_ClientListAll_InputMessage" />
