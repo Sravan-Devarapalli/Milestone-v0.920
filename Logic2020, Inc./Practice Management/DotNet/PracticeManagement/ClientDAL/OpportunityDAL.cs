@@ -116,7 +116,7 @@ namespace DataAccess
                     var opportunityPriority =
                         new OpportunityPriority
                         {
-                            Id=reader.GetInt32(priorityIdIndex),
+                            Id = reader.GetInt32(priorityIdIndex),
                             Priority = reader.GetString(priorityIndex),
                             Description = reader.GetString(descriptionIdIndex)
                         };
@@ -147,6 +147,7 @@ namespace DataAccess
                 var ownerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.OwnerLastNameColumn);
                 var EstimatedRevenueiIndex = reader.GetOrdinal(Constants.ColumnNames.EstimatedRevenueColumn);
                 var buyerNameIndex = reader.GetOrdinal(Constants.ColumnNames.BuyerNameColumn);
+                var prioritySortOrderIndex = reader.GetOrdinal(Constants.ColumnNames.PrioritySortOrderColumn);
 
                 while (reader.Read())
                 {
@@ -157,7 +158,11 @@ namespace DataAccess
                             Id = reader.GetInt32(opportunityIdIndex),
                             Name = reader.GetString(nameIndex),
                             BuyerName = !reader.IsDBNull(buyerNameIndex) ? reader.GetString(buyerNameIndex) : string.Empty,
-                            Priority = reader.GetString(priorityIndex),
+                            Priority = new OpportunityPriority
+                            {
+                                Priority = reader.GetString(priorityIndex),
+                                SortOrder = reader.GetInt32(prioritySortOrderIndex)
+                            },
                             Client = new Client
                             {
                                 Id = reader.GetInt32(clientIdIndex),
@@ -279,7 +284,9 @@ namespace DataAccess
                                                 opportunity.Status != null
                                                     ? (object)opportunity.Status.Id
                                                     : DBNull.Value);
-                command.Parameters.AddWithValue(Constants.ParameterNames.PriorityIdParam, opportunity.PriorityId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PriorityIdParam,
+                                                opportunity.Priority != null ? (object)opportunity.Priority.Id
+                                                : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectedStartDateParam,
                                                 opportunity.ProjectedStartDate.HasValue
                                                     ? (object)opportunity.ProjectedStartDate
@@ -389,7 +396,9 @@ namespace DataAccess
                                                 opportunity.Status != null
                                                     ? (object)opportunity.Status.Id
                                                     : DBNull.Value);
-                command.Parameters.AddWithValue(Constants.ParameterNames.PriorityIdParam, opportunity.PriorityId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PriorityIdParam,
+                                                opportunity.Priority != null ? (object)opportunity.Priority.Id
+                                                : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectedStartDateParam,
                                                 opportunity.ProjectedStartDate.HasValue
                                                     ? (object)opportunity.ProjectedStartDate
@@ -553,6 +562,7 @@ namespace DataAccess
                 var groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
                 var practManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeManagerIdColumn);
                 int priorityIdIndex = -1;
+                var prioritySortOrderIndex = -1;
                 int EstimatedRevenueiIndex = -1;
                 int OutSideResourcesIndex = -1;
                 try
@@ -575,11 +585,19 @@ namespace DataAccess
 
                 try
                 {
-                   priorityIdIndex = reader.GetOrdinal(Constants.ColumnNames.PriorityIdColumn); 
+                    priorityIdIndex = reader.GetOrdinal(Constants.ColumnNames.PriorityIdColumn);
                 }
                 catch
                 {
                     priorityIdIndex = -1;
+                }
+                try
+                {
+                    prioritySortOrderIndex = reader.GetOrdinal(Constants.ColumnNames.PrioritySortOrderColumn);
+                }
+                catch
+                {
+                    prioritySortOrderIndex = -1;
                 }
 
                 while (reader.Read())
@@ -604,7 +622,7 @@ namespace DataAccess
                             BuyerName =
                                 !reader.IsDBNull(buyerNameIndex) ? reader.GetString(buyerNameIndex) : null,
                             CreateDate = reader.GetDateTime(createDateIndex),
-                            Priority = reader.GetString(priorityIndex),
+                            Priority = new OpportunityPriority { Priority = reader.GetString(priorityIndex) },
                             Pipeline =
                                 !reader.IsDBNull(pipelineIndex) ? reader.GetString(pipelineIndex) : null,
                             Proposed =
@@ -678,7 +696,7 @@ namespace DataAccess
                     {
                         if (!reader.IsDBNull(priorityIdIndex))
                         {
-                            opportunity.PriorityId = reader.GetInt32(priorityIdIndex);
+                            opportunity.Priority = new OpportunityPriority { Id = reader.GetInt32(priorityIdIndex) };
                         }
                     }
 
@@ -687,6 +705,13 @@ namespace DataAccess
                         if (!reader.IsDBNull(OutSideResourcesIndex))
                         {
                             opportunity.OutSideResources = reader.GetString(OutSideResourcesIndex);
+                        }
+                    }
+                    if (prioritySortOrderIndex > -1)
+                    {
+                        if (!reader.IsDBNull(prioritySortOrderIndex))
+                        {
+                            opportunity.Priority.SortOrder = reader.GetInt32(prioritySortOrderIndex);
                         }
                     }
 
