@@ -191,6 +191,7 @@
             public const string SalespersonIdColumn = "SalespersonId";
             public const string OpportunityStatusIdColumn = "OpportunityStatusId";
             public const string PriorityColumn = "Priority";
+            public const string PrioritySortOrderColumn = "PrioritySortOrder";
             public const string PriorityIdColumn = "PriorityId";
             public const string ProjectedStartDateColumn = "ProjectedStartDate";
             public const string ProjectedEndDateColumn = "ProjectedEndDate";
