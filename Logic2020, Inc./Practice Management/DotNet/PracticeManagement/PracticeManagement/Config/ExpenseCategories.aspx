@@ -38,11 +38,11 @@
                         <asp:TemplateField>
                             <ItemStyle Width="20%" HorizontalAlign="Center" Height="25px" />
                             <ItemTemplate>
-                                <asp:ImageButton ID="imgbtnEdit" CommandName="edit" runat="server" ToolTip="Edit"
+                                <asp:ImageButton ID="imgbtnEdit" CommandName="edit" runat="server" ToolTip="Edit Expense Category"
                                     ImageUrl="~/Images/icon-edit.png" />
                             </ItemTemplate>
                             <EditItemTemplate>
-                                <asp:ImageButton ID="imgbtnUpdate" CommandName="update" runat="server" ToolTip="Update"
+                                <asp:ImageButton ID="imgbtnUpdate" CommandName="update" runat="server" ToolTip="Confirm"
                                     ImageUrl="~/Images/icon-check.png" />
                                 <asp:ImageButton ID="imgbtnCancel" CommandName="cancel" runat="server" ToolTip="Cancel"
                                     ImageUrl="~/Images/no.png" />
@@ -55,13 +55,24 @@
                             </ItemTemplate>
                             <EditItemTemplate>
                                 <asp:TextBox ID="txtEditCategoryName" runat="Server" Text='<%# Bind("Name") %>' Width="90%"
-                                    MaxLength="25" /><asp:RequiredFieldValidator ID="rfvEditCategoryName" runat="server"
-                                        ErrorMessage="The Name is required." ToolTip="The Name is required." SetFocusOnError="true"
-                                        ControlToValidate="txtEditCategoryName" Display="dynamic" ValidationGroup="UpdateCategory">*</asp:RequiredFieldValidator>
+                                    MaxLength="25" />
+                                <asp:RequiredFieldValidator ID="rfvEditCategoryName" runat="server" ErrorMessage="The Name is required."
+                                    ToolTip="The Name is required." SetFocusOnError="true" ControlToValidate="txtEditCategoryName"
+                                    Display="dynamic" ValidationGroup="UpdateCategory">*</asp:RequiredFieldValidator>
+                                <asp:CustomValidator ID="cvCategoryExists" runat="server" Text="*" ErrorMessage="This Expense Category already exists. Please add a different Expense Category."
+                                    ToolTip="This Expense Category already exists. Please add a different Expense Category."
+                                    Display="Dynamic" ControlToValidate="txtEditCategoryName" ValidationGroup="UpdateCategory"></asp:CustomValidator>
                             </EditItemTemplate>
                         </asp:TemplateField>
-                        <asp:CommandField ButtonType="Image" DeleteImageUrl="~/Images/icon-delete.png" ShowInsertButton="false"
-                            ShowSelectButton="false" CausesValidation="True" ShowDeleteButton="True" ShowEditButton="false" />
+                        <asp:TemplateField>
+                            <ItemTemplate>
+                                <asp:ImageButton ID="imgDelete" runat="server" CommandName="delete" ImageUrl="~/Images/icon-delete.png"
+                                    ToolTip="Delete Expense Category" />
+                            </ItemTemplate>
+                            <EditItemTemplate></EditItemTemplate>
+                        </asp:TemplateField>
+                        <%--<asp:CommandField ButtonType="Image" DeleteImageUrl="~/Images/icon-delete.png" ShowInsertButton="false"
+                            ShowSelectButton="false" CausesValidation="True" ShowDeleteButton="True" ShowEditButton="false" />--%>
                     </Columns>
                 </asp:GridView>
                 <table width="400px">
@@ -70,15 +81,15 @@
                             <asp:ImageButton ID="ibtnInsertCategory" runat="server" Visible="true" ToolTip="Add Expense Category"
                                 ImageUrl="~/Images/add_16.png" OnClick="ibtnInsertCategory_Click" />
                             <asp:ImageButton ID="ibtnInsert" runat="server" Visible="false" OnClick="ibtnInsert_Clicked"
-                                ToolTip="Save" ImageUrl="~/Images/icon-check.png" />
+                                ToolTip="Confirm" ImageUrl="~/Images/icon-check.png" />
                             <asp:ImageButton ID="ibtnCancel" CommandName="cancel" runat="server" Visible="false"
                                 ToolTip="Cancel" ImageUrl="~/Images/no.png" OnClick="ibtnCancel_Clicked" />
                         </td>
                         <td style="width: 80%;">
                             <asp:TextBox ID="txtNewCategoryName" runat="server" Width="90%" Visible="false" ValidationGroup="NewCategory" />
-                            <AjaxControlToolkit:TextBoxWatermarkExtender ID="tbwmextender" runat="server" TargetControlID="txtNewCategoryName"
-                                WatermarkText="Add Expense Category" WatermarkCssClass="watermarkedtext">
-                            </AjaxControlToolkit:TextBoxWatermarkExtender>
+                            <ajaxcontroltoolkit:textboxwatermarkextender id="tbwmextender" runat="server" targetcontrolid="txtNewCategoryName"
+                                watermarktext="Add Expense Category" watermarkcssclass="watermarkedtext">
+                            </ajaxcontroltoolkit:textboxwatermarkextender>
                             <asp:RequiredFieldValidator ID="reqNewCategoryName" runat="server" ControlToValidate="txtNewCategoryName"
                                 ErrorMessage="The Name is required." ToolTip="The Name is required." EnableClientScript="false"
                                 SetFocusOnError="true" Text="*" ValidationGroup="NewCategory"></asp:RequiredFieldValidator>
