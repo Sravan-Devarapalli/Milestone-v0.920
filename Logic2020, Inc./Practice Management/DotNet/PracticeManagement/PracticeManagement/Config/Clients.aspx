@@ -39,43 +39,81 @@
                 </AjaxControlToolkit:TabContainer>
             </asp:Panel>
             <br />
-            <asp:GridView ID="gvClients" runat="server" AutoGenerateColumns="False" EmptyDataText="There is nothind to be displayed here."
-                DataKeyNames="Id" CssClass="CompPerfTable" GridLines="None">
-                <AlternatingRowStyle BackColor="#F9FAFF" />
-                <Columns>
-                    <asp:TemplateField>
-                        <HeaderTemplate>
-                            <div class="ie-bg">
-                                Client Name</div>
-                        </HeaderTemplate>
-                        <ItemTemplate>
-                            <asp:HyperLink ID="btnClientName" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("Name")) %>'
-                                NavigateUrl='<%# GetClientDetailsUrlWithReturn(Eval("Id")) %>' />
-                        </ItemTemplate>
-                    </asp:TemplateField>
-                    <asp:TemplateField>
-                        <ItemStyle HorizontalAlign="Center" Width="50" />
-                        <HeaderTemplate>
-                            <div class="ie-bg">
-                                Active</div>
-                        </HeaderTemplate>
-                        <ItemTemplate>
-                            <asp:CheckBox ID="chbInactive" runat="server" Enabled="false" Checked='<%# !Convert.ToBoolean(Eval("Inactive")) %>' />
-                        </ItemTemplate>
-                    </asp:TemplateField>
-                    <asp:TemplateField>
-                        <ItemStyle HorizontalAlign="Center" Width="120" />
-                        <HeaderTemplate>
-                            <div class="ie-bg">
-                                Billable by default</div>
-                        </HeaderTemplate>
-                        <ItemTemplate>
-                            <asp:CheckBox ID="chbIsChargeable" runat="server" Checked='<%# Convert.ToBoolean(Eval("IsChargeable")) %>'
-                                Enabled="false" />
-                        </ItemTemplate>
-                    </asp:TemplateField>
-                </Columns>
-            </asp:GridView>
+            <table class="WholeWidth">
+                <tr>
+                    <td valign="top" style="width: 45%; padding: 5px;">
+                        <asp:GridView ID="gvClients" runat="server" AutoGenerateColumns="False" EmptyDataText="There is nothind to be displayed here."
+                            DataKeyNames="Id" CssClass="CompPerfTable" GridLines="None">
+                            <AlternatingRowStyle BackColor="#F9FAFF" />
+                            <Columns>
+                                <asp:TemplateField>
+                                 <ItemStyle  Width="250"  />
+                                    <HeaderTemplate>
+                                        <div class="ie-bg">
+                                            Client Name</div>
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <asp:HyperLink ID="btnClientName" style="padding-left:5px;" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("Name")) %>'
+                                            NavigateUrl='<%# GetClientDetailsUrlWithReturn(Eval("Id")) %>' />
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField>
+                                    <ItemStyle HorizontalAlign="Center" Width="50" />
+                                    <HeaderTemplate>
+                                        <div class="ie-bg">
+                                            Active</div>
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <asp:CheckBox ID="chbInactive" AutoPostBack="true" ClientId='<%# Eval("Id") %>' OnCheckedChanged="chbInactive_CheckedChanged"
+                                            runat="server" Checked='<%# !Convert.ToBoolean(Eval("Inactive")) %>' />
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField>
+                                    <ItemStyle HorizontalAlign="Center" Width="120" />
+                                    <HeaderTemplate>
+                                        <div class="ie-bg">
+                                            Billable by default</div>
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <asp:CheckBox ID="chbIsChargeable" ClientId='<%# Eval("Id") %>' AutoPostBack="true"
+                                            runat="server" OnCheckedChanged="chbIsChargeable_CheckedChanged" Checked='<%# Convert.ToBoolean(Eval("IsChargeable")) %>' />
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                            </Columns>
+                        </asp:GridView>
+                    </td>
+                     <td style="width: 9%; padding: 5px;">
+                    </td>
+                    <td valign="top" style="width: 36%; padding-top:50px;;padding-left: 5px;padding-right: 5px;padding-bottom: 25px;">
+                        <div style="border: 1px solid black;background-color: #d4dff8; padding: 5px;">
+                            <span>To add a new Client to Practice Management, click the "Add Client" button and
+                                enter the required data. Upon saving you will be returned to this page.<br />
+                                <br />
+                                To edit the properties of any existing Client, click the client name and make any
+                                necessary changes. Upon saving you will be returned to this page.<br />
+                                <br />
+                                To make a Client Active or Inactive, check or uncheck the box in the "Active" column.
+                                The Change will take effect immediately, but the Client will not be added to or
+                                removed from the default view here until the page is refreshed or revisited.<br />
+                                <br />
+                                To change whether a Client is Billable by default, check or uncheck the box in the
+                                "Billable by default" column. The Change will take effect immediately, but previous/existing
+                                Projects and Milestones linked to this Client will not be altered. </span>
+                        </div>
+                    </td>
+                    <td style="width: 10%; padding: 5px;">
+                    </td>
+                </tr>
+            </table>
+            <table class="WholeWidth" style="background-color: #d4dff8;">
+                <tr>
+                    <td id="tdAlphabeticalPaging" runat="server" style="padding: 10px; text-align: center;">
+                        <asp:LinkButton ID="lnkbtnAll" runat="server" Text="All" Font-Underline="false" Font-Bold="true"
+                            OnClick="Alphabet_Clicked"></asp:LinkButton>
+                    </td>
+                </tr>
+            </table>
+            <asp:HiddenField ID="hdnAlphabet" runat="server" />
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>
