@@ -132,7 +132,7 @@
                             </ItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField HeaderText="Practice Area" SortExpression="PracticeName">
-                            <ItemStyle Wrap="true" Width="10%" />
+                            <ItemStyle Wrap="true" Width="13%" />
                             <ItemTemplate>
                                 <asp:Label ID="lblPracticeName" runat="server" Text='<%# Eval("DefaultPractice") != null ? Eval("DefaultPractice.Name") : string.Empty %>'></asp:Label>
                             </ItemTemplate>
@@ -144,7 +144,7 @@
                             </ItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField HeaderText="Status" SortExpression="PersonStatusName">
-                            <ItemStyle Width="45px" HorizontalAlign="Center" />
+                            <ItemStyle Width="72px" HorizontalAlign="Center" />
                             <ItemTemplate>
                                 <asp:Label ID="lblStatus" runat="server" Text='<%# Eval("Status") != null ? Eval("Status.Name") : string.Empty %>'></asp:Label>
                             </ItemTemplate>
@@ -163,7 +163,7 @@
                             </ItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField HeaderText="Line Manager" SortExpression="ManagerLastName" HeaderStyle-CssClass="ie-bg">
-                            <ItemStyle Width="170px" />
+                            <ItemStyle Width="130px" />
                             <ItemTemplate>
                                 <asp:HyperLink ID="btnManagerName" runat="server" Text='<%# Eval("Manager.PersonLastFirstName") %>'
                                     NavigateUrl='<%# GetPersonDetailsUrlWithReturn(Eval("Manager.Id")) %>' />
