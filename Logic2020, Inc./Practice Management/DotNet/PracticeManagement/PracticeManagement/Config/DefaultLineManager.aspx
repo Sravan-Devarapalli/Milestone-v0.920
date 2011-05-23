@@ -14,10 +14,11 @@
             <td style="width: 50%">
                 <uc:DefaultManager ID="defaultManager" runat="server" AllowChange="true" PersonsRole="Practice Area Manager" />
             </td>
-            <td style="width: 50%; padding-left:40px; vertical-align:top;">
-                <span style="background-color:White">Once selected, the Default Line Manager is the person that all users in PM<br />
+            <td style="width: 50%; padding-left: 40px; vertical-align: top;">
+                <span style="background-color:White; border: 1px solid black; padding: 8px; display:block; width:430px;">Once selected,
+                    the Default Line Manager is the person that all users in PM<br />
                     will default to in the event that they are either not assigned a Line Manager<br />
-                    or if their assigned Line Manager is made Inactive or Terminated.</span>
+                    or if their assigned Line Manager is made Inactive or Terminated. </span>
             </td>
         </tr>
     </table>
