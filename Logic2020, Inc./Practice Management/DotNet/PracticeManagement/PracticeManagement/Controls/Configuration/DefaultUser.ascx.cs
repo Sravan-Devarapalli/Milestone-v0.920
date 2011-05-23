@@ -173,16 +173,23 @@ namespace PraticeManagement.Controls.Configuration
 
         protected void btnSetDefault_Click(object sender, EventArgs e)
         {
+            SavedNewDefaultManager();
+        }
+
+        internal bool SavedNewDefaultManager()
+        {
             try
             {
                 DataHelper.SetNewDefaultManager(SelectedManager);
                 mlMessage.ShowInfoMessage(Messages.ManagerSet);
 
                 HostingPage.ClearDirty();
+                return true;
             }
             catch (Exception exc)
             {
                 mlMessage.ShowErrorMessage(exc.Message);
+                return false;
             }
         }
 
