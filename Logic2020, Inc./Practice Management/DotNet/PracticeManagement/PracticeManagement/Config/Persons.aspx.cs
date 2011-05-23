@@ -276,10 +276,12 @@ namespace PraticeManagement.Config
 
         protected void ResetFilter_Clicked(object sender, EventArgs e)
         {
+            CurrentIndex = 0;
             ResetFilterControlsToDefault();
             SetFilterValues();
             gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
             gvPersons.Sort("LastName", SortDirection.Ascending);
+            gvPersons.PageIndex = 0;
         }
 
         protected void DdlView_SelectedIndexChanged(object sender, EventArgs e)
@@ -705,6 +707,18 @@ namespace PraticeManagement.Config
             projected.Checked = terminated.Checked = inactive.Checked = false;
             ddlRecruiter.SelectedIndex = 0;
             txtSearch.Text = string.Empty;
+            ddlView.SelectedIndex = 0;
+
+            //Reset to All button.
+            if (previousLetter != null)
+            {
+                LinkButton previousLinkButton = (LinkButton)divAlphabeticalPaging.FindControl(previousLetter);
+                previousLinkButton.Font.Bold = false;
+            }
+
+            lnkbtnAll.Font.Bold = true;
+            previousLetter = lnkbtnAll.ID;
+            hdnAlphabet.Value = null;
         }
 
         private int GetPageSize(string view)
