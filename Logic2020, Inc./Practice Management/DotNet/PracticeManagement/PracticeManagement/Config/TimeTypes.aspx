@@ -54,8 +54,9 @@
                                 Display="Dynamic" ErrorMessage="Time Type Name is required" ToolTip="Time Type Name is required"
                                 ValidationGroup="UpdateTimeType">*</asp:RequiredFieldValidator>
                             <asp:RegularExpressionValidator ID="regValUpdatedTimeType" ControlToValidate="tbName"
-                                Display="Dynamic" runat="server" ValidationGroup="UpdateTimeType" ValidationExpression="^[\s\S]{0,50}$"
-                                ErrorMessage="Time Type Name should not be more than 50 characters." ToolTip="Time Type Name should not be more than 50 characters.">*</asp:RegularExpressionValidator>
+                                Display="Dynamic" runat="server" ValidationGroup="UpdateTimeType" ValidationExpression="^[a-zA-Z\s]{0,50}$"
+                                ErrorMessage="Time Type Name should have only alphabets and should not be more than 50 characters."
+                                ToolTip="Time Type Name should have only alphabets and should not be more than 50 characters.">*</asp:RegularExpressionValidator>
                             <asp:CustomValidator ID="cvUpdatedTimeTypeName" runat="server" ControlToValidate="tbName"
                                 Display="Dynamic" ValidationGroup="UpdateTimeType" ErrorMessage="This time type already exists. Please enter a different time type."
                                 ToolTip="This time type already exists. Please enter a different time type.">*</asp:CustomValidator>
