@@ -255,7 +255,7 @@ namespace PraticeManagement.Config
             CurrentIndex = 0;
             if (previousLetter != null)
             {
-                LinkButton previousLinkButton = (LinkButton)divAlphabeticalPaging.FindControl(previousLetter);
+                LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLetter);
                 previousLinkButton.Font.Bold = false;
             }
 
@@ -627,31 +627,29 @@ namespace PraticeManagement.Config
 
         private void AddAlphabetButtons()
         {
-            if (divAlphabeticalPaging.HasControls())
-            {
-                for (int index = 65; index <= 65 + 25; index++)
-                {
-                    char alphabet = Convert.ToChar(index);
-                    string alphabetId = "lnkbtn" + alphabet;
-                    LinkButton Alphabet = (LinkButton)divAlphabeticalPaging.FindControl(alphabetId);
-                    divAlphabeticalPaging.Controls.Remove(Alphabet);
-                }
-            }
-
             for (int index = 65; index <= 65 + 25; index++)
             {
                 char alphabet = Convert.ToChar(index);
+
                 LinkButton Alphabet = new LinkButton();
                 Alphabet.ID = "lnkbtn" + alphabet;
+
+                HtmlTableCell tc = new HtmlTableCell();
+                tc.ID = "td" + alphabet;
+                tc.Style.Add("padding-left", "15px");
+                tc.Style.Add("padding-top", "10px");
+                tc.Style.Add("padding-bottom", "10px");
+                tc.Style.Add("text-align", "center");
+
                 Alphabet.Text = alphabet.ToString();
                 Alphabet.Font.Underline = false;
-                Alphabet.Style.Add("padding-left", "15px");
                 Alphabet.Click += new EventHandler(Alphabet_Clicked);
 
-                divAlphabeticalPaging.Controls.Add(Alphabet);
+                tc.Controls.Add(Alphabet);
+
+                trAlphabeticalPaging.Controls.Add(tc);
             }
         }
-
 
         /// <summary>
         /// Retrives the data and display them in the table.
@@ -712,7 +710,7 @@ namespace PraticeManagement.Config
             //Reset to All button.
             if (previousLetter != null)
             {
-                LinkButton previousLinkButton = (LinkButton)divAlphabeticalPaging.FindControl(previousLetter);
+                LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLetter);
                 previousLinkButton.Font.Bold = false;
             }
 
