@@ -39,7 +39,7 @@
                         <td style="width: 115px;">
                             <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" OnClick="ResetFilter_Clicked" />
                         </td>
-                        <td style="width: 115px; text-align:right">
+                        <td style="width: 115px; text-align: right">
                             <asp:DropDownList ID="ddlView" runat="server" OnSelectedIndexChanged="DdlView_SelectedIndexChanged"
                                 AutoPostBack="true">
                                 <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
@@ -50,7 +50,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="5" align="right" style="padding-top:10px;">
+                        <td colspan="5" align="right" style="padding-top: 10px;">
                             <asp:ShadowedHyperlink runat="server" Text="Add Person" ID="lnkAddPerson" CssClass="add-btn"
                                 NavigateUrl="~/PersonDetail.aspx?returnTo=Config/Persons.aspx" />
                         </td>
@@ -110,59 +110,112 @@
                     GridLines="None" OnSorting="gvPersons_Sorting" OnPreRender="gvPersons_PreRender">
                     <AlternatingRowStyle BackColor="#F9FAFF" />
                     <Columns>
-                        <asp:TemplateField HeaderText="Person Name" SortExpression="LastName" HeaderStyle-CssClass="ie-bg">
+                        <asp:TemplateField>
+                            <HeaderTemplate>
+                                <div class="ie-bg">
+                                    <asp:LinkButton ID="lnkPersonName" CommandName="Sort" CommandArgument="LastName"
+                                        runat="server">Person Name</asp:LinkButton>
+                                </div>
+                            </HeaderTemplate>
                             <ItemStyle Width="20%" />
                             <ItemTemplate>
                                 <asp:HyperLink ID="btnPersonName" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("LastName") + ", " + Eval("FirstName")) %>'
                                     NavigateUrl='<%# GetPersonDetailsUrlWithReturn(Eval("Id")) %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="Start Date" SortExpression="HireDate">
+                        <asp:TemplateField>
+                            <HeaderTemplate>
+                                <div class="ie-bg">
+                                    <asp:LinkButton ID="LinkButton1" CommandName="Sort" CommandArgument="HireDate" runat="server">Start Date</asp:LinkButton>
+                                </div>
+                            </HeaderTemplate>
                             <HeaderStyle HorizontalAlign="Center" Wrap="false" />
                             <ItemStyle Width="70px" HorizontalAlign="Center" />
                             <ItemTemplate>
                                 <asp:Label ID="lblStartDate" runat="server" Text='<%# FormatDate((DateTime?)Eval("HireDate")) %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="End Date" SortExpression="TerminationDate">
+                        <asp:TemplateField>
+                            <HeaderTemplate>
+                                <div class="ie-bg">
+                                    <asp:LinkButton ID="LinkEndDate" CommandName="Sort" CommandArgument="TerminationDate"
+                                        runat="server">End Date</asp:LinkButton>
+                                </div>
+                            </HeaderTemplate>
                             <HeaderStyle HorizontalAlign="Center" Wrap="false" />
                             <ItemStyle Width="70px" HorizontalAlign="Center" />
                             <ItemTemplate>
                                 <asp:Label ID="lblEndDate" runat="server" Text='<%# FormatDate((DateTime?)Eval("TerminationDate")) %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="Practice Area" SortExpression="PracticeName">
+                        <asp:TemplateField>
+                            <HeaderTemplate>
+                                <div class="ie-bg">
+                                    <asp:LinkButton ID="lnkPracticeName" CommandName="Sort" CommandArgument="PracticeName"
+                                        runat="server">Practice Area</asp:LinkButton>
+                                </div>
+                            </HeaderTemplate>
                             <ItemStyle Wrap="true" Width="13%" />
                             <ItemTemplate>
                                 <asp:Label ID="lblPracticeName" runat="server" Text='<%# Eval("DefaultPractice") != null ? Eval("DefaultPractice.Name") : string.Empty %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="Pay Type" SortExpression="TimescaleName" HeaderStyle-Wrap="false">
+                        <asp:TemplateField>
+                            <HeaderTemplate>
+                                <div class="ie-bg">
+                                    <asp:LinkButton ID="LinkButton4" CommandName="Sort" CommandArgument="TimescaleName"
+                                        runat="server">Pay Type</asp:LinkButton>
+                                </div>
+                            </HeaderTemplate>
                             <ItemStyle Width="70px" HorizontalAlign="Center" />
                             <ItemTemplate>
                                 <asp:Label ID="lblTimascaleName" runat="server" Text='<%# Eval("CurrentPay.TimescaleName") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="Status" SortExpression="PersonStatusName">
+                        <asp:TemplateField>
+                            <HeaderTemplate>
+                                <div class="ie-bg">
+                                    <asp:LinkButton ID="lnkStatus" CommandName="Sort" CommandArgument="PersonStatusName"
+                                        runat="server">Status</asp:LinkButton>
+                                </div>
+                            </HeaderTemplate>
                             <ItemStyle Width="72px" HorizontalAlign="Center" />
                             <ItemTemplate>
                                 <asp:Label ID="lblStatus" runat="server" Text='<%# Eval("Status") != null ? Eval("Status.Name") : string.Empty %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="Last Login" SortExpression="LastLoginDate">
+                        <asp:TemplateField>
+                            <HeaderTemplate>
+                                <div class="ie-bg">
+                                    <asp:LinkButton ID="lnkLastLogin" CommandName="Sort" CommandArgument="LastLoginDate"
+                                        runat="server">Last Login</asp:LinkButton>
+                                </div>
+                            </HeaderTemplate>
                             <HeaderStyle HorizontalAlign="Center" Wrap="false" />
                             <ItemStyle Width="80px" HorizontalAlign="Center" />
                             <ItemTemplate>
                                 <asp:Label ID="lblLastLogin" runat="server" Text='<%# FormatDate((DateTime?) Eval("LastLogin")) %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="Seniority" SortExpression="SeniorityName">
+                        <asp:TemplateField>
+                            <HeaderTemplate>
+                                <div class="ie-bg">
+                                    <asp:LinkButton ID="lnkSeniority" CommandName="Sort" CommandArgument="SeniorityName"
+                                        runat="server">Seniority</asp:LinkButton>
+                                </div>
+                            </HeaderTemplate>
                             <ItemStyle Width="130px" />
                             <ItemTemplate>
                                 <asp:Label ID="lblSeniority" runat="server" Text='<%# Eval("Seniority.Name") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="Line Manager" SortExpression="ManagerLastName" HeaderStyle-CssClass="ie-bg">
+                        <asp:TemplateField>
+                            <HeaderTemplate>
+                                <div class="ie-bg">
+                                    <asp:LinkButton ID="LinkButton8" CommandName="Sort" CommandArgument="ManagerLastName"
+                                        runat="server">Line Manager</asp:LinkButton>
+                                </div>
+                            </HeaderTemplate>
                             <ItemStyle Width="130px" />
                             <ItemTemplate>
                                 <asp:HyperLink ID="btnManagerName" runat="server" Text='<%# Eval("Manager.PersonLastFirstName") %>'
@@ -185,7 +238,8 @@
                     <asp:ControlParameter ControlID="gvPersons" Name="pageSize" PropertyName="PageSize"
                         Type="Int32" />
                     <asp:SessionParameter SessionField="CurrentPageIndex" Name="pageNo" Type="Int32" />
-                    <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnLooked" Name="looked" PropertyName="Value" Type="String" />
+                    <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnLooked" Name="looked"
+                        PropertyName="Value" Type="String" />
                     <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnRecruiterId" Name="recruiterId"
                         PropertyName="Value" Type="String" />
                     <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnPayTypeId" Name="payTypeId"
@@ -203,14 +257,18 @@
             <table class="buttons-block WholeWidth" style="background-color: #d4dff8;">
                 <tr style="height: 25px;">
                     <td align="left" style="width: 100px; padding-left: 10px;">
-                        <asp:LinkButton ID="lnkbtnPrevious" runat="server" Text="<- PREVIOUS"
-                            Font-Underline="false" OnClick="Previous_Clicked"></asp:LinkButton>
+                        <asp:LinkButton ID="lnkbtnPrevious" runat="server" Text="<- PREVIOUS" Font-Underline="false"
+                            OnClick="Previous_Clicked"></asp:LinkButton>
                     </td>
                     <td align="center">
-                        <div id="divAlphabeticalPaging" runat="server">
-                            <asp:LinkButton ID="lnkbtnAll" runat="server" Text="All" Font-Underline="false"
-                                Font-Bold="true" OnClick="Alphabet_Clicked"></asp:LinkButton>
-                        </div>
+                        <table>
+                            <tr id="trAlphabeticalPaging" runat="server">
+                                <td style="padding-left: 15px; padding-top: 10px; padding-bottom: 10px; text-align: center;">
+                                    <asp:LinkButton ID="lnkbtnAll" runat="server" Text="All" Font-Underline="false" Font-Bold="true"
+                                        OnClick="Alphabet_Clicked"></asp:LinkButton>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                     <td align="right" style="width: 100px; padding-right: 10px;">
                         <asp:LinkButton ID="lnkbtnNext" runat="server" Text="NEXT ->" Font-Underline="false"
