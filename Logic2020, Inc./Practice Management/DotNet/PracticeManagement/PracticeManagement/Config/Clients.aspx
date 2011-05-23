@@ -15,9 +15,19 @@
         <ContentTemplate>
             <table class="WholeWidth" style="background-color: #d4dff8;">
                 <tr>
-                    <td id="tdAlphabeticalPaging" runat="server" style="padding: 10px; text-align: center;">
-                        <asp:LinkButton ID="lnkbtnAll" runat="server" Text="All" Font-Underline="false" Font-Bold="true"
-                            OnClick="Alphabet_Clicked"></asp:LinkButton>
+                    <td style="width: 15%;">
+                    </td>
+                    <td valign="middle" align="center" style="text-align: center;">
+                        <table>
+                            <tr id="trAlphabeticalPaging" runat="server">
+                                <td style="padding-left: 15px; padding-top: 10px; padding-bottom: 10px; text-align: center;">
+                                    <asp:LinkButton ID="lnkbtnAll" runat="server" Text="All" Font-Underline="false" Font-Bold="true"
+                                        OnClick="Alphabet_Clicked"></asp:LinkButton>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="width: 15%;">
                     </td>
                 </tr>
             </table>
@@ -27,11 +37,11 @@
                         padding-bottom: 5px;">
                         <table class="WholeWidth">
                             <tr>
-                                <td style="width: 75%; padding: 5px;padding-bottom:15px;">
+                                <td style="width: 75%; padding: 5px; padding-bottom: 15px;">
                                     <asp:CheckBox ID="chbShowActive" runat="server" AutoPostBack="true" Text="Show Active Clients Only (default view)"
                                         Checked="True" OnCheckedChanged="chbShowActive_CheckedChanged" />
                                 </td>
-                                <td style="width: 25%; padding: 5px;padding-bottom:15px;">
+                                <td style="width: 25%; padding: 5px; padding-bottom: 15px;">
                                     <asp:ShadowedHyperlink runat="server" Text="Add Client" ID="lnkAddClient" CssClass="add-btn"
                                         NavigateUrl="~/ClientDetails.aspx?returnTo=Config/Clients.aspx" />
                                 </td>
