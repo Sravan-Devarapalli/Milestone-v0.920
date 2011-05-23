@@ -696,7 +696,7 @@ namespace DataAccess
                     {
                         if (!reader.IsDBNull(priorityIdIndex))
                         {
-                            opportunity.Priority = new OpportunityPriority { Id = reader.GetInt32(priorityIdIndex) };
+                            opportunity.Priority.Id = reader.GetInt32(priorityIdIndex);
                         }
                     }
 
