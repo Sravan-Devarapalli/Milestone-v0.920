@@ -265,13 +265,13 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.LinkButton lnkbtnPrevious;
         
         /// <summary>
-        /// divAlphabeticalPaging control.
+        /// trAlphabeticalPaging control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divAlphabeticalPaging;
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trAlphabeticalPaging;
         
         /// <summary>
         /// lnkbtnAll control.
