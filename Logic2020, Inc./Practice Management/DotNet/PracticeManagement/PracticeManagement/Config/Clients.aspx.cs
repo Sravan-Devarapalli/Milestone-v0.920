@@ -5,6 +5,7 @@ using DataTransferObjects;
 using PraticeManagement.ClientService;
 using PraticeManagement.Controls;
 using System.Linq;
+using System.Web.UI.HtmlControls;
 
 namespace PraticeManagement.Config
 {
@@ -90,7 +91,7 @@ namespace PraticeManagement.Config
         {
             Cache.Remove(CLIENTS_LIST_KEY);
 
-            LinkButton previousLinkButton = (LinkButton)tdAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
+            LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
             Client[] FilteredClientList = previousLinkButton != null && previousLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(previousLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
             DataBindClients(FilteredClientList);
         }
@@ -168,28 +169,27 @@ namespace PraticeManagement.Config
 
         private void AddAlphabetButtons()
         {
-            if (tdAlphabeticalPaging.HasControls())
-            {
-                for (int index = 65; index <= 65 + 25; index++)
-                {
-                    char alphabet = Convert.ToChar(index);
-                    string alphabetId = "lnkbtn" + alphabet;
-                    LinkButton Alphabet = (LinkButton)tdAlphabeticalPaging.FindControl(alphabetId);
-                    tdAlphabeticalPaging.Controls.Remove(Alphabet);
-                }
-            }
-
             for (int index = 65; index <= 65 + 25; index++)
             {
                 char alphabet = Convert.ToChar(index);
+
                 LinkButton Alphabet = new LinkButton();
                 Alphabet.ID = "lnkbtn" + alphabet;
+
+                HtmlTableCell tc = new HtmlTableCell();
+                tc.ID = "td" + alphabet;
+                tc.Style.Add("padding-left", "15px");
+                tc.Style.Add("padding-top", "10px");
+                tc.Style.Add("padding-bottom", "10px");
+                tc.Style.Add("text-align", "center");
+
                 Alphabet.Text = alphabet.ToString();
                 Alphabet.Font.Underline = false;
-                Alphabet.Style.Add("padding-left", "15px");
                 Alphabet.Click += new EventHandler(Alphabet_Clicked);
 
-                tdAlphabeticalPaging.Controls.Add(Alphabet);
+                tc.Controls.Add(Alphabet);                
+
+                trAlphabeticalPaging.Controls.Add(tc);
             }
         }
 
@@ -197,7 +197,7 @@ namespace PraticeManagement.Config
         {
             if (previousAlphabetLnkButtonId != null)
             {
-                LinkButton previousLinkButton = (LinkButton)tdAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
+                LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
                 previousLinkButton.Font.Bold = false;
             }
 
@@ -212,3 +212,4 @@ namespace PraticeManagement.Config
         }
     }
 }
+
