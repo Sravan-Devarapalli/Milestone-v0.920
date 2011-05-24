@@ -53,11 +53,11 @@ namespace PraticeManagement
         {
             get
             {
-                if (Cache[OPPORTUNITY_KEY] != null && OpportunityId.HasValue)
+                if (ViewState[OPPORTUNITY_KEY] != null && OpportunityId.HasValue)
                 {
-                    if ((Cache[OPPORTUNITY_KEY] as Opportunity).Id == OpportunityId)
+                    if ((ViewState[OPPORTUNITY_KEY] as Opportunity).Id == OpportunityId)
                     {
-                        return Cache[OPPORTUNITY_KEY] as Opportunity;
+                        return ViewState[OPPORTUNITY_KEY] as Opportunity;
                     }
                 }
 
@@ -68,7 +68,7 @@ namespace PraticeManagement
                         try
                         {
                             var currentOpportunity = serviceClient.GetById(OpportunityId.Value);
-                            Cache[OPPORTUNITY_KEY] = currentOpportunity;
+                            ViewState[OPPORTUNITY_KEY] = currentOpportunity;
                             return currentOpportunity;
                         }
                         catch (CommunicationException)
@@ -86,15 +86,15 @@ namespace PraticeManagement
         {
             get
             {
-                if (Cache[OPPORTUNITIES_LIST_KEY] != null)
+                if (ViewState[OPPORTUNITIES_LIST_KEY] != null)
                 {
-                    return Cache[OPPORTUNITIES_LIST_KEY] as Opportunity[];
+                    return ViewState[OPPORTUNITIES_LIST_KEY] as Opportunity[];
                 }
 
                 else
                 {
                     var result = ServiceCallers.Custom.Opportunity(c => c.OpportunityListAllShort(new OpportunityListContext { ActiveClientsOnly = true }));
-                    Cache[OPPORTUNITIES_LIST_KEY] = result;
+                    ViewState[OPPORTUNITIES_LIST_KEY] = result;
                     return result;
                 }
 
@@ -137,8 +137,8 @@ namespace PraticeManagement
         {
             if (!IsPostBack)
             {
-                Cache.Remove(OPPORTUNITY_KEY);
-                Cache.Remove(OPPORTUNITIES_LIST_KEY);
+                ViewState.Remove(OPPORTUNITY_KEY);
+                ViewState.Remove(OPPORTUNITIES_LIST_KEY);
             }
 
             // Security
@@ -663,9 +663,9 @@ namespace PraticeManagement
                         ClearDirty();
                         lblSaved.Text = "Saved";
 
-                        Cache.Remove(OPPORTUNITY_KEY);
-                        Cache.Remove(PreviousReportContext_Key);
-                        Cache.Remove(DistinctPotentialBoldPersons_Key);
+                        ViewState.Remove(OPPORTUNITY_KEY);
+                        ViewState.Remove(PreviousReportContext_Key);
+                        ViewState.Remove(DistinctPotentialBoldPersons_Key);
                         btnSave.Enabled = false;
                         UpdateOpportunitiesList();
                     }
