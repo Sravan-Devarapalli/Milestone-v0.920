@@ -26,9 +26,9 @@
     <MetadataFile FileName="DataTransferObjects.xsd" MetadataType="Schema" ID="5f686058-b31d-4e9a-8ceb-874395b7d295" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
     <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="7a01c046-a6b4-4e81-96de-99697ea3e220" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
     <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="b7f80b63-041d-4858-83db-42a420520150" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
+    <MetadataFile FileName="System.xsd" MetadataType="Schema" ID="d990e436-bc56-4e0f-9357-42c7336fa441" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
     <MetadataFile FileName="service2.xsd" MetadataType="Schema" ID="ceda29ae-28c0-4a7b-a996-14d9b919a956" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
     <MetadataFile FileName="DataTransferObjects.ContextObjects.xsd" MetadataType="Schema" ID="31116ca5-9425-41d1-9da6-29137eece512" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
-    <MetadataFile FileName="System.xsd" MetadataType="Schema" ID="d990e436-bc56-4e0f-9357-42c7336fa441" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
