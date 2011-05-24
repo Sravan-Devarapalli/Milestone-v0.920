@@ -56,7 +56,7 @@ namespace PraticeManagement.Config
                 {
                     return null;
                 }
-                    
+
             }
         }
 
@@ -112,33 +112,19 @@ namespace PraticeManagement.Config
             }
         }
 
-        private int? PracticeId
+        private string PracticeIdsSelected
         {
             get
             {
-                int result;
-
-                if(int.TryParse(hdnPracticeId.Value, out result))
-                {
-                    return result;
-                }
-                else
-                    return null;
+                return hdnPracticeId.Value;
             }
         }
 
-        private int? PayTypeId
+        private string PayTypeIdsSelected
         {
             get
             {
-                int result;
-
-                if(int.TryParse(hdnPayTypeId.Value, out result))
-                {
-                    return result;
-                }
-                else
-                    return null;
+                return hdnPayTypeId.Value;
             }
         }
 
@@ -169,8 +155,8 @@ namespace PraticeManagement.Config
                 //personsFilter.Projected = personsFilter.Terminated = personsFilter.Inactive = !(userIsAdministrator || userIsHR);
 
                 DataHelper.FillRecruiterList(
-                    ddlRecruiter,
-                    (userIsAdministrator || userIsHR) ? AllRecruiters : Resources.Controls.NotAvailableText,
+                    cblRecruiters,
+                     AllRecruiters,
                     null,
                     null);//#2817: userIsHR is added as per  requirement.
 
@@ -178,23 +164,32 @@ namespace PraticeManagement.Config
                 {
                     Person current = DataHelper.CurrentPerson;
 
-                    ddlRecruiter.SelectedIndex =
-                        ddlRecruiter.Items.IndexOf(
-                            ddlRecruiter.Items.FindByValue(
-                                current != null && current.Id.HasValue ? current.Id.Value.ToString() : string.Empty));
-                    ddlRecruiter.Enabled = false;
+                    var selectedItem = cblRecruiters.Items.FindByValue(current != null && current.Id.HasValue ? current.Id.Value.ToString() : string.Empty);
+                    if (selectedItem != null)
+                    {
+                    }
+
+                    for (int i = cblRecruiters.Items.Count - 1; i >= 1; i--)
+                    {
+                        if (!(cblRecruiters.Items[i].Value == current.Id.Value.ToString()))
+                        {
+                            cblRecruiters.Items.RemoveAt(i);
+                        }
+                    }
 
                     btnExportToExcel.Visible = false;
                 }
 
+                SelectAllItems(this.cblRecruiters);
                 previousLetter = lnkbtnAll.ID;
 
                 gvPersons.Sort("LastName", SortDirection.Ascending);
+                SetFilterValues();
             }
 
             AddAlphabetButtons();
         }
-        
+
         protected void Page_PreRender(object sender, EventArgs e)
         {
         }
@@ -262,7 +257,7 @@ namespace PraticeManagement.Config
             LinkButton alpha = (LinkButton)sender;
             alpha.Font.Bold = true;
             hdnAlphabet.Value = alpha.Text != "All" ? alpha.Text : null;
-            
+
             previousLetter = alpha.ID;
             gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
         }
@@ -276,12 +271,12 @@ namespace PraticeManagement.Config
 
         protected void ResetFilter_Clicked(object sender, EventArgs e)
         {
-            CurrentIndex = 0;
             ResetFilterControlsToDefault();
             SetFilterValues();
             gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
             gvPersons.Sort("LastName", SortDirection.Ascending);
             gvPersons.PageIndex = 0;
+            CurrentIndex = 0;
         }
 
         protected void DdlView_SelectedIndexChanged(object sender, EventArgs e)
@@ -304,7 +299,7 @@ namespace PraticeManagement.Config
                 CurrentIndex = (int)CurrentIndex + 1;
             }
         }
-        
+
         protected void btnExportToExcel_Click(object sender, EventArgs e)
         {
             using (var serviceClient = new PersonServiceClient())
@@ -419,27 +414,36 @@ namespace PraticeManagement.Config
         /// <param name="looked">The text from search text box.</param>
         /// <param name="recruiterId">The recruiter filter.</param>
         /// <returns>The total number of records to be paged.</returns>
-        public static int GetPersonCount(int? practiceId, bool active, int pageSize, int pageNo, string looked,
-                                         string recruiterId, int? payTypeId, bool projected, bool terminated, bool inactive, char? alphabet)
+        public static int GetPersonCount(string practiceIdsSelected, bool active, int pageSize, int pageNo, string looked,
+                                         string recruitersSelected, string payTypeIdsSelected, bool projected, bool terminated, bool inactive, char? alphabet)
         {
-            //if (CurrentIndex != -1 && pageNo == 0)
-            //{
-            //    pageNo = CurrentIndex;
-            //}
+            if (practiceIdsSelected == null)
+            {
+                practiceIdsSelected = string.Empty;
+            }
+
+            if (payTypeIdsSelected == null)
+            {
+                payTypeIdsSelected = string.Empty;
+            }
+
+            if (recruitersSelected == null)
+            {
+                recruitersSelected = string.Empty;
+            }
+
             using (var serviceClient = new PersonServiceClient())
             {
                 try
                 {
-                    int? recruiter =
-                        !string.IsNullOrEmpty(recruiterId) ? (int?)int.Parse(recruiterId) : null;
                     return
-                        serviceClient.GetPersonCount(
-                            practiceId,
+                        serviceClient.GetPersonCountByCommaSeperatedIdsList(
+                            practiceIdsSelected,
                             active,
                             looked,
-                            recruiter,
+                            recruitersSelected,
                             Thread.CurrentPrincipal.Identity.Name,
-                            payTypeId,
+                            payTypeIdsSelected,
                             projected,
                             terminated,
                             inactive,
@@ -467,37 +471,40 @@ namespace PraticeManagement.Config
         /// <param name="sortBy"></param>
         /// <returns>The list of the <see cref="Person"/> object for the specified data page.</returns>
         [DataObjectMethod(DataObjectMethodType.Select)]
-        public static Person[] GetPersons(int? practiceId, bool active, int pageSize, int pageNo, string looked,
-                                          int startRow, int maxRows, string recruiterId, string sortBy, int? payTypeId,
+        public static Person[] GetPersons(string practiceIdsSelected, bool active, int pageSize, int pageNo, string looked,
+                                          int startRow, int maxRows, string recruitersSelected, string sortBy, string payTypeIdsSelected,
                                             bool projected, bool terminated, bool inactive, char? alphabet)
         {
-            //if (CurrentIndex != -1 && pageNo == 0)
-            //{
-            //    pageNo = CurrentIndex;
-            //}
-
-            if (practiceId != null && practiceId == -1)
+            if (practiceIdsSelected == null)
             {
-                practiceId = null;
+                practiceIdsSelected = string.Empty;
+            }
+
+            if (payTypeIdsSelected == null)
+            {
+                payTypeIdsSelected = string.Empty;
+            }
+
+            if (recruitersSelected == null)
+            {
+                recruitersSelected = string.Empty;
             }
 
             using (var serviceClient = new PersonServiceClient())
             {
                 try
                 {
-                    int? recruiter =
-                        !string.IsNullOrEmpty(recruiterId) ? (int?)int.Parse(recruiterId) : null;
                     Person[] result =
-                        serviceClient.GetPersonListWithCurrentPay(
-                            practiceId,
+                        serviceClient.GetPersonListWithCurrentPayByCommaSeparatedIdsList(
+                            practiceIdsSelected,
                             active,
                             pageSize,
                             pageNo,
                             looked,
-                            recruiter,
+                            recruitersSelected,
                             Thread.CurrentPrincipal.Identity.Name,
                             sortBy,
-                            payTypeId,
+                            payTypeIdsSelected,
                             projected,
                             terminated,
                             inactive,
@@ -620,7 +627,7 @@ namespace PraticeManagement.Config
         #endregion
 
         #region Methods
-        
+
         protected override void Display()
         {
         }
@@ -663,7 +670,7 @@ namespace PraticeManagement.Config
         {
             return PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(GetPersonDetailsUrl(id), Request.Url.AbsoluteUri);
         }
-        
+
         private string GetSortDirection()
         {
             switch (GridViewSortDirection)
@@ -677,33 +684,39 @@ namespace PraticeManagement.Config
             }
             return GridViewSortDirection;
         }
-        
+
         private void SetFilterValues()
         {
             hdnActive.Value = personsFilter.Active.ToString();
-            hdnPracticeId.Value = personsFilter.PracticeId.ToString();
-            hdnRecruiterId.Value = ddlRecruiter.SelectedValue;
-            hdnPayTypeId.Value = personsFilter.PayTypeId.ToString();
+            hdnPracticeId.Value = personsFilter.PracticeIds;
+            hdnRecruiterId.Value = cblRecruiters.SelectedItems;
+            hdnPayTypeId.Value = personsFilter.PayTypeIds;
             hdnProjected.Value = personsFilter.Projected.ToString();
             hdnTerminated.Value = personsFilter.Terminated.ToString();
             hdnInactive.Value = personsFilter.Inactive.ToString();
             hdnLooked.Value = txtSearch.Text;
         }
 
+        private void SelectAllItems(ScrollingDropDown ddlpractices)
+        {
+            foreach (ListItem item in ddlpractices.Items)
+            {
+                item.Selected = true;
+            }
+        }
+
         private void ResetFilterControlsToDefault()
         {
             CheckBox activeOnly = (CheckBox)personsFilter.FindControl("chbShowActive");
-            DropDownList ddlFilter = (DropDownList)personsFilter.FindControl("ddlFilter");
-            DropDownList ddlPayType = (DropDownList)personsFilter.FindControl("ddlPayType");
             CheckBox projected = (CheckBox)personsFilter.FindControl("chbProjected");
             CheckBox terminated = (CheckBox)personsFilter.FindControl("chbTerminated");
             CheckBox inactive = (CheckBox)personsFilter.FindControl("chbInactive");
 
-            ddlPayType.SelectedIndex = 0;
-            ddlFilter.SelectedIndex = 0;
+            personsFilter.ResetFilterControlsToDefault();
+            SelectAllItems(this.cblRecruiters);
+
             activeOnly.Checked = true;
             projected.Checked = terminated.Checked = inactive.Checked = false;
-            ddlRecruiter.SelectedIndex = 0;
             txtSearch.Text = string.Empty;
             ddlView.SelectedIndex = 0;
 
@@ -732,13 +745,13 @@ namespace PraticeManagement.Config
 
             if (pageSize == -1)
             {
-                pageSize = GetPersonCount(PracticeId,
+                pageSize = GetPersonCount(PracticeIdsSelected,
                                             Convert.ToBoolean(hdnActive.Value),
                                             0,
                                             1,
                                             hdnLooked.Value,
                                             hdnRecruiterId.Value,
-                                            PayTypeId,
+                                            PayTypeIdsSelected,
                                             Convert.ToBoolean(hdnProjected.Value),
                                             Convert.ToBoolean(hdnTerminated.Value),
                                             Convert.ToBoolean(hdnInactive.Value),
