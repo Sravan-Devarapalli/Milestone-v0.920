@@ -4,6 +4,8 @@
 )
 AS
 	SET NOCOUNT ON
+	DECLARE @MilestoneIdLocal INT
+	SELECT @MilestoneIdLocal = @MilestoneId
 
 	;WITH FinancialsRetro AS 
 	(
@@ -28,7 +30,7 @@ AS
 		   f.PersonId,
 		   f.Discount
 	FROM v_FinancialsRetrospective f
-	WHERE f.MilestoneId = @MilestoneId
+	WHERE f.MilestoneId = @MilestoneIdLocal
 	)
 	SELECT f.ProjectId,
 		   f.PersonId,
@@ -64,6 +66,6 @@ AS
 	  FROM FinancialsRetro AS f
 	  JOIN MilestonePerson MP ON MP.MilestoneId = f.MilestoneId AND MP.PersonId = f.PersonId
 	  JOIN MilestonePersonEntry MPE ON MP.MilestonePersonId = MPE.MilestonePersonId AND f.Date BETWEEN MPE.StartDate AND MPE.EndDate
-	 WHERE f.MilestoneId = @MilestoneId AND f.PersonId IS NOT NULL--AND f.PersonId = @PersonId AND f.EntryStartDate = @EntryStartDate
+	 WHERE f.MilestoneId = @MilestoneIdLocal AND f.PersonId IS NOT NULL--AND f.PersonId = @PersonId AND f.EntryStartDate = @EntryStartDate
 	GROUP BY f.ProjectId, f.PersonId, MPE.StartDate, MPE.EndDate, YEAR(f.Date), MONTH(f.Date)
 
