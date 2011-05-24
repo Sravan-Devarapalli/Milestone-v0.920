@@ -19,7 +19,8 @@
 	@ProjectId             INT,
 	@OwnerId	       INT = NULL,
 	@GroupId	       INT,
-	@EstimatedRevenue  DECIMAL(18,2) 
+	@EstimatedRevenue  DECIMAL(18,2) ,
+	@PersonIdList          NVARCHAR(MAX)
 )
 AS
 BEGIN
@@ -70,5 +71,17 @@ BEGIN
 			@PersonId = @PersonId,
 			@NoteText = @CreatedMessage,
 			@OpportunityTransitionId = NULL
+
+
+IF(@PersonIdList IS NOT NULL)
+BEGIN
+	INSERT INTO OpportunityPersons
+	SELECT @OpportunityId ,P.ResultId
+	FROM [dbo].[ConvertStringListIntoTable] (@PersonIdList) AS p 
+	LEFT JOIN OpportunityPersons op
+	ON p.ResultId = op.PersonId AND op.OpportunityId=@OpportunityId
+	WHERE op.PersonId IS NULL 
+END
 	
 END
+
