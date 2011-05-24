@@ -3214,6 +3214,12 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\dbo.UpdateIsChargableForClient.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\PersonListAllSeniorityFilterWithCurrentPayByCommaSeparatedIdsList.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\PersonGetCountByCommaSeparatedIdsList.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Schema Comparisons\v0.850.dbschema">
