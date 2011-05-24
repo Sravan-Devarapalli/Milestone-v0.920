@@ -12,7 +12,11 @@ CREATE PROCEDURE dbo.FinancialsGetByProject
 AS
 	SET NOCOUNT ON;
 
-	WITH FinancialsRetro AS 
+	DECLARE @ProjectIdLocal	INT
+
+	SELECT @ProjectIdLocal = @ProjectId
+
+	;WITH FinancialsRetro AS 
 	(
 	SELECT f.ProjectId,
 		   f.Date, 
@@ -34,7 +38,7 @@ AS
 		   f.PersonId,
 		   f.Discount
 	FROM v_FinancialsRetrospective f
-	WHERE f.ProjectId = @ProjectId
+	WHERE f.ProjectId = @ProjectIdLocal
 	),
 	
 	ProjectFinancials
@@ -71,7 +75,7 @@ AS
 		   min(f.Discount) as Discount
 	  FROM FinancialsRetro AS f
 	  LEFT JOIN v_ProjectTotalExpenses as pe on f.ProjectId = pe.ProjectId
-	 WHERE f.ProjectId = @ProjectId
+	 WHERE f.ProjectId = @ProjectIdLocal
 	GROUP BY f.ProjectId
 	)
 	SELECT
