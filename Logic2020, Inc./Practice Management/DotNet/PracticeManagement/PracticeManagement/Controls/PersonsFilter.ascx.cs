@@ -78,24 +78,22 @@ namespace PraticeManagement.Controls
         /// <summary>
         /// Gets the name (?) of the selected practice.
         /// </summary>
-        public int? PracticeId
+        public string PracticeIds
         {
             get
             {
-                string stringResult = ddlFilter.SelectedValue;
-                return string.IsNullOrEmpty(stringResult) ? (int?)null : Int32.Parse(stringResult);
+                return this.cblPractices.SelectedItems;
             }
         }
 
         /// <summary>
         /// Gets the name (?) of the selected paytype.
         /// </summary>
-        public int? PayTypeId
+        public string PayTypeIds
         {
             get
             {
-                string stringResult = ddlPayType.SelectedValue;
-                return string.IsNullOrEmpty(stringResult) ? (int?)null : Int32.Parse(stringResult);
+                return this.cblTimeScales.SelectedItems;
             }
         }
 
@@ -123,18 +121,31 @@ namespace PraticeManagement.Controls
 
         protected void Page_Init(object sender, EventArgs e)
         {
-            FillPracticeList();
-            FillPayTypeList();
+            if (!IsPostBack)
+            {
+                FillPracticeList();
+                FillPayTypeList();
+            }
         }
 
         private void FillPracticeList()
         {
-            DataHelper.FillPracticeList(ddlFilter, Resources.Controls.AllPracticesText);
+            DataHelper.FillPracticeList(this.cblPractices, Resources.Controls.AllPracticesText);
+             SelectAllItems(this.cblPractices);
         }
 
         private void FillPayTypeList()
         {
-            DataHelper.FillTimescaleList(ddlPayType, Resources.Controls.AllTypes);
+            DataHelper.FillTimescaleList(this.cblTimeScales, Resources.Controls.AllTypes);
+            SelectAllItems(this.cblTimeScales);
+        }
+
+        private void SelectAllItems(ScrollingDropDown ddlpractices)
+        {
+            foreach (ListItem item in ddlpractices.Items)
+            {
+                item.Selected = true;
+            }
         }
 
         protected void chbShowActive_CheckedChanged(object sender, EventArgs e)
@@ -162,6 +173,12 @@ namespace PraticeManagement.Controls
             {
                 FilterChanged(this, e);
             }
+        }
+
+        public void ResetFilterControlsToDefault()
+        {
+            SelectAllItems(this.cblPractices);
+            SelectAllItems(this.cblTimeScales);
         }
     }
 }
