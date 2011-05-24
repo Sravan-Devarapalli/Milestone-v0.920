@@ -314,8 +314,9 @@ namespace PraticeManagement.Controls.Opportunities
             if (Opportunity != null && Opportunity.Id.HasValue)
             {
                 AddAttributesTocblProposedResources();
-                AddAttributesAndBoldPotentialResourcesPersons();
             }
+
+            AddAttributesAndBoldPotentialResourcesPersons();
         }
 
         public void FillPotentialResources()
@@ -327,11 +328,19 @@ namespace PraticeManagement.Controls.Opportunities
 
         public void FillProposedResources()
         {
-            using (var serviceClient = new OpportunityServiceClient())
+            if (OpportunityId.HasValue)
             {
-                cblProposedResources.DataSource = serviceClient.GetOpportunityPersons(OpportunityId.Value);
-                cblProposedResources.DataBind();
+                using (var serviceClient = new OpportunityServiceClient())
+                {
+                    cblProposedResources.DataSource = serviceClient.GetOpportunityPersons(OpportunityId.Value);
+                    cblProposedResources.DataBind();
+                }
             }
+        }
+
+        public void ResetProposedResources() 
+        {
+            hdnProposedPersonIdsList.Value = "";
         }
     }
 }
