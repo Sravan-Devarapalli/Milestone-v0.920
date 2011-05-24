@@ -34,6 +34,7 @@ namespace DataAccess
         private const string ShowAllParam = "@ShowAll";
         private const string PracticeIdParam = "@PracticeId";
         private const string TimescaleIdParam = "@TimescaleId";
+        private const string TimescaleIdsListParam = "@TimescaleIdsList";
         private const string PageSizeParam = "@PageSize";
         private const string PageNoParam = "@PageNo";
         private const string MilestonePersonIdParam = "@MilestonePersonId";
@@ -53,6 +54,7 @@ namespace DataAccess
         private const string UserLoginParam = "@UserLogin";
         private const string IncludeInactiveParam = "@IncludeInactive";
         private const string RecruiterIdParam = "@RecruiterId";
+        private const string RecruiterIdsListParam = "@RecruiterIdsList";
         private const string MaxSeniorityLevelParam = "@MaxSeniorityLevel";
         private const string MilestoneStartParam = "@mile_start";
         private const string MilestoneEndParam = "@mile_end";
@@ -104,6 +106,7 @@ namespace DataAccess
         private const string PersonOverheadByPersonProcedure = "dbo.PersonOverheadByPerson";
         private const string PersonOverheadByTimescaleProcedure = "dbo.PersonOverheadByTimescale";
         private const string PersonGetCountProcedure = "dbo.PersonGetCount";
+        private const string PersonGetCountByCommaSeparatedIdsListProcedure = "dbo.PersonGetCountByCommaSeparatedIdsList";
         private const string PersonListBenchExpenseProcedure = "dbo.PersonListBenchExpense";
 
         private const string MilestonePersonListOverheadByPersonProcedure =
@@ -141,6 +144,7 @@ namespace DataAccess
         private const string PersonMilestoneWithFinancials = "dbo.PersonMilestoneWithFinancials";
 
         private const string PersonListAllSeniorityFilterWithPayProcedure = "dbo.PersonListAllSeniorityFilterWithCurrentPay";
+        private const string PersonListAllSeniorityFilterWithPayByCommaSeparatedIdsListProcedure = "dbo.PersonListAllSeniorityFilterWithCurrentPayByCommaSeparatedIdsList";
 
         #endregion
 
@@ -369,7 +373,7 @@ namespace DataAccess
         /// Retrives consultans report
         /// </summary>
         /// <returns>An <see cref="Opportunity"/> object if found and null otherwise.</returns>
-        public static List<Quadruple<Person, int[], int,int>> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context)
+        public static List<Quadruple<Person, int[], int, int>> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(ConsultantUtilizationWeeklyProcedure, connection))
@@ -1237,6 +1241,68 @@ namespace DataAccess
                     }
                     command.Parameters.AddWithValue(TimescaleIdParam,
                                                     timeScaleId.HasValue ? (object)timeScaleId.Value : DBNull.Value);
+                    command.Parameters.AddWithValue(ProjectedParam, projected);
+                    command.Parameters.AddWithValue(TerminatedParam, terminated);
+                    command.Parameters.AddWithValue(InactiveParam, inactive);
+                    command.Parameters.AddWithValue(AlphabetParam, alphabet.HasValue ? (object)alphabet.Value : DBNull.Value);
+
+                    connection.Open();
+                    ReadPersonsWithCurrentPay(command, personList);
+                }
+            }
+            return personList;
+        }
+
+        public static List<Person> PersonListFilteredWithCurrentPayByCommaSeparatedIdsList(
+           string practiceIdsSelected,
+           bool showAll,
+           int pageSize,
+           int pageNo,
+           string looked,
+           DateTime startDate,
+           DateTime endDate,
+           string recruiterIdsSelected,
+           int? maxSeniorityLevel,
+           string sortBy,
+           string timeScaleIdsSelected,
+           bool projected,
+           bool terminated,
+           bool inactive,
+           char? alphabet)
+        {
+            var personList = new List<Person>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(PersonListAllSeniorityFilterWithPayByCommaSeparatedIdsListProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(ShowAllParam, showAll);
+                    command.Parameters.AddWithValue(PracticeIdsListParam,
+                                                    practiceIdsSelected);
+                    command.Parameters.AddWithValue(StartDateParam,
+                                                    startDate != DateTime.MinValue ? (object)startDate : DBNull.Value);
+                    command.Parameters.AddWithValue(EndDateParam,
+                                                    endDate != DateTime.MinValue ? (object)endDate : DBNull.Value);
+                    command.Parameters.AddWithValue(PageSizeParam,
+                                                    pageSize > 0 && pageNo >= 0 ? (object)pageSize : DBNull.Value);
+                    command.Parameters.AddWithValue(PageNoParam,
+                                                    pageSize > 0 && pageNo >= 0 ? (object)pageNo : DBNull.Value);
+                    command.Parameters.AddWithValue(LookedParam,
+                                                    !string.IsNullOrEmpty(looked) ? (object)looked : DBNull.Value);
+                    command.Parameters.AddWithValue(RecruiterIdsListParam,
+                                                    recruiterIdsSelected);
+                    command.Parameters.AddWithValue(MaxSeniorityLevelParam,
+                                                    maxSeniorityLevel.HasValue
+                                                        ? (object)maxSeniorityLevel.Value
+                                                        : DBNull.Value);
+                    if (!string.IsNullOrEmpty(sortBy))
+                    {
+                        command.Parameters.AddWithValue(SortByParam, sortBy);
+                    }
+                    command.Parameters.AddWithValue(TimescaleIdsListParam,
+                                                    timeScaleIdsSelected);
                     command.Parameters.AddWithValue(ProjectedParam, projected);
                     command.Parameters.AddWithValue(TerminatedParam, terminated);
                     command.Parameters.AddWithValue(InactiveParam, inactive);
@@ -2628,6 +2694,33 @@ namespace DataAccess
 
             return result;
 
+        }
+
+        public static int PersonGetCount(string practiceIds, bool showAll, string looked, string recruiterIds, string timeScaleIds, bool projected, bool terminated, bool inactive, char? alphabet)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(PersonGetCountByCommaSeparatedIdsListProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(ShowAllParam, showAll);
+
+                command.Parameters.AddWithValue(PracticeIdsListParam, practiceIds);
+                command.Parameters.AddWithValue(LookedParam,
+                                                !string.IsNullOrEmpty(looked) ? (object)looked : DBNull.Value);
+                command.Parameters.AddWithValue(RecruiterIdsListParam,
+                                               recruiterIds);
+                command.Parameters.AddWithValue(TimescaleIdsListParam,
+                                                timeScaleIds);
+                command.Parameters.AddWithValue(ProjectedParam, projected);
+                command.Parameters.AddWithValue(TerminatedParam, terminated);
+                command.Parameters.AddWithValue(InactiveParam, inactive);
+                command.Parameters.AddWithValue(AlphabetParam, alphabet.HasValue ? (object)alphabet.Value : DBNull.Value);
+
+                connection.Open();
+                return (int)command.ExecuteScalar();
+            }
         }
     }
 }
