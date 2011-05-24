@@ -49,22 +49,40 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.CheckBox chbTerminated;
         
         /// <summary>
-        /// ddlPayType control.
+        /// cblTimeScales control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlPayType;
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblTimeScales;
         
         /// <summary>
-        /// ddlFilter control.
+        /// sdeTimeScales control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlFilter;
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeTimeScales;
+        
+        /// <summary>
+        /// cblPractices control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblPractices;
+        
+        /// <summary>
+        /// sdePractices control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdePractices;
     }
 }
 
