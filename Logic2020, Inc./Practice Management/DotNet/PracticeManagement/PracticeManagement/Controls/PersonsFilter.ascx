@@ -1,20 +1,24 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="PersonsFilter.ascx.cs" Inherits="PraticeManagement.Controls.PersonsFilter" %>
-
-
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="PersonsFilter.ascx.cs"
+    Inherits="PraticeManagement.Controls.PersonsFilter" %>
+<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
+<%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <table>
     <tr style="text-align: center;">
-        <td style="padding-right: 5px; border-bottom:1px solid black;">
+        <td style="padding-right: 5px; border-bottom: 1px solid black;">
             <span>Person Status</span>
         </td>
-        <td style="width:15px" ></td>
-        <td style="padding-right: 5px; border-bottom:1px solid black;">
+        <td style="width: 15px">
+        </td>
+        <td style="padding-right: 5px; border-bottom: 1px solid black;">
             <span>Pay Type</span>
         </td>
-        <td style="width:15px" ></td>
-        <td style="padding-left: 5px; border-bottom:1px solid black;">
+        <td style="width: 15px">
+        </td>
+        <td style="padding-left: 5px; border-bottom: 1px solid black;">
             <span>Practice</span>
         </td>
-        <td style="width:15px" ></td>
+        <td style="width: 15px">
+        </td>
     </tr>
     <tr>
         <td style="padding-right: 5px;">
@@ -42,16 +46,30 @@
                 </tr>
             </table>
         </td>
-        <td style="width:15px" ></td>
-        <td rowspan="2" style="padding-right: 5px;">
-            <asp:DropDownList ID="ddlPayType" Width="150px" runat="server" AutoPostBack="false" OnSelectedIndexChanged="ddlPayType_SelectedIndexChanged">
-            </asp:DropDownList>
+        <td style="width: 15px">
         </td>
-        <td style="width:15px" ></td>
-        <td rowspan="2" style="padding-right: 5px;">
-            <asp:DropDownList ID="ddlFilter" runat="server" AutoPostBack="false" OnSelectedIndexChanged="ddlFilter_SelectedIndexChanged" />
+        <td rowspan="2" class="floatRight" style="padding-top: 5px; padding-left: 3px;">
+            <cc2:ScrollingDropDown ID="cblTimeScales" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
+                AutoPostBack="false" onclick="scrollingDropdown_onclick('cblTimeScales','Pay Type')"
+                BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False" Width="200px"
+                DropDownListType="Pay Type" Height="100px" BorderWidth="0" />
+            <ext:ScrollableDropdownExtender ID="sdeTimeScales" runat="server" TargetControlID="cblTimeScales"
+                UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png" Width="200px">
+            </ext:ScrollableDropdownExtender>
         </td>
-        <td style="width:15px" ></td>
+        <td style="width: 15px">
+        </td>
+        <td class="floatRight" style="padding-top: 5px; padding-left: 3px;">
+            <cc2:ScrollingDropDown ID="cblPractices" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
+                onclick="scrollingDropdown_onclick('cblPractices','Practice Area')" BackColor="White"
+                CellPadding="3" Height="250px" NoItemsType="All" SetDirty="False" DropDownListType="Practice Area"
+                Width="260px" BorderWidth="0" />
+            <ext:ScrollableDropdownExtender ID="sdePractices" runat="server" TargetControlID="cblPractices"
+                UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+            </ext:ScrollableDropdownExtender>
+        </td>
+        <td style="width: 15px">
+        </td>
     </tr>
 </table>
 
