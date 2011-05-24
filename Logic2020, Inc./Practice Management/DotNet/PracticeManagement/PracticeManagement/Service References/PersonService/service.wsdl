@@ -3,14 +3,29 @@
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import namespace="http://tempuri.org/" />
-      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/System" />
       <xsd:import />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/System" />
     </xsd:schema>
   </wsdl:types>
+  <wsdl:message name="IPersonService_SavePersonDetail_InputMessage">
+    <wsdl:part name="parameters" element="tns:SavePersonDetail" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_SavePersonDetail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SavePersonDetailResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_SavePersonDetail_DataAccessFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" name="detail" element="q1:DataAccessFault" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_PersonInactivate_InputMessage">
+    <wsdl:part name="parameters" element="tns:PersonInactivate" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_PersonInactivate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PersonInactivateResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_PersonReactivate_InputMessage">
     <wsdl:part name="parameters" element="tns:PersonReactivate" />
   </wsdl:message>
@@ -203,6 +218,12 @@
   <wsdl:message name="IPersonService_GetPersonListWithCurrentPay_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonListWithCurrentPayResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonListWithCurrentPayByCommaSeparatedIdsList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonListWithCurrentPayByCommaSeparatedIdsList" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonListWithCurrentPayByCommaSeparatedIdsList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonListWithCurrentPayByCommaSeparatedIdsListResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonListActiveDate_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonListActiveDate" />
   </wsdl:message>
@@ -238,6 +259,12 @@
   </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonCount_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonCountByCommaSeperatedIdsList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonCountByCommaSeperatedIdsList" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonCountByCommaSeperatedIdsList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonCountByCommaSeperatedIdsListResponse" />
   </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonWorkDaysNumber_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonWorkDaysNumber" />
@@ -305,22 +332,16 @@
   <wsdl:message name="IPersonService_GetPersonByAlias_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonByAliasResponse" />
   </wsdl:message>
-  <wsdl:message name="IPersonService_SavePersonDetail_InputMessage">
-    <wsdl:part name="parameters" element="tns:SavePersonDetail" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_SavePersonDetail_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SavePersonDetailResponse" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_SavePersonDetail_DataAccessFaultFault_FaultMessage">
-    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" name="detail" element="q1:DataAccessFault" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_PersonInactivate_InputMessage">
-    <wsdl:part name="parameters" element="tns:PersonInactivate" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_PersonInactivate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:PersonInactivateResponse" />
-  </wsdl:message>
   <wsdl:portType name="IPersonService">
+    <wsdl:operation name="SavePersonDetail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SavePersonDetail" message="tns:IPersonService_SavePersonDetail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SavePersonDetailResponse" message="tns:IPersonService_SavePersonDetail_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IPersonService/SavePersonDetailDataAccessFaultFault" name="DataAccessFaultFault" message="tns:IPersonService_SavePersonDetail_DataAccessFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PersonInactivate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/PersonInactivate" message="tns:IPersonService_PersonInactivate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/PersonInactivateResponse" message="tns:IPersonService_PersonInactivate_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="PersonReactivate">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/PersonReactivate" message="tns:IPersonService_PersonReactivate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/PersonReactivateResponse" message="tns:IPersonService_PersonReactivate_OutputMessage" />
@@ -449,6 +470,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonListWithCurrentPay" message="tns:IPersonService_GetPersonListWithCurrentPay_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonListWithCurrentPayResponse" message="tns:IPersonService_GetPersonListWithCurrentPay_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetPersonListWithCurrentPayByCommaSeparatedIdsList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonListWithCurrentPayByCommaSeparatedIdsList" message="tns:IPersonService_GetPersonListWithCurrentPayByCommaSeparatedIdsList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonListWithCurrentPayByCommaSeparatedIdsListResponse" message="tns:IPersonService_GetPersonListWithCurrentPayByCommaSeparatedIdsList_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetPersonListActiveDate">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonListActiveDate" message="tns:IPersonService_GetPersonListActiveDate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonListActiveDateResponse" message="tns:IPersonService_GetPersonListActiveDate_OutputMessage" />
@@ -472,6 +497,10 @@
     <wsdl:operation name="GetPersonCount">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonCount" message="tns:IPersonService_GetPersonCount_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonCountResponse" message="tns:IPersonService_GetPersonCount_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonCountByCommaSeperatedIdsList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonCountByCommaSeperatedIdsList" message="tns:IPersonService_GetPersonCountByCommaSeperatedIdsList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonCountByCommaSeperatedIdsListResponse" message="tns:IPersonService_GetPersonCountByCommaSeperatedIdsList_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetPersonWorkDaysNumber">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonWorkDaysNumber" message="tns:IPersonService_GetPersonWorkDaysNumber_InputMessage" />
@@ -517,18 +546,30 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonByAlias" message="tns:IPersonService_GetPersonByAlias_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonByAliasResponse" message="tns:IPersonService_GetPersonByAlias_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="SavePersonDetail">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SavePersonDetail" message="tns:IPersonService_SavePersonDetail_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SavePersonDetailResponse" message="tns:IPersonService_SavePersonDetail_OutputMessage" />
-      <wsdl:fault wsaw:Action="http://tempuri.org/IPersonService/SavePersonDetailDataAccessFaultFault" name="DataAccessFaultFault" message="tns:IPersonService_SavePersonDetail_DataAccessFaultFault_FaultMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="PersonInactivate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/PersonInactivate" message="tns:IPersonService_PersonInactivate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/PersonInactivateResponse" message="tns:IPersonService_PersonInactivate_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IPersonService" type="tns:IPersonService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="SavePersonDetail">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/SavePersonDetail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="DataAccessFaultFault">
+        <soap:fault use="literal" name="DataAccessFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="PersonInactivate">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/PersonInactivate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="PersonReactivate">
       <soap:operation soapAction="http://tempuri.org/IPersonService/PersonReactivate" style="document" />
       <wsdl:input>
@@ -817,6 +858,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetPersonListWithCurrentPayByCommaSeparatedIdsList">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonListWithCurrentPayByCommaSeparatedIdsList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetPersonListActiveDate">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonListActiveDate" style="document" />
       <wsdl:input>
@@ -864,6 +914,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetPersonCount">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonCount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonCountByCommaSeperatedIdsList">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonCountByCommaSeperatedIdsList" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -970,31 +1029,10 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SavePersonDetail">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/SavePersonDetail" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-      <wsdl:fault name="DataAccessFaultFault">
-        <soap:fault use="literal" name="DataAccessFaultFault" namespace="" />
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="PersonInactivate">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/PersonInactivate" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="PersonService">
     <wsdl:port name="BasicHttpBinding_IPersonService" binding="tns:BasicHttpBinding_IPersonService">
-      <soap:address location="http://system67.ggk.com/PracticeManagementService/PersonService.svc" />
+      <soap:address location="http://system66.ggk.com/PracticeManagementService/PersonService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
