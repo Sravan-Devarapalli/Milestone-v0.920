@@ -138,6 +138,21 @@ namespace PracticeManagementService
             bool inactive,
             char? alphabet);
 
+        [OperationContract]
+        List<Person> GetPersonListWithCurrentPayByCommaSeparatedIdsList(
+            string practiceIdsSelected,
+            bool active,
+            int pageSize,
+            int pageNo,
+            string looked,
+            string recruiterIdsSelected,
+            string userName,
+            string sortBy,
+            string timeScaleIdsSelected,
+            bool projected,
+            bool terminated,
+            bool inactive,
+            char? alphabet);
         /// <summary>
         /// Get all persons able to work on Milestone
         /// </summary>
@@ -211,6 +226,9 @@ namespace PracticeManagementService
         /// <returns>The number of the persons those match with the specified conditions.</returns>
         [OperationContract]
         int GetPersonCount(int? practice, bool showAll, string looked, int? recruiterId, string userName, int? timeScaleId, bool projected, bool terminated, bool inactive, char? alphabet);
+
+        [OperationContract]
+        int GetPersonCountByCommaSeperatedIdsList(string practiceIds, bool active, string looked, string recruiterIds, string userName, string timeScaleIds, bool projected, bool terminated, bool inactive, char? alphabet);
 
         /// <summary>
         /// Calculates a number of <see cref="Person"/>s working days in period.
