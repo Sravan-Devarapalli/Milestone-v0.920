@@ -139,13 +139,22 @@ namespace PraticeManagement.Config {
         protected global::PraticeManagement.Controls.PersonsFilter personsFilter;
         
         /// <summary>
-        /// ddlRecruiter control.
+        /// cblRecruiters control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRecruiter;
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblRecruiters;
+        
+        /// <summary>
+        /// sdeRecruiters control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeRecruiters;
         
         /// <summary>
         /// hdnActive control.
