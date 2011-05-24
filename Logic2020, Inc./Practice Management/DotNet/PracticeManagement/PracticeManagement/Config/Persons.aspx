@@ -5,6 +5,8 @@
     Assembly="PraticeManagement" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register Src="~/Controls/PersonsFilter.ascx" TagName="PersonsFilter" TagPrefix="uc1" %>
+<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
+<%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
     <title>Practice Management - Persons</title>
 </asp:Content>
@@ -12,6 +14,8 @@
     Person List
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
+    <script language="javascript" type="text/javascript" src="../Scripts/jquery-1.4.1.js"></script>
+    <script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
             <div class="buttons-block">
@@ -70,18 +74,26 @@
                                     <td>
                                         <uc1:PersonsFilter ID="personsFilter" runat="server" OnFilterChanged="personsFilter_FilterChanged" />
                                     </td>
-                                    <td rowspan="3" valign="top" align="center" style="padding-left: 5px;">
+                                    <td>
                                         <table>
-                                            <tr>
-                                                <td style="border-bottom: 1px solid black;">
+                                            <tr style="text-align: center;">
+                                                <td style="padding-right: 5px; border-bottom: 1px solid black;">
                                                     <span>Recruiter</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td rowspan="2" style="padding-top: 9px;">
-                                                    <asp:DropDownList ID="ddlRecruiter" Width="200px" runat="server" AutoPostBack="false"
-                                                        CssClass="WholeWidth">
-                                                    </asp:DropDownList>
+                                                <td style="padding-top: 10px;">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="2" class="floatRight" style="padding-bottom: 7px; padding-left: 3px;">
+                                                    <cc2:ScrollingDropDown ID="cblRecruiters" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
+                                                        onclick="scrollingDropdown_onclick('cblRecruiters','Recruiter')" BackColor="White"
+                                                        CellPadding="3" Height="200px" NoItemsType="All" SetDirty="False" DropDownListType="Recruiter"
+                                                        Width="180px" BorderWidth="0" />
+                                                    <ext:ScrollableDropdownExtender ID="sdeRecruiters" runat="server" TargetControlID="cblRecruiters"
+                                                        UseAdvanceFeature="true" Width="200px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                                                    </ext:ScrollableDropdownExtender>
                                                 </td>
                                             </tr>
                                         </table>
@@ -231,7 +243,7 @@
                 SelectMethod="GetPersons" StartRowIndexParameterName="startRow" MaximumRowsParameterName="maxRows"
                 EnablePaging="true" SortParameterName="sortBy" CacheDuration="5" TypeName="PraticeManagement.Config.Persons">
                 <SelectParameters>
-                    <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnPracticeId" Name="practiceId"
+                    <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnPracticeId" Name="practiceIdsSelected"
                         PropertyName="Value" />
                     <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnActive" Name="active"
                         PropertyName="Value" Type="Boolean" />
@@ -240,9 +252,9 @@
                     <asp:SessionParameter SessionField="CurrentPageIndex" Name="pageNo" Type="Int32" />
                     <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnLooked" Name="looked"
                         PropertyName="Value" Type="String" />
-                    <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnRecruiterId" Name="recruiterId"
+                    <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnRecruiterId" Name="recruitersSelected"
                         PropertyName="Value" Type="String" />
-                    <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnPayTypeId" Name="payTypeId"
+                    <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnPayTypeId" Name="payTypeIdsSelected"
                         PropertyName="Value" />
                     <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnProjected" Name="projected"
                         PropertyName="Value" />
