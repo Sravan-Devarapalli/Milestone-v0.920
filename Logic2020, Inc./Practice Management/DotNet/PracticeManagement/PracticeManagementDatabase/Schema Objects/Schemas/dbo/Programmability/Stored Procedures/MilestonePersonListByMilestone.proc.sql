@@ -1,12 +1,11 @@
-﻿
-
-
-CREATE PROCEDURE [dbo].[MilestonePersonListByMilestone]
+﻿CREATE PROCEDURE [dbo].[MilestonePersonListByMilestone]
 (
 	@MilestoneId   INT
 )
 AS
 	SET NOCOUNT ON
+	DECLARE @MilestoneIdLocal INT
+	SELECT @MilestoneIdLocal = @MilestoneId
 	
 	SELECT mp.MilestonePersonId,
 	       mp.MilestoneId,
@@ -37,5 +36,5 @@ AS
 	       mp.MilestoneActualDeliveryDate,
 	       mp.MilestoneHourlyRevenue
 	  FROM dbo.v_MilestonePerson AS mp
-	 WHERE mp.MilestoneId = @MilestoneId
+	 WHERE mp.MilestoneId = @MilestoneIdLocal
 
