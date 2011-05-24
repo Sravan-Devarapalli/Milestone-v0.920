@@ -15,6 +15,15 @@ namespace PraticeManagement.PersonService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="PersonService.IPersonService")]
     public interface IPersonService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SavePersonDetail", ReplyAction="http://tempuri.org/IPersonService/SavePersonDetailResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DataTransferObjects.DataAccessFault), Action="http://tempuri.org/IPersonService/SavePersonDetailDataAccessFaultFault", Name="DataAccessFault", Namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
+        int SavePersonDetail(DataTransferObjects.Person person, string currentUser);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonInactivate", ReplyAction="http://tempuri.org/IPersonService/PersonInactivateResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
+        void PersonInactivate(DataTransferObjects.Person person);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonReactivate", ReplyAction="http://tempuri.org/IPersonService/PersonReactivateResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         void PersonReactivate(DataTransferObjects.Person person);
@@ -124,6 +133,11 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListWithCurrentPay", ReplyAction="http://tempuri.org/IPersonService/GetPersonListWithCurrentPayResponse")]
         DataTransferObjects.Person[] GetPersonListWithCurrentPay(System.Nullable<int> practice, bool active, int pageSize, int pageNo, string looked, System.Nullable<int> recruiterId, string userName, string sortBy, System.Nullable<int> timeScaleId, bool projected, bool terminated, bool inactive, System.Nullable<char> alphabet);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListWithCurrentPayByCommaSeparatedIdsL" +
+            "ist", ReplyAction="http://tempuri.org/IPersonService/GetPersonListWithCurrentPayByCommaSeparatedIdsL" +
+            "istResponse")]
+        DataTransferObjects.Person[] GetPersonListWithCurrentPayByCommaSeparatedIdsList(string practiceIdsSelected, bool active, int pageSize, int pageNo, string looked, string recruiterIdsSelected, string userName, string sortBy, string timeScaleIdsSelected, bool projected, bool terminated, bool inactive, System.Nullable<char> alphabet);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListActiveDate", ReplyAction="http://tempuri.org/IPersonService/GetPersonListActiveDateResponse")]
         DataTransferObjects.Person[] GetPersonListActiveDate(System.Nullable<int> practice, bool active, int pageSize, int pageNo, string looked, System.DateTime startDate, System.DateTime endDate, System.Nullable<int> recruiterId, string userName);
         
@@ -141,6 +155,9 @@ namespace PraticeManagement.PersonService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonCount", ReplyAction="http://tempuri.org/IPersonService/GetPersonCountResponse")]
         int GetPersonCount(System.Nullable<int> practice, bool showAll, string looked, System.Nullable<int> recruiterId, string userName, System.Nullable<int> timeScaleId, bool projected, bool terminated, bool inactive, System.Nullable<char> alphabet);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonCountByCommaSeperatedIdsList", ReplyAction="http://tempuri.org/IPersonService/GetPersonCountByCommaSeperatedIdsListResponse")]
+        int GetPersonCountByCommaSeperatedIdsList(string practiceIds, bool active, string looked, string recruiterIds, string userName, string timeScaleIds, bool projected, bool terminated, bool inactive, System.Nullable<char> alphabet);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonWorkDaysNumber", ReplyAction="http://tempuri.org/IPersonService/GetPersonWorkDaysNumberResponse")]
         int GetPersonWorkDaysNumber(int personId, System.DateTime startDate, System.DateTime endDate);
@@ -179,15 +196,6 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonByAlias", ReplyAction="http://tempuri.org/IPersonService/GetPersonByAliasResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         DataTransferObjects.Person GetPersonByAlias(string alias);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SavePersonDetail", ReplyAction="http://tempuri.org/IPersonService/SavePersonDetailResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(DataTransferObjects.DataAccessFault), Action="http://tempuri.org/IPersonService/SavePersonDetailDataAccessFaultFault", Name="DataAccessFault", Namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        int SavePersonDetail(DataTransferObjects.Person person, string currentUser);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonInactivate", ReplyAction="http://tempuri.org/IPersonService/PersonInactivateResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        void PersonInactivate(DataTransferObjects.Person person);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -197,7 +205,7 @@ namespace PraticeManagement.PersonService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
-               
+        
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -212,6 +220,14 @@ namespace PraticeManagement.PersonService {
         
         public PersonServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public int SavePersonDetail(DataTransferObjects.Person person, string currentUser) {
+            return base.Channel.SavePersonDetail(person, currentUser);
+        }
+        
+        public void PersonInactivate(DataTransferObjects.Person person) {
+            base.Channel.PersonInactivate(person);
         }
         
         public void PersonReactivate(DataTransferObjects.Person person) {
@@ -342,6 +358,10 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetPersonListWithCurrentPay(practice, active, pageSize, pageNo, looked, recruiterId, userName, sortBy, timeScaleId, projected, terminated, inactive, alphabet);
         }
         
+        public DataTransferObjects.Person[] GetPersonListWithCurrentPayByCommaSeparatedIdsList(string practiceIdsSelected, bool active, int pageSize, int pageNo, string looked, string recruiterIdsSelected, string userName, string sortBy, string timeScaleIdsSelected, bool projected, bool terminated, bool inactive, System.Nullable<char> alphabet) {
+            return base.Channel.GetPersonListWithCurrentPayByCommaSeparatedIdsList(practiceIdsSelected, active, pageSize, pageNo, looked, recruiterIdsSelected, userName, sortBy, timeScaleIdsSelected, projected, terminated, inactive, alphabet);
+        }
+        
         public DataTransferObjects.Person[] GetPersonListActiveDate(System.Nullable<int> practice, bool active, int pageSize, int pageNo, string looked, System.DateTime startDate, System.DateTime endDate, System.Nullable<int> recruiterId, string userName) {
             return base.Channel.GetPersonListActiveDate(practice, active, pageSize, pageNo, looked, startDate, endDate, recruiterId, userName);
         }
@@ -364,6 +384,10 @@ namespace PraticeManagement.PersonService {
         
         public int GetPersonCount(System.Nullable<int> practice, bool showAll, string looked, System.Nullable<int> recruiterId, string userName, System.Nullable<int> timeScaleId, bool projected, bool terminated, bool inactive, System.Nullable<char> alphabet) {
             return base.Channel.GetPersonCount(practice, showAll, looked, recruiterId, userName, timeScaleId, projected, terminated, inactive, alphabet);
+        }
+        
+        public int GetPersonCountByCommaSeperatedIdsList(string practiceIds, bool active, string looked, string recruiterIds, string userName, string timeScaleIds, bool projected, bool terminated, bool inactive, System.Nullable<char> alphabet) {
+            return base.Channel.GetPersonCountByCommaSeperatedIdsList(practiceIds, active, looked, recruiterIds, userName, timeScaleIds, projected, terminated, inactive, alphabet);
         }
         
         public int GetPersonWorkDaysNumber(int personId, System.DateTime startDate, System.DateTime endDate) {
@@ -408,14 +432,6 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.Person GetPersonByAlias(string alias) {
             return base.Channel.GetPersonByAlias(alias);
-        }
-        
-        public int SavePersonDetail(DataTransferObjects.Person person, string currentUser) {
-            return base.Channel.SavePersonDetail(person, currentUser);
-        }
-        
-        public void PersonInactivate(DataTransferObjects.Person person) {
-            base.Channel.PersonInactivate(person);
         }
     }
 }
