@@ -343,6 +343,10 @@ namespace DataAccess
                     Constants.ParameterNames.GroupIdParam,
                     opportunity.Group == null ? (object)DBNull.Value : opportunity.Group.Id);
 
+                command.Parameters.AddWithValue(
+                   Constants.ParameterNames.PersonIdListParam,
+                   opportunity.ProposedPersonIdList == null ? (object)DBNull.Value : opportunity.ProposedPersonIdList);
+
 
                 var idParam = new SqlParameter(Constants.ParameterNames.OpportunityIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
                 command.Parameters.Add(idParam);
