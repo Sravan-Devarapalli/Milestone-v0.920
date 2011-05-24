@@ -21,11 +21,11 @@ namespace PraticeManagement.Controls.Opportunities
         {
             get
             {
-                if (Cache[OPPORTUNITY_KEY] != null && OpportunityId.HasValue)
+                if (ViewState[OPPORTUNITY_KEY] != null && OpportunityId.HasValue)
                 {
-                    if ((Cache[OPPORTUNITY_KEY] as Opportunity).Id == OpportunityId)
+                    if ((ViewState[OPPORTUNITY_KEY] as Opportunity).Id == OpportunityId)
                     {
-                        return Cache[OPPORTUNITY_KEY] as Opportunity;
+                        return ViewState[OPPORTUNITY_KEY] as Opportunity;
                     }
                 }
 
@@ -35,8 +35,8 @@ namespace PraticeManagement.Controls.Opportunities
                     {
                         try
                         {
-                            Cache[OPPORTUNITY_KEY] = serviceClient.GetById(OpportunityId.Value);
-                            return Cache[OPPORTUNITY_KEY] as Opportunity;
+                            ViewState[OPPORTUNITY_KEY] = serviceClient.GetById(OpportunityId.Value);
+                            return ViewState[OPPORTUNITY_KEY] as Opportunity;
                         }
                         catch (CommunicationException ex)
                         {
@@ -105,15 +105,15 @@ namespace PraticeManagement.Controls.Opportunities
         {
             get
             {
-                if (Cache[PreviousReportContext_Key] != null)
+                if (ViewState[PreviousReportContext_Key] != null)
                 {
-                    return Cache[PreviousReportContext_Key] as BenchReportContext;
+                    return ViewState[PreviousReportContext_Key] as BenchReportContext;
                 }
                 return null;
             }
             set
             {
-                Cache[PreviousReportContext_Key] = value;
+                ViewState[PreviousReportContext_Key] = value;
             }
 
         }
@@ -122,15 +122,15 @@ namespace PraticeManagement.Controls.Opportunities
         {
             get
             {
-                if (Cache[DistinctPotentialBoldPersons_Key] != null)
+                if (ViewState[DistinctPotentialBoldPersons_Key] != null)
                 {
-                    return Cache[DistinctPotentialBoldPersons_Key] as List<string>;
+                    return ViewState[DistinctPotentialBoldPersons_Key] as List<string>;
                 }
                 return null;
             }
             set
             {
-                Cache[DistinctPotentialBoldPersons_Key] = value;
+                ViewState[DistinctPotentialBoldPersons_Key] = value;
             }
         }
 
@@ -158,8 +158,8 @@ namespace PraticeManagement.Controls.Opportunities
         {
             if (!IsPostBack)
             {
-                Cache.Remove(PreviousReportContext_Key);
-                Cache.Remove(DistinctPotentialBoldPersons_Key);
+                ViewState.Remove(PreviousReportContext_Key);
+                ViewState.Remove(DistinctPotentialBoldPersons_Key);
             }
         }
 
@@ -338,7 +338,7 @@ namespace PraticeManagement.Controls.Opportunities
             }
         }
 
-        public void ResetProposedResources() 
+        public void ResetProposedResources()
         {
             hdnProposedPersonIdsList.Value = "";
         }
