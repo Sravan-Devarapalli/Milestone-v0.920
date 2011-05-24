@@ -151,6 +151,25 @@ namespace PracticeManagementService
                 PersonDAL.PersonListFilteredWithCurrentPay(practice, !active, pageSize, pageNo, looked, DateTime.MinValue, DateTime.MinValue, recruiterId, null, sortBy, timeScaleId, projected, terminated, inactive, alphabet);
         }
 
+        public List<Person> GetPersonListWithCurrentPayByCommaSeparatedIdsList(
+            string practiceIdsSelected,
+            bool active,
+            int pageSize,
+            int pageNo,
+            string looked,
+            string recruiterIdsSelected,
+            string userName,
+            string sortBy,
+            string timeScaleIdsSelected,
+            bool projected,
+            bool terminated,
+            bool inactive,
+            char? alphabet)
+        {
+            return
+                PersonDAL.PersonListFilteredWithCurrentPayByCommaSeparatedIdsList(practiceIdsSelected, !active, pageSize, pageNo, looked, DateTime.MinValue, DateTime.MinValue, recruiterIdsSelected, null, sortBy, timeScaleIdsSelected, projected, terminated, inactive, alphabet);
+        }
+
         /// <summary>
         /// Retrives <see cref="Person"/> data to be exported to excel.
         /// </summary>
@@ -289,6 +308,12 @@ namespace PracticeManagementService
         {
             PersonRateCalculator.VerifyPrivileges(userName, ref recruiterId);
             return PersonDAL.PersonGetCount(practice, !active, looked, recruiterId, timeScaleId, projected, terminated, inactive, alphabet);
+        }
+
+
+        public int GetPersonCountByCommaSeperatedIdsList(string practiceIds, bool active, string looked, string recruiterIds, string userName, string timeScaleIds, bool projected, bool terminated, bool inactive, char? alphabet)
+        {
+            return PersonDAL.PersonGetCount(practiceIds, !active, looked, recruiterIds, timeScaleIds, projected, terminated, inactive, alphabet);
         }
 
         /// <summary>
