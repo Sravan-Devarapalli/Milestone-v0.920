@@ -8,7 +8,10 @@ CREATE PROCEDURE dbo.ProjectMilestonesFinancials
 AS
 BEGIN
 	SET NOCOUNT ON;
-	WITH FinancialsRetro AS 
+	DECLARE @ProjectIdLocal	INT
+
+	SELECT @ProjectIdLocal = @ProjectId
+	;WITH FinancialsRetro AS 
 	(
 	SELECT f.ProjectId,
 		   f.MilestoneId,
@@ -31,7 +34,7 @@ BEGIN
 		   f.PersonId,
 		   f.Discount
 	FROM v_FinancialsRetrospective f
-	WHERE f.ProjectId = @ProjectId
+	WHERE f.ProjectId = @ProjectIdLocal
 	),
 	MilestoneFinancials as 
 	(SELECT f.MilestoneId,
@@ -65,7 +68,7 @@ BEGIN
 		   min(f.Discount) as Discount
 	  FROM FinancialsRetro AS f
 	  LEFT JOIN v_ProjectTotalExpenses as pe on f.ProjectId = pe.ProjectId
-	 WHERE f.ProjectId = @ProjectId
+	 WHERE f.ProjectId = @ProjectIdLocal
 	GROUP BY f.ProjectId,f.MilestoneId
 	)
 	SELECT
@@ -95,5 +98,5 @@ BEGIN
 		end as 'TargetMargin'
 	from dbo.Milestone as m
 	left join MilestoneFinancials as fin on m.MilestoneId = fin.MilestoneId
-	where m.ProjectId = @ProjectId
+	where m.ProjectId = @ProjectIdLocal
 END
