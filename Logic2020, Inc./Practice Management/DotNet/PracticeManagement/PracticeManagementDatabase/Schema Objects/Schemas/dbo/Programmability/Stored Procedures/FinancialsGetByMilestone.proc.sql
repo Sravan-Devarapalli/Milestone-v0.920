@@ -11,8 +11,9 @@ CREATE PROCEDURE dbo.FinancialsGetByMilestone
 )
 AS
 	SET NOCOUNT ON;
-
-	WITH FinancialsRetro AS 
+	DECLARE @MilestoneIdLocal INT
+	SELECT @MilestoneIdLocal = @MilestoneId
+	;WITH FinancialsRetro AS 
 	(
 	SELECT f.ProjectId,
 		   f.MilestoneId,
@@ -35,7 +36,7 @@ AS
 		   f.PersonId,
 		   f.Discount
 	FROM v_FinancialsRetrospective f
-	WHERE f.MilestoneId = @MilestoneId
+	WHERE f.MilestoneId = @MilestoneIdLocal
 	),
 	MilestoneFinancials as 
 	(SELECT f.ProjectId,
@@ -70,7 +71,7 @@ AS
 		   min(f.Discount) as Discount
 	  FROM FinancialsRetro AS f
 	  LEFT JOIN v_ProjectTotalExpenses as pe on f.ProjectId = pe.ProjectId
-	 WHERE f.MilestoneId = @MilestoneId
+	 WHERE f.MilestoneId = @MilestoneIdLocal
 	GROUP BY f.ProjectId,f.MilestoneId
 	)
 
