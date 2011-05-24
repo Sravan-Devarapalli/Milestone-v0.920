@@ -42,7 +42,7 @@ namespace PraticeManagement
         private const string EstRevenueFormat = "Est. Revenue - {0}";
         private const string WordBreak = "<wbr />";
         private const string NEWLY_ADDED_NOTES_LIST = "NEWLY_ADDED_NOTES_LIST";
-        
+
         /// <summary>
         /// 	Gets a selected opportunity
         /// </summary>
@@ -50,9 +50,9 @@ namespace PraticeManagement
         {
             get
             {
-                if (Cache[OPPORTUNITY_KEY] != null && OpportunityId.HasValue)
+                if (ViewState[OPPORTUNITY_KEY] != null && OpportunityId.HasValue)
                 {
-                    return Cache[OPPORTUNITY_KEY] as Opportunity;
+                    return ViewState[OPPORTUNITY_KEY] as Opportunity;
                 }
 
                 if (OpportunityId.HasValue)
@@ -61,8 +61,8 @@ namespace PraticeManagement
                     {
                         try
                         {
-                            Cache[OPPORTUNITY_KEY] = serviceClient.GetById(OpportunityId.Value);
-                            return Cache[OPPORTUNITY_KEY] as Opportunity;
+                            ViewState[OPPORTUNITY_KEY] = serviceClient.GetById(OpportunityId.Value);
+                            return ViewState[OPPORTUNITY_KEY] as Opportunity;
                         }
                         catch (CommunicationException)
                         {
@@ -111,16 +111,16 @@ namespace PraticeManagement
         {
             get
             {
-                if (Cache[NOTE_LIST_KEY] != null)
+                if (ViewState[NOTE_LIST_KEY] != null)
                 {
-                    return Cache[NOTE_LIST_KEY] as Note[];
+                    return ViewState[NOTE_LIST_KEY] as Note[];
                 }
 
                 if (OpportunityId.HasValue)
                 {
 
                     Note[] notes = ServiceCallers.Custom.Milestone(c => c.NoteListByTargetId(Convert.ToInt32(OpportunityId), 4));
-                    Cache[NOTE_LIST_KEY] = notes;
+                    ViewState[NOTE_LIST_KEY] = notes;
                     return notes;
                 }
 
@@ -132,15 +132,15 @@ namespace PraticeManagement
         {
             get
             {
-                if (Cache[NEWLY_ADDED_NOTES_LIST] != null)
+                if (ViewState[NEWLY_ADDED_NOTES_LIST] != null)
                 {
-                    return Cache[NEWLY_ADDED_NOTES_LIST] as List<Note>;
+                    return ViewState[NEWLY_ADDED_NOTES_LIST] as List<Note>;
                 }
                 return null;
             }
             set
             {
-                Cache[NEWLY_ADDED_NOTES_LIST] = value;
+                ViewState[NEWLY_ADDED_NOTES_LIST] = value;
             }
         }
 
@@ -152,9 +152,9 @@ namespace PraticeManagement
         {
             if (!IsPostBack)
             {
-                Cache.Remove(OPPORTUNITY_KEY);
-                Cache.Remove(NOTE_LIST_KEY);
-                Cache.Remove(NEWLY_ADDED_NOTES_LIST);
+                ViewState.Remove(OPPORTUNITY_KEY);
+                ViewState.Remove(NOTE_LIST_KEY);
+                ViewState.Remove(NEWLY_ADDED_NOTES_LIST);
             }
 
 
@@ -181,7 +181,7 @@ namespace PraticeManagement
                     ucProposedResources.FillPotentialResources();
                     upProposedResources.Update();
                 }
-                
+
                 tpHistory.Visible = OpportunityId.HasValue;
             }
 
@@ -279,7 +279,7 @@ namespace PraticeManagement
                     Author = new Person
                     {
                         Id = DataHelper.CurrentPerson.Id,
-                        LastName =DataHelper.CurrentPerson.LastName
+                        LastName = DataHelper.CurrentPerson.LastName
                     },
                     CreateDate = DateTime.Now,
                     NoteText = tbNote.Text,
@@ -294,19 +294,19 @@ namespace PraticeManagement
                 {
                     NewlyAddedNotes = new List<Note>();
                     NewlyAddedNotes.Add(note);
-                }              
+                }
 
                 if (NotesList != null)
                 {
                     List<Note> notesList = NotesList.ToList();
                     notesList.Add(note);
-                    Cache[NOTE_LIST_KEY] = notesList.AsQueryable().ToArray();
+                    ViewState[NOTE_LIST_KEY] = notesList.AsQueryable().ToArray();
                 }
                 else
                 {
                     List<Note> notesList = new List<Note>();
                     notesList.Add(note);
-                    Cache[NOTE_LIST_KEY] = notesList.AsQueryable().ToArray();
+                    ViewState[NOTE_LIST_KEY] = notesList.AsQueryable().ToArray();
                 }
 
                 ScriptManager.RegisterClientScriptBlock(upNotes, upNotes.GetType(), "", "EnableSaveButton();setDirty();", true);
@@ -315,6 +315,10 @@ namespace PraticeManagement
                 lvNotes.DataBind();
 
                 tbNote.Text = string.Empty;
+            }
+            else
+            {
+                BindNotesData();
             }
         }
 
@@ -336,6 +340,15 @@ namespace PraticeManagement
 
                 if (opportunity == null && !OpportunityId.HasValue)
                 {
+                    if (IsDirty)
+                    {
+                        if (!SaveDirty)
+                        {
+                            BindNotesData();
+                            return;
+                        }
+                    }
+
                     if (!ValidateAndSave())
                     {
                         return;
@@ -372,6 +385,10 @@ namespace PraticeManagement
                     }
                 }
             }
+            else
+            {
+                BindNotesData();
+            }
         }
 
         public bool CheckForDirtyBehaviour()
@@ -403,9 +420,24 @@ namespace PraticeManagement
                 {
                     var projectId = serviceClient.ConvertOpportunityToProject(OpportunityId.Value,
                                                                               User.Identity.Name, HasProposedPersons);
-
-                    Response.Redirect(
-                            Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri));
+                    if (!string.IsNullOrEmpty(Request.QueryString["id"]))
+                    {
+                        Response.Redirect(
+                                Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri));
+                    }
+                    else
+                    {
+                        if (Request.Url.AbsoluteUri.Contains('?'))
+                        {
+                            Response.Redirect(
+                                Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri + "&id=" + OpportunityId.Value));
+                        }
+                        else
+                        {
+                            Response.Redirect(
+                               Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri + "?id=" + OpportunityId.Value));
+                        }
+                    }
                 }
                 catch (CommunicationException)
                 {
@@ -447,6 +479,7 @@ namespace PraticeManagement
             upAttachToProject.Update();
         }
 
+
         protected void btnSave_Click(object sender, EventArgs e)
         {
             upAttachToProject.Update();
@@ -467,8 +500,8 @@ namespace PraticeManagement
         {
             if (IsDirty)
             {
-                Cache.Remove(NOTE_LIST_KEY);
-                Cache.Remove(NEWLY_ADDED_NOTES_LIST);
+                ViewState.Remove(NOTE_LIST_KEY);
+                ViewState.Remove(NEWLY_ADDED_NOTES_LIST);
 
                 if (OpportunityId.HasValue)
                 {
@@ -485,7 +518,7 @@ namespace PraticeManagement
         }
 
         private void ResetControls()
-        {           
+        {
             txtBuyerName.Text = string.Empty;
             txtDescription.Text = string.Empty;
             txtEstRevenue.Text = string.Empty;
@@ -511,6 +544,11 @@ namespace PraticeManagement
             {
                 mpeAttachToProject.Show();
             }
+            else
+            {
+                BindNotesData();
+            }
+
         }
 
 
@@ -548,10 +586,10 @@ namespace PraticeManagement
                         retValue = true;
                         ClearDirty();
 
-                        Cache.Remove(OPPORTUNITY_KEY);
-                        Cache.Remove(PreviousReportContext_Key);
-                        Cache.Remove(DistinctPotentialBoldPersons_Key);
-                        Cache.Remove(NEWLY_ADDED_NOTES_LIST);
+                        ViewState.Remove(OPPORTUNITY_KEY);
+                        ViewState.Remove(PreviousReportContext_Key);
+                        ViewState.Remove(DistinctPotentialBoldPersons_Key);
+                        ViewState.Remove(NEWLY_ADDED_NOTES_LIST);
                         btnSave.Enabled = false;
                     }
                     catch (CommunicationException ex)
@@ -563,6 +601,7 @@ namespace PraticeManagement
             }
             else
             {
+                BindNotesData();
                 dpEndDate.ErrorMessage = string.Empty;
                 dpStartDate.ErrorMessage = string.Empty;
             }
