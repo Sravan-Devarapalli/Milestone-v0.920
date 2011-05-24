@@ -669,9 +669,7 @@
                                     </table>
                                 </ContentTemplate>
                                 <Triggers>
-                                    <asp:AsyncPostBackTrigger ControlID="btnSave" />
                                     <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
-                                    <asp:AsyncPostBackTrigger ControlID="btnAttach" />
                                 </Triggers>
                             </asp:UpdatePanel>
                         </td>
