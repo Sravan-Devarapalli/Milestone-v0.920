@@ -110,18 +110,27 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SaveMinimumLoadFactorOverheadMultipliers">
+  <xs:element name="UpdateMinimumLoadFactorHistory">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="OverHeadName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="inActive" type="xs:boolean" />
-        <xs:element minOccurs="0" name="W2HourlyMultiplier" type="xs:decimal" />
-        <xs:element minOccurs="0" name="W2SalaryMultiplier" type="xs:decimal" />
-        <xs:element minOccurs="0" name="Hourly1099Multiplier" type="xs:decimal" />
+        <xs:element minOccurs="0" name="timeScaleId" type="xs:int" />
+        <xs:element minOccurs="0" name="rate" type="xs:decimal" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SaveMinimumLoadFactorOverheadMultipliersResponse">
+  <xs:element name="UpdateMinimumLoadFactorHistoryResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateMinimumLoadFactorStatus">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="inActive" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateMinimumLoadFactorStatusResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
