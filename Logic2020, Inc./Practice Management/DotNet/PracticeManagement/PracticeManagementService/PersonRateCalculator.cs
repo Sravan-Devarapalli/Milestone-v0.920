@@ -875,6 +875,32 @@ namespace PracticeManagementService
         #endregion
 
         #endregion
+
+        public static void VerifyPrivileges(string userName, ref string recruiterIds)
+        {
+            if (recruiterIds == null)
+            {
+                // Administrators can see anything.
+                if (
+                    !Roles.IsUserInRole(userName, Constants.RoleNames.AdministratorRoleName) &&
+                    !Roles.IsUserInRole(userName, Constants.RoleNames.HRRoleName)                           //#2817:HRRoleName is added as per requirement.
+                   )
+                {
+                    if (Roles.IsUserInRole(userName, Constants.RoleNames.RecruiterRoleName))
+                    {
+                        // A rectuiter can see only hes/her recruits
+                        Person recruiter = PersonDAL.PersonGetByAlias(userName);
+                        recruiterIds =
+                            recruiter != null && recruiter.Id.HasValue ? recruiter.Id.Value.ToString() : null;
+                    }
+                    else
+                    {
+                        // Cannot apply the filter
+                        recruiterIds = null;
+                    }
+                }
+            }
+        }
     }
 }
 
