@@ -2,9 +2,9 @@
 	@Description NVARCHAR(225),
 	@Inactive	 BIT  OUTPUT
 AS
-	SELECT OT.TimescaleId, OT.Rate
+	SELECT MH.TimescaleId, MH.Rate
 	FROM dbo.OverheadFixedRate O
-	JOIN dbo.OverheadFixedRateTimescale OT ON O.OverheadFixedRateId = OT.OverheadFixedRateId
+	JOIN dbo.MinimumLoadFactorHistory AS MH  ON MH.OverheadFixedRateId = o.OverheadFixedRateId AND MH.EndDate IS NULL
 	WHERE O.IsMinimumLoadFactor = 1 AND O.Description = @Description
 
 	SELECT @Inactive = Inactive
