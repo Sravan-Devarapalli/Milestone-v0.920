@@ -16,8 +16,7 @@ AS
 	SET @today = dbo.Today()
 
 	SELECT o.Description,
-	       CASE WHEN o.IsMinimumLoadFactor = 1 THEN ot.Rate
-		   ELSE  o.Rate END Rate,
+	       o.Rate,
 	       t.HoursToCollect,
 	       o.StartDate,
 	       o.EndDate,
@@ -33,7 +32,30 @@ AS
 	  FROM dbo.OverheadFixedRate AS o
 	  JOIN dbo.OverheadRateType AS t ON o.RateType = t.OverheadRateTypeId
 	  JOIN dbo.OverheadFixedRateTimescale AS ot  ON ot.OverheadFixedRateId = o.OverheadFixedRateId
-	 WHERE  ot.TimescaleId = @TimescaleId
+	 WHERE  ot.TimescaleId = @TimescaleId AND o.IsMinimumLoadFactor = 0
 			AND o.StartDate <= @today AND ISNULL(o.EndDate, dbo.GetFutureDate()) > @today
 			AND o.Inactive = 0
+
+	UNION ALL
+	SELECT o.Description,
+			MH.Rate,
+			t.HoursToCollect,
+			MH.StartDate,
+			MH.EndDate,
+			t.IsPercentage,
+				   t.OverheadRateTypeId,
+				   t.Name OverheadRateTypeName,
+				   CASE t.OverheadRateTypeId
+					   WHEN 2
+					   THEN o.Rate
+					   ELSE CAST(0 AS DECIMAL)
+				   END AS BillRateMultiplier,
+			o.IsMinimumLoadFactor
+	FROM dbo.OverheadFixedRate AS o
+	JOIN dbo.OverheadRateType AS t ON o.RateType = t.OverheadRateTypeId
+	JOIN dbo.MinimumLoadFactorHistory MH ON MH.OverheadFixedRateId = o.OverheadFixedRateId 
+	WHERE o.IsMinimumLoadFactor = 1
+			AND o.Inactive = 0
+			AND  MH.TimescaleId = @TimescaleId
+			AND @today >= MH.StartDate AND (@today<= MH.EndDate OR MH.EndDate  IS NULL)
 
