@@ -82,6 +82,10 @@ namespace PraticeManagement.Controls
         {
             get
             {
+                if (this.cblPractices.Items[0].Selected)
+                {
+                    return null;
+                }
                 return this.cblPractices.SelectedItems;
             }
         }
@@ -93,6 +97,10 @@ namespace PraticeManagement.Controls
         {
             get
             {
+                if (this.cblTimeScales.Items[0].Selected)
+                {
+                    return null;
+                }
                 return this.cblTimeScales.SelectedItems;
             }
         }
