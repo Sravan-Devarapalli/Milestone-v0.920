@@ -259,6 +259,7 @@ namespace PraticeManagement.Config
         {
             hdnLooked.Value = txtSearch.Text;
             gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
+            gvPersons.DataBind();
         }
 
         protected void Alphabet_Clicked(object sender, EventArgs e)
@@ -302,6 +303,7 @@ namespace PraticeManagement.Config
         protected void DdlView_SelectedIndexChanged(object sender, EventArgs e)
         {
             gvPersons.PageSize = GetPageSize(((DropDownList)sender).SelectedValue);
+            gvPersons.DataBind();
         }
 
         protected void Previous_Clicked(object sender, EventArgs e)
