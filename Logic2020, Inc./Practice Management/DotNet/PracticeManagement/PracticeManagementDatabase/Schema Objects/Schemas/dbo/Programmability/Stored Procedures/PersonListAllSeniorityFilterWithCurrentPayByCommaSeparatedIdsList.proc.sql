@@ -15,7 +15,7 @@
 	@Inactive		BIT,
 	@Terminated		BIT,
 	@Alphabet		NVARCHAR(5)
-)
+) 
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -124,13 +124,13 @@ BEGIN
 							OR (p.PersonStatusId = 3 AND @Projected = 1)
 							OR (p.PersonStatusId = 4 AND @Inactive = 1) 
 						) 
-		            AND ( p.DefaultPractice IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable] (@PracticeIdsList)))
+		            AND (@PracticeIdsList IS NULL OR p.DefaultPractice IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable] (@PracticeIdsList)))
 					AND ( p.FirstName LIKE @Looked OR p.LastName LIKE @Looked OR p.EmployeeNumber LIKE @Looked )
-		            AND (  P.PersonId  IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable] (@RecruiterIdsList))
+		            AND (  @RecruiterIdsList IS NULL
 		                 OR EXISTS (SELECT 1
 		                              FROM dbo.RecruiterCommission AS c
 		                             WHERE c.RecruitId = p.PersonId AND c.RecruiterId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable] (@RecruiterIdsList))))
-		            AND (	(TS.Timescale IN ((SELECT ResultId FROM [dbo].[ConvertStringListIntoTable] (@TimescaleIdsList)))) 	)
+		            AND (@TimescaleIdsList IS NULL OR	(TS.Timescale IN ((SELECT ResultId FROM [dbo].[ConvertStringListIntoTable] (@TimescaleIdsList)))) 	)
 		            AND ( p.LastName LIKE @Alphabet )
 					AND ((@MaxSeniorityLevel IS NULL) OR (@MaxSeniorityLevel >= p.SeniorityId))' + @OrderBy + '
 		       ) AS tmp
