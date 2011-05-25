@@ -119,18 +119,16 @@ namespace PracticeManagementService
             return OverheadFixedRateDAL.GetMinimumLoadFactorOverheadMultipliers(OverHeadName, ref isInActive);
         }
 
-        /// <summary>
-        /// Saves the Rate for each time scale type of a Overhead specified by description.
-        /// </summary>
-        /// <param name="OverHeadName"></param>
-        /// <param name="W2HourlyMultiplier"></param>
-        /// <param name="W2SalaryMultiplier"></param>
-        /// <param name="Hourly1099Multiplier"></param>
-        public void SaveMinimumLoadFactorOverheadMultipliers(string OverHeadName, bool inActive, decimal W2HourlyMultiplier, 
-                                                                    decimal W2SalaryMultiplier, decimal Hourly1099Multiplier)
+        public void UpdateMinimumLoadFactorHistory(int timeScaleId, decimal rate)
         {
-            OverheadFixedRateDAL.SaveMinimumLoadFactorOverheadMultipliers(OverHeadName, inActive, W2HourlyMultiplier, W2SalaryMultiplier, Hourly1099Multiplier);
+            OverheadFixedRateDAL.UpdateMinimumLoadFactorHistory(timeScaleId, rate);
         }
+        public void UpdateMinimumLoadFactorStatus(bool inActive)
+        {
+            OverheadFixedRateDAL.UpdateMinimumLoadFactorStatus(inActive);
+        }
+
+
         #endregion
     }
 }
