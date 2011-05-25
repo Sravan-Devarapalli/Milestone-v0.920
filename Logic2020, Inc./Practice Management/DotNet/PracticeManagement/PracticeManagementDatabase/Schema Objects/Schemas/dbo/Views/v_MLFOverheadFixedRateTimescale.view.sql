@@ -1,10 +1,10 @@
 ﻿CREATE VIEW [dbo].[v_MLFOverheadFixedRateTimescale]
 AS
 	  SELECT o.Description,
-			 ot.Rate,
+			 MH.Rate,
 			 t.HoursToCollect,
-			 o.StartDate,
-			 o.EndDate,
+			 MH.StartDate,
+			 MH.EndDate,
 			 t.IsPercentage,
 			 t.OverheadRateTypeId,
 			 t.Name OverheadRateTypeName,
@@ -12,10 +12,10 @@ AS
 				WHEN 2 THEN o.Rate
 				ELSE CAST(0 AS DECIMAL) 
 				END AS BillRateMultiplier,
-			ot.TimescaleId
+			MH.TimescaleId
 	  FROM dbo.OverheadFixedRate AS o
 	  JOIN dbo.OverheadRateType AS t ON o.RateType = t.OverheadRateTypeId
-	  JOIN dbo.OverheadFixedRateTimescale AS ot  ON ot.OverheadFixedRateId = o.OverheadFixedRateId
-	  WHERE o.IsMinimumLoadFactor = 1 AND o.Inactive = 0 AND ot.Rate > 0
+	  JOIN dbo.MinimumLoadFactorHistory AS MH  ON MH.OverheadFixedRateId = o.OverheadFixedRateId
+	  WHERE o.IsMinimumLoadFactor = 1 AND o.Inactive = 0 AND MH.Rate > 0
 
 
