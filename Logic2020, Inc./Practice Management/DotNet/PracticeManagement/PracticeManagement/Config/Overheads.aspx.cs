@@ -107,13 +107,31 @@ namespace PraticeManagement.Config
 
         protected void MLF_Changed(object sender, EventArgs e)
         {
+            var ddl = sender as DropDownList;
+            int timeScaleId;
+            if(ddl.ID=="ddlW2Hourly")
+            {
+                timeScaleId= (int)TimescaleType.Hourly;
+            }
+            else if(ddl.ID=="ddlW2Salary")
+            {
+                timeScaleId = (int)TimescaleType.Salary;
+            }
+            else
+            {
+                timeScaleId = (int)TimescaleType._1099Ctc;
+            }
             using (var serviceClient = new OverheadServiceClient())
             {
-                serviceClient.SaveMinimumLoadFactorOverheadMultipliers(MLFOverHeadDesc,
-                    !chbMLFActive.Checked,
-                    decimal.Parse(ddlW2Hourly.SelectedValue),
-                    decimal.Parse(ddlW2Salary.SelectedValue),
-                    decimal.Parse(ddl1099.SelectedValue));
+                serviceClient.UpdateMinimumLoadFactorHistory(timeScaleId,decimal.Parse(ddl.SelectedValue));
+            }
+        }
+
+        protected void chbMLFActive_OnCheckedChanged(object sender, EventArgs e)
+        {
+            using (var serviceClient = new OverheadServiceClient())
+            {
+                serviceClient.UpdateMinimumLoadFactorStatus(!chbMLFActive.Checked);
             }
         }
     }
