@@ -15,19 +15,55 @@
         <ContentTemplate>
             <table class="WholeWidth" style="background-color: #d4dff8;">
                 <tr>
-                    <td style="width: 15%;">
+                    <td colspan="3" style="width: 100%; padding-left: 10px;">
+                        <table class="WholeWidth">
+                            <tr>
+                                <td style="width: 40%; padding: 5px;">
+                                    <asp:TextBox runat="server" ID="txtSearch" Width="100%" Style="text-align: left;"
+                                        OnTextChanged="txtSearch_TextChanged" MaxLength="40"></asp:TextBox>
+                                    <ajaxToolkit:TextBoxWatermarkExtender ID="waterMarkTxtSearch" runat="server" TargetControlID="txtSearch"
+                                        WatermarkCssClass="watermarkedtext" WatermarkText="To search for a client, click here to begin typing and hit enter...">
+                                    </ajaxToolkit:TextBoxWatermarkExtender>
+                                </td>
+                                <td style="width: 30%; padding: 5px;">
+                                    <asp:CheckBox ID="chbShowActive" runat="server" AutoPostBack="true" Text="Show Active Clients Only (default view)"
+                                        Checked="True" OnCheckedChanged="chbShowActive_CheckedChanged" />
+                                </td>
+                                <td style="width: 15%; padding: 5px;">
+                                    <asp:DropDownList ID="ddlView" runat="server" OnSelectedIndexChanged="ddlView_SelectedIndexChanged"
+                                        AutoPostBack="true">
+                                        <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
+                                        <asp:ListItem Text="View 50" Value="50"></asp:ListItem>
+                                        <asp:ListItem Text="View 100" Value="100"></asp:ListItem>
+                                        <asp:ListItem Text="View All" Value="-1"></asp:ListItem>
+                                    </asp:DropDownList>
+                                </td>
+                                <td style="width: 15%; padding: 5px;">
+                                    <asp:ShadowedHyperlink runat="server" Text="Add Client" ID="lnkAddClient" CssClass="add-btn"
+                                        NavigateUrl="~/ClientDetails.aspx?returnTo=Config/Clients.aspx" />
+                                </td>
+                            </tr>
+                        </table>
                     </td>
-                    <td valign="middle" align="center" style="text-align: center;">
+                </tr>
+                <tr>
+                    <td align="left" style="width: 15%; white-space: nowrap; padding-left: 10px;">
+                        <asp:LinkButton ID="lnkbtnPrevious" runat="server" Text="<- PREVIOUS" Font-Underline="false"
+                            OnClick="Previous_Clicked"></asp:LinkButton>
+                    </td>
+                    <td valign="middle" align="center" style="width: 70%; text-align: center;">
                         <table>
                             <tr id="trAlphabeticalPaging" runat="server">
                                 <td style="padding-left: 15px; padding-top: 10px; padding-bottom: 10px; text-align: center;">
-                                    <asp:LinkButton ID="lnkbtnAll" runat="server" Text="All" Font-Underline="false" Font-Bold="true"
+                                    <asp:LinkButton ID="lnkbtnAll" Top="lnkbtnAll" Bottom="lnkbtnAll1" runat="server" Text="All" Font-Underline="false" Font-Bold="true"
                                         OnClick="Alphabet_Clicked"></asp:LinkButton>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 15%;">
+                    <td align="right" style="width: 15%; white-space: nowrap; padding-right: 10px;">
+                        <asp:LinkButton ID="lnkbtnNext" runat="server" Text="NEXT ->" Font-Underline="false"
+                            OnClick="Next_Clicked"></asp:LinkButton>
                     </td>
                 </tr>
             </table>
@@ -35,21 +71,11 @@
                 <tr>
                     <td valign="top" style="width: 45%; padding-top: 12px; padding-left: 5px; padding-right: 5px;
                         padding-bottom: 5px;">
-                        <table class="WholeWidth">
-                            <tr>
-                                <td style="width: 75%; padding: 5px; padding-bottom: 15px;">
-                                    <asp:CheckBox ID="chbShowActive" runat="server" AutoPostBack="true" Text="Show Active Clients Only (default view)"
-                                        Checked="True" OnCheckedChanged="chbShowActive_CheckedChanged" />
-                                </td>
-                                <td style="width: 25%; padding: 5px; padding-bottom: 15px;">
-                                    <asp:ShadowedHyperlink runat="server" Text="Add Client" ID="lnkAddClient" CssClass="add-btn"
-                                        NavigateUrl="~/ClientDetails.aspx?returnTo=Config/Clients.aspx" />
-                                </td>
-                            </tr>
-                        </table>
-                        <asp:GridView ID="gvClients" runat="server" AutoGenerateColumns="False" EmptyDataText="There is nothind to be displayed here."
-                            DataKeyNames="Id" CssClass="CompPerfTable" GridLines="None">
+                        <asp:GridView ID="gvClients" AllowPaging="true" runat="server" AutoGenerateColumns="False"
+                            EmptyDataText="There is nothind to be displayed here." DataKeyNames="Id" CssClass="CompPerfTable"
+                            GridLines="None">
                             <AlternatingRowStyle BackColor="#F9FAFF" />
+                            <PagerSettings Visible="false" />
                             <Columns>
                                 <asp:TemplateField>
                                     <ItemStyle Width="250" />
@@ -108,6 +134,28 @@
                         </div>
                     </td>
                     <td style="width: 10%; padding: 5px;">
+                    </td>
+                </tr>
+            </table>
+            <table class="WholeWidth" style="background-color: #d4dff8;">
+                <tr>
+                    <td align="left" style="width: 15%; white-space: nowrap; padding-left: 10px;">
+                        <asp:LinkButton ID="lnkbtnPrevious1" runat="server" Text="<- PREVIOUS" Font-Underline="false"
+                            OnClick="Previous_Clicked"></asp:LinkButton>
+                    </td>
+                    <td valign="middle" align="center" style="width: 70%; text-align: center;">
+                        <table>
+                            <tr id="trAlphabeticalPaging1" runat="server">
+                                <td style="padding-left: 15px; padding-top: 10px; padding-bottom: 10px; text-align: center;">
+                                    <asp:LinkButton ID="lnkbtnAll1" Top="lnkbtnAll" Bottom="lnkbtnAll1" runat="server" Text="All" Font-Underline="false"
+                                        Font-Bold="true" OnClick="Alphabet_Clicked"></asp:LinkButton>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td align="right" style="width: 15%; white-space: nowrap; padding-right: 10px;">
+                        <asp:LinkButton ID="lnkbtnNext1" runat="server" Text="NEXT ->" Font-Underline="false"
+                            OnClick="Next_Clicked"></asp:LinkButton>
                     </td>
                 </tr>
             </table>
