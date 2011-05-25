@@ -177,13 +177,15 @@ namespace PraticeManagement
                 }
                 else
                 {
-                    BindNotesData();
                     ucProposedResources.FillPotentialResources();
                     upProposedResources.Update();
                 }
 
                 tpHistory.Visible = OpportunityId.HasValue;
             }
+
+            if (NotesList == null || !NotesList.Any())
+                BindNotesData();
 
             mlConfirmation.ClearMessage();
 
@@ -316,10 +318,7 @@ namespace PraticeManagement
 
                 tbNote.Text = string.Empty;
             }
-            else
-            {
-                BindNotesData();
-            }
+
         }
 
         /// <summary>
@@ -344,7 +343,6 @@ namespace PraticeManagement
                     {
                         if (!SaveDirty)
                         {
-                            BindNotesData();
                             return;
                         }
                     }
@@ -353,6 +351,7 @@ namespace PraticeManagement
                     {
                         return;
                     }
+
 
                     opportunity = Opportunity;
                     ucProposedResources.OpportunityId = Opportunity.Id;
@@ -384,10 +383,6 @@ namespace PraticeManagement
                         }
                     }
                 }
-            }
-            else
-            {
-                BindNotesData();
             }
         }
 
@@ -544,11 +539,6 @@ namespace PraticeManagement
             {
                 mpeAttachToProject.Show();
             }
-            else
-            {
-                BindNotesData();
-            }
-
         }
 
 
@@ -601,7 +591,6 @@ namespace PraticeManagement
             }
             else
             {
-                BindNotesData();
                 dpEndDate.ErrorMessage = string.Empty;
                 dpStartDate.ErrorMessage = string.Empty;
             }
