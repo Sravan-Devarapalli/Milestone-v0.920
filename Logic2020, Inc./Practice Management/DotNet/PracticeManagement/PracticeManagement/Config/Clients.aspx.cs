@@ -6,6 +6,7 @@ using PraticeManagement.ClientService;
 using PraticeManagement.Controls;
 using System.Linq;
 using System.Web.UI.HtmlControls;
+using System.Drawing;
 
 namespace PraticeManagement.Config
 {
@@ -33,9 +34,9 @@ namespace PraticeManagement.Config
         {
             get
             {
-                if (Cache[CLIENTS_LIST_KEY] != null)
+                if (ViewState[CLIENTS_LIST_KEY] != null)
                 {
-                    return Cache[CLIENTS_LIST_KEY] as Client[];
+                    return ViewState[CLIENTS_LIST_KEY] as Client[];
                 }
                 else
                 {
@@ -46,7 +47,7 @@ namespace PraticeManagement.Config
                             var result = chbShowActive.Checked
                                     ? serviceClient.ClientListAll()
                                     : serviceClient.ClientListAllWithInactive();
-                            Cache[CLIENTS_LIST_KEY] = result;
+                            ViewState[CLIENTS_LIST_KEY] = result;
                             return result;
                         }
                         catch (FaultException<ExceptionDetail>)
@@ -65,14 +66,17 @@ namespace PraticeManagement.Config
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            int pagesize = Convert.ToInt32(ddlView.SelectedValue);
+            gvClients.PageSize = pagesize == -1 ? ClientsList.Count() : pagesize;
+
+            AddAlphabetButtons();
             if (!IsPostBack)
             {
-                Cache.Remove(CLIENTS_LIST_KEY);
+                ViewState.Remove(CLIENTS_LIST_KEY);
                 DataBindClients(ClientsList);
                 previousAlphabetLnkButtonId = lnkbtnAll.ID;
             }
 
-            AddAlphabetButtons();
         }
 
         protected void DataBindClients(Client[] clientsList)
@@ -83,16 +87,22 @@ namespace PraticeManagement.Config
             {
                 gvClients.SelectedIndex = 0;
             }
-
             gvClients.DataBind();
         }
 
         protected void chbShowActive_CheckedChanged(object sender, EventArgs e)
         {
-            Cache.Remove(CLIENTS_LIST_KEY);
+            gvClients.PageIndex = 0;
+            ViewState.Remove(CLIENTS_LIST_KEY);
 
             LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
             Client[] FilteredClientList = previousLinkButton != null && previousLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(previousLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
+
+            if (!string.IsNullOrEmpty(txtSearch.Text))
+            {
+                FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.Contains(txtSearch.Text)).ToArray();
+            }
+
             DataBindClients(FilteredClientList);
         }
 
@@ -167,6 +177,14 @@ namespace PraticeManagement.Config
                                  args);
         }
 
+        protected void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
+            Client[] FilteredClientList = previousLinkButton != null && previousLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(previousLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
+            FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.Contains(txtSearch.Text)).ToArray();
+            DataBindClients(FilteredClientList);
+        }
+
         private void AddAlphabetButtons()
         {
             for (int index = 65; index <= 65 + 25; index++)
@@ -175,6 +193,8 @@ namespace PraticeManagement.Config
 
                 LinkButton Alphabet = new LinkButton();
                 Alphabet.ID = "lnkbtn" + alphabet;
+                Alphabet.Attributes.Add("Top", "lnkbtn" + alphabet);
+                Alphabet.Attributes.Add("Bottom", "lnkbtn1" + alphabet);
 
                 HtmlTableCell tc = new HtmlTableCell();
                 tc.ID = "td" + alphabet;
@@ -187,29 +207,156 @@ namespace PraticeManagement.Config
                 Alphabet.Font.Underline = false;
                 Alphabet.Click += new EventHandler(Alphabet_Clicked);
 
-                tc.Controls.Add(Alphabet);                
+                tc.Controls.Add(Alphabet);
 
                 trAlphabeticalPaging.Controls.Add(tc);
+
+                LinkButton Alphabet1 = new LinkButton();
+                Alphabet1.ID = "lnkbtn1" + alphabet;
+                Alphabet1.Attributes.Add("Top", "lnkbtn" + alphabet);
+                Alphabet1.Attributes.Add("Bottom", "lnkbtn1" + alphabet);
+
+
+                HtmlTableCell tc1 = new HtmlTableCell();
+                tc1.ID = "td1" + alphabet;
+                tc1.Style.Add("padding-left", "15px");
+                tc1.Style.Add("padding-top", "10px");
+                tc1.Style.Add("padding-bottom", "10px");
+                tc1.Style.Add("text-align", "center");
+
+                Alphabet1.Text = alphabet.ToString();
+                Alphabet1.Font.Underline = false;
+                Alphabet1.Click += new EventHandler(Alphabet_Clicked);
+
+                tc1.Controls.Add(Alphabet1);
+
+                trAlphabeticalPaging1.Controls.Add(tc1);
             }
         }
 
         protected void Alphabet_Clicked(object sender, EventArgs e)
         {
+            gvClients.PageIndex = 0;
+
             if (previousAlphabetLnkButtonId != null)
             {
                 LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
-                previousLinkButton.Font.Bold = false;
+
+                LinkButton prevtopButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLinkButton.Attributes["Top"]);
+                LinkButton prevbottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(previousLinkButton.Attributes["Bottom"]);
+
+                prevtopButton.Font.Bold = false;
+                prevbottomButton.Font.Bold = false;
             }
 
             LinkButton alpha = (LinkButton)sender;
-            alpha.Font.Bold = true;
-            hdnAlphabet.Value = alpha.Text != "All" ? alpha.Text : null;
-            previousAlphabetLnkButtonId = alpha.ID;
+
+            LinkButton topButton = (LinkButton)trAlphabeticalPaging.FindControl(alpha.Attributes["Top"]);
+            LinkButton bottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(alpha.Attributes["Bottom"]);
+
+            topButton.Font.Bold = true;
+            bottomButton.Font.Bold = true;
+            hdnAlphabet.Value = topButton.Text != "All" ? topButton.Text : null;
+            previousAlphabetLnkButtonId = topButton.ID;
 
             Client[] FilteredClientList = alpha.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(alpha.Text.ToUpperInvariant())).ToArray() : ClientsList;
 
+            if (!string.IsNullOrEmpty(txtSearch.Text))
+            {
+                FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.Contains(txtSearch.Text)).ToArray();
+            }
+
             DataBindClients(FilteredClientList);
         }
+
+        protected void Previous_Clicked(object sender, EventArgs e)
+        {
+            gvClients.PageIndex = gvClients.PageIndex - 1;
+            LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
+            Client[] FilteredClientList = previousLinkButton != null && previousLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(previousLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
+            if (!string.IsNullOrEmpty(txtSearch.Text))
+            {
+                FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.Contains(txtSearch.Text)).ToArray();
+            }
+
+            DataBindClients(FilteredClientList);
+        }
+
+        protected void Next_Clicked(object sender, EventArgs e)
+        {
+            gvClients.PageIndex = gvClients.PageIndex + 1;
+            LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
+            Client[] FilteredClientList = previousLinkButton != null && previousLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(previousLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
+            if (!string.IsNullOrEmpty(txtSearch.Text))
+            {
+                FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.Contains(txtSearch.Text)).ToArray();
+            }
+
+            DataBindClients(FilteredClientList);
+        }
+
+        protected void ddlView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
+
+            Client[] FilteredClientList = previousLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(previousLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
+
+            if (!string.IsNullOrEmpty(txtSearch.Text))
+            {
+                FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.Contains(txtSearch.Text)).ToArray();
+            }
+
+            DataBindClients(FilteredClientList);
+        }
+
+        public void EnableOrDisablePrevNextButtons()
+        {
+            if (gvClients.PageIndex == 0)
+            {
+                lnkbtnPrevious.Enabled = lnkbtnPrevious1.Enabled = false;
+            }
+            else
+            {
+                lnkbtnPrevious.Enabled = lnkbtnPrevious1.Enabled = true;
+            }
+
+            if (!lnkbtnPrevious.Enabled)
+            {
+                Color color = ColorTranslator.FromHtml("#8F8F8F");
+                lnkbtnPrevious.ForeColor = lnkbtnPrevious1.ForeColor = color;
+            }
+            else
+            {
+                Color color = ColorTranslator.FromHtml("#0898E6");
+                lnkbtnPrevious.ForeColor = lnkbtnPrevious1.ForeColor = color;
+            }
+
+            if (gvClients.PageCount - 1 == gvClients.PageIndex || gvClients.PageCount == 0)
+            {
+                lnkbtnNext.Enabled = lnkbtnNext1.Enabled = false;
+            }
+            else
+            {
+                lnkbtnNext.Enabled = lnkbtnNext1.Enabled = true;
+            }
+
+            if (!lnkbtnNext.Enabled)
+            {
+                Color color = ColorTranslator.FromHtml("#8F8F8F");
+                lnkbtnNext.ForeColor = lnkbtnNext1.ForeColor = color;
+            }
+            else
+            {
+                Color color = ColorTranslator.FromHtml("#0898E6");
+                lnkbtnNext.ForeColor = lnkbtnNext1.ForeColor = color;
+            }
+        }
+
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            EnableOrDisablePrevNextButtons();
+        }
+
     }
 }
 
