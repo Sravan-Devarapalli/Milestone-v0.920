@@ -68,17 +68,11 @@ namespace PracticeManagementService
         [OperationContract]
         Dictionary<int, decimal> GetMinimumLoadFactorOverheadMultipliers(string OverHeadName, ref bool isInactive);
 
-        /// <summary>
-        /// saves the Rate for each time scale type of a Overhead specified by description.
-        /// </summary>
-        /// <param name="OverHeadName"></param>
-        /// <param name="inActive"></param>
-        /// <param name="W2HourlyMultiplier"></param>
-        /// <param name="W2SalaryMultiplier"></param>
-        /// <param name="Hourly1099Multiplier"></param>
         [OperationContract]
-        void SaveMinimumLoadFactorOverheadMultipliers(string OverHeadName, bool inActive, decimal W2HourlyMultiplier,
-                                                                    decimal W2SalaryMultiplier, decimal Hourly1099Multiplier);
+        void UpdateMinimumLoadFactorHistory(int timeScaleId, decimal rate);
+
+        [OperationContract]
+        void UpdateMinimumLoadFactorStatus(bool inActive);
     }
 }
 
