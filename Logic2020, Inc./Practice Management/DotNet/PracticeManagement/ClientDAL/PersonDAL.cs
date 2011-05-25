@@ -1280,7 +1280,7 @@ namespace DataAccess
 
                     command.Parameters.AddWithValue(ShowAllParam, showAll);
                     command.Parameters.AddWithValue(PracticeIdsListParam,
-                                                    practiceIdsSelected);
+                                                    practiceIdsSelected != null ? (object)practiceIdsSelected : DBNull.Value);
                     command.Parameters.AddWithValue(StartDateParam,
                                                     startDate != DateTime.MinValue ? (object)startDate : DBNull.Value);
                     command.Parameters.AddWithValue(EndDateParam,
@@ -1292,7 +1292,7 @@ namespace DataAccess
                     command.Parameters.AddWithValue(LookedParam,
                                                     !string.IsNullOrEmpty(looked) ? (object)looked : DBNull.Value);
                     command.Parameters.AddWithValue(RecruiterIdsListParam,
-                                                    recruiterIdsSelected);
+                                                    recruiterIdsSelected != null ? (object)recruiterIdsSelected : DBNull.Value);
                     command.Parameters.AddWithValue(MaxSeniorityLevelParam,
                                                     maxSeniorityLevel.HasValue
                                                         ? (object)maxSeniorityLevel.Value
@@ -1302,7 +1302,7 @@ namespace DataAccess
                         command.Parameters.AddWithValue(SortByParam, sortBy);
                     }
                     command.Parameters.AddWithValue(TimescaleIdsListParam,
-                                                    timeScaleIdsSelected);
+                                                    timeScaleIdsSelected != null ? (object)timeScaleIdsSelected : DBNull.Value);
                     command.Parameters.AddWithValue(ProjectedParam, projected);
                     command.Parameters.AddWithValue(TerminatedParam, terminated);
                     command.Parameters.AddWithValue(InactiveParam, inactive);
@@ -2706,13 +2706,14 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(ShowAllParam, showAll);
 
-                command.Parameters.AddWithValue(PracticeIdsListParam, practiceIds);
+                command.Parameters.AddWithValue(PracticeIdsListParam,
+                                                    practiceIds != null ? (object)practiceIds : DBNull.Value);
                 command.Parameters.AddWithValue(LookedParam,
                                                 !string.IsNullOrEmpty(looked) ? (object)looked : DBNull.Value);
                 command.Parameters.AddWithValue(RecruiterIdsListParam,
-                                               recruiterIds);
+                                               recruiterIds != null ? (object)recruiterIds : DBNull.Value);
                 command.Parameters.AddWithValue(TimescaleIdsListParam,
-                                                timeScaleIds);
+                                                    timeScaleIds != null ? (object)timeScaleIds : DBNull.Value);
                 command.Parameters.AddWithValue(ProjectedParam, projected);
                 command.Parameters.AddWithValue(TerminatedParam, terminated);
                 command.Parameters.AddWithValue(InactiveParam, inactive);
