@@ -161,7 +161,7 @@
         </tr>
         <tr>
             <td>
-                <asp:CheckBox ID="chbMLFActive" runat="server" AutoPostBack="true" OnCheckedChanged="MLF_Changed" />
+                <asp:CheckBox ID="chbMLFActive" runat="server" AutoPostBack="true" OnCheckedChanged="chbMLFActive_OnCheckedChanged" />
             </td>
             <td>
                 <asp:Label ID="Label1" runat="server" EnableViewState="false" Font-Bold="true" Text="Minimum Load Factor (MLF)"></asp:Label>
