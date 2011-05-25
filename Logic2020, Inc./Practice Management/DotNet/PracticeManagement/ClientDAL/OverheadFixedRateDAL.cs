@@ -24,8 +24,10 @@ namespace DataAccess
         private const string OverheadFixedRateGetByIdProcedure = "dbo.OverheadFixedRateGetById";
         private const string OverheadFixedRateInsertProcedure = "dbo.OverheadFixedRateInsert";
         private const string OverheadFixedRateUpdateProcedure = "dbo.OverheadFixedRateUpdate";
-        private const string GetMLFMultipliersProcedure = "GetMinimumLoadFactorMultipliers";
-        private const string SaveMLFMultipliersProcedure = "SaveMinimumLoadFactorOverheadMultipliers";
+        private const string GetMLFMultipliersProcedure = "dbo.GetMinimumLoadFactorMultipliers";
+        private const string SaveMLFMultipliersProcedure = "dbo.SaveMinimumLoadFactorOverheadMultipliers";
+        private const string UpdateMinimumLoadFactorHistoryProcedure = "dbo.UpdateMinimumLoadFactorHistory";
+        private const string UpdateMinimumLoadFactorStatusProcedure = "dbo.UpdateMinimumLoadFactorStatus";
 
         #endregion
 
@@ -150,6 +152,35 @@ namespace DataAccess
                 command.Parameters.AddWithValue(W2HourlyMultiplierParam, w2HourlyMultiplier);
                 command.Parameters.AddWithValue(W2SalaryMultiplierParam, w2SalaryMultiplier);
                 command.Parameters.AddWithValue(Hourly1099MultiplierParam, hourly1099Multiplier);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void UpdateMinimumLoadFactorHistory(int timeScaleId, decimal rate )
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command =
+                new SqlCommand(UpdateMinimumLoadFactorHistoryProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(TimescaleIdParam, timeScaleId);
+                command.Parameters.AddWithValue(RateParam, rate);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void UpdateMinimumLoadFactorStatus(bool inActive)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command =
+                new SqlCommand(UpdateMinimumLoadFactorStatusProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(InactiveParam, inActive);
                 connection.Open();
                 command.ExecuteNonQuery();
             }
