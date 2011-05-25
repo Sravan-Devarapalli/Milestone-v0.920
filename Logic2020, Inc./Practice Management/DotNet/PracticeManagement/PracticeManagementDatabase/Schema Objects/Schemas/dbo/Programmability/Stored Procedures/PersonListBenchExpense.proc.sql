@@ -130,7 +130,10 @@ AS
 							WHEN 3 THEN MLFO.[Rate] * 12 / HY.HoursInYear
 							ELSE  MLFO.[Rate]   END
 						FROM dbo.v_MLFOverheadFixedRateTimescale MLFO 
-						WHERE MLFO.TimescaleId = pay.Timescale)
+						WHERE MLFO.TimescaleId = pay.Timescale
+							AND r.Date >= MLFO.StartDate 
+								AND (r.Date <=MLFO.EndDate OR MLFO.EndDate IS NULL)
+							)
 						   ,0) MLFOverheadRate,
 						   P.PersonId,
 						   cal.Date,
