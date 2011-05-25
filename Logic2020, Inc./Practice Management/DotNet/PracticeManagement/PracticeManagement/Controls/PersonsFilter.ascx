@@ -63,7 +63,7 @@
             <cc2:ScrollingDropDown ID="cblPractices" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
                 onclick="scrollingDropdown_onclick('cblPractices','Practice Area')" BackColor="White"
                 CellPadding="3" Height="250px" NoItemsType="All" SetDirty="False" DropDownListType="Practice Area"
-                Width="260px" BorderWidth="0" />
+                Width="250px" BorderWidth="0" />
             <ext:ScrollableDropdownExtender ID="sdePractices" runat="server" TargetControlID="cblPractices"
                 UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
             </ext:ScrollableDropdownExtender>
