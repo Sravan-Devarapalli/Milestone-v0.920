@@ -57,13 +57,14 @@ AS
 				OR (p.PersonStatusId = 3 AND @Projected = 1)
 				OR (p.PersonStatusId = 4 AND @Inactive = 1) 
 			) 
-		AND ( p.DefaultPractice  IN (SELECT PracticeId FROM @PracticeIdsTable) )
+		AND ( p.DefaultPractice  IN (SELECT PracticeId FROM @PracticeIdsTable)  OR @PracticeIdsList IS NULL )
 		AND (p.FirstName LIKE @Looked OR p.LastName LIKE @Looked OR p.EmployeeNumber LIKE @Looked )
-		AND (   P.PersonId  IN (SELECT RecruiterId FROM @RecruiterIdsTable)
+		AND ( @RecruiterIdsList IS NULL
 	        OR EXISTS (SELECT 1
 	                     FROM dbo.RecruiterCommission AS c
 	                    WHERE c.RecruitId = p.PersonId AND c.RecruiterId IN (SELECT RecruiterId FROM @RecruiterIdsTable)))
-		AND (EXISTS (SELECT 1
+		AND (@TimescaleIdsList IS NULL
+			OR EXISTS (SELECT 1
 						FROM dbo.v_Pay AS pay
 						WHERE pay.PersonId = p.PersonId AND pay.Timescale IN (SELECT TimeScaleId FROM @TimeScaleIdsTable)))
 		AND ( p.LastName LIKE @Alphabet )
