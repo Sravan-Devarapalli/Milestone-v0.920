@@ -11,6 +11,7 @@ using PraticeManagement.PersonService;
 using PraticeManagement.Utils;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
+using System.Drawing;
 
 namespace PraticeManagement.Config
 {
@@ -39,6 +40,42 @@ namespace PraticeManagement.Config
             set
             {
                 Session["CurrentPageIndex"] = value;
+            }
+        }
+
+        private string RecruiterIdsSelectedKey
+        {
+            get
+            {
+                return Session["RecruiterIdsSelectedKey"] as string;
+            }
+            set
+            {
+                Session["RecruiterIdsSelectedKey"] = value;
+            }
+        }
+
+        private string PayTypeIdsSelectedKey
+        {
+            get
+            {
+                return Session["PayTypeIdsSelectedKey"] as string;
+            }
+            set
+            {
+                Session["PayTypeIdsSelectedKey"] = value;
+            }
+        }
+
+        private string PracticeIdsSelectedKey
+        {
+            get
+            {
+                return Session["PracticeIdsSelectedKey"] as string;
+            }
+            set
+            {
+                Session["PracticeIdsSelectedKey"] = value;
             }
         }
 
@@ -112,22 +149,6 @@ namespace PraticeManagement.Config
             }
         }
 
-        private string PracticeIdsSelected
-        {
-            get
-            {
-                return hdnPracticeId.Value;
-            }
-        }
-
-        private string PayTypeIdsSelected
-        {
-            get
-            {
-                return hdnPayTypeId.Value;
-            }
-        }
-
         #endregion Properties
 
         #region Events And Methods
@@ -163,11 +184,6 @@ namespace PraticeManagement.Config
                 if (!userIsAdministrator && !userIsHR)//#2817: userIsHR is added as per  requirement.
                 {
                     Person current = DataHelper.CurrentPerson;
-
-                    var selectedItem = cblRecruiters.Items.FindByValue(current != null && current.Id.HasValue ? current.Id.Value.ToString() : string.Empty);
-                    if (selectedItem != null)
-                    {
-                    }
 
                     for (int i = cblRecruiters.Items.Count - 1; i >= 1; i--)
                     {
@@ -260,6 +276,7 @@ namespace PraticeManagement.Config
 
             previousLetter = alpha.ID;
             gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
+            gvPersons.DataBind();
         }
 
         protected void UpdateView_Clicked(object sender, EventArgs e)
@@ -267,7 +284,10 @@ namespace PraticeManagement.Config
             CurrentIndex = 0;
             SetFilterValues();
             gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
+            gvPersons.DataBind();
         }
+
+        
 
         protected void ResetFilter_Clicked(object sender, EventArgs e)
         {
@@ -290,6 +310,7 @@ namespace PraticeManagement.Config
             {
                 CurrentIndex = (int)CurrentIndex - 1;
             }
+            gvPersons.DataBind();
         }
 
         protected void Next_Clicked(object sender, EventArgs e)
@@ -298,6 +319,7 @@ namespace PraticeManagement.Config
             {
                 CurrentIndex = (int)CurrentIndex + 1;
             }
+            gvPersons.DataBind();
         }
 
         protected void btnExportToExcel_Click(object sender, EventArgs e)
@@ -391,12 +413,33 @@ namespace PraticeManagement.Config
 
             if (ddlView.SelectedValue == "-1")
             {
-                lnkbtnPrevious.Enabled = lnkbtnNext.Enabled = false;
+                lnkbtnPrevious.Enabled = lnkbtnNext.Enabled = false;                
             }
             else
             {
                 lnkbtnPrevious.Enabled = !(CurrentIndex == 0);
                 lnkbtnNext.Enabled = !((gvPersons.Rows.Count == 0) || (currentRecords == totalRecords) || (currentRecords < Convert.ToInt32(ddlView.SelectedValue)));
+            }
+
+            if (!lnkbtnPrevious.Enabled)
+            {
+                Color color = ColorTranslator.FromHtml("#8F8F8F");
+                lnkbtnPrevious.ForeColor = color;
+            }
+            else
+            {
+                Color color = ColorTranslator.FromHtml("#0898E6");
+                lnkbtnPrevious.ForeColor = color;
+            }
+            if (!lnkbtnNext.Enabled)
+            {
+                Color color = ColorTranslator.FromHtml("#8F8F8F");
+                lnkbtnNext.ForeColor = color;
+            }
+            else
+            {
+                Color color = ColorTranslator.FromHtml("#0898E6");
+                lnkbtnNext.ForeColor = color;
             }
         }
 
@@ -417,21 +460,6 @@ namespace PraticeManagement.Config
         public static int GetPersonCount(string practiceIdsSelected, bool active, int pageSize, int pageNo, string looked,
                                          string recruitersSelected, string payTypeIdsSelected, bool projected, bool terminated, bool inactive, char? alphabet)
         {
-            if (practiceIdsSelected == null)
-            {
-                practiceIdsSelected = string.Empty;
-            }
-
-            if (payTypeIdsSelected == null)
-            {
-                payTypeIdsSelected = string.Empty;
-            }
-
-            if (recruitersSelected == null)
-            {
-                recruitersSelected = string.Empty;
-            }
-
             using (var serviceClient = new PersonServiceClient())
             {
                 try
@@ -475,21 +503,6 @@ namespace PraticeManagement.Config
                                           int startRow, int maxRows, string recruitersSelected, string sortBy, string payTypeIdsSelected,
                                             bool projected, bool terminated, bool inactive, char? alphabet)
         {
-            if (practiceIdsSelected == null)
-            {
-                practiceIdsSelected = string.Empty;
-            }
-
-            if (payTypeIdsSelected == null)
-            {
-                payTypeIdsSelected = string.Empty;
-            }
-
-            if (recruitersSelected == null)
-            {
-                recruitersSelected = string.Empty;
-            }
-
             using (var serviceClient = new PersonServiceClient())
             {
                 try
@@ -688,9 +701,9 @@ namespace PraticeManagement.Config
         private void SetFilterValues()
         {
             hdnActive.Value = personsFilter.Active.ToString();
-            hdnPracticeId.Value = personsFilter.PracticeIds;
-            hdnRecruiterId.Value = cblRecruiters.SelectedItems;
-            hdnPayTypeId.Value = personsFilter.PayTypeIds;
+            PracticeIdsSelectedKey = personsFilter.PracticeIds;
+            RecruiterIdsSelectedKey = cblRecruiters.Items[0].Selected ? null : cblRecruiters.SelectedItems;
+            PayTypeIdsSelectedKey = personsFilter.PayTypeIds;
             hdnProjected.Value = personsFilter.Projected.ToString();
             hdnTerminated.Value = personsFilter.Terminated.ToString();
             hdnInactive.Value = personsFilter.Inactive.ToString();
@@ -745,13 +758,13 @@ namespace PraticeManagement.Config
 
             if (pageSize == -1)
             {
-                pageSize = GetPersonCount(PracticeIdsSelected,
+                pageSize = GetPersonCount(PracticeIdsSelectedKey,
                                             Convert.ToBoolean(hdnActive.Value),
                                             0,
                                             1,
                                             hdnLooked.Value,
-                                            hdnRecruiterId.Value,
-                                            PayTypeIdsSelected,
+                                            RecruiterIdsSelectedKey,
+                                            PayTypeIdsSelectedKey,
                                             Convert.ToBoolean(hdnProjected.Value),
                                             Convert.ToBoolean(hdnTerminated.Value),
                                             Convert.ToBoolean(hdnInactive.Value),
@@ -773,6 +786,21 @@ namespace PraticeManagement.Config
             }
         }
 
+        protected void odsPersons_OnSelecting(object sender, ObjectDataSourceSelectingEventArgs e)
+        {
+            e.InputParameters["practiceIdsSelected"] = PracticeIdsSelectedKey;
+            e.InputParameters["active"] = hdnActive.Value;
+            e.InputParameters["pageSize"] = gvPersons.PageSize;
+            e.InputParameters["pageNo"] = CurrentIndex;
+            e.InputParameters["looked"] = hdnLooked.Value;
+            e.InputParameters["recruitersSelected"] = RecruiterIdsSelectedKey;
+            e.InputParameters["payTypeIdsSelected"] = PayTypeIdsSelectedKey;
+            e.InputParameters["projected"] = hdnProjected.Value;
+            e.InputParameters["terminated"] = hdnTerminated.Value;
+            e.InputParameters["inactive"] = hdnInactive.Value;
+            e.InputParameters["alphabet"] = hdnAlphabet.Value;
+
+        }
         #endregion
 
         #endregion
