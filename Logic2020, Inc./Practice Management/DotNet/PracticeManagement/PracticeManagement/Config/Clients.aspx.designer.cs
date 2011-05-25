@@ -22,6 +22,60 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.UpdatePanel pnlBody;
         
         /// <summary>
+        /// txtSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSearch;
+        
+        /// <summary>
+        /// waterMarkTxtSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TextBoxWatermarkExtender waterMarkTxtSearch;
+        
+        /// <summary>
+        /// chbShowActive control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbShowActive;
+        
+        /// <summary>
+        /// ddlView control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlView;
+        
+        /// <summary>
+        /// lnkAddClient control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedHyperlink lnkAddClient;
+        
+        /// <summary>
+        /// lnkbtnPrevious control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkbtnPrevious;
+        
+        /// <summary>
         /// trAlphabeticalPaging control.
         /// </summary>
         /// <remarks>
@@ -40,22 +94,13 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.LinkButton lnkbtnAll;
         
         /// <summary>
-        /// chbShowActive control.
+        /// lnkbtnNext control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chbShowActive;
-        
-        /// <summary>
-        /// lnkAddClient control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedHyperlink lnkAddClient;
+        protected global::System.Web.UI.WebControls.LinkButton lnkbtnNext;
         
         /// <summary>
         /// gvClients control.
@@ -65,6 +110,42 @@ namespace PraticeManagement.Config {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvClients;
+        
+        /// <summary>
+        /// lnkbtnPrevious1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkbtnPrevious1;
+        
+        /// <summary>
+        /// trAlphabeticalPaging1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trAlphabeticalPaging1;
+        
+        /// <summary>
+        /// lnkbtnAll1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkbtnAll1;
+        
+        /// <summary>
+        /// lnkbtnNext1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkbtnNext1;
         
         /// <summary>
         /// hdnAlphabet control.
