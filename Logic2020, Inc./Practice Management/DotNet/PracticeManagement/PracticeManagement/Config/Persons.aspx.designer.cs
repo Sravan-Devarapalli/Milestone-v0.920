@@ -193,33 +193,6 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.HiddenField hdnTerminated;
         
         /// <summary>
-        /// hdnPracticeId control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnPracticeId;
-        
-        /// <summary>
-        /// hdnPayTypeId control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnPayTypeId;
-        
-        /// <summary>
-        /// hdnRecruiterId control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnRecruiterId;
-        
-        /// <summary>
         /// hdnLooked control.
         /// </summary>
         /// <remarks>
