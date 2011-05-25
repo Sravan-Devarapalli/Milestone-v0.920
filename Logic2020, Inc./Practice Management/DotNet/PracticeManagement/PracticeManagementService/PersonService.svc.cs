@@ -166,6 +166,7 @@ namespace PracticeManagementService
             bool inactive,
             char? alphabet)
         {
+            PersonRateCalculator.VerifyPrivileges(userName, ref recruiterIdsSelected);
             return
                 PersonDAL.PersonListFilteredWithCurrentPayByCommaSeparatedIdsList(practiceIdsSelected, !active, pageSize, pageNo, looked, DateTime.MinValue, DateTime.MinValue, recruiterIdsSelected, null, sortBy, timeScaleIdsSelected, projected, terminated, inactive, alphabet);
         }
@@ -313,6 +314,7 @@ namespace PracticeManagementService
 
         public int GetPersonCountByCommaSeperatedIdsList(string practiceIds, bool active, string looked, string recruiterIds, string userName, string timeScaleIds, bool projected, bool terminated, bool inactive, char? alphabet)
         {
+            PersonRateCalculator.VerifyPrivileges(userName, ref recruiterIds);
             return PersonDAL.PersonGetCount(practiceIds, !active, looked, recruiterIds, timeScaleIds, projected, terminated, inactive, alphabet);
         }
 
