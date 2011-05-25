@@ -17,13 +17,24 @@ namespace PraticeManagement.Controls.Projects
 
         #endregion
 
+        #region Constants
+
         public const string MILESTONE_TARGET = "milestone";
         protected const string ProjectIdFormat = "projectId={0}";
 
         private const int GROSS_MARGIN_CELL_INDEX = 4;
         private const int MARGIN_PERCENT_CELL_INDEX = 5;
 
+        private const string ViewSortExpression = "SortExpression";
+        private const string ViewSortDirection = "SortDirection";
+
+        private const string CssArrowClass = "arrow";
+
+        #endregion
+
         private SeniorityAnalyzer milestonesSeniorityAnalyzer;
+
+        #region Properties
 
         protected int? ProjectId
         {
@@ -39,10 +50,43 @@ namespace PraticeManagement.Controls.Projects
                 }
             }
         }
+        
+        private string PreviousSortExpression
+        {
+            get
+            {
+                return (string)ViewState[ViewSortExpression];
+            }
+            set
+            {
+                ViewState[ViewSortExpression] = value;
+            }
+        }
+
+        private SortDirection PreviousSortDirection
+        {
+            get
+            {
+                var value = ViewState[ViewSortDirection];
+                return value == null ? SortDirection.Ascending : (SortDirection)value;
+            }
+            set
+            {
+                ViewState[ViewSortDirection] = value;
+            }
+        }
+
+        #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
             milestonesSeniorityAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
+
+            if (!IsPostBack)
+            {
+                gvRevenueMilestones.Sort("StartDate", SortDirection.Ascending);
+                PreviousSortExpression = "StartDate";
+            }
         }
 
         protected string GetMilestoneRedirectUrl(object milestoneId)
@@ -74,6 +118,52 @@ namespace PraticeManagement.Controls.Projects
                     HideCell(e, MARGIN_PERCENT_CELL_INDEX);
                 }
             }
+
+            if (e.Row.RowType == DataControlRowType.Header)
+            {
+                GridViewRow row = e.Row;
+
+                if (row.HasControls())
+                {
+                    foreach (TableCell cell in row.Controls)
+                    {
+                        if (cell.HasControls())
+                        {
+                            foreach (var ctrl in cell.Controls)
+                            {
+                                if (ctrl is LinkButton)
+                                {
+                                    var lb = (LinkButton)ctrl;
+
+                                    lb.CssClass = CssArrowClass;
+
+                                    if (lb.CommandArgument == PreviousSortExpression)
+                                    {
+                                        lb.CssClass += string.Format(" sort-{0}", PreviousSortDirection == SortDirection.Ascending ? "up" : "down");
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void gvRevenueMilestones_Sorting(object sender, GridViewSortEventArgs e)
+        {
+
+            string newExpression = e.SortExpression;
+            if (newExpression == PreviousSortExpression)
+            {
+                PreviousSortDirection = PreviousSortDirection == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending;
+            }
+            else
+            {
+                PreviousSortExpression = newExpression;
+                PreviousSortDirection = SortDirection.Ascending;
+            }
         }
     }
 }
+
