@@ -90,7 +90,7 @@
                                                     <cc2:ScrollingDropDown ID="cblRecruiters" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
                                                         onclick="scrollingDropdown_onclick('cblRecruiters','Recruiter')" BackColor="White"
                                                         CellPadding="3" Height="200px" NoItemsType="All" SetDirty="False" DropDownListType="Recruiter"
-                                                        Width="180px" BorderWidth="0" />
+                                                        Width="200px" BorderWidth="0" />
                                                     <ext:ScrollableDropdownExtender ID="sdeRecruiters" runat="server" TargetControlID="cblRecruiters"
                                                         UseAdvanceFeature="true" Width="200px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                                                     </ext:ScrollableDropdownExtender>
@@ -104,9 +104,6 @@
                             <asp:HiddenField ID="hdnProjected" runat="server" Value="false" />
                             <asp:HiddenField ID="hdnInactive" runat="server" Value="false" />
                             <asp:HiddenField ID="hdnTerminated" runat="server" Value="false" />
-                            <asp:HiddenField ID="hdnPracticeId" runat="server" />
-                            <asp:HiddenField ID="hdnPayTypeId" runat="server" />
-                            <asp:HiddenField ID="hdnRecruiterId" runat="server" />
                             <asp:HiddenField ID="hdnLooked" runat="server" />
                             <asp:HiddenField ID="hdnAlphabet" runat="server" />
                         </ContentTemplate>
@@ -241,29 +238,19 @@
             </asp:GridView>
             <asp:ObjectDataSource ID="odsPersons" runat="server" SelectCountMethod="GetPersonCount"
                 SelectMethod="GetPersons" StartRowIndexParameterName="startRow" MaximumRowsParameterName="maxRows"
-                EnablePaging="true" SortParameterName="sortBy" CacheDuration="5" TypeName="PraticeManagement.Config.Persons">
-                <SelectParameters>
-                    <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnPracticeId" Name="practiceIdsSelected"
-                        PropertyName="Value" />
-                    <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnActive" Name="active"
-                        PropertyName="Value" Type="Boolean" />
-                    <asp:ControlParameter ControlID="gvPersons" Name="pageSize" PropertyName="PageSize"
-                        Type="Int32" />
-                    <asp:SessionParameter SessionField="CurrentPageIndex" Name="pageNo" Type="Int32" />
-                    <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnLooked" Name="looked"
-                        PropertyName="Value" Type="String" />
-                    <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnRecruiterId" Name="recruitersSelected"
-                        PropertyName="Value" Type="String" />
-                    <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnPayTypeId" Name="payTypeIdsSelected"
-                        PropertyName="Value" />
-                    <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnProjected" Name="projected"
-                        PropertyName="Value" />
-                    <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnTerminated" Name="terminated"
-                        PropertyName="Value" />
-                    <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnInactive" Name="inactive"
-                        PropertyName="Value" />
-                    <asp:ControlParameter ControlID="tcFilters$tpMainFilters$hdnAlphabet" Name="alphabet"
-                        PropertyName="Value" />
+                EnablePaging="true" SortParameterName="sortBy" CacheDuration="5" TypeName="PraticeManagement.Config.Persons" OnSelecting="odsPersons_OnSelecting">
+               <SelectParameters>
+                    <asp:Parameter Name="practiceIdsSelected" Type="String" />
+                    <asp:Parameter Name="active" Type="Boolean" />
+                    <asp:Parameter Name="pageSize" Type="Int32" />
+                    <asp:Parameter Name="pageNo" Type="Int32" />
+                    <asp:Parameter Name="looked" Type="String" />
+                    <asp:Parameter Name="recruitersSelected" Type="String" />
+                    <asp:Parameter Name="payTypeIdsSelected" Type="String" />
+                    <asp:Parameter Name="projected" />
+                    <asp:Parameter Name="terminated" />
+                    <asp:Parameter Name="inactive" />
+                    <asp:Parameter Name="alphabet" />
                 </SelectParameters>
             </asp:ObjectDataSource>
             <table class="buttons-block WholeWidth" style="background-color: #d4dff8;">
