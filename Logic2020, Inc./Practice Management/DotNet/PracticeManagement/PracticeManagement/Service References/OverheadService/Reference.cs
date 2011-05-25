@@ -40,9 +40,11 @@ namespace PraticeManagement.OverheadService {
             "se")]
         System.Collections.Generic.Dictionary<int, decimal> GetMinimumLoadFactorOverheadMultipliers(string OverHeadName, ref bool isInactive);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOverheadService/SaveMinimumLoadFactorOverheadMultipliers", ReplyAction="http://tempuri.org/IOverheadService/SaveMinimumLoadFactorOverheadMultipliersRespo" +
-            "nse")]
-        void SaveMinimumLoadFactorOverheadMultipliers(string OverHeadName, bool inActive, decimal W2HourlyMultiplier, decimal W2SalaryMultiplier, decimal Hourly1099Multiplier);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOverheadService/UpdateMinimumLoadFactorHistory", ReplyAction="http://tempuri.org/IOverheadService/UpdateMinimumLoadFactorHistoryResponse")]
+        void UpdateMinimumLoadFactorHistory(int timeScaleId, decimal rate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOverheadService/UpdateMinimumLoadFactorStatus", ReplyAction="http://tempuri.org/IOverheadService/UpdateMinimumLoadFactorStatusResponse")]
+        void UpdateMinimumLoadFactorStatus(bool inActive);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -102,8 +104,12 @@ namespace PraticeManagement.OverheadService {
             return base.Channel.GetMinimumLoadFactorOverheadMultipliers(OverHeadName, ref isInactive);
         }
         
-        public void SaveMinimumLoadFactorOverheadMultipliers(string OverHeadName, bool inActive, decimal W2HourlyMultiplier, decimal W2SalaryMultiplier, decimal Hourly1099Multiplier) {
-            base.Channel.SaveMinimumLoadFactorOverheadMultipliers(OverHeadName, inActive, W2HourlyMultiplier, W2SalaryMultiplier, Hourly1099Multiplier);
+        public void UpdateMinimumLoadFactorHistory(int timeScaleId, decimal rate) {
+            base.Channel.UpdateMinimumLoadFactorHistory(timeScaleId, rate);
+        }
+        
+        public void UpdateMinimumLoadFactorStatus(bool inActive) {
+            base.Channel.UpdateMinimumLoadFactorStatus(inActive);
         }
     }
 }
