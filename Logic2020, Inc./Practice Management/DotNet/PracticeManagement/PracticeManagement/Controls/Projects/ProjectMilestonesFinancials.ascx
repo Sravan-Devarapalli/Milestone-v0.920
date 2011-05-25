@@ -1,15 +1,17 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProjectMilestonesFinancials.ascx.cs"
     Inherits="PraticeManagement.Controls.Projects.ProjectMilestonesFinancials" %>
 <%@ Import Namespace="DataTransferObjects" %>
-<asp:GridView ID="gvRevenueMilestones" runat="server" AutoGenerateColumns="false"
-    EmptyDataText="No milestones have been created for this project." OnRowDataBound="gvRevenueMilestones_RowDataBound"
-    CssClass="CompPerfTable WholeWidth" GridLines="None" BackColor="White" DataSourceID="odsMilestones">
-    <AlternatingRowStyle BackColor="#F9FAFF" />
-    <Columns>
+<asp:gridview id="gvRevenueMilestones" runat="server" autogeneratecolumns="false"
+    allowsorting="true" emptydatatext="No milestones have been created for this project."
+    onrowdatabound="gvRevenueMilestones_RowDataBound" cssclass="CompPerfTable WholeWidth"
+    gridlines="None" backcolor="White" datasourceid="odsMilestones" onsorting="gvRevenueMilestones_Sorting">
+    <alternatingrowstyle backcolor="#F9FAFF" />
+    <columns>
         <asp:TemplateField HeaderText="Milestone Name">
             <HeaderTemplate>
                 <div class="ie-bg">
-                    Milestone Name</div>
+                    <asp:LinkButton ID="lbMilestoneName" runat="server" Text="Milestone Name" CommandName="Sort" CommandArgument="MilestoneName"/>
+                    </div>
             </HeaderTemplate>
             <ItemTemplate>
                 <asp:HyperLink ID="hlMilestoneName" runat="server" NavigateUrl='<%# GetMilestoneRedirectUrl(Eval("MilestoneId")) %>'
@@ -20,20 +22,20 @@
             <ItemStyle HorizontalAlign="Center" />
             <HeaderTemplate>
                 <div class="ie-bg">
-                    Start Date</div>
+                    <asp:LinkButton ID="lbStartDate" runat="server" Text="Start Date" CommandName="Sort" CommandArgument="StartDate" /></div>
             </HeaderTemplate>
             <ItemTemplate>
-                <asp:Label ID="lblStartDate" runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToString("d") %>' />
+                <asp:Label ID="lblStartDate" runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>' />
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderText="End Date">
             <ItemStyle HorizontalAlign="Center" />
             <HeaderTemplate>
                 <div class="ie-bg">
-                    End Date</div>
+                    <asp:LinkButton ID="lbEndDate" runat="server" Text="End Date" CommandName="Sort" CommandArgument="ProjectedDeliveryDate" /></div>
             </HeaderTemplate>
             <ItemTemplate>
-                <asp:Label ID="lblEndDate" runat="server" Text='<%# ((DateTime)Eval("ProjectedDeliveryDate")).ToString("d") %>' />
+                <asp:Label ID="lblEndDate" runat="server" Text='<%# ((DateTime)Eval("ProjectedDeliveryDate")).ToString("MM/dd/yyyy") %>' />
             </ItemTemplate>
         </asp:TemplateField>
         <%--<asp:TemplateField HeaderText="Expected Hours">
@@ -58,7 +60,8 @@
         <asp:TemplateField HeaderText="Revenue">
             <HeaderTemplate>
                 <div class="ie-bg">
-                    Revenue</div>
+                <asp:LinkButton ID="lbRevenue" runat="server" Text="Revenue" CommandName="Sort" CommandArgument="Revenue"/>
+                    </div>
             </HeaderTemplate>
             <ItemStyle HorizontalAlign="Center" />
             <ItemTemplate>
@@ -68,7 +71,8 @@
         <asp:TemplateField HeaderText="Gross Margin">
             <HeaderTemplate>
                 <div class="ie-bg">
-                    Gross Margin</div>
+                <asp:LinkButton ID="lbGrossMargin" runat="server" Text="Gross Margin" CommandName="Sort" CommandArgument="GrossMargin" />
+                    </div>
             </HeaderTemplate>
             <ItemStyle HorizontalAlign="Center" />
             <ItemTemplate>
@@ -78,7 +82,8 @@
         <asp:TemplateField HeaderText="Margin %">
             <HeaderTemplate>
                 <div class="ie-bg">
-                    Margin %</div>
+                <asp:LinkButton ID="lbMargin" runat="server" Text="Margin %" CommandName="Sort" CommandArgument="TargetMargin" />
+                    </div>
             </HeaderTemplate>
             <ItemStyle HorizontalAlign="Center" />
             <ItemTemplate>
@@ -89,7 +94,8 @@
             <ItemStyle HorizontalAlign="Center" />
             <HeaderTemplate>
                 <div class="ie-bg">
-                    Billable</div>
+                <asp:LinkButton ID="lbBillable" runat="server" Text="Billable" CommandName="Sort" CommandArgument="IsChargeable" />
+                    </div>
             </HeaderTemplate>
             <ItemTemplate>
                 <%# ((bool) Eval("IsChargeable")) ? "Yes" : "No" %>
@@ -99,19 +105,19 @@
             <ItemStyle HorizontalAlign="Center" />
             <HeaderTemplate>
                 <div class="ie-bg">
-                    Consultants can adjust</div>
+                <asp:LinkButton ID="lbConsultantsCanAdjust" runat="server" Text="Consultants can adjust" CommandName="Sort" CommandArgument="ConsultantsCanAdjust" />
+                    </div>
             </HeaderTemplate>
             <ItemTemplate>
                 <%# ((bool)Eval("ConsultantsCanAdjust")) ? "Yes" : "No"%>
             </ItemTemplate>
         </asp:TemplateField>
-    </Columns>
-</asp:GridView>
-<asp:ObjectDataSource ID="odsMilestones" runat="server" 
-    SelectMethod="GetProjectMilestonesFinancials" 
-    TypeName="PraticeManagement.ProjectService.ProjectServiceClient">
-    <SelectParameters>
+    </columns>
+</asp:gridview>
+<asp:objectdatasource id="odsMilestones" runat="server" selectmethod="GetProjectMilestonesFinancials"
+    typename="PraticeManagement.ProjectService.ProjectServiceClient">
+    <selectparameters>
         <asp:QueryStringParameter Name="projectId" QueryStringField="id" Type="Int32" />
-    </SelectParameters>
-</asp:ObjectDataSource>
+    </selectparameters>
+</asp:objectdatasource>
 
