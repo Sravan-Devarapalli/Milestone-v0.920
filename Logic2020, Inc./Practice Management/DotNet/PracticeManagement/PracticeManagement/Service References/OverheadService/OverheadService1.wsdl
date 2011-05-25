@@ -56,11 +56,17 @@
   <wsdl:message name="IOverheadService_GetMinimumLoadFactorOverheadMultipliers_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetMinimumLoadFactorOverheadMultipliersResponse" />
   </wsdl:message>
-  <wsdl:message name="IOverheadService_SaveMinimumLoadFactorOverheadMultipliers_InputMessage">
-    <wsdl:part name="parameters" element="tns:SaveMinimumLoadFactorOverheadMultipliers" />
+  <wsdl:message name="IOverheadService_UpdateMinimumLoadFactorHistory_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateMinimumLoadFactorHistory" />
   </wsdl:message>
-  <wsdl:message name="IOverheadService_SaveMinimumLoadFactorOverheadMultipliers_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaveMinimumLoadFactorOverheadMultipliersResponse" />
+  <wsdl:message name="IOverheadService_UpdateMinimumLoadFactorHistory_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateMinimumLoadFactorHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOverheadService_UpdateMinimumLoadFactorStatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateMinimumLoadFactorStatus" />
+  </wsdl:message>
+  <wsdl:message name="IOverheadService_UpdateMinimumLoadFactorStatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateMinimumLoadFactorStatusResponse" />
   </wsdl:message>
   <wsdl:portType name="IOverheadService">
     <wsdl:operation name="GetRateTypes">
@@ -95,9 +101,13 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IOverheadService/GetMinimumLoadFactorOverheadMultipliers" message="tns:IOverheadService_GetMinimumLoadFactorOverheadMultipliers_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IOverheadService/GetMinimumLoadFactorOverheadMultipliersResponse" message="tns:IOverheadService_GetMinimumLoadFactorOverheadMultipliers_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="SaveMinimumLoadFactorOverheadMultipliers">
-      <wsdl:input wsaw:Action="http://tempuri.org/IOverheadService/SaveMinimumLoadFactorOverheadMultipliers" message="tns:IOverheadService_SaveMinimumLoadFactorOverheadMultipliers_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IOverheadService/SaveMinimumLoadFactorOverheadMultipliersResponse" message="tns:IOverheadService_SaveMinimumLoadFactorOverheadMultipliers_OutputMessage" />
+    <wsdl:operation name="UpdateMinimumLoadFactorHistory">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOverheadService/UpdateMinimumLoadFactorHistory" message="tns:IOverheadService_UpdateMinimumLoadFactorHistory_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOverheadService/UpdateMinimumLoadFactorHistoryResponse" message="tns:IOverheadService_UpdateMinimumLoadFactorHistory_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMinimumLoadFactorStatus">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOverheadService/UpdateMinimumLoadFactorStatus" message="tns:IOverheadService_UpdateMinimumLoadFactorStatus_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOverheadService/UpdateMinimumLoadFactorStatusResponse" message="tns:IOverheadService_UpdateMinimumLoadFactorStatus_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IOverheadService" type="tns:IOverheadService">
@@ -174,8 +184,17 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SaveMinimumLoadFactorOverheadMultipliers">
-      <soap:operation soapAction="http://tempuri.org/IOverheadService/SaveMinimumLoadFactorOverheadMultipliers" style="document" />
+    <wsdl:operation name="UpdateMinimumLoadFactorHistory">
+      <soap:operation soapAction="http://tempuri.org/IOverheadService/UpdateMinimumLoadFactorHistory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMinimumLoadFactorStatus">
+      <soap:operation soapAction="http://tempuri.org/IOverheadService/UpdateMinimumLoadFactorStatus" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
