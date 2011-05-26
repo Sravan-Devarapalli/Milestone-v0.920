@@ -1,10 +1,14 @@
-﻿CREATE TRIGGER tr_OpportunityTransition_Log 
-   ON  dbo.[OpportunityTransition] 
+﻿CREATE TRIGGER [dbo].[tr_OpportunityTransition_Log] 
+   ON  [dbo].[OpportunityTransition] 
    AFTER INSERT, UPDATE
 AS 
 BEGIN
 	-- Ensure the temporary table exists
 	EXEC SessionLogPrepare @UserLogin = NULL
+
+	DECLARE @GMT NVARCHAR(10) = (SELECT Value FROM Settings WHERE SettingsKey = 'TimeZone')
+	DECLARE @CurrentPMTime DATETIME = (CASE WHEN CHARINDEX('-',@GMT) >0 THEN GETUTCDATE() - REPLACE(@GMT,'-','') ELSE 
+											GETUTCDATE() + @GMT END)
 
 	;WITH NEW_VALUES AS
 	(
@@ -54,7 +58,8 @@ BEGIN
 	             LastName,
 	             FirstName,
 				 Data,
-	             LogData)
+	             LogData,
+	             LogDate)
 	SELECT CASE
 	           WHEN d.OpportunityTransitionId IS NULL THEN 3
 	           WHEN i.OpportunityTransitionId IS NULL THEN 5
@@ -90,7 +95,8 @@ BEGIN
 							FROM NEW_VALUES
 									FULL JOIN OLD_VALUES ON NEW_VALUES.OpportunityTransitionId = OLD_VALUES.OpportunityTransitionId
 							WHERE NEW_VALUES.OpportunityTransitionId = ISNULL(i.OpportunityTransitionId, d.OpportunityTransitionId) OR OLD_VALUES.OpportunityTransitionId = ISNULL(i.OpportunityTransitionId, d.OpportunityTransitionId)
-							FOR XML AUTO, ROOT('OpportunityTransition'), TYPE)
+							FOR XML AUTO, ROOT('OpportunityTransition'), TYPE),
+			@CurrentPMTime
 	  FROM inserted AS i
 	       FULL JOIN deleted AS d ON i.OpportunityTransitionId = d.OpportunityTransitionId
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
@@ -99,3 +105,9 @@ BEGIN
 	EXEC dbo.SessionLogUnprepare
 
 END
+
+
+GO
+
+
+
