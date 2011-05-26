@@ -53,6 +53,20 @@ namespace PracticeManagementService
 
         #endregion
 
+        #region Time Zone
+
+        public void SetTimeZone(Timezone timezone)
+        {
+            TimeEntryDAL.SetTimeZone(timezone);
+        }
+
+        public List<Timezone> TimeZonesAll()
+        {
+            return TimeEntryDAL.TimeZonesAll();
+        }
+
+        #endregion
+
         #region Time entry
 
         public void RemoveTimeEntryById(int id)
