@@ -33,7 +33,7 @@ AS
 	       tmp.ActivityID,
 	       tmp.ActivityTypeID,
 	       tmp.SessionID,
-	       tmp.LogDate,
+	       dbo.GettingPMTime(tmp.LogDate) as LogDate,
 	       tmp.SystemUser,
 	       tmp.Workstation,
 	       tmp.ApplicationName,
