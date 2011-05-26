@@ -47,6 +47,10 @@ BEGIN
 
     DECLARE @TranStarted   bit
     SET @TranStarted = 0
+    
+    DECLARE @GMT NVARCHAR(10) = (SELECT Value FROM Settings WHERE SettingsKey = 'TimeZone')
+    DECLARE @CurrentPMTime DATETIME = (CASE WHEN CHARINDEX('-',@GMT) >0 THEN GETUTCDATE() - REPLACE(@GMT,'-','') ELSE 
+											GETUTCDATE() + @GMT END)
 
     IF( @@TRANCOUNT = 0 )
     BEGIN
@@ -160,7 +164,7 @@ BEGIN
                   @IsApproved,
                   @IsLockedOut,
                   @CreateDate,
-                  @CreateDate,
+                  @CurrentPMTime,
                   @CreateDate,
                   @LastLockoutDate,
                   @FailedPasswordAttemptCount,
@@ -193,4 +197,9 @@ Cleanup:
     RETURN @ErrorCode
 
 END
+
+
+GO
+
+
 
