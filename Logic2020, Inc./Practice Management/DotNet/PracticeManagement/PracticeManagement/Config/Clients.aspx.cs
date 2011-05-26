@@ -69,6 +69,15 @@ namespace PraticeManagement.Config
             int pagesize = Convert.ToInt32(ddlView.SelectedValue);
             gvClients.PageSize = pagesize == -1 ? ClientsList.Count() : pagesize;
 
+            if (pagesize == -1)
+            {
+                gvClients.AllowPaging = false;
+            }
+            else 
+            {
+                gvClients.AllowPaging = true;
+            }
+
             AddAlphabetButtons();
             if (!IsPostBack)
             {
