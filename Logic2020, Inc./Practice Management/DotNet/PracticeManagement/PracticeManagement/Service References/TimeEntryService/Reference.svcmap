@@ -23,16 +23,16 @@
     <MetadataSource Address="http://localhost/PracticeManagementService/TimeEntryService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="TimeEntryService.xsd" MetadataType="Schema" ID="b60ff082-9b18-4b8e-85bd-3483390d27fa" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd3" />
-    <MetadataFile FileName="TimeEntryService1.xsd" MetadataType="Schema" ID="750f014e-331c-408f-a686-b6fb006ca917" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd0" />
-    <MetadataFile FileName="TimeEntryService2.xsd" MetadataType="Schema" ID="7af648c7-93a1-4b11-ae3e-ba36d25e1a1d" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd1" />
-    <MetadataFile FileName="TimeEntryService3.xsd" MetadataType="Schema" ID="bfff9040-f0d7-4575-9903-5f320d89760a" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd5" />
-    <MetadataFile FileName="TimeEntryService.disco" MetadataType="Disco" ID="19cdf2d4-95c0-4742-891b-cb338daa638c" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/TimeEntryService.svc?disco" />
-    <MetadataFile FileName="TimeEntryService4.xsd" MetadataType="Schema" ID="43516a2a-f778-4cdc-aacf-d6bc83f01cdc" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd6" />
-    <MetadataFile FileName="TimeEntryService5.xsd" MetadataType="Schema" ID="5ee69cac-a058-4ed2-9504-6c468bd1d346" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd7" />
-    <MetadataFile FileName="TimeEntryService6.xsd" MetadataType="Schema" ID="d315389a-0270-4250-a017-f545314e3cfd" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd4" />
-    <MetadataFile FileName="TimeEntryService.wsdl" MetadataType="Wsdl" ID="55346575-fd7d-4ccd-b212-f53ed280fd97" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/TimeEntryService.svc?wsdl" />
-    <MetadataFile FileName="TimeEntryService7.xsd" MetadataType="Schema" ID="2f16489d-1204-4d33-ab66-2cc5cc3b195e" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd2" />
+    <MetadataFile FileName="TimeEntryService817.xsd" MetadataType="Schema" ID="7e2133ef-6356-4c9a-a3a4-d978f1090662" SourceId="1" SourceUrl="http://system67.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd0" />
+    <MetadataFile FileName="TimeEntryService818.xsd" MetadataType="Schema" ID="8798c764-e5e2-4ebc-b6f5-a37721bfaebd" SourceId="1" SourceUrl="http://system67.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd6" />
+    <MetadataFile FileName="TimeEntryService819.xsd" MetadataType="Schema" ID="8956a601-0e56-4ebd-bf80-52c9046f94e1" SourceId="1" SourceUrl="http://system67.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd2" />
+    <MetadataFile FileName="TimeEntryService14.disco" MetadataType="Disco" ID="a24b305f-08ac-456a-8f3f-7e0eac39f3f6" SourceId="1" SourceUrl="http://system67.ggk.com/PracticeManagementService/TimeEntryService.svc?disco" />
+    <MetadataFile FileName="TimeEntryService820.xsd" MetadataType="Schema" ID="5a99a1a7-5913-479a-b6fb-9222c1382e6f" SourceId="1" SourceUrl="http://system67.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd1" />
+    <MetadataFile FileName="TimeEntryService821.xsd" MetadataType="Schema" ID="536ebbd3-0997-42a9-9dc3-4c89da60af70" SourceId="1" SourceUrl="http://system67.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd7" />
+    <MetadataFile FileName="TimeEntryService14.wsdl" MetadataType="Wsdl" ID="383ce1bb-c0c2-4751-92b8-cc49b90b01d1" SourceId="1" SourceUrl="http://system67.ggk.com/PracticeManagementService/TimeEntryService.svc?wsdl" />
+    <MetadataFile FileName="TimeEntryService822.xsd" MetadataType="Schema" ID="0657a23f-e8e7-4d32-b0aa-f7777d7d32d7" SourceId="1" SourceUrl="http://system67.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd4" />
+    <MetadataFile FileName="TimeEntryService823.xsd" MetadataType="Schema" ID="02091890-7363-4a2b-b777-38a73385b068" SourceId="1" SourceUrl="http://system67.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd5" />
+    <MetadataFile FileName="TimeEntryService824.xsd" MetadataType="Schema" ID="d89f50ad-81f0-4411-a789-8e6a3fb6ebc9" SourceId="1" SourceUrl="http://system67.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd3" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
