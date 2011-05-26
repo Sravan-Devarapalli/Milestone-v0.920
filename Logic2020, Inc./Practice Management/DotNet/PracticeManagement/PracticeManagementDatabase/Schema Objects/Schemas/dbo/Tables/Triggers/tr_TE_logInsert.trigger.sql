@@ -3,13 +3,17 @@
 -- Create date: 2009-12-23
 -- Description:	Adds activity log record on TE insert
 -- =============================================
-CREATE TRIGGER tr_TE_logInsert 
-   ON  dbo.TimeEntries
+CREATE TRIGGER [dbo].[tr_TE_logInsert] 
+   ON  [dbo].[TimeEntries]
    AFTER INSERT
 AS 
 BEGIN
 	-- Ensure the temporary table exists
 	EXEC SessionLogPrepare @UserLogin = NULL
+	
+	DECLARE @GMT NVARCHAR(10) = (SELECT Value FROM Settings WHERE SettingsKey = 'TimeZone')
+	DECLARE @CurrentPMTime DATETIME = (CASE WHEN CHARINDEX('-',@GMT) >0 THEN GETUTCDATE() - REPLACE(@GMT,'-','') ELSE 
+											GETUTCDATE() + @GMT END)
 
 	-- Log an activity
 	INSERT INTO dbo.UserActivityLog
@@ -23,7 +27,8 @@ BEGIN
 	             LastName,
 	             FirstName,
 				 Data,
-	             LogData)
+	             LogData,
+	             LogDate)
 	SELECT 3 AS ActivityTypeID /* insert only */,
 	       l.SessionID,
 	       l.SystemUser,
@@ -85,11 +90,17 @@ BEGIN
 					    INNER JOIN dbo.Project AS proj ON proj.ProjectId = m.ProjectId
 					    INNER JOIN dbo.Client AS clnt ON proj.ClientId = clnt.ClientId
 			           WHERE NEW_VALUES.TimeEntryId = i.TimeEntryId
-					  FOR XML EXPLICIT, ROOT('TimeEntry'), TYPE)
+					  FOR XML EXPLICIT, ROOT('TimeEntry'), TYPE),
+			@CurrentPMTime
 	  FROM inserted AS i
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
 
 	 -- End logging session
 	 EXEC dbo.SessionLogUnprepare
 END
+
+
+GO
+
+
 
