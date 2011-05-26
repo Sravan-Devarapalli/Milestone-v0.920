@@ -3,7 +3,7 @@
 -- Create date: 2009-12-08
 -- Description:	Inserts new time entry record
 -- =============================================
-CREATE PROCEDURE dbo.TimeEntryInsert
+CREATE PROCEDURE [dbo].[TimeEntryInsert]
     @TimeEntryId INT OUT ,
     @EntryDate DATETIME ,
     @MilestoneDate DATETIME ,
@@ -25,7 +25,11 @@ AS
         SET NOCOUNT ON ;
 	
         BEGIN TRANSACTION
-	
+		
+		DECLARE @GMT NVARCHAR(10) = (SELECT Value FROM Settings WHERE SettingsKey = 'TimeZone')
+		DECLARE @CurrentPMTime DATETIME = (CASE WHEN CHARINDEX('-',@GMT) >0 THEN GETUTCDATE() - REPLACE(@GMT,'-','') ELSE 
+											GETUTCDATE() + @GMT END)
+		
         --DECLARE @IsChargeable BIT
 	
 	-- If it's default milestone, create MPE for it
@@ -83,9 +87,9 @@ AS
                   [IsChargeable] ,
                   [IsCorrect]
                 )
-        VALUES  ( @EntryDate ,
+        VALUES  ( @CurrentPMTime ,
                   @MilestoneDate ,
-                  GETDATE() ,
+                  @CurrentPMTime ,
                   @MilestonePersonId ,
                   @ActualHours ,
                   @ForecastedHours ,
@@ -100,4 +104,9 @@ AS
 				
         COMMIT 
     END
+
+
+GO
+
+
 
