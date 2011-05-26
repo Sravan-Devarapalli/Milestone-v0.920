@@ -164,6 +164,12 @@ namespace PraticeManagement.TimeEntryService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/AddTimeType", ReplyAction="http://tempuri.org/ITimeEntryService/AddTimeTypeResponse")]
         int AddTimeType(DataTransferObjects.TimeEntry.TimeTypeRecord timeType);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/TimeZonesAll", ReplyAction="http://tempuri.org/ITimeEntryService/TimeZonesAllResponse")]
+        DataTransferObjects.Timezone[] TimeZonesAll();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/SetTimeZone", ReplyAction="http://tempuri.org/ITimeEntryService/SetTimeZoneResponse")]
+        void SetTimeZone(DataTransferObjects.Timezone timezone);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/RemoveTimeEntries", ReplyAction="http://tempuri.org/ITimeEntryService/RemoveTimeEntriesResponse")]
         void RemoveTimeEntries(int milestonePersonId, int timeTypeId, System.DateTime startDate, System.DateTime endDate);
         
@@ -269,6 +275,14 @@ namespace PraticeManagement.TimeEntryService {
         
         public int AddTimeType(DataTransferObjects.TimeEntry.TimeTypeRecord timeType) {
             return base.Channel.AddTimeType(timeType);
+        }
+        
+        public DataTransferObjects.Timezone[] TimeZonesAll() {
+            return base.Channel.TimeZonesAll();
+        }
+        
+        public void SetTimeZone(DataTransferObjects.Timezone timezone) {
+            base.Channel.SetTimeZone(timezone);
         }
         
         public void RemoveTimeEntries(int milestonePersonId, int timeTypeId, System.DateTime startDate, System.DateTime endDate) {
