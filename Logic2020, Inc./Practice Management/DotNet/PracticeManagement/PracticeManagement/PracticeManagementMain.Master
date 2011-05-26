@@ -163,7 +163,7 @@
 		    <asp:HyperLink ID="hlHome" runat="server"><asp:Image ID="imgLogo" CssClass="main-logo" ImageUrl="~/Controls/CompanyLogoImage.ashx" runat="server" /></asp:HyperLink>
 		    <asp:ContentPlaceHolder ID="header" runat="server" Visible="false"></asp:ContentPlaceHolder>
 		    <div class="serv-info">
-                <div class="date"><%= DateTime.Now.ToLongDateString() %></div>
+                <div class="date"><%= GetTodayWithTimeZone()%></div>
 			    <div class="authent"><asp:LoginView ID="loginView" runat="server">
 					<LoggedInTemplate>
 						Welcome,&nbsp;<asp:Label ID="lblUserName" runat="server" EnableViewState="false" />
