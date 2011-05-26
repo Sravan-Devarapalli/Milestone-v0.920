@@ -1,18 +1,21 @@
-﻿
--- =============================================
+﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 11-27-2008
 -- Updated by:	
 -- Update date:	
 -- Description:	Logs the updating and deletring from the dbo.Project table.
 -- =============================================
-CREATE TRIGGER dbo.tr_Project_LogUpdateDelete
-ON dbo.[Project]
+CREATE TRIGGER [dbo].[tr_Project_LogUpdateDelete]
+ON [dbo].[Project]
 AFTER UPDATE, DELETE
 AS
 BEGIN
 	-- Ensure the temporary table exists
 	EXEC SessionLogPrepare @UserLogin = NULL
+	
+	DECLARE @GMT NVARCHAR(10) = (SELECT Value FROM Settings WHERE SettingsKey = 'TimeZone')
+	DECLARE @CurrentPMTime DATETIME = (CASE WHEN CHARINDEX('-',@GMT) >0 THEN GETUTCDATE() - REPLACE(@GMT,'-','') ELSE 
+											GETUTCDATE() + @GMT END)
 
 	;WITH NEW_VALUES AS
 	(
@@ -70,7 +73,8 @@ BEGIN
 	             LastName,
 	             FirstName,
 				 Data,
-	             LogData)
+	             LogData,
+	             LogDate)
 	SELECT CASE
 	           WHEN d.ProjectId IS NULL THEN 3 -- Actually is redundant
 	           WHEN i.ProjectId IS NULL THEN 5
@@ -105,7 +109,8 @@ BEGIN
 					    FROM NEW_VALUES
 					         FULL JOIN OLD_VALUES ON NEW_VALUES.ProjectId = OLD_VALUES.ProjectId
 			           WHERE NEW_VALUES.ProjectId = ISNULL(i.ProjectId, d.ProjectId) OR OLD_VALUES.ProjectId = ISNULL(i.ProjectId, d.ProjectId)
-					  FOR XML AUTO, ROOT('Project'), TYPE)
+					  FOR XML AUTO, ROOT('Project'), TYPE),
+			@CurrentPMTime
 	  FROM inserted AS i
 	       FULL JOIN deleted AS d ON i.ProjectId = d.ProjectId
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
@@ -123,4 +128,9 @@ BEGIN
 	-- End logging session
 	 EXEC dbo.SessionLogUnprepare
 END
+
+
+GO
+
+
 
