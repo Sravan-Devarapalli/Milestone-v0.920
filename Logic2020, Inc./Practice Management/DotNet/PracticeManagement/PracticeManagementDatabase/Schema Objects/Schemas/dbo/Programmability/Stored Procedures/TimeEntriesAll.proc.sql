@@ -187,7 +187,7 @@ AS
 	SET @EntryDateCondition = 
 		CASE 
 			WHEN @EntryDateFrom IS NULL OR @EntryDateTo IS NULL THEN ' '
-			ELSE ' AND ( [EntryDate] BETWEEN ''' + CONVERT(VARCHAR(8), @EntryDateFrom, 10) + ''' AND '''+ 
+			ELSE ' AND ( dbo.GettingPMTime([EntryDate]) BETWEEN ''' + CONVERT(VARCHAR(8), @EntryDateFrom, 10) + ''' AND '''+ 
 						CONVERT(VARCHAR(8), @EntryDateTo, 10) + ''')'
 		END 
 		
@@ -195,14 +195,43 @@ AS
 	SET @ModifiedDateCondition = 
 		CASE 
 			WHEN @ModifiedDateFrom IS NULL OR @ModifiedDateTo IS NULL THEN ' '
-			ELSE ' AND ( [ModifiedDate] BETWEEN ''' + CONVERT(VARCHAR(8), @ModifiedDateFrom, 10) + ''' AND ''' +     
+			ELSE ' AND ( dbo.GettingPMTime([ModifiedDate]) BETWEEN ''' + CONVERT(VARCHAR(8), @ModifiedDateFrom, 10) + ''' AND ''' +     
 						CONVERT(VARCHAR(8), @ModifiedDateTo, 10) + ''' )'
 		END 
 	DECLARE @query VARCHAR(max)
 	IF @FirstRecord IS NULL
 	BEGIN
 		SET @query = '
-			SELECT  *
+			SELECT   TimeEntryId,
+					dbo.GettingPMTime(EntryDate) AS EntryDate,
+					dbo.GettingPMTime(ModifiedDate) AS ModifiedDate, 
+					MilestonePersonId, 
+					ActualHours, 
+					ForecastedHours, 
+					TimeTypeId, 
+					TimeTypeName, 
+					ModifiedBy, 
+					Note, 
+					IsReviewed, 
+					IsChargeable, 
+					MilestoneDate, 
+					ModifiedByFirstName, 
+					ModifiedByLastName, 
+					PersonId,
+					ObjectFirstName, 
+					ObjectLastName, 
+					MilestoneName,
+					StartDate, 
+					EndDate, 
+					HoursPerDay,
+					MilestoneId, 
+					ProjectId, 
+					ProjectName, 
+					ProjectNumber, 
+					IsCorrect, 
+					ClientId, 
+					ClientName, 
+					IsProjectChargeable
 			FROM    v_TimeEntries
 			WHERE   1=1 ' 
 				+ @PersonIdCondition 
@@ -229,7 +258,36 @@ AS
 		SET @SortExpression =' ORDER BY ModifiedDate '
 
 		SET @query = '
-			SELECT *
+			SELECT TimeEntryId,
+					dbo.GettingPMTime(EntryDate) AS EntryDate,
+					dbo.GettingPMTime(ModifiedDate) AS ModifiedDate, 
+					MilestonePersonId, 
+					ActualHours, 
+					ForecastedHours, 
+					TimeTypeId, 
+					TimeTypeName, 
+					ModifiedBy, 
+					Note, 
+					IsReviewed, 
+					IsChargeable, 
+					MilestoneDate, 
+					ModifiedByFirstName, 
+					ModifiedByLastName, 
+					PersonId,
+					ObjectFirstName, 
+					ObjectLastName, 
+					MilestoneName,
+					StartDate, 
+					EndDate, 
+					HoursPerDay,
+					MilestoneId, 
+					ProjectId, 
+					ProjectName, 
+					ProjectNumber, 
+					IsCorrect, 
+					ClientId, 
+					ClientName, 
+					IsProjectChargeable
 			FROM (
 			SELECT  TOP ('+CONVERT(VARCHAR(10),@LastRecord)+') 
 				*,
@@ -262,4 +320,8 @@ AS
 	EXEC(@query)    
     
     END
+
+GO
+
+
 
