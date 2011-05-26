@@ -138,6 +138,88 @@ namespace DataAccess
 
         #endregion
 
+        #region Time Zone
+
+
+        #region Constants
+
+        private const string TimeZonesAllProcedure = "dbo.TimeZonesAll";
+        private const string SetTimeZoneProcedure = "dbo.SetTimeZone";
+
+        private const string IdParameter = "@Id";
+        private const string GMTParameter = "@GMT";
+
+        private const string TimeZoneIdColumn = "Id";
+        private const string TimeZoneGMTColumn = "GMT";
+        private const string TimeZoneGMTNameColumn = "GMTName";
+        private const string TimeZoneIsActiveColumn = "IsActive";
+
+        #endregion
+
+        public static void SetTimeZone(Timezone timezone)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(SetTimeZoneProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    
+                    command.Parameters.AddWithValue(GMTParameter, timezone.GMT);
+
+                    connection.Open();
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static List<Timezone> TimeZonesAll()
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(TimeZonesAllProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        List<Timezone> result = new List<Timezone>();
+
+                        ReadTimeZones(reader, result);
+
+                        return result;
+                    }
+                }
+            }
+        }
+
+        private static void ReadTimeZones(SqlDataReader reader, List<Timezone> result)
+        {
+            if (reader.HasRows)
+            {
+                int timeZoneIdIndex = reader.GetOrdinal(TimeZoneIdColumn);
+                int timeZoneGMTIndex = reader.GetOrdinal(TimeZoneGMTColumn);
+                int timeZoneGMTNameIndex = reader.GetOrdinal(TimeZoneGMTNameColumn);
+                int timeZoneIsActiveIndex = reader.GetOrdinal(TimeZoneIsActiveColumn);
+
+                while (reader.Read())
+                {
+                    Timezone timeZone = new Timezone();
+
+                    timeZone.Id = reader.GetInt32(timeZoneIdIndex);
+                    timeZone.GMT = reader.GetString(timeZoneGMTIndex);
+                    timeZone.GMTName = reader.GetString(timeZoneGMTNameIndex);
+                    timeZone.IsActive = reader.GetBoolean(timeZoneIsActiveIndex);
+
+                    result.Add(timeZone);
+                }
+            }
+        }
+
+        #endregion
+
         #region Toggling
 
         public static void ToggleIsCorrect(TimeEntryRecord timeEntry)
