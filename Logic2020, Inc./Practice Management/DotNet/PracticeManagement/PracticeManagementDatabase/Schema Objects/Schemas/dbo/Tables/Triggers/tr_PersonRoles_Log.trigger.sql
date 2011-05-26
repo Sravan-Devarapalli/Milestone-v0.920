@@ -3,14 +3,18 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE TRIGGER dbo.tr_PersonRoles_Log
-   ON  dbo.[aspnet_UsersInRoles]
+CREATE TRIGGER [dbo].[tr_PersonRoles_Log]
+   ON  [dbo].[aspnet_UsersInRoles]
    AFTER INSERT, UPDATE, DELETE
 as
 BEGIN
 	-- Ensure the temporary table exists
 	EXEC SessionLogPrepare @UserLogin = NULL
 
+	DECLARE @GMT NVARCHAR(10) = (SELECT Value FROM Settings WHERE SettingsKey = 'TimeZone')
+	DECLARE @CurrentPMTime DATETIME = (CASE WHEN CHARINDEX('-',@GMT) >0 THEN GETUTCDATE() - REPLACE(@GMT,'-','') ELSE 
+											GETUTCDATE() + @GMT END)
+	
 	;WITH NEW_VALUES AS
 	(
 		SELECT 
@@ -55,7 +59,8 @@ BEGIN
 	             LastName,
 	             FirstName,
 				 Data,
-	             LogData)
+	             LogData,
+	             LogDate)
 	SELECT 4 as ActivityTypeID,
 	       l.SessionID,
 	       l.SystemUser,
@@ -78,11 +83,17 @@ BEGIN
 					         FULL JOIN OLD_VALUES ON NEW_VALUES.PersonID = OLD_VALUES.PersonID
 			           WHERE (NEW_VALUES.userid = ISNULL(i.userid, d.userid) AND new_values.roleid=i.roleid) 
 								OR (OLD_VALUES.userid = ISNULL(i.userid, d.userid) AND OLD_VALUES.roleid = d.roleid)
-					  FOR XML AUTO, ROOT('Roles'), TYPE)
+					  FOR XML AUTO, ROOT('Roles'), TYPE),
+			@CurrentPMTime
 	  FROM inserted AS i
 	       FULL JOIN deleted AS d ON i.userid = d.userid
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
 	 -- End logging session
 	 EXEC dbo.SessionLogUnprepare
 END
+
+
+GO
+
+
 
