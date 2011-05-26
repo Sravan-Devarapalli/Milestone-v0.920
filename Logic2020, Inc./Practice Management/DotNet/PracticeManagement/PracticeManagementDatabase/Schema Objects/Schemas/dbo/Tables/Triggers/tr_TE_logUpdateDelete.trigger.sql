@@ -1,17 +1,32 @@
-﻿-- =============================================
+﻿USE [ObfuscatedPracticeManagement]
+GO
+
+/****** Object:  Trigger [dbo].[tr_TE_logUpdateDelete]    Script Date: 05/25/2011 09:58:26 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+-- =============================================
 -- Author:		Nikita Goncharenko
 -- Create date: 2009-12-23
 -- Description:	
 -- =============================================
-CREATE TRIGGER tr_TE_logUpdateDelete
-   ON  dbo.TimeEntries
+CREATE TRIGGER [dbo].[tr_TE_logUpdateDelete]
+   ON  [dbo].[TimeEntries]
    AFTER UPDATE, DELETE
 AS 
 BEGIN
 	-- Ensure the temporary table exists
 	EXEC SessionLogPrepare @UserLogin = NULL;
+	
+	DECLARE @GMT NVARCHAR(10) = (SELECT Value FROM Settings WHERE SettingsKey = 'TimeZone')
+	DECLARE @CurrentPMTime DATETIME = (CASE WHEN CHARINDEX('-',@GMT) >0 THEN GETUTCDATE() - REPLACE(@GMT,'-','') ELSE 
+											GETUTCDATE() + @GMT END)
 
-	WITH NEW_VALUES AS
+	;WITH NEW_VALUES AS
 	(
 		SELECT 1 AS Tag,
 			   NULL AS Parent, 
@@ -89,7 +104,8 @@ BEGIN
 	             LastName,
 	             FirstName,
 				 Data,
-	             LogData)
+	             LogData,
+	             LogDate)
 	SELECT CASE
 	           WHEN d.TimeEntryId IS NULL THEN 3 -- Actually is redundant
 	           WHEN i.TimeEntryId IS NULL THEN 5
@@ -135,7 +151,8 @@ BEGIN
 					    FROM NEW_VALUES
 					         FULL JOIN OLD_VALUES ON NEW_VALUES.TimeEntryId = OLD_VALUES.TimeEntryId
 			           WHERE NEW_VALUES.TimeEntryId = ISNULL(i.TimeEntryId, d.TimeEntryId) OR OLD_VALUES.TimeEntryId = ISNULL(i.TimeEntryId, d.TimeEntryId)
-					  FOR XML AUTO, ROOT('TimeEntry'), TYPE)
+					  FOR XML AUTO, ROOT('TimeEntry'), TYPE),
+			@CurrentPMTime
 	  FROM inserted AS i
 	       FULL JOIN deleted AS d ON i.TimeEntryId = d.TimeEntryId
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
@@ -143,4 +160,9 @@ BEGIN
 	 -- End logging session
 	 EXEC dbo.SessionLogUnprepare
 END
+
+
+GO
+
+
 
