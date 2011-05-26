@@ -302,8 +302,9 @@
             </ItemTemplate>
             <ItemStyle CssClass="tem-grid-date-cell grid-item-cell-padding"></ItemStyle>
             <EditItemTemplate>
+                <%--<asp:Label ID="ftbEntryDateEdit" runat="server" Text='<%# Bind("EntryDate") %>' ToolTip="Item entered date" />--%>
                 <cc2:FormatedTextBox ID="ftbEntryDateEdit" runat="server" DataFormatString='<%# PraticeManagement.Constants.Formatting.EntryDateFormat %>'
-                    DateText='<%# Bind("EntryDate") %>' Width="50" />
+                    DateText='<%# Bind("EntryDate") %>' Width="55"/>
                 <ajaxToolkit:CalendarExtender runat="server" Format='<%# PraticeManagement.Constants.Formatting.EntryDateFormat %>'
                     PopupPosition="Right" TargetControlID="ftbEntryDateEdit" />
             </EditItemTemplate>
