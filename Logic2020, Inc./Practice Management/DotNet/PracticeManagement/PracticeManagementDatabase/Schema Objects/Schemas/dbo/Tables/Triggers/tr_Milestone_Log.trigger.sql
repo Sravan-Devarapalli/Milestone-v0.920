@@ -1,18 +1,21 @@
-﻿
--- =============================================
+﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 11-27-2008
 -- Updated by:	
 -- Update date:	
 -- Description:	Logs the changes in the dbo.Milestone table.
 -- =============================================
-CREATE TRIGGER dbo.tr_Milestone_Log
-ON dbo.[Milestone]
+CREATE TRIGGER [dbo].[tr_Milestone_Log]
+ON [dbo].[Milestone]
 AFTER INSERT, UPDATE, DELETE
 AS
 BEGIN
 	-- Ensure the temporary table exists
 	EXEC SessionLogPrepare @UserLogin = NULL
+
+	DECLARE @GMT NVARCHAR(10) = (SELECT Value FROM Settings WHERE SettingsKey = 'TimeZone')
+	DECLARE @CurrentPMTime DATETIME = (CASE WHEN CHARINDEX('-',@GMT) >0 THEN GETUTCDATE() - REPLACE(@GMT,'-','') ELSE 
+											GETUTCDATE() + @GMT END)
 
 	;WITH NEW_VALUES AS
 	(
@@ -60,7 +63,8 @@ BEGIN
 	             LastName,
 	             FirstName,
 				 Data,
-	             LogData)
+	             LogData,
+	             LogDate)
 	SELECT CASE
 	           WHEN d.MilestoneId IS NULL THEN 3
 	           WHEN i.MilestoneId IS NULL THEN 5
@@ -92,7 +96,8 @@ BEGIN
 					    FROM NEW_VALUES
 					         FULL JOIN OLD_VALUES ON NEW_VALUES.MilestoneId = OLD_VALUES.MilestoneId
 			           WHERE NEW_VALUES.MilestoneId = ISNULL(i.MilestoneId, d.MilestoneId) OR OLD_VALUES.MilestoneId = ISNULL(i.MilestoneId, d.MilestoneId)
-					  FOR XML AUTO, ROOT('Milestone'), TYPE)
+					  FOR XML AUTO, ROOT('Milestone'), TYPE),
+			@CurrentPMTime
 
 	  FROM inserted AS i
 	       FULL JOIN deleted AS d ON i.MilestoneId = d.MilestoneId
@@ -110,4 +115,8 @@ BEGIN
 	EXEC dbo.SessionLogUnprepare
 
 END
+
+GO
+
+
 
