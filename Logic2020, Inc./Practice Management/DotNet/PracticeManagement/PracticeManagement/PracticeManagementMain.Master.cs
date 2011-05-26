@@ -14,6 +14,8 @@ using System.Web.UI.HtmlControls;
 using System.Drawing;
 using System.Linq;
 using System.Collections;
+using PraticeManagement.Utils;
+using DataTransferObjects;
 
 namespace PraticeManagement
 {
@@ -437,6 +439,26 @@ namespace PraticeManagement
                 }
             }
             return Unit.Pixel(width);
+        }
+
+        protected string GetTodayWithTimeZone()
+        {
+            var timezone = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.TimeZoneKey);
+            //DateTime.Now.T
+            //string s = "+05:30";
+            var timezoneWithoutSign = timezone.Replace("+", string.Empty).Replace("-", string.Empty);
+            var hours = Int32.Parse(timezoneWithoutSign.Substring(0, timezoneWithoutSign.IndexOf(':')));
+            var min = Int32.Parse(timezoneWithoutSign.Substring(timezoneWithoutSign.IndexOf(':') + 1));
+            if (timezone[0] == '+')
+            {
+                return DateTime.UtcNow.AddHours(hours).AddMinutes(min).ToLongDateString();
+            }
+            else
+            {
+                return DateTime.UtcNow.AddHours(-1 * hours).AddMinutes(-1 * min).ToLongDateString();
+            }
+
+          
         }
     }
 }
