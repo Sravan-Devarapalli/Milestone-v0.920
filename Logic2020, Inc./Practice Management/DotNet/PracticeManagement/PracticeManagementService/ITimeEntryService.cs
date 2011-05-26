@@ -45,7 +45,25 @@ namespace PracticeManagementService
 
 		#endregion    
 
-		#region Time entries
+        #region Time Zones
+
+        /// <summary>
+        /// Retrieves all existing time types
+        /// </summary>
+        /// <returns>Collection of new time types</returns>
+        [OperationContract]
+        List<Timezone> TimeZonesAll();
+
+        /// <summary>
+        /// Sets given time zone
+        /// </summary>
+        /// <param name="Timezone">Time zone to set</param>
+        [OperationContract]
+        void SetTimeZone(Timezone timezone);
+
+        #endregion
+
+        #region Time entries
 
         [OperationContract]
         void RemoveTimeEntries(int milestonePersonId, int timeTypeId, DateTime startDate, DateTime endDate);
