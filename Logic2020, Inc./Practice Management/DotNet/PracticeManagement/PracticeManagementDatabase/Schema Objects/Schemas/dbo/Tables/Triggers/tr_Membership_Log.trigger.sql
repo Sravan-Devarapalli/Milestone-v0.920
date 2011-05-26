@@ -3,8 +3,8 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE TRIGGER dbo.tr_Membership_Log
-   ON  dbo.[aspnet_Membership]
+CREATE TRIGGER [dbo].[tr_Membership_Log]
+   ON  [dbo].[aspnet_Membership]
    AFTER INSERT, UPDATE, DELETE
 AS 
 BEGIN
@@ -12,6 +12,10 @@ BEGIN
 
 	-- Ensure the temporary table exists
 	EXEC SessionLogPrepare @UserLogin = NULL
+	
+	DECLARE @GMT NVARCHAR(10) = (SELECT Value FROM Settings WHERE SettingsKey = 'TimeZone')
+	DECLARE @CurrentPMTime DATETIME = (CASE WHEN CHARINDEX('-',@GMT) >0 THEN GETUTCDATE() - REPLACE(@GMT,'-','') ELSE 
+											GETUTCDATE() + @GMT END)
 
 	;WITH NEW_VALUES AS
 	(
@@ -51,7 +55,8 @@ BEGIN
 	             LastName,
 	             FirstName,
 				 Data,
-	             LogData)
+	             LogData,
+	             LogDate)
 	SELECT 4 as ActivityTypeID,
 	       l.SessionID,
 	       l.SystemUser,
@@ -78,7 +83,8 @@ BEGIN
 					    FROM NEW_VALUES
 					         FULL JOIN OLD_VALUES ON NEW_VALUES.PersonID = OLD_VALUES.PersonID
 			           WHERE (NEW_VALUES.userid = ISNULL(i.userid, d.userid)) OR (OLD_VALUES.userid = ISNULL(i.userid, d.userid))
-					  FOR XML AUTO, ROOT('Membership'), TYPE)
+					  FOR XML AUTO, ROOT('Membership'), TYPE),
+			LogDate = @CurrentPMTime
 	  FROM inserted AS i
 	       FULL JOIN deleted AS d ON i.userid = d.userid
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
@@ -86,4 +92,8 @@ BEGIN
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
 END
+
+GO
+
+
 
