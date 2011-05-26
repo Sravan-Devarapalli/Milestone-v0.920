@@ -5,13 +5,17 @@
 -- Update date:	
 -- Description:	Logs the inserting into the dbo.Project table.
 -- =============================================
-CREATE TRIGGER tr_Project_LogInsert
-ON dbo.Project
+CREATE TRIGGER [dbo].[tr_Project_LogInsert]
+ON [dbo].[Project]
 AFTER INSERT
 AS
 BEGIN
 	-- Ensure the temporary table exists
 	EXEC SessionLogPrepare @UserLogin = NULL
+	
+	DECLARE @GMT NVARCHAR(10) = (SELECT Value FROM Settings WHERE SettingsKey = 'TimeZone')
+	DECLARE @CurrentPMTime DATETIME = (CASE WHEN CHARINDEX('-',@GMT) >0 THEN GETUTCDATE() - REPLACE(@GMT,'-','') ELSE 
+											GETUTCDATE() + @GMT END)
 
 	-- Log an activity
 	INSERT INTO dbo.UserActivityLog
@@ -25,7 +29,8 @@ BEGIN
 	             LastName,
 	             FirstName,
 				 Data,
-	             LogData)
+	             LogData,
+	             LogDate)
 	SELECT 3 AS ActivityTypeID /* insert only */,
 	       l.SessionID,
 	       l.SystemUser,
@@ -42,11 +47,17 @@ BEGIN
 			LogData = (SELECT NEW_VALUES.ProjectId
 					    FROM inserted AS NEW_VALUES
 			           WHERE NEW_VALUES.ProjectId = i.ProjectId
-					  FOR XML AUTO, ROOT('Project'), TYPE)
+					  FOR XML AUTO, ROOT('Project'), TYPE),
+			@CurrentPMTime
 	  FROM inserted AS i
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
 	  
 	  -- End logging session
 	 EXEC dbo.SessionLogUnprepare
 END
+
+
+GO
+
+
 
