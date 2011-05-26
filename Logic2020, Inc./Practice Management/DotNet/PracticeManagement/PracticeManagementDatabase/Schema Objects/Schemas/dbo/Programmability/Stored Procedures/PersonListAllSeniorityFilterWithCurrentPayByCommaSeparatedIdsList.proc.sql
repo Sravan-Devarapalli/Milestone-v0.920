@@ -64,7 +64,7 @@ BEGIN
 					   p.HireDate,
 					   p.TerminationDate,
 					   p.Alias,
-					   M.LastLoginDate,
+					   dbo.GettingPMTime(M.LastLoginDate) LastLoginDate,
 					   p.DefaultPractice,
 					   p.PracticeName,
 					   p.PersonStatusId,
