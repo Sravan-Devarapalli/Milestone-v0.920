@@ -26,9 +26,8 @@ AS
 	
         BEGIN TRANSACTION
 		
-		DECLARE @GMT NVARCHAR(10) = (SELECT Value FROM Settings WHERE SettingsKey = 'TimeZone')
-		DECLARE @CurrentPMTime DATETIME = (CASE WHEN CHARINDEX('-',@GMT) >0 THEN GETUTCDATE() - REPLACE(@GMT,'-','') ELSE 
-											GETUTCDATE() + @GMT END)
+		DECLARE @CurrentPMTime DATETIME 
+		SET @CurrentPMTime = dbo.InsertingTime()
 		
         --DECLARE @IsChargeable BIT
 	
