@@ -49,6 +49,12 @@ namespace PraticeManagement
 
             # endregion SMTP
 
+            # region Application
+
+            public const string TimeZoneKey = "TimeZone";
+
+            #endregion
+
         }
 
         /// <summary>
