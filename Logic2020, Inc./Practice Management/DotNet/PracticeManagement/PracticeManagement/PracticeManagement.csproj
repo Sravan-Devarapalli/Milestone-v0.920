@@ -148,6 +148,7 @@
     <Content Include="Config\SMTPSetup.aspx" />
     <Content Include="Config\SupportLink.aspx" />
     <Content Include="Config\TimeTypes.aspx" />
+    <Content Include="Config\TimeZones.aspx" />
     <Content Include="Controls\Configuration\SmtpPopSetUpControl.ascx" />
     <Content Include="Controls\Opportunities\OpportunityListControl.ascx" />
     <Content Include="Controls\Opportunities\ProposedResources.ascx" />
@@ -236,6 +237,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.ProjectsGroupedByPerson.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.ProjectsGroupedByPractice.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.TimeEntry.TimeEntrySums.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Timezone.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -530,26 +532,18 @@
     <None Include="Service References\TimeEntryService\PraticeManagement.TimeEntryService.TimeEntriesGroupedByTimeEntryHours.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService.wsdl" />
-    <None Include="Service References\TimeEntryService\TimeEntryService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\TimeEntryService\TimeEntryService10.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\TimeEntryService\TimeEntryService11.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService12.wsdl" />
+    <None Include="Service References\TimeEntryService\TimeEntryService14.wsdl" />
     <None Include="Service References\TimeEntryService\TimeEntryService19.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\TimeEntryService\TimeEntryService2.wsdl" />
-    <None Include="Service References\TimeEntryService\TimeEntryService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\TimeEntryService\TimeEntryService20.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -578,22 +572,55 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\TimeEntryService\TimeEntryService3.wsdl" />
-    <None Include="Service References\TimeEntryService\TimeEntryService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService4.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService5.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService6.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService7.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\TimeEntryService\TimeEntryService8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService81.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService817.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService818.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService819.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService82.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService820.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService821.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService822.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService823.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService824.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService83.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService84.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService85.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService86.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService87.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService88.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\TimeEntryService\TimeEntryService9.xsd">
@@ -627,8 +654,9 @@
     <None Include="Service References\ProjectGroupService\ProjectGroupService15.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <None Include="Service References\ProjectService\ProjectService1.disco" />
-    <None Include="Service References\TimeEntryService\TimeEntryService.disco" />
     <None Include="Service References\OpportunityService\OpportunityService1.disco" />
+    <None Include="Service References\TimeEntryService\TimeEntryService12.disco" />
+    <None Include="Service References\TimeEntryService\TimeEntryService14.disco" />
     <Content Include="TimeEntrySetting.aspx" />
     <None Include="Web References\AttachmentService\AttachmentService.disco" />
     <Content Include="Web.config">
@@ -852,6 +880,13 @@
     <Compile Include="Config\TimeTypes.aspx.designer.cs">
       <DependentUpon>TimeTypes.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Config\TimeZones.aspx.cs">
+      <DependentUpon>TimeZones.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\TimeZones.aspx.designer.cs">
+      <DependentUpon>TimeZones.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Configuration\SmtpPopSetUpControl.ascx.cs">
       <DependentUpon>SmtpPopSetUpControl.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -875,6 +910,7 @@
     </Compile>
     <Compile Include="Controls\PersonsFilter.ascx.cs">
       <DependentUpon>PersonsFilter.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Controls\PersonsFilter.ascx.designer.cs">
       <DependentUpon>PersonsFilter.ascx</DependentUpon>
