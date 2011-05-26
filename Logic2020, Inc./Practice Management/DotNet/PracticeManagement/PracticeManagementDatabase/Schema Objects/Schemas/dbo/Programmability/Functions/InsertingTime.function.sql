@@ -1,0 +1,11 @@
+﻿CREATE FUNCTION [dbo].[InsertingTime]
+(
+)
+RETURNS DATETIME
+AS
+BEGIN
+	DECLARE @CurrentTime DATETIME
+	SET @CurrentTime = GETUTCDATE()
+
+	RETURN @CurrentTime
+END
