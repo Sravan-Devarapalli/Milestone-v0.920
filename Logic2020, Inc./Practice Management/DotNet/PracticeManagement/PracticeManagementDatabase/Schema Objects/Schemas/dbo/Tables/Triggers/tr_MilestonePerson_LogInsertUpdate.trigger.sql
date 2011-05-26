@@ -1,18 +1,21 @@
-﻿
--- =============================================
+﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 11-27-2008
 -- Updated by:	
 -- Update date:	
 -- Description:	Logs the changes in the dbo.Milestone table.
 -- =============================================
-CREATE TRIGGER tr_MilestonePerson_LogInsertUpdate
-ON dbo.MilestonePersonEntry
+CREATE TRIGGER [dbo].[tr_MilestonePerson_LogInsertUpdate]
+ON [dbo].[MilestonePersonEntry]
 AFTER INSERT
 AS
 BEGIN
 	-- Ensure the temporary table exists
 	EXEC SessionLogPrepare @UserLogin = NULL
+
+	DECLARE @GMT NVARCHAR(10) = (SELECT Value FROM Settings WHERE SettingsKey = 'TimeZone')
+	DECLARE @CurrentPMTime DATETIME = (CASE WHEN CHARINDEX('-',@GMT) >0 THEN GETUTCDATE() - REPLACE(@GMT,'-','') ELSE 
+											GETUTCDATE() + @GMT END)
 
 	;WITH NEW_VALUES AS
 	(
@@ -44,7 +47,8 @@ BEGIN
 	             LastName,
 	             FirstName,
 				 Data,
-	             LogData)
+	             LogData,
+	             LogDate)
 	SELECT 4 AS ActivityTypeID,
 	       l.SessionID,
 	       l.SystemUser,
@@ -66,7 +70,8 @@ BEGIN
 					    FROM NEW_VALUES
 			           WHERE NEW_VALUES.MilestonePersonId = mp.MilestonePersonId
 	                     AND NEW_VALUES.StartDate = mp.StartDate
-					  FOR XML AUTO, ROOT('MilestonePerson'), TYPE)
+					  FOR XML AUTO, ROOT('MilestonePerson'), TYPE),
+			@CurrentPMTime
 	  FROM inserted AS i
 	       INNER JOIN dbo.v_MilestonePerson AS mp
 	           ON i.MilestonePersonId = mp.MilestonePersonId AND i.StartDate = mp.StartDate
@@ -76,4 +81,8 @@ BEGIN
 	EXEC dbo.SessionLogUnprepare
 
 END
+
+GO
+
+
 
