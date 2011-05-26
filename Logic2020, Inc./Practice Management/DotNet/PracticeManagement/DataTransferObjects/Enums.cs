@@ -22,6 +22,8 @@ namespace DataTransferObjects
         SMTP = 2,
         [EnumMember]
         Project = 3,
+        [EnumMember]
+        Application = 4
     }
 }
 
