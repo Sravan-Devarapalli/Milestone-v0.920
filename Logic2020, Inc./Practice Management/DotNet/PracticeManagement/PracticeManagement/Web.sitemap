@@ -70,6 +70,7 @@
         <siteMapNode url="~/Config/Notes.aspx" title="Notes" description="Notes"  />
         <siteMapNode url="~/DefaultMilestoneSetting.aspx" title="Default Time Entry Project" description="Default Time Entry Project"  />
         <siteMapNode url="~/Config/TimeTypes.aspx" title="Time Types" description="TimeTypes"  />
+        <siteMapNode url="~/Config/TimeZones.aspx" title="Time Zones" description="TimeZones" />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Troubleshooting" title="Troubleshooting" description="Troubleshooting">
         <siteMapNode url="~/ActivityLog.aspx" title="Activity Log" description="Activity Log"  />
