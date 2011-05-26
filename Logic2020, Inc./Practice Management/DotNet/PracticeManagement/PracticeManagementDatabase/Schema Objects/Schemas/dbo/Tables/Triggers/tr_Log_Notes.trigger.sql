@@ -13,6 +13,10 @@ BEGIN
 	 --Ensure the temporary table exists
 	EXEC SessionLogPrepare @UserLogin = NULL
 
+	DECLARE @GMT NVARCHAR(10) = (SELECT Value FROM Settings WHERE SettingsKey = 'TimeZone')
+	DECLARE @CurrentPMTime DATETIME = (CASE WHEN CHARINDEX('-',@GMT) >0 THEN GETUTCDATE() - REPLACE(@GMT,'-','') ELSE 
+											GETUTCDATE() + @GMT END)
+
 	;WITH NEW_VALUES AS
 	(
 		SELECT  i.[NoteId]
@@ -57,7 +61,8 @@ BEGIN
 	             LastName,
 	             FirstName,
 				 Data,
-	             LogData)
+	             LogData,
+	             LogDate)
 	SELECT CASE
 	           WHEN d.[NoteId] IS NULL THEN 3
 	           WHEN i.[NoteId] IS NULL THEN 5
@@ -98,7 +103,8 @@ BEGIN
 								FULL JOIN OLD_VALUES ON NEW_VALUES.[NoteId] = OLD_VALUES.[NoteId]
 						WHERE NEW_VALUES.[NoteId] = ISNULL(i.[NoteId], d.[NoteId]) OR OLD_VALUES.[NoteId] = ISNULL(i.[NoteId], d.[NoteId])
 						FOR XML AUTO, ROOT('Note'), TYPE
-					)
+					),
+			@CurrentPMTime
 	  FROM inserted AS i
 	       FULL JOIN deleted AS d ON i.[NoteId] = d.[NoteId]
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
@@ -106,4 +112,8 @@ BEGIN
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
 END
+
+GO
+
+
 
