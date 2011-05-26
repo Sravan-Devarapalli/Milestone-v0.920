@@ -3,7 +3,7 @@
 -- Create date: 2009-12-08
 -- Description:	Updates time entry record
 -- =============================================
-CREATE PROCEDURE dbo.TimeEntryUpdate
+CREATE PROCEDURE [dbo].[TimeEntryUpdate]
 	@TimeEntryId INT,
 	@EntryDate datetime,
 	@MilestoneDate datetime,
@@ -23,6 +23,10 @@ BEGIN
 	SET NOCOUNT ON;
 
 	declare @OldIsReviewed bit
+	
+	DECLARE @GMT NVARCHAR(10) = (SELECT Value FROM Settings WHERE SettingsKey = 'TimeZone')
+	DECLARE @CurrentPMTime DATETIME = (CASE WHEN CHARINDEX('-',@GMT) >0 THEN GETUTCDATE() - REPLACE(@GMT,'-','') ELSE 
+											GETUTCDATE() + @GMT END)
 
 	IF @MilestonePersonId = 0 
             EXECUTE dbo.MilestonePersonEntryCreateProgrammatically @PersonId = @PersonId, --  int
@@ -38,7 +42,7 @@ BEGIN
 	
 	UPDATE [dbo].[TimeEntries]
 	   SET [EntryDate] = @EntryDate
-		  ,[ModifiedDate] = GETDATE()
+		  ,[ModifiedDate] = @CurrentPMTime
 		  ,[MilestonePersonId] = @MilestonePersonId
 		  ,[ActualHours] = @ActualHours
 		  ,[ForecastedHours] = @ForecastedHours
@@ -51,4 +55,9 @@ BEGIN
 		  ,[IsCorrect] = @IsCorrect
 	WHERE TimeEntryId = @TimeEntryId
 END
+
+
+GO
+
+
 
