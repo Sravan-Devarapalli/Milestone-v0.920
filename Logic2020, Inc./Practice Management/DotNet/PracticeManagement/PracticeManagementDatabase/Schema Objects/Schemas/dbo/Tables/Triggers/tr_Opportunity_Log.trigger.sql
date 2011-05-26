@@ -11,6 +11,10 @@ BEGIN
 	-- Ensure the temporary table exists
 	EXEC SessionLogPrepare @UserLogin = NULL
 
+	DECLARE @GMT NVARCHAR(10) = (SELECT Value FROM Settings WHERE SettingsKey = 'TimeZone')
+	DECLARE @CurrentPMTime DATETIME = (CASE WHEN CHARINDEX('-',@GMT) >0 THEN GETUTCDATE() - REPLACE(@GMT,'-','') ELSE 
+											GETUTCDATE() + @GMT END)
+
 	;WITH NEW_VALUES AS
 	(
 		SELECT i.OpportunityId 
@@ -91,7 +95,8 @@ BEGIN
 	             LastName,
 	             FirstName,
 				 Data,
-	             LogData)
+	             LogData,
+	             LogDate)
 	SELECT CASE
 	           WHEN d.OpportunityId IS NULL THEN 3
 	           WHEN i.OpportunityId IS NULL THEN 5
@@ -138,7 +143,8 @@ BEGIN
 					    FROM NEW_VALUES
 					         FULL JOIN OLD_VALUES ON NEW_VALUES.OpportunityId = OLD_VALUES.OpportunityId
 			           WHERE NEW_VALUES.OpportunityId = ISNULL(i.OpportunityId, d.OpportunityId) OR OLD_VALUES.OpportunityId = ISNULL(i.OpportunityId, d.OpportunityId)
-					  FOR XML AUTO, ROOT('Opportunity'), TYPE)
+					  FOR XML AUTO, ROOT('Opportunity'), TYPE),
+			@CurrentPMTime
 	  FROM inserted AS i
 	       FULL JOIN deleted AS d ON i.OpportunityId = d.OpportunityId
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
@@ -150,10 +156,12 @@ BEGIN
 END
 
 GO
-EXECUTE sp_settriggerorder @triggername = N'[dbo].[tr_Opportunity_Log]', @order = N'last', @stmttype = N'insert';
 
-
+EXEC sp_settriggerorder @triggername=N'[dbo].[tr_Opportunity_Log]', @order=N'Last', @stmttype=N'INSERT'
 GO
-EXECUTE sp_settriggerorder @triggername = N'[dbo].[tr_Opportunity_Log]', @order = N'last', @stmttype = N'update';
+
+EXEC sp_settriggerorder @triggername=N'[dbo].[tr_Opportunity_Log]', @order=N'Last', @stmttype=N'UPDATE'
+GO
+
 
 
