@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/Arrays" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://system67.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+  <xs:import schemaLocation="http://system67.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd1" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
+  <xs:complexType name="ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5">
+    <xs:annotation>
+      <xs:appinfo>
+        <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfdateTimeComputedFinancialsfLTn8SS5">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Key" type="xs:dateTime" />
+            <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" name="Value" nillable="true" type="q1:ComputedFinancials" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" nillable="true" type="tns:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
+  <xs:complexType name="ArrayOfstring">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfstring" nillable="true" type="tns:ArrayOfstring" />
+  <xs:complexType name="ArrayOfint">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="int" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfint" nillable="true" type="tns:ArrayOfint" />
+  <xs:complexType name="ArrayOfKeyValueOfPersonArrayOfTimeEntryRecordvCShFPHe">
+    <xs:annotation>
+      <xs:appinfo>
+        <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfPersonArrayOfTimeEntryRecordvCShFPHe">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" name="Key" nillable="true" type="q2:Person" />
+            <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" name="Value" nillable="true" type="q3:ArrayOfTimeEntryRecord" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfKeyValueOfPersonArrayOfTimeEntryRecordvCShFPHe" nillable="true" type="tns:ArrayOfKeyValueOfPersonArrayOfTimeEntryRecordvCShFPHe" />
+  <xs:complexType name="ArrayOfKeyValueOfTimeEntryHoursArrayOfTimeEntryRecordPnpt9Yr5">
+    <xs:annotation>
+      <xs:appinfo>
+        <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfTimeEntryHoursArrayOfTimeEntryRecordPnpt9Yr5">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" name="Key" nillable="true" type="q4:TimeEntryHours" />
+            <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" name="Value" nillable="true" type="q5:ArrayOfTimeEntryRecord" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfKeyValueOfTimeEntryHoursArrayOfTimeEntryRecordPnpt9Yr5" nillable="true" type="tns:ArrayOfKeyValueOfTimeEntryHoursArrayOfTimeEntryRecordPnpt9Yr5" />
+  <xs:complexType name="ArrayOfKeyValueOfProjectArrayOfTimeEntryRecordvCShFPHe">
+    <xs:annotation>
+      <xs:appinfo>
+        <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfProjectArrayOfTimeEntryRecordvCShFPHe">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" name="Key" nillable="true" type="q6:Project" />
+            <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" name="Value" nillable="true" type="q7:ArrayOfTimeEntryRecord" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfKeyValueOfProjectArrayOfTimeEntryRecordvCShFPHe" nillable="true" type="tns:ArrayOfKeyValueOfProjectArrayOfTimeEntryRecordvCShFPHe" />
+</xs:schema>
