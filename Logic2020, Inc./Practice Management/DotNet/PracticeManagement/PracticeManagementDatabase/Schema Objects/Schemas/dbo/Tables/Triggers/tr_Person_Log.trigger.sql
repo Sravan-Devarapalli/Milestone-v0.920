@@ -5,13 +5,17 @@
 -- Update date:	
 -- Description:	Logs the changes in the dbo.Person table.
 -- =============================================
-CREATE TRIGGER dbo.tr_Person_Log
-ON dbo.[Person]
+CREATE TRIGGER [dbo].[tr_Person_Log]
+ON [dbo].[Person]
 AFTER INSERT, UPDATE, DELETE
 AS
 BEGIN
 	-- Ensure the temporary table exists
 	EXEC SessionLogPrepare @UserLogin = NULL
+	
+	DECLARE @GMT NVARCHAR(10) = (SELECT Value FROM Settings WHERE SettingsKey = 'TimeZone')
+	DECLARE @CurrentPMTime DATETIME = (CASE WHEN CHARINDEX('-',@GMT) >0 THEN GETUTCDATE() - REPLACE(@GMT,'-','') ELSE 
+											GETUTCDATE() + @GMT END)
 
 	;WITH NEW_VALUES AS
 	(
@@ -71,7 +75,8 @@ BEGIN
 	             LastName,
 	             FirstName,
 				 Data,
-	             LogData)
+	             LogData,
+	             LogDate)
 	SELECT CASE
 	           WHEN d.PersonID IS NULL THEN 3
 	           WHEN i.PersonID IS NULL THEN 5
@@ -107,7 +112,8 @@ BEGIN
 					    FROM NEW_VALUES
 					         FULL JOIN OLD_VALUES ON NEW_VALUES.PersonID = OLD_VALUES.PersonID
 			           WHERE NEW_VALUES.PersonID = ISNULL(i.PersonId, d.PersonID) OR OLD_VALUES.PersonID = ISNULL(i.PersonId, d.PersonID)
-					  FOR XML AUTO, ROOT('Person'), TYPE)
+					  FOR XML AUTO, ROOT('Person'), TYPE),
+			@CurrentPMTime
 	  FROM inserted AS i
 	       FULL JOIN deleted AS d ON i.PersonID = d.PersonID
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
@@ -115,4 +121,9 @@ BEGIN
 	  -- End logging session
 	EXEC dbo.SessionLogUnprepare
 END
+
+
+GO
+
+
 
