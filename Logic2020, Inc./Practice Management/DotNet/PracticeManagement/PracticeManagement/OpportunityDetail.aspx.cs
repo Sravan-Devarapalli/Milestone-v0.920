@@ -288,30 +288,39 @@ namespace PraticeManagement
                     Target = (NoteTarget)4
                 };
 
-                if (NewlyAddedNotes != null)
+                if (!OpportunityId.HasValue)
                 {
-                    NewlyAddedNotes.Add(note);
-                }
-                else
-                {
-                    NewlyAddedNotes = new List<Note>();
-                    NewlyAddedNotes.Add(note);
-                }
+                    if (NewlyAddedNotes != null)
+                    {
+                        NewlyAddedNotes.Add(note);
+                    }
+                    else
+                    {
+                        NewlyAddedNotes = new List<Note>();
+                        NewlyAddedNotes.Add(note);
+                    }
 
-                if (NotesList != null)
-                {
-                    List<Note> notesList = NotesList.ToList();
-                    notesList.Add(note);
-                    ViewState[NOTE_LIST_KEY] = notesList.AsQueryable().ToArray();
-                }
-                else
-                {
-                    List<Note> notesList = new List<Note>();
-                    notesList.Add(note);
-                    ViewState[NOTE_LIST_KEY] = notesList.AsQueryable().ToArray();
-                }
+                    if (NotesList != null)
+                    {
+                        List<Note> notesList = NotesList.ToList();
+                        notesList.Add(note);
+                        ViewState[NOTE_LIST_KEY] = notesList.AsQueryable().ToArray();
+                    }
+                    else
+                    {
+                        List<Note> notesList = new List<Note>();
+                        notesList.Add(note);
+                        ViewState[NOTE_LIST_KEY] = notesList.AsQueryable().ToArray();
+                    }
 
-                ScriptManager.RegisterClientScriptBlock(upNotes, upNotes.GetType(), "", "EnableSaveButton();setDirty();", true);
+                    ScriptManager.RegisterClientScriptBlock(upNotes, upNotes.GetType(), "", "EnableSaveButton();setDirty();", true);
+                }
+                else 
+                {
+                    note.TargetId = OpportunityId.Value;
+                    ServiceCallers.Custom.Milestone(client => client.NoteInsert(note));
+                    ViewState.Remove(NOTE_LIST_KEY);
+                }
 
                 lvNotes.DataSource = NotesList;
                 lvNotes.DataBind();
