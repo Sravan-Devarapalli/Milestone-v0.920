@@ -1,15 +1,4 @@
-﻿USE [ObfuscatedPracticeManagement]
-GO
-
-/****** Object:  Trigger [dbo].[tr_TE_logUpdateDelete]    Script Date: 05/25/2011 09:58:26 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
--- =============================================
+﻿-- =============================================
 -- Author:		Nikita Goncharenko
 -- Create date: 2009-12-23
 -- Description:	
