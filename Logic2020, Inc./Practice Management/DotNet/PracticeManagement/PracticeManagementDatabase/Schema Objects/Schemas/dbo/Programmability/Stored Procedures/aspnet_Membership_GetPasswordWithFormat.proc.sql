@@ -16,9 +16,8 @@ BEGIN
     DECLARE @LastActivityDate                   datetime
     DECLARE @LastLoginDate                      datetime
     
-	DECLARE @GMT NVARCHAR(10) = (SELECT Value FROM Settings WHERE SettingsKey = 'TimeZone')
-	DECLARE @CurrentPMTime DATETIME = (CASE WHEN CHARINDEX('-',@GMT) >0 THEN @CurrentTimeUtc - REPLACE(@GMT,'-','') ELSE 
-											@CurrentTimeUtc + @GMT END) --To add and subtract timezone from UTCtime.
+	DECLARE @CurrentPMTime DATETIME 
+	SET @CurrentPMTime = dbo.InsertingTime()
 
     SELECT  @UserId          = NULL
 
