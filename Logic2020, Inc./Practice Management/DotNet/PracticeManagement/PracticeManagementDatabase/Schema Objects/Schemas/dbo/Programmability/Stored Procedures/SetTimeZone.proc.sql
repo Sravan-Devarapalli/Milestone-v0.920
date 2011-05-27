@@ -11,8 +11,4 @@ AS
 		UPDATE TimeZones
 		SET IsActive = 1
 		WHERE GMT = @GMT -- Active selected Time zone.
-		
-		UPDATE Settings
-		SET Value = @GMT
-		WHERE SettingsKey = 'TimeZone'
 	END
