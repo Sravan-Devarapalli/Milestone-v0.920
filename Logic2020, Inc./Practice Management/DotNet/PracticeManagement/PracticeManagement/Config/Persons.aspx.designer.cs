@@ -67,24 +67,6 @@ namespace PraticeManagement.Config {
         protected global::AjaxControlToolkit.TextBoxWatermarkExtender waterMarkTxtSearch;
         
         /// <summary>
-        /// btnUpdateView control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUpdateView;
-        
-        /// <summary>
-        /// btnResetFilter control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnResetFilter;
-        
-        /// <summary>
         /// ddlView control.
         /// </summary>
         /// <remarks>
@@ -101,6 +83,42 @@ namespace PraticeManagement.Config {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedHyperlink lnkAddPerson;
+        
+        /// <summary>
+        /// lnkbtnPrevious1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkbtnPrevious1;
+        
+        /// <summary>
+        /// trAlphabeticalPaging1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trAlphabeticalPaging1;
+        
+        /// <summary>
+        /// lnkbtnAll1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkbtnAll1;
+        
+        /// <summary>
+        /// lnkbtnNext1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkbtnNext1;
         
         /// <summary>
         /// pnlFilters control.
@@ -155,6 +173,24 @@ namespace PraticeManagement.Config {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeRecruiters;
+        
+        /// <summary>
+        /// btnUpdateView control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnUpdateView;
+        
+        /// <summary>
+        /// btnResetFilter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnResetFilter;
         
         /// <summary>
         /// hdnActive control.
