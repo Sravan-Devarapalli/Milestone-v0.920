@@ -601,6 +601,33 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} (from milestone start date to {1:c}).
+        /// </summary>
+        internal static string TeMilestoneReportEndDate {
+            get {
+                return ResourceManager.GetString("TeMilestoneReportEndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (from {1:c} to the milestone end date).
+        /// </summary>
+        internal static string TeMilestoneReportStartDate {
+            get {
+                return ResourceManager.GetString("TeMilestoneReportStartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (whole milestone period).
+        /// </summary>
+        internal static string TeMilestoneReportWholePeriod {
+            get {
+                return ResourceManager.GetString("TeMilestoneReportWholePeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} (from project start date to {1:c}).
         /// </summary>
         internal static string TeProjectReportEndDate {
