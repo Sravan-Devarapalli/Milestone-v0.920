@@ -90,7 +90,14 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 if (unrestricted)
                 {
-                    lblProjectName.Text = string.Format(Resources.Controls.TeProjectReportWholePeriod, projectName);
+                    if (ddlMilestones.SelectedIndex == 0)
+                    {
+                        lblProjectName.Text = string.Format(Resources.Controls.TeProjectReportWholePeriod, projectName);
+                    }
+                    else
+                    {
+                        lblProjectName.Text = string.Format(Resources.Controls.TeMilestoneReportWholePeriod, projectName);
+                    }
                     return;
                 }
 
@@ -104,13 +111,31 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 if (!startDateMissing)
                 {
-                    lblProjectName.Text = string.Format(Resources.Controls.TeProjectReportStartDate,
-                                                        projectName, diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+                    if (ddlMilestones.SelectedIndex == 0)
+                    {
+                        lblProjectName.Text = string.Format(Resources.Controls.TeProjectReportStartDate,
+                                                            projectName, diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+
+                    }
+                    else
+                    {
+                        lblProjectName.Text = string.Format(Resources.Controls.TeMilestoneReportStartDate,
+                                                               projectName, diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+                    }
                     return;
                 }
 
-                lblProjectName.Text = string.Format(Resources.Controls.TeProjectReportEndDate, projectName,
-                                                    diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+
+                if (ddlMilestones.SelectedIndex == 0)
+                {
+                    lblProjectName.Text = string.Format(Resources.Controls.TeProjectReportEndDate, projectName,
+                                                        diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+                }
+                else
+                {
+                    lblProjectName.Text = string.Format(Resources.Controls.TeMilestoneReportEndDate, projectName,
+                                                        diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+                }
             }
         }
 
