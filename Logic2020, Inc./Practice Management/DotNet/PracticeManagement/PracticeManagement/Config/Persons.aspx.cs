@@ -268,14 +268,23 @@ namespace PraticeManagement.Config
             if (previousLetter != null)
             {
                 LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLetter);
-                previousLinkButton.Font.Bold = false;
+                LinkButton prevtopButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLinkButton.Attributes["Top"]);
+                LinkButton prevbottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(previousLinkButton.Attributes["Bottom"]);
+
+                prevtopButton.Font.Bold = false;
+                prevbottomButton.Font.Bold = false;
             }
 
             LinkButton alpha = (LinkButton)sender;
-            alpha.Font.Bold = true;
-            hdnAlphabet.Value = alpha.Text != "All" ? alpha.Text : null;
 
-            previousLetter = alpha.ID;
+            LinkButton topButton = (LinkButton)trAlphabeticalPaging.FindControl(alpha.Attributes["Top"]);
+            LinkButton bottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(alpha.Attributes["Bottom"]);
+
+            topButton.Font.Bold = true;
+            bottomButton.Font.Bold = true;
+            hdnAlphabet.Value = topButton.Text != "All" ? topButton.Text : null;
+            previousLetter = topButton.ID;
+
             gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
             gvPersons.DataBind();
         }
@@ -287,8 +296,6 @@ namespace PraticeManagement.Config
             gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
             gvPersons.DataBind();
         }
-
-        
 
         protected void ResetFilter_Clicked(object sender, EventArgs e)
         {
@@ -415,33 +422,37 @@ namespace PraticeManagement.Config
 
             if (ddlView.SelectedValue == "-1")
             {
-                lnkbtnPrevious.Enabled = lnkbtnNext.Enabled = false;                
+                lnkbtnPrevious.Enabled = lnkbtnPrevious1.Enabled = lnkbtnNext.Enabled = lnkbtnNext1.Enabled =false;                
             }
             else
             {
-                lnkbtnPrevious.Enabled = !(CurrentIndex == 0);
-                lnkbtnNext.Enabled = !((gvPersons.Rows.Count == 0) || (currentRecords == totalRecords) || (currentRecords < Convert.ToInt32(ddlView.SelectedValue)));
+                lnkbtnPrevious.Enabled = lnkbtnPrevious1.Enabled = !(CurrentIndex == 0);
+                lnkbtnNext.Enabled = lnkbtnNext1.Enabled = !((gvPersons.Rows.Count == 0) || (currentRecords == totalRecords) || (currentRecords < Convert.ToInt32(ddlView.SelectedValue)));
             }
 
             if (!lnkbtnPrevious.Enabled)
             {
                 Color color = ColorTranslator.FromHtml("#8F8F8F");
                 lnkbtnPrevious.ForeColor = color;
+                lnkbtnPrevious1.ForeColor = color;
             }
             else
             {
                 Color color = ColorTranslator.FromHtml("#0898E6");
                 lnkbtnPrevious.ForeColor = color;
+                lnkbtnPrevious1.ForeColor = color;
             }
             if (!lnkbtnNext.Enabled)
             {
                 Color color = ColorTranslator.FromHtml("#8F8F8F");
                 lnkbtnNext.ForeColor = color;
+                lnkbtnNext1.ForeColor = color;
             }
             else
             {
                 Color color = ColorTranslator.FromHtml("#0898E6");
                 lnkbtnNext.ForeColor = color;
+                lnkbtnNext1.ForeColor = color;
             }
         }
 
@@ -655,6 +666,8 @@ namespace PraticeManagement.Config
 
                 LinkButton Alphabet = new LinkButton();
                 Alphabet.ID = "lnkbtn" + alphabet;
+                Alphabet.Attributes.Add("Top", "lnkbtn" + alphabet);
+                Alphabet.Attributes.Add("Bottom", "lnkbtn1" + alphabet);
 
                 HtmlTableCell tc = new HtmlTableCell();
                 tc.ID = "td" + alphabet;
@@ -670,6 +683,27 @@ namespace PraticeManagement.Config
                 tc.Controls.Add(Alphabet);
 
                 trAlphabeticalPaging.Controls.Add(tc);
+
+                LinkButton Alphabet1 = new LinkButton();
+                Alphabet1.ID = "lnkbtn1" + alphabet;
+                Alphabet1.Attributes.Add("Top", "lnkbtn" + alphabet);
+                Alphabet1.Attributes.Add("Bottom", "lnkbtn1" + alphabet);
+
+
+                HtmlTableCell tc1 = new HtmlTableCell();
+                tc1.ID = "td1" + alphabet;
+                tc1.Style.Add("padding-left", "15px");
+                tc1.Style.Add("padding-top", "10px");
+                tc1.Style.Add("padding-bottom", "10px");
+                tc1.Style.Add("text-align", "center");
+
+                Alphabet1.Text = alphabet.ToString();
+                Alphabet1.Font.Underline = false;
+                Alphabet1.Click += new EventHandler(Alphabet_Clicked);
+
+                tc1.Controls.Add(Alphabet1);
+
+                trAlphabeticalPaging1.Controls.Add(tc1);
             }
         }
 
@@ -738,11 +772,17 @@ namespace PraticeManagement.Config
             //Reset to All button.
             if (previousLetter != null)
             {
-                LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLetter);
-                previousLinkButton.Font.Bold = false;
+                LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLetter);                
+                                
+                LinkButton prevtopButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLinkButton.Attributes["Top"]);
+                LinkButton prevbottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(previousLinkButton.Attributes["Bottom"]);
+
+                prevtopButton.Font.Bold = false;
+                prevbottomButton.Font.Bold = false;
             }
 
             lnkbtnAll.Font.Bold = true;
+            lnkbtnAll1.Font.Bold = true;
             previousLetter = lnkbtnAll.ID;
             hdnAlphabet.Value = null;
         }
