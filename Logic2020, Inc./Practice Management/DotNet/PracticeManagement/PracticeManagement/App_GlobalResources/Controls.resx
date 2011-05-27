@@ -338,4 +338,13 @@
   <data name="AllTypes" xml:space="preserve">
     <value>All Types</value>
   </data>
+  <data name="TeMilestoneReportEndDate" xml:space="preserve">
+    <value>{0} (from milestone start date to {1:c})</value>
+  </data>
+  <data name="TeMilestoneReportStartDate" xml:space="preserve">
+    <value>{0} (from {1:c} to the milestone end date)</value>
+  </data>
+  <data name="TeMilestoneReportWholePeriod" xml:space="preserve">
+    <value>{0} (whole milestone period)</value>
+  </data>
 </root>
