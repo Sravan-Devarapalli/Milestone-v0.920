@@ -89,10 +89,12 @@
             </ItemTemplate>
             <ItemStyle CssClass="tem-grid-date-cell grid-item-cell-padding"></ItemStyle>
             <EditItemTemplate>
+                <asp:Label ID="lblMilestoneDateEdit" runat="server" Text='<%# ((TimeEntryRecord)Container.DataItem).
+                MilestoneDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>' ></asp:Label>
                 <cc2:FormatedTextBox ID="ftbMilestoneDateEdit" runat="server" DataFormatString='<%# PraticeManagement.Constants.Formatting.EntryDateFormat %>'
-                    DateText='<%# Bind("MilestoneDate") %>' Width="50" />
-                <ajaxToolkit:CalendarExtender runat="server" Format='<%# PraticeManagement.Constants.Formatting.EntryDateFormat %>'
-                    PopupPosition="Right" TargetControlID="ftbMilestoneDateEdit" />
+                    DateText='<%# Bind("MilestoneDate") %>' Width="50" Visible="false"/>
+                <%--<ajaxToolkit:CalendarExtender runat="server" Format='<%# PraticeManagement.Constants.Formatting.EntryDateFormat %>'
+                    PopupPosition="Right" TargetControlID="ftbMilestoneDateEdit" />--%>
             </EditItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderText="Frcst">
@@ -302,11 +304,12 @@
             </ItemTemplate>
             <ItemStyle CssClass="tem-grid-date-cell grid-item-cell-padding"></ItemStyle>
             <EditItemTemplate>
-                <%--<asp:Label ID="ftbEntryDateEdit" runat="server" Text='<%# Bind("EntryDate") %>' ToolTip="Item entered date" />--%>
+                <asp:Label ID="lblEntryDateEdit" runat="server" Text='<%# ((TimeEntryRecord)Container.DataItem).
+                EntryDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>' ToolTip="Item entered date" />
                 <cc2:FormatedTextBox ID="ftbEntryDateEdit" runat="server" DataFormatString='<%# PraticeManagement.Constants.Formatting.EntryDateFormat %>'
-                    DateText='<%# Bind("EntryDate") %>' Width="55"/>
-                <ajaxToolkit:CalendarExtender runat="server" Format='<%# PraticeManagement.Constants.Formatting.EntryDateFormat %>'
-                    PopupPosition="Right" TargetControlID="ftbEntryDateEdit" />
+                    DateText='<%# Bind("EntryDate") %>' Width="55" Visible="false"/>
+                <%--<ajaxToolkit:CalendarExtender runat="server" Format='<%# PraticeManagement.Constants.Formatting.EntryDateFormat %>'
+                    PopupPosition="Right" TargetControlID="ftbEntryDateEdit" />--%>
             </EditItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderText="Modified by">
