@@ -35,6 +35,17 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td>
+                                        Milestone
+                                    </td>
+                                    <td>
+                                        <asp:DropDownList ID="ddlMilestones" runat="server" Enabled="false" AutoPostBack="true" Width="460px"
+                                            OnSelectedIndexChanged="ddlMilestones_OnSelectedIndexChanged">
+                                            <asp:ListItem Text="Entire Project" Value=""></asp:ListItem>
+                                        </asp:DropDownList>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td colspan="2">
                                         <table>
                                             <tr>
@@ -140,6 +151,7 @@
                 <asp:Parameter Name="startDate" Type="DateTime" />
                 <asp:Parameter Name="endDate" Type="DateTime" />
                 <asp:Parameter Name="personIdList" Type="Object" />
+                <asp:Parameter Name="milestoneId" Type="Int32" />
             </SelectParameters>
         </asp:ObjectDataSource>
     </ContentTemplate>
