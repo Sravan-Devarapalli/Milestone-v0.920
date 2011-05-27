@@ -427,14 +427,15 @@ namespace PraticeManagement.Utils
 
         #region Reports
 
-        public static Dictionary<Person, TimeEntryRecord[]> GetTimeEntriesForProject(int projectId, DateTime? startDate, DateTime? endDate, IEnumerable<int> personIdList)
+        public static Dictionary<Person, TimeEntryRecord[]> GetTimeEntriesForProject(int projectId, DateTime? startDate, DateTime? endDate, IEnumerable<int> personIdList, int? milestoneId)
         {
             var reportContext = new TimeEntryProjectReportContext
             {
                 ProjectId = projectId,
                 StartDate = startDate,
                 EndDate = endDate,
-                PersonIds = personIdList
+                PersonIds = personIdList,
+                MilestoneId = milestoneId
             };
 
             var byProject = ServiceCallers.Custom.TimeEntry(client => client.GetTimeEntriesProject(reportContext));
