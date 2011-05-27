@@ -21,42 +21,62 @@
             <div class="buttons-block">
                 <table class="WholeWidth">
                     <tr valign="middle">
-                        <td style="width: 40px;">
-                            <ajaxToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
-                                ImageControlID="btnExpandCollapseFilter" CollapsedImage="../Images/expand.jpg"
-                                ExpandedImage="../Images/collapse.jpg" CollapseControlID="btnExpandCollapseFilter"
-                                ExpandControlID="btnExpandCollapseFilter" Collapsed="True" TextLabelID="lblFilter" />
-                            <asp:Label ID="lblFilter" runat="server"></asp:Label>&nbsp;
-                            <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg"
-                                ToolTip="Expand Filters" />
-                        </td>
-                        <td align="left" valign="middle" style="float: left;">
-                            <asp:TextBox runat="server" ID="txtSearch" Style="width: 400px; text-align: left;"
-                                OnTextChanged="txtSearch_TextChanged" MaxLength="40"></asp:TextBox>
-                            <ajaxToolkit:TextBoxWatermarkExtender ID="waterMarkTxtSearch" runat="server" TargetControlID="txtSearch"
-                                WatermarkCssClass="watermarkedtext" WatermarkText="To search for a person, click here to begin typing and hit enter...">
-                            </ajaxToolkit:TextBoxWatermarkExtender>
-                        </td>
-                        <td style="width: 115px;">
-                            <asp:Button ID="btnUpdateView" runat="server" Text="Update View" OnClick="UpdateView_Clicked" />
-                        </td>
-                        <td style="width: 115px;">
-                            <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" OnClick="ResetFilter_Clicked" />
-                        </td>
-                        <td style="width: 115px; text-align: right">
-                            <asp:DropDownList ID="ddlView" runat="server" OnSelectedIndexChanged="DdlView_SelectedIndexChanged"
-                                AutoPostBack="true">
-                                <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
-                                <asp:ListItem Text="View 50" Value="50"></asp:ListItem>
-                                <asp:ListItem Text="View 100" Value="100"></asp:ListItem>
-                                <asp:ListItem Text="View All" Value="-1"></asp:ListItem>
-                            </asp:DropDownList>
+                        <td colspan="3">
+                            <table class="WholeWidth">
+                                <tr>
+                                    <td>
+                                        <td style="width: 40px;">
+                                            <ajaxToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
+                                                ImageControlID="btnExpandCollapseFilter" CollapsedImage="../Images/expand.jpg"
+                                                ExpandedImage="../Images/collapse.jpg" CollapseControlID="btnExpandCollapseFilter"
+                                                ExpandControlID="btnExpandCollapseFilter" Collapsed="True" TextLabelID="lblFilter" />
+                                            <asp:Label ID="lblFilter" runat="server"></asp:Label>&nbsp;
+                                            <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg"
+                                                ToolTip="Expand Filters" />
+                                        </td>
+                                        <td valign="middle" style="float: left;">
+                                            <asp:TextBox runat="server" ID="txtSearch" Style="width: 400px; text-align: left;"
+                                                OnTextChanged="txtSearch_TextChanged" MaxLength="40"></asp:TextBox>
+                                            <ajaxToolkit:TextBoxWatermarkExtender ID="waterMarkTxtSearch" runat="server" TargetControlID="txtSearch"
+                                                WatermarkCssClass="watermarkedtext" WatermarkText="To search for a person, click here to begin typing and hit enter...">
+                                            </ajaxToolkit:TextBoxWatermarkExtender>
+                                        </td>
+                                        <td style="width: 115px; text-align: right">
+                                            <asp:DropDownList ID="ddlView" runat="server" OnSelectedIndexChanged="DdlView_SelectedIndexChanged"
+                                                AutoPostBack="true">
+                                                <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
+                                                <asp:ListItem Text="View 50" Value="50"></asp:ListItem>
+                                                <asp:ListItem Text="View 100" Value="100"></asp:ListItem>
+                                                <asp:ListItem Text="View All" Value="-1"></asp:ListItem>
+                                            </asp:DropDownList>
+                                        </td>
+                                        <td align="right">
+                                            <asp:ShadowedHyperlink runat="server" Text="Add Person" ID="lnkAddPerson" CssClass="add-btn"
+                                                NavigateUrl="~/PersonDetail.aspx?returnTo=Config/Persons.aspx" />
+                                        </td>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="5" align="right" style="padding-top: 10px;">
-                            <asp:ShadowedHyperlink runat="server" Text="Add Person" ID="lnkAddPerson" CssClass="add-btn"
-                                NavigateUrl="~/PersonDetail.aspx?returnTo=Config/Persons.aspx" />
+                        <td align="left" style="width: 15%; white-space: nowrap; padding-left: 10px;">
+                            <asp:LinkButton ID="lnkbtnPrevious1" runat="server" Text="<- PREVIOUS" Font-Underline="false"
+                                OnClick="Previous_Clicked"></asp:LinkButton>
+                        </td>
+                        <td valign="middle" align="center" style="width: 70%; text-align: center;">
+                            <table>
+                                <tr id="trAlphabeticalPaging1" runat="server">
+                                    <td style="padding-left: 15px; padding-top: 10px; padding-bottom: 10px; text-align: center;">
+                                        <asp:LinkButton ID="lnkbtnAll1" Top="lnkbtnAll" Bottom="lnkbtnAll1" runat="server"
+                                            Text="All" Font-Underline="false" Font-Bold="true" OnClick="Alphabet_Clicked"></asp:LinkButton>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td align="right" style="width: 15%; white-space: nowrap; padding-right: 10px;">
+                            <asp:LinkButton ID="lnkbtnNext1" runat="server" Text="NEXT ->" Font-Underline="false"
+                                OnClick="Next_Clicked"></asp:LinkButton>
                         </td>
                     </tr>
                 </table>
@@ -94,6 +114,20 @@
                                                     <ext:ScrollableDropdownExtender ID="sdeRecruiters" runat="server" TargetControlID="cblRecruiters"
                                                         UseAdvanceFeature="true" Width="200px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                                                     </ext:ScrollableDropdownExtender>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="padding: 5px;">
+                                        <table>
+                                            <tr>
+                                                <td style="padding: 5px;">
+                                                    <asp:Button ID="btnUpdateView" Width="75px" runat="server" Text="Update" OnClick="UpdateView_Clicked" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 5px;">
+                                                    <asp:Button ID="btnResetFilter" Width="75px" runat="server" Text="Reset" OnClick="ResetFilter_Clicked" />
                                                 </td>
                                             </tr>
                                         </table>
@@ -238,8 +272,9 @@
             </asp:GridView>
             <asp:ObjectDataSource ID="odsPersons" runat="server" SelectCountMethod="GetPersonCount"
                 SelectMethod="GetPersons" StartRowIndexParameterName="startRow" MaximumRowsParameterName="maxRows"
-                EnablePaging="true" SortParameterName="sortBy" CacheDuration="5" TypeName="PraticeManagement.Config.Persons" OnSelecting="odsPersons_OnSelecting">
-               <SelectParameters>
+                EnablePaging="true" SortParameterName="sortBy" CacheDuration="5" TypeName="PraticeManagement.Config.Persons"
+                OnSelecting="odsPersons_OnSelecting">
+                <SelectParameters>
                     <asp:Parameter Name="practiceIdsSelected" Type="String" />
                     <asp:Parameter Name="active" Type="Boolean" />
                     <asp:Parameter Name="pageSize" Type="Int32" />
@@ -253,36 +288,42 @@
                     <asp:Parameter Name="alphabet" />
                 </SelectParameters>
             </asp:ObjectDataSource>
-            <table class="buttons-block WholeWidth" style="background-color: #d4dff8;">
+            <table class="WholeWidth" style="background-color: #d4dff8;">
                 <tr style="height: 25px;">
-                    <td align="left" style="width: 100px; padding-left: 10px;">
+                    <td align="left" style="width: 15%; white-space: nowrap; padding-left: 25px;">
                         <asp:LinkButton ID="lnkbtnPrevious" runat="server" Text="<- PREVIOUS" Font-Underline="false"
                             OnClick="Previous_Clicked"></asp:LinkButton>
                     </td>
-                    <td align="center">
+                    <td valign="middle" align="center" style="width: 70%; text-align: center;">
                         <table>
                             <tr id="trAlphabeticalPaging" runat="server">
                                 <td style="padding-left: 15px; padding-top: 10px; padding-bottom: 10px; text-align: center;">
-                                    <asp:LinkButton ID="lnkbtnAll" runat="server" Text="All" Font-Underline="false" Font-Bold="true"
-                                        OnClick="Alphabet_Clicked"></asp:LinkButton>
+                                    <asp:LinkButton ID="lnkbtnAll" Top="lnkbtnAll" Bottom="lnkbtnAll1" runat="server"
+                                        Text="All" Font-Underline="false" Font-Bold="true" OnClick="Alphabet_Clicked"></asp:LinkButton>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td align="right" style="width: 100px; padding-right: 10px;">
+                    <td align="right" style="width: 15%; white-space: nowrap; padding-right: 10px;">
                         <asp:LinkButton ID="lnkbtnNext" runat="server" Text="NEXT ->" Font-Underline="false"
                             OnClick="Next_Clicked"></asp:LinkButton>
                     </td>
                 </tr>
                 <tr style="height: 40px;">
-                    <td style="width: 150px;">
-                    </td>
-                    <td align="center">
-                        <asp:Label ID="lblRecords" runat="server" ForeColor="Black" Font-Bold="true"></asp:Label>
-                    </td>
-                    <td align="right" style="width: 150px;">
-                        <asp:Button ID="btnExportToExcel" runat="server" OnClick="btnExportToExcel_Click"
-                            Text="Export" />
+                    <td colspan="3">
+                        <table class="WholeWidth">
+                            <tr>
+                                <td style="width: 15%;">
+                                </td>
+                                <td align="center" style="width: 70%; text-align: center;">
+                                    <asp:Label ID="lblRecords" runat="server" ForeColor="Black" Font-Bold="true"></asp:Label>
+                                </td>
+                                <td align="right" style="width: 15%; white-space: nowrap; padding-right: 10px;">
+                                    <asp:Button ID="btnExportToExcel" Width="100px" runat="server" OnClick="btnExportToExcel_Click"
+                                        Text="Export" />
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
             </table>
