@@ -19,6 +19,8 @@ namespace DataTransferObjects.ContextObjects
         public DateTime? EndDate { get; set; }
         [DataMember]
         public IEnumerable<int> PersonIds { get; set; }
+        [DataMember]
+        public int? MilestoneId { get; set; }
     }
 }
 
