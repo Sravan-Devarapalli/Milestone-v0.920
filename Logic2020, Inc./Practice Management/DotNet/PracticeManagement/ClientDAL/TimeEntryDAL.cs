@@ -453,6 +453,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, reportContext.ProjectId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, reportContext.StartDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, reportContext.EndDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, reportContext.MilestoneId.HasValue ? (object)reportContext.MilestoneId : DBNull.Value);
 
                 connection.Open();
 
