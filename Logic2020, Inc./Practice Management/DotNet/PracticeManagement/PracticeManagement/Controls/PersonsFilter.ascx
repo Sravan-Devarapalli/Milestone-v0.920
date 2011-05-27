@@ -24,22 +24,22 @@
         <td style="padding-right: 5px;">
             <table>
                 <tr>
-                    <td>
+                    <td style="white-space:nowrap;">
                         <asp:CheckBox ID="chbShowActive" runat="server" AutoPostBack="false" TextAlign="Left"
                             Checked="true" OnCheckedChanged="chbShowActive_CheckedChanged" />
                         <span style="padding-right: 5px">Active</span>
                     </td>
-                    <td style="padding-left: 20px;">
+                    <td style="padding-left: 20px;white-space:nowrap;">
                         <asp:CheckBox ID="chbProjected" runat="server" />
                         <span style="padding-right: 5px">Projected</span>
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td style="white-space:nowrap;">
                         <asp:CheckBox ID="chbInactive" runat="server" />
                         <span style="padding-right: 5px">Inactive</span>
                     </td>
-                    <td style="padding-left: 20px;">
+                    <td style="padding-left: 20px;white-space:nowrap;">
                         <asp:CheckBox ID="chbTerminated" runat="server" />
                         <span style="padding-right: 5px">Terminated</span>
                     </td>
@@ -51,10 +51,10 @@
         <td rowspan="2" class="floatRight" style="padding-top: 5px; padding-left: 3px;">
             <cc2:ScrollingDropDown ID="cblTimeScales" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
                 AutoPostBack="false" onclick="scrollingDropdown_onclick('cblTimeScales','Pay Type')"
-                BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False" Width="200px"
+                BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False" Width="190px"
                 DropDownListType="Pay Type" Height="100px" BorderWidth="0" />
             <ext:ScrollableDropdownExtender ID="sdeTimeScales" runat="server" TargetControlID="cblTimeScales"
-                UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png" Width="200px">
+                UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png" Width="190px">
             </ext:ScrollableDropdownExtender>
         </td>
         <td style="width: 15px">
@@ -63,9 +63,9 @@
             <cc2:ScrollingDropDown ID="cblPractices" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
                 onclick="scrollingDropdown_onclick('cblPractices','Practice Area')" BackColor="White"
                 CellPadding="3" Height="250px" NoItemsType="All" SetDirty="False" DropDownListType="Practice Area"
-                Width="250px" BorderWidth="0" />
+                Width="240px" BorderWidth="0" />
             <ext:ScrollableDropdownExtender ID="sdePractices" runat="server" TargetControlID="cblPractices"
-                UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                UseAdvanceFeature="true" Width="240px" EditImageUrl="~/Images/Dropdown_Arrow.png">
             </ext:ScrollableDropdownExtender>
         </td>
         <td style="width: 15px">
