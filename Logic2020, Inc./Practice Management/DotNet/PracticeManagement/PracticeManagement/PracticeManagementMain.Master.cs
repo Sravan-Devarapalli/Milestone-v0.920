@@ -444,21 +444,17 @@ namespace PraticeManagement
         protected string GetTodayWithTimeZone()
         {
             var timezone = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.TimeZoneKey);
-            //DateTime.Now.T
-            //string s = "+05:30";
-            var timezoneWithoutSign = timezone.Replace("+", string.Empty).Replace("-", string.Empty);
-            var hours = Int32.Parse(timezoneWithoutSign.Substring(0, timezoneWithoutSign.IndexOf(':')));
-            var min = Int32.Parse(timezoneWithoutSign.Substring(timezoneWithoutSign.IndexOf(':') + 1));
-            if (timezone[0] == '+')
+            
+            if (timezone == "-08:00")
             {
-                return DateTime.UtcNow.AddHours(hours).AddMinutes(min).ToLongDateString();
+                return TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time")).ToLongDateString();
             }
             else
             {
-                return DateTime.UtcNow.AddHours(-1 * hours).AddMinutes(-1 * min).ToLongDateString();
+                var timezoneWithoutSign = timezone.Replace("+", string.Empty);
+                TimeZoneInfo ctz = TimeZoneInfo.CreateCustomTimeZone("cid", TimeSpan.Parse(timezoneWithoutSign), "customzone", "customzone");
+                return TimeZoneInfo.ConvertTime(DateTime.UtcNow, ctz).ToLongDateString();
             }
-
-          
         }
     }
 }
