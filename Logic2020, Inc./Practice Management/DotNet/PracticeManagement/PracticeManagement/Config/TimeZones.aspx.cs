@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.Controls;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement.Config
 {
@@ -41,6 +42,8 @@ namespace PraticeManagement.Config
                 {
                     serviceClient.SetTimeZone(timezone);
                 }
+
+                SettingsHelper.SaveResourceKeyValuePairItem(SettingsType.Application, Constants.ResourceKeys.TimeZoneKey, timezone.GMT);
 
                 ClearDirty();
                 return true;
