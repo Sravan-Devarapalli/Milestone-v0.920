@@ -2,6 +2,32 @@
     Inherits="PraticeManagement.Controls.PersonsFilter" %>
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
+
+  <script type="text/javascript">
+      window.onload = changeAlternateitemsForProposedResources;
+      function changeAlternateitemsForProposedResources() {
+          var chkboxList = document.getElementById('<%=cblTimeScales.ClientID %>');
+          SetAlternateColors(chkboxList);
+          var cbList = document.getElementById('<%=cblPractices.ClientID %>');
+          SetAlternateColors(cbList);
+      }
+
+      function SetAlternateColors(chkboxList) {     
+          var chkboxes = chkboxList.getElementsByTagName('input');
+          var index = 0;
+          for (var i = 0; i < chkboxes.length; i++) {
+              if (chkboxes[i].parentNode.style.display != "none") {
+                  index++;
+                  if ((index) % 2 == 0) {
+                      chkboxes[i].parentNode.style.backgroundColor = "#f9faff";
+                  }
+                  else {
+                      chkboxes[i].parentNode.style.backgroundColor = "";
+                  }
+              }
+          }
+      }
+    </script>
 <table>
     <tr style="text-align: center;">
         <td style="padding-right: 5px; border-bottom: 1px solid black;">
