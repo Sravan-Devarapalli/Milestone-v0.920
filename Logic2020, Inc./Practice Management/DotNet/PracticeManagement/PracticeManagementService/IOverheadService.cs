@@ -73,6 +73,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         void UpdateMinimumLoadFactorStatus(bool inActive);
+
+        [OperationContract]
+        List<OverHeadHistory> GetOverheadHistory();
     }
 }
 
