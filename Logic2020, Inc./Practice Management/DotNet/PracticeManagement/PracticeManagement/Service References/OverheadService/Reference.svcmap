@@ -21,12 +21,12 @@
     <MetadataSource Address="http://localhost/PracticeManagementService/OverheadService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="OverheadService3.xsd" MetadataType="Schema" ID="d0cf292f-41e5-4a10-9401-47d27460c74f" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd1" />
-    <MetadataFile FileName="OverheadService4.xsd" MetadataType="Schema" ID="416f2f66-9be9-45b4-9247-1bea0b6351b8" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd0" />
-    <MetadataFile FileName="OverheadService5.xsd" MetadataType="Schema" ID="d80c4ae1-7365-4768-9760-273f4cfe8486" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd3" />
-    <MetadataFile FileName="OverheadService6.xsd" MetadataType="Schema" ID="e152f5f4-cb40-4c1f-a817-920fe245b069" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd2" />
-    <MetadataFile FileName="OverheadService1.disco" MetadataType="Disco" ID="735fa9e9-d2b6-4b36-945f-3f26f61c11a1" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OverheadService.svc?disco" />
-    <MetadataFile FileName="OverheadService1.wsdl" MetadataType="Wsdl" ID="cf74fff6-531f-4614-88ef-24b56a157a4e" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OverheadService.svc?wsdl" />
+    <MetadataFile FileName="OverheadService3.xsd" MetadataType="Schema" ID="cd6233c5-e115-4227-9c74-b614addf8582" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd1" />
+    <MetadataFile FileName="OverheadService1.disco" MetadataType="Disco" ID="233f78d9-d039-4deb-9778-88e19bd6212d" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OverheadService.svc?disco" />
+    <MetadataFile FileName="OverheadService4.xsd" MetadataType="Schema" ID="326f3db8-2a77-4756-ad54-29fdbd3a3c65" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd3" />
+    <MetadataFile FileName="OverheadService5.xsd" MetadataType="Schema" ID="2d9f81e4-2d3c-43bd-9b75-e1f72f6e26ee" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd2" />
+    <MetadataFile FileName="OverheadService6.xsd" MetadataType="Schema" ID="c8577bd4-53f7-4592-bc91-baecbff59d9c" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd0" />
+    <MetadataFile FileName="OverheadService1.wsdl" MetadataType="Wsdl" ID="54d5de5b-1090-4214-af8f-585f98ecabf8" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OverheadService.svc?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
