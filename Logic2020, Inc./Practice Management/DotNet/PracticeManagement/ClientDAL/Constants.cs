@@ -9,6 +9,9 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string W2Salary_RateColumn = "W2Salary_Rate";
+            public const string W2Hourly_RateColumn ="W2Hourly_Rate";
+            public const string _1099_Hourly_RateColumn = "_1099_Hourly_Rate";
             public const string FileName = "FileName";
             public const string HoursInPeriod = "HoursInPeriod";
             public const string ProjectDiscount = "ProjectDiscount";
@@ -654,6 +657,11 @@
                 public const string OpportunityPersonDelete = "dbo.OpportunityPersonDelete";
                 public const string OpportunityPrioritiesListAll = "dbo.OpportunityPrioritiesListAll";
                 public const string GetPersonsByOpportunityIds = "dbo.GetPersonsByOpportunityIds";
+            }
+
+            public class OverHeads
+            {
+                public const string GetMLFHistory = "dbo.GetMLFHistory";
             }
         }
 
