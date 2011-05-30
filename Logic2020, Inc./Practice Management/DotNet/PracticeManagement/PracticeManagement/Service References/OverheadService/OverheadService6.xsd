@@ -1,121 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataTransferObjects" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://server2.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-  <xs:import schemaLocation="http://server2.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-  <xs:complexType name="ArrayOfOverheadRateType">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="OverheadRateType" nillable="true" type="tns:OverheadRateType" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfOverheadRateType" nillable="true" type="tns:ArrayOfOverheadRateType" />
-  <xs:complexType name="OverheadRateType">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="HoursToCollect" type="xs:int" />
-      <xs:element minOccurs="0" name="Id" type="xs:int" />
-      <xs:element minOccurs="0" name="IsPercentage" type="xs:boolean" />
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="OverheadRateType" nillable="true" type="tns:OverheadRateType" />
-  <xs:complexType name="ArrayOfOverheadFixedRate">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="OverheadFixedRate" nillable="true" type="tns:OverheadFixedRate" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfOverheadFixedRate" nillable="true" type="tns:ArrayOfOverheadFixedRate" />
-  <xs:complexType name="OverheadFixedRate">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="Inactive" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsCogs" type="xs:boolean" />
-      <xs:element minOccurs="0" name="Rate" type="tns:PracticeManagementCurrency" />
-      <xs:element minOccurs="0" name="RateType" nillable="true" type="tns:OverheadRateType" />
-      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
-      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Timescales" nillable="true" type="q1:ArrayOfKeyValueOfTimescaleTypebooleanHkPrmpBP" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="OverheadFixedRate" nillable="true" type="tns:OverheadFixedRate" />
-  <xs:complexType name="PracticeManagementCurrency">
-    <xs:annotation>
-      <xs:appinfo>
-        <IsValueType xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsValueType>
-      </xs:appinfo>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element minOccurs="0" name="FormatStyle" type="tns:NumberFormatStyle" />
-      <xs:element minOccurs="0" name="Value" type="xs:decimal" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="PracticeManagementCurrency" nillable="true" type="tns:PracticeManagementCurrency" />
-  <xs:simpleType name="NumberFormatStyle">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="General" />
-      <xs:enumeration value="Negative" />
-      <xs:enumeration value="Revenue" />
-      <xs:enumeration value="Cogs">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Margin">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">8</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Total">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">16</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Percent">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">32</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="NumberFormatStyle" nillable="true" type="tns:NumberFormatStyle" />
-  <xs:simpleType name="TimescaleType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Hourly">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Salary">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="_1099Ctc">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="PercRevenue">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="TimescaleType" nillable="true" type="tns:TimescaleType" />
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://system66.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+  <xs:import schemaLocation="http://system66.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:element name="GetRateTypes">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRateTypesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetRateTypesResult" nillable="true" type="q1:ArrayOfOverheadRateType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRateTypeDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="overheadRateTypeId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRateTypeDetailResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetRateTypeDetailResult" nillable="true" type="q2:OverheadRateType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetOverheadFixedRates">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="activeOnly" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetOverheadFixedRatesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetOverheadFixedRatesResult" nillable="true" type="q3:ArrayOfOverheadFixedRate" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetOverheadFixedRateDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="overheadId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetOverheadFixedRateDetailResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetOverheadFixedRateDetailResult" nillable="true" type="q4:OverheadFixedRate" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveOverheadFixedRateDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="overhead" nillable="true" type="q5:OverheadFixedRate" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveOverheadFixedRateDetailResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SaveOverheadFixedRateDetailResult" nillable="true" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OverheadFixedRateInactivate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="overheadId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OverheadFixedRateInactivateResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OverheadFixedRateReactivate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="overheadId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OverheadFixedRateReactivateResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetMinimumLoadFactorOverheadMultipliers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="OverHeadName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="isInactive" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetMinimumLoadFactorOverheadMultipliersResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetMinimumLoadFactorOverheadMultipliersResult" nillable="true" type="q6:ArrayOfKeyValueOfintdecimal" />
+        <xs:element minOccurs="0" name="isInactive" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateMinimumLoadFactorHistory">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="timeScaleId" type="xs:int" />
+        <xs:element minOccurs="0" name="rate" type="xs:decimal" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateMinimumLoadFactorHistoryResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateMinimumLoadFactorStatus">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="inActive" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateMinimumLoadFactorStatusResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetOverheadHistory">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetOverheadHistoryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetOverheadHistoryResult" nillable="true" type="q7:ArrayOfOverHeadHistory" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>
