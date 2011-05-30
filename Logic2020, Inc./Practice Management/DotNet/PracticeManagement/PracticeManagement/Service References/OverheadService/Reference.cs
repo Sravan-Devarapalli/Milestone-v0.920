@@ -45,6 +45,9 @@ namespace PraticeManagement.OverheadService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOverheadService/UpdateMinimumLoadFactorStatus", ReplyAction="http://tempuri.org/IOverheadService/UpdateMinimumLoadFactorStatusResponse")]
         void UpdateMinimumLoadFactorStatus(bool inActive);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOverheadService/GetOverheadHistory", ReplyAction="http://tempuri.org/IOverheadService/GetOverheadHistoryResponse")]
+        DataTransferObjects.OverHeadHistory[] GetOverheadHistory();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -54,7 +57,6 @@ namespace PraticeManagement.OverheadService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class OverheadServiceClient : System.ServiceModel.ClientBase<PraticeManagement.OverheadService.IOverheadService>, PraticeManagement.OverheadService.IOverheadService {
-        
         
         public OverheadServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -110,6 +112,10 @@ namespace PraticeManagement.OverheadService {
         
         public void UpdateMinimumLoadFactorStatus(bool inActive) {
             base.Channel.UpdateMinimumLoadFactorStatus(inActive);
+        }
+        
+        public DataTransferObjects.OverHeadHistory[] GetOverheadHistory() {
+            return base.Channel.GetOverheadHistory();
         }
     }
 }
