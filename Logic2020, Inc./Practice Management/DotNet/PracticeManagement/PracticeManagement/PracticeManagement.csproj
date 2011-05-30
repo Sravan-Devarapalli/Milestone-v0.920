@@ -234,6 +234,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.EmailData.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Financials.MilestonePersonComputedFinancials.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.OpportunityPriority.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.OverHeadHistory.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.ProjectsGroupedByPerson.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.ProjectsGroupedByPractice.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.TimeEntry.TimeEntrySums.datasource" />
@@ -631,7 +632,6 @@
     <None Include="Service References\ExpenseCategoryService\ExpenseCategoryService1.disco" />
     <None Include="Service References\ExpenseService\ExpenseService1.disco" />
     <None Include="Service References\MembershipService\MembershipService1.disco" />
-    <None Include="Service References\OverheadService\OverheadService1.disco" />
     <None Include="Service References\PersonRoleService\PersonRoleService1.disco" />
     <None Include="Service References\PersonStatusService\PersonStatusService1.disco" />
     <None Include="Service References\ProjectStatusService\ProjectStatusService1.disco" />
@@ -654,9 +654,10 @@
     <None Include="Service References\ProjectGroupService\ProjectGroupService15.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <None Include="Service References\ProjectService\ProjectService1.disco" />
-    <None Include="Service References\OpportunityService\OpportunityService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService12.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService14.disco" />
+    <None Include="Service References\OpportunityService\OpportunityService1.disco" />
+    <None Include="Service References\OverheadService\OverheadService1.disco" />
     <Content Include="TimeEntrySetting.aspx" />
     <None Include="Web References\AttachmentService\AttachmentService.disco" />
     <Content Include="Web.config">
