@@ -4,5 +4,9 @@
 	GMT NVARCHAR(6) NOT NULL ,
 	GMTName NVARCHAR(2000) NOT NULL,
 	IsActive BIT CONSTRAINT DF_TimeZones_IsActive  DEFAULT 0 NOT NULL ,
+	IsdaylightsavingTime BIT,
+	StartDate DATETIME,
+	EndDate DATETIME, 
+	DayLightSavingTimeValue NVARCHAR(20),
 	CONSTRAINT PK_TimeZones_Id PRIMARY KEY CLUSTERED (Id)
 )
