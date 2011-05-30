@@ -83,14 +83,14 @@ namespace PraticeManagement.Controls.TimeEntry
                 var endDateMissing = !diRange.ToDate.HasValue;
                 var unrestricted = startDateMissing && endDateMissing;
 
-                if (ddlMilestones.SelectedIndex != 0)
+                if (ddlMilestones.SelectedValue != string.Empty)
                 {
                     projectName = projectName + " - " + ddlMilestones.SelectedItem.Text;
                 }
 
                 if (unrestricted)
                 {
-                    if (ddlMilestones.SelectedIndex == 0)
+                    if (ddlMilestones.SelectedValue == string.Empty)
                     {
                         lblProjectName.Text = string.Format(Resources.Controls.TeProjectReportWholePeriod, projectName);
                     }
@@ -111,7 +111,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 if (!startDateMissing)
                 {
-                    if (ddlMilestones.SelectedIndex == 0)
+                    if (ddlMilestones.SelectedValue == string.Empty)
                     {
                         lblProjectName.Text = string.Format(Resources.Controls.TeProjectReportStartDate,
                                                             projectName, diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat));
@@ -126,7 +126,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 }
 
 
-                if (ddlMilestones.SelectedIndex == 0)
+                if (ddlMilestones.SelectedValue == string.Empty)
                 {
                     lblProjectName.Text = string.Format(Resources.Controls.TeProjectReportEndDate, projectName,
                                                         diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat));
@@ -141,9 +141,12 @@ namespace PraticeManagement.Controls.TimeEntry
 
         protected void btnUpdate_OnClick(object sender, EventArgs e)
         {
-            UpdateHeaderTitle();
-            ResetTotalCounters();
-            dlTimeEntries.DataBind();
+            if (ddlMilestones.SelectedValue != "-1")
+            {
+                UpdateHeaderTitle();
+                ResetTotalCounters();
+                dlTimeEntries.DataBind();
+            }
         }
 
         protected void ddlClients_OnSelectedIndexChanged(object sender, EventArgs e)
@@ -192,7 +195,7 @@ namespace PraticeManagement.Controls.TimeEntry
             diRange.ToDate = null;
             //Clearing Persons Scrolling Dropdown as project is changed and then rebinding TimeEntries list control.
             cblPersons.Items.Clear();
-            dlTimeEntries.DataBind();
+            //dlTimeEntries.DataBind();
 
             if (ddlProjects.SelectedValue != string.Empty)
             {
@@ -210,14 +213,16 @@ namespace PraticeManagement.Controls.TimeEntry
                                                     ).ToArray();
                 ddlMilestones.Items.AddRange(items);
 
-                //We need to show Entire Project details by default.
-                ShowEntireProjectDetails();
             }
             else
             {
                 ddlMilestones.Enabled = false;
             }
-            UpdateHeaderTitle();
+
+            if (ddlProjects.SelectedValue == string.Empty)
+            {
+                lblProjectName.Visible = false;
+            }
         }
 
         protected void ddlMilestones_OnSelectedIndexChanged(object sender, EventArgs e)
@@ -227,8 +232,16 @@ namespace PraticeManagement.Controls.TimeEntry
             //Clearing Persons Scrolling Dropdown as milestone is changed and then rebinding TimeEntries list control.
             cblPersons.Items.Clear();
 
+            if (ddlMilestones.SelectedValue == "-1")
+            {
+                dlTimeEntries.Visible = false;
+                lblProjectName.Visible = false;
+                lblGrandTotal.Visible = false;
+                return;
+            }
+
             dlTimeEntries.DataBind();
-            dlTimeEntries.Visible = true;
+            dlTimeEntries.Visible = true;          
 
             if (!string.IsNullOrEmpty(ddlMilestones.SelectedValue))
             {
@@ -254,6 +267,7 @@ namespace PraticeManagement.Controls.TimeEntry
             if (ddlProjects.SelectedValue == string.Empty)
             {
                 lblGrandTotal.Visible = false;
+               
                 return;
             }
 
@@ -353,9 +367,11 @@ namespace PraticeManagement.Controls.TimeEntry
 
         private void SetFirstItemOfMilestones()
         {
-            ListItem firstItem = new ListItem("Entire Project", string.Empty);
+            ListItem firstItem = new ListItem("-- Select a Milestone --", "-1");
+            ListItem secondItem = new ListItem("Entire Project", string.Empty);
             ddlMilestones.Items.Clear();
             ddlMilestones.Items.Add(firstItem);
+            ddlMilestones.Items.Add(secondItem);
             ddlMilestones.DataBind();
         }
 
