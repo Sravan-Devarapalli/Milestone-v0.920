@@ -81,4 +81,10 @@ BEGIN
 				   ,NULL)
 		END
 	END
+	
+	EXEC dbo.SaveMLFHistory	
+		@TimescaleId = @TimescaleId, 
+		@Rate = @Rate,
+		@Today = @Today
 END
+
