@@ -21,6 +21,11 @@ namespace PracticeManagementService
             return OverheadRateTypeDAL.OverheadRateTypeListAll();
         }
 
+        public List<OverHeadHistory> GetOverheadHistory()
+        {
+            return OverHeadHistoryDAL.GetOverheadHistory();
+        }
+
         /// <summary>
         /// Retrieves an overhead rate type info by the specified ID.
         /// </summary>
