@@ -165,6 +165,7 @@
     <Compile Include="OpportunityTransitionStatus.cs" />
     <Compile Include="OpportunityTransitionStatusType.cs" />
     <Compile Include="OverheadFixedRate.cs" />
+    <Compile Include="OverHeadHistory.cs" />
     <Compile Include="OverheadRateType.cs" />
     <Compile Include="OverheadRateTypes.cs" />
     <Compile Include="PersonOverhead.cs" />
