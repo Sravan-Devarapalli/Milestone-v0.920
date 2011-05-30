@@ -41,7 +41,7 @@
                                     <td>
                                         <asp:DropDownList ID="ddlMilestones" runat="server" Enabled="false" AutoPostBack="true" Width="460px"
                                             OnSelectedIndexChanged="ddlMilestones_OnSelectedIndexChanged">
-                                            <asp:ListItem Text="Entire Project" Value=""></asp:ListItem>
+                                            <asp:ListItem Text="-- Select a Milestone --" Value="-1"></asp:ListItem>
                                         </asp:DropDownList>
                                     </td>
                                 </tr>
