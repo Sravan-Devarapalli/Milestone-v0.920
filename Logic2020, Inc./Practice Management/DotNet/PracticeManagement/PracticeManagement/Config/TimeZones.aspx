@@ -22,7 +22,7 @@
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="padding-top:10px; padding-bottom:5px;">
                 <asp:CheckBox id="cbIsDayLightSavingsTimeEffect" runat="server" Text="Daylight Savings Time is in effect for this location" ></asp:CheckBox>
             </td>
         </tr>
