@@ -121,6 +121,7 @@
     <Compile Include="OpportunityTransitionStatusDAL.cs" />
     <Compile Include="Other\DataSourceHelper.cs" />
     <Compile Include="OverheadFixedRateDAL.cs" />
+    <Compile Include="OverHeadHistoryDAL.cs" />
     <Compile Include="OverheadRateTypeDAL.cs" />
     <Compile Include="PayDAL.cs" />
     <Compile Include="PersonDAL.cs" />
