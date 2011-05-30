@@ -22,6 +22,33 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.UpdatePanel pnlBody;
         
         /// <summary>
+        /// cpe control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.CollapsiblePanelExtender cpe;
+        
+        /// <summary>
+        /// lblFilter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblFilter;
+        
+        /// <summary>
+        /// btnExpandCollapseFilter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image btnExpandCollapseFilter;
+        
+        /// <summary>
         /// txtSearch control.
         /// </summary>
         /// <remarks>
@@ -40,13 +67,22 @@ namespace PraticeManagement.Config {
         protected global::AjaxControlToolkit.TextBoxWatermarkExtender waterMarkTxtSearch;
         
         /// <summary>
-        /// chbShowActive control.
+        /// reqSearchText control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chbShowActive;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqSearchText;
+        
+        /// <summary>
+        /// btnSearchAll control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSearchAll;
         
         /// <summary>
         /// ddlView control.
@@ -65,6 +101,15 @@ namespace PraticeManagement.Config {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedHyperlink lnkAddClient;
+        
+        /// <summary>
+        /// valsumSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valsumSearch;
         
         /// <summary>
         /// lnkbtnPrevious control.
@@ -101,6 +146,42 @@ namespace PraticeManagement.Config {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lnkbtnNext;
+        
+        /// <summary>
+        /// pnlFilters control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlFilters;
+        
+        /// <summary>
+        /// tcFilters control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabContainer tcFilters;
+        
+        /// <summary>
+        /// tpMainFilters control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel tpMainFilters;
+        
+        /// <summary>
+        /// chbShowActive control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbShowActive;
         
         /// <summary>
         /// gvClients control.
