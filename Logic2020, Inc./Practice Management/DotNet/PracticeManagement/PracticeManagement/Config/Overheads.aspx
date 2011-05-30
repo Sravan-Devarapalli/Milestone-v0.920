@@ -79,13 +79,6 @@
                     <asp:Label ID="lblCogsOrExpense" runat="server" Text='<%# Convert.ToBoolean(Eval("IsCogs")) ? "COGS" : "Expense" %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
-            <%--<asp:TemplateField HeaderText="Overhead per Hour">
-            <ItemStyle CssClass="LeftPadding10px"/>
-            <HeaderStyle HorizontalAlign="Left" />
-            <ItemTemplate>
-                <asp:Label ID="lblCostHourly" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "RatePerHour") == null ? string.Empty : Eval("RatePerHour") %>'></asp:Label>
-            </ItemTemplate>
-        </asp:TemplateField>--%>
             <asp:TemplateField HeaderText="W2-Hourly">
                 <ItemStyle CssClass="LeftPadding10px" />
                 <HeaderStyle HorizontalAlign="Left" />
@@ -191,9 +184,72 @@
             </td>
             <td>
             </td>
-            <td>
+            <td align="right">
+                <asp:LinkButton ID="lnkBtnViewMLFHistory" OnClick="lnkBtnViewMLFHistory_OnClick"
+                    runat="server" Text="View History"></asp:LinkButton>
+                <asp:HiddenField ID="hdnField" runat="server" />
+                <AjaxControlToolkit:ModalPopupExtender ID="mpeViewMLFHistory" runat="server" TargetControlID="hdnField"
+                    CancelControlID="btnClose" BackgroundCssClass="modalBackground" PopupControlID="pnlViewMLFHistory"
+                    DropShadow="false" />
             </td>
         </tr>
     </table>
+    <asp:Panel ID="pnlViewMLFHistory" runat="server" BackColor="White" BorderColor="Black"
+        CssClass="ConfirmBoxClass" Style="display: none" BorderWidth="2px">
+        <table width="100%">
+            <tr style="height: 20px;">
+                <th align="right" style="padding-right: 3px; font-size: 14px;
+                    width: 100%">
+                    <asp:Button ID="btnClose" ToolTip="Close" runat="server" CssClass="mini-report-close" Text="X"></asp:Button>
+                </th>
+            </tr>
+            <tr>
+                <td align="center" style="padding: 6px 6px 2px 6px;">
+                    <div style="overflow-y: auto; height: 300px;">
+                        <asp:GridView ID="gvMLFHistory" runat="server" AutoGenerateColumns="false" EmptyDataText="There is nothing to be displayed here."
+                            CssClass="CompPerfTable WholeWidth" GridLines="None">
+                            <AlternatingRowStyle BackColor="#F9FAFF" />
+                            <Columns>
+                                <asp:TemplateField HeaderText="W2-Salary">
+                                    <HeaderStyle HorizontalAlign="Center" />
+                                    <ItemTemplate>
+                                        <asp:Label ID="lblW2_Salary" runat="server" Text='<%# Eval("W2Salary_Rate") %>'></asp:Label>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="W2-Hourly">
+                                    <HeaderStyle HorizontalAlign="Center" />
+                                    <ItemStyle CssClass="LeftPadding10px" />
+                                    <ItemTemplate>
+                                        <asp:Label ID="lblW2Hourly_Rate" runat="server" Text='<%# Eval("W2Hourly_Rate") %>'></asp:Label>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="1099 Hourly">
+                                    <ItemStyle CssClass="LeftPadding10px" />
+                                    <HeaderStyle HorizontalAlign="Center" />
+                                    <ItemTemplate>
+                                        <asp:Label ID="lbl_1099_Hourly_Rate" runat="server" Text='<%# Eval("_1099_Hourly_Rate") %>'></asp:Label>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Start Date">
+                                    <ItemStyle CssClass="LeftPadding10px" />
+                                    <HeaderStyle HorizontalAlign="Center" />
+                                    <ItemTemplate>
+                                        <asp:Label ID="lblStartDate" runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>'></asp:Label>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="End Date">
+                                    <ItemStyle CssClass="LeftPadding10px" />
+                                    <HeaderStyle HorizontalAlign="Center" />
+                                    <ItemTemplate>
+                                        <asp:Label ID="lblEndDate" runat="server" Text='<%# ((DateTime?)Eval("EndDate")).HasValue ? ((DateTime?)Eval("EndDate")).Value.ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                            </Columns>
+                        </asp:GridView>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </asp:Panel>
 </asp:Content>
 
