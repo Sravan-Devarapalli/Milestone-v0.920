@@ -204,6 +204,8 @@ namespace PraticeManagement.Config
             }
 
             AddAlphabetButtons();
+
+            gvPersons.EmptyDataText = "No results found.";
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -255,11 +257,39 @@ namespace PraticeManagement.Config
             }
         }
 
-        protected void txtSearch_TextChanged(object sender, EventArgs e)
+        protected void btnSearchAll_OnClick(object sender, EventArgs e)
         {
+            SearchPersons();
+        }
+
+        private void SearchPersons()
+        {
+            CurrentIndex = 0;
+            personsFilter.Active = true;
+            personsFilter.Projected = true;
+            personsFilter.Terminated = true;
+            personsFilter.Inactive = true;
+            SelectAllItems(this.cblRecruiters);
+            personsFilter.ResetFilterControlsToDefault();
+            SetFilterValues();
+            previousLetter = lnkbtnAll.ID;
+            hdnAlphabet.Value = null;
             hdnLooked.Value = txtSearch.Text;
             gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
             gvPersons.DataBind();
+
+            if (gvPersons.Rows.Count == 0)
+            {
+                string txt =txtSearch.Text;
+                txt= "<b>"+txt +"</b>";
+                gvPersons.EmptyDataText = string.Format("No results found for {0}", txt);
+            }
+
+        }
+
+        protected void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            SearchPersons();
         }
 
         protected void Alphabet_Clicked(object sender, EventArgs e)
