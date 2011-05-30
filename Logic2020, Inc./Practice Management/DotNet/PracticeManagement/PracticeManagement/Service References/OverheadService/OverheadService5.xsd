@@ -1,40 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/Arrays" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://server2.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
-  <xs:complexType name="ArrayOfKeyValueOfTimescaleTypebooleanHkPrmpBP">
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataTransferObjects" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://system66.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://system66.ggk.com/PracticeManagementService/OverheadService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="ArrayOfOverheadRateType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="OverheadRateType" nillable="true" type="tns:OverheadRateType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfOverheadRateType" nillable="true" type="tns:ArrayOfOverheadRateType" />
+  <xs:complexType name="OverheadRateType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="HoursToCollect" type="xs:int" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="IsPercentage" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="OverheadRateType" nillable="true" type="tns:OverheadRateType" />
+  <xs:complexType name="ArrayOfOverheadFixedRate">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="OverheadFixedRate" nillable="true" type="tns:OverheadFixedRate" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfOverheadFixedRate" nillable="true" type="tns:ArrayOfOverheadFixedRate" />
+  <xs:complexType name="OverheadFixedRate">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Inactive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsCogs" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Rate" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="RateType" nillable="true" type="tns:OverheadRateType" />
+      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Timescales" nillable="true" type="q1:ArrayOfKeyValueOfTimescaleTypebooleanHkPrmpBP" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="OverheadFixedRate" nillable="true" type="tns:OverheadFixedRate" />
+  <xs:complexType name="PracticeManagementCurrency">
     <xs:annotation>
       <xs:appinfo>
-        <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
+        <IsValueType xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsValueType>
       </xs:appinfo>
     </xs:annotation>
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfTimescaleTypebooleanHkPrmpBP">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" name="Key" type="q1:TimescaleType" />
-            <xs:element name="Value" type="xs:boolean" />
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
+      <xs:element minOccurs="0" name="FormatStyle" type="tns:NumberFormatStyle" />
+      <xs:element minOccurs="0" name="Value" type="xs:decimal" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfKeyValueOfTimescaleTypebooleanHkPrmpBP" nillable="true" type="tns:ArrayOfKeyValueOfTimescaleTypebooleanHkPrmpBP" />
-  <xs:complexType name="ArrayOfKeyValueOfintdecimal">
-    <xs:annotation>
-      <xs:appinfo>
-        <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
-      </xs:appinfo>
-    </xs:annotation>
+  <xs:element name="PracticeManagementCurrency" nillable="true" type="tns:PracticeManagementCurrency" />
+  <xs:simpleType name="NumberFormatStyle">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="General" />
+      <xs:enumeration value="Negative" />
+      <xs:enumeration value="Revenue" />
+      <xs:enumeration value="Cogs">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Margin">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">8</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Total">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">16</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Percent">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">32</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="NumberFormatStyle" nillable="true" type="tns:NumberFormatStyle" />
+  <xs:simpleType name="TimescaleType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Hourly">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Salary">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="_1099Ctc">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="PercRevenue">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="TimescaleType" nillable="true" type="tns:TimescaleType" />
+  <xs:complexType name="ArrayOfOverHeadHistory">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfintdecimal">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="Key" type="xs:int" />
-            <xs:element name="Value" type="xs:decimal" />
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="OverHeadHistory" nillable="true" type="tns:OverHeadHistory" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfKeyValueOfintdecimal" nillable="true" type="tns:ArrayOfKeyValueOfintdecimal" />
+  <xs:element name="ArrayOfOverHeadHistory" nillable="true" type="tns:ArrayOfOverHeadHistory" />
+  <xs:complexType name="OverHeadHistory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="W2Hourly_Rate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="W2Salary_Rate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="_1099_Hourly_Rate" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="OverHeadHistory" nillable="true" type="tns:OverHeadHistory" />
 </xs:schema>
