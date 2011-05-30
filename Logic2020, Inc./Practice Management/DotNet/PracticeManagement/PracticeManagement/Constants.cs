@@ -52,6 +52,7 @@ namespace PraticeManagement
             # region Application
 
             public const string TimeZoneKey = "TimeZone";
+            public const string IsDayLightSavingsTimeEffectKey = "IsDayLightSavingsTimeEffect";
 
             #endregion
 
