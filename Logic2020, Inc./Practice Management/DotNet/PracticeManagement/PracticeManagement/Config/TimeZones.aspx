@@ -2,12 +2,12 @@
     AutoEventWireup="true" CodeBehind="TimeZones.aspx.cs" Inherits="PraticeManagement.Config.TimeZones" %>
 
 <asp:content id="Content1" contentplaceholderid="title" runat="server">
-    <title>Practice Management - Time Zones</title>
+    <title>Practice Management - Time Zone</title>
 </asp:content>
 <asp:content id="Content2" contentplaceholderid="head" runat="server">
 </asp:content>
 <asp:content id="Content3" contentplaceholderid="header" runat="server">
-    Time Zones
+    Time Zone
 </asp:content>
 <asp:content id="Content4" contentplaceholderid="body" runat="server">
     <table width="50%" style="padding: 5px;">
@@ -19,6 +19,11 @@
             </td>
             <td style="padding-left:10px;">
                 <asp:button id="btnSetTimeZone" runat="server" onclick="btnSetTimeZone_Clicked" text="Set TimeZone" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <asp:CheckBox id="cbIsDayLightSavingsTimeEffect" runat="server" Text="Daylight Savings Time is in effect for this location" ></asp:CheckBox>
             </td>
         </tr>
     </table>
