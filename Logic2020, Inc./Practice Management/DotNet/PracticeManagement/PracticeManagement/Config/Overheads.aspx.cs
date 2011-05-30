@@ -70,6 +70,25 @@ namespace PraticeManagement.Config
             }
         }
 
+        protected void lnkBtnViewMLFHistory_OnClick(object sender, EventArgs e)
+        {
+            using (OverheadServiceClient serviceClient = new OverheadServiceClient())
+            {
+                try
+                {
+                    gvMLFHistory.DataSource = serviceClient.GetOverheadHistory();
+                    gvMLFHistory.DataBind();
+                }
+                catch (FaultException<ExceptionDetail>)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+
+            mpeViewMLFHistory.Show();
+        }
+
         protected void btnAddOverhead_Click(object sender, EventArgs e)
         {
             Redirect(Constants.ApplicationPages.OverheadDetail);
