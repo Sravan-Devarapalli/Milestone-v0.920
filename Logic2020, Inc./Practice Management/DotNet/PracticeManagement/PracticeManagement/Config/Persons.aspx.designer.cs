@@ -67,6 +67,24 @@ namespace PraticeManagement.Config {
         protected global::AjaxControlToolkit.TextBoxWatermarkExtender waterMarkTxtSearch;
         
         /// <summary>
+        /// reqSearchText control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqSearchText;
+        
+        /// <summary>
+        /// btnSearchAll control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSearchAll;
+        
+        /// <summary>
         /// ddlView control.
         /// </summary>
         /// <remarks>
@@ -83,6 +101,15 @@ namespace PraticeManagement.Config {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedHyperlink lnkAddPerson;
+        
+        /// <summary>
+        /// valsumSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valsumSearch;
         
         /// <summary>
         /// lnkbtnPrevious1 control.
