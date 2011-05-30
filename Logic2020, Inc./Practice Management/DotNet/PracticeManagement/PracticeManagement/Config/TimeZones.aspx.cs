@@ -18,6 +18,11 @@ namespace PraticeManagement.Config
         {
             successMessage.Text = string.Empty;
             errorMessage.Text = string.Empty;
+
+            if (!IsPostBack)
+            {
+                cbIsDayLightSavingsTimeEffect.Checked = Convert.ToBoolean(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDayLightSavingsTimeEffectKey));
+            }
         }
 
         protected override void Display()
@@ -44,6 +49,7 @@ namespace PraticeManagement.Config
                 }
 
                 SettingsHelper.SaveResourceKeyValuePairItem(SettingsType.Application, Constants.ResourceKeys.TimeZoneKey, timezone.GMT);
+                SettingsHelper.SaveResourceKeyValuePairItem(SettingsType.Application, Constants.ResourceKeys.IsDayLightSavingsTimeEffectKey, cbIsDayLightSavingsTimeEffect.Checked.ToString());
 
                 ClearDirty();
                 return true;
