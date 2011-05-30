@@ -73,7 +73,7 @@ namespace PraticeManagement.Config
             {
                 gvClients.AllowPaging = false;
             }
-            else 
+            else
             {
                 gvClients.AllowPaging = true;
             }
@@ -86,6 +86,7 @@ namespace PraticeManagement.Config
                 previousAlphabetLnkButtonId = lnkbtnAll.ID;
             }
 
+            gvClients.EmptyDataText = "No results found.";
         }
 
         protected void DataBindClients(Client[] clientsList)
@@ -109,7 +110,7 @@ namespace PraticeManagement.Config
 
             if (!string.IsNullOrEmpty(txtSearch.Text))
             {
-                FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.Contains(txtSearch.Text)).ToArray();
+                FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.ToUpperInvariant().Contains(txtSearch.Text.ToUpperInvariant())).ToArray();
             }
 
             DataBindClients(FilteredClientList);
@@ -188,10 +189,50 @@ namespace PraticeManagement.Config
 
         protected void txtSearch_TextChanged(object sender, EventArgs e)
         {
-            LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
-            Client[] FilteredClientList = previousLinkButton != null && previousLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(previousLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
-            FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.Contains(txtSearch.Text)).ToArray();
+            Searchclients();
+        }
+
+        private void Searchclients()
+        {
+            chbShowActive.Checked = false;
+            gvClients.PageIndex = 0;
+            ViewState.Remove(CLIENTS_LIST_KEY);
+
+            if (previousAlphabetLnkButtonId != null)
+            {
+                LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
+
+                LinkButton prevtopButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLinkButton.Attributes["Top"]);
+                LinkButton prevbottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(previousLinkButton.Attributes["Bottom"]);
+
+                prevtopButton.Font.Bold = false;
+                prevbottomButton.Font.Bold = false;
+            }
+
+            lnkbtnAll.Font.Bold = true;
+            lnkbtnAll1.Font.Bold = true;
+            hdnAlphabet.Value = null;
+            previousAlphabetLnkButtonId = lnkbtnAll.ID;
+
+            LinkButton preLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
+            Client[] FilteredClientList = preLinkButton != null && preLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(preLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
+            FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.ToUpperInvariant().Contains(txtSearch.Text.ToUpperInvariant())).ToArray();
             DataBindClients(FilteredClientList);
+
+            SetEmptyDataText();
+        }
+
+        private void SetEmptyDataText()
+        {
+            if (!string.IsNullOrEmpty(txtSearch.Text))
+            {
+                if (gvClients.Rows.Count == 0)
+                {
+                    string txt = txtSearch.Text;
+                    txt = "<b>" + txt + "</b>";
+                    gvClients.EmptyDataText = string.Format("No results found for {0}", txt);
+                }
+            }
         }
 
         private void AddAlphabetButtons()
@@ -272,10 +313,12 @@ namespace PraticeManagement.Config
 
             if (!string.IsNullOrEmpty(txtSearch.Text))
             {
-                FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.Contains(txtSearch.Text)).ToArray();
+                FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.ToUpperInvariant().Contains(txtSearch.Text.ToUpperInvariant())).ToArray();
             }
 
             DataBindClients(FilteredClientList);
+
+            SetEmptyDataText();
         }
 
         protected void Previous_Clicked(object sender, EventArgs e)
@@ -285,10 +328,12 @@ namespace PraticeManagement.Config
             Client[] FilteredClientList = previousLinkButton != null && previousLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(previousLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
             if (!string.IsNullOrEmpty(txtSearch.Text))
             {
-                FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.Contains(txtSearch.Text)).ToArray();
+                FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.ToUpperInvariant().Contains(txtSearch.Text.ToUpperInvariant())).ToArray();
             }
 
             DataBindClients(FilteredClientList);
+
+            SetEmptyDataText();
         }
 
         protected void Next_Clicked(object sender, EventArgs e)
@@ -298,10 +343,12 @@ namespace PraticeManagement.Config
             Client[] FilteredClientList = previousLinkButton != null && previousLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(previousLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
             if (!string.IsNullOrEmpty(txtSearch.Text))
             {
-                FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.Contains(txtSearch.Text)).ToArray();
+                FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.ToUpperInvariant().Contains(txtSearch.Text.ToUpperInvariant())).ToArray();
             }
 
             DataBindClients(FilteredClientList);
+
+            SetEmptyDataText();
         }
 
         protected void ddlView_SelectedIndexChanged(object sender, EventArgs e)
@@ -312,10 +359,12 @@ namespace PraticeManagement.Config
 
             if (!string.IsNullOrEmpty(txtSearch.Text))
             {
-                FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.Contains(txtSearch.Text)).ToArray();
+                FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.ToUpperInvariant().Contains(txtSearch.Text.ToUpperInvariant())).ToArray();
             }
 
             DataBindClients(FilteredClientList);
+
+            SetEmptyDataText();
         }
 
         public void EnableOrDisablePrevNextButtons()
@@ -359,6 +408,11 @@ namespace PraticeManagement.Config
                 Color color = ColorTranslator.FromHtml("#0898E6");
                 lnkbtnNext.ForeColor = lnkbtnNext1.ForeColor = color;
             }
+        }
+
+        protected void btnSearchAll_OnClick(object sender, EventArgs e)
+        {
+            Searchclients();
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
