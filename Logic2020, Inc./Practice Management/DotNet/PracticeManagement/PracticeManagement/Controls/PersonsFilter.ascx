@@ -2,33 +2,16 @@
     Inherits="PraticeManagement.Controls.PersonsFilter" %>
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
-
-  <script type="text/javascript">
-      window.onload = changeAlternateitemsForProposedResources;
-      function changeAlternateitemsForProposedResources() {
-          var chkboxList = document.getElementById('<%=cblTimeScales.ClientID %>');
-          SetAlternateColors(chkboxList);
-          var cbList = document.getElementById('<%=cblPractices.ClientID %>');
-          SetAlternateColors(cbList);
-      }
-
-      function SetAlternateColors(chkboxList) {     
-          var chkboxes = chkboxList.getElementsByTagName('input');
-          var index = 0;
-          for (var i = 0; i < chkboxes.length; i++) {
-              if (chkboxes[i].parentNode.style.display != "none") {
-                  index++;
-                  if ((index) % 2 == 0) {
-                      chkboxes[i].parentNode.style.backgroundColor = "#f9faff";
-                  }
-                  else {
-                      chkboxes[i].parentNode.style.backgroundColor = "";
-                  }
-              }
-          }
-      }
-    </script>
-<table>
+<script type="text/javascript">
+    function SetAlternateColorsForCBL() {
+        var chkboxList = document.getElementById('<%=cblTimeScales.ClientID %>');
+        SetAlternateColors(chkboxList);
+        var cbList = document.getElementById('<%=cblPractices.ClientID %>');
+        SetAlternateColors(cbList);
+    }
+     
+</script>
+<table class="WholeWidth">
     <tr style="text-align: center;">
         <td style="padding-right: 5px; border-bottom: 1px solid black;">
             <span>Person Status</span>
@@ -50,22 +33,22 @@
         <td style="padding-right: 5px;">
             <table>
                 <tr>
-                    <td style="white-space:nowrap;">
+                    <td style="white-space: nowrap;">
                         <asp:CheckBox ID="chbShowActive" runat="server" AutoPostBack="false" TextAlign="Left"
                             Checked="true" OnCheckedChanged="chbShowActive_CheckedChanged" />
                         <span style="padding-right: 5px">Active</span>
                     </td>
-                    <td style="padding-left: 20px;white-space:nowrap;">
+                    <td style="padding-left: 20px; white-space: nowrap;">
                         <asp:CheckBox ID="chbProjected" runat="server" />
                         <span style="padding-right: 5px">Projected</span>
                     </td>
                 </tr>
                 <tr>
-                    <td style="white-space:nowrap;">
+                    <td style="white-space: nowrap;">
                         <asp:CheckBox ID="chbInactive" runat="server" />
                         <span style="padding-right: 5px">Inactive</span>
                     </td>
-                    <td style="padding-left: 20px;white-space:nowrap;">
+                    <td style="padding-left: 20px; white-space: nowrap;">
                         <asp:CheckBox ID="chbTerminated" runat="server" />
                         <span style="padding-right: 5px">Terminated</span>
                     </td>
