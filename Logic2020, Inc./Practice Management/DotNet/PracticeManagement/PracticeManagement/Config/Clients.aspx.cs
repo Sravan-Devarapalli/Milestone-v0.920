@@ -44,7 +44,7 @@ namespace PraticeManagement.Config
                     {
                         try
                         {
-                            var result = chbShowActive.Checked
+                            var result = IsShowActive
                                     ? serviceClient.ClientListAll()
                                     : serviceClient.ClientListAllWithInactive();
                             ViewState[CLIENTS_LIST_KEY] = result;
@@ -58,6 +58,12 @@ namespace PraticeManagement.Config
                     }
                 }
             }
+        }
+
+        private bool IsShowActive
+        {
+            get { return Convert.ToBoolean(hdnActive.Value); }
+            set { hdnActive.Value = value.ToString(); }
         }
 
         protected override void Display()
@@ -81,6 +87,7 @@ namespace PraticeManagement.Config
             AddAlphabetButtons();
             if (!IsPostBack)
             {
+                IsShowActive = true;
                 ViewState.Remove(CLIENTS_LIST_KEY);
                 DataBindClients(ClientsList);
                 previousAlphabetLnkButtonId = lnkbtnAll.ID;
@@ -102,6 +109,7 @@ namespace PraticeManagement.Config
 
         protected void chbShowActive_CheckedChanged(object sender, EventArgs e)
         {
+            IsShowActive = chbShowActive.Checked;
             gvClients.PageIndex = 0;
             ViewState.Remove(CLIENTS_LIST_KEY);
 
@@ -194,7 +202,8 @@ namespace PraticeManagement.Config
 
         private void Searchclients()
         {
-            chbShowActive.Checked = false;
+            btnClearResults.Enabled = true;
+            IsShowActive = false;
             gvClients.PageIndex = 0;
             ViewState.Remove(CLIENTS_LIST_KEY);
 
@@ -209,8 +218,8 @@ namespace PraticeManagement.Config
                 prevbottomButton.Font.Bold = false;
             }
 
-            lnkbtnAll.Font.Bold = true;
-            lnkbtnAll1.Font.Bold = true;
+            //lnkbtnAll.Font.Bold = true;
+            //lnkbtnAll1.Font.Bold = true;
             hdnAlphabet.Value = null;
             previousAlphabetLnkButtonId = lnkbtnAll.ID;
 
@@ -286,7 +295,9 @@ namespace PraticeManagement.Config
 
         protected void Alphabet_Clicked(object sender, EventArgs e)
         {
+            txtSearch.Text = string.Empty;
             gvClients.PageIndex = 0;
+            btnClearResults.Enabled = false;
 
             if (previousAlphabetLnkButtonId != null)
             {
@@ -334,6 +345,16 @@ namespace PraticeManagement.Config
             DataBindClients(FilteredClientList);
 
             SetEmptyDataText();
+        }
+
+        protected void ResetFilter_Clicked(object sender, EventArgs e)
+        {
+            btnClearResults.Enabled = false;
+            txtSearch.Text = string.Empty;
+            IsShowActive = chbShowActive.Checked = true;
+            ViewState.Remove(CLIENTS_LIST_KEY);
+            DataBindClients(ClientsList);
+            previousAlphabetLnkButtonId = lnkbtnAll.ID;
         }
 
         protected void Next_Clicked(object sender, EventArgs e)
