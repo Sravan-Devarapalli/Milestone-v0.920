@@ -3,6 +3,7 @@
   <siteMapNode url="" roles="*">
     <siteMapNode url="~/Projects.aspx?from=toolbar" title="Projects" description="Company Performance page" >
       <siteMapNode url="~/ProjectDetail.aspx" title="Add Project" description="Show url" />
+      <siteMapNode url="~/ProjectSearch.aspx" title="Search" description="Show url" />
       <siteMapNode url="~/Projects.aspx" title="Summary" description="Show url" />
       <siteMapNode url="~/GroupBy.aspx" title="Group By..."  description="Show url"/>
       <siteMapNode url="~/RevenueGoals.aspx" title="Revenue Goals" description="Show url" />
