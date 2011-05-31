@@ -158,7 +158,14 @@ namespace PraticeManagement.Config
 
        protected static string GetFormattedMLFRate(Decimal rate)
         {
-            return ((int)rate) + "%";
+            if (rate == 0M)
+            {
+                return "N/A";
+            }
+            else
+            {
+                return ((int)rate) + "%";
+            }
         }
     }
 
