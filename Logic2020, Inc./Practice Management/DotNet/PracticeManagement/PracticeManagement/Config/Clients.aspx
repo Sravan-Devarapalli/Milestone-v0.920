@@ -104,6 +104,7 @@
                     </tr>
                 </table>
                 <asp:HiddenField ID="hdnActive" runat="server" Value="true" />
+                 <asp:HiddenField ID="hdnCleartoDefaultView" runat="server" Value="false" />
             </div>
             <asp:Panel CssClass="filters" ID="pnlFilters" runat="server">
                 <AjaxControlToolkit:TabContainer ID="tcFilters" runat="server" ActiveTabIndex="0"
