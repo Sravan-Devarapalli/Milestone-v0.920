@@ -364,6 +364,10 @@ namespace PraticeManagement.Config
             ViewState.Remove(CLIENTS_LIST_KEY);
             DataBindClients(ClientsList);
             previousAlphabetLnkButtonId = lnkbtnAll.ID;
+
+            lnkbtnAll.Font.Bold = true;
+            lnkbtnAll1.Font.Bold = true;
+
         }
 
         protected void Next_Clicked(object sender, EventArgs e)
