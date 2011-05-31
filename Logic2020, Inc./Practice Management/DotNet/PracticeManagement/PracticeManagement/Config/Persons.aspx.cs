@@ -206,6 +206,8 @@ namespace PraticeManagement.Config
             AddAlphabetButtons();
 
             gvPersons.EmptyDataText = "No results found.";
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "", "changeAlternateitemscolrsForCBL();", true);
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
