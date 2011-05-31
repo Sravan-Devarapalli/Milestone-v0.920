@@ -51,6 +51,7 @@ namespace PraticeManagement.Config
                 }
             }
         }
+
         private const string EditRecordCommand = "EditRecord";
 
         protected void DisplayContent()
@@ -152,6 +153,12 @@ namespace PraticeManagement.Config
             {
                 serviceClient.UpdateMinimumLoadFactorStatus(!chbMLFActive.Checked);
             }
+        }
+
+
+       protected static string GetFormattedMLFRate(Decimal rate)
+        {
+            return ((int)rate) + "%";
         }
     }
 
