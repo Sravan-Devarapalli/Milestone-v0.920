@@ -17,7 +17,7 @@
     <script language="javascript" type="text/javascript" src="../Scripts/jquery-1.4.1.js"></script>
     <script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
     <script type="text/javascript">
-        window.onload = changeAlternateitemscolrsForCBL;
+        
         function changeAlternateitemscolrsForCBL() {
             var cbl = document.getElementById('<%=cblRecruiters.ClientID %>');
             SetAlternateColors(cbl);
