@@ -13,13 +13,13 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
     <asp:UpdatePanel ID="pnlBody" runat="server">
         <ContentTemplate>
-            <div class="buttons-block">
+            <div class="buttons-block" style="padding-left: 5px !important; padding-right: 5px !important;">
                 <table class="WholeWidth">
-                    <tr>
-                        <td colspan="3" style="width: 100%; padding-left: 10px;">
+                    <tr valign="middle">
+                        <td colspan="3">
                             <table class="WholeWidth">
                                 <tr>
-                                    <td style="width: 40px;">
+                                    <td style="width: 4%;">
                                         <ajaxToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
                                             ImageControlID="btnExpandCollapseFilter" CollapsedImage="../Images/expand.jpg"
                                             ExpandedImage="../Images/collapse.jpg" CollapseControlID="btnExpandCollapseFilter"
@@ -28,25 +28,39 @@
                                         <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg"
                                             ToolTip="Expand Filters" />
                                     </td>
-                                    <td valign="middle" style="width: 410px; white-space: nowrap; padding-right: 0px;">
-                                        <asp:TextBox runat="server" ID="txtSearch" Width="400px" Style="text-align: left;"
-                                            OnTextChanged="txtSearch_TextChanged" MaxLength="40"></asp:TextBox>
-                                        <ajaxToolkit:TextBoxWatermarkExtender ID="waterMarkTxtSearch" runat="server" TargetControlID="txtSearch"
-                                            WatermarkCssClass="watermarkedtext" WatermarkText="To search for a client, click here to begin typing and hit enter...">
-                                        </ajaxToolkit:TextBoxWatermarkExtender>
+                                    <td valign="middle" style="width: 39%; white-space: nowrap; padding-left: 5px; padding-right: 0px;">
+                                        <table class="WholeWidth">
+                                            <tr>
+                                                <td style="width: 97%;">
+                                                    <asp:TextBox runat="server" ID="txtSearch" Width="100%" Style="text-align: left;"
+                                                        OnTextChanged="txtSearch_TextChanged" MaxLength="40"></asp:TextBox>
+                                                    <ajaxToolkit:TextBoxWatermarkExtender ID="waterMarkTxtSearch" runat="server" TargetControlID="txtSearch"
+                                                        WatermarkCssClass="watermarkedtext" WatermarkText="To search for a client, click here to begin typing and hit enter...">
+                                                    </ajaxToolkit:TextBoxWatermarkExtender>
+                                                </td>
+                                                <td style="width: 3%;">
+                                                    <asp:RequiredFieldValidator ID="reqSearchText" runat="server" Text="*" ErrorMessage="Please type text to be searched."
+                                                        ToolTip="Please type text to be searched." ControlToValidate="txtSearch" EnableClientScript="true"
+                                                        ValidationGroup="ValSearch" />
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </td>
-                                    <td style="width: 2px; padding-left: 0px;">
-                                        <asp:RequiredFieldValidator ID="reqSearchText" runat="server" Text="*" ErrorMessage="Please type text to be searched."
-                                            ToolTip="Please type text to be searched." ControlToValidate="txtSearch" EnableClientScript="true"
-                                            ValidationGroup="ValSearch" />
+                                    <td style="width: 1%; padding-left: 0px;">
                                     </td>
-                                    <td style="width: 105px;">
-                                        <asp:Button ID="btnSearchAll" ValidationGroup="ValSearch" Width="100px" runat="server"
+                                    <td style="width: 11%;">
+                                        <asp:Button ID="btnSearchAll" ValidationGroup="ValSearch" Width="100%" runat="server"
                                             Text="Search All" OnClick="btnSearchAll_OnClick" />
                                     </td>
-                                    <td style="width: 115px;">
+                                    <td style="width: 1%;">
                                     </td>
-                                    <td style="width: 115px; text-align: right;padding-right:0px;">
+                                    <td style="width: 11%;">
+                                        <asp:Button ID="btnClearResults" Width="100%" Enabled="false" runat="server" Text="Clear Results"
+                                            OnClick="ResetFilter_Clicked" />
+                                    </td>
+                                    <td style="width: 9%;">
+                                    </td>
+                                    <td style="width: 12%; text-align: right">
                                         <asp:DropDownList ID="ddlView" runat="server" OnSelectedIndexChanged="ddlView_SelectedIndexChanged"
                                             AutoPostBack="true">
                                             <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
@@ -55,7 +69,7 @@
                                             <asp:ListItem Text="View All" Value="-1"></asp:ListItem>
                                         </asp:DropDownList>
                                     </td>
-                                    <td align="right" style="width: 95px; text-align: right;padding-left:0px;">
+                                    <td align="right" style="width: 12%; text-align: right">
                                         <asp:ShadowedHyperlink runat="server" Text="Add Client" ID="lnkAddClient" CssClass="add-btn"
                                             NavigateUrl="~/ClientDetails.aspx?returnTo=Config/Clients.aspx" />
                                     </td>
@@ -64,7 +78,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="3" style="width: 100%; padding-left: 63px;white-space: nowrap;" >
+                        <td colspan="3" style="width: 100%; padding-left: 3%; white-space: nowrap;">
                             <asp:ValidationSummary ID="valsumSearch" runat="server" ValidationGroup="ValSearch" />
                         </td>
                     </tr>
@@ -74,7 +88,7 @@
                                 OnClick="Previous_Clicked"></asp:LinkButton>
                         </td>
                         <td valign="middle" align="center" style="width: 66%; text-align: center;">
-                            <table>
+                            <table class="WholeWidth">
                                 <tr id="trAlphabeticalPaging" runat="server">
                                     <td style="padding-left: 10px; padding-top: 10px; padding-bottom: 10px; text-align: center;">
                                         <asp:LinkButton ID="lnkbtnAll" Top="lnkbtnAll" Bottom="lnkbtnAll1" runat="server"
@@ -89,6 +103,7 @@
                         </td>
                     </tr>
                 </table>
+                <asp:HiddenField ID="hdnActive" runat="server" Value="true" />
             </div>
             <asp:Panel CssClass="filters" ID="pnlFilters" runat="server">
                 <AjaxControlToolkit:TabContainer ID="tcFilters" runat="server" ActiveTabIndex="0"
@@ -174,7 +189,7 @@
                     </td>
                 </tr>
             </table>
-            <div class="buttons-block">
+            <div class="buttons-block" style="padding-left: 5px !important; padding-right: 5px !important;">
                 <table class="WholeWidth">
                     <tr>
                         <td align="left" style="width: 17%; white-space: nowrap; padding-left: 10px;">
@@ -182,7 +197,7 @@
                                 OnClick="Previous_Clicked"></asp:LinkButton>
                         </td>
                         <td valign="middle" align="center" style="width: 66%; text-align: center;">
-                            <table>
+                            <table class="WholeWidth">
                                 <tr id="trAlphabeticalPaging1" runat="server">
                                     <td style="padding-left: 10px; padding-top: 10px; padding-bottom: 10px; text-align: center;">
                                         <asp:LinkButton ID="lnkbtnAll1" Top="lnkbtnAll" Bottom="lnkbtnAll1" runat="server"
