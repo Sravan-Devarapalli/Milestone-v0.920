@@ -85,6 +85,15 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.Button btnSearchAll;
         
         /// <summary>
+        /// btnClearResults control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnClearResults;
+        
+        /// <summary>
         /// ddlView control.
         /// </summary>
         /// <remarks>
@@ -146,6 +155,15 @@ namespace PraticeManagement.Config {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lnkbtnNext;
+        
+        /// <summary>
+        /// hdnActive control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnActive;
         
         /// <summary>
         /// pnlFilters control.
