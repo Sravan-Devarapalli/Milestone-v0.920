@@ -166,20 +166,20 @@
                     </td>
                     <td>
                     </td>
-                    <td style="padding-left: 15px;">
+                    <td style="padding-left: 30px;">
                         <asp:Label ID="Label3" runat="server" EnableViewState="false" Text="COGS"></asp:Label>
                     </td>
-                    <td>
+                    <td align="right">
                         <asp:DropDownList ID="ddlW2Hourly" runat="server" DataTextField="Name" DataValueField="Id"
                             AutoPostBack="true" OnSelectedIndexChanged="MLF_Changed">
                         </asp:DropDownList>
                     </td>
-                    <td>
+                    <td align="right">
                         <asp:DropDownList ID="ddlW2Salary" runat="server" DataTextField="Name" DataValueField="Id"
                             AutoPostBack="true" OnSelectedIndexChanged="MLF_Changed">
                         </asp:DropDownList>
                     </td>
-                    <td>
+                    <td align="right">
                         <asp:DropDownList ID="ddl1099" runat="server" DataTextField="Name" DataValueField="Id"
                             AutoPostBack="true" OnSelectedIndexChanged="MLF_Changed">
                         </asp:DropDownList>
