@@ -134,6 +134,8 @@ namespace PraticeManagement.Controls
                 FillPracticeList();
                 FillPayTypeList();
             }
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "", "SetAlternateColorsForCBL();", true);
         }
 
         private void FillPracticeList()
