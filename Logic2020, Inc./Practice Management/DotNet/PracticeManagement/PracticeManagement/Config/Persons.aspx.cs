@@ -233,29 +233,7 @@ namespace PraticeManagement.Config
         protected void personsFilter_FilterChanged(object sebder, EventArgs e)
         {
             Display();
-        }
-
-
-        /// <summary>
-        /// Searches the persons by first name or last name
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected void btnSearch_OnClick(object sender, EventArgs e)
-        {
-            personsFilter.Active = true;
-            personsFilter.Projected = true;
-            personsFilter.Terminated = true;
-            personsFilter.Inactive = true;
-            Display();
-
-            if (gvPersons.Rows.Count == 1)
-            {
-                Person person = ((Person[])odsPersons.Select())[0];
-                Response.Redirect(
-                    Urls.GetPersonDetailsUrl(person, Request.Url.AbsoluteUri));
-            }
-        }
+        }            
 
         protected void btnSearchAll_OnClick(object sender, EventArgs e)
         {
@@ -265,24 +243,35 @@ namespace PraticeManagement.Config
         private void SearchPersons()
         {
             CurrentIndex = 0;
-            personsFilter.Active = true;
-            personsFilter.Projected = true;
-            personsFilter.Terminated = true;
-            personsFilter.Inactive = true;
-            SelectAllItems(this.cblRecruiters);
-            personsFilter.ResetFilterControlsToDefault();
-            SetFilterValues();
-            previousLetter = lnkbtnAll.ID;
-            hdnAlphabet.Value = null;
+            bool istrue = true;
+            hdnActive.Value = istrue.ToString();
+            hdnProjected.Value = istrue.ToString();
+            hdnTerminated.Value = istrue.ToString();
+            hdnInactive.Value = istrue.ToString();
+            PracticeIdsSelectedKey = null;
+            RecruiterIdsSelectedKey = null;
+            PayTypeIdsSelectedKey = null;
             hdnLooked.Value = txtSearch.Text;
+            hdnAlphabet.Value = null;
             gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
             gvPersons.DataBind();
-
+            hdnCleartoDefaultView.Value = "true";
+            btnClearResults.Enabled = true;
             if (gvPersons.Rows.Count == 0)
             {
                 string txt =txtSearch.Text;
                 txt= "<b>"+txt +"</b>";
                 gvPersons.EmptyDataText = string.Format("No results found for {0}", txt);
+            }
+
+            if (previousLetter != null)
+            {
+                LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLetter);
+                LinkButton prevtopButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLinkButton.Attributes["Top"]);
+                LinkButton prevbottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(previousLinkButton.Attributes["Bottom"]);
+
+                prevtopButton.Font.Bold = false;
+                prevbottomButton.Font.Bold = false;
             }
 
         }
@@ -294,6 +283,7 @@ namespace PraticeManagement.Config
 
         protected void Alphabet_Clicked(object sender, EventArgs e)
         {
+            btnClearResults.Enabled = false;
             CurrentIndex = 0;
             if (previousLetter != null)
             {
@@ -315,12 +305,22 @@ namespace PraticeManagement.Config
             hdnAlphabet.Value = topButton.Text != "All" ? topButton.Text : null;
             previousLetter = topButton.ID;
 
+            if (hdnCleartoDefaultView.Value == "true")
+            {
+                ResetControls();
+                SetFilterValues();
+                hdnCleartoDefaultView.Value = "false";
+            }
+
             gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
             gvPersons.DataBind();
         }
 
         protected void UpdateView_Clicked(object sender, EventArgs e)
         {
+            btnClearResults.Enabled = false;
+            hdnCleartoDefaultView.Value = "false";
+            txtSearch.Text = string.Empty;
             CurrentIndex = 0;
             SetFilterValues();
             gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
@@ -329,6 +329,8 @@ namespace PraticeManagement.Config
 
         protected void ResetFilter_Clicked(object sender, EventArgs e)
         {
+            btnClearResults.Enabled = false;
+            hdnCleartoDefaultView.Value = "false";
             ResetFilterControlsToDefault();
             SetFilterValues();
             gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
@@ -784,7 +786,7 @@ namespace PraticeManagement.Config
             }
         }
 
-        private void ResetFilterControlsToDefault()
+        private void ResetControls()
         {
             CheckBox activeOnly = (CheckBox)personsFilter.FindControl("chbShowActive");
             CheckBox projected = (CheckBox)personsFilter.FindControl("chbProjected");
@@ -798,7 +800,12 @@ namespace PraticeManagement.Config
             projected.Checked = terminated.Checked = inactive.Checked = false;
             txtSearch.Text = string.Empty;
             ddlView.SelectedIndex = 0;
+        }
 
+        private void ResetFilterControlsToDefault()
+        {
+
+            ResetControls();
             //Reset to All button.
             if (previousLetter != null)
             {
