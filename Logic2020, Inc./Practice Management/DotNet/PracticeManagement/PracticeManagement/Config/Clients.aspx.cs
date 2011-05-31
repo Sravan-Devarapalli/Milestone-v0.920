@@ -197,11 +197,12 @@ namespace PraticeManagement.Config
 
         protected void txtSearch_TextChanged(object sender, EventArgs e)
         {
-            Searchclients();
+            SearchClients();
         }
 
-        private void Searchclients()
+        private void SearchClients()
         {
+            hdnCleartoDefaultView.Value = "true";
             btnClearResults.Enabled = true;
             IsShowActive = false;
             gvClients.PageIndex = 0;
@@ -295,9 +296,16 @@ namespace PraticeManagement.Config
 
         protected void Alphabet_Clicked(object sender, EventArgs e)
         {
+            if (hdnCleartoDefaultView.Value == "true")
+            {
+                IsShowActive = true;
+                ViewState.Remove(CLIENTS_LIST_KEY);
+            }
+
             txtSearch.Text = string.Empty;
             gvClients.PageIndex = 0;
             btnClearResults.Enabled = false;
+            hdnCleartoDefaultView.Value = "false";
 
             if (previousAlphabetLnkButtonId != null)
             {
@@ -350,6 +358,7 @@ namespace PraticeManagement.Config
         protected void ResetFilter_Clicked(object sender, EventArgs e)
         {
             btnClearResults.Enabled = false;
+            hdnCleartoDefaultView.Value = "false";
             txtSearch.Text = string.Empty;
             IsShowActive = chbShowActive.Checked = true;
             ViewState.Remove(CLIENTS_LIST_KEY);
@@ -433,7 +442,7 @@ namespace PraticeManagement.Config
 
         protected void btnSearchAll_OnClick(object sender, EventArgs e)
         {
-            Searchclients();
+            SearchClients();
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
