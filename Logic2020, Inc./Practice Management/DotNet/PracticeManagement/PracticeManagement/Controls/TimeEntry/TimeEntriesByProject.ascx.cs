@@ -145,7 +145,7 @@ namespace PraticeManagement.Controls.TimeEntry
             {
                 UpdateHeaderTitle();
                 ResetTotalCounters();
-                dlTimeEntries.DataBind();
+                BindTimeEntries();
             }
         }
 
@@ -238,10 +238,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 lblProjectName.Visible = false;
                 lblGrandTotal.Visible = false;
                 return;
-            }
-
-            dlTimeEntries.DataBind();
-            dlTimeEntries.Visible = true;          
+            }          
 
             if (!string.IsNullOrEmpty(ddlMilestones.SelectedValue))
             {
@@ -251,11 +248,24 @@ namespace PraticeManagement.Controls.TimeEntry
                     diRange.FromDate = selectedMilestone.StartDate;
                     diRange.ToDate = selectedMilestone.EndDate;
                 }
+
+                //To Show All Persons in the milestone
+                var milestonepersonList = GetMilestonePersons(Convert.ToInt32(ddlMilestones.SelectedItem.Value));
+
+                BindCblPersons(milestonepersonList);
             }
             else
             {
                 ShowEntireProjectDetails();
+
+                //To Show All Persons in the project
+                var milestonepersonList = GetProjectPersons(Convert.ToInt32(ddlProjects.SelectedItem.Value));
+
+                BindCblPersons(milestonepersonList);
             }
+
+            BindTimeEntries();
+            dlTimeEntries.Visible = true;
 
             UpdateHeaderTitle();
 
@@ -274,77 +284,7 @@ namespace PraticeManagement.Controls.TimeEntry
             lblGrandTotal.Visible = true;
             lblGrandTotal.Text = string.Format(Resources.Controls.GrandTotalHours, _grandTotalHours.ToString(Constants.Formatting.DoubleFormat));
         }
-
-        protected void odsTimeEntries_OnDataBinding(object sender, EventArgs e)
-        {
-            ResetTotalCounters();
-        }
-
-        protected void odsTimeEntries_OnSelecting(object sender, ObjectDataSourceSelectingEventArgs e)
-        {
-            if (!IsPostBack || ddlProjects.SelectedValue == string.Empty)
-            {
-                e.Cancel = true;
-                //Hiding the Grand Total label as the selected project is "-- Select a Project --"
-                lblGrandTotal.Visible = false;
-            }
-            else
-            {
-                if (cblPersons.Items.Count > 0 && cblPersons.SelectedValues.Count == 0)
-                {
-                    //Sending the value as selected personid as -1, because the user as unchecked all the Persons
-                    List<int> dummyPersonsList = new List<int>();
-                    dummyPersonsList.Add(-1);
-                    e.InputParameters["personIdList"] = dummyPersonsList;
-                }
-                else
-                {
-                    e.InputParameters["personIdList"] = cblPersons.SelectedValues;
-                }
-
-                e.InputParameters["projectId"] = ddlProjects.SelectedValue;
-
-                if (!string.IsNullOrEmpty(ddlMilestones.SelectedValue))
-                {
-                    e.InputParameters["milestoneId"] = ddlMilestones.SelectedValue;
-                }
-
-                if (diRange.FromDate.HasValue)
-                {
-                    e.InputParameters["startDate"] = diRange.FromDate.Value;
-                }
-
-                if (diRange.ToDate.HasValue)
-                {
-                    e.InputParameters["endDate"] = diRange.ToDate.Value;
-                }
-            }
-        }
-
-        protected void odsTimeEntries_OnSelected(object sender, ObjectDataSourceStatusEventArgs e)
-        {
-            Dictionary<Person, TimeEntryRecord[]> timeEntryRecords = e.ReturnValue as Dictionary<Person, TimeEntryRecord[]>;
-            List<Person> personList = new List<Person>();
-
-            foreach (Person key in timeEntryRecords.Keys)
-            {
-                personList.Add(key);
-            }
-
-            //We are not refreshing the Persons List, until and unless the project changes OR Milestone changes.
-            if (cblPersons.Items.Count == 0)
-            {
-                DataHelper.FillTimeEntryPersonList(cblPersons, Resources.Controls.AllPersons, null, personList);
-                CheckAllCheckboxes(cblPersons);
-            }
-
-            //We are hiding GrandTotal label as the resulted records count is zero.
-            if (timeEntryRecords.Count == 0)
-            {
-                lblGrandTotal.Visible = false;
-            }
-        }
-
+        
         private void CheckAllCheckboxes(ScrollingDropDown chbList)
         {
             foreach (ListItem targetItem in chbList.Items)
@@ -380,6 +320,87 @@ namespace PraticeManagement.Controls.TimeEntry
             using (var serviceClient = new MilestoneService.MilestoneServiceClient())
             {
                 return serviceClient.MilestoneListByProject(projectId);
+            }
+        }
+
+        private MilestonePerson[] GetMilestonePersons(int milestoneId)
+        {
+            using (var serviceClient = new MilestonePersonService.MilestonePersonServiceClient())
+            {
+                return serviceClient.GetMilestonePersonListByMilestone(milestoneId);
+            }
+        }
+
+        private MilestonePerson[] GetProjectPersons(int projectId)
+        {
+            using (var serviceClient = new MilestonePersonService.MilestonePersonServiceClient())
+            {
+                return serviceClient.GetMilestonePersonListByProject(projectId);
+            }
+        }
+
+        private void BindCblPersons(MilestonePerson[] milestonePersonList)
+        {
+            if (milestonePersonList != null)
+            {
+                List<Person> personList = new List<Person>();
+                foreach (MilestonePerson item in milestonePersonList)
+                {
+                    if (!personList.Contains(item.Person))
+                        personList.Add(item.Person);
+                }
+
+                DataHelper.FillTimeEntryPersonList(cblPersons, Resources.Controls.AllPersons, null, personList);
+                CheckAllCheckboxes(cblPersons);
+            }
+        }
+
+        private void BindTimeEntries()
+        {
+            lblGrandTotal.Visible = false;
+            int? milestone = null;
+            if (!String.IsNullOrEmpty(ddlMilestones.SelectedValue))
+                milestone = Convert.ToInt32(ddlMilestones.SelectedValue);
+
+            if (cblPersons.SelectedValues.Count != 0)
+            {
+                var data = Utils.TimeEntryHelper.GetTimeEntriesForProject(Convert.ToInt32(ddlProjects.SelectedValue), diRange.FromDate, diRange.ToDate, cblPersons.SelectedValues, milestone);
+
+                //To insert Persons whose dont have Time entries in this project and/or given period.
+                foreach (ListItem item in cblPersons.Items)
+                {
+                    if (item.Selected && item.Value != "-1")
+                    {
+                        string lastName = item.Text.Substring(0, item.Text.IndexOf(','));
+                        string firstName = item.Text.Substring(item.Text.IndexOf(',') + 2, item.Text.Length - item.Text.IndexOf(',') - 2);
+                        Person selectedPerson = new Person
+                        {
+                            Id = Convert.ToInt32(item.Value),
+                            LastName = lastName,
+                            FirstName = firstName
+                        };
+                        if (data.Keys.Where(person => person.Id == selectedPerson.Id).Count() == 0)
+                        {
+                            data.Add(selectedPerson, null);
+                        }
+                    }
+                }
+
+                dlTimeEntries.DataSource = data.OrderBy(k => k.Key.PersonLastFirstName);
+            }
+
+            dlTimeEntries.DataBind();
+        }
+
+        public string GetEmptyDataText()
+        {
+            if (ddlMilestones.SelectedValue == string.Empty)
+            {
+                return "This person has not entered any time towards this project for the period selected.";
+            }
+            else
+            {
+                return "This person has not entered any time towards this milestone for the period selected.";
             }
         }
     }
