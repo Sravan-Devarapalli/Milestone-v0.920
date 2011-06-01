@@ -327,7 +327,7 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             using (var serviceClient = new MilestonePersonService.MilestonePersonServiceClient())
             {
-                return serviceClient.GetMilestonePersonListByMilestone(milestoneId);
+                return serviceClient.GetMilestonePersonListByMilestoneNoFinancials(milestoneId);
             }
         }
 
