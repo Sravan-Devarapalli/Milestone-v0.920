@@ -93,14 +93,14 @@
         </asp:Panel>
         <h2>
             <asp:Label ID="lblProjectName" runat="server" Visible="false" /></h2>
-        <asp:DataList ID="dlTimeEntries" runat="server" DataSourceID="odsTimeEntries" CssClass="WholeWidth">
+        <asp:DataList ID="dlTimeEntries" runat="server" CssClass="WholeWidth">
             <ItemTemplate>
                 <h3>
                     <asp:Label ID="lblPersonName" runat="server" Text='<%# Eval("Key.PersonLastFirstName") %>' /></h3>
                 <asp:GridView ID="gvPersonTimeEntries" runat="server" DataSource='<%# Eval("Value") %>'
                     AutoGenerateColumns="false" CssClass="CompPerfTable WholeWidth" GridLines="None"
                     OnRowDataBound="gvPersonTimeEntries_OnRowDataBound" BackColor="White" ShowFooter="true"
-                    OnDataBound="gvPersonTimeEntries_OnDataBound">
+                    OnDataBound="gvPersonTimeEntries_OnDataBound" EmptyDataText='<%# GetEmptyDataText() %>'>
                     <AlternatingRowStyle BackColor="#F9FAFF" />
                     <FooterStyle Font-Bold="true" HorizontalAlign="Center" />
                     <Columns>
@@ -143,17 +143,6 @@
         </asp:DataList>
         <h3 style="text-align: right">
             <asp:Label ID="lblGrandTotal" runat="server" /></h3>
-        <asp:ObjectDataSource ID="odsTimeEntries" runat="server" SelectMethod="GetTimeEntriesForProject"
-            OnSelecting="odsTimeEntries_OnSelecting" TypeName="PraticeManagement.Utils.TimeEntryHelper"
-            OnDataBinding="odsTimeEntries_OnDataBinding" OnSelected="odsTimeEntries_OnSelected">
-            <SelectParameters>
-                <asp:Parameter Name="projectId" Type="Int32" />
-                <asp:Parameter Name="startDate" Type="DateTime" />
-                <asp:Parameter Name="endDate" Type="DateTime" />
-                <asp:Parameter Name="personIdList" Type="Object" />
-                <asp:Parameter Name="milestoneId" Type="Int32" />
-            </SelectParameters>
-        </asp:ObjectDataSource>
     </ContentTemplate>
 </asp:UpdatePanel>
 
