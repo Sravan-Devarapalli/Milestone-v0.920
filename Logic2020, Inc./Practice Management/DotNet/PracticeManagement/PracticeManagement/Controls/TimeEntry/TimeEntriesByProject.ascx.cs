@@ -195,6 +195,9 @@ namespace PraticeManagement.Controls.TimeEntry
             diRange.ToDate = null;
             //Clearing Persons Scrolling Dropdown as project is changed and then rebinding TimeEntries list control.
             cblPersons.Items.Clear();
+            dlTimeEntries.Visible = false;
+            lblProjectName.Visible = false;
+            lblGrandTotal.Visible = false;
             //dlTimeEntries.DataBind();
 
             if (ddlProjects.SelectedValue != string.Empty)
@@ -217,11 +220,6 @@ namespace PraticeManagement.Controls.TimeEntry
             else
             {
                 ddlMilestones.Enabled = false;
-            }
-
-            if (ddlProjects.SelectedValue == string.Empty)
-            {
-                lblProjectName.Visible = false;
             }
         }
 
