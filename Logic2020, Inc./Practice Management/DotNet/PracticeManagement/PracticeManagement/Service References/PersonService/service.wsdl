@@ -140,6 +140,18 @@
   <wsdl:message name="IPersonService_PersonListByCategoryTypeAndPeriod_OutputMessage">
     <wsdl:part name="parameters" element="tns:PersonListByCategoryTypeAndPeriodResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_CheckPersonTimeEntriesAfterTerminationDate_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckPersonTimeEntriesAfterTerminationDate" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_CheckPersonTimeEntriesAfterTerminationDate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckPersonTimeEntriesAfterTerminationDateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonMilestonesAfterTerminationDate_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonMilestonesAfterTerminationDate" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonMilestonesAfterTerminationDate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonMilestonesAfterTerminationDateResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonMilestoneWithFinancials_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonMilestoneWithFinancials" />
   </wsdl:message>
@@ -417,6 +429,14 @@
     <wsdl:operation name="PersonListByCategoryTypeAndPeriod">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/PersonListByCategoryTypeAndPeriod" message="tns:IPersonService_PersonListByCategoryTypeAndPeriod_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/PersonListByCategoryTypeAndPeriodResponse" message="tns:IPersonService_PersonListByCategoryTypeAndPeriod_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckPersonTimeEntriesAfterTerminationDate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/CheckPersonTimeEntriesAfterTerminationDate" message="tns:IPersonService_CheckPersonTimeEntriesAfterTerminationDate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/CheckPersonTimeEntriesAfterTerminationDateResponse" message="tns:IPersonService_CheckPersonTimeEntriesAfterTerminationDate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonMilestonesAfterTerminationDate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonMilestonesAfterTerminationDate" message="tns:IPersonService_GetPersonMilestonesAfterTerminationDate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonMilestonesAfterTerminationDateResponse" message="tns:IPersonService_GetPersonMilestonesAfterTerminationDate_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetPersonMilestoneWithFinancials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials" message="tns:IPersonService_GetPersonMilestoneWithFinancials_InputMessage" />
@@ -741,6 +761,24 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="CheckPersonTimeEntriesAfterTerminationDate">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/CheckPersonTimeEntriesAfterTerminationDate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonMilestonesAfterTerminationDate">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonMilestonesAfterTerminationDate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetPersonMilestoneWithFinancials">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials" style="document" />
       <wsdl:input>
@@ -1032,7 +1070,7 @@
   </wsdl:binding>
   <wsdl:service name="PersonService">
     <wsdl:port name="BasicHttpBinding_IPersonService" binding="tns:BasicHttpBinding_IPersonService">
-      <soap:address location="http://system66.ggk.com/PracticeManagementService/PersonService.svc" />
+      <soap:address location="http://server2.ggk.com/PracticeManagementService/PersonService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
