@@ -10,7 +10,7 @@
         public class ColumnNames
         {
             public const string W2Salary_RateColumn = "W2Salary_Rate";
-            public const string W2Hourly_RateColumn ="W2Hourly_Rate";
+            public const string W2Hourly_RateColumn = "W2Hourly_Rate";
             public const string _1099_Hourly_RateColumn = "_1099_Hourly_Rate";
             public const string FileName = "FileName";
             public const string HoursInPeriod = "HoursInPeriod";
@@ -238,7 +238,7 @@
         /// </summary>
         public class ParameterNames
         {
-            public const string AttachmentFileName = "@FileName";            
+            public const string AttachmentFileName = "@FileName";
             public const string AttachmentData = "@AttachmentData";
             public const string OpportunityTransitionId = ColumnNames.OpportunityTransitionId;
             public const string TargetPerson = "@TargetPersonId";
@@ -251,6 +251,7 @@
             public const string IsSampleReport = "@IsSampleReport";
             public const string TimescaleIds = "TimescaleIds";
             public const string ActivePersons = "ActivePersons";
+            public const string TerminationDate = "@TerminationDate";
             public const string ProjectedPersons = "ProjectedPersons";
             public const string ActiveProjects = "ActiveProjects";
             public const string ProjectedProjects = "ProjectedProjects";
@@ -534,6 +535,7 @@
 
                 public const string ConsultantMilestones = "dbo.ConsultantMilestones";
                 public const string GetTimeEntryMilestones = "dbo.GetTimeEntryMilestones";
+                public const string CheckPersonTimeEntriesAfterTerminationDate = "dbo.CheckPersonTimeEntriesAfterTerminationDate";
                 #endregion
 
                 #region Reports
