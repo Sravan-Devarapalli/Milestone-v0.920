@@ -5,7 +5,7 @@
 -- Update date: 9-09-2008
 -- Description:	Retrives the Person by its ID.
 -- =============================================
-CREATE PROCEDURE dbo.PersonGetById
+CREATE PROCEDURE [dbo].[PersonGetById]
 (
 	@PersonId	INT
 )
@@ -33,7 +33,8 @@ AS
 	       p.PracticeOwnedId,
 	       p.PracticeOwnedName,
 		   p.PracticesOwned,
-		   p.TelephoneNumber
+		   p.TelephoneNumber,
+		   p.IsDefaultManager
 	  FROM dbo.v_Person AS p
 	 WHERE p.PersonId = @PersonId
 
