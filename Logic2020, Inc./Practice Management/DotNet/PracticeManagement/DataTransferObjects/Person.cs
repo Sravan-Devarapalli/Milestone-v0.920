@@ -4,37 +4,37 @@ using System.Runtime.Serialization;
 
 namespace DataTransferObjects
 {
-	/// <summary>
-	/// Data Transfer Object for a Person entity
-	/// </summary>
+    /// <summary>
+    /// Data Transfer Object for a Person entity
+    /// </summary>
     [DataContract]
-	[Serializable]
-	public class Person : IEquatable<Person>, IIdNameObject, IComparable<Person>
-	{
+    [Serializable]
+    public class Person : IEquatable<Person>, IIdNameObject, IComparable<Person>
+    {
 
-		#region Constants
+        #region Constants
 
-		public const string RecruitingOverheadName = "Recruiting";
-	    public const string PersonNameFormat = "{0}, {1}";
+        public const string RecruitingOverheadName = "Recruiting";
+        public const string PersonNameFormat = "{0}, {1}";
 
-		#endregion
+        #endregion
 
-		#region Fields
+        #region Fields
 
-		private int _ptoDays;
+        private int _ptoDays;
         private DateTime? _terminationDate;
         private string _alias;
-		private Practice _defaultPractice;
+        private Practice _defaultPractice;
         private List<Commission> _commissionList = new List<Commission>();
         private List<BilledTime> _billedTimeList = new List<BilledTime>();
         private Pay _currentPay;
 
 
-		#endregion
+        #endregion
 
-		#region Properties - data members
+        #region Properties - data members
 
-		/// <summary>
+        /// <summary>
         /// Identifies the person in the system
         /// </summary>
         /// <remarks>
@@ -49,41 +49,41 @@ namespace DataTransferObjects
             set;
         }
 
-	    public string Name
-	    {
-	        get { return PersonLastFirstName; }
-	        set { throw new NotImplementedException("Unable to set person name"); }
-	    }
-
-	    /// <summary>
-        /// First name of the person, should be able to identify the person in the system along with the LastName
-        /// </summary>
-		[DataMember]
-		public string FirstName
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Last name of the person, should be able to identify the person in the system along with the FirstName
-		/// </summary>
-		[DataMember]
-		public string LastName
-		{
-			get;
-			set;
-		}
+        public string Name
+        {
+            get { return PersonLastFirstName; }
+            set { throw new NotImplementedException("Unable to set person name"); }
+        }
 
         /// <summary>
-		/// Person status 
+        /// First name of the person, should be able to identify the person in the system along with the LastName
         /// </summary>
-		[DataMember]
-		public PersonStatus Status
-		{
-			get;
-			set;
-		}
+        [DataMember]
+        public string FirstName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Last name of the person, should be able to identify the person in the system along with the FirstName
+        /// </summary>
+        [DataMember]
+        public string LastName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Person status 
+        /// </summary>
+        [DataMember]
+        public PersonStatus Status
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Person Locked-Out value 
@@ -115,15 +115,15 @@ namespace DataTransferObjects
             set;
         }
 
-		/// <summary>
-		/// Employee number
-		/// </summary>
-		[DataMember]
-		public string EmployeeNumber
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Employee number
+        /// </summary>
+        [DataMember]
+        public string EmployeeNumber
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Person telephone number.
@@ -161,6 +161,13 @@ namespace DataTransferObjects
             get { return _alias; }
             set { _alias = value; }
         }
+        [DataMember]
+        public bool IsDefaultManager
+        {
+            get;
+            set;
+        }
+
 
         [DataMember]
         public Practice DefaultPractice
@@ -169,19 +176,19 @@ namespace DataTransferObjects
             set { _defaultPractice = value; }
         }
 
-		/// <summary>
-		/// Gets or sets a default commission's value if the <see cref="Person"/> receives any.
-		/// </summary>
-		[DataMember]
-		public List<DefaultRecruiterCommission> DefaultPersonRecruiterCommission
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a default commission's value if the <see cref="Person"/> receives any.
+        /// </summary>
+        [DataMember]
+        public List<DefaultRecruiterCommission> DefaultPersonRecruiterCommission
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets the commissions for the recruiter of the <see cref="Person"/>.
-		/// </summary>
+        /// <summary>
+        /// Gets or sets the commissions for the recruiter of the <see cref="Person"/>.
+        /// </summary>
         [DataMember]
         public List<RecruiterCommission> RecruiterCommission
         {
@@ -189,9 +196,9 @@ namespace DataTransferObjects
             set;
         }
 
-		/// <summary>
-		/// Gets or sets default <see cref="Person"/>'s commissions if applicable.
-		/// </summary>
+        /// <summary>
+        /// Gets or sets default <see cref="Person"/>'s commissions if applicable.
+        /// </summary>
         [DataMember]
         public List<DefaultCommission> DefaultPersonCommissions
         {
@@ -199,9 +206,9 @@ namespace DataTransferObjects
             set;
         }
 
-		/// <summary>
-		/// Gets or sets the <see cref="Person"/>'s commissions.
-		/// </summary>
+        /// <summary>
+        /// Gets or sets the <see cref="Person"/>'s commissions.
+        /// </summary>
         [DataMember]
         public List<Commission> CommissionList
         {
@@ -223,55 +230,55 @@ namespace DataTransferObjects
             set { _currentPay = value; }
         }
 
-		/// <summary>
-		/// Gets or sets a list of the <see cref="Pay"/> objects to determine the payment history for the person.
-		/// </summary>
-		[DataMember]
-		public List<Pay> PaymentHistory
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a list of the <see cref="Pay"/> objects to determine the payment history for the person.
+        /// </summary>
+        [DataMember]
+        public List<Pay> PaymentHistory
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets a list of overheads for the given person.
-		/// </summary>
-		[DataMember]
-		public List<PersonOverhead> OverheadList
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a list of overheads for the given person.
+        /// </summary>
+        [DataMember]
+        public List<PersonOverhead> OverheadList
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets a list of the projected financial indicators for the interest period.
-		/// </summary>
-		[DataMember]
-		public Dictionary<DateTime, ComputedFinancials> ProjectedFinancialsByMonth
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a list of the projected financial indicators for the interest period.
+        /// </summary>
+        [DataMember]
+        public Dictionary<DateTime, ComputedFinancials> ProjectedFinancialsByMonth
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets a list of roles the person is assigned to.
-		/// </summary>
-		[DataMember]
-		public string[] RoleNames
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a list of roles the person is assigned to.
+        /// </summary>
+        [DataMember]
+        public string[] RoleNames
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets a person's seniority.
-		/// </summary>
-		[DataMember]
-		public Seniority Seniority
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a person's seniority.
+        /// </summary>
+        [DataMember]
+        public Seniority Seniority
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// List of practices owned by this person
@@ -288,20 +295,20 @@ namespace DataTransferObjects
         [DataMember]
         public DateTime? LastLogin { get; set; }
 
-		#endregion
+        #endregion
 
         #region Properties - calculated
 
         /// <summary>
-		/// Gets a person's Raw Hourly Rate
-		/// </summary>
-		public PracticeManagementCurrency RawHourlyRate
-		{
-			get
-			{
-				return CurrentPay != null ? CurrentPay.AmountHourly : 0;
-			}
-		}
+        /// Gets a person's Raw Hourly Rate
+        /// </summary>
+        public PracticeManagementCurrency RawHourlyRate
+        {
+            get
+            {
+                return CurrentPay != null ? CurrentPay.AmountHourly : 0;
+            }
+        }
 
         /// <summary>
         /// Gets a person's Total Overhead
@@ -320,57 +327,57 @@ namespace DataTransferObjects
                     }
                 }
 
-				return result;
-			}
-		}
+                return result;
+            }
+        }
 
-		/// <summary>
-		/// Gets a person's Total Overhead exluding the recruiting commissions.
-		/// </summary>
-		/// <remarks>The OverheadList property must be correctly set before calculating.</remarks>
-		public PracticeManagementCurrency OverheadWithoutRecruiting
-		{
-			get
-			{
-				decimal result = 0;
-				if (OverheadList != null)
-				{
-					foreach (PersonOverhead overhead in OverheadList)
-					{
-						if (string.Compare(overhead.Name, RecruitingOverheadName, true) != 0)
-						{
-							result += overhead.HourlyValue;
-						}
-					}
-				}
+        /// <summary>
+        /// Gets a person's Total Overhead exluding the recruiting commissions.
+        /// </summary>
+        /// <remarks>The OverheadList property must be correctly set before calculating.</remarks>
+        public PracticeManagementCurrency OverheadWithoutRecruiting
+        {
+            get
+            {
+                decimal result = 0;
+                if (OverheadList != null)
+                {
+                    foreach (PersonOverhead overhead in OverheadList)
+                    {
+                        if (string.Compare(overhead.Name, RecruitingOverheadName, true) != 0)
+                        {
+                            result += overhead.HourlyValue;
+                        }
+                    }
+                }
 
-				return result;
-			}
-		}
+                return result;
+            }
+        }
 
-		/// <summary>
-		/// Gets a person's Loaded hourly rate.
-		/// </summary>
-		/// <remarks>The OverheadList property must be correctly set before calculating.</remarks>
-		public PracticeManagementCurrency LoadedHourlyRate
-		{
-			get
-			{
-				return RawHourlyRate + TotalOverhead;
-			}
-		}
+        /// <summary>
+        /// Gets a person's Loaded hourly rate.
+        /// </summary>
+        /// <remarks>The OverheadList property must be correctly set before calculating.</remarks>
+        public PracticeManagementCurrency LoadedHourlyRate
+        {
+            get
+            {
+                return RawHourlyRate + TotalOverhead;
+            }
+        }
 
-		/// <summary>
-		/// Gets a person's Loaded Rate excluding the recruiting commissions.
-		/// </summary>
-		/// <remarks>The OverheadList property must be correctly set before calculating.</remarks>
-		public PracticeManagementCurrency LoadedHourlyRateWithoutRecruiting
-		{
-			get
-			{
-				return RawHourlyRate + OverheadWithoutRecruiting;
-			}
-		}
+        /// <summary>
+        /// Gets a person's Loaded Rate excluding the recruiting commissions.
+        /// </summary>
+        /// <remarks>The OverheadList property must be correctly set before calculating.</remarks>
+        public PracticeManagementCurrency LoadedHourlyRateWithoutRecruiting
+        {
+            get
+            {
+                return RawHourlyRate + OverheadWithoutRecruiting;
+            }
+        }
 
         /// <summary>
         /// Substitution for ToString
@@ -407,8 +414,8 @@ namespace DataTransferObjects
 
         #region Methods
 
-	    public bool Equals(Person other)
-	    {
+        public bool Equals(Person other)
+        {
             if (other == null)
                 return false;
 
@@ -416,14 +423,14 @@ namespace DataTransferObjects
                 return Id.Value == other.Id.Value;
 
             return false;
-	    }
+        }
 
-	    public int CompareTo(Person other)
-	    {
-	        return other == null ? 1 : PersonLastFirstName.CompareTo(other.PersonLastFirstName);
-	    }
+        public int CompareTo(Person other)
+        {
+            return other == null ? 1 : PersonLastFirstName.CompareTo(other.PersonLastFirstName);
+        }
 
-	    public override string ToString()
+        public override string ToString()
         {
             return string.Format(
                 PersonNameFormat,
