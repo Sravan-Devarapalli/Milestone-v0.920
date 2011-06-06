@@ -148,7 +148,7 @@ namespace PraticeManagement
                 return _userIsHRValue.Value;
             }
         }
-        
+
 
         public bool UserIsRecruiter
         {
@@ -170,6 +170,7 @@ namespace PraticeManagement
             AllowContinueWithoutSave = cellActivityLog.Visible = PersonId.HasValue;
             personOpportunities.TargetPersonId = PersonId;
             mlError.ClearMessage();
+            this.dvTerminationDateErrors.Visible = false;
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -602,13 +603,19 @@ namespace PraticeManagement
                 person != null && person.PaymentHistory != null &&
                 person.PaymentHistory.Count > 0 &&
                 !person.PaymentHistory[person.PaymentHistory.Count - 1].EndDate.HasValue;
+            string compensationEndDate = (((person != null) && (person.PaymentHistory != null)) &&
+                                            ((person.PaymentHistory.Count > 0) &&
+                                                person.PaymentHistory[person.PaymentHistory.Count - 1].EndDate.HasValue))
+                                                ? person.PaymentHistory[person.PaymentHistory.Count - 1].EndDate.ToString() : string.Empty;
 
             ltrScript.Text =
                 string.Format(ltrScript.Text,
                               ddlPersonStatus.ClientID,
                               hasNotClosedCompensation ? "true" : "false",
                               (int)PersonStatusType.Terminated,
-                              (int)PersonStatusType.Active);
+                              (int)PersonStatusType.Active,
+                              ((TextBox)this.dtpTerminationDate.FindControl("txtDate")).ClientID,
+                             compensationEndDate);
 
             UpdateSalesCommissionState();
             UpdateManagementCommissionState();
@@ -805,6 +812,10 @@ namespace PraticeManagement
 
             repPracticesOwned.DataSource = person.PracticesOwned;
             repPracticesOwned.DataBind();
+            if (person.IsDefaultManager)
+            {
+                this.hdnIsDefaultManager.Value = person.IsDefaultManager.ToString();
+            }
         }
 
         private void PopulatePracticeDropDown(Person person)
@@ -812,7 +823,7 @@ namespace PraticeManagement
             if (person != null && person.DefaultPractice != null)
             {
                 ListItem selectedPractice = ddlDefaultPractice.Items.FindByValue(person.DefaultPractice.Id.ToString());
-               
+
                 if (selectedPractice == null)
                 {
                     selectedPractice = new ListItem(person.DefaultPractice.Name, person.DefaultPractice.Id.ToString());
@@ -865,11 +876,7 @@ namespace PraticeManagement
             person.LastName = txtLastName.Text;
             person.HireDate = dtpHireDate.DateValue;
 
-            if (PersonStatusId != PersonStatusType.Active)
-            {
-                person.TerminationDate = dtpTerminationDate.DateValue != DateTime.MinValue ? (DateTime?)dtpTerminationDate.DateValue : null;
-
-            }
+            person.TerminationDate = dtpTerminationDate.DateValue != DateTime.MinValue ? (DateTime?)dtpTerminationDate.DateValue : null;
 
             person.Alias = txtEmailAddress.Text;
             person.TelephoneNumber = txtTelephoneNumber.Text;
@@ -1136,26 +1143,13 @@ namespace PraticeManagement
         protected void custTerminationDate_ServerValidate(object source, ServerValidateEventArgs args)
         {
             int personStatus;
-            if (int.TryParse(ddlPersonStatus.SelectedValue, out personStatus))
+            if (int.TryParse(this.ddlPersonStatus.SelectedValue, out personStatus))
             {
-                bool isTerminationDateEmpty = String.IsNullOrEmpty(dtpTerminationDate.TextValue);
-                // Check if person Status = Active, the Termination date should be empty OR
-                // if person Status isn't Active, doesn't matter what value is in Termination Date field.
+                bool isTerminationDateEmpty = string.IsNullOrEmpty(this.dtpTerminationDate.TextValue);
                 args.IsValid = true;
-
-                if (personStatus == (int)PersonStatusType.Active)
-                {
-                    args.IsValid = isTerminationDateEmpty;
-                }
-                else if (personStatus == (int)PersonStatusType.Terminated)
+                if (personStatus == 2)
                 {
                     args.IsValid = !isTerminationDateEmpty;
-                }
-
-                if (personStatus == (int)PersonStatusType.Active)
-                {
-                    custTerminationDate.ErrorMessage = Messages.PersonDetail_custTerminationDateMustBeEmpty;
-                    custTerminationDate.ToolTip = Messages.PersonDetail_custTerminationDateMustBeEmpty;
                 }
             }
         }
@@ -1306,6 +1300,67 @@ namespace PraticeManagement
                 }
             }
         }
+        protected void custTerminationDateTE_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            DateTime? terminationDate = (this.dtpTerminationDate.DateValue != DateTime.MinValue) ? new DateTime?(this.dtpTerminationDate.DateValue) : null;
+            bool TEsExistsAfterTerminationDate = false;
+            List<Milestone> milestonesAfterTerminationDate = new List<Milestone>();
+            using (PersonServiceClient serviceClient = new PersonServiceClient())
+            {
+                if (this.PersonId.HasValue && terminationDate.HasValue)
+                {
+                    TEsExistsAfterTerminationDate = serviceClient.CheckPersonTimeEntriesAfterTerminationDate(this.PersonId.Value, terminationDate.Value);
+                    milestonesAfterTerminationDate.AddRange(serviceClient.GetPersonMilestonesAfterTerminationDate(this.PersonId.Value, terminationDate.Value));
+                }
+            }
+            if (TEsExistsAfterTerminationDate || milestonesAfterTerminationDate.Any<Milestone>())
+            {
+                this.dvTerminationDateErrors.Visible = true;
+                if (TEsExistsAfterTerminationDate)
+                {
+                    this.lblTimeEntriesExist.Visible = true;
+                    this.lblTimeEntriesExist.Text = string.Format(this.lblTimeEntriesExist.Text, terminationDate.Value.ToString("MM/dd/yyy"));
+                }
+                else
+                {
+                    this.lblTimeEntriesExist.Visible = false;
+                }
+                if (milestonesAfterTerminationDate.Any<Milestone>())
+                {
+                    this.dvProjectMilestomesExist.Visible = true;
+                    this.lblProjectMilestomesExist.Text = string.Format(this.lblProjectMilestomesExist.Text, terminationDate.Value.ToString("MM/dd/yyy"));
+                    this.dtlProjectMilestones.DataSource = milestonesAfterTerminationDate;
+                    this.dtlProjectMilestones.DataBind();
+                }
+                else
+                {
+                    this.dvProjectMilestomesExist.Visible = false;
+                }
+                this.dtpTerminationDate.DateValue = terminationDate.Value;
+                args.IsValid = false;
+            }
+            else
+            {
+                args.IsValid = true;
+            }
+        }
+
+        protected void custIsDefautManager_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            bool isDefaultManager;
+            DateTime? terminationDate = (this.dtpTerminationDate.DateValue != DateTime.MinValue) ? new DateTime?(this.dtpTerminationDate.DateValue) : null;
+            if ((terminationDate.HasValue && bool.TryParse(this.hdnIsDefaultManager.Value, out isDefaultManager)) && isDefaultManager)
+            {
+                args.IsValid = false;
+                custIsDefautManager.ToolTip = custIsDefautManager.ErrorMessage;
+            }
+            else
+            {
+                args.IsValid = true;
+            }
+        }
+
+
 
         #region IPostBackEventHandler Members
 
