@@ -497,6 +497,12 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Person> PersonListByCategoryTypeAndPeriod(BudgetCategoryType categoryType, DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        bool CheckPersonTimeEntriesAfterTerminationDate(int personId, DateTime terminationDate);
+
+        [OperationContract]
+        List<Milestone> GetPersonMilestonesAfterTerminationDate(int personId, DateTime terminationDate);
     }
 }
 
