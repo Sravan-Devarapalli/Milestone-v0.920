@@ -301,6 +301,24 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CompareValidator cmpTerminateDate;
         
         /// <summary>
+        /// custTerminateDateTE control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custTerminateDateTE;
+        
+        /// <summary>
+        /// custIsDefautManager control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custIsDefautManager;
+        
+        /// <summary>
         /// txtTelephoneNumber control.
         /// </summary>
         /// <remarks>
@@ -344,6 +362,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hdnPersonId;
+        
+        /// <summary>
+        /// hdnIsDefaultManager control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnIsDefaultManager;
         
         /// <summary>
         /// reqEmployeeNumber control.
@@ -1109,6 +1136,51 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ValidationSummary valsManager;
+        
+        /// <summary>
+        /// dvTerminationDateErrors control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl dvTerminationDateErrors;
+        
+        /// <summary>
+        /// lblTimeEntriesExist control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTimeEntriesExist;
+        
+        /// <summary>
+        /// dvProjectMilestomesExist control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl dvProjectMilestomesExist;
+        
+        /// <summary>
+        /// lblProjectMilestomesExist control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblProjectMilestomesExist;
+        
+        /// <summary>
+        /// dtlProjectMilestones control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DataList dtlProjectMilestones;
         
         /// <summary>
         /// mlError control.
