@@ -2215,6 +2215,17 @@ namespace DataAccess
                     int managerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerFirstName);
                     int managerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerLastName);
                     int telephoneNumberIndex = reader.GetOrdinal(Constants.ColumnNames.TelephoneNumber);
+                    int isDefManagerIndex;
+
+                    try
+                    {
+                        isDefManagerIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefaultManager);
+                    }
+                    catch
+                    {
+                        isDefManagerIndex = -1;
+                    }                    
+                    
 
                     //  PracticesOwned column is not defined for each set that
                     //  uses given method, so we need to know if that column exists
@@ -2243,6 +2254,11 @@ namespace DataAccess
                             HireDate = (DateTime)reader[HireDateColumn],
                             TelephoneNumber = !reader.IsDBNull(telephoneNumberIndex) ? reader.GetString(telephoneNumberIndex) : string.Empty
                         };
+
+                        if (isDefManagerIndex > -1)
+                        {
+                            person.IsDefaultManager = reader.GetBoolean(isDefManagerIndex);
+                        }
 
                         if (Convert.IsDBNull(reader[TerminationDateColumn]))
                         {
