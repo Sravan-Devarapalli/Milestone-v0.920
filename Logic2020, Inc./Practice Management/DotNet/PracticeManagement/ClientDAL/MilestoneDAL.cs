@@ -51,6 +51,7 @@ namespace DataAccess
         private const string MilestoneCloneProcedure = "dbo.MilestoneClone";
         private const string DefaultMileStoneInsertProcedure = "dbo.DefaultMilestoneSettingInsert";
         private const string DefaultMileStoneGetProcedure = "dbo.GetDefaultMilestoneSetting";
+        public const string GetPersonMilestonesAfterTerminationDateProcedure = "dbo.GetPersonMilestonesAfterTerminationDate";
 
         #endregion
 
@@ -147,6 +148,53 @@ namespace DataAccess
                     ReadMilestones(reader, result);
 
                     return result;
+                }
+            }
+        }
+
+        public static List<Milestone> GetPersonMilestonesAfterTerminationDate(int personId, DateTime terminationDate)
+        {
+
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(GetPersonMilestonesAfterTerminationDateProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TerminationDate, terminationDate);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.SingleRow))
+                {
+                    List<Milestone> result = new List<Milestone>(1);
+
+                    ReadMilestonesForPersonTermination(reader, result);
+
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadMilestonesForPersonTermination(SqlDataReader reader, List<Milestone> result)
+        {
+            if (reader.HasRows)
+            {
+                int projectIdIndex = reader.GetOrdinal("ProjectId");
+                int milestoneIdIndex = reader.GetOrdinal("MilestoneId");
+                int descriptionIndex = reader.GetOrdinal("MilestoneName");
+                int projectNameIndex = reader.GetOrdinal("ProjectName");
+
+                while (reader.Read())
+                {
+                    Milestone milestone = new Milestone();
+
+                    milestone.Id = reader.GetInt32(milestoneIdIndex);
+                    milestone.Description = reader.GetString(descriptionIndex);
+
+                    milestone.Project = new Project();
+                    milestone.Project.Id = reader.GetInt32(projectIdIndex);
+                    milestone.Project.Name = reader.GetString(projectNameIndex);
+                    result.Add(milestone);
                 }
             }
         }
