@@ -5,7 +5,7 @@
 -- Update date: 9-09-2008
 -- Description:	Updates the Person.
 -- =============================================
-CREATE PROCEDURE dbo.PersonUpdate
+CREATE PROCEDURE [dbo].[PersonUpdate]
 (
 	@PersonId        INT,
 	@FirstName       NVARCHAR(40),
@@ -25,7 +25,13 @@ CREATE PROCEDURE dbo.PersonUpdate
 )
 AS
 	SET NOCOUNT ON
-	DECLARE @ErrorMessage NVARCHAR(2048)
+	DECLARE @ErrorMessage NVARCHAR(2048),
+			@Today			DATETIME,
+			@CurrentPayEndDate DATETIME
+
+	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,GETDATE()))
+
+	SELECT @PersonStatusId = CASE WHEN @TerminationDate<= @Today THEN 2 ELSE @PersonStatusId END
 
 	IF EXISTS(SELECT 1
 	            FROM dbo.[Person] AS p
@@ -61,11 +67,21 @@ AS
 
 		IF @PersonStatusId = 2
 		BEGIN
+			SELECT @CurrentPayEndDate = EndDate
+			FROM dbo.Pay
+			WHERE Person = @PersonId AND EndDate >= @TerminationDate
+					AND StartDate < @TerminationDate
 			-- Close a current compensation for the terminated persons
 			UPDATE dbo.Pay
 			   SET EndDate = @TerminationDate
-			 WHERE Person = @PersonId AND EndDate >= dbo.GetFutureDate()
+			 WHERE Person = @PersonId AND EndDate > @TerminationDate
+					AND StartDate < @TerminationDate
+
+			--Delete all the Compensation records later @TerminationDate
+			DELETE FROM dbo.Pay
+			WHERE Person = @PersonId AND StartDate >= @TerminationDate
 			 
+
 		END
 
 		IF @PersonStatusId <> 1
@@ -113,9 +129,8 @@ AS
 					OR (@ExistingPracticeId IS NOT NULL AND @DefaultPractice IS NULL)
 			)
 		BEGIN
-			DECLARE @Today DATETIME,
-					@CurrentPayEndDate DATETIME
-			SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,GETDATE())) -- This logic is to set time art to 0.
+
+
 			SELECT @CurrentPayEndDate = EndDate
 			FROM dbo.Pay P
 			WHERE Person = @PersonId  
