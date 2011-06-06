@@ -575,17 +575,20 @@ namespace PracticeManagementService
                     PersonDAL.PersonUpdate(person, currentUser, connection, transaction);
                 }
 
+                bool isLockedOutUpdated = false;
+
                 // Locking the terminated users
                 if (oldPerson != null && oldPerson.Status != null && person.Status != null &&
                     oldPerson.Status.Id != person.Status.Id &&
                     person.Status.Id == (int)PersonStatusType.Terminated)
                 {
                     AspMembershipDAL.UserSetLockedOut(person.Alias, Membership.ApplicationName, connection, transaction);
+                    person.LockedOut = isLockedOutUpdated = true;
                 }
 
                 // Saving the Locked-Out value
                 if (Roles.IsUserInRole(currentUser, DataTransferObjects.Constants.RoleNames.AdministratorRoleName) // && userInfo != null && person.LockedOut != userInfo.IsLockedOut
-                    )
+                     && !isLockedOutUpdated)
                 {
                     if (person.LockedOut)
                     {
@@ -912,6 +915,14 @@ namespace PracticeManagementService
         public List<Person> PersonListByCategoryTypeAndPeriod(BudgetCategoryType categoryType, DateTime startDate, DateTime endDate)
         {
             return PersonDAL.PersonListByCategoryTypeAndPeriod(categoryType, startDate, endDate);
+        }
+        public bool CheckPersonTimeEntriesAfterTerminationDate(int personId, DateTime terminationDate)
+        {
+            return TimeEntryDAL.CheckPersonTimeEntriesAfterTerminationDate(personId, terminationDate);
+        }
+        public List<Milestone> GetPersonMilestonesAfterTerminationDate(int personId, DateTime terminationDate)
+        {
+            return MilestoneDAL.GetPersonMilestonesAfterTerminationDate(personId, terminationDate);
         }
         #endregion
     }
