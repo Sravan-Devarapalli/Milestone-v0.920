@@ -1,4 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
+<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="True"
     CodeBehind="PersonDetail.aspx.cs" Inherits="PraticeManagement.PersonDetail" Title="Practice Management - Person Details" %>
 
 <%@ Register Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.Filtering"
@@ -137,11 +137,39 @@
             <asp:Literal ID="ltrScript" runat="server" Mode="PassThrough"> <script type="text/javascript" defer="defer">//<!--
 				function validateStatus()
 				{{
-					if ({1})
+                 var compensationEndDateStr = "{5}";
+                 var terminationDateStr = document.getElementById("{4}").value;
+                 var ddl = document.getElementById("{0}");
+                 var statusId = ddl.selectedIndex >= 0 ? ddl.options[ddl.selectedIndex].value : "";                
+                 var hasOpenEndedCompensation = {1};                 
+                 var compensationEndDate = new Date(compensationEndDateStr);
+                 var terminationDate = new Date(terminationDateStr);
+                 var now = new Date();
+					if (terminationDateStr!='' && (now >= terminationDate || statusId == "{2}")  &&
+                            ( compensationEndDateStr != '' && compensationEndDate>terminationDate || hasOpenEndedCompensation )
+                        )
 					{{
-						var ddl = document.getElementById("{0}");
-						var statusId = ddl.selectedIndex >= 0 ? ddl.options[ddl.selectedIndex].value : "";
-						var result = statusId != "{2}" || confirm("This person has a status of Terminated, but still has an open-ended compensation record. Click OK to close their compensation as of their termination date, or click Cancel to set their status back to Active.");
+						var result = (statusId != "{2}" && terminationDateStr=="");
+                        if(!result)
+                        {{
+                            var  message =  "";
+                            if(statusId == "{2}")
+                            {{
+                            if(hasOpenEndedCompensation)
+                              message =  message+"This person has a status of Terminated, but still has an open-ended compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.";
+                            else
+                              message =  message+"This person has a status of Terminated, but still has an active compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.";
+                            
+                            }}
+                            else
+                            {{
+                            if(hasOpenEndedCompensation)
+                                message =  message+"This person has Termination Date, but still has an open-ended compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.";
+                             else
+                                message =  message+"This person has Termination Date, but still has an active compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.";
+                            }}
+                            result= confirm(message);
+                         }}
 						if (!result)
 						{{
 							for (var i = 0; i < ddl.options.length; i++)
@@ -316,6 +344,11 @@
                                             ControlToCompare="dtpHireDate" Operator="GreaterThan" Type="Date" ErrorMessage="Termination date should be greater than Hire date."
                                             Text="*" ValidationGroup="Person" ToolTip="Termination date should be greater than Hire date."
                                             SetFocusOnError="true"></asp:CompareValidator>
+                                        <asp:CustomValidator ID="custTerminateDateTE" runat="server" ErrorMessage="" ToolTip=""
+                                            ValidationGroup="Person" Text="*" EnableClientScript="false" OnServerValidate="custTerminationDateTE_ServerValidate"></asp:CustomValidator>
+                                        <asp:CustomValidator ID="custIsDefautManager" runat="server" ErrorMessage="Unable to set Termination Date for this person because this person is set as default line manager. Please select another default line manager and refresh this page to enter termination date for this person."
+                                            ValidationGroup="Person" Text="*"
+                                            EnableClientScript="false" OnServerValidate="custIsDefautManager_ServerValidate"></asp:CustomValidator>
                                     </td>
                                 </tr>
                                 <tr>
@@ -351,6 +384,7 @@
                                             onfocus="if (!this.readOnly &amp;&amp; !confirm('This value should not normally be changed once set. Please be cautious about changing this value. Press OK to continue or Cancel to return without changing it.')) this.blur();"
                                             CssClass="info-field"></asp:TextBox>
                                         <asp:HiddenField ID="hdnPersonId" runat="server" />
+                                        <asp:HiddenField ID="hdnIsDefaultManager" runat="server" />
                                     </td>
                                     <td>
                                         <asp:RequiredFieldValidator ID="reqEmployeeNumber" runat="server" ValidationGroup="Person"
@@ -930,6 +964,26 @@
                             ValidationGroup="Person" />
                         <asp:ValidationSummary ID="valsManager" runat="server" EnableClientScript="false"
                             ValidationGroup="ActiveManagers" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="dvTerminationDateErrors" runat="server" visible="false" style="padding: 0px 0px 5px 0px;
+                            color: Red;">
+                            Unable to set Termination Date for this person because of following reasons.<br />
+                            <asp:Label ID="lblTimeEntriesExist" runat="server" Visible="false" Text="There are time entries submitted by person on/after {0}.">
+                            </asp:Label>
+                            <div id="dvProjectMilestomesExist" runat="server">
+                                <asp:Label ID="lblProjectMilestomesExist" runat="server" Text="Person is assigned to below Project - Milesones on/after {0}.">
+                                </asp:Label>
+                                <asp:DataList ID="dtlProjectMilestones" runat="server" Style="white-space: normal;">
+                                    <ItemTemplate>
+                                        <%# ((DataTransferObjects.Milestone)Container.DataItem).Project.Name+
+                                             "-" + ((DataTransferObjects.Milestone)Container.DataItem).Description%>
+                                    </ItemTemplate>
+                                </asp:DataList>
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 <tr>
