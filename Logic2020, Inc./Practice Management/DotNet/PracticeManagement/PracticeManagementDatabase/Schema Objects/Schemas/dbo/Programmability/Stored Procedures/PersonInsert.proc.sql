@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE dbo.PersonInsert
+﻿CREATE PROCEDURE [dbo].[PersonInsert]
 (
 	@FirstName       NVARCHAR(40),
 	@LastName        NVARCHAR(40),
@@ -17,7 +17,10 @@
 )
 AS
 	SET NOCOUNT ON
-	DECLARE @ErrorMessage NVARCHAR(2048)
+	DECLARE @ErrorMessage NVARCHAR(2048),
+			@Today			DATETIME
+
+	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,GETDATE()))
 
 	IF EXISTS(SELECT 1
 	            FROM dbo.[Person] AS p
@@ -74,6 +77,7 @@ AS
 			-- Try to get default manager id
 			SELECT @ManagerId = p.PersonId FROM person AS p WHERE p.IsDefaultManager = 1
 
+		SELECT @PersonStatusId = CASE WHEN @TerminationDate<= @Today THEN 2 ELSE @PersonStatusId END
 		-- Inserting Person
 		INSERT Person
 			(FirstName, LastName, PTODaysPerAnnum,  HireDate,  Alias, DefaultPractice, 
