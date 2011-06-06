@@ -163,7 +163,7 @@ namespace DataAccess
                 using (SqlCommand command = new SqlCommand(SetTimeZoneProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    
+
                     command.Parameters.AddWithValue(GMTParameter, timezone.GMT);
 
                     connection.Open();
@@ -484,6 +484,23 @@ namespace DataAccess
                     return ReadTimeEntryHours(reader);
             }
         }
+
+        public static bool CheckPersonTimeEntriesAfterTerminationDate(int personId, DateTime terminationDate)
+        {
+
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.TimeEntry.CheckPersonTimeEntriesAfterTerminationDate, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TerminationDate, terminationDate);
+                connection.Open();
+                return ((bool)command.ExecuteScalar());
+            }
+        }
+
         /// <summary>
         /// Get milestones by person for given time period
         /// </summary>
@@ -497,7 +514,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonIds, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PersonIds, id => id));
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, reportContext.StartDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, reportContext.EndDate);
-                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam,DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PracticeIds, id => id));
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PracticeIds, id => id));
                 command.Parameters.AddWithValue(Constants.ParameterNames.TimescaleIds, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PayTypeIds, id => id));
 
                 connection.Open();
@@ -542,7 +559,7 @@ namespace DataAccess
                            //Calendar = CalendarDAL.ReadSingleCalendarItem(reader, dateIndex, dayOffIndex, companyDayOffIndex, readOnlyIndex),
                            Id = reader.GetInt32(reader.GetOrdinal(Constants.ColumnNames.Id)),
                            Name = reader.GetString(reader.GetOrdinal(Constants.ColumnNames.Name))
-                           +" - "+reader.GetString(reader.GetOrdinal(Constants.ColumnNames.TimeTypeName))                               
+                           + " - " + reader.GetString(reader.GetOrdinal(Constants.ColumnNames.TimeTypeName))
                        };
         }
 
@@ -1076,7 +1093,7 @@ namespace DataAccess
             }
 
             return result.ToArray();
-            
+
         }
 
         /// <summary>
@@ -1166,7 +1183,7 @@ namespace DataAccess
 
         #endregion
 
-       
+
     }
 }
 
