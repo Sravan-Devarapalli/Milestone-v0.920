@@ -24,6 +24,7 @@ AS
 	       p.SeniorityId,
 	       e.Name AS SeniorityName,
 	       p.ManagerId,
+		   p.IsDefaultManager,
 	       manager.Alias AS 'ManagerAlias',
 	       manager.FirstName AS 'ManagerFirstName',
 	       manager.LastName AS 'ManagerLastName',
