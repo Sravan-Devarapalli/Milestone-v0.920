@@ -446,7 +446,7 @@ namespace PraticeManagement
             var timezone = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.TimeZoneKey);
             var isDayLightSavingsTimeEffect = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDayLightSavingsTimeEffectKey);
             
-            if (timezone == "-08:00" && isDayLightSavingsTimeEffect == "true")
+            if (timezone == "-08:00" && isDayLightSavingsTimeEffect.ToLower() == "true")
             {
                 return TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time")).ToLongDateString();
             }
