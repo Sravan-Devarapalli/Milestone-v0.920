@@ -25,6 +25,9 @@ namespace DataTransferObjects
         }
 
         [DataMember]
+        public bool InUse { get; set; }
+
+        [DataMember]
         public string Description
         {
             get;
