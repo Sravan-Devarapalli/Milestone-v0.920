@@ -7,6 +7,9 @@ using DataTransferObjects;
 using PraticeManagement.Utils;
 using PraticeManagement.Controls.Generic.Filtering;
 using DataTransferObjects.ContextObjects;
+using System.Web.UI.HtmlControls;
+using AjaxControlToolkit;
+using PraticeManagement.Controls.Opportunities;
 
 namespace PraticeManagement.Controls.Generic
 {
@@ -21,6 +24,31 @@ namespace PraticeManagement.Controls.Generic
         private const string ViewStateSortOrder = "SortOrder";
         private const string ViewStateSortDirection = "SortDirection";
         private const string CssArrowClass = "arrow";
+
+        private const string ANIMATION_SHOW_SCRIPT =
+                       @"<OnClick>
+                        	<Sequence>
+                        		<Parallel Duration=""0"" AnimationTarget=""{0}"">
+                        			<Discrete Property=""style"" propertyKey=""border"" ValuesScript=""['thin solid navy']""/>
+                        		</Parallel>
+                        		<Parallel Duration="".4"" Fps=""20"" AnimationTarget=""{0}"">
+                        			<Resize  Width=""257"" Height=""{1}"" Unit=""px"" />
+                        		</Parallel>
+                        	</Sequence>
+                        </OnClick>";
+
+        private const string ANIMATION_HIDE_SCRIPT =
+                        @"<OnClick>
+                        	<Sequence>
+                        		<Parallel Duration="".4"" Fps=""20"" AnimationTarget=""{0}"">
+                        			<Resize Width=""0"" Height=""0"" Unit=""px"" />
+                        		</Parallel>
+                        		<Parallel Duration=""0"" AnimationTarget=""{0}"">
+                        			<Discrete Property=""style"" propertyKey=""border"" ValuesScript=""['none']""/>
+                        		</Parallel>
+                        	</Sequence>
+                        </OnClick>";
+
 
         public bool AllowAutoRedirectToDetails { get; set; }
         public OpportunityListFilterMode FilterMode { get; set; }
@@ -59,6 +87,24 @@ namespace PraticeManagement.Controls.Generic
                 DataHelper.GetOpportunitiesForTargetPerson(TargetPersonId);
         }
 
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void PopulatePriorityHint()
+        {
+            var opportunityPriorities = OpportunityPriorityHelper.GetOpportunityPriorities(true);
+            var row = lvOpportunities.FindControl("lvHeader") as System.Web.UI.HtmlControls.HtmlTableRow;
+            if (row != null)
+            {
+                var lvOp = row.FindControl("lvOpportunityPriorities") as ListView;
+                lvOp.DataSource = opportunityPriorities;
+                lvOp.DataBind();
+            }
+            
+        }
+
         protected void lvOpportunities_Sorting(object sender, ListViewSortEventArgs e)
         {
             var newOrder = e.SortExpression;
@@ -89,7 +135,7 @@ namespace PraticeManagement.Controls.Generic
 
         protected override void InitControls()
         {
-            
+
             OrderBy = Filter.OrderBy;
             SortDirection = DataTransferObjects.Utils.Generic.ToEnum<SortDirection>(Filter.SortDirection, SortDirection.Ascending);
 
@@ -103,6 +149,43 @@ namespace PraticeManagement.Controls.Generic
                             SortDirection = SortDirection.ToString(),
                             OrderBy = OrderBy
                         };
+        }
+
+        protected void Page_Prerender(object sender, EventArgs e)
+        {
+            PopulatePriorityHint();
+            PreparePrioritiesWithAnimations();
+        }
+
+        private void PreparePrioritiesWithAnimations()
+        {
+            var row = lvOpportunities.FindControl("lvHeader") as System.Web.UI.HtmlControls.HtmlTableRow;
+
+            if (row != null)
+            {
+                var img = row.FindControl("imgPriorityHint") as Image;
+                var lvOp = row.FindControl("lvOpportunityPriorities") as ListView;
+                var pnlPriority = row.FindControl("pnlPriority") as Panel;
+                var btnClosePriority = row.FindControl("btnClosePriority") as Button;
+
+                var animHide = row.FindControl("animHide") as AnimationExtender;
+                var animShow = row.FindControl("animShow") as AnimationExtender;
+
+                int lvCount = lvOp.Items.Count;
+
+                int height = ((lvCount + 1) * (35)) - 10;
+
+                if (height > 150)
+                {
+                    height = 177;
+                }
+
+                animShow.Animations = string.Format(ANIMATION_SHOW_SCRIPT, pnlPriority.ID, height);
+                animHide.Animations = string.Format(ANIMATION_HIDE_SCRIPT, pnlPriority.ID);
+
+                img.Attributes["onclick"]
+                   = string.Format("setHintPosition('{0}', '{1}');", img.ClientID, pnlPriority.ClientID);
+            }
         }
 
         private void SetHeaderIconsAccordingToSordOrder()
