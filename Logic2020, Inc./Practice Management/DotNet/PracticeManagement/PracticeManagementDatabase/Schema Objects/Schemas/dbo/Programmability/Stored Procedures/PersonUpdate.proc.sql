@@ -29,7 +29,7 @@ AS
 			@Today			DATETIME,
 			@CurrentPayEndDate DATETIME
 
-	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,GETDATE()))
+	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETDATE())))
 
 	SELECT @PersonStatusId = CASE WHEN @TerminationDate<= @Today THEN 2 ELSE @PersonStatusId END
 
