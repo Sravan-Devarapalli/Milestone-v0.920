@@ -36,7 +36,7 @@ namespace PraticeManagement.Controls
                 // Preserve the selected value.
                 int? selectedRecruiter = RecruiterId;
                 DataHelper.FillRecruiterList(ddlRecruiter,
-                    string.Empty,
+                    NeedFirstItemForRecruiterDropDown ? "--Select Recruiter--" : " ",
                     personValue != null ? personValue.Id : null,
                     personValue != null && personValue.HireDate != DateTime.MinValue ?
                     (DateTime?)personValue.HireDate : null);
@@ -97,10 +97,20 @@ namespace PraticeManagement.Controls
 
                             selectedRecruiter = new ListItem(selectedPerson.PersonLastFirstName, selectedPerson.Id.Value.ToString());
                             ddlRecruiter.Items.Add(selectedRecruiter);
-                            ddlRecruiter.SortByText();
+                            if (NeedFirstItemForRecruiterDropDown)
+                            {
+                                var firstItem = ddlRecruiter.Items[0];
+                                ddlRecruiter.Items.RemoveAt(0);
+                                ddlRecruiter.SortByText();
+                                ddlRecruiter.Items.Insert(0, firstItem);
+                            }
                         }
 
                         ddlRecruiter.SelectedValue = selectedRecruiter.Value;
+                    }
+                    else
+                    {
+                        ddlRecruiter.SelectedIndex = 0;
                     }
                 }
                 catch
@@ -125,11 +135,11 @@ namespace PraticeManagement.Controls
             set
             {
                 trCommissionDetails.Visible =
-                    reqRecruiterCommission1.Enabled = compRecruiterCommission1.Enabled =
-                    reqAfret1.Enabled = compAfret1.Enabled =
-                    reqRecruiterCommission2.Enabled = compRecruiterCommission2.Enabled =
-                    reqAfter2.Enabled = compAfter2.Enabled = compAfter.Enabled =
-                    value && !string.IsNullOrEmpty(ddlRecruiter.SelectedValue);
+                    compRecruiterCommission1.Enabled =
+                    compAfret1.Enabled = custAfret1.Enabled = custRecruiterCommission1.Enabled =
+                    custRecruiterCommission2.Enabled = compRecruiterCommission2.Enabled =
+                    custAfter2.Enabled = compAfter2.Enabled = compAfter.Enabled =
+                    value;
             }
         }
 
@@ -144,6 +154,12 @@ namespace PraticeManagement.Controls
                 ddlRecruiter.Enabled = !value;
                 UpdateInfoState();
             }
+        }
+
+        public bool NeedFirstItemForRecruiterDropDown
+        {
+            set;
+            get;
         }
 
         public event EventHandler InfoChanged;
@@ -205,11 +221,11 @@ namespace PraticeManagement.Controls
 
         private void UpdateInfoState()
         {
-            txtRecruiterCommission1.Enabled = reqRecruiterCommission1.Enabled = compRecruiterCommission1.Enabled =
-                txtAfter1.Enabled = reqAfret1.Enabled = compAfret1.Enabled =
-                txtRecruiterCommission2.Enabled = reqRecruiterCommission2.Enabled = compRecruiterCommission2.Enabled =
-                txtAfter2.Enabled = reqAfter2.Enabled = compAfter2.Enabled =
-                !string.IsNullOrEmpty(ddlRecruiter.SelectedValue) && ddlRecruiter.Enabled;
+            txtRecruiterCommission1.Enabled = compRecruiterCommission1.Enabled =
+                txtAfter1.Enabled = compAfret1.Enabled = custAfret1.Enabled = custRecruiterCommission1.Enabled =
+                txtRecruiterCommission2.Enabled = custRecruiterCommission2.Enabled = compRecruiterCommission2.Enabled =
+                txtAfter2.Enabled = custAfter2.Enabled = compAfter2.Enabled =
+                ddlRecruiter.Enabled;
         }
 
         private void PopulateData(List<RecruiterCommission> result)
@@ -225,35 +241,63 @@ namespace PraticeManagement.Controls
 
                 commission1.RecruiterId = RecruiterId.Value;
                 decimal.TryParse(txtRecruiterCommission1.Text, out tmpAmount);
-                commission1.Amount = tmpAmount;
+                if (string.IsNullOrEmpty(txtRecruiterCommission1.Text))
+                {
+                    commission1.Amount = null;
+                }
+                else
+                {
+                    commission1.Amount = tmpAmount;
+                }
                 int.TryParse(txtAfter1.Text, out tmpHours);
                 commission1.HoursToCollect = tmpHours * 8;
 
                 commission2.RecruiterId = RecruiterId.Value;
                 decimal.TryParse(txtRecruiterCommission2.Text, out tmpAmount);
-                commission2.Amount = tmpAmount;
+                if (string.IsNullOrEmpty(txtRecruiterCommission2.Text))
+                {
+                    commission2.Amount = null;
+                }
+                else
+                {
+                    commission2.Amount = tmpAmount;
+                }
                 int.TryParse(txtAfter2.Text, out tmpHours);
                 commission2.HoursToCollect = tmpHours * 8;
             }
-            else if (!string.IsNullOrEmpty(hidRecruiter.Value))
-            {
-                commission1.RecruiterId = commission2.RecruiterId = int.Parse(hidRecruiter.Value);
-            }
+            //else if (!string.IsNullOrEmpty(hidRecruiter.Value))
+            //{
+            //    commission1.RecruiterId = commission2.RecruiterId = int.Parse(hidRecruiter.Value);
+            //}
 
             if (!string.IsNullOrEmpty(hidOldAfret1.Value))
             {
                 commission1.Old_HoursToCollect = int.Parse(hidOldAfret1.Value);
             }
-            result.Add(commission1);
+
             if (!string.IsNullOrEmpty(hidOldAfret2.Value))
             {
                 commission2.Old_HoursToCollect = int.Parse(hidOldAfret2.Value);
             }
-            result.Add(commission2);
+            if (RecruiterId.HasValue && RecruiterId.Value != 0
+                //|| !string.IsNullOrEmpty(hidRecruiter.Value)
+                )
+            {
+                if (!commission2.Amount.HasValue || commission1.Amount.HasValue)
+                {
+                    result.Add(commission1);
+                }
+                if (commission2.Amount.HasValue)
+                {
+                    result.Add(commission2);
+                }
+            }
             result.Sort();
         }
         private void PopulateControls(DefaultRecruiterCommission commission)
         {
+            txtRecruiterCommission1.Text = txtAfter1.Text =
+            txtRecruiterCommission2.Text = txtAfter2.Text = string.Empty;
             if (commission != null && commission.Items != null && commission.Items.Count > 0)
             {
                 txtRecruiterCommission1.Text = commission.Items[0].Amount.Value.ToString();
@@ -271,21 +315,76 @@ namespace PraticeManagement.Controls
             UpdateInfoState();
         }
 
+        protected void custRecruiterCommission1_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtAfter1.Text) && string.IsNullOrEmpty(txtRecruiterCommission1.Text))
+            {
+                e.IsValid = false;
+            }
+            else
+            {
+                e.IsValid = true;
+            }
+
+        }
+
+        protected void custAfret1_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtAfter1.Text) && !string.IsNullOrEmpty(txtRecruiterCommission1.Text))
+            {
+                e.IsValid = false;
+            }
+            else
+            {
+                e.IsValid = true;
+            }
+        }
+
+
+        protected void custRecruiterCommission2_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtAfter2.Text) && string.IsNullOrEmpty(txtRecruiterCommission2.Text))
+            {
+                e.IsValid = false;
+            }
+            else
+            {
+                e.IsValid = true;
+            }
+        }
+
+        protected void custAfter2_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtAfter2.Text) && !string.IsNullOrEmpty(txtRecruiterCommission2.Text))
+            {
+                e.IsValid = false;
+            }
+            else
+            {
+                e.IsValid = true;
+            }
+        }
         private void PopulateControls(List<RecruiterCommission> value)
         {
+            txtRecruiterCommission1.Text = txtAfter1.Text =
+                txtAfter2.Text = txtRecruiterCommission2.Text = string.Empty;
             if (value != null && value.Count > 0)
             {
                 RecruiterId = value[0].RecruiterId;
                 hidRecruiter.Value = value[0].RecruiterId.ToString();
-
-                txtRecruiterCommission1.Text = value[0].Amount.Value.ToString();
-                txtAfter1.Text = (value[0].HoursToCollect / 8).ToString();
+                if (value[0].Amount.HasValue)
+                {
+                    txtRecruiterCommission1.Text = value[0].Amount.Value.Value.ToString();
+                    txtAfter1.Text = (value[0].HoursToCollect / 8).ToString();
+                }
                 hidOldAfret1.Value = value[0].HoursToCollect.ToString();
-
                 if (value.Count > 1)
                 {
-                    txtRecruiterCommission2.Text = value[1].Amount.Value.ToString();
-                    txtAfter2.Text = (value[1].HoursToCollect / 8).ToString();
+                    if (value[1].Amount.HasValue)
+                    {
+                        txtRecruiterCommission2.Text = value[1].Amount.Value.Value.ToString();
+                        txtAfter2.Text = (value[1].HoursToCollect / 8).ToString();
+                    }
                     hidOldAfret2.Value = value[1].HoursToCollect.ToString();
                 }
             }
