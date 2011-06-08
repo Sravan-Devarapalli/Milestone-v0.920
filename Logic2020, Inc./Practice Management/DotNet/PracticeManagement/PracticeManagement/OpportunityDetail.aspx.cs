@@ -12,6 +12,9 @@ using PraticeManagement.Utils;
 using System.Web.UI;
 using System.Linq;
 using System.Collections;
+using PraticeManagement.Controls.Opportunities;
+using AjaxControlToolkit;
+using System.Web.UI.HtmlControls;
 
 namespace PraticeManagement
 {
@@ -42,6 +45,30 @@ namespace PraticeManagement
         private const string EstRevenueFormat = "Est. Revenue - {0}";
         private const string WordBreak = "<wbr />";
         private const string NEWLY_ADDED_NOTES_LIST = "NEWLY_ADDED_NOTES_LIST";
+
+        private const string ANIMATION_SHOW_SCRIPT =
+                        @"<OnClick>
+                        	<Sequence>
+                        		<Parallel Duration=""0"" AnimationTarget=""{0}"">
+                        			<Discrete Property=""style"" propertyKey=""border"" ValuesScript=""['thin solid navy']""/>
+                        		</Parallel>
+                        		<Parallel Duration="".4"" Fps=""20"" AnimationTarget=""{0}"">
+                        			<Resize  Width=""260"" Height=""{1}"" Unit=""px"" />
+                        		</Parallel>
+                        	</Sequence>
+                        </OnClick>";
+
+        private const string ANIMATION_HIDE_SCRIPT =
+                        @"<OnClick>
+                        	<Sequence>
+                        		<Parallel Duration="".4"" Fps=""20"" AnimationTarget=""{0}"">
+                        			<Resize Width=""0"" Height=""0"" Unit=""px"" />
+                        		</Parallel>
+                        		<Parallel Duration=""0"" AnimationTarget=""{0}"">
+                        			<Discrete Property=""style"" propertyKey=""border"" ValuesScript=""['none']""/>
+                        		</Parallel>
+                        	</Sequence>
+                        </OnClick>";
 
         /// <summary>
         /// 	Gets a selected opportunity
@@ -200,6 +227,29 @@ namespace PraticeManagement
             {
                 btnSave.Attributes.Remove("disabled");
             }
+
+            animHide.Animations = GetAnimationsScriptForAnimHide();
+            animShow.Animations = GetAnimationsScriptForAnimShow();
+        }
+
+
+        public string GetAnimationsScriptForAnimShow()
+        {
+            int lvCount = lvOpportunityPriorities.Items.Count;
+
+            int height = ((lvCount + 1) * (35)) - 10;
+
+            if (height > 150)
+            {
+                height = 180;
+            }
+
+            return string.Format(ANIMATION_SHOW_SCRIPT, pnlPriority.ID, 180);
+        }
+
+        public string GetAnimationsScriptForAnimHide()
+        {
+            return string.Format(ANIMATION_HIDE_SCRIPT, pnlPriority.ID);
         }
 
         private void FillGroupAndProjectDropDown()
@@ -315,7 +365,7 @@ namespace PraticeManagement
 
                     ScriptManager.RegisterClientScriptBlock(upNotes, upNotes.GetType(), "", "EnableSaveButton();setDirty();", true);
                 }
-                else 
+                else
                 {
                     note.TargetId = OpportunityId.Value;
                     ServiceCallers.Custom.Milestone(client => client.NoteInsert(note));
@@ -745,7 +795,8 @@ namespace PraticeManagement
 
         private void PopulatePriorityHint()
         {
-            var opportunityPriorities = DataHelper.GetOpportunityPrioritiesListAll();
+            var opportunityPriorities = OpportunityPriorityHelper.GetOpportunityPriorities(true);
+
             lvOpportunityPriorities.DataSource = opportunityPriorities;
             lvOpportunityPriorities.DataBind();
         }
