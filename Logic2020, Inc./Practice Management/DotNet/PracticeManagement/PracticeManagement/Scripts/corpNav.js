@@ -19,7 +19,9 @@ function () {
     clearTimeout(timer);
     $('li#' + hoverItem + ' a').removeClass('liBG');
     $('li#' + menuItem).removeClass('l1hover');
-    $('li#' + hoverItem + ' a')[0].style.color = '';
+    if ($('li#' + hoverItem + ' a')[0] != null && $('li#' + hoverItem + ' a')[0] != "undefined") {
+        $('li#' + hoverItem + ' a')[0].style.color = '';
+    }
     $(selectDefList).slideUp(150);
     return false;
 });
