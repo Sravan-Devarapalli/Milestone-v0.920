@@ -62,6 +62,18 @@ namespace PracticeManagementService
         [OperationContract]
         List<OpportunityPriority> GetOpportunityPrioritiesListAll();
 
+        [OperationContract]
+        List<OpportunityPriority> GetOpportunityPriorities(bool isinserted);
+
+        [OperationContract]
+        void InsertOpportunityPriority(OpportunityPriority opportunityPriority);
+
+        [OperationContract]
+        void UpdateOpportunityPriority(int oldPriorityId, OpportunityPriority opportunityPriority);
+
+        [OperationContract]
+        void DeleteOpportunityPriority(int? updatedPriorityId, int deletedPriorityId);
+
 		/// <summary>
 		/// Retrives an <see cref="Opportunity"/> be a specified ID.
 		/// </summary>
