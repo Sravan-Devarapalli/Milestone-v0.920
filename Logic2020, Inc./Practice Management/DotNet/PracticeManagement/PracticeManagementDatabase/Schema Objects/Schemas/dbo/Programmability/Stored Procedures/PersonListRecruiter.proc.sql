@@ -49,10 +49,6 @@ AS
             p.TelephoneNumber
     FROM    dbo.v_Person AS p
     WHERE   p.PersonStatusId = 1	-- Active person only
-            /*AND ( EXISTS ( SELECT   *
-                           FROM     v_UsersInRoles AS ur
-                           WHERE    ur.UserName = p.Alias
-                                    AND ur.RoleName = 'Recruiter' ) )*/
 	   AND (   EXISTS (SELECT 1
 	                     FROM dbo.DefaultRecruiterCommissionHeader AS c
 	                    WHERE p.PersonId = c.PersonId
@@ -61,6 +57,10 @@ AS
 	        OR EXISTS (SELECT 1
 	                     FROM dbo.RecruiterCommission AS rc
 	                    WHERE rc.RecruitId = @PersonId AND rc.RecruiterId = p.PersonId)
+			OR EXISTS ( SELECT   *
+                           FROM     v_UsersInRoles AS ur
+                           WHERE    ur.UserName = p.Alias
+                                    AND ur.RoleName = 'Recruiter' )
 	       )
     ORDER BY p.LastName ,
             p.FirstName
