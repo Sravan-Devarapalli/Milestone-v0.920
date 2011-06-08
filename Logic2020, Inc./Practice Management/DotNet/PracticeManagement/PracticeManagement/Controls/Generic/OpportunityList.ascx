@@ -4,6 +4,26 @@
 <%@ Import Namespace="System.Data" %>
 <%@ Register Src="~/Controls/ProjectNameCellRounded.ascx" TagName="ProjectNameCellRounded"
     TagPrefix="uc" %>
+<script src="../../Scripts/jquery-1.4.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+    function setHintPosition(img, displayPnl) {
+        var image = $("#" + img);
+        var displayPanel = $("#" + displayPnl);
+        iptop = image.offset().top;
+        ipleft = image.offset().left;
+        iptop = iptop + 10;
+        ipleft = ipleft - 10;
+        setPosition(displayPanel, iptop, ipleft);
+        displayPanel.show();
+        setPosition(displayPanel, iptop, ipleft);
+        displayPanel.show();
+    }
+
+    function setPosition(item, ytop, xleft) {
+        item.offset({ top: ytop, left: xleft });
+    }
+</script>
 <div id="opportunity-list">
     <asp:ListView ID="lvOpportunities" runat="server" DataKeyNames="Id" OnSorting="lvOpportunities_Sorting">
         <LayoutTemplate>
@@ -23,6 +43,65 @@
                         <div class="ie-bg no-wrap">
                             <asp:LinkButton ID="btnPrioritySort" runat="server" Text="Priority" CommandName="Sort"
                                 CssClass="arrow" CommandArgument="Priority" />
+                            <asp:Image ID="imgPriorityHint" runat="server" ImageUrl="~/Images/hint.png" />
+                            <asp:Panel ID="pnlPriority" Style="display: none;" CssClass="MiniReport" runat="server">
+                                <table>
+                                    <tr>
+                                        <th align="right">
+                                            <asp:Button ID="btnClosePriority" OnClientClick="return false;" runat="server" CssClass="mini-report-close"
+                                                Text="x" />
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <asp:ListView ID="lvOpportunityPriorities" runat="server">
+                                                <LayoutTemplate>
+                                                    <div style="max-height: 150px; overflow-y: auto;overflow-x:hidden;">
+                                                        <table id="itemPlaceHolderContainer" runat="server" style="background-color: White;"
+                                                            class="WholeWidth">
+                                                            <tr runat="server" id="itemPlaceHolder">
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tr>
+                                                        <td style="width: 100%; padding-left: 2px;">
+                                                            <table class="WholeWidth">
+                                                                <tr>
+                                                                    <td align="center" valign="middle" style="text-align: center;  color:Black;font-size:12px;padding: 0px;">
+                                                                        <asp:Label ID="lblPriority" Width="15px" Font-Bold="true" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>
+                                                                    </td>
+                                                                    <td align="center" valign="middle" style="text-align: center; color:Black; padding: 0px;font-size:12px;padding-left: 2px;padding-right: 2px;">
+                                                                        -
+                                                                    </td>
+                                                                    <td style="padding: 0px;">
+                                                                        <asp:Label ID="lblDescription" runat="server" Width="180px" Style="white-space: normal; color:Black;font-size:12px;"
+                                                                            Text='<%# Eval("Description") %>'></asp:Label>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </ItemTemplate>
+                                                <EmptyDataTemplate>
+                                                    <tr>
+                                                        <td valign="middle" style="padding-left: 2px;">
+                                                            <asp:Label ID="lblNoPriorities" runat="server" Text="No Priorities."></asp:Label>
+                                                        </td>
+                                                    </tr>
+                                                </EmptyDataTemplate>
+                                            </asp:ListView>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </asp:Panel>
+                            <AjaxControlToolkit:AnimationExtender ID="animHide" TargetControlID="btnClosePriority"
+                                runat="server">
+                            </AjaxControlToolkit:AnimationExtender>
+                            <AjaxControlToolkit:AnimationExtender ID="animShow" TargetControlID="imgPriorityHint"
+                                runat="server">
+                            </AjaxControlToolkit:AnimationExtender>
                         </div>
                     </td>
                     <td width="15%">
@@ -199,9 +278,5 @@
             </tr>
         </EmptyDataTemplate>
     </asp:ListView>
-    <%-- <asp:ObjectDataSource ID="odsOpportunities" runat="server" 
-                SelectMethod="GetOpportunities" EnableCaching="false" 
-                TypeName="PraticeManagement.Controls.Generic.OpportunityList">
-   </asp:ObjectDataSource>--%>
 </div>
 
