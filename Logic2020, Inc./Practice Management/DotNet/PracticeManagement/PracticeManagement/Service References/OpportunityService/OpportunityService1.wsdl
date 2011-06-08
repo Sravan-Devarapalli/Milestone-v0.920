@@ -2,12 +2,12 @@
 <wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="OpportunityService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://server2.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://server2.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://server2.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd2" />
-      <xsd:import schemaLocation="http://server2.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
-      <xsd:import schemaLocation="http://server2.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import schemaLocation="http://server2.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd2" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IOpportunityService_OpportunityGetExcelSet_InputMessage">
@@ -57,6 +57,30 @@
   </wsdl:message>
   <wsdl:message name="IOpportunityService_GetOpportunityPrioritiesListAll_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetOpportunityPrioritiesListAllResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOpportunityService_GetOpportunityPriorities_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetOpportunityPriorities" />
+  </wsdl:message>
+  <wsdl:message name="IOpportunityService_GetOpportunityPriorities_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetOpportunityPrioritiesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOpportunityService_InsertOpportunityPriority_InputMessage">
+    <wsdl:part name="parameters" element="tns:InsertOpportunityPriority" />
+  </wsdl:message>
+  <wsdl:message name="IOpportunityService_InsertOpportunityPriority_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InsertOpportunityPriorityResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOpportunityService_UpdateOpportunityPriority_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateOpportunityPriority" />
+  </wsdl:message>
+  <wsdl:message name="IOpportunityService_UpdateOpportunityPriority_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateOpportunityPriorityResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOpportunityService_DeleteOpportunityPriority_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteOpportunityPriority" />
+  </wsdl:message>
+  <wsdl:message name="IOpportunityService_DeleteOpportunityPriority_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteOpportunityPriorityResponse" />
   </wsdl:message>
   <wsdl:message name="IOpportunityService_GetById_InputMessage">
     <wsdl:part name="parameters" element="tns:GetById" />
@@ -150,6 +174,22 @@
     <wsdl:operation name="GetOpportunityPrioritiesListAll">
       <wsdl:input wsaw:Action="http://tempuri.org/IOpportunityService/GetOpportunityPrioritiesListAll" message="tns:IOpportunityService_GetOpportunityPrioritiesListAll_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IOpportunityService/GetOpportunityPrioritiesListAllResponse" message="tns:IOpportunityService_GetOpportunityPrioritiesListAll_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOpportunityPriorities">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOpportunityService/GetOpportunityPriorities" message="tns:IOpportunityService_GetOpportunityPriorities_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOpportunityService/GetOpportunityPrioritiesResponse" message="tns:IOpportunityService_GetOpportunityPriorities_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertOpportunityPriority">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOpportunityService/InsertOpportunityPriority" message="tns:IOpportunityService_InsertOpportunityPriority_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOpportunityService/InsertOpportunityPriorityResponse" message="tns:IOpportunityService_InsertOpportunityPriority_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateOpportunityPriority">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOpportunityService/UpdateOpportunityPriority" message="tns:IOpportunityService_UpdateOpportunityPriority_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOpportunityService/UpdateOpportunityPriorityResponse" message="tns:IOpportunityService_UpdateOpportunityPriority_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteOpportunityPriority">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOpportunityService/DeleteOpportunityPriority" message="tns:IOpportunityService_DeleteOpportunityPriority_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOpportunityService/DeleteOpportunityPriorityResponse" message="tns:IOpportunityService_DeleteOpportunityPriority_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetById">
       <wsdl:input wsaw:Action="http://tempuri.org/IOpportunityService/GetById" message="tns:IOpportunityService_GetById_InputMessage" />
@@ -266,6 +306,42 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetOpportunityPriorities">
+      <soap:operation soapAction="http://tempuri.org/IOpportunityService/GetOpportunityPriorities" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertOpportunityPriority">
+      <soap:operation soapAction="http://tempuri.org/IOpportunityService/InsertOpportunityPriority" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateOpportunityPriority">
+      <soap:operation soapAction="http://tempuri.org/IOpportunityService/UpdateOpportunityPriority" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteOpportunityPriority">
+      <soap:operation soapAction="http://tempuri.org/IOpportunityService/DeleteOpportunityPriority" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetById">
       <soap:operation soapAction="http://tempuri.org/IOpportunityService/GetById" style="document" />
       <wsdl:input>
@@ -359,7 +435,7 @@
   </wsdl:binding>
   <wsdl:service name="OpportunityService">
     <wsdl:port name="BasicHttpBinding_IOpportunityService" binding="tns:BasicHttpBinding_IOpportunityService">
-      <soap:address location="http://server2.ggk.com/PracticeManagementService/OpportunityService.svc" />
+      <soap:address location="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
