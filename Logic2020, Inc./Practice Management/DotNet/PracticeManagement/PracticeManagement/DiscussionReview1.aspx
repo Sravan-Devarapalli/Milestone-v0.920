@@ -101,15 +101,12 @@
 
         Sys.WebForms.PageRequestManager.getInstance().add_pageLoaded(getEvents);
         function getEvents() {
-            var divPriority = $("#<%= divPriorityDescription.ClientID %>");
+            var divPriority = $("#<%= pnlPriority.ClientID %>");
             var imgPriorityHint = $("#<%= imgPriorityHint.ClientID %>");
-            var lblClose = $("#<%= lblClose.ClientID %>");
-            divPriority.hide();
+            setHintPosition(imgPriorityHint, divPriority);
+
             imgPriorityHint.click(function () {
                 setHintPosition(imgPriorityHint, divPriority);
-            });
-            lblClose.click(function () {
-                divPriority.hide();
             });
         }
 
@@ -514,6 +511,58 @@
                                             <td style="font-weight: bold; width: 12%">
                                                 Priority
                                                 <asp:Image ID="imgPriorityHint" runat="server" ImageUrl="~/Images/hint.png" />
+                                                <asp:Panel ID="pnlPriority" Style="display: none;" CssClass="MiniReport" runat="server">
+                                                    <table>
+                                                        <tr>
+                                                            <th align="right">
+                                                                <asp:Button ID="btnClosePriority" OnClientClick="return false;" runat="server" CssClass="mini-report-close"
+                                                                    Text="x" />
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <asp:ListView ID="lvOpportunityPriorities" runat="server">
+                                                                    <LayoutTemplate>
+                                                                        <div style="max-height: 150px; overflow-y: auto;overflow-x:hidden;">
+                                                                            <table id="itemPlaceHolderContainer" runat="server" style="background-color: White;"
+                                                                                class="WholeWidth">
+                                                                                <tr runat="server" id="itemPlaceHolder">
+                                                                                </tr>
+                                                                            </table>
+                                                                        </div>
+                                                                    </LayoutTemplate>
+                                                                    <ItemTemplate>
+                                                                        <tr>
+                                                                            <td style="width: 100%; padding-left: 2px;">
+                                                                                <table class="WholeWidth">
+                                                                                    <tr>
+                                                                                        <td align="center" valign="middle" style="text-align: center; padding: 0px; color:Black;font-size:12px;">
+                                                                                            <asp:Label ID="lblPriority" Width="15px" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>
+                                                                                        </td>
+                                                                                        <td align="center" valign="middle" style="text-align: center; padding: 0px;padding-left: 2px;padding-right: 2px; color:Black;font-size:12px;">
+                                                                                            -
+                                                                                        </td>
+                                                                                        <td style="padding: 0px;">
+                                                                                            <asp:Label ID="lblDescription" runat="server" Width="180px" Style="white-space: normal; color:Black;font-size:12px;"
+                                                                                                Text='<%# Eval("Description") %>'></asp:Label>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </table>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </ItemTemplate>
+                                                                    <EmptyDataTemplate>
+                                                                        <tr>
+                                                                            <td valign="middle" style="padding-left: 2px;">
+                                                                                <asp:Label ID="lblNoPriorities" runat="server" Text="No Priorities."></asp:Label>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </EmptyDataTemplate>
+                                                                </asp:ListView>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </asp:Panel>
                                             </td>
                                             <td style="width: 38%;">
                                                 <table width="100%">
@@ -668,6 +717,10 @@
                                             </td>
                                         </tr>
                                     </table>
+                                    <ajax:AnimationExtender ID="animHide" TargetControlID="btnClosePriority" runat="server">
+                                    </ajax:AnimationExtender>
+                                    <ajax:AnimationExtender ID="animShow" TargetControlID="imgPriorityHint" runat="server">
+                                    </ajax:AnimationExtender>
                                 </ContentTemplate>
                                 <Triggers>
                                     <asp:AsyncPostBackTrigger ControlID="btnAttach" />
@@ -965,48 +1018,6 @@
                                             alert('{0}');
                                         </script>
                                         </asp:Literal>
-                                        <div id="divPriorityDescription" style="width: 100%; max-width: 330px; display: none;"
-                                            runat="server">
-                                            <table width="100%" style="border: 1px solid #FF9F00; padding-left: 4px; padding-right: 4px;
-                                                background-color: White;">
-                                                <tr style="background-color: #FF9F00 !important;">
-                                                    <td style="width: 95%;">
-                                                    </td>
-                                                    <td style="width: 5%;" valign="top" align="right">
-                                                        <asp:Label ID="lblClose" runat="server" Font-Bold="true" Font-Size="Small" ToolTip="Close"
-                                                            Style="cursor: pointer;" Text="x"></asp:Label>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="2" style="padding: 2px;">
-                                                        <asp:ListView ID="lvOpportunityPriorities" runat="server">
-                                                            <LayoutTemplate>
-                                                                <table id="itemPlaceHolderContainer" runat="server" style="background-color: White;"
-                                                                    class="WholeWidth">
-                                                                    <tr runat="server" id="itemPlaceHolder">
-                                                                    </tr>
-                                                                </table>
-                                                            </LayoutTemplate>
-                                                            <ItemTemplate>
-                                                                <tr>
-                                                                    <td style="width: 100%; white-space: nowrap; padding-left: 2px;">
-                                                                        <asp:Label ID="lblPriority" Width="5%" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>&nbsp;-&nbsp;<asp:Label
-                                                                            ID="lblDescription" runat="server" Width="95%" Text='<%# Eval("Description") %>'></asp:Label>
-                                                                    </td>
-                                                                </tr>
-                                                            </ItemTemplate>
-                                                            <EmptyDataTemplate>
-                                                                <tr>
-                                                                    <td valign="middle" style="padding-left: 2px;">
-                                                                        <asp:Label ID="lblNoPriorities" runat="server" Text="No Priorities."></asp:Label>
-                                                                    </td>
-                                                                </tr>
-                                                            </EmptyDataTemplate>
-                                                        </asp:ListView>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
                                     </div>
                                     <table style="width: 100%; background: #e2ebff;">
                                         <tr>
