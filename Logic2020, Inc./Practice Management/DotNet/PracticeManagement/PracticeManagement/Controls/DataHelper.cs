@@ -34,6 +34,7 @@ using PraticeManagement.TimescaleService;
 using PraticeManagement.Controls.Generic.Filtering;
 using PraticeManagement.Controls.Generic;
 using PraticeManagement.ConfigurationService;
+using PraticeManagement.Controls.Opportunities;
 
 #endregion
 
@@ -1672,24 +1673,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public static OpportunityPriority[] GetOpportunityPrioritiesListAll()
-        {
-            using (var serviceClient = new OpportunityServiceClient())
-            {
-                try
-                {
-                    OpportunityPriority[] opportunityPriorities = serviceClient.GetOpportunityPrioritiesListAll();
-                    return opportunityPriorities;
-
-                }
-                catch (CommunicationException)
-                {
-                    serviceClient.Abort();
-                    throw;
-                }
-            }
-        }
-
         /// <summary>
         /// Fills the list control with the list of opportunity transition statuses.
         /// </summary>
@@ -1830,7 +1813,7 @@ namespace PraticeManagement.Controls
 
         public static void FillOpportunityPrioritiesList(DropDownList ddlPriority, string firstItemText)
         {
-            OpportunityPriority[] priorities = DataHelper.GetOpportunityPrioritiesListAll();
+            OpportunityPriority[] priorities = OpportunityPriorityHelper.GetOpportunityPriorities(true);
 
             FillListDefault(ddlPriority, firstItemText, priorities, false, "Id", "Priority");
 
