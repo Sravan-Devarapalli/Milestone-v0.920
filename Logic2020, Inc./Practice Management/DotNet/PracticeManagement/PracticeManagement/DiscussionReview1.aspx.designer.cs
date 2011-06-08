@@ -337,6 +337,33 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Image imgPriorityHint;
         
         /// <summary>
+        /// pnlPriority control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlPriority;
+        
+        /// <summary>
+        /// btnClosePriority control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnClosePriority;
+        
+        /// <summary>
+        /// lvOpportunityPriorities control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ListView lvOpportunityPriorities;
+        
+        /// <summary>
         /// ddlPriority control.
         /// </summary>
         /// <remarks>
@@ -488,6 +515,24 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqPractice;
+        
+        /// <summary>
+        /// animHide control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.AnimationExtender animHide;
+        
+        /// <summary>
+        /// animShow control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.AnimationExtender animShow;
         
         /// <summary>
         /// tcOpportunityDetails control.
@@ -740,33 +785,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal ltrWonConvertInvalid;
-        
-        /// <summary>
-        /// divPriorityDescription control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divPriorityDescription;
-        
-        /// <summary>
-        /// lblClose control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblClose;
-        
-        /// <summary>
-        /// lvOpportunityPriorities control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView lvOpportunityPriorities;
         
         /// <summary>
         /// mlConfirmation control.
