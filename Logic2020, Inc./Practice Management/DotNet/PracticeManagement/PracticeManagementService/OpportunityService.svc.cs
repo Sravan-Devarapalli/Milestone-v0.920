@@ -70,6 +70,28 @@ namespace PracticeManagementService
         {
             return OpportunityDAL.GetOpportunityPrioritiesListAll();
         }
+
+        public List<OpportunityPriority> GetOpportunityPriorities(bool isinserted)
+        {
+            return OpportunityDAL.GetOpportunityPriorities(isinserted);
+        }
+
+        public void InsertOpportunityPriority(OpportunityPriority opportunityPriority)
+        {
+            OpportunityDAL.InsertOpportunityPriority(opportunityPriority);
+        }
+
+        public void UpdateOpportunityPriority(int oldPriorityId, OpportunityPriority opportunityPriority)
+        {
+            OpportunityDAL.UpdateOpportunityPriority(oldPriorityId, opportunityPriority);
+        }
+
+
+        public void DeleteOpportunityPriority(int? updatedPriorityId, int deletedPriorityId)
+        {
+            OpportunityDAL.DeleteOpportunityPriority(updatedPriorityId, deletedPriorityId);
+        }
+
         /// <summary>
         /// 	Retrives an <see cref = "Opportunity" /> be a specified ID.
         /// </summary>
@@ -194,7 +216,7 @@ namespace PracticeManagementService
         {
             OpportunityDAL.OpportunityPersonDelete(opportunityId, personIdList);
         }
-        
+
         #endregion
     }
 }
