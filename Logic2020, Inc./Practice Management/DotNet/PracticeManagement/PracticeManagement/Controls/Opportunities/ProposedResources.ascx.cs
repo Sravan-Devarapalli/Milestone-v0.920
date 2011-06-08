@@ -314,6 +314,11 @@ namespace PraticeManagement.Controls.Opportunities
             if (Opportunity != null && Opportunity.Id.HasValue)
             {
                 AddAttributesTocblProposedResources();
+
+                if (!IsPostBack)
+                {
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "GetProposedPersonIdsList", "GetProposedPersonIdsList();", true);
+                }
             }
 
             AddAttributesAndBoldPotentialResourcesPersons();
