@@ -118,7 +118,7 @@ BEGIN
 	  AND RoleId IN (SELECT RoleId FROM @tbRoles)
 
 	  DECLARE @Today DATETIME
-	  SET @Today  = CONVERT(DATETIME,CONVERT(DATE,GETDATE()))
+	  SET @Today  = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETDATE())))
 
 	  UPDATE dbo.aspnet_UsersRolesHistory 
 	  SET EndDate = @Today-1
