@@ -39,6 +39,18 @@ namespace PraticeManagement.OpportunityService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/GetOpportunityPrioritiesListAll", ReplyAction="http://tempuri.org/IOpportunityService/GetOpportunityPrioritiesListAllResponse")]
         DataTransferObjects.OpportunityPriority[] GetOpportunityPrioritiesListAll();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/GetOpportunityPriorities", ReplyAction="http://tempuri.org/IOpportunityService/GetOpportunityPrioritiesResponse")]
+        DataTransferObjects.OpportunityPriority[] GetOpportunityPriorities(bool isinserted);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/InsertOpportunityPriority", ReplyAction="http://tempuri.org/IOpportunityService/InsertOpportunityPriorityResponse")]
+        void InsertOpportunityPriority(DataTransferObjects.OpportunityPriority opportunityPriority);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/UpdateOpportunityPriority", ReplyAction="http://tempuri.org/IOpportunityService/UpdateOpportunityPriorityResponse")]
+        void UpdateOpportunityPriority(int oldPriorityId, DataTransferObjects.OpportunityPriority opportunityPriority);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/DeleteOpportunityPriority", ReplyAction="http://tempuri.org/IOpportunityService/DeleteOpportunityPriorityResponse")]
+        void DeleteOpportunityPriority(System.Nullable<int> updatedPriorityId, int deletedPriorityId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/GetById", ReplyAction="http://tempuri.org/IOpportunityService/GetByIdResponse")]
         DataTransferObjects.Opportunity GetById(int opportunityId);
         
@@ -78,7 +90,7 @@ namespace PraticeManagement.OpportunityService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class OpportunityServiceClient : System.ServiceModel.ClientBase<PraticeManagement.OpportunityService.IOpportunityService>, PraticeManagement.OpportunityService.IOpportunityService {
-        
+       
         public OpportunityServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -125,6 +137,22 @@ namespace PraticeManagement.OpportunityService {
         
         public DataTransferObjects.OpportunityPriority[] GetOpportunityPrioritiesListAll() {
             return base.Channel.GetOpportunityPrioritiesListAll();
+        }
+        
+        public DataTransferObjects.OpportunityPriority[] GetOpportunityPriorities(bool isinserted) {
+            return base.Channel.GetOpportunityPriorities(isinserted);
+        }
+        
+        public void InsertOpportunityPriority(DataTransferObjects.OpportunityPriority opportunityPriority) {
+            base.Channel.InsertOpportunityPriority(opportunityPriority);
+        }
+        
+        public void UpdateOpportunityPriority(int oldPriorityId, DataTransferObjects.OpportunityPriority opportunityPriority) {
+            base.Channel.UpdateOpportunityPriority(oldPriorityId, opportunityPriority);
+        }
+        
+        public void DeleteOpportunityPriority(System.Nullable<int> updatedPriorityId, int deletedPriorityId) {
+            base.Channel.DeleteOpportunityPriority(updatedPriorityId, deletedPriorityId);
         }
         
         public DataTransferObjects.Opportunity GetById(int opportunityId) {
