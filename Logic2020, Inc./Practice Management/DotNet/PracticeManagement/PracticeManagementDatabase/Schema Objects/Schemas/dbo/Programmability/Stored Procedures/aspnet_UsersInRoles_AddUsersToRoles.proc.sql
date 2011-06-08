@@ -108,7 +108,7 @@ BEGIN
 	FROM @tbUsers, @tbRoles
 
 	DECLARE @Today DATETIME
-	  SET @Today  = CONVERT(DATETIME,CONVERT(DATE,GETDATE()))
+	  SET @Today  = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETDATE())))
 
 	  INSERT INTO [dbo].[aspnet_UsersRolesHistory]
            ([UserId]
