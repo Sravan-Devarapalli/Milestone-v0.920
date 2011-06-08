@@ -656,8 +656,8 @@
     <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService12.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService14.disco" />
-    <None Include="Service References\OpportunityService\OpportunityService1.disco" />
     <None Include="Service References\OverheadService\OverheadService1.disco" />
+    <None Include="Service References\OpportunityService\OpportunityService1.disco" />
     <Content Include="TimeEntrySetting.aspx" />
     <None Include="Web References\AttachmentService\AttachmentService.disco" />
     <Content Include="Web.config">
@@ -901,6 +901,9 @@
     </Compile>
     <Compile Include="Controls\Opportunities\OpportunityListControl.ascx.designer.cs">
       <DependentUpon>OpportunityListControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Opportunities\OpportunityPriorityHelper.cs">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controls\Opportunities\ProposedResources.ascx.cs">
       <DependentUpon>ProposedResources.ascx</DependentUpon>
