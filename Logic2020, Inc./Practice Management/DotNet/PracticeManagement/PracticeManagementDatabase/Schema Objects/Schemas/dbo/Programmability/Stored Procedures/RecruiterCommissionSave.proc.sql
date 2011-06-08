@@ -16,21 +16,47 @@ CREATE PROCEDURE [dbo].[RecruiterCommissionSave]
 AS
 	SET NOCOUNT ON
 
-	IF EXISTS (SELECT 1
-	             FROM dbo.RecruiterCommission AS c
-	            WHERE c.RecruitId = @RecruitId
-	              AND c.HoursToCollect = @OLD_HoursToCollect)
+	IF(@Amount IS NOT NULL AND
+		EXISTS (SELECT 1 FROM dbo.RecruiterCommission  WITH(NOLOCK)
+				WHERE RecruitId = @RecruitId AND Amount IS NULL)
+	)
 	BEGIN
+		DELETE FROM dbo.RecruiterCommission  
+        WHERE  RecruitId = @RecruitId AND Amount IS NULL
+	END
+
+	
+	IF EXISTS (SELECT 1
+					FROM dbo.RecruiterCommission AS c
+				WHERE c.RecruitId = @RecruitId
+					AND c.HoursToCollect = @OLD_HoursToCollect
+					AND c.RecruiterId = @RecruiterId)
+	BEGIN
+
 		UPDATE dbo.RecruiterCommission
-		   SET Amount = @Amount,
-		       HoursToCollect = @HoursToCollect
-		 WHERE RecruitId = @RecruitId
-		   AND HoursToCollect = @OLD_HoursToCollect
+			SET Amount = @Amount,
+				HoursToCollect = @HoursToCollect
+			WHERE RecruitId = @RecruitId
+			AND HoursToCollect = @OLD_HoursToCollect   
 	END
 	ELSE
 	BEGIN
-		INSERT INTO dbo.RecruiterCommission
-		            (RecruiterId, RecruitId, HoursToCollect, Amount)
-		     VALUES (@RecruiterId, @RecruitId, @HoursToCollect, @Amount)
-	END
+		IF @HoursToCollect <> 0 OR
+		NOT EXISTS (SELECT 1 FROM dbo.RecruiterCommission WHERE RecruitId = @RecruitId 
+						AND RecruiterId = @RecruiterId AND HoursToCollect = 0)
+		BEGIN
+			INSERT INTO dbo.RecruiterCommission
+					(RecruiterId, RecruitId, HoursToCollect, Amount)
+				VALUES (@RecruiterId, @RecruitId, @HoursToCollect, @Amount)
+		END
+		ELSE
+		BEGIN
+				
+			UPDATE dbo.RecruiterCommission
+				SET Amount = @Amount 
+				WHERE RecruitId = @RecruitId
+				AND RecruiterId = @RecruiterId
+				AND HoursToCollect = 0
 
+		END
+END
