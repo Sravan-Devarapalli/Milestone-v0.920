@@ -109,6 +109,16 @@ namespace DataAccess
                 var priorityIndex = reader.GetOrdinal(Constants.ColumnNames.PriorityColumn);
                 var descriptionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
                 var priorityIdIndex = reader.GetOrdinal(Constants.ColumnNames.Id);
+                int inUseIndex = -1;
+
+                try
+                {
+                    inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
+                }
+                catch
+                {
+                    inUseIndex = -1;
+                }
 
                 while (reader.Read())
                 {
@@ -118,8 +128,20 @@ namespace DataAccess
                         {
                             Id = reader.GetInt32(priorityIdIndex),
                             Priority = reader.GetString(priorityIndex),
-                            Description = reader.GetString(descriptionIdIndex)
+                            Description = reader.IsDBNull(descriptionIdIndex) ? null : reader.GetString(descriptionIdIndex)
                         };
+
+                    if (inUseIndex >= 0)
+                    {
+                        try
+                        {
+                            opportunityPriority.InUse = reader.GetBoolean(inUseIndex);
+                        }
+                        catch
+                        {
+                        }
+                    }
+
 
                     result.Add(opportunityPriority);
 
@@ -959,6 +981,76 @@ namespace DataAccess
             }
         }
 
+        public static List<OpportunityPriority> GetOpportunityPriorities(bool isinserted)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.OpportunityPriorities, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsInserted, isinserted);
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<OpportunityPriority>();
+                    ReadOpportunityPriorityListAll(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static void InsertOpportunityPriority(OpportunityPriority opportunityPriority)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.OpportunityPriorityInsert, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PriorityIdParam, opportunityPriority.Id);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DescriptionParam,
+                    opportunityPriority.Description != null ? (object)opportunityPriority.Description : DBNull.Value);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void UpdateOpportunityPriority(int oldPriorityId, OpportunityPriority opportunityPriority)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.OpportunityPriorityUpdate, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.OldPriorityIdParam, oldPriorityId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PriorityIdParam, opportunityPriority.Id);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DescriptionParam,
+                    opportunityPriority.Description != null ? (object)opportunityPriority.Description : DBNull.Value);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void DeleteOpportunityPriority(int? updatedPriorityId, int deletedPriorityId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.OpportunityPriorityDelete, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+               
+                command.Parameters.AddWithValue(Constants.ParameterNames.UpdatedPriorityIdParam,
+                                                updatedPriorityId != null ? (object)updatedPriorityId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DeletedPriorityIdParam, deletedPriorityId);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }
 
