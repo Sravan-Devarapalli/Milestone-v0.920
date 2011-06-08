@@ -6,7 +6,7 @@
 AS
 BEGIN
 	 DECLARE @Today DATETIME
-	 SET @Today  = CONVERT(DATETIME,CONVERT(DATE,GETDATE()))
+	 SET @Today  = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETDATE())))
 	 
 	 -- Set the end date of the previous person status record to yester day
 	 IF NOT EXISTS (SELECT 1 FROM dbo.PersonStatusHistory 
