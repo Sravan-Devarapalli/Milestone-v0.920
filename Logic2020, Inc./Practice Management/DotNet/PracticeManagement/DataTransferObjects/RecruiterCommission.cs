@@ -30,7 +30,7 @@ namespace DataTransferObjects
         /// The amount of the comission awarded
         /// </summary>
         [DataMember]
-        public PracticeManagementCurrency Amount
+        public PracticeManagementCurrency? Amount
         {
             get;
             set;
