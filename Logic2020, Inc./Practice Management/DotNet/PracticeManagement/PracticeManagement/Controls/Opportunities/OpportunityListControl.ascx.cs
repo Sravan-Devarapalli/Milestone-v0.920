@@ -32,6 +32,30 @@ namespace PraticeManagement.Controls.Opportunities
         private const string OpportunityIdValue = "OpportunityId";
         private const string Watermarker = "watermarker";
 
+        private const string ANIMATION_SHOW_SCRIPT =
+                     @"<OnClick>
+                        	<Sequence>
+                        		<Parallel Duration=""0"" AnimationTarget=""{0}"">
+                        			<Discrete Property=""style"" propertyKey=""border"" ValuesScript=""['thin solid navy']""/>
+                        		</Parallel>
+                        		<Parallel Duration="".4"" Fps=""20"" AnimationTarget=""{0}"">
+                        			<Resize  Width=""257"" Height=""{1}"" Unit=""px"" />
+                        		</Parallel>
+                        	</Sequence>
+                        </OnClick>";
+
+        private const string ANIMATION_HIDE_SCRIPT =
+                        @"<OnClick>
+                        	<Sequence>
+                        		<Parallel Duration="".4"" Fps=""20"" AnimationTarget=""{0}"">
+                        			<Resize Width=""0"" Height=""0"" Unit=""px"" />
+                        		</Parallel>
+                        		<Parallel Duration=""0"" AnimationTarget=""{0}"">
+                        			<Discrete Property=""style"" propertyKey=""border"" ValuesScript=""['none']""/>
+                        		</Parallel>
+                        	</Sequence>
+                        </OnClick>";
+
         public bool AllowAutoRedirectToDetails { get; set; }
 
         public int? TargetPersonId { get; set; }
@@ -182,6 +206,53 @@ namespace PraticeManagement.Controls.Opportunities
                 InitFilter();
                 FireFilterOptionsChanged();
             }
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            PopulatePriorityHint();
+        }
+
+        private void PopulatePriorityHint()
+        {
+            var opportunityPriorities = OpportunityPriorityHelper.GetOpportunityPriorities(true);
+            var row = lvOpportunities.FindControl("lvHeader") as System.Web.UI.HtmlControls.HtmlTableRow;
+            var lvOp = row.FindControl("lvOpportunityPriorities") as ListView;
+            lvOp.DataSource = opportunityPriorities;
+            lvOp.DataBind();
+        }
+
+        protected void Page_Prerender(object sender, EventArgs e)
+        {
+            PreparePrioritiesWithAnimations();
+        }
+
+        private void PreparePrioritiesWithAnimations()
+        {
+            var row = lvOpportunities.FindControl("lvHeader") as System.Web.UI.HtmlControls.HtmlTableRow;
+
+            var img = row.FindControl("imgPriorityHint") as Image;
+            var lvOp = row.FindControl("lvOpportunityPriorities") as ListView;
+            var pnlPriority = row.FindControl("pnlPriority") as Panel;
+            var btnClosePriority = row.FindControl("btnClosePriority") as Button;
+
+            var animHide = row.FindControl("animHide") as AnimationExtender;
+            var animShow = row.FindControl("animShow") as AnimationExtender;
+
+            int lvCount = lvOp.Items.Count;
+
+            int height = ((lvCount + 1) * (35)) - 10;
+
+            if (height > 150)
+            {
+                height = 177;
+            }
+
+            animShow.Animations = string.Format(ANIMATION_SHOW_SCRIPT, pnlPriority.ID, height);
+            animHide.Animations = string.Format(ANIMATION_HIDE_SCRIPT, pnlPriority.ID);
+
+            img.Attributes["onclick"]
+               = string.Format("setHintPosition('{0}', '{1}');", img.ClientID, pnlPriority.ClientID);
         }
 
         public void DatabindOpportunities()
