@@ -49,13 +49,13 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.TextBox txtRecruiterCommission1;
         
         /// <summary>
-        /// reqRecruiterCommission1 control.
+        /// custRecruiterCommission1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqRecruiterCommission1;
+        protected global::System.Web.UI.WebControls.CustomValidator custRecruiterCommission1;
         
         /// <summary>
         /// compRecruiterCommission1 control.
@@ -76,13 +76,13 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.TextBox txtAfter1;
         
         /// <summary>
-        /// reqAfret1 control.
+        /// custAfret1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqAfret1;
+        protected global::System.Web.UI.WebControls.CustomValidator custAfret1;
         
         /// <summary>
         /// compAfret1 control.
@@ -112,13 +112,13 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.TextBox txtRecruiterCommission2;
         
         /// <summary>
-        /// reqRecruiterCommission2 control.
+        /// custRecruiterCommission2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqRecruiterCommission2;
+        protected global::System.Web.UI.WebControls.CustomValidator custRecruiterCommission2;
         
         /// <summary>
         /// compRecruiterCommission2 control.
@@ -139,13 +139,13 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.TextBox txtAfter2;
         
         /// <summary>
-        /// reqAfter2 control.
+        /// custAfter2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqAfter2;
+        protected global::System.Web.UI.WebControls.CustomValidator custAfter2;
         
         /// <summary>
         /// compAfter2 control.
