@@ -54,6 +54,7 @@
         Use Page.ClientScript.GetPostBackClientHyperlink(...) method to generate
         personProjects control postback url
     --%>
+    <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
     <script type="text/javascript">
         function checkDirty(target, entityId) {
             if (showDialod()) {
@@ -62,6 +63,22 @@
             }
 
             return false;
+        }
+        function setHintPosition(img, displayPnl) {
+            var image = $("#" + img);
+            var displayPanel = $("#" + displayPnl);
+            iptop = image.offset().top;
+            ipleft = image.offset().left;
+            iptop = iptop + 10;
+            ipleft = ipleft - 10;
+            setPosition(displayPanel, iptop, ipleft);
+            displayPanel.show();
+            setPosition(displayPanel, iptop, ipleft);
+            displayPanel.show();
+        }
+
+        function setPosition(item, ytop, xleft) {
+            item.offset({ top: ytop, left: xleft });
         }
     </script>
     <style>
