@@ -305,6 +305,7 @@
             public const string IncludeTotals = "IncludeTotals";
             public const string InUse = ColumnNames.InUse;
             public const string IsActive = ColumnNames.IsActive;
+            public const string IsInserted = "@IsInserted";
             public const string IsChargeable = ColumnNames.IsChargeable;
             public const string IsCorrect = ColumnNames.IsCorrect;
             public const string IsProjectChargeable = ColumnNames.IsProjectChargeable;
@@ -407,6 +408,9 @@
             public const string OpportunityStatusIdParam = "@OpportunityStatusId";
             public const string PriorityParam = "@Priority";
             public const string PriorityIdParam = "@PriorityId";
+            public const string OldPriorityIdParam = "@OldPriorityId";
+            public const string UpdatedPriorityIdParam = "@UpdatedPriorityId";
+            public const string DeletedPriorityIdParam = "@DeletedPriorityId";
             public const string ProjectedStartDateParam = "@ProjectedStartDate";
             public const string ProjectedEndDateParam = "@ProjectedEndDate";
             public const string DescriptionParam = "@Description";
@@ -656,8 +660,12 @@
                 public const string GetOpportunityPersons = "dbo.GetOpportunityPersons";
                 public const string ConvertOpportunityToProject = "dbo.ConvertOpportunityToProject";
                 public const string OpportunityPersonInsert = "dbo.OpportunityPersonInsert";
+                public const string OpportunityPriorityInsert = "dbo.OpportunityPriorityInsert";
+                public const string OpportunityPriorityUpdate = "dbo.OpportunityPriorityUpdate";
+                public const string OpportunityPriorityDelete = "dbo.OpportunityPriorityDelete";
                 public const string OpportunityPersonDelete = "dbo.OpportunityPersonDelete";
                 public const string OpportunityPrioritiesListAll = "dbo.OpportunityPrioritiesListAll";
+                public const string OpportunityPriorities = "dbo.GetOpportunityPriorities";
                 public const string GetPersonsByOpportunityIds = "dbo.GetPersonsByOpportunityIds";
             }
 
