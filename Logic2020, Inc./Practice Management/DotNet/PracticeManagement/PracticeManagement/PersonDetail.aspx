@@ -364,8 +364,7 @@
                                         <asp:CustomValidator ID="custTerminateDateTE" runat="server" ErrorMessage="" ToolTip=""
                                             ValidationGroup="Person" Text="*" EnableClientScript="false" OnServerValidate="custTerminationDateTE_ServerValidate"></asp:CustomValidator>
                                         <asp:CustomValidator ID="custIsDefautManager" runat="server" ErrorMessage="Unable to set Termination Date for this person because this person is set as default line manager. Please select another default line manager and refresh this page to enter termination date for this person."
-                                            ValidationGroup="Person" Text="*"
-                                            EnableClientScript="false" OnServerValidate="custIsDefautManager_ServerValidate"></asp:CustomValidator>
+                                            ValidationGroup="Person" Text="*" EnableClientScript="false" OnServerValidate="custIsDefautManager_ServerValidate"></asp:CustomValidator>
                                     </td>
                                 </tr>
                                 <tr>
@@ -380,8 +379,7 @@
                                             Display="Dynamic" ErrorMessage="The Telephone number is not valid." ValidationGroup="Person"
                                             ToolTip="The Telephone number is not valid." Text="*" EnableClientScript="False"
                                             ValidationExpression="^[01]?[- .]?(\([2-9]\d{2}\)|[2-9]\d{2})[- .]?\d{3}[- .]?\d{4}$"></asp:RegularExpressionValidator>
-                                      
-                                   </td>
+                                    </td>
                                     <td>
                                         &nbsp;
                                     </td>
@@ -575,24 +573,24 @@
                                                 </HeaderTemplate>
                                                 <ItemStyle HorizontalAlign="Center" />
                                             </asp:TemplateField>
-                                            <asp:templatefield headertext="Practice Area">
-                                                <itemtemplate>
-                                                    <asp:label id="lblpractice" runat="server" text='<%# Eval("PracticeName")%>'></asp:label></itemtemplate>
-                                                <headertemplate>
+                                            <asp:TemplateField HeaderText="Practice Area">
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblpractice" runat="server" Text='<%# Eval("PracticeName")%>'></asp:Label></ItemTemplate>
+                                                <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         Practice Area</div>
-                                                </headertemplate>
-                                                <itemstyle horizontalalign="center" />
-                                            </asp:templatefield>
-                                            <asp:templatefield headertext="Seniority">
-                                                <itemtemplate>
-                                                    <asp:label id="lblseniority" runat="server" text='<%# Eval("SeniorityName")%>'></asp:label></itemtemplate>
-                                                <headertemplate>
+                                                </HeaderTemplate>
+                                                <ItemStyle HorizontalAlign="center" />
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Seniority">
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblseniority" runat="server" Text='<%# Eval("SeniorityName")%>'></asp:Label></ItemTemplate>
+                                                <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         Seniority</div>
-                                                </headertemplate>
-                                                <itemstyle horizontalalign="center" />
-                                            </asp:templatefield>
+                                                </HeaderTemplate>
+                                                <ItemStyle HorizontalAlign="center" />
+                                            </asp:TemplateField>
                                             <asp:TemplateField HeaderText="Basis">
                                                 <ItemTemplate>
                                                     <asp:Label ID="lblBasis" runat="server" Text='<%# Eval("TimescaleName") %>'></asp:Label></ItemTemplate>
@@ -634,7 +632,8 @@
                             </asp:View>
                             <asp:View ID="vwRecruiter" runat="server">
                                 <asp:Panel ID="pnlRecruiter" runat="server" CssClass="tab-pane WholeWidth">
-                                    <uc1:RecruiterInfo ID="recruiterInfo" runat="server" OnInfoChanged="recruiterInfo_InfoChanged" />
+                                    <uc1:RecruiterInfo ID="recruiterInfo" NeedFirstItemForRecruiterDropDown="true" runat="server"
+                                        OnInfoChanged="recruiterInfo_InfoChanged" />
                                 </asp:Panel>
                             </asp:View>
                             <asp:View ID="vwCommission" runat="server">
@@ -825,7 +824,8 @@
                             <asp:View ID="vwWhatIf" runat="server">
                                 <asp:Panel ID="pnlWhatIf" runat="server" CssClass="tab-pane WholeWidth">
                                     <div style="background-color: none">
-                                        <uc1:WhatIf ID="whatIf" runat="server" DisplayTargetMargin="True" TargetMarginReadOnly="True" DisplayDefinedTermsAndCalcs="true" />
+                                        <uc1:WhatIf ID="whatIf" runat="server" DisplayTargetMargin="True" TargetMarginReadOnly="True"
+                                            DisplayDefinedTermsAndCalcs="true" />
                                     </div>
                                 </asp:Panel>
                             </asp:View>
