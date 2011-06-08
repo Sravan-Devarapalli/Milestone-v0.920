@@ -1,0 +1,9 @@
+﻿CREATE TABLE dbo.SchedularLog
+(
+	Id				INT IDENTITY(1,1),
+	LastRun			DATETIME,
+	[Status]		NVARCHAR(255),
+	Comments		NVARCHAR(4000),
+	NextRun			DATETIME,
+	CONSTRAINT PK_SchedularLog_Id PRIMARY KEY CLUSTERED(Id)
+)
