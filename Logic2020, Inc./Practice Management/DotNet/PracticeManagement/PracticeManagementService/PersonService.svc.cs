@@ -605,28 +605,20 @@ namespace PracticeManagementService
                 {
                     List<RecruiterCommission> currentRecruiterCommission =
                         RecruiterCommissionDAL.DefaultRecruiterCommissionListByRecruitId(person.Id.Value);
-
+                    foreach (RecruiterCommission commission in currentRecruiterCommission)
+                    {
+                        if (!person.RecruiterCommission.Exists(comm => comm.RecruiterId == commission.RecruiterId)
+                            || person.RecruiterCommission.Count < 2 && currentRecruiterCommission.Count == 2)
+                        {
+                            RecruiterCommissionDAL.DeleteRecruiterCommissionDetail(commission, connection, transaction);
+                        }
+                    }
                     foreach (RecruiterCommission commission in person.RecruiterCommission)
                     {
                         commission.Recruit = person;
-                        if (commission.Amount > 0)
-                        {
-                            RecruiterCommissionDAL.SaveRecruiterCommissionDetail(commission, connection, transaction);
-                        }
-                        else
-                        {
-                            RecruiterCommissionDAL.DeleteRecruiterCommissionDetail(commission, connection, transaction);
-                        }
+                        RecruiterCommissionDAL.SaveRecruiterCommissionDetail(commission, connection, transaction);
                     }
 
-                    // Clearing old commissions
-                    foreach (RecruiterCommission commission in currentRecruiterCommission)
-                    {
-                        if (!person.RecruiterCommission.Exists(comm => comm.RecruiterId == commission.RecruiterId))
-                        {
-                            RecruiterCommissionDAL.DeleteRecruiterCommissionDetail(commission, connection, transaction);
-                        }
-                    }
                 }
 
                 // Saving the person's payment info
@@ -653,7 +645,7 @@ namespace PracticeManagementService
                     }
                 }
 
-                PersonDAL.PersonEnsureIntegrity(person.Id.Value, connection, transaction);
+                //PersonDAL.PersonEnsureIntegrity(person.Id.Value, connection, transaction);
 
                 transaction.Commit();
             }
