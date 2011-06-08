@@ -820,9 +820,9 @@ namespace PracticeManagementService
 
                 foreach (RecruiterCommission commision in Person.RecruiterCommission)
                 {
-                    if (commision.HoursToCollect >= hoursWorked && commision.HoursToCollect != 0)
+                    if (commision.HoursToCollect >= hoursWorked && commision.HoursToCollect != 0 && commision.Amount.HasValue)
                     {
-                        result.Rate += commision.Amount / commision.HoursToCollect;
+                        result.Rate += commision.Amount.Value / commision.HoursToCollect;
                     }
                 }
 
