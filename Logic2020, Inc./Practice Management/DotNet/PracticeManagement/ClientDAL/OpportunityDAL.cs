@@ -1051,6 +1051,24 @@ namespace DataAccess
                 command.ExecuteNonQuery();
             }
         }
+
+        public static void OpportunityDelete(int opportunityId, string userName)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Opportunitites.OpportunityDelete, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityIdParam, opportunityId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userName);
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
 
