@@ -81,6 +81,9 @@ namespace PraticeManagement.OpportunityService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/OpportunityPersonDelete", ReplyAction="http://tempuri.org/IOpportunityService/OpportunityPersonDeleteResponse")]
         void OpportunityPersonDelete(int opportunityId, string personIdList);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/OpportunityDelete", ReplyAction="http://tempuri.org/IOpportunityService/OpportunityDeleteResponse")]
+        void OpportunityDelete(int opportunityId, string userName);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -90,7 +93,7 @@ namespace PraticeManagement.OpportunityService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class OpportunityServiceClient : System.ServiceModel.ClientBase<PraticeManagement.OpportunityService.IOpportunityService>, PraticeManagement.OpportunityService.IOpportunityService {
-       
+        
         public OpportunityServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -193,6 +196,10 @@ namespace PraticeManagement.OpportunityService {
         
         public void OpportunityPersonDelete(int opportunityId, string personIdList) {
             base.Channel.OpportunityPersonDelete(opportunityId, personIdList);
+        }
+        
+        public void OpportunityDelete(int opportunityId, string userName) {
+            base.Channel.OpportunityDelete(opportunityId, userName);
         }
     }
 }
