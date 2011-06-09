@@ -45,6 +45,13 @@
             }
             return true;
         }
+
+        function ConfirmToDeleteProject() {
+            var hdnProject = document.getElementById('<%= hdnProjectDelete.ClientID %>');
+            var result = confirm("Do you really want to delete the project?");
+            hdnProject.value = result ? 1 : 0;
+        }
+
     </script>
     <style type="text/css">
         /* --------- Tabs for person and project details pages ------ */
@@ -490,6 +497,9 @@
                 <tr>
                     <td align="center">
                         <asp:HiddenField ID="hdnProjectId" runat="server" />
+                        <asp:HiddenField ID="hdnProjectDelete" runat="server" />
+                        <asp:Button ID="btnDelete" runat="server" Text="Delete Project" OnClick="btnDelete_Click"
+                            OnClientClick="ConfirmToDeleteProject();" Enabled="false" Visible="false" />&nbsp;
                         <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" ValidationGroup="Project" />&nbsp;
                         <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" />
                     </td>
