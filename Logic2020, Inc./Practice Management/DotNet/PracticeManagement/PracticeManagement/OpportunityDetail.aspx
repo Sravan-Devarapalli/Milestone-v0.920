@@ -105,6 +105,12 @@
             __doPostBack('__Page', arg);
             return true;
         }
+
+        function ConfirmToDeleteOpportunity() {
+            var hdnProject = document.getElementById('<%= hdnOpportunityDelete.ClientID %>');
+            var result = confirm("Do you really want to delete the opportunity?");
+            hdnProject.value = result ? 1 : 0;
+        }
     </script>
     <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -776,6 +782,10 @@
                                         DisplayMode="BulletList" EnableClientScript="false" HeaderText="Unable to convert opportunity due to the following errors:" />
                                     <asp:ValidationSummary ID="vsumHasPersons" runat="server" ValidationGroup="HasPersons"
                                         DisplayMode="BulletList" EnableClientScript="false" HeaderText="Unable to convert opportunity due to the following errors:" />
+                                </td>
+                                <td style="padding: 4px; height: 35px; width: 13%;">
+                                    <asp:HiddenField ID="hdnOpportunityDelete" runat="server"></asp:HiddenField>
+                                    <asp:Button ID="btnDelete" runat="server" Visible="false" Enabled="false" Text="Delete Opportunity" OnClientClick="ConfirmToDeleteOpportunity();" OnClick="btnDelete_Click" />
                                 </td>
                                 <td style="padding: 4px; height: 35px; width: 13%;">
                                     <asp:Button ID="btnSave" runat="server" Text="Save Changes" OnClick="btnSave_Click" />
