@@ -613,6 +613,7 @@
                 public const string CalculateBudgetForCategoryItems = "dbo.CalculateBudgetForCategoryItems";
                 public const string CategoryItemsSaveFromXML = "dbo.CategoryItemsSaveFromXML";
                 public const string GetProjectAttachmentData = "dbo.GetProjectAttachmentData";
+                public const string ProjectDelete = "dbo.ProjectDelete";
             }
 
             public class MilestonePerson
@@ -667,6 +668,7 @@
                 public const string OpportunityPrioritiesListAll = "dbo.OpportunityPrioritiesListAll";
                 public const string OpportunityPriorities = "dbo.GetOpportunityPriorities";
                 public const string GetPersonsByOpportunityIds = "dbo.GetPersonsByOpportunityIds";
+                public const string OpportunityDelete = "dbo.OpportunityDelete";
             }
 
             public class OverHeads
