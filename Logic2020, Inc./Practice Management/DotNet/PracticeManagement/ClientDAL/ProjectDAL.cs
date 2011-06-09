@@ -1724,6 +1724,24 @@ namespace DataAccess
 
 
         }
+
+        public static void ProjectDelete(int projectId, string userName)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.ProjectDelete, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userName);
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
        
     }
 }
