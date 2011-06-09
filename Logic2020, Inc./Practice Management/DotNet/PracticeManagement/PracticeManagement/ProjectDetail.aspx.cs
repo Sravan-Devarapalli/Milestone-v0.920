@@ -161,6 +161,25 @@ namespace PraticeManagement
             txtSalesCommission.Enabled = !string.IsNullOrEmpty(ddlSalesperson.SelectedValue);
             chbReceivesSalesCommission.Enabled =
                 chbReceivesSalesCommission.Enabled && !string.IsNullOrEmpty(ddlSalesperson.SelectedValue);
+
+            NeedToShowDeleteButton();
+        }
+
+        private void NeedToShowDeleteButton()
+        {
+            if (ProjectId.HasValue && Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName))
+            {
+                btnDelete.Visible = true;
+
+                if (Project.Status.Id == 1 || Project.Status.Id == 5)//Status Ids 1 :-Inactive and 5:- Experimental.
+                {
+                    btnDelete.Enabled = true;
+                }
+                else
+                {
+                    btnDelete.Enabled = false;
+                }
+            }
         }
 
         protected void btnMilestoneName_Command(object sender, CommandEventArgs e)
@@ -211,6 +230,27 @@ namespace PraticeManagement
                 Project = GetCurrentProject(ProjectId);
                 if (Project != null)
                     PopulateControls(Project);
+            }
+        }
+
+        protected void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (hdnProjectDelete.Value == "1")
+            {
+                using (var serviceClient = new ProjectService.ProjectServiceClient())
+                {
+                    try
+                    {
+                        serviceClient.ProjectDelete(ProjectId.Value, User.Identity.Name);
+
+                        Redirect("Projects.aspx");
+                    }
+                    catch(Exception ex)
+                    {
+                        serviceClient.Abort();
+                        mlConfirmation.ShowErrorMessage("{0}", ex.Message);
+                    }
+                }
             }
         }
 
