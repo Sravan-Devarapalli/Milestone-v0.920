@@ -277,6 +277,25 @@ namespace PraticeManagement
             activityLog.Update();
             upActivityLog.Update();
             UpdatePanel1.Update();
+
+            NeedToShowDeleteButton();
+        }
+
+        private void NeedToShowDeleteButton()
+        {
+            if (OpportunityId.HasValue && _userIsAdministrator)
+            {
+                btnDelete.Visible = true;
+
+                if (Opportunity.Status.Id == 3 || Opportunity.Status.Id == 5)//Status Ids 3 :-Inactive and 5:- Experimental.
+                {
+                    btnDelete.Enabled = true;
+                }
+                else
+                {
+                    btnDelete.Enabled = false;
+                }
+            }
         }
 
         private void InitSecurity()
@@ -533,6 +552,26 @@ namespace PraticeManagement
             upAttachToProject.Update();
         }
 
+        protected void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (hdnOpportunityDelete.Value == "1")
+            {
+                using (var serviceClient = new OpportunityService.OpportunityServiceClient())
+                {
+                    try
+                    {
+                        serviceClient.OpportunityDelete(OpportunityId.Value, User.Identity.Name);
+
+                        Redirect("OpportunityList.aspx");
+                    }
+                    catch (Exception ex)
+                    {
+                        serviceClient.Abort();
+                        mlConfirmation.ShowErrorMessage("{0}", ex.Message);
+                    }
+                }
+            }
+        }
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
