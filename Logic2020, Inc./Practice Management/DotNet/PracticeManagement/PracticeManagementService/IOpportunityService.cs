@@ -152,6 +152,14 @@ namespace PracticeManagementService
         ///<param name="personId">An Id of the person</param>
         [OperationContract]
         void OpportunityPersonDelete(int opportunityId, string personIdList);
-	}
+
+        ///<summary>
+        /// Deletes an Opportunity
+        ///</summary>
+        ///<param name="opportunityId">An ID of the opportunity</param>
+        ///<param name="userName">Name of the User</param>
+        [OperationContract]
+        void OpportunityDelete(int opportunityId, string userName);
+    }
 }
 
