@@ -217,6 +217,11 @@ namespace PracticeManagementService
             OpportunityDAL.OpportunityPersonDelete(opportunityId, personIdList);
         }
 
+        public void OpportunityDelete(int opportunityId, string userName)
+        {
+            OpportunityDAL.OpportunityDelete(opportunityId, userName);//It will delete only Inactive and Experimental Opportunities as per #2702.
+        }
+
         #endregion
     }
 }
