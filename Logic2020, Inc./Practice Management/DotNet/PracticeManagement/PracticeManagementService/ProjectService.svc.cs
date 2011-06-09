@@ -599,6 +599,11 @@ namespace PracticeManagementService
             ProjectDAL.CategoryItemsSaveFromXML(categoryItems, year);
         }
 
+        public void ProjectDelete(int projectId, string userName)
+        {
+            ProjectDAL.ProjectDelete(projectId, userName);//It will delete only Inactive and Experimental Projects as per #2702.
+        }
+
         #endregion
     }
 }
