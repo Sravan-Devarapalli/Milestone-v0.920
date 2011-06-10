@@ -91,6 +91,7 @@
         }
 
         function resetFiltersTab() {
+            GetDefaultcblList();
             GetDefault(document.getElementById("<%= cblClient.ClientID %>"));
             GetDefault(document.getElementById("<%= cblSalesperson.ClientID %>"));
             GetDefault(document.getElementById("<%= cblPractice.ClientID %>"));
@@ -98,16 +99,16 @@
             GetDefault(document.getElementById("<%= cblProjectOwner.ClientID %>"));
         }
 
-        function GetDefault(control) {
-            var arrayOfCheckBoxes = control.getElementsByTagName('input');
+        function GetDefaultcblList() {
+            var div = document.getElementById("<%= divProjectFilter.ClientID %>");
+            var arrayOfCheckBoxes = div.getElementsByTagName('input');
             for (var i = 0; i < arrayOfCheckBoxes.length; i++) {
                 arrayOfCheckBoxes[i].checked = true;
             }
+         }
 
+        function GetDefault(control) {
             control.fireEvent('onclick');
-            //control.checkAll();
-            //$('input[@type=checkbox]').attr('checked', 'true');
-
         }
 
         function resetCalculationsTab() {
@@ -257,7 +258,7 @@
                         <span class="bg"><a href="#"><span>Filters</span></a> </span>
                     </headertemplate>
                     <contenttemplate>
-                        <div class="project-filter">
+                        <div id="divProjectFilter" runat="server" class="project-filter">
                             <table class="WholeWidth">
                                 <tr class="tb-header">
                                     <td style="border-bottom:1px solid black; width:190px; text-align:center">
