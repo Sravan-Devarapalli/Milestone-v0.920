@@ -130,13 +130,22 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnExportToExcel;
         
         /// <summary>
+        /// imgExportAllToExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgExportAllToExcel;
+        
+        /// <summary>
         /// btnExportAllToExcel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnExportAllToExcel;
+        protected global::System.Web.UI.WebControls.LinkButton btnExportAllToExcel;
         
         /// <summary>
         /// ddlView control.
@@ -236,6 +245,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.TabPanel tpAdvancedFilters;
+        
+        /// <summary>
+        /// divProjectFilter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divProjectFilter;
         
         /// <summary>
         /// btnUpdateFilters control.
