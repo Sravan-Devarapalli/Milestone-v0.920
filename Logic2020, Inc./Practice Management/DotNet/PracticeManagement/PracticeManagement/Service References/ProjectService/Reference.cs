@@ -53,7 +53,7 @@ namespace PraticeManagement.ProjectService {
         DataTransferObjects.Project[] GetProjectListCustom(bool projected, bool completed, bool active, bool experimantal);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectList", ReplyAction="http://tempuri.org/IProjectService/GetProjectListResponse")]
-        DataTransferObjects.Project[] GetProjectList(System.Nullable<int> clientId, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, System.DateTime periodStart, System.DateTime periodEnd, string userName, System.Nullable<int> salespersonId, System.Nullable<int> practiceManagerId, System.Nullable<int> practiceId, System.Nullable<int> projectGroupId, bool includeCurentYearFinancials);
+        DataTransferObjects.Project[] GetProjectList(System.Nullable<int> clientId, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, System.DateTime periodStart, System.DateTime periodEnd, string userName, System.Nullable<int> salespersonId, System.Nullable<int> practiceManagerId, System.Nullable<int> practiceId, System.Nullable<int> projectGroupId, DataTransferObjects.ProjectCalculateRangeType includeCurentYearFinancials);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectListAllMultiParameters", ReplyAction="http://tempuri.org/IProjectService/ProjectListAllMultiParametersResponse")]
         DataTransferObjects.Project[] ProjectListAllMultiParameters(
@@ -71,7 +71,7 @@ namespace PraticeManagement.ProjectService {
                     string projectOwnerIdsList, 
                     string practiceIdsList, 
                     string projectGroupIdsList, 
-                    bool includeCurentYearFinancials, 
+                    DataTransferObjects.ProjectCalculateRangeType includeCurentYearFinancials, 
                     bool excludeInternalPractices);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectListWithFinancials", ReplyAction="http://tempuri.org/IProjectService/GetProjectListWithFinancialsResponse")]
@@ -207,7 +207,7 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.GetProjectListCustom(projected, completed, active, experimantal);
         }
         
-        public DataTransferObjects.Project[] GetProjectList(System.Nullable<int> clientId, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, System.DateTime periodStart, System.DateTime periodEnd, string userName, System.Nullable<int> salespersonId, System.Nullable<int> practiceManagerId, System.Nullable<int> practiceId, System.Nullable<int> projectGroupId, bool includeCurentYearFinancials) {
+        public DataTransferObjects.Project[] GetProjectList(System.Nullable<int> clientId, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, System.DateTime periodStart, System.DateTime periodEnd, string userName, System.Nullable<int> salespersonId, System.Nullable<int> practiceManagerId, System.Nullable<int> practiceId, System.Nullable<int> projectGroupId, DataTransferObjects.ProjectCalculateRangeType includeCurentYearFinancials) {
             return base.Channel.GetProjectList(clientId, showProjected, showCompleted, showActive, showExperimental, periodStart, periodEnd, userName, salespersonId, practiceManagerId, practiceId, projectGroupId, includeCurentYearFinancials);
         }
         
@@ -226,7 +226,7 @@ namespace PraticeManagement.ProjectService {
                     string projectOwnerIdsList, 
                     string practiceIdsList, 
                     string projectGroupIdsList, 
-                    bool includeCurentYearFinancials, 
+                    DataTransferObjects.ProjectCalculateRangeType includeCurentYearFinancials, 
                     bool excludeInternalPractices) {
             return base.Channel.ProjectListAllMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, periodStart, periodEnd, userName, salespersonIdsList, projectOwnerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices);
         }
