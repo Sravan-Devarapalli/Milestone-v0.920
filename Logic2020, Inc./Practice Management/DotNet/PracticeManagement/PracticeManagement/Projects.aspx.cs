@@ -305,8 +305,8 @@ namespace PraticeManagement
                 SelectItemInControl(userIsSalesperson, cblSalesperson, personId);
                 SelectItemInControl((userIsPracticeManager || userIsDirector), cblProjectOwner, personId);// #2817: userIsDirector is added as per the requirement.
 
-                Label lblViewingRecords = (Label)GetPager().FindControl("currentPage");
-                lblViewingRecords.Text = lvProjects.Items.Count.ToString();
+                //Label lblViewingRecords = (Label)GetPager().FindControl("currentPage");
+                //lblViewingRecords.Text = lvProjects.Items.Count.ToString();
             }
 
             // cblSalesperson.Enabled = cblPracticeManager.Enabled = userIsAdministrator;
@@ -354,7 +354,7 @@ namespace PraticeManagement
 
         public void btnSearch_Clicked(object sender, EventArgs e)
         {
-            var projectList = ProjectList.Where(pro => pro.Name.ToLower().Contains(txtSearchText.Text.ToLower()) || 
+            var projectList = ProjectList.Where(pro => pro.Name.ToLower().Contains(txtSearchText.Text.ToLower()) ||
                                                 pro.Client.Name.ToLower().Contains(txtSearchText.Text.ToLower())
                                             ).ToList();
             if (projectList != null)
@@ -524,7 +524,7 @@ namespace PraticeManagement
                      PeriodSelected = Convert.ToInt32(ddlPeriod.SelectedValue),
                      ViewSelected = Convert.ToInt32(ddlView.SelectedValue),
 
-                     CalculateRangeSelected = (ProjectCalculateRangeType)Enum.Parse(typeof(ProjectCalculateRangeType),ddlCalculateRange.SelectedValue),
+                     CalculateRangeSelected = (ProjectCalculateRangeType)Enum.Parse(typeof(ProjectCalculateRangeType), ddlCalculateRange.SelectedValue),
                      HideAdvancedFilter = false
                  };
             return filter;
@@ -980,8 +980,14 @@ namespace PraticeManagement
                 }
 
                 financialSummaryRevenue.ProjectedFinancialsByMonth.Add(dtTemp, financials);
-                financialSummaryRevenue.ComputedFinancials.GrossMargin += financials.GrossMargin;
-                financialSummaryRevenue.ComputedFinancials.Revenue += financials.Revenue;
+
+                var projectsHavingFinancials = projects.Where(project => project.ComputedFinancials != null && project.Id.Value != defaultProjectIdValue);
+
+                if (projectsHavingFinancials != null)
+                {
+                    financialSummaryRevenue.ComputedFinancials.GrossMargin = projectsHavingFinancials.Sum(proj => proj.ComputedFinancials.GrossMargin);
+                    financialSummaryRevenue.ComputedFinancials.Revenue = projectsHavingFinancials.Sum(proj => proj.ComputedFinancials.Revenue);
+                }
             }
 
             return financialSummaryRevenue;
@@ -1401,6 +1407,7 @@ namespace PraticeManagement
                 td.Attributes["class"] = "CompPerfMonthSummary";
                 row.Cells.Insert(row.Cells.Count, td);
             }
+
             var summary = CalculateSummaryTotals(ProjectList, periodStart, PeriodEnd);
 
             FillSummaryTotalRow(monthsInPeriod, summary, row);
@@ -1586,7 +1593,7 @@ namespace PraticeManagement
         {
             using (var serviceClient = new ProjectService.ProjectServiceClient())
             {
-                return serviceClient.GetProjectListCustom(true,true,true,true);
+                return serviceClient.GetProjectListCustom(true, true, true, true);
             }
         }
 
