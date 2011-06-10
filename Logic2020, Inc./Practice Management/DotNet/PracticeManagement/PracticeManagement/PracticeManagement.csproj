@@ -653,10 +653,10 @@
     <None Include="Service References\TimescaleService\TimescaleService1.disco" />
     <None Include="Service References\ProjectGroupService\ProjectGroupService15.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
-    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService12.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService14.disco" />
     <None Include="Service References\OverheadService\OverheadService1.disco" />
+    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\OpportunityService\OpportunityService1.disco" />
     <Content Include="TimeEntrySetting.aspx" />
     <None Include="Web References\AttachmentService\AttachmentService.disco" />
