@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using DataTransferObjects;
 
 namespace PraticeManagement.Controls
 {
@@ -35,12 +36,43 @@ namespace PraticeManagement.Controls
         [DebuggerBrowsable(DebuggerBrowsableState.Never)] private int startMonthValue;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)] private int startYearValue;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)] private bool isGroupByPersonPage;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private int periodSelectedValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private int viewSelectedValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private ProjectCalculateRangeType calculateRangeSelectedValue;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)] private bool totalOnlySelectedDateWindowValue;
 
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// 	Gets or sets a period.
+        /// </summary>
+        public int PeriodSelected
+        {
+            get { return periodSelectedValue; }
+            set { periodSelectedValue = value; }
+        }
+
+
+        /// <summary>
+        /// 	Gets or sets a value for the results view (10/25/50/ALL).
+        /// </summary>
+        public int ViewSelected
+        {
+            get { return viewSelectedValue; }
+            set { viewSelectedValue = value; }
+        }
+
+        /// <summary>
+        /// 	Gets or sets a period range for GrandTotal calculation.
+        /// </summary>
+        public ProjectCalculateRangeType CalculateRangeSelected
+        {
+            get { return calculateRangeSelectedValue; }
+            set { calculateRangeSelectedValue = value; }
+        }
 
         /// <summary>
         /// 	Gets or sets a start year.
@@ -297,16 +329,20 @@ namespace PraticeManagement.Controls
             StartYear = thisMonth.Year;
             StartMonth = thisMonth.Month;
 
+
             var periodEnd = thisMonth.AddMonths(Constants.Dates.DefaultViewableMonths);
             EndYear = periodEnd.Year;
             EndMonth = periodEnd.Month;
+
+            PeriodSelected = 3; //Here 3 represents Last 3 months.
+            ViewSelected = 10; //Here 10 represents View 10 results.
+            CalculateRangeSelected = ProjectCalculateRangeType.ProjectValueInRange;
 
             // Project status filter defaults
             ShowActive = true;
             ShowCompleted = true;
             ShowProjected = true;
             ShowInternal = true;
-            TotalOnlySelectedDateWindow = true;
 
             HideAdvancedFilter = true;
             ExcludeInternalPractices = false;
@@ -344,6 +380,7 @@ namespace PraticeManagement.Controls
                     StartYear == compareObj.StartYear &&
                     EndMonth == compareObj.EndMonth &&
                     EndYear == compareObj.EndYear &&
+                    PeriodSelected == compareObj.PeriodSelected &&
                     // filters
                     ClientId == compareObj.ClientId &&
                     ProjectGroupId == compareObj.ProjectGroupId &&
@@ -359,6 +396,7 @@ namespace PraticeManagement.Controls
                     ShowInactive == compareObj.ShowInactive &&
                     // total range
                     TotalOnlySelectedDateWindow == compareObj.TotalOnlySelectedDateWindow &&
+                    CalculateRangeSelected == compareObj.CalculateRangeSelected &&
                     ExcludeInternalPractices == compareObj.ExcludeInternalPractices &&
 
                     ClientIdsList == compareObj.ClientIdsList &&
@@ -366,6 +404,8 @@ namespace PraticeManagement.Controls
                     ProjectOwnerIdsList == compareObj.ProjectOwnerIdsList &&
                     PracticeIdsList == compareObj.PracticeIdsList &&
                     ProjectGroupIdsList == compareObj.ProjectGroupIdsList &&
+
+                    ViewSelected == compareObj.ViewSelected &&
                     
                     IsGroupByPersonPage == compareObj.IsGroupByPersonPage;
             }
@@ -384,6 +424,7 @@ namespace PraticeManagement.Controls
                    Convert.ToInt32(StartYear) +
                    Convert.ToInt32(EndMonth) +
                    Convert.ToInt32(EndYear) +
+                   Convert.ToInt32(PeriodSelected) +
                    // filters
                    Convert.ToInt32(ClientId) +
                    Convert.ToInt32(ProjectGroupId) +
@@ -398,7 +439,9 @@ namespace PraticeManagement.Controls
                    Convert.ToInt32(ShowInternal) +
                    Convert.ToInt32(ShowInactive) +
                    // total range
-                   Convert.ToInt32(TotalOnlySelectedDateWindow);
+                   Convert.ToInt32(CalculateRangeSelected) +
+                   Convert.ToInt32(TotalOnlySelectedDateWindow) +
+                   Convert.ToInt32(ViewSelected);
         }
 
         /// <summary>
