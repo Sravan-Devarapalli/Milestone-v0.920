@@ -260,6 +260,12 @@ namespace PraticeManagement
             }
         }
 
+        public bool IsSearchClicked
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         #region Methods
@@ -317,6 +323,24 @@ namespace PraticeManagement
             SaveFilterSettings();
 
             tblDateSelection.Visible = (ddlPeriod.SelectedValue == "0");
+            var pager = GetPager();
+            if (pager != null && !IsSearchClicked)
+            {
+                if (ddlView.SelectedValue != "1")
+                {
+                    if (pager.PageSize != Convert.ToInt32(ddlView.SelectedValue))
+                    {
+                        Response.Redirect(Request.Url.AbsoluteUri);
+                    }
+                }
+                else
+                {
+                    if (pager.PageSize != pager.TotalRowCount)
+                    {
+                        Response.Redirect(Request.Url.AbsoluteUri);
+                    }
+                }
+            }
         }
 
         public void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
@@ -362,6 +386,7 @@ namespace PraticeManagement
                 lvProjects.DataSource = projectList;
                 lvProjects.DataBind();
             }
+            IsSearchClicked = true;
 
             StyledUpdatePanel.Update();
         }
@@ -1407,7 +1432,6 @@ namespace PraticeManagement
                 td.Attributes["class"] = "CompPerfMonthSummary";
                 row.Cells.Insert(row.Cells.Count, td);
             }
-
             var summary = CalculateSummaryTotals(ProjectList, periodStart, PeriodEnd);
 
             FillSummaryTotalRow(monthsInPeriod, summary, row);
