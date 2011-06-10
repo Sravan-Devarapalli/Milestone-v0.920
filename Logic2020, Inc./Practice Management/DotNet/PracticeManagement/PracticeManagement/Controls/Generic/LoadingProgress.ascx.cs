@@ -17,7 +17,7 @@ namespace PraticeManagement.Controls.Generic
             {
                 DisplayText = "Saving ...";
             }
-            else
+            else if(string.IsNullOrEmpty(DisplayText))
             {
                 DisplayText = "Please Wait..";
             }            
