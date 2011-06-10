@@ -305,7 +305,7 @@
                                             <ul id="popupmenu" class="pmenu">
                                                 <li>
                                                     <asp:LinkButton ID="btnExportAllToExcel" runat="server" OnClick="btnExportAllToExcel_Click"
-                                                        Text="Export All" CssClass="pm-button" />
+                                                        Text="Export All" CssClass="pm-button" OnClientClick="this.parentNode.parentNode.style.display='none';return true;" />
                                                 </li>
                                             </ul>
                                         </td>
