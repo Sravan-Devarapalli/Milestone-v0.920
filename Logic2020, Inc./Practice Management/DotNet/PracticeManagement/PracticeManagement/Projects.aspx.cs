@@ -305,6 +305,8 @@ namespace PraticeManagement
                 SelectItemInControl(userIsSalesperson, cblSalesperson, personId);
                 SelectItemInControl((userIsPracticeManager || userIsDirector), cblProjectOwner, personId);// #2817: userIsDirector is added as per the requirement.
 
+                Label lblViewingRecords = (Label)GetPager().FindControl("currentPage");
+                lblViewingRecords.Text = lvProjects.Items.Count.ToString();
             }
 
             // cblSalesperson.Enabled = cblPracticeManager.Enabled = userIsAdministrator;
@@ -313,7 +315,162 @@ namespace PraticeManagement
             reqSearchText.IsValid = true;
 
             SaveFilterSettings();
+
+            tblDateSelection.Visible = (ddlPeriod.SelectedValue == "0");
         }
+
+        public void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            tblDateSelection.Visible = false;
+            int periodSelected = Convert.ToInt32(ddlPeriod.SelectedValue);
+
+            if (periodSelected == 0)
+            {
+                tblDateSelection.Visible = true;
+            }
+            else
+            {
+                SetPeriodSelection(periodSelected);
+
+                ValidateAndDisplay();
+            }
+        }
+
+        public void mpPeriodStart_SelectedValueChanged(object sender, EventArgs e)
+        {
+            UpdateToDate();
+            upPeriodEnd.Update();
+        }
+
+        public void ddlView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetddlView();
+
+            lvProjects.DataSource = ProjectList;
+            lvProjects.DataBind();
+
+            StyledUpdatePanel.Update();
+        }
+
+        public void btnSearch_Clicked(object sender, EventArgs e)
+        {
+            var projectList = ProjectList.Where(pro => pro.Name.ToLower().Contains(txtSearchText.Text.ToLower()) || 
+                                                pro.Client.Name.ToLower().Contains(txtSearchText.Text.ToLower())
+                                            ).ToList();
+            if (projectList != null)
+            {
+                lvProjects.DataSource = projectList;
+                lvProjects.DataBind();
+            }
+
+            StyledUpdatePanel.Update();
+        }
+
+        private void SetddlView()
+        {
+            DataPager pager = GetPager();
+            if (pager != null)
+            {
+                if (ddlView.SelectedValue != "1")
+                {
+                    pager.SetPageProperties(0, Convert.ToInt32(ddlView.SelectedValue), false);
+                }
+                else
+                {
+                    pager.SetPageProperties(0, pager.TotalRowCount, false);
+                }
+            }
+        }
+
+        private void UpdateToDate()
+        {
+            DropDownList monthToControl = mpPeriodEnd.FindControl("ddlMonth") as DropDownList;
+            DropDownList yearToControl = mpPeriodEnd.FindControl("ddlYear") as DropDownList;
+
+            //remove all the year items less than mpFromControl.SelectedYear in mpToControl.
+            RemoveToControls(mpPeriodStart.SelectedYear, yearToControl);
+
+            if (mpPeriodStart.SelectedYear >= mpPeriodEnd.SelectedYear)
+            {
+                //remove all the month items less than mpFromControl.SelectedMonth in mpToControl.
+                RemoveToControls(mpPeriodStart.SelectedMonth, monthToControl);
+
+                if (mpPeriodStart.SelectedYear > mpPeriodEnd.SelectedYear ||
+                    mpPeriodStart.SelectedMonth > mpPeriodEnd.SelectedMonth)
+                {
+                    mpPeriodEnd.SelectedYear = mpPeriodStart.SelectedYear;
+                    mpPeriodEnd.SelectedMonth = mpPeriodStart.SelectedMonth;
+                }
+            }
+            else
+            {
+                RemoveToControls(0, monthToControl);
+            }
+        }
+
+        private void RemoveToControls(int FromSelectedValue, DropDownList yearToControl)
+        {
+            foreach (ListItem toYearItem in yearToControl.Items)
+            {
+                var toYearItemInt = Convert.ToInt32(toYearItem.Value);
+                if (toYearItemInt < FromSelectedValue)
+                {
+                    toYearItem.Enabled = false;
+                }
+                else
+                {
+                    toYearItem.Enabled = true;
+                }
+            }
+        }
+
+        private void SetPeriodSelection(int periodSelected)
+        {
+            DateTime currentMonth = DateTime.Now;
+            if (periodSelected > 0)
+            {
+                DateTime startMonth = new DateTime();
+                DateTime endMonth = new DateTime();
+
+                if (periodSelected < 13)
+                {
+                    startMonth = currentMonth;
+                    endMonth = currentMonth.AddMonths(Convert.ToInt32(ddlPeriod.SelectedValue) - 1);
+                }
+                else
+                {
+                    Dictionary<string, DateTime> fPeriod = DataHelper.GetFiscalYearPeriod(currentMonth);
+                    startMonth = fPeriod["StartMonth"];
+                    endMonth = fPeriod["EndMonth"];
+                }
+                mpPeriodStart.SelectedMonth = startMonth.Month;
+                mpPeriodStart.SelectedYear = startMonth.Year;
+                mpPeriodEnd.SelectedYear = endMonth.Year;
+                mpPeriodEnd.SelectedMonth = endMonth.Month;
+            }
+            else if (periodSelected < 0)
+            {
+                DateTime startMonth = new DateTime();
+                DateTime endMonth = new DateTime();
+
+                if (periodSelected > -13)
+                {
+                    startMonth = currentMonth.AddMonths(Convert.ToInt32(ddlPeriod.SelectedValue) + 1);
+                    endMonth = currentMonth;
+                }
+                else
+                {
+                    Dictionary<string, DateTime> fPeriod = DataHelper.GetFiscalYearPeriod(currentMonth.AddYears(-1));
+                    startMonth = fPeriod["StartMonth"];
+                    endMonth = fPeriod["EndMonth"];
+                }
+                mpPeriodStart.SelectedMonth = startMonth.Month;
+                mpPeriodStart.SelectedYear = startMonth.Year;
+                mpPeriodEnd.SelectedYear = endMonth.Year;
+                mpPeriodEnd.SelectedMonth = endMonth.Month;
+            }
+        }
+
 
         /// <summary>
         /// Selects item in list control according to some condition
@@ -364,8 +521,10 @@ namespace PraticeManagement
                      ShowInternal = chbInternal.Checked,
                      ShowExperimental = chbExperimental.Checked,
                      ShowInactive = chbInactive.Checked,
+                     PeriodSelected = Convert.ToInt32(ddlPeriod.SelectedValue),
+                     ViewSelected = Convert.ToInt32(ddlView.SelectedValue),
 
-                     TotalOnlySelectedDateWindow = chbPeriodOnly.Checked,
+                     CalculateRangeSelected = (ProjectCalculateRangeType)Enum.Parse(typeof(ProjectCalculateRangeType),ddlCalculateRange.SelectedValue),
                      HideAdvancedFilter = false
                  };
             return filter;
@@ -730,6 +889,11 @@ namespace PraticeManagement
             if (Page.IsValid)
             {
                 Display();
+
+                SetddlView();
+                lvProjects.DataBind();
+
+                StyledUpdatePanel.Update();
             }
         }
 
@@ -758,6 +922,13 @@ namespace PraticeManagement
             // Main GridView
             lvProjects.DataSource = ProjectList;
             lvProjects.DataBind();
+
+            if (!IsPostBack)
+            {
+                SetddlView();
+
+                lvProjects.DataBind();
+            }
         }
 
         protected override void RedirectWithBack(string redirectUrl, string backUrl)
@@ -852,7 +1023,7 @@ namespace PraticeManagement
                     false);
 
                 PraticeManagement.Controls.DataHelper.FillProjectOwnerList(cblProjectOwner,
-                    Resources.Controls.AllPracticeMgrsText,
+                    "All Owners",
                     null,
                     false,
                     person);
@@ -871,8 +1042,9 @@ namespace PraticeManagement
 
                 mpPeriodEnd.SelectedYear = filter.EndYear;
                 mpPeriodEnd.SelectedMonth = filter.EndMonth;
+                UpdateToDate(); //To keep End date greater than start date.
 
-                chbPeriodOnly.Checked = filter.TotalOnlySelectedDateWindow;
+                //chbPeriodOnly.Checked = filter.TotalOnlySelectedDateWindow;
 
                 chbActive.Checked = filter.ShowActive;
                 chbCompleted.Checked = filter.ShowCompleted;
@@ -886,6 +1058,10 @@ namespace PraticeManagement
                 SelectedProjectOwnerIds = filter.ProjectOwnerIdsList;
                 SelectedSalespersonIds = filter.SalespersonIdsList;
                 SelectedGroupIds = filter.ProjectGroupIdsList;
+
+                ddlPeriod.SelectedIndex = ddlPeriod.Items.IndexOf(ddlPeriod.Items.FindByValue(filter.PeriodSelected.ToString()));
+                ddlView.SelectedIndex = ddlView.Items.IndexOf(ddlView.Items.FindByValue(filter.ViewSelected.ToString()));
+                ddlCalculateRange.SelectedIndex = ddlCalculateRange.Items.IndexOf(ddlCalculateRange.Items.FindByValue(filter.CalculateRangeSelected.ToString()));
             }
             else
             {
@@ -1186,7 +1362,7 @@ namespace PraticeManagement
 
         protected void lvProjects_DataBinding(object sender, EventArgs e)
         {
-            horisontalScrollDiv.CssClass = chbPrintVersion.Checked ? string.Empty : "xScroll cp";
+            //horisontalScrollDiv.CssClass = chbPrintVersion.Checked ? string.Empty : "xScroll cp";
 
             var periodStart = new DateTime(mpPeriodStart.SelectedYear, mpPeriodStart.SelectedMonth, Constants.Dates.FirstDay);
             var monthsInPeriod = GetPeriodLength();
@@ -1195,7 +1371,7 @@ namespace PraticeManagement
             if (!IsPostBack || Page.IsValid)
                 AddMonthColumn(row, periodStart, monthsInPeriod, NumberOfFixedColumns);
 
-            string totalHeaderText = string.Format(TotalHeaderFormat, chbPeriodOnly.Checked ? SelectedText : EntireProjectPeriod);
+            string totalHeaderText = string.Format(TotalHeaderFormat, ddlCalculateRange.SelectedItem.Text);// chbPeriodOnly.Checked ? SelectedText : EntireProjectPeriod);
             var div = new Panel() { CssClass = CompPerfHeaderDivCssClass };
             div.Controls.Add(new Label() { Text = totalHeaderText });
 
@@ -1365,6 +1541,55 @@ namespace PraticeManagement
             GridViewExportUtil.Export("Projects.xls", projectsGrid);
         }
 
+        protected void btnExportAllToExcel_Click(object sender, EventArgs e)
+        {
+            DataHelper.InsertExportActivityLogMessage("Projects");
+
+            var projectsList = GetProjectListAll();
+
+            var projectsData = (from pro in projectsList
+                                where pro != null
+                                select new
+                                {
+                                    ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
+                                    ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
+                                    Client = (pro.Client != null && pro.Client.Name != null) ? pro.Client.Name.ToString() : string.Empty,
+                                    ProjectName = pro.Name != null ? pro.Name : string.Empty,
+                                    BuyerName = pro.BuyerName != null ? pro.BuyerName : string.Empty,
+                                    Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
+                                    StartDate = pro.StartDate != null ? pro.StartDate.Value.ToString("MM/dd/yyyy") : string.Empty,
+                                    EndDate = pro.EndDate != null ? pro.EndDate.Value.ToString("MM/dd/yyyy") : string.Empty,
+                                    PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
+                                    Revenue = (pro.ComputedFinancials != null && pro.ComputedFinancials.Revenue != null) ? pro.ComputedFinancials.Revenue.Value : 0,
+                                    Margin = (pro.ComputedFinancials != null && pro.ComputedFinancials.GrossMargin != null) ? pro.ComputedFinancials.GrossMargin.Value : 0,
+                                    PM = (pro.ProjectManager != null && pro.ProjectManager.Name != null) ? pro.ProjectManager.Name : string.Empty,
+                                    Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
+                                    ClientDirector = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty
+                                }).ToList();
+
+            GridView projectsGrid = new GridView();
+            projectsGrid.DataSource = projectsData;
+            projectsGrid.DataMember = "excelDataTable";
+            projectsGrid.DataBind();
+            projectsGrid.Visible = false;
+            FormatExcelReport(projectsGrid);
+
+            if (projectsGrid.HeaderRow != null && projectsGrid.HeaderRow.Cells.Count > 0)
+            {
+                projectsGrid.HeaderRow.Cells[0].Visible = false;
+            }
+
+            GridViewExportUtil.Export("Projects.xls", projectsGrid);
+        }
+
+        private Project[] GetProjectListAll()
+        {
+            using (var serviceClient = new ProjectService.ProjectServiceClient())
+            {
+                return serviceClient.GetProjectListCustom(true,true,true,true);
+            }
+        }
+
         private void FormatExcelReport(GridView projectsGrid)
         {
             foreach (GridViewRow row in projectsGrid.Rows)
@@ -1471,7 +1696,14 @@ namespace PraticeManagement
             if (pager != null)
             {
                 pager.Visible = (pager.PageSize < pager.TotalRowCount);
+                lblTotalCount.Text = GetTotalCount().ToString();
             }
+            else
+            {
+                lblTotalCount.Text = GetCurrentPageCount().ToString();
+            }
+
+            lblCurrentPageCount.Text = GetCurrentPageCount().ToString();
         }
 
         protected void Pager_PagerCommand(object sender, DataPagerCommandEventArgs e)
@@ -1504,8 +1736,18 @@ namespace PraticeManagement
 
         protected bool IsNeedToShowNextButton()
         {
+            int currentRecords = GetCurrentPageCount();
             var pager = GetPager();
-            return pager.StartRowIndex + pager.PageSize <= pager.TotalRowCount;
+            //return pager.StartRowIndex + pager.PageSize <= pager.TotalRowCount;
+
+            if (ddlView.SelectedValue == "1")
+            {
+                return false;
+            }
+            else
+            {
+                return !((lvProjects.Items.Count == 0) || (currentRecords == GetTotalCount()) || (currentRecords < Convert.ToInt32(ddlView.SelectedValue)));
+            }
         }
 
         protected bool IsNeedToShowPrevButton()
@@ -1516,6 +1758,17 @@ namespace PraticeManagement
         private DataPager GetPager()
         {
             return (DataPager)lvProjects.FindControl("dpProjects");
+            //return dpProjects;
+        }
+
+        public int GetCurrentPageCount()
+        {
+            return lvProjects.Items.Count;
+        }
+
+        public int GetTotalCount()
+        {
+            return GetPager().TotalRowCount;
         }
     }
 }
