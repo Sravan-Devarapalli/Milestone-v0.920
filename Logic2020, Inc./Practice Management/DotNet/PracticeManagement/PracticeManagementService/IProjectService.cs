@@ -107,7 +107,7 @@ namespace PracticeManagementService
             int? practiceManagerId,
             int? practiceId,
             int? projectGroupId,
-            bool includeCurentYearFinancials);
+            ProjectCalculateRangeType includeCurentYearFinancials);
 
         /// <summary>
         /// Enlists the requested projects.
@@ -144,7 +144,7 @@ namespace PracticeManagementService
             string projectOwnerIdsList,
             string practiceIdsList,
             string projectGroupIdsList,
-            bool includeCurentYearFinancials,
+            ProjectCalculateRangeType includeCurentYearFinancials,
             bool excludeInternalPractices);
 
         [OperationContract]
