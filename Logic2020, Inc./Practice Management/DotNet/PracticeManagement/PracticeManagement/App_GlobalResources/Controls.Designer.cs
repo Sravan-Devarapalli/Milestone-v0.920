@@ -79,7 +79,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Projects.
+        ///   Looks up a localized string similar to All Groups.
         /// </summary>
         internal static string AllGroupsText {
             get {
