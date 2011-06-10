@@ -14,11 +14,11 @@ BEGIN
 	END
 	ELSE IF EXISTS (SELECT 1 FROM v_TimeEntries WHERE ProjectId = @ProjectID)
 	BEGIN
-		RAISERROR ('Project persons entered Time entries towards this project.', 16, 1)
+		RAISERROR ('This project cannot be deleted, because there are time entries related to it.', 16, 1)
 	END
 	ELSE IF EXISTS (SELECT 1 FROM DefaultMilestoneSetting WHERE ProjectId = @ProjectID)
 	BEGIN
-		RAISERROR ('This project set as Default Milestone Project',16,1)
+		RAISERROR ('This project cannot be deleted, because it is set as Default Milestone Project',16,1)
 	END
 	ELSE 
 	BEGIN
@@ -109,6 +109,11 @@ BEGIN
 		BEGIN CATCH
 			ROLLBACK TRAN projectDelete
 			SELECT @ErrorMessage = ERROR_MESSAGE()
+
+			IF @ErrorMessage = [dbo].[GetErrorMessage](70018)
+			BEGIN
+				SET @ErrorMessage = 'This project cannot be deleted, because there are project expenses related to it.'
+			END
 			
 			RAISERROR(@ErrorMessage, 16, 1) --To Raise IF any errors in MilestoneDelete,
 		END CATCH
