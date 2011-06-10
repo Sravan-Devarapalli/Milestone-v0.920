@@ -156,6 +156,7 @@ namespace PraticeManagement
             {
                 var panel = e.Item.FindControl("pnlMilestones");
                 var project = (e.Item as ListViewDataItem).DataItem as Project;
+                var collapsiblepanelextender = e.Item.FindControl("cpe") as AjaxControlToolkit.CollapsiblePanelExtender;
 
                 if (project.Milestones != null && project.Milestones.Any())
                 {
@@ -170,22 +171,17 @@ namespace PraticeManagement
                             }
                             datalist.DataSource = project.Milestones;
                             datalist.DataBind();
+                            hdnExpandCollapseExtendersIds.Value += "," + collapsiblepanelextender.ClientID;
                         }
                     }
                 }
                 else
                 {
-                    var collapsiblepanelextender = e.Item.FindControl("cpe") as AjaxControlToolkit.CollapsiblePanelExtender;
                     var btnExpandCollapseMilestones = e.Item.FindControl("btnExpandCollapseMilestones") as Image;
                     collapsiblepanelextender.Enabled = btnExpandCollapseMilestones.Visible = false;
                     var btnProjectName = e.Item.FindControl("btnProjectName") as LinkButton;
                     btnProjectName.Style.Add("padding-left", "15px");
                 }
-
-                //LinkButton milestone = 
-                //ID="btnMilestoneNames" runat="server" Text='<%# HighlightFound(Eval("Milestones[0].Description")) %>'
-                //                CommandArgument='<%# string.Concat(Eval("Milestones[0].Id"), "_", Eval("Id")) %>'
-                //                OnCommand="btnMilestoneName_Command"
             }
         }
     }
