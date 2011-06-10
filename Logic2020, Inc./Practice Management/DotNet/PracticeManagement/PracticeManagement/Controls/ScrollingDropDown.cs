@@ -356,7 +356,7 @@ namespace PraticeManagement.Controls
             {
                 int counter = 0;
                 string text = null;
-                if (Items.Count == 1 && !Items[0].Enabled)
+                if (Items.Count==0 ||(Items.Count == 1 && !Items[0].Enabled))
                 {
                     return "No " + DropDownListType + "s to select";
                 }
