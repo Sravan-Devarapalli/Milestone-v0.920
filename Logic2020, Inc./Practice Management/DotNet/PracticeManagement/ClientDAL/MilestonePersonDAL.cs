@@ -695,8 +695,22 @@ namespace DataAccess
                                              Id = reader.GetInt32(personRoleIdIndex),
                                              Name = reader.GetString(personRoleNameIndex)
                                          };
-                        entry.StartDate = reader.GetDateTime(startDateIndex);
-                        entry.EndDate = reader.GetDateTime(endDateIndex);
+                        if (!reader.IsDBNull(startDateIndex))
+                        {
+                            entry.StartDate = reader.GetDateTime(startDateIndex);
+                        }
+                        else
+                        {
+                            entry.StartDate = DateTime.MinValue;
+                        }
+                        if (!reader.IsDBNull(endDateIndex))
+                        {
+                            entry.EndDate = reader.GetDateTime(endDateIndex);
+                        }
+                        else
+                        {
+                            entry.EndDate = DateTime.MaxValue;
+                        }
                     }
 
                     milestonePerson.Entries = new List<MilestonePersonEntry>(1) { entry };
