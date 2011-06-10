@@ -1818,6 +1818,32 @@ namespace PraticeManagement.Controls
             FillListDefault(ddlPriority, firstItemText, priorities, false, "Id", "Priority");
 
         }
+
+        public static Dictionary<string, DateTime> GetFiscalYearPeriod(DateTime currentMonth)
+        {
+            Dictionary<string, DateTime> fPeriod = new Dictionary<string, DateTime>();
+
+            int fyearStart;
+            int fyearEnd;
+            if (currentMonth.Month <= Constants.Dates.FYLastMonth)
+            {
+                fyearStart = currentMonth.Year - 1;
+                fyearEnd = currentMonth.Year;
+            }
+            else
+            {
+                fyearStart = currentMonth.Year;
+                fyearEnd = currentMonth.Year + 1;
+            }
+
+            DateTime startMonth = new DateTime(fyearStart, Constants.Dates.FYFirstMonth, 1);
+            DateTime endMonth = new DateTime(fyearEnd, Constants.Dates.FYLastMonth, 30);
+
+            fPeriod.Add("StartMonth", startMonth);
+            fPeriod.Add("EndMonth", endMonth);
+
+            return fPeriod;
+        }
     }
 }
 
