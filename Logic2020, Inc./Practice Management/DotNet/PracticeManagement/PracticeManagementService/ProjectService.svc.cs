@@ -133,7 +133,7 @@ namespace PracticeManagementService
             int? practiceManagerId,
             int? practiceId,
             int? projectGroupId,
-            bool includeCurentYearFinancials)
+            ProjectCalculateRangeType includeCurentYearFinancials)
         {
             List<Project> result =
                 ProjectRateCalculator.GetProjectList(
@@ -187,7 +187,7 @@ namespace PracticeManagementService
             string projectOwnerIdsList,
             string practiceIdsList,
             string projectGroupIdsList,
-            bool includeCurentYearFinancials,
+            ProjectCalculateRangeType includeCurentYearFinancials,
             bool excludeInternalPractices)
         {
             List<Project> result =
@@ -395,10 +395,10 @@ namespace PracticeManagementService
                 if (project.SalesCommission != null)
                 {
                     project.SalesCommission.ForEach(delegate(Commission salesCommission)
-                        {
-                            salesCommission.ProjectWithMargin = project;
-                            CommissionDAL.CommissionSet(salesCommission, connection, currentTransaction);
-                        });
+                    {
+                        salesCommission.ProjectWithMargin = project;
+                        CommissionDAL.CommissionSet(salesCommission, connection, currentTransaction);
+                    });
                 }
                 if (project.ManagementCommission != null)
                 {
