@@ -1533,11 +1533,8 @@ namespace PraticeManagement.Controls
                 clientIndex++;
             }
 
-            if (groupList.Items.Count > 0)
-            {
-                groupList.Items.Insert(0,
-                                       new ListItem(Resources.Controls.AllGroupsText, String.Empty));
-            }
+            groupList.Items.Insert(0,
+                                    new ListItem(Resources.Controls.AllGroupsText, String.Empty));
         }
 
         /// <summary>
@@ -1554,11 +1551,8 @@ namespace PraticeManagement.Controls
             clientList.DataSource = clients;
             clientList.DataBind();
 
-            if (clientList.Items.Count > 0)
-            {
-                clientList.Items.Insert(0,
-                                        new ListItem(Resources.Controls.AllClientsText, String.Empty));
-            }
+            clientList.Items.Insert(0,
+                                    new ListItem(Resources.Controls.AllClientsText, String.Empty));
         }
 
         /// <summary>
