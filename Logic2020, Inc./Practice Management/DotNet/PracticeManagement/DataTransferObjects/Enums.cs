@@ -25,5 +25,16 @@ namespace DataTransferObjects
         [EnumMember]
         Application = 4
     }
+
+    [DataContract]
+    public enum ProjectCalculateRangeType
+    {
+        [EnumMember]
+        ProjectValueInRange = 1,
+        [EnumMember]
+        TotalProjectValue = 2,
+        [EnumMember]
+        CurrentFiscalYear = 3
+    }
 }
 
