@@ -5,62 +5,86 @@
 <%@ Register TagPrefix="uc" TagName="ProjectNameCellRounded" Src="~/Controls/ProjectNameCellRounded.ascx" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ PreviousPageType VirtualPath="~/Projects.aspx" %>
-<asp:content id="cntTitle" contentplaceholderid="title" runat="server">
+<asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Practice Management - Project Search Results</title>
-</asp:content>
-<asp:content id="cntHeader" contentplaceholderid="header" runat="server">
+</asp:Content>
+<asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Project Search Results
-</asp:content>
-<asp:content id="cntBody" contentplaceholderid="body" runat="server">
-<script type="text/javascript" language="javascript">
-    function ExpandAll() {
-        var lvProjects_table = document.getElementById('<%= lvProjects.ClientID %>'+'_lvProjects_table');
-        if (lvProjects_table != null) {
-        var tBody = lvProjects_table.children[0];
-        for (var i = 1; i < tBody.children.length; i++) {
-            var img = tBody.children[i].children[3].getElementsByTagName('IMG');
-            if (img != null && img.length > 0) {
-                img.fireEvent('onclick');
+</asp:Content>
+<asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
+    <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+        function ExpandAll(btn) {
+            var hdnExpandCollapseExtendersIds = document.getElementById('<%= hdnExpandCollapseExtendersIds.ClientID %>');
+            var isExpand = false;
+            if (btn.value == "Expand All") {
+                isExpand = true;
+                btn.value = "Collapse All";
             }
+            else {
+                btn.value = "Expand All";
+            }
+            if (hdnExpandCollapseExtendersIds != null) {
+                var ids = hdnExpandCollapseExtendersIds.value.split(",");
+                for (var i = 0; i < ids.length; i++) {
+                    var cpe = $find(ids[i]);
+                    if (cpe != null) {
+                        if (isExpand)
+                            cpe._doOpen();
+                        else
+                            cpe._doClose();
+                    }
+                }
             }
         }
-    }
-</script>
-    <asp:panel runat="server" defaultbutton="btnSearch">
+        $(document).ready(
+        function () {
+            var hdnExpandCollapseExtendersIds = document.getElementById('<%= hdnExpandCollapseExtendersIds.ClientID %>');
+            var btn = document.getElementById('<%= ExpandAll.ClientID %>');
+            var ids = hdnExpandCollapseExtendersIds.value.split(",");
+            if (ids == null || ids.length < 2) {
+                btn.style.display = "none";
+            }
+        });
+    </script>
+    <asp:Panel runat="server" DefaultButton="btnSearch">
         <div class="project-filter" style="background: #E2EBFF; margin-bottom: 10px; padding: 5px;">
             <table class="WholeWidth">
                 <tbody>
                     <tr>
                         <td style="padding-right: 8px;">
-                            <asp:textbox id="txtSearchText" runat="server" cssclass="WholeWidth" maxlength="255">
-                            </asp:textbox>
+                            <asp:TextBox ID="txtSearchText" runat="server" CssClass="WholeWidth" MaxLength="255">
+                            </asp:TextBox>
                         </td>
                         <td>
-                            <asp:requiredfieldvalidator id="reqSearchText" runat="server" controltovalidate="txtSearchText"
-                                errormessage="The Search Text is required." tooltip="The Search Text is required."
-                                text="*" enableclientscript="false" setfocusonerror="true" display="Dynamic">
-                            </asp:requiredfieldvalidator>
+                            <asp:RequiredFieldValidator ID="reqSearchText" runat="server" ControlToValidate="txtSearchText"
+                                ErrorMessage="The Search Text is required." ToolTip="The Search Text is required."
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic">
+                            </asp:RequiredFieldValidator>
                         </td>
                         <td style="width: 55px;">
-                            <asp:button id="btnSearch" runat="server" text="Search" onclick="btnSearch_Click"
-                                width="55" />
+                            <asp:Button ID="btnSearch" runat="server" Text="Search" OnClick="btnSearch_Click"
+                                Width="55" />
                         </td>
                     </tr>
                     <tr>
                         <td colspan="3">
-                            <asp:validationsummary id="vsumProjectSearch" runat="server" enableclientscript="false" />
+                            <asp:ValidationSummary ID="vsumProjectSearch" runat="server" EnableClientScript="false" />
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <asp:Button id="ExpandAll" runat="server" Text="Expand All" OnClientClick="ExpandAll();return false;"  ></asp:Button>
-        <asp:listview id="lvProjects" runat="server" datakeynames="Id" onitemdatabound="lvProjects_ItemDataBound">
-            <layouttemplate>
+        <asp:Button ID="ExpandAll" runat="server" Text="Expand All" OnClientClick="ExpandAll(this);return false;">
+        </asp:Button>
+        <br />
+        <br />
+        <asp:ListView ID="lvProjects" runat="server" DataKeyNames="Id" OnItemDataBound="lvProjects_ItemDataBound">
+            <LayoutTemplate>
                 <table id="lvProjects_table" runat="server" class="CompPerfTable WholeWidth">
                     <tr runat="server" id="lvHeader" class="CompPerfHeader">
                         <td class="CompPerfProjectState">
-                            <div>                            
+                            <div>
                             </div>
                         </td>
                         <td class="CompPerfProjectState">
@@ -90,71 +114,18 @@
                             <div class="ie-bg">
                                 Project End Date
                             </div>
-                        </td>                    
+                        </td>
                     </tr>
                     <tbody>
                         <tr runat="server" id="itemPlaceholder" />
                     </tbody>
                 </table>
-            </layouttemplate>
-            <itemtemplate>
-                <tr runat="server" id="boundingRow" valign="top">
-                     <td>                    
-                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25" 
-                            ButtonProjectNameToolTip='<%# Eval("Status.Name") %>' 
-                            ButtonCssClass='<%#PraticeManagement.Utils.ProjectHelper.GetIndicatorClassByStatusId((int)Eval("Status.Id")) %>' />
-                    </td>
-                    <td class="CompPerfProjectState">
-                        <asp:LinkButton ID="btnProjectNumber" runat="server" Text='<%# HighlightFound(Eval("ProjectNumber")) %>'
-                            CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
-                    </td>
-                    <td class="CompPerfProjectNumber">
-                        <asp:LinkButton ID="LinkButton1" runat="server" Text='<%# HighlightFound(Eval("Client.Name")) %>'
-                            CommandArgument='<%# Eval("Client.Id") %>' OnCommand="btnClientName_Command"></asp:LinkButton>
-                    </td>
-                    <td class="CompPerfClient">
-                   
-                        <ajaxtoolkit:collapsiblepanelextender id="cpe" runat="Server" targetcontrolid="pnlMilestones"
-                            imagecontrolid="btnExpandCollapseMilestones" collapsedimage="Images/expand.jpg" expandedimage="Images/collapse.jpg"
-                            collapsecontrolid="btnExpandCollapseMilestones" expandcontrolid="btnExpandCollapseMilestones"
-                            collapsed="True" textlabelid="lblFilter" />
-                        <asp:Label ID="lblFilter" runat="server"></asp:Label>&nbsp;
-                        <asp:Image ID="btnExpandCollapseMilestones" runat="server" ImageUrl="~/Images/collapse.jpg"
-                            ToolTip="Project Milestones" />
-                        <asp:LinkButton ID="btnProjectName" runat="server" Text='<%# HighlightFound(Eval("Name")) %>'
-                            CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
-                        <asp:Panel ID="pnlMilestones" runat="server" style="padding-left:30px;">
-                       <asp:DataList ID="dtlProposedPersons" runat="server">
-                            <ItemTemplate>
-                            <%-- Eval("PersonLastFirstName") --%>
-                                <asp:LinkButton ID="btnMilestoneNames" runat="server" Text='<%# HighlightFound(Eval("Description")) %>'
-                                CommandArgument='<%# string.Concat(Eval("Id"), "_", Eval("Project.Id")) %>'
-                                OnCommand="btnMilestoneName_Command"></asp:LinkButton>
-                            </ItemTemplate>
-                        </asp:DataList>
-                         </asp:Panel>
-                    </td>
-                    <%--<td class="CompPerfProject">
-                        <asp:LinkButton ID="btnMilestoneName" runat="server" Text='<%# HighlightFound(Eval("Milestones[0].Description")) %>'
-                            CommandArgument='<%# string.Concat(Eval("Milestones[0].Id"), "_", Eval("Id")) %>'
-                            OnCommand="btnMilestoneName_Command"></asp:LinkButton>
-                    </td>--%>
-                    <td class="CompPerfPeriod">
-                        <asp:LinkButton ID="btnProjectStartDate" runat="server" Text='<%# Eval("StartDate") != null ? ((DateTime)Eval("StartDate")).ToShortDateString() : string.Empty %>'
-                            CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
-                    </td>
-                    <td class="CompPerfPeriod">
-                        <asp:LinkButton ID="btnProjectEndDate" runat="server" Text='<%# Eval("EndDate") != null ? ((DateTime)Eval("EndDate")).ToShortDateString() : string.Empty %>'
-                            CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
-                    </td>               
-                </tr>
-            </itemtemplate>
-            <alternatingitemtemplate>
-                <tr runat="server" id="boundingRow" class="rowEven" valign="top">
+            </LayoutTemplate>
+            <ItemTemplate>
+                <tr runat="server" id="boundingRow" valign="top" style="min-height: 20px;">
                     <td>
-                         <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25" 
-                            ButtonProjectNameToolTip='<%# Eval("Status.Name") %>' 
-                            ButtonCssClass='<%#PraticeManagement.Utils.ProjectHelper.GetIndicatorClassByStatusId((int)Eval("Status.Id")) %>' />
+                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
+                            ButtonProjectNameToolTip='<%# Eval("Status.Name") %>' ButtonCssClass='<%#PraticeManagement.Utils.ProjectHelper.GetIndicatorClassByStatusId((int)Eval("Status.Id")) %>' />
                     </td>
                     <td class="CompPerfProjectState">
                         <asp:LinkButton ID="btnProjectNumber" runat="server" Text='<%# HighlightFound(Eval("ProjectNumber")) %>'
@@ -165,26 +136,24 @@
                             CommandArgument='<%# Eval("Client.Id") %>' OnCommand="btnClientName_Command"></asp:LinkButton>
                     </td>
                     <td class="CompPerfClient">
-                        <ajaxtoolkit:collapsiblepanelextender id="cpe" runat="Server" targetcontrolid="pnlMilestones"
-                            imagecontrolid="btnExpandCollapseMilestones" collapsedimage="Images/expand.jpg" expandedimage="Images/collapse.jpg"
-                            collapsecontrolid="btnExpandCollapseMilestones" expandcontrolid="btnExpandCollapseMilestones"
-                            collapsed="True" textlabelid="lblFilter" />
-                           
+                        <ajaxToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlMilestones"
+                            ImageControlID="btnExpandCollapseMilestones" CollapsedImage="Images/expand.jpg"
+                            ExpandedImage="Images/collapse.jpg" CollapseControlID="btnExpandCollapseMilestones"
+                            ExpandControlID="btnExpandCollapseMilestones" Collapsed="True" TextLabelID="lblFilter" />
                         <asp:Label ID="lblFilter" runat="server"></asp:Label>&nbsp;
                         <asp:Image ID="btnExpandCollapseMilestones" runat="server" ImageUrl="~/Images/collapse.jpg"
                             ToolTip="Project Milestones" />
                         <asp:LinkButton ID="btnProjectName" runat="server" Text='<%# HighlightFound(Eval("Name")) %>'
                             CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
-                        <asp:Panel ID="pnlMilestones" runat="server" style="padding-left:30px;">
-                       <asp:DataList ID="dtlProposedPersons" runat="server">
-                            <ItemTemplate>
-                            <%-- Eval("PersonLastFirstName") --%>
-                                <asp:LinkButton ID="btnMilestoneNames" runat="server" Text='<%# HighlightFound(Eval("Description")) %>'
-                                CommandArgument='<%# string.Concat(Eval("Id"), "_", Eval("Id")) %>'
-                                OnCommand="btnMilestoneName_Command"></asp:LinkButton>
-                            </ItemTemplate>
-                        </asp:DataList>
-                         </asp:Panel>
+                        <asp:Panel ID="pnlMilestones" runat="server" Style="padding-left: 30px;">
+                            <asp:DataList ID="dtlProposedPersons" runat="server">
+                                <ItemTemplate>
+                                    <%-- Eval("PersonLastFirstName") --%>
+                                    <asp:LinkButton ID="btnMilestoneNames" runat="server" Text='<%# HighlightFound(Eval("Description")) %>'
+                                        CommandArgument='<%# string.Concat(Eval("Id"), "_", Eval("Project.Id")) %>' OnCommand="btnMilestoneName_Command"></asp:LinkButton>
+                                </ItemTemplate>
+                            </asp:DataList>
+                        </asp:Panel>
                     </td>
                     <%--<td class="CompPerfProject">
                         <asp:LinkButton ID="btnMilestoneName" runat="server" Text='<%# HighlightFound(Eval("Milestones[0].Description")) %>'
@@ -198,17 +167,61 @@
                     <td class="CompPerfPeriod">
                         <asp:LinkButton ID="btnProjectEndDate" runat="server" Text='<%# Eval("EndDate") != null ? ((DateTime)Eval("EndDate")).ToShortDateString() : string.Empty %>'
                             CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
-                    </td>                
+                    </td>
                 </tr>
-            </alternatingitemtemplate>
-            <emptydatatemplate>
+            </ItemTemplate>
+            <AlternatingItemTemplate>
+                <tr runat="server" id="boundingRow" class="rowEven" valign="top" style="min-height: 20px;">
+                    <td>
+                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
+                            ButtonProjectNameToolTip='<%# Eval("Status.Name") %>' ButtonCssClass='<%#PraticeManagement.Utils.ProjectHelper.GetIndicatorClassByStatusId((int)Eval("Status.Id")) %>' />
+                    </td>
+                    <td class="CompPerfProjectState">
+                        <asp:LinkButton ID="btnProjectNumber" runat="server" Text='<%# HighlightFound(Eval("ProjectNumber")) %>'
+                            CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
+                    </td>
+                    <td class="CompPerfProjectNumber">
+                        <asp:LinkButton ID="LinkButton1" runat="server" Text='<%# HighlightFound(Eval("Client.Name")) %>'
+                            CommandArgument='<%# Eval("Client.Id") %>' OnCommand="btnClientName_Command"></asp:LinkButton>
+                    </td>
+                    <td class="CompPerfClient">
+                        <ajaxToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlMilestones"
+                            ImageControlID="btnExpandCollapseMilestones" CollapsedImage="Images/expand.jpg"
+                            ExpandedImage="Images/collapse.jpg" CollapseControlID="btnExpandCollapseMilestones"
+                            ExpandControlID="btnExpandCollapseMilestones" Collapsed="True" TextLabelID="lblFilter" />
+                        <asp:Label ID="lblFilter" runat="server"></asp:Label>&nbsp;
+                        <asp:Image ID="btnExpandCollapseMilestones" runat="server" ImageUrl="~/Images/collapse.jpg"
+                            ToolTip="Project Milestones" />
+                        <asp:LinkButton ID="btnProjectName" runat="server" Text='<%# HighlightFound(Eval("Name")) %>'
+                            CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
+                        <asp:Panel ID="pnlMilestones" runat="server" Style="padding-left: 30px;">
+                            <asp:DataList ID="dtlProposedPersons" runat="server">
+                                <ItemTemplate>
+                                    <asp:LinkButton ID="btnMilestoneNames" runat="server" Text='<%# HighlightFound(Eval("Description")) %>'
+                                        CommandArgument='<%# string.Concat(Eval("Id"), "_", Eval("Id")) %>' OnCommand="btnMilestoneName_Command"></asp:LinkButton>
+                                </ItemTemplate>
+                            </asp:DataList>
+                        </asp:Panel>
+                    </td>
+                    <td class="CompPerfPeriod">
+                        <asp:LinkButton ID="btnProjectStartDate" runat="server" Text='<%# Eval("StartDate") != null ? ((DateTime)Eval("StartDate")).ToShortDateString() : string.Empty %>'
+                            CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
+                    </td>
+                    <td class="CompPerfPeriod">
+                        <asp:LinkButton ID="btnProjectEndDate" runat="server" Text='<%# Eval("EndDate") != null ? ((DateTime)Eval("EndDate")).ToShortDateString() : string.Empty %>'
+                            CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
+                    </td>
+                </tr>
+            </AlternatingItemTemplate>
+            <EmptyDataTemplate>
                 <tr runat="server" id="EmptyDataRow">
                     <td>
                         No projects found.
                     </td>
                 </tr>
-            </emptydatatemplate>
-        </asp:listview>
-    </asp:panel>
-</asp:content>
+            </EmptyDataTemplate>
+        </asp:ListView>
+        <asp:HiddenField ID="hdnExpandCollapseExtendersIds" runat="server" Value="" />
+    </asp:Panel>
+</asp:Content>
 
