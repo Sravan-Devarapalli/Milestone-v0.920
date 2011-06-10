@@ -208,7 +208,7 @@ namespace PraticeManagement.Controls
                                         filterSet.ProjectOwnerIdsList,
                                         filterSet.PracticeIdsList,
                                         filterSet.ProjectGroupIdsList,
-                                        !filterSet.TotalOnlySelectedDateWindow,
+                                        filterSet.CalculateRangeSelected,
                                         filterSet.ExcludeInternalPractices);
                                 }
                                 else
