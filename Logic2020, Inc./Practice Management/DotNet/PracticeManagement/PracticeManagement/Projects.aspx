@@ -307,7 +307,7 @@
                                     </td>
                                     <td></td>
                                     <td>
-                                        <uc:ScrollingDropDown ID="cblPractice" runat="server" CssClass="scroll-y" SetDirty="false" Width="240" Height="240px" 
+                                        <uc:ScrollingDropDown ID="cblPractice" runat="server"  SetDirty="false" Width="240" Height="240px" 
                                             onclick="scrollingDropdown_onclick('cblPractice','Practice Area')" DropDownListType="Practice Area" CellPadding="3" />
                                         <ext:ScrollableDropdownExtender ID="sdeCblPractice" runat="server" TargetControlID="cblPractice"
                                             UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px"></ext:ScrollableDropdownExtender>
@@ -322,7 +322,7 @@
                                     </td>
                                     <td></td>
                                     <td>
-                                        <uc:ScrollingDropDown ID="cblProjectOwner" runat="server" CssClass="scroll-y" SetDirty="false" Width="240" Height="240px"
+                                        <uc:ScrollingDropDown ID="cblProjectOwner" runat="server" SetDirty="false" Width="240" Height="240px"
                                             onclick="scrollingDropdown_onclick('cblProjectOwner','Owner')" DropDownListType="Owner" CellPadding="3" />
                                         <ext:ScrollableDropdownExtender ID="sdeCblProjectOwner" runat="server" TargetControlID="cblProjectOwner"
                                             UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px"></ext:ScrollableDropdownExtender>
