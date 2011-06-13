@@ -20,7 +20,7 @@
                 <div class="cell-pad">
                     <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25" 
                     ButtonProjectNameToolTip='<%# Eval("ProjectStatus") %>' 
-                    ButtonCssClass='<%#PraticeManagement.Utils.ProjectHelper.GetIndicatorClassByStatusId((int)Eval("ProjectStatusId")) %>' />
+                    ButtonCssClass='<%# GetProjectNameCellCssClass((int)Eval("ProjectStatusId") , (object) Eval("FileName") )%>' />
                 </div>
             </ItemTemplate>
         </asp:TemplateField>
