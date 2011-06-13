@@ -2,6 +2,7 @@
     CodeBehind="ProjectSearch.aspx.cs" Inherits="PraticeManagement.ProjectSearch"
     Title="Practice Management - Project Search Results" %>
 
+<%@ Import Namespace="DataTransferObjects" %>
 <%@ Register TagPrefix="uc" TagName="ProjectNameCellRounded" Src="~/Controls/ProjectNameCellRounded.ascx" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ PreviousPageType VirtualPath="~/Projects.aspx" %>
@@ -47,6 +48,12 @@
             }
         });
     </script>
+    <style type="text/css">
+        .AddLeftPadding
+        {
+            padding-left: 4px;
+        }
+    </style>
     <asp:Panel runat="server" DefaultButton="btnSearch">
         <div class="project-filter" style="background: #E2EBFF; margin-bottom: 10px; padding: 5px;">
             <table class="WholeWidth">
@@ -81,21 +88,21 @@
         <br />
         <asp:ListView ID="lvProjects" runat="server" DataKeyNames="Id" OnItemDataBound="lvProjects_ItemDataBound">
             <LayoutTemplate>
-                <table id="lvProjects_table" runat="server" class="CompPerfTable WholeWidth">
+                <table id="lvProjects_table" runat="server" class="CompPerfTable WholeWidth AddLeftPadding">
                     <tr runat="server" id="lvHeader" class="CompPerfHeader">
                         <td class="CompPerfProjectState">
                             <div>
                             </div>
                         </td>
-                        <td class="CompPerfProjectState">
+                        <td class="CompPerfProjectState AddLeftPadding">
                             <div class="ie-bg">
                                 Project #</div>
                         </td>
-                        <td class="CompPerfProjectNumber">
+                        <td class="CompPerfProjectNumber AddLeftPadding">
                             <div class="ie-bg">
                                 Client</div>
                         </td>
-                        <td class="CompPerfClient">
+                        <td class="CompPerfClient AddLeftPadding">
                             <div class="ie-bg">
                                 Project Name
                             </div>
@@ -105,12 +112,12 @@
                                 Milestone Name
                             </div>
                         </td>--%>
-                        <td class="CompPerfPeriod">
+                        <td class="CompPerfPeriod AddLeftPadding">
                             <div class="ie-bg">
                                 Project Start Date
                             </div>
                         </td>
-                        <td class="CompPerfPeriod">
+                        <td class="CompPerfPeriod AddLeftPadding">
                             <div class="ie-bg">
                                 Project End Date
                             </div>
@@ -122,20 +129,20 @@
                 </table>
             </LayoutTemplate>
             <ItemTemplate>
-                <tr runat="server" id="boundingRow" valign="top" style="min-height: 20px;">
-                    <td>
+                <tr runat="server" id="boundingRow" valign="top" style="min-height: 25px;">
+                    <td style="padding-top:4px;">
                         <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
-                            ButtonProjectNameToolTip='<%# Eval("Status.Name") %>' ButtonCssClass='<%#PraticeManagement.Utils.ProjectHelper.GetIndicatorClassByStatusId((int)Eval("Status.Id")) %>' />
+                            ButtonProjectNameToolTip='<%# Eval("Status.Name") %>' ButtonCssClass='<%# GetProjectNameCellCssClass(((Project) Container.DataItem))%>' />
                     </td>
-                    <td class="CompPerfProjectState">
+                    <td class="CompPerfProjectState AddLeftPadding">
                         <asp:LinkButton ID="btnProjectNumber" runat="server" Text='<%# HighlightFound(Eval("ProjectNumber")) %>'
                             CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
                     </td>
-                    <td class="CompPerfProjectNumber">
+                    <td class="CompPerfProjectNumber AddLeftPadding">
                         <asp:LinkButton ID="LinkButton1" runat="server" Text='<%# HighlightFound(Eval("Client.Name")) %>'
                             CommandArgument='<%# Eval("Client.Id") %>' OnCommand="btnClientName_Command"></asp:LinkButton>
                     </td>
-                    <td class="CompPerfClient">
+                    <td class="CompPerfClient AddLeftPadding">
                         <ajaxToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlMilestones"
                             ImageControlID="btnExpandCollapseMilestones" CollapsedImage="Images/expand.jpg"
                             ExpandedImage="Images/collapse.jpg" CollapseControlID="btnExpandCollapseMilestones"
@@ -149,8 +156,10 @@
                             <asp:DataList ID="dtlProposedPersons" runat="server">
                                 <ItemTemplate>
                                     <%-- Eval("PersonLastFirstName") --%>
-                                    <asp:LinkButton ID="btnMilestoneNames" runat="server" Text='<%# HighlightFound(Eval("Description")) %>'
-                                        CommandArgument='<%# string.Concat(Eval("Id"), "_", Eval("Project.Id")) %>' OnCommand="btnMilestoneName_Command"></asp:LinkButton>
+                                    <div style="padding: 2px 0px 2px 0px;">
+                                        <asp:LinkButton ID="btnMilestoneNames" runat="server" Style="height: 10px;" Text='<%# HighlightFound(Eval("Description")) %>'
+                                            CommandArgument='<%# string.Concat(Eval("Id"), "_", Eval("Project.Id")) %>' OnCommand="btnMilestoneName_Command"></asp:LinkButton>
+                                    </div>
                                 </ItemTemplate>
                             </asp:DataList>
                         </asp:Panel>
@@ -160,11 +169,11 @@
                             CommandArgument='<%# string.Concat(Eval("Milestones[0].Id"), "_", Eval("Id")) %>'
                             OnCommand="btnMilestoneName_Command"></asp:LinkButton>
                     </td>--%>
-                    <td class="CompPerfPeriod">
+                    <td class="CompPerfPeriod AddLeftPadding">
                         <asp:LinkButton ID="btnProjectStartDate" runat="server" Text='<%# Eval("StartDate") != null ? ((DateTime)Eval("StartDate")).ToShortDateString() : string.Empty %>'
                             CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
                     </td>
-                    <td class="CompPerfPeriod">
+                    <td class="CompPerfPeriod AddLeftPadding">
                         <asp:LinkButton ID="btnProjectEndDate" runat="server" Text='<%# Eval("EndDate") != null ? ((DateTime)Eval("EndDate")).ToShortDateString() : string.Empty %>'
                             CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
                     </td>
@@ -172,19 +181,19 @@
             </ItemTemplate>
             <AlternatingItemTemplate>
                 <tr runat="server" id="boundingRow" class="rowEven" valign="top" style="min-height: 20px;">
-                    <td>
+                    <td style="padding-top:4px;">
                         <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
                             ButtonProjectNameToolTip='<%# Eval("Status.Name") %>' ButtonCssClass='<%#PraticeManagement.Utils.ProjectHelper.GetIndicatorClassByStatusId((int)Eval("Status.Id")) %>' />
                     </td>
-                    <td class="CompPerfProjectState">
+                    <td class="CompPerfProjectState AddLeftPadding">
                         <asp:LinkButton ID="btnProjectNumber" runat="server" Text='<%# HighlightFound(Eval("ProjectNumber")) %>'
                             CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
                     </td>
-                    <td class="CompPerfProjectNumber">
+                    <td class="CompPerfProjectNumber AddLeftPadding">
                         <asp:LinkButton ID="LinkButton1" runat="server" Text='<%# HighlightFound(Eval("Client.Name")) %>'
                             CommandArgument='<%# Eval("Client.Id") %>' OnCommand="btnClientName_Command"></asp:LinkButton>
                     </td>
-                    <td class="CompPerfClient">
+                    <td class="CompPerfClient AddLeftPadding">
                         <ajaxToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlMilestones"
                             ImageControlID="btnExpandCollapseMilestones" CollapsedImage="Images/expand.jpg"
                             ExpandedImage="Images/collapse.jpg" CollapseControlID="btnExpandCollapseMilestones"
@@ -197,17 +206,19 @@
                         <asp:Panel ID="pnlMilestones" runat="server" Style="padding-left: 30px;">
                             <asp:DataList ID="dtlProposedPersons" runat="server">
                                 <ItemTemplate>
-                                    <asp:LinkButton ID="btnMilestoneNames" runat="server" Text='<%# HighlightFound(Eval("Description")) %>'
-                                        CommandArgument='<%# string.Concat(Eval("Id"), "_", Eval("Id")) %>' OnCommand="btnMilestoneName_Command"></asp:LinkButton>
+                                    <div style="padding: 2px 0px 2px 0px;">
+                                        <asp:LinkButton ID="btnMilestoneNames" runat="server" Text='<%# HighlightFound(Eval("Description")) %>'
+                                            CommandArgument='<%# string.Concat(Eval("Id"), "_", Eval("Id")) %>' OnCommand="btnMilestoneName_Command"></asp:LinkButton>
+                                    </div>
                                 </ItemTemplate>
                             </asp:DataList>
                         </asp:Panel>
                     </td>
-                    <td class="CompPerfPeriod">
+                    <td class="CompPerfPeriod AddLeftPadding">
                         <asp:LinkButton ID="btnProjectStartDate" runat="server" Text='<%# Eval("StartDate") != null ? ((DateTime)Eval("StartDate")).ToShortDateString() : string.Empty %>'
                             CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
                     </td>
-                    <td class="CompPerfPeriod">
+                    <td class="CompPerfPeriod AddLeftPadding">
                         <asp:LinkButton ID="btnProjectEndDate" runat="server" Text='<%# Eval("EndDate") != null ? ((DateTime)Eval("EndDate")).ToShortDateString() : string.Empty %>'
                             CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
                     </td>
