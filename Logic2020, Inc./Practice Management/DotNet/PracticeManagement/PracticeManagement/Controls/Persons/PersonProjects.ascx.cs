@@ -46,10 +46,10 @@ namespace PraticeManagement.Controls.Persons
 
         private void InitTotals()
         {
-            projectMarginTotal = 
-                new PracticeManagementCurrency {Value = 0.0M, FormatStyle = NumberFormatStyle.Margin};
-            projectRevenueTotal = 
-                new PracticeManagementCurrency{Value = 0.0M, FormatStyle = NumberFormatStyle.Revenue};
+            projectMarginTotal =
+                new PracticeManagementCurrency { Value = 0.0M, FormatStyle = NumberFormatStyle.Margin };
+            projectRevenueTotal =
+                new PracticeManagementCurrency { Value = 0.0M, FormatStyle = NumberFormatStyle.Revenue };
         }
 
         private static void SetCellValue(GridViewRowEventArgs e, string lblId, string cellValue)
@@ -129,7 +129,7 @@ namespace PraticeManagement.Controls.Persons
 
         private void SaveAndRedirectToProject(object projectId)
         {
-            if (((PersonDetail) Page).ValidateAndSavePersonDetails())
+            if (((PersonDetail)Page).ValidateAndSavePersonDetails())
                 Response.Redirect(GetProjectRedirectUrl(projectId));
         }
 
@@ -140,5 +140,18 @@ namespace PraticeManagement.Controls.Persons
         }
 
         #endregion
+
+        protected string GetProjectNameCellCssClass(int projectStatusId, object fileName)
+        {
+            string cssClass = ProjectHelper.GetIndicatorClassByStatusId(projectStatusId);
+            string fileNameStr = fileName.ToString();
+            if (projectStatusId == 3 && string.IsNullOrEmpty(fileNameStr))
+            {
+                cssClass = "ActiveProjectWithoutSOW";
+            }
+
+            return cssClass;
+        }
+
     }
 }
