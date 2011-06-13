@@ -405,8 +405,7 @@ namespace PraticeManagement.Controls
                     PracticeIdsList == compareObj.PracticeIdsList &&
                     ProjectGroupIdsList == compareObj.ProjectGroupIdsList &&
 
-                    ViewSelected == compareObj.ViewSelected &&
-                    
+                   
                     IsGroupByPersonPage == compareObj.IsGroupByPersonPage;
             }
 
