@@ -48,7 +48,7 @@
             var menu = document.getElementById('popupmenu');
             menu.style.display = 'block';
         }
-       
+
 
         function excludeDualSelection(target) {
             var targetElement = $get(target);
@@ -311,7 +311,7 @@
                                         <td>
                                             <asp:UpdatePanel ID="upPeriodEnd" runat="server" UpdateMode="Conditional">
                                                 <ContentTemplate>
-                                                    <uc2:MonthPicker ID="mpPeriodEnd" runat="server" AutoPostBack="false" />
+                                                    <uc2:MonthPicker ID="mpPeriodEnd" runat="server" AutoPostBack="true" OnSelectedValueChanged="mpPeriodStart_SelectedValueChanged"  />
                                                 </ContentTemplate>
                                             </asp:UpdatePanel>
                                         </td>
@@ -331,21 +331,21 @@
                             <td style="width: 10%;">
                                 <table width="100%" cellpadding="0px" cellspacing="0px">
                                     <tr>
-                                        <td style="padding: 0px;" >
+                                        <td style="padding: 0px;">
                                             <asp:Button ID="btnExportToExcel" runat="server" Style="margin: 0px;" OnClick="btnExportToExcel_Click"
                                                 Text="Export" Width="100%" />
                                         </td>
                                         <td style="padding: 0px;">
-                                            <asp:Image ID="imgExportAllToExcel" runat="server" Style="margin: 0px;" ImageUrl="~/Images/Dropdown_Arrow.png"
+                                            <asp:Image ID="imgExportAllToExcel" runat="server" Style="margin: 0px;" ImageUrl="~/Images/Dropdown_Arrow_22.png"
                                                 onclick="imgArrow_click();" onmouseover="imgArrow_mouseOver();" onmouseout="imgArrow_mouseOut();" />
                                         </td>
                                     </tr>
                                     <tr onmouseover="Exportall_click_mouseOver();" onmouseout="imgArrow_mouseOut();">
-                                        <td>
+                                        <td colspan="2">
                                             <ul id="popupmenu" class="pmenu">
                                                 <li>
                                                     <asp:LinkButton ID="btnExportAllToExcel" runat="server" OnClick="btnExportAllToExcel_Click"
-                                                        Text="Export All" CssClass="pm-button" OnClientClick="this.parentNode.parentNode.style.display='none';return true;" />
+                                                        Text="Export All" Style="background-color: #CCCCCC;" CssClass="pm-button" OnClientClick="this.parentNode.parentNode.style.display='none';return true;" />
                                                 </li>
                                             </ul>
                                         </td>
