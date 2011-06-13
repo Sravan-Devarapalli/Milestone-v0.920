@@ -96,25 +96,25 @@
             return result;
         }
 
-        function enableClientGroup(clients) {
-            var ClientGroup = document.getElementById("<%= cblProjectGroup.ClientID %>");
-            var arrayOfCheckBoxes = clients.getElementsByTagName("input");
-            if (arrayOfCheckBoxes.length == 1 && arrayOfCheckBoxes[0].disabled) {
-                ClientGroup.disabled = disabled;
+        function EnableOrDisableGroup() {
+            var control = document.getElementById("<%= cblProjectGroup.ClientID %>")
+            control.fireEvent('onclick');
+
+            var cbl = document.getElementById("<%= cblClient.ClientID %>");
+            var arrayOfCheckBoxes = cbl.getElementsByTagName("input");
+            var cblList = $("div[id^='sdeCblProjectGroup']");
+            var anySingleItemChecked = "false";
+            for (var i = 0; i < arrayOfCheckBoxes.length; i++) {
+                if (arrayOfCheckBoxes[i].checked) {
+                    anySingleItemChecked = "true";
+                }
+            }
+
+            if (anySingleItemChecked == "true") {
+                cblList[0].disabled = "";
             }
             else {
-                var temp = 0;
-                for (var i = 0; i < arrayOfCheckBoxes.length; i++) {
-                    if (arrayOfCheckBoxes[i].checked) {
-                        temp++;
-                    }
-                }
-                if (temp == 0) {
-                    ClientGroup.disabled = true;
-                }
-                else {
-                    ClientGroup.disabled = false;
-                }
+                cblList[0].disabled = "disabled";
             }
         }
 
@@ -148,6 +148,46 @@
             document.getElementById("<%= chbInactive.ClientID %>").checked = false;
 
             document.getElementById("<%= ddlCalculateRange.ClientID %>").selectedIndex = 0;
+        }
+
+        function custom_ScrollingDropdown_onclick(control, type) {
+            var temp = 0;
+            var text = "";
+            var scrollingDropdownList = document.getElementById(control.toString());
+            var arrayOfCheckBoxes = scrollingDropdownList.getElementsByTagName("input");
+            if (arrayOfCheckBoxes.length == 1 && arrayOfCheckBoxes[0].disabled) {
+                text = "No " + type.toString() + "s to select.";
+            }
+            else {
+                for (var i = 0; i < arrayOfCheckBoxes.length; i++) {
+
+                    if (arrayOfCheckBoxes[i].checked) {
+                        if (arrayOfCheckBoxes[i].parentNode.parentNode.style.display != "none") {
+                            temp++;
+                            text = arrayOfCheckBoxes[i].parentNode.childNodes[1].innerHTML;
+                        }
+                    }
+                    if (temp > 1) {
+                        text = "Multiple " + type.toString() + "s selected";
+
+                    }
+                    if (arrayOfCheckBoxes[0].checked) {
+                        text = arrayOfCheckBoxes[0].parentNode.childNodes[1].innerHTML;
+                    }
+                    if (temp === 0) {
+                        text = "Please Choose " + type.toString() + "(s)";
+                    }
+                }
+                if (text.length > 32) {
+                    text = text.substr(0, 30) + "..";
+                }
+                scrollingDropdownList.parentNode.children[1].children[0].firstChild.nodeValue = text;
+            }
+        }
+
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+        function endRequestHandle(sender, Args) {
+            addListenersToParent('<%= cblProjectGroup.ClientID %>', '<%= cblClient.ClientID %>');
         }
 
     </script>
@@ -401,7 +441,7 @@
                                         <tr>
                                             <td style="padding: 5px;">
                                                 <uc:CascadingMsdd ID="cblClient" runat="server" TargetControlId="cblProjectGroup"
-                                                    SetDirty="false" Width="240" Height="240px" onclick="enableClientGroup(this); scrollingDropdown_onclick('cblClient','Client');"
+                                                    SetDirty="false" Width="240" Height="240px" onclick="scrollingDropdown_onclick('cblClient','Client');EnableOrDisableGroup();"
                                                     DropDownListType="Client" CellPadding="3" />
                                                 <ext:ScrollableDropdownExtender ID="sdeCblClient" runat="server" TargetControlID="cblClient"
                                                     UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px">
@@ -431,7 +471,7 @@
                                         <tr>
                                             <td style="padding: 5px;">
                                                 <uc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" Width="240"
-                                                    Height="240px" onclick="scrollingDropdown_onclick('cblProjectGroup','Group')"
+                                                    Height="240px" onclick="custom_ScrollingDropdown_onclick('cblProjectGroup','Group')"
                                                     DropDownListType="Group" CellPadding="3" />
                                                 <ext:ScrollableDropdownExtender ID="sdeCblProjectGroup" runat="server" TargetControlID="cblProjectGroup"
                                                     UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px">
