@@ -7,7 +7,7 @@
 -- Update date: 08-07-2009
 -- Description:	Retrives the list of projects by the specified conditions.
 -- =============================================
-CREATE PROCEDURE dbo.ProjectSearchText
+CREATE PROCEDURE [dbo].[ProjectSearchText]
 (
 	@Looked              NVARCHAR(255),
 	@PersonId			 INT
@@ -60,9 +60,11 @@ AS
 	       m.ProjectNumber,
 	       m.ProjectStatusId,
 	       s.Name AS ProjectStatusName,
-           m.GroupId
+           m.GroupId,
+		   pa.[FileName]
 	  FROM dbo.v_Milestone AS m
 	       INNER JOIN dbo.ProjectStatus AS s ON m.ProjectStatusId = s.ProjectStatusId
+	       LEFT JOIN dbo.ProjectAttachment AS pa ON m.ProjectId = pa.ProjectId
 	 WHERE (
 			m.ProjectName LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
 	        OR m.ProjectNumber LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
@@ -85,8 +87,10 @@ AS
 	       p.ProjectNumber,
 	       p.ProjectStatusId,
 	       p.ProjectStatusName,
-           p.GroupId
+           p.GroupId,
+		   pa.[FileName]
 	  FROM dbo.v_Project AS p
+	  LEFT JOIN dbo.ProjectAttachment AS pa ON p.ProjectId = pa.ProjectId
 	 WHERE NOT EXISTS (SELECT 1 FROM dbo.Milestone AS m WHERE m.ProjectId = p.ProjectId)
 	   AND (   
 			p.Name LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
@@ -102,3 +106,4 @@ AS
 	select distinct *
 	from FoundProjects
 	ORDER BY ProjectName, Description
+
