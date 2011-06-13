@@ -1120,6 +1120,16 @@ namespace DataAccess
                 int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusIdColumn);
                 int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
                 int projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
+                int attachmentFileNameIndex = -1;
+
+                try
+                {
+                    attachmentFileNameIndex = reader.GetOrdinal(Constants.ColumnNames.FileName);
+                }
+                catch
+                {
+                    attachmentFileNameIndex = -1;
+                }
 
                 while (reader.Read())
                 {
@@ -1166,6 +1176,17 @@ namespace DataAccess
                         milestone.Description = reader.GetString(descriptionIndex);
 
                         project.Milestones.Add(milestone);
+                    }
+
+                    if (attachmentFileNameIndex >= 0)
+                    {
+                        try
+                        {
+                            project.Attachment = new ProjectAttachment { AttachmentFileName = reader.GetString(attachmentFileNameIndex) };
+                        }
+                        catch
+                        {
+                        }
                     }
 
                     result.Add(project);
