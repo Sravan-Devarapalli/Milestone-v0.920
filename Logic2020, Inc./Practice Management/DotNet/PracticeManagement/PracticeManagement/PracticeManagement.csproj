@@ -167,6 +167,7 @@
     <Content Include="Images\bg_corpnav_bottom.png" />
     <Content Include="Images\bg_corpnav_mid.png" />
     <Content Include="Images\bg_corpnav_top.png" />
+    <Content Include="Images\Dropdown_Arrow_22.png" />
     <Content Include="Images\grayedArrow-First.png" />
     <Content Include="Images\grayedArrow-Last.png" />
     <Content Include="Images\grayedArrow-Next.png" />
