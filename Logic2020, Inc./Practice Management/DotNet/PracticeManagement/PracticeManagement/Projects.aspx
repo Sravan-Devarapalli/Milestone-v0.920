@@ -97,9 +97,6 @@
         }
 
         function EnableOrDisableGroup() {
-            var control = document.getElementById("<%= cblProjectGroup.ClientID %>")
-            control.fireEvent('onclick');
-
             var cbl = document.getElementById("<%= cblClient.ClientID %>");
             var arrayOfCheckBoxes = cbl.getElementsByTagName("input");
             var cblList = $("div[id^='sdeCblProjectGroup']");
@@ -116,6 +113,7 @@
             else {
                 cblList[0].disabled = "disabled";
             }
+            custom_ScrollingDropdown_onclick('cblProjectGroup', 'Group');
         }
 
         function resetFiltersTab() {
@@ -123,8 +121,8 @@
             GetDefault(document.getElementById("<%= cblClient.ClientID %>"));
             GetDefault(document.getElementById("<%= cblSalesperson.ClientID %>"));
             GetDefault(document.getElementById("<%= cblPractice.ClientID %>"));
-            GetDefault(document.getElementById("<%= cblProjectGroup.ClientID %>"));
             GetDefault(document.getElementById("<%= cblProjectOwner.ClientID %>"));
+            custom_ScrollingDropdown_onclick('cblProjectGroup', 'Group');
         }
 
         function GetDefaultcblList() {
@@ -311,7 +309,7 @@
                                         <td>
                                             <asp:UpdatePanel ID="upPeriodEnd" runat="server" UpdateMode="Conditional">
                                                 <ContentTemplate>
-                                                    <uc2:MonthPicker ID="mpPeriodEnd" runat="server" AutoPostBack="true" OnSelectedValueChanged="mpPeriodStart_SelectedValueChanged"  />
+                                                    <uc2:MonthPicker ID="mpPeriodEnd" runat="server" AutoPostBack="true" OnSelectedValueChanged="mpPeriodStart_SelectedValueChanged" />
                                                 </ContentTemplate>
                                             </asp:UpdatePanel>
                                         </td>
