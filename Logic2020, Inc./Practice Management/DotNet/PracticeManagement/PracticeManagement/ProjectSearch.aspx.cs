@@ -7,6 +7,7 @@ using PraticeManagement.ProjectService;
 using DataTransferObjects;
 using System.Linq;
 using System.Collections.Generic;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement
 {
@@ -183,6 +184,17 @@ namespace PraticeManagement
                     btnProjectName.Style.Add("padding-left", "15px");
                 }
             }
+        }
+
+        protected string GetProjectNameCellCssClass(Project project)
+        {
+            string cssClass = ProjectHelper.GetIndicatorClassByStatusId(project.Status.Id);
+            if (project.Status.Id == 3 && project.Attachment == null)
+            {
+                cssClass = "ActiveProjectWithoutSOW";
+            }
+
+            return cssClass;
         }
     }
 }
