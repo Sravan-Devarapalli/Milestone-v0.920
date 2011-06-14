@@ -1069,6 +1069,23 @@ namespace DataAccess
                 }
             }
         }
+
+        public static bool IsOpportunityPriorityInUse(int priorityId)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Opportunitites.IsOpportunityPriorityInUse, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PriorityIdParam, priorityId);
+
+                    connection.Open();
+                    return (int)command.ExecuteScalar() > 0;
+                }
+            }
+        }
     }
 }
 
