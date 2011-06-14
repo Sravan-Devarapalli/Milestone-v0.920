@@ -98,6 +98,8 @@ namespace PraticeManagement.Config
             //Edit mode.
             if ((e.Row.RowState & DataControlRowState.Edit) != 0)
             {
+                opportunityPriority.InUse =  OpportunityPriorityHelper.IsOpportunityPriorityInUse(opportunityPriority.Id);
+
                 DropDownList ddl = e.Row.Cells[DDL_OPPORTUNITY_PRIORITY_INDEX].FindControl("ddlOpportunityPriority") as DropDownList;
                 if (ddl != null)
                 {
@@ -230,9 +232,11 @@ namespace PraticeManagement.Config
         protected void imgDeletePriority_OnClick(object sender, EventArgs e)
         {
             ImageButton imgDelete = sender as ImageButton;
-
-            var inUse = Convert.ToBoolean(imgDelete.Attributes["InUse"]);
             int priorityId = Convert.ToInt32(imgDelete.Attributes["PriorityId"]);
+
+            var inUse = OpportunityPriorityHelper.IsOpportunityPriorityInUse(priorityId);
+
+            imgDelete.Attributes["InUse"] = inUse.ToString();
 
             btnOK.Attributes["PriorityId"] = priorityId.ToString();
 
