@@ -16,6 +16,9 @@ namespace PracticeManagementService
 		[OperationContract]
 		System.Data.DataSet OpportunityGetExcelSet();
 
+        [OperationContract]
+        bool IsOpportunityPriorityInUse(int priorityId);
+
 	    /// <summary>
 	    /// List Opportunity Transitions
 	    /// </summary>
