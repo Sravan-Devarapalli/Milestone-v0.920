@@ -96,5 +96,22 @@ namespace PraticeManagement.Controls.Opportunities
                 }
             }
         }
+
+        public static bool IsOpportunityPriorityInUse(int priorityId)
+        {
+            using (var serviceClient = new OpportunityServiceClient())
+            {
+                try
+                {
+                    return serviceClient.IsOpportunityPriorityInUse(priorityId);
+
+                }
+                catch (CommunicationException ex)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
     }
 }
