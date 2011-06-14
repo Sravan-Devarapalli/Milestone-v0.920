@@ -669,6 +669,8 @@
                 public const string OpportunityPriorities = "dbo.GetOpportunityPriorities";
                 public const string GetPersonsByOpportunityIds = "dbo.GetPersonsByOpportunityIds";
                 public const string OpportunityDelete = "dbo.OpportunityDelete";
+                public const string IsOpportunityPriorityInUse = "dbo.IsOpportunityPriorityInUse";
+                
             }
 
             public class OverHeads
