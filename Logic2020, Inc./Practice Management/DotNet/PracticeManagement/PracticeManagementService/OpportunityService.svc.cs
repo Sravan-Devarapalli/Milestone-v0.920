@@ -92,6 +92,12 @@ namespace PracticeManagementService
             OpportunityDAL.DeleteOpportunityPriority(updatedPriorityId, deletedPriorityId);
         }
 
+
+        public bool IsOpportunityPriorityInUse(int priorityId)
+        {
+            return OpportunityDAL.IsOpportunityPriorityInUse(priorityId);
+        }
+
         /// <summary>
         /// 	Retrives an <see cref = "Opportunity" /> be a specified ID.
         /// </summary>
