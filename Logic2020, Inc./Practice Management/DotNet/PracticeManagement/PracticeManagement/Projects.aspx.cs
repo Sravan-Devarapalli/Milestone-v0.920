@@ -388,7 +388,8 @@ namespace PraticeManagement
                                             ).ToList();
             if (projectList != null)
             {
-                lvProjects.DataSource = projectList;
+                CompanyPerformanceState.ProjectList = projectList.ToArray<Project>();
+                lvProjects.DataSource = ProjectList;
                 lvProjects.DataBind();
             }
             IsSearchClicked = true;
