@@ -199,8 +199,8 @@ namespace PracticeManagementService
                 case ProjectCalculateRangeType.TotalProjectValue:
                     ComputedFinancialsDAL.LoadTotalFinancialsPeriodForProjects(
                         result,
-                        System.Data.SqlTypes.SqlDateTime.MinValue.Value,
-                        DateTime.MaxValue);
+                        null,
+                        null);
                     break;
                 case ProjectCalculateRangeType.CurrentFiscalYear:
                     Dictionary<string, DateTime> fyCalendar = GetFiscalYearPeriod(DateTime.Now);
