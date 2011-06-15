@@ -424,21 +424,9 @@ namespace PracticeManagementService
         {
             Dictionary<string, DateTime> fPeriod = new Dictionary<string, DateTime>();
 
-            int fyearStart;
-            int fyearEnd;
-            if (currentMonth.Month <= 6)
-            {
-                fyearStart = currentMonth.Year - 1;
-                fyearEnd = currentMonth.Year;
-            }
-            else
-            {
-                fyearStart = currentMonth.Year;
-                fyearEnd = currentMonth.Year + 1;
-            }
 
-            DateTime startMonth = new DateTime(fyearStart, 7, 1);
-            DateTime endMonth = new DateTime(fyearEnd, 6, 30);
+            DateTime startMonth = new DateTime(currentMonth.Year, 1, 1);
+            DateTime endMonth = new DateTime(currentMonth.Year, 12, 31);
 
             fPeriod.Add("StartMonth", startMonth);
             fPeriod.Add("EndMonth", endMonth);
