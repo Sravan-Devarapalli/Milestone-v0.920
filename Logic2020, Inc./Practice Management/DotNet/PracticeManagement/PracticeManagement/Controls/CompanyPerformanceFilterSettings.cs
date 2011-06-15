@@ -12,35 +12,60 @@ namespace PraticeManagement.Controls
     {
         #region Fields
 
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private int? clientIdValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private int? clientIdValue;
 
         private string clientIdsList;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private int endMonthValue;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private int endYearValue;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private bool hideAdvancedFilterValue;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private int? practiceIdValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private int? endDayValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private int endMonthValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private int endYearValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool hideAdvancedFilterValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private int? practiceIdValue;
         private string practiceIdsList;
         private bool excludeInternalPractices;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private int? projectOwnerIdValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private int? projectOwnerIdValue;
         private string projectOwnerIdsList;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private int? projectGroupIdValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private int? projectGroupIdValue;
         private string projectGroupIdsList;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private int? salespersonIdValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private int? salespersonIdValue;
         private string salespersonIdsList;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private bool showActiveValue;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private bool showCompletedValue;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private bool showInternalValue;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private bool showInactiveValue;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private bool showExperimentalValue;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private bool showProjectedValue;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private int startMonthValue;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private int startYearValue;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private bool isGroupByPersonPage;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private int periodSelectedValue;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private int viewSelectedValue;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private ProjectCalculateRangeType calculateRangeSelectedValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool showActiveValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool showCompletedValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool showInternalValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool showInactiveValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool showExperimentalValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool showProjectedValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private int? startDayValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private int startMonthValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private int startYearValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool isGroupByPersonPage;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private int periodSelectedValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private int viewSelectedValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ProjectCalculateRangeType calculateRangeSelectedValue;
 
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private bool totalOnlySelectedDateWindowValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool totalOnlySelectedDateWindowValue;
 
         #endregion
 
@@ -92,6 +117,16 @@ namespace PraticeManagement.Controls
             set { startMonthValue = value; }
         }
 
+
+        /// <summary>
+        /// 	Gets or sets a start Day.
+        /// </summary>
+        public int? StartDay
+        {
+            get { return startDayValue; }
+            set { startDayValue = value; }
+        }
+
         /// <summary>
         /// 	Gets or sets an end year.
         /// </summary>
@@ -110,6 +145,14 @@ namespace PraticeManagement.Controls
             set { endMonthValue = value; }
         }
 
+        /// <summary>
+        /// 	Gets or sets a end Day.
+        /// </summary>
+        public int? EndDay
+        {
+            get { return endDayValue; }
+            set { endDayValue = value; }
+        }
         /// <summary>
         /// 	Gets or sets whether the Active projects are shown.
         /// </summary>
@@ -292,7 +335,11 @@ namespace PraticeManagement.Controls
         /// </summary>
         public DateTime PeriodStart
         {
-            get { return new DateTime(StartYear, StartMonth, Constants.Dates.FirstDay); }
+            get
+            {
+                return new DateTime(StartYear, StartMonth,
+                    StartDay.HasValue ? StartDay.Value : Constants.Dates.FirstDay);
+            }
         }
 
         /// <summary>
@@ -300,7 +347,11 @@ namespace PraticeManagement.Controls
         /// </summary>
         public DateTime PeriodEnd
         {
-            get { return new DateTime(EndYear, EndMonth, DateTime.DaysInMonth(EndYear, EndMonth)); }
+            get
+            {
+                return new DateTime(EndYear, EndMonth,
+                    EndDay.HasValue ? EndDay.Value : DateTime.DaysInMonth(EndYear, EndMonth));
+            }
         }
 
         /// <summary>
@@ -381,6 +432,10 @@ namespace PraticeManagement.Controls
                     EndMonth == compareObj.EndMonth &&
                     EndYear == compareObj.EndYear &&
                     PeriodSelected == compareObj.PeriodSelected &&
+                    ((EndDay.HasValue && compareObj.EndDay.HasValue && EndDay.Value == compareObj.EndDay.Value)
+                    || (!EndDay.HasValue && !compareObj.EndDay.HasValue)) &&
+                     ((StartDay.HasValue && compareObj.StartDay.HasValue && StartDay.Value == compareObj.StartDay.Value)
+                    || (!StartDay.HasValue && !compareObj.StartDay.HasValue)) &&
                     // filters
                     ClientId == compareObj.ClientId &&
                     ProjectGroupId == compareObj.ProjectGroupId &&
@@ -405,7 +460,7 @@ namespace PraticeManagement.Controls
                     PracticeIdsList == compareObj.PracticeIdsList &&
                     ProjectGroupIdsList == compareObj.ProjectGroupIdsList &&
 
-                   
+
                     IsGroupByPersonPage == compareObj.IsGroupByPersonPage;
             }
 
@@ -424,20 +479,20 @@ namespace PraticeManagement.Controls
                    Convert.ToInt32(EndMonth) +
                    Convert.ToInt32(EndYear) +
                    Convert.ToInt32(PeriodSelected) +
-                   // filters
+                // filters
                    Convert.ToInt32(ClientId) +
                    Convert.ToInt32(ProjectGroupId) +
                    Convert.ToInt32(ProjectOwnerId) +
                    Convert.ToInt32(PracticeId) +
                    Convert.ToInt32(SalespersonId) +
-                   // project status
+                // project status
                    Convert.ToInt32(ShowActive) +
                    Convert.ToInt32(ShowCompleted) +
                    Convert.ToInt32(ShowExperimental) +
                    Convert.ToInt32(ShowProjected) +
                    Convert.ToInt32(ShowInternal) +
                    Convert.ToInt32(ShowInactive) +
-                   // total range
+                // total range
                    Convert.ToInt32(CalculateRangeSelected) +
                    Convert.ToInt32(TotalOnlySelectedDateWindow) +
                    Convert.ToInt32(ViewSelected);
