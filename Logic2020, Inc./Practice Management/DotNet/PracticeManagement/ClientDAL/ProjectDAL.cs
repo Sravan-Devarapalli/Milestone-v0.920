@@ -319,7 +319,7 @@ namespace DataAccess
 
                     SqlDataReader reader = command.ExecuteReader();
 
-                    ReadProjects(reader, projectList, false);//If readGroups parameter value set to true then you need to add InUse with value 1 as Parameter in stored procedure.
+                    ReadProjectsWithMilestones(reader, projectList);
                 }
             }
 
@@ -1104,6 +1104,213 @@ namespace DataAccess
             }
         }
 
+        private static void ReadProjectsWithMilestones(SqlDataReader reader, List<Project> resultList)
+        {
+            try
+            {
+                if (reader.HasRows)
+                {
+                    int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+                    int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIdColumn);
+                    int discountIndex = reader.GetOrdinal(Constants.ColumnNames.DiscountColumn);
+                    int termsIndex = reader.GetOrdinal(Constants.ColumnNames.TermsColumn);
+                    int nameIndex = reader.GetOrdinal(Constants.ColumnNames.NameColumn);
+                    int practiceIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
+                    int practiceNameIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeNameColumn);
+                    int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
+                    int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
+                    int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
+                    int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusIdColumn);
+                    int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
+                    int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
+                    int buyerNameIndex = reader.GetOrdinal(Constants.ColumnNames.BuyerNameColumn);
+                    int opportunityId = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
+                    int projectIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIsChargeable);
+                    int clientIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIsChargeable);
+                    int pmIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerId);
+                    int pmFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerFirstName);
+                    int pmLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerLastName);
+                    int mileStoneIdIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneId);
+                    int mileStoneNameIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneName);
+
+                    int salesPersonNameIndex = -1;
+                    int practiceOwnerNameIndex = -1;
+                    int projectGroupIdIndex = -1;
+                    int projectGroupNameIndex = -1;
+                    int groupInUseIndex = -1;
+                    int attachmentFileNameIndex = -1;
+                    try
+                    {
+                        projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
+                        projectGroupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
+                        groupInUseIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupInUseColumn);
+
+                    }
+                    catch
+                    {
+                        projectGroupIdIndex = -1;
+                        projectGroupNameIndex = -1;
+                        groupInUseIndex = -1;
+                    }
+                    try
+                    {
+                        practiceOwnerNameIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeOwnerName);
+                    }
+                    catch
+                    {
+                        practiceOwnerNameIndex = -1;
+                    }
+                    try
+                    {
+                        salesPersonNameIndex = reader.GetOrdinal(Constants.ColumnNames.SalespersonFullNameColumn);
+                    }
+                    catch
+                    {
+                        salesPersonNameIndex = -1;
+                    }
+
+                    try
+                    {
+                        attachmentFileNameIndex = reader.GetOrdinal(Constants.ColumnNames.FileName);
+                    }
+                    catch
+                    {
+                        attachmentFileNameIndex = -1;
+                    }
+
+                    while (reader.Read())
+                    {
+                        var projectId = reader.GetInt32(projectIdIndex);
+                        Project project;
+
+                        if (resultList.Any(p => p.Id.Value == projectId))
+                        {
+                            project = resultList.First(p => p.Id.Value == projectId);
+                        }
+                        else
+                        {
+
+                            project = new Project
+                           {
+                               Id = reader.GetInt32(projectIdIndex),
+                               Discount = reader.GetDecimal(discountIndex),
+                               Terms = reader.GetInt32(termsIndex),
+                               Name = reader.GetString(nameIndex),
+                               StartDate =
+                                   !reader.IsDBNull(startDateIndex) ? (DateTime?)reader.GetDateTime(startDateIndex) : null,
+                               EndDate =
+                                   !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
+                               ProjectNumber = reader.GetString(projectNumberIndex),
+                               BuyerName = !reader.IsDBNull(buyerNameIndex) ? reader.GetString(buyerNameIndex) : null,
+                               IsChargeable = reader.GetBoolean(projectIsChargeableIndex),
+                               Practice = new Practice
+                               {
+                                   Id = reader.GetInt32(practiceIdIndex),
+                                   Name = reader.GetString(practiceNameIndex)
+                               },
+                               ProjectManager = new Person
+                               {
+                                   Id = reader.GetInt32(pmIdIndex),
+                                   FirstName = reader.GetString(pmFirstNameIndex),
+                                   LastName = reader.GetString(pmLastNameIndex)
+                               }
+                           };
+
+
+                            if (practiceOwnerNameIndex >= 0)
+                            {
+                                try
+                                {
+                                    project.Practice.PracticeOwnerName = reader.GetString(practiceOwnerNameIndex);
+                                }
+                                catch
+                                {
+                                    project.Practice.PracticeOwnerName = string.Empty;
+                                }
+                            }
+
+                            if (salesPersonNameIndex >= 0)
+                            {
+                                try
+                                {
+                                    project.SalesPersonName = reader.GetString(salesPersonNameIndex);
+                                }
+                                catch
+                                {
+                                    project.SalesPersonName = string.Empty;
+                                }
+                            }
+                            if (attachmentFileNameIndex >= 0)
+                            {
+                                try
+                                {
+                                    project.Attachment = new ProjectAttachment { AttachmentFileName = reader.GetString(attachmentFileNameIndex) };
+                                }
+                                catch
+                                {
+                                }
+                            }
+
+                            project.Client = new Client
+                            {
+                                Id = reader.GetInt32(clientIdIndex),
+                                Name = reader.GetString(clientNameIndex),
+                                IsChargeable = reader.GetBoolean(clientIsChargeableIndex)
+                            };
+
+                            project.Status = new ProjectStatus
+                            {
+                                Id = reader.GetInt32(projectStatusIdIndex),
+                                Name = reader.GetString(projectStatusNameIndex)
+                            };
+
+                            project.OpportunityId =
+                            !reader.IsDBNull(opportunityId) ? (int?)reader.GetInt32(opportunityId) : null;
+
+                            try
+                            {
+                                int directorIdIndex = reader.GetOrdinal(Constants.ColumnNames.DirectorIdColumn),
+                                 directorLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.DirectorLastNameColumn),
+                                 directorFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.DirectorFirstNameColumn);
+                                if (!reader.IsDBNull(directorIdIndex))
+                                {
+                                    project.Director = new Person()
+                                    {
+                                        Id = (int?)reader.GetInt32(directorIdIndex),
+                                        FirstName = reader.GetString(directorFirstNameIndex),
+                                        LastName = reader.GetString(directorLastNameIndex)
+                                    };
+                                }
+                            }
+                            catch
+                            {
+                            }
+                            resultList.Add(project);
+                        }
+
+                        if (!reader.IsDBNull(mileStoneIdIndex))
+                        {
+                            var milestone = new Milestone
+                            {
+                                Description = reader.GetString(mileStoneNameIndex),
+                                Id = reader.GetInt32(mileStoneIdIndex)
+                            };
+                            if (project.Milestones == null)
+                            {
+                                project.Milestones = new List<Milestone>();
+                            }
+                            project.Milestones.Add(milestone);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
         private static void ReadProjectSearchList(DbDataReader reader, List<Project> result)
         {
             if (reader.HasRows)
@@ -1684,9 +1891,9 @@ namespace DataAccess
 
         public static void SaveProjectAttachmentData(ProjectAttachment attachment, int projectId)
         {
-            
-             var connection = new SqlConnection(DataSourceHelper.DataConnection);
-           
+
+            var connection = new SqlConnection(DataSourceHelper.DataConnection);
+
 
             using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.SaveProjectAttachment, connection))
             {
@@ -1763,7 +1970,7 @@ namespace DataAccess
                 }
             }
         }
-       
+
     }
 }
 
