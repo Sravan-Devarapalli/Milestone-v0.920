@@ -58,94 +58,76 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.DropDownList ddlPeriod;
         
         /// <summary>
-        /// tblDateSelection control.
+        /// btnddlPeriodChanged control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTable tblDateSelection;
+        protected global::System.Web.UI.WebControls.Button btnddlPeriodChanged;
         
         /// <summary>
-        /// upPeriodStart control.
+        /// mpeCustomDates control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upPeriodStart;
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeCustomDates;
         
         /// <summary>
-        /// mpPeriodStart control.
+        /// hdnStartDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.MonthPicker mpPeriodStart;
+        protected global::System.Web.UI.WebControls.HiddenField hdnStartDate;
         
         /// <summary>
-        /// upPeriodEnd control.
+        /// hdnEndDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upPeriodEnd;
+        protected global::System.Web.UI.WebControls.HiddenField hdnEndDate;
         
         /// <summary>
-        /// mpPeriodEnd control.
+        /// hdnStartDateTxtBoxId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.MonthPicker mpPeriodEnd;
+        protected global::System.Web.UI.WebControls.HiddenField hdnStartDateTxtBoxId;
         
         /// <summary>
-        /// custPeriodLengthLimit control.
+        /// hdnEndDateTxtBoxId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator custPeriodLengthLimit;
+        protected global::System.Web.UI.WebControls.HiddenField hdnEndDateTxtBoxId;
         
         /// <summary>
-        /// btnUpdateDates control.
+        /// lblCustomDateRange control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUpdateDates;
+        protected global::System.Web.UI.WebControls.Label lblCustomDateRange;
         
         /// <summary>
-        /// btnExportToExcel control.
+        /// imgCalender control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnExportToExcel;
-        
-        /// <summary>
-        /// imgExportAllToExcel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Image imgExportAllToExcel;
-        
-        /// <summary>
-        /// btnExportAllToExcel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnExportAllToExcel;
+        protected global::System.Web.UI.WebControls.Image imgCalender;
         
         /// <summary>
         /// ddlView control.
@@ -236,6 +218,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSearchAll;
+        
+        /// <summary>
+        /// valsSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valsSearch;
         
         /// <summary>
         /// tpAdvancedFilters control.
@@ -463,15 +454,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.ValidationSummary valsPerformance;
         
         /// <summary>
-        /// valsSearch control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary valsSearch;
-        
-        /// <summary>
         /// StyledUpdatePanel control.
         /// </summary>
         /// <remarks>
@@ -479,24 +461,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Generic.StyledUpdatePanel StyledUpdatePanel;
-        
-        /// <summary>
-        /// lblCurrentPageCount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblCurrentPageCount;
-        
-        /// <summary>
-        /// lblTotalCount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTotalCount;
         
         /// <summary>
         /// horisontalScrollDiv control.
@@ -524,6 +488,105 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Generic.LoadingProgress LoadingProgress1;
+        
+        /// <summary>
+        /// lblCurrentPageCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCurrentPageCount;
+        
+        /// <summary>
+        /// lblTotalCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTotalCount;
+        
+        /// <summary>
+        /// btnExportToExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportToExcel;
+        
+        /// <summary>
+        /// imgExportAllToExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgExportAllToExcel;
+        
+        /// <summary>
+        /// btnExportAllToExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnExportAllToExcel;
+        
+        /// <summary>
+        /// pnlCustomDates control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlCustomDates;
+        
+        /// <summary>
+        /// diRange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.Filtering.DateInterval1 diRange;
+        
+        /// <summary>
+        /// btnCustDatesOK control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCustDatesOK;
+        
+        /// <summary>
+        /// btnCustDatesClose control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCustDatesClose;
+        
+        /// <summary>
+        /// btnCustDatesCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCustDatesCancel;
+        
+        /// <summary>
+        /// valSum control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSum;
         
         /// <summary>
         /// lblCurrentVersion control.
