@@ -144,8 +144,8 @@ namespace PraticeManagement
             public const int DefaultViewableMonths = 2;
             public const string ValidMinDate = "1/1/1975";
             public const string ValidMaxDate = "12/31/2100";
-            public const int FYFirstMonth = 7;
-            public const int FYLastMonth = 6;
+            public const int FYFirstMonth = 1;
+            public const int FYLastMonth = 12;
         }
 
         /// <summary>
