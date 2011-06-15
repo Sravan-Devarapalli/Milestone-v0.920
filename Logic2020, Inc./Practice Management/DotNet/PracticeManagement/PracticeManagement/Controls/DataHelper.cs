@@ -269,7 +269,7 @@ namespace PraticeManagement.Controls
         /// <summary>
         /// Retrives consultans report: Person - load per range - avarage u%
         /// </summary>
-        public static List<Quadruple<Person, int[], int,int>> GetConsultantsWeeklyReport
+        public static List<Quadruple<Person, int[], int, int>> GetConsultantsWeeklyReport
             (DateTime startDate,
             int step,
             int duration,
@@ -1817,21 +1817,8 @@ namespace PraticeManagement.Controls
         {
             Dictionary<string, DateTime> fPeriod = new Dictionary<string, DateTime>();
 
-            int fyearStart;
-            int fyearEnd;
-            if (currentMonth.Month <= Constants.Dates.FYLastMonth)
-            {
-                fyearStart = currentMonth.Year - 1;
-                fyearEnd = currentMonth.Year;
-            }
-            else
-            {
-                fyearStart = currentMonth.Year;
-                fyearEnd = currentMonth.Year + 1;
-            }
-
-            DateTime startMonth = new DateTime(fyearStart, Constants.Dates.FYFirstMonth, 1);
-            DateTime endMonth = new DateTime(fyearEnd, Constants.Dates.FYLastMonth, 30);
+            DateTime startMonth = new DateTime(currentMonth.Year, Constants.Dates.FYFirstMonth, 1);
+            DateTime endMonth = new DateTime(currentMonth.Year, Constants.Dates.FYLastMonth, 31);
 
             fPeriod.Add("StartMonth", startMonth);
             fPeriod.Add("EndMonth", endMonth);
