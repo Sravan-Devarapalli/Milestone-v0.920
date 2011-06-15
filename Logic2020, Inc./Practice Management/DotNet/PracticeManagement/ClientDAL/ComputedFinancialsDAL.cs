@@ -98,7 +98,7 @@ namespace DataAccess
         /// <param name="endDate">A period end.</param>
         /// <returns>The <see cref="ComputedFinancials"/> object if found and null otherwise.</returns>
         public static void LoadTotalFinancialsPeriodForProjects(
-            List<Project> projects, DateTime startDate, DateTime endDate)
+            List<Project> projects, DateTime? startDate, DateTime? endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(
@@ -108,8 +108,11 @@ namespace DataAccess
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, DataTransferObjects.Utils.Generic.IdsListToString(projects));
-                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
-                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                if (startDate.HasValue && endDate.HasValue)
+                {
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                }
 
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
