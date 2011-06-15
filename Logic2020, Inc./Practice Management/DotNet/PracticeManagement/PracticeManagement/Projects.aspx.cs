@@ -141,7 +141,7 @@ namespace PraticeManagement
         {
             get
             {
-                return new DateTime(mpPeriodStart.SelectedYear, mpPeriodStart.SelectedMonth, Constants.Dates.FirstDay);
+                return diRange.FromDate.Value;
             }
         }
 
@@ -152,9 +152,7 @@ namespace PraticeManagement
         {
             get
             {
-                return
-                    new DateTime(mpPeriodEnd.SelectedYear, mpPeriodEnd.SelectedMonth,
-                        DateTime.DaysInMonth(mpPeriodEnd.SelectedYear, mpPeriodEnd.SelectedMonth));
+                return diRange.ToDate.Value;
             }
         }
 
@@ -284,7 +282,7 @@ namespace PraticeManagement
                 PreparePeriodView();
             }
 
-            custPeriodLengthLimit.ErrorMessage = custPeriodLengthLimit.ToolTip = string.Format(custPeriodLengthLimit.ErrorMessage, MaxPeriodLength);
+            //custPeriodLengthLimit.ErrorMessage = custPeriodLengthLimit.ToolTip = string.Format(custPeriodLengthLimit.ErrorMessage, MaxPeriodLength);
         }
 
         private void SetCurrentAssemblyVersion()
@@ -321,8 +319,21 @@ namespace PraticeManagement
             reqSearchText.IsValid = true;
 
             SaveFilterSettings();
+            lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
+                    diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat),
+                    diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat)
+                    );
+            if (ddlPeriod.SelectedValue == "0")
+            {
+                lblCustomDateRange.Attributes.Remove("class");
+                imgCalender.Attributes.Remove("class");
+            }
+            else
+            {
+                lblCustomDateRange.Attributes.Add("class", "displayNone");
+                imgCalender.Attributes.Add("class", "displayNone");
+            }
 
-            tblDateSelection.Visible = (ddlPeriod.SelectedValue == "0");
             var pager = GetPager();
             if (pager != null && !IsSearchClicked)
             {
@@ -341,29 +352,21 @@ namespace PraticeManagement
                     }
                 }
             }
+
+            hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+            hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+            hdnStartDateTxtBoxId.Value = (diRange.FindControl("tbFrom") as TextBox).ClientID;
+            hdnEndDateTxtBoxId.Value = (diRange.FindControl("tbTo") as TextBox).ClientID;
         }
 
         public void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
         {
-            tblDateSelection.Visible = false;
             int periodSelected = Convert.ToInt32(ddlPeriod.SelectedValue);
 
-            if (periodSelected == 0)
-            {
-                tblDateSelection.Visible = true;
-            }
-            else
-            {
-                SetPeriodSelection(periodSelected);
+            SetPeriodSelection(periodSelected);
 
-                ValidateAndDisplay();
-            }
-        }
+            ValidateAndDisplay();
 
-        public void mpPeriodStart_SelectedValueChanged(object sender, EventArgs e)
-        {
-            UpdateToDate();
-            upPeriodEnd.Update();
         }
 
         public void ddlView_SelectedIndexChanged(object sender, EventArgs e)
@@ -378,8 +381,10 @@ namespace PraticeManagement
 
         public void btnSearch_Clicked(object sender, EventArgs e)
         {
+
             var projectList = ProjectList.Where(pro => pro.Name.ToLower().Contains(txtSearchText.Text.ToLower()) ||
-                                                pro.Client.Name.ToLower().Contains(txtSearchText.Text.ToLower())
+                                                pro.Client.Name.ToLower().Contains(txtSearchText.Text.ToLower()) ||
+                                                (pro.Milestones != null && pro.Milestones.Any(m => m.Description.ToLower().Contains(txtSearchText.Text.ToLower())))
                                             ).ToList();
             if (projectList != null)
             {
@@ -407,31 +412,31 @@ namespace PraticeManagement
             }
         }
 
-        private void UpdateToDate()
-        {
-            DropDownList monthToControl = mpPeriodEnd.FindControl("ddlMonth") as DropDownList;
-            DropDownList yearToControl = mpPeriodEnd.FindControl("ddlYear") as DropDownList;
+        //private void UpdateToDate()
+        //{
+        //    DropDownList monthToControl = mpPeriodEnd.FindControl("ddlMonth") as DropDownList;
+        //    DropDownList yearToControl = mpPeriodEnd.FindControl("ddlYear") as DropDownList;
 
-            //remove all the year items less than mpFromControl.SelectedYear in mpToControl.
-            RemoveToControls(mpPeriodStart.SelectedYear, yearToControl);
+        //    //remove all the year items less than mpFromControl.SelectedYear in mpToControl.
+        //    RemoveToControls(mpPeriodStart.SelectedYear, yearToControl);
 
-            if (mpPeriodStart.SelectedYear >= mpPeriodEnd.SelectedYear)
-            {
-                //remove all the month items less than mpFromControl.SelectedMonth in mpToControl.
-                RemoveToControls(mpPeriodStart.SelectedMonth, monthToControl);
+        //    if (mpPeriodStart.SelectedYear >= mpPeriodEnd.SelectedYear)
+        //    {
+        //        //remove all the month items less than mpFromControl.SelectedMonth in mpToControl.
+        //        RemoveToControls(mpPeriodStart.SelectedMonth, monthToControl);
 
-                if (mpPeriodStart.SelectedYear > mpPeriodEnd.SelectedYear ||
-                    mpPeriodStart.SelectedMonth > mpPeriodEnd.SelectedMonth)
-                {
-                    mpPeriodEnd.SelectedYear = mpPeriodStart.SelectedYear;
-                    mpPeriodEnd.SelectedMonth = mpPeriodStart.SelectedMonth;
-                }
-            }
-            else
-            {
-                RemoveToControls(0, monthToControl);
-            }
-        }
+        //        if (mpPeriodStart.SelectedYear > mpPeriodEnd.SelectedYear ||
+        //            mpPeriodStart.SelectedMonth > mpPeriodEnd.SelectedMonth)
+        //        {
+        //            mpPeriodEnd.SelectedYear = mpPeriodStart.SelectedYear;
+        //            mpPeriodEnd.SelectedMonth = mpPeriodStart.SelectedMonth;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        RemoveToControls(0, monthToControl);
+        //    }
+        //}
 
         private void RemoveToControls(int FromSelectedValue, DropDownList yearToControl)
         {
@@ -451,7 +456,7 @@ namespace PraticeManagement
 
         private void SetPeriodSelection(int periodSelected)
         {
-            DateTime currentMonth = DateTime.Now;
+            DateTime currentMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, Constants.Dates.FirstDay);
             if (periodSelected > 0)
             {
                 DateTime startMonth = new DateTime();
@@ -468,10 +473,8 @@ namespace PraticeManagement
                     startMonth = fPeriod["StartMonth"];
                     endMonth = fPeriod["EndMonth"];
                 }
-                mpPeriodStart.SelectedMonth = startMonth.Month;
-                mpPeriodStart.SelectedYear = startMonth.Year;
-                mpPeriodEnd.SelectedYear = endMonth.Year;
-                mpPeriodEnd.SelectedMonth = endMonth.Month;
+                diRange.FromDate = startMonth;
+                diRange.ToDate = new DateTime(endMonth.Year, endMonth.Month, DateTime.DaysInMonth(endMonth.Year, endMonth.Month));
             }
             else if (periodSelected < 0)
             {
@@ -489,10 +492,12 @@ namespace PraticeManagement
                     startMonth = fPeriod["StartMonth"];
                     endMonth = fPeriod["EndMonth"];
                 }
-                mpPeriodStart.SelectedMonth = startMonth.Month;
-                mpPeriodStart.SelectedYear = startMonth.Year;
-                mpPeriodEnd.SelectedYear = endMonth.Year;
-                mpPeriodEnd.SelectedMonth = endMonth.Month;
+                diRange.FromDate = startMonth;
+                diRange.ToDate = new DateTime(endMonth.Year, endMonth.Month, DateTime.DaysInMonth(endMonth.Year, endMonth.Month));
+            }
+            else
+            {
+                mpeCustomDates.Show();
             }
         }
 
@@ -531,10 +536,12 @@ namespace PraticeManagement
             var filter =
                  new CompanyPerformanceFilterSettings
                  {
-                     StartYear = mpPeriodStart.SelectedYear,
-                     StartMonth = mpPeriodStart.SelectedMonth,
-                     EndYear = mpPeriodEnd.SelectedYear,
-                     EndMonth = mpPeriodEnd.SelectedMonth,
+                     StartYear = diRange.FromDate.Value.Year,
+                     StartMonth = diRange.FromDate.Value.Month,
+                     StartDay = diRange.FromDate.Value.Day,
+                     EndYear = diRange.ToDate.Value.Year,
+                     EndMonth = diRange.ToDate.Value.Month,
+                     EndDay = diRange.ToDate.Value.Day,
                      ClientIdsList = SelectedClientIds,
                      ProjectOwnerIdsList = SelectedProjectOwnerIds,
                      PracticeIdsList = SelectedPracticeIds,
@@ -665,8 +672,8 @@ namespace PraticeManagement
 
         private DateTime GetMonthBegin()
         {
-            return new DateTime(mpPeriodStart.SelectedYear,
-                    mpPeriodStart.SelectedMonth,
+            return new DateTime(diRange.FromDate.Value.Year,
+                    diRange.FromDate.Value.Month,
                     Constants.Dates.FirstDay);
         }
 
@@ -1068,12 +1075,8 @@ namespace PraticeManagement
                     cblClient, cblProjectGroup);
 
                 // Set the default viewable interval.
-                mpPeriodStart.SelectedYear = filter.StartYear;
-                mpPeriodStart.SelectedMonth = filter.StartMonth;
-
-                mpPeriodEnd.SelectedYear = filter.EndYear;
-                mpPeriodEnd.SelectedMonth = filter.EndMonth;
-                UpdateToDate(); //To keep End date greater than start date.
+                diRange.FromDate = filter.PeriodStart;
+                diRange.ToDate = filter.PeriodEnd;
 
                 //chbPeriodOnly.Checked = filter.TotalOnlySelectedDateWindow;
 
@@ -1176,8 +1179,8 @@ namespace PraticeManagement
         private int GetPeriodLength()
         {
             int mounthsInPeriod =
-                (mpPeriodEnd.SelectedYear - mpPeriodStart.SelectedYear) * Constants.Dates.LastMonth +
-                (mpPeriodEnd.SelectedMonth - mpPeriodStart.SelectedMonth + 1);
+                (diRange.ToDate.Value.Year - diRange.FromDate.Value.Year) * Constants.Dates.LastMonth +
+                (diRange.ToDate.Value.Month - diRange.FromDate.Value.Month + 1);
             return mounthsInPeriod;
         }
 
@@ -1395,7 +1398,7 @@ namespace PraticeManagement
         {
             //horisontalScrollDiv.CssClass = chbPrintVersion.Checked ? string.Empty : "xScroll cp";
 
-            var periodStart = new DateTime(mpPeriodStart.SelectedYear, mpPeriodStart.SelectedMonth, Constants.Dates.FirstDay);
+            var periodStart = diRange.FromDate.Value;
             var monthsInPeriod = GetPeriodLength();
             var row = lvProjects.FindControl("lvHeader") as System.Web.UI.HtmlControls.HtmlTableRow;
             Page.Validate(valsPerformance.ValidationGroup);
@@ -1728,13 +1731,15 @@ namespace PraticeManagement
             {
                 pager.Visible = (pager.PageSize < pager.TotalRowCount);
                 lblTotalCount.Text = GetTotalCount().ToString();
+                lblCurrentPageCount.Text = (pager.StartRowIndex + 1).ToString() + "&nbsp;-&nbsp;" + (pager.StartRowIndex + GetCurrentPageCount()).ToString();
             }
             else
             {
                 lblTotalCount.Text = GetCurrentPageCount().ToString();
+
+                lblCurrentPageCount.Text = "0&nbsp;-&nbsp;0";
             }
 
-            lblCurrentPageCount.Text = GetCurrentPageCount().ToString();
         }
 
         protected void Pager_PagerCommand(object sender, DataPagerCommandEventArgs e)
