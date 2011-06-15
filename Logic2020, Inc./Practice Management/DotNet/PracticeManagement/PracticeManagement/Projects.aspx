@@ -12,6 +12,8 @@
 <%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Src="Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc3" %>
+<%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
+    TagName="DateInterval" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Practice Management - Projects</title>
 </asp:Content>
@@ -188,6 +190,52 @@
             addListenersToParent('<%= cblProjectGroup.ClientID %>', '<%= cblClient.ClientID %>');
         }
 
+        function ReAssignStartDateEndDates() {
+            hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
+            hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
+            hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
+            hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
+            txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
+            txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
+            txtStartDate.value = hdnStartDate.value;
+            txtEndDate.value = hdnEndDate.value;
+        }
+        function CheckIfDatesValid() {
+            hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
+            hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
+            txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
+            txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
+            var startDate = new Date(txtStartDate.value);
+            var EtartDate = new Date(txtEndDate.value);
+            if (txtStartDate.value != '' && txtEndDate.value != ''
+            && startDate <= EtartDate) {
+                var btnCustDatesClose = document.getElementById('<%= btnCustDatesClose.ClientID %>');
+                btnCustDatesClose.click();
+            }
+        }
+
+        function CheckAndShowCustomDatesPoup(ddlPeriod) {
+            if (ddlPeriod.value == '0') {
+                imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
+                lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
+                if (imgCalender.fireEvent) {
+                    imgCalender.attributes["class"].value = "";
+                    lblCustomDateRange.attributes["class"].value = "";
+                    imgCalender.click();
+                }
+                if (document.createEvent) {
+                    imgCalender.attributes["class"].value = "";
+                    lblCustomDateRange.attributes["class"].value = "";
+                    var event = document.createEvent('HTMLEvents');
+                    event.initEvent('click', true, true);
+                    imgCalender.dispatchEvent(event);
+                }
+            }
+            else {
+                var btnddlPeriodChanged = document.getElementById('<%= btnddlPeriodChanged.ClientID %>');
+                btnddlPeriodChanged.click();
+            }
+        }
     </script>
     <style>
         ul, li
@@ -201,7 +249,7 @@
             margin: 0;
             padding: 1px;
             list-style: none;
-            width: 100px; /* Width of Menu Items */
+            width: 88px; /* Width of Menu Items */
             border: 1px solid #ccc;
             background: white;
             display: none;
@@ -229,7 +277,8 @@
         ul.pmenu li a:hover
         {
             background: #335EA8;
-            color: white;
+            color: Black;
+            font-weight: bold;
         }
         
         /* IE \*/* html ul.pmenu li
@@ -258,6 +307,10 @@
         {
             overflow-x: auto;
         }
+        .displayNone
+        {
+            display: none;
+        }
     </style>
     <asp:UpdatePanel ID="flrPanel" runat="server">
         <ContentTemplate>
@@ -277,8 +330,8 @@
                             <td style="width: 8%;">
                                 &nbsp;Show&nbsp;Projects&nbsp;for&nbsp;
                             </td>
-                            <td style="width: 10%;">
-                                <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
+                            <td style="width: 8%;">
+                                <asp:DropDownList ID="ddlPeriod" runat="server" Onchange=" return CheckAndShowCustomDatesPoup(this);">
                                     <asp:ListItem Text="Next 3 months" Value="3"></asp:ListItem>
                                     <asp:ListItem Text="Next 6 months" Value="6"></asp:ListItem>
                                     <asp:ListItem Text="Next 12 months" Value="12"></asp:ListItem>
@@ -289,76 +342,29 @@
                                     <asp:ListItem Text="Current FY" Value="13"></asp:ListItem>
                                     <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
                                 </asp:DropDownList>
+                                <asp:Button ID="btnddlPeriodChanged" runat="server" OnClick="ddlPeriod_SelectedIndexChanged"
+                                    Style="display: none" />
+                                <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
+                                    CancelControlID="btnCustDatesCancel" OkControlID="btnCustDatesClose" BackgroundCssClass="modalBackground"
+                                    PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates" DropShadow="false"
+                                    OnCancelScript="ReAssignStartDateEndDates();" />
+                                <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
+                                <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
+                                <asp:HiddenField ID="hdnStartDateTxtBoxId" runat="server" Value="" />
+                                <asp:HiddenField ID="hdnEndDateTxtBoxId" runat="server" Value="" />
                             </td>
-                            <td style="width: 38%;">
-                                <table id="tblDateSelection" runat="server" visible="false">
-                                    <tr>
-                                        <td style="text-align: center;">
-                                            &nbsp;from&nbsp;
-                                        </td>
-                                        <td>
-                                            <asp:UpdatePanel ID="upPeriodStart" runat="server">
-                                                <ContentTemplate>
-                                                    <uc2:MonthPicker ID="mpPeriodStart" runat="server" AutoPostBack="true" OnSelectedValueChanged="mpPeriodStart_SelectedValueChanged" />
-                                                </ContentTemplate>
-                                            </asp:UpdatePanel>
-                                        </td>
-                                        <td style="text-align: center;">
-                                            &nbsp;to&nbsp;
-                                        </td>
-                                        <td>
-                                            <asp:UpdatePanel ID="upPeriodEnd" runat="server" UpdateMode="Conditional">
-                                                <ContentTemplate>
-                                                    <uc2:MonthPicker ID="mpPeriodEnd" runat="server" AutoPostBack="true" OnSelectedValueChanged="mpPeriodStart_SelectedValueChanged" />
-                                                </ContentTemplate>
-                                            </asp:UpdatePanel>
-                                        </td>
-                                        <td>
-                                            <asp:CustomValidator ID="custPeriodLengthLimit" runat="server" EnableViewState="False"
-                                                ErrorMessage="The period length must be not more than {0} months." ToolTip="The period length must be not more than {0} months."
-                                                Text="*" EnableClientScript="False" OnServerValidate="custPeriodLengthLimit_ServerValidate"
-                                                ValidationGroup="Filter"></asp:CustomValidator>
-                                        </td>
-                                        <td>
-                                            <asp:Button ID="btnUpdateDates" runat="server" Text="Update" Style="width: 60px;"
-                                                OnClick="btnUpdateView_Click" />
-                                        </td>
-                                    </tr>
-                                </table>
+                            <td style="width: 48%; padding-left: 5px;" align="left">
+                                <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
+                                <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
                             </td>
-                            <td style="width: 10%;">
-                                <table width="100%" cellpadding="0px" cellspacing="0px">
-                                    <tr>
-                                        <td style="padding: 0px;">
-                                            <asp:Button ID="btnExportToExcel" runat="server" Style="margin: 0px;" OnClick="btnExportToExcel_Click"
-                                                Text="Export" Width="100%" />
-                                        </td>
-                                        <td style="padding: 0px;">
-                                            <asp:Image ID="imgExportAllToExcel" runat="server" Style="margin: 0px;" ImageUrl="~/Images/Dropdown_Arrow_22.png"
-                                                onclick="imgArrow_click();" onmouseover="imgArrow_mouseOver();" onmouseout="imgArrow_mouseOut();" />
-                                        </td>
-                                    </tr>
-                                    <tr onmouseover="Exportall_click_mouseOver();" onmouseout="imgArrow_mouseOut();">
-                                        <td colspan="2">
-                                            <ul id="popupmenu" class="pmenu">
-                                                <li>
-                                                    <asp:LinkButton ID="btnExportAllToExcel" runat="server" OnClick="btnExportAllToExcel_Click"
-                                                        Text="Export All" Style="background-color: #CCCCCC;" CssClass="pm-button" OnClientClick="this.parentNode.parentNode.style.display='none';return true;" />
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td style="text-align: right; width: 9%;">
+                            <td style="width: 22%;" align="right">
                                 <asp:DropDownList ID="ddlView" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlView_SelectedIndexChanged">
                                     <asp:ListItem Text="View 10" Value="10"></asp:ListItem>
                                     <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
                                     <asp:ListItem Text="View 50" Value="50"></asp:ListItem>
                                     <asp:ListItem Text="View ALL" Value="1"></asp:ListItem>
                                 </asp:DropDownList>
-                            </td>
-                            <td style="width: 13%;">
+                                &nbsp;&nbsp;
                                 <asp:ShadowedHyperlink runat="server" Text="Add Project" ID="lnkAddProject" CssClass="add-btn"
                                     NavigateUrl="~/ProjectDetail.aspx?returnTo=Projects.aspx" />
                             </td>
@@ -373,25 +379,33 @@
                                 <span class="bg"><a href="#"><span>Search</span></a> </span>
                             </HeaderTemplate>
                             <ContentTemplate>
-                                <asp:Panel ID="pnlSearch" runat="server" CssClass="project-filter" DefaultButton="btnSearch">
+                                <asp:Panel ID="pnlSearch" runat="server" Style="height: 80px;" CssClass="project-filter"
+                                    DefaultButton="btnSearch">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td style="padding-right: 8px;">
+                                            <td style="padding-right: 8px; padding-left: 4px;">
                                                 <asp:TextBox ID="txtSearchText" runat="server" CssClass="WholeWidth" EnableViewState="False" />
                                             </td>
-                                            <td>
+                                            <td style="width: 10px;">
                                                 <asp:RequiredFieldValidator ID="reqSearchText" runat="server" ControlToValidate="txtSearchText"
                                                     ErrorMessage="Please type text to be searched." ToolTip="Please type text to be searched."
                                                     Text="*" SetFocusOnError="true" ValidationGroup="Search" CssClass="searchError"
-                                                    Display="Dynamic" />
+                                                    Display="Static" />
                                             </td>
                                             <td>
                                                 <asp:Button ID="btnSearch" runat="server" Text="Search View" ValidationGroup="Search"
                                                     OnClick="btnSearch_Clicked" Width="100px" EnableViewState="False" />
+                                                &nbsp;
                                                 <asp:Button ID="btnSearchAll" runat="server" Text="Search All" ValidationGroup="Search"
                                                     PostBackUrl="~/ProjectSearch.aspx" Width="100px" EnableViewState="False" />
                                             </td>
                                             <td>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <asp:ValidationSummary ID="valsSearch" runat="server" ValidationGroup="Search" EnableClientScript="true"
+                                                    ShowMessageBox="false" CssClass="searchError" />
                                             </td>
                                         </tr>
                                     </table>
@@ -404,7 +418,7 @@
                             </HeaderTemplate>
                             <ContentTemplate>
                                 <div id="divProjectFilter" runat="server" class="project-filter">
-                                    <table class="WholeWidth">
+                                    <table class="WholeWidth" style="height: 80px;">
                                         <tr class="tb-header">
                                             <td style="border-bottom: 1px solid black; width: 190px; text-align: center">
                                                 Client / Group
@@ -412,7 +426,7 @@
                                             <td style="padding: 5px; width: 10px;">
                                             </td>
                                             <td style="border-bottom: 1px solid black; width: 190px; text-align: center;">
-                                                SalesTeam
+                                                Sales Team
                                             </td>
                                             <td style="padding: 5px; width: 10px;">
                                             </td>
@@ -500,9 +514,9 @@
                             </HeaderTemplate>
                             <ContentTemplate>
                                 <div class="project-filter">
-                                    <table class="WholeWidth" cellpadding="5">
+                                    <table class="WholeWidth" cellpadding="5" style="height: 80px;">
                                         <tr class="tb-header">
-                                            <td colspan="2" style="border-bottom: 1px solid black; text-align: center; width: 300px">
+                                            <td colspan="2" style="border-bottom: 1px solid black; text-align: center; width: 200px">
                                                 Project Types Included
                                             </td>
                                             <td style="width: 20px;" rowspan="4">
@@ -530,16 +544,15 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="padding-left: 10px; width: 160px; padding-top: 5px;">
-                                                <asp:CheckBox ID="chbActive" runat="server" Text="Active Projects" Checked="True"
-                                                    EnableViewState="False" />
+                                            <td style="padding-left: 10px; width: 100px; padding-top: 1px;">
+                                                <asp:CheckBox ID="chbActive" runat="server" Text="Active" Checked="True" EnableViewState="False" />
                                             </td>
-                                            <td style="padding-left: 10px; width: 160px; padding-top: 5px;">
-                                                <asp:CheckBox ID="chbInternal" runat="server" Text="Internal Projects" Checked="True"
-                                                    EnableViewState="False" />
+                                            <td style="padding-left: 10px; width: 100px; padding-top: 1px;">
+                                                <asp:CheckBox ID="chbInternal" runat="server" Text="Internal" Checked="True" EnableViewState="False" />
                                             </td>
-                                            <td rowspan="2" style="text-align: center">
-                                                <asp:DropDownList ID="ddlCalculateRange" runat="server" AutoPostBack="false" Width="170px">
+                                            <td rowspan="2" style="text-align: center; padding-top: 5px;" valign="top">
+                                                <asp:DropDownList ID="ddlCalculateRange" runat="server" Style="font-family: Arial !Important;
+                                                    color: #333 !Important; font-size: 12px !Important;" AutoPostBack="false" Width="170px">
                                                     <asp:ListItem Text="Project Value in Range" Value="1"></asp:ListItem>
                                                     <asp:ListItem Text="Total Project Value" Value="2"></asp:ListItem>
                                                     <asp:ListItem Text="Current Fiscal Year" Value="3"></asp:ListItem>
@@ -548,22 +561,20 @@
                                         </tr>
                                         <tr>
                                             <td style="padding-left: 10px;">
-                                                <asp:CheckBox ID="chbProjected" runat="server" Text="Projected Projects" Checked="True"
-                                                    EnableViewState="False" />
+                                                <asp:CheckBox ID="chbProjected" runat="server" Text="Projected" Checked="True" EnableViewState="False" />
                                             </td>
                                             <td style="padding-left: 10px;">
-                                                <asp:CheckBox ID="chbInactive" runat="server" Text="Inactive Projects" EnableViewState="False" />
+                                                <asp:CheckBox ID="chbInactive" runat="server" Text="Inactive" EnableViewState="False" />
                                             </td>
                                             <td>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td style="padding-left: 10px;">
-                                                <asp:CheckBox ID="chbCompleted" runat="server" Text="Completed Projects" Checked="True"
-                                                    EnableViewState="False" />
+                                                <asp:CheckBox ID="chbCompleted" runat="server" Text="Completed" Checked="True" EnableViewState="False" />
                                             </td>
                                             <td style="padding-left: 10px;">
-                                                <asp:CheckBox ID="chbExperimental" runat="server" Text="Experimental Projects" EnableViewState="False" />
+                                                <asp:CheckBox ID="chbExperimental" runat="server" Text="Experimental" EnableViewState="False" />
                                             </td>
                                             <td>
                                             </td>
@@ -576,8 +587,6 @@
                 </asp:Panel>
                 <asp:ValidationSummary ID="valsPerformance" runat="server" Width="100%" ValidationGroup="Filter"
                     CssClass="searchError" />
-                <asp:ValidationSummary ID="valsSearch" runat="server" ValidationGroup="Search" EnableClientScript="true"
-                    ShowMessageBox="false" CssClass="searchError" />
             </div>
         </ContentTemplate>
         <Triggers>
@@ -588,14 +597,6 @@
     <cc1:StyledUpdatePanel ID="StyledUpdatePanel" runat="server" CssClass="container"
         UpdateMode="Conditional">
         <ContentTemplate>
-            <div style="font-weight: bold; width: 100%; text-align: center; padding-top: 5px;
-                padding-bottom: 10px; font-size: larger;">
-                Viewing&nbsp;
-                <asp:Label ID="lblCurrentPageCount" runat="server" Text='<%# GetCurrentPageCount() %>'></asp:Label>
-                &nbsp;of&nbsp;
-                <asp:Label ID="lblTotalCount" runat="server" Text='<%# GetTotalCount() %>'></asp:Label>&nbsp;
-                Projects
-            </div>
             <asp:Panel class="this value set OnPageLoad" runat="server" ID="horisontalScrollDiv"
                 CssClass="xScrollProjects">
                 <asp:ListView ID="lvProjects" runat="server" DataKeyNames="Id" OnItemDataBound="lvProjects_ItemDataBound"
@@ -725,6 +726,72 @@
                     </EmptyDataTemplate>
                 </asp:ListView>
                 <uc3:LoadingProgress ID="LoadingProgress1" runat="server" DisplayText="Refreshing Data..." />
+            </asp:Panel>
+            <div style="padding: 5px 10px 5px 5px;">
+                <table class="WholeWidth">
+                    <tr>
+                        <td style="padding-left: 40%;">
+                            <div style="font-weight: bold; width: 100%; padding-top: 5px; color: Black;">
+                                Viewing&nbsp;
+                                <asp:Label ID="lblCurrentPageCount" runat="server" Text='<%# GetCurrentPageCount() %>'></asp:Label>
+                                &nbsp;of&nbsp;
+                                <asp:Label ID="lblTotalCount" runat="server" Text='<%# GetTotalCount() %>'></asp:Label>&nbsp;
+                                Projects
+                            </div>
+                        </td>
+                        <td align="right">
+                            <table cellpadding="0px" cellspacing="0px">
+                                <tr>
+                                    <td style="padding: 0px;">
+                                        <asp:Button ID="btnExportToExcel" runat="server" Style="margin: 0px;" OnClick="btnExportToExcel_Click"
+                                            Text="Export" Width="100%" />
+                                    </td>
+                                    <td style="padding: 0px;">
+                                        <asp:Image ID="imgExportAllToExcel" runat="server" Style="margin: 0px;" ImageUrl="~/Images/Dropdown_Arrow_22.png"
+                                            onclick="imgArrow_click();" onmouseover="imgArrow_mouseOver();" onmouseout="imgArrow_mouseOut();" />
+                                    </td>
+                                </tr>
+                                <tr onmouseover="Exportall_click_mouseOver();" onmouseout="imgArrow_mouseOut();">
+                                    <td colspan="2">
+                                        <ul id="popupmenu" class="pmenu">
+                                            <li>
+                                                <asp:LinkButton ID="btnExportAllToExcel" runat="server" OnClick="btnExportAllToExcel_Click"
+                                                    Text="Export All" Style="background-color: #CCCCCC; text-align: left!important;"
+                                                    CssClass="pm-button" OnClientClick="this.parentNode.parentNode.style.display='none';return true;" />
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <asp:Panel ID="pnlCustomDates" runat="server" BackColor="White" BorderColor="Black"
+                CssClass="ConfirmBoxClass" Style="padding-top: 20px; display: none;" BorderWidth="2px">
+                <table class="WholeWidth">
+                    <tr>
+                        <td colspan="2" align="center">
+                            <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
+                                FromToDateFieldWidth="70" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="padding: 10px 0px 10px 0px;">
+                            <asp:Button ID="btnCustDatesOK" runat="server" OnClientClick="CheckIfDatesValid();"
+                                Text="OK" OnClick="btnUpdateView_Click" />
+                            <asp:Button ID="btnCustDatesClose" runat="server" Style="display: none;" CausesValidation="true" />
+                            &nbsp; &nbsp;
+                            <asp:Button ID="btnCustDatesCancel" runat="server" OnClientClick="ReAssignStartDateEndDates();"
+                                Text="Cancel" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center">
+                            <asp:ValidationSummary ID="valSum" runat="server" />
+                        </td>
+                    </tr>
+                </table>
             </asp:Panel>
         </ContentTemplate>
     </cc1:StyledUpdatePanel>
