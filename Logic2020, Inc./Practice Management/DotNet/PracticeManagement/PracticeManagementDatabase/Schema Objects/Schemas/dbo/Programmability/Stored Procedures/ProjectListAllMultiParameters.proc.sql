@@ -84,9 +84,12 @@ AS
 		   p.DirectorId,
 		   p.DirectorLastName,
 		   p.DirectorFirstName,
-		   pa.[FileName]
+		   pa.[FileName],
+		   M.MilestoneId,
+		   M.Description MilestoneName
 	FROM	dbo.v_Project AS p
 	JOIN dbo.Practice pr ON pr.PracticeId = p.PracticeId
+	LEFT JOIN dbo.Milestone M ON M.ProjectId = P.ProjectId
 	LEFT JOIN dbo.v_PersonProjectCommission AS c on c.ProjectId = p.ProjectId
 	LEFT JOIN dbo.ProjectGroup PG	ON PG.GroupId = p.GroupId
 	LEFT JOIN v_Person AS person ON person.PersonId = c.PersonId
