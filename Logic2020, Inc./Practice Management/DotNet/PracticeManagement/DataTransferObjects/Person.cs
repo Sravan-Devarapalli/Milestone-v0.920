@@ -295,6 +295,12 @@ namespace DataTransferObjects
         [DataMember]
         public DateTime? LastLogin { get; set; }
 
+        [DataMember]
+        public int OpportunityPersonTypeId
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Properties - calculated
