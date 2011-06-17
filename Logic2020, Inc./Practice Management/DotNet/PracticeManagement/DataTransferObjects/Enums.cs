@@ -36,5 +36,14 @@ namespace DataTransferObjects
         [EnumMember]
         CurrentFiscalYear = 3
     }
+
+    [DataContract]
+    public enum OpportunityPersonType
+    {
+        [EnumMember]
+        NormalPerson = 1,
+        [EnumMember]
+        StrikedPerson = 2,
+    }
 }
 
