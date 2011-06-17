@@ -126,11 +126,11 @@ namespace PraticeManagement
             }
         }
 
-        private bool HasProposedPersons
+        private bool HasProposedPersonsOfTypeNormal
         {
             get
             {
-                return ucProposedResources.HasProposedPersons;
+                return ucProposedResources.HasProposedPersonsOfTypeNormal;
             }
         }
 
@@ -447,7 +447,7 @@ namespace PraticeManagement
                     {
                         ucProposedResources.FillProposedResources();
                         upProposedResources.Update();
-                        if (HasProposedPersons)
+                        if (HasProposedPersonsOfTypeNormal)
                         {
                             Page.Validate(vsumHasPersons.ValidationGroup);
                             if (Page.IsValid)
@@ -492,7 +492,7 @@ namespace PraticeManagement
                 try
                 {
                     var projectId = serviceClient.ConvertOpportunityToProject(OpportunityId.Value,
-                                                                              User.Identity.Name, HasProposedPersons);
+                                                                              User.Identity.Name, HasProposedPersonsOfTypeNormal);
                     if (!string.IsNullOrEmpty(Request.QueryString["id"]))
                     {
                         Response.Redirect(
