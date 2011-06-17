@@ -75,9 +75,9 @@ BEGIN
 
 IF(@PersonIdList IS NOT NULL)
 BEGIN
-	INSERT INTO OpportunityPersons
-	SELECT @OpportunityId ,P.ResultId
-	FROM [dbo].[ConvertStringListIntoTable] (@PersonIdList) AS p 
+	INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId)
+	SELECT @OpportunityId ,P.ResultId,P.ResultType
+	FROM dbo.[ConvertStringListIntoTableWithTwoColoumns] (@PersonIdList) AS p 
 	LEFT JOIN OpportunityPersons op
 	ON p.ResultId = op.PersonId AND op.OpportunityId=@OpportunityId
 	WHERE op.PersonId IS NULL 
