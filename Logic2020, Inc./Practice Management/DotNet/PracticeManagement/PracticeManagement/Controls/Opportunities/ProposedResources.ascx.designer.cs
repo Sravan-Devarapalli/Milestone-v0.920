@@ -49,6 +49,24 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::System.Web.UI.WebControls.Label lblPotentialResources;
         
         /// <summary>
+        /// imgCheck control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgCheck;
+        
+        /// <summary>
+        /// imgCross control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgCross;
+        
+        /// <summary>
         /// lblProposedResources control.
         /// </summary>
         /// <remarks>
@@ -64,7 +82,7 @@ namespace PraticeManagement.Controls.Opportunities {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBoxList cblPotentialResources;
+        protected global::PraticeManagement.Controls.MultipleSelectionCheckBoxList cblPotentialResources;
         
         /// <summary>
         /// divProposedResources control.
