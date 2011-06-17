@@ -84,7 +84,7 @@ BEGIN
 	
 	-- Add persons to milestone
 		DECLARE @OpportunityPersons TABLE(OpportunityId INT, PersonId INT, RowNumber INT)
-		DECLARE @PersonsCount INT = (SELECT COUNT(PersonId) FROM dbo.OpportunityPersons WHERE OpportunityId = @OpportunityId)
+		DECLARE @PersonsCount INT = (SELECT COUNT(PersonId) FROM dbo.OpportunityPersons WHERE OpportunityId = @OpportunityId AND OpportunityPersonTypeId = 1)
 		DECLARE @tempPersonId INT
 		DECLARE @Index INT = 1
 		
@@ -93,7 +93,7 @@ BEGIN
 				, OpportunityId
 				, PersonId
 		FROM dbo.OpportunityPersons
-		WHERE OpportunityId = @OpportunityId
+		WHERE OpportunityId = @OpportunityId AND OpportunityPersonTypeId = 1
 				
 		WHILE @Index <= @PersonsCount
 		BEGIN
