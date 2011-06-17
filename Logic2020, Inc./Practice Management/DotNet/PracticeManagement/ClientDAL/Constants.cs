@@ -9,6 +9,8 @@
         /// </summary>
         public class ColumnNames
         {
+
+            public const string IsWelcomeEmailSent = "IsWelcomeEmailSent";
             public const string W2Salary_RateColumn = "W2Salary_Rate";
             public const string W2Hourly_RateColumn = "W2Hourly_Rate";
             public const string _1099_Hourly_RateColumn = "_1099_Hourly_Rate";
@@ -98,6 +100,7 @@
             public const string ObjectFirstName = "ObjectFirstName";
             public const string ObjectLastName = "ObjectLastName";
             public const string PersonId = "PersonId";
+            public const string OpportunityPersonTypeId = "OpportunityPersonTypeId";
             public const string PersonName = "PersonName";
             public const string PersonRoleId = "PersonRoleId";
             public const string PersonRoleName = "RoleName";
@@ -479,6 +482,7 @@
 
             public class Configuration
             {
+                public const string GetCompanyNameProcedure = "dbo.GetCompanyName";
                 public const string GetCompanyLogoDataProcedure = "dbo.GetCompanyLogoData";
                 public const string CompanyLogoDataSaveProcedure = "dbo.CompanyLogoDataSave";
                 public const string SaveSettingsKeyValuePairsProcedure = "dbo.SaveSettingsKeyValuePairs";
@@ -491,10 +495,13 @@
 
             public class Person
             {
+                public const string IsPersonAlreadyHavingStatus = "dbo.IsPersonAlreadyHavingStatus";
                 public const string SetNewManager = "dbo.SetNewManager";
                 public const string SetDefaultManager = "dbo.PersonSetDefaultManager";
                 public const string ListManagersSubordinates = "dbo.ListManagersSubordinates";
                 public const string PersonListByCategoryTypeAndPeriod = "[dbo].[PersonListByCategoryTypeAndPeriod]";
+                public const string UpdateIsWelcomeEmailSentForPerson = "dbo.UpdateIsWelcomeEmailSentForPerson";
+
             }
 
             #endregion
@@ -670,7 +677,7 @@
                 public const string GetPersonsByOpportunityIds = "dbo.GetPersonsByOpportunityIds";
                 public const string OpportunityDelete = "dbo.OpportunityDelete";
                 public const string IsOpportunityPriorityInUse = "dbo.IsOpportunityPriorityInUse";
-                
+
             }
 
             public class OverHeads
