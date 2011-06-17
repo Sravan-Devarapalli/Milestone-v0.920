@@ -810,6 +810,7 @@ namespace DataAccess
                 int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
                 int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
                 int OpportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
+                 int opportunityPersonTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonTypeId);
                 Opportunity CurrentOpportunity = null;
 
                 while (reader.Read())
@@ -828,7 +829,8 @@ namespace DataAccess
                     {
                         Id = personId,
                         FirstName = reader.GetString(firstNameIndex),
-                        LastName = reader.GetString(lastNameIndex)
+                        LastName = reader.GetString(lastNameIndex),
+                        OpportunityPersonTypeId = reader.GetInt32(opportunityPersonTypeIdIndex) 
                     };
 
                     CurrentOpportunity.ProposedPersons.Add(person);
@@ -867,7 +869,7 @@ namespace DataAccess
                 int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
                 int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
                 int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
-
+                int opportunityPersonTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonTypeId);
                 while (reader.Read())
                 {
                     var personId = reader.GetInt32(personIdIndex);
@@ -875,7 +877,8 @@ namespace DataAccess
                     {
                         Id = personId,
                         FirstName = reader.GetString(firstNameIndex),
-                        LastName = reader.GetString(lastNameIndex)
+                        LastName = reader.GetString(lastNameIndex),
+                        OpportunityPersonTypeId = reader.GetInt32(opportunityPersonTypeIdIndex)
                     };
 
                     result.Add(person);
