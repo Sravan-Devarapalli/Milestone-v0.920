@@ -8,30 +8,31 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @OpportunityIdsLocal NVARCHAR(MAX)
-	SELECT @OpportunityIdsLocal = @PersonIdList
-	DECLARE @OpportunityIdTable TABLE
+	DECLARE @PersonIdListLocal NVARCHAR(MAX)
+	SELECT  @PersonIdListLocal = @PersonIdList
+	DECLARE @OpportunityPersonIdsWithTypeTable TABLE
 	(
-		OpportunityId INT
+		PersonId INT,
+		PersonType INT
 	)
 	
-	INSERT INTO @OpportunityIdTable
-	SELECT ResultId 
-	FROM [dbo].[ConvertStringListIntoTable] (@OpportunityIdsLocal)
+	INSERT INTO @OpportunityPersonIdsWithTypeTable
+	SELECT ResultId ,ResultType
+	FROM [dbo].[ConvertStringListIntoTableWithTwoColoumns] (@PersonIdListLocal)
 	
 	IF(@PersonIdList IS NOT NULL)
 	BEGIN
 		DELETE op
 		FROM dbo.OpportunityPersons  op
-		LEFT JOIN @OpportunityIdTable AS p 
-		ON op.OpportunityId = @OpportunityId AND op.PersonId = p.OpportunityId
-		WHERE p.OpportunityId IS NULL and OP.OpportunityId = @OpportunityId
+		LEFT JOIN @OpportunityPersonIdsWithTypeTable AS p 
+		ON op.OpportunityId = @OpportunityId AND op.PersonId = p.PersonId AND op.OpportunityPersonTypeId=p.PersonType
+		WHERE p.PersonId IS NULL and OP.OpportunityId = @OpportunityId
 
-		INSERT INTO OpportunityPersons
-		SELECT @OpportunityId ,P.OpportunityId
-		FROM @OpportunityIdTable AS p 
+		INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId)
+		SELECT @OpportunityId ,p.PersonId,p.PersonType
+		FROM @OpportunityPersonIdsWithTypeTable AS p 
 		LEFT JOIN dbo.OpportunityPersons op
-		ON p.OpportunityId = op.PersonId AND op.OpportunityId=@OpportunityId
+		ON p.PersonId = op.PersonId AND op.OpportunityId=@OpportunityId AND op.OpportunityPersonTypeId=p.PersonType
 		WHERE op.PersonId IS NULL 
 	END
 	UPDATE dbo.Opportunity
