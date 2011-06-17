@@ -8,6 +8,7 @@
     TagPrefix="cc2" %>
 <%@ Register Src="~/Controls/Opportunities/ProposedResources.ascx" TagName="ProposedResources"
     TagPrefix="uc" %>
+<%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
 <script src="Scripts/jquery.blockUI.js" type="text/javascript"></script>
 <script type="text/javascript" language="javascript">
@@ -23,33 +24,57 @@
         var refreshLableParentNode = image.parentNode.parentNode.children[0];
         Array.add(refreshMessageIdsFromLastRefresh, refreshLableParentNode.children[refreshLableParentNode.children.length - 1].id);
 
-        var chkboxList = document.getElementById('<%=cblPotentialResources.ClientID %>');
-        var chkboxes = chkboxList.getElementsByTagName('input');
+        var chkboxes = $('#<%=cblPotentialResources.ClientID %> tr td:first-child :input');
+        var strikechkboxes = $('#<%=cblPotentialResources.ClientID %> tr td:nth-child(2) :input');
+
         $find("wmBhOutSideResources").set_Text(image.parentNode.children[2].value);
         $find("wmbhSearchBox").set_Text('');
-        changeAlternateitemsForProposedResources();
         for (var i = 0; i < chkboxes.length; i++) {
-            chkboxes[i].checked = false;
-            chkboxes[i].parentNode.style.display = "";
+
+            chkboxes[i].checked = chkboxes[i].disabled = strikechkboxes[i].checked = strikechkboxes[i].disabled = false;
+            chkboxes[i].parentNode.parentNode.parentNode.style.display = "";
             for (var j = 0; j < attachedResourcesIndexes.length; j++) {
-                if (i == attachedResourcesIndexes[j] && attachedResourcesIndexes[j] != '') {
-                    chkboxes[i].checked = true;
+                var indexString = attachedResourcesIndexes[j];
+                var index = indexString.substring(0, indexString.indexOf(":", 0));
+                var checkBoxType = indexString.substring(indexString.indexOf(":", 0) + 1, indexString.length);
+                if (i == index && index != '') {
+                    if (checkBoxType == 1) {
+                        chkboxes[i].checked = true;
+                        strikechkboxes[i].disabled = true;
+                    }
+                    else {
+                        strikechkboxes[i].checked = true;
+                        chkboxes[i].disabled = true;
+                    }
                     break;
                 }
             }
         }
         hdnCurrentOpportunityId.value = image.attributes["OpportunityId"].value;
-        $.blockUI({ message: $('#divPotentialResources'), css: { width: '362px', top: '20%'} });
         return false;
     }
 
-    function saveProposedResources() {
+    function GetProposedPersonIdsListWithPersonType() {
+        var cblPotentialResources = document.getElementById("<%= cblPotentialResources.ClientID%>");
+        var potentialCheckboxes = $('#<%=cblPotentialResources.ClientID %> tr td :input');
+        var hdnProposedPersonIdsList = document.getElementById("<%= hdnProposedResourceIdsWithTypes.ClientID%>");
+        var PersonIdList = '';
+        if (cblPotentialResources != null) {
+            for (var i = 0; i < potentialCheckboxes.length; ++i) {
+                if (potentialCheckboxes[i].checked) {
+                    PersonIdList += potentialCheckboxes[i].parentNode.attributes['personid'].value + ':' + potentialCheckboxes[i].parentNode.attributes['persontype'].value + ',';
+                }
+            }
+        }
+        hdnProposedPersonIdsList.value = PersonIdList;
+    }
 
+    function saveProposedResources() {
         var buttonSave = document.getElementById('<%=btnSaveProposedResourcesHidden.ClientID %>');
-        var chkboxList = document.getElementById('<%=cblPotentialResources.ClientID %>');
         var hdnProposedResourceIndexes = document.getElementById('<%=hdnProposedResourceIndexes.ClientID %>');
         var hdnProposedOutSideResources = document.getElementById('<%=hdnProposedOutSideResources.ClientID %>');
-        var chkboxes = chkboxList.getElementsByTagName('input');
+
+        var chkboxes = $('#<%=cblPotentialResources.ClientID %> tr td:first-child :input');
         hdnProposedOutSideResources.value = $find("wmBhOutSideResources").get_Text(); ;
         for (var i = 0; i < chkboxes.length; i++) {
             if (chkboxes[i].checked) {
@@ -64,7 +89,7 @@
         var hdnProposedPersonsIndexes = document.getElementById(currenthdnProposedPersonsIndexesId);
         hdnProposedPersonsIndexes.value = hdnProposedResourceIndexes.value;
         hdnProposedPersonsIndexes.nextSibling.nextSibling.value = hdnProposedOutSideResources.value;
-        $.unblockUI();
+        GetProposedPersonIdsListWithPersonType();
         buttonSave.click();
     }
     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
@@ -76,44 +101,32 @@
     }
     function filterPotentialResources(searchtextBox) {
         var chkboxList = document.getElementById('<%=cblPotentialResources.ClientID %>');
-        var chkboxes = chkboxList.getElementsByTagName('input');
+        var chkboxes = $('#<%=cblPotentialResources.ClientID %> tr td:first-child :input');
         var searchText = searchtextBox.value.toLowerCase();
+
         for (var i = 0; i < chkboxes.length; i++) {
             var checkboxText = chkboxes[i].parentNode.children[1].innerHTML.toLowerCase();
             if (checkboxText.length >= searchText.length && checkboxText.substr(0, searchText.length) == searchText) {
-                chkboxes[i].parentNode.style.display = "";
+
+                chkboxes[i].parentNode.parentNode.parentNode.style.display = "";
             }
             else {
-                chkboxes[i].parentNode.style.display = "none";
+
+                chkboxes[i].parentNode.parentNode.parentNode.style.display = "none";
             }
         }
         changeAlternateitemsForProposedResources();
     }
     function ClearProposedResources() {
         var chkboxList = document.getElementById('<%=cblPotentialResources.ClientID %>');
-        var chkboxes = chkboxList.getElementsByTagName('input');
+        var chkboxes = $('#<%=cblPotentialResources.ClientID %> tr td :input');
         for (var i = 0; i < chkboxes.length; i++) {
             chkboxes[i].checked = false;
+            chkboxes[i].disabled = false;
         }
     }
     function clearOutSideResources() {
         $find("wmBhOutSideResources").set_Text('');
-    }
-    function changeAlternateitemsForProposedResources() {
-        var chkboxList = document.getElementById('<%=cblPotentialResources.ClientID %>');
-        var chkboxes = chkboxList.getElementsByTagName('input');
-        var index = 0;
-        for (var i = 0; i < chkboxes.length; i++) {
-            if (chkboxes[i].parentNode.style.display != "none") {
-                index++;
-                if ((index) % 2 == 0) {
-                    chkboxes[i].parentNode.style.backgroundColor = "#f9faff";
-                }
-                else {
-                    chkboxes[i].parentNode.style.backgroundColor = "";
-                }
-            }
-        }
     }
 
 
@@ -172,7 +185,7 @@
                                                 <td>
                                                     <asp:ListView ID="lvOpportunityPriorities" runat="server">
                                                         <LayoutTemplate>
-                                                            <div style="max-height: 150px; overflow-y: auto;overflow-x:hidden;">
+                                                            <div style="max-height: 150px; overflow-y: auto; overflow-x: hidden;">
                                                                 <table id="itemPlaceHolderContainer" runat="server" style="background-color: White;"
                                                                     class="WholeWidth">
                                                                     <tr runat="server" id="itemPlaceHolder">
@@ -185,13 +198,15 @@
                                                                 <td style="width: 100%; padding-left: 2px;">
                                                                     <table class="WholeWidth">
                                                                         <tr>
-                                                                            <td align="center" valign="middle" style="text-align: center;  color:Black;font-size:12px; padding: 0px;">
+                                                                            <td align="center" valign="middle" style="text-align: center; color: Black; font-size: 12px;
+                                                                                padding: 0px;">
                                                                                 <asp:Label ID="lblPriority" Width="15px" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>
                                                                             </td>
-                                                                            <td align="center" valign="middle" style="text-align: center;  color:Black;font-size:12px; padding: 0px;padding-left: 2px;padding-right: 2px;">
+                                                                            <td align="center" valign="middle" style="text-align: center; color: Black; font-size: 12px;
+                                                                                padding: 0px; padding-left: 2px; padding-right: 2px;">
                                                                                 -
                                                                             </td>
-                                                                            <td style="padding: 0px;  color:Black;font-size:12px;">
+                                                                            <td style="padding: 0px; color: Black; font-size: 12px;">
                                                                                 <asp:Label ID="lblDescription" runat="server" Width="180px" Style="white-space: normal;"
                                                                                     Text='<%# Eval("Description") %>'></asp:Label>
                                                                             </td>
@@ -313,7 +328,7 @@
                                         <td style="width: 96%;">
                                             <asp:DataList ID="dtlProposedPersons" runat="server" Style="white-space: normal;">
                                                 <ItemTemplate>
-                                                    <%# Eval("PersonLastFirstName")%></font>
+                                                    <%# GetFormattedPersonName((string)Eval("PersonLastFirstName"),(int)Eval("OpportunityPersonTypeId"))%>
                                                 </ItemTemplate>
                                             </asp:DataList>
                                             <div style="white-space: normal;">
@@ -323,10 +338,13 @@
                                                 Style="display: none; font-style: italic;"></asp:Label>
                                         </td>
                                         <td style="width: 4%; white-space: normal;" align="right">
-                                            <img src="Images/People_icon.png" alt="people" onclick="ShowPotentialResourcesModal(this);"
-                                                style="cursor: pointer;" opportunityid='<%# Eval("Id") %>' />
+                                            <asp:Image ID="imgPeople_icon" runat="server" ImageUrl="~/Images/People_icon.png"
+                                                onclick="ShowPotentialResourcesModal(this);" Style="cursor: pointer;" opportunityid='<%# Eval("Id") %>' />
                                             <asp:HiddenField ID="hdnProposedPersonsIndexes" runat="server" />
                                             <asp:HiddenField ID="hdnOutSideResources" runat="server" />
+                                            <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachToProject" runat="server" TargetControlID="imgPeople_icon" EnableViewState="false" 
+                                                BackgroundCssClass="modalBackground" PopupControlID="pnlPotentialResources" CancelControlID="btnCancel"
+                                                DropShadow="false" />
                                         </td>
                                     </tr>
                                 </table>
@@ -382,7 +400,7 @@
                                         <td style="width: 96%;">
                                             <asp:DataList ID="dtlProposedPersons" runat="server" Style="white-space: normal;">
                                                 <ItemTemplate>
-                                                    <%# Eval("PersonLastFirstName")%></font>
+                                                    <%# GetFormattedPersonName((string)Eval("PersonLastFirstName"),(int)Eval("OpportunityPersonTypeId"))%>
                                                 </ItemTemplate>
                                             </asp:DataList>
                                             <div style="white-space: normal;">
@@ -392,10 +410,13 @@
                                                 Style="display: none; font-style: italic;"></asp:Label>
                                         </td>
                                         <td style="width: 4%; white-space: normal;" align="right">
-                                            <img src="Images/People_icon.png" alt="people" style="cursor: pointer;" onclick="ShowPotentialResourcesModal(this);"
-                                                opportunityid='<%# Eval("Id") %>' />
+                                            <asp:Image ID="imgPeople_icon" runat="server" ImageUrl="~/Images/People_icon.png"
+                                                onclick="ShowPotentialResourcesModal(this);" Style="cursor: pointer;" opportunityid='<%# Eval("Id") %>' />
                                             <asp:HiddenField ID="hdnProposedPersonsIndexes" runat="server" />
                                             <asp:HiddenField ID="hdnOutSideResources" runat="server" />
+                                            <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachToProject" runat="server" TargetControlID="imgPeople_icon"
+                                                BackgroundCssClass="modalBackground" PopupControlID="pnlPotentialResources" CancelControlID="btnCancel" OkControlID="btnSaveProposedResources"
+                                                DropShadow="false" />
                                         </td>
                                     </tr>
                                 </table>
@@ -413,53 +434,73 @@
             </asp:ListView>
         </div>
         <asp:HiddenField ID="hdnPreviouslyClickedRowIndex" runat="server" />
-        <div id="divPotentialResources" style="cursor: default; padding: 4px; background-color: #d4dff8;
-            display: none">
-            <center>
-                <b>Potential Resources</b>
-            </center>
-            <asp:TextBox ID="txtSearchBox" runat="server" Width="98%" Height="16px" Style="padding-bottom: 4px;
-                margin-bottom: 4px;" MaxLength="4000" onkeyup="filterPotentialResources(this);"></asp:TextBox>
-            <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmSearch" runat="server" TargetControlID="txtSearchBox"
-                WatermarkText="Begin typing here to filter the list of resources below." EnableViewState="false"
-                WatermarkCssClass="watermarkedtext" BehaviorID="wmbhSearchBox" />
-            <div class="cbfloatRight" style="height: 250px; width: 350px; overflow-y: scroll;
-                border: 1px solid black; background: white; padding-left: 3px; text-align: left !important;">
-                <asp:CheckBoxList ID="cblPotentialResources" runat="server" Width="100%" BackColor="White"
-                    AutoPostBack="false" DataTextField="Name" DataValueField="id" CellPadding="3">
-                </asp:CheckBoxList>
-            </div>
-            <div style="text-align: right; padding: 8px 0px 8px 0px">
-                <input type="button" value="Clear All" onclick="javascript:ClearProposedResources();" />
-            </div>
-            <table style="width: 100%">
+        <asp:Panel ID="pnlPotentialResources" runat="server" BorderColor="Black" BackColor="#d4dff8"
+            Width="372px" Style="display: none" BorderWidth="1px">
+            <table width="100%">
                 <tr>
-                    <td style="width: 93% !important;">
-                        <asp:TextBox ID="txtOutSideResources" runat="server" Width="100%" Height="16px" Style="padding-bottom: 4px;
-                            margin-bottom: 4px;" MaxLength="4000"></asp:TextBox>
-                        <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmOutSideResources" runat="server"
-                            TargetControlID="txtOutSideResources" WatermarkText="Enter Other Names(s) (optional) separated by semi-colons."
-                            EnableViewState="false" WatermarkCssClass="watermarkedtext" BehaviorID="wmBhOutSideResources" />
-                    </td>
-                    <td align="right">
-                        <img id="imgtrash" src="Images/trash-icon-Large.png" onclick="clearOutSideResources();"
-                            style="cursor: pointer; padding-bottom: 5px;" />
+                    <td style="padding-left: 5px; padding-top: 5px; padding-bottom: 5px; padding-right: 2px;">
+                        <center>
+                            <b>Potential Resources</b>
+                        </center>
+                        <asp:TextBox ID="txtSearchBox" runat="server" Width="353px" Height="16px" Style="padding-bottom: 4px;
+                            margin-bottom: 4px;" MaxLength="4000" onkeyup="filterPotentialResources(this);"></asp:TextBox>
+                        <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmSearch" runat="server" TargetControlID="txtSearchBox"
+                            WatermarkText="Begin typing here to filter the list of resources below." EnableViewState="false" 
+                            WatermarkCssClass="watermarkedtext" BehaviorID="wmbhSearchBox" />
+                        <table>
+                            <tr>
+                                <td style="width: 300px;">
+                                </td>
+                                <td style="padding-right: 2px;">
+                                    <asp:Image ID="imgCheck" runat="server" ImageUrl="~/Images/right_icon.png" />
+                                </td>
+                                <td style="padding-left: 2px;">
+                                    <asp:Image ID="imgCross" runat="server" ImageUrl="~/Images/cross_icon.png" />
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="cbfloatRight" style="height: 250px; width: 350px; overflow-y: scroll;
+                            border: 1px solid black; background: white; padding-left: 3px; text-align: left !important;">
+                            <uc:MultipleSelectionCheckBoxList ID="cblPotentialResources" runat="server" Width="100%"
+                                BackColor="White" AutoPostBack="false" DataTextField="Name" DataValueField="id"
+                                CellPadding="3">
+                            </uc:MultipleSelectionCheckBoxList>
+                        </div>
+                        <div style="text-align: right;width: 356px; padding: 8px 0px 8px 0px">
+                            <input type="button" value="Clear All" onclick="javascript:ClearProposedResources();" />
+                        </div>
+                        <table style="width: 100%">
+                            <tr>
+                                <td style="width: 93% !important;">
+                                    <asp:TextBox ID="txtOutSideResources" runat="server" Width="100%" Height="16px" Style="padding-bottom: 4px;
+                                        margin-bottom: 4px;" MaxLength="4000"></asp:TextBox>
+                                    <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmOutSideResources" runat="server"
+                                        TargetControlID="txtOutSideResources" WatermarkText="Enter Other Names(s) (optional) separated by semi-colons."
+                                        EnableViewState="false" WatermarkCssClass="watermarkedtext" BehaviorID="wmBhOutSideResources" />
+                                </td>
+                                <td align="right">
+                                    <img id="imgtrash" src="Images/trash-icon-Large.png" onclick="clearOutSideResources();"
+                                        style="cursor: pointer; padding-bottom: 5px;" />
+                                </td>
+                            </tr>
+                        </table>
+                        <br />
+                        <table width="356px;">
+                            <tr>
+                                <td align="right">
+                                    <input type="button" id="btnSaveProposedResources" value="Save" onclick="javascript:saveProposedResources();" />
+                                    &nbsp;
+                                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" ToolTip="Cancel" />
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
             </table>
-            <br />
-            <table width="350px;">
-                <tr>
-                    <td align="right">
-                        <input type="button" id="btnSaveProposedResources" value="Save" onclick="javascript:saveProposedResources();" />
-                        &nbsp;
-                        <input type="button" value="Cancel" onclick="javascript:$.unblockUI();" />
-                    </td>
-                </tr>
-            </table>
-        </div>
+        </asp:Panel>
         <asp:HiddenField ID="hdnCurrentOpportunityId" runat="server" Value="" />
         <asp:HiddenField ID="hdnProposedResourceIndexes" runat="server" Value="" />
+        <asp:HiddenField ID="hdnProposedResourceIdsWithTypes" runat="server" Value="" />
         <asp:HiddenField ID="hdnProposedOutSideResources" runat="server" Value="" />
         <asp:Button ID="btnSaveProposedResourcesHidden" runat="server" OnClick="btnSaveProposedResources_OnClick"
             Style="display: none;" />
