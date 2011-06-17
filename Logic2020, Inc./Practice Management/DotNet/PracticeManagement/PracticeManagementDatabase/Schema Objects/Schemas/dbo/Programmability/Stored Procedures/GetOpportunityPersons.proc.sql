@@ -9,6 +9,7 @@ BEGIN
 		SELECT   op.PersonId
 				,p.FirstName
 				,p.LastName
+				,op.OpportunityPersonTypeId
 		FROM dbo.OpportunityPersons op
 		JOIN dbo.Person p ON p.PersonId = op.PersonId
 		WHERE op.OpportunityId = @OpportunityId
