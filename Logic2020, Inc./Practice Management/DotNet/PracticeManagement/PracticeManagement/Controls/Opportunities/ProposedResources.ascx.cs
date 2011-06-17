@@ -17,6 +17,9 @@ namespace PraticeManagement.Controls.Opportunities
         private const string OPPORTUNITY_KEY = "OPPORTUNITY_KEY";
         private const string PreviousReportContext_Key = "PREVIOUSREPORTCONTEXT_KEY";
         private const string DistinctPotentialBoldPersons_Key = "DISTINCTPOTENTIALBOLDPERSONS_KEY";
+        private const string OpportunityPersons_Key = "OPPORTUNITYPERSONS_KEY";
+
+
         public Opportunity Opportunity
         {
             get
@@ -74,11 +77,17 @@ namespace PraticeManagement.Controls.Opportunities
             set { hintDate.Visible = value; }
         }
 
-        public bool HasProposedPersons
+        public bool HasProposedPersonsOfTypeNormal
         {
             get
             {
-                if (cblProposedResources.Items.Count > 0)
+                int personCount =0;
+
+                if (OpportunityPersons != null)
+                {
+                    personCount = OpportunityPersons.Where(op => op.OpportunityPersonTypeId == (int)OpportunityPersonType.NormalPerson).Count();
+                }
+                if (personCount > 0)
                     return true;
                 else
                     return false;
@@ -154,12 +163,31 @@ namespace PraticeManagement.Controls.Opportunities
             }
         }
 
+        private Person[] OpportunityPersons
+        {
+            get
+            {
+                if (ViewState[OpportunityPersons_Key] != null)
+                {
+                    return ViewState[OpportunityPersons_Key] as Person[];
+                }
+
+                using (var serviceClient = new OpportunityServiceClient())
+                {
+                    Person[] opPersons = serviceClient.GetOpportunityPersons(OpportunityId.Value);
+                    ViewState[OpportunityPersons_Key] = opPersons;
+                    return opPersons;
+                }
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
                 ViewState.Remove(PreviousReportContext_Key);
                 ViewState.Remove(DistinctPotentialBoldPersons_Key);
+                ViewState.Remove(OpportunityPersons_Key);
             }
         }
 
@@ -200,34 +228,20 @@ namespace PraticeManagement.Controls.Opportunities
                 item.Selected = false;
                 item.Enabled = true;
 
-                foreach (ListItem item2 in cblProposedResources.Items)
+                if (OpportunityId.HasValue)
                 {
-                    if (item2.Value == item.Value)
+                    foreach (var person in OpportunityPersons)
                     {
-                        item.Selected = true;
-                        item.Enabled = false;
-                        break;
+                        if (person.Id.Value.ToString() == item.Value)
+                        {
+
+                            item.Attributes["selectedchecktype"] = person.OpportunityPersonTypeId.ToString();
+                            
+                            item.Enabled = false;
+                            break;
+                        }
                     }
                 }
-            }
-        }
-
-        public void AddAttributesAndBoldPotentialResourcesPersons()
-        {
-            //List<string> distinctPotentialBoldPersons = GetDistinctPotentialBoldPersons();
-
-            foreach (ListItem item in cblPotentialResources.Items)
-            {
-                item.Attributes["PersonId"] = item.Value;
-
-                //foreach (string name in distinctPotentialBoldPersons)
-                //{
-                //    if (item.Text == name)
-                //    {
-                //        item.Attributes["style"] = "font-weight:bold;";
-                //        break;
-                //    }
-                //}
             }
         }
 
@@ -240,7 +254,14 @@ namespace PraticeManagement.Controls.Opportunities
         {
             foreach (ListItem item in cblProposedResources.Items)
             {
-                item.Attributes["PersonId"] = item.Value;
+                item.Attributes["personid"] = item.Value;
+                item.Attributes["personname"] = item.Text;
+                Person person = OpportunityPersons.Where(op => op.Id.Value.ToString() == item.Value).AsQueryable().ToArray()[0];
+                item.Attributes["persontype"] = person.OpportunityPersonTypeId.ToString();
+                if (person.OpportunityPersonTypeId == (int)OpportunityPersonType.StrikedPerson)
+                {
+                    item.Text = "<strike>" + item.Text + "</ strike>";
+                }
             }
         }
 
@@ -314,14 +335,19 @@ namespace PraticeManagement.Controls.Opportunities
             if (Opportunity != null && Opportunity.Id.HasValue)
             {
                 AddAttributesTocblProposedResources();
+            }
 
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "MultipleSelectionCheckBoxes_OnClickKey", string.Format("MultipleSelectionCheckBoxes_OnClick('{0}');", cblPotentialResources.ClientID), true);
+
+            if (Opportunity != null && Opportunity.Id.HasValue)
+            {
                 if (!IsPostBack)
                 {
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "GetProposedPersonIdsList", "GetProposedPersonIdsList();", true);
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "GetProposedPersonIdsList", "GetProposedPersonIdsListWithPersonType();", true);
                 }
             }
 
-            AddAttributesAndBoldPotentialResourcesPersons();
+           
         }
 
         public void FillPotentialResources()
@@ -335,9 +361,10 @@ namespace PraticeManagement.Controls.Opportunities
         {
             if (OpportunityId.HasValue)
             {
+                ViewState.Remove(OpportunityPersons_Key);
                 using (var serviceClient = new OpportunityServiceClient())
                 {
-                    cblProposedResources.DataSource = serviceClient.GetOpportunityPersons(OpportunityId.Value);
+                    cblProposedResources.DataSource = OpportunityPersons;
                     cblProposedResources.DataBind();
                 }
             }
