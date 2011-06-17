@@ -144,13 +144,13 @@ BEGIN
 		BEGIN
 			DELETE op
 			FROM OpportunityPersons op
-			LEFT JOIN [dbo].[ConvertStringListIntoTable] (@PersonIdList) AS p 
-			ON op.OpportunityId = @OpportunityId AND op.PersonId = p.ResultId
+			LEFT JOIN [dbo].[ConvertStringListIntoTableWithTwoColoumns] (@PersonIdList) AS p 
+			ON op.OpportunityId = @OpportunityId AND op.PersonId = p.ResultId AND op.OpportunityPersonTypeId = p.ResultType
 			WHERE p.ResultId IS NULL and OP.OpportunityId = @OpportunityId
 
-			INSERT INTO OpportunityPersons
-			SELECT @OpportunityId ,P.ResultId
-			FROM [dbo].[ConvertStringListIntoTable] (@PersonIdList) AS p 
+			INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId)
+			SELECT @OpportunityId ,p.ResultId,p.ResultType
+			FROM [dbo].[ConvertStringListIntoTableWithTwoColoumns] (@PersonIdList) AS p 
 			LEFT JOIN OpportunityPersons op
 			ON p.ResultId = op.PersonId AND op.OpportunityId=@OpportunityId
 			WHERE op.PersonId IS NULL 
