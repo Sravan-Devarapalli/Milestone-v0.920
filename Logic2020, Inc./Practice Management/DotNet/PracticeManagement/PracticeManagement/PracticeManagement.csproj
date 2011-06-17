@@ -167,12 +167,14 @@
     <Content Include="Images\bg_corpnav_bottom.png" />
     <Content Include="Images\bg_corpnav_mid.png" />
     <Content Include="Images\bg_corpnav_top.png" />
+    <Content Include="Images\cross_icon.png" />
     <Content Include="Images\Dropdown_Arrow_22.png" />
     <Content Include="Images\grayedArrow-First.png" />
     <Content Include="Images\grayedArrow-Last.png" />
     <Content Include="Images\grayedArrow-Next.png" />
     <Content Include="Images\grayedArrow-Previous.png" />
     <Content Include="Images\People_icon.png" />
+    <Content Include="Images\right_icon.png" />
     <Content Include="Images\trash-icon-Large.png" />
     <Content Include="Reports\Expenses.aspx" />
     <Content Include="RevenueGoals.aspx" />
@@ -896,6 +898,7 @@
     <Compile Include="Controls\Configuration\SmtpPopSetUpControl.ascx.designer.cs">
       <DependentUpon>SmtpPopSetUpControl.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MultipleSelectionCheckBoxList.cs" />
     <Compile Include="Controls\Opportunities\OpportunityListControl.ascx.cs">
       <DependentUpon>OpportunityListControl.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
