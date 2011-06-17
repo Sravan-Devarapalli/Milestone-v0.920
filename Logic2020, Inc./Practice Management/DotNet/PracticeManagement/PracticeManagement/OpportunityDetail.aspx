@@ -720,10 +720,10 @@
                 </ajax:TabContainer>
                 <table class="WholeWidth" style="background: #e2ebff;">
                     <tr>
-                        <td style="padding-left: 8px; padding-right: 8px;">
+                        <td align="center" style="padding-left: 8px; padding-right: 8px;">
                             <asp:UpdatePanel ID="upProposedResources" UpdateMode="Conditional" runat="server">
                                 <ContentTemplate>
-                                    <table class="WholeWidth" style="width: 99%;">
+                                    <table class="WholeWidth" style="width: 78%;">
                                         <uc:ProposedResources ID="ucProposedResources" runat="server" hintDateVisible="true" />
                                     </table>
                                 </ContentTemplate>
