@@ -225,6 +225,7 @@ namespace PraticeManagement.Controls.Opportunities
         protected void Page_Prerender(object sender, EventArgs e)
         {
             PreparePrioritiesWithAnimations();
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "MultipleSelectionCheckBoxes_OnClickKeyName", string.Format("MultipleSelectionCheckBoxes_OnClick('{0}');", cblPotentialResources.ClientID), true);
         }
 
         private void PreparePrioritiesWithAnimations()
@@ -508,7 +509,7 @@ namespace PraticeManagement.Controls.Opportunities
                 }
                 if (oppty.ProposedPersons != null)
                 {
-                    hdnProposedPersonsIndexes.Value = GetPersonsIndexesString(oppty.ProposedPersons, cblPotentialResources);
+                    hdnProposedPersonsIndexes.Value = GetPersonsIndexesWithPersonTypeString(oppty.ProposedPersons, cblPotentialResources);
                 }
                 if (!string.IsNullOrEmpty(oppty.OutSideResources))
                 {
@@ -524,7 +525,7 @@ namespace PraticeManagement.Controls.Opportunities
             }
         }
 
-        private string GetPersonsIndexesString(List<Person> persons, CheckBoxList cblPotentialResources)
+        private string GetPersonsIndexesWithPersonTypeString(List<Person> persons, CheckBoxList cblPotentialResources)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -540,6 +541,8 @@ namespace PraticeManagement.Controls.Opportunities
                                          cblPotentialResources.Items.FindByValue(person.Id.Value.ToString())
                                                                      ).ToString()
                                    );
+                        sb.Append(':');
+                        sb.Append(person.OpportunityPersonTypeId.ToString());
                         sb.Append(',');
                     }
                 }
@@ -552,7 +555,7 @@ namespace PraticeManagement.Controls.Opportunities
             int opportunityId;
             if (Int32.TryParse(hdnCurrentOpportunityId.Value, out opportunityId))
             {
-                var selectedList = GetProposedResources();
+                var selectedList = hdnProposedResourceIdsWithTypes.Value;
 
                 using (var serviceClient = new OpportunityServiceClient())
                 {
@@ -580,6 +583,20 @@ namespace PraticeManagement.Controls.Opportunities
             return clientList.ToString();
         }
 
+        protected static string GetFormattedPersonName(string personLastFirstName, int opportunityPersonTypeId)
+        {
+            if (opportunityPersonTypeId == (int)OpportunityPersonType.NormalPerson)
+            {
+                return personLastFirstName;
+            }
+            else
+            {
+                return "<strike>"+ personLastFirstName + "</strike>";
+            }
+ 
+        }
+
 
     }
 }
+
