@@ -13,69 +13,6 @@ namespace PraticeManagement.Controls.Opportunities {
     public partial class ProposedResources {
         
         /// <summary>
-        /// hdnOpportunityIdValue control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnOpportunityIdValue;
-        
-        /// <summary>
-        /// hdnProposedPersonIdsList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnProposedPersonIdsList;
-        
-        /// <summary>
-        /// hintDate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Image hintDate;
-        
-        /// <summary>
-        /// lblPotentialResources control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPotentialResources;
-        
-        /// <summary>
-        /// imgCheck control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Image imgCheck;
-        
-        /// <summary>
-        /// imgCross control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Image imgCross;
-        
-        /// <summary>
-        /// lblProposedResources control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblProposedResources;
-        
-        /// <summary>
         /// cblPotentialResources control.
         /// </summary>
         /// <remarks>
@@ -101,6 +38,24 @@ namespace PraticeManagement.Controls.Opportunities {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBoxList cblProposedResources;
+        
+        /// <summary>
+        /// hdnOpportunityIdValue control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnOpportunityIdValue;
+        
+        /// <summary>
+        /// hdnProposedPersonIdsList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnProposedPersonIdsList;
     }
 }
 
