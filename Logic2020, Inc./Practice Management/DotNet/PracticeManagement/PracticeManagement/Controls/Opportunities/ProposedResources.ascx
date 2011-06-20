@@ -134,69 +134,25 @@
     }    
 </script>
 <tr>
-    <td colspan="6" style="width: 100%; border-bottom: 1px solid black; padding: 1px 0px 4px 0px;">
-        <asp:HiddenField ID="hdnOpportunityIdValue" runat="server" />
-        <asp:HiddenField ID="hdnProposedPersonIdsList" runat="server" />
-    </td>
-</tr>
-<tr>
-    <td>
-    </td>
-</tr>
-<tr style="background-color: #e2ebff">
-    <td colspan="6" style="width: 100%; padding-left: 4px;">
-        <div style="text-align: center; padding: 4px 0px 4px 0px;">
-            Select from the list of Potential Resources below and click "Add" to note them as
-            Proposed for this Opportunity.<asp:Image ID="hintDate" runat="server" ImageUrl="~/Images/hint.png"
-                ToolTip="Choosing a Start and End Date for the Opportunity, even loosely, will result in a much more accurate idea of which Potential Resources are available for this Opportunity." />
-        </div>
-    </td>
-</tr>
-<tr>
-    <td colspan="6" style="padding: 0px 0px 4px 4px; width: 100%; background-color: #e2ebff;">
-        <table width="100%" >
-            <tr style="padding-left: 20px; padding-top: 2px;">
-                <td style="padding-right: 20px; padding-top: 2px; width: 45%">
-                    <table width="100%">
-                        <tr>
-                            <td align="center" style="width: 87%;">
-                                <asp:Label ID="lblPotentialResources" runat="server" Text="Potential Resources" Style="font-weight: bold;
-                                    padding-bottom: 2px;"></asp:Label>
-                            </td>
-                            <td align="center" style="width: 4%;">
-                                <asp:Image ID="imgCheck" runat="server" ImageUrl="~/Images/right_icon.png" />
-                            </td>
-                            <td align="center" style="width: 5%;">
-                                <asp:Image ID="imgCross" runat="server" ImageUrl="~/Images/cross_icon.png" />
-                            </td>
-                            <td style="width: 5%;">
-                            </td>
-                        </tr>
-                    </table>
-                </td >
-                <td valign="middle" align="center" style="width: 10%">
-                </td>
-                <td align="center"  style="padding-left: 20px; padding-top: 2px; vertical-align: top; width: 45%">
-                    <asp:Label ID="lblProposedResources" runat="server" Text="Proposed Resources" Style="font-weight: bold;
-                        padding-bottom: 2px;"></asp:Label>
-                </td>
-            </tr>
-            <tr style="padding-left: 20px; padding-top: 2px;">
-                <td align="left" style="padding-right: 20px; padding-top: 2px; width: 45%">
+    <td style="padding: 0px 0px 4px 4px; width: 100%; background-color: #e2ebff;">
+        <table width="100%">
+            <tr style=" padding-top: 2px;">
+                <td align="left" style="padding-left: 6px;padding-right: 6px; padding-top: 2px; width: 44%">
                     <div class="cbfloatRight" style="height: 100px; width: 100%; overflow-y: scroll;
                         border: 1px solid black; background: white; padding-left: 3px;">
                         <uc:MultipleSelectionCheckBoxList ID="cblPotentialResources" runat="server" Height="100px"
-                            Width="100%" BackColor="White" AutoPostBack="false" DataTextField="Name" DataValueField="id" CellSpacing="0" 
-                            CellPadding="0" OnDataBound="cblPotentialResources_DataBound">
+                            Width="100%" BackColor="White" AutoPostBack="false" DataTextField="Name" DataValueField="id"
+                            CellSpacing="0" CellPadding="0" OnDataBound="cblPotentialResources_DataBound">
                         </uc:MultipleSelectionCheckBoxList>
                     </div>
                 </td>
-                <td valign="middle" align="center" style="width: 10%">
+                <td valign="middle" align="center" style="width: 12%">
                     <input id="btnAdd" type="button" onclick="Add_Click();" value="Add =>" /><br />
                     <br />
                     <input id="btnRemove" type="button" onclick="Remove_Click();" value="<= Remove" />
                 </td>
-                <td style="padding-left: 20px; padding-top: 2px; vertical-align: top; width: 45%">
+                <td align="left" style="padding-left: 6px;padding-right: 6px; padding-top: 2px; vertical-align: top;
+                    width: 44%">
                     <div id="divProposedResources" runat="server" class="cbfloatRight" style="height: 100px;
                         width: 100%; overflow-y: scroll; border: 1px solid black; background: white;
                         padding-left: 3px;">
@@ -207,6 +163,12 @@
                 </td>
             </tr>
         </table>
+    </td>
+</tr>
+<tr>
+    <td style="width: 100%; padding: 1px 0px 4px 0px;">
+        <asp:HiddenField ID="hdnOpportunityIdValue" runat="server" />
+        <asp:HiddenField ID="hdnProposedPersonIdsList" runat="server" />
     </td>
 </tr>
 
