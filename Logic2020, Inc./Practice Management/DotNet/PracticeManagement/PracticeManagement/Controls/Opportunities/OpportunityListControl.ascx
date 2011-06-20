@@ -23,34 +23,35 @@
         currenthdnProposedPersonsIndexesId = image.parentNode.children[1].id;
         var refreshLableParentNode = image.parentNode.parentNode.children[0];
         Array.add(refreshMessageIdsFromLastRefresh, refreshLableParentNode.children[refreshLableParentNode.children.length - 1].id);
-
-        var chkboxes = $('#<%=cblPotentialResources.ClientID %> tr td:first-child :input');
-        var strikechkboxes = $('#<%=cblPotentialResources.ClientID %> tr td:nth-child(2) :input');
-
+        var trPotentialResources = document.getElementById('<%=cblPotentialResources.ClientID %>').getElementsByTagName('tr');
+        
         $find("wmBhOutSideResources").set_Text(image.parentNode.children[2].value);
         $find("wmbhSearchBox").set_Text('');
-        for (var i = 0; i < chkboxes.length; i++) {
 
-            chkboxes[i].checked = chkboxes[i].disabled = strikechkboxes[i].checked = strikechkboxes[i].disabled = false;
-            chkboxes[i].parentNode.parentNode.parentNode.style.display = "";
+        for (var i = 0; i < trPotentialResources.length; i++) {
+            var checkBox = trPotentialResources[i].children[0].getElementsByTagName('input')[0];
+            var strikeCheckBox = trPotentialResources[i].children[1].getElementsByTagName('input')[0];
+            checkBox.checked = checkBox.disabled = strikeCheckBox.checked = strikeCheckBox.disabled = false;
+            trPotentialResources[i].style.display = "";
             for (var j = 0; j < attachedResourcesIndexes.length; j++) {
                 var indexString = attachedResourcesIndexes[j];
                 var index = indexString.substring(0, indexString.indexOf(":", 0));
                 var checkBoxType = indexString.substring(indexString.indexOf(":", 0) + 1, indexString.length);
                 if (i == index && index != '') {
                     if (checkBoxType == 1) {
-                        chkboxes[i].checked = true;
-                        strikechkboxes[i].disabled = true;
+                        checkBox.checked = true;
+                        strikeCheckBox.disabled = true;
                     }
                     else {
-                        strikechkboxes[i].checked = true;
-                        chkboxes[i].disabled = true;
+                        strikeCheckBox.checked = true;
+                        checkBox.disabled = true;
                     }
                     break;
                 }
             }
         }
         hdnCurrentOpportunityId.value = image.attributes["OpportunityId"].value;
+        $find("behaviorIdPotentialResources").show();
         return false;
     }
 
@@ -66,18 +67,19 @@
                 }
             }
         }
-        hdnProposedPersonIdsList.value = PersonIdList;
+        hdnProposedPersonIdsList.value = PersonIdList;               
     }
 
     function saveProposedResources() {
         var buttonSave = document.getElementById('<%=btnSaveProposedResourcesHidden.ClientID %>');
         var hdnProposedResourceIndexes = document.getElementById('<%=hdnProposedResourceIndexes.ClientID %>');
         var hdnProposedOutSideResources = document.getElementById('<%=hdnProposedOutSideResources.ClientID %>');
+        var trPotentialResources = document.getElementById('<%=cblPotentialResources.ClientID %>').getElementsByTagName('tr');
+        hdnProposedOutSideResources.value = $find("wmBhOutSideResources").get_Text();
 
-        var chkboxes = $('#<%=cblPotentialResources.ClientID %> tr td:first-child :input');
-        hdnProposedOutSideResources.value = $find("wmBhOutSideResources").get_Text(); ;
-        for (var i = 0; i < chkboxes.length; i++) {
-            if (chkboxes[i].checked) {
+        for (var i = 0; i < trPotentialResources.length; i++) {
+            var checkBox = trPotentialResources[i].children[0].getElementsByTagName('input')[0];
+            if (checkBox.checked) {
                 if (hdnProposedResourceIndexes.value == '') {
                     hdnProposedResourceIndexes.value = i;
                 }
@@ -100,22 +102,22 @@
         }
     }
     function filterPotentialResources(searchtextBox) {
-        var chkboxList = document.getElementById('<%=cblPotentialResources.ClientID %>');
-        var chkboxes = $('#<%=cblPotentialResources.ClientID %> tr td:first-child :input');
+        var trPotentialResources = document.getElementById('<%=cblPotentialResources.ClientID %>').getElementsByTagName('tr');
         var searchText = searchtextBox.value.toLowerCase();
+        for (var i = 0; i < trPotentialResources.length; i++) {
+            var checkBox = trPotentialResources[i].children[0].getElementsByTagName('input')[0];
+            var checkboxText = checkBox.parentNode.children[1].innerHTML.toLowerCase();
 
-        for (var i = 0; i < chkboxes.length; i++) {
-            var checkboxText = chkboxes[i].parentNode.children[1].innerHTML.toLowerCase();
             if (checkboxText.length >= searchText.length && checkboxText.substr(0, searchText.length) == searchText) {
 
-                chkboxes[i].parentNode.parentNode.parentNode.style.display = "";
+                trPotentialResources[i].style.display = "";
             }
             else {
 
-                chkboxes[i].parentNode.parentNode.parentNode.style.display = "none";
+                trPotentialResources[i].style.display = "none";
             }
         }
-        changeAlternateitemsForProposedResources();
+        changeAlternateitemsForProposedResources('<%=cblPotentialResources.ClientID %>');
     }
     function ClearProposedResources() {
         var chkboxList = document.getElementById('<%=cblPotentialResources.ClientID %>');
@@ -128,7 +130,6 @@
     function clearOutSideResources() {
         $find("wmBhOutSideResources").set_Text('');
     }
-
 
     function setHintPosition(img, displayPnl) {
         var image = $("#" + img);
@@ -342,9 +343,6 @@
                                                 onclick="ShowPotentialResourcesModal(this);" Style="cursor: pointer;" opportunityid='<%# Eval("Id") %>' />
                                             <asp:HiddenField ID="hdnProposedPersonsIndexes" runat="server" />
                                             <asp:HiddenField ID="hdnOutSideResources" runat="server" />
-                                            <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachToProject" runat="server" TargetControlID="imgPeople_icon" EnableViewState="false" 
-                                                BackgroundCssClass="modalBackground" PopupControlID="pnlPotentialResources" CancelControlID="btnCancel"
-                                                DropShadow="false" />
                                         </td>
                                     </tr>
                                 </table>
@@ -414,9 +412,6 @@
                                                 onclick="ShowPotentialResourcesModal(this);" Style="cursor: pointer;" opportunityid='<%# Eval("Id") %>' />
                                             <asp:HiddenField ID="hdnProposedPersonsIndexes" runat="server" />
                                             <asp:HiddenField ID="hdnOutSideResources" runat="server" />
-                                            <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachToProject" runat="server" TargetControlID="imgPeople_icon"
-                                                BackgroundCssClass="modalBackground" PopupControlID="pnlPotentialResources" CancelControlID="btnCancel" OkControlID="btnSaveProposedResources"
-                                                DropShadow="false" />
                                         </td>
                                     </tr>
                                 </table>
@@ -434,8 +429,12 @@
             </asp:ListView>
         </div>
         <asp:HiddenField ID="hdnPreviouslyClickedRowIndex" runat="server" />
-        <asp:Panel ID="pnlPotentialResources" runat="server" BorderColor="Black" BackColor="#d4dff8"
-            Width="372px" Style="display: none" BorderWidth="1px">
+        <asp:HiddenField ID="hdnmpePotentialResources" runat="server" />
+        <AjaxControlToolkit:ModalPopupExtender ID="mpePotentialResources" runat="server" BehaviorID="behaviorIdPotentialResources"
+            TargetControlID="hdnmpePotentialResources" EnableViewState="false" BackgroundCssClass="modalBackground"
+            PopupControlID="pnlPotentialResources" CancelControlID="btnCancel" DropShadow="false" />
+        <asp:Panel ID="pnlPotentialResources" runat="server" BorderColor="Black" BackColor="#d4dff8" style="display:none;"
+            Width="372px" BorderWidth="1px">
             <table width="100%">
                 <tr>
                     <td style="padding-left: 5px; padding-top: 5px; padding-bottom: 5px; padding-right: 2px;">
@@ -445,11 +444,11 @@
                         <asp:TextBox ID="txtSearchBox" runat="server" Width="353px" Height="16px" Style="padding-bottom: 4px;
                             margin-bottom: 4px;" MaxLength="4000" onkeyup="filterPotentialResources(this);"></asp:TextBox>
                         <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmSearch" runat="server" TargetControlID="txtSearchBox"
-                            WatermarkText="Begin typing here to filter the list of resources below." EnableViewState="false" 
+                            WatermarkText="Begin typing here to filter the list of resources below." EnableViewState="false"
                             WatermarkCssClass="watermarkedtext" BehaviorID="wmbhSearchBox" />
                         <table>
                             <tr>
-                                <td style="width: 300px;">
+                                <td style="width: 304px;">
                                 </td>
                                 <td style="padding-right: 2px;">
                                     <asp:Image ID="imgCheck" runat="server" ImageUrl="~/Images/right_icon.png" />
@@ -466,7 +465,7 @@
                                 CellPadding="3">
                             </uc:MultipleSelectionCheckBoxList>
                         </div>
-                        <div style="text-align: right;width: 356px; padding: 8px 0px 8px 0px">
+                        <div style="text-align: right; width: 356px; padding: 8px 0px 8px 0px">
                             <input type="button" value="Clear All" onclick="javascript:ClearProposedResources();" />
                         </div>
                         <table style="width: 100%">
