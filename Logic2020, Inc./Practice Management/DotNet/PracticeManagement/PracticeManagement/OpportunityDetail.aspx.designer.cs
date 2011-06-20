@@ -517,6 +517,51 @@ namespace PraticeManagement {
         protected global::System.Web.UI.UpdatePanel upProposedResources;
         
         /// <summary>
+        /// hintDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image hintDate;
+        
+        /// <summary>
+        /// lblPotentialResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPotentialResources;
+        
+        /// <summary>
+        /// imgCheck control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgCheck;
+        
+        /// <summary>
+        /// imgCross control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgCross;
+        
+        /// <summary>
+        /// lblProposedResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblProposedResources;
+        
+        /// <summary>
         /// ucProposedResources control.
         /// </summary>
         /// <remarks>
