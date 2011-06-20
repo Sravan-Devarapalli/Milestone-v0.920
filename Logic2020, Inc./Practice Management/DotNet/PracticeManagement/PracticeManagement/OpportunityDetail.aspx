@@ -281,14 +281,15 @@
                                         <table>
                                             <tr>
                                                 <th align="right">
-                                                    <asp:Button ID="btnClosePriority" OnClientClick="return false;" runat="server" CssClass="mini-report-close" Text="x" />
+                                                    <asp:Button ID="btnClosePriority" OnClientClick="return false;" runat="server" CssClass="mini-report-close"
+                                                        Text="x" />
                                                 </th>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     <asp:ListView ID="lvOpportunityPriorities" runat="server">
                                                         <LayoutTemplate>
-                                                            <div style="max-height: 150px; overflow-y: auto;overflow-x:hidden;">
+                                                            <div style="max-height: 150px; overflow-y: auto; overflow-x: hidden;">
                                                                 <table id="itemPlaceHolderContainer" runat="server" style="background-color: White;"
                                                                     class="WholeWidth">
                                                                     <tr runat="server" id="itemPlaceHolder">
@@ -301,15 +302,17 @@
                                                                 <td style="width: 100%; padding-left: 2px;">
                                                                     <table class="WholeWidth">
                                                                         <tr>
-                                                                            <td align="center" valign="middle" style="text-align: center; padding: 0px; color:Black;font-size:12px;">
+                                                                            <td align="center" valign="middle" style="text-align: center; padding: 0px; color: Black;
+                                                                                font-size: 12px;">
                                                                                 <asp:Label ID="lblPriority" Width="15px" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>
                                                                             </td>
-                                                                            <td align="center" valign="middle" style="text-align: center; padding: 0px;padding-left: 2px;padding-right: 2px; color:Black;font-size:12px;">
+                                                                            <td align="center" valign="middle" style="text-align: center; padding: 0px; padding-left: 2px;
+                                                                                padding-right: 2px; color: Black; font-size: 12px;">
                                                                                 -
                                                                             </td>
                                                                             <td style="padding: 0px;">
-                                                                                <asp:Label ID="lblDescription" runat="server" Width="180px" Style="white-space: normal; color:Black;font-size:12px;"
-                                                                                    Text='<%# Eval("Description") %>'></asp:Label>
+                                                                                <asp:Label ID="lblDescription" runat="server" Width="180px" Style="white-space: normal;
+                                                                                    color: Black; font-size: 12px;" Text='<%# Eval("Description") %>'></asp:Label>
                                                                             </td>
                                                                         </tr>
                                                                     </table>
@@ -482,9 +485,9 @@
                                 </td>
                             </tr>
                         </table>
-                        <ajax:AnimationExtender ID="animHide"  TargetControlID="btnClosePriority" runat="server">
+                        <ajax:AnimationExtender ID="animHide" TargetControlID="btnClosePriority" runat="server">
                         </ajax:AnimationExtender>
-                        <ajax:AnimationExtender ID="animShow"  TargetControlID="imgPriorityHint" runat="server">
+                        <ajax:AnimationExtender ID="animShow" TargetControlID="imgPriorityHint" runat="server">
                         </ajax:AnimationExtender>
                     </ContentTemplate>
                     <Triggers>
@@ -723,8 +726,49 @@
                         <td align="center" style="padding-left: 8px; padding-right: 8px;">
                             <asp:UpdatePanel ID="upProposedResources" UpdateMode="Conditional" runat="server">
                                 <ContentTemplate>
-                                    <table class="WholeWidth" style="width: 78%;">
-                                        <uc:ProposedResources ID="ucProposedResources" runat="server" hintDateVisible="true" />
+                                    <table width="98%" >
+                                        <tr>
+                                            <td style="width: 100%; border-bottom: 1px solid black;">
+                                                <div style="text-align: center; padding: 4px 0px 4px 0px;">
+                                                    Select from the list of Potential Resources below and click "Add" to note them as
+                                                    Proposed for this Opportunity.<asp:Image ID="hintDate" runat="server" ImageUrl="~/Images/hint.png"
+                                                        ToolTip="Choosing a Start and End Date for the Opportunity, even loosely, will result in a much more accurate idea of which Potential Resources are available for this Opportunity." />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr style="padding-top: 2px;">
+                                            <td style="width: 100%;">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td align="center" style="width: 44%;">
+                                                            <div class="cbfloatRight" style="width: 100%; padding-left: 3px;">
+                                                                <table width="100%">
+                                                                    <tr>
+                                                                        <td style="width:100%;text-align:center;" >
+                                                                            <asp:Label ID="lblPotentialResources" runat="server" Text="Potential Resources" Style="font-weight: bold;
+                                                                                padding-bottom: 2px;"></asp:Label>
+                                                                        </td>
+                                                                        <td  style="width: 10px;padding-right:6px;">
+                                                                            <asp:Image ID="imgCheck" runat="server" ImageUrl="~/Images/right_icon.png" />
+                                                                        </td>
+                                                                        <td style="width: 10px;padding-right:22px;">
+                                                                            <asp:Image ID="imgCross" runat="server" ImageUrl="~/Images/cross_icon.png" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        </td>
+                                                        <td align="center" style="width: 12%;">
+                                                        </td>
+                                                        <td align="center" style="width: 44%;text-align:center;">
+                                                            <asp:Label ID="lblProposedResources" runat="server" Text="Proposed Resources" Style="font-weight: bold;
+                                                                padding-bottom: 2px;"></asp:Label>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <uc:ProposedResources ID="ucProposedResources" runat="server" />
                                     </table>
                                 </ContentTemplate>
                                 <Triggers>
@@ -785,7 +829,8 @@
                                 </td>
                                 <td style="padding: 4px; height: 35px; width: 13%;">
                                     <asp:HiddenField ID="hdnOpportunityDelete" runat="server"></asp:HiddenField>
-                                    <asp:Button ID="btnDelete" runat="server" Visible="false" Enabled="false" Text="Delete Opportunity" OnClientClick="ConfirmToDeleteOpportunity();" OnClick="btnDelete_Click" />
+                                    <asp:Button ID="btnDelete" runat="server" Visible="false" Enabled="false" Text="Delete Opportunity"
+                                        OnClientClick="ConfirmToDeleteOpportunity();" OnClick="btnDelete_Click" />
                                 </td>
                                 <td style="padding: 4px; height: 35px; width: 13%;">
                                     <asp:Button ID="btnSave" runat="server" Text="Save Changes" OnClick="btnSave_Click" />
