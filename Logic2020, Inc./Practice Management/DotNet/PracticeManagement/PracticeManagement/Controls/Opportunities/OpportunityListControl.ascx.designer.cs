@@ -49,6 +49,24 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::System.Web.UI.WebControls.HiddenField hdnPreviouslyClickedRowIndex;
         
         /// <summary>
+        /// hdnmpePotentialResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnmpePotentialResources;
+        
+        /// <summary>
+        /// mpePotentialResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpePotentialResources;
+        
+        /// <summary>
         /// pnlPotentialResources control.
         /// </summary>
         /// <remarks>
