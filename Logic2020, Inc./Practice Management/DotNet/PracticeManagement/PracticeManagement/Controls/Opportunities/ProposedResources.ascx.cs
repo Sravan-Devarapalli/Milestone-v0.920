@@ -70,13 +70,6 @@ namespace PraticeManagement.Controls.Opportunities
             }
         }
 
-        public bool hintDateVisible
-        {
-            get { return hintDate.Visible; }
-
-            set { hintDate.Visible = value; }
-        }
-
         public bool HasProposedPersonsOfTypeNormal
         {
             get
