@@ -58,31 +58,27 @@ namespace PraticeManagement.Controls
 
             function MultipleSelectionCheckBoxes_OnClick(ControlClientID) {
                 changeAlternateitemsForProposedResources(ControlClientID);
-                var checkBoxList = $('#'+ControlClientID+' tr td:first-child :input');
-                for (var i = 0; i < checkBoxList.length; i++) {
-                    var currCheckbox = checkBoxList[i];
+                var trPotentialResources = document.getElementById(ControlClientID).getElementsByTagName('tr');
+                for (var i = 0; i < trPotentialResources.length; i++) {
+                    var currCheckbox = trPotentialResources[i].children[0].getElementsByTagName('input')[0];
+                    var strikeCheckbox = trPotentialResources[i].children[1].getElementsByTagName('input')[0];
                     var func = 'currCheckbox_Onclick('+currCheckbox.id.toString()+');';
                     currCheckbox.setAttribute('onclick', func);
-                }
-
-                var strikeCBL = $('#'+ControlClientID+' tr td:nth-child(2) :input');
-                for (var j = 0; j < strikeCBL.length; j++) {
-                    var strikeCheckbox = strikeCBL[j];
                     var funcName = 'strikeCB_Onclick('+strikeCheckbox.id.toString()+');';
                     strikeCheckbox.setAttribute('onclick', funcName);
                 }
             }
              function changeAlternateitemsForProposedResources(ControlClientID) {
-                    var chkboxes = $('#'+ControlClientID+' tr td:first-child :input');
+                    var trPotentialResources = document.getElementById(ControlClientID).getElementsByTagName('tr');
                     var index = 0;
-                    for (var i = 0; i < chkboxes.length; i++) {
-                        if (chkboxes[i].parentNode.style.display != 'none') {
+                    for (var i = 0; i < trPotentialResources.length; i++) {
+                        if (trPotentialResources[i].style.display != 'none') {
                             index++;
                             if ((index) % 2 == 0) {
-                                chkboxes[i].parentNode.parentNode.parentNode.style.backgroundColor = '#f9faff';
+                                trPotentialResources[i].style.backgroundColor = '#f9faff';
                             }
                             else {
-                                chkboxes[i].parentNode.parentNode.parentNode.style.backgroundColor = '';
+                                trPotentialResources[i].style.backgroundColor = '';
                             }
                         }
                     }
