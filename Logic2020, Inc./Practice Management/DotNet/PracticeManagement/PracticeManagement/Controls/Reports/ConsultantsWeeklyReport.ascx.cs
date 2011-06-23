@@ -68,7 +68,7 @@ namespace PraticeManagement.Controls.Reports
         {
             get
             {
-               return utf.Granularity;
+                return utf.Granularity;
             }
         }
 
@@ -79,8 +79,8 @@ namespace PraticeManagement.Controls.Reports
         {
             get
             {
-               return utf.AvgUtil;
-           
+                return utf.AvgUtil;
+
             }
         }
 
@@ -91,7 +91,7 @@ namespace PraticeManagement.Controls.Reports
         {
             get
             {
-               return utf.Period;
+                return utf.Period;
             }
         }
 
@@ -121,7 +121,7 @@ namespace PraticeManagement.Controls.Reports
         {
             get
             {
-               return utf.EndPeriod;
+                return utf.EndPeriod;
             }
         }
 
@@ -129,7 +129,7 @@ namespace PraticeManagement.Controls.Reports
         {
             get
             {
-                    return utf.SortId;
+                return utf.SortId;
             }
         }
 
@@ -145,7 +145,7 @@ namespace PraticeManagement.Controls.Reports
         {
             get
             {
-                return hdnIsSampleReport.Value.ToLowerInvariant()=="true" ? true :false ; 
+                return hdnIsSampleReport.Value.ToLowerInvariant() == "true" ? true : false;
             }
             set
             {
@@ -233,7 +233,7 @@ namespace PraticeManagement.Controls.Reports
             horizAxis.IsLabelAutoFit = true;
             horizAxis.IsStartedFromZero = true;
 
-            if (utf.DetalizationSelectedValue == "1" || utf.DetalizationSelectedValue == "7")
+            if (utf.DetalizationSelectedValue == "1")
             {
                 horizAxis.IntervalType = DateTimeIntervalType.Weeks;
                 horizAxis.Interval = 1;
@@ -241,16 +241,41 @@ namespace PraticeManagement.Controls.Reports
                 horizAxis.IntervalOffset = GetOffset(BegPeriod);
                 horizAxis.IntervalOffsetType = DateTimeIntervalType.Days;
             }
-            else if (utf.DetalizationSelectedValue == "14")
+            else if (utf.DetalizationSelectedValue == "7")
             {
-                horizAxis.IntervalType = DateTimeIntervalType.Weeks;
-                horizAxis.Interval = 2;
+                if ((int)BegPeriod.DayOfWeek > 1)
+                {
+                    double period = Convert.ToDouble("-" + (int)BegPeriod.DayOfWeek);
+                    horizAxis.Minimum = BegPeriod.AddDays(period + 1).ToOADate();
+                }
+                if ((int)EndPeriod.DayOfWeek < 6)
+                {
+                    double period = Convert.ToDouble((int)EndPeriod.DayOfWeek);
+                    horizAxis.Maximum = EndPeriod.AddDays(6 - period).ToOADate();
+                }
 
-                horizAxis.IntervalOffset = GetOffset(BegPeriod) == 0 ? 0 : GetOffset(BegPeriod) - 7;
+                horizAxis.IntervalType = DateTimeIntervalType.Weeks;
+                horizAxis.Interval = 1;
+
+                horizAxis.IntervalOffset = 0;
                 horizAxis.IntervalOffsetType = DateTimeIntervalType.Days;
             }
             else
             {
+                var beginPeriod = BegPeriod.AddDays(1 - BegPeriod.Day);
+                var endPeriod = (new DateTime(EndPeriod.Year, EndPeriod.Month, 1)).AddMonths(1).AddDays(-1);
+
+                if ((int)beginPeriod.DayOfWeek > 1)
+                {
+                    double period = Convert.ToDouble("-" + (int)beginPeriod.DayOfWeek);
+                    horizAxis.Minimum = beginPeriod.AddDays(period + 1).ToOADate();
+                }
+                if ((int)endPeriod.DayOfWeek < 6)
+                {
+                    double period = Convert.ToDouble((int)endPeriod.DayOfWeek);
+                    horizAxis.Maximum = endPeriod.AddDays(6 - period).ToOADate();
+                }
+
                 horizAxis.IntervalType = DateTimeIntervalType.Months;
                 horizAxis.Interval = 1;
             }
@@ -534,7 +559,7 @@ namespace PraticeManagement.Controls.Reports
         /// </summary>
         /// <param name = "p">Person</param>
         /// <param name = "avg">Average load</param>
-        private void AddLabel(Person p, int avg,int vacationDays)
+        private void AddLabel(Person p, int avg, int vacationDays)
         {
             //  Get labels collection
             var labels =
@@ -571,7 +596,7 @@ namespace PraticeManagement.Controls.Reports
                 labels.Add(
                     _personsCount - 0.49, // From position
                     _personsCount + 0.49, // To position
-                    FormatAvgPercentage(vacationDays ,avg), // Formated person title
+                    FormatAvgPercentage(vacationDays, avg), // Formated person title
                     0, // Index
                     LabelMarkStyle.None); // Mark style: none
 
@@ -579,20 +604,50 @@ namespace PraticeManagement.Controls.Reports
 
         private void AddPersonRange(Person p, int w, int load, string csv)
         {
-            var pointStartDate = BegPeriod.AddDays(w * Granularity);
-            var pointEndDate = BegPeriod.AddDays(((w + 1) * Granularity));
+            var beginPeriod = BegPeriod;
+            var endPeriod = EndPeriod;
+
+            if (Granularity == 7)
+            {
+                if ((int)BegPeriod.DayOfWeek > 1)
+                {
+                    beginPeriod = BegPeriod.AddDays(-1 * ((int)BegPeriod.DayOfWeek));
+                }
+                if ((int)EndPeriod.DayOfWeek < 6)
+                {
+                    endPeriod = EndPeriod.AddDays(6 - ((int)EndPeriod.DayOfWeek));
+                }
+
+            }
+            else if (Granularity == 30)
+            {
+                beginPeriod = BegPeriod.AddDays(1 - BegPeriod.Day);
+                endPeriod = (new DateTime(EndPeriod.Year, EndPeriod.Month, 1)).AddMonths(1).AddDays(-1);
+
+                if ((int)beginPeriod.DayOfWeek > 1)
+                {
+                    beginPeriod = beginPeriod.AddDays(-1 * ((int)beginPeriod.DayOfWeek));
+                }
+                if ((int)endPeriod.DayOfWeek < 6)
+                {
+                    endPeriod = endPeriod.AddDays(6 - ((int)endPeriod.DayOfWeek));
+                }
+            }
+            var period = (endPeriod.Subtract(beginPeriod).Days + 1);
+            var pointStartDate = beginPeriod.AddDays(w * Granularity);
+            var pointEndDate = beginPeriod.AddDays(((w + 1) * Granularity));
 
             if (Granularity == 30)
             {
-                pointStartDate = BegPeriod.AddMonths(w);
-                pointEndDate = BegPeriod.AddMonths(w + 1);
+                pointStartDate = beginPeriod.AddMonths(w);
+                pointEndDate = endPeriod > beginPeriod.AddMonths(w + 1) ? beginPeriod.AddMonths(w + 1) : endPeriod.AddDays(1);
             }
             else
             {
-                var delta = Period - (w * Granularity - 1);
+                var delta = period - (w * Granularity - 1);
                 if (delta <= Granularity)
                 {
-                    pointEndDate = BegPeriod.AddDays(Period);
+                    pointEndDate = beginPeriod.AddDays(period);
                 }
             }
 
@@ -609,7 +664,7 @@ namespace PraticeManagement.Controls.Reports
                 range.ToolTip = FormatRangeTooltip(load, pointStartDate, pointEndDate.AddDays(-1));
                 if (!IsSampleReport)
                 {
-                    range.PostBackValue = FormatRangePostbackValue(p, BegPeriod, EndPeriod); // For the whole period
+                    range.PostBackValue = FormatRangePostbackValue(p, beginPeriod, endPeriod); // For the whole period
                     range.Url = Constants.ApplicationPages.ConsTimelineReportDetails;
                 }
             }
