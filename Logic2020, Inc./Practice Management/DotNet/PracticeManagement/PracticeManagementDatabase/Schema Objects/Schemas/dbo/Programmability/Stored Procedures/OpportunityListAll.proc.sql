@@ -29,7 +29,9 @@ BEGIN
 	(
 		
 	SELECT ROW_NUMBER() OVER(PARTITION BY O.ClientName + isnull(O.BuyerName, '') 
-							ORDER BY CASE OP.sortOrder WHEN 0 THEN 1000 ELSE OP.sortOrder END, O.SalespersonLastName) RowNumber,
+							ORDER BY CASE OP.sortOrder WHEN 0 THEN 1000 ELSE OP.sortOrder END,
+									YEAR(O.ProjectedStartDate),MONTH(O.ProjectedStartDate),
+									O.SalespersonLastName) RowNumber,
 							/* here sortOrder = 0 means 'PO' priority */
 			o.OpportunityId,
 			o.Name,		   
@@ -66,8 +68,7 @@ BEGIN
 			p.FirstName as 'OwnerFirstName',
 			os.Name as 'OwnerStatus',
 			o.EstimatedRevenue,
-			o.OutSideResources,
-			OP.sortOrder
+			o.OutSideResources
 		FROM v_Opportunity O
 		LEFT JOIN dbo.Person p ON o.OwnerId = p.PersonId
 		LEFT JOIN dbo.PersonStatus ps ON ps.PersonStatusId = o.SalespersonStatusId  
@@ -86,9 +87,16 @@ BEGIN
 			B.*
 		FROM CTE A
 		JOIN CTE B	ON (A.ClientName =B.ClientName AND isnull(A.BuyerName, '')  = isnull(B.BuyerName, '') 
-							AND A.RowNumber=1 AND A.sortOrder!=0 AND B.SortOrder != 0 ) 
-					   OR (A.OpportunityId = B.OpportunityId AND A.sortOrder=0)
-		ORDER BY A.sortOrder,A.SalespersonLastName,B.ClientName,isnull(B.BuyerName, ''),B.sortOrder,B.SalespersonLastName
+							AND A.RowNumber=1 AND A.PrioritySortOrder!=0 AND B.PrioritySortOrder != 0 ) 
+					   OR (A.OpportunityId = B.OpportunityId AND A.PrioritySortOrder=0)
+		ORDER BY A.PrioritySortOrder,
+				YEAR(A.ProjectedStartDate),
+				MONTH(A.ProjectedStartDate),
+				A.SalespersonLastName,
+				B.ClientName,
+				isnull(B.BuyerName, ''),
+				B.PrioritySortOrder,
+				B.SalespersonLastName
 
 		/* here sortOrder = 0 means 'PO' priority */
 		
