@@ -6,6 +6,7 @@ using System.Web;
 using PraticeManagement.Controls;
 using PraticeManagement.Controls.Generic.Filtering;
 using ErrorEventArgs = PraticeManagement.Events.ErrorEventArgs;
+using DataTransferObjects;
 
 namespace PraticeManagement.Utils
 {
@@ -159,6 +160,23 @@ namespace PraticeManagement.Utils
             var weekStartDate = GetWeekStartDate(DateTime.Now);
             dateIntervalControl.FromDate = weekStartDate;
             dateIntervalControl.ToDate = weekStartDate.AddDays(7.0);
+        }
+
+        public static DateTime GetNowWithTimeZone()
+        {
+            var timezone = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.TimeZoneKey);
+            var isDayLightSavingsTimeEffect = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDayLightSavingsTimeEffectKey);
+
+            if (timezone == "-08:00" && isDayLightSavingsTimeEffect == "true")
+            {
+                return TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
+            }
+            else
+            {
+                var timezoneWithoutSign = timezone.Replace("+", string.Empty);
+                TimeZoneInfo ctz = TimeZoneInfo.CreateCustomTimeZone("cid", TimeSpan.Parse(timezoneWithoutSign), "customzone", "customzone");
+                return TimeZoneInfo.ConvertTime(DateTime.UtcNow, ctz);
+            }
         }
     }
 }
