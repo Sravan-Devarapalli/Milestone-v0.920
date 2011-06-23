@@ -499,6 +499,8 @@ namespace DataAccess
                     int hireDateIndex = reader.GetOrdinal(HireDateColumn);
                     int avgUtilIndex = reader.GetOrdinal(AvgUtilColumn);
                     int personVacationDaysIndex = reader.GetOrdinal(PersonVactionDaysColumn);
+                    int seniorityIdColumnIndex = reader.GetOrdinal(SeniorityIdColumn);
+                    int SeniorityNameColumnIndex = reader.GetOrdinal(SeniorityNameColumn);
 
                     var res = new List<Quadruple<Person, int[], int, int>>();
                     while (reader.Read())
@@ -522,7 +524,12 @@ namespace DataAccess
                                     TimescaleName = reader.GetString(timescaleNameIndex),
                                     Timescale = (TimescaleType)reader.GetInt32(timescaleIdIndex)
                                 },
-                                HireDate = (DateTime)reader[hireDateIndex]
+                                HireDate = (DateTime)reader[hireDateIndex],
+                                Seniority = new Seniority
+                                {
+                                     Id = reader.GetInt32(seniorityIdColumnIndex),
+                                     Name = reader.GetString(SeniorityNameColumnIndex)
+                                }
                             };
                         int[] load = Utils.StringToIntArray((string)reader[weeklyLoadIndex]);
 
