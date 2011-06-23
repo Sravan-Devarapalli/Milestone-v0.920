@@ -3,6 +3,8 @@
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Src="~/Controls/MonthPicker.ascx" TagPrefix="uc" TagName="MonthPicker" %>
+<%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
+    TagName="DateInterval" %>
 <script type="text/javascript">
     function ChangeSortByRadioButtons(sender) {
         var sortby = document.getElementById("<%= ddlSortBy.ClientID%>");
@@ -40,13 +42,271 @@
             rbDesc.checked = false;
         }
     }
+    function CheckIfDatesValid() {
+        hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
+        hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
+        txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
+        txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
+        var startDate = new Date(txtStartDate.value);
+        var endDate = new Date(txtEndDate.value);
+        if (txtStartDate.value != '' && txtEndDate.value != ''
+            && startDate <= endDate) {
+            var startYear = parseInt(startDate.format('yyyy'));
+            var endYear = parseInt(endDate.format('yyyy'));
+            var startMonth = 0;
+            var endMonth = 0;
+            if (startDate.format('MM')[0] == '0') {
+                startMonth = parseInt(startDate.format('MM')[1]);
+            }
+            else {
+                startMonth = parseInt(startDate.format('MM'));
+            }
+            if (endDate.format('MM')[0] == '0') {
+                endMonth = parseInt(endDate.format('MM')[1]);
+            }
+            else {
+                endMonth = parseInt(endDate.format('MM'));
+            }
+            if ((startYear == endYear && ((endMonth - startMonth + 1) <= 3))
+            || (((((endYear - startYear) * 12 + endMonth) - startMonth + 1)) <= 3)
+            || ((endDate - startDate) / (1000 * 60 * 60 * 24)) < 90
+            ) {
+                var btnCustDatesClose = document.getElementById('<%= btnCustDatesClose.ClientID %>');
+                hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
+                hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
+                lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
+                var startDate = new Date(txtStartDate.value);
+                var endDate = new Date(txtEndDate.value);
+                var startDateStr = startDate.format("MM/dd/yyyy");
+                var endDateStr = endDate.format("MM/dd/yyyy");
+                hdnStartDate.value = startDateStr;
+                hdnEndDate.value = endDateStr;
+                lblCustomDateRange.innerHTML = '(' + startDateStr + '&nbsp;-&nbsp;' + endDateStr + ')';
+                btnCustDatesClose.click();
+            }
+        }
+    }
+
+    function ValidatePeriod(sender, args) {
+        hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
+        hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
+        txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
+        txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
+        ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
+        var startDate = new Date(txtStartDate.value);
+        var endDate = new Date(txtEndDate.value);
+        if (txtStartDate.value != '' && txtEndDate.value != ''
+            && startDate <= endDate && ddlPeriod.value == '0') {
+            var startYear = parseInt(startDate.format('yyyy'));
+            var endYear = parseInt(endDate.format('yyyy'));
+            var startMonth = 0;
+            var endMonth = 0;
+            if (startDate.format('MM')[0] == '0') {
+                startMonth = parseInt(startDate.format('MM')[1]);
+            }
+            else {
+                startMonth = parseInt(startDate.format('MM'));
+            }
+            if (endDate.format('MM')[0] == '0') {
+                endMonth = parseInt(endDate.format('MM')[1]);
+            }
+            else {
+                endMonth = parseInt(endDate.format('MM'));
+            }
+            if (startYear == endYear) {
+                args.IsValid = ((endMonth - startMonth + 1) <= 3);
+            }
+            else {
+                args.IsValid = (((((endYear - startYear) * 12 + endMonth) - startMonth + 1)) <= 3);
+            }
+            if (((endDate - startDate) / (1000 * 60 * 60 * 24)) < 90) {
+                args.IsValid = true;
+            }
+            //            if (!args.IsValid) {
+            //                imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
+            //                imgCalender.click();
+            //            }
+        }
+        else {
+            args.IsValid = true;
+        }
+    }
+
+    function CheckAndShowCustomDatesPoup(ddlPeriod) {
+        imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
+        lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
+        if (ddlPeriod.value == '0') {
+            imgCalender.attributes["class"].value = "";
+            lblCustomDateRange.attributes["class"].value = "";
+            if (imgCalender.fireEvent) {
+                imgCalender.style.display = "";
+                lblCustomDateRange.style.display = "";
+                imgCalender.click();
+            }
+            if (document.createEvent) {
+                var event = document.createEvent('HTMLEvents');
+                event.initEvent('click', true, true);
+                imgCalender.dispatchEvent(event);
+            }
+        }
+        else {
+            imgCalender.attributes["class"].value = "displayNone";
+            lblCustomDateRange.attributes["class"].value = "displayNone";
+            if (imgCalender.fireEvent) {
+                imgCalender.style.display = "none";
+                lblCustomDateRange.style.display = "none";
+            }
+        }
+    }
+    function ReAssignStartDateEndDates() {
+        hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
+        hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
+        hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
+        hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
+        txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
+        txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
+        txtStartDate.value = hdnStartDate.value;
+        txtEndDate.value = hdnEndDate.value;
+    }
+    function ChangeStartEndDates() {
+        ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
+        ddlDetalization = document.getElementById('<%=  ddlDetalization.ClientID %>');
+        if (ddlPeriod.value == '0' && ddlDetalization.value == '30') {
+
+            hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
+            hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
+            hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
+            hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
+            txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
+            txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
+            var startDate = new Date(txtStartDate.value);
+            var endDate = new Date(txtEndDate.value);
+            if (txtStartDate.value != '' && txtEndDate.value != ''
+            && startDate <= endDate) {
+                var startYear = parseInt(startDate.format('yyyy'));
+                var endYear = parseInt(endDate.format('yyyy'));
+                var startMonth = 0;
+                var endMonth = 0;
+                if (startDate.format('MM')[0] == '0') {
+                    startMonth = parseInt(startDate.format('MM')[1]);
+                }
+                else {
+                    startMonth = parseInt(startDate.format('MM'));
+                }
+                if (endDate.format('MM')[0] == '0') {
+                    endMonth = parseInt(endDate.format('MM')[1]);
+                }
+                else {
+                    endMonth = parseInt(endDate.format('MM'));
+                }
+
+                startDate = new Date(startMonth.toString() + '/01/' + startYear.toString());
+                if (endMonth == 12) {
+                    endYear = endYear + 1;
+                    endMonth = 1;
+                    endDate = new Date('01/01/' + endYear.toString());
+                }
+                else {
+                    endMonth = endMonth + 1;
+                    endDate = new Date(endMonth.toString() + '/01/' + endYear.toString());
+                }
+                endDate = new Date((endDate - (1000 * 60 * 60 * 24)));
+                if ((endYear - startYear) * 12 + endMonth - startMonth > 3) {
+                    endMonth = (startMonth + 2) % 12;
+                    if (startMonth > endMonth) {
+                        endYear = startYear + 1;
+                    }
+                    else {
+                        endYear = startYear;
+                    }
+                    endDate = new Date((endMonth + 1).toString() + '/01/' + endYear.toString());
+                    endDate = new Date((endDate - (1000 * 60 * 60 * 24)));
+                }
+
+                txtStartDate.value = startDate.format("MM/dd/yyyy");
+                txtEndDate.value = endDate.format("MM/dd/yyyy");
+                hdnStartDate.value = txtStartDate.value;
+                hdnEndDate.value = txtEndDate.value;
+                lblCustomDateRange.innerHTML = '(' + txtStartDate.value + '&nbsp;-&nbsp;' + txtEndDate.value + ')';
+            }
+        }
+    }
+    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+
+    function endRequestHandle(sender, Args) {
+        imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
+        lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
+        ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
+        if (imgCalender.fireEvent && ddlPeriod.value != '0') {
+            imgCalender.style.display = "none";
+            lblCustomDateRange.style.display = "none";
+        }
+    }
+
+    function DisableInvalidDays(sender, args) {
+        hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
+        hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
+        txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
+        txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
+        ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
+        var startDate = new Date(txtStartDate.value);
+
+        if (txtStartDate.value != '' && ddlPeriod.value == '0') {
+            var startYear = parseInt(startDate.format('yyyy'));
+            var startMonth = 0;
+            if (startDate.format('MM')[0] == '0') {
+                startMonth = parseInt(startDate.format('MM')[1]);
+            }
+            else {
+                startMonth = parseInt(startDate.format('MM'));
+            }
+            for (var i = 0; i < sender._days.all.length; i++) {
+                for (var j = 0; j < 6; j++) {
+                    for (var k = 0; k < 7; k++) {
+                        if (sender._days.all[i].id == sender._id + '_day_' + j + '_' + k) {
+                            var endDate = new Date(sender._days.all[i].title);
+                            var endYear = parseInt(endDate.format('yyyy'));
+                            var endMonth = 0;
+
+                            if (endDate.format('MM')[0] == '0') {
+                                endMonth = parseInt(endDate.format('MM')[1]);
+                            }
+                            else {
+                                endMonth = parseInt(endDate.format('MM'));
+                            }
+
+                            if (endDate > startDate) {
+                            }
+                            if (endDate < startDate ||
+                               (endDate > startDate
+                               && ((endYear - startYear) * 12 + endMonth - startMonth + 1) > 3
+                               && ((endDate - startDate) / (1000 * 60 * 60 * 24)) > 90
+                               )) {
+                                sender._days.all[i].disabled = true;
+                                sender._days.all[i].innerHTML = "<div>" + sender._days.all[i].innerText + "</div>";
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+
+    }
+
 </script>
+<style type="text/css">
+    .displayNone
+    {
+        display: none;
+    }
+</style>
 <script language="javascript" type="text/javascript" src="../../Scripts/jquery-1.4.1.js"></script>
 <div class="filters" style="margin-bottom: 10px;">
     <div class="buttons-block">
         <table class="WholeWidth">
             <tr>
-                <td align="left" style="width: 20px">
+                <td align="left" style="width: 98%;">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
                         ImageControlID="btnExpandCollapseFilter" CollapsedImage="~/Images/expand.jpg"
                         ExpandedImage="~/Images/collapse.jpg" CollapseControlID="btnExpandCollapseFilter"
@@ -54,57 +314,56 @@
                     <asp:Label ID="lblFilter" runat="server"></asp:Label>&nbsp;
                     <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg"
                         ToolTip="Expand Filters and Sort Options" />
-                </td>
-                <td align="left" style="width: 90px;" align="left">
-                    <asp:Label ID="lblUtilizationFrom" runat="server" Text="Show Utilization"></asp:Label>
-                </td>
-                <td style="width: 45px; padding-right: 4px" align="right">
-                    <asp:Label ID="Label1" runat="server" Text="from "></asp:Label>
-                </td>
-                <td style="width: 115px;" align="left">
-                    <uc:MonthPicker ID="mpFromControl" OnSelectedValueChanged="mpFromControl_OnSelectedValueChanged"  
-                        runat="server" />
-                </td>
-                <td style="width: 15px;" align="left">
-                    <asp:Label ID="lblT0" runat="server" Text="to "></asp:Label>
-                </td>
-                <td style="width: 115px;" align="left">
-                    <uc:MonthPicker ID="mpToControl" runat="server" OnClientChange="EnableResetButton();"
-                        OnSelectedValueChanged="mpToControl_OnSelectedValueChanged" />
-                </td>
-                <td style="width: 15px;" align="left">
+                    &nbsp;
+                    <asp:Label ID="lblUtilizationFrom" runat="server" Text="Show Utilization for"></asp:Label>
+                    &nbsp;
+                    <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="false" Onchange=" EnableResetButton(); CheckAndShowCustomDatesPoup(this);">
+                        <asp:ListItem Text="Next 3 months" Value="3"></asp:ListItem>
+                        <asp:ListItem Text="Last 3 months" Value="-3"></asp:ListItem>
+                        <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
+                    </asp:DropDownList>
+                    <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
+                        CancelControlID="btnCustDatesCancel" OkControlID="btnCustDatesClose" BackgroundCssClass="modalBackground"
+                        PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates" DropShadow="false"
+                        OnCancelScript="ReAssignStartDateEndDates();" OnOkScript="return false;" />
+                    <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
+                    <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
+                    <asp:HiddenField ID="hdnStartDateTxtBoxId" runat="server" Value="" />
+                    <asp:HiddenField ID="hdnEndDateTxtBoxId" runat="server" Value="" />
+                    &nbsp;
+                    <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
+                    <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
+                    &nbsp;
                     <asp:Label ID="lblBy" runat="server" Text="by "></asp:Label>
-                </td>
-                <td style="width: 85px;" align="left">
-                    <asp:DropDownList ID="ddlDetalization" runat="server" AutoPostBack="false" onchange="EnableResetButton();">
+                    &nbsp;
+                    <asp:DropDownList ID="ddlDetalization" runat="server" AutoPostBack="false" onchange="EnableResetButton();ChangeStartEndDates();">
                         <asp:ListItem Value="1">1 Day</asp:ListItem>
                         <asp:ListItem Selected="True" Value="7">1 Week</asp:ListItem>
-                        <asp:ListItem Value="14">2 Weeks</asp:ListItem>
                         <asp:ListItem Value="30">1 Month</asp:ListItem>
                     </asp:DropDownList>
-                </td>
-                <td style="width: 160px;" align="left">
+                    &nbsp;
                     <asp:Label ID="lblUtilization" runat="server" Text="  where U% is "></asp:Label>
+                    &nbsp;
                     <asp:DropDownList ID="ddlAvgUtil" runat="server" AutoPostBack="false" onchange="EnableResetButton();">
                         <asp:ListItem Value="2147483647">0 - 106+</asp:ListItem>
                         <asp:ListItem Value="106">&lt; 106+</asp:ListItem>
                         <asp:ListItem Value="90">&lt; 90</asp:ListItem>
                         <asp:ListItem Value="50">&lt; 50</asp:ListItem>
                     </asp:DropDownList>
+                    &nbsp;
                 </td>
                 <td align="right">
                     <table>
                         <tr>
                             <td>
-                                <asp:Button ID="btnUpdateView" runat="server" Text="Update View" Width="100px" OnClick="btnUpdateView_OnClick"
+                                <asp:Button ID="btnUpdateView" runat="server" Text="Update View" Width="90px" OnClick="btnUpdateView_OnClick"
                                     EnableViewState="False" />
                             </td>
                             <td>
-                                <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" Width="100px"
-                                    OnClick="btnResetFilter_OnClick" />
+                                <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" Width="90px" OnClick="btnResetFilter_OnClick" />
                             </td>
                             <td>
-                                <asp:Button ID="btnSaveReport" runat="server" Text="Save Report" Width="100px" OnClick="btnSaveReport_OnClick"
+                                <asp:Button ID="btnSaveReport" runat="server" Text="Save Report" Width="90px" OnClick="btnSaveReport_OnClick"
                                     EnableViewState="False" />
                             </td>
                         </tr>
@@ -112,6 +371,43 @@
                 </td>
             </tr>
         </table>
+        <asp:Panel ID="pnlCustomDates" runat="server" BackColor="White" BorderColor="Black"
+            CssClass="ConfirmBoxClass" Style="padding-top: 20px; display: none;" BorderWidth="2px">
+            <table class="WholeWidth">
+                <tr>
+                    <td align="center">
+                        <table>
+                            <tr>
+                                <td>
+                                    <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
+                                        FromToDateFieldWidth="70" />
+                                </td>
+                                <td>
+                                    <asp:CustomValidator ID="cstvalPeriodRange" runat="server" ClientValidationFunction="ValidatePeriod"
+                                        Text="*" EnableClientScript="true" ValidationGroup="<%# ClientID %>" ToolTip="Period should not be more than three months"
+                                        ErrorMessage="Period should not be more than three months."></asp:CustomValidator>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="padding: 10px 0px 10px 0px;">
+                        <asp:Button ID="btnCustDatesOK" runat="server" OnClientClick="CheckIfDatesValid();"
+                            Text="OK" Style="float: none !Important;" CausesValidation="true" />
+                        <asp:Button ID="btnCustDatesClose" runat="server" Style="display: none;" CausesValidation="true"
+                            OnClientClick="return false;" />
+                        &nbsp; &nbsp;
+                        <asp:Button ID="btnCustDatesCancel" runat="server" Text="Cancel" Style="float: none !Important;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        <asp:ValidationSummary ID="valSum" runat="server" />
+                    </td>
+                </tr>
+            </table>
+        </asp:Panel>
     </div>
     <asp:Panel ID="pnlFilters" runat="server">
         <AjaxControlToolkit:TabContainer ID="tcFilters" runat="server" ActiveTabIndex="0"
@@ -244,7 +540,7 @@
         </AjaxControlToolkit:TabContainer>
     </asp:Panel>
     <asp:HiddenField ID="hdnFiltersChanged" runat="server" Value="false" />
-    <asp:Label ID="lblMessage" runat="server" ></asp:Label>
+    <asp:Label ID="lblMessage" runat="server"></asp:Label>
 </div>
- <asp:HiddenField ID="hdnIsSampleReport" runat="server" />
+<asp:HiddenField ID="hdnIsSampleReport" runat="server" />
 
