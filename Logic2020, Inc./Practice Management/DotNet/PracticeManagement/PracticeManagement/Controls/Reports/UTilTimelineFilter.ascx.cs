@@ -28,10 +28,54 @@ namespace PraticeManagement.Controls.Reports
         public int SortId { get { return Convert.ToInt32(ddlSortBy.SelectedItem.Value); } }
         public int AvgUtil { get { return ParseInt(ddlAvgUtil.SelectedValue, int.MaxValue); } }
         public int Granularity { get { return ParseInt(ddlDetalization.SelectedValue, DEFAULT_STEP); } }
-        public int Period { get { return ParseInt((mpToControl.MonthEnd.Subtract(mpFromControl.MonthBegin).Days + 1).ToString(), DAYS_FORWARD); } }
-        public DateTime BegPeriod { get { return mpFromControl.MonthBegin; } }
+        public int Period { get { return ParseInt((EndPeriod.Subtract(BegPeriod).Days + 1).ToString(), DAYS_FORWARD); } }
+        public DateTime BegPeriod
+        {
+            get
+            {
+                var selectedVal = int.Parse(ddlPeriod.SelectedValue);
+                if (selectedVal == 0)
+                {
+                    return diRange.FromDate.Value;
+                }
+                else
+                {
+                    var now = Utils.Generic.GetNowWithTimeZone();
+                    if (selectedVal > 0)
+                    {
+                        return now.AddDays(1 - now.Day).Date;
+                    }
+                    else
+                    {
+                        return now.AddDays(1 - now.Day).AddMonths(selectedVal + 1).Date;
+                    }
+                }
+            }
+        }
         public string DetalizationSelectedValue { get { return ddlDetalization.SelectedValue; } }
-        public DateTime EndPeriod { get { return mpToControl.MonthEnd; } }
+        public DateTime EndPeriod
+        {
+            get
+            {
+                var selectedVal = int.Parse(ddlPeriod.SelectedValue);
+                if (selectedVal == 0)
+                {
+                    return diRange.ToDate.Value;
+                }
+                else
+                {
+                    var now = Utils.Generic.GetNowWithTimeZone();
+                    if (selectedVal > 0)
+                    {
+                        return now.AddDays(-1 * now.Day).AddMonths(selectedVal).Date;
+                    }
+                    else
+                    {
+                        return now.AddDays(-1 * now.Day).AddMonths(1).Date;
+                    }
+                }
+            }
+        }
 
         private Dictionary<string, string> resoureDictionary
         {
@@ -133,8 +177,6 @@ namespace PraticeManagement.Controls.Reports
                 }
                 else
                 {
-                    mpFromControl.SelectedMonth = DateTime.Now.Month;
-                    mpFromControl.SelectedYear = DateTime.Now.Year;
                     SelectAllItems(this.cblPractices);
                     SelectAllItems(this.cblTimeScales);
                 }
@@ -169,14 +211,10 @@ namespace PraticeManagement.Controls.Reports
 
             if (resoureDictionary != null && resoureDictionary.Keys.Count > 0)
             {
-                mpFromControl.YearFromDB = Convert.ToDateTime(resoureDictionary[Constants.ResourceKeys.StartDateKey]);
-                mpFromControl.SelectedMonth = Convert.ToDateTime(resoureDictionary[Constants.ResourceKeys.StartDateKey]).Month;
-                mpFromControl.SelectedYear = Convert.ToDateTime(resoureDictionary[Constants.ResourceKeys.StartDateKey]).Year;
+                diRange.FromDate = Convert.ToDateTime(resoureDictionary[Constants.ResourceKeys.StartDateKey]);
 
-                mpToControl.YearFromDB = Convert.ToDateTime(resoureDictionary[Constants.ResourceKeys.EndDateKey]);
-                mpToControl.SelectedMonth = Convert.ToDateTime(resoureDictionary[Constants.ResourceKeys.EndDateKey]).Month;
-                mpToControl.SelectedYear = Convert.ToDateTime(resoureDictionary[Constants.ResourceKeys.EndDateKey]).Year;
-
+                diRange.ToDate = Convert.ToDateTime(resoureDictionary[Constants.ResourceKeys.EndDateKey]);
+                ddlPeriod.SelectedValue = resoureDictionary[Constants.ResourceKeys.PeriodKey];
                 ddlDetalization.SelectedValue = ddlDetalization.Items.FindByValue(resoureDictionary[Constants.ResourceKeys.GranularityKey]).Value;
                 ddlAvgUtil.SelectedValue = ddlAvgUtil.Items.FindByValue(resoureDictionary[Constants.ResourceKeys.AvgUtilKey]).Value;
                 ddlSortBy.SelectedValue = ddlSortBy.Items.FindByValue(resoureDictionary[Constants.ResourceKeys.SortIdKey]).Value;
@@ -287,9 +325,7 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnResetFilter_OnClick(object sender, EventArgs e)
         {
-            mpFromControl.SelectedMonth = DateTime.Now.Month;
-            mpFromControl.SelectedYear = DateTime.Now.Year;
-            UpdateToDate();
+            ddlPeriod.SelectedIndex = 0;
             ddlDetalization.SelectedIndex = 1;
             ddlAvgUtil.SelectedIndex = 0;
             ddlSortBy.SelectedIndex = 0;
@@ -306,69 +342,32 @@ namespace PraticeManagement.Controls.Reports
             btnResetFilter.Attributes.Add("disabled", "true");
         }
 
-        protected void mpFromControl_OnSelectedValueChanged(object sender, EventArgs e)
-        {
-            UpdateToDate();
-            btnResetFilter.Attributes.Remove("disabled");
-        }
-
-        private void UpdateToDate()
-        {
-            DropDownList monthToControl = mpToControl.FindControl("ddlMonth") as DropDownList;
-            DropDownList yearControl = mpToControl.FindControl("ddlYear") as DropDownList;
-            foreach (ListItem item in monthToControl.Items)
-            {
-                var itemVal = Convert.ToInt32(item.Value);
-                if ((mpFromControl.SelectedMonth + 2 > 12 && (mpFromControl.SelectedMonth + 2) % 12 < itemVal && mpFromControl.SelectedMonth > itemVal) ||
-
-                    (mpFromControl.SelectedMonth + 2 <= 12 && (mpFromControl.SelectedMonth + 2 < itemVal || mpFromControl.SelectedMonth > itemVal)))
-                {
-                    item.Enabled = false;
-                }
-                else
-                {
-                    if (mpFromControl.SelectedYear == 2029 && mpFromControl.SelectedMonth > itemVal)
-                    {
-                        item.Enabled = false;
-                    }
-                    else
-                    {
-                        item.Enabled = true;
-                    }
-                }
-            }
-            yearControl.Items.Clear();
-            yearControl.Items.Add(new ListItem(mpFromControl.SelectedYear.ToString()));
-            if ((mpFromControl.SelectedMonth + 2) > 12 && mpFromControl.SelectedYear != 2029)
-            {
-                yearControl.Items.Add(new ListItem((mpFromControl.SelectedYear + 1).ToString()));
-            }
-
-            mpToControl.SelectedYear = (mpFromControl.SelectedMonth + 2) > 12 && mpFromControl.SelectedYear != 2029 ? (mpFromControl.SelectedYear + 1) : mpFromControl.SelectedYear;
-            mpToControl.SelectedMonth = (mpFromControl.SelectedMonth + 2) > 12 ?
-                      (mpFromControl.SelectedYear != 2029 ? (mpFromControl.SelectedMonth + 2) % 12 : 12)
-                    : mpFromControl.SelectedMonth + 2;
-        }
-
-        protected void mpToControl_OnSelectedValueChanged(object sender, EventArgs e)
-        {
-            if (mpToControl.MonthEnd.Year > mpFromControl.MonthBegin.Year && mpToControl.MonthEnd.Month >= mpFromControl.MonthBegin.Month)
-            {
-                mpToControl.SelectedYear = mpToControl.SelectedYear - 1;
-            }
-            else if (mpToControl.MonthEnd.Year == mpFromControl.MonthBegin.Year && mpToControl.MonthEnd.Month < mpFromControl.MonthBegin.Month)
-            {
-                mpToControl.SelectedYear = mpToControl.SelectedYear + 1;
-            }
-
-        }
-
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            diRange.FromDate = BegPeriod;
+            diRange.ToDate = EndPeriod;
+            lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
+                    diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat),
+                    diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat)
+                    );
+            if (ddlPeriod.SelectedValue == "0")
             {
-                UpdateToDate();
+                lblCustomDateRange.Attributes.Add("class", "");
+                imgCalender.Attributes.Add("class", "");
             }
+            else
+            {
+                lblCustomDateRange.Attributes.Add("class", "displayNone");
+                imgCalender.Attributes.Add("class", "displayNone");
+            }
+            hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+            hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+            var tbFrom = diRange.FindControl("tbFrom") as TextBox;
+            var tbTo = diRange.FindControl("tbTo") as TextBox;
+            tbFrom.Attributes.Add("onchange", "ChangeStartEndDates();");
+            tbTo.Attributes.Add("onchange", "ChangeStartEndDates();");
+            hdnStartDateTxtBoxId.Value = tbFrom.ClientID;
+            hdnEndDateTxtBoxId.Value = tbTo.ClientID;
         }
 
         protected void btnSaveReport_OnClick(object sender, EventArgs e)
@@ -384,7 +383,6 @@ namespace PraticeManagement.Controls.Reports
 
             reportFilterDictionary.Add(Constants.ResourceKeys.StartDateKey, BegPeriod.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.GranularityKey, Granularity.ToString());
-            reportFilterDictionary.Add(Constants.ResourceKeys.PeriodKey, Period.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.ProjectedPersonsKey, ProjectedPersons.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.ProjectedProjectsKey, ProjectedProjects.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.ActivePersonsKey, ActivePersons.ToString());
@@ -398,7 +396,7 @@ namespace PraticeManagement.Controls.Reports
             reportFilterDictionary.Add(Constants.ResourceKeys.SortDirectionKey, SortDirection.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.AvgUtilKey, AvgUtil.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.EndDateKey, EndPeriod.ToString());
-
+            reportFilterDictionary.Add(Constants.ResourceKeys.PeriodKey, ddlPeriod.SelectedValue);
             DataHelper.SaveResourceKeyValuePairs(SettingsType.Reports, reportFilterDictionary);
         }
     }
