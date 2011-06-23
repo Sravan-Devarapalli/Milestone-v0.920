@@ -1077,7 +1077,7 @@
                                                     DisplayMode="BulletList" EnableClientScript="false" HeaderText="Unable to convert opportunity due to the following errors:" />
                                             </td>
                                             <td style="padding: 4px; height: 35px; width: 13%;">
-                                                <asp:Button ID="btnSave" runat="server" Text="Save Changes" OnClick="btnSave_Click" />
+                                                <asp:Button ID="btnSave" OnClientClick="GetProposedPersonIdsListWithPersonType();" runat="server" Text="Save Changes" OnClick="btnSave_Click" />
                                             </td>
                                             <td style="padding: 4px; height: 35px; width: 13%;">
                                                 <asp:Button ID="btnCancelChanges" runat="server" Text="Cancel Changes" OnClientClick="if(getDirty()){return true;}else{return false;}"
