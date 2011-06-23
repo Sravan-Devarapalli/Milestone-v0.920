@@ -838,6 +838,9 @@ namespace DataAccess
                 var clientNameIndex = reader.GetOrdinal(ClientNameColumn);
                 var projectStatusIdIndex = reader.GetOrdinal(ProjectStatusIdColumn);
                 var projectNumberIndex = reader.GetOrdinal(ProjectNumberColumn);
+                var projectManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerId);
+                var projectManagerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerFirstName);
+                var projectManagerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerLastName);
 
                 while (reader.Read())
                 {
@@ -858,7 +861,13 @@ namespace DataAccess
                                                        {
                                                            Id = reader.GetInt32(projectStatusIdIndex)
                                                        },
-                                          Client = client
+                                          Client = client,
+                                          ProjectManager = new Person
+                                          {
+                                              Id = reader.GetInt32(projectManagerIdIndex),
+                                              LastName = reader.GetString(projectManagerLastNameIndex),
+                                              FirstName = reader.GetString(projectManagerFirstNameIndex)
+                                          }
                                       };
 
                     // Milestone details
