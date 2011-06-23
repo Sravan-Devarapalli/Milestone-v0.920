@@ -3,7 +3,7 @@
 -- Create date: 2009-11-20
 -- Description:	Get utilization report by weeks for given person
 -- =============================================
-CREATE FUNCTION dbo.GetWeeklyUtilization
+CREATE FUNCTION [dbo].[GetWeeklyUtilization]
 (
 	@PersonId INT,
 	@StartDate DATETIME,
@@ -33,9 +33,34 @@ BEGIN
 	DECLARE @EndRange DATETIME
 	
 	SET @EndRange = DATEADD(dd , @DaysForward, @StartDate) - 1
-    
+	IF(@Step = 7)
+	BEGIN
+		IF(DATEPART(DW,@StartDate)>2)
+		BEGIN
+			SELECT @StartDate = @StartDate - DATEPART(DW,@StartDate)+2
+		END
+		IF(DATEPART(DW,@StartDate)<7)
+		BEGIN
+			SELECT @EndRange = DATEADD(dd , 7-DATEPART(DW,@EndRange), @EndRange)
+		END
+	END
+	ELSE IF (@Step = 30)
+	BEGIN
+		SELECT @StartDate  = @StartDate-DAY(@StartDate)+1,
+				@EndRange = DATEADD(MM,1,@EndRange)-DAY(@EndRange)
+                
+		IF(DATEPART(DW,@StartDate)>2)
+		BEGIN
+			SELECT @StartDate = @StartDate - DATEPART(DW,@StartDate)+2
+		END
+		IF(DATEPART(DW,@EndRange)<7)
+		BEGIN
+			SELECT @EndRange = DATEADD(dd , 7-DATEPART(DW,@EndRange), @EndRange)
+		END
+	END
+    SELECT @DaysForward = DATEDIFF(DD,@StartDate,@EndRange)+1
     -- Iterate through all days
-    WHILE @w*@Step < @DaysForward
+    WHILE (@w*@Step < @DaysForward)
     BEGIN
 
 		IF(@Step = 30)
@@ -49,7 +74,8 @@ BEGIN
 			END
 			ELSE
 			BEGIN
-				BREAK
+				SET @start = DATEADD(mm , @w, @StartDate)
+				SET @end = @EndRange
 			END
 		END
 		ELSE
@@ -90,4 +116,3 @@ BEGIN
 	RETURN @rep
 
 END
-
