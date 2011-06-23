@@ -122,10 +122,6 @@
             if (((endDate - startDate) / (1000 * 60 * 60 * 24)) < 90) {
                 args.IsValid = true;
             }
-            //            if (!args.IsValid) {
-            //                imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
-            //                imgCalender.click();
-            //            }
         }
         else {
             args.IsValid = true;
@@ -241,57 +237,6 @@
             imgCalender.style.display = "none";
             lblCustomDateRange.style.display = "none";
         }
-    }
-
-    function DisableInvalidDays(sender, args) {
-        hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
-        hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
-        txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
-        txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
-        ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
-        var startDate = new Date(txtStartDate.value);
-
-        if (txtStartDate.value != '' && ddlPeriod.value == '0') {
-            var startYear = parseInt(startDate.format('yyyy'));
-            var startMonth = 0;
-            if (startDate.format('MM')[0] == '0') {
-                startMonth = parseInt(startDate.format('MM')[1]);
-            }
-            else {
-                startMonth = parseInt(startDate.format('MM'));
-            }
-            for (var i = 0; i < sender._days.all.length; i++) {
-                for (var j = 0; j < 6; j++) {
-                    for (var k = 0; k < 7; k++) {
-                        if (sender._days.all[i].id == sender._id + '_day_' + j + '_' + k) {
-                            var endDate = new Date(sender._days.all[i].title);
-                            var endYear = parseInt(endDate.format('yyyy'));
-                            var endMonth = 0;
-
-                            if (endDate.format('MM')[0] == '0') {
-                                endMonth = parseInt(endDate.format('MM')[1]);
-                            }
-                            else {
-                                endMonth = parseInt(endDate.format('MM'));
-                            }
-
-                            if (endDate > startDate) {
-                            }
-                            if (endDate < startDate ||
-                               (endDate > startDate
-                               && ((endYear - startYear) * 12 + endMonth - startMonth + 1) > 3
-                               && ((endDate - startDate) / (1000 * 60 * 60 * 24)) > 90
-                               )) {
-                                sender._days.all[i].disabled = true;
-                                sender._days.all[i].innerHTML = "<div>" + sender._days.all[i].innerText + "</div>";
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
-
     }
 
 </script>
