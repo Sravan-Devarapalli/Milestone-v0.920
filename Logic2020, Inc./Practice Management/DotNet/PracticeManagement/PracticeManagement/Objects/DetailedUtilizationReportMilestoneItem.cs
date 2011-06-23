@@ -7,9 +7,9 @@ namespace PraticeManagement.Objects
     {
         #region Constants
 
-        private const string DetailsTooltipFormat = "{0} - {6} - {1} - {2} - {3} - {4} - {5:F2} h/d";
+        private const string DetailsTooltipFormat = "{0:F2} h/d - {1} - {2} ({3}) - {4} ({5} - {6}) - {7}";
         private const string NotEndDate = "No End Date Specified.";
-        private const string DetailsLabelFormat = "{0} - {3} - {1} - {2:F2} h/d";
+        private const string DetailsLabelFormat = "{0:F2} h/d - {1}";
 
         #endregion
 
@@ -71,10 +71,8 @@ namespace PraticeManagement.Objects
             {
                 return string.Format(
                     DetailsLabelFormat,
-                    Entry.ParentMilestone.Project.ProjectNumber,
-                    Entry.ParentMilestone.Project.Client.Name,
-                    Entry.ParentMilestone.Project.Name,
-                    Entry.HoursPerDay);
+                    Entry.HoursPerDay,
+                    Entry.ParentMilestone.Project.ProjectNumber);
             }
         }
 
@@ -84,15 +82,16 @@ namespace PraticeManagement.Objects
             {
                 return string.Format(
                     DetailsTooltipFormat,
+                    Entry.HoursPerDay,
                     Entry.ParentMilestone.Project.Client.Name,
                     Entry.ParentMilestone.Project.Name,
+                    Entry.ParentMilestone.Project.ProjectNumber,
                     Entry.ParentMilestone.Description,
                     Entry.StartDate.ToShortDateString(),
                     Entry.EndDate.HasValue
                         ? Entry.EndDate.Value.ToShortDateString()
                         : NotEndDate,
-                    Entry.HoursPerDay,
-                    Entry.ParentMilestone.Project.ProjectNumber);
+                    Entry.ParentMilestone.Project.ProjectManager.Name);
             }
         }
 
