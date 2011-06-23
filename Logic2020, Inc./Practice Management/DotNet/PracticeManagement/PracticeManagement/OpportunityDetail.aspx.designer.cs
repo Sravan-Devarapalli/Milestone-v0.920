@@ -76,6 +76,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqStartDate;
         
         /// <summary>
+        /// cmpStartDateDataTypeCheck control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator cmpStartDateDataTypeCheck;
+        
+        /// <summary>
         /// dpEndDate control.
         /// </summary>
         /// <remarks>
@@ -92,6 +101,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqEndDate;
+        
+        /// <summary>
+        /// cmpEndDateDataTypeCheck control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator cmpEndDateDataTypeCheck;
         
         /// <summary>
         /// compEndDate control.
