@@ -189,8 +189,8 @@
                                             </td>
                                             <td>
                                                 <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpStartDate"
-                                                    ErrorMessage="Start date is required to add Proposed Resources to project." ToolTip="Start date is required to add Proposed Resources to project."
-                                                    ValidationGroup="HasPersons" Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>
+                                                    ErrorMessage="Start date is required" ToolTip="Start date is required."
+                                                    ValidationGroup="Opportunity" Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>
                                             </td>
                                             <td style="padding-left: 4px; padding-right: 8px;">
                                                 End Date
