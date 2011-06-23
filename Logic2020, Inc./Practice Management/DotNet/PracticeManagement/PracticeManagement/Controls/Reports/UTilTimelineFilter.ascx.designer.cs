@@ -49,40 +49,76 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.WebControls.Label lblUtilizationFrom;
         
         /// <summary>
-        /// Label1 control.
+        /// ddlPeriod control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label1;
+        protected global::System.Web.UI.WebControls.DropDownList ddlPeriod;
         
         /// <summary>
-        /// mpFromControl control.
+        /// mpeCustomDates control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.MonthPicker mpFromControl;
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeCustomDates;
         
         /// <summary>
-        /// lblT0 control.
+        /// hdnStartDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblT0;
+        protected global::System.Web.UI.WebControls.HiddenField hdnStartDate;
         
         /// <summary>
-        /// mpToControl control.
+        /// hdnEndDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.MonthPicker mpToControl;
+        protected global::System.Web.UI.WebControls.HiddenField hdnEndDate;
+        
+        /// <summary>
+        /// hdnStartDateTxtBoxId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnStartDateTxtBoxId;
+        
+        /// <summary>
+        /// hdnEndDateTxtBoxId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnEndDateTxtBoxId;
+        
+        /// <summary>
+        /// lblCustomDateRange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCustomDateRange;
+        
+        /// <summary>
+        /// imgCalender control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgCalender;
         
         /// <summary>
         /// lblBy control.
@@ -146,6 +182,69 @@ namespace PraticeManagement.Controls.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSaveReport;
+        
+        /// <summary>
+        /// pnlCustomDates control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlCustomDates;
+        
+        /// <summary>
+        /// diRange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.Filtering.DateInterval1 diRange;
+        
+        /// <summary>
+        /// cstvalPeriodRange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cstvalPeriodRange;
+        
+        /// <summary>
+        /// btnCustDatesOK control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCustDatesOK;
+        
+        /// <summary>
+        /// btnCustDatesClose control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCustDatesClose;
+        
+        /// <summary>
+        /// btnCustDatesCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCustDatesCancel;
+        
+        /// <summary>
+        /// valSum control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSum;
         
         /// <summary>
         /// pnlFilters control.
