@@ -397,7 +397,7 @@
             <td style="border-left: 2px solid black; padding-left: 5px; width: 72%;" valign="top">
                 <table width="100%">
                     <tr>
-                        <td style="width: 100%;" >
+                        <td style="width: 100%;">
                             <asp:UpdatePanel ID="upOpportunityDetail" UpdateMode="Conditional" runat="server">
                                 <ContentTemplate>
                                     <asp:Label ID="lblReadOnlyWarning" runat="server" ForeColor="Red" Visible="false">Since you are not the designated owner of this opportunity, you will not be able to make any changes.</asp:Label>
@@ -423,8 +423,12 @@
                                                         </td>
                                                         <td>
                                                             <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpStartDate"
-                                                                ErrorMessage="Start date is required." ToolTip="Start date is required."
+                                                                ErrorMessage="The Projected Start date is required." ToolTip="The Projected Start date is required."
                                                                 ValidationGroup="Opportunity" Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>
+                                                            <asp:CompareValidator ID="cmpStartDateDataTypeCheck" runat="server" ControlToValidate="dpStartDate"
+                                                                ValidationGroup="Opportunity" Type="Date" Operator="DataTypeCheck" Text="*" Display="Dynamic"
+                                                                ErrorMessage="The Projected Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                                                                ToolTip="The Projected Start Date has an incorrect format. It must be 'MM/dd/yyyy'."></asp:CompareValidator>
                                                         </td>
                                                         <td style="padding-left: 4px; padding-right: 8px;">
                                                             End Date
@@ -437,6 +441,10 @@
                                                             <asp:RequiredFieldValidator ID="reqEndDate" runat="server" ControlToValidate="dpEndDate"
                                                                 ErrorMessage="End date is required to add Proposed Resources to project." ToolTip="End date is required to add Proposed Resources to project."
                                                                 ValidationGroup="HasPersons" Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>
+                                                            <asp:CompareValidator ID="cmpEndDateDataTypeCheck" runat="server" ControlToValidate="dpEndDate"
+                                                                ValidationGroup="Opportunity" Type="Date" Operator="DataTypeCheck" Text="*" Display="Dynamic"
+                                                                ErrorMessage="The Projected End Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                                                                ToolTip="The Projected End Date has an incorrect format. It must be 'MM/dd/yyyy'."></asp:CompareValidator>
                                                             <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpEndDate"
                                                                 ControlToCompare="dpStartDate" ErrorMessage="The Projected End must be greater or equal to the Projected Start."
                                                                 ToolTip="The Projected End must be greate or equals to the Projected Start."
@@ -972,7 +980,7 @@
                                             <ContentTemplate>
                                                 <table style="width: 99%;">
                                                     <tr>
-                                                        <td style="width: 100%;border-bottom: 1px solid black;">
+                                                        <td style="width: 100%; border-bottom: 1px solid black;">
                                                             <div style="text-align: center; padding: 4px 0px 4px 0px;">
                                                                 Select from the list of Potential Resources below and click "Add" to note them as
                                                                 Proposed for this Opportunity.<asp:Image ID="hintDate" runat="server" ImageUrl="~/Images/hint.png"
@@ -981,31 +989,30 @@
                                                         </td>
                                                     </tr>
                                                     <tr style="padding-top: 2px;">
-                                                        <td  style="width: 100%;">
+                                                        <td style="width: 100%;">
                                                             <table width="100%">
                                                                 <tr>
                                                                     <td align="center" style="width: 44%;">
                                                                         <div class="cbfloatRight" style="width: 100%;">
                                                                             <table width="100%">
                                                                                 <tr>
-                                                                                    <td style="width: 100%;text-align:center;">
+                                                                                    <td style="width: 100%; text-align: center;">
                                                                                         <asp:Label ID="lblPotentialResources" runat="server" Text="Potential Resources" Style="font-weight: bold;
                                                                                             padding-bottom: 2px;"></asp:Label>
                                                                                     </td>
                                                                                     <td style="width: 10px; padding-right: 6px;">
                                                                                         <asp:Image ID="imgCheck" runat="server" ImageUrl="~/Images/right_icon.png" />
                                                                                     </td>
-                                                                                    <td style="width: 10px; padding-right:21px;">
+                                                                                    <td style="width: 10px; padding-right: 21px;">
                                                                                         <asp:Image ID="imgCross" runat="server" ImageUrl="~/Images/cross_icon.png" />
                                                                                     </td>
-
                                                                                 </tr>
                                                                             </table>
                                                                         </div>
                                                                     </td>
                                                                     <td align="center" style="width: 12%;">
                                                                     </td>
-                                                                    <td align="center" style="width: 44%;text-align:center;">
+                                                                    <td align="center" style="width: 44%; text-align: center;">
                                                                         <asp:Label ID="lblProposedResources" runat="server" Text="Proposed Resources" Style="font-weight: bold;
                                                                             padding-bottom: 2px;"></asp:Label>
                                                                     </td>
@@ -1077,7 +1084,8 @@
                                                     DisplayMode="BulletList" EnableClientScript="false" HeaderText="Unable to convert opportunity due to the following errors:" />
                                             </td>
                                             <td style="padding: 4px; height: 35px; width: 13%;">
-                                                <asp:Button ID="btnSave" OnClientClick="GetProposedPersonIdsListWithPersonType();" runat="server" Text="Save Changes" OnClick="btnSave_Click" />
+                                                <asp:Button ID="btnSave" OnClientClick="GetProposedPersonIdsListWithPersonType();"
+                                                    runat="server" Text="Save Changes" OnClick="btnSave_Click" />
                                             </td>
                                             <td style="padding: 4px; height: 35px; width: 13%;">
                                                 <asp:Button ID="btnCancelChanges" runat="server" Text="Cancel Changes" OnClientClick="if(getDirty()){return true;}else{return false;}"
