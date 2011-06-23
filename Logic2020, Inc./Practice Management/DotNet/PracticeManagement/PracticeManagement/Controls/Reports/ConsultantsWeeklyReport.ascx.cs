@@ -16,13 +16,13 @@ namespace PraticeManagement.Controls.Reports
     {
         #region Constants
 
-        private const string PERSON_TOOLTIP_FORMAT = "Employee {0}, Hired {1}";
-        private const string NOT_HIRED_PERSON_TOOLTIP_FORMAT = "Employee {0}";
+        private const string PERSON_TOOLTIP_FORMAT = "PayType {0}, Hired {1}";
+        private const string NOT_HIRED_PERSON_TOOLTIP_FORMAT = "PayType {0}";
         private const string WEEKS_SERIES_NAME = "Weeks";
         private const string MAIN_CHART_AREA_NAME = "MainArea";
         private const int DAYS_FORWARD = 184;
         private const int DEFAULT_STEP = 7;
-        private const string NAME_FORMAT = "{0}, {1} ({2}/{3})";
+        private const string NAME_FORMAT = "{0}, {1} ({2})";
         private const string NAME_FORMAT_WITH_DATES = "{0}, {1} ({2}): {3}-{4}";
         private const string TITLE_FORMAT = "Consultant Utilization Report \n{0} to {1}\nFor {2} Persons; For {3} Projects\n{4}\n\n*Utilization reflects person vacation time during this period.";
         private const string POSTBACK_FORMAT = "{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}";
@@ -584,7 +584,7 @@ namespace PraticeManagement.Controls.Reports
             label.ToolTip =
                 string.Format(
                     DateTime.MinValue != p.HireDate ? PERSON_TOOLTIP_FORMAT : NOT_HIRED_PERSON_TOOLTIP_FORMAT,
-                    p.EmployeeNumber, // Employee number
+                     p.CurrentPay.TimescaleName, // Current Pay Type
                     p.HireDate.ToShortDateString() // Hire date
                 //,avg // Average U%
                     );
@@ -737,8 +737,8 @@ namespace PraticeManagement.Controls.Reports
                 NAME_FORMAT,
                 p.LastName,
                 p.FirstName,
-                p.Status.Name,
-                p.CurrentPay.TimescaleName);
+                p.Seniority.Name
+                );
         }
 
         private static string FormatRangeTooltip(int load, DateTime pointStartDate, DateTime pointEndDate)
