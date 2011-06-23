@@ -32,6 +32,9 @@ BEGIN
 		pr.ProjectId,
 		pr.ProjectStatusId,
 		pr.ProjectNumber,
+		pr.ProjectManagerId,
+		P.LastName ProjectManagerLastName,
+		P.FirstName ProjectManagerFirstName,
 		m.Description AS 'MilestoneName',
 		m.MilestoneId,
 		m.ConsultantsCanAdjust AS 'ConsultantsCanAdjust',
@@ -53,6 +56,7 @@ BEGIN
 	INNER JOIN dbo.MilestonePerson AS mp ON m.MilestoneId = mp.MilestoneId
 	INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId
 	INNER JOIN dbo.Project AS pr ON m.ProjectId = pr.ProjectId
+	INNER JOIN dbo.Person P ON P.PersonId = pr.ProjectManagerId
 	INNER JOIN dbo.Client AS cl ON pr.ClientId = cl.ClientId
 	WHERE mp.PersonId = @PersonId AND 
 		  (@IncludeDefaultMileStone = 1 OR m.MilestoneId <> @DefaultMilestoneId) AND 
