@@ -91,6 +91,8 @@ AS
                 paytp.TimescaleId,
                 paytp.[Name] AS Timescale,
                 st.[Name],
+				S.[Name] Seniorityname,
+				S.SeniorityId,
                 dbo.GetWeeklyUtilization(c.ConsId, @StartDate, @Step, @DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects) AS wutil,
                 dbo.GetAvgUtilization(c.ConsId, @StartDate,@DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects) AS wutilAvg,
                 dbo.GetPersonVacationDays(c.ConsId,@StartDate,@DaysForward) PersonVactionDays
@@ -98,6 +100,7 @@ AS
                 INNER JOIN @CurrentConsultants AS c ON c.ConsId = p.PersonId
                 INNER JOIN dbo.PersonStatus AS st ON p.PersonStatusId = st.PersonStatusId
                 INNER JOIN dbo.Timescale AS paytp ON paytp.TimescaleId = dbo.GetCurrentPayType(c.ConsId)
+				INNER JOIN dbo.Seniority S ON P.SeniorityId = S.SeniorityId
                 LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
         WHERE dbo.GetNumberAvaliableHours(c.ConsId, @StartDate, @EndDate, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects) > 0 '
      SET @Query = @Query+@OrderBy
