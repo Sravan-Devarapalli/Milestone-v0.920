@@ -5,13 +5,14 @@
 AS
 BEGIN
 	SET NOCOUNT ON
-	
+
 	;WITH CTE
 	AS
 	(
 	SELECT ROW_NUMBER() OVER(PARTITION BY O.ClientName + isnull(O.BuyerName, '') 
 							ORDER BY CASE OP.sortOrder WHEN 0 THEN 1000 ELSE OP.sortOrder END,
-							YEAR(O.ProjectedStartDate),MONTH(O.ProjectedStartDate),
+							YEAR(ISNULL(O.ProjectedStartDate,dbo.GetFutureDate())),
+							MONTH(ISNULL(O.ProjectedStartDate,dbo.GetFutureDate())),
 							O.SalespersonLastName) RowNumber,
 		   o.OpportunityId,
 		   o.Name,
@@ -44,8 +45,8 @@ BEGIN
 			AND A.RowNumber=1 AND A.PrioritySortOrder!=0 AND B.PrioritySortOrder != 0 ) 
 			OR (A.OpportunityId = B.OpportunityId AND A.PrioritySortOrder=0)
 		ORDER BY A.PrioritySortOrder,
-		YEAR(A.ProjectedStartDate),
-		MONTH(A.ProjectedStartDate),
+		YEAR(ISNULL(A.ProjectedStartDate,dbo.GetFutureDate())),
+		MONTH(ISNULL(A.ProjectedStartDate,dbo.GetFutureDate())),
 		A.SalespersonLastName,
 		B.ClientName,
 		isnull(B.BuyerName, ''),B.PrioritySortOrder,B.SalespersonLastName
