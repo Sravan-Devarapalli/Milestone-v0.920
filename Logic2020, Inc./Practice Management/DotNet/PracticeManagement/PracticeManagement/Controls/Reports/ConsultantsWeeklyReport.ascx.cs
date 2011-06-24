@@ -16,8 +16,8 @@ namespace PraticeManagement.Controls.Reports
     {
         #region Constants
 
-        private const string PERSON_TOOLTIP_FORMAT = "PayType {0}, Hired {1}";
-        private const string NOT_HIRED_PERSON_TOOLTIP_FORMAT = "PayType {0}";
+        private const string PERSON_TOOLTIP_FORMAT = "{0}, Hired {1}";
+        private const string NOT_HIRED_PERSON_TOOLTIP_FORMAT = "{0}";
         private const string WEEKS_SERIES_NAME = "Weeks";
         private const string MAIN_CHART_AREA_NAME = "MainArea";
         private const int DAYS_FORWARD = 184;
