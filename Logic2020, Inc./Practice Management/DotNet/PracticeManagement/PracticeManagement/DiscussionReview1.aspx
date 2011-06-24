@@ -415,7 +415,7 @@
                                                 <table cellpadding="4px;">
                                                     <tr>
                                                         <td style="padding-right: 4px;">
-                                                            Start Date
+                                                            <b>Start Date</b>
                                                         </td>
                                                         <td class="DatePickerPadding" style="padding-left: 4px; padding-right: 4px;">
                                                             <uc1:DatePicker ID="dpStartDate" ValidationGroup="Opportunity" AutoPostBack="false"
