@@ -74,7 +74,7 @@ namespace PraticeManagement.Objects
             // Opportunity #, Priority, Client, Opportunity Name, Last Updated
             return string.Format(OpportunityLabelFormat,
                                  opp.OpportunityNumber,
-                                 opp.Priority,
+                                 opp.Priority.Priority,
                                  opp.Client.Name,
                                  opp.Name,
                                  trans.OpportunityTransitionStatus.Name,
