@@ -180,7 +180,13 @@
             lnkbtnHistory.setAttribute('clicked', 'true');
             return true;
 
-        }       
+        }
+
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+        function endRequestHandle(sender, Args) {
+            GetProposedPersonIdsListWithPersonType();
+        }
+              
     </script>
     <table class="CompPerfTable WholeWidth">
         <tr>
