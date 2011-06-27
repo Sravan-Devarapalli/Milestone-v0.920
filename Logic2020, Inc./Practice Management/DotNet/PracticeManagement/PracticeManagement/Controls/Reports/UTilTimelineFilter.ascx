@@ -157,12 +157,21 @@
     function ReAssignStartDateEndDates() {
         hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
         hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
-        hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
-        hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
         txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
         txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
-        txtStartDate.value = hdnStartDate.value;
-        txtEndDate.value = hdnEndDate.value;
+        hdnStartDateCalExtenderBehaviourId = document.getElementById('<%= hdnStartDateCalExtenderBehaviourId.ClientID %>');
+        hdnEndDateCalExtenderBehaviourId = document.getElementById('<%= hdnEndDateCalExtenderBehaviourId.ClientID %>');
+
+        var endDateCalExtender = $find(hdnEndDateCalExtenderBehaviourId.value);
+        var startDateCalExtender = $find(hdnStartDateCalExtenderBehaviourId.value);
+        if (startDateCalExtender != null) {
+            startDateCalExtender.set_selectedDate(hdnStartDate.value);
+        }
+        if (endDateCalExtender != null) {
+            endDateCalExtender.set_selectedDate(hdnEndDate.value);
+        }
+        btnCustDatesOK = document.getElementById('<%= btnCustDatesOK.ClientID %>');
+        btnCustDatesOK.click();
     }
     function ChangeStartEndDates() {
         ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
@@ -175,6 +184,8 @@
             hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
             txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
             txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
+            hdnStartDateCalExtenderBehaviourId = document.getElementById('<%= hdnStartDateCalExtenderBehaviourId.ClientID %>');
+            hdnEndDateCalExtenderBehaviourId = document.getElementById('<%= hdnEndDateCalExtenderBehaviourId.ClientID %>');
             var startDate = new Date(txtStartDate.value);
             var endDate = new Date(txtEndDate.value);
             if (txtStartDate.value != '' && txtEndDate.value != ''
@@ -218,12 +229,17 @@
                     endDate = new Date((endMonth + 1).toString() + '/01/' + endYear.toString());
                     endDate = new Date((endDate - (1000 * 60 * 60 * 24)));
                 }
-
-                txtStartDate.value = startDate.format("MM/dd/yyyy");
-                txtEndDate.value = endDate.format("MM/dd/yyyy");
-                hdnStartDate.value = txtStartDate.value;
-                hdnEndDate.value = txtEndDate.value;
-                lblCustomDateRange.innerHTML = '(' + txtStartDate.value + '&nbsp;-&nbsp;' + txtEndDate.value + ')';
+                var endDateCalExtender = $find(hdnEndDateCalExtenderBehaviourId.value);
+                var startDateCalExtender = $find(hdnStartDateCalExtenderBehaviourId.value);
+                if (startDateCalExtender != null) {
+                    startDateCalExtender.set_selectedDate(new Date(startDate.format("MM/dd/yyyy")));
+                }
+                if (endDateCalExtender != null) {
+                    endDateCalExtender.set_selectedDate(new Date(endDate.format("MM/dd/yyyy")));
+                }
+                hdnStartDate.value = startDate.format("MM/dd/yyyy");
+                hdnEndDate.value = endDate.format("MM/dd/yyyy");
+                lblCustomDateRange.innerHTML = '(' + hdnStartDate.value + '&nbsp;-&nbsp;' + hdnEndDate.value + ')';
             }
         }
     }
@@ -275,6 +291,8 @@
                     <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
                     <asp:HiddenField ID="hdnStartDateTxtBoxId" runat="server" Value="" />
                     <asp:HiddenField ID="hdnEndDateTxtBoxId" runat="server" Value="" />
+                    <asp:HiddenField ID="hdnStartDateCalExtenderBehaviourId" runat="server" Value="" />
+                    <asp:HiddenField ID="hdnEndDateCalExtenderBehaviourId" runat="server" Value="" />
                     &nbsp;
                     <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
                     <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
