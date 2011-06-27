@@ -51,8 +51,8 @@
         </td>
     </tr>
 </table>
-<ajaxToolkit:CalendarExtender ID="clFromDate" runat="server" Format='<%# PraticeManagement.Constants.Formatting.EntryDateFormat %>'
+<ajaxToolkit:CalendarExtender ID="clFromDate" runat="server" BehaviorID="bhclFromDate" Format='<%# PraticeManagement.Constants.Formatting.EntryDateFormat %>'
     PopupPosition="BottomLeft" PopupButtonID="lnkCalendarFrom" TargetControlID="tbFrom" />
-<ajaxToolkit:CalendarExtender ID="clToDate" runat="server" Format='<%# PraticeManagement.Constants.Formatting.EntryDateFormat %>'
+<ajaxToolkit:CalendarExtender ID="clToDate" runat="server" BehaviorID="bhclToDate" Format='<%# PraticeManagement.Constants.Formatting.EntryDateFormat %>'
     PopupPosition="BottomLeft" PopupButtonID="lnkCalendarTo" TargetControlID="tbTo" />
 
