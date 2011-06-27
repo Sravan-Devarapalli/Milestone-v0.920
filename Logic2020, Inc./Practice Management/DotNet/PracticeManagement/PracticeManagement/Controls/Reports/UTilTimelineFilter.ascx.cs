@@ -364,10 +364,14 @@ namespace PraticeManagement.Controls.Reports
             hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
             var tbFrom = diRange.FindControl("tbFrom") as TextBox;
             var tbTo = diRange.FindControl("tbTo") as TextBox;
+            var clFromDate = diRange.FindControl("clFromDate") as AjaxControlToolkit.CalendarExtender;
+            var clToDate = diRange.FindControl("clToDate") as AjaxControlToolkit.CalendarExtender;
             tbFrom.Attributes.Add("onchange", "ChangeStartEndDates();");
             tbTo.Attributes.Add("onchange", "ChangeStartEndDates();");
             hdnStartDateTxtBoxId.Value = tbFrom.ClientID;
             hdnEndDateTxtBoxId.Value = tbTo.ClientID;
+            hdnStartDateCalExtenderBehaviourId.Value = clFromDate.BehaviorID;
+            hdnEndDateCalExtenderBehaviourId.Value = clToDate.BehaviorID;
         }
 
         protected void btnSaveReport_OnClick(object sender, EventArgs e)
