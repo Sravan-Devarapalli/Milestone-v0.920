@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 using PraticeManagement.Controls;
 using DataTransferObjects;
 using System.Web.UI.HtmlControls;
-using System.Text; 
+using System.Text;
 using System.Web.Security;
 using System.Configuration;
 using PraticeManagement.Utils;
@@ -23,8 +23,8 @@ namespace PraticeManagement
         #region "Constants"
         private const int NumberOfFixedColumns = 2;
         private const string GrandTotalCellTemplate = "<table><tr><td align='right'>{0}</td></tr><tr><td align='right'>{1}</td></tr></table>";
-        private const string MonthCellTemplate            = "<td align='right' style='padding-right:3px;'><table><tr><td align='right'>{0}</td></tr><tr><td align='right'>{1}</td></tr></table></td>";
-        private const string CurrentMonthCellTemplate     = "<td align='right' style='padding-right:3px;border-left:1px solid black;border-right:1px solid black;'><table><tr><td align='right'>{0}</td></tr><tr><td align='right'>{1}</td></tr></table></td>";
+        private const string MonthCellTemplate = "<td align='right' style='padding-right:3px;'><table><tr><td align='right'>{0}</td></tr><tr><td align='right'>{1}</td></tr></table></td>";
+        private const string CurrentMonthCellTemplate = "<td align='right' style='padding-right:3px;border-left:1px solid black;border-right:1px solid black;'><table><tr><td align='right'>{0}</td></tr><tr><td align='right'>{1}</td></tr></table></td>";
         private const string CurrentMonthLastCellTemplate = "<td align='right' style='padding-right:3px;border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;'><table><tr><td align='right'>{0}</td></tr><tr><td align='right'>{1}</td></tr></table></td>";
         private const string RowHTMLTemplate =
                             @"</tr><tr {5} height = '35px' class='hidden'>
@@ -589,7 +589,7 @@ namespace PraticeManagement
                 GroupedPractices = null;
             }
             var person = DataHelper.CurrentPerson;
-            if (person == null || person.Seniority.Id > 35)
+            if (person == null || Seniority.GetSeniorityValueById(person.Seniority.Id) > 35)
             {
                 Response.Redirect(@"~\GuestPages\AccessDenied.aspx");
             }
@@ -1194,7 +1194,7 @@ namespace PraticeManagement
                     row.Cells.RemoveAt(NumberOfFixedColumns);
                 }
 
-               row.Cells[row.Cells.Count-1].Attributes["Style"] = "";
+                row.Cells[row.Cells.Count - 1].Attributes["Style"] = "";
 
                 for (int i = insertPosition, k = 0; k < monthsInPeriod; i++, k++)
                 {
