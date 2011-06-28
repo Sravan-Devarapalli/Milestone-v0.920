@@ -252,7 +252,7 @@ namespace PraticeManagement
             if (!IsPostBack)
             {
                 var person = DataHelper.CurrentPerson;
-                if (person == null || person.Seniority.Id > 35)
+                if (person == null || Seniority.GetSeniorityValueById(person.Seniority.Id) > 35)
                 {
                     Response.Redirect(@"~\GuestPages\AccessDenied.aspx");
                 }
