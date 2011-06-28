@@ -11,8 +11,11 @@ BEGIN
 	JOIN dbo.Pay Pa
 	ON P.PersonId = Pa.Person AND 
 		pa.StartDate <= @Today AND ISNULL(EndDate,dbo.GetFutureDate()) > @Today
+		AND (P.SeniorityId <> Pa.SeniorityId OR P.DefaultPractice <> Pa.PracticeId)
 
 	UPDATE dbo.Pay
 	SET IsActivePay = CASE WHEN StartDate <= @Today AND  EndDate > @Today
 							   THEN 1 ELSE 0 END
+	WHERE IsActivePay <> (CASE WHEN StartDate <= @Today AND  EndDate > @Today
+							   THEN 1 ELSE 0 END)
 END
