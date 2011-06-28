@@ -132,7 +132,7 @@ BEGIN
 		                             WHERE c.RecruitId = p.PersonId AND c.RecruiterId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable] (@RecruiterIdsList))))
 		            AND (@TimescaleIdsList IS NULL OR	(TS.Timescale IN ((SELECT ResultId FROM [dbo].[ConvertStringListIntoTable] (@TimescaleIdsList)))) 	)
 		            AND ( p.LastName LIKE @Alphabet )
-					AND ((@MaxSeniorityLevel IS NULL) OR (@MaxSeniorityLevel >= p.SeniorityId))' + @OrderBy + '
+					AND ((@MaxSeniorityLevel IS NULL) OR (@MaxSeniorityLevel >= p.SeniorityValue))' + @OrderBy + '
 		       ) AS tmp
 		 WHERE ( (@FirstRecord !=0 AND tmp.rownum BETWEEN @FirstRecord AND @LastRecord - 1)
 				 OR @FirstRecord = 0 ) '
