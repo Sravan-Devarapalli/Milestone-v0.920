@@ -12,11 +12,12 @@ CREATE PROCEDURE dbo.PersonListSubordinates
 AS
 	SET NOCOUNT ON
 
-	DECLARE @PracticeManagerSeniorityId INT
+	DECLARE @PracticeManagerSeniorityValue INT
 
 	--Get the SeniorityId of the Practice Manager and store it in a variable
-	SELECT @PracticeManagerSeniorityId = SeniorityId
-	FROM dbo.Person
+	SELECT @PracticeManagerSeniorityValue = S.SeniorityValue
+	FROM dbo.Person P
+	JOIN dbo.Seniority S ON P.SeniorityId = S.SeniorityId
 	WHERE PersonId = @PracticeManagerId
 
 	SELECT p.PersonId,
@@ -43,7 +44,7 @@ AS
 	  FROM dbo.v_Person AS p
 	  LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
 	 WHERE ISNULL(pr.IsCompanyInternal, 0) = 0
-					AND p.SeniorityId > @PracticeManagerSeniorityId -- All the persons, having seniority level below the Practice Manager's seniority level
-					AND @PracticeManagerSeniorityId <= 65 -- According to 2656, Managers and up should be able to see their subordinates, but not equals.
+					AND p.SeniorityValue > @PracticeManagerSeniorityValue -- All the persons, having seniority level below the Practice Manager's seniority level
+					AND @PracticeManagerSeniorityValue <= 65 -- According to 2656, Managers and up should be able to see their subordinates, but not equals.
 	ORDER BY p.LastName, p.FirstName
 
