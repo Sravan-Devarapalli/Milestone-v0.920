@@ -270,8 +270,8 @@ namespace PraticeManagement.Controls
 
                 case "Seniority":
                     //  Assign lowest seniority to the ones who have no one
-                    cx = x.Seniority == null ? 105 : x.Seniority.Id;
-                    cy = y.Seniority == null ? 105 : y.Seniority.Id;
+                    cx = x.Seniority == null ? 105 : Seniority.GetSeniorityValueById(x.Seniority.Id);
+                    cy = y.Seniority == null ? 105 : Seniority.GetSeniorityValueById(y.Seniority.Id);
                     break;
 
                 case "Manager":
