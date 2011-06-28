@@ -9,13 +9,15 @@ BEGIN
 	(
 	PersonID INT,
 	TerminationDate DATETIME,
-	Alias nvarchar(100)
+	Alias nvarchar(100),
+	DefaultPractice INT
 	)
 	
 	INSERT INTO @TerminatedPersons
 	SELECT	PersonId,
 			TerminationDate,
-			Alias
+			Alias,
+			DefaultPractice
 	FROM dbo.Person
 	WHERE TerminationDate <= @Today 
 			AND PersonStatusId <> 2
@@ -38,14 +40,15 @@ BEGIN
 	FROM dbo.Person P
 	JOIN @TerminatedPersons Manager ON P.ManagerId = Manager.PersonId
 	LEFT JOIN Practice pr ON P.DefaultPractice = pr.PracticeId
-	OUTER APPLY( 
+	OUTER APPLY(
 				SELECT TOP 1 PersonId
 				FROM dbo.Person P1
-				WHERE P1.DefaultPractice = P.DefaultPractice
+				WHERE P1.DefaultPractice = Manager.DefaultPractice
 						AND P.PersonId <> P1.PersonId
 						AND P1.SeniorityId <= 65
 						AND P1.PersonStatusId = 1
-						AND p1.TerminationDate > @Today
+						AND P1.PersonId <> Manager.PersonID
+						AND (p1.TerminationDate > @Today OR p1.TerminationDate IS NULL)
 				ORDER BY ISNULL(p1.TerminationDate,dbo.GetFutureDate()) DESC
 					) SamePracticedManagerOrUp
 	OUTER APPLY(
@@ -53,8 +56,9 @@ BEGIN
 				FROM dbo.Person P2
 				WHERE P2.IsDefaultManager = 1
 						AND P.PersonId <> P2.PersonId
+						AND P2.PersonId <> manager.PersonID
 						AND P2.PersonStatusId = 1
-						AND p2.TerminationDate > @Today
+						AND (p2.TerminationDate > @Today OR p2.TerminationDate IS NULL)
 				ORDER BY ISNULL(p2.TerminationDate,dbo.GetFutureDate()) DESC
 				) DefalutManager
 
@@ -92,3 +96,4 @@ BEGIN
 		   @Today
 	FROM @TerminatedPersons
 END
+
