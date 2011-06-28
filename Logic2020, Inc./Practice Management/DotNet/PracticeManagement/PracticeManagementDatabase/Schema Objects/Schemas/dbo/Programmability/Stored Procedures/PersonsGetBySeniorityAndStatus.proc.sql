@@ -7,7 +7,8 @@ AS
 		   LastName,
 		   IsDefaultManager,
 		   HireDate
-	FROM dbo.Person
-	WHERE SeniorityId = @SeniorityId
+	FROM dbo.Person P
+	JOIN dbo.Seniority S ON P.SeniorityId = S.SeniorityId
+	WHERE S.SeniorityValue = @SeniorityId
 			AND (PersonStatusId = @PersonStatusId OR @PersonStatusId IS NULL)
 
