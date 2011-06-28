@@ -22,6 +22,7 @@ AS
 		   s.Name as PersonStatusName,
 		   p.EmployeeNumber,
 	       p.SeniorityId,
+		   e.SeniorityValue,
 	       e.Name AS SeniorityName,
 	       p.ManagerId,
 		   p.IsDefaultManager,
