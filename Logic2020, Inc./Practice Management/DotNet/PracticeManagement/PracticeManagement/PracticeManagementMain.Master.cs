@@ -229,7 +229,7 @@ namespace PraticeManagement
                 {
                     var person = DataHelper.CurrentPerson;
                     //Only persons with the Director seniority and up should be able to see/access Group by Director view.
-                    if (person == null || person.Seniority.Id > 35)
+                    if (person == null || Seniority.GetSeniorityValueById(person.Seniority.Id) > 35)
                     {
                         continue;
                     }
@@ -410,7 +410,7 @@ namespace PraticeManagement
             {
                 var person = DataHelper.CurrentPerson;
                 //Only persons with the Director seniority and up should be able to see/access Group by Director view.
-                if (person == null || person.Seniority.Id > 35)
+                if (person == null || Seniority.GetSeniorityValueById(person.Seniority.Id) > 35)
                 {
                     item.Text = string.Empty;
                 }
