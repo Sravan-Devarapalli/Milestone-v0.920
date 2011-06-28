@@ -11,5 +11,5 @@ AS
 
 	SELECT e.SeniorityId, e.Name
 	  FROM dbo.Seniority AS e
-	ORDER BY e.SeniorityId
+	ORDER BY e.SeniorityValue,e.Name
 
