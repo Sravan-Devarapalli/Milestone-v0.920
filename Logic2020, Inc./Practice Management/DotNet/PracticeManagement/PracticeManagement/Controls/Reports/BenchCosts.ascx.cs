@@ -419,7 +419,7 @@ namespace PraticeManagement.Controls.Reports
                                     bool seniority = true;
                                     if (grid.ID == "gvBenchCostsInternal")
                                     {
-                                        if ((UserIsAdmin || current.Seniority.Id == ((int)PersonSeniorityType.Partner)))
+                                        if ((UserIsAdmin || Seniority.GetSeniorityValueById(current.Seniority.Id) == Seniority.GetSeniorityValueById(((int)PersonSeniorityType.Partner))))
                                         {
                                             seniority = false;
                                         }
