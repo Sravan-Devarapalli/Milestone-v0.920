@@ -132,7 +132,7 @@ BEGIN
 		                             WHERE c.RecruitId = p.PersonId AND c.RecruiterId = @RecruiterId))
 		            AND (	(TS.Timescale = @TimescaleId) OR @TimescaleId IS NULL	)
 		            AND ( p.LastName LIKE @Alphabet )
-					AND ((@MaxSeniorityLevel IS NULL) OR (@MaxSeniorityLevel >= p.SeniorityId))' + @OrderBy + '
+					AND ((@MaxSeniorityLevel IS NULL) OR (@MaxSeniorityLevel >= p.SeniorityValue))' + @OrderBy + '
 		       ) AS tmp
 		 WHERE ( (@FirstRecord !=0 AND tmp.rownum BETWEEN @FirstRecord AND @LastRecord - 1)
 				 OR @FirstRecord = 0 ) '
