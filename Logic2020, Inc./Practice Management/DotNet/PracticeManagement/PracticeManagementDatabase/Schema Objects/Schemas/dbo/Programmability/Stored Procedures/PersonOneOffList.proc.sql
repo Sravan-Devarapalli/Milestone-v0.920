@@ -38,6 +38,6 @@ AS
            LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
 	 WHERE p.PersonStatusId in (1,2,3) AND ISNULL(pr.IsCompanyInternal, 0) = 0
            AND @DateToday BETWEEN y.StartDate AND ISNULL(y.EndDate, dbo.GetFutureDate())
-           AND ((@MaxSeniorityLevel IS NULL) OR (@MaxSeniorityLevel < p.SeniorityId))
+           AND ((@MaxSeniorityLevel IS NULL) OR (@MaxSeniorityLevel < p.SeniorityValue))
      ORDER BY p.LastName
 
