@@ -43,9 +43,10 @@ BEGIN
 	OUTER APPLY(
 				SELECT TOP 1 PersonId
 				FROM dbo.Person P1
+				JOIN dbo.Seniority S ON P1.SeniorityId = s.SeniorityId
 				WHERE P1.DefaultPractice = Manager.DefaultPractice
 						AND P.PersonId <> P1.PersonId
-						AND P1.SeniorityId <= 65
+						AND S.SeniorityValue <= 65
 						AND P1.PersonStatusId = 1
 						AND P1.PersonId <> Manager.PersonID
 						AND (p1.TerminationDate > @Today OR p1.TerminationDate IS NULL)
