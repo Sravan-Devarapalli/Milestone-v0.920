@@ -10,7 +10,7 @@ BEGIN
 	DECLARE @Query NVARCHAR(4000),
 			@Where NVARCHAR(4000)
 			
-	DECLARE @PersonSeniorityId INT
+	DECLARE @PersonSeniorityValue INT
 		
 	SET @Where = ''
 
@@ -18,7 +18,9 @@ BEGIN
 					   FirstName,
 					   LastName,
 					   IsDefaultManager
-				FROM dbo.Person'
+				FROM dbo.Person P
+				JOIN dbo.Seniority S
+				ON P.SeniorityId = S.SeniorityId'
 	  
 	  IF(ISNULL(@PersonStatusIdsList,'')<>'')
 	  BEGIN
@@ -26,14 +28,15 @@ BEGIN
 	  END
 	  IF (ISNULL(@PersonId,'') <> '')
 	  BEGIN
-		SELECT @PersonSeniorityId = SeniorityId 
-		FROM Person
+		SELECT @PersonSeniorityValue = S.SeniorityValue 
+		FROM dbo.Person P
+		JOIN dbo.Seniority S ON S.SeniorityId = P.SeniorityId
 		WHERE PersonId = @PersonId
 				
 		SET @Where = (CASE WHEN @Where='' THEN ' WHERE ' ELSE @Where+ ' AND ' END )
 						+ 'PersonId = ' + CONVERT(NVARCHAR,@PersonId) 
-						+ (CASE WHEN @PersonSeniorityId <= 65 -- According to 2656, Managers and up should be able to see their subordinates, but not equals.
-								THEN ' OR SeniorityId > '+ CONVERT(NVARCHAR,@PersonSeniorityId)
+						+ (CASE WHEN @PersonSeniorityValue <= 65 -- According to 2656, Managers and up should be able to see their subordinates, but not equals.
+								THEN ' OR S.SeniorityValue > '+ CONVERT(NVARCHAR,@PersonSeniorityValue)
 								ELSE '' END
 							)
 	  END
