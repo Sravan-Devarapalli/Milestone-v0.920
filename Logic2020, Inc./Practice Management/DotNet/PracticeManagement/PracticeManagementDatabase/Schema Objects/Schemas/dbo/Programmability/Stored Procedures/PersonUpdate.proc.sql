@@ -95,9 +95,10 @@ AS
 			WHERE PersonId = @PersonId
 
 			SELECT @newManager = PersonId
-			FROM Person 
+			FROM Person P
+			JOIN dbo.Seniority S ON S.SeniorityId = P.SeniorityId
 			where DefaultPractice = @currentPractice
-			AND SeniorityId <= 65 AND PersonId != @PersonId AND PersonStatusId = 1 -- ActivePerson
+			AND S.SeniorityValue <= 65 AND PersonId != @PersonId AND PersonStatusId = 1 -- ActivePerson
 
 			IF (@newManager IS NULL)
 				SELECT @newManager = PersonId
