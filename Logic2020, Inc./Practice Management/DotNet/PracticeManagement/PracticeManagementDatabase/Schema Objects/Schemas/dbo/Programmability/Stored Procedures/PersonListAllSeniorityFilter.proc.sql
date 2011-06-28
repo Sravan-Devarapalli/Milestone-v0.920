@@ -63,7 +63,7 @@ BEGIN
 		        OR EXISTS (SELECT 1
 		                     FROM dbo.RecruiterCommission AS c
 		                    WHERE c.RecruitId = p.PersonId AND c.RecruiterId = @RecruiterId))
-			AND ((@MaxSeniorityLevel IS NULL) OR (@MaxSeniorityLevel >= p.SeniorityId))
+			AND ((@MaxSeniorityLevel IS NULL) OR (@MaxSeniorityLevel >= p.SeniorityValue))
 		ORDER BY p.LastName, p.FirstName
 	END
 	ELSE
@@ -127,7 +127,7 @@ BEGIN
 		                 OR EXISTS (SELECT 1
 		                              FROM dbo.RecruiterCommission AS c
 		                             WHERE c.RecruitId = p.PersonId AND c.RecruiterId = @RecruiterId))
-					AND ((@MaxSeniorityLevel IS NULL) OR (@MaxSeniorityLevel >= p.SeniorityId))
+					AND ((@MaxSeniorityLevel IS NULL) OR (@MaxSeniorityLevel >= p.SeniorityValue))
 				ORDER BY p.LastName, p.FirstName
 		       ) AS tmp
 		 WHERE tmp.rownum BETWEEN @FirstRecord AND @LastRecord - 1
