@@ -22,7 +22,9 @@ namespace DataAccess
         private const string ClientGetByIdProcedure = "dbo.ClientGetById";
         private const string ClientListAllForProjectProcedure = "dbo.ClientListAllForProject";
         private const string UpdateIsChargableForClientProcedure = "dbo.UpdateIsChargableForClient";
-
+        private const string ColorsListAllProcedure = "dbo.ColorsListAll";
+        private const string GetClientMarginColorInfoProcedure = "dbo.GetClientMarginColorInfo";
+        private const string ClientMarginColorInfoInsertProcedure = "dbo.ClientMarginColorInfoInsert";
         #endregion
 
         #region Parameters
@@ -38,6 +40,10 @@ namespace DataAccess
         private const string ProjectIdParam = "@ProjectId";
         private const string PersonIdParam = "@PersonId";
         private const string IsChargeableParam = "@IsChargeable";
+        private const string ColorIdParam = "@ColorId";
+        private const string StartRangeParam = "@StartRange";
+        private const string EndRangeParam = "@EndRange";
+        private const string isDeletePreviousMarginInfoParam = "@isDeletePreviousMarginInfo";
 
         #endregion
 
@@ -50,6 +56,7 @@ namespace DataAccess
         private const string DefaultSalespersonIdColumn = "DefaultSalespersonId";
         private const string DefaultDirectorIdColumn = "DefaultDirectorId";
         private const string InactiveColumn = "Inactive";
+        private const string IsMarginColorInfoEnabledColumn = "IsMarginColorInfoEnabled";
 
         #endregion
 
@@ -85,11 +92,36 @@ namespace DataAccess
                     var clientIdParameter = new SqlParameter(ClientIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
                     command.Parameters.Add(clientIdParameter);
 
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsMarginColorInfoEnabled, client.IsMarginColorInfoEnabled);
+
                     try
                     {
                         connection.Open();
+
+                        SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted);
+                        command.Transaction = transaction;
+
                         command.ExecuteNonQuery();
                         client.Id = (int)clientIdParameter.Value;
+
+                        if (client.IsMarginColorInfoEnabled && client.ClientMarginInfo != null)
+                        {
+                            for (int i = 0; i < client.ClientMarginInfo.Count; i++)
+                            {
+                                bool isDeletePreviousMarginInfo = false;
+                                if (i == 0)
+                                {
+                                    isDeletePreviousMarginInfo = true;
+                                }
+                                else
+                                {
+                                    isDeletePreviousMarginInfo = false;
+                                }
+                                ClientMarginColorInfoInsert(client.Id, client.ClientMarginInfo[i], isDeletePreviousMarginInfo, connection, transaction);
+                            }  
+                        }
+
+                        transaction.Commit();
                     }
                     catch (Exception ex)
                     {
@@ -98,6 +130,46 @@ namespace DataAccess
                 }
             }
         }
+
+        private static void ClientMarginColorInfoInsert(int? clientId, ClientMarginColorInfo marginColorInfo,bool isDeletePreviousMarginInfo, SqlConnection connection = null, SqlTransaction activeTransaction = null)
+        {
+            if (connection == null)
+            {
+                connection = new SqlConnection(DataSourceHelper.DataConnection);
+            }
+
+            using (var command = new SqlCommand(ClientMarginColorInfoInsertProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(ClientIdParam, clientId.Value);
+                command.Parameters.AddWithValue(ColorIdParam, marginColorInfo.ColorInfo.ColorId);
+                command.Parameters.AddWithValue(StartRangeParam, marginColorInfo.StartRange);
+                command.Parameters.AddWithValue(EndRangeParam, marginColorInfo.EndRange);
+                command.Parameters.AddWithValue(isDeletePreviousMarginInfoParam, isDeletePreviousMarginInfo);
+
+                try
+                {
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    if (activeTransaction != null)
+                    {
+                        command.Transaction = activeTransaction;
+                    }
+
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                
+            }
+        }
+
 
         /// <summary>
         /// 	Updates client information to the system.
@@ -126,11 +198,35 @@ namespace DataAccess
                         client.DefaultDirectorId.HasValue ? (object)client.DefaultDirectorId.Value : DBNull.Value);
                     command.Parameters.AddWithValue(InactiveParam, client.Inactive);
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsChargeable, client.IsChargeable);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsMarginColorInfoEnabled, client.IsMarginColorInfoEnabled);
 
                     try
                     {
                         connection.Open();
+
+                        SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted);
+                        command.Transaction = transaction;
+
                         command.ExecuteNonQuery();
+
+                        if (client.IsMarginColorInfoEnabled && client.ClientMarginInfo != null)
+                        {
+                            for (int i=0;i<client.ClientMarginInfo.Count;i++)
+                            {
+                                bool isDeletePreviousMarginInfo = false;
+                                if (i == 0)
+                                {
+                                    isDeletePreviousMarginInfo = true;
+                                }
+                                else
+                                {
+                                    isDeletePreviousMarginInfo = false;
+                                }
+                                ClientMarginColorInfoInsert(client.Id, client.ClientMarginInfo[i], isDeletePreviousMarginInfo, connection, transaction);
+                            }
+                        }
+
+                        transaction.Commit();
                     }
                     catch (Exception ex)
                     {
@@ -347,6 +443,16 @@ namespace DataAccess
         {
             using (var reader = command.ExecuteReader())
             {
+                int isMarginColorInfoEnabledIndex = -1;
+                try
+                {
+                    isMarginColorInfoEnabledIndex = reader.GetOrdinal(Constants.ColumnNames.IsMarginColorInfoEnabledColumn);
+                }
+                catch
+                {
+                    isMarginColorInfoEnabledIndex = -1;
+                }
+
                 while (reader.Read())
                 {
                     var client = ReadClientBasic(reader);
@@ -357,6 +463,18 @@ namespace DataAccess
                         client.DefaultDirectorId = (int)reader[DefaultDirectorIdColumn];
                     client.Inactive = (bool)reader[InactiveColumn];
                     client.IsChargeable = (bool)reader[Constants.ColumnNames.IsChargeable];
+
+                    if (isMarginColorInfoEnabledIndex >= 0)
+                    {
+                        try
+                        {
+                            client.IsMarginColorInfoEnabled = reader.GetBoolean(isMarginColorInfoEnabledIndex);
+                        }
+                        catch
+                        {
+ 
+                        }
+                    }
 
                     if (loadGroups)
                         client.Groups = ProjectGroupDAL.GroupListAll(client.Id, null, person == null ? null : person.Id);
@@ -389,6 +507,103 @@ namespace DataAccess
                     command.Parameters.AddWithValue(IsChargeableParam, isChargable);
                     connection.Open();
                     command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static List<ColorInformation> GetAllColorsForMargin()
+        {
+            var colors = new List<ColorInformation>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(ColorsListAllProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+
+                        ReadColor(reader, colors);
+                        return colors;
+                    }
+                }
+            }
+        }
+
+        private static void ReadColor(SqlDataReader reader, List<ColorInformation> result)
+        {
+            if (reader.HasRows)
+            {
+                int colorIdIndex = reader.GetOrdinal(Constants.ColumnNames.Id);
+                int colorValueIndex = reader.GetOrdinal(Constants.ColumnNames.ValueColumn);
+                int colorDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
+
+                while (reader.Read())
+                {
+                    result.Add(
+                        new ColorInformation()
+                        {
+                            ColorId = reader.GetInt32(colorIdIndex),
+                            ColorValue = reader.GetString(colorValueIndex),
+                            ColorDescription = reader.GetString(colorDescriptionIndex)
+                        }
+
+                                                );
+                }
+            }
+        }
+
+        public static List<ClientMarginColorInfo> GetClientMarginColorInfo(int clientId)
+        {
+            var clientMarginColorInfo = new List<ClientMarginColorInfo>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(GetClientMarginColorInfoProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ClientId, clientId);
+
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        ReadClientMarginColorInfo(reader, clientMarginColorInfo);
+                    }
+                }
+            }
+            if (clientMarginColorInfo.Count > 0)
+                return clientMarginColorInfo;
+            else
+                return null;
+        }
+
+        private static void ReadClientMarginColorInfo(SqlDataReader reader, List<ClientMarginColorInfo> clientMarginColorInfo)
+        {
+            if (reader.HasRows)
+            {
+                int colorIdIndex = reader.GetOrdinal(Constants.ColumnNames.ColorIdColumn);
+                int colorValueIndex = reader.GetOrdinal(Constants.ColumnNames.ValueColumn);
+                int startRangeIndex = reader.GetOrdinal(Constants.ColumnNames.StartRangeColumn);
+                int endRangeIndex = reader.GetOrdinal(Constants.ColumnNames.EndRangeColumn);
+                int colorDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
+
+                while (reader.Read())
+                {
+                    clientMarginColorInfo.Add(
+                                                new ClientMarginColorInfo()
+                                                {
+                                                    ColorInfo = new ColorInformation()
+                                                    {
+                                                        ColorId=reader.GetInt32(colorIdIndex),
+                                                        ColorValue = reader.GetString(colorValueIndex),
+                                                        ColorDescription = reader.GetString(colorDescriptionIndex)
+                                                    },
+                                                    StartRange = reader.GetInt32(startRangeIndex),
+                                                    EndRange = reader.GetInt32(endRangeIndex),
+                                                }
+                        );
                 }
             }
         }
