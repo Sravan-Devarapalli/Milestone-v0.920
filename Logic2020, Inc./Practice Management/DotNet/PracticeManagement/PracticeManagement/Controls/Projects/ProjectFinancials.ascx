@@ -76,10 +76,10 @@
                 <asp:Label ID="lblGrossMargin" CssClass="Margin" runat="server">Unavailable</asp:Label>
             </td>
             <td>
-                &nbsp;Margin
+                &nbsp;
             </td>
-            <td align="right">
-                <asp:Label ID="lblTargetMargin" runat="server">Unavailable</asp:Label>
+            <td id="tdTargetMargin" runat="server"  align="right">
+                (<asp:Label ID="lblTargetMargin" runat="server">Unavailable</asp:Label>)
             </td>
         </tr>
         <tr>
