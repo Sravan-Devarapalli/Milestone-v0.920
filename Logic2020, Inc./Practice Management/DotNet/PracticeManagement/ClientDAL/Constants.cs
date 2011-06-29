@@ -9,7 +9,10 @@
         /// </summary>
         public class ColumnNames
         {
-
+            public const string IsMarginColorInfoEnabledColumn = "IsMarginColorInfoEnabled";
+            public const string ColorIdColumn = "ColorId";
+            public const string StartRangeColumn = "StartRange";
+            public const string EndRangeColumn = "EndRange";
             public const string IsWelcomeEmailSent = "IsWelcomeEmailSent";
             public const string W2Salary_RateColumn = "W2Salary_Rate";
             public const string W2Hourly_RateColumn = "W2Hourly_Rate";
@@ -310,6 +313,7 @@
             public const string IsActive = ColumnNames.IsActive;
             public const string IsInserted = "@IsInserted";
             public const string IsChargeable = ColumnNames.IsChargeable;
+            public const string IsMarginColorInfoEnabled = "@IsMarginColorInfoEnabled";
             public const string IsCorrect = ColumnNames.IsCorrect;
             public const string IsProjectChargeable = ColumnNames.IsProjectChargeable;
             public const string IsDefault = ColumnNames.IsDefault;
