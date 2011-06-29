@@ -4,6 +4,8 @@ using System.Web.UI;
 using DataTransferObjects;
 using PraticeManagement.ProjectService;
 using PraticeManagement.Security;
+using System.Web.UI.MobileControls;
+using System.Collections.Generic;
 
 namespace PraticeManagement.Controls.Projects
 {
@@ -63,7 +65,7 @@ namespace PraticeManagement.Controls.Projects
                     _peopleSeniorityAnalyzer.GreaterSeniorityExists;
                 var ht = Resources.Controls.HiddenCellText;
 
-                var nfi = new NumberFormatInfo {CurrencyDecimalDigits = 0, CurrencySymbol = "$"};
+                var nfi = new NumberFormatInfo { CurrencyDecimalDigits = 0, CurrencySymbol = "$" };
 
                 lblEstimatedRevenue.Text = String.Format(nfi, "{0:c}", Financials.Revenue.Value);
                 lblDiscount.Text = String.Format(nfi, "{0}", project.Discount);
@@ -80,6 +82,12 @@ namespace PraticeManagement.Controls.Projects
                                            ? ht
                                            : string.Format(Constants.Formatting.PercentageFormat,
                                                            Financials.TargetMargin);
+
+                if (project.Client.Id.HasValue && project.Client.IsMarginColorInfoEnabled)
+                {
+                    SetBackgroundColorForMargin(project.Client.Id.Value);
+                }
+
                 lblSalesCommission.Text =
                     hide ? ht : String.Format(nfi, "{0:c}", Financials.SalesCommission.Value);
                 lblEstimatedMargin.Text =
@@ -90,6 +98,24 @@ namespace PraticeManagement.Controls.Projects
                                                         ? ht
                                                         : String.Format(nfi, "{0:c}",
                                                                         Financials.PracticeManagementCommission.Value);
+            }
+        }
+
+        private void SetBackgroundColorForMargin(int clientId)
+        {
+            int margin = (int)Financials.TargetMargin;
+            List<ClientMarginColorInfo> cmciList = DataHelper.GetClientMarginColorInfo(clientId);
+
+            if (cmciList != null)
+            {
+                foreach (var item in cmciList)
+                {
+                    if (margin >= item.StartRange && margin <= item.EndRange)
+                    {
+                        tdTargetMargin.Style["background-color"] = item.ColorInfo.ColorValue;
+                        break;
+                    }
+                }
             }
         }
 
