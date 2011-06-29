@@ -14,7 +14,8 @@ CREATE PROCEDURE dbo.ClientInsert
 	@Inactive             BIT,
 	@IsChargeable         BIT,
 	@DefaultTerms         INT,
-	@ClientId             INT OUTPUT
+	@ClientId             INT OUTPUT,
+	@IsMarginColorInfoEnabled BIT
 )
 AS
 	SET NOCOUNT ON
@@ -28,11 +29,12 @@ AS
 	ELSE
 	BEGIN
 		INSERT INTO Client
-					(DefaultDiscount, DefaultTerms, DefaultSalespersonId, DefaultDirectorID, Name, Inactive, IsChargeable)
-			 VALUES (@DefaultDiscount, @DefaultTerms, @DefaultSalespersonId, @DefaultDirectorId, @Name, @Inactive, @IsChargeable)
+					(DefaultDiscount, DefaultTerms, DefaultSalespersonId, DefaultDirectorID, Name, Inactive, IsChargeable,IsMarginColorInfoEnabled)
+			 VALUES (@DefaultDiscount, @DefaultTerms, @DefaultSalespersonId, @DefaultDirectorId, @Name, @Inactive, @IsChargeable,@IsMarginColorInfoEnabled)
 
 		SELECT @clientId = SCOPE_IDENTITY()
 
 		SELECT @clientId
 	END
+GO
 
