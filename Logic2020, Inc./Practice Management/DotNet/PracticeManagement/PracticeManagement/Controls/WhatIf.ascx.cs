@@ -10,6 +10,7 @@ using PraticeManagement.PersonService;
 using Resources;
 using System.Linq;
 using System.Collections.Generic;
+using PraticeManagement.Security;
 
 namespace PraticeManagement.Controls
 {
@@ -71,6 +72,15 @@ namespace PraticeManagement.Controls
             get;
         }
 
+        public bool HideCalculatedValues
+        {
+            get
+            {
+                var personListAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
+                return personListAnalyzer.IsOtherGreater(Person);
+            }
+        }
+
         /// <summary>
         /// Gets or sets whether the Target Margin should be displayed.
         /// </summary>
@@ -93,9 +103,9 @@ namespace PraticeManagement.Controls
         //    {
 
         //        decimal tempDefaultSalesCommission = 0.0M; // Default Sales Commission 
-                //Match m = validatePercentage.Match(txtDefaultSalesCommission.Text);
-                //decimal.TryParse(m.Groups[1].Captures[0].Value, out tempDefaultSalesCommission);
-                //tempDefaultSalesCommission = (tempDefaultSalesCommission / 100);
+        //Match m = validatePercentage.Match(txtDefaultSalesCommission.Text);
+        //decimal.TryParse(m.Groups[1].Captures[0].Value, out tempDefaultSalesCommission);
+        //tempDefaultSalesCommission = (tempDefaultSalesCommission / 100);
         //        return tempDefaultSalesCommission;
         //    }
         //}
@@ -256,7 +266,7 @@ namespace PraticeManagement.Controls
                         tmpPerson.OverheadList = null;
 
                         ComputedFinancialsEx rate =
-                            serviceClient.CalculateProposedFinancialsPersonTargetMargin(tmpPerson, targetMargin, hoursPerWeek, ClientDiscount,IsMarginTestPage);
+                            serviceClient.CalculateProposedFinancialsPersonTargetMargin(tmpPerson, targetMargin, hoursPerWeek, ClientDiscount, IsMarginTestPage);
 
                         DisplayRate(rate);
 
@@ -314,19 +324,38 @@ namespace PraticeManagement.Controls
 
         private void DisplayRate(ComputedFinancialsEx rate)
         {
-            lblMonthlyRevenue.Text = lblMonthlyRevenueWithoutRecruiting.Text = rate.Revenue.ToString();
-            lblMonthlyGogs.Text = rate.Cogs.ToString();
-            lblMonthlyGrossMargin.Text = rate.GrossMargin.ToString();
-            txtTargetMargin.Text = lblTargetMargin.Text =
-                string.Format(Constants.Formatting.PercentageFormat, rate.TargetMargin);
+            if (!HideCalculatedValues)
+            {
+                lblMonthlyRevenue.Text = lblMonthlyRevenueWithoutRecruiting.Text = rate.Revenue.ToString();
+                lblMonthlyGogs.Text = rate.Cogs.ToString();
+                lblMonthlyGrossMargin.Text = rate.GrossMargin.ToString();
+                txtTargetMargin.Text = lblTargetMargin.Text =
+                    string.Format(Constants.Formatting.PercentageFormat, rate.TargetMargin);
 
-            lblMonthlyGrossMarginWithoutRecruiting.Text = rate.MarginWithoutRecruiting.ToString();
-            lblMonthlyCogsWithoutRecruiting.Text = rate.CogsWithoutRecruiting.ToString();
-            lblTargetMarginWithoutRecruiting.Text =
-                string.Format(Constants.Formatting.PercentageFormat, rate.TargetMarginWithoutRecruiting);
+                lblMonthlyGrossMarginWithoutRecruiting.Text = rate.MarginWithoutRecruiting.ToString();
+                lblMonthlyCogsWithoutRecruiting.Text = rate.CogsWithoutRecruiting.ToString();
+                lblTargetMarginWithoutRecruiting.Text =
+                    string.Format(Constants.Formatting.PercentageFormat, rate.TargetMarginWithoutRecruiting);
+            }
+            else
+            {
+                TargetMarginReadOnly = true;
+                lblMonthlyRevenue.Text =
+                lblMonthlyGogs.Text =
+                lblMonthlyGrossMargin.Text =
+                lblTargetMargin.Text =
+                lblMonthlyRevenueWithoutRecruiting.Text =
+                lblMonthlyGrossMarginWithoutRecruiting.Text =
+                lblMonthlyCogsWithoutRecruiting.Text =
+                lblTargetMarginWithoutRecruiting.Text =
+                   Resources.Controls.HiddenCellText;
 
+                lblMonthlyRevenue.CssClass = lblMonthlyRevenueWithoutRecruiting.CssClass = "Revenue";
+                lblMonthlyGogs.CssClass = lblMonthlyCogsWithoutRecruiting.CssClass = "Cogs";
+                lblMonthlyGrossMargin.CssClass = lblMonthlyGrossMarginWithoutRecruiting.CssClass = "Margin";
+            }
             var overheads = rate.OverheadList;
-            var mlf = overheads.Find(oh => oh.Name == MLFText);            
+            var mlf = overheads.Find(oh => oh.Name == MLFText);
             if (mlf != null)
             {
                 overheads.Remove(mlf);
@@ -347,3 +376,4 @@ namespace PraticeManagement.Controls
 
     }
 }
+
