@@ -230,6 +230,8 @@
     <Content Include="Controls\CompanyLogoImage.ashx" />
     <Content Include="Controls\Projects\ProjectAttachmentHandler.ashx" />
     <None Include="PracticeManagementStrongNameKey.snk" />
+    <None Include="Properties\DataSources\DataTransferObjects.ClientMarginColorInfo.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ColorInformation.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.CompanyLogo1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.TimeEntryPersonProjects.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.TimeEntryProjectPerson.datasource" />
@@ -242,6 +244,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.ProjectsGroupedByPractice.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.TimeEntry.TimeEntrySums.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Timezone.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.UserPasswordsHistory1.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -898,6 +901,7 @@
     <Compile Include="Controls\Configuration\SmtpPopSetUpControl.ascx.designer.cs">
       <DependentUpon>SmtpPopSetUpControl.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CustomDropDown.cs" />
     <Compile Include="Controls\MultipleSelectionCheckBoxList.cs" />
     <Compile Include="Controls\Opportunities\OpportunityListControl.ascx.cs">
       <DependentUpon>OpportunityListControl.ascx</DependentUpon>
