@@ -535,6 +535,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Label lblTotalMargin;
         
         /// <summary>
+        /// tdTargetMargin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdTargetMargin;
+        
+        /// <summary>
         /// lblTargetMargin control.
         /// </summary>
         /// <remarks>
