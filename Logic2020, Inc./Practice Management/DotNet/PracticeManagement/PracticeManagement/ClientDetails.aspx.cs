@@ -330,7 +330,7 @@ namespace PraticeManagement
         protected void cvClientThresholds_ServerValidate(object source, ServerValidateEventArgs args)
         {
             args.IsValid = true;
-            if (userIsAdministrator)
+            if (userIsAdministrator && chbMarginThresholds.Checked)
             {
                 if (ClientMarginColorInfoList != null && ClientMarginColorInfoList.Count > 0)
                 {
