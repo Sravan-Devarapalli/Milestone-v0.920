@@ -110,6 +110,8 @@
     <Compile Include="CalendarItem.cs" />
     <Compile Include="CategoryItemBudget.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="ClientMarginColorInfo.cs" />
+    <Compile Include="ColorInformation.cs" />
     <Compile Include="Commission.cs" />
     <Compile Include="CommissionType.cs" />
     <Compile Include="CompanyLogo.cs" />
