@@ -132,6 +132,20 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public bool IsMarginColorInfoEnabled
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public List<ClientMarginColorInfo> ClientMarginInfo
+        {
+            get;
+            set;
+        }
+
 		#endregion
 
 		#region Construction
