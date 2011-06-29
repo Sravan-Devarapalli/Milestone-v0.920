@@ -207,18 +207,30 @@ namespace PraticeManagement.Controls
                 {
                     case TimescaleType.Salary:
                         txtSalaryAnnual.Text = inputValue;
+                        txtSalaryHourly.Text =
+                            txt1099Ctc.Text =
+                            txtPercRevenue.Text = string.Empty;
                         break;
 
                     case TimescaleType.Hourly:
                         txtSalaryHourly.Text = inputValue;
+                        txtSalaryAnnual.Text =
+                            txt1099Ctc.Text =
+                            txtPercRevenue.Text = string.Empty;
                         break;
 
                     case TimescaleType._1099Ctc:
                         txt1099Ctc.Text = inputValue;
+                        txtSalaryHourly.Text =
+                        txtSalaryAnnual.Text =
+                            txtPercRevenue.Text = string.Empty;
                         break;
 
                     case TimescaleType.PercRevenue:
                         txtPercRevenue.Text = inputValue;
+                        txt1099Ctc.Text =
+                        txtSalaryHourly.Text =
+                        txtSalaryAnnual.Text = string.Empty;
                         break;
                 }
             }
@@ -650,3 +662,4 @@ namespace PraticeManagement.Controls
         }
     }
 }
+
