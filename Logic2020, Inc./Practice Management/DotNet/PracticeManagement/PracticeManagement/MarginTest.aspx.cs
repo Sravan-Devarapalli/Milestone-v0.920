@@ -7,6 +7,7 @@ using DataTransferObjects;
 using PraticeManagement.Controls;
 using PraticeManagement.PersonService;
 using System.Web.Security;
+using PraticeManagement.Security;
 
 namespace PraticeManagement
 {
@@ -62,10 +63,10 @@ namespace PraticeManagement
 
         protected void compensation_Changed(object sender, EventArgs e)
         {
-            DoCompute();
+            DoCompute(SelectedPerson);
         }
 
-        private void DoCompute()
+        private void DoCompute(Person selectedPerson)
         {
             TextBox txtTargetMargin = (TextBox)whatIf.FindControl("txtTargetMargin");
             txtTargetMargin.Text = string.Empty;
@@ -73,6 +74,12 @@ namespace PraticeManagement
             if (Page.IsValid)
             {
                 Person person = new Person();
+
+                if (selectedPerson != null)
+                {
+                    person.Seniority = selectedPerson.Seniority;
+                }
+
                 // Payment
                 person.CurrentPay = personnelCompensation.Pay;
                 bool isHourlyAmount =
@@ -121,9 +128,25 @@ namespace PraticeManagement
                 {
                     recruiterInfo.RecruiterCommission = person.RecruiterCommission;
                 }
+
+                var personListAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
+                if (personListAnalyzer.IsOtherGreater(person))
+                {
+                    personnelCompensation.Visible = false;
+                    //whatIf.HideCalculatedValues = true;
+                }
+                else
+                {
+                    personnelCompensation.Visible = true;
+                    //whatIf.HideCalculatedValues = false;
+                }
+            }
+            else
+            {
+                personnelCompensation.Visible = true;
             }
 
-            DoCompute();
+            DoCompute(person);
         }
 
         private void PopulateControls(Pay pay)
