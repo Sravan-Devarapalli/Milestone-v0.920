@@ -736,6 +736,12 @@ namespace PraticeManagement
                         string.Format(Constants.Formatting.PercentageFormat, milestone.ComputedFinancials.TargetMargin),
                 lblTargetMargin);
 
+            if (milestone.Project.Client.Id.HasValue && milestone.Project.Client.IsMarginColorInfoEnabled)
+            {
+                SetBackgroundColorForMargin(milestone.Project.Client.Id.Value, milestone.ComputedFinancials.TargetMargin);
+            }
+
+
             //Fill Final Milestone Margin Cell
             SetFooterLabelWithSeniority(
                 milestone.ComputedFinancials == null ? string.Empty :
@@ -753,6 +759,24 @@ namespace PraticeManagement
                 milestone.ComputedFinancials == null ? string.Empty :
                         ((PracticeManagementCurrency)milestone.ComputedFinancials.ReimbursedExpenses).ToString(),
                 lblReimbursedExpenses);
+        }
+
+        private void SetBackgroundColorForMargin(int clientId, decimal targetMargin)
+        {
+            int margin = (int)targetMargin;
+            List<ClientMarginColorInfo> cmciList = DataHelper.GetClientMarginColorInfo(clientId);
+
+            if (cmciList != null)
+            {
+                foreach (var item in cmciList)
+                {
+                    if (margin >= item.StartRange && margin <= item.EndRange)
+                    {
+                        tdTargetMargin.Style["background-color"] = item.ColorInfo.ColorValue;
+                        break;
+                    }
+                }
+            }
         }
 
         private void SetControlsChangebility()
@@ -776,6 +800,7 @@ namespace PraticeManagement
             label.Text =
                 PersonListSeniorityAnalyzer != null && PersonListSeniorityAnalyzer.GreaterSeniorityExists ?
                     Resources.Controls.HiddenCellText : labelValue;
+
         }
 
         private void PopulateProjectControls(Project project)
