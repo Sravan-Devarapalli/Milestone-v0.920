@@ -939,6 +939,7 @@ namespace DataAccess
                     int projectGroupNameIndex = -1;
                     int groupInUseIndex = -1;
                     int attachmentFileNameIndex = -1;
+                    int isMarginColorInfoEnabledIndex = -1;
                     try
                     {
                         projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
@@ -976,6 +977,15 @@ namespace DataAccess
                     catch
                     {
                         attachmentFileNameIndex = -1;
+                    }
+
+                    try
+                    {
+                        isMarginColorInfoEnabledIndex = reader.GetOrdinal(Constants.ColumnNames.IsMarginColorInfoEnabledColumn);
+                    }
+                    catch
+                    {
+                        isMarginColorInfoEnabledIndex = -1;
                     }
 
                     while (reader.Read())
@@ -1046,6 +1056,18 @@ namespace DataAccess
                                                  Name = reader.GetString(clientNameIndex),
                                                  IsChargeable = reader.GetBoolean(clientIsChargeableIndex)
                                              };
+
+                        if (isMarginColorInfoEnabledIndex >= 0)
+                        {
+                            try
+                            {
+                                project.Client.IsMarginColorInfoEnabled = reader.GetBoolean(isMarginColorInfoEnabledIndex);
+                            }
+                            catch
+                            {
+
+                            }
+                        }
 
                         project.Status = new ProjectStatus
                                              {
