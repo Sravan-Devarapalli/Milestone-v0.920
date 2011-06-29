@@ -82,5 +82,11 @@ namespace PracticeManagementService
 		[OperationContract]
         List<Client> ClientListAllForProject(int? projectId, int? loggedInPersonId);
 
+        [OperationContract]
+        List<ColorInformation> GetAllColorsForMargin();
+
+        [OperationContract]
+        List<ClientMarginColorInfo> GetClientMarginColorInfo(int clientId);
+
     }
 }
