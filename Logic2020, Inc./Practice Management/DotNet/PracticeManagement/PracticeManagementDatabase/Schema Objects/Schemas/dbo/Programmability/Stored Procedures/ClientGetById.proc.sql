@@ -18,7 +18,10 @@ AS
 		   c.DefaultDirectorID,
 	       c.Name,
 	       c.Inactive,
-	       c.IsChargeable
+	       c.IsChargeable,
+		   c.IsMarginColorInfoEnabled
 	  FROM dbo.Client AS c
 	 WHERE c.ClientId = @ClientId
+
+GO
 
