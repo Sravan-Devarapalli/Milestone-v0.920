@@ -457,6 +457,15 @@ namespace DataAccess
                 int projectedDurationIndex = reader.GetOrdinal(ProjectedDurationColumn);
                 int milestoneIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneIsChargeable);
                 int consultantsCanAdjustIndex = reader.GetOrdinal(Constants.ColumnNames.ConsultantsCanAdjust);
+                int isMarginColorInfoEnabledIndex = -1;
+                try
+                {
+                    isMarginColorInfoEnabledIndex = reader.GetOrdinal(Constants.ColumnNames.IsMarginColorInfoEnabledColumn);
+                }
+                catch
+                {
+                    isMarginColorInfoEnabledIndex = -1;
+                }
 
                 while (reader.Read())
                 {
@@ -488,6 +497,18 @@ namespace DataAccess
                     milestone.Project.Client = new Client();
                     milestone.Project.Client.Id = reader.GetInt32(clientIdIndex);
                     milestone.Project.Client.Name = reader.GetString(clientNameIndex);
+
+                    if (isMarginColorInfoEnabledIndex >= 0)
+                    {
+                        try
+                        {
+                            milestone.Project.Client.IsMarginColorInfoEnabled = reader.GetBoolean(isMarginColorInfoEnabledIndex);
+                        }
+                        catch
+                        {
+
+                        }
+                    }
 
                     milestone.Project.SalesCommission =
                         new List<Commission>()
