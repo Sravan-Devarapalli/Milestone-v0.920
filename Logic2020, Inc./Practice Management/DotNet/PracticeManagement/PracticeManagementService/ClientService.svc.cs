@@ -125,6 +125,15 @@ namespace PracticeManagementService
             return result;
         }
 
+        public List<ColorInformation> GetAllColorsForMargin()
+        {
+            return ClientDAL.GetAllColorsForMargin();
+        }
+
+        public List<ClientMarginColorInfo> GetClientMarginColorInfo(int clientId)
+        {
+            return ClientDAL.GetClientMarginColorInfo(clientId);
+        }
         #endregion
     }
 }
