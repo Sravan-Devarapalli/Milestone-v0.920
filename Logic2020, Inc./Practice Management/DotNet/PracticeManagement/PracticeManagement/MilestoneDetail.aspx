@@ -361,8 +361,16 @@
                                     Gross Margin
                                 </td>
                                 <td align="right" nowrap="nowrap">
-                                    <asp:Label ID="lblTotalMargin" runat="server" Font-Bold="true" />
-                                    &nbsp;(<asp:Label ID="lblTargetMargin" runat="server" />)
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <asp:Label ID="lblTotalMargin" runat="server" Font-Bold="true" />
+                                            </td>
+                                            <td id="tdTargetMargin" runat="server">
+                                                &nbsp;(<asp:Label ID="lblTargetMargin" runat="server" />)
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </td>
                             </tr>
                             <tr>
@@ -394,11 +402,12 @@
                     </asp:Panel>
                 </asp:View>
                 <asp:View ID="vwDetails" runat="server">
-                    <asp:Panel ID="pnlDetails" runat="server" CssClass="tab-pane" style="overflow:auto;margin-bottom:5px; ">
-                        <asp:GridView EnableViewState="false" ID="gvPeople" runat="server" AutoGenerateColumns="False" BorderStyle="None"
-                            BorderWidth="1" EmptyDataText="There is nothing to be displayed." OnRowDataBound="gvPeople_RowDataBound"
-                            ShowFooter="true" CssClass="CompPerfTable WholeWidth" GridLines="None" BackColor="White"
-                            OnDataBound="gvPeople_OnDataBound">
+                    <asp:Panel ID="pnlDetails" runat="server" CssClass="tab-pane" Style="overflow: auto;
+                        margin-bottom: 5px;">
+                        <asp:GridView EnableViewState="false" ID="gvPeople" runat="server" AutoGenerateColumns="False"
+                            BorderStyle="None" BorderWidth="1" EmptyDataText="There is nothing to be displayed."
+                            OnRowDataBound="gvPeople_RowDataBound" ShowFooter="true" CssClass="CompPerfTable WholeWidth"
+                            GridLines="None" BackColor="White" OnDataBound="gvPeople_OnDataBound">
                             <AlternatingRowStyle BackColor="#F9FAFF" />
                             <RowStyle BackColor="White" />
                             <Columns>
@@ -647,7 +656,7 @@
                         <uc:MessageLabel ID="lblResult" runat="server" ErrorColor="Red" InfoColor="DarkGreen"
                             WarningColor="Orange" />
                         <asp:ValidationSummary ID="vsumMilestone" runat="server" EnableClientScript="false"
-                            ValidationGroup="Milestone" />                        
+                            ValidationGroup="Milestone" />
                         <asp:ValidationSummary ID="vsumShiftDays" runat="server" EnableClientScript="false"
                             ValidationGroup="ShiftDays" />
                         <asp:ValidationSummary ID="vsumClone" runat="server" EnableClientScript="false" ValidationGroup="Clone" />
@@ -666,25 +675,25 @@
                                 document.getElementById('<%= btnSave.ClientID %>').disabled = true;
                             }
                         </script>
-                        <ajaxToolkit:AnimationExtender ID="aeBtnSave" runat="server" TargetControlID="btnSave">
-                            <Animations>
+                        <ajaxtoolkit:animationextender id="aeBtnSave" runat="server" targetcontrolid="btnSave">
+                            <animations>
 					            <OnClick>
 					                <ScriptAction Script="disableSaveButton();" />
 					            </OnClick>
-                            </Animations>
-                        </ajaxToolkit:AnimationExtender>
+                            </animations>
+                        </ajaxtoolkit:animationextender>
                     </td>
                 </tr>
             </table>
         </ContentTemplate>
     </asp:UpdatePanel>
-    <AjaxControlToolkit:UpdatePanelAnimationExtender ID="upnlBody_UpdatePanelAnimationExtender"
-        runat="server" Enabled="True" TargetControlID="upnlBody">
-        <Animations>
+    <ajaxcontroltoolkit:updatepanelanimationextender id="upnlBody_UpdatePanelAnimationExtender"
+        runat="server" enabled="True" targetcontrolid="upnlBody">
+        <animations>
 			<OnUpdating>
 				<EnableAction AnimationTarget="btnAddPerson" Enabled="false" />
 			</OnUpdating>
-        </Animations>
-    </AjaxControlToolkit:UpdatePanelAnimationExtender>
+        </animations>
+    </ajaxcontroltoolkit:updatepanelanimationextender>
 </asp:Content>
 
