@@ -58,7 +58,8 @@ namespace PraticeManagement.Config
             if (gvOpportunityPriorities.Rows.Count == 1)
             {
                 var imgDelete = gvOpportunityPriorities.Rows[0].FindControl("imgDeletePriority") as ImageButton;
-                imgDelete.Visible = false;
+                if (imgDelete != null)
+                    imgDelete.Visible = false;
             }
 
             var count = GetCountOfInsertedPriorities();
@@ -98,7 +99,7 @@ namespace PraticeManagement.Config
             //Edit mode.
             if ((e.Row.RowState & DataControlRowState.Edit) != 0)
             {
-                opportunityPriority.InUse =  OpportunityPriorityHelper.IsOpportunityPriorityInUse(opportunityPriority.Id);
+                opportunityPriority.InUse = OpportunityPriorityHelper.IsOpportunityPriorityInUse(opportunityPriority.Id);
 
                 DropDownList ddl = e.Row.Cells[DDL_OPPORTUNITY_PRIORITY_INDEX].FindControl("ddlOpportunityPriority") as DropDownList;
                 if (ddl != null)
