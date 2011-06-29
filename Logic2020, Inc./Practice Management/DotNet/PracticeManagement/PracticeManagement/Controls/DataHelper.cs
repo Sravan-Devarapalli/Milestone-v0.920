@@ -1825,6 +1825,71 @@ namespace PraticeManagement.Controls
 
             return fPeriod;
         }
+
+        public static void FillColorsList(DropDownList ddlColor, string p)
+        {
+            using (var serviceClient = new ClientServiceClient())
+            {
+                try
+                {
+                    List<ColorInformation> colors = serviceClient.GetAllColorsForMargin().AsQueryable().ToList();
+
+                    ddlColor.Items.Clear();
+
+                    ListItem firstItem = new ListItem()
+                                            {
+                                                Text = "-- Select a Color --",
+                                                Value = ""
+                                            };
+
+                    ddlColor.Items.Add(firstItem);
+                    firstItem.Attributes.Add("style", string.Format("background-color:{0}", "white"));
+                    firstItem.Attributes.Add("colorValue", "white");
+
+                    foreach (var color in colors)
+                    {
+                        var colorItem = new ListItem()
+                                            {
+                                                Text = color.ColorDescription.ToString(),
+                                                Value = color.ColorId.ToString()
+                                            };
+                        colorItem.Attributes.Add("style",string.Format("background-color:{0}",color.ColorValue));
+                        colorItem.Attributes.Add("colorValue", string.Format(color.ColorValue));
+                        colorItem.Attributes.Add("Description", string.Format(color.ColorDescription));
+                        ddlColor.Items.Add(colorItem);
+                    }
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        public static List<ClientMarginColorInfo> GetClientMarginColorInfo(int clientId)
+        {
+            using (var serviceClient = new ClientServiceClient())
+            {
+                try
+                {
+                    var result = serviceClient.GetClientMarginColorInfo(clientId);
+
+                    if (result != null)
+                    {
+                        var clientInfoList = result.AsQueryable().ToList();
+                        
+                        return clientInfoList;
+                    }
+                }
+                catch (FaultException<ExceptionDetail> ex)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+            return null;
+        }
     }
 }
 
