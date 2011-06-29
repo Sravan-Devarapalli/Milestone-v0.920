@@ -7,7 +7,8 @@
 	@DefaultDirectorId	  INT,
 	@IsChargeable         BIT,
 	@Inactive             BIT,
-	@DefaultTerms         INT
+	@DefaultTerms         INT,
+	@IsMarginColorInfoEnabled BIT
 )
 AS
 	SET NOCOUNT ON;
@@ -27,7 +28,10 @@ AS
 			   DefaultDirectorID	= @DefaultDirectorId,
 			   Name = @Name,
 			   Inactive = @Inactive,
-			   IsChargeable = @IsChargeable
+			   IsChargeable = @IsChargeable,
+			   IsMarginColorInfoEnabled = @IsMarginColorInfoEnabled
 		 WHERE ClientId = @ClientId
 	END
+
+GO
 
