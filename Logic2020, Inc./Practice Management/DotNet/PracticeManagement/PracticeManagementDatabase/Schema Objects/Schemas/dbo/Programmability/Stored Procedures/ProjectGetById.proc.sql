@@ -23,6 +23,7 @@ AS
 
 	SELECT person.LastName+', '+person.FirstName AS PracticeOwnerName,
 		   p.ClientId,
+		   p.IsMarginColorInfoEnabled,
 	       p.ProjectId,
 	       p.Discount,
 	       p.Terms,
@@ -66,4 +67,6 @@ AS
 	                   )
 	       )
 
+
+GO
 
