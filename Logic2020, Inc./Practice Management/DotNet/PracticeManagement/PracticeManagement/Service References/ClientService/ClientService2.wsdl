@@ -62,6 +62,18 @@
   <wsdl:message name="IClientService_ClientListAllForProject_OutputMessage">
     <wsdl:part name="parameters" element="tns:ClientListAllForProjectResponse" />
   </wsdl:message>
+  <wsdl:message name="IClientService_GetAllColorsForMargin_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllColorsForMargin" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_GetAllColorsForMargin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllColorsForMarginResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_GetClientMarginColorInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetClientMarginColorInfo" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_GetClientMarginColorInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetClientMarginColorInfoResponse" />
+  </wsdl:message>
   <wsdl:portType name="IClientService">
     <wsdl:operation name="SaveClientDetail">
       <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/SaveClientDetail" message="tns:IClientService_SaveClientDetail_InputMessage" />
@@ -98,6 +110,14 @@
     <wsdl:operation name="ClientListAllForProject">
       <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/ClientListAllForProject" message="tns:IClientService_ClientListAllForProject_InputMessage" />
       <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/ClientListAllForProjectResponse" message="tns:IClientService_ClientListAllForProject_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllColorsForMargin">
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/GetAllColorsForMargin" message="tns:IClientService_GetAllColorsForMargin_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/GetAllColorsForMarginResponse" message="tns:IClientService_GetAllColorsForMargin_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetClientMarginColorInfo">
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/GetClientMarginColorInfo" message="tns:IClientService_GetClientMarginColorInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/GetClientMarginColorInfoResponse" message="tns:IClientService_GetClientMarginColorInfo_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>
