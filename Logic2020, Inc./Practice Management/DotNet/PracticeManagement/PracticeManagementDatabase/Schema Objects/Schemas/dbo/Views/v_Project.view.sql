@@ -10,6 +10,7 @@
 CREATE VIEW dbo.v_Project
 AS
 	SELECT p.ClientId,
+		   c.IsMarginColorInfoEnabled,
 		   p.ProjectId,
 		   p.Discount,
 		   p.Terms,
