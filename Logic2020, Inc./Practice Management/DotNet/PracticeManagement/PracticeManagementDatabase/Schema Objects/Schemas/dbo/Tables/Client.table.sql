@@ -6,7 +6,8 @@
     [Name]                 NVARCHAR (100)  NOT NULL,
     [Inactive]             BIT             NOT NULL,
     [IsChargeable]         BIT             NOT NULL,
-	[DefaultDirectorID]	   INT
+	[DefaultDirectorID]	   INT,
+	IsMarginColorInfoEnabled BIT NOT NULL CONSTRAINT DF_Client_IsMarginColorInfoEnabled DEFAULT(0) 
 );
 
 
