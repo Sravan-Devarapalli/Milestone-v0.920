@@ -33,7 +33,8 @@ AS
 	       m.ConsultantsCanAdjust,
 	       m.ClientIsChargeable,
 	       m.ProjectIsChargeable,
-	       m.MilestoneIsChargeable
+	       m.MilestoneIsChargeable,		  
+		   m.IsMarginColorInfoEnabled
 	  FROM dbo.v_Milestone AS m
 	 WHERE m.MilestoneId = @MilestoneId
 
