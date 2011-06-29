@@ -10,6 +10,7 @@
 CREATE VIEW dbo.v_Milestone
 AS
 	SELECT c.ClientId,
+		   c.IsMarginColorInfoEnabled,
 	       m.ProjectId,
 	       m.MilestoneId,
 	       m.Description,
