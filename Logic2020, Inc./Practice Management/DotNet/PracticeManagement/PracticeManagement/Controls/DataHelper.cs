@@ -1839,7 +1839,7 @@ namespace PraticeManagement.Controls
                     ListItem firstItem = new ListItem()
                                             {
                                                 Text = "-- Select a Color --",
-                                                Value = ""
+                                                Value = "0"
                                             };
 
                     ddlColor.Items.Add(firstItem);
@@ -1850,12 +1850,13 @@ namespace PraticeManagement.Controls
                     {
                         var colorItem = new ListItem()
                                             {
-                                                Text = color.ColorDescription.ToString(),
+                                                Text = string.Empty,
                                                 Value = color.ColorId.ToString()
                                             };
                         colorItem.Attributes.Add("style",string.Format("background-color:{0}",color.ColorValue));
                         colorItem.Attributes.Add("colorValue", string.Format(color.ColorValue));
                         colorItem.Attributes.Add("Description", string.Format(color.ColorDescription));
+                        colorItem.Attributes["title"]= string.Format(color.ColorDescription);
                         ddlColor.Items.Add(colorItem);
                     }
                 }
