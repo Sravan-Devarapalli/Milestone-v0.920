@@ -26,10 +26,6 @@ namespace PraticeManagement
         private const string gvddlStartRange = "gvddlStartRange";
         private const string gvddlEndRange = "gvddlEndRange";
         private const string gvddlColor = "gvddlColor";
-        private const string lblStartRange = "lblStartRange";
-        private const string lblEndRange = "lblEndRange";
-        private const string lblColor = "lblColor";
-
         private bool userIsAdministrator;
         #endregion
 
@@ -43,7 +39,8 @@ namespace PraticeManagement
             {
                 if (ViewState[CLIENT_THRESHOLDS_LIST_KEY] != null)
                 {
-                    return ViewState[CLIENT_THRESHOLDS_LIST_KEY] as List<ClientMarginColorInfo>;
+                    var output = ViewState[CLIENT_THRESHOLDS_LIST_KEY] as List<ClientMarginColorInfo>;
+                    return output;
                 }
                 else
                 {
@@ -69,7 +66,11 @@ namespace PraticeManagement
                             }
                         }
                     }
-                    return null;
+
+                    var cmci = new List<ClientMarginColorInfo>();
+                    cmci.Add(new ClientMarginColorInfo() { ColorInfo = new ColorInformation() });
+                    ViewState[CLIENT_THRESHOLDS_LIST_KEY] = cmci;
+                    return cmci;
                 }
             }
             set { ViewState[CLIENT_THRESHOLDS_LIST_KEY] = value; }
@@ -106,66 +107,15 @@ namespace PraticeManagement
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            DisableUsedItemsinDropDowns();
-
             if (gvClientThrsholds.Rows.Count == 5)
             {
-                ddlEndRange.Enabled = ddlColor.Enabled = ddlStartRange.Enabled = btnAddThreshold.Enabled = false;
+                btnAddThreshold.Enabled = false;
             }
             else if (chbMarginThresholds.Checked)
             {
-                ddlEndRange.Enabled = ddlColor.Enabled = ddlStartRange.Enabled = btnAddThreshold.Enabled = true;
+                btnAddThreshold.Enabled = true;
             }
 
-        }
-
-        private void DisableUsedItemsinDropDowns()
-        {
-            for (int i = 1; i < ddlColor.Items.Count; i++)
-            {
-                ddlColor.Items[i].Attributes.Remove("disabled");
-            }
-
-            if (ClientMarginColorInfoList != null)
-            {
-                foreach (ClientMarginColorInfo color in ClientMarginColorInfoList)
-                {
-                    for (int i = 1; i < ddlColor.Items.Count; i++)
-                    {
-                        int colorId = Convert.ToInt32(ddlColor.Items[i].Value);
-                        if (color.ColorInfo.ColorId == colorId)
-                        {
-                            ddlColor.Items[i].Attributes["disabled"] = "true";
-                        }
-                    }
-
-                    for (int i = 0; i < ddlStartRange.Items.Count; i++)
-                    {
-                        int val = Convert.ToInt32(ddlStartRange.Items[i].Value);
-                        if (val <= color.EndRange && val >= color.StartRange)
-                        {
-                            ddlStartRange.Items[i].Attributes.Add("style", "color:gray;");
-                            ddlStartRange.Items[i].Attributes["disabled"] = "true";
-                            ddlEndRange.Items[i].Attributes.Add("style", "color:gray;");
-                            ddlEndRange.Items[i].Attributes["disabled"] = "true";
-                        }
-                    }
-
-                    if (ddlStartRange.SelectedItem.Attributes["disabled"] == "true")
-                    {
-                        for (int i = 0; i < ddlStartRange.Items.Count; i++)
-                        {
-                            if (ddlStartRange.Items[i].Attributes["disabled"] != "true")
-                            {
-                                ddlStartRange.SelectedIndex = i;
-                                ddlEndRange.SelectedIndex = i;
-                                break;
-                            }
-                        }
-                    }
-
-                }
-            }
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -178,11 +128,6 @@ namespace PraticeManagement
 
                 //Directors
                 DataHelper.FillDirectorsList(ddlDefaultDirector, "-- Select Client Director --");
-
-                DataHelper.FillColorsList(ddlColor, string.Empty);
-
-                FillRangeDropdown(ddlStartRange);
-                FillRangeDropdown(ddlEndRange);
 
                 // Terms
                 TermsConfigurationSection terms = TermsConfigurationSection.Current;
@@ -220,24 +165,9 @@ namespace PraticeManagement
             {
                 return;
             }
-
             var clientMarginIfo = e.Row.DataItem as ClientMarginColorInfo;
 
             if (e.Row.RowType == DataControlRowType.DataRow && (e.Row.RowState & DataControlRowState.Edit) == 0)
-            {
-                Label lblSR = e.Row.FindControl(lblStartRange) as Label;
-                Label lblER = e.Row.FindControl(lblEndRange) as Label;
-                Table lblcolor = e.Row.FindControl("tableColor") as Table;
-
-
-                lblSR.Text = string.Format("{0}%", clientMarginIfo.StartRange.ToString());
-                lblER.Text = string.Format("{0}%", clientMarginIfo.EndRange.ToString());
-                Color colorValueFrmHex = ColorTranslator.FromHtml(clientMarginIfo.ColorInfo.ColorValue);
-                lblcolor.BackColor = colorValueFrmHex;
-            }
-
-            // Edit mode.
-            if ((e.Row.RowState & DataControlRowState.Edit) != 0)
             {
                 DropDownList ddlSR = e.Row.FindControl(gvddlStartRange) as DropDownList;
                 DropDownList ddlER = e.Row.FindControl(gvddlEndRange) as DropDownList;
@@ -249,53 +179,18 @@ namespace PraticeManagement
 
                 ddlSR.SelectedValue = clientMarginIfo.StartRange.ToString();
                 ddlER.SelectedValue = clientMarginIfo.EndRange.ToString();
-                ddcolor.SelectedValue = clientMarginIfo.ColorInfo.ColorId.ToString();
-                ddcolor.Style["background-color"] = clientMarginIfo.ColorInfo.ColorValue;
 
-                if (ClientMarginColorInfoList != null)
+                if (clientMarginIfo.ColorInfo.ColorId != 0)
                 {
-                    List<ClientMarginColorInfo> cmciList = new List<ClientMarginColorInfo>();
-                    for (int i = 0; i < ClientMarginColorInfoList.Count; i++)
-                    {
-                        if (i != e.Row.RowIndex)
-                        {
-                            cmciList.Add(ClientMarginColorInfoList[i]);
-                        }
-
-                    }
-
-                    foreach (ClientMarginColorInfo color in cmciList)
-                    {
-                        for (int i = 1; i < ddcolor.Items.Count; i++)
-                        {
-                            int colorId = Convert.ToInt32(ddcolor.Items[i].Value);
-                            if (color.ColorInfo.ColorId == colorId)
-                            {
-                                ddcolor.Items[i].Attributes["disabled"] = "true";
-                            }
-                        }
-
-                        for (int i = 0; i < ddlSR.Items.Count; i++)
-                        {
-                            int val = Convert.ToInt32(ddlSR.Items[i].Value);
-                            if (val <= color.EndRange && val >= color.StartRange)
-                            {
-                                ddlSR.Items[i].Attributes.Add("style", "color:gray;");
-                                ddlSR.Items[i].Attributes["disabled"] = "true";
-                                ddlER.Items[i].Attributes.Add("style", "color:gray;");
-                                ddlER.Items[i].Attributes["disabled"] = "true";
-                            }
-                        }
-                    }
+                    ddcolor.SelectedValue = clientMarginIfo.ColorInfo.ColorId.ToString();
+                    ddcolor.Style["background-color"] = clientMarginIfo.ColorInfo.ColorValue;
                 }
-
-
+                else
+                {
+                    ddcolor.SelectedValue = string.Empty;
+                    ddcolor.Style["background-color"] = "White";
+                }
             }
-        }
-
-        protected void gvClientThrsholds_OnRowUpdating(object sender, GridViewUpdateEventArgs e)
-        {
-
         }
 
         private void FillRangeDropdown(DropDownList ddlRange)
@@ -327,6 +222,22 @@ namespace PraticeManagement
             }
         }
 
+        protected void cvColors_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = true;
+            int i = 0;
+            foreach (var item in ClientMarginColorInfoList)
+            {
+                if (ClientMarginColorInfoList.Any(c => c.ColorInfo.ColorId == ClientMarginColorInfoList[i].ColorInfo.ColorId && c != item && c.ColorInfo.ColorId != 0))
+                {
+                    args.IsValid = false;
+                    break;
+                }
+                i++;
+            }
+
+        }
+
         protected void cvClientThresholds_ServerValidate(object source, ServerValidateEventArgs args)
         {
             args.IsValid = true;
@@ -342,11 +253,12 @@ namespace PraticeManagement
                     }
                     else
                     {
-                        for (int i = 0; i < ClientMarginColorInfoList.Count; i++)
+                        var temp = ClientMarginColorInfoList.OrderBy(k => k.StartRange).ToList();
+                        for (int i = 0; i < temp.Count; i++)
                         {
-                            if (i + 1 != ClientMarginColorInfoList.Count)
+                            if (i + 1 != temp.Count)
                             {
-                                if (ClientMarginColorInfoList[i].EndRange + 1 != ClientMarginColorInfoList[i + 1].StartRange)
+                                if (temp[i].EndRange + 1 != temp[i + 1].StartRange)
                                 {
                                     args.IsValid = false;
                                 }
@@ -361,41 +273,6 @@ namespace PraticeManagement
             }
         }
 
-        protected void cvddlColor_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            args.IsValid = true;
-            if (ddlColor.SelectedIndex == 0)
-            {
-                args.IsValid = false;
-            }
-        }
-
-        protected void cvRange_OnServerValidate(object source, ServerValidateEventArgs args)
-        {
-            args.IsValid = true;
-            int start = Convert.ToInt32(ddlStartRange.SelectedValue);
-            int end = Convert.ToInt32(ddlEndRange.SelectedValue);
-            if (start > end)
-            {
-                args.IsValid = false;
-            }
-        }
-
-        protected void cvOverLapRange_OnServerValidate(object source, ServerValidateEventArgs args)
-        {
-            args.IsValid = true;
-            int start = Convert.ToInt32(ddlStartRange.SelectedValue);
-            int end = Convert.ToInt32(ddlEndRange.SelectedValue);
-            if (ClientMarginColorInfoList != null)
-            {
-                if (ClientMarginColorInfoList.Any(k => k.StartRange >= start && k.StartRange <= end))
-                {
-                    args.IsValid = false;
-                }
-            }
-
-        }
-
         protected void cvgvddlColor_ServerValidate(object source, ServerValidateEventArgs args)
         {
             CustomValidator cvcolor = source as CustomValidator;
@@ -406,6 +283,7 @@ namespace PraticeManagement
             if (ddcolor.SelectedIndex == 0)
             {
                 args.IsValid = false;
+                cvgvddlColorClone.IsValid = false;
             }
         }
 
@@ -422,6 +300,7 @@ namespace PraticeManagement
             if (start > end)
             {
                 args.IsValid = false;
+                cvgvRangeClone.IsValid = false;
             }
         }
 
@@ -451,6 +330,7 @@ namespace PraticeManagement
                 if (cmciList.Any(k => k.StartRange >= start && k.StartRange <= end))
                 {
                     args.IsValid = false;
+                    cvgvOverLapRangeClone.IsValid = false;
                 }
             }
 
@@ -470,6 +350,7 @@ namespace PraticeManagement
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
+            GetLatesMarginInfoValues();
             Page.Validate(vsumClient.ValidationGroup);
             if (Page.IsValid)
             {
@@ -491,6 +372,7 @@ namespace PraticeManagement
 
         protected void btnAddProject_Click(object sender, EventArgs e)
         {
+            GetLatesMarginInfoValues();
             Page.Validate(vsumClient.ValidationGroup);
             if (Page.IsValid)
             {
@@ -514,102 +396,83 @@ namespace PraticeManagement
             }
         }
 
+        private void GetLatesMarginInfoValues()
+        {
+            while (ClientMarginColorInfoList.Count > 0)
+            {
+                ClientMarginColorInfoList.RemoveAt(0);
+            }
+
+            foreach (GridViewRow row in gvClientThrsholds.Rows)
+            {
+                DropDownList ddlSR = row.FindControl(gvddlStartRange) as DropDownList;
+                DropDownList ddlER = row.FindControl(gvddlEndRange) as DropDownList;
+                DropDownList ddcolor = row.FindControl(gvddlColor) as DropDownList;
+
+                int start = Convert.ToInt32(ddlSR.SelectedValue);
+                int end = Convert.ToInt32(ddlER.SelectedValue);
+                int colorId = Convert.ToInt32(ddcolor.SelectedValue);
+                string colorValue = ddcolor.SelectedItem.Attributes["colorValue"];
+                string colorDescription = ddcolor.SelectedItem.Attributes["Description"];
+                ClientMarginColorInfoList.Add(
+                    new ClientMarginColorInfo()
+                    {
+                        ColorInfo = new ColorInformation()
+                        {
+                            ColorId = colorId,
+                            ColorValue = colorValue,
+                            ColorDescription = colorDescription
+
+                        },
+                        StartRange = start,
+                        EndRange = end
+                    });
+
+            }
+        }
+
         protected void btnAddThreshold_OnClick(object sender, EventArgs e)
         {
-            Page.Validate(vsumClientMargin.ValidationGroup);
-            if (Page.IsValid)
+            GetLatesMarginInfoValues();
+            var clientMarginColorInfo = new ClientMarginColorInfo();
+            clientMarginColorInfo.ColorInfo = new ColorInformation();
+
+            int end = ClientMarginColorInfoList.Max(m => m.EndRange);
+            if (end != 150)
             {
-                var clientMarginColorInfo = new ClientMarginColorInfo();
-
-                clientMarginColorInfo.ColorInfo = new ColorInformation();
-                clientMarginColorInfo.ColorInfo.ColorId = Convert.ToInt32(ddlColor.SelectedValue);
-                clientMarginColorInfo.ColorInfo.ColorDescription = ddlColor.SelectedItem.Attributes["Description"];
-                clientMarginColorInfo.ColorInfo.ColorValue = ddlColor.SelectedItem.Attributes["colorValue"];
-                clientMarginColorInfo.StartRange = Convert.ToInt32(ddlStartRange.SelectedValue);
-                clientMarginColorInfo.EndRange = Convert.ToInt32(ddlEndRange.SelectedValue);
-
-                if (ClientMarginColorInfoList != null)
-                {
-                    ClientMarginColorInfoList.Add(clientMarginColorInfo);
-                }
-                else
-                {
-                    ClientMarginColorInfoList = new List<ClientMarginColorInfo>();
-                    ClientMarginColorInfoList.Add(clientMarginColorInfo);
-                }
-
-                ClientMarginColorInfoList = ClientMarginColorInfoList.OrderBy(k => k.StartRange).ToList();
-                gvClientThrsholds.EditIndex = -1;
-                DataBindClientThresholds(ClientMarginColorInfoList);
-
-                ddlColor.SelectedIndex = 0;
+                end = end + 1;
             }
+            clientMarginColorInfo.StartRange = end;
+            clientMarginColorInfo.EndRange = end;
+
+
+            ClientMarginColorInfoList.Add(clientMarginColorInfo);
+            DataBindClientThresholds(ClientMarginColorInfoList);
+
         }
 
         protected void btnDeleteRow_OnClick(object sender, EventArgs e)
         {
+            GetLatesMarginInfoValues();
             ImageButton imgDelete = sender as ImageButton;
             GridViewRow gvRow = imgDelete.NamingContainer as GridViewRow;
             ClientMarginColorInfoList.RemoveAt(gvRow.RowIndex);
-            ClientMarginColorInfoList = ClientMarginColorInfoList.OrderBy(k => k.StartRange).ToList();
-            DataBindClientThresholds(ClientMarginColorInfoList);
-        }
 
-        protected void imgCancelClientThrsholds_OnClick(object sender, EventArgs e)
-        {
-            gvClientThrsholds.EditIndex = -1;
-            DataBindClientThresholds(ClientMarginColorInfoList);
-        }
-
-        protected void imgEditClientThrsholds_OnClick(object sender, EventArgs e)
-        {
-            ImageButton imgEdit = sender as ImageButton;
-            GridViewRow row = imgEdit.NamingContainer as GridViewRow;
-            gvClientThrsholds.EditIndex = row.DataItemIndex;
-            DataBindClientThresholds(ClientMarginColorInfoList);
-        }
-
-        protected void imgUpdateClientThrsholds_OnClick(object sender, EventArgs e)
-        {
-            ImageButton imgUpdate = sender as ImageButton;
-            GridViewRow row = imgUpdate.NamingContainer as GridViewRow;
-            DropDownList ddcolor = row.FindControl(gvddlColor) as DropDownList;
-
-            Page.Validate(vsumEditClientMargin.ValidationGroup);
-            if (Page.IsValid)
+            if (gvClientThrsholds.Rows.Count == 1)
             {
-                DropDownList ddlSR = row.FindControl(gvddlStartRange) as DropDownList;
-                DropDownList ddlER = row.FindControl(gvddlEndRange) as DropDownList;
-
-                int start = Convert.ToInt32(ddlSR.SelectedValue);
-                int end = Convert.ToInt32(ddlER.SelectedValue);
-                int colorid = Convert.ToInt32(ddcolor.SelectedValue);
-
-                if (ClientMarginColorInfoList[row.RowIndex].StartRange != start ||
-                    ClientMarginColorInfoList[row.RowIndex].EndRange != end ||
-                    ClientMarginColorInfoList[row.RowIndex].ColorInfo.ColorId != colorid)
-                {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "", "setDirty();", true);
-                }
-                ClientMarginColorInfoList[row.RowIndex].StartRange = start;
-                ClientMarginColorInfoList[row.RowIndex].EndRange = end;
-                ClientMarginColorInfoList[row.RowIndex].ColorInfo.ColorId = colorid;
-                ClientMarginColorInfoList[row.RowIndex].ColorInfo.ColorValue = ddcolor.SelectedItem.Attributes["colorValue"];
-                ClientMarginColorInfoList[row.RowIndex].ColorInfo.ColorDescription = ddlColor.SelectedItem.Attributes["Description"];
-                gvClientThrsholds.EditIndex = -1;
-                ClientMarginColorInfoList = ClientMarginColorInfoList.OrderBy(k => k.StartRange).ToList();
-                DataBindClientThresholds(ClientMarginColorInfoList);
-
+                var cmci = new List<ClientMarginColorInfo>();
+                cmci.Add(new ClientMarginColorInfo() { ColorInfo = new ColorInformation() });
+                ClientMarginColorInfoList = cmci;
             }
-            else
-            {
-                ddcolor.Style["background-color"] = ddcolor.SelectedItem.Attributes["colorValue"];
-            }
+
+            DataBindClientThresholds(ClientMarginColorInfoList);
         }
 
         protected void cbMarginThresholds_OnCheckedChanged(object sender, EventArgs e)
         {
+            GetLatesMarginInfoValues();
             EnableorDisableClientThrsholdControls(chbMarginThresholds.Checked);
+            DataBindClientThresholds(ClientMarginColorInfoList);
         }
 
         /// <summary>
@@ -733,9 +596,7 @@ namespace PraticeManagement
 
         private void EnableorDisableClientThrsholdControls(bool ischbMarginThresholdsChecked)
         {
-
-            cvOverLapRange.Enabled = cvRange.Enabled = cvddlColor.Enabled = cvClientThresholds.Enabled = btnAddThreshold.Enabled = ddlColor.Enabled = ddlStartRange.Enabled = ddlEndRange.Enabled = gvClientThrsholds.Enabled = ischbMarginThresholdsChecked;
-
+            cvClientThresholds.Enabled = btnAddThreshold.Enabled = gvClientThrsholds.Enabled = ischbMarginThresholdsChecked;
         }
 
         private void PopulateData(Client client)
@@ -761,8 +622,6 @@ namespace PraticeManagement
             client.ClientMarginInfo = ClientMarginColorInfoList;
         }
 
-
-
         #region Projects
 
         protected void btnProjectName_Command(object sender, CommandEventArgs e)
@@ -778,6 +637,7 @@ namespace PraticeManagement
 
         public void RaisePostBackEvent(string eventArgument)
         {
+            GetLatesMarginInfoValues();
             Page.Validate(vsumClient.ValidationGroup);
             if (Page.IsValid)
             {
