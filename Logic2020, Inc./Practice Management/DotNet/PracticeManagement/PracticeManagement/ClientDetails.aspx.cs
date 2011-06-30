@@ -225,22 +225,27 @@ namespace PraticeManagement
         protected void cvColors_ServerValidate(object source, ServerValidateEventArgs args)
         {
             args.IsValid = true;
-            int i = 0;
-            foreach (var item in ClientMarginColorInfoList)
+            if (chbMarginThresholds.Checked)
             {
-                if (ClientMarginColorInfoList.Any(c => c.ColorInfo.ColorId == ClientMarginColorInfoList[i].ColorInfo.ColorId && c != item && c.ColorInfo.ColorId != 0))
+                int i = 0;
+                foreach (var item in ClientMarginColorInfoList)
                 {
-                    args.IsValid = false;
-                    break;
+                    if (ClientMarginColorInfoList.Any(c => c.ColorInfo.ColorId == ClientMarginColorInfoList[i].ColorInfo.ColorId && c != item && c.ColorInfo.ColorId != 0))
+                    {
+                        args.IsValid = false;
+                        break;
+                    }
+                    i++;
                 }
-                i++;
             }
 
         }
 
         protected void cvClientThresholds_ServerValidate(object source, ServerValidateEventArgs args)
         {
+
             args.IsValid = true;
+
             if (userIsAdministrator && chbMarginThresholds.Checked)
             {
                 if (ClientMarginColorInfoList != null && ClientMarginColorInfoList.Count > 0)
@@ -280,57 +285,66 @@ namespace PraticeManagement
             DropDownList ddcolor = row.FindControl(gvddlColor) as DropDownList;
 
             args.IsValid = true;
-            if (ddcolor.SelectedIndex == 0)
+            if (chbMarginThresholds.Checked)
             {
-                args.IsValid = false;
-                cvgvddlColorClone.IsValid = false;
+                if (ddcolor.SelectedIndex == 0)
+                {
+                    args.IsValid = false;
+                    cvgvddlColorClone.IsValid = false;
+                }
             }
         }
 
         protected void cvgvRange_OnServerValidate(object source, ServerValidateEventArgs args)
         {
-            CustomValidator cvgvRange = source as CustomValidator;
-            GridViewRow row = cvgvRange.NamingContainer as GridViewRow;
-            DropDownList ddlSR = row.FindControl(gvddlStartRange) as DropDownList;
-            DropDownList ddlER = row.FindControl(gvddlEndRange) as DropDownList;
-
-            args.IsValid = true;
-            int start = Convert.ToInt32(ddlSR.SelectedValue);
-            int end = Convert.ToInt32(ddlER.SelectedValue);
-            if (start > end)
+            if (chbMarginThresholds.Checked)
             {
-                args.IsValid = false;
-                cvgvRangeClone.IsValid = false;
+                CustomValidator cvgvRange = source as CustomValidator;
+                GridViewRow row = cvgvRange.NamingContainer as GridViewRow;
+                DropDownList ddlSR = row.FindControl(gvddlStartRange) as DropDownList;
+                DropDownList ddlER = row.FindControl(gvddlEndRange) as DropDownList;
+
+                args.IsValid = true;
+                int start = Convert.ToInt32(ddlSR.SelectedValue);
+                int end = Convert.ToInt32(ddlER.SelectedValue);
+                if (start > end)
+                {
+                    args.IsValid = false;
+                    cvgvRangeClone.IsValid = false;
+                }
             }
         }
 
         protected void cvgvOverLapRange_OnServerValidate(object source, ServerValidateEventArgs args)
         {
-            CustomValidator cvgvOverLapRange = source as CustomValidator;
-            GridViewRow row = cvgvOverLapRange.NamingContainer as GridViewRow;
-
-            DropDownList ddlSR = row.FindControl(gvddlStartRange) as DropDownList;
-            DropDownList ddlER = row.FindControl(gvddlEndRange) as DropDownList;
-
             args.IsValid = true;
-            int start = Convert.ToInt32(ddlSR.SelectedValue);
-            int end = Convert.ToInt32(ddlER.SelectedValue);
-            if (ClientMarginColorInfoList != null)
+            if (chbMarginThresholds.Checked)
             {
-                List<ClientMarginColorInfo> cmciList = new List<ClientMarginColorInfo>();
-                for (int i = 0; i < ClientMarginColorInfoList.Count; i++)
+                CustomValidator cvgvOverLapRange = source as CustomValidator;
+                GridViewRow row = cvgvOverLapRange.NamingContainer as GridViewRow;
+
+                DropDownList ddlSR = row.FindControl(gvddlStartRange) as DropDownList;
+                DropDownList ddlER = row.FindControl(gvddlEndRange) as DropDownList;
+                
+                int start = Convert.ToInt32(ddlSR.SelectedValue);
+                int end = Convert.ToInt32(ddlER.SelectedValue);
+                if (ClientMarginColorInfoList != null)
                 {
-                    if (i != row.RowIndex)
+                    List<ClientMarginColorInfo> cmciList = new List<ClientMarginColorInfo>();
+                    for (int i = 0; i < ClientMarginColorInfoList.Count; i++)
                     {
-                        cmciList.Add(ClientMarginColorInfoList[i]);
+                        if (i != row.RowIndex)
+                        {
+                            cmciList.Add(ClientMarginColorInfoList[i]);
+                        }
+
                     }
 
-                }
-
-                if (cmciList.Any(k => k.StartRange >= start && k.StartRange <= end))
-                {
-                    args.IsValid = false;
-                    cvgvOverLapRangeClone.IsValid = false;
+                    if (cmciList.Any(k => k.StartRange >= start && k.StartRange <= end))
+                    {
+                        args.IsValid = false;
+                        cvgvOverLapRangeClone.IsValid = false;
+                    }
                 }
             }
 
