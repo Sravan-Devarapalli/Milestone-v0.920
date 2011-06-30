@@ -198,7 +198,7 @@
                         <ContentTemplate>
                             <table width="100%">
                                 <tr>
-                                    <td style="width: 50%;">
+                                    <td valign="top" style="width: 50%;">
                                         <table width="99%">
                                             <tr>
                                                 <td colspan="3" style="padding-bottom: 15px; padding-top: 15px;">
@@ -275,7 +275,7 @@
                                     </td>
                                     <td style="width: 3%;">
                                     </td>
-                                    <td style="width: 44%;">
+                                    <td  valign="top" style="width: 44%;">
                                         <div style="background-color: White; padding: 10px;">
                                             <p>
                                                 Enabling this feature and configuring color-coded ranges will allow persons without
