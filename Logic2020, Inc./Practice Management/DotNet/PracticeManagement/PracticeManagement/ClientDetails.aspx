@@ -17,7 +17,7 @@
     Client Details
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-<script src="Scripts/jquery-1.4.1.js" ></script>
+    <script src="Scripts/jquery-1.4.1.js"></script>
     <script type="text/javascript">
         function setClassForAddProject() {
             var button = document.getElementById("<%= btnAddProject.ClientID%>");
@@ -61,7 +61,7 @@
 
         function SetBackGroundColorForDdls() {
             var list = document.getElementsByTagName('select');
-          
+
             for (var j = 0; j < list.length; j++) {
                 applyColor(list[j]);
             }
@@ -196,79 +196,109 @@
                 <ContentTemplate>
                     <asp:UpdatePanel ID="upnlClientThrsholds" runat="server">
                         <ContentTemplate>
-                            <table width="45%">
+                            <table width="100%">
                                 <tr>
-                                    <td colspan="3" style="padding-bottom: 15px; padding-top: 15px;">
-                                        <asp:CheckBox ID="chbMarginThresholds" AutoPostBack="true" OnCheckedChanged="cbMarginThresholds_OnCheckedChanged"
-                                            runat="server" Checked="false" onclick="setDirty();" />&nbsp;&nbsp; Use Color-coded
-                                        Margin thresholds
+                                    <td style="width: 50%;">
+                                        <table width="99%">
+                                            <tr>
+                                                <td colspan="3" style="padding-bottom: 15px; padding-top: 15px;">
+                                                    <asp:CheckBox ID="chbMarginThresholds" AutoPostBack="true" OnCheckedChanged="cbMarginThresholds_OnCheckedChanged"
+                                                        runat="server" Checked="false" onclick="setDirty();" />&nbsp;&nbsp; Use Color-coded
+                                                    Margin thresholds
+                                                </td>
+                                                <td align="right" style="padding-bottom: 15px; padding-top: 15px;">
+                                                    <asp:Button ID="btnAddThreshold" Enabled="false" runat="server" Text="Add Threshold"
+                                                        OnClientClick="setDirty();" OnClick="btnAddThreshold_OnClick" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <asp:GridView ID="gvClientThrsholds" Enabled="false" runat="server" Width="99%" OnRowDataBound="gvClientThrsholds_RowDataBound"
+                                            AutoGenerateColumns="False" EmptyDataText="" DataKeyNames="Id" CssClass="CompPerfTable"
+                                            GridLines="None">
+                                            <Columns>
+                                                <asp:TemplateField>
+                                                    <ItemStyle Height="25px" HorizontalAlign="Center" Width="25%" />
+                                                    <HeaderTemplate>
+                                                        <div class="ie-bg">
+                                                            Start</div>
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <asp:DropDownList ID="gvddlStartRange" onchange="setDirty();" runat="server">
+                                                        </asp:DropDownList>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <ItemStyle Height="25px" HorizontalAlign="Center" Width="25%" />
+                                                    <HeaderTemplate>
+                                                        <div class="ie-bg">
+                                                            End</div>
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <asp:DropDownList ID="gvddlEndRange" onchange="setDirty();" runat="server">
+                                                        </asp:DropDownList>
+                                                        <asp:CustomValidator ID="cvgvRange" runat="server" ToolTip="The End must be greater than or equals to Start."
+                                                            Text="*" EnableClientScript="false" OnServerValidate="cvgvRange_OnServerValidate"
+                                                            SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
+                                                        <asp:CustomValidator ID="cvgvOverLapRange" runat="server" ToolTip="The specified Threshold Percentage range overlaps with another Threshold Percentage range."
+                                                            OnServerValidate="cvgvOverLapRange_OnServerValidate" Text="*" EnableClientScript="false"
+                                                            SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <ItemStyle Height="25px" HorizontalAlign="Center" Width="42%" />
+                                                    <HeaderTemplate>
+                                                        <div class="ie-bg">
+                                                            Color</div>
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <cc2:CustomDropDown ID="gvddlColor" Width="85%" onclick="applyColor(this);" onchange="applyColor(this);setDirty();"
+                                                            runat="server">
+                                                        </cc2:CustomDropDown>
+                                                        <asp:CustomValidator ID="cvgvddlColor" runat="server" OnServerValidate="cvgvddlColor_ServerValidate"
+                                                            ToolTip="Please Select a Color." Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                            Display="Static" ValidationGroup="Client" />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <ItemStyle Height="25px" HorizontalAlign="Center" Width="8%" />
+                                                    <HeaderTemplate>
+                                                        <div class="ie-bg">
+                                                        </div>
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <asp:ImageButton ID="btnDeleteRow" runat="server" ImageUrl="~/Images/cross_icon.png"
+                                                            ToolTip="Delete" OnClientClick="setDirty();" OnClick="btnDeleteRow_OnClick" />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                            </Columns>
+                                        </asp:GridView>
                                     </td>
-                                    <td align="right" style="padding-bottom: 15px; padding-top: 15px;">
-                                        <asp:Button ID="btnAddThreshold" Enabled="false" runat="server" Text="Add Threshold"
-                                            OnClientClick="setDirty();" OnClick="btnAddThreshold_OnClick" />
+                                    <td style="width: 3%;">
+                                    </td>
+                                    <td style="width: 44%;">
+                                        <div style="background-color: White; padding: 10px;">
+                                            <p>
+                                                Enabling this feature and configuring color-coded ranges will allow persons without
+                                                unrestricted access to Project and Milestone margin calculations a visual indication
+                                                of how Projects and Milestones are tracking with regard to the margin goals defined
+                                                by the company.<br />
+                                                <br />
+                                            </p>
+                                            <p>
+                                                Margin goals must add up to at least 100%.<br />
+                                                <br />
+                                            </p>
+                                            <p>
+                                                NOTE: It is also possible to specify individual Client margin goals from each Client's
+                                                profile page, either in lieu of these default margin goals, or by overriding them.<br />
+                                                <br />
+                                            </p>
+                                        </div>
+                                    </td>
+                                    <td style="width: 3%;">
                                     </td>
                                 </tr>
                             </table>
-                            <asp:GridView ID="gvClientThrsholds" Enabled="false" runat="server" Width="45%" OnRowDataBound="gvClientThrsholds_RowDataBound"
-                                AutoGenerateColumns="False" EmptyDataText="" DataKeyNames="Id" CssClass="CompPerfTable"
-                                GridLines="None">
-                                <Columns>
-                                    <asp:TemplateField>
-                                        <ItemStyle Height="25px" HorizontalAlign="Center" Width="25%" />
-                                        <HeaderTemplate>
-                                            <div class="ie-bg">
-                                                Start</div>
-                                        </HeaderTemplate>
-                                        <ItemTemplate>
-                                            <asp:DropDownList ID="gvddlStartRange" onchange="setDirty();" runat="server">
-                                            </asp:DropDownList>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <asp:TemplateField>
-                                        <ItemStyle Height="25px" HorizontalAlign="Center" Width="25%" />
-                                        <HeaderTemplate>
-                                            <div class="ie-bg">
-                                                End</div>
-                                        </HeaderTemplate>
-                                        <ItemTemplate>
-                                            <asp:DropDownList ID="gvddlEndRange" onchange="setDirty();" runat="server">
-                                            </asp:DropDownList>
-                                            <asp:CustomValidator ID="cvgvRange" runat="server" ToolTip="The End must be greater than or equals to Start."
-                                                Text="*" EnableClientScript="false" OnServerValidate="cvgvRange_OnServerValidate"
-                                                SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
-                                            <asp:CustomValidator ID="cvgvOverLapRange" runat="server" ToolTip="The specified Threshold Percentage range overlaps with another Threshold Percentage range."
-                                                OnServerValidate="cvgvOverLapRange_OnServerValidate" Text="*" EnableClientScript="false"
-                                                SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <asp:TemplateField>
-                                        <ItemStyle Height="25px" HorizontalAlign="Center" Width="42%" />
-                                        <HeaderTemplate>
-                                            <div class="ie-bg">
-                                                Color</div>
-                                        </HeaderTemplate>
-                                        <ItemTemplate>
-                                            <cc2:CustomDropDown ID="gvddlColor" Width="85%" onclick="applyColor(this);" onchange="applyColor(this);setDirty();"
-                                                runat="server">
-                                            </cc2:CustomDropDown>
-                                            <asp:CustomValidator ID="cvgvddlColor" runat="server" OnServerValidate="cvgvddlColor_ServerValidate"
-                                                ToolTip="Please Select a Color." Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                                Display="Static" ValidationGroup="Client" />
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <asp:TemplateField>
-                                        <ItemStyle Height="25px" HorizontalAlign="Center" Width="8%" />
-                                        <HeaderTemplate>
-                                            <div class="ie-bg">
-                                            </div>
-                                        </HeaderTemplate>
-                                        <ItemTemplate>
-                                            <asp:ImageButton ID="btnDeleteRow" runat="server" ImageUrl="~/Images/cross_icon.png"
-                                                ToolTip="Delete" OnClientClick="setDirty();" OnClick="btnDeleteRow_OnClick" />
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                </Columns>
-                            </asp:GridView>
                         </ContentTemplate>
                     </asp:UpdatePanel>
                 </ContentTemplate>
