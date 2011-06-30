@@ -51,16 +51,23 @@
         function applyColor(ddlColor) {
             for (var i = 0; i < ddlColor.length; i++) {
                 if (ddlColor[i].selected) {
-                    ddlColor.style.backgroundColor = ddlColor[i].attributes["colorvalue"].value;
+                    if (ddlColor[i].attributes["colorvalue"] != null && ddlColor[i].attributes["colorvalue"] != "undefined") {
+                        ddlColor.style.backgroundColor = ddlColor[i].attributes["colorvalue"].value;
+                    }
                     break;
                 }
             }
         }
 
-        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
-        function endRequestHandle(sender, Args) {
-            
+        function SetBackGroundColorForDdls() {
+            var list = document.getElementsByTagName('select');
+          
+            for (var j = 0; j < list.length; j++) {
+                applyColor(list[j]);
+            }
         }
+
+        window.onload = SetBackGroundColorForDdls;
     </script>
     <div class="filters">
         <AjaxControlToolkit:TabContainer ID="TabContainer1" runat="server" ActiveTabIndex="0"
