@@ -12,14 +12,19 @@ namespace DataAccess
 {
     public static class ConfigurationDAL
     {
-        #region Constants 
-         
+        #region Constants
+
         #region Parameters
 
         private const string TitleParam = "@Title";
         private const string ImageNameParam = "@FileName";
         private const string ImagePathParam = "@FilePath";
         private const string DataParam = "@Data";
+        private const string GoalTypeIdParam = "@GoalTypeId";
+        private const string ColorIdParam = "@ColorId";
+        private const string StartRangeParam = "@StartRange";
+        private const string EndRangeParam = "@EndRange";
+        private const string isDeletePreviousMarginInfoParam = "@isDeletePreviousMarginInfo";
 
         #endregion Parameters
 
@@ -91,49 +96,61 @@ namespace DataAccess
 
         public static void SaveResourceKeyValuePairs(SettingsType settingType, Dictionary<string, string> dictionary)
         {
-           if(dictionary != null && dictionary.Keys.Count > 0)
-           {
-           
-            foreach (var item in dictionary)
-	        {
-                using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            if (dictionary != null && dictionary.Keys.Count > 0)
+            {
+
+                foreach (var item in dictionary)
                 {
-                    using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.SaveSettingsKeyValuePairsProcedure, connection))
+                    using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
                     {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.CommandTimeout = connection.ConnectionTimeout;
+                        using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.SaveSettingsKeyValuePairsProcedure, connection))
+                        {
+                            command.CommandType = CommandType.StoredProcedure;
+                            command.CommandTimeout = connection.ConnectionTimeout;
 
-                        command.Parameters.AddWithValue(Constants.ParameterNames.SettingsTypeParam, (int)settingType);
-                        command.Parameters.AddWithValue(Constants.ParameterNames.SettingsKeyParam, item.Key);
-                        command.Parameters.AddWithValue(Constants.ParameterNames.ValueParam, item.Value);
+                            command.Parameters.AddWithValue(Constants.ParameterNames.SettingsTypeParam, (int)settingType);
+                            command.Parameters.AddWithValue(Constants.ParameterNames.SettingsKeyParam, item.Key);
+                            command.Parameters.AddWithValue(Constants.ParameterNames.ValueParam, item.Value);
 
-                        connection.Open();
-                        command.ExecuteNonQuery();
+                            connection.Open();
+                            command.ExecuteNonQuery();
+                        }
                     }
                 }
-             }
-           }
+            }
         }
 
 
-        public static bool SaveResourceKeyValuePairItem(SettingsType settingType, string key, string value)
+        public static bool SaveResourceKeyValuePairItem(SettingsType settingType, string key, string value, SqlConnection connection = null, SqlTransaction activeTransaction = null)
         {
             int rowsAffected = 0;
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+
+            if (connection == null)
             {
-                using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.SaveSettingsKeyValuePairsProcedure, connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.CommandTimeout = connection.ConnectionTimeout;
-
-                    command.Parameters.AddWithValue(Constants.ParameterNames.SettingsTypeParam, (int)settingType);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.SettingsKeyParam, key);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.ValueParam, value);
-
-                    connection.Open();
-                    rowsAffected = command.ExecuteNonQuery();
-                }
+                connection = new SqlConnection(DataSourceHelper.DataConnection);
             }
+
+            using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.SaveSettingsKeyValuePairsProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.SettingsTypeParam, (int)settingType);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SettingsKeyParam, key);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ValueParam, value);
+
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+                if (activeTransaction != null)
+                {
+                    command.Transaction = activeTransaction;
+                }
+
+                rowsAffected = command.ExecuteNonQuery();
+            }
+
             return rowsAffected > 0;
         }
 
@@ -160,7 +177,7 @@ namespace DataAccess
 
                             while (reader.Read())
                             {
-                               dictionary.Add(reader.GetString(ResourcesKeyIndex),reader.GetString(ValueIndex));
+                                dictionary.Add(reader.GetString(ResourcesKeyIndex), reader.GetString(ValueIndex));
                             }
                         }
 
@@ -169,6 +186,140 @@ namespace DataAccess
                 }
             }
         }
+
+        public static void SaveMarginInfoDetail(List<Triple<DefaultGoalType, Triple<SettingsType, string, string>, List<ClientMarginColorInfo>>> marginInfoList)
+        {
+            if (marginInfoList != null && marginInfoList.Count > 0)
+            {
+                using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+                {
+                    connection.Open();
+
+                    SqlTransaction transaction = connection.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
+
+                    foreach (var triple in marginInfoList)
+                    {
+                        SaveResourceKeyValuePairItem((SettingsType)triple.Second.First, triple.Second.Second.ToString(), triple.Second.Third.ToString());
+
+                        if (Convert.ToBoolean(triple.Second.Third) && triple.Third != null)
+                        {
+
+                            for (int i = 0; i < triple.Third.Count; i++)
+                            {
+                                bool isDeletePreviousMarginInfo = false;
+                                if (i == 0)
+                                {
+                                    isDeletePreviousMarginInfo = true;
+                                }
+                                else
+                                {
+                                    isDeletePreviousMarginInfo = false;
+                                }
+                                DefaultMarginColorInfoInsert((int)triple.First, triple.Third[i], isDeletePreviousMarginInfo, connection, transaction);
+                            }
+
+                        }
+                    }
+
+                    transaction.Commit();
+                }
+            }
+        }
+
+        private static void DefaultMarginColorInfoInsert(int goalTypeId, ClientMarginColorInfo marginColorInfo, bool isDeletePreviousMarginInfo, SqlConnection connection = null, SqlTransaction activeTransaction = null)
+        {
+            if (connection == null)
+            {
+                connection = new SqlConnection(DataSourceHelper.DataConnection);
+            }
+
+            using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.SaveMarginInfoDefaultsProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(GoalTypeIdParam, goalTypeId);
+                command.Parameters.AddWithValue(ColorIdParam, marginColorInfo.ColorInfo.ColorId);
+                command.Parameters.AddWithValue(StartRangeParam, marginColorInfo.StartRange);
+                command.Parameters.AddWithValue(EndRangeParam, marginColorInfo.EndRange);
+                command.Parameters.AddWithValue(isDeletePreviousMarginInfoParam, isDeletePreviousMarginInfo);
+
+                try
+                {
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    if (activeTransaction != null)
+                    {
+                        command.Transaction = activeTransaction;
+                    }
+
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+
+            }
+        }
+
+
+
+        public static List<ClientMarginColorInfo> GetMarginColorInfoDefaults(DefaultGoalType goalType)
+        {
+            var clientMarginColorInfo = new List<ClientMarginColorInfo>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.GetMarginColorInfoDefaultsProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(GoalTypeIdParam, (int)goalType);
+
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        ReadMarginColorInfoDefaults(reader, clientMarginColorInfo);
+                    }
+                }
+            }
+            if (clientMarginColorInfo.Count > 0)
+                return clientMarginColorInfo;
+            else
+                return null;
+        }
+
+        private static void ReadMarginColorInfoDefaults(SqlDataReader reader, List<ClientMarginColorInfo> clientMarginColorInfo)
+        {
+            if (reader.HasRows)
+            {
+                int colorIdIndex = reader.GetOrdinal(Constants.ColumnNames.ColorIdColumn);
+                int colorValueIndex = reader.GetOrdinal(Constants.ColumnNames.ValueColumn);
+                int startRangeIndex = reader.GetOrdinal(Constants.ColumnNames.StartRangeColumn);
+                int endRangeIndex = reader.GetOrdinal(Constants.ColumnNames.EndRangeColumn);
+                int colorDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
+
+                while (reader.Read())
+                {
+                    clientMarginColorInfo.Add(
+                                                new ClientMarginColorInfo()
+                                                {
+                                                    ColorInfo = new ColorInformation()
+                                                    {
+                                                        ColorId = reader.GetInt32(colorIdIndex),
+                                                        ColorValue = reader.GetString(colorValueIndex),
+                                                        ColorDescription = reader.GetString(colorDescriptionIndex)
+                                                    },
+                                                    StartRange = reader.GetInt32(startRangeIndex),
+                                                    EndRange = reader.GetInt32(endRangeIndex),
+                                                }
+                        );
+                }
+            }
+        }
+
     }
 }
 
