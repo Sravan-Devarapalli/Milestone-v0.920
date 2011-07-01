@@ -94,6 +94,18 @@
   <wsdl:message name="IConfigurationService_VerifySMTPSettings_OutputMessage">
     <wsdl:part name="parameters" element="tns:VerifySMTPSettingsResponse" />
   </wsdl:message>
+  <wsdl:message name="IConfigurationService_SaveMarginInfoDetail_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveMarginInfoDetail" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_SaveMarginInfoDetail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveMarginInfoDetailResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_GetMarginColorInfoDefaults_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMarginColorInfoDefaults" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_GetMarginColorInfoDefaults_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMarginColorInfoDefaultsResponse" />
+  </wsdl:message>
   <wsdl:portType name="IConfigurationService">
     <wsdl:operation name="GetAllEmailTemplates">
       <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetAllEmailTemplates" message="tns:IConfigurationService_GetAllEmailTemplates_InputMessage" />
@@ -150,6 +162,14 @@
     <wsdl:operation name="VerifySMTPSettings">
       <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/VerifySMTPSettings" message="tns:IConfigurationService_VerifySMTPSettings_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/VerifySMTPSettingsResponse" message="tns:IConfigurationService_VerifySMTPSettings_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveMarginInfoDetail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/SaveMarginInfoDetail" message="tns:IConfigurationService_SaveMarginInfoDetail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/SaveMarginInfoDetailResponse" message="tns:IConfigurationService_SaveMarginInfoDetail_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMarginColorInfoDefaults">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetMarginColorInfoDefaults" message="tns:IConfigurationService_GetMarginColorInfoDefaults_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/GetMarginColorInfoDefaultsResponse" message="tns:IConfigurationService_GetMarginColorInfoDefaults_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IConfigurationService" type="tns:IConfigurationService">
@@ -273,6 +293,24 @@
     </wsdl:operation>
     <wsdl:operation name="VerifySMTPSettings">
       <soap:operation soapAction="http://tempuri.org/IConfigurationService/VerifySMTPSettings" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveMarginInfoDetail">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/SaveMarginInfoDetail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMarginColorInfoDefaults">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/GetMarginColorInfoDefaults" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
