@@ -200,4 +200,30 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="SaveMarginInfoDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="marginInfoList" nillable="true" type="q13:ArrayOfTripleOfDefaultGoalTypeTripleOfSettingsTypestringstringe0xbWBnxArrayOfClientMarginColorInfoNa7Nk_Pmk" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveMarginInfoDetailResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetMarginColorInfoDefaults">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="goalType" type="q14:DefaultGoalType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetMarginColorInfoDefaultsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetMarginColorInfoDefaultsResult" nillable="true" type="q15:ArrayOfClientMarginColorInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>
