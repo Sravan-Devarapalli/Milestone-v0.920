@@ -10,6 +10,9 @@ namespace PraticeManagement.Utils
     public class SettingsHelper
     {
         const string ApplicationSettingskey = "ApplicationSettings";
+        const string CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY = "CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY";
+        const string PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY = "PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY";
+
         public static Dictionary<string, string> GetResourceKeyValuePairs(SettingsType settingType)
         {
             using (var serviceClient = new ConfigurationServiceClient())
@@ -138,6 +141,56 @@ namespace PraticeManagement.Utils
                     throw;
                 }
             }
+        }
+
+        public static List<ClientMarginColorInfo> GetMarginColorInfoDefaults(DefaultGoalType goaltype)
+        {
+            if (goaltype == DefaultGoalType.Client && HttpContext.Current.Cache[CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY] != null)
+            {
+                return HttpContext.Current.Cache[CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY] as List<ClientMarginColorInfo>;
+            }
+            else if (HttpContext.Current.Cache[PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY] != null)
+            {
+                return HttpContext.Current.Cache[PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY] as List<ClientMarginColorInfo>;
+            }
+
+            using (var serviceClient = new ConfigurationServiceClient())
+            {
+                try
+                {
+                    var result = serviceClient.GetMarginColorInfoDefaults(goaltype);
+
+                    if (result != null)
+                    {
+                        var marginInfoList = result.AsQueryable().ToList();
+
+                        if (goaltype == DefaultGoalType.Client)
+                        {
+                            HttpContext.Current.Cache[CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY] = marginInfoList;
+                        }
+                        else
+                        {
+                            HttpContext.Current.Cache[PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY] = marginInfoList;
+                        }
+
+                        return marginInfoList;
+                    }
+
+                    return null;
+                }
+                catch (FaultException<ExceptionDetail> ex)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+
+        internal static void RemoveMarginColorInfoDefaults()
+        {
+            HttpContext.Current.Cache.Remove(CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY);
+            HttpContext.Current.Cache.Remove(PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY);
         }
     }
 }
