@@ -53,6 +53,8 @@ namespace PraticeManagement
 
             public const string TimeZoneKey = "TimeZone";
             public const string IsDayLightSavingsTimeEffectKey = "IsDayLightSavingsTimeEffect";
+            public const string IsDefaultMarginInfoEnabledForAllClientsKey = "IsDefaultMarginInfoEnabledForAllClients";
+            public const string IsDefaultMarginInfoEnabledForAllPersonsKey = "IsDefaultMarginInfoEnabledForAllPersons";
 
             #endregion
 
