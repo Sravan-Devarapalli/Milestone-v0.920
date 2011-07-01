@@ -491,6 +491,8 @@
                 public const string CompanyLogoDataSaveProcedure = "dbo.CompanyLogoDataSave";
                 public const string SaveSettingsKeyValuePairsProcedure = "dbo.SaveSettingsKeyValuePairs";
                 public const string GetSettingsKeyValuePairsProcedure = "dbo.GetSettingsKeyValuePairsBySettingsType";
+                public const string SaveMarginInfoDefaultsProcedure = "dbo.SaveMarginInfoDefaults";
+                public const string GetMarginColorInfoDefaultsProcedure = "dbo.GetMarginColorInfoDefaults";
             }
 
             #endregion
