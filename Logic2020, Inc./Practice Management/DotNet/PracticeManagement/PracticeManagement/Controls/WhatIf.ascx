@@ -95,15 +95,15 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="margin:0px; padding-right: 2px;width: 15px !important;">
+                                    <td style="margin: 0px; padding-right: 2px; width: 15px !important;">
                                     </td>
                                     <td>
                                         <table class="WholeWidth">
                                             <tr>
-                                                <td align="left" style="width:60px;" >
+                                                <td align="left" style="width: 60px;">
                                                     $<asp:Label ID="lblBillRateMin" runat="server"></asp:Label>
                                                 </td>
-                                                <td align="center" style="margin:0px;padding-top: 3px;">
+                                                <td align="center" style="margin: 0px; padding-top: 3px;">
                                                     <asp:TextBox ID="txtBillRateSlider_BoundControl" runat="server" Width="60px" AutoPostBack="true"
                                                         OnTextChanged="txtBillRateSlider_TextChanged" Text="120" Style="text-align: center"></asp:TextBox>
                                                     <asp:CompareValidator ID="compBillRateSlider_BoundControl" runat="server" ControlToValidate="txtBillRateSlider_BoundControl"
@@ -111,13 +111,13 @@
                                                         Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="ComputeRate"
                                                         Operator="DataTypeCheck" Type="Currency"></asp:CompareValidator>
                                                 </td>
-                                                <td align="right" style="width:60px;">
+                                                <td align="right" style="width: 60px;">
                                                     $<asp:Label ID="lblBillRateMax" runat="server"></asp:Label>
                                                 </td>
                                             </tr>
                                         </table>
                                     </td>
-                                    <td style="margin:0px;padding-left: 2px;width: 15px!important;">
+                                    <td style="margin: 0px; padding-left: 2px; width: 15px!important;">
                                     </td>
                                 </tr>
                             </table>
@@ -153,12 +153,12 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="margin:0px;width: 15px!important;">
+                                    <td style="margin: 0px; width: 15px!important;">
                                     </td>
-                                    <td align="left" style="margin:0px;width: 25px!important;">
+                                    <td align="left" style="margin: 0px; width: 25px!important;">
                                         <asp:Label ID="lblHoursMin" runat="server"></asp:Label>
                                     </td>
-                                    <td align="center" style="margin:0px;padding-top: 3px;">
+                                    <td align="center" style="margin: 0px; padding-top: 3px;">
                                         <asp:TextBox ID="txtHorsPerWeekSlider_BoundControl" runat="server" Width="60px" AutoPostBack="true"
                                             Text="40" OnTextChanged="txtBillRateSlider_TextChanged" Style="text-align: center"></asp:TextBox>
                                         <asp:CompareValidator ID="compHorsPerWeekSlider_BoundControl" runat="server" ControlToValidate="txtHorsPerWeekSlider_BoundControl"
@@ -167,10 +167,10 @@
                                             EnableClientScript="false" SetFocusOnError="true" ValidationGroup="ComputeRate"
                                             Operator="DataTypeCheck" Type="Currency"></asp:CompareValidator>
                                     </td>
-                                    <td align="right" style="margin:0px;width: 25px!important;">
+                                    <td align="right" style="margin: 0px; width: 25px!important;">
                                         <asp:Label ID="lblHoursMax" runat="server"></asp:Label>
                                     </td>
-                                    <td style="margin:0px;width: 15px!important;">
+                                    <td style="margin: 0px; width: 15px!important;">
                                     </td>
                                 </tr>
                             </table>
@@ -230,16 +230,28 @@
                             Target Margin
                         </td>
                         <td colspan="2" style="padding-right: 75px;" align="right">
-                            <asp:TextBox ID="txtTargetMargin" Style="text-align: right;" Width="95px" runat="server"
-                                AutoPostBack="true" OnTextChanged="txtTargetMargin_TextChanged"></asp:TextBox>
-                            <asp:Label ID="lblTargetMargin" runat="server" Visible="false"></asp:Label>
+                            <table>
+                                <tr>
+                                    <td id="tdTargetMargin" runat="server">
+                                        <asp:TextBox ID="txtTargetMargin" Style="text-align: right;" Width="95px" runat="server"
+                                            AutoPostBack="true" OnTextChanged="txtTargetMargin_TextChanged"></asp:TextBox>
+                                        <asp:Label ID="lblTargetMargin" runat="server" Visible="false"></asp:Label>
+                                    </td>
+                                </tr>
+                            </table>
                             <asp:CustomValidator ID="custTargetMargin" runat="server" ControlToValidate="txtTargetMargin"
                                 ErrorMessage="The Target Margin must be a number and be less then 100." ToolTip="The Target Margin must be a number and be less then 100."
                                 EnableClientScript="false" Display="Dynamic" Text="*" ValidateEmptyText="false"
                                 SetFocusOnError="true" OnServerValidate="custTargetMargin_ServerValidate" ValidationGroup="ComputeRate"></asp:CustomValidator>
                         </td>
                         <td colspan="2" style="padding-right: 42px;" align="right">
-                            <asp:Label ID="lblTargetMarginWithoutRecruiting" runat="server"></asp:Label>
+                            <table>
+                                <tr>
+                                    <td id="tdTargetMarginWithoutRecruiting" runat="server">
+                                        <asp:Label ID="lblTargetMarginWithoutRecruiting" runat="server"></asp:Label>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                     <tr>
