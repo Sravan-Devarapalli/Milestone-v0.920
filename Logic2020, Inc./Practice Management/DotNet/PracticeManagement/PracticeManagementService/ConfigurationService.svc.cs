@@ -155,6 +155,16 @@ namespace PracticeManagementService
             }
 
         }
+
+        public void SaveMarginInfoDetail(List<Triple<DefaultGoalType, Triple<SettingsType, string, string>, List<ClientMarginColorInfo>>> marginInfoList)
+        {
+            ConfigurationDAL.SaveMarginInfoDetail(marginInfoList);
+        }
+
+        public List<ClientMarginColorInfo> GetMarginColorInfoDefaults(DefaultGoalType goalType)
+        {
+            return ConfigurationDAL.GetMarginColorInfoDefaults(goalType);
+        }
     }
 }
 
