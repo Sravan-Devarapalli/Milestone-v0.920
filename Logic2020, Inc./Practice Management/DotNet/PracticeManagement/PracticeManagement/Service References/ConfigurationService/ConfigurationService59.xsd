@@ -62,7 +62,107 @@
           </xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
+      <xs:enumeration value="Project">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Application">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="SettingsType" nillable="true" type="tns:SettingsType" />
+  <xs:complexType name="ArrayOfTripleOfDefaultGoalTypeTripleOfSettingsTypestringstringe0xbWBnxArrayOfClientMarginColorInfoNa7Nk_Pmk">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TripleOfDefaultGoalTypeTripleOfSettingsTypestringstringe0xbWBnxArrayOfClientMarginColorInfoNa7Nk_Pmk" nillable="true" type="tns:TripleOfDefaultGoalTypeTripleOfSettingsTypestringstringe0xbWBnxArrayOfClientMarginColorInfoNa7Nk_Pmk" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTripleOfDefaultGoalTypeTripleOfSettingsTypestringstringe0xbWBnxArrayOfClientMarginColorInfoNa7Nk_Pmk" nillable="true" type="tns:ArrayOfTripleOfDefaultGoalTypeTripleOfSettingsTypestringstringe0xbWBnxArrayOfClientMarginColorInfoNa7Nk_Pmk" />
+  <xs:complexType name="TripleOfDefaultGoalTypeTripleOfSettingsTypestringstringe0xbWBnxArrayOfClientMarginColorInfoNa7Nk_Pmk">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="TripleOf{0}{1}{2}{#}" Namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="DefaultGoalType" Namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+          <GenericParameter Name="TripleOf{0}{1}{2}{#}" Namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects">
+            <GenericParameter Name="SettingsType" Namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+            <GenericParameter Name="string" Namespace="http://www.w3.org/2001/XMLSchema" />
+            <GenericParameter Name="string" Namespace="http://www.w3.org/2001/XMLSchema" />
+          </GenericParameter>
+          <GenericParameter Name="ArrayOfClientMarginColorInfo" Namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="First" type="tns:DefaultGoalType" />
+      <xs:element minOccurs="0" name="Second" nillable="true" type="tns:TripleOfSettingsTypestringstringe0xbWBnx" />
+      <xs:element minOccurs="0" name="Third" nillable="true" type="tns:ArrayOfClientMarginColorInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TripleOfDefaultGoalTypeTripleOfSettingsTypestringstringe0xbWBnxArrayOfClientMarginColorInfoNa7Nk_Pmk" nillable="true" type="tns:TripleOfDefaultGoalTypeTripleOfSettingsTypestringstringe0xbWBnxArrayOfClientMarginColorInfoNa7Nk_Pmk" />
+  <xs:simpleType name="DefaultGoalType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Client">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Person">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="DefaultGoalType" nillable="true" type="tns:DefaultGoalType" />
+  <xs:complexType name="TripleOfSettingsTypestringstringe0xbWBnx">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="TripleOf{0}{1}{2}{#}" Namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="SettingsType" Namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+          <GenericParameter Name="string" Namespace="http://www.w3.org/2001/XMLSchema" />
+          <GenericParameter Name="string" Namespace="http://www.w3.org/2001/XMLSchema" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="First" type="tns:SettingsType" />
+      <xs:element minOccurs="0" name="Second" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Third" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TripleOfSettingsTypestringstringe0xbWBnx" nillable="true" type="tns:TripleOfSettingsTypestringstringe0xbWBnx" />
+  <xs:complexType name="ArrayOfClientMarginColorInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ClientMarginColorInfo" nillable="true" type="tns:ClientMarginColorInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfClientMarginColorInfo" nillable="true" type="tns:ArrayOfClientMarginColorInfo" />
+  <xs:complexType name="ClientMarginColorInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ColorInfo" nillable="true" type="tns:ColorInformation" />
+      <xs:element minOccurs="0" name="EndRange" type="xs:int" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="StartRange" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ClientMarginColorInfo" nillable="true" type="tns:ClientMarginColorInfo" />
+  <xs:complexType name="ColorInformation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ColorDescription" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ColorId" type="xs:int" />
+      <xs:element minOccurs="0" name="ColorValue" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ColorInformation" nillable="true" type="tns:ColorInformation" />
 </xs:schema>
