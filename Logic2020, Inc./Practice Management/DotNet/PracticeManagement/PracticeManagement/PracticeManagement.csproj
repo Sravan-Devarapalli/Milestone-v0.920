@@ -136,6 +136,7 @@
     <Content Include="Config\Expenses.aspx" />
     <Content Include="Config\General.aspx" />
     <Content Include="Config\Help.aspx" />
+    <Content Include="Config\MarginGoals.aspx" />
     <Content Include="Config\Notes.aspx" />
     <Content Include="Config\OpportunityPriorities.aspx" />
     <Content Include="Config\Overheads.aspx" />
@@ -802,6 +803,13 @@
     </Compile>
     <Compile Include="Config\Help.aspx.designer.cs">
       <DependentUpon>Help.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\MarginGoals.aspx.cs">
+      <DependentUpon>MarginGoals.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\MarginGoals.aspx.designer.cs">
+      <DependentUpon>MarginGoals.aspx</DependentUpon>
     </Compile>
     <Compile Include="Config\Notes.aspx.cs">
       <DependentUpon>Notes.aspx</DependentUpon>
