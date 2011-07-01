@@ -288,11 +288,6 @@
                                                 Margin goals must add up to at least 100%.<br />
                                                 <br />
                                             </p>
-                                            <p>
-                                                NOTE: It is also possible to specify individual Client margin goals from each Client's
-                                                profile page, either in lieu of these default margin goals, or by overriding them.<br />
-                                                <br />
-                                            </p>
                                         </div>
                                     </td>
                                     <td style="width: 3%;">
