@@ -27,6 +27,7 @@ namespace PraticeManagement
         private const string gvddlEndRange = "gvddlEndRange";
         private const string gvddlColor = "gvddlColor";
         private bool userIsAdministrator;
+        private bool userIsClientDirector;
         #endregion
 
         private ExceptionDetail InnerException { get; set; }
@@ -146,7 +147,10 @@ namespace PraticeManagement
         {
             userIsAdministrator =
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
-            if (!userIsAdministrator)
+            userIsClientDirector =
+                Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);
+
+            if (!userIsAdministrator && !userIsClientDirector)
             {
                 tpMarginGoals.Visible = false;
             }
@@ -246,7 +250,7 @@ namespace PraticeManagement
 
             args.IsValid = true;
 
-            if (userIsAdministrator && chbMarginThresholds.Checked)
+            if ((userIsAdministrator || userIsClientDirector) && chbMarginThresholds.Checked)
             {
                 if (ClientMarginColorInfoList != null && ClientMarginColorInfoList.Count > 0)
                 {
@@ -364,7 +368,7 @@ namespace PraticeManagement
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            GetLatesMarginInfoValues();
+            GetLatestMarginInfoValues();
             Page.Validate(vsumClient.ValidationGroup);
             if (Page.IsValid)
             {
@@ -386,7 +390,7 @@ namespace PraticeManagement
 
         protected void btnAddProject_Click(object sender, EventArgs e)
         {
-            GetLatesMarginInfoValues();
+            GetLatestMarginInfoValues();
             Page.Validate(vsumClient.ValidationGroup);
             if (Page.IsValid)
             {
@@ -410,7 +414,7 @@ namespace PraticeManagement
             }
         }
 
-        private void GetLatesMarginInfoValues()
+        private void GetLatestMarginInfoValues()
         {
             while (ClientMarginColorInfoList.Count > 0)
             {
@@ -447,7 +451,7 @@ namespace PraticeManagement
 
         protected void btnAddThreshold_OnClick(object sender, EventArgs e)
         {
-            GetLatesMarginInfoValues();
+            GetLatestMarginInfoValues();
             var clientMarginColorInfo = new ClientMarginColorInfo();
             clientMarginColorInfo.ColorInfo = new ColorInformation();
 
@@ -467,7 +471,7 @@ namespace PraticeManagement
 
         protected void btnDeleteRow_OnClick(object sender, EventArgs e)
         {
-            GetLatesMarginInfoValues();
+            GetLatestMarginInfoValues();
             ImageButton imgDelete = sender as ImageButton;
             GridViewRow gvRow = imgDelete.NamingContainer as GridViewRow;
             ClientMarginColorInfoList.RemoveAt(gvRow.RowIndex);
@@ -484,7 +488,7 @@ namespace PraticeManagement
 
         protected void cbMarginThresholds_OnCheckedChanged(object sender, EventArgs e)
         {
-            GetLatesMarginInfoValues();
+            GetLatestMarginInfoValues();
             EnableorDisableClientThrsholdControls(chbMarginThresholds.Checked);
             DataBindClientThresholds(ClientMarginColorInfoList);
         }
@@ -651,7 +655,7 @@ namespace PraticeManagement
 
         public void RaisePostBackEvent(string eventArgument)
         {
-            GetLatesMarginInfoValues();
+            GetLatestMarginInfoValues();
             Page.Validate(vsumClient.ValidationGroup);
             if (Page.IsValid)
             {
