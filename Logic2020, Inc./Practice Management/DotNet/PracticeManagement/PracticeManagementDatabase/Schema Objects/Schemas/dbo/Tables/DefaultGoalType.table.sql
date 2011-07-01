@@ -1,0 +1,7 @@
+﻿CREATE TABLE dbo.DefaultGoalType
+(
+	[Id]   INT IDENTITY(1,1) NOT NULL,
+	GoalType NVARCHAR(255) NOT NULL,
+	CONSTRAINT PK_DefaultGoalType_Id PRIMARY KEY CLUSTERED([Id])
+);
+
