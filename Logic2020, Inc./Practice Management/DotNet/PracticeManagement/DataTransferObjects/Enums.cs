@@ -45,5 +45,14 @@ namespace DataTransferObjects
         [EnumMember]
         StrikedPerson = 2,
     }
+
+    [DataContract]
+    public enum DefaultGoalType
+    {
+        [EnumMember]
+        Client = 1,
+        [EnumMember]
+        Person = 2,
+    }
 }
 
