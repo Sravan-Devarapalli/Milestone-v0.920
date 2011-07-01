@@ -6,6 +6,7 @@ using PraticeManagement.ProjectService;
 using PraticeManagement.Security;
 using System.Web.UI.MobileControls;
 using System.Collections.Generic;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement.Controls.Projects
 {
@@ -83,9 +84,9 @@ namespace PraticeManagement.Controls.Projects
                                            : string.Format(Constants.Formatting.PercentageFormat,
                                                            Financials.TargetMargin);
 
-                if (project.Client.Id.HasValue && project.Client.IsMarginColorInfoEnabled)
+                if (project.Client.Id.HasValue)
                 {
-                    SetBackgroundColorForMargin(project.Client.Id.Value);
+                    SetBackgroundColorForMargin(project.Client.Id.Value,project.Client.IsMarginColorInfoEnabled);
                 }
 
                 lblSalesCommission.Text =
@@ -101,10 +102,20 @@ namespace PraticeManagement.Controls.Projects
             }
         }
 
-        private void SetBackgroundColorForMargin(int clientId)
+        private void SetBackgroundColorForMargin(int clientId,bool individualClientMarginColorInfoEnabled)
         {
+            
             int margin = (int)Financials.TargetMargin;
-            List<ClientMarginColorInfo> cmciList = DataHelper.GetClientMarginColorInfo(clientId);
+            List<ClientMarginColorInfo> cmciList = new List<ClientMarginColorInfo>();
+
+            if (individualClientMarginColorInfoEnabled)
+            {
+                 cmciList = DataHelper.GetClientMarginColorInfo(clientId);
+            }
+            else if(Convert.ToBoolean(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDefaultMarginInfoEnabledForAllClientsKey)))
+            {
+                cmciList = SettingsHelper.GetMarginColorInfoDefaults(DefaultGoalType.Client);
+            }
 
             if (cmciList != null)
             {
