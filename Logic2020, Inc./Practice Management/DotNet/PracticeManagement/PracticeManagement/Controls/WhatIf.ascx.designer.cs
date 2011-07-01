@@ -229,6 +229,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.HtmlControls.HtmlTableRow trTargetMargin;
         
         /// <summary>
+        /// tdTargetMargin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdTargetMargin;
+        
+        /// <summary>
         /// txtTargetMargin control.
         /// </summary>
         /// <remarks>
@@ -254,6 +263,15 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator custTargetMargin;
+        
+        /// <summary>
+        /// tdTargetMarginWithoutRecruiting control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdTargetMarginWithoutRecruiting;
         
         /// <summary>
         /// lblTargetMarginWithoutRecruiting control.
