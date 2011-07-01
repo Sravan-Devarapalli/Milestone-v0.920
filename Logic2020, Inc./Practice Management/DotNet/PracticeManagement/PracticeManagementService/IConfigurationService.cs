@@ -51,6 +51,12 @@ namespace PracticeManagementService
 
         [OperationContract]
         Boolean VerifySMTPSettings(string MailServer, int PortNumber, bool EnableSSl, string UserName, string Password, string PMSupportEmailAddress);
+
+        [OperationContract]
+        void SaveMarginInfoDetail(List<Triple<DefaultGoalType, Triple<SettingsType, string, string>, List<ClientMarginColorInfo>>> marginInfoList);
+
+        [OperationContract]
+        List<ClientMarginColorInfo> GetMarginColorInfoDefaults(DefaultGoalType goalType);
     }
 }
 
