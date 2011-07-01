@@ -11,6 +11,8 @@ using Resources;
 using System.Linq;
 using System.Collections.Generic;
 using PraticeManagement.Security;
+using PraticeManagement.Utils;
+using System.Web.UI.HtmlControls;
 
 namespace PraticeManagement.Controls
 {
@@ -322,6 +324,36 @@ namespace PraticeManagement.Controls
             }
         }
 
+        private void SetBackgroundColorForMargin(decimal targetMargin, HtmlTableCell td, TextBox txt = null)
+        {
+            int margin = (int)targetMargin;
+            List<ClientMarginColorInfo> cmciList = new List<ClientMarginColorInfo>();
+
+            if (Convert.ToBoolean(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDefaultMarginInfoEnabledForAllPersonsKey)))
+            {
+                cmciList = SettingsHelper.GetMarginColorInfoDefaults(DefaultGoalType.Person);
+            }
+
+            if (cmciList != null)
+            {
+                foreach (var item in cmciList)
+                {
+                    if (margin >= item.StartRange && margin <= item.EndRange)
+                    {
+                        if (txt != null)
+                        {
+                            txt.Style["background-color"] = item.ColorInfo.ColorValue;
+                        }
+                        else
+                        {
+                            td.Style["background-color"] = item.ColorInfo.ColorValue;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
         private void DisplayRate(ComputedFinancialsEx rate)
         {
             if (!HideCalculatedValues)
@@ -331,6 +363,8 @@ namespace PraticeManagement.Controls
                 lblMonthlyGrossMargin.Text = rate.GrossMargin.ToString();
                 txtTargetMargin.Text = lblTargetMargin.Text =
                     string.Format(Constants.Formatting.PercentageFormat, rate.TargetMargin);
+                SetBackgroundColorForMargin(rate.TargetMargin, tdTargetMargin, txtTargetMargin);
+
 
                 lblMonthlyGrossMarginWithoutRecruiting.Text = rate.MarginWithoutRecruiting.ToString();
                 lblMonthlyCogsWithoutRecruiting.Text = rate.CogsWithoutRecruiting.ToString();
@@ -353,7 +387,11 @@ namespace PraticeManagement.Controls
                 lblMonthlyRevenue.CssClass = lblMonthlyRevenueWithoutRecruiting.CssClass = "Revenue";
                 lblMonthlyGogs.CssClass = lblMonthlyCogsWithoutRecruiting.CssClass = "Cogs";
                 lblMonthlyGrossMargin.CssClass = lblMonthlyGrossMarginWithoutRecruiting.CssClass = "Margin";
+                SetBackgroundColorForMargin(rate.TargetMargin, tdTargetMargin);
             }
+            
+            SetBackgroundColorForMargin(rate.TargetMarginWithoutRecruiting, tdTargetMarginWithoutRecruiting);
+
             var overheads = rate.OverheadList;
             var mlf = overheads.Find(oh => oh.Name == MLFText);
             if (mlf != null)
