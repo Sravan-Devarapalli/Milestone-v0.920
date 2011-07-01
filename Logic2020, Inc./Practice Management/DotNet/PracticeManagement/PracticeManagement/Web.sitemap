@@ -57,6 +57,7 @@
         <siteMapNode url="~/Config/ExpenseCategories.aspx" title="Expense Categories" description="Expense Categories"  />
         <siteMapNode url="~/Config/Overheads.aspx" title="Overheads" description="Overhead List"  />
         <siteMapNode url="~/Config/RevenueGoals.aspx" title="Revenue Goals" description="Revenue Goals"  />
+        <siteMapNode url="~/Config/MarginGoals.aspx" title="Margin Goals" description="Margin Goals"  />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=ConfigurationReports" title="Reports" description="Reports" >
         <siteMapNode url="~/Config/ConsultantUtilTimelineReport.aspx" title="Consultant Util Timeline Report" description="Consultant Util Timeline Report"  />
