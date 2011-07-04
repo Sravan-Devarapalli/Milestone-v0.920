@@ -326,6 +326,16 @@ namespace PraticeManagement.Controls
 
         private void SetBackgroundColorForMargin(decimal targetMargin, HtmlTableCell td, TextBox txt = null)
         {
+            if (txt != null)
+            {
+                txt.Style["background-color"] = "White";
+            }
+            else
+            {
+                td.Style["background-color"] = "White";
+            }
+
+
             int margin = (int)targetMargin;
             List<ClientMarginColorInfo> cmciList = new List<ClientMarginColorInfo>();
 
