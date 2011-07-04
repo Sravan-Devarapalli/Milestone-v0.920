@@ -10,7 +10,7 @@
     Reports
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <script language="javascript" type="text/javascript" src="Scripts/ScrollinDropDown.js"></script>
+    <script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
     <asp:UpdatePanel ID="updFilters" runat="server">
         <ContentTemplate>
             <uc:UtilTimelineFilter ID="utf" BtnSaveReportVisible="true" BtnUpdateViewVisible="false"
