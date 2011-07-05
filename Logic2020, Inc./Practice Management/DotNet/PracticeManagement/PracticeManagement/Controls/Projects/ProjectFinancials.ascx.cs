@@ -86,7 +86,7 @@ namespace PraticeManagement.Controls.Projects
 
                 if (project.Client.Id.HasValue)
                 {
-                    SetBackgroundColorForMargin(project.Client.Id.Value,project.Client.IsMarginColorInfoEnabled);
+                    SetBackgroundColorForMargin(project.Client.Id.Value, project.Client.IsMarginColorInfoEnabled);
                 }
 
                 lblSalesCommission.Text =
@@ -102,17 +102,17 @@ namespace PraticeManagement.Controls.Projects
             }
         }
 
-        private void SetBackgroundColorForMargin(int clientId,bool individualClientMarginColorInfoEnabled)
+        private void SetBackgroundColorForMargin(int clientId, bool? individualClientMarginColorInfoEnabled)
         {
-            
+
             int margin = (int)Financials.TargetMargin;
             List<ClientMarginColorInfo> cmciList = new List<ClientMarginColorInfo>();
 
-            if (individualClientMarginColorInfoEnabled)
+            if (individualClientMarginColorInfoEnabled.HasValue && individualClientMarginColorInfoEnabled.Value)
             {
-                 cmciList = DataHelper.GetClientMarginColorInfo(clientId);
+                cmciList = DataHelper.GetClientMarginColorInfo(clientId);
             }
-            else if(Convert.ToBoolean(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDefaultMarginInfoEnabledForAllClientsKey)))
+            else if (Convert.ToBoolean(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDefaultMarginInfoEnabledForAllClientsKey)))
             {
                 cmciList = SettingsHelper.GetMarginColorInfoDefaults(DefaultGoalType.Client);
             }
