@@ -307,9 +307,9 @@
       <xsl:when test="$attrName = 'MilestoneDate'">Milestone Date</xsl:when>
       <xsl:when test="$attrName = 'ObjectName'">Person Name</xsl:when>
       <xsl:when test="$attrName = 'ObjectPersonId'">Person Id</xsl:when>
+      <xsl:when test="($rootName = 'Opportunity') and ($attrName = 'Description')">Description</xsl:when>
       <xsl:when test="$attrName = 'Description'">Milestone Name</xsl:when>
       <xsl:when test="$attrName = 'ClientId'">Client Id</xsl:when>
-
       <xsl:when test="$attrName = 'FirstName'">First Name</xsl:when>
       <xsl:when test="$attrName = 'HashedPassword'">Password Reset</xsl:when>
       <xsl:when test="$attrName = 'LastName'">Last Name</xsl:when>
