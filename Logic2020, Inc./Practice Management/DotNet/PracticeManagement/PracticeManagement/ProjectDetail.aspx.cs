@@ -577,8 +577,9 @@ namespace PraticeManagement
 
                     if (fuProjectAttachment.PostedFile.ContentLength > size)
                     {
-                        cvalidatorProjectAttachment.ErrorMessage = "File Must be less than " + size + " Bytes.";
-                        cvalidatorProjectAttachment.ToolTip = "File Must be less than " + size + " Bytes.";
+                        int kbSize =(int) size / 1024;
+                        cvalidatorProjectAttachment.ErrorMessage = "File Must be less than " + kbSize + " Kb.";
+                        cvalidatorProjectAttachment.ToolTip = "File Must be less than " + kbSize + " Kb.";
                         args.IsValid = false;
                     }
                 }
