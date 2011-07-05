@@ -16,6 +16,7 @@ namespace PracticeManagementService
         internal const string ModifiedUserEmailTemplateKey = "ModifiedUserEmailTemplate";
         internal const string ResetPasswordEmailTemplateKey = "ResetPasswordEmailTemplate";
         private const string TestSettingsEmailTemplateKey = "TestSettingsEmailTemplate";
+        private const string WelcomeEmailTemplateKey =      "WelcomeEmailTemplate";
 
         #endregion
 
@@ -61,6 +62,26 @@ namespace PracticeManagementService
             var smtpSettings = SettingsHelper.GetSMTPSettings();
             message.From = new MailAddress(smtpSettings.PMSupportEmail);
 
+            client.Send(message);
+        }
+
+        internal static void SendWelcomeEmail(string firstName, string username, string password, string companyName, string loginPageUrl)
+        {
+
+            var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.WelcomeEmailTemplateName);
+            var smtpSettings = SettingsHelper.GetSMTPSettings();
+
+            MailMessage message = new MailMessage();
+            DateTime now = DateTime.Now;
+            message.To.Add(new MailAddress(username));
+            message.Subject = emailTemplate.Subject;
+            message.Body = string.Format(emailTemplate.Body, firstName, companyName, username, password, loginPageUrl, smtpSettings.PMSupportEmail);
+
+            message.IsBodyHtml = true;
+
+            SmtpClient client = MailUtil.GetSmtpClient();
+            
+            message.From = new MailAddress(smtpSettings.PMSupportEmail);
             client.Send(message);
         }
 
