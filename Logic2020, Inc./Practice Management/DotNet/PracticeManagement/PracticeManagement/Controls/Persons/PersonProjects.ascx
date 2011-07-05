@@ -19,7 +19,7 @@
             <ItemTemplate>
                 <div class="cell-pad">
                     <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25" 
-                    ButtonProjectNameToolTip='<%# Eval("ProjectStatus") %>' 
+                    ButtonProjectNameToolTip='<%# GetProjectNameCellToolTip((int)Eval("ProjectStatusId"),(object) Eval("FileName"),(string)Eval("ProjectStatus")) %>' 
                     ButtonCssClass='<%# GetProjectNameCellCssClass((int)Eval("ProjectStatusId") , (object) Eval("FileName") )%>' />
                 </div>
             </ItemTemplate>
@@ -126,3 +126,4 @@
         <asp:QueryStringParameter Name="personId" QueryStringField="id" Type="Object" />
     </SelectParameters>
 </asp:ObjectDataSource>
+
