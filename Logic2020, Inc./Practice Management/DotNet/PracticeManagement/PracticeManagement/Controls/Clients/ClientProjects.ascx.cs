@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.UI.WebControls;
+using PraticeManagement.Configuration;
 
 namespace PraticeManagement.Controls.Clients
 {
@@ -16,6 +17,13 @@ namespace PraticeManagement.Controls.Clients
                 string.Format(Constants.ApplicationPages.DetailRedirectFormat,
                                    Constants.ApplicationPages.ProjectDetail,
                                    e.CommandArgument));
+        }
+
+        public bool CheckIfDefaultProject(object projectIdObj)
+        {
+            var defaultProjectId = MileStoneConfigurationManager.GetProjectId();
+            var projectId = Int32.Parse(projectIdObj.ToString());
+            return defaultProjectId.HasValue && defaultProjectId.Value == projectId;
         }
     }
 }
