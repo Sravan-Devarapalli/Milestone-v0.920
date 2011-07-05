@@ -635,6 +635,7 @@
                 public const string MilestonePersonListByProject = "dbo.MilestonePersonListByProject";
                 public const string MilestonePersonListByProjectShort = "dbo.MilestonePersonListByProjectShort";
                 public const string MilestonePersonListByMilestone = "dbo.MilestonePersonListByMilestone";
+                public const string MilestonePersonsByMilestoneForTEByProject = "dbo.MilestonePersonsByMilestoneForTEByProject";
                 public const string MilestonePersonGetByMilestonePerson = "dbo.MilestonePersonGetByMilestonePerson";
                 public const string MilestonePersonInsert = "dbo.MilestonePersonInsert";
                 public const string MilestonePersonDelete = "dbo.MilestonePersonDelete";
@@ -652,6 +653,7 @@
             {
                 public const string GetById = "dbo.ProjectExpenseGetById";
                 public const string GetAllForMilestone = "dbo.ProjectExpenseGetAllForMilestone";
+                public const string GetAllForProject = "dbo.ProjectExpenseGetAllForProject";
                 public const string Update = "dbo.ProjectExpenseUpdate";
                 public const string Insert = "dbo.ProjectExpenseInsert";
                 public const string Delete = "dbo.ProjectExpenseDelete";
