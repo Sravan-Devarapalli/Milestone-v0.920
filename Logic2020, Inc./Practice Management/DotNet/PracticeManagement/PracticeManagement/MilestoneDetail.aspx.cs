@@ -736,7 +736,7 @@ namespace PraticeManagement
                         string.Format(Constants.Formatting.PercentageFormat, milestone.ComputedFinancials.TargetMargin),
                 lblTargetMargin);
 
-            if (milestone.Project.Client.Id.HasValue)
+            if (milestone.Project.Client.Id.HasValue && milestone != null && milestone.ComputedFinancials != null)
             {
                 SetBackgroundColorForMargin(milestone.Project.Client.Id.Value, milestone.ComputedFinancials.TargetMargin, milestone.Project.Client.IsMarginColorInfoEnabled);
             }
@@ -761,12 +761,12 @@ namespace PraticeManagement
                 lblReimbursedExpenses);
         }
 
-        private void SetBackgroundColorForMargin(int clientId, decimal targetMargin, bool individualClientMarginColorInfoEnabled)
+        private void SetBackgroundColorForMargin(int clientId, decimal targetMargin, bool? individualClientMarginColorInfoEnabled)
         {
             int margin = (int)targetMargin;
             List<ClientMarginColorInfo> cmciList = new List<ClientMarginColorInfo>();
 
-            if (individualClientMarginColorInfoEnabled)
+            if (individualClientMarginColorInfoEnabled.HasValue && individualClientMarginColorInfoEnabled.Value)
             {
                 cmciList = DataHelper.GetClientMarginColorInfo(clientId);
             }
