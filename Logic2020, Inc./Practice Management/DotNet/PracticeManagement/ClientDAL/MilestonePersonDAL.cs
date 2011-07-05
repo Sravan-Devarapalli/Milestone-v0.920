@@ -220,6 +220,30 @@ namespace DataAccess
             }
         }
 
+        public static List<MilestonePerson> MilestonePersonsByMilestoneForTEByProject(int milestoneId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (
+                var command = new SqlCommand(Constants.ProcedureNames.MilestonePerson.MilestonePersonsByMilestoneForTEByProject,
+                                             connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(MilestoneIdParam, milestoneId);
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<MilestonePerson>();
+
+                    ReadMilestonePersonsForTEbyProjectReport(reader, result);
+
+                    return result;
+                }
+            }
+        }
+
         /// <summary>
         /// 	Retrives the list of the <see cref = "Milestone" />s for the specified <see cref = "Person" />.
         /// </summary>
@@ -777,6 +801,34 @@ namespace DataAccess
                             {
                                 new Commission {FractionOfMargin = reader.GetDecimal(salesCommissionIndex)}
                             };
+
+                    result.Add(milestonePerson);
+                }
+            }
+        }
+
+        private static void ReadMilestonePersonsForTEbyProjectReport(DbDataReader reader, List<MilestonePerson> result)
+        {
+            if (reader.HasRows)
+            {
+                var milestonePersonIdIndex = reader.GetOrdinal(MilestonePersonIdColumn);
+                var personIdIndex = reader.GetOrdinal(PersonIdColumn);
+                var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+                var lastNameIndex = reader.GetOrdinal(LastNameColumn);
+
+                while (reader.Read())
+                {
+                    var milestonePerson = new MilestonePerson { Id = reader.GetInt32(milestonePersonIdIndex) };
+
+                     
+
+                    // Person details
+                    milestonePerson.Person = new Person
+                    {
+                        Id = reader.GetInt32(personIdIndex),
+                        FirstName = reader.GetString(firstNameIndex),
+                        LastName = reader.GetString(lastNameIndex)
+                    };
 
                     result.Add(milestonePerson);
                 }
