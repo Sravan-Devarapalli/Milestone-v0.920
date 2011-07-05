@@ -2,7 +2,8 @@
 (
 	@ProjectId			  INT, 
     @FileName			  NVARCHAR(256),	
-	@AttachmentData	      VARBINARY(MAX)
+	@AttachmentData	      VARBINARY(MAX),
+	@UploadedDate         DATETIME 
 )
 AS
 	SET NOCOUNT ON
@@ -17,17 +18,21 @@ AS
 	  INSERT INTO ProjectAttachment
 			   ([ProjectId]
 			   ,[FileName]
-			   ,[AttachmentData])     
+			   ,[AttachmentData]
+			   ,UploadedDate
+			   )     
 		 VALUES
 			   (@ProjectId
 			   ,@FileName			   
-			   ,@AttachmentData)
+			   ,@AttachmentData
+			   ,@UploadedDate)
       END
       ELSE
       BEGIN
 		UPDATE ProjectAttachment
 		SET [FileName] = @FileName			
 			,AttachmentData =  @AttachmentData
+			,UploadedDate   = @UploadedDate
 		WHERE ProjectId = @ProjectId
       END
 	END
