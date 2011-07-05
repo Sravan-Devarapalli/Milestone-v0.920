@@ -23,6 +23,21 @@ namespace DataTransferObjects
             get;
             set;
         }
+
+        [DataMember]
+        public int AttachmentSize
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public DateTime? UploadedDate
+        {
+            get;
+            set;
+        }
+
     }
 }
 
