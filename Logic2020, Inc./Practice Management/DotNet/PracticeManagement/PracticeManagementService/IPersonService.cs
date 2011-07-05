@@ -353,7 +353,7 @@ namespace PracticeManagementService
         /// <param name="currentUser">current logged in user name</param>       
         [OperationContract]
         [FaultContract(typeof(DataAccessFault))]
-        int SavePersonDetail(Person person, string currentUser);
+        int SavePersonDetail(Person person, string currentUser, string loginPageUrl);
 
         /// <summary>
         /// Deactivates the specified person.
