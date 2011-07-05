@@ -34,7 +34,8 @@ AS
 	       p.PracticeOwnedName,
 		   p.PracticesOwned,
 		   p.TelephoneNumber,
-		   p.IsDefaultManager
+		   p.IsDefaultManager,
+		   p.IsWelcomeEmailSent
 	  FROM dbo.v_Person AS p
 	 WHERE p.PersonId = @PersonId
 
