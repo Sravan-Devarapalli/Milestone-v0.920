@@ -8,7 +8,7 @@
         <asp:TemplateField HeaderText= "<div class='ie-bg' > Project Name </div>" SortExpression="Name">
             <ItemTemplate>
                 <asp:LinkButton ID="btnProjectName" runat="server" CausesValidation="false" Text='<%# HttpUtility.HtmlEncode((string)Eval("Name")) %>'
-                    CommandArgument='<%# Eval("Id") %>' OnCommand="btnProjectName_Command"></asp:LinkButton>
+                    CommandArgument='<%# Eval("Id") %>' OnCommand="btnProjectName_Command" Enabled='<%# !CheckIfDefaultProject(Eval("Id")) %>'></asp:LinkButton>
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderText="<div class='ie-bg' >Group</div>" SortExpression="GroupName">
