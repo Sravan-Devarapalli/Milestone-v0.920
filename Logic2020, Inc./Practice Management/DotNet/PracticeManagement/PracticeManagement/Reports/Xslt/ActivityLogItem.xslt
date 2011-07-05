@@ -114,6 +114,9 @@
       <xsl:when test="name() = 'OpportunityTransition'">
         <xsl:value-of select="//NEW_VALUES/@OpportunityName"/>
       </xsl:when>
+      <xsl:when test="name() = 'ProjectAttachment'">
+        <xsl:value-of select="//NEW_VALUES/@FileName"/>
+      </xsl:when>
       <xsl:when test="name() = 'Export' and //NEW_VALUES/@User">
         <!--<xsl:text>&#160;</xsl:text>-->
         <xsl:value-of select="//NEW_VALUES/@User"/>
