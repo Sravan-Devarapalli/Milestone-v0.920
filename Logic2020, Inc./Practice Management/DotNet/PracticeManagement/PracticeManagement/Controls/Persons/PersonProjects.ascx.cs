@@ -141,6 +141,30 @@ namespace PraticeManagement.Controls.Persons
 
         #endregion
 
+        protected string GetProjectNameCellToolTip(int projectStatusId, object fileName,string statusName)
+        {
+            string cssClass = ProjectHelper.GetIndicatorClassByStatusId(projectStatusId);
+            string fileNameStr = fileName.ToString();
+            if (projectStatusId == 3 && string.IsNullOrEmpty(fileNameStr))
+            {
+                cssClass = "ActiveProjectWithoutSOW";
+            }
+
+            if (projectStatusId == (int)ProjectStatusType.Active)
+            {
+                if (cssClass == "ActiveProjectWithoutSOW")
+                {
+                    statusName = "Active without SOW";
+                }
+                else
+                {
+                    statusName = "Active with SOW";
+                }
+            }
+
+            return statusName;
+        }
+
         protected string GetProjectNameCellCssClass(int projectStatusId, object fileName)
         {
             string cssClass = ProjectHelper.GetIndicatorClassByStatusId(projectStatusId);
@@ -155,3 +179,4 @@ namespace PraticeManagement.Controls.Persons
 
     }
 }
+
