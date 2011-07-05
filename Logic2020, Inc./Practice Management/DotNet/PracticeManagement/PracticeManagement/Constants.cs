@@ -109,6 +109,8 @@ namespace PraticeManagement
             public const string ClientDetailsWithReturnFormat = "{0}?{1}&Id={2}";
             public const string ClientDetailsWithoutClientIdFormat = "{0}?{1}";
             public const string ChangePasswordErrorpage = "~/GuestPages/ChangePasswordError.aspx";
+            public const string ChangePasswordPage = "~/ChangePassword.aspx";
+            public const string Set_userPage = "~/set_user.aspx";
         }
 
         /// <summary>
