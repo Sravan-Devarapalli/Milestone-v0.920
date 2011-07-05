@@ -133,7 +133,7 @@ namespace DataTransferObjects
         }
 
         [DataMember]
-        public bool IsMarginColorInfoEnabled
+        public bool? IsMarginColorInfoEnabled
         {
             get;
             set;
