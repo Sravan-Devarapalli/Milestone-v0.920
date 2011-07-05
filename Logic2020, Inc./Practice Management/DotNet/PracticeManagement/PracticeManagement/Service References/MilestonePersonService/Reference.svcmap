@@ -21,14 +21,14 @@
     <MetadataSource Address="http://localhost/PracticeManagementService/MilestonePersonService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="MilestonePersonService3.xsd" MetadataType="Schema" ID="ef5f9427-08f5-4b2f-8c0b-de02819cbf7c" SourceId="1" SourceUrl="http://server4.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd0" />
-    <MetadataFile FileName="MilestonePersonService1.wsdl" MetadataType="Wsdl" ID="a7d00047-c3a3-4abb-97c2-196e30805844" SourceId="1" SourceUrl="http://server4.ggk.com/PracticeManagementService/MilestonePersonService.svc?wsdl" />
-    <MetadataFile FileName="MilestonePersonService4.xsd" MetadataType="Schema" ID="b717a221-c460-45fb-b75a-72b2b53d5cd3" SourceId="1" SourceUrl="http://server4.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd3" />
-    <MetadataFile FileName="MilestonePersonService5.xsd" MetadataType="Schema" ID="11639835-06b6-4ebe-8d9b-af95a60ac7cd" SourceId="1" SourceUrl="http://server4.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd1" />
-    <MetadataFile FileName="MilestonePersonService6.xsd" MetadataType="Schema" ID="c7fc0f82-4551-43d9-bec8-aca585a040e4" SourceId="1" SourceUrl="http://server4.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd5" />
-    <MetadataFile FileName="MilestonePersonService7.xsd" MetadataType="Schema" ID="1222ac89-2d28-46f5-8a32-60d92f07c5fc" SourceId="1" SourceUrl="http://server4.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd4" />
-    <MetadataFile FileName="MilestonePersonService8.xsd" MetadataType="Schema" ID="dca6e60c-c540-44fc-a035-6ce9d589f36f" SourceId="1" SourceUrl="http://server4.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd2" />
-    <MetadataFile FileName="MilestonePersonService1.disco" MetadataType="Disco" ID="f184b218-d0b8-490f-8acc-58f814e4e520" SourceId="1" SourceUrl="http://server4.ggk.com/PracticeManagementService/MilestonePersonService.svc?disco" />
+    <MetadataFile FileName="MilestonePersonService3.xsd" MetadataType="Schema" ID="957281ad-f383-4434-bab3-3b35f00c213f" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd4" />
+    <MetadataFile FileName="MilestonePersonService4.xsd" MetadataType="Schema" ID="7043a0d1-e47c-42ba-95da-e24f2b16342a" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd5" />
+    <MetadataFile FileName="MilestonePersonService5.xsd" MetadataType="Schema" ID="b60854a9-818c-4805-9f73-cabdea877b3d" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd2" />
+    <MetadataFile FileName="MilestonePersonService1.wsdl" MetadataType="Wsdl" ID="50a8aeb6-5c97-4590-8ba8-11018bbd6580" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/MilestonePersonService.svc?wsdl" />
+    <MetadataFile FileName="MilestonePersonService1.disco" MetadataType="Disco" ID="71f156e6-1575-4173-b485-52d28d0ead6c" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/MilestonePersonService.svc?disco" />
+    <MetadataFile FileName="MilestonePersonService6.xsd" MetadataType="Schema" ID="d7b46009-dbcd-4b0b-9247-86edca180816" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd3" />
+    <MetadataFile FileName="MilestonePersonService7.xsd" MetadataType="Schema" ID="a7be9ad5-2bae-4223-94f0-c3a0e466ee8b" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd1" />
+    <MetadataFile FileName="MilestonePersonService8.xsd" MetadataType="Schema" ID="de5fb2a5-a0b9-4332-8695-0a0cefe78d72" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd0" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
