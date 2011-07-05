@@ -939,6 +939,8 @@ namespace DataAccess
                     int projectGroupNameIndex = -1;
                     int groupInUseIndex = -1;
                     int attachmentFileNameIndex = -1;
+                    int attachmentSizeIndex = -1;
+                    int uploadedDateIndex = -1;
                     int isMarginColorInfoEnabledIndex = -1;
                     try
                     {
@@ -978,7 +980,6 @@ namespace DataAccess
                     {
                         attachmentFileNameIndex = -1;
                     }
-
                     try
                     {
                         isMarginColorInfoEnabledIndex = reader.GetOrdinal(Constants.ColumnNames.IsMarginColorInfoEnabledColumn);
@@ -986,6 +987,24 @@ namespace DataAccess
                     catch
                     {
                         isMarginColorInfoEnabledIndex = -1;
+                    }
+
+                    try
+                    {
+                        attachmentSizeIndex = reader.GetOrdinal(Constants.ColumnNames.AttachmentSize);
+                    }
+                    catch
+                    {
+                        attachmentSizeIndex = -1;
+                    }
+
+                    try
+                    {
+                        uploadedDateIndex = reader.GetOrdinal(Constants.ColumnNames.UploadedDate);
+                    }
+                    catch
+                    {
+                        uploadedDateIndex = -1;
                     }
 
                     while (reader.Read())
@@ -1050,12 +1069,49 @@ namespace DataAccess
                             }
                         }
 
+                        if (attachmentSizeIndex >= 0)
+                        {
+                            try
+                            {
+                                if (project.Attachment != null)
+                                {
+                                    project.Attachment.AttachmentSize = (int)reader.GetInt64(attachmentSizeIndex);
+                                }
+                                else
+                                {
+                                    project.Attachment = new ProjectAttachment { AttachmentSize = (int)reader.GetInt64(attachmentSizeIndex) };
+                                }
+                            }
+                            catch
+                            {
+                            }
+                        }
+
+                        if (uploadedDateIndex >= 0)
+                        {
+                            try
+                            {
+                                if (project.Attachment != null)
+                                {
+                                    project.Attachment.UploadedDate = reader.GetDateTime(uploadedDateIndex);
+                                }
+                                else
+                                {
+                                    project.Attachment = new ProjectAttachment { UploadedDate = reader.GetDateTime(uploadedDateIndex) };
+                                }
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+
                         project.Client = new Client
-                                             {
-                                                 Id = reader.GetInt32(clientIdIndex),
-                                                 Name = reader.GetString(clientNameIndex),
-                                                 IsChargeable = reader.GetBoolean(clientIsChargeableIndex)
-                                             };
+                                                                     {
+                                                                         Id = reader.GetInt32(clientIdIndex),
+                                                                         Name = reader.GetString(clientNameIndex),
+                                                                         IsChargeable = reader.GetBoolean(clientIsChargeableIndex)
+                                                                     };
 
                         if (isMarginColorInfoEnabledIndex >= 0)
                         {
@@ -1068,6 +1124,7 @@ namespace DataAccess
 
                             }
                         }
+
 
                         project.Status = new ProjectStatus
                                              {
@@ -1911,7 +1968,7 @@ namespace DataAccess
             return monthNode;
         }
 
-        public static void SaveProjectAttachmentData(ProjectAttachment attachment, int projectId)
+        public static void SaveProjectAttachmentData(ProjectAttachment attachment, int projectId, string userName)
         {
 
             var connection = new SqlConnection(DataSourceHelper.DataConnection);
@@ -1923,9 +1980,12 @@ namespace DataAccess
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UploadedDateParam, DateTime.Now);
                 command.Parameters.AddWithValue(Constants.ParameterNames.AttachmentFileName, !string.IsNullOrEmpty(attachment.AttachmentFileName) ? (object)attachment.AttachmentFileName : DBNull.Value);
                 command.Parameters.Add(Constants.ParameterNames.AttachmentData, SqlDbType.VarBinary, -1);
                 command.Parameters[Constants.ParameterNames.AttachmentData].Value = attachment.AttachmentData != null ? (object)attachment.AttachmentData : DBNull.Value;
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam,
+                    !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -1973,6 +2033,24 @@ namespace DataAccess
             }
 
 
+        }
+
+        public static void DeleteProjectAttachmentByProjectId(int projectId, string userName)
+        {
+            var connection = new SqlConnection(DataSourceHelper.DataConnection);
+
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.DeleteProjectAttachmentByProjectId, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam,
+                    !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
         }
 
         public static void ProjectDelete(int projectId, string userName)
