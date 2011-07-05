@@ -1,13 +1,17 @@
-﻿CREATE PROCEDURE dbo.SaveProjectAttachment
+﻿CREATE PROCEDURE [dbo].[SaveProjectAttachment]
 (
 	@ProjectId			  INT, 
     @FileName			  NVARCHAR(256),	
 	@AttachmentData	      VARBINARY(MAX),
-	@UploadedDate         DATETIME 
+	@UploadedDate         DATETIME ,
+	@UserLogin            NVARCHAR(255)
 )
 AS
 	SET NOCOUNT ON
 	BEGIN
+	
+	-- Start logging session
+	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 	IF (
 	    NOT EXISTS(SELECT 1 
 				   FROM [dbo].ProjectAttachment 
@@ -35,4 +39,6 @@ AS
 			,UploadedDate   = @UploadedDate
 		WHERE ProjectId = @ProjectId
       END
+      
+      EXEC dbo.SessionLogUnprepare
 	END
