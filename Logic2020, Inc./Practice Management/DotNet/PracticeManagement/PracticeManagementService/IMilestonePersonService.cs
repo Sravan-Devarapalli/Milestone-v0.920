@@ -89,6 +89,9 @@ namespace PracticeManagementService
         [OperationContract]
         List<MilestonePerson> GetMilestonePersonListByMilestoneNoFinancials(int milestoneId);
 
+        [OperationContract]
+        List<MilestonePerson> MilestonePersonsByMilestoneForTEByProject(int milestoneId);
+
 	    /// <summary>
 	    /// Computed financials for milestone person
 	    /// </summary>
