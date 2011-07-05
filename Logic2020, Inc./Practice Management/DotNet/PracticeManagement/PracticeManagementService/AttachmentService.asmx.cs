@@ -19,11 +19,11 @@ namespace PracticeManagementService
     public class AttachmentService : System.Web.Services.WebService
     {
         [WebMethod]
-        public void SaveProjectAttachment(ProjectAttachment sow, int projectId)
+        public void SaveProjectAttachment(ProjectAttachment sow, int projectId, string userName)
         {
             if (sow != null)
             {
-                ProjectDAL.SaveProjectAttachmentData(sow, projectId);
+                ProjectDAL.SaveProjectAttachmentData(sow, projectId, userName);
             }
         }
 
@@ -31,6 +31,12 @@ namespace PracticeManagementService
         public byte[] GetProjectAttachmentData(int projectId)
         {
            return ProjectDAL.GetProjectAttachmentData(projectId);
+        }
+
+        [WebMethod]
+        public void DeleteProjectAttachmentByProjectId(int projectId, string userName)
+        {
+            ProjectDAL.DeleteProjectAttachmentByProjectId(projectId, userName);
         }
 
     }
