@@ -186,6 +186,32 @@ namespace PraticeManagement
             }
         }
 
+        protected string GetProjectNameCellToolTip(Project project)
+        {
+            string cssClass = ProjectHelper.GetIndicatorClassByStatusId(project.Status.Id);
+            if (project.Status.Id == 3 && project.Attachment == null)
+            {
+                cssClass = "ActiveProjectWithoutSOW";
+            }
+
+            var statusName = project.Status.Name;
+
+            if (project.Status.Id == (int)ProjectStatusType.Active)
+            {
+                if (cssClass == "ActiveProjectWithoutSOW")
+                {
+                    statusName = "Active without SOW";
+                }
+                else
+                {
+                    statusName = "Active with SOW";
+                }
+            }
+
+
+            return statusName;
+        }
+
         protected string GetProjectNameCellCssClass(Project project)
         {
             string cssClass = ProjectHelper.GetIndicatorClassByStatusId(project.Status.Id);
