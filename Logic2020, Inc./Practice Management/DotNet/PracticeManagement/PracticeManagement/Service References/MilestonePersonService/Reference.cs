@@ -53,6 +53,11 @@ namespace PraticeManagement.MilestonePersonService {
             "ancialsResponse")]
         DataTransferObjects.MilestonePerson[] GetMilestonePersonListByMilestoneNoFinancials(int milestoneId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestonePersonService/MilestonePersonsByMilestoneForTEByProj" +
+            "ect", ReplyAction="http://tempuri.org/IMilestonePersonService/MilestonePersonsByMilestoneForTEByProj" +
+            "ectResponse")]
+        DataTransferObjects.MilestonePerson[] MilestonePersonsByMilestoneForTEByProject(int milestoneId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestonePersonService/CalculateMilestonePersonFinancials", ReplyAction="http://tempuri.org/IMilestonePersonService/CalculateMilestonePersonFinancialsResp" +
             "onse")]
         DataTransferObjects.Financials.MilestonePersonComputedFinancials CalculateMilestonePersonFinancials(int milestonePersonId);
@@ -65,7 +70,7 @@ namespace PraticeManagement.MilestonePersonService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class MilestonePersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.MilestonePersonService.IMilestonePersonService>, PraticeManagement.MilestonePersonService.IMilestonePersonService {
-                
+        
         public MilestonePersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -120,6 +125,10 @@ namespace PraticeManagement.MilestonePersonService {
         
         public DataTransferObjects.MilestonePerson[] GetMilestonePersonListByMilestoneNoFinancials(int milestoneId) {
             return base.Channel.GetMilestonePersonListByMilestoneNoFinancials(milestoneId);
+        }
+        
+        public DataTransferObjects.MilestonePerson[] MilestonePersonsByMilestoneForTEByProject(int milestoneId) {
+            return base.Channel.MilestonePersonsByMilestoneForTEByProject(milestoneId);
         }
         
         public DataTransferObjects.Financials.MilestonePersonComputedFinancials CalculateMilestonePersonFinancials(int milestonePersonId) {
