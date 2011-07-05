@@ -105,7 +105,7 @@ namespace PraticeManagement
                 {
                     if (!(Request.AppRelativeCurrentExecutionFilePath == Constants.ApplicationPages.ChangePasswordPage) )
                     {
-                         if(!(Request.AppRelativeCurrentExecutionFilePath == Constants.ApplicationPages.Set_userPage))
+                        if (Session["IsLoggedInthroughLoginPage"] != null && Convert.ToBoolean(Session["IsLoggedInthroughLoginPage"]))
                         Response.Redirect(Constants.ApplicationPages.ChangePasswordPage);
                     }
                 }
@@ -126,8 +126,9 @@ namespace PraticeManagement
             string htmltext = GetMenuHtml();
 
             if (user != null
-                && user.CreationDate.Subtract(user.LastPasswordChangedDate).Duration() < ts && Request.AppRelativeCurrentExecutionFilePath != Constants.ApplicationPages.Set_userPage) 
+                && user.CreationDate.Subtract(user.LastPasswordChangedDate).Duration() < ts ) 
             {
+                if (Session["IsLoggedInthroughLoginPage"] != null && Convert.ToBoolean(Session["IsLoggedInthroughLoginPage"]))
                 htmltext = string.Empty;
             }
 
