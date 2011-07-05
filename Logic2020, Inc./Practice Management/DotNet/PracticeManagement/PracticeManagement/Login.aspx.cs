@@ -69,6 +69,8 @@ namespace PraticeManagement
                 login.DestinationPageUrl = mapping.Mapping.FindFirstUrl(Roles.GetRolesForUser(login.UserName));
             }
             LogLoginResult(0);
+
+            Session["IsLoggedInthroughLoginPage"] = true;
         }
 
         private void LogLoginResult(int loginResult)
