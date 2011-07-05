@@ -9,6 +9,8 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string UploadedDate = "UploadedDate";
+            public const string AttachmentSize = "AttachmentSize";
             public const string IsMarginColorInfoEnabledColumn = "IsMarginColorInfoEnabled";
             public const string ColorIdColumn = "ColorId";
             public const string StartRangeColumn = "StartRange";
@@ -361,6 +363,7 @@
             public const string TimeTypeId = ColumnNames.TimeTypeId;
             public const string TimeTypeName = ColumnNames.TimeTypeName;
             public const string ProjectIdParam = "@ProjectId";
+            public const string UploadedDateParam = "@UploadedDate";
             public const string MilestoneIdParam = "@MilestoneId";
             public const string PersonIdParam = "@PersonId";
             public const string PersonIdListParam = "@PersonIdList";
@@ -614,6 +617,7 @@
                 public const string ProjectInsert = "dbo.ProjectInsert";
                 public const string ProjectUpdate = "dbo.ProjectUpdate";
                 public const string SaveProjectAttachment = "dbo.SaveProjectAttachment";
+                public const string DeleteProjectAttachmentByProjectId = "dbo.DeleteProjectAttachmentByProjectId";
                 public const string ProjectSetStatus = "dbo.ProjectSetStatus";
                 public const string ProjectSearchText = "dbo.ProjectSearchText";
                 public const string CloneProject = "dbo.CloneProject";
