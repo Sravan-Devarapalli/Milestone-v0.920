@@ -50,7 +50,9 @@ AS
 		   p.DirectorFirstName,
 		   pg.Name AS GroupName,
 		   1 InUse,
-		   pa.[FileName]
+		   pa.[FileName],
+		   DATALENGTH(PA.AttachmentData) AS AttachmentSize,
+		   pa.UploadedDate
 	  FROM dbo.v_Project AS p
 	  INNER JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	  INNER JOIN Person AS person ON p.PracticeManagerId = person.PersonId
