@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using DataTransferObjects;
 using System.Web.Security;
 using System.Linq;
+using PraticeManagement.Configuration;
 
 namespace PraticeManagement.Controls.TimeEntry
 {
@@ -161,7 +162,7 @@ namespace PraticeManagement.Controls.TimeEntry
             ddlProjects.Enabled = false;
             dlTimeEntries.Visible = false;
             UpdateGrandTotal();
-            SetFirstItemOfMilestones();
+            SetFirstItemOfMilestones(true);
             ddlMilestones.Enabled = false;//disable Milestone dropdown.
 
             if (ddlClients.SelectedIndex != 0)
@@ -189,7 +190,23 @@ namespace PraticeManagement.Controls.TimeEntry
 
         protected void ddlProjects_OnSelectedIndexChanged(object sender, EventArgs e)
         {
-            SetFirstItemOfMilestones();
+            if (ddlProjects.SelectedValue != string.Empty)
+            {
+                int projectId = Convert.ToInt32(ddlProjects.SelectedItem.Value);
+                var defaultProjectId = MileStoneConfigurationManager.GetProjectId();
+                if (defaultProjectId.HasValue && projectId == defaultProjectId.Value)
+                {
+                    SetFirstItemOfMilestones(false);
+                }
+                else
+                {
+                    SetFirstItemOfMilestones(true);
+                }
+            }
+            else
+            {
+                SetFirstItemOfMilestones(true);
+            }
 
             diRange.FromDate = null;
             diRange.ToDate = null;
@@ -236,15 +253,35 @@ namespace PraticeManagement.Controls.TimeEntry
                 lblProjectName.Visible = false;
                 lblGrandTotal.Visible = false;
                 return;
-            }          
+            }
 
             if (!string.IsNullOrEmpty(ddlMilestones.SelectedValue))
             {
                 using (var milestoneService = new MilestoneService.MilestoneServiceClient())
                 {
                     var selectedMilestone = milestoneService.GetMilestoneDataById(Convert.ToInt32(ddlMilestones.SelectedValue));
-                    diRange.FromDate = selectedMilestone.StartDate;
-                    diRange.ToDate = selectedMilestone.EndDate;
+                    if (selectedMilestone != null)
+                    {
+                        diRange.FromDate = selectedMilestone.StartDate;
+                        diRange.ToDate = selectedMilestone.EndDate;
+                    }
+                    else if (ddlMilestones.SelectedValue.Length == 8)
+                    {
+                        var StartDateStr = ddlMilestones.SelectedValue;
+                        int startDateYear, startDateMonth, startDateDay;
+                        if (int.TryParse(StartDateStr.Substring(0, 4), out startDateYear) //Year part
+                            && int.TryParse(StartDateStr.Substring(4, 2), out startDateMonth) //Month part
+                            && int.TryParse(StartDateStr.Substring(6, 2), out startDateDay) //Day part
+                            )
+                        {
+                            var startDate = new DateTime(startDateYear, startDateMonth, startDateDay);
+                            var endDate = startDate.AddMonths(1).AddDays(-1);
+
+                            diRange.FromDate = startDate;
+                            diRange.ToDate = endDate;
+                        }
+
+                    }
                 }
 
                 //To Show All Persons in the milestone
@@ -275,14 +312,14 @@ namespace PraticeManagement.Controls.TimeEntry
             if (ddlProjects.SelectedValue == string.Empty)
             {
                 lblGrandTotal.Visible = false;
-               
+
                 return;
             }
 
             lblGrandTotal.Visible = true;
             lblGrandTotal.Text = string.Format(Resources.Controls.GrandTotalHours, _grandTotalHours.ToString(Constants.Formatting.DoubleFormat));
         }
-        
+
         private void CheckAllCheckboxes(ScrollingDropDown chbList)
         {
             foreach (ListItem targetItem in chbList.Items)
@@ -303,13 +340,14 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
-        private void SetFirstItemOfMilestones()
+        private void SetFirstItemOfMilestones(bool bindEntireProjectItem)
         {
             ListItem firstItem = new ListItem("-- Select a Milestone --", "-1");
             ListItem secondItem = new ListItem("Entire Project", string.Empty);
             ddlMilestones.Items.Clear();
             ddlMilestones.Items.Add(firstItem);
-            ddlMilestones.Items.Add(secondItem);
+            if (bindEntireProjectItem)
+                ddlMilestones.Items.Add(secondItem);
             ddlMilestones.DataBind();
         }
 
@@ -317,7 +355,7 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             using (var serviceClient = new MilestoneService.MilestoneServiceClient())
             {
-                return serviceClient.MilestoneListByProject(projectId);
+                return serviceClient.MilestoneListByProjectForTimeEntryByProjectReport(projectId);
             }
         }
 
@@ -325,7 +363,7 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             using (var serviceClient = new MilestonePersonService.MilestonePersonServiceClient())
             {
-                return serviceClient.GetMilestonePersonListByMilestoneNoFinancials(milestoneId);
+                return serviceClient.MilestonePersonsByMilestoneForTEByProject(milestoneId);
             }
         }
 
@@ -342,6 +380,8 @@ namespace PraticeManagement.Controls.TimeEntry
             if (milestonePersonList != null)
             {
                 List<Person> personList = new List<Person>();
+
+
                 foreach (MilestonePerson item in milestonePersonList)
                 {
                     if (!personList.Contains(item.Person))
