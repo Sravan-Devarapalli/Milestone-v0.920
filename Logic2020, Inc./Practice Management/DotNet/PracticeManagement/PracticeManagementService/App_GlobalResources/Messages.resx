@@ -156,4 +156,7 @@
   <data name="VacationOverheadName" xml:space="preserve">
     <value>Vacation Hourly Expense  (VHE)</value>
   </data>
+  <data name="WelcomeEmailTemplateName" xml:space="preserve">
+    <value>WelcomeEmailTemplate</value>
+  </data>
 </root>
