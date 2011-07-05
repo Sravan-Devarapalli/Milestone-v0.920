@@ -20,6 +20,7 @@ using PraticeManagement.Security;
 using PraticeManagement.OpportunityService;
 using DataTransferObjects.ContextObjects;
 using PraticeManagement.Utils;
+using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace PraticeManagement
 {
@@ -940,13 +941,15 @@ namespace PraticeManagement
         /// </summary>
         private int? SaveData()
         {
+            string loginPageUrl = base.Request.Url.Scheme + "://" + base.Request.Url.Host + (IsAzureWebRole() ? string.Empty : (":" + base.Request.Url.Port.ToString())) + base.Request.ApplicationPath + "/Login.aspx";
+
             var person = new Person();
             PopulateData(person);
             using (var serviceClient = new PersonServiceClient())
             {
                 try
                 {
-                    int? personId = serviceClient.SavePersonDetail(person, User.Identity.Name);
+                    int? personId = serviceClient.SavePersonDetail(person, User.Identity.Name, loginPageUrl);
                     SaveRoles(person);
 
                     if (personId.Value < 0)
@@ -974,6 +977,20 @@ namespace PraticeManagement
 
             return null;
         }
+
+        private static bool IsAzureWebRole()
+        {
+            try
+            {
+                return RoleEnvironment.IsAvailable;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
 
         private void SavePersonsPermissions(Person person, PersonServiceClient serviceClient)
         {
