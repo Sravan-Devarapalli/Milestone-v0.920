@@ -26,6 +26,7 @@ AS
 	       e.Name AS SeniorityName,
 	       p.ManagerId,
 		   p.IsDefaultManager,
+		   p.IsWelcomeEmailSent,
 	       manager.Alias AS 'ManagerAlias',
 	       manager.FirstName AS 'ManagerFirstName',
 	       manager.LastName AS 'ManagerLastName',
