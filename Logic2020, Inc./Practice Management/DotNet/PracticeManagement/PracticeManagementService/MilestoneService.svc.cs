@@ -56,6 +56,11 @@ namespace PracticeManagementService
             return result;
         }
 
+        public List<Milestone> MilestoneListByProjectForTimeEntryByProjectReport(int projectId)
+        {
+           return  MilestoneDAL.MilestoneListByProjectForTimeEntryByProjectReport(projectId);
+        }
+
         /// <summary>
         /// Reatrives a <see cref="Milestone"/> by a specified ID.
         /// </summary>
