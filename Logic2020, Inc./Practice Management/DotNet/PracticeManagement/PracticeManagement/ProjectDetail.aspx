@@ -32,9 +32,43 @@
             return false;
         }
 
-        function ShowPrompt() {
+        function cvProjectAttachment_ClientValidationFunction(obj, args) {
+            var fuControl = document.getElementById('<%= fuProjectAttachment.ClientID %>');
+            var FileUploadPath = fuControl.value;
+            var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
+            if (Extension == "pdf") {
+                args.IsValid = true; // Valid file type
+            }
+            else {
+                args.IsValid = false; // Not valid file type
+            }
+        }
+
+        function EnableUploadButton() {
+            var cvProjectAttachment = document.getElementById('<%= cvProjectAttachment.ClientID %>');
+            var UploadButton = document.getElementById('<%= btnUpload.ClientID %>');
+            if (cvProjectAttachment.isvalid) {
+                UploadButton.disabled = "";
+            }
+            else {
+                UploadButton.disabled = "disabled";
+            }
+        }
+
+        function CanShowPrompt() {
             var hlnk = document.getElementById('<%= hlnkProjectAttachment.ClientID %>');
+            var lnk = document.getElementById('<%= lnkProjectAttachment.ClientID %>');
+            var showPrompt = false;
+
+            if (lnk != null && lnk.value != "") {
+                showPrompt = true;
+            }
+
             if (!(hlnk.href == "")) {
+                showPrompt = true;
+            }
+
+            if (showPrompt) {
                 var result = confirm("SOW already exists for this project. Click Ok to replace the file or Cancel to continue without replacing.");
                 if (result == true) {
                     return true;
@@ -43,7 +77,9 @@
                     return false;
                 }
             }
-            return true;
+            else {
+                return true;
+            }
         }
 
         function ConfirmToDeleteProject() {
@@ -275,22 +311,32 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        Attach SOW
+                                    <td valign="middle">
+                                        <asp:Button ID="btnAttachSOW" runat="server" Text="Attach SOW" ToolTip="Attach SOW" />
                                     </td>
-                                    <td colspan="3" style="white-space:nowrap;">
-                                        <asp:FileUpload ID="fuProjectAttachment" BackColor="White" onchange="setDirty();"  onclick="return ShowPrompt();" 
-                                            runat="server" Width="375px"  Size="56" />
-                                        <asp:CustomValidator ID="cvProjectAttachment" runat="server" ControlToValidate="fuProjectAttachment"
-                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvProjectAttachment_OnServerValidate"
-                                            ValidationGroup="Project" Text="*" ToolTip="File Format must be PDF."
-                                            ErrorMessage="File Format must be PDF."></asp:CustomValidator>
-                                        <asp:CustomValidator ID="cvalidatorProjectAttachment" runat="server" ControlToValidate="fuProjectAttachment"
-                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvalidatorProjectAttachment_OnServerValidate"
-                                            ValidationGroup="Project" Text="*"></asp:CustomValidator>
-                                    </td>
-                                    <td colspan="5" style="padding-left:20px;">
-                                        <asp:HyperLink ID="hlnkProjectAttachment" runat="server"></asp:HyperLink>
+                                    <td align="left" valign="middle" colspan="5" style="padding-left: 10px; vertical-align: middle;
+                                        white-space: nowrap;">
+                                        <table>
+                                            <tr>
+                                                <td style="padding:0px;">
+                                                    <asp:HyperLink ID="hlnkProjectAttachment" runat="server"></asp:HyperLink><asp:LinkButton
+                                                        ID="lnkProjectAttachment" runat="server" Visible="false" OnClick="lnkProjectAttachment_OnClick" />
+                                                </td>
+                                                <td style="padding:0px;padding-left:3px;">
+                                                    &nbsp;<asp:Label ID="lblAttachmentsize" runat="server"></asp:Label>
+                                                </td>
+                                                <td style="padding:0px;">
+                                                    &nbsp;<asp:Label ID="lblAttachmentUploadedDate" runat="server"></asp:Label>
+                                                </td>
+                                                <td valign="middle" style="padding:0px;">
+                                                    &nbsp;<asp:ImageButton ID="imgbtnDeleteAttachment" OnClick="imgbtnDeleteAttachment_Click"
+                                                        OnClientClick="if(confirm('Do you really want to delete the project attachment?')){ return true;}return false;"
+                                                        Visible="false" runat="server" ImageUrl="~/Images/trash-icon-Large.png" ToolTip="Delete Attachment" /><AjaxControlToolkit:ModalPopupExtender
+                                                            ID="mpeAttachSOW" runat="server" TargetControlID="btnAttachSOW" BackgroundCssClass="modalBackground"
+                                                            PopupControlID="pnlAttachSOW" DropShadow="false" />
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </td>
                                 </tr>
                                 <tr>
@@ -487,6 +533,8 @@
                     <td>
                         <asp:ValidationSummary ID="vsumProject" runat="server" EnableClientScript="false"
                             ValidationGroup="Project" />
+                        <asp:ValidationSummary ID="vsumProjectAttachment" runat="server" EnableClientScript="false"
+                            ValidationGroup="ProjectAttachment" />
                     </td>
                 </tr>
                 <tr>
@@ -505,9 +553,59 @@
                     </td>
                 </tr>
             </table>
+            <asp:Panel ID="pnlAttachSOW" runat="server" BackColor="White" BorderColor="Black"
+                Style="display: none" BorderWidth="2px">
+                <table width="100%" style="padding: 5px;">
+                    <tr style="background-color: Gray; height: 27px;">
+                        <td align="center" style="white-space: nowrap; font-size: 14px; width: 100%">
+                            Attach SOW to Existing Project
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="white-space: nowrap; padding-left: 5px; padding-right: 5px;">
+                            <asp:FileUpload ID="fuProjectAttachment" onchange="EnableUploadButton();" BackColor="White"
+                                runat="server" Width="375px" Size="56" />
+                            <asp:CustomValidator ID="cvProjectAttachment" runat="server" ControlToValidate="fuProjectAttachment"
+                                EnableClientScript="true" ClientValidationFunction="cvProjectAttachment_ClientValidationFunction"
+                                SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvProjectAttachment_OnServerValidate"
+                                ValidationGroup="ProjectAttachment" Text="*" ToolTip="File Format must be PDF."
+                                ErrorMessage="File Format must be PDF."></asp:CustomValidator>
+                            <asp:CustomValidator ID="cvalidatorProjectAttachment" runat="server" ControlToValidate="fuProjectAttachment"
+                                EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvalidatorProjectAttachment_OnServerValidate"
+                                ValidationGroup="ProjectAttachment" Text="*"></asp:CustomValidator>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="white-space: nowrap; padding-left: 5px; padding-right: 5px;">
+                            <asp:Label ID="lblAttachmentMessage" ForeColor="Gray" runat="server"></asp:Label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" style="padding: 5px; white-space: nowrap;">
+                            <asp:Button ID="btnUpload" Enabled="false" ValidationGroup="ProjectAttachment" runat="server"
+                                Text="Upload" OnClick="btnUpload_Click" />
+                            &nbsp;&nbsp;&nbsp;
+                            <asp:Button ID="btnCancel" OnClick="btnCancel_OnClick" runat="server" Text="Cancel" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnSave" />
+            <asp:PostBackTrigger ControlID="btnUpload" />
+            <asp:PostBackTrigger ControlID="btnCancel" />
+            <asp:PostBackTrigger ControlID="lnkProjectAttachment" />
         </Triggers>
     </asp:UpdatePanel>
     <asp:ObjectDataSource ID="odsActivePersons" runat="server" SelectMethod="PersonListAllShort"
