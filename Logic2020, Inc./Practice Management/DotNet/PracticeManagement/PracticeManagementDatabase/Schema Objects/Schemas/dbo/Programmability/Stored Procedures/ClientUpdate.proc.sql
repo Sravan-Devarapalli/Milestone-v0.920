@@ -8,7 +8,7 @@
 	@IsChargeable         BIT,
 	@Inactive             BIT,
 	@DefaultTerms         INT,
-	@IsMarginColorInfoEnabled BIT
+	@IsMarginColorInfoEnabled BIT = NULL
 )
 AS
 	SET NOCOUNT ON;
