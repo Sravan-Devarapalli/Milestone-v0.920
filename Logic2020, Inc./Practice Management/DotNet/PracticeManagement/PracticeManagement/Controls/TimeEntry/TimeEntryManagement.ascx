@@ -171,13 +171,15 @@
                 </asp:HyperLink>
                 <br />
                 <asp:Label runat="server" ID="lblProjectTooltip" ToolTip="Project">[P]</asp:Label>
-                <asp:HyperLink ID="hlroject" runat="server" NavigateUrl='<%# GetProjectUrl(((TimeEntryRecord)Container.DataItem).ParentMilestonePersonEntry.ParentMilestone.Project) %>'>
+                <asp:HyperLink ID="hlroject" runat="server" NavigateUrl='<%# GetProjectUrl(((TimeEntryRecord)Container.DataItem).ParentMilestonePersonEntry.ParentMilestone.Project) %>' 
+                Enabled="<%#!CheckIfDefaultProject(((TimeEntryRecord)Container.DataItem).ParentMilestonePersonEntry.ParentMilestone.Project.Id) %>">
                 <%# ((TimeEntryRecord)Container.DataItem).
                                     ParentMilestonePersonEntry.ParentMilestone.Project.Name%>
                 </asp:HyperLink>
                 <br />
                 <asp:Label runat="server" ID="lblMilestoneTooltip" ToolTip="Milestone">[M]</asp:Label>
-                <asp:HyperLink ID="hlMilestone" runat="server" NavigateUrl='<%# GetMilestonePersonUrl(((TimeEntryRecord)Container.DataItem).ParentMilestonePersonEntry) %>'>
+                <asp:HyperLink ID="hlMilestone" runat="server" NavigateUrl='<%# GetMilestonePersonUrl(((TimeEntryRecord)Container.DataItem).ParentMilestonePersonEntry) %>'
+                Enabled='<%# !CheckIfDefaultMileStone(((TimeEntryRecord)Container.DataItem).ParentMilestonePersonEntry.ParentMilestone.Id) %>' >
                                     <%# 
                     ((TimeEntryRecord)Container.DataItem).
                                     ParentMilestonePersonEntry.ParentMilestone.Description%>
