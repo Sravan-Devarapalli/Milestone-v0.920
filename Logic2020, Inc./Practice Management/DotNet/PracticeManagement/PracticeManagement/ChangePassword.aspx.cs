@@ -5,6 +5,7 @@ using PraticeManagement.Controls;
 using System.Web.UI.WebControls;
 using PraticeManagement.PersonService;
 using System.Text.RegularExpressions;
+using System.Web;
 namespace PraticeManagement
 {
     public partial class ChangePassword : System.Web.UI.Page, System.Web.UI.IPostBackEventHandler
@@ -124,6 +125,14 @@ namespace PraticeManagement
         {
             if (!Page.IsPostBack)
             {
+                MembershipUser user = Membership.GetUser(HttpContext.Current.User.Identity.Name);
+                TimeSpan ts = new TimeSpan(00, 00, 20);
+                if (user != null
+               && user.CreationDate.Subtract(user.LastPasswordChangedDate).Duration() < ts)
+                {
+                    System.Web.UI.ScriptManager.RegisterStartupScript(this, GetType(), "", "alert('This is your first time logging in to Practice Management. You must change your password before continuing!');", true);
+                }
+
                 UrlRoleMappingElementSection mapping = UrlRoleMappingElementSection.Current;
                 var person = DataHelper.CurrentPerson;
                 if (person != null && mapping != null)
