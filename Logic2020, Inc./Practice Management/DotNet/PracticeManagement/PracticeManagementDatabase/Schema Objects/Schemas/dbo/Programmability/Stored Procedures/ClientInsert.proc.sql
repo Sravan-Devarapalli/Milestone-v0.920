@@ -15,7 +15,7 @@ CREATE PROCEDURE dbo.ClientInsert
 	@IsChargeable         BIT,
 	@DefaultTerms         INT,
 	@ClientId             INT OUTPUT,
-	@IsMarginColorInfoEnabled BIT
+	@IsMarginColorInfoEnabled BIT = NULL
 )
 AS
 	SET NOCOUNT ON
