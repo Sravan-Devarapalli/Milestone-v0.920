@@ -488,20 +488,51 @@ namespace PracticeManagementService
         /// is placed in the <paramref name="person"/>
         /// </remarks>
         /// <returns>An ID of the saved record.</returns>
-        public int SavePersonDetail(Person person, string currentUser)
+        public int SavePersonDetail(Person person, string currentUser, string loginPageUrl)
         {
             Person oldPerson = person.Id.HasValue ? PersonDAL.GetById(person.Id.Value) : null;
 
+            bool isPreviouslyActive = person.Id.HasValue ? PersonDAL.IsPersonAlreadyHavingStatus((int)PersonStatusType.Active, person.Id) : true;
+
             try
             {
+                ProcessPersonData(person, currentUser, oldPerson, loginPageUrl);               
 
-                ProcessPersonData(person, currentUser, oldPerson);
+                if (oldPerson != null
+                    && !oldPerson.IsWelcomeEmailSent
+                    && oldPerson.Status.Id != (int)PersonStatusType.Active
+                    && person.Status.Id == (int)PersonStatusType.Active
+                    && !isPreviouslyActive)
+                {
+                    var companyName = ConfigurationDAL.GetCompanyName();
+                    SendWelcomeEmail(person, companyName, loginPageUrl);
+                    PersonDAL.UpdateLastPasswordChangedDateForPerson(person.Alias);
+                }
 
                 return person.Id.Value;
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        public static void SendWelcomeEmail(Person person, string companyName, string loginPageUrl)
+        {
+            MembershipUser user = Membership.GetUser(person.Alias);
+            if (user != null)
+            {
+                if (user.IsLockedOut)
+                {
+                    user.UnlockUser();
+                }
+                string password = user.ResetPassword();
+                MailUtil.SendWelcomeEmail(person.FirstName, person.Alias, password, companyName, loginPageUrl);
+                PersonDAL.UpdateIsWelcomeEmailSentForPerson(person.Id);
+            }
+            else
+            {
+                throw new MembershipPasswordException();
             }
         }
 
@@ -535,8 +566,9 @@ namespace PracticeManagementService
         /// <param name="person">The data to be stored.</param>
         /// <param name="currentUser">A currently logged user.</param>
         /// <param name="oldPerson">Old person data.</param>
-        private static void ProcessPersonData(Person person, string currentUser, Person oldPerson)
+        private static void ProcessPersonData(Person person, string currentUser, Person oldPerson, string loginPageUrl)
         {
+            string password = string.Empty;
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
                 connection.Open();
@@ -545,21 +577,21 @@ namespace PracticeManagementService
 
                 if (!person.Id.HasValue)
                 {
+                    
+
                     if (!string.IsNullOrEmpty(person.Alias))
                     {
                         // Create a login
-                        string password = Membership.GeneratePassword(Math.Max(Membership.MinRequiredPasswordLength, 1),
+                        password = Membership.GeneratePassword(Math.Max(Membership.MinRequiredPasswordLength, 1),
                                                                         Membership.MinRequiredNonAlphanumericCharacters);
                         string salt = GenerateSalt();
                         string hashedPassword = EncodePassword(password, salt);
 
                         PersonDAL.Createuser(person.Alias, hashedPassword, salt, person.Alias, connection, transaction);
+
                     }
-
                     // Create a Person record
-                    PersonDAL.PersonInsert(person, currentUser, connection, transaction);
-
-                    //throw new Exception("Test");
+                    PersonDAL.PersonInsert(person, currentUser, connection, transaction);                  
                 }
                 else
                 {
@@ -571,8 +603,10 @@ namespace PracticeManagementService
                             throw new Exception("There is another Person with the same Email.");
                     }
 
+
                     //PersonDAL.PersonSetStatus(person);
                     PersonDAL.PersonUpdate(person, currentUser, connection, transaction);
+
                 }
 
                 bool isLockedOutUpdated = false;
@@ -648,6 +682,13 @@ namespace PracticeManagementService
                 //PersonDAL.PersonEnsureIntegrity(person.Id.Value, connection, transaction);
 
                 transaction.Commit();
+            }
+
+            if (oldPerson == null && !string.IsNullOrEmpty(person.Alias) && person.Status.Id == (int)PersonStatusType.Active)
+            {
+                var companyName = ConfigurationDAL.GetCompanyName();
+                MailUtil.SendWelcomeEmail(person.FirstName, person.Alias, password, companyName, loginPageUrl);
+                PersonDAL.UpdateIsWelcomeEmailSentForPerson(person.Id);
             }
 
         }
