@@ -12,6 +12,7 @@ using DTO = DataTransferObjects;
 using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
+using System.ComponentModel;
 
 
 namespace PraticeManagement
@@ -45,36 +46,86 @@ namespace PraticeManagement
                 }
                 else
                 {
+                    var IsDeaultMarginInfoEnabled = Convert.ToBoolean(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDefaultMarginInfoEnabledForAllClientsKey));
+
                     if (ClientId.HasValue)
                     {
-                        using (var serviceClient = new ClientServiceClient())
+                        var client = GetClient(ClientId.Value);
+                        if (client.IsMarginColorInfoEnabled != null && client.IsMarginColorInfoEnabled.HasValue)
                         {
-                            try
+                            using (var serviceClient = new ClientServiceClient())
                             {
-                                var result = serviceClient.GetClientMarginColorInfo(ClientId.Value);
-
-                                if (result != null)
+                                try
                                 {
-                                    var clientInfoList = result.AsQueryable().ToList();
-                                    ViewState[CLIENT_THRESHOLDS_LIST_KEY] = clientInfoList;
-                                    return clientInfoList;
+                                    var result = serviceClient.GetClientMarginColorInfo(ClientId.Value);
+
+                                    if (result != null)
+                                    {
+                                        var clientInfoList = result.AsQueryable().ToList();
+                                        ViewState[CLIENT_THRESHOLDS_LIST_KEY] = clientInfoList;
+                                        return clientInfoList;
+                                    }
+                                    else
+                                    {
+                                        return SetSingleRowDataSource();
+                                    }
+                                }
+                                catch (FaultException<ExceptionDetail> ex)
+                                {
+                                    serviceClient.Abort();
+                                    throw;
                                 }
                             }
-                            catch (FaultException<ExceptionDetail> ex)
-                            {
-                                serviceClient.Abort();
-                                throw;
-                            }
+                        }
+                        else if (IsDeaultMarginInfoEnabled)
+                        {
+                            return SetDefaultClientDataSource();
                         }
                     }
+                    else if (IsDeaultMarginInfoEnabled)
+                    {
+                        return SetDefaultClientDataSource();
+                    }
 
-                    var cmci = new List<ClientMarginColorInfo>();
-                    cmci.Add(new ClientMarginColorInfo() { ColorInfo = new ColorInformation() });
-                    ViewState[CLIENT_THRESHOLDS_LIST_KEY] = cmci;
-                    return cmci;
+                    return SetSingleRowDataSource();
                 }
             }
             set { ViewState[CLIENT_THRESHOLDS_LIST_KEY] = value; }
+        }
+
+        private List<ClientMarginColorInfo> SetSingleRowDataSource()
+        {
+            var cmciList = new List<ClientMarginColorInfo>();
+            cmciList.Add(new ClientMarginColorInfo() { ColorInfo = new ColorInformation() });
+            ViewState[CLIENT_THRESHOLDS_LIST_KEY] = cmciList;
+            return cmciList;
+        }
+
+        private List<ClientMarginColorInfo> SetDefaultClientDataSource()
+        {
+            var result = SettingsHelper.GetMarginColorInfoDefaults(DefaultGoalType.Client);
+            if (result != null)
+            {
+                var clientInfoList = result.AsQueryable().ToList();
+                ViewState[CLIENT_THRESHOLDS_LIST_KEY] = clientInfoList;
+                return clientInfoList;
+            }
+            else
+            {
+                return SetSingleRowDataSource();
+            }
+        }
+
+        private bool IntialchbMarginThresholdsValue
+        {
+            get { return Convert.ToBoolean(ViewState["IntialchbMarginThresholdsValue"]); }
+            set { ViewState["IntialchbMarginThresholdsValue"] = value; }
+        }
+
+        private List<ClientMarginColorInfo> IntialClientMarginColorInfoList
+        {
+            get { return ViewState["IsClientChangedColorSetting"] as List<ClientMarginColorInfo>; }
+            set { ViewState["IsClientChangedColorSetting"] = value; }
         }
 
         private String ExMessage { get; set; }
@@ -135,8 +186,6 @@ namespace PraticeManagement
                 ddlDefaultTerms.DataSource = terms != null ? terms.Terms : null;
                 ddlDefaultTerms.DataBind();
                 txtClientName.Focus();
-                var marginInfo = ClientMarginColorInfoList;
-                DataBindClientThresholds(marginInfo);
             }
             mlConfirmation.ClearMessage();
 
@@ -329,7 +378,7 @@ namespace PraticeManagement
 
                 DropDownList ddlSR = row.FindControl(gvddlStartRange) as DropDownList;
                 DropDownList ddlER = row.FindControl(gvddlEndRange) as DropDownList;
-                
+
                 int start = Convert.ToInt32(ddlSR.SelectedValue);
                 int end = Convert.ToInt32(ddlER.SelectedValue);
                 if (ClientMarginColorInfoList != null)
@@ -504,14 +553,24 @@ namespace PraticeManagement
                 var client = GetClient(id);
 
                 if (client != null)
+                {
                     PopulateControls(client);
+                }
 
                 InitActionControls(client == null || !client.Id.HasValue ? string.Empty : client.Id.Value.ToString());
             }
             else
             {
                 InitActionControls(string.Empty);
+                var IsDeaultMarginInfoEnabled = Convert.ToBoolean(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDefaultMarginInfoEnabledForAllClientsKey));
+                chbMarginThresholds.Checked = IsDeaultMarginInfoEnabled;
+                EnableorDisableClientThrsholdControls(chbMarginThresholds.Checked);
             }
+
+            IntialchbMarginThresholdsValue = chbMarginThresholds.Checked;
+            var marginInfo = ClientMarginColorInfoList;
+            IntialClientMarginColorInfoList = marginInfo;
+            DataBindClientThresholds(marginInfo);
         }
 
         private Client GetClient(int? clientId)
@@ -608,7 +667,19 @@ namespace PraticeManagement
             ddlDefaultTerms.SelectedIndex =
                 ddlDefaultTerms.Items.IndexOf(ddlDefaultTerms.Items.FindByValue(client.DefaultTerms.ToString()));
 
-            chbMarginThresholds.Checked = client.IsMarginColorInfoEnabled;
+            if (client.IsMarginColorInfoEnabled != null && client.IsMarginColorInfoEnabled.HasValue)
+            {
+                chbMarginThresholds.Checked = client.IsMarginColorInfoEnabled.Value;
+            }
+            else if (Convert.ToBoolean(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDefaultMarginInfoEnabledForAllClientsKey)))
+            {
+                chbMarginThresholds.Checked = true;
+            }
+            else
+            {
+                chbMarginThresholds.Checked = false;
+            }
+
             EnableorDisableClientThrsholdControls(chbMarginThresholds.Checked);
         }
 
@@ -636,8 +707,37 @@ namespace PraticeManagement
                     ? int.Parse(ddlDefaultTerms.SelectedValue)
                     : default(int);
 
-            client.IsMarginColorInfoEnabled = chbMarginThresholds.Checked;
-            client.ClientMarginInfo = ClientMarginColorInfoList;
+            client.IsMarginColorInfoEnabled = null;
+            client.ClientMarginInfo = null;
+            if (IntialClientMarginColorInfoList.Count == ClientMarginColorInfoList.Count)
+            {
+                for (int i = 0; i < ClientMarginColorInfoList.Count; i++)
+                {
+                    if (!(ClientMarginColorInfoList[i].ColorInfo.ColorId == IntialClientMarginColorInfoList[i].ColorInfo.ColorId
+                        && ClientMarginColorInfoList[i].ColorInfo.ColorValue == IntialClientMarginColorInfoList[i].ColorInfo.ColorValue
+                        && ClientMarginColorInfoList[i].StartRange == IntialClientMarginColorInfoList[i].StartRange
+                        && ClientMarginColorInfoList[i].EndRange == IntialClientMarginColorInfoList[i].EndRange))
+                    {
+                        client.IsMarginColorInfoEnabled = chbMarginThresholds.Checked;
+                        client.ClientMarginInfo = ClientMarginColorInfoList;
+                        break;
+                    }
+                }
+
+                if (chbMarginThresholds.Checked != IntialchbMarginThresholdsValue)
+                {
+                    client.IsMarginColorInfoEnabled = chbMarginThresholds.Checked;
+                    client.ClientMarginInfo = ClientMarginColorInfoList;
+                }
+
+            }
+            else
+            {
+                client.IsMarginColorInfoEnabled = chbMarginThresholds.Checked;
+                client.ClientMarginInfo = ClientMarginColorInfoList;
+            }
+
+
         }
 
         #region Projects
