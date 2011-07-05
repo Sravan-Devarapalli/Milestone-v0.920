@@ -108,6 +108,8 @@ namespace DataAccess
         private const string PersonGetCountProcedure = "dbo.PersonGetCount";
         private const string PersonGetCountByCommaSeparatedIdsListProcedure = "dbo.PersonGetCountByCommaSeparatedIdsList";
         private const string PersonListBenchExpenseProcedure = "dbo.PersonListBenchExpense";
+        private const string UpdateLastPasswordChangedDateForPersonProcedure = "dbo.UpdateLastPasswordChangedDateForPerson";
+
 
         private const string MilestonePersonListOverheadByPersonProcedure =
             "dbo.MilestonePersonListOverheadByPerson";
@@ -2223,6 +2225,15 @@ namespace DataAccess
                     int managerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerLastName);
                     int telephoneNumberIndex = reader.GetOrdinal(Constants.ColumnNames.TelephoneNumber);
                     int isDefManagerIndex;
+                    int IsWelcomeEmailSentIndex;
+                    try
+                    {
+                        IsWelcomeEmailSentIndex = reader.GetOrdinal(Constants.ColumnNames.IsWelcomeEmailSent);
+                    }
+                    catch
+                    {
+                        IsWelcomeEmailSentIndex = -1;
+                    }
 
                     try
                     {
@@ -2261,6 +2272,11 @@ namespace DataAccess
                             HireDate = (DateTime)reader[HireDateColumn],
                             TelephoneNumber = !reader.IsDBNull(telephoneNumberIndex) ? reader.GetString(telephoneNumberIndex) : string.Empty
                         };
+
+                        if (IsWelcomeEmailSentIndex > -1)
+                        {
+                            person.IsWelcomeEmailSent = reader.GetBoolean(IsWelcomeEmailSentIndex);
+                        }
 
                         if (isDefManagerIndex > -1)
                         {
@@ -2746,6 +2762,57 @@ namespace DataAccess
                 return (int)command.ExecuteScalar();
             }
         }
+
+        public static void UpdateIsWelcomeEmailSentForPerson(int? personId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.UpdateIsWelcomeEmailSentForPerson, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(PersonIdParam, personId.Value);
+
+                connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static bool IsPersonAlreadyHavingStatus(int statusId, int? personId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.IsPersonAlreadyHavingStatus, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(PersonIdParam, personId.Value);
+                command.Parameters.AddWithValue(PersonStatusIdColumn, statusId);
+
+                connection.Open();
+
+                int count = (int)command.ExecuteNonQuery();
+
+                if (count > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static void UpdateLastPasswordChangedDateForPerson(string email)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(UpdateLastPasswordChangedDateForPersonProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(EmailParam, email);
+
+                connection.Open();
+                command.ExecuteScalar();
+            }
+        }
+        
     }
 }
 
