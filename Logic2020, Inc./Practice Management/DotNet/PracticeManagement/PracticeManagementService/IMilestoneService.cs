@@ -35,6 +35,8 @@ namespace PracticeManagementService
 		[OperationContract]
 		List<Milestone> MilestoneListByProject(int projectId);
 
+        [OperationContract]
+        List<Milestone> MilestoneListByProjectForTimeEntryByProjectReport(int projectId);
 		/// <summary>
 		/// Reatrives a <see cref="Milestone"/> by a specified ID.
 		/// </summary>
