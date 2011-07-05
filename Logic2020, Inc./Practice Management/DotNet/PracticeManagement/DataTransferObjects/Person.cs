@@ -49,6 +49,13 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public bool IsWelcomeEmailSent
+        {
+            get;
+            set;
+        }
+
         public string Name
         {
             get { return PersonLastFirstName; }
