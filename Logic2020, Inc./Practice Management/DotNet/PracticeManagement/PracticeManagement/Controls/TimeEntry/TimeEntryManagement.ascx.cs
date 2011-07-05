@@ -10,6 +10,7 @@ using PraticeManagement.Controls.Generic.Buttons;
 using PraticeManagement.Controls.Generic.Sorting.MultisortExtender;
 using PraticeManagement.Utils;
 using System.Linq;
+using PraticeManagement.Configuration;
 
 namespace PraticeManagement.Controls.TimeEntry
 {
@@ -374,6 +375,19 @@ namespace PraticeManagement.Controls.TimeEntry
                                PageSize = gvTimeEntries.PageSize
                            };
             }
+        }
+
+        public bool CheckIfDefaultProject(object projectIdObj)
+        {
+            var defaultProjectId = MileStoneConfigurationManager.GetProjectId();
+            var projectId = Int32.Parse(projectIdObj.ToString());
+            return defaultProjectId.HasValue && defaultProjectId.Value == projectId;
+        }
+        public bool CheckIfDefaultMileStone(object mileStoneIdObj)
+        {
+            var defaultMileStoneId = MileStoneConfigurationManager.GetMileStoneId();
+            var projectId = Int32.Parse(mileStoneIdObj.ToString());
+            return defaultMileStoneId.HasValue && defaultMileStoneId.Value == projectId;
         }
     }
 }
