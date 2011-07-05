@@ -132,7 +132,7 @@
                 <tr runat="server" id="boundingRow" valign="top" style="min-height: 25px;">
                     <td style="padding-top: 4px;">
                         <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
-                            ButtonProjectNameToolTip='<%# Eval("Status.Name") %>' ButtonCssClass='<%# GetProjectNameCellCssClass(((Project) Container.DataItem))%>' />
+                            ButtonProjectNameToolTip='<%# GetProjectNameCellToolTip(((Project) Container.DataItem)) %>' ButtonCssClass='<%# GetProjectNameCellCssClass(((Project) Container.DataItem))%>' />
                     </td>
                     <td class="CompPerfProjectState AddLeftPadding">
                         <asp:LinkButton ID="btnProjectNumber" runat="server" Text='<%# HighlightFound(Eval("ProjectNumber")) %>'
@@ -183,7 +183,7 @@
                 <tr runat="server" id="boundingRow" class="rowEven" valign="top" style="min-height: 20px;">
                     <td style="padding-top: 4px;">
                         <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
-                            ButtonProjectNameToolTip='<%# Eval("Status.Name") %>' ButtonCssClass='<%# GetProjectNameCellCssClass(((Project) Container.DataItem))%>' />
+                            ButtonProjectNameToolTip='<%# GetProjectNameCellToolTip(((Project) Container.DataItem)) %>' ButtonCssClass='<%# GetProjectNameCellCssClass(((Project) Container.DataItem))%>' />
                     </td>
                     <td class="CompPerfProjectState AddLeftPadding">
                         <asp:LinkButton ID="btnProjectNumber" runat="server" Text='<%# HighlightFound(Eval("ProjectNumber")) %>'
