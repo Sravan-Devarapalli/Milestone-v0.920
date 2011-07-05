@@ -88,8 +88,11 @@ namespace PraticeManagement
                     {
                         try
                         {
-                            ViewState[OPPORTUNITY_KEY] = serviceClient.GetById(OpportunityId.Value);
-                            return ViewState[OPPORTUNITY_KEY] as Opportunity;
+
+                            var result = serviceClient.GetById(OpportunityId.Value);
+                            Generic.RedirectIfNullEntity(result, Response);
+                            ViewState[OPPORTUNITY_KEY] = result;
+                            return result;
                         }
                         catch (CommunicationException)
                         {
