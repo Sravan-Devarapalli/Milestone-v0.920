@@ -47,6 +47,10 @@ AS
 	insert into @ProjectOwnerList
 	select TargetId FROM dbo.PersonProjectOwnerPermissions(@PersonId)
 
+	DECLARE @DefaultProjectId INT
+	SELECT @DefaultProjectId = ProjectId
+	FROM dbo.DefaultMilestoneSetting
+
 	-- Search for a project with milestone(s)
 	;with FoundProjects as (
 	SELECT m.ClientId,
@@ -105,5 +109,6 @@ AS
 	)
 	select distinct *
 	from FoundProjects
+	WHERE ProjectId <> @DefaultProjectId
 	ORDER BY ProjectName, Description
 
