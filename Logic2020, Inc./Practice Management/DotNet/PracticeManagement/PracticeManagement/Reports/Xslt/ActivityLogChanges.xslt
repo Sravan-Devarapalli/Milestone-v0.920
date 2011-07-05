@@ -128,78 +128,99 @@
 
 		<xsl:choose>
 			<xsl:when test="$needHyperlink = 'true'">
-				<a>
-					<xsl:attribute name="href">
-						<!-- Render an URL to navigate to the Project view -->
-						<xsl:choose>
-			  <xsl:when test="($rootName = 'Client' or $rootName = 'TimeEntry') and (name() = 'ClientId' or name() = 'ClientName')">
-				<xsl:text>ClientDetails.aspx?id=</xsl:text>
-				<xsl:value-of select="./../@ClientId"/>
-				<xsl:value-of select="$redirectUrl"/>
-			  </xsl:when>
-			  <xsl:when test="($rootName = 'Person' or $rootName = 'TimeEntry' or $rootName = 'Note' or $rootName = 'Roles') and (name() = 'PersonId' or name() = 'Name' or name() = 'ModifiedBy' or name() = 'ObjectName' or name() = 'ModifiedByName' or name() = 'ObjectPersonId' or name() = 'By')">
-								<xsl:text>PersonDetail.aspx?id=</xsl:text>
-				<xsl:choose>
-				  <xsl:when test="name() = 'ModifiedBy' or name() = 'ModifiedByName'">
-					<xsl:value-of select="./../@ModifiedBy"/>
-				  </xsl:when>
-				  <xsl:when test="name() = 'ObjectPersonId' or name() = 'ObjectName'">
-					<xsl:value-of select="./../@ObjectPersonId"/>
-				  </xsl:when>
-				  <xsl:otherwise>
-					<xsl:value-of select="./../@PersonId"/>
-				  </xsl:otherwise>
-				</xsl:choose>
-								<xsl:value-of select="$redirectUrl"/>
-							</xsl:when>
-							<xsl:when test="($rootName = 'Project' or $rootName = 'TimeEntry') and (name() = 'ProjectId' or name() = 'Name' or name() = 'ProjectName')">
-								<xsl:text>ProjectDetail.aspx?id=</xsl:text>
-								<xsl:value-of select="./../@ProjectId"/>
-								<xsl:value-of select="$redirectUrl"/>
-							</xsl:when>
-							<xsl:when test="$rootName = 'Milestone' and (name() = 'MilestoneId' or name() = 'Name')">
-								<xsl:text>MilestoneDetail.aspx?id=</xsl:text>
-								<xsl:value-of select="./../@MilestoneId"/>
-								<xsl:text>&amp;projectId=</xsl:text>
-								<xsl:value-of select="./../@MilestoneProjectId"/>
-								<xsl:value-of select="$redirectUrl"/>
-							</xsl:when>
-							<xsl:when test="$rootName = 'Milestone' and (name() = 'MilestoneProjectId' or name() = 'ProjectName')">
-								<xsl:text>ProjectDetail.aspx?id=</xsl:text>
-								<xsl:value-of select="./../@MilestoneProjectId"/>
-								<xsl:value-of select="$redirectUrl"/>
-							</xsl:when>
-							<xsl:when test="$rootName = 'MilestonePerson' and (name() = 'MilestoneProjectId' or name() = 'ProjectName')">
-								<xsl:text>ProjectDetail.aspx?id=</xsl:text>
-								<xsl:value-of select="./../@MilestoneProjectId"/>
-								<xsl:value-of select="$redirectUrl"/>
-							</xsl:when>
-							<xsl:when test="($rootName = 'MilestonePerson' or $rootName = 'TimeEntry') and (name() = 'MilestoneId' or name() = 'Name' or name() = 'Description')">
-								<xsl:text>MilestoneDetail.aspx?id=</xsl:text>
-								<xsl:value-of select="./../@MilestoneId"/>
-								<xsl:text>&amp;projectId=</xsl:text>
-				<xsl:choose>
-				  <xsl:when test="$rootName = 'TimeEntry'">
-					<xsl:value-of select="./../@ProjectId"/>
-				  </xsl:when>
-				  <xsl:otherwise>
-					<xsl:value-of select="./../@MilestoneProjectId"/>
-				  </xsl:otherwise>
-				</xsl:choose>
-				<xsl:value-of select="$redirectUrl"/>
-							</xsl:when>
-							<xsl:when test="($rootName = 'MilestonePerson' or $rootName = 'TimeEntry') and name() = 'MilestonePersonId'">
-								<xsl:text>MilestonePersonDetail.aspx?id=</xsl:text>
-								<xsl:value-of select="./../@MilestoneId"/>
-								<xsl:text>&amp;milestonePersonId=</xsl:text>
-								<xsl:value-of select="./../@MilestonePersonId"/>
-								<xsl:value-of select="$redirectUrl"/>
-							</xsl:when>
-							<xsl:otherwise>#</xsl:otherwise>
-						</xsl:choose>
-					</xsl:attribute>
-					<xsl:call-template name="DisplayValue" />
-				</a>
+        <xsl:choose>
+          <xsl:when test="(($rootName = 'Project' or $rootName = 'TimeEntry') and (name() = 'ProjectId' or name() = 'Name' or name() = 'ProjectName') 
+                    and //DefaultProjectId = ./../@ProjectId) 
+                    or ($rootName = 'Milestone' and (name() = 'MilestoneId' or name() = 'Name')
+                        and //DefaultMileStoneId = ./../@MilestoneId)
+                    or ($rootName = 'Milestone' and (name() = 'MilestoneProjectId' or name() = 'ProjectName')
+                        and //DefaultProjectId = ./../@MilestoneProjectId )
+                    or ($rootName = 'MilestonePerson' and (name() = 'MilestoneProjectId' or name() = 'ProjectName')
+                        and //DefaultProjectId = ./../@MilestoneProjectId)
+                    or (($rootName = 'MilestonePerson' or $rootName = 'TimeEntry') and (name() = 'MilestoneId' or name() = 'Name' or name() = 'Description')
+                        and //DefaultMileStoneId =./../@MilestoneId)
+                    or (($rootName = 'MilestonePerson' or $rootName = 'TimeEntry') and name() = 'MilestonePersonId'
+                        and //DefaultMileStoneId = ./../@MilestoneId)">
+            <xsl:call-template name="DisplayValue" />
+          </xsl:when>
+          <xsl:otherwise>
+
+            <a>
+              <xsl:attribute name="href">
+                <!-- Render an URL to navigate to the Project view -->
+                <xsl:choose>
+                  <xsl:when test="($rootName = 'Client' or $rootName = 'TimeEntry') and (name() = 'ClientId' or name() = 'ClientName')">
+                    <xsl:text>ClientDetails.aspx?id=</xsl:text>
+                    <xsl:value-of select="./../@ClientId"/>
+                    <xsl:value-of select="$redirectUrl"/>
+                  </xsl:when>
+                  <xsl:when test="($rootName = 'Person' or $rootName = 'TimeEntry' or $rootName = 'Note' or $rootName = 'Roles') and (name() = 'PersonId' or name() = 'Name' or name() = 'ModifiedBy' or name() = 'ObjectName' or name() = 'ModifiedByName' or name() = 'ObjectPersonId' or name() = 'By')">
+                    <xsl:text>PersonDetail.aspx?id=</xsl:text>
+                    <xsl:choose>
+                      <xsl:when test="name() = 'ModifiedBy' or name() = 'ModifiedByName'">
+                        <xsl:value-of select="./../@ModifiedBy"/>
+                      </xsl:when>
+                      <xsl:when test="name() = 'ObjectPersonId' or name() = 'ObjectName'">
+                        <xsl:value-of select="./../@ObjectPersonId"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="./../@PersonId"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:value-of select="$redirectUrl"/>
+                  </xsl:when>
+                  <xsl:when test="($rootName = 'Project' or $rootName = 'TimeEntry') and (name() = 'ProjectId' or name() = 'Name' or name() = 'ProjectName')">
+                    <xsl:text>ProjectDetail.aspx?id=</xsl:text>
+                    <xsl:value-of select="./../@ProjectId"/>
+                    <xsl:value-of select="$redirectUrl"/>
+                  </xsl:when>
+                  <xsl:when test="$rootName = 'Milestone' and (name() = 'MilestoneId' or name() = 'Name')">
+                    <xsl:text>MilestoneDetail.aspx?id=</xsl:text>
+                    <xsl:value-of select="./../@MilestoneId"/>
+                    <xsl:text>&amp;projectId=</xsl:text>
+                    <xsl:value-of select="./../@MilestoneProjectId"/>
+                    <xsl:value-of select="$redirectUrl"/>
+                  </xsl:when>
+                  <xsl:when test="$rootName = 'Milestone' and (name() = 'MilestoneProjectId' or name() = 'ProjectName')">
+                    <xsl:text>ProjectDetail.aspx?id=</xsl:text>
+                    <xsl:value-of select="./../@MilestoneProjectId"/>
+                    <xsl:value-of select="$redirectUrl"/>
+                  </xsl:when>
+                  <xsl:when test="$rootName = 'MilestonePerson' and (name() = 'MilestoneProjectId' or name() = 'ProjectName')">
+                    <xsl:text>ProjectDetail.aspx?id=</xsl:text>
+                    <xsl:value-of select="./../@MilestoneProjectId"/>
+                    <xsl:value-of select="$redirectUrl"/>
+                  </xsl:when>
+                  <xsl:when test="($rootName = 'MilestonePerson' or $rootName = 'TimeEntry') and (name() = 'MilestoneId' or name() = 'Name' or name() = 'Description')">
+                    <xsl:text>MilestoneDetail.aspx?id=</xsl:text>
+                    <xsl:value-of select="./../@MilestoneId"/>
+                    <xsl:text>&amp;projectId=</xsl:text>
+                    <xsl:choose>
+                      <xsl:when test="$rootName = 'TimeEntry'">
+                        <xsl:value-of select="./../@ProjectId"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="./../@MilestoneProjectId"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:value-of select="$redirectUrl"/>
+                  </xsl:when>
+                  <xsl:when test="($rootName = 'MilestonePerson' or $rootName = 'TimeEntry') and name() = 'MilestonePersonId'">
+                    <xsl:text>MilestonePersonDetail.aspx?id=</xsl:text>
+                    <xsl:value-of select="./../@MilestoneId"/>
+                    <xsl:text>&amp;milestonePersonId=</xsl:text>
+                    <xsl:value-of select="./../@MilestonePersonId"/>
+                    <xsl:value-of select="$redirectUrl"/>
+                  </xsl:when>
+                  <xsl:otherwise>#</xsl:otherwise>
+                </xsl:choose>
+              </xsl:attribute>
+              <xsl:call-template name="DisplayValue" />
+            </a>
+
+          </xsl:otherwise>
+        </xsl:choose>
+				
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="DisplayValue" />
