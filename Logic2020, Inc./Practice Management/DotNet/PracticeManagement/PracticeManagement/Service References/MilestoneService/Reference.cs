@@ -24,6 +24,11 @@ namespace PraticeManagement.MilestoneService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestoneService/MilestoneListByProject", ReplyAction="http://tempuri.org/IMilestoneService/MilestoneListByProjectResponse")]
         DataTransferObjects.Milestone[] MilestoneListByProject(int projectId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestoneService/MilestoneListByProjectForTimeEntryByProjectR" +
+            "eport", ReplyAction="http://tempuri.org/IMilestoneService/MilestoneListByProjectForTimeEntryByProjectR" +
+            "eportResponse")]
+        DataTransferObjects.Milestone[] MilestoneListByProjectForTimeEntryByProjectReport(int projectId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestoneService/GetMilestoneDetail", ReplyAction="http://tempuri.org/IMilestoneService/GetMilestoneDetailResponse")]
         DataTransferObjects.Milestone GetMilestoneDetail(int milestoneId);
         
@@ -83,7 +88,7 @@ namespace PraticeManagement.MilestoneService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class MilestoneServiceClient : System.ServiceModel.ClientBase<PraticeManagement.MilestoneService.IMilestoneService>, PraticeManagement.MilestoneService.IMilestoneService {
-      
+        
         public MilestoneServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -110,6 +115,10 @@ namespace PraticeManagement.MilestoneService {
         
         public DataTransferObjects.Milestone[] MilestoneListByProject(int projectId) {
             return base.Channel.MilestoneListByProject(projectId);
+        }
+        
+        public DataTransferObjects.Milestone[] MilestoneListByProjectForTimeEntryByProjectReport(int projectId) {
+            return base.Channel.MilestoneListByProjectForTimeEntryByProjectReport(projectId);
         }
         
         public DataTransferObjects.Milestone GetMilestoneDetail(int milestoneId) {
