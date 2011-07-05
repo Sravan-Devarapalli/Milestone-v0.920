@@ -766,6 +766,18 @@ namespace PraticeManagement
             // Shading project according to its status
             btnProject.ButtonProjectNameToolTip = status.Name;
 
+            if (status.Id == (int)ProjectStatusType.Active)
+            {
+                if (cssClass == "ActiveProjectWithoutSOW")
+                {
+                    btnProject.ButtonProjectNameToolTip = "Active without SOW";
+                }
+                else
+                {
+                    btnProject.ButtonProjectNameToolTip = "Active with SOW";
+                }
+            }
+
             btnProject.ButtonCssClass = cssClass;
             btnProject.ToolTipOffsetY = -25;
             btnProject.ToolTipOffsetX = 5;
