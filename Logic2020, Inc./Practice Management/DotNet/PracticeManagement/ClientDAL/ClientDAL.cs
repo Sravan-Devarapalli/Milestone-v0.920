@@ -104,7 +104,7 @@ namespace DataAccess
                         command.ExecuteNonQuery();
                         client.Id = (int)clientIdParameter.Value;
 
-                        if (client.IsMarginColorInfoEnabled && client.ClientMarginInfo != null)
+                        if (client.IsMarginColorInfoEnabled.HasValue && client.IsMarginColorInfoEnabled.Value && client.ClientMarginInfo != null)
                         {
                             for (int i = 0; i < client.ClientMarginInfo.Count; i++)
                             {
@@ -209,7 +209,7 @@ namespace DataAccess
 
                         command.ExecuteNonQuery();
 
-                        if (client.IsMarginColorInfoEnabled && client.ClientMarginInfo != null)
+                        if (client.IsMarginColorInfoEnabled.HasValue && client.IsMarginColorInfoEnabled.Value && client.ClientMarginInfo != null)
                         {
                             for (int i=0;i<client.ClientMarginInfo.Count;i++)
                             {
@@ -468,7 +468,14 @@ namespace DataAccess
                     {
                         try
                         {
-                            client.IsMarginColorInfoEnabled = reader.GetBoolean(isMarginColorInfoEnabledIndex);
+                            if (!reader.IsDBNull(isMarginColorInfoEnabledIndex))
+                            {
+                                client.IsMarginColorInfoEnabled = reader.GetBoolean(isMarginColorInfoEnabledIndex);
+                            }
+                            else
+                            {
+                                client.IsMarginColorInfoEnabled = null;
+                            }
                         }
                         catch
                         {
