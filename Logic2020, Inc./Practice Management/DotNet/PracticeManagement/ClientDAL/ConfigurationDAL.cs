@@ -12,8 +12,8 @@ namespace DataAccess
 {
     public static class ConfigurationDAL
     {
-        #region Constants
-
+        #region Constants 
+         
         #region Parameters
 
         private const string TitleParam = "@Title";
@@ -90,6 +90,20 @@ namespace DataAccess
                         }
                         return companylogo;
                     }
+                }
+            }
+        }
+
+        public static string GetCompanyName()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.GetCompanyNameProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    connection.Open();
+                    return (string)command.ExecuteScalar();
                 }
             }
         }
