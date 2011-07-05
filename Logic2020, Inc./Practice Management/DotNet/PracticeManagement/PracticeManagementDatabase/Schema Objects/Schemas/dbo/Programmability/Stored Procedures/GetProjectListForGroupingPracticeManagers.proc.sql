@@ -52,6 +52,10 @@ AS
 	SELECT com.PersonId FROM dbo.Commission AS com
     WHERE com.CommissionType = 1
 
+	DECLARE @DefaultProjectId INT
+	SELECT @DefaultProjectId = ProjectId
+	FROM dbo.DefaultMilestoneSetting
+
 	DECLARE @TempProjectResult table
 									(ClientId INT,
 									ProjectId INT,
@@ -117,6 +121,7 @@ AS
 				  OR ( @ShowInactive = 1 AND p.ProjectStatusId = 1 ) -- Inactive
 			)
 			AND  (ISNULL(pr.IsCompanyInternal, 0) = 0 AND @ExcludeInternalPractices  = 1 OR @ExcludeInternalPractices = 0)				
+			AND P.ProjectId <> @DefaultProjectId
 	ORDER BY CASE p.ProjectStatusId
 			   WHEN 2 THEN p.StartDate
 			   ELSE p.EndDate
