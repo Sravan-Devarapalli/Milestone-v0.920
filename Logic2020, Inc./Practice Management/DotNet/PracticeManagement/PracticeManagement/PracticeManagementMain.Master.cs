@@ -93,9 +93,22 @@ namespace PraticeManagement
         {
             SetPageTitle();
 
+            MembershipUser user = Membership.GetUser(HttpContext.Current.User.Identity.Name);
+            TimeSpan ts = new TimeSpan(00, 00, 20);
+
             if (!string.IsNullOrEmpty(HttpContext.Current.User.Identity.Name))
             {
                 hlnkChangePassword.Visible = true;
+                
+                
+                if (user != null && user.CreationDate.Subtract(user.LastPasswordChangedDate).Duration() < ts)
+                {
+                    if (!(Request.AppRelativeCurrentExecutionFilePath == Constants.ApplicationPages.ChangePasswordPage) )
+                    {
+                         if(!(Request.AppRelativeCurrentExecutionFilePath == Constants.ApplicationPages.Set_userPage))
+                        Response.Redirect(Constants.ApplicationPages.ChangePasswordPage);
+                    }
+                }
             }
             else
             {
@@ -110,8 +123,15 @@ namespace PraticeManagement
                               bool.TrueString,
                               bool.FalseString,
                               hidAllowContinueWithoutSave.ClientID);
+            string htmltext = GetMenuHtml();
 
-            ltrlMenu.Text = GetMenuHtml();
+            if (user != null
+                && user.CreationDate.Subtract(user.LastPasswordChangedDate).Duration() < ts && Request.AppRelativeCurrentExecutionFilePath != Constants.ApplicationPages.Set_userPage) 
+            {
+                htmltext = string.Empty;
+            }
+
+            ltrlMenu.Text = htmltext;
 
             if (!Page.IsPostBack)
             {
@@ -174,10 +194,12 @@ namespace PraticeManagement
         private string GetMenuHtml()
         {
             string htmltext = string.Empty;
+
             foreach (SiteMapNode item in ((System.Web.SiteMapNodeCollection)(smdsMain.Provider.RootNode.ChildNodes)))
             {
                 htmltext += GetLevel1MenuItemHtml(item);
-            }
+            }       
+
             return htmltext;
         }
 
@@ -445,7 +467,7 @@ namespace PraticeManagement
         {
             var timezone = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.TimeZoneKey);
             var isDayLightSavingsTimeEffect = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDayLightSavingsTimeEffectKey);
-            
+
             if (timezone == "-08:00" && isDayLightSavingsTimeEffect.ToLower() == "true")
             {
                 return TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time")).ToLongDateString();
@@ -456,7 +478,7 @@ namespace PraticeManagement
                 TimeZoneInfo ctz = TimeZoneInfo.CreateCustomTimeZone("cid", TimeSpan.Parse(timezoneWithoutSign), "customzone", "customzone");
                 return TimeZoneInfo.ConvertTime(DateTime.UtcNow, ctz).ToLongDateString();
             }
-        }
+        }       
     }
 }
 
