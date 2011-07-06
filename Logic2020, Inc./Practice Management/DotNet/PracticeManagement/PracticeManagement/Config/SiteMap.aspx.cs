@@ -17,5 +17,19 @@ namespace PraticeManagement.Config
         protected override void Display()
         {
         }
+
+        protected void menu_OnMenuItemDataBound(object sender, MenuEventArgs e)
+        {
+            var item = e.Item;
+            if (item.NavigateUrl.Contains("Temp.aspx"))
+            {
+                item.NavigateUrl = string.Empty;
+            }
+
+            if (item.ToolTip.ToLower() == "show url")
+            {
+                item.ToolTip = item.Text;
+            }
+        }
     }
 }
