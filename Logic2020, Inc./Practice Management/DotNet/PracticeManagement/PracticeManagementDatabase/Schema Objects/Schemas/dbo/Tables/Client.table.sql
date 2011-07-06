@@ -7,7 +7,7 @@
     [Inactive]             BIT             NOT NULL,
     [IsChargeable]         BIT             NOT NULL,
 	[DefaultDirectorID]	   INT,
-	IsMarginColorInfoEnabled BIT NOT NULL CONSTRAINT DF_Client_IsMarginColorInfoEnabled DEFAULT(0) 
+	IsMarginColorInfoEnabled BIT NULL 
 );
 
 
