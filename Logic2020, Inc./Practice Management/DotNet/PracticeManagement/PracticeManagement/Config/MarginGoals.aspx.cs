@@ -399,7 +399,6 @@ namespace PraticeManagement.Config
                     if (cmciList.Any(k => k.StartRange >= start && k.StartRange <= end))
                     {
                         args.IsValid = false;
-                        cvgvOverLapRangeClone.IsValid = false;
                     }
                 }
             }
@@ -626,7 +625,6 @@ namespace PraticeManagement.Config
                     if (cmciList.Any(k => k.StartRange >= start && k.StartRange <= end))
                     {
                         args.IsValid = false;
-                        cvgvOverLapRangeClone.IsValid = false;
                     }
                 }
             }
