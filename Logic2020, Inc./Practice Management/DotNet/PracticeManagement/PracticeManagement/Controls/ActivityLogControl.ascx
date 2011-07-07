@@ -80,7 +80,7 @@
                                 </HeaderTemplate>
                                 <ItemTemplate>
                                     <asp:Label ID="lblActivityType" runat="server" Text='<%# Eval("ActivityName") %>'></asp:Label>
-                                    <asp:Xml ID="xmlActivityItem" runat="server" DocumentContent='<%# Eval("LogData") %>'
+                                    <asp:Xml ID="xmlActivityItem" runat="server" DocumentContent='<%# AddDefaultProjectAndMileStoneInfo(Eval("LogData")) %>' 
                                         TransformSource="~/Reports/Xslt/ActivityLogItem.xslt"></asp:Xml>
                                 </ItemTemplate>
                             </asp:TemplateField>
@@ -91,7 +91,7 @@
                                         Changes</div>
                                 </HeaderTemplate>
                                 <ItemTemplate>
-                                    <asp:Xml ID="xmlChanges" runat="server" DocumentContent='<%# Eval("LogData") %>'
+                                    <asp:Xml ID="xmlChanges" runat="server" DocumentContent='<%# AddDefaultProjectAndMileStoneInfo(Eval("LogData")) %>'
                                         TransformSource="~/Reports/Xslt/ActivityLogChanges.xslt"></asp:Xml>
                                 </ItemTemplate>
                             </asp:TemplateField>
