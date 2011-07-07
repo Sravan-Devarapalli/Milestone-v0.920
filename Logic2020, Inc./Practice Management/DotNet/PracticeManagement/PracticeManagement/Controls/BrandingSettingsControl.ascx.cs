@@ -1,13 +1,12 @@
-﻿namespace PraticeManagement.Controls
+﻿using System;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using PraticeManagement.Configuration;
+using System.Drawing;
+
+namespace PraticeManagement.Controls
 {
-    using System;
-    using System.Web;
-    using System.Web.UI;
-    using System.Web.UI.WebControls;
-    using PraticeManagement.Configuration;
-    using System.Drawing;
-
-
     public partial class BrandingSettingsControl : UserControl
     {
         protected void Page_Load(object sender, EventArgs e)
@@ -23,6 +22,12 @@
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(fuImagePath.PostedFile.FileName))
+            {
+                mlConfirmation.ClearMessage();
+                mlConfirmation.ShowErrorMessage("File path is required.");
+                return;
+            }
             if (Page.IsValid)
             {
                 try
@@ -87,7 +92,7 @@
                     Bitmap bmp = new Bitmap(fuImagePath.FileContent);
                     int Height = bmp.Height;
                     int Width = bmp.Width;
-                    if (!(Width <= 175 && Height <= 55))
+                    if (!(Width <= 500 && Height <= 60))
                     {
                         args.IsValid = false;
                     }
