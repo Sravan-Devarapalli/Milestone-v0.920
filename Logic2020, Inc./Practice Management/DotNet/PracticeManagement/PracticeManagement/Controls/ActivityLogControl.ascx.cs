@@ -8,6 +8,8 @@ using System.Web.UI.WebControls;
 using System.Xml.Xsl;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
+using System.Xml;
+using PraticeManagement.Configuration;
 
 namespace PraticeManagement.Controls
 {
@@ -110,7 +112,7 @@ namespace PraticeManagement.Controls
                 var obj = ViewState[ViewstateDisplayVisible];
 
                 if (obj != null)
-                    return (bool) obj;
+                    return (bool)obj;
 
                 return true;
             }
@@ -164,7 +166,7 @@ namespace PraticeManagement.Controls
                 var obj = ViewState[OpportunityIdViewstate];
 
                 if (obj != null)
-                    return (int?) obj;
+                    return (int?)obj;
 
                 return null;
             }
@@ -196,7 +198,7 @@ namespace PraticeManagement.Controls
                 var obj = ViewState[ViewstateEventSource];
 
                 if (obj != null)
-                    return (ActivityEventSource) obj;
+                    return (ActivityEventSource)obj;
 
                 return ActivityEventSource.All;
             }
@@ -212,18 +214,18 @@ namespace PraticeManagement.Controls
 
         public DateFilterType DateFilterValue
         {
-            get { return (DateFilterType) Enum.Parse(typeof (DateFilterType), ddlPeriod.SelectedValue); }
+            get { return (DateFilterType)Enum.Parse(typeof(DateFilterType), ddlPeriod.SelectedValue); }
             set
             {
                 ddlPeriod.SelectedValue =
-                    ((IConvertible) Enum.Parse(typeof (DateFilterType), value.ToString())).
+                    ((IConvertible)Enum.Parse(typeof(DateFilterType), value.ToString())).
                         ToInt32(new NumberFormatInfo()).ToString();
             }
         }
 
         private static string GetStringByValue(ActivityEventSource value)
         {
-            return Enum.GetName(typeof (ActivityEventSource), value);
+            return Enum.GetName(typeof(ActivityEventSource), value);
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -354,13 +356,44 @@ namespace PraticeManagement.Controls
         {
             e.InputParameters["periodFilter"] = ddlPeriod.SelectedValue;
             e.InputParameters["sourceFilter"] = ddlEventSource.SelectedValue;
-            e.InputParameters["opportunityId"] = (this.OpportunityId==null ? null :this.OpportunityId.ToString());
+            e.InputParameters["opportunityId"] = (this.OpportunityId == null ? null : this.OpportunityId.ToString());
             e.InputParameters["milestoneId"] = (this.MilestoneId == null ? null : this.MilestoneId.ToString());
-            e.InputParameters["personId"] = string.IsNullOrEmpty(ddlPersonName.SelectedValue) ? 
+            e.InputParameters["personId"] = string.IsNullOrEmpty(ddlPersonName.SelectedValue) ?
                                                 null : ddlPersonName.SelectedValue;
-            e.InputParameters["projectId"] = string.IsNullOrEmpty(ddlProjects.SelectedValue) ? 
+            e.InputParameters["projectId"] = string.IsNullOrEmpty(ddlProjects.SelectedValue) ?
                                                 null : ddlProjects.SelectedValue;
-                            
+
+        }
+
+        public object  AddDefaultProjectAndMileStoneInfo(object logDataObject)
+        {
+            if (logDataObject != null)
+            {
+                var logDataStr = logDataObject.ToString();
+                var XmlDoc = new XmlDocument();
+                XmlDoc.LoadXml(logDataStr);
+                var Root = XmlDoc.FirstChild;
+                var defaultProjectId = MileStoneConfigurationManager.GetProjectId();
+                var defaultMileStoneId = MileStoneConfigurationManager.GetMileStoneId();
+                if (defaultProjectId.HasValue)
+                {
+                    var defaultProjectIdElement = XmlDoc.CreateElement("DefaultProjectId");
+                    defaultProjectIdElement.InnerText = defaultProjectId.Value.ToString();
+                    Root.InsertAfter(defaultProjectIdElement, Root.LastChild);
+                }
+                if (defaultMileStoneId.HasValue)
+                {
+                    var defaultMileStoneIdElement = XmlDoc.CreateElement("DefaultMileStoneId");
+                    defaultMileStoneIdElement.InnerText = defaultMileStoneId.Value.ToString();
+                    Root.InsertAfter(defaultMileStoneIdElement, Root.LastChild);
+                }
+
+                return Root.OuterXml;
+            }
+            else
+            {
+                return logDataObject;
+            }
         }
     }
 }
