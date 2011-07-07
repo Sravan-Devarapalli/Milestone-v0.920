@@ -82,7 +82,7 @@
                                             <asp:CustomValidator ID="cvgvClientRange" runat="server" ToolTip="The End must be greater than or equals to Start."
                                                 Text="*" EnableClientScript="false" OnServerValidate="cvgvClientRange_OnServerValidate"
                                                 SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
-                                            <asp:CustomValidator ID="cvgvClientOverLapRange" runat="server" ToolTip="The specified Threshold Percentage range overlaps with another Threshold Percentage range."
+                                            <asp:CustomValidator ID="cvgvClientOverLapRange" runat="server" ErrorMessage="The specified Client goal threshold Percentage range overlaps with another Client goal threshold Percentage range." ToolTip="The specified Client goal threshold Percentage range overlaps with another Client goal threshold Percentage range."
                                                 OnServerValidate="cvgvClientOverLapRange_OnServerValidate" Text="*" EnableClientScript="false"
                                                 SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
                                         </ItemTemplate>
@@ -145,15 +145,13 @@
             </ContentTemplate>
         </asp:UpdatePanel>
         <asp:CustomValidator ID="cvClientThresholds" runat="server" OnServerValidate="cvClientThresholds_ServerValidate"
-            ErrorMessage="Thresholds must be added up to  100% or more and must be continuous."
-            ToolTip="Thresholds must be added up to  100% or more and must be continuous."
+            ErrorMessage="Client goal thresholds must be added up to  100% or more and must be continuous."
+            ToolTip="Client goal thresholds must be added up to  100% or more and must be continuous."
             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="None" ValidationGroup="Client" />
         <asp:CustomValidator ID="cvClientColors" runat="server" OnServerValidate="cvClientColors_ServerValidate"
             ErrorMessage="Color must not be selected more than once." ToolTip="Color must not be selected more than once."
             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="None" ValidationGroup="Client" />
         <asp:CustomValidator ID="cvgvddlColorClone" runat="server" ErrorMessage="Please Select a Color."
-            Text="*" EnableClientScript="false" SetFocusOnError="false" Display="None" ValidationGroup="Client" />
-        <asp:CustomValidator ID="cvgvOverLapRangeClone" runat="server" ErrorMessage="The specified Threshold Percentage range overlaps with another Threshold Percentage range."
             Text="*" EnableClientScript="false" SetFocusOnError="false" Display="None" ValidationGroup="Client" />
         <asp:CustomValidator ID="cvgvRangeClone" runat="server" ErrorMessage="The End must be greater than or equals to Start."
             Text="*" EnableClientScript="false" SetFocusOnError="false" Display="None" ValidationGroup="Client" />
@@ -207,7 +205,7 @@
                                             <asp:CustomValidator ID="cvgvPersonRange" runat="server" ToolTip="The End must be greater than or equals to Start."
                                                 Text="*" EnableClientScript="false" OnServerValidate="cvgvPersonRange_OnServerValidate"
                                                 SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
-                                            <asp:CustomValidator ID="cvgvPersonOverLapRange" runat="server" ToolTip="The specified Threshold Percentage range overlaps with another Threshold Percentage range."
+                                            <asp:CustomValidator ID="cvgvPersonOverLapRange" runat="server" ErrorMessage="The specified Person goal threshold Percentage range overlaps with another Person goal threshold Percentage range." ToolTip="The specified Person goal threshold Percentage range overlaps with another Person goal threshold Percentage range."
                                                 OnServerValidate="cvgvPersonOverLapRange_OnServerValidate" Text="*" EnableClientScript="false"
                                                 SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
                                         </ItemTemplate>
@@ -252,8 +250,8 @@
             </ContentTemplate>
         </asp:UpdatePanel>
         <asp:CustomValidator ID="cvPersonThresholds" runat="server" OnServerValidate="cvPersonThresholds_ServerValidate"
-            ErrorMessage="Thresholds must be added up to  100% or more and must be continuous."
-            ToolTip="Thresholds must be added up to  100% or more and must be continuous."
+            ErrorMessage="Person goal thresholds must be added up to  100% or more and must be continuous."
+            ToolTip="Person goal thresholds must be added up to  100% or more and must be continuous."
             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="None" ValidationGroup="Client" />
         <asp:CustomValidator ID="cvPersonColors" runat="server" OnServerValidate="cvPersonColors_ServerValidate"
             ErrorMessage="Color must not be selected more than once." ToolTip="Color must not be selected more than once."
