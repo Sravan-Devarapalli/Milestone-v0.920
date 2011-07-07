@@ -17,6 +17,7 @@
     {
         private const string LogoImagePathKey = "LogoImagePath";
         private const string CompanyTitleKey = "CompanyTitle";
+        private const string CompanyLogoKey = "CompanyLogo";
         private const string imageUrl = @"~/Controls/CompanyLogoImage.ashx";
         private static readonly object _settingsGuard = new object();
         private static readonly object _configGuard = new object();
@@ -181,7 +182,22 @@
         {
             using (var serviceClient = new ConfigurationServiceClient())
             {
-                serviceClient.SaveCompanyLogoData(title, imagename, imagePath, data);
+                try
+                {
+                    serviceClient.SaveCompanyLogoData(title, imagename, imagePath, data);
+
+                    CompanyLogo companyLogo = new CompanyLogo();
+                    companyLogo.Title = title;
+                    companyLogo.FileName = imagename;
+                    companyLogo.FilePath = imagePath;
+                    companyLogo.Data = data;
+
+                    HttpContext.Current.Cache[CompanyLogoKey] = companyLogo;
+                }
+                catch(Exception e)
+                {
+                    serviceClient.Abort();
+                }
             }
 
             HttpContext.Current.Cache[LogoImagePathKey] = GetValidatedLogoPath();
@@ -190,10 +206,15 @@
 
         private static CompanyLogo GetCompanyLogoData()
         {
-            using (var serviceClient = new ConfigurationServiceClient())
+            if (HttpContext.Current.Cache[CompanyLogoKey] == null)
             {
-                return serviceClient.GetCompanyLogoData();
+                using (var serviceClient = new ConfigurationServiceClient())
+                {
+                    HttpContext.Current.Cache[CompanyLogoKey] = serviceClient.GetCompanyLogoData();
+                }
             }
+
+            return (CompanyLogo)HttpContext.Current.Cache[CompanyLogoKey];
         }
     }
 }
