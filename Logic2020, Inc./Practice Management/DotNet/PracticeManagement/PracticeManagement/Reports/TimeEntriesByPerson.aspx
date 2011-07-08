@@ -50,6 +50,13 @@
                 hiddenField.value = "true";
             }
         }
+
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+
+
+        function endRequestHandle(sender, Args) {
+            SetDivWidth();
+        }
     </script>
     <style type="text/css">
         .AlignRight
@@ -76,7 +83,7 @@
                             <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/expand.jpg"
                                 ToolTip="Expand Filters" />
                         </td>
-                        <td  style="width: 13%; padding-top: 3px; white-space:nowrap;" align="left">
+                        <td style="width: 13%; padding-top: 3px; white-space: nowrap;" align="left">
                             &nbsp;&nbsp;Show Time Entered
                         </td>
                         <td style="width: 20%" align="left">
@@ -84,7 +91,7 @@
                                 IsToDateRequired="true" />
                             <asp:ValidationSummary ID="valSum" runat="server" />
                         </td>
-                        <td style="width: 3%;padding-top: 3px;  white-space:nowrap;" align="left">
+                        <td style="width: 3%; padding-top: 3px; white-space: nowrap;" align="left">
                             &nbsp;&nbsp;for&nbsp;&nbsp;
                         </td>
                         <td style="width: 28%; padding-top: 3px;" align="left">
@@ -103,11 +110,11 @@
                                 <table>
                                     <tr>
                                         <td>
-                                             <asp:Button ID="btnUpdateView" runat="server" Text="Update View" Width="100px" OnClick="btnUpdate_OnClick"
+                                            <asp:Button ID="btnUpdateView" runat="server" Text="Update View" Width="100px" OnClick="btnUpdate_OnClick"
                                                 EnableViewState="False" />
                                         </td>
                                         <td>
-                                                <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" Width="100px"
+                                            <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" Width="100px"
                                                 OnClick="btnResetFilter_OnClick" CausesValidation="false" />
                                         </td>
                                     </tr>
@@ -302,7 +309,7 @@
                                     <asp:GridView ID="gvTimeEntries" runat="server" AutoGenerateColumns="False" DataSource='<%# Eval("Value") %>'
                                         EnableModelValidation="True" CssClass="CompPerfTable WholeWidth" GridLines="None"
                                         ShowFooter="true" OnRowDataBound="gvTimeEntries_OnRowDataBound" BackColor="White"
-                                        EmptyDataText="This person has not entered any time for this project for the period selected.">
+                                        EmptyDataText="This person has not entered any time for the period selected.">
                                         <AlternatingRowStyle BackColor="#F9FAFF" />
                                         <Columns>
                                             <asp:TemplateField HeaderText="MilestoneDate" SortExpression="MilestoneDate">
@@ -359,7 +366,7 @@
                             </asp:DataList>
                         </div>
                         <div class="PersonGridLeftPadding">
-                            <asp:Label ID="lblnoDataMesssage" runat="server" Text="This person might not be assigned to any project or there are no time entries submitted."
+                            <asp:Label ID="lblnoDataMesssage" runat="server" Text="This person has not entered any time for the period selected."
                                 Visible="false"></asp:Label>
                         </div>
                         <div style="padding-top: 10px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px;">
