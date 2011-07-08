@@ -2507,6 +2507,7 @@ namespace DataAccess
                 int lastNameIndex = reader.GetOrdinal(LastNameColumn);
                 int isDefManagerIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefaultManager);
                 int hireDateIndex;
+                int terminationDateIndex;
                 try
                 {
                     hireDateIndex = reader.GetOrdinal(HireDateColumn);
@@ -2514,6 +2515,14 @@ namespace DataAccess
                 catch
                 {
                     hireDateIndex = -1;
+                }
+                try
+                {
+                    terminationDateIndex = reader.GetOrdinal(TerminationDateColumn);
+                }
+                catch
+                {
+                    terminationDateIndex = -1;
                 }
 
                 while (reader.Read())
@@ -2526,6 +2535,10 @@ namespace DataAccess
                         LastName = reader.GetString(lastNameIndex),
                         HireDate = (hireDateIndex > -1) ? reader.GetDateTime(hireDateIndex) : DateTime.MinValue
                     };
+                    if (terminationDateIndex > -1)
+                    {
+                        person.TerminationDate = !reader.IsDBNull(terminationDateIndex) ? (DateTime?)reader[terminationDateIndex] : null;
+                    }
                     var isDefaultManager = reader.GetBoolean(isDefManagerIndex);
                     if (isDefaultManager)
                         person.Manager = new Person { Id = personId };
