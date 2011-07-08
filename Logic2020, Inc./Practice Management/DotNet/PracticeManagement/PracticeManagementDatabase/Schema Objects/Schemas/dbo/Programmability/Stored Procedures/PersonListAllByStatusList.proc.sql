@@ -17,7 +17,9 @@ BEGIN
 	SET @Query='SELECT PersonId,
 					   FirstName,
 					   LastName,
-					   IsDefaultManager
+					   IsDefaultManager,
+					   HireDate,
+					   TerminationDate
 				FROM dbo.Person P
 				JOIN dbo.Seniority S
 				ON P.SeniorityId = S.SeniorityId'
