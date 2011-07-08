@@ -1144,6 +1144,16 @@ namespace PraticeManagement.Controls
             FillCheckBoxList(control, firstItemText, selectedValue, persons, "-1");
         }
 
+        public static void FillTimeEntryPersonListBetweenStartAndEndDates(ListControl control, string firstItemText, int? selectedValue, string personStatusIdsList, int? personId, DateTime? startDate, DateTime? endDate)
+        {
+            var persons = ServiceCallers.Custom.Person(c => c.GetPersonListByStatusList(personStatusIdsList, personId));
+            if (startDate.HasValue && endDate.HasValue)
+            {
+                persons = persons.Where(p => p.HireDate <= endDate && (!p.TerminationDate.HasValue || p.TerminationDate.Value >= startDate)).ToArray();
+            }
+            FillCheckBoxList(control, firstItemText, selectedValue, persons, "-1");
+        }
+
         /// <summary>
         /// Fills the list control with the list of persons.
         /// </summary>
@@ -1853,10 +1863,10 @@ namespace PraticeManagement.Controls
                                                 Text = string.Empty,
                                                 Value = color.ColorId.ToString()
                                             };
-                        colorItem.Attributes.Add("style",string.Format("background-color:{0}",color.ColorValue));
+                        colorItem.Attributes.Add("style", string.Format("background-color:{0}", color.ColorValue));
                         colorItem.Attributes.Add("colorValue", string.Format(color.ColorValue));
                         colorItem.Attributes.Add("Description", string.Format(color.ColorDescription));
-                        colorItem.Attributes["title"]= string.Format(color.ColorDescription);
+                        colorItem.Attributes["title"] = string.Format(color.ColorDescription);
                         ddlColor.Items.Add(colorItem);
                     }
                 }
@@ -1879,7 +1889,7 @@ namespace PraticeManagement.Controls
                     if (result != null)
                     {
                         var clientInfoList = result.AsQueryable().ToList();
-                        
+
                         return clientInfoList;
                     }
                 }
