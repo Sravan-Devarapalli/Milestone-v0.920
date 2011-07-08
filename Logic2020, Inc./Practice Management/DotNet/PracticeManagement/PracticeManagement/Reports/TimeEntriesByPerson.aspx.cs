@@ -40,6 +40,7 @@ namespace PraticeManagement.Sandbox
         {
             if (!IsPostBack)
             {
+                Utils.Generic.InitStartEndDate(diRange);
                 Populatepersons(true);
                 DataHelper.FillPracticeList(this.cblPractices, Resources.Controls.AllPracticesText);
                 DataHelper.FillTimescaleList(this.cblTimeScales, Resources.Controls.AllTypes);
@@ -61,12 +62,21 @@ namespace PraticeManagement.Sandbox
                 TextBox fromDate = diRange.FindControl("tbFrom") as TextBox;
                 TextBox toDate = diRange.FindControl("tbTo") as TextBox;
 
+                fromDate.AutoPostBack = true;
+                toDate.AutoPostBack = true;
+                fromDate.CausesValidation = true;
+                toDate.CausesValidation = true;
                 fromDateExt.OnClientDateSelectionChanged = "EnableResetButton";
                 toDateExt.OnClientDateSelectionChanged = "EnableResetButton";
                 //fromDate.Attributes.Add("onchange", "EnableResetButton();");
                 //toDate.Attributes.Add("onchange", "EnableResetButton();");
 
             }
+
+            TextBox from= diRange.FindControl("tbFrom") as TextBox;
+            TextBox to = diRange.FindControl("tbTo") as TextBox;
+            from.TextChanged += diRange_SelectionChanged;
+            to.TextChanged += diRange_SelectionChanged;
                      
         }
 
@@ -95,7 +105,7 @@ namespace PraticeManagement.Sandbox
 
         protected override void Display()
         {
-            Utils.Generic.InitStartEndDate(diRange);
+            //Utils.Generic.InitStartEndDate(diRange);
         }
 
         protected void wsChoose_WeekChanged(object sender, WeekChangedEventArgs args)
@@ -303,6 +313,14 @@ namespace PraticeManagement.Sandbox
             }
         }
 
+        protected void diRange_SelectionChanged(object sender, EventArgs e)
+        {
+            if (diRange.FromDate <= diRange.ToDate)
+            {
+                PersonStatus_OnCheckedChanged(sender, e);
+            }
+        }
+
         private void Populatepersons(bool enableDisableChevron)
         {
             var currentPerson = DataHelper.CurrentPerson;
@@ -319,7 +337,7 @@ namespace PraticeManagement.Sandbox
                 }
 
             }
-            DataHelper.FillTimeEntryPersonList(this.cblPersons, Resources.Controls.AllPersons, null, statusIdsList, personId);
+            DataHelper.FillTimeEntryPersonListBetweenStartAndEndDates(this.cblPersons, Resources.Controls.AllPersons, null, statusIdsList, personId, diRange.FromDate, diRange.ToDate);
             AddAttributesToCheckBoxes(this.cblPersons);
         }
 
