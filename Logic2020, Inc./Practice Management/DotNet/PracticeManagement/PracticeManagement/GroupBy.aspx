@@ -157,7 +157,7 @@
         function SetDirectorReportHeight() {
             var div = $get("<%=updGroupByDirector.ClientID %>").children[0];
             if (div != null) {
-                div.style.maxHeight = div.scrollHeight + 20 + "px";
+                div.style.maxHeight = div.scrollHeight + 320 + "px";
             }
         }
         function SetAccountmanagerReportHeight() {
@@ -165,14 +165,14 @@
             var updGroupByAccountManager = $get("<%=updGroupByAccountManager.ClientID %>");
             var div = updGroupByAccountManager.children[updGroupByAccountManager.children.length - 1];
             if (div != null) {
-                div.style.maxHeight = div.scrollHeight + 20 + "px";
+                div.style.maxHeight = div.scrollHeight + 320 + "px";
             }
         }
         function SetPracticeReportHeight() {
             var updGroupByPractice = $get("<%=updGroupByPractice.ClientID %>");
             var div = updGroupByPractice.children[updGroupByPractice.children.length - 1];
             if (div != null) {
-                div.style.maxHeight = div.scrollHeight +20+ "px";
+                div.style.maxHeight = div.scrollHeight + 320+ "px";
             }
         }
     </script>
