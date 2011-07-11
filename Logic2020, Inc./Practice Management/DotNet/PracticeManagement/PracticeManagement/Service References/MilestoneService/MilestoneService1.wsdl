@@ -80,6 +80,18 @@
   <wsdl:message name="IMilestoneService_GetMilestoneDataById_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetMilestoneDataByIdResponse" />
   </wsdl:message>
+  <wsdl:message name="IMilestoneService_CheckIfExpensesExistsForMilestonePeriod_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfExpensesExistsForMilestonePeriod" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_CheckIfExpensesExistsForMilestonePeriod_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfExpensesExistsForMilestonePeriodResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_CanMoveFutureMilestones_InputMessage">
+    <wsdl:part name="parameters" element="tns:CanMoveFutureMilestones" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_CanMoveFutureMilestones_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CanMoveFutureMilestonesResponse" />
+  </wsdl:message>
   <wsdl:message name="IMilestoneService_AddProjectExpense_InputMessage">
     <wsdl:part name="parameters" element="tns:AddProjectExpense" />
   </wsdl:message>
@@ -182,6 +194,14 @@
     <wsdl:operation name="GetMilestoneDataById">
       <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/GetMilestoneDataById" message="tns:IMilestoneService_GetMilestoneDataById_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/GetMilestoneDataByIdResponse" message="tns:IMilestoneService_GetMilestoneDataById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckIfExpensesExistsForMilestonePeriod">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/CheckIfExpensesExistsForMilestonePeriod" message="tns:IMilestoneService_CheckIfExpensesExistsForMilestonePeriod_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/CheckIfExpensesExistsForMilestonePeriodResponse" message="tns:IMilestoneService_CheckIfExpensesExistsForMilestonePeriod_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CanMoveFutureMilestones">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/CanMoveFutureMilestones" message="tns:IMilestoneService_CanMoveFutureMilestones_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/CanMoveFutureMilestonesResponse" message="tns:IMilestoneService_CanMoveFutureMilestones_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddProjectExpense">
       <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/AddProjectExpense" message="tns:IMilestoneService_AddProjectExpense_InputMessage" />
@@ -323,6 +343,24 @@
     </wsdl:operation>
     <wsdl:operation name="GetMilestoneDataById">
       <soap:operation soapAction="http://tempuri.org/IMilestoneService/GetMilestoneDataById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckIfExpensesExistsForMilestonePeriod">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/CheckIfExpensesExistsForMilestonePeriod" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CanMoveFutureMilestones">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/CanMoveFutureMilestones" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
