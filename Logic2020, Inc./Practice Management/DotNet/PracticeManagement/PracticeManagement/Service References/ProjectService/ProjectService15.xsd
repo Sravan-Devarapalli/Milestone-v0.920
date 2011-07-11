@@ -16,7 +16,10 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ConsultantTableReportContext">
         <xs:sequence>
+          <xs:element minOccurs="0" name="IncludeOverheads" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="IncludeZeroCostEmployees" type="xs:boolean" />
           <xs:element minOccurs="0" name="PracticeIds" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TimeScaleIds" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="UserName" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:extension>
@@ -35,12 +38,12 @@
   <xs:element name="ConsultantTableReportContext" nillable="true" type="tns:ConsultantTableReportContext" />
   <xs:complexType name="ConsultantReportContextBase">
     <xs:sequence>
-      <xs:element minOccurs="0" name="ActivePersons" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ActivePersons" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="ActiveProjects" type="xs:boolean" />
       <xs:element minOccurs="0" name="CompletedProjects" type="xs:boolean" />
       <xs:element minOccurs="0" name="ExperimentalProjects" type="xs:boolean" />
       <xs:element minOccurs="0" name="InternalProjects" type="xs:boolean" />
-      <xs:element minOccurs="0" name="ProjectedPersons" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ProjectedPersons" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="ProjectedProjects" type="xs:boolean" />
       <xs:element minOccurs="0" name="Start" type="xs:dateTime" />
     </xs:sequence>
