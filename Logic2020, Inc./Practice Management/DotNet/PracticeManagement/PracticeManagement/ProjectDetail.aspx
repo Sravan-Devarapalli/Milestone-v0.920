@@ -1,4 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
+<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="True"
     CodeBehind="ProjectDetail.aspx.cs" Inherits="PraticeManagement.ProjectDetail"
     Title="Practice Management - Project Details" EnableEventValidation="false" ValidateRequest="False" %>
 
@@ -10,6 +10,8 @@
     Assembly="PraticeManagement" %>
 <%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectMilestonesFinancials.ascx"
     TagName="ProjectMilestonesFinancials" %>
+<%@ Register Src="Controls/ProjectExpenses/ProjectExpensesControl.ascx" TagName="ProjectExpenses"
+    TagPrefix="uc2" %>
 <%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectFinancials.ascx" TagName="ProjectFinancials" %>
 <%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectPersons.ascx" TagName="ProjectPersons" %>
 <%@ Register Src="~/Controls/Generic/Notes.ascx" TagName="Notes" TagPrefix="uc" %>
@@ -382,28 +384,34 @@
                                             OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
+                                <asp:TableCell ID="cellExpenses" runat="server">
+                                    <span class="bg"><span>
+                                        <asp:LinkButton ID="btnExpenses" runat="server" Text="Expenses" CausesValidation="false"
+                                            OnCommand="btnView_Command" CommandArgument="3"></asp:LinkButton></span>
+                                    </span>
+                                </asp:TableCell>
                                 <asp:TableCell ID="cellPersons" runat="server">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnPersons" runat="server" Text="Persons" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="3"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="4"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellBillingInfo" runat="server">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnBillingInfo" runat="server" Text="Billing Info" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="4"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="TableCellHistoryg" runat="server" Visible="false">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnHstory" runat="server" Text="History" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellProjectTools" runat="server" Visible="false">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnProjectTools" runat="server" Text="Tools" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                             </asp:TableRow>
@@ -470,6 +478,11 @@
                                         </tr>
                                     </table>
                                 </asp:Panel>
+                            </asp:View>
+                            <asp:View ID="vwExpenses" runat="server">
+                                <div class="tab-pane">
+                                    <uc2:ProjectExpenses runat="server" ID="projectExpenses" />
+                                </div>
                             </asp:View>
                             <asp:View ID="vwPersons" runat="server">
                                 <uc:ProjectPersons ID="persons" runat="server" />
