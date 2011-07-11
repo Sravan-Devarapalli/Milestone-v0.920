@@ -16,6 +16,8 @@
 AS 
 	SET NOCOUNT ON ;
 
+	SET NOCOUNT ON ;
+
 	-- Convert client ids from string to table
 	declare @ClientsList table (Id int)
 	insert into @ClientsList
@@ -173,6 +175,7 @@ AS
 				   r.MilestoneId,
 				   r.Date,
 				   p.PracticeId,
+				   r.Discount,
 				   CASE
 					   WHEN r.IsHourlyAmount = 1 OR s.HoursPerDay = 0
 					   THEN ISNULL(m.Amount*m.HoursPerDay, 0)
@@ -338,63 +341,96 @@ AS
 					 m.Amount, p.BonusAmount, p.BonusHoursToCollect, p.Timescale,p.PracticeId, s.HoursPerDay,
 					 r.IsHourlyAmount, m.HoursPerDay, m.PersonId,m.MilestonePersonId, m.EntryStartDate
 
-	  ) 
+	  ),
+	  ProjectExpensesMonthly
+		AS
+		(
+			SELECT pexp.ProjectId,
+				CONVERT(DECIMAL(18,2),SUM(pexp.Amount/((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Expense,
+				CONVERT(DECIMAL(18,2),SUM(pexp.Reimbursement*0.01*pexp.Amount /((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Reimbursement,
+				dbo.MakeDate(YEAR(MIN(c.Date)), MONTH(MIN(c.Date)), 1) AS FinancialDate,
+			   dbo.MakeDate(YEAR(MIN(c.Date)), MONTH(MIN(c.Date)), dbo.GetDaysInMonth(MIN(C.Date))) AS MonthEnd
+			FROM dbo.ProjectExpense as pexp
+			JOIN dbo.Calendar c ON c.Date BETWEEN pexp.StartDate AND pexp.EndDate
+			WHERE ProjectId IN (SELECT ProjectId FROM @TempProjectResult) AND c.Date BETWEEN @StartDate	AND @EndDate
+			GROUP BY pexp.ProjectId,MONTH(c.Date),YEAR(c.Date)
+		) 
 
-	SELECT f.ProjectId,
-		   f.PersonId,
-		   f.MilestonePersonId,
-		   f.PracticeId,
-		   pra.Name PracticeName,
-		   PM.LastName PracticeManagerLastName,
-		   PM.FirstName PracticeManagerFirstName,
-		   pra.PracticeManagerId,
-		   f.MilestoneId,
-		   mile.Description MilestoneName,
-		   per.FirstName MilestonePersonFirstName,
-		   per.LastName MilestonePersonLastName,
-	       dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1) AS MonthStartDate,
-	       dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), dbo.GetDaysInMonth(MIN(f.Date))) AS MonthEndDate,
-	       ISNULL(SUM(f.PersonMilestoneDailyAmount),0) AS Revenue,
-	       ISNULL(SUM(f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount-
-						(CASE WHEN f.SLHR  >=  f.PayRate +f.MLFOverheadRate 
-							  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END) 
-					    *ISNULL(f.PersonHoursPerDay, 0)),0) GrossMargin
-	  FROM (
+		SELECT temp.ProjectId,
+			   temp.PersonId,
+			   temp.MilestonePersonId,
+			   temp.PracticeId,
+			   temp.PracticeName,
+			   temp.PracticeManagerLastName,
+			   temp.PracticeManagerFirstName,
+			   temp.PracticeManagerId,
+			   temp.MilestoneId,
+			   temp.MilestoneName,
+			   temp.MilestonePersonFirstName,
+			   temp.MilestonePersonLastName,
+			   temp.MonthStartDate,
+			   temp.MonthEndDate,
+			   temp.Revenue +ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0) AS 'Revenue',
+			   temp.GrossMargin+(ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0))* (1 - temp.Discount/100)  as 'GrossMargin' 
+		FROM
+		(
+		SELECT f.ProjectId,
+			   f.PersonId,
+			   f.MilestonePersonId,
+			   f.PracticeId,
+			   pra.Name PracticeName,
+			   PM.LastName PracticeManagerLastName,
+			   PM.FirstName PracticeManagerFirstName,
+			   pra.PracticeManagerId,
+			   f.MilestoneId,
+			   mile.Description MilestoneName,
+			   per.FirstName MilestonePersonFirstName,
+			   per.LastName MilestonePersonLastName,
+			   dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1) AS MonthStartDate,
+			   dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), dbo.GetDaysInMonth(MIN(f.Date))) AS MonthEndDate,
+			   ISNULL(SUM(f.PersonMilestoneDailyAmount),0) AS Revenue,
+			   ISNULL(SUM(f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount-
+							(CASE WHEN f.SLHR  >=  f.PayRate +f.MLFOverheadRate 
+								  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END) 
+							*ISNULL(f.PersonHoursPerDay, 0)),0) GrossMargin,
+				MAX(f.Discount) Discount
+		  FROM (
 	  
-			SELECT f.ProjectId,
-				   f.MilestoneId,
-				   f.MilestonePersonId,
-				   f.PracticeId,
-				   f.Date, 
-				   f.PersonMilestoneDailyAmount,
-				   f.PersonDiscountDailyAmount,
-				   (ISNULL(f.PayRate, 0) + ISNULL(f.OverheadRate, 0)+ISNULL(f.BonusRate,0)+ISNULL(f.VacationRate,0)
-					+ISNULL(f.RecruitingCommissionRate,0)) SLHR,
-				   ISNULL(f.PayRate,0) PayRate,
-				   f.MLFOverheadRate,
-				   f.PersonHoursPerDay,
-				   --f.PracticeManagementCommissionSub,
-				   --f.PracticeManagementCommissionOwn ,
-				   --f.PracticeManagerId,
-				   f.PersonId
-				   --,
-				   --f.Discount
-		    FROM CTEFinancialsRetroSpective f 
-	     ) as f
-	  JOIN MilestonePerson MP ON MP.MilestoneId = f.MilestoneId AND MP.PersonId = f.PersonId 
-	  JOIN MilestonePersonEntry MPE ON MP.MilestonePersonId = MPE.MilestonePersonId 
-										AND f.Date BETWEEN MPE.StartDate AND MPE.EndDate
-	  JOIN dbo.Milestone mile ON mile.MilestoneId = f.MilestoneId
-	  JOIN dbo.Practice pra ON pra.PracticeId = f.PracticeId
-	  JOIN dbo.Person PM ON PM.PersonId = pra.PracticeManagerId
-	  JOIN dbo.Person per ON per.PersonId = f.PersonId	  
-	  JOIN @TempProjectResult pr ON pr.ProjectId = f.ProjectId 
-	  WHERE  f.PersonId IS NOT NULL 
-	    AND ( @PracticeIds IS NULL 
-				OR f.PracticeId IN (SELECT Id FROM @PracticesList)) 
-				AND f.Date BETWEEN @StartDate AND @EndDate
-	  GROUP BY f.ProjectId,f.MilestonePersonId, f.PersonId,f.PracticeId, pra.Name,
-				PM.LastName,PM.FirstName,pra.PracticeManagerId,f.MilestoneId,mile.Description,
-				per.FirstName,per.LastName,YEAR(f.Date), MONTH(f.Date)
-	  ORDER BY dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1)
-
+				SELECT f.ProjectId,
+					   f.MilestoneId,
+					   f.MilestonePersonId,
+					   f.PracticeId,
+					   f.Date, 
+					   f.PersonMilestoneDailyAmount,
+					   f.PersonDiscountDailyAmount,
+					   (ISNULL(f.PayRate, 0) + ISNULL(f.OverheadRate, 0)+ISNULL(f.BonusRate,0)+ISNULL(f.VacationRate,0)
+						+ISNULL(f.RecruitingCommissionRate,0)) SLHR,
+					   ISNULL(f.PayRate,0) PayRate,
+					   f.MLFOverheadRate,
+					   f.PersonHoursPerDay,
+					   --f.PracticeManagementCommissionSub,
+					   --f.PracticeManagementCommissionOwn ,
+					   --f.PracticeManagerId,
+					   f.PersonId
+					   , f.Discount
+				FROM CTEFinancialsRetroSpective f 
+			 ) as f
+		  JOIN MilestonePerson MP ON MP.MilestoneId = f.MilestoneId AND MP.PersonId = f.PersonId 
+		  JOIN MilestonePersonEntry MPE ON MP.MilestonePersonId = MPE.MilestonePersonId 
+											AND f.Date BETWEEN MPE.StartDate AND MPE.EndDate
+		  JOIN dbo.Milestone mile ON mile.MilestoneId = f.MilestoneId
+		  JOIN dbo.Practice pra ON pra.PracticeId = f.PracticeId
+		  JOIN dbo.Person PM ON PM.PersonId = pra.PracticeManagerId
+		  JOIN dbo.Person per ON per.PersonId = f.PersonId	  
+		  JOIN @TempProjectResult pr ON pr.ProjectId = f.ProjectId 
+		  WHERE  f.PersonId IS NOT NULL 
+			AND ( @PracticeIds IS NULL 
+					OR f.PracticeId IN (SELECT Id FROM @PracticesList)) 
+					AND f.Date BETWEEN @StartDate AND @EndDate
+		  GROUP BY f.ProjectId,f.MilestonePersonId, f.PersonId,f.PracticeId, pra.Name,
+					PM.LastName,PM.FirstName,pra.PracticeManagerId,f.MilestoneId,mile.Description,
+					per.FirstName,per.LastName,YEAR(f.Date), MONTH(f.Date)
+	  ) Temp
+	  LEFT JOIN ProjectExpensesMonthly  PEM 
+	ON PEM.ProjectId = Temp.ProjectId AND Temp.MonthStartDate = PEM.FinancialDate  AND Temp.MonthEndDate = PEM.MonthEnd
+	ORDER BY Temp.MonthStartDate
