@@ -10,8 +10,9 @@ namespace DataAccess.Readers
         private int _nameIndex;
         private int _amountIndex;
         private int _reimbIndex;
-        private int _milestoneIdIndex;
-        private int _milestoneNameIndex;
+        private int _projectIndex;
+        private int _startDateIndex;
+        private int _endDateIndex;
 
         public ProjectExpenseReader() : base()
         {
@@ -29,8 +30,9 @@ namespace DataAccess.Readers
             _nameIndex = reader.GetOrdinal(Constants.ColumnNames.ExpenseName);
             _amountIndex = reader.GetOrdinal(Constants.ColumnNames.ExpenseAmount);
             _reimbIndex = reader.GetOrdinal(Constants.ColumnNames.ExpenseReimbursement);
-            _milestoneIdIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneId);
-            _milestoneNameIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneName);
+            _projectIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+            _startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+            _endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
         }
 
         public override void SetReader(DbDataReader value)
@@ -48,11 +50,9 @@ namespace DataAccess.Readers
                            Name = Reader.GetString(_nameIndex),
                            Amount = Reader.GetDecimal(_amountIndex),
                            Reimbursement = Reader.GetDecimal(_reimbIndex),
-                           Milestone = new Milestone
-                                           {
-                                               Id = Reader.GetInt32(_milestoneIdIndex),
-                                               Description = Reader.GetString(_milestoneNameIndex)
-                                           }
+                           ProjectId = Reader.GetInt32(_projectIndex),
+                           StartDate = Reader.GetDateTime(_startDateIndex),
+                           EndDate = Reader.GetDateTime(_endDateIndex)
                        };
         }
     }
