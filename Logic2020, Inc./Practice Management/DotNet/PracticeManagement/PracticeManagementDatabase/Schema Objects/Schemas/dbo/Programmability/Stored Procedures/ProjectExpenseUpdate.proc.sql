@@ -7,27 +7,19 @@ CREATE PROCEDURE dbo.ProjectExpenseUpdate
     @ExpenseName nvarchar(50),
     @ExpenseAmount decimal(18, 2),
     @ExpenseReimbursement decimal(18, 2),
-	@MilestoneId int = null 
+	@ProjectId int = null,
+	@StartDate	datetime,
+	@EndDate	datetime
 AS
 BEGIN
 	SET NOCOUNT ON;
-
-	if (@MilestoneId is NULL)
-	begin
 		Update [dbo].[ProjectExpense] Set 
 				[Name] = @ExpenseName
 			   ,[Amount] = @ExpenseAmount
 			   ,[Reimbursement] = @ExpenseReimbursement
+			   ,[ProjectId] = ISNULL(@ProjectId,[ProjectId])
+			   ,[StartDate] = @StartDate
+			   ,[EndDate] = @EndDate			   
 		 Where Id = @ExpenseId
-	end
-	else
-	begin
-		Update [dbo].[ProjectExpense] Set 
-				[Name] = @ExpenseName
-			   ,[Amount] = @ExpenseAmount
-			   ,[Reimbursement] = @ExpenseReimbursement
-			   ,[MilestoneId] = @MilestoneId
-		 Where Id = @ExpenseId
-	end
 END
 
