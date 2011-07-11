@@ -66,7 +66,7 @@ begin transaction
 	      -- Take a last mileston-person entry if several exists
 	      WHERE mp.RowNum = 1
 
-	exec dbo.ExpensesClone @OldMilestoneId = @MilestoneId, @NewMilestoneId = @MilestoneCloneId
+	--exec dbo.ExpensesClone @OldMilestoneId = @MilestoneId, @NewMilestoneId = @MilestoneCloneId
 	
 	exec dbo.NotesClone @OldTargetId = @MilestoneId, @NewTargetId = @MilestoneCloneId
 	
