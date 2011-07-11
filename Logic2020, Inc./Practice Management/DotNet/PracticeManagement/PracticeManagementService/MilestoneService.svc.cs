@@ -200,6 +200,16 @@ namespace PracticeManagementService
             return result;
         }
 
+        public bool CheckIfExpensesExistsForMilestonePeriod(int milestoneId, DateTime? startDate, DateTime? endDate)
+        {
+            return MilestoneDAL.CheckIfExpensesExistsForMilestonePeriod(milestoneId, startDate, endDate);
+        }
+
+        public bool CanMoveFutureMilestones(int milestoneId, int shiftDays)
+        {
+            return MilestoneDAL.CanMoveFutureMilestones(milestoneId, shiftDays);
+        }
+
         #endregion
 
         #region Implementation of IDataTransferObjectManipulator<ProjectExpense> and custom methods
@@ -272,6 +282,7 @@ namespace PracticeManagementService
         {
             return (new ProjectExpenseDal()).GetForMilestone(entity);
         }
+
 
         #endregion
     }
