@@ -10,6 +10,12 @@
       <xsd:import schemaLocation="http://server2.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
     </xsd:schema>
   </wsdl:types>
+  <wsdl:message name="IProjectService_GetProjectExpensesForProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectExpensesForProject" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectExpensesForProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectExpensesForProjectResponse" />
+  </wsdl:message>
   <wsdl:message name="IProjectService_ProjectGetById_InputMessage">
     <wsdl:part name="parameters" element="tns:ProjectGetById" />
   </wsdl:message>
@@ -196,7 +202,17 @@
   <wsdl:message name="IProjectService_CategoryItemsSaveFromXML_OutputMessage">
     <wsdl:part name="parameters" element="tns:CategoryItemsSaveFromXMLResponse" />
   </wsdl:message>
+  <wsdl:message name="IProjectService_ProjectDelete_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectDelete" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_ProjectDelete_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectDeleteResponse" />
+  </wsdl:message>
   <wsdl:portType name="IProjectService">
+    <wsdl:operation name="GetProjectExpensesForProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectExpensesForProject" message="tns:IProjectService_GetProjectExpensesForProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectExpensesForProjectResponse" message="tns:IProjectService_GetProjectExpensesForProject_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ProjectGetById">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectGetById" message="tns:IProjectService_ProjectGetById_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectGetByIdResponse" message="tns:IProjectService_ProjectGetById_OutputMessage" />
@@ -321,9 +337,22 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CategoryItemsSaveFromXML" message="tns:IProjectService_CategoryItemsSaveFromXML_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CategoryItemsSaveFromXMLResponse" message="tns:IProjectService_CategoryItemsSaveFromXML_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="ProjectDelete">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectDelete" message="tns:IProjectService_ProjectDelete_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectDeleteResponse" message="tns:IProjectService_ProjectDelete_OutputMessage" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IProjectService" type="tns:IProjectService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetProjectExpensesForProject">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectExpensesForProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="ProjectGetById">
       <soap:operation soapAction="http://tempuri.org/IProjectService/ProjectGetById" style="document" />
       <wsdl:input>
@@ -596,6 +625,15 @@
     </wsdl:operation>
     <wsdl:operation name="CategoryItemsSaveFromXML">
       <soap:operation soapAction="http://tempuri.org/IProjectService/CategoryItemsSaveFromXML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProjectDelete">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/ProjectDelete" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
