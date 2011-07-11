@@ -188,7 +188,39 @@ BEGIN
 			GROUP BY r.Date, r.ProjectId, r.MilestoneId, r.MilestoneDailyAmount, r.Discount, 
 					m.Amount, s.HoursPerDay,r.IsHourlyAmount, m.HoursPerDay, m.PersonId,
 					m.MilestonePersonId, m.EntryStartDate
-		) 
+		),
+		ProjectExpensesMonthly
+		AS
+		(
+
+			SELECT pexp.ProjectId,
+				CONVERT(DECIMAL(18,2),SUM(pexp.Amount/((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Expense,
+				CONVERT(DECIMAL(18,2),SUM(pexp.Reimbursement*0.01*pexp.Amount /((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Reimbursement,
+				dbo.MakeDate(YEAR(MIN(c.Date)), MONTH(MIN(c.Date)), 1) AS FinancialDate
+			FROM dbo.ProjectExpense as pexp
+			JOIN dbo.Calendar c ON c.Date BETWEEN pexp.StartDate AND pexp.EndDate
+			WHERE c.Date BETWEEN @StartDateLocal AND @EndDateLocal
+			GROUP BY pexp.ProjectId,MONTH(c.Date),YEAR(c.Date)
+		),
+		ProjectMonthlyFinancials
+		AS
+		(
+		
+			SELECT  ISNULL(Fin.ProjectId,PEM.ProjectId) ProjectId,
+					ISNULL(Fin.MonthStartDate,PEM.FinancialDate) MonthStartDate,
+					ISNULL(Fin.Revenue,0)+ISNULL(Reimbursement,0)-ISNULL(Expense,0) Revenue
+			FROM 
+			(
+				SELECT	F.ProjectId,
+						dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1) AS MonthStartDate,
+						SUM(f.PersonMilestoneDailyAmount) AS Revenue
+				FROM  CTEFinancialsRetroSpective F
+				WHERE F.Date  BETWEEN @StartDateLocal AND	 @EndDateLocal
+				GROUP BY F.ProjectId, YEAR(f.Date), MONTH(f.Date)
+			) Fin
+			FULL JOIN ProjectExpensesMonthly PEM
+			ON PEM.ProjectId = FIN.ProjectId AND PEM.FinancialDate = Fin.MonthStartDate
+		)
 
 		SELECT CD.PersonId,
 				CD.LastName,
@@ -200,13 +232,13 @@ BEGIN
 		LEFT JOIN 
 		(
 		SELECT P.DirectorId,
-			dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1) AS MonthStartDate,
-			SUM(f.PersonMilestoneDailyAmount) AS Revenue
+			   F.MonthStartDate,
+			   SUM(Revenue) AS Revenue
 		FROM dbo.Project P
-		JOIN CTEFinancialsRetroSpective F
+		JOIN ProjectMonthlyFinancials F
 				ON F.ProjectId = P.ProjectId
-		WHERE F.Date  BETWEEN @StartDateLocal AND	 @EndDateLocal AND P.DirectorId IS NOT NULL
-		GROUP BY P.DirectorId, YEAR(f.Date), MONTH(f.Date)
+		WHERE P.DirectorId IS NOT NULL
+		GROUP BY P.DirectorId,MonthStartDate
 		) B
 		ON CD.PersonId = B.DirectorId AND B.MonthStartDate = CD.MonthStartDate
 		ORDER BY CD.LastName, CD.FirstName
@@ -356,7 +388,38 @@ BEGIN
 			GROUP BY r.Date, r.ProjectId, r.MilestoneId, r.MilestoneDailyAmount, r.Discount,
 					 m.Amount, s.HoursPerDay,r.IsHourlyAmount, m.HoursPerDay, 
 					 m.PersonId,m.MilestonePersonId, m.EntryStartDate
-		) 
+		) ,
+		ProjectExpensesMonthly
+		AS
+		(
+			SELECT pexp.ProjectId,
+				CONVERT(DECIMAL(18,2),SUM(pexp.Amount/((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Expense,
+				CONVERT(DECIMAL(18,2),SUM(pexp.Reimbursement*0.01*pexp.Amount /((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Reimbursement,
+				dbo.MakeDate(YEAR(MIN(c.Date)), MONTH(MIN(c.Date)), 1) AS FinancialDate
+			FROM dbo.ProjectExpense as pexp
+			JOIN dbo.Calendar c ON c.Date BETWEEN pexp.StartDate AND pexp.EndDate
+			WHERE c.Date BETWEEN @StartDateLocal AND @EndDateLocal
+			GROUP BY pexp.ProjectId,MONTH(c.Date),YEAR(c.Date)
+		),
+		ProjectFinancialsMonthly
+		AS
+		(
+		SELECT ISNULL(Fin.ProjectId,PEM.ProjectId) ProjectId,
+				ISNULL(Fin.MonthStartDate,PEM.FinancialDate) MonthStartDate,
+				ISNULL(Fin.Revenue,0)+ISNULL(Reimbursement,0)-ISNULL(Expense,0) Revenue
+		FROM 
+		(
+			SELECT	F.ProjectId,
+					dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1) AS MonthStartDate,
+					SUM(f.PersonMilestoneDailyAmount) AS Revenue
+			 FROM CTEFinancialsRetroSpective F 
+			WHERE  F.Date  BETWEEN @StartDateLocal AND	 @EndDateLocal  
+			GROUP BY F.ProjectId, YEAR(f.Date), MONTH(f.Date)
+		) Fin
+		FULL JOIN ProjectExpensesMonthly PEM
+		ON PEM.ProjectId = FIN.ProjectId AND PEM.FinancialDate = Fin.MonthStartDate
+		)
+
 		SELECT BDM.PersonId,
 			   BDM.LastName,
 			   BDM.FirstName,
@@ -367,13 +430,13 @@ BEGIN
 		LEFT JOIN 
 		(
 		SELECT C.PersonId,
-	       dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1) AS MonthStartDate,
-	       SUM(f.PersonMilestoneDailyAmount) AS Revenue
+	       MonthStartDate,
+	       SUM(f.Revenue) AS Revenue
 		FROM dbo.Commission C
 		JOIN  dbo.Project P ON C.ProjectId = P.ProjectId
-		JOIN CTEFinancialsRetroSpective F ON F.ProjectId = P.ProjectId
-		WHERE F.Date  BETWEEN @StartDateLocal AND	 @EndDateLocal AND C.CommissionType = 1
-		GROUP BY C.PersonId, YEAR(f.Date), MONTH(f.Date)
+		JOIN ProjectFinancialsMonthly F ON F.ProjectId = P.ProjectId
+		WHERE C.CommissionType = 1
+		GROUP BY C.PersonId,MonthStartDate
 		) B 	ON BDM.PersonId = B.PersonId AND BDM.MonthStartDate = B.MonthStartDate
 		
 		
