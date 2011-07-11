@@ -18,11 +18,6 @@ BEGIN
 		   f.Date, 
 		   f.PersonMilestoneDailyAmount,
 		   f.PersonDiscountDailyAmount,
-		   ISNULL((SELECT SUM(c.FractionOfMargin) 
-							  FROM dbo.Commission AS  c 
-							  WHERE c.ProjectId = f.ProjectId 
-									AND c.CommissionType = 1
-								),0) ProjectSalesCommisionFraction,
 		   (ISNULL(f.PayRate, 0) + ISNULL(f.OverheadRate, 0)+ISNULL(f.BonusRate,0)+ISNULL(f.VacationRate,0) 
 			+ ISNULL(f.RecruitingCommissionRate,0)) SLHR,
 		   ISNULL(f.PayRate,0) PayRate,
@@ -53,21 +48,23 @@ BEGIN
 		   ISNULL(SUM((CASE WHEN f.SLHR >= f.PayRate + f.MLFOverheadRate THEN f.SLHR ELSE  f.PayRate + f.MLFOverheadRate END)*ISNULL(f.PersonHoursPerDay, 0)),0) Cogs,
 
 	       ISNULL(SUM(f.PersonHoursPerDay), 0) AS Hours,
-	       
-	       (SUM((f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount -
-						(CASE WHEN f.SLHR >=  f.PayRate +f.MLFOverheadRate 
-							  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END) 
-					    *ISNULL(f.PersonHoursPerDay, 0))* (f.ProjectSalesCommisionFraction/100))) SalesCommission,
+		   --MAX(f.ProjectSalesCommisionFraction) ProjectSalesCommisionFraction,
+
+	     --  (SUM((f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount -
+						--(CASE WHEN f.SLHR >=  f.PayRate +f.MLFOverheadRate 
+						--	  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END) 
+					 --   *ISNULL(f.PersonHoursPerDay, 0))* (f.ProjectSalesCommisionFraction/100))) SalesCommission,
 
 	       SUM((f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount -
 	            (CASE WHEN f.SLHR >=  f.PayRate +f.MLFOverheadRate 
 							  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END) * ISNULL(f.PersonHoursPerDay, 0)) *
-	           (f.PracticeManagementCommissionSub + CASE f.PracticeManagerId WHEN f.PersonId THEN f.PracticeManagementCommissionOwn ELSE 0 END)) / 100 AS PracticeManagementCommission,
-		   min(case when pe.ExpenseSum is null then 0 else pe.ExpenseSum end) as 'Expense',
-		   min(case when pe.ReimbursedExpenseSum is null then 0 else pe.ReimbursedExpenseSum end) as 'ReimbursedExpense',
-		   min(f.Discount) as Discount
+	           (f.PracticeManagementCommissionSub + CASE f.PracticeManagerId WHEN f.PersonId THEN f.PracticeManagementCommissionOwn ELSE 0 END)) / 100 AS PracticeManagementCommission
+			   --,
+		   --min(case when pe.Expense  is null then 0 else pe.Expense  end) as 'Expense',
+		   --min(case when pe.ReimbursedExpense is null then 0 else pe.ReimbursedExpense  end) as 'ReimbursedExpense',
+		   --min(f.Discount) as Discount
 	  FROM FinancialsRetro AS f
-	  LEFT JOIN v_ProjectTotalExpenses as pe on f.ProjectId = pe.ProjectId
+	  LEFT JOIN v_MilestoneExpenses as pe on f.ProjectId = pe.ProjectId AND f.MilestoneId = pe.MilestoneId 
 	 WHERE f.ProjectId = @ProjectIdLocal
 	GROUP BY f.ProjectId,f.MilestoneId
 	)
@@ -81,22 +78,28 @@ BEGIN
 		0 as 'ExpectedHours',
 		fin.FinancialDate,
 		fin.MonthEnd,
-		ISNULL(fin.Revenue, 0) as 'Revenue',
-		ISNULL(fin.RevenueNet+((fin.ReimbursedExpense) * (1 - fin.Discount/100)),0) as 'RevenueNet',
-		fin.Cogs,
-		ISNULL((fin.GrossMargin+(fin.ReimbursedExpense* (1 - fin.Discount/100)) - fin.Expense),0)  as 'GrossMargin',
+		ISNULL(Revenue,0) +ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0)   as 'Revenue',
+		(ISNULL(RevenueNet,0)+(ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0))*(1 - p.Discount/100))  as 'RevenueNet',
+		ISNULL(Cogs,0) Cogs,
+		ISNULL(GrossMargin,0)+(ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0))*(1 - p.Discount/100)  as 'GrossMargin',
 		fin.Hours,
-		fin.SalesCommission,
-		fin.PracticeManagementCommission,
-		fin.Expense,
-		fin.ReimbursedExpense,
+		ISNULL(GrossMargin,0)+(ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0))*(1 - p.Discount/100)
+						*  ISNULL((SELECT SUM(c.FractionOfMargin)  FROM dbo.Commission AS  c   WHERE c.ProjectId = P.ProjectId 
+									AND c.CommissionType = 1
+								),0)*0.01  SalesCommission,
+		ISNULL(fin.PracticeManagementCommission,0),
+		ISNULL(me.Expense,0) Expense,
+		ISNULL(Me.ReimbursedExpense,0) ReimbursedExpense,
 		case 
-			when fin.Revenue <> 0
-				then (((fin.Revenue + fin.ReimbursedExpense) * (1 - fin.Discount/100)) - fin.Cogs - fin.Expense) * 100 / fin.Revenue
+			when ISNULL(Revenue,0) +ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0) <> 0
+				then (ISNULL(GrossMargin,0)+(ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0))*(1 - p.Discount/100))  * 100 / 
+				(ISNULL(Revenue,0) +ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0))
 			else
 				0
 		end as 'TargetMargin'
 	from dbo.Milestone as m
 	left join MilestoneFinancials as fin on m.MilestoneId = fin.MilestoneId
+	left Join v_MilestoneExpenses ME ON Me.MilestoneId = m.MilestoneId
+	left Join Project p on P.ProjectId = m.ProjectId
 	where m.ProjectId = @ProjectIdLocal
 END
