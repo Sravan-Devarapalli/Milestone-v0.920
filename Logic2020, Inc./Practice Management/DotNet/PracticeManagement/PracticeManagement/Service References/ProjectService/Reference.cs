@@ -15,6 +15,11 @@ namespace PraticeManagement.ProjectService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ProjectService.IProjectService")]
     public interface IProjectService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectExpensesForProject", ReplyAction="http://tempuri.org/IProjectService/GetProjectExpensesForProjectResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
+        DataTransferObjects.ProjectExpense[] GetProjectExpensesForProject(DataTransferObjects.ProjectExpense entity);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectGetById", ReplyAction="http://tempuri.org/IProjectService/ProjectGetByIdResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
@@ -161,6 +166,10 @@ namespace PraticeManagement.ProjectService {
         
         public ProjectServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public DataTransferObjects.ProjectExpense[] GetProjectExpensesForProject(DataTransferObjects.ProjectExpense entity) {
+            return base.Channel.GetProjectExpensesForProject(entity);
         }
         
         public DataTransferObjects.Project ProjectGetById(int projectId) {
