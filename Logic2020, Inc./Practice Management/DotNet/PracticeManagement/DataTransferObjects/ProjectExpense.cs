@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using System;
 
 namespace DataTransferObjects
 {
@@ -15,6 +16,21 @@ namespace DataTransferObjects
         /// </summary>
         [DataMember]
         public string Name { get; set; }
+
+        [DataMember]
+        public int ProjectId { get; set; }
+
+        /// <summary>
+        /// Expense Start Date
+        /// </summary>
+        [DataMember]
+        public DateTime StartDate { get; set; }
+
+        /// <summary>
+        /// Expense End Date
+        /// </summary>
+        [DataMember]
+        public DateTime EndDate { get; set; }
 
         /// <summary>
         /// Expense $
@@ -41,7 +57,7 @@ namespace DataTransferObjects
         {
             get
             {
-                return 0.01M*Amount*Reimbursement;
+                return 0.01M * Amount * Reimbursement;
             }
         }
 
