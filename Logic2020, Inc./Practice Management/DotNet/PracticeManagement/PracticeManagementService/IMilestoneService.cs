@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using DataTransferObjects;
 
@@ -104,6 +105,13 @@ namespace PracticeManagementService
 	    /// <returns></returns>
         [OperationContract]
         Milestone GetMilestoneDataById(int milestoneId);
+
+        [OperationContract]
+        bool CheckIfExpensesExistsForMilestonePeriod(int milestoneId, DateTime? startDate, DateTime? endDate);
+
+
+        [OperationContract]
+        bool CanMoveFutureMilestones(int milestoneId, int shiftDays);
 
 	    /// <summary>
 	    /// Insert entity to the database
