@@ -74,30 +74,42 @@ AS
 	            (CASE WHEN f.SLHR >=  f.PayRate +f.MLFOverheadRate 
 							  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END) * ISNULL(f.PersonHoursPerDay, 0)) *
 	           (f.PracticeManagementCommissionSub + CASE f.PracticeManagerId WHEN f.PersonId THEN f.PracticeManagementCommissionOwn ELSE 0 END)) / 100 AS PracticeManagementCommission,
-		   min(case when pe.ExpenseSum is null then 0 else pe.ExpenseSum end) as 'Expense',
-		   min(case when pe.ReimbursedExpenseSum is null then 0 else pe.ReimbursedExpenseSum end) as 'ReimbursedExpense',
-		   min(f.Discount) as Discount
+		  		   min(f.Discount) as Discount
 	  FROM FinancialsRetro AS f
-	  LEFT JOIN v_ProjectTotalExpenses as pe on f.ProjectId = pe.ProjectId
 	  WHERE  
 		f.ProjectId IN (SELECT * FROM @ProjectIDs) 
 		AND f.Date BETWEEN @StartDate AND @EndDate
 	GROUP BY f.ProjectId, YEAR(f.Date), MONTH(f.Date)
+	),
+	ProjectExpensesMonthly
+	AS
+	(
+		SELECT pexp.ProjectId,
+			CONVERT(DECIMAL(18,2),SUM(pexp.Amount/((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Expense,
+			CONVERT(DECIMAL(18,2),SUM(pexp.Reimbursement*0.01*pexp.Amount /((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Reimbursement,
+			dbo.MakeDate(YEAR(MIN(c.Date)), MONTH(MIN(c.Date)), 1) AS FinancialDate,
+	       dbo.MakeDate(YEAR(MIN(c.Date)), MONTH(MIN(c.Date)), dbo.GetDaysInMonth(MIN(C.Date))) AS MonthEnd
+		FROM dbo.ProjectExpense as pexp
+		JOIN dbo.Calendar c ON c.Date BETWEEN pexp.StartDate AND pexp.EndDate
+		WHERE ProjectId IN (SELECT * FROM @ProjectIDs) AND c.Date BETWEEN @StartDate	AND @EndDate
+		GROUP BY pexp.ProjectId,MONTH(c.Date),YEAR(c.Date)
 	)
 	
 	SELECT
-		pf.ProjectId,
-		pf.FinancialDate,
-		pf.MonthEnd,
-		ISNULL(pf.Revenue,0) as 'Revenue',
-		ISNULL(pf.RevenueNet+(pf.ReimbursedExpense * (1 - pf.Discount/100)),0)  as 'RevenueNet',
-		pf.Cogs ,
-		ISNULL((pf.GrossMargin+(pf.ReimbursedExpense * (1 - pf.Discount/100)) - pf.Expense),0)  as 'GrossMargin',
-		pf.Hours,
-		pf.SalesCommission,
-		pf.PracticeManagementCommission,
-		pf.Expense,
-		pf.ReimbursedExpense
+		ISNULL(pf.ProjectId,PEM.ProjectId) ProjectId,
+		ISNULL(pf.FinancialDate,PEM.FinancialDate) FinancialDate,
+		ISNULL(pf.MonthEnd,PEM.MonthEnd) MonthEnd,
+		ISNULL(pf.Revenue,0)+ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0) AS 'Revenue',
+		ISNULL(pf.RevenueNet,0)+ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0)   as 'RevenueNet',
+		ISNULL(pf.Cogs,0) Cogs ,
+		ISNULL(pf.GrossMargin,0)+(ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0))* (1 - ISNULL(pf.Discount,0)/100)  as 'GrossMargin',
+		ISNULL(pf.Hours,0) Hours,
+		ISNULL(pf.SalesCommission,0) SalesCommission,
+		ISNULL(pf.PracticeManagementCommission,0) PracticeManagementCommission,
+		ISNULL(PEM.Expense,0) Expense,
+		ISNULL(PEM.Reimbursement,0) ReimbursedExpense
 	FROM ProjectFinancials pf
+	FULL JOIN ProjectExpensesMonthly PEM 
+	ON PEM.ProjectId = pf.ProjectId AND pf.FinancialDate = PEM.FinancialDate  AND Pf.MonthEnd = PEM.MonthEnd
 	
 
