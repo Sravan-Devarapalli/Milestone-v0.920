@@ -152,6 +152,7 @@ namespace PraticeManagement.ProjectService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
         
+       
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
