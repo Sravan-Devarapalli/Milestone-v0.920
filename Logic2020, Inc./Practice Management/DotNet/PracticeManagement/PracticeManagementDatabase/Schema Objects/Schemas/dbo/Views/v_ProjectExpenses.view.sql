@@ -1,14 +1,11 @@
 ﻿CREATE view dbo.v_ProjectExpenses
 as
 	SELECT 
-	   pexp.[Id] as 'ExpenseId'
-      ,pexp.[Name] as 'ExpenseName'
-      ,pexp.[Amount] as 'ExpenseAmount'
+
+      pexp.[Amount] as 'ExpenseAmount'
       ,pexp.[Reimbursement] as 'ExpenseReimbursement'
 	  ,pexp.[Reimbursement] * 0.01 * pexp.[Amount] as 'ExpenseReimbursementAmount'
-	  ,m.ProjectId
-      ,m.[MilestoneId] as 'MilestoneId'
-	  ,m.[Description] as 'MilestoneName'
+	  ,pexp.ProjectId
 	from dbo.ProjectExpense as pexp
-	inner join milestone as m on pexp.milestoneId = m.milestoneId
+	JOIN dbo.Milestone M ON M.ProjectId = pexp.ProjectId
 
