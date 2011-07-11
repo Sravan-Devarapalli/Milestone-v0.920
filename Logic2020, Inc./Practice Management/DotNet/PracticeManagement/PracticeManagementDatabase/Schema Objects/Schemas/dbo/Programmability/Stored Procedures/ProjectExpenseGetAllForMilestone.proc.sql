@@ -9,8 +9,15 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT *
-	from v_ProjectExpenses 
+
+	SELECT  0 ExpenseId,
+			'' ExpenseName,
+			ProjectId,
+			CONVERT(DATETIME,'') StartDate,
+			CONVERT(DATETIME,'') EndDate,
+			Expense ExpenseAmount,
+			ReimbursedExpense ExpenseReimbursement
+	from v_MilestoneExpenses 
 	where MilestoneId = @MilestoneId
 END
 
