@@ -27,6 +27,9 @@ namespace PraticeManagement.Config
         private const string gvPersonddlColor = "gvPersonddlColor";
         private const string PersonMarginColorInfo_THRESHOLDS_LIST_KEY = "PERSONMARGINCOLORINFO_THRESHOLDS_LIST_KEY";
 
+        const string CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY = "CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY";
+        const string PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY = "PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY";
+
         #endregion
 
 
@@ -45,12 +48,15 @@ namespace PraticeManagement.Config
 
                     if (result != null)
                     {
-                        return result;
+                        var cmci = new List<ClientMarginColorInfo>();
+                        cmci.AddRange(result);
+                        ViewState[ClientGoalDefault_THRESHOLDS_LIST_KEY] = cmci;
+                        return cmci;
                     }
-                    var cmci = new List<ClientMarginColorInfo>();
-                    cmci.Add(new ClientMarginColorInfo() { ColorInfo = new ColorInformation() });
-                    ViewState[ClientGoalDefault_THRESHOLDS_LIST_KEY] = cmci;
-                    return cmci;
+                    var cmcilist = new List<ClientMarginColorInfo>();
+                    cmcilist.Add(new ClientMarginColorInfo() { ColorInfo = new ColorInformation() });
+                    ViewState[ClientGoalDefault_THRESHOLDS_LIST_KEY] = cmcilist;
+                    return cmcilist;
                 }
             }
             set { ViewState[ClientGoalDefault_THRESHOLDS_LIST_KEY] = value; }
@@ -71,13 +77,16 @@ namespace PraticeManagement.Config
 
                     if (result != null)
                     {
-                        return result;
+                        var cmci = new List<ClientMarginColorInfo>();
+                        cmci.AddRange(result);
+                        ViewState[PersonMarginColorInfo_THRESHOLDS_LIST_KEY] = cmci;
+                        return cmci;
                     }
 
-                    var cmci = new List<ClientMarginColorInfo>();
-                    cmci.Add(new ClientMarginColorInfo() { ColorInfo = new ColorInformation() });
-                    ViewState[PersonMarginColorInfo_THRESHOLDS_LIST_KEY] = cmci;
-                    return cmci;
+                    var cmcilist = new List<ClientMarginColorInfo>();
+                    cmcilist.Add(new ClientMarginColorInfo() { ColorInfo = new ColorInformation() });
+                    ViewState[PersonMarginColorInfo_THRESHOLDS_LIST_KEY] = cmcilist;
+                    return cmcilist;
                 }
             }
             set { ViewState[PersonMarginColorInfo_THRESHOLDS_LIST_KEY] = value; }
@@ -91,6 +100,9 @@ namespace PraticeManagement.Config
         {
             if (!IsPostBack)
             {
+                HttpContext.Current.Cache.Remove(CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY);
+                HttpContext.Current.Cache.Remove(PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY);
+
                 PopulateControls();
             }
             mlConfirmation.ClearMessage();
@@ -738,3 +750,4 @@ namespace PraticeManagement.Config
 
     }
 }
+
