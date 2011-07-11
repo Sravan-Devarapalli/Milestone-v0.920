@@ -185,6 +185,38 @@ namespace PraticeManagement
             }
         }
 
+        protected void cstCheckStartDateForExpensesExistance_OnServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            if (MilestoneId.HasValue && Milestone != null && Milestone.StartDate < dtpPeriodFrom.DateValue
+                && Milestone.Project.StartDate == Milestone.StartDate)
+            {
+                using (var service = new MilestoneServiceClient())
+                {
+                    args.IsValid = !(service.CheckIfExpensesExistsForMilestonePeriod(MilestoneId.Value, dtpPeriodFrom.DateValue, null));
+                }
+            }
+            else
+            {
+                args.IsValid = true;
+            }
+        }
+
+        protected void cstCheckEndDateForExpensesExistance_OnServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            if (MilestoneId.HasValue && Milestone != null && Milestone.EndDate > dtpPeriodTo.DateValue
+                && Milestone.Project.EndDate == Milestone.EndDate)
+            {
+                using (var service = new MilestoneServiceClient())
+                {
+                    args.IsValid = !(service.CheckIfExpensesExistsForMilestonePeriod(MilestoneId.Value, null, dtpPeriodTo.DateValue));
+                }
+            }
+            else
+            {
+                args.IsValid = true;
+            }
+        }
+
         /// <summary>
         /// Initializes 'Previous Milestone' and 'Next Milestone' buttons
         /// </summary>
@@ -362,6 +394,18 @@ namespace PraticeManagement
 
         protected void btnDelete_Click(object sender, EventArgs e)
         {
+            if (Milestone.Project.StartDate.Value == Milestone.StartDate ||
+                Milestone.Project.EndDate.Value == Milestone.EndDate)
+            {
+                using (var service = new MilestoneServiceClient())
+                {
+                    if (service.CheckIfExpensesExistsForMilestonePeriod(MilestoneId.Value, null, null))
+                    {
+                        lblError.ShowErrorMessage("This milestone cannot be deleted, because project has expenses during the milestone period.");
+                        return;
+                    }
+                }
+            }
             try
             {
                 DeleteRecord();
@@ -375,11 +419,50 @@ namespace PraticeManagement
 
         protected void btnMoveMilestone_Click(object sender, EventArgs e)
         {
+            lblResult.ClearMessage();
             Page.Validate(vsumShiftDays.ValidationGroup);
             if (Page.IsValid)
             {
+                var shiftDays = int.Parse(txtShiftDays.Text);
+                var newStartDate = Milestone.StartDate.AddDays(shiftDays);
+                var newEndDate = Milestone.EndDate.AddDays(shiftDays);
+                if (Milestone.Project.StartDate.Value == Milestone.StartDate)
+                {
+                    using (var service = new MilestoneServiceClient())
+                    {
+                        if (service.CheckIfExpensesExistsForMilestonePeriod(MilestoneId.Value, newStartDate, null))
+                        {
+                            lblError.ShowErrorMessage("This milestone cannot be moved because the project has expenses earlier than new start date.\nPlease change the expenses first.");
+                            return;
+                        }
+                    }
+                }
+                if (Milestone.Project.EndDate.Value == Milestone.EndDate)
+                {
+                    using (var service = new MilestoneServiceClient())
+                    {
+                        if (service.CheckIfExpensesExistsForMilestonePeriod(MilestoneId.Value, newStartDate, null))
+                        {
+                            lblError.ShowErrorMessage("This milestone cannot be moved because the project has expenses beyond new end date.\nPlease change the expenses first.");
+                            return;
+                        }
+                    }
+                }
+
+                if (shiftDays < 0)
+                {
+                    using (var service = new MilestoneServiceClient())
+                    {
+                        if (!service.CanMoveFutureMilestones(MilestoneId.Value, shiftDays))
+                        {
+                            lblError.ShowErrorMessage("Cannot move future milestones because it leads to change in its project end date, but the project has expenses beyond new end date.\n Please change expenses first.");
+                            return;
+                        }
+                    }
+                }
+
                 DataHelper.ShiftMilestone(
-                    int.Parse(txtShiftDays.Text),
+                    shiftDays,
                     MilestoneId.Value,
                     chbMoveFutureMilestones.Checked);
                 ReturnToPreviousPage();
@@ -741,6 +824,23 @@ namespace PraticeManagement
                 SetBackgroundColorForMargin(milestone.Project.Client.Id.Value, milestone.ComputedFinancials.TargetMargin, milestone.Project.Client.IsMarginColorInfoEnabled);
             }
 
+            if (Milestone.ComputedFinancials != null)
+            {
+                lblTotalCogs.Text =
+                    PersonListSeniorityAnalyzer.GreaterSeniorityExists ?
+                    Resources.Controls.HiddenCellText : Milestone.ComputedFinancials.Cogs.ToString();
+                lblTotalRevenue.Text = Milestone.ComputedFinancials.Revenue.ToString();
+                lblTotalRevenueNet.Text = Milestone.ComputedFinancials.RevenueNet.ToString();
+
+                lblClientDiscountAmount.Text =
+                    (Milestone.ComputedFinancials.Revenue - Milestone.ComputedFinancials.RevenueNet).ToString();
+
+                // Sales commission
+                lblSalesCommissionPercentage.Text =
+                    PersonListSeniorityAnalyzer.GreaterSeniorityExists ?
+                    Resources.Controls.HiddenCellText :
+                    Project.SalesCommission.Sum(commission => commission.FractionOfMargin).ToString("##0.00");
+            }
 
             //Fill Final Milestone Margin Cell
             SetFooterLabelWithSeniority(
@@ -759,6 +859,15 @@ namespace PraticeManagement
                 milestone.ComputedFinancials == null ? string.Empty :
                         ((PracticeManagementCurrency)milestone.ComputedFinancials.ReimbursedExpenses).ToString(),
                 lblReimbursedExpenses);
+
+            SetFooterLabelWithSeniority(milestone.ComputedFinancials == null ? string.Empty :
+                        ((PracticeManagementCurrency)milestone.ComputedFinancials.Expenses).ToString(),
+                        lblExpenseAmount);
+            SetFooterLabelWithSeniority(milestone.ComputedFinancials == null || milestone.ComputedFinancials.Expenses == 0 ? "-" :
+                        (string.Format("{0:0}", (milestone.ComputedFinancials.ReimbursedExpenses * 100 / milestone.ComputedFinancials.Expenses))), lblReimbursedPrcnt);
+            SetFooterLabelWithSeniority(milestone.ComputedFinancials == null ? string.Empty :
+                        ((PracticeManagementCurrency)milestone.ComputedFinancials.ReimbursedExpenses).ToString(), lblReimbursedAmount);
+
         }
 
         private void SetBackgroundColorForMargin(int clientId, decimal targetMargin, bool? individualClientMarginColorInfoEnabled)
