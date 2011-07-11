@@ -53,6 +53,13 @@ namespace PraticeManagement.MilestoneService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestoneService/GetMilestoneDataById", ReplyAction="http://tempuri.org/IMilestoneService/GetMilestoneDataByIdResponse")]
         DataTransferObjects.Milestone GetMilestoneDataById(int milestoneId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestoneService/CheckIfExpensesExistsForMilestonePeriod", ReplyAction="http://tempuri.org/IMilestoneService/CheckIfExpensesExistsForMilestonePeriodRespo" +
+            "nse")]
+        bool CheckIfExpensesExistsForMilestonePeriod(int milestoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestoneService/CanMoveFutureMilestones", ReplyAction="http://tempuri.org/IMilestoneService/CanMoveFutureMilestonesResponse")]
+        bool CanMoveFutureMilestones(int milestoneId, int shiftDays);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestoneService/AddProjectExpense", ReplyAction="http://tempuri.org/IMilestoneService/AddProjectExpenseResponse")]
         int AddProjectExpense(DataTransferObjects.ProjectExpense entity);
         
@@ -88,7 +95,7 @@ namespace PraticeManagement.MilestoneService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class MilestoneServiceClient : System.ServiceModel.ClientBase<PraticeManagement.MilestoneService.IMilestoneService>, PraticeManagement.MilestoneService.IMilestoneService {
-        
+ 
         public MilestoneServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -151,6 +158,14 @@ namespace PraticeManagement.MilestoneService {
         
         public DataTransferObjects.Milestone GetMilestoneDataById(int milestoneId) {
             return base.Channel.GetMilestoneDataById(milestoneId);
+        }
+        
+        public bool CheckIfExpensesExistsForMilestonePeriod(int milestoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate) {
+            return base.Channel.CheckIfExpensesExistsForMilestonePeriod(milestoneId, startDate, endDate);
+        }
+        
+        public bool CanMoveFutureMilestones(int milestoneId, int shiftDays) {
+            return base.Channel.CanMoveFutureMilestones(milestoneId, shiftDays);
         }
         
         public int AddProjectExpense(DataTransferObjects.ProjectExpense entity) {
