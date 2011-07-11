@@ -604,6 +604,11 @@ namespace PracticeManagementService
             ProjectDAL.ProjectDelete(projectId, userName);//It will delete only Inactive and Experimental Projects as per #2702.
         }
 
+        public ProjectExpense[] GetProjectExpensesForProject(ProjectExpense entity)
+        {
+            return (new ProjectExpenseDal()).GetForProject(entity);
+        }
+
         #endregion
     }
 }
