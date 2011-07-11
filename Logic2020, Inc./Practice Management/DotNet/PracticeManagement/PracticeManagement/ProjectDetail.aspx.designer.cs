@@ -400,6 +400,24 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.LinkButton btnCommissions;
         
         /// <summary>
+        /// cellExpenses control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableCell cellExpenses;
+        
+        /// <summary>
+        /// btnExpenses control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnExpenses;
+        
+        /// <summary>
         /// cellPersons control.
         /// </summary>
         /// <remarks>
@@ -623,6 +641,24 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RadioButtonList rlstManagementCommission;
+        
+        /// <summary>
+        /// vwExpenses control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.View vwExpenses;
+        
+        /// <summary>
+        /// projectExpenses control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.ProjectExpenses.ProjectExpensesControl projectExpenses;
         
         /// <summary>
         /// vwPersons control.
