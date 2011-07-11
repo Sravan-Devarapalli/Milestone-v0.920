@@ -97,7 +97,7 @@
                 </tr>
                 <tr>
                     <td style="border:1px solid black;">
-                        <asp:Image ID="imgCurrentLogo" runat="server" ImageUrl="~/Controls/CompanyLogoImage.ashx" />
+                        <asp:Image ID="imgCurrentLogo" runat="server" style="padding:2px;" ImageUrl="~/Controls/CompanyLogoImage.ashx" />
                     </td>
                 </tr>
                 <tr>
