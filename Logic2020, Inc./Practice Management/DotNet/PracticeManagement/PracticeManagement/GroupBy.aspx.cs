@@ -646,7 +646,7 @@ namespace PraticeManagement
                 PraticeManagement.Controls.DataHelper.FillProjectOwnerList(cblProjectOwner,
                     Resources.Controls.AllPracticeMgrsText,
                     null,
-                    false,
+                    true,
                     person);
 
 
