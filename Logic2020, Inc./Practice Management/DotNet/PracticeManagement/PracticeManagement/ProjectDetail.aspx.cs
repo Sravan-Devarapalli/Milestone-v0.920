@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
+using System.Drawing;
+using System.IO;
 using System.ServiceModel;
+using System.Text;
+using System.Web;
 using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
+using PraticeManagement.AttachmentService;
 using PraticeManagement.ClientService;
 using PraticeManagement.Controls;
 using PraticeManagement.DefaultCommissionService;
 using PraticeManagement.ProjectService;
 using PraticeManagement.Utils;
 using BillingInfo = DataTransferObjects.BillingInfo;
-using System.Text;
-using System.IO;
-using System.Web;
-using System.Drawing;
-using PraticeManagement.AttachmentService;
-using System.ComponentModel;
 
 namespace PraticeManagement
 {
@@ -39,7 +39,7 @@ namespace PraticeManagement
         /// <summary>
         /// Gets or sets a project is currently dislplayed
         /// </summary>
-        private Project Project
+        public Project Project
         {
             get
             {
@@ -51,7 +51,7 @@ namespace PraticeManagement
             }
         }
 
-        private int? ProjectId
+        public int? ProjectId
         {
             get
             {
@@ -121,6 +121,7 @@ namespace PraticeManagement
             mlConfirmation.ClearMessage();
 
             btnUpload.Attributes["onclick"] = "return CanShowPrompt();";
+
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -128,6 +129,14 @@ namespace PraticeManagement
             if (ProjectId.HasValue)
             {
                 lnkProjectAttachment.Visible = false;
+            }
+            if (ProjectId.HasValue && Project != null && Project.Milestones != null && Project.Milestones.Count > 0)
+            {
+                cellExpenses.Visible = true;
+            }
+            else
+            {
+                cellExpenses.Visible = false;
             }
         }
 
@@ -232,7 +241,7 @@ namespace PraticeManagement
             {
                 AttachmentService.AttachmentService svc = Utils.WCFClientUtility.GetAttachmentService();
 
-                svc.DeleteProjectAttachmentByProjectId(ProjectId.Value,User.Identity.Name);
+                svc.DeleteProjectAttachmentByProjectId(ProjectId.Value, User.Identity.Name);
 
                 Project.Attachment = null;
                 PopulateAttachmentControl(Project);
@@ -296,7 +305,7 @@ namespace PraticeManagement
                 {
                     AttachmentService.ProjectAttachment attachment = PopulateProjectAttachment();
                     AttachmentService.AttachmentService svc = Utils.WCFClientUtility.GetAttachmentService();
-                    svc.SaveProjectAttachment(attachment, ProjectId.Value , User.Identity.Name);
+                    svc.SaveProjectAttachment(attachment, ProjectId.Value, User.Identity.Name);
                 }
                 else
                 {
@@ -577,7 +586,7 @@ namespace PraticeManagement
 
                     if (fuProjectAttachment.PostedFile.ContentLength > size)
                     {
-                        int kbSize =(int) size / 1024;
+                        int kbSize = (int)size / 1024;
                         cvalidatorProjectAttachment.ErrorMessage = "File Must be less than " + kbSize + " Kb.";
                         cvalidatorProjectAttachment.ToolTip = "File Must be less than " + kbSize + " Kb.";
                         args.IsValid = false;
@@ -621,7 +630,10 @@ namespace PraticeManagement
             {
                 int? id = SaveData();
                 if (id.HasValue)
+                {
                     this.ProjectId = id;
+                    projectExpenses.BindExpenses();
+                }
                 result = true;
             }
 
@@ -689,7 +701,7 @@ namespace PraticeManagement
             if (AttachmentForNewProject != null && result != -1)
             {
                 AttachmentService.AttachmentService svc = Utils.WCFClientUtility.GetAttachmentService();
-                svc.SaveProjectAttachment(AttachmentForNewProject, result,User.Identity.Name);
+                svc.SaveProjectAttachment(AttachmentForNewProject, result, User.Identity.Name);
                 ViewState.Remove(ProjectAttachmentKey);
                 lnkProjectAttachment.Visible = false;
                 lnkProjectAttachment.Text = string.Empty;
@@ -1104,10 +1116,15 @@ namespace PraticeManagement
             int viewIndex = int.Parse((string)e.CommandArgument);
             SelectView((Control)sender, viewIndex, false);
 
-            if (viewIndex == 5) //History
+            if (viewIndex == 6) //History
             {
                 activityLog.Update();
             }
+            else if (viewIndex == 0 && ProjectId.HasValue)
+            {
+                financials.Project = GetCurrentProject(ProjectId.Value);
+            }
+
         }
 
         private void SelectView(Control sender, int viewIndex, bool selectOnly)
@@ -1210,7 +1227,7 @@ namespace PraticeManagement
                     break;
             }
         }
-      
+
         #endregion
     }
 }
