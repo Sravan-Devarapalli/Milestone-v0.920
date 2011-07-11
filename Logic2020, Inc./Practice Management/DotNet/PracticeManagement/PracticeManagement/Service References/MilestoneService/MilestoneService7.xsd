@@ -217,6 +217,7 @@
       <xs:element minOccurs="0" name="HireDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="IsDefaultManager" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsWelcomeEmailSent" type="xs:boolean" />
       <xs:element minOccurs="0" name="LastLogin" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LockedOut" type="xs:boolean" />
@@ -347,6 +348,8 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="AttachmentData" nillable="true" type="xs:base64Binary" />
       <xs:element minOccurs="0" name="AttachmentFileName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AttachmentSize" type="xs:int" />
+      <xs:element minOccurs="0" name="UploadedDate" nillable="true" type="xs:dateTime" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectAttachment" nillable="true" type="tns:ProjectAttachment" />
@@ -377,7 +380,7 @@
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="Inactive" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsMarginColorInfoEnabled" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsMarginColorInfoEnabled" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
@@ -618,10 +621,13 @@
   <xs:complexType name="ProjectExpense">
     <xs:sequence>
       <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="EndDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="Milestone" nillable="true" type="tns:Milestone" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProjectId" type="xs:int" />
       <xs:element minOccurs="0" name="Reimbursement" type="xs:decimal" />
+      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectExpense" nillable="true" type="tns:ProjectExpense" />
