@@ -29,13 +29,12 @@ namespace PraticeManagement.Controls.Projects
 
         public Project Project { get; set; }
 
-        protected void Page_Load(object sender, EventArgs e)
+        protected void Page_PreRender(object sender, EventArgs e)
         {
-            if (!IsPostBack)
-            {
-                InitSeniorityAnalyzers();
-                DisplayInterestValues(Project);
-            }
+
+            InitSeniorityAnalyzers();
+            DisplayInterestValues(Project);
+
         }
 
         private void InitSeniorityAnalyzers()
@@ -67,12 +66,21 @@ namespace PraticeManagement.Controls.Projects
                 var ht = Resources.Controls.HiddenCellText;
 
                 var nfi = new NumberFormatInfo { CurrencyDecimalDigits = 0, CurrencySymbol = "$" };
-
-                lblEstimatedRevenue.Text = String.Format(nfi, "{0:c}", Financials.Revenue.Value);
+                if (Financials.Revenue.Value >= 0)
+                {
+                    lblEstimatedRevenue.Text = String.Format(nfi, "{0:c}", Financials.Revenue.Value);
+                }
+                else
+                {
+                    lblEstimatedRevenue.Text = Financials.Revenue.ToString();
+                }
                 lblDiscount.Text = String.Format(nfi, "{0}", project.Discount);
-                lblDiscountAmount.Text =
-                    String.Format(nfi, "{0:c}", (Financials.Revenue.Value - Financials.RevenueNet.Value));
-                lblRevenueNet.Text = String.Format(nfi, "{0:c}", Financials.RevenueNet.Value);
+                var discountAmt = (Financials.Revenue.Value - Financials.RevenueNet.Value);
+                lblDiscountAmount.Text = discountAmt>=0?
+                    String.Format(nfi, "{0:c}", discountAmt) : ((PracticeManagementCurrency)discountAmt).ToString();
+                lblRevenueNet.Text = Financials.RevenueNet.Value>=0?
+                    (String.Format(nfi, "{0:c}", Financials.RevenueNet.Value)):
+                    Financials.RevenueNet.ToString();
                 lblEstimatedCogs.Text = hide ? ht : String.Format(nfi, "{0:c}", Financials.Cogs.Value);
                 lblExpenses.Text = hide ? ht : String.Format(nfi, "{0:c}", Financials.Expenses);
                 lblReimbursedExpenses.Text = hide ? ht : String.Format(nfi, "{0:c}", Financials.ReimbursedExpenses);
@@ -90,7 +98,9 @@ namespace PraticeManagement.Controls.Projects
                 }
 
                 lblSalesCommission.Text =
-                    hide ? ht : String.Format(nfi, "{0:c}", Financials.SalesCommission.Value);
+                    hide ? ht : 
+                    (Financials.SalesCommission.Value>=0?
+                    String.Format(nfi, "{0:c}", Financials.SalesCommission.Value) : Financials.SalesCommission.ToString());
                 lblEstimatedMargin.Text =
                     hide ? ht : String.Format(nfi, "{0:c}", Financials.MarginNet.Value);
                 lblEstimatedMargin.CssClass =
