@@ -1,6 +1,7 @@
 ﻿using System;
 using DataTransferObjects;
 using PraticeManagement.MilestoneService;
+using PraticeManagement.ProjectService;
 
 namespace PraticeManagement.Controls.ProjectExpenses
 {
@@ -54,23 +55,39 @@ namespace PraticeManagement.Controls.ProjectExpenses
         /// <summary>
         /// 	Update entity in the database
         /// </summary>
+        public static ProjectExpense[] ProjectExpensesForProject(int projectId)
+        {
+            var projectExpense = new ProjectExpense { ProjectId = projectId };
+
+            var expensesForMilestone =
+                ServiceCallers.Invoke<ProjectServiceClient, ProjectExpense[]>(
+                    client => client.GetProjectExpensesForProject(projectExpense));
+
+            // Add fake row to the datatable so we can still see the footer and add new rows
+            //  We know that this row is fake because Id will not have value
+            if (expensesForMilestone.Length == 0)
+                expensesForMilestone = new[] { projectExpense };
+
+            return expensesForMilestone;
+        }
+
         public static ProjectExpense[] ProjectExpensesForMilestone(int milestoneId)
         {
-            var projectExpense = new ProjectExpense {Milestone = new Milestone{Id = milestoneId}};
+            var projectExpense = new ProjectExpense { Milestone = new Milestone { Id = milestoneId } };
 
-            var expensesForMilestone = 
+            var expensesForMilestone =
                 ServiceCallers.Invoke<MilestoneServiceClient, ProjectExpense[]>(
                     client => client.GetProjectExpensesForMilestone(projectExpense));
 
             // Add fake row to the datatable so we can still see the footer and add new rows
             //  We know that this row is fake because Id will not have value
             if (expensesForMilestone.Length == 0)
-                expensesForMilestone = new[] {projectExpense};
+                expensesForMilestone = new[] { projectExpense };
 
             return expensesForMilestone;
         }
 
-        public static void AddProjectExpense(string name, string amount, string reimb, string milestoneId)
+        public static void AddProjectExpense(string name, string amount, string reimb, string projectId, DateTime startDate, DateTime endDate)
         {
             AddProjectExpense(
                     new ProjectExpense
@@ -78,10 +95,9 @@ namespace PraticeManagement.Controls.ProjectExpenses
                             Name = name,
                             Amount = Convert.ToDecimal(amount),
                             Reimbursement = Convert.ToDecimal(reimb),
-                            Milestone = new Milestone
-                                            {
-                                                Id = Convert.ToInt32(milestoneId)
-                                            }
+                            StartDate =  startDate,
+                            EndDate =  endDate,
+                            ProjectId = Convert.ToInt32(projectId)
                         }
                 );
         }
