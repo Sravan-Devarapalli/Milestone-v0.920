@@ -172,6 +172,11 @@
                                             ToolTip="The Project Start has an incorrect format. It must be 'MM/dd/yyyy'."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             Operator="DataTypeCheck" Type="Date" ValidationGroup="Milestone"></asp:CompareValidator>
+                                        <asp:CustomValidator ID="cstCheckStartDateForExpensesExistance" runat="server" ErrorMessage="From Date cannot be changed because Project has Expenses earlier than selected From Date."
+                                            ToolTip="From Date cannot be changed because Project has Expenses earlier than selected From Date."
+                                            ValidationGroup="Milestone" Text="*" OnServerValidate="cstCheckStartDateForExpensesExistance_OnServerValidate"
+                                            Display="Dynamic">
+                                        </asp:CustomValidator>
                                     </td>
                                     <td>
                                         &nbsp;to&nbsp;
@@ -193,6 +198,11 @@
                                             ToolTip="The Project To has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
                                             EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
                                             Type="Date" ValidationGroup="Milestone"></asp:CompareValidator>
+                                        <asp:CustomValidator ID="cstCheckEndDateForExpensesExistance" runat="server" ErrorMessage="To Date cannot be changed because Project has Expenses beyond selected To Date."
+                                            ToolTip="To Date cannot be changed because Project has Expenses beyond selected To Date."
+                                            ValidationGroup="Milestone" Text="*" OnServerValidate="cstCheckEndDateForExpensesExistance_OnServerValidate"
+                                            Display="Dynamic">
+                                        </asp:CustomValidator>
                                     </td>
                                 </tr>
                             </table>
@@ -528,7 +538,33 @@
                 </asp:View>
                 <asp:View ID="vwExpenses" runat="server">
                     <asp:Panel ID="pnlExpenses" runat="server" CssClass="tab-pane">
-                        <uc2:ProjectExpenses runat="server" ID="projectExpenses" />
+                        <table class="CompPerfTable" style="width: 50%">
+                            <tr>
+                                <th>
+                                    <div class="ie-bg" style="padding: 0px 0px 0px 2px;">
+                                        Expense, $</div>
+                                </th>
+                                <th>
+                                    <div class="ie-bg" style="padding: 0px 0px 0px 2px;">
+                                        Reimbursed, %</div>
+                                </th>
+                                <th>
+                                    <div class="ie-bg" style="padding: 0px 0px 0px 2px;">
+                                        Reimbursed, $</div>
+                                </th>
+                            </tr>
+                            <tr style="background-color: White;">
+                                <td>
+                                    <asp:Label ID="lblExpenseAmount" runat="server"></asp:Label>
+                                </td>
+                                <td>
+                                    <asp:Label ID="lblReimbursedPrcnt" runat="server"></asp:Label>
+                                </td>
+                                <td>
+                                    <asp:Label ID="lblReimbursedAmount" runat="server"></asp:Label>
+                                </td>
+                            </tr>
+                        </table>
                     </asp:Panel>
                 </asp:View>
                 <asp:View ID="vwDaily" runat="server">
@@ -675,25 +711,25 @@
                                 document.getElementById('<%= btnSave.ClientID %>').disabled = true;
                             }
                         </script>
-                        <ajaxtoolkit:animationextender id="aeBtnSave" runat="server" targetcontrolid="btnSave">
-                            <animations>
+                        <ajaxToolkit:AnimationExtender ID="aeBtnSave" runat="server" TargetControlID="btnSave">
+                            <Animations>
 					            <OnClick>
 					                <ScriptAction Script="disableSaveButton();" />
 					            </OnClick>
-                            </animations>
-                        </ajaxtoolkit:animationextender>
+                            </Animations>
+                        </ajaxToolkit:AnimationExtender>
                     </td>
                 </tr>
             </table>
         </ContentTemplate>
     </asp:UpdatePanel>
-    <ajaxcontroltoolkit:updatepanelanimationextender id="upnlBody_UpdatePanelAnimationExtender"
-        runat="server" enabled="True" targetcontrolid="upnlBody">
-        <animations>
+    <AjaxControlToolkit:UpdatePanelAnimationExtender ID="upnlBody_UpdatePanelAnimationExtender"
+        runat="server" Enabled="True" TargetControlID="upnlBody">
+        <Animations>
 			<OnUpdating>
 				<EnableAction AnimationTarget="btnAddPerson" Enabled="false" />
 			</OnUpdating>
-        </animations>
-    </ajaxcontroltoolkit:updatepanelanimationextender>
+        </Animations>
+    </AjaxControlToolkit:UpdatePanelAnimationExtender>
 </asp:Content>
 
