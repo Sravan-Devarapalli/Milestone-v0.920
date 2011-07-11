@@ -18,7 +18,7 @@
                 Reimbursed Expenses, $
             </td>
             <td align="right">
-                <asp:Label ID="lblReimbursedExpenses" runat="server" Font-Bold="true"></asp:Label>
+                <asp:Label ID="lblReimbursedExpenses" runat="server" Font-Bold="true">Unavailable</asp:Label>
             </td>
             <td class="NoBorder">
                 &nbsp;
@@ -62,7 +62,7 @@
                 Expenses, $
             </td>
             <td align="right">
-                <asp:Label ID="lblExpenses" runat="server" Font-Bold="true" />
+                <asp:Label ID="lblExpenses" runat="server" Font-Bold="true" >Unavailable</asp:Label>
             </td>
             <td class="NoBorder">
                 &nbsp;
