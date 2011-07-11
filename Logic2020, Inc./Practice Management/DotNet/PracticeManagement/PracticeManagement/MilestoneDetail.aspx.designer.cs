@@ -166,6 +166,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CompareValidator compPeriodFrom;
         
         /// <summary>
+        /// cstCheckStartDateForExpensesExistance control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cstCheckStartDateForExpensesExistance;
+        
+        /// <summary>
         /// dtpPeriodTo control.
         /// </summary>
         /// <remarks>
@@ -200,6 +209,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CompareValidator compPeriodTo;
+        
+        /// <summary>
+        /// cstCheckEndDateForExpensesExistance control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cstCheckEndDateForExpensesExistance;
         
         /// <summary>
         /// rbtnHourlyRevenue control.
@@ -634,13 +652,31 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Panel pnlExpenses;
         
         /// <summary>
-        /// projectExpenses control.
+        /// lblExpenseAmount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.ProjectExpenses.ProjectExpensesControl projectExpenses;
+        protected global::System.Web.UI.WebControls.Label lblExpenseAmount;
+        
+        /// <summary>
+        /// lblReimbursedPrcnt control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblReimbursedPrcnt;
+        
+        /// <summary>
+        /// lblReimbursedAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblReimbursedAmount;
         
         /// <summary>
         /// vwDaily control.
