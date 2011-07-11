@@ -170,6 +170,37 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="CheckIfExpensesExistsForMilestonePeriod">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="milestoneId" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" nillable="true" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" nillable="true" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CheckIfExpensesExistsForMilestonePeriodResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CheckIfExpensesExistsForMilestonePeriodResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CanMoveFutureMilestones">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="milestoneId" type="xs:int" />
+        <xs:element minOccurs="0" name="shiftDays" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CanMoveFutureMilestonesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CanMoveFutureMilestonesResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="AddProjectExpense">
     <xs:complexType>
       <xs:sequence>
