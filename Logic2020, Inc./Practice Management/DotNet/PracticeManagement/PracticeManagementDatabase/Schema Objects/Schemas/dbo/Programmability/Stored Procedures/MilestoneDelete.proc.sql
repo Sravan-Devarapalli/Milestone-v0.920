@@ -19,12 +19,12 @@ AS
 		RAISERROR (@ErrorMessage, 16, 1)
 	END
 	ELSE
-	IF EXISTS (SELECT TOP 1 1 FROM dbo.v_ProjectExpenses AS pe WHERE pe.MilestoneId = @MilestoneId)
-	BEGIN
-		SELECT @ErrorMessage = [dbo].[GetErrorMessage](70018)
-		RAISERROR (@ErrorMessage, 16, 1)
-	END
-	ELSE
+	--IF EXISTS (SELECT TOP 1 1 FROM dbo.v_ProjectExpenses AS pe WHERE pe.MilestoneId = @MilestoneId)
+	--BEGIN
+	--	SELECT @ErrorMessage = [dbo].[GetErrorMessage](70018)
+	--	RAISERROR (@ErrorMessage, 16, 1)
+	--END
+	--ELSE
 	BEGIN
 
 		-- Start logging session
