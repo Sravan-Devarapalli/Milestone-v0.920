@@ -40,7 +40,8 @@ namespace DataAccess
         protected override SqlParameter InitAddCommand(ProjectExpense entity, SqlCommand command)
         {
             InitPropertiesNoId(command, entity);
-            command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, entity.Milestone.Id.Value);
+            command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, entity.ProjectId);
+           
 
             var outParam =
                 new SqlParameter(Constants.ParameterNames.ExpenseId, SqlDbType.Int)
@@ -81,6 +82,8 @@ namespace DataAccess
             command.Parameters.AddWithValue(Constants.ParameterNames.ExpenseName, entity.Name);
             command.Parameters.AddWithValue(Constants.ParameterNames.ExpenseAmount, entity.Amount);
             command.Parameters.AddWithValue(Constants.ParameterNames.ExpenseReimbursement, entity.Reimbursement);
+            command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, entity.StartDate);
+            command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, entity.EndDate);
         }
 
         private static void InitSingleId(SqlCommand command, IIdNameObject entity)
@@ -100,9 +103,22 @@ namespace DataAccess
                         GetForMilestoneInitializer);
         }
 
+        public ProjectExpense[] GetForProject(ProjectExpense projectExpense)
+        {
+            return ExecuteReader(
+                        projectExpense,
+                        Constants.ProcedureNames.ProjectExpenses.GetAllForProject,
+                        GetForProjectInitializer);
+        }
+
         private static void GetForMilestoneInitializer(ProjectExpense projectExpense, SqlCommand sqlCommand)
         {
             sqlCommand.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, projectExpense.Milestone.Id);
+        }
+
+        private static void GetForProjectInitializer(ProjectExpense projectExpense, SqlCommand sqlCommand)
+        {
+            sqlCommand.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, projectExpense.ProjectId);
         }
 
         #endregion
