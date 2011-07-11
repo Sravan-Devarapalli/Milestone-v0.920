@@ -23,6 +23,7 @@ namespace DataAccess
         private const string DescriptionParam = "@Description";
         private const string AmountParam = "@Amount";
         private const string StartDateParam = "@StartDate";
+        private const string EndDateParam = "@EndDate";
         private const string ProjectedDeliveryDateParam = "@ProjectedDeliveryDate";
         private const string ActualDeliveryDateParam = "@ActualDeliveryDate";
         private const string IsHourlyAmountParam = "@IsHourlyAmount";
@@ -53,6 +54,8 @@ namespace DataAccess
         private const string DefaultMileStoneInsertProcedure = "dbo.DefaultMilestoneSettingInsert";
         private const string DefaultMileStoneGetProcedure = "dbo.GetDefaultMilestoneSetting";
         public const string GetPersonMilestonesAfterTerminationDateProcedure = "dbo.GetPersonMilestonesAfterTerminationDate";
+        public const string CheckIfExpensesExistsForMilestonePeriodProcedure = "dbo.CheckIfExpensesExistsForMilestonePeriod";
+        public const string CanMoveFutureMilestonesProcedure = "dbo.CanMoveFutureMilestones";
 
         #endregion
 
@@ -174,8 +177,6 @@ namespace DataAccess
                 }
             }
         }
-
-
 
         public static List<Milestone> GetPersonMilestonesAfterTerminationDate(int personId, DateTime terminationDate)
         {
@@ -450,6 +451,41 @@ namespace DataAccess
                 {
                     throw new DataAccessException(ex);
                 }
+            }
+        }
+
+        public static bool CheckIfExpensesExistsForMilestonePeriod(int milestoneId, DateTime? startDate, DateTime? EndDate)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(CheckIfExpensesExistsForMilestonePeriodProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(MilestoneIdParam, milestoneId);
+                if (startDate.HasValue)
+                    command.Parameters.AddWithValue(StartDateParam, startDate.Value);
+                if (EndDate.HasValue)
+                    command.Parameters.AddWithValue(EndDateParam, EndDate.Value);
+
+                connection.Open();
+
+                return Boolean.Parse(command.ExecuteScalar().ToString());
+            }
+        }
+
+        public static bool CanMoveFutureMilestones(int milestoneId, int shiftDays)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(CanMoveFutureMilestonesProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(MilestoneIdParam, milestoneId);
+                command.Parameters.AddWithValue(ShiftDaysParam, shiftDays);
+                connection.Open();
+                return Boolean.Parse(command.ExecuteScalar().ToString());
             }
         }
 
