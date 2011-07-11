@@ -322,6 +322,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         void ProjectDelete(int projectId, string userName);
+
+        [OperationContract]
+        ProjectExpense[] GetProjectExpensesForProject(ProjectExpense entity);
     }
 }
 
