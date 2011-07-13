@@ -580,7 +580,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="3" style="white-space: nowrap; padding-left: 5px; padding-right: 5px;">
+                        <td  style="white-space: nowrap; padding-left: 10px; padding-right: 20px;">
                             <asp:FileUpload ID="fuProjectAttachment" onchange="EnableUploadButton();" BackColor="White"
                                 runat="server" Width="375px" Size="56" />
                             <asp:CustomValidator ID="cvProjectAttachment" runat="server" ControlToValidate="fuProjectAttachment"
@@ -594,12 +594,12 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="3" style="white-space: nowrap; padding-left: 5px; padding-right: 5px;">
+                        <td  style="white-space: nowrap; padding-left: 10px; padding-right: 20px;">
                             <asp:Label ID="lblAttachmentMessage" ForeColor="Gray" runat="server"></asp:Label>
                         </td>
                     </tr>
                     <tr>
-                        <td align="right" style="padding: 5px; white-space: nowrap;">
+                        <td align="right" style="padding: 10px;padding-right:20px; white-space: nowrap;">
                             <asp:Button ID="btnUpload" Enabled="false" ValidationGroup="ProjectAttachment" runat="server"
                                 Text="Upload" OnClick="btnUpload_Click" />
                             &nbsp;&nbsp;&nbsp;
