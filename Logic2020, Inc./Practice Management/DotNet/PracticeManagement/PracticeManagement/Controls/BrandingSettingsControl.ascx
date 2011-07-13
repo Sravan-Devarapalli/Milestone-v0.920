@@ -48,7 +48,7 @@
                     <td>
                     </td>
                     <td>
-                        <span style="color: Gray">* recomended logo size is 175 x 55 px</span>
+                        <span style="color: Gray">* recommended logo size is 175 x 55 px</span>
                     </td>
                 </tr>
                 <tr>
