@@ -48,7 +48,14 @@
                     <td>
                     </td>
                     <td>
-                        <span style="color: Gray">* recomended logo size is ~ 175 x 55 px</span>
+                        <span style="color: Gray">* recomended logo size is 175 x 55 px</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    </td>
+                    <td style="padding-top:4px;">
+                        <span style="color: Gray;">* maximum logo size is 500 x 60 px</span>
                     </td>
                 </tr>
                 <tr>
@@ -69,7 +76,7 @@
                             Text="*" ErrorMessage="Error occured. Can't save the settings: Invalid File Format."></asp:CustomValidator>
                         <asp:CustomValidator ID="cvalidatorImagePath" runat="server" ControlToValidate="fuImagePath"
                             Display="None" OnServerValidate="cvalidatorImagePath_OnServerValidate" ValidationGroup="BrandingLogo"
-                            Text="*" ErrorMessage="Error occured. Can't save the settings: Logo size cannot be more than 500*60 px."></asp:CustomValidator>
+                            Text="*" ErrorMessage="Error occured. Can't save the settings: Logo size cannot be more than 500 x 60 px."></asp:CustomValidator>
                         <uc:MessageLabel ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green"
                             WarningColor="Orange" />
                         <asp:ValidationSummary ID="valsumBrandingLogo" ValidationGroup="BrandingLogo" runat="server" />
