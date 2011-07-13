@@ -10,3 +10,4 @@ AS
 			[Reimbursement] ExpenseReimbursement
 	FROM dbo.ProjectExpense
 	WHERE ProjectId = @ProjectId
+	ORDER BY StartDate
