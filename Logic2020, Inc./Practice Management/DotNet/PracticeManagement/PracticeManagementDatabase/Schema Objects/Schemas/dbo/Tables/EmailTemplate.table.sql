@@ -4,7 +4,8 @@
     [EmailTemplateTo]    NVARCHAR (250),
     [EmailTemplateCc]    NVARCHAR (250),
     [EmailTemplateSubject] NVARCHAR (255) NOT NULL,
-    [EmailTemplateBody]    NVARCHAR (MAX) NOT NULL
+    [EmailTemplateBody]    NVARCHAR (MAX) NOT NULL,
+	Name				   NVARCHAR (50)  NULL
 );
 
 
