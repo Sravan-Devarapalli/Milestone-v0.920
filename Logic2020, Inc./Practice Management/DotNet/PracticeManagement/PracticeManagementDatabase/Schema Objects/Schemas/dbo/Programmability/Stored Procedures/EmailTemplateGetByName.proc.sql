@@ -1,13 +1,13 @@
 ﻿CREATE PROCEDURE [dbo].[EmailTemplateGetByName]
 (
-	@EmailTemplateName	nvarchar(50)
+	@EmailTemplateName	NVARCHAR(50)
 )
 AS
 BEGIN
 	SET NOCOUNT ON;
-	DECLARE @EmailTemplateNameLocal nvarchar(50)
+	DECLARE @EmailTemplateNameLocal NVARCHAR(50)
 	SELECT @EmailTemplateNameLocal = @EmailTemplateName
-	Select 
+	SELECT 
 			et.EmailTemplateId
 			, et.EmailTemplateName
 			, et.EmailTemplateTo
@@ -15,6 +15,6 @@ BEGIN
 			, et.EmailTemplateSubject
 			, et.EmailTemplateBody
 		FROM EmailTemplate AS et
-		WHERE et.EmailTemplateName = @EmailTemplateNameLocal
+		WHERE ISNULL(et.Name,et.EmailTemplateName) = @EmailTemplateNameLocal
 END
 
