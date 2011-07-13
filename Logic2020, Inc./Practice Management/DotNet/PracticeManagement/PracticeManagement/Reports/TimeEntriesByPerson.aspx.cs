@@ -326,17 +326,16 @@ namespace PraticeManagement.Sandbox
             var currentPerson = DataHelper.CurrentPerson;
             var personRoles = Roles.GetRolesForUser(currentPerson.Alias);
             string statusIdsList = GetStatusIds();
-            int? personId = null;
-            if (!personRoles.Any(s => s == "Administrator"))
-            {
-                personId = currentPerson.Id;
-                if (enableDisableChevron)
-                {
-                    this.cpe.Enabled = false;
-                    pnlFilters.Visible = false;
-                }
-
-            }
+            //int? personId = null;
+            //if (!personRoles.Any(s => s == "Administrator"))
+            //{
+            //    personId = currentPerson.Id;
+            //    if (enableDisableChevron)
+            //    {
+            //        this.cpe.Enabled = false;
+            //        pnlFilters.Visible = false;
+            //    }
+            //}
             DataHelper.FillTimeEntryPersonListBetweenStartAndEndDates(this.cblPersons, Resources.Controls.AllPersons, null, statusIdsList, null, diRange.FromDate, diRange.ToDate);
             AddAttributesToCheckBoxes(this.cblPersons);
         }
