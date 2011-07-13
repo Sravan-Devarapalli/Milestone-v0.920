@@ -337,7 +337,7 @@ namespace PraticeManagement.Sandbox
                 }
 
             }
-            DataHelper.FillTimeEntryPersonListBetweenStartAndEndDates(this.cblPersons, Resources.Controls.AllPersons, null, statusIdsList, personId, diRange.FromDate, diRange.ToDate);
+            DataHelper.FillTimeEntryPersonListBetweenStartAndEndDates(this.cblPersons, Resources.Controls.AllPersons, null, statusIdsList, null, diRange.FromDate, diRange.ToDate);
             AddAttributesToCheckBoxes(this.cblPersons);
         }
 
