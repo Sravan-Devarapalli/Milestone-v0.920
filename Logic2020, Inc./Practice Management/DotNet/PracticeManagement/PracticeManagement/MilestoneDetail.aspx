@@ -538,33 +538,79 @@
                 </asp:View>
                 <asp:View ID="vwExpenses" runat="server">
                     <asp:Panel ID="pnlExpenses" runat="server" CssClass="tab-pane">
-                        <table class="CompPerfTable" style="width: 50%">
-                            <tr>
-                                <th>
-                                    <div class="ie-bg" style="padding: 0px 0px 0px 2px;">
-                                        Expense, $</div>
-                                </th>
-                                <th>
-                                    <div class="ie-bg" style="padding: 0px 0px 0px 2px;">
-                                        Reimbursed, %</div>
-                                </th>
-                                <th>
-                                    <div class="ie-bg" style="padding: 0px 0px 0px 2px;">
-                                        Reimbursed, $</div>
-                                </th>
-                            </tr>
-                            <tr style="background-color: White;">
-                                <td>
-                                    <asp:Label ID="lblExpenseAmount" runat="server"></asp:Label>
-                                </td>
-                                <td>
-                                    <asp:Label ID="lblReimbursedPrcnt" runat="server"></asp:Label>
-                                </td>
-                                <td>
-                                    <asp:Label ID="lblReimbursedAmount" runat="server"></asp:Label>
-                                </td>
-                            </tr>
-                        </table>
+                        <div style="background-color: White;" runat="server" id="dvNoExpenses">
+                            <asp:Label ID="lblNoExpenses" runat="server" Text="No expenses are there for this Milestone period."></asp:Label>
+                        </div>
+                        <asp:GridView ID="gvMilestoneExpenses" runat="server" DataSourceID="odsMilestoneExpenses"
+                            EmptyDataText="No expenses are there for this Milestone." ShowFooter="True" AutoGenerateColumns="False"
+                            AlternatingRowStyle-BackColor="#e0e0e0" DataKeyNames="Id" OnRowDataBound="gvMilestoneExpenses_OnRowDataBound"
+                            FooterStyle-Font-Bold="true" FooterStyle-VerticalAlign="Top" CssClass="CompPerfTable WholeWidth"
+                            GridLines="None" BackColor="White" OnPreRender="gvMilestoneExpenses_OnPreRender">
+                            <AlternatingRowStyle BackColor="#F9FAFF" />
+                            <RowStyle BackColor="White" />
+                            <Columns>
+                                <asp:TemplateField HeaderText="Name">
+                                    <HeaderTemplate>
+                                        <div class="ie-bg">
+                                            Name
+                                        </div>
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <%# ((DataTransferObjects.ProjectExpense) Container.DataItem).Name %>
+                                    </ItemTemplate>
+                                    <FooterTemplate>
+                                        Total
+                                    </FooterTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField>
+                                    <HeaderTemplate>
+                                        <div class="ie-bg">
+                                            Expense, $
+                                        </div>
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <%# ((DataTransferObjects.PracticeManagementCurrency) ((DataTransferObjects.ProjectExpense) Container.DataItem).Amount).ToString() %>
+                                    </ItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:Label ID="lblTotalAmount" runat="server" Text="$0" />
+                                    </FooterTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Reimbursed, %">
+                                    <HeaderTemplate>
+                                        <div class="ie-bg">
+                                            Reimbursed, %
+                                        </div>
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <%# (string.Format("{0:0}",((DataTransferObjects.ProjectExpense) Container.DataItem).Reimbursement)) %>%
+                                    </ItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:Label ID="lblTotalReimbursed" runat="server" Text="0%" />
+                                    </FooterTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Reimbursed, $">
+                                    <HeaderTemplate>
+                                        <div class="ie-bg">
+                                            Reimbursed, $
+                                        </div>
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <%# ((DataTransferObjects.PracticeManagementCurrency) ((DataTransferObjects.ProjectExpense)Container.DataItem).ReimbursementAmount).ToString() %>
+                                    </ItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:Label ID="lblTotalReimbursementAmount" runat="server" Text="$0" />
+                                    </FooterTemplate>
+                                </asp:TemplateField>
+                            </Columns>
+                            <AlternatingRowStyle BackColor="#E0E0E0" />
+                        </asp:GridView>
+                        <asp:ObjectDataSource ID="odsMilestoneExpenses" runat="server" DataObjectTypeName="DataTransferObjects.ProjectExpense"
+                            SelectMethod="ProjectExpensesForMilestone" TypeName="PraticeManagement.Controls.ProjectExpenses.ProjectExpenseHelper"
+                            OnSelecting="odsMilestoneExpenses_OnSelecting">
+                            <SelectParameters>
+                                <asp:Parameter Name="milestoneId" Type="Int32" />
+                            </SelectParameters>
+                        </asp:ObjectDataSource>
                     </asp:Panel>
                 </asp:View>
                 <asp:View ID="vwDaily" runat="server">
