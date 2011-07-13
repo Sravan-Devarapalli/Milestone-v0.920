@@ -82,7 +82,8 @@
                                             <asp:CustomValidator ID="cvgvClientRange" runat="server" ToolTip="The End must be greater than or equals to Start."
                                                 Text="*" EnableClientScript="false" OnServerValidate="cvgvClientRange_OnServerValidate"
                                                 SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
-                                            <asp:CustomValidator ID="cvgvClientOverLapRange" runat="server" ErrorMessage="The specified Client goal threshold Percentage range overlaps with another Client goal threshold Percentage range." ToolTip="The specified Client goal threshold Percentage range overlaps with another Client goal threshold Percentage range."
+                                            <asp:CustomValidator ID="cvgvClientOverLapRange" runat="server" ErrorMessage="The specified Client goal threshold Percentage range overlaps with another Client goal threshold Percentage range."
+                                                ToolTip="The specified Client goal threshold Percentage range overlaps with another Client goal threshold Percentage range."
                                                 OnServerValidate="cvgvClientOverLapRange_OnServerValidate" Text="*" EnableClientScript="false"
                                                 SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
                                         </ItemTemplate>
@@ -205,7 +206,8 @@
                                             <asp:CustomValidator ID="cvgvPersonRange" runat="server" ToolTip="The End must be greater than or equals to Start."
                                                 Text="*" EnableClientScript="false" OnServerValidate="cvgvPersonRange_OnServerValidate"
                                                 SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
-                                            <asp:CustomValidator ID="cvgvPersonOverLapRange" runat="server" ErrorMessage="The specified Person goal threshold Percentage range overlaps with another Person goal threshold Percentage range." ToolTip="The specified Person goal threshold Percentage range overlaps with another Person goal threshold Percentage range."
+                                            <asp:CustomValidator ID="cvgvPersonOverLapRange" runat="server" ErrorMessage="The specified Person goal threshold Percentage range overlaps with another Person goal threshold Percentage range."
+                                                ToolTip="The specified Person goal threshold Percentage range overlaps with another Person goal threshold Percentage range."
                                                 OnServerValidate="cvgvPersonOverLapRange_OnServerValidate" Text="*" EnableClientScript="false"
                                                 SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
                                         </ItemTemplate>
@@ -242,6 +244,20 @@
                         <td style="width: 3%; padding-bottom: 10px;">
                         </td>
                         <td valign="top" style="width: 44%; padding-bottom: 10px;">
+                            <div style="background-color: White; padding: 10px;">
+                                <p>
+                                    Enabling this feature and configuring color-coded ranges will allow persons without
+                                    unrestricted access to the Margin Test page and its calculations a visual indication
+                                    of how acceptable a calculated margin is, based on the selected Bill Rate and Hours
+                                    per Week.
+                                    <br />
+                                    <br />
+                                </p>
+                                <p>
+                                    Margin goals must add up to at least 100%.<br />
+                                    <br />
+                                </p>
+                            </div>
                         </td>
                         <td style="width: 3%; padding-bottom: 10px;">
                         </td>
@@ -257,10 +273,10 @@
             ErrorMessage="Color must not be selected more than once." ToolTip="Color must not be selected more than once."
             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="None" ValidationGroup="Client" />
     </div>
-    <div class="buttons-block" style="margin-bottom: 10px;" >
+    <div class="buttons-block" style="margin-bottom: 10px;">
         <div>
             <asp:ValidationSummary ID="vsumClient" runat="server" ValidationGroup="Client" />
-             <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
+            <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
         </div>
         &nbsp;
         <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" CssClass="pm-button"
