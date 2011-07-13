@@ -27,6 +27,15 @@ namespace PraticeManagement
         private const string TotalHoursHeaderText = "Total Hours";
         private const int TotalRows = 10;
 
+        private decimal _totalAmount;
+        private decimal _totalReimbursed;
+        private decimal _totalReimbursementAmount;
+        private int _expensesCount;
+
+        private const string LblTotalamount = "lblTotalAmount";
+        private const string LblTotalreimbursement = "lblTotalReimbursed";
+        private const string LblTotalreimbursementamount = "lblTotalReimbursementAmount";
+
         #endregion
 
         #region Fields
@@ -710,6 +719,8 @@ namespace PraticeManagement
                     lblTotalRevenue.Text = Milestone.ComputedFinancials.Revenue.ToString();
                     lblTotalRevenueNet.Text = Milestone.ComputedFinancials.RevenueNet.ToString();
 
+                    lblClientDiscount.Text = Milestone.Project.Discount.ToString("##0.00");
+
                     lblClientDiscountAmount.Text =
                         (Milestone.ComputedFinancials.Revenue - Milestone.ComputedFinancials.RevenueNet).ToString();
 
@@ -832,8 +843,10 @@ namespace PraticeManagement
                 lblTotalRevenue.Text = Milestone.ComputedFinancials.Revenue.ToString();
                 lblTotalRevenueNet.Text = Milestone.ComputedFinancials.RevenueNet.ToString();
 
-                lblClientDiscountAmount.Text =
+                lblClientDiscountAmount.Text = 
                     (Milestone.ComputedFinancials.Revenue - Milestone.ComputedFinancials.RevenueNet).ToString();
+
+                lblClientDiscount.Text = Milestone.Project.Discount.ToString("##0.00");
 
                 // Sales commission
                 lblSalesCommissionPercentage.Text =
@@ -859,15 +872,6 @@ namespace PraticeManagement
                 milestone.ComputedFinancials == null ? string.Empty :
                         ((PracticeManagementCurrency)milestone.ComputedFinancials.ReimbursedExpenses).ToString(),
                 lblReimbursedExpenses);
-
-            SetFooterLabelWithSeniority(milestone.ComputedFinancials == null ? string.Empty :
-                        ((PracticeManagementCurrency)milestone.ComputedFinancials.Expenses).ToString(),
-                        lblExpenseAmount);
-            SetFooterLabelWithSeniority(milestone.ComputedFinancials == null || milestone.ComputedFinancials.Expenses == 0 ? "-" :
-                        (string.Format("{0:0}", (milestone.ComputedFinancials.ReimbursedExpenses * 100 / milestone.ComputedFinancials.Expenses))), lblReimbursedPrcnt);
-            SetFooterLabelWithSeniority(milestone.ComputedFinancials == null ? string.Empty :
-                        ((PracticeManagementCurrency)milestone.ComputedFinancials.ReimbursedExpenses).ToString(), lblReimbursedAmount);
-
         }
 
         private void SetBackgroundColorForMargin(int clientId, decimal targetMargin, bool? individualClientMarginColorInfoEnabled)
@@ -982,6 +986,59 @@ namespace PraticeManagement
             LoadActiveTabIndex(viewIndex);
         }
 
+        protected void odsMilestoneExpenses_OnSelecting(object sender, ObjectDataSourceSelectingEventArgs e)
+        {
+            if (MilestoneId.HasValue)
+            {
+                e.InputParameters["milestoneId"] = MilestoneId.Value;
+            }
+        }
+
+        protected void gvMilestoneExpenses_OnRowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            var row = e.Row;
+            switch (row.RowType)
+            {
+                case DataControlRowType.DataRow:
+                    var expense = row.DataItem as ProjectExpense;
+
+                    if (expense != null)
+                    {
+                        _totalAmount += expense.Amount;
+                        _totalReimbursed += expense.Reimbursement;
+                        _totalReimbursementAmount += expense.ReimbursementAmount;
+
+                        _expensesCount++;
+
+                        // Hide rows with null values.
+                        // These are special rows that are used not to show
+                        //      empty data grid message
+                        if (!expense.Id.HasValue)
+                            row.Visible = false;
+                    }
+
+                    break;
+
+                case DataControlRowType.Footer:
+                    SetRowValue(row, LblTotalamount, _totalAmount);
+                    SetRowValue(row, LblTotalreimbursement, string.Format("{0:0}%", (_totalReimbursed / _expensesCount)));
+                    SetRowValue(row, LblTotalreimbursementamount, _totalReimbursementAmount);
+
+                    break;
+            }
+        }
+        private static void SetRowValue(Control row, string ctrlName, decimal number)
+        {
+            SetRowValue(row, ctrlName, ((PracticeManagementCurrency)number).ToString());
+        }
+
+        private static void SetRowValue(Control row, string ctrlName, string text)
+        {
+            var totalAmountCtrl = row.FindControl(ctrlName) as Label;
+            if (totalAmountCtrl != null)
+                totalAmountCtrl.Text = text;
+        }
+
         private void LoadActiveTabIndex(int viewIndex)
         {
             switch (viewIndex)
@@ -992,6 +1049,20 @@ namespace PraticeManagement
                 case 4: mpaCumulative.ActivityPeriod = Milestone; break;
                 case 5: mpaTotal.ActivityPeriod = Milestone; break;
                 case 6: activityLog.Update(); break;
+            }
+        }
+
+        protected void gvMilestoneExpenses_OnPreRender(object sender,EventArgs  e)
+        {
+            if (gvMilestoneExpenses.Rows.Count == 1)
+            {
+                gvMilestoneExpenses.Visible = false;
+                dvNoExpenses.Visible = true;
+            }
+            else
+            {
+                gvMilestoneExpenses.Visible = true;
+                dvNoExpenses.Visible = false;
             }
         }
 
