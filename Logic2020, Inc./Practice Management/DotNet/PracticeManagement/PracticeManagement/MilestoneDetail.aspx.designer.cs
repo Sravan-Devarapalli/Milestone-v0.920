@@ -652,31 +652,40 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Panel pnlExpenses;
         
         /// <summary>
-        /// lblExpenseAmount control.
+        /// dvNoExpenses control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblExpenseAmount;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl dvNoExpenses;
         
         /// <summary>
-        /// lblReimbursedPrcnt control.
+        /// lblNoExpenses control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblReimbursedPrcnt;
+        protected global::System.Web.UI.WebControls.Label lblNoExpenses;
         
         /// <summary>
-        /// lblReimbursedAmount control.
+        /// gvMilestoneExpenses control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblReimbursedAmount;
+        protected global::System.Web.UI.WebControls.GridView gvMilestoneExpenses;
+        
+        /// <summary>
+        /// odsMilestoneExpenses control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ObjectDataSource odsMilestoneExpenses;
         
         /// <summary>
         /// vwDaily control.
