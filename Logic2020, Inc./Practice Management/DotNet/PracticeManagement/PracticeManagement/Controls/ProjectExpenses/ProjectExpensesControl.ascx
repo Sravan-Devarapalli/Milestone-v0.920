@@ -30,7 +30,7 @@
                     </ItemTemplate>
                     <EditItemTemplate>
                         <asp:TextBox ID="tbEditName" runat="server" Text='<%# Bind("Name") %>' ValidationGroup="ProjectExpensesEdit" />
-                        <asp:RequiredFieldValidator ID="valReqName" runat="server" ControlToValidate="tbEditName"
+                        <asp:RequiredFieldValidator ID="valReqName" runat="server" ControlToValidate="tbEditName" ValidationGroup="ProjectExpensesEdit"
                             ErrorMessage="Expense name is required" Text="*" />
                     </EditItemTemplate>
                     <FooterTemplate>
