@@ -26,6 +26,7 @@ namespace PraticeManagement
         private const int FirstMonthColumn = 5;
         private const string TotalHoursHeaderText = "Total Hours";
         private const int TotalRows = 10;
+        private const int MilestoneNameLength = 55;
 
         private decimal _totalAmount;
         private decimal _totalReimbursed;
@@ -350,6 +351,13 @@ namespace PraticeManagement
         }
 
         #region Validation
+
+        protected void cvMilestoneName_Validate(object sender, ServerValidateEventArgs e)
+        {
+            int length = txtMilestoneName.Text.Length;
+
+            e.IsValid = (length <= MilestoneNameLength);
+        }
 
         protected void Revenue_CheckedChanged(object sender, EventArgs e)
         {
