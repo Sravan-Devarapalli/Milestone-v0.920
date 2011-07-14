@@ -1,6 +1,14 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProjectMilestonesFinancials.ascx.cs"
     Inherits="PraticeManagement.Controls.Projects.ProjectMilestonesFinancials" %>
 <%@ Import Namespace="DataTransferObjects" %>
+<style>
+    .wrapMilestoneName
+    {
+        word-wrap: break-word !important; /* Internet Explorer 5.5+ */
+        word-break: break-all;
+        white-space: normal;
+    }
+</style>
 <asp:gridview id="gvRevenueMilestones" runat="server" autogeneratecolumns="false"
     allowsorting="true" emptydatatext="No milestones have been created for this project."
     onrowdatabound="gvRevenueMilestones_RowDataBound" cssclass="CompPerfTable WholeWidth"
@@ -8,6 +16,7 @@
     <alternatingrowstyle backcolor="#F9FAFF" />
     <columns>
         <asp:TemplateField HeaderText="Milestone Name">
+            <ItemStyle Width="35%" CssClass="wrapMilestoneName"/>
             <HeaderTemplate>
                 <div class="ie-bg">
                     <asp:LinkButton ID="lbMilestoneName" runat="server" Text="Milestone Name" CommandName="Sort" CommandArgument="MilestoneName"/>
@@ -15,11 +24,11 @@
             </HeaderTemplate>
             <ItemTemplate>
                 <asp:HyperLink ID="hlMilestoneName" runat="server" NavigateUrl='<%# GetMilestoneRedirectUrl(Eval("MilestoneId")) %>'
-                    Text='<%# HttpUtility.HtmlEncode((string)Eval("MilestoneName")) %>' onclick='<%# "javascript:checkDirty(\"" + MILESTONE_TARGET + "\", " + Eval("MilestoneId") + ")" %>' />
+                    Text='<%# GetWrappedTest(HttpUtility.HtmlEncode((string)Eval("MilestoneName"))) %>' onclick='<%# "javascript:checkDirty(\"" + MILESTONE_TARGET + "\", " + Eval("MilestoneId") + ")" %>' />
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderText="Start Date">
-            <ItemStyle HorizontalAlign="Center" />
+            <ItemStyle HorizontalAlign="Center" Width="9%" />
             <HeaderTemplate>
                 <div class="ie-bg">
                     <asp:LinkButton ID="lbStartDate" runat="server" Text="Start Date" CommandName="Sort" CommandArgument="StartDate" /></div>
@@ -29,7 +38,7 @@
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderText="End Date">
-            <ItemStyle HorizontalAlign="Center" />
+            <ItemStyle HorizontalAlign="Center" Width="9%" />
             <HeaderTemplate>
                 <div class="ie-bg">
                     <asp:LinkButton ID="lbEndDate" runat="server" Text="End Date" CommandName="Sort" CommandArgument="ProjectedDeliveryDate" /></div>
@@ -63,7 +72,7 @@
                 <asp:LinkButton ID="lbRevenue" runat="server" Text="Revenue" CommandName="Sort" CommandArgument="Revenue"/>
                     </div>
             </HeaderTemplate>
-            <ItemStyle HorizontalAlign="Center" />
+            <ItemStyle HorizontalAlign="Center" Width="7%" />
             <ItemTemplate>
                 <asp:Label ID="lblRevenue" runat="server" Text='<%# ((PracticeManagementCurrency) (decimal) Eval("Revenue")).ToString() %>' CssClass="Revenue"></asp:Label>
             </ItemTemplate>
@@ -74,7 +83,7 @@
                 <asp:LinkButton ID="lbGrossMargin" runat="server" Text="Gross Margin" CommandName="Sort" CommandArgument="GrossMargin" />
                     </div>
             </HeaderTemplate>
-            <ItemStyle HorizontalAlign="Center" />
+            <ItemStyle HorizontalAlign="Center" Width="11%" />
             <ItemTemplate>
                 <asp:Label ID="lblEstimatedMargin" runat="server" Text='<%# ((PracticeManagementCurrency) (decimal) Eval("GrossMargin")).ToString() %>' CssClass="Margin" />
             </ItemTemplate>
@@ -85,13 +94,13 @@
                 <asp:LinkButton ID="lbMargin" runat="server" Text="Margin %" CommandName="Sort" CommandArgument="TargetMargin" />
                     </div>
             </HeaderTemplate>
-            <ItemStyle HorizontalAlign="Center" />
+            <ItemStyle HorizontalAlign="Center" Width="7%" />
             <ItemTemplate>
                 <asp:Label ID="lblTargetMargin" runat="server" Text='<%# string.Format(PraticeManagement.Constants.Formatting.PercentageFormat, Eval("TargetMargin") ?? 0) %>'></asp:Label>
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderText="Billable">
-            <ItemStyle HorizontalAlign="Center" />
+            <ItemStyle HorizontalAlign="Center" Width="7%" />
             <HeaderTemplate>
                 <div class="ie-bg">
                 <asp:LinkButton ID="lbBillable" runat="server" Text="Billable" CommandName="Sort" CommandArgument="IsChargeable" />
@@ -102,7 +111,7 @@
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderText="Consultants can adjust">
-            <ItemStyle HorizontalAlign="Center" />
+            <ItemStyle HorizontalAlign="Center" Width="16%" />
             <HeaderTemplate>
                 <div class="ie-bg">
                 <asp:LinkButton ID="lbConsultantsCanAdjust" runat="server" Text="Consultants can adjust" CommandName="Sort" CommandArgument="ConsultantsCanAdjust" />
