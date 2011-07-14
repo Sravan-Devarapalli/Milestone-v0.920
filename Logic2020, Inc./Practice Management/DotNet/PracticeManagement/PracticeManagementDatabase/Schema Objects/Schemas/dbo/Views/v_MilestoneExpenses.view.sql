@@ -19,5 +19,5 @@ FROM CTEMileStonesPerDay CTE
 JOIN dbo.ProjectExpense as pexp 
 ON CTE.ProjectId = pexp.ProjectId AND CTE.Date BETWEEN pexp.StartDate AND pexp.EndDate
 JOIN dbo.Milestone M ON M.ProjectId = pexp.ProjectId AND CTE.Date BETWEEN M.StartDate AND M.ProjectedDeliveryDate
-GROUP BY M.MilestoneId,M.ProjectId,M.StartDate,M.ProjectedDeliveryDate 
+GROUP BY M.MilestoneId,M.ProjectId
  
