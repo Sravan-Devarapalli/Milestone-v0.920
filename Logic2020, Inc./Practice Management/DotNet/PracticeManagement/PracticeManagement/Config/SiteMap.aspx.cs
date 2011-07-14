@@ -26,10 +26,7 @@ namespace PraticeManagement.Config
                 item.NavigateUrl = string.Empty;
             }
 
-            if (item.ToolTip.ToLower() == "show url")
-            {
-                item.ToolTip = item.Text;
-            }
+            item.ToolTip = item.Text;
         }
     }
 }
