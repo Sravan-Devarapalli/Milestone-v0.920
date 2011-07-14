@@ -538,14 +538,11 @@
                 </asp:View>
                 <asp:View ID="vwExpenses" runat="server">
                     <asp:Panel ID="pnlExpenses" runat="server" CssClass="tab-pane">
-                        <div style="background-color: White;" runat="server" id="dvNoExpenses">
-                            <asp:Label ID="lblNoExpenses" runat="server" Text="No expenses are there for this Milestone period."></asp:Label>
-                        </div>
                         <asp:GridView ID="gvMilestoneExpenses" runat="server" DataSourceID="odsMilestoneExpenses"
-                            EmptyDataText="No expenses are there for this Milestone." ShowFooter="True" AutoGenerateColumns="False"
+                            EmptyDataText="No expenses are there for this Milestone period." ShowFooter="True" AutoGenerateColumns="False"
                             AlternatingRowStyle-BackColor="#e0e0e0" DataKeyNames="Id" OnRowDataBound="gvMilestoneExpenses_OnRowDataBound"
                             FooterStyle-Font-Bold="true" FooterStyle-VerticalAlign="Top" CssClass="CompPerfTable WholeWidth"
-                            GridLines="None" BackColor="White" OnPreRender="gvMilestoneExpenses_OnPreRender">
+                            GridLines="None" BackColor="White">
                             <AlternatingRowStyle BackColor="#F9FAFF" />
                             <RowStyle BackColor="White" />
                             <Columns>
