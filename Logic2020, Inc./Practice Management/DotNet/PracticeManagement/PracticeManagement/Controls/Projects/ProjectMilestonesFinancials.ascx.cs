@@ -29,6 +29,8 @@ namespace PraticeManagement.Controls.Projects
         private const string ViewSortDirection = "SortDirection";
 
         private const string CssArrowClass = "arrow";
+        
+        private const string WordBreak = "<wbr />";
 
         #endregion
 
@@ -163,6 +165,15 @@ namespace PraticeManagement.Controls.Projects
                 PreviousSortExpression = newExpression;
                 PreviousSortDirection = SortDirection.Ascending;
             }
+        }
+
+        public string GetWrappedTest(string text)
+        {
+            if (text.Length > 30)
+            {
+                text = text.Insert(30, WordBreak);
+            }
+            return text;
         }
     }
 }
