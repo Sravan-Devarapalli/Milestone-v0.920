@@ -1052,20 +1052,6 @@ namespace PraticeManagement
             }
         }
 
-        protected void gvMilestoneExpenses_OnPreRender(object sender,EventArgs  e)
-        {
-            if (gvMilestoneExpenses.Rows.Count == 1)
-            {
-                gvMilestoneExpenses.Visible = false;
-                dvNoExpenses.Visible = true;
-            }
-            else
-            {
-                gvMilestoneExpenses.Visible = true;
-                dvNoExpenses.Visible = false;
-            }
-        }
-
         private void SelectView(Control sender, int viewIndex, bool selectOnly)
         {
             mvMilestoneDetailTab.ActiveViewIndex = viewIndex;
