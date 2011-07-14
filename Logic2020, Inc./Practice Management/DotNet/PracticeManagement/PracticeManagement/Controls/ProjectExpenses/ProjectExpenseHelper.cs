@@ -81,8 +81,8 @@ namespace PraticeManagement.Controls.ProjectExpenses
 
             // Add fake row to the datatable so we can still see the footer and add new rows
             //  We know that this row is fake because Id will not have value
-            if (expensesForMilestone.Length == 0)
-                expensesForMilestone = new[] { projectExpense };
+            //if (expensesForMilestone.Length == 0)
+            //    expensesForMilestone = new[] { projectExpense };
 
             return expensesForMilestone;
         }
