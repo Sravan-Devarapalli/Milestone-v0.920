@@ -18,7 +18,7 @@ namespace PraticeManagement.Controls
             DataHelper.FillProjectOwnerList(
                 msddPracticeManagers,
                 Resources.Controls.AllPracticeMgrsText,
-                null, false);
+                null, true);
 
             DataHelper.FillPracticeList(
                 msddPractices, Resources.Controls.AllPracticesText);
