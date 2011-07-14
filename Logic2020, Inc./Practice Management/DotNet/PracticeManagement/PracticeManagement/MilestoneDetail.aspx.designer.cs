@@ -139,6 +139,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqMilestoneName;
         
         /// <summary>
+        /// cvMilestoneName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvMilestoneName;
+        
+        /// <summary>
         /// dtpPeriodFrom control.
         /// </summary>
         /// <remarks>
@@ -650,24 +659,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlExpenses;
-        
-        /// <summary>
-        /// dvNoExpenses control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl dvNoExpenses;
-        
-        /// <summary>
-        /// lblNoExpenses control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNoExpenses;
         
         /// <summary>
         /// gvMilestoneExpenses control.
