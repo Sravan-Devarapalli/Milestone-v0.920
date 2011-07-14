@@ -20,6 +20,10 @@ BEGIN
 	BEGIN
 		RAISERROR ('This project cannot be deleted, because it is set as Default Milestone Project',16,1)
 	END
+	ELSE IF EXISTS (SELECT 1 FROM dbo.ProjectExpense WHERE ProjectId = @ProjectID)
+	BEGIN
+		RAISERROR ('This project cannot be deleted, because there are Expenses related to it.', 16, 1)
+	END
 	ELSE 
 	BEGIN
 		BEGIN TRY
