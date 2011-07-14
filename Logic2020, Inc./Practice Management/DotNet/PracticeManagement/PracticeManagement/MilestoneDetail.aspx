@@ -153,6 +153,9 @@
                             <asp:RequiredFieldValidator ID="reqMilestoneName" runat="server" ControlToValidate="txtMilestoneName"
                                 ErrorMessage="The Milestone Name is required." ToolTip="The Milestone Name is required."
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="Milestone"></asp:RequiredFieldValidator>
+                            <asp:CustomValidator ID="cvMilestoneName" runat="server" ControlToValidate="txtMilestoneName" OnServerValidate="cvMilestoneName_Validate"
+                                ErrorMessage="The Milestone Name should be less than or equal to 55 characters" ToolTip="The Milestone Name should be less than or equal to 55 characters" Text="*"
+                                EnableClientScript="false" SetFocusOnError="true" ValidationGroup="Milestone"></asp:CustomValidator>
                         </td>
                         <td>
                             <table cellpadding="0" cellspacing="0" border="0">
