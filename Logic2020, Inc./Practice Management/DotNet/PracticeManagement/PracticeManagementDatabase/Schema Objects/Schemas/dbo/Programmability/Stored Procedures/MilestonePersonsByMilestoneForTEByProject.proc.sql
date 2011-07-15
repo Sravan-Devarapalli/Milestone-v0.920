@@ -35,7 +35,23 @@ BEGIN
 		WHERE mp.MilestoneId = @MilestoneIdLocal
 			AND (@StartDate BETWEEN StartDate AND EndDate
 				OR @EndDate BETWEEN StartDate AND EndDate)
-		
+			AND (EXISTS (
+						SELECT 1 
+						FROM dbo.PersonStatusHistory PH
+						WHERE PH.PersonId = mp.PersonId
+								AND PH.PersonStatusId = 1 --Active
+								AND (@StartDate BETWEEN PH.StartDate AND ISNULL(PH.EndDate,dbo.GetFutureDate())
+									OR @EndDate BETWEEN PH.StartDate AND ISNULL(PH.EndDate,dbo.GetFutureDate())
+									OR PH.StartDate BETWEEN @StartDate AND @EndDate
+									OR (PH.EndDate BETWEEN @StartDate AND @EndDate AND PH.EndDate IS NOT NULL)
+									)
+									)
+				OR EXISTS(
+						SELECT 1 FROM dbo.TimeEntries TE
+						WHERE TE.MilestonePersonId = mp.MilestonePersonId
+						AND TE.MilestoneDate BETWEEN @StartDate AND @EndDate
+				)
+			)
 	END
 
 END
