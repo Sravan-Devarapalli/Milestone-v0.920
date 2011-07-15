@@ -331,18 +331,18 @@ namespace PraticeManagement.Controls
             var result = new List<DetailedUtilizationReportBaseItem>();
 
             var context = new ConsultantMilestonesContext
-                              {
-                                  PersonId = personId,
-                                  StartDate = startDate,
-                                  EndDate = endDate,
-                                  IncludeActiveProjects = incActive,
-                                  IncludeProjectedProjects = incProjected,
-                                  IncludeCompletedProjects = false,
-                                  IncludeInternalProjects = incInternal,
-                                  IncludeExperimentalProjects = incExperimental,
-                                  IncludeInactiveProjects = false,
-                                  IncludeDefaultMileStone = false
-                              };
+            {
+                PersonId = personId,
+                StartDate = startDate,
+                EndDate = endDate,
+                IncludeActiveProjects = incActive,
+                IncludeProjectedProjects = incProjected,
+                IncludeCompletedProjects = false,
+                IncludeInternalProjects = incInternal,
+                IncludeExperimentalProjects = incExperimental,
+                IncludeInactiveProjects = false,
+                IncludeDefaultMileStone = false
+            };
 
             var personEntries =
                 ServiceCallers.Custom.MilestonePerson(
@@ -357,6 +357,32 @@ namespace PraticeManagement.Controls
             foreach (var transition in opportTransition)
                 result.Add(new DetailedUtilizationReportOpportunityItem(startDate, endDate, transition));
 
+            return result;
+        }
+
+
+        public static List<DetailedProjectReportItem> GetProjects(DateTime startDate, DateTime endDate)
+        {
+            var result = new List<DetailedProjectReportItem>();
+            var projectsList = new List<Project>();
+             using (var serviceClient = new ProjectServiceClient())
+            {
+                try
+                {
+                     projectsList = serviceClient.GetProjectListByDateRange(true,false,true,false,false,false,startDate,endDate).AsQueryable().ToList();
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+          
+
+            foreach (var project in projectsList)
+                result.Add(new DetailedProjectReportItem(startDate, endDate, project));
+
+            
             return result;
         }
 
