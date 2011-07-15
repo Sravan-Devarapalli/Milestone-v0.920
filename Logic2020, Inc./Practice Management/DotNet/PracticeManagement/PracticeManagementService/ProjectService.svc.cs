@@ -609,6 +609,17 @@ namespace PracticeManagementService
             return (new ProjectExpenseDal()).GetForProject(entity);
         }
 
+        public List<Project> AllProjectsWithFinancialTotalsAndPersons()
+        {
+            var projectsList = ProjectDAL.ProjectsAll();
+
+            ComputedFinancialsDAL.LoadTotalFinancialsPeriodForProjects(projectsList, null, null);
+
+            MilestonePersonDAL.LoadMilestonePersonListForProject(projectsList);
+
+            return projectsList;
+        }
+
         #endregion
     }
 }
