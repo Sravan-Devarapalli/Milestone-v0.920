@@ -631,6 +631,7 @@
                 public const string CategoryItemsSaveFromXML = "dbo.CategoryItemsSaveFromXML";
                 public const string GetProjectAttachmentData = "dbo.GetProjectAttachmentData";
                 public const string ProjectDelete = "dbo.ProjectDelete";
+                public const string ProjectsAll = "dbo.ProjectsAll";
             }
 
             public class MilestonePerson
