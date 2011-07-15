@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[ProjectsAll]
+﻿CREATE PROCEDURE [dbo].[ProjectListAllWithoutFiltering]
 AS
 	SELECT DISTINCT p.ClientId,
 		   p.ProjectId,
