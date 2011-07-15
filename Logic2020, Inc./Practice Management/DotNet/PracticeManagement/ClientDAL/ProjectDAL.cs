@@ -1222,7 +1222,7 @@ namespace DataAccess
                     {
                         projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
                         projectGroupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
-                        groupInUseIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupInUseColumn);
+                        //groupInUseIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupInUseColumn);
 
                     }
                     catch
@@ -1295,6 +1295,23 @@ namespace DataAccess
                                }
                            };
 
+                            if (projectGroupIdIndex >= 0)
+                            {
+                                try
+                                {
+                                    var group = new ProjectGroup
+                                    {
+                                        Id = (int)reader[projectGroupIdIndex],
+                                        Name = (string)reader[projectGroupNameIndex],
+                                        //InUse = (int)reader[groupInUseIndex] == 1
+                                    };
+
+                                    project.Group = group;
+                                }
+                                catch
+                                {
+                                }
+                            }
 
                             if (practiceOwnerNameIndex >= 0)
                             {
@@ -2071,6 +2088,25 @@ namespace DataAccess
             }
         }
 
+        public static List<Project> ProjectsAll()
+        {
+            var projectList = new List<Project>();
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.ProjectsAll, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    connection.Open();
+
+                    var reader = command.ExecuteReader();
+
+                    ReadProjects(reader, projectList);
+                }
+            }
+            return projectList;
+        }
     }
 }
 
