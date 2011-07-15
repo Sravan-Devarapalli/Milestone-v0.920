@@ -99,6 +99,13 @@ namespace PraticeManagement
 
         private const string CompanyPerformanceFilterKey = "CompanyPerformanceFilterKey";
 
+        private const string ViewExportProjects = "ExportProjects";
+        private const string ViewExportAllProjects = "ExportAllProjects";
+        private const string ExportId = "ExportID";
+        private const string ExportAllId = "ExportAllID";
+        private const string ExportDateRangeFormat = "Date Range: {0} - {1}";
+        private const string ClientGroupHeader = "Client-Group";
+
         protected const string PagerNextCommand = "Next";
         protected const string PagerPrevCommand = "Prev";
 
@@ -226,6 +233,59 @@ namespace PraticeManagement
             {
                 CompanyPerformanceState.Filter = GetFilterSettings();
                 return CompanyPerformanceState.ProjectList;
+            }
+        }
+
+        private Project[] ExportProjectList
+        {
+            get
+            {
+                if (ViewState[ViewExportProjects] == null)
+                {
+                    var filterSet = GetFilterSettings();
+                    using (var serviceClient = new ProjectServiceClient())
+                    {
+                        try
+                        {
+                            ViewState[ViewExportProjects] =
+                                 serviceClient.ProjectListAllMultiParameters(
+                                 filterSet.ClientIdsList,
+                                 filterSet.ShowProjected,
+                                 filterSet.ShowCompleted,
+                                 filterSet.ShowActive,
+                                 filterSet.ShowInternal,
+                                 filterSet.ShowExperimental,
+                                 filterSet.ShowInactive,
+                                 filterSet.PeriodStart,
+                                 filterSet.PeriodEnd,
+                                 HttpContext.Current.User.Identity.Name,
+                                 filterSet.SalespersonIdsList,
+                                 filterSet.ProjectOwnerIdsList,
+                                 filterSet.PracticeIdsList,
+                                 filterSet.ProjectGroupIdsList,
+                                 ProjectCalculateRangeType.TotalProjectValue,
+                                 filterSet.ExcludeInternalPractices);
+                        }
+                        catch
+                        {
+                            serviceClient.Abort();
+                            throw;
+                        }
+                    }
+                }
+                return (Project[])ViewState[ViewExportProjects];
+            }
+        }
+
+        private Project[] ExportAllProjectList
+        {
+            get
+            {
+                if (ViewState[ViewExportAllProjects] == null)
+                {
+                    ViewState[ViewExportAllProjects] = GetProjectListAll();
+                }
+                return (Project[])ViewState[ViewExportAllProjects];
             }
         }
 
@@ -651,13 +711,7 @@ namespace PraticeManagement
                                 interestValue.Value.GrossMargin.Value.ToString(CurrencyDisplayFormat);
 
                             row.Cells[i].InnerHtml = GetMonthReportTableAsHtml(interestValue.Value.Revenue, grossMargin);
-                            //string.Format("<div class=\"cell-pad\">{0}</div>",
-                            //string.Format(Resources.Controls.ProjectInterestFormat,
-                            //interestValue.Value.Revenue,
-                            //grossMargin));
-
-                            //if (greaterSeniorityExists)
-                            //    OneGreaterSeniorityExists = true;
+                            break;
                         }
                     }
                 }
@@ -1553,46 +1607,225 @@ namespace PraticeManagement
         {
             DataHelper.InsertExportActivityLogMessage("Projects");
 
-            var projectsData = (from pro in ProjectList
+            var projectsData = (from pro in ExportProjectList
                                 where pro != null
                                 select new
                                 {
                                     ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                     ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
                                     Client = (pro.Client != null && pro.Client.Name != null) ? pro.Client.Name.ToString() : string.Empty,
+                                    Group = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
+                                    Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
-                                    BuyerName = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                     Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
-                                    StartDate = pro.StartDate != null ? pro.StartDate.Value.ToString("MM/dd/yyyy") : string.Empty,
-                                    EndDate = pro.EndDate != null ? pro.EndDate.Value.ToString("MM/dd/yyyy") : string.Empty,
                                     PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
-                                    Revenue = (pro.ComputedFinancials != null && pro.ComputedFinancials.Revenue != null) ? pro.ComputedFinancials.Revenue.Value : 0,
-                                    Margin = (pro.ComputedFinancials != null && pro.ComputedFinancials.GrossMargin != null) ? pro.ComputedFinancials.GrossMargin.Value : 0,
-                                    PM = (pro.ProjectManager != null && pro.ProjectManager.Name != null) ? pro.ProjectManager.Name : string.Empty,
+                                    Owner = (pro.ProjectManager != null && pro.ProjectManager.Name != null) ? pro.ProjectManager.Name : string.Empty,
                                     Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
-                                    ClientDirector = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty
-                                }).ToList();//Note: If you add any extra property to this anonymous type object then change cell index values in  FormatExcelReport method.
+                                    Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty
+                                }).ToList();//Note: If you add any extra property to this anonymous type object then change insertPosition of month cells in RowDataBound.
 
             GridView projectsGrid = new GridView();
+            projectsGrid.ID = ExportId;
+            projectsGrid.RowDataBound += exportProjects_RowDataBound;
             projectsGrid.DataSource = projectsData;
             projectsGrid.DataMember = "excelDataTable";
             projectsGrid.DataBind();
             projectsGrid.Visible = false;
-            FormatExcelReport(projectsGrid);
 
-            if (projectsGrid.HeaderRow != null && projectsGrid.HeaderRow.Cells.Count > 0)
+            string dateRangeTitle = string.Format(ExportDateRangeFormat, diRange.FromDate.Value.ToShortDateString(), diRange.ToDate.Value.ToShortDateString());
+
+            GridViewExportUtil.Export("Projects.xls", projectsGrid, dateRangeTitle);
+        }
+
+        protected void exportProjects_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            var id = ((GridView)sender).ID;
+            var periodStart = GetMonthBegin();
+            var monthsInPeriod = GetPeriodLength();
+            int insertPosition = 8;//Change this if any new columns added to Exportfile.
+            var row = e.Row;
+            if (row != null)//Hide Unnecessary columns in Report.
             {
-                projectsGrid.HeaderRow.Cells[0].Visible = false;
+                row.Cells[0].Visible = false;//To hide ProjectID in the report.
             }
 
-            GridViewExportUtil.Export("Projects.xls", projectsGrid);
+            if (e.Row.RowType == DataControlRowType.Header)
+            {
+                row.Cells[3].Text = ClientGroupHeader; //Rename Header Columns.
+                switch (id)
+                {
+                    case ExportId:
+                        //Insert Month columns and Total Column in Header row.
+                        InsertMonthColumnsInHeader(row, insertPosition, monthsInPeriod, periodStart);
+                        InsertTotalColumnInHeader(row, insertPosition + monthsInPeriod);
+                        break;
+                    case ExportAllId:
+                        InsertTotalColumnInHeader(row, insertPosition);
+                        break;
+                }
+            }
+            else if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                Project project = new Project();
+                switch (id)
+                {
+                    case ExportId:
+                        project = ExportProjectList.Where(proj => proj.Id == Convert.ToInt32(e.Row.Cells[0].Text)).First();
+
+                        //Insert Month cells in Excel.
+                        InsertMonthFinancialsInExport(row, project, insertPosition, monthsInPeriod, periodStart);
+                        break;
+
+                    case ExportAllId:
+                        project = ExportAllProjectList.Where(proj => proj.Id == Convert.ToInt32(e.Row.Cells[0].Text)).First();
+
+                        SeniorityAnalyzer personListAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
+                        personListAnalyzer.OneWithGreaterSeniorityExists(project.ProjectPersons);
+                        bool greaterSeniorityExists = personListAnalyzer != null && personListAnalyzer.GreaterSeniorityExists;
+
+                        //Insert Total cells in Excel.
+                        FillTotalCellInExcelReport(row, project, insertPosition, greaterSeniorityExists);
+                        break;
+                }
+
+            }
+        }
+
+        private void InsertMonthColumnsInHeader(GridViewRow row, int insertPosition, int monthsInPeriod, DateTime periodStart)
+        {
+            for (int i = insertPosition, k = 0; k < monthsInPeriod; i++, k++)
+            {
+                var monthColumn = new TableCell();
+                monthColumn.HorizontalAlign = HorizontalAlign.Center;
+                monthColumn.Text = periodStart.ToString(Constants.Formatting.CompPerfMonthYearFormat);
+                monthColumn.Style.Add("mso-number-format", "mmm-yy");
+                monthColumn.Font.Bold = true;
+                row.Cells.AddAt(i, monthColumn);
+
+                periodStart = periodStart.AddMonths(1);
+            }
+        }
+
+        private void InsertTotalColumnInHeader(GridViewRow row, int insertPosition)
+        {
+            var totalColumn = new TableCell();
+            totalColumn.HorizontalAlign = HorizontalAlign.Center;
+            totalColumn.Text = "Total";
+            totalColumn.Font.Bold = true;
+            row.Cells.AddAt(insertPosition, totalColumn);
+        }
+
+        private void InsertMonthFinancialsInExport(GridViewRow row, Project project, int insertPosition, int monthsInPeriod, DateTime periodStart)
+        {
+            SeniorityAnalyzer personListAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
+            personListAnalyzer.OneWithGreaterSeniorityExists(project.ProjectPersons);
+            bool greaterSeniorityExists = personListAnalyzer != null && personListAnalyzer.GreaterSeniorityExists;
+
+            // Displaying the month values (main cell data)
+            for (int i = insertPosition, k = 0;
+                k < monthsInPeriod;
+                i++, k++, periodStart = periodStart.AddMonths(1))
+            {
+                DateTime monthEnd = GetMonthEnd(ref periodStart);
+
+                //Fill Month Cell.
+                FillMonthCellInExcelReport(row, project, periodStart, monthEnd, i, greaterSeniorityExists);
+            }
+
+            //Fill Total Cell.
+            FillTotalCellInExcelReport(row, project, insertPosition + monthsInPeriod, greaterSeniorityExists);
+        }
+
+        private void FillMonthCellInExcelReport(GridViewRow row, Project project, DateTime monthStart, DateTime monthEnd, int insertPosition, bool greaterSeniorityExists)
+        {
+            TableCell monthCell = new TableCell();
+
+            PracticeManagementCurrency revenue = 0M;
+            PracticeManagementCurrency margin = 0M;
+
+            if (project != null && project.ProjectedFinancialsByMonth != null)
+            {
+                foreach (KeyValuePair<DateTime, ComputedFinancials> interestValue in
+                    project.ProjectedFinancialsByMonth)
+                {
+                    if (IsInMonth(interestValue.Key, monthStart, monthEnd))
+                    {
+                        revenue = interestValue.Value.Revenue;
+                        margin = interestValue.Value.GrossMargin;
+                        break;
+                    }
+                }
+            }
+
+            monthCell = FormatExcelFinancialsCell(revenue, margin, greaterSeniorityExists);
+            row.Cells.AddAt(insertPosition, monthCell);
+        }
+
+        private void FillTotalCellInExcelReport(GridViewRow row, Project project, int insertPosition, bool greaterSeniorityExists)
+        {
+            TableCell totalCell = new TableCell();
+
+            // Project totals
+            PracticeManagementCurrency totalRevenue = 0M;
+            PracticeManagementCurrency totalMargin = 0M;
+
+            // Calculate Total Revenue and Margin for current Project
+            if (project.ComputedFinancials != null)
+            {
+                totalRevenue = project.ComputedFinancials.Revenue;
+                totalMargin = project.ComputedFinancials.GrossMargin;
+            }
+
+            totalCell = FormatExcelFinancialsCell(totalRevenue, totalMargin, greaterSeniorityExists);
+
+            row.Cells.AddAt(insertPosition, totalCell);
+        }
+
+        private TableCell FormatExcelFinancialsCell(PracticeManagementCurrency revenue, PracticeManagementCurrency grossMargin, bool isGreaterSeniorityExists)
+        {
+            string outterHtml;
+            Decimal revenueValue = Convert.ToDecimal(revenue.Value.ToString());
+            Decimal marginValue = Convert.ToDecimal(grossMargin.Value.ToString());
+            //Table to stringformat
+            string revenueText = revenueValue.ToString(CurrencyExcelReportFormat);
+            Label revenueLabel = new Label()
+            {
+                Text = revenue < 0 ? revenueText.Replace('-', '(') + ')' : revenueText,
+                ForeColor = revenue < 0 ? Color.Red : Color.Green
+            };
+            string marginText = marginValue.ToString(CurrencyExcelReportFormat);
+            Label marginLabel = new Label()
+            {
+                Text = isGreaterSeniorityExists ? Resources.Controls.HiddenCellText : ((marginValue < 0) ? marginText.Replace('-', '(') + ')' : marginText),
+                ForeColor = ((marginValue >= 0) || isGreaterSeniorityExists) ? Color.Purple : Color.Red
+            };
+
+            var stringWriter = new StringWriter();
+            using (HtmlTextWriter wr = new HtmlTextWriter(stringWriter))
+            {
+                revenueLabel.RenderControl(wr);
+                outterHtml = stringWriter.ToString();
+            }
+            stringWriter = new StringWriter();
+            using (HtmlTextWriter wr = new HtmlTextWriter(stringWriter))
+            {
+                marginLabel.RenderControl(wr);
+                outterHtml = outterHtml + "<br style='mso-data-placement: same-cell;' />" + stringWriter.ToString();
+            }
+
+            TableCell monthCell = new TableCell();
+            monthCell.Text = outterHtml;
+            monthCell.HorizontalAlign = HorizontalAlign.Right;
+            monthCell.Height = Unit.Pixel(40);
+            monthCell.Width = Unit.Pixel(120);
+            return monthCell;
         }
 
         protected void btnExportAllToExcel_Click(object sender, EventArgs e)
         {
             DataHelper.InsertExportActivityLogMessage("Projects");
 
-            var projectsList = GetProjectListAll();
+            var projectsList = ExportAllProjectList.OrderBy(proj => proj.Id);
 
             var projectsData = (from pro in projectsList
                                 where pro != null
@@ -1601,30 +1834,23 @@ namespace PraticeManagement
                                     ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                     ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
                                     Client = (pro.Client != null && pro.Client.Name != null) ? pro.Client.Name.ToString() : string.Empty,
+                                    Group = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
+                                    Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
-                                    BuyerName = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                     Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
-                                    StartDate = pro.StartDate != null ? pro.StartDate.Value.ToString("MM/dd/yyyy") : string.Empty,
-                                    EndDate = pro.EndDate != null ? pro.EndDate.Value.ToString("MM/dd/yyyy") : string.Empty,
                                     PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
-                                    Revenue = (pro.ComputedFinancials != null && pro.ComputedFinancials.Revenue != null) ? pro.ComputedFinancials.Revenue.Value : 0,
-                                    Margin = (pro.ComputedFinancials != null && pro.ComputedFinancials.GrossMargin != null) ? pro.ComputedFinancials.GrossMargin.Value : 0,
-                                    PM = (pro.ProjectManager != null && pro.ProjectManager.Name != null) ? pro.ProjectManager.Name : string.Empty,
+                                    Owner = (pro.ProjectManager != null && pro.ProjectManager.Name != null) ? pro.ProjectManager.Name : string.Empty,
                                     Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
-                                    ClientDirector = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty
-                                }).ToList();
+                                    Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty
+                                }).ToList();//Note:- Change insertPosition Of Total cell in RowDataBound if any modifications in projectsData.
 
             GridView projectsGrid = new GridView();
+            projectsGrid.ID = ExportAllId;
+            projectsGrid.RowDataBound += exportProjects_RowDataBound;
             projectsGrid.DataSource = projectsData;
             projectsGrid.DataMember = "excelDataTable";
             projectsGrid.DataBind();
             projectsGrid.Visible = false;
-            FormatExcelReport(projectsGrid);
-
-            if (projectsGrid.HeaderRow != null && projectsGrid.HeaderRow.Cells.Count > 0)
-            {
-                projectsGrid.HeaderRow.Cells[0].Visible = false;
-            }
 
             GridViewExportUtil.Export("Projects.xls", projectsGrid);
         }
@@ -1633,7 +1859,7 @@ namespace PraticeManagement
         {
             using (var serviceClient = new ProjectService.ProjectServiceClient())
             {
-                return serviceClient.GetProjectListCustom(true, true, true, true);
+                return serviceClient.AllProjectsWithFinancialTotalsAndPersons();
             }
         }
 
