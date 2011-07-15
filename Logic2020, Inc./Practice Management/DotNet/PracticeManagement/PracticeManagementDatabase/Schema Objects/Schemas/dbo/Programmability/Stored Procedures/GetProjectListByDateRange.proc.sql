@@ -39,5 +39,6 @@ DECLARE @DefaultProjectId INT
 				  OR ( @ShowInactive = 1 AND p.ProjectStatusId = 1 ) -- Inactive
 			)
 			AND P.ProjectId <> @DefaultProjectId
+    ORDER BY StartDate
 
 END
