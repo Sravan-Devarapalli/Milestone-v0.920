@@ -325,6 +325,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         ProjectExpense[] GetProjectExpensesForProject(ProjectExpense entity);
+
+        [OperationContract]
+        List<Project> AllProjectsWithFinancialTotalsAndPersons();
     }
 }
 
