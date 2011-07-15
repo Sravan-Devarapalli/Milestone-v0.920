@@ -2093,7 +2093,7 @@ namespace DataAccess
             var projectList = new List<Project>();
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.ProjectsAll, connection))
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.ProjectListAllWithoutFiltering, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
