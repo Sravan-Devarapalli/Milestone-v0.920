@@ -607,6 +607,7 @@
 
             public class Project
             {
+                public const string GetProjectListByDateRange = "dbo.GetProjectListByDateRange";
                 public const string ProjectListAll = "dbo.ProjectListAll";
                 public const string ProjectListAllMultiParameters = "dbo.ProjectListAllMultiParameters";
                 public const string ProjectsListByClient = "dbo.ProjectsListByClient";
