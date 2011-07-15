@@ -41,7 +41,10 @@ public class GridViewExportUtil
 
                     TableCell titleCell = new TableCell();
                     titleCell.Text = title;
-                    titleCell.Style.Add(HtmlTextWriterStyle.FontWeight, "bold");
+                    titleCell.Font.Bold = true;
+                    titleCell.Font.Size = new FontUnit(FontSize.Medium);
+                    if(gv.HeaderRow != null)
+                        titleCell.ColumnSpan = gv.HeaderRow.Cells.Count;
 
                     TableRow titleRow = new TableRow();
                     titleRow.Cells.Add(titleCell);
