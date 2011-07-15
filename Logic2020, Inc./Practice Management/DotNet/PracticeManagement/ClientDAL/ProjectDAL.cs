@@ -2107,6 +2107,132 @@ namespace DataAccess
             }
             return projectList;
         }
+
+
+        public static List<Project> GetProjectListByDateRange(bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, DateTime periodStart, DateTime periodEnd)
+        {
+            var projectList = new List<Project>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Project.GetProjectListByDateRange, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowProjectedParam, showProjected);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowCompletedParam, showCompleted);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowActiveParam, showActive);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowInternalParam, showInternal);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowExperimentalParam, showExperimental);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowInactiveParam, showInactive);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, periodStart);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, periodEnd);
+
+                    connection.Open();
+
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    ReadProjectsShort(reader, projectList);
+                }
+            }
+
+            MilestonePersonDAL.LoadMilestonePersonListForProject(projectList);
+
+            return projectList;
+        }
+
+        private static void ReadProjectsShort(SqlDataReader reader, List<Project> resultList)
+        {
+            try
+            {
+                if (reader.HasRows)
+                {
+                    int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+                    int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIdColumn);
+                    int nameIndex = reader.GetOrdinal(Constants.ColumnNames.NameColumn);
+                    int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
+                    int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
+                    int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
+                    int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusIdColumn);
+                    int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
+                    int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
+                    int pmIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerId);
+                    int pmFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerFirstName);
+                    int pmLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerLastName);
+                    int attachmentFileNameIndex = -1;
+
+                    while (reader.Read())
+                    {
+
+                        try
+                        {
+                            attachmentFileNameIndex = reader.GetOrdinal(Constants.ColumnNames.FileName);
+                        }
+                        catch
+                        {
+                            attachmentFileNameIndex = -1;
+                        }
+
+                        var projectId = reader.GetInt32(projectIdIndex);
+                        Project project;
+
+                        if (resultList.Any(p => p.Id.Value == projectId))
+                        {
+                            project = resultList.First(p => p.Id.Value == projectId);
+                        }
+                        else
+                        {
+                            project = new Project
+                            {
+                                Id = reader.GetInt32(projectIdIndex),
+                                Name = reader.GetString(nameIndex),
+                                StartDate =
+                                    !reader.IsDBNull(startDateIndex) ? (DateTime?)reader.GetDateTime(startDateIndex) : null,
+                                EndDate =
+                                    !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
+                                ProjectNumber = reader.GetString(projectNumberIndex),
+                                ProjectManager = new Person
+                                {
+                                    Id = reader.GetInt32(pmIdIndex),
+                                    FirstName = reader.GetString(pmFirstNameIndex),
+                                    LastName = reader.GetString(pmLastNameIndex)
+                                }
+                            };
+
+                            project.Client = new Client
+                            {
+                                Id = reader.GetInt32(clientIdIndex),
+                                Name = reader.GetString(clientNameIndex)
+                            };
+
+                            project.Status = new ProjectStatus
+                            {
+                                Id = reader.GetInt32(projectStatusIdIndex),
+                                Name = reader.GetString(projectStatusNameIndex)
+                            };
+
+                            if (attachmentFileNameIndex >= 0)
+                            {
+                                try
+                                {
+                                    project.Attachment = new ProjectAttachment { AttachmentFileName = reader.GetString(attachmentFileNameIndex) };
+                                }
+                                catch
+                                {
+                                }
+                            }
+
+
+                            resultList.Add(project);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 
