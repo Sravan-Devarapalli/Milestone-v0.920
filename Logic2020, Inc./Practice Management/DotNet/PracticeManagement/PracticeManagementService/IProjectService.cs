@@ -49,6 +49,17 @@ namespace PracticeManagementService
         [OperationContract]
         List<Project> GetProjectListAll();
 
+        [OperationContract]
+        List<Project> GetProjectListByDateRange(   bool showProjected,
+                                                bool showCompleted,
+                                                bool showActive,
+                                                bool showInternal,
+                                                bool showExperimental,
+                                                bool showInactive,
+                                                DateTime periodStart,
+                                                DateTime periodEnd
+                                                );
+
         /// <summary>
         /// Enlists the requested projects.
         /// </summary>
