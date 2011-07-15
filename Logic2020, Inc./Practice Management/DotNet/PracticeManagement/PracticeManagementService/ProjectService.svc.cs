@@ -211,6 +211,33 @@ namespace PracticeManagementService
             return result;
         }
 
+
+        public List<Project> GetProjectListByDateRange(
+                                                    bool showProjected,
+                                                    bool showCompleted,
+                                                    bool showActive,
+                                                    bool showInternal,
+                                                    bool showExperimental,
+                                                    bool showInactive,
+                                                    DateTime periodStart,
+                                                    DateTime periodEnd
+                                                    )
+        {
+            List<Project> result =
+               ProjectDAL.GetProjectListByDateRange(  
+                                                   showProjected,
+                                                   showCompleted,
+                                                   showActive,
+                                                   showInternal,
+                                                   showExperimental,
+                                                   showInactive,
+                                                   periodStart,
+                                                   periodEnd
+                                                   );
+
+            return result;
+        }
+
         public List<Project> GetProjectListWithFinancials(
             string clientIds,
             bool showProjected,
@@ -623,4 +650,5 @@ namespace PracticeManagementService
         #endregion
     }
 }
+ 
 
