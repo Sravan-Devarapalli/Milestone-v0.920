@@ -417,6 +417,8 @@ namespace PraticeManagement
             hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
             hdnStartDateTxtBoxId.Value = (diRange.FindControl("tbFrom") as TextBox).ClientID;
             hdnEndDateTxtBoxId.Value = (diRange.FindControl("tbTo") as TextBox).ClientID;
+
+            imgExportAllToExcel.Visible = userIsAdministrator;
         }
 
         public void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
