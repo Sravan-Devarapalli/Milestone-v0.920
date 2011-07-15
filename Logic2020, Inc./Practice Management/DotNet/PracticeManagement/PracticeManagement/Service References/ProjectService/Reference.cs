@@ -20,6 +20,10 @@ namespace PraticeManagement.ProjectService {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
         DataTransferObjects.ProjectExpense[] GetProjectExpensesForProject(DataTransferObjects.ProjectExpense entity);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/AllProjectsWithFinancialTotalsAndPersons", ReplyAction="http://tempuri.org/IProjectService/AllProjectsWithFinancialTotalsAndPersonsRespon" +
+            "se")]
+        DataTransferObjects.Project[] AllProjectsWithFinancialTotalsAndPersons();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectGetById", ReplyAction="http://tempuri.org/IProjectService/ProjectGetByIdResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
@@ -152,7 +156,6 @@ namespace PraticeManagement.ProjectService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
         
-       
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -171,6 +174,10 @@ namespace PraticeManagement.ProjectService {
         
         public DataTransferObjects.ProjectExpense[] GetProjectExpensesForProject(DataTransferObjects.ProjectExpense entity) {
             return base.Channel.GetProjectExpensesForProject(entity);
+        }
+        
+        public DataTransferObjects.Project[] AllProjectsWithFinancialTotalsAndPersons() {
+            return base.Channel.AllProjectsWithFinancialTotalsAndPersons();
         }
         
         public DataTransferObjects.Project ProjectGetById(int projectId) {
