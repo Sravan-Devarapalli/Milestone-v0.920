@@ -124,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ActivityLog.aspx" />
+    <Content Include="Calendarview.aspx" />
     <Content Include="Config\BecomeUser.aspx" />
     <Content Include="Config\Branding.aspx" />
     <Content Include="Config\Clients.aspx" />
@@ -720,6 +721,13 @@
     <Compile Include="ActivityLog_Old.aspx.designer.cs">
       <DependentUpon>ActivityLog_Old.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Calendarview.aspx.cs">
+      <DependentUpon>Calendarview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Calendarview.aspx.designer.cs">
+      <DependentUpon>Calendarview.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Config\BecomeUser.aspx.cs">
       <DependentUpon>BecomeUser.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -959,6 +967,7 @@
     <Compile Include="GuestPages\ChangePasswordError.aspx.designer.cs">
       <DependentUpon>ChangePasswordError.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Objects\DetailedProjectReportItem.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -2805,7 +2814,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>3087</DevelopmentServerPort>
+          <DevelopmentServerPort>51633</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
@@ -2822,3 +2831,4 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
+
