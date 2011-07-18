@@ -9,6 +9,7 @@ using PraticeManagement.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -233,6 +234,17 @@ namespace PraticeManagement.Controls.Reports
             horizAxis.IsLabelAutoFit = true;
             horizAxis.IsStartedFromZero = true;
 
+            StripLine stripLine = new StripLine();
+            stripLine.ForeColor = Color.Blue;
+            stripLine.BorderColor = Color.Blue;
+            stripLine.BorderWidth = 2;
+            stripLine.StripWidthType = DateTimeIntervalType.Days;
+            stripLine.Interval = 0;
+            stripLine.IntervalOffset = DateTime.Today.ToOADate();
+            stripLine.BorderDashStyle = ChartDashStyle.Solid;
+            stripLine.ToolTip = "Today";
+            horizAxis.StripLines.Add(stripLine);
+
             if (utf.DetalizationSelectedValue == "1")
             {
                 horizAxis.IntervalType = DateTimeIntervalType.Weeks;
@@ -240,6 +252,7 @@ namespace PraticeManagement.Controls.Reports
 
                 horizAxis.IntervalOffset = GetOffset(BegPeriod);
                 horizAxis.IntervalOffsetType = DateTimeIntervalType.Days;
+
             }
             else if (utf.DetalizationSelectedValue == "7")
             {
