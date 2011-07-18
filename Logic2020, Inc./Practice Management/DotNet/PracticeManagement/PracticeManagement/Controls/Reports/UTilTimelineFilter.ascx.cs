@@ -326,8 +326,8 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnResetFilter_OnClick(object sender, EventArgs e)
         {
-            ddlPeriod.SelectedIndex = 0;
-            ddlDetalization.SelectedIndex = 1;
+            ddlPeriod.SelectedValue = "3";
+            ddlDetalization.SelectedValue = "7";
             ddlAvgUtil.SelectedIndex = 0;
             ddlSortBy.SelectedIndex = 0;
             Resetfilter();
