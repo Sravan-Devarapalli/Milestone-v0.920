@@ -124,6 +124,25 @@ namespace PraticeManagement
             }
         }
 
+
+        private bool? IsUserHasPermissionOnProject
+        {
+            get
+            {
+                int? projectId = MilestonePerson.Milestone.Project.Id;
+                if (projectId.HasValue)
+                {
+                    if (ViewState["HasPermission"] == null)
+                    {
+                        ViewState["HasPermission"] = DataHelper.IsUserHasPermissionOnProject(User.Identity.Name, projectId.Value);
+                    }
+                    return (bool)ViewState["HasPermission"];
+                }
+
+                return null;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -745,6 +764,13 @@ namespace PraticeManagement
                     if (milestonePerson != null)
                     {
                         MilestonePerson = milestonePerson;
+
+
+                        if (!Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName))
+                        {
+                            if (IsUserHasPermissionOnProject.HasValue && !IsUserHasPermissionOnProject.Value)
+                                Response.Redirect(@"~\GuestPages\AccessDenied.aspx");
+                        }
                         ShowPreviousAndNext();
                         _seniorityAnalyzer.IsOtherGreater(milestonePerson.Person);
                         PopulateControls(milestonePerson);
