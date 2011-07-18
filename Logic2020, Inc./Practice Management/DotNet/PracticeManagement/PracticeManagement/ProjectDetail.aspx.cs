@@ -90,6 +90,23 @@ namespace PraticeManagement
             }
         }
 
+        private bool? IsUserHasPermissionOnProject
+        {
+            get
+            {
+                if (ProjectId.HasValue)
+                {
+                    if (ViewState["HasPermission"] == null)
+                    {
+                        ViewState["HasPermission"] = DataHelper.IsUserHasPermissionOnProject(User.Identity.Name, ProjectId.Value);
+                    }
+                    return (bool)ViewState["HasPermission"];
+                }
+
+                return null;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -98,6 +115,14 @@ namespace PraticeManagement
         {
             if (!IsPostBack)
             {
+                if (ProjectId.HasValue && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName))
+                {
+                    if (IsUserHasPermissionOnProject.HasValue && !IsUserHasPermissionOnProject.Value)
+                    {
+                        Response.Redirect(@"~\GuestPages\AccessDenied.aspx");
+                    }
+                }
+
                 txtProjectName.Focus();
 
                 int clientId = -1;
