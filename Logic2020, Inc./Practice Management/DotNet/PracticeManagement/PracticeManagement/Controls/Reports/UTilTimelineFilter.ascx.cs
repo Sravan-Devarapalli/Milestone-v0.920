@@ -65,13 +65,14 @@ namespace PraticeManagement.Controls.Reports
                 else
                 {
                     var now = Utils.Generic.GetNowWithTimeZone();
+                    DateTime firstDay = new DateTime(now.Year, now.Month, 1);
                     if (selectedVal > 0)
                     {
-                        return now.AddDays(-1 * now.Day).AddMonths(selectedVal).Date;
+                        return firstDay.AddMonths(selectedVal).AddDays(-1).Date;
                     }
                     else
                     {
-                        return now.AddDays(-1 * now.Day).AddMonths(1).Date;
+                        return firstDay.AddMonths(1).AddDays(-1).Date;
                     }
                 }
             }
@@ -372,6 +373,8 @@ namespace PraticeManagement.Controls.Reports
             hdnEndDateTxtBoxId.Value = tbTo.ClientID;
             hdnStartDateCalExtenderBehaviourId.Value = clFromDate.BehaviorID;
             hdnEndDateCalExtenderBehaviourId.Value = clToDate.BehaviorID;
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "", "SaveItemsToArray();EnableOrDisableItemsOfDetalization();", true);
         }
 
         protected void btnSaveReport_OnClick(object sender, EventArgs e)
