@@ -339,6 +339,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Project> AllProjectsWithFinancialTotalsAndPersons();
+
+        [OperationContract]
+        bool IsUserHasPermissionOnProject(string user, int projectId);
     }
 }
 
