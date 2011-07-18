@@ -6,6 +6,10 @@
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
 <script type="text/javascript">
+
+    var optionsList = new Array();
+    var selectedValue;
+
     function ChangeSortByRadioButtons(sender) {
         var sortby = document.getElementById("<%= ddlSortBy.ClientID%>");
         if (sortby.selectedIndex > 1) {
@@ -255,6 +259,58 @@
         }
     }
 
+    function SaveItemsToArray() {
+        optionsList = new Array();
+        var ddlDetail = document.getElementById('<%=  ddlDetalization.ClientID %>');
+        for (var i = 0; i < ddlDetail.length; i++) {
+            Array.add(optionsList, ddlDetail[i]);
+        }
+    }
+
+
+    function EnableOrDisableItemsOfDetalization() {
+       var ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
+       var ddlDetail = document.getElementById('<%=  ddlDetalization.ClientID %>');
+        if (ddlPeriod.value == '1') {
+            for (var i = ddlDetail.length-1; i >= 0; i--) {
+
+                if (ddlDetail[i].value != '1') {
+                    ddlDetail.removeChild(ddlDetail[i]);
+                  
+                }
+                else {
+                    ddlDetail[i].selected = 'true';
+                }
+            }
+        }
+        else {
+          
+            selectedValue = ddlDetail.value;
+
+            for (var i = ddlDetail.length - 1; i >= 0; i--) {
+                ddlDetail.removeChild(ddlDetail[i]);
+            }
+
+            for (var i = 0; i < optionsList.length; i++) {
+                ddlDetail.appendChild(optionsList[i]);
+            }
+
+            if (ddlDetail.value != selectedValue) {
+                for (var i = ddlDetail.length - 1; i >= 0; i--) {
+                    if (ddlDetail[i].value != selectedValue) {
+                        ddlDetail.selected = 'false';
+
+                    }
+                    else {
+                        ddlDetail[i].selected = 'true';
+                    }
+                }
+            }
+               
+
+        }
+    }
+
 </script>
 <style type="text/css">
     .displayNone
@@ -278,10 +334,12 @@
                     &nbsp;
                     <asp:Label ID="lblUtilizationFrom" runat="server" Text="Show Utilization for"></asp:Label>
                     &nbsp;
-                    <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="false" Onchange=" EnableResetButton(); CheckAndShowCustomDatesPoup(this);">
-                        <asp:ListItem Text="Next 3 months" Value="3"></asp:ListItem>
-                        <asp:ListItem Text="Last 3 months" Value="-3"></asp:ListItem>
-                        <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
+                    <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="false" onchange="EnableOrDisableItemsOfDetalization(); EnableResetButton(); CheckAndShowCustomDatesPoup(this);">
+                        <asp:ListItem Text="Next Month" Value="1"></asp:ListItem>
+                        <asp:ListItem  Text="Next 2 Months" Value="2"></asp:ListItem>
+                        <asp:ListItem Text="Next 3 Months" Value="3"></asp:ListItem>
+                        <asp:ListItem Text="Last 3 Months" Value="-3"></asp:ListItem>
+                        <asp:ListItem Text="Custom Dates"  Value="0"></asp:ListItem>
                     </asp:DropDownList>
                     <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
                         CancelControlID="btnCustDatesCancel" OkControlID="btnCustDatesClose" BackgroundCssClass="modalBackground"
@@ -299,7 +357,7 @@
                     &nbsp;
                     <asp:Label ID="lblBy" runat="server" Text="by "></asp:Label>
                     &nbsp;
-                    <asp:DropDownList ID="ddlDetalization" runat="server" AutoPostBack="false" onchange="EnableResetButton();ChangeStartEndDates();">
+                    <asp:DropDownList ID="ddlDetalization" runat="server" Width="75px" AutoPostBack="false" onchange="EnableResetButton();ChangeStartEndDates();">
                         <asp:ListItem Value="1">1 Day</asp:ListItem>
                         <asp:ListItem Selected="True" Value="7">1 Week</asp:ListItem>
                         <asp:ListItem Value="30">1 Month</asp:ListItem>
