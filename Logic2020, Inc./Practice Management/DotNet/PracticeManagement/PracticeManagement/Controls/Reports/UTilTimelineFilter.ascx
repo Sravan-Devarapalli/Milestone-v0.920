@@ -337,7 +337,7 @@
                     <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="false" onchange="EnableOrDisableItemsOfDetalization(); EnableResetButton(); CheckAndShowCustomDatesPoup(this);">
                         <asp:ListItem Text="Next Month" Value="1"></asp:ListItem>
                         <asp:ListItem  Text="Next 2 Months" Value="2"></asp:ListItem>
-                        <asp:ListItem Text="Next 3 Months" Value="3"></asp:ListItem>
+                        <asp:ListItem Selected="True" Text="Next 3 Months" Value="3"></asp:ListItem>
                         <asp:ListItem Text="Last 3 Months" Value="-3"></asp:ListItem>
                         <asp:ListItem Text="Custom Dates"  Value="0"></asp:ListItem>
                     </asp:DropDownList>
