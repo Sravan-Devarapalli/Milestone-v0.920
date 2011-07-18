@@ -2233,6 +2233,27 @@ namespace DataAccess
                 throw ex;
             }
         }
+
+        public static bool IsUserHasPermissionOnProject(string user, int projectId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Project.IsUserHasPermissionOnProject, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, user);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+
+                    connection.Open();
+
+                    var result = command.ExecuteScalar();
+
+                    return Convert.ToBoolean(result);
+                }
+            }
+        }
     }
 }
 
