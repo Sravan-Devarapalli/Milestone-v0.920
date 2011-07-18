@@ -1927,6 +1927,14 @@ namespace PraticeManagement.Controls
             }
             return null;
         }
+
+        public static bool IsUserHasPermissionOnProject(string user, int projectId)
+        {
+            using (var serviceClient = new ProjectService.ProjectServiceClient())
+            {
+                return serviceClient.IsUserHasPermissionOnProject(user, projectId);
+            }
+        }
     }
 }
 
