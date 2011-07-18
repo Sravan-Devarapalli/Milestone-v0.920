@@ -633,6 +633,7 @@
                 public const string GetProjectAttachmentData = "dbo.GetProjectAttachmentData";
                 public const string ProjectDelete = "dbo.ProjectDelete";
                 public const string ProjectListAllWithoutFiltering = "dbo.ProjectListAllWithoutFiltering";
+                public const string IsUserHasPermissionOnProject = "dbo.IsUserHasPermissionOnProject";
             }
 
             public class MilestonePerson
