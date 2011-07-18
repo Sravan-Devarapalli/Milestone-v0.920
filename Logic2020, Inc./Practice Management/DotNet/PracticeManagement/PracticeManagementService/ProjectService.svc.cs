@@ -647,6 +647,11 @@ namespace PracticeManagementService
             return projectsList;
         }
 
+        public bool IsUserHasPermissionOnProject(string user, int projectId)
+        {
+            return ProjectDAL.IsUserHasPermissionOnProject(user, projectId);
+        }
+
         #endregion
     }
 }
