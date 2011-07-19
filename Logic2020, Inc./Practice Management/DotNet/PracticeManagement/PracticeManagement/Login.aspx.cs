@@ -19,6 +19,7 @@ namespace PraticeManagement
         private string MessageLoginErrorUserDoesNotExist = "There is no user in the database with the username {0}";
         private string MessageLoginErrorNotApproved = "Your account has not yet been approved by the site's administrators. Please try again later...";
         private string MessageLoginErrorLockedOut = "You could not be logged in. Please see the System Administrator for help.";
+        private string MessageLoginErrorLockedOutWithNotiFicationEmail = "The account for the user name you have entered has been locked out for {0} in PM and sent lock out notification Email.";
         private string MessageLoginErrorNotActive = "Failed - bad password";
         private string EmptyUserNameErrorMessage = "Please enter your User Name (your e-mail address) in the box above and select the \"Forgot your password?\" link again.";
         private string UserNameWrongFormatErrorMessage = "Your User Name is an e-mail address and should be entered as \"user@domain.com\".  Please correct in the box above and select the \"Forgot your password?\" link again.";
@@ -26,7 +27,14 @@ namespace PraticeManagement
         private string UserNameLockedOutErrorMessage = "The account for the user name you have entered has been locked out in PM.  Please <a href='mailto:{0}'>contact your Administrator</a> to unlock it.";
         private string ChangePwdAleadyRequestedErrorMessage = "A password reset has already been requested for this User Name within the last 24 hours.  If you have any questions, <a href='mailto:{0}'>please contact your Administrator.</a>";
         private string ChangePwdSuccessMessage = "Your password has been successfully reset and sent to your e-mail.";
+
+        private const string LoginPageUrlWithQueryString = "/Login.aspx?UserName={0}&ForgotPassword=true";
+        public const string userNameKey = "UserName";
+        public const string ForgotPasswordKey = "ForgotPassword";
+
         #endregion
+
+        private bool IsLockedOut { get; set; }
 
         private string PMSupportEmail
         {
@@ -37,10 +45,34 @@ namespace PraticeManagement
             }
         }
 
+        private string Username
+        {
+            get
+            {
+                return Request.QueryString[userNameKey];
+            }
+        }
+
+        private string ForgotPassword
+        {
+            get
+            {
+                return Request.QueryString[ForgotPasswordKey];
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
+            {
                 login.Focus();
+                if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(ForgotPassword) && ForgotPassword == "true")
+                {
+                    login.UserName = Username;
+                    System.Web.UI.ScriptManager.RegisterStartupScript(this, GetType(), "RaiseCustomForgotPasswordClickEvent", "RaiseCustomForgotPasswordClick();", true);
+                }
+            }
+
             msglblForgotPWDErrorDetails.ClearMessage();
             loginErrorDetails.Text = string.Empty;
             var userNameTextBox = login.FindControl("UserName") as TextBox;
@@ -50,15 +82,66 @@ namespace PraticeManagement
 
         private string GetErrorMessageById(int Id)
         {
+
             switch (Id)
             {
                 case 0: return "Success";
                 case 1: return string.Format(MessageLoginErrorUserDoesNotExist, login.UserName);
                 case 2: return MessageLoginErrorNotApproved;
-                case 3: return MessageLoginErrorLockedOut;
+                case 3:
+                    var lockedOutMinitues = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.UnlockUserMinituesKey);
+                    int mins = 30;
+                    string output = string.Empty;
+                    try
+                    {
+                        mins = Convert.ToInt32(lockedOutMinitues);
+                        output = lockedOutMinitues + " minitue(s)";
+                        if (mins > 59)
+                        {
+                            output = (mins / 60).ToString() + " hour(s)";
+                        }
+                        if (mins == 1440)
+                        {
+                            output = "1 day";
+                        }
+                    }
+                    catch
+                    {
+                        output = "30 minitue(s)";
+                    }
+                    return string.Format(MessageLoginErrorLockedOutWithNotiFicationEmail, output);
                 case 4: return MessageLoginErrorNotActive;
                 default: return "Login failed";
             }
+        }
+
+        private void UnlockUserIfLockOutTimeCompleted(MembershipUser user)
+        {
+            if (user != null)
+            {
+                IsLockedOut = user.IsLockedOut;
+
+                if (user.IsLockedOut)
+                {
+                    DateTime lastLockout = user.LastLockoutDate;
+                    //Calculate the time the user should be unlocked   
+                    string unlockMinits = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.UnlockUserMinituesKey);
+                    if (!string.IsNullOrEmpty(unlockMinits))
+                    {
+                        DateTime unlockDate = lastLockout.AddMinutes(Convert.ToInt32(unlockMinits));
+                        //Check to see if it is time to unlock the user      
+                        if (DateTime.Now.ToUniversalTime() > unlockDate.ToUniversalTime())
+                            user.UnlockUser();
+                    }
+                }
+            }
+        }
+
+
+        protected void login_OnLoggingIn(object sender, EventArgs e)
+        {
+            MembershipUser user = Membership.GetUser(login.UserName);
+            UnlockUserIfLockOutTimeCompleted(user);
         }
 
         protected void login_LoggedIn(object sender, EventArgs e)
@@ -126,6 +209,46 @@ namespace PraticeManagement
             {
                 loginErrorDetails.Text = MessageLoginErrorLockedOut;
                 LogLoginResult(3);
+
+                if (!IsLockedOut)
+                {
+                    using (PersonServiceClient serviceClient = new PersonServiceClient())
+                    {
+                        try
+                        {
+                            string loginPageUrl = base.Request.Url.Scheme + "://" + base.Request.Url.Host + (IsAzureWebRole() ? string.Empty : (":" + base.Request.Url.Port.ToString())) + base.Request.ApplicationPath + string.Format(LoginPageUrlWithQueryString, login.UserName);
+                            serviceClient.SendLockedOutNotificationEmail(login.UserName, loginPageUrl);
+
+                        }
+                        catch (CommunicationException)
+                        {
+                            serviceClient.Abort();
+                            throw;
+                        }
+                    }
+                    var lockedOutMinitues = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.UnlockUserMinituesKey);
+                    string output = string.Empty;
+                    int mins = 30;
+                    try
+                    {
+                        mins = Convert.ToInt32(lockedOutMinitues);
+                        output = lockedOutMinitues + " minitue(s)";
+                        if (mins > 59)
+                        {
+                            output = (mins / 60).ToString() + " hour(s)";
+                        }
+                        if (mins == 1440)
+                        {
+                            output = "1 day";
+                        }
+                    }
+                    catch
+                    {
+                        output = "30 minitue(s)";
+                    }
+                    loginErrorDetails.Text = string.Format(MessageLoginErrorLockedOutWithNotiFicationEmail, output);
+                }
+
             }
             else
                 using (PersonServiceClient serviceClient = new PersonServiceClient())
@@ -158,6 +281,9 @@ namespace PraticeManagement
             else
             {
                 MembershipUser user = Membership.GetUser(login.UserName);
+                
+                UnlockUserIfLockOutTimeCompleted(user);
+
                 if (user == null)
                 {
                     msglblForgotPWDErrorDetails.ShowErrorMessage(
