@@ -132,6 +132,9 @@
   <data name="BonusOverheadName" xml:space="preserve">
     <value>Bonus Hourly Expense (BHE)</value>
   </data>
+  <data name="LockedOutEmailTemplateName" xml:space="preserve">
+    <value>LockedOutEmailTemplate</value>
+  </data>
   <data name="OpportunityConversionMessage" xml:space="preserve">
     <value>Only Administrators can convert an Opportunity.</value>
   </data>
