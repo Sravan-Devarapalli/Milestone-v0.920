@@ -147,6 +147,7 @@ namespace DataAccess
 
         private const string PersonListAllSeniorityFilterWithPayProcedure = "dbo.PersonListAllSeniorityFilterWithCurrentPay";
         private const string PersonListAllSeniorityFilterWithPayByCommaSeparatedIdsListProcedure = "dbo.PersonListAllSeniorityFilterWithCurrentPayByCommaSeparatedIdsList";
+        private const string GetPasswordHistoryByUserNameProcedure = "dbo.GetPasswordHistoryByUserName";
 
         #endregion
 
@@ -2825,7 +2826,46 @@ namespace DataAccess
                 command.ExecuteScalar();
             }
         }
-        
+
+        public static List<UserPasswordsHistory> GetPasswordHistoryByUserName(string userName)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(GetPasswordHistoryByUserNameProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(UserNameParam, userName);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<UserPasswordsHistory>();
+                    ReadPasswordHistory(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadPasswordHistory(SqlDataReader reader, List<UserPasswordsHistory> result)
+        {
+            if (reader.HasRows)
+            {
+                int hashedPasswordIndex = reader.GetOrdinal(PasswordColumn);
+                int passwordSaltIndex = reader.GetOrdinal(PasswordSaltColumn);
+
+                while (reader.Read())
+                {
+                    var user = new UserPasswordsHistory
+                    {
+                        HashedPassword = reader.GetString(hashedPasswordIndex),
+                        PasswordSalt = reader.GetString(passwordSaltIndex),
+                    };
+
+                    result.Add(user);
+                }
+            }
+        }
     }
 }
 
