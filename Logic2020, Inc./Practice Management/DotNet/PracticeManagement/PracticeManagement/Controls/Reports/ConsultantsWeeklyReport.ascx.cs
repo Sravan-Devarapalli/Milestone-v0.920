@@ -234,16 +234,19 @@ namespace PraticeManagement.Controls.Reports
             horizAxis.IsLabelAutoFit = true;
             horizAxis.IsStartedFromZero = true;
 
-            StripLine stripLine = new StripLine();
-            stripLine.ForeColor = Color.Blue;
-            stripLine.BorderColor = Color.Blue;
-            stripLine.BorderWidth = 2;
-            stripLine.StripWidthType = DateTimeIntervalType.Days;
-            stripLine.Interval = 0;
-            stripLine.IntervalOffset = DateTime.Today.ToOADate();
-            stripLine.BorderDashStyle = ChartDashStyle.Solid;
-            stripLine.ToolTip = "Today";
-            horizAxis.StripLines.Add(stripLine);
+            if (utf.IsshowTodayBar)
+            {
+                StripLine stripLine = new StripLine();
+                stripLine.ForeColor = Color.Blue;
+                stripLine.BorderColor = Color.Blue;
+                stripLine.BorderWidth = 2;
+                stripLine.StripWidthType = DateTimeIntervalType.Days;
+                stripLine.Interval = 0;
+                stripLine.IntervalOffset = DateTime.Today.ToOADate();
+                stripLine.BorderDashStyle = ChartDashStyle.Solid;
+                stripLine.ToolTip = "Today";
+                horizAxis.StripLines.Add(stripLine);
+            }
 
             if (utf.DetalizationSelectedValue == "1")
             {
