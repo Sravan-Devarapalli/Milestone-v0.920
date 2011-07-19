@@ -106,6 +106,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to LockedOutEmailTemplate.
+        /// </summary>
+        internal static string LockedOutEmailTemplateName {
+            get {
+                return ResourceManager.GetString("LockedOutEmailTemplateName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only Administrators can convert an Opportunity..
         /// </summary>
         internal static string OpportunityConversionMessage {
