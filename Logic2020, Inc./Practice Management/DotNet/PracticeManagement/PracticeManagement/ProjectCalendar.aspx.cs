@@ -107,7 +107,7 @@ namespace PraticeManagement
                 if (txtWidth < lblWidth)
                     pt.Label = item.smallLabel;
             }
-            pt.ToolTip = item.Tooltip;
+            pt.MapAreaAttributes = "onmouseover=\"DisplayTooltip('" + item.Tooltip + "');\" onmouseout=\"DisplayTooltip('');\"";
         }
 
         private void SetAlterNativeColorsForBar(DateTime ptStart, DateTime ptEnd, int barIndex, DataPointCollection points)
@@ -148,21 +148,6 @@ namespace PraticeManagement
             var horizAxis2 = chartProjectDetails.ChartAreas["ProjectsArea"].AxisY2;
             horizAxis2.Minimum = minDate.ToOADate();
             horizAxis2.Maximum = maxDate.ToOADate();
-        }
-
-        private void PrepareTooltip(DataPointCustomProperties pt)
-        {
-            ProjectNameCellRounded btnProject = (ProjectNameCellRounded)LoadControl(Constants.ApplicationControls.ProjectNameCellRoundedControl);
-            btnProject.ButtonProjectNameId = pt.Label;
-
-            btnProject.ButtonProjectNameToolTip = pt.ToolTip; //PrepareToolTipView(project);
-            btnProject.ToolTipOffsetX = 5;
-            btnProject.ToolTipOffsetY = -15;
-            btnProject.ToolTipPopupPosition = HoverMenuPopupPosition.Right;
-            var indentDiv = new Panel() { CssClass = "cell-pad" };
-            indentDiv.Controls.Add(btnProject);
-            chartProjectDetails.Controls.Add(indentDiv);
-
         }
 
         protected void imgbtnNavigateRange_Click(object sender, EventArgs e)
