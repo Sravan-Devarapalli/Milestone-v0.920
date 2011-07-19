@@ -6,6 +6,8 @@ using System.Web.UI.WebControls;
 using PraticeManagement.PersonService;
 using System.Text.RegularExpressions;
 using System.Web;
+using PraticeManagement.Utils;
+using DataTransferObjects;
 namespace PraticeManagement
 {
     public partial class ChangePassword : System.Web.UI.Page, System.Web.UI.IPostBackEventHandler
@@ -15,7 +17,9 @@ namespace PraticeManagement
         public const string PwdKey = "Pwd";
         public const string IsValidUserKey = "IsValidUser";
         public const string ChangePwdFailureText = "Change Password is failed. The user name does not exists in password reset requests list or it's been more than 24 hours that you have requested for Password reset.";
-
+        public const string IsNewPasswordMatchedWithOldPasswordFailureText = "Last {0} password(s) cannot be reused.";
+        public const string PasswordChangeMorethanOnceFailureText = "Password cannot be changed more than once in {0}.";
+       
         string Username
         {
             get
@@ -48,6 +52,8 @@ namespace PraticeManagement
             }
         }
 
+        private bool IsFirstTimeLogin { get; set; }
+
         protected void changePassword_OnChangingPassword(object sender, System.Web.UI.WebControls.LoginCancelEventArgs e)
         {
             var ChangePasswordContainer = changePassword.FindControl("ChangePasswordContainerID");
@@ -58,11 +64,22 @@ namespace PraticeManagement
                     goto Cancel;
                 }
 
-                if (ValidateCredentialsAndSetPassword())
+                if (ValidateCredentials())
                 {
-                    hdnAreCredentialssaved.Value = "true";
-                    var newPwdTextBox = ChangePasswordContainer.FindControl("NewPassword") as TextBox;
-                    newPwdTextBox.Attributes["value"] = changePassword.NewPassword;
+                    if (!IsNewPasswordMatchedWithOldPassword())
+                    {
+                        SetNewPasswordForUser();
+                        hdnAreCredentialssaved.Value = "true";
+                        var newPwdTextBox = ChangePasswordContainer.FindControl("NewPassword") as TextBox;
+                        newPwdTextBox.Attributes["value"] = changePassword.NewPassword;
+                    }
+                    else
+                    {
+                        var count = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.OldPasswordCheckCountKey);
+                        var failureText = string.Empty;
+                        failureText = !string.IsNullOrEmpty(count) ? string.Format(IsNewPasswordMatchedWithOldPasswordFailureText, count) : string.Format(IsNewPasswordMatchedWithOldPasswordFailureText, 3);
+                        msglblchangePasswordDetails.ShowErrorMessage(failureText);
+                    }
                 }
                 else
                 {
@@ -77,6 +94,110 @@ namespace PraticeManagement
 
                 e.Cancel = true;
             }
+            else
+            {
+                bool isValidPassword = Membership.ValidateUser(changePassword.UserName, changePassword.CurrentPassword);//ThulasiramP
+
+                if (isValidPassword)
+                {
+                    if (IsNewPasswordMatchedWithOldPassword())
+                    {
+                        var count = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.OldPasswordCheckCountKey);
+                        var failureText = string.Empty;
+                        failureText = !string.IsNullOrEmpty(count) ? string.Format(IsNewPasswordMatchedWithOldPasswordFailureText, count) : string.Format(IsNewPasswordMatchedWithOldPasswordFailureText, 3);
+                        msglblchangePasswordDetails.ShowErrorMessage(failureText);
+                        e.Cancel = true;
+                    }
+                    else
+                    {
+                        string changePasswordTimeSpanLimitInDays = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.ChangePasswordTimeSpanLimitInDaysKey);
+
+                        if (changePasswordTimeSpanLimitInDays != "*" && changePasswordTimeSpanLimitInDays != string.Empty)
+                        {
+                            int days = Convert.ToInt32(changePasswordTimeSpanLimitInDays);
+                            MembershipUser user = Membership.GetUser(changePassword.UserName);
+                            if (user != null && !IsFirstTimeLogin)
+                            {
+                                TimeSpan daysTs = new TimeSpan(days, 0, 0, 0).Duration();
+                                DateTime lastPasswordChanged = user.LastPasswordChangedDate.ToUniversalTime();
+                                DateTime now = DateTime.UtcNow.ToUniversalTime();
+                                TimeSpan ts = now.Subtract(lastPasswordChanged).Duration();
+                                
+                                if (ts < daysTs)
+                                {
+                                    var text = string.Empty;
+                                    if (days == 1)
+                                    {
+                                        text = "24 hours";
+                                    }
+                                    else
+                                    {
+                                        text = "1 week";
+                                    }
+                                    var failureText = string.Empty;
+                                    failureText =  string.Format(PasswordChangeMorethanOnceFailureText, text);
+                                    msglblchangePasswordDetails.ShowErrorMessage(failureText);
+                                    e.Cancel = true;
+                                }
+
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    msglblchangePasswordDetails.ShowErrorMessage("You entered Invalid Password.");
+                    e.Cancel = true;
+                }
+            }
+        }
+
+        private void SetNewPasswordForUser()
+        {
+            using (var service = new PersonServiceClient())
+            {
+                service.SetNewPasswordForUser(changePassword.UserName, changePassword.NewPassword);
+            }
+        }
+
+        private bool IsNewPasswordMatchedWithOldPassword()
+        {
+            var historyList = DataHelper.GetPasswordHistoryByUserName(changePassword.UserName);
+
+            bool isMatchedWithOldPassword = false;
+
+            if (changePassword.CurrentPassword == changePassword.NewPassword)
+            {
+                isMatchedWithOldPassword = true;
+            }
+
+            if (changePassword.DisplayUserName && !string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
+            {
+                MembershipUser user = Membership.GetUser(Username);
+                if (user != null)
+                {
+                    bool isPreviousPassword = Membership.ValidateUser(changePassword.UserName, changePassword.NewPassword);
+                    if (isPreviousPassword)
+                    {
+                        isMatchedWithOldPassword = true;
+                    }
+                }
+            }
+
+            if (!isMatchedWithOldPassword)
+            {
+                foreach (var item in historyList)
+                {
+                    string hashPassword = DataHelper.GetEncodedPassword(changePassword.NewPassword, item.PasswordSalt);
+                    if (hashPassword == item.HashedPassword)
+                    {
+                        isMatchedWithOldPassword = true;
+                        break;
+                    }
+                }
+            }
+
+            return isMatchedWithOldPassword;
         }
 
         private void LoginUser()
@@ -107,31 +228,34 @@ namespace PraticeManagement
             return true;
         }
 
-        private bool ValidateCredentialsAndSetPassword()
+        private bool ValidateCredentials()
         {
             bool isValidUser = false;
             using (var service = new PersonServiceClient())
             {
                 isValidUser = service.CheckIfTemporaryCredentialsValid(changePassword.UserName, changePassword.CurrentPassword);
-                if (isValidUser)
-                {
-                    service.SetNewPasswordForUser(changePassword.UserName, changePassword.NewPassword);
-                }
             }
             return isValidUser;
         }
 
         protected void Page_Load(object senser, EventArgs e)
         {
+            MembershipUser user = Membership.GetUser(HttpContext.Current.User.Identity.Name);
+            TimeSpan ts = new TimeSpan(00, 00, 20);
+            if (user != null
+           && user.CreationDate.Subtract(user.LastPasswordChangedDate).Duration() < ts)
+            {
+                IsFirstTimeLogin = true;
+            }
+
             if (!Page.IsPostBack)
             {
-                MembershipUser user = Membership.GetUser(HttpContext.Current.User.Identity.Name);
-                TimeSpan ts = new TimeSpan(00, 00, 20);
                 if (user != null
                && user.CreationDate.Subtract(user.LastPasswordChangedDate).Duration() < ts)
                 {
                     System.Web.UI.ScriptManager.RegisterStartupScript(this, GetType(), "", "alert('This is your first time logging in to Practice Management. You must change your password before continuing!');", true);
                 }
+
 
                 UrlRoleMappingElementSection mapping = UrlRoleMappingElementSection.Current;
                 var person = DataHelper.CurrentPerson;
