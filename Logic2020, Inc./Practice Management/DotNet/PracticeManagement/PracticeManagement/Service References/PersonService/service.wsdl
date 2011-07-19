@@ -152,6 +152,30 @@
   <wsdl:message name="IPersonService_GetPersonMilestonesAfterTerminationDate_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonMilestonesAfterTerminationDateResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_GetPasswordHistoryByUserName_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPasswordHistoryByUserName" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPasswordHistoryByUserName_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPasswordHistoryByUserNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetEncodedPassword_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetEncodedPassword" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetEncodedPassword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetEncodedPasswordResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_RestartCustomMembershipProvider_InputMessage">
+    <wsdl:part name="parameters" element="tns:RestartCustomMembershipProvider" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_RestartCustomMembershipProvider_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RestartCustomMembershipProviderResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_SendLockedOutNotificationEmail_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendLockedOutNotificationEmail" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_SendLockedOutNotificationEmail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendLockedOutNotificationEmailResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonMilestoneWithFinancials_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonMilestoneWithFinancials" />
   </wsdl:message>
@@ -437,6 +461,22 @@
     <wsdl:operation name="GetPersonMilestonesAfterTerminationDate">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonMilestonesAfterTerminationDate" message="tns:IPersonService_GetPersonMilestonesAfterTerminationDate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonMilestonesAfterTerminationDateResponse" message="tns:IPersonService_GetPersonMilestonesAfterTerminationDate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPasswordHistoryByUserName">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPasswordHistoryByUserName" message="tns:IPersonService_GetPasswordHistoryByUserName_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPasswordHistoryByUserNameResponse" message="tns:IPersonService_GetPasswordHistoryByUserName_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEncodedPassword">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetEncodedPassword" message="tns:IPersonService_GetEncodedPassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetEncodedPasswordResponse" message="tns:IPersonService_GetEncodedPassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RestartCustomMembershipProvider">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/RestartCustomMembershipProvider" message="tns:IPersonService_RestartCustomMembershipProvider_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/RestartCustomMembershipProviderResponse" message="tns:IPersonService_RestartCustomMembershipProvider_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendLockedOutNotificationEmail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SendLockedOutNotificationEmail" message="tns:IPersonService_SendLockedOutNotificationEmail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SendLockedOutNotificationEmailResponse" message="tns:IPersonService_SendLockedOutNotificationEmail_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetPersonMilestoneWithFinancials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials" message="tns:IPersonService_GetPersonMilestoneWithFinancials_InputMessage" />
@@ -772,6 +812,42 @@
     </wsdl:operation>
     <wsdl:operation name="GetPersonMilestonesAfterTerminationDate">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonMilestonesAfterTerminationDate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPasswordHistoryByUserName">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPasswordHistoryByUserName" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEncodedPassword">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetEncodedPassword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RestartCustomMembershipProvider">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/RestartCustomMembershipProvider" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendLockedOutNotificationEmail">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/SendLockedOutNotificationEmail" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
