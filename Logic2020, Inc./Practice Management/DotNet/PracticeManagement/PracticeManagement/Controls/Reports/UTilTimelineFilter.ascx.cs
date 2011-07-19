@@ -15,20 +15,47 @@ namespace PraticeManagement.Controls.Reports
         private const int DEFAULT_STEP = 7;
         private const int DAYS_FORWARD = 184;
         private string RESOURE_DICTIONARY_FILTER_LIST_KEY = "RESOURE_DICTIONARY_FILTER_LIST_KEYS";
+
         public bool ActivePersons { get { return chbActivePersons.Checked; } }
+
         public bool ProjectedPersons { get { return chbProjectedPersons.Checked; } }
+
         public string PracticesSelected { get { return cblPractices.SelectedItems; } }
+
         public bool ActiveProjects { get { return chbActiveProjects.Checked; } }
+
         public bool ProjectedProjects { get { return chbProjectedProjects.Checked; } }
+
         public bool ExperimentalProjects { get { return chbExperimentalProjects.Checked; } }
+
         public bool InternalProjects { get { return chbInternalProjects.Checked; } }
+
         public string TimescalesSelected { get { return cblTimeScales.SelectedItems; } }
+
         public bool ExcludeInternalPractices { get { return chkExcludeInternalPractices.Checked; } }
+
         public string SortDirection { get { return this.rbSortbyAsc.Checked ? "Desc" : "Asc"; } }
+
         public int SortId { get { return Convert.ToInt32(ddlSortBy.SelectedItem.Value); } }
+
         public int AvgUtil { get { return ParseInt(ddlAvgUtil.SelectedValue, int.MaxValue); } }
-        public int Granularity { get { return ParseInt(ddlDetalization.SelectedValue, DEFAULT_STEP); } }
-        public int Period { get { return ParseInt((EndPeriod.Subtract(BegPeriod).Days + 1).ToString(), DAYS_FORWARD); } }
+
+        public int Granularity 
+        {
+            get 
+            { 
+                return ParseInt(ddlDetalization.SelectedValue, DEFAULT_STEP); 
+            }
+        }
+
+        public int Period
+        {
+            get
+            {
+                return ParseInt((EndPeriod.Subtract(BegPeriod).Days + 1).ToString(), DAYS_FORWARD);
+            }
+        }
+
         public DateTime BegPeriod
         {
             get
@@ -43,7 +70,15 @@ namespace PraticeManagement.Controls.Reports
                     var now = Utils.Generic.GetNowWithTimeZone();
                     if (selectedVal > 0)
                     {
-                        return now.AddDays(1 - now.Day).Date;
+                        //return now.AddDays(1 - now.Day).Date;
+                        if (Granularity == 1)
+                        {
+                            return now.Date;
+                        }
+                        else
+                        {
+                            return now.AddDays(-(int)now.DayOfWeek).Date;
+                        }
                     }
                     else
                     {
@@ -52,7 +87,17 @@ namespace PraticeManagement.Controls.Reports
                 }
             }
         }
+
+        public bool IsshowTodayBar
+        {
+            get
+            {
+                return ddlPeriod.SelectedValue == "0";
+            }
+        }
+
         public string DetalizationSelectedValue { get { return ddlDetalization.SelectedValue; } }
+
         public DateTime EndPeriod
         {
             get
@@ -68,7 +113,15 @@ namespace PraticeManagement.Controls.Reports
                     DateTime firstDay = new DateTime(now.Year, now.Month, 1);
                     if (selectedVal > 0)
                     {
-                        return firstDay.AddMonths(selectedVal).AddDays(-1).Date;
+                        //return firstDay.AddMonths(selectedVal).AddDays(-1).Date;
+                        if (Granularity == 1)
+                        {
+                            return now.AddMonths(selectedVal).AddDays(-1).Date;
+                        }
+                        else
+                        {
+                            return now.AddDays(-(int)now.DayOfWeek).AddMonths(selectedVal).AddDays(-1).Date;
+                        }                       
                     }
                     else
                     {
@@ -160,9 +213,11 @@ namespace PraticeManagement.Controls.Reports
         }
 
         public delegate void OnUpDateViewClick(object sender, EventArgs e);
+
         public event OnUpDateViewClick EvntHandler_OnUpDateView_Click;
 
         public delegate void OnResetFilterClick(object sender, EventArgs e);
+
         public event OnResetFilterClick EvntHandler_OnResetFilter_Click;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -406,5 +461,7 @@ namespace PraticeManagement.Controls.Reports
             reportFilterDictionary.Add(Constants.ResourceKeys.PeriodKey, ddlPeriod.SelectedValue);
             DataHelper.SaveResourceKeyValuePairs(SettingsType.Reports, reportFilterDictionary);
         }
+
     }
 }
+
