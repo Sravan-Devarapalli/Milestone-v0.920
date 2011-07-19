@@ -211,6 +211,7 @@
     <Compile Include="Timezone.cs" />
     <Compile Include="Triple.cs" />
     <Compile Include="UserCredentials.cs" />
+    <Compile Include="UserPasswordsHistory.cs" />
     <Compile Include="Utils\Generic.cs" />
     <Compile Include="WeekPaidOption.cs" />
   </ItemGroup>
