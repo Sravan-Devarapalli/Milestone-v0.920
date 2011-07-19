@@ -55,7 +55,13 @@ namespace PraticeManagement
             public const string IsDayLightSavingsTimeEffectKey = "IsDayLightSavingsTimeEffect";
             public const string IsDefaultMarginInfoEnabledForAllClientsKey = "IsDefaultMarginInfoEnabledForAllClients";
             public const string IsDefaultMarginInfoEnabledForAllPersonsKey = "IsDefaultMarginInfoEnabledForAllPersons";
-
+            public const string OldPasswordCheckCountKey = "OldPasswordCheckCount";
+            public const string ChangePasswordTimeSpanLimitInDaysKey = "ChangePasswordTimeSpanLimitInDays";
+            public const string FailedPasswordAttemptCountKey = "FailedPasswordAttemptCount";
+            public const string PasswordAttemptWindowKey = "PasswordAttemptWindow";
+            public const string IsLockOutPolicyEnabledKey = "IsLockOutPolicyEnabled";
+            public const string UnlockUserMinituesKey = "UnlockUserMinitues";
+            
             #endregion
 
         }
