@@ -64,7 +64,6 @@ BEGIN
 
     UPDATE dbo.aspnet_Membership
     SET    Password = @NewPassword,
-           LastPasswordChangedDate = @CurrentTimeUtc,
            PasswordFormat = @PasswordFormat,
            PasswordSalt = @PasswordSalt
     WHERE  @UserId = UserId AND
