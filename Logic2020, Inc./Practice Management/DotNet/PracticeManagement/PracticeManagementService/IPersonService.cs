@@ -503,6 +503,18 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Milestone> GetPersonMilestonesAfterTerminationDate(int personId, DateTime terminationDate);
+
+        [OperationContract]
+        List<UserPasswordsHistory> GetPasswordHistoryByUserName(string userName);
+
+        [OperationContract]
+        string GetEncodedPassword(string password, string passwordSalt);
+
+        [OperationContract]
+        void RestartCustomMembershipProvider();
+
+        [OperationContract]
+        void SendLockedOutNotificationEmail(string userName, string loginPageUrl);
     }
 }
 
