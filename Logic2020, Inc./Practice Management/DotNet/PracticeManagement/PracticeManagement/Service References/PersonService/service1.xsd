@@ -337,6 +337,58 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetPasswordHistoryByUserName">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPasswordHistoryByUserNameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPasswordHistoryByUserNameResult" nillable="true" type="q27:ArrayOfUserPasswordsHistory" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetEncodedPassword">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="password" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="passwordSalt" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetEncodedPasswordResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetEncodedPasswordResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RestartCustomMembershipProvider">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RestartCustomMembershipProviderResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SendLockedOutNotificationEmail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="loginPageUrl" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SendLockedOutNotificationEmailResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="GetPersonMilestoneWithFinancials">
     <xs:complexType>
       <xs:sequence>
@@ -366,7 +418,7 @@
   <xs:element name="SetAsDefaultManager">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q27:Person" />
+        <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q28:Person" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -378,7 +430,7 @@
   <xs:element name="IsSomeonesManager">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q28:Person" />
+        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q29:Person" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -392,8 +444,8 @@
   <xs:element name="SetNewManager">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="oldManager" nillable="true" type="q29:Person" />
-        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="newManager" nillable="true" type="q30:Person" />
+        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="oldManager" nillable="true" type="q30:Person" />
+        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="newManager" nillable="true" type="q31:Person" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -405,7 +457,7 @@
   <xs:element name="GetConsultantUtilizationReport">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="context" nillable="true" type="q31:ConsultantTableReportContext" />
+        <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="context" nillable="true" type="q32:ConsultantTableReportContext" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -431,14 +483,14 @@
   <xs:element name="GetConsultantUtilizationWeekly">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="context" nillable="true" type="q32:ConsultantTimelineReportContext" />
+        <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="context" nillable="true" type="q33:ConsultantTimelineReportContext" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetConsultantUtilizationWeeklyResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetConsultantUtilizationWeeklyResult" nillable="true" type="q33:ArrayOfQuadrupleOfPersonArrayOfintintintlqlLCQKx" />
+        <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetConsultantUtilizationWeeklyResult" nillable="true" type="q34:ArrayOfQuadrupleOfPersonArrayOfintintintlqlLCQKx" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -446,21 +498,21 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="personId" type="xs:int" />
-        <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="context" nillable="true" type="q34:ConsultantTimelineReportContext" />
+        <xs:element xmlns:q35="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="context" nillable="true" type="q35:ConsultantTimelineReportContext" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ConsultantUtilizationDailyByPersonResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q35="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ConsultantUtilizationDailyByPersonResult" nillable="true" type="q35:ArrayOfTripleOfPersonArrayOfintintfnyeTkk6" />
+        <xs:element xmlns:q36="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ConsultantUtilizationDailyByPersonResult" nillable="true" type="q36:ArrayOfTripleOfPersonArrayOfintintfnyeTkk6" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="IsCompensationCoversMilestone">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q36="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q36:Person" />
+        <xs:element xmlns:q37="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q37:Person" />
         <xs:element minOccurs="0" name="start" nillable="true" type="xs:dateTime" />
         <xs:element minOccurs="0" name="end" nillable="true" type="xs:dateTime" />
       </xs:sequence>
@@ -514,14 +566,14 @@
   <xs:element name="GetPermissions">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q37="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q37:Person" />
+        <xs:element xmlns:q38="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q38:Person" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPermissionsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q38="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPermissionsResult" nillable="true" type="q38:PersonPermission" />
+        <xs:element xmlns:q39="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPermissionsResult" nillable="true" type="q39:PersonPermission" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -541,7 +593,7 @@
   <xs:element name="GetPersonListResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q39="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPersonListResult" nillable="true" type="q39:ArrayOfPerson" />
+        <xs:element xmlns:q40="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPersonListResult" nillable="true" type="q40:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -560,14 +612,14 @@
         <xs:element minOccurs="0" name="projected" type="xs:boolean" />
         <xs:element minOccurs="0" name="terminated" type="xs:boolean" />
         <xs:element minOccurs="0" name="inactive" type="xs:boolean" />
-        <xs:element xmlns:q40="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="alphabet" nillable="true" type="q40:char" />
+        <xs:element xmlns:q41="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="alphabet" nillable="true" type="q41:char" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPersonListWithCurrentPayResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q41="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPersonListWithCurrentPayResult" nillable="true" type="q41:ArrayOfPerson" />
+        <xs:element xmlns:q42="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPersonListWithCurrentPayResult" nillable="true" type="q42:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -586,14 +638,14 @@
         <xs:element minOccurs="0" name="projected" type="xs:boolean" />
         <xs:element minOccurs="0" name="terminated" type="xs:boolean" />
         <xs:element minOccurs="0" name="inactive" type="xs:boolean" />
-        <xs:element xmlns:q42="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="alphabet" nillable="true" type="q42:char" />
+        <xs:element xmlns:q43="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="alphabet" nillable="true" type="q43:char" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPersonListWithCurrentPayByCommaSeparatedIdsListResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q43="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPersonListWithCurrentPayByCommaSeparatedIdsListResult" nillable="true" type="q43:ArrayOfPerson" />
+        <xs:element xmlns:q44="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPersonListWithCurrentPayByCommaSeparatedIdsListResult" nillable="true" type="q44:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -615,7 +667,7 @@
   <xs:element name="GetPersonListActiveDateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q44="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPersonListActiveDateResult" nillable="true" type="q44:ArrayOfPerson" />
+        <xs:element xmlns:q45="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPersonListActiveDateResult" nillable="true" type="q45:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -632,7 +684,7 @@
   <xs:element name="PersonListAllShortResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q45="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonListAllShortResult" nillable="true" type="q45:ArrayOfPerson" />
+        <xs:element xmlns:q46="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonListAllShortResult" nillable="true" type="q46:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -647,7 +699,7 @@
   <xs:element name="PersonsGetBySeniorityAndStatusResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q46="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonsGetBySeniorityAndStatusResult" nillable="true" type="q46:ArrayOfPerson" />
+        <xs:element xmlns:q47="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonsGetBySeniorityAndStatusResult" nillable="true" type="q47:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -662,7 +714,7 @@
   <xs:element name="PersonListShortByRoleAndStatusResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q47="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonListShortByRoleAndStatusResult" nillable="true" type="q47:ArrayOfPerson" />
+        <xs:element xmlns:q48="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonListShortByRoleAndStatusResult" nillable="true" type="q48:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -678,7 +730,7 @@
   <xs:element name="PersonListAllForMilestoneResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q48="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonListAllForMilestoneResult" nillable="true" type="q48:ArrayOfPerson" />
+        <xs:element xmlns:q49="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonListAllForMilestoneResult" nillable="true" type="q49:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -694,7 +746,7 @@
         <xs:element minOccurs="0" name="projected" type="xs:boolean" />
         <xs:element minOccurs="0" name="terminated" type="xs:boolean" />
         <xs:element minOccurs="0" name="inactive" type="xs:boolean" />
-        <xs:element xmlns:q49="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="alphabet" nillable="true" type="q49:char" />
+        <xs:element xmlns:q50="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="alphabet" nillable="true" type="q50:char" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -717,7 +769,7 @@
         <xs:element minOccurs="0" name="projected" type="xs:boolean" />
         <xs:element minOccurs="0" name="terminated" type="xs:boolean" />
         <xs:element minOccurs="0" name="inactive" type="xs:boolean" />
-        <xs:element xmlns:q50="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="alphabet" nillable="true" type="q50:char" />
+        <xs:element xmlns:q51="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="alphabet" nillable="true" type="q51:char" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -755,7 +807,7 @@
   <xs:element name="GetRecruiterListResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q51="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetRecruiterListResult" nillable="true" type="q51:ArrayOfPerson" />
+        <xs:element xmlns:q52="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetRecruiterListResult" nillable="true" type="q52:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -769,14 +821,14 @@
   <xs:element name="GetSalespersonListResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q52="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetSalespersonListResult" nillable="true" type="q52:ArrayOfPerson" />
+        <xs:element xmlns:q53="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetSalespersonListResult" nillable="true" type="q53:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="PersonListSalesperson">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q53="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q53:Person" />
+        <xs:element xmlns:q54="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q54:Person" />
         <xs:element minOccurs="0" name="inactives" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
@@ -784,7 +836,7 @@
   <xs:element name="PersonListSalespersonResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q54="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonListSalespersonResult" nillable="true" type="q54:ArrayOfPerson" />
+        <xs:element xmlns:q55="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonListSalespersonResult" nillable="true" type="q55:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -800,7 +852,7 @@
   <xs:element name="GetPracticeManagerListResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q55="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPracticeManagerListResult" nillable="true" type="q55:ArrayOfPerson" />
+        <xs:element xmlns:q56="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPracticeManagerListResult" nillable="true" type="q56:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -809,21 +861,21 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="endDate" nillable="true" type="xs:dateTime" />
         <xs:element minOccurs="0" name="includeInactive" type="xs:boolean" />
-        <xs:element xmlns:q56="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q56:Person" />
+        <xs:element xmlns:q57="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q57:Person" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="PersonListProjectOwnerResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q57="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonListProjectOwnerResult" nillable="true" type="q57:ArrayOfPerson" />
+        <xs:element xmlns:q58="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonListProjectOwnerResult" nillable="true" type="q58:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="PersonListPracticeManager">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q58="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q58:Person" />
+        <xs:element xmlns:q59="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q59:Person" />
         <xs:element minOccurs="0" name="projectId" nillable="true" type="xs:int" />
         <xs:element minOccurs="0" name="endDate" nillable="true" type="xs:dateTime" />
         <xs:element minOccurs="0" name="includeInactive" type="xs:boolean" />
@@ -833,7 +885,7 @@
   <xs:element name="PersonListPracticeManagerResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q59="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonListPracticeManagerResult" nillable="true" type="q59:ArrayOfPerson" />
+        <xs:element xmlns:q60="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonListPracticeManagerResult" nillable="true" type="q60:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -847,7 +899,7 @@
   <xs:element name="GetSubordinatesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q60="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetSubordinatesResult" nillable="true" type="q60:ArrayOfPerson" />
+        <xs:element xmlns:q61="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetSubordinatesResult" nillable="true" type="q61:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -862,7 +914,7 @@
   <xs:element name="GetOneOffListResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q61="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetOneOffListResult" nillable="true" type="q61:ArrayOfPerson" />
+        <xs:element xmlns:q62="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetOneOffListResult" nillable="true" type="q62:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -876,7 +928,7 @@
   <xs:element name="GetPersonDetailResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q62="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPersonDetailResult" nillable="true" type="q62:Person" />
+        <xs:element xmlns:q63="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPersonDetailResult" nillable="true" type="q63:Person" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -890,7 +942,7 @@
   <xs:element name="GetPersonByAliasResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q63="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPersonByAliasResult" nillable="true" type="q63:Person" />
+        <xs:element xmlns:q64="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPersonByAliasResult" nillable="true" type="q64:Person" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
