@@ -9,14 +9,114 @@
     Calendar view
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
+     <style type="text/css">
+        .FadingTooltip
+        {
+            border-right: darkgray 1px outset;
+            border-top: darkgray 1px outset;
+            font-size: 10px;
+            border-left: darkgray 1px outset;
+            width: auto;
+            color: black;
+            border-bottom: darkgray 1px outset;
+            height: auto;
+            background-color: lemonchiffon;
+            borderbottomwidths: "3,3,3,3";
+        }
+    </style>
     <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
-<script type="text/javascript">
-    $(document).ready(function(){
-    var x = document.getElementById('<%= chartProjectDetails.ClientID %>');
-    debugger;
-    }
-);
-</script>
+    <script type="text/javascript" language="javascript">
+        var FADINGTOOLTIP
+        var wnd_height, wnd_width;
+        var tooltip_height, tooltip_width;
+        var tooltip_shown = false;
+        var transparency = 100;
+        var timer_id = 1;
+        var tooltiptext;
+
+        // override events
+        window.onload = WindowLoading;
+        window.onresize = UpdateWindowSize;
+        document.onmousemove = AdjustToolTipPosition;
+
+        function DisplayTooltip(tooltip_text) {
+            FADINGTOOLTIP.innerHTML = tooltip_text;
+            tooltip_shown = (tooltip_text != "") ? true : false;
+            if (tooltip_text != "") {
+                // Get tooltip window height
+                tooltip_height = (FADINGTOOLTIP.style.pixelHeight) ? FADINGTOOLTIP.style.pixelHeight : FADINGTOOLTIP.offsetHeight;
+                transparency = 0;
+                ToolTipFading();
+            }
+            else {
+                clearTimeout(timer_id);
+                FADINGTOOLTIP.style.visibility = "hidden";
+            }
+        }
+
+        function AdjustToolTipPosition(e) {
+            if (tooltip_shown) {
+                e = e || window.event;
+
+                FADINGTOOLTIP.style.visibility = "visible";
+                setPosition($(FADINGTOOLTIP), getPosition(e).y, getPosition(e).x + 20)
+            }
+        }
+
+        function setPosition(item, ytop, xleft) {
+            item.offset({ top: ytop, left: xleft });
+        }
+
+        function getPosition(e) {
+            var cursor = { x: 0, y: 0 };
+            if (e.pageX || e.pageY) {
+                cursor.x = e.pageX;
+                cursor.y = e.pageY;
+            }
+            else {
+                var de = document.documentElement;
+                var b = document.body;
+
+                cursor.x = e.clientX +
+            (de.scrollLeft || b.scrollLeft) - (de.clientLeft || 0);
+                cursor.y = e.clientY +
+            (de.scrollTop || b.scrollTop) - (de.clientTop || 0);
+            }
+            return cursor;
+        }
+
+
+
+        function WindowLoading() {
+            FADINGTOOLTIP = document.getElementById('FADINGTOOLTIP');
+
+            // Get tooltip  window width				
+            tooltip_width = (FADINGTOOLTIP.style.pixelWidth) ? FADINGTOOLTIP.style.pixelWidth : FADINGTOOLTIP.offsetWidth;
+
+            // Get tooltip window height
+            tooltip_height = (FADINGTOOLTIP.style.pixelHeight) ? FADINGTOOLTIP.style.pixelHeight : FADINGTOOLTIP.offsetHeight;
+
+            UpdateWindowSize();
+        }
+
+        function ToolTipFading() {
+            if (transparency <= 100) {
+                FADINGTOOLTIP.style.filter = "alpha(opacity=" + transparency + ")";
+                transparency += 5;
+                timer_id = setTimeout('ToolTipFading()', 35);
+            }
+        }
+
+        function UpdateWindowSize() {
+            wnd_height = document.body.clientHeight;
+            wnd_width = document.body.clientWidth;
+        }
+
+    </script>
+    <div class="FadingTooltip" id="FADINGTOOLTIP" style="z-index: 999; padding: 5px;
+        visibility: hidden; position: absolute">
+    </div>
+
     <asp:UpdatePanel ID="updProjectDetails" runat="server">
         <ContentTemplate>
             <div style="text-align: center;">
