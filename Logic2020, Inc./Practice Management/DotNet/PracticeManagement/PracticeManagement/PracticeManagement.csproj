@@ -124,7 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ActivityLog.aspx" />
-    <Content Include="Calendarview.aspx" />
+    <Content Include="ProjectCalendar.aspx" />
     <Content Include="Config\BecomeUser.aspx" />
     <Content Include="Config\Branding.aspx" />
     <Content Include="Config\Clients.aspx" />
@@ -721,12 +721,12 @@
     <Compile Include="ActivityLog_Old.aspx.designer.cs">
       <DependentUpon>ActivityLog_Old.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Calendarview.aspx.cs">
-      <DependentUpon>Calendarview.aspx</DependentUpon>
+    <Compile Include="ProjectCalendar.aspx.cs">
+      <DependentUpon>ProjectCalendar.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Calendarview.aspx.designer.cs">
-      <DependentUpon>Calendarview.aspx</DependentUpon>
+    <Compile Include="ProjectCalendar.aspx.designer.cs">
+      <DependentUpon>ProjectCalendar.aspx</DependentUpon>
     </Compile>
     <Compile Include="Config\BecomeUser.aspx.cs">
       <DependentUpon>BecomeUser.aspx</DependentUpon>
