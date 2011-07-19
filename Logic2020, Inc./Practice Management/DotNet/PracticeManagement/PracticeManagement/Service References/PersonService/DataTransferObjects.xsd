@@ -343,7 +343,7 @@
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="Inactive" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsMarginColorInfoEnabled" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsMarginColorInfoEnabled" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
@@ -844,6 +844,19 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="BudgetCategoryType" nillable="true" type="tns:BudgetCategoryType" />
+  <xs:complexType name="ArrayOfUserPasswordsHistory">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="UserPasswordsHistory" nillable="true" type="tns:UserPasswordsHistory" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfUserPasswordsHistory" nillable="true" type="tns:ArrayOfUserPasswordsHistory" />
+  <xs:complexType name="UserPasswordsHistory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="HashedPassword" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PasswordSalt" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="UserPasswordsHistory" nillable="true" type="tns:UserPasswordsHistory" />
   <xs:complexType name="ArrayOfQuadrupleOfPersonArrayOfintintintlqlLCQKx">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="QuadrupleOfPersonArrayOfintintintlqlLCQKx" nillable="true" type="tns:QuadrupleOfPersonArrayOfintintintlqlLCQKx" />
