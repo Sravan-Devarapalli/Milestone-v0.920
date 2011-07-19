@@ -32,6 +32,10 @@
     <script src="Scripts/jquery.blockUI.js" type="text/javascript"></script>
     <script type="text/javascript">
 
+        function RaiseCustomForgotPasswordClick() {
+            Yes();
+        }
+
         function ConfirmChangePwd(textboxId, messageLabel) {
             var textbox = document.getElementById(textboxId);
             if (textbox != null && textbox.value != '') {
@@ -77,7 +81,7 @@
         <ContentTemplate>
             <div style="vertical-align: middle; margin-left: auto; margin-right: auto; width: 300px;
                 padding: 5px; background: #E2EBFF;">
-                <asp:Login ID="login" runat="server" OnLoggedIn="login_LoggedIn" OnLoginError="login_LoginError"
+                <asp:Login ID="login" runat="server" OnLoggedIn="login_LoggedIn" OnLoginError="login_LoginError" OnLoggingIn="login_OnLoggingIn"
                     RememberMeText="Remember me" Font-Bold="true" RememberMeSet="true" />
                 <div style="padding-bottom: 5px;">
                     <asp:LinkButton ID="lnkbtnForgotPwd" runat="server" Text="Forgot your Password?"
