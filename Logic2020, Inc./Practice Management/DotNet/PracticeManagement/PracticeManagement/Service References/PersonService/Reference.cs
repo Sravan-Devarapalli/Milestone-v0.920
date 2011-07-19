@@ -97,6 +97,18 @@ namespace PraticeManagement.PersonService {
             "")]
         DataTransferObjects.Milestone[] GetPersonMilestonesAfterTerminationDate(int personId, System.DateTime terminationDate);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPasswordHistoryByUserName", ReplyAction="http://tempuri.org/IPersonService/GetPasswordHistoryByUserNameResponse")]
+        DataTransferObjects.UserPasswordsHistory[] GetPasswordHistoryByUserName(string userName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetEncodedPassword", ReplyAction="http://tempuri.org/IPersonService/GetEncodedPasswordResponse")]
+        string GetEncodedPassword(string password, string passwordSalt);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/RestartCustomMembershipProvider", ReplyAction="http://tempuri.org/IPersonService/RestartCustomMembershipProviderResponse")]
+        void RestartCustomMembershipProvider();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SendLockedOutNotificationEmail", ReplyAction="http://tempuri.org/IPersonService/SendLockedOutNotificationEmailResponse")]
+        void SendLockedOutNotificationEmail(string userName, string loginPageUrl);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials", ReplyAction="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancialsResponse")]
         System.Data.DataSet GetPersonMilestoneWithFinancials(int personId);
         
@@ -213,7 +225,7 @@ namespace PraticeManagement.PersonService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
-     
+       
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -320,6 +332,22 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.Milestone[] GetPersonMilestonesAfterTerminationDate(int personId, System.DateTime terminationDate) {
             return base.Channel.GetPersonMilestonesAfterTerminationDate(personId, terminationDate);
+        }
+        
+        public DataTransferObjects.UserPasswordsHistory[] GetPasswordHistoryByUserName(string userName) {
+            return base.Channel.GetPasswordHistoryByUserName(userName);
+        }
+        
+        public string GetEncodedPassword(string password, string passwordSalt) {
+            return base.Channel.GetEncodedPassword(password, passwordSalt);
+        }
+        
+        public void RestartCustomMembershipProvider() {
+            base.Channel.RestartCustomMembershipProvider();
+        }
+        
+        public void SendLockedOutNotificationEmail(string userName, string loginPageUrl) {
+            base.Channel.SendLockedOutNotificationEmail(userName, loginPageUrl);
         }
         
         public System.Data.DataSet GetPersonMilestoneWithFinancials(int personId) {
