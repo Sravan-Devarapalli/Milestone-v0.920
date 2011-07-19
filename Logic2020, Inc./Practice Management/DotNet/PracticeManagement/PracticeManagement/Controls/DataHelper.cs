@@ -365,11 +365,11 @@ namespace PraticeManagement.Controls
         {
             var result = new List<DetailedProjectReportItem>();
             var projectsList = new List<Project>();
-             using (var serviceClient = new ProjectServiceClient())
+            using (var serviceClient = new ProjectServiceClient())
             {
                 try
                 {
-                     projectsList = serviceClient.GetProjectListByDateRange(true,false,true,false,false,false,startDate,endDate).AsQueryable().ToList();
+                    projectsList = serviceClient.GetProjectListByDateRange(true, false, true, false, false, false, startDate, endDate).AsQueryable().ToList();
                 }
                 catch (CommunicationException)
                 {
@@ -377,12 +377,12 @@ namespace PraticeManagement.Controls
                     throw;
                 }
             }
-          
+
 
             foreach (var project in projectsList)
                 result.Add(new DetailedProjectReportItem(startDate, endDate, project));
 
-            
+
             return result;
         }
 
@@ -1935,6 +1935,24 @@ namespace PraticeManagement.Controls
                 return serviceClient.IsUserHasPermissionOnProject(user, projectId);
             }
         }
+
+        public static List<UserPasswordsHistory> GetPasswordHistoryByUserName(string userName)
+        {
+            using (var person = new PersonServiceClient())
+            {
+                return person.GetPasswordHistoryByUserName(userName).AsQueryable().ToList();
+            }
+        }
+
+
+        public static string GetEncodedPassword(string password, string passwordSalt)
+        {
+            using (var person = new PersonServiceClient())
+            {
+                return person.GetEncodedPassword(password, passwordSalt);
+            }
+        }
+
     }
 }
 
