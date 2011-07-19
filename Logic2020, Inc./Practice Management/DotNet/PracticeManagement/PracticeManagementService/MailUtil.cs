@@ -16,7 +16,7 @@ namespace PracticeManagementService
         internal const string ModifiedUserEmailTemplateKey = "ModifiedUserEmailTemplate";
         internal const string ResetPasswordEmailTemplateKey = "ResetPasswordEmailTemplate";
         private const string TestSettingsEmailTemplateKey = "TestSettingsEmailTemplate";
-        private const string WelcomeEmailTemplateKey =      "WelcomeEmailTemplate";
+        private const string WelcomeEmailTemplateKey = "WelcomeEmailTemplate";
 
         #endregion
 
@@ -80,7 +80,53 @@ namespace PracticeManagementService
             message.IsBodyHtml = true;
 
             SmtpClient client = MailUtil.GetSmtpClient();
-            
+
+            message.From = new MailAddress(smtpSettings.PMSupportEmail);
+            client.Send(message);
+        }
+
+        internal static void SendLockedOutNotificationEmail(string userName, string loginPageUrl)
+        {
+            var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.LockedOutEmailTemplateName);
+            var smtpSettings = SettingsHelper.GetSMTPSettings();
+            var companyName = ConfigurationDAL.GetCompanyName();
+
+            var lockedOutMinitues = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.UnlockUserMinituesKey);
+            string output = string.Empty;
+            int mins = 30;
+            try
+            {
+                mins = Convert.ToInt32(lockedOutMinitues);
+                output = lockedOutMinitues + " minitue(s)";
+                if (mins > 59)
+                {
+                    output = (mins / 60).ToString() + " hour(s)";
+                }
+                if (mins == 1440)
+                {
+                    output = "1 day";
+                }
+            }
+            catch
+            {
+                output = "30 minitue(s)";
+            }
+
+            MailMessage message = new MailMessage();
+            DateTime now = DateTime.Now;
+            message.To.Add(new MailAddress(userName));
+            if (!string.IsNullOrEmpty(emailTemplate.EmailTemplateCc))
+            {
+                message.CC.Add(emailTemplate.EmailTemplateCc);
+            }
+
+            message.Subject = string.Format(emailTemplate.Subject, companyName);
+            message.Body = string.Format(emailTemplate.Body, output);
+
+            message.IsBodyHtml = true;
+
+            SmtpClient client = MailUtil.GetSmtpClient();
+
             message.From = new MailAddress(smtpSettings.PMSupportEmail);
             client.Send(message);
         }
@@ -157,6 +203,8 @@ namespace PracticeManagementService
         }
 
         #endregion
+
+
     }
 }
 
