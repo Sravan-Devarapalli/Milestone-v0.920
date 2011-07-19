@@ -16,7 +16,7 @@ namespace PraticeManagement.Objects
         private const string DetailsLabelFormat = "{0} - {1}";
         private const string AppendPersonFormat = "{0} {2} {1},";
         private const string AppendLastPersonFormat = "{0} {2} {1}";
-        private const string ToolTipView = " {1}, {0} {2}, {0} Start: {3:d}, {0} End: {4:d}, {0} Owner: {5},{0} Resources: {6}";
+        private const string ToolTipView = " {1}, {0} {2}, {0} <b> Start: </b>{3:d}, {0}  <b>End:</b> {4:d}, {0}  <b>Owner:</b> {5},{0}  <b>Resources:</b> {6}";
 
         #endregion
 
@@ -152,21 +152,21 @@ namespace PraticeManagement.Objects
                 if (i == personList.Count - 1)
                 {
                     persons.AppendFormat(AppendLastPersonFormat,
-                                         Environment.NewLine,
+                                         "<br />",
                                          HttpUtility.HtmlEncode(personList[i].Person.FirstName),
                                          HttpUtility.HtmlEncode(personList[i].Person.LastName));
                 }
                 else
                 {
                     persons.AppendFormat(AppendPersonFormat,
-                                        Environment.NewLine,
+                                        "<br />",
                                         HttpUtility.HtmlEncode(personList[i].Person.FirstName),
                                         HttpUtility.HtmlEncode(personList[i].Person.LastName));
                 }
             }
 
             return string.Format(ToolTipView,
-                Environment.NewLine,
+                "<br />",
                 HttpUtility.HtmlEncode(project.Client.Name),
                 HttpUtility.HtmlEncode(project.Name),
                 project.StartDate,
