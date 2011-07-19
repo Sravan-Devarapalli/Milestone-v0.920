@@ -15,6 +15,9 @@ using System.IO;
 using DataTransferObjects.ContextObjects;
 using System.Text;
 using System.Security.Cryptography;
+using System.Web.Configuration;
+using PraticeManagement;
+using System.Collections.Specialized;
 
 namespace PracticeManagementService
 {
@@ -496,7 +499,7 @@ namespace PracticeManagementService
 
             try
             {
-                ProcessPersonData(person, currentUser, oldPerson, loginPageUrl);               
+                ProcessPersonData(person, currentUser, oldPerson, loginPageUrl);
 
                 if (oldPerson != null
                     && !oldPerson.IsWelcomeEmailSent
@@ -506,7 +509,6 @@ namespace PracticeManagementService
                 {
                     var companyName = ConfigurationDAL.GetCompanyName();
                     SendWelcomeEmail(person, companyName, loginPageUrl);
-                    PersonDAL.UpdateLastPasswordChangedDateForPerson(person.Alias);
                 }
 
                 return person.Id.Value;
@@ -577,7 +579,7 @@ namespace PracticeManagementService
 
                 if (!person.Id.HasValue)
                 {
-                    
+
 
                     if (!string.IsNullOrEmpty(person.Alias))
                     {
@@ -591,7 +593,7 @@ namespace PracticeManagementService
 
                     }
                     // Create a Person record
-                    PersonDAL.PersonInsert(person, currentUser, connection, transaction);                  
+                    PersonDAL.PersonInsert(person, currentUser, connection, transaction);
                 }
                 else
                 {
@@ -957,6 +959,54 @@ namespace PracticeManagementService
         {
             return MilestoneDAL.GetPersonMilestonesAfterTerminationDate(personId, terminationDate);
         }
+
+        public List<UserPasswordsHistory> GetPasswordHistoryByUserName(string userName)
+        {
+            return PersonDAL.GetPasswordHistoryByUserName(userName);
+        }
+
+        public string GetEncodedPassword(string password, string passwordSalt)
+        {
+            return EncodePassword(password, passwordSalt);
+        }
+
+        public void RestartCustomMembershipProvider()
+        {
+            System.Web.HttpRuntime.UnloadAppDomain();
+
+            //// Get the configuration file.
+            //Configuration config = WebConfigurationManager.OpenWebConfiguration("~");
+
+            //var section = (MembershipSection)config.GetSection("system.web/membership");
+            //var defaultProvider = section.DefaultProvider;
+            //var providerSettings = section.Providers[defaultProvider];
+
+            //int count = Convert.ToInt32(providerSettings.Parameters.Get("maxInvalidPasswordAttempts"));
+            //count = count + 1;
+            //providerSettings.Parameters.Set("maxInvalidPasswordAttempts", count.ToString());
+
+           
+            //    // Save the configuration file.
+            //    config.Save(ConfigurationSaveMode.Minimal);
+            
+
+            //ConfigurationManager.RefreshSection("system.web/membership");
+            //count = count - 1;
+            //providerSettings.Parameters.Set("maxInvalidPasswordAttempts", count.ToString());
+
+            
+            //    // Save the configuration file.
+            //    config.Save(ConfigurationSaveMode.Minimal);
+            
+
+            //ConfigurationManager.RefreshSection("system.web/membership");
+        }
+
+        public void SendLockedOutNotificationEmail(string userName, string loginPageUrl)
+        {
+            MailUtil.SendLockedOutNotificationEmail(userName, loginPageUrl);
+        }
+
         #endregion
     }
 }
