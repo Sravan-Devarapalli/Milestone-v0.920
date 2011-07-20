@@ -34,6 +34,7 @@ namespace PraticeManagement
         {
             chartProjectDetails.Visible = true;
             chartProjectDetails.Titles["ProjectsTitle"].Text = "Project Calendar";
+            chartProjectDetails.Titles["ProjectsTitle"].Font =new Font("Arial", 10, FontStyle.Bold); 
             var points = chartProjectDetails.Series["Projects"].Points;
             points.Clear();
 
