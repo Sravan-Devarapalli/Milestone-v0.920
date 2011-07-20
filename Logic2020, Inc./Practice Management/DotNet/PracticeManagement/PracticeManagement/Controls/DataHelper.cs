@@ -1953,6 +1953,16 @@ namespace PraticeManagement.Controls
             }
         }
 
+
+        public static List<MilestonePerson> GetMilestonePersonListByProjectWithoutPay(int projectId)
+        {
+            using (var serviceClient = new MilestonePersonService.MilestonePersonServiceClient())
+            {
+                var milestonePersonList = serviceClient.GetMilestonePersonListByProjectWithoutPay(projectId);
+                return milestonePersonList.OrderBy(mp => mp.Person.PersonLastFirstName).ThenBy(mp => mp.StartDate).ToList();
+            }
+        }
+
     }
 }
 
