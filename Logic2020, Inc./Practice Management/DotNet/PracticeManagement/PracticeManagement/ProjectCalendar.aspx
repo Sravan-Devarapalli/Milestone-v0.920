@@ -186,7 +186,7 @@
                 </table>
             </td>
             <td style="margin-top: 5px; padding-top: 5px;">
-                Active Project with SOW
+               - Active Project with SOW
             </td>
         </tr>
         <tr>
@@ -205,7 +205,7 @@
                 </table>
             </td>
             <td style="margin-top: 5px; padding-top: 5px;">
-                Active Project pending SOW
+               - Active Project pending SOW
             </td>
         </tr>
         <tr>
@@ -220,7 +220,7 @@
                 </table>
             </td>
             <td style="margin-top: 5px; padding-top: 5px;">
-                Projected Project
+               - Projected Project
             </td>
         </tr>
     </table>
