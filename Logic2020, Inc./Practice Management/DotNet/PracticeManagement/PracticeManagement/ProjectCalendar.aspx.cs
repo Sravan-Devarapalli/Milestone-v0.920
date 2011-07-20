@@ -77,6 +77,7 @@ namespace PraticeManagement
             }
 
             SetAxisMaxAndMin(repStartDate, repEndDate);
+            //InitLegends();
 
             chartProjectDetails.Height = 2 * (Resources.Controls.TimelineDetailedHeaderFooterHeigth - 15) +
                                   bars.Count * Resources.Controls.TimelineDetailedItemHeigth;
@@ -149,6 +150,30 @@ namespace PraticeManagement
             horizAxis2.Minimum = minDate.ToOADate();
             horizAxis2.Maximum = maxDate.ToOADate();
         }
+
+         
+        
+
+        ///// <summary>
+        ///// 	Apply color coding to all legends
+        ///// </summary>
+        //private void InitLegends()
+        //{
+        //    foreach (var legend in chartProjectDetails.Legends)
+        //    {
+        //        //  Clear legend items first
+        //        LegendItemsCollection legendItems = legend.CustomItems;
+        //        legendItems.Clear();
+
+        //        LegendItem li = new LegendItem();
+        //        li.Name ="Active Project pending SOW";
+        //        li.SeparatorType = LegendSeparatorStyle.
+
+        //        legendItems.Add(Color.FromArgb(142, 213, 55), "Active Project with SOW");
+        //        //legendItems.Add(Color.FromArgb(142, 213, 55), );
+        //        legendItems.Add(Color.FromArgb(217, 211, 68), "Projected Project");
+        //    }
+        //}
 
         protected void imgbtnNavigateRange_Click(object sender, EventArgs e)
         {
