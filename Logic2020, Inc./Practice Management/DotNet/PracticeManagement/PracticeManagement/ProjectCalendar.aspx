@@ -9,7 +9,7 @@
     Calendar view
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
-     <style type="text/css">
+    <style type="text/css">
         .FadingTooltip
         {
             border-right: darkgray 1px outset;
@@ -22,6 +22,7 @@
             height: auto;
             background-color: lemonchiffon;
             borderbottomwidths: "3,3,3,3";
+            font-size: 11px;
         }
     </style>
     <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
@@ -116,7 +117,6 @@
     <div class="FadingTooltip" id="FADINGTOOLTIP" style="z-index: 999; padding: 5px;
         visibility: hidden; position: absolute">
     </div>
-
     <asp:UpdatePanel ID="updProjectDetails" runat="server">
         <ContentTemplate>
             <div style="text-align: center;">
@@ -124,13 +124,14 @@
                     <tr>
                         <td style="text-align: right;">
                             <asp:ImageButton ID="imgbtnPrevious" runat="server" ImageUrl="~/Images/previous.gif"
-                                OnClick="imgbtnNavigateRange_Click" ToolTip="Previous"  />
+                                OnClick="imgbtnNavigateRange_Click" ToolTip="Previous" />
                         </td>
                         <td style="width: 140px; text-align: center">
-                            <asp:Label ID="lblRange" runat="server" Style="vertical-align: top;font-weight:bold;"></asp:Label>
+                            <asp:Label ID="lblRange" runat="server" Style="vertical-align: top; font-weight: bold;"></asp:Label>
                         </td>
                         <td style="text-align: left;">
-                            <asp:ImageButton ID="imgbtnNext" runat="server"  ToolTip="Next" ImageUrl="~/Images/next.gif" OnClick="imgbtnNavigateRange_Click" />
+                            <asp:ImageButton ID="imgbtnNext" runat="server" ToolTip="Next" ImageUrl="~/Images/next.gif"
+                                OnClick="imgbtnNavigateRange_Click" />
                         </td>
                     </tr>
                 </table>
@@ -138,6 +139,7 @@
                     <tr>
                         <td align="center" style="background-color: White;">
                             <asp:Chart ID="chartProjectDetails" Width="800px" runat="server" Visible="false">
+                               
                                 <Series>
                                     <asp:Series Name="Projects" ChartType="RangeBar" XValueMember="Description" YValueMembers="StartDate,EndDate">
                                     </asp:Series>
@@ -184,7 +186,7 @@
                 </table>
             </td>
             <td style="margin-top: 5px; padding-top: 5px;">
-                - Active Project with attachment.
+                Active Project with SOW
             </td>
         </tr>
         <tr>
@@ -203,7 +205,7 @@
                 </table>
             </td>
             <td style="margin-top: 5px; padding-top: 5px;">
-                - Project without attachment.
+                Active Project pending SOW
             </td>
         </tr>
         <tr>
@@ -218,7 +220,7 @@
                 </table>
             </td>
             <td style="margin-top: 5px; padding-top: 5px;">
-                - Projected Project.
+                Projected Project
             </td>
         </tr>
     </table>
