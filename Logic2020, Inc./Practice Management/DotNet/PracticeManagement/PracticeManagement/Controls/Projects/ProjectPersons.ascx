@@ -7,6 +7,7 @@
         <AlternatingRowStyle BackColor="#F9FAFF" />
         <Columns>
             <asp:TemplateField HeaderText="Person Name">
+                <HeaderStyle Width="20%" />
                 <HeaderTemplate>
                     <div class="ie-bg">
                         Person Name</div>
@@ -18,6 +19,7 @@
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Role">
+                <HeaderStyle Width="10%" />
                 <HeaderTemplate>
                     <div class="ie-bg">
                         Role</div>
@@ -26,31 +28,54 @@
                     <asp:Label ID="lblPersonRole" runat="server" Text='<%# Eval("Entries[0].Role.Name") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
+            <asp:TemplateField>
+                <HeaderStyle Width="32%" />
+                <HeaderTemplate>
+                    <div class="ie-bg">
+                        Milestone Name</div>
+                </HeaderTemplate>
+                <ItemTemplate>
+                    <asp:Label ID="lblMilestoneName" runat="server" Text=' <%# Eval("Milestone.Description") %>'></asp:Label>
+                </ItemTemplate>
+            </asp:TemplateField>
             <asp:TemplateField HeaderText="Start">
+                <HeaderStyle Width="8%" />
                 <HeaderTemplate>
                     <div class="ie-bg">
                         Start</div>
                 </HeaderTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="lblStartDate0" runat="server" Text='<%# ((DateTime)Eval("Entries[0].StartDate")).ToString("d") %>'></asp:Label>
+                    <asp:Label ID="lblStartDate0" runat="server" Text='<%# ((DateTime)Eval("Entries[0].StartDate")).ToString("MM/dd/yyyy") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="End">
+                <HeaderStyle Width="8%" />
                 <HeaderTemplate>
                     <div class="ie-bg">
                         End</div>
                 </HeaderTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="lblStartDate1" runat="server" Text='<%# ((DateTime?)Eval("Entries[0].EndDate")).HasValue ? ((DateTime)Eval("Entries[0].EndDate")).ToString("d") : string.Empty %>'></asp:Label>
+                    <asp:Label ID="lblStartDate1" runat="server" Text='<%# ((DateTime?)Eval("Entries[0].EndDate")).HasValue ? ((DateTime)Eval("Entries[0].EndDate")).ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="Hours Per Month">
+            <asp:TemplateField>
+                <HeaderStyle Width="11%" HorizontalAlign="Center" />
                 <HeaderTemplate>
                     <div class="ie-bg">
-                        Hours Per Month</div>
+                        Assigned Hours</div>
                 </HeaderTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="lblHoursPerMonth" runat="server" Text='<%# Convert.ToInt32(Eval("Entries[0].HoursPerDay")) * PraticeManagement.Constants.Dates.WorkDaysInMonth %>'></asp:Label>
+                    <asp:Label ID="lblHoursAssigned" runat="server" Text='<%# Convert.ToInt32(Eval("Entries[0].ProjectedWorkload")) %>'></asp:Label>
+                </ItemTemplate>
+            </asp:TemplateField>
+            <asp:TemplateField>
+                <HeaderStyle Width="11%" HorizontalAlign="Center" />
+                <HeaderTemplate>
+                    <div class="ie-bg">
+                        Assigned Per Day</div>
+                </HeaderTemplate>
+                <ItemTemplate>
+                    <asp:Label ID="lblHoursPerMonth" runat="server" Text='<%# Eval("Entries[0].HoursPerDay") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
         </Columns>
@@ -58,7 +83,7 @@
 </asp:Panel>
 <asp:ObjectDataSource ID="odsMilestonePersons" runat="server" 
     SelectMethod="GetMilestonePersonListByProjectWithoutPay" 
-    TypeName="PraticeManagement.MilestonePersonService.MilestonePersonServiceClient" >
+    TypeName="PraticeManagement.Controls.DataHelper" >
     <SelectParameters>
         <asp:QueryStringParameter Name="projectId" QueryStringField="id" Type="Int32" />
     </SelectParameters>
