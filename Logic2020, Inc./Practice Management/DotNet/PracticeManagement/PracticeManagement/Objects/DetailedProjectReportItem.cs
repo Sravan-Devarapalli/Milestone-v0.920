@@ -11,12 +11,11 @@ namespace PraticeManagement.Objects
     {
         #region Constants
 
-        private const string ProjectOwnerFormat = "{0} {1}";
+        private const string ProjectOwnerFormat = "{0}, {1}";
         private const string NotEndDate = "No End Date Specified.";
         private const string DetailsLabelFormat = "{0} - {1}";
-        private const string AppendPersonFormat = "{0} {2} {1},";
-        private const string AppendLastPersonFormat = "{0} {2} {1}";
-        private const string ToolTipView = " {1}, {0} {2}, {0} <b> Start: </b>{3:d}, {0}  <b>End:</b> {4:d}, {0}  <b>Owner:</b> {5},{0}  <b>Resources:</b> {6}";
+        private const string AppendPersonFormat = "{0} {2}, {1}";
+        private const string ToolTipView = " {1}{0}{2}{0}<b>Start:</b>{3:d}{0}<b>End:</b>{4:d}{0}<b>Owner:</b>{5}{0}<b>Resources:</b>{6}";
 
         #endregion
 
@@ -105,7 +104,7 @@ namespace PraticeManagement.Objects
         {
             get
             {
-                return PrepareToolTipView(Project);
+                return PrepareToolTipView(Project).Replace("'", "&#39;");
             }
         }
 
@@ -120,7 +119,7 @@ namespace PraticeManagement.Objects
 
         private static string GetRedirectUrl(int argProjectId, string targetUrl)
         {
-            return string.Format(Constants.ApplicationPages.DetailRedirectWithReturnFormat,
+            return  string.Format(Constants.ApplicationPages.DetailRedirectWithReturnFormat,
                                  targetUrl,
                                  argProjectId,
                                  Constants.ApplicationPages.Projects);
@@ -149,20 +148,11 @@ namespace PraticeManagement.Objects
             }
             for (int i = 0; i < personList.Count; i++)
             {
-                if (i == personList.Count - 1)
-                {
-                    persons.AppendFormat(AppendLastPersonFormat,
+               
+                    persons.AppendFormat(AppendPersonFormat,
                                          "<br />",
                                          HttpUtility.HtmlEncode(personList[i].Person.FirstName),
                                          HttpUtility.HtmlEncode(personList[i].Person.LastName));
-                }
-                else
-                {
-                    persons.AppendFormat(AppendPersonFormat,
-                                        "<br />",
-                                        HttpUtility.HtmlEncode(personList[i].Person.FirstName),
-                                        HttpUtility.HtmlEncode(personList[i].Person.LastName));
-                }
             }
 
             return string.Format(ToolTipView,
