@@ -278,8 +278,8 @@ namespace PraticeManagement.Controls.Reports
             }
             else
             {
-                var beginPeriod = BegPeriod.AddDays(1 - BegPeriod.Day);
-                var endPeriod = (new DateTime(EndPeriod.Year, EndPeriod.Month, 1)).AddMonths(1).AddDays(-1);
+                var beginPeriod = BegPeriod;
+                var endPeriod = EndPeriod;
 
                 if ((int)beginPeriod.DayOfWeek > 1)
                 {
@@ -637,8 +637,8 @@ namespace PraticeManagement.Controls.Reports
             }
             else if (Granularity == 30)
             {
-                beginPeriod = BegPeriod.AddDays(1 - BegPeriod.Day);
-                endPeriod = (new DateTime(EndPeriod.Year, EndPeriod.Month, 1)).AddMonths(1).AddDays(-1);
+                beginPeriod = BegPeriod;
+                endPeriod = EndPeriod;
 
                 if ((int)beginPeriod.DayOfWeek > 1)
                 {
