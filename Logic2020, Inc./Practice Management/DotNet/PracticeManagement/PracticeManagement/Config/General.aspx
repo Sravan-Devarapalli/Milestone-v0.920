@@ -154,6 +154,43 @@
             </td>
         </tr>
         <tr>
+            <td colspan="2">
+                <b>Inactivity Logoff Policy :</b>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <table width="100%" class="PaddingClass">
+                    <tr>
+                        <td colspan="2">
+                            Log off the user if inactive for &nbsp;
+                            <asp:TextBox ID="txtFormsAuthenticationTimeOutMin" runat="server" Width="80px"></asp:TextBox>
+                            &nbsp;
+                            <asp:RequiredFieldValidator ID="rqFormsAuthenticationTimeOutMin" runat="server" Text="*"
+                                ControlToValidate="txtFormsAuthenticationTimeOutMin" ErrorMessage="Inactivity period is required."
+                                ToolTip="Inactivity period is required." ValidationGroup="General" Display="Dynamic">
+                            </asp:RequiredFieldValidator>
+                            <asp:CompareValidator ID="valDatatypeCheck" runat="server" ControlToValidate="txtFormsAuthenticationTimeOutMin"
+                                Operator="DataTypeCheck" Type="Integer" ErrorMessage="Inactivity period must be an integer."
+                                ToolTip="Inactivity period must be an integer." Text="*" ValidationGroup="General"
+                                Display="Dynamic">
+                            </asp:CompareValidator>
+                            <asp:RangeValidator ID="valRanage" runat="server" ControlToValidate="txtFormsAuthenticationTimeOutMin"
+                                MinimumValue="2" MaximumValue="35790" ErrorMessage="Inactivity period must be between 2 and 35790"
+                                Type="Integer" ToolTip="Inactivity period must be between 2 and 35790." Text="*"
+                                ValidationGroup="General" Display="Dynamic">
+                            </asp:RangeValidator>
+                            minutes. (2 - 35790)
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+            </td>
+        </tr>
+        <tr>
             <td valign="top" width="59%">
                 <table width="100%" class="PaddingClass">
                     <tr>
