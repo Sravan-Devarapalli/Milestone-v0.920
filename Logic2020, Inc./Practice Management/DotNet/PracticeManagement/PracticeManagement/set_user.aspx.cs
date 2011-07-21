@@ -7,6 +7,7 @@ using System.Threading;
 using System.Web.Security;
 using System.Web.UI.WebControls;
 using PraticeManagement.PersonService;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement
 {
@@ -66,7 +67,8 @@ namespace PraticeManagement
             var roles = Roles.GetRolesForUser(userName);
             var principal = new GenericPrincipal(identity, roles);
             Thread.CurrentPrincipal = principal;
-            FormsAuthentication.SetAuthCookie(userName, true);
+            //FormsAuthentication.SetAuthCookie(userName, true);
+            Generic.SetCustomFormsAuthenticationTicket(userName, true,this.Page);
             var message = string.Format(
                             "User was set to {0} [{1}]",
                             userName,
