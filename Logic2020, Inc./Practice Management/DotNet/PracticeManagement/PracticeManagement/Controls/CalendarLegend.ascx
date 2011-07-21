@@ -73,6 +73,21 @@
                     - This is a company holiday, but the person is scheduled to work anyway.
                 </td>
             </tr>
+            <tr>
+                <td style="margin-top: 5px; padding-top: 5px; padding-right: 5px;">
+                    <table bgcolor="black" border="1" cellpadding="0" cellspacing="0" width="20">
+                        <tr>
+                            <td style="background-color: white; border: 1px solid black;">
+                                <div class="WeekEndDayOff">
+                                    &nbsp;</div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="margin-top: 5px; padding-top: 5px;">
+                    - This is a WeekEnd day.
+                </td>
+            </tr>
         </table>
     </asp:Panel>
 </div>
