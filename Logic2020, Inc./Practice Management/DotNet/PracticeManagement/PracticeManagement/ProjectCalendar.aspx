@@ -138,7 +138,7 @@
                 <table cellpadding="0" cellspacing="0" width="100%" runat="server" id="tblDetails">
                     <tr>
                         <td align="center" style="background-color: White;">
-                            <asp:Chart ID="chartProjectDetails" Width="800px" runat="server" Visible="false">
+                            <asp:Chart ID="chartProjectDetails" Width="800px" runat="server" Visible="false" EnableViewState="true">
                                
                                 <Series>
                                     <asp:Series Name="Projects" ChartType="RangeBar" XValueMember="Description" YValueMembers="StartDate,EndDate">
