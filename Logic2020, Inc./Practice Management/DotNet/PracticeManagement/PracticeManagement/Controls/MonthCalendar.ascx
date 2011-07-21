@@ -21,7 +21,7 @@
 			<ItemStyle HorizontalAlign="Center" />
 			<ItemTemplate>
 				<asp:Panel ID="pnlDay" runat="server"
-					CssClass='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year ? ((bool)Eval("DayOff") ? ((bool)Eval("CompanyDayOff") ? "DayOff" : "CompanyDayOn") : ((bool)Eval("CompanyDayOff") ? "CompanyDayOff" : "DayOn")) : "DayGrayed" %>'>
+					CssClass='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year ? ((bool)Eval("DayOff") ? ((bool)Eval("CompanyDayOff") ? (((DateTime)Eval("Date")).DayOfWeek == DayOfWeek.Sunday || ((DateTime)Eval("Date")).DayOfWeek == DayOfWeek.Saturday ? "WeekEndDayOff" : "DayOff") : "CompanyDayOn") : ((bool)Eval("CompanyDayOff") ? "CompanyDayOff" : "DayOn")) : "" %>'>
 					<asp:LinkButton ID="btnDay" runat="server" Text='<%# Eval("Date.Day") %>'
 						OnCommand="btnDay_Command"
 						CommandName='<%# (bool)Eval("DayOff") ? false : true %>'
@@ -30,8 +30,8 @@
 						OnClientClick='<%# DayOnClientClick() %>'></asp:LinkButton>
 					<asp:Label ID="lblDay" runat="server" Text='<%# Eval("Date.Day") %>'
 						Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year && (bool)Eval("ReadOnly") %>'></asp:Label>
-					<asp:Label ID="lblDayOut" runat="server" Text='<%# Eval("Date.Day") %>'
-						Visible='<%# ((DateTime)Eval("Date")).Month != Month || ((DateTime)Eval("Date")).Year != Year %>'></asp:Label>
+					<%--<asp:Label ID="lblDayOut" runat="server" Text='<%# Eval("Date.Day") %>'
+						Visible='<%# ((DateTime)Eval("Date")).Month != Month || ((DateTime)Eval("Date")).Year != Year %>'></asp:Label>--%>
 				</asp:Panel>
 			</ItemTemplate>
 		</asp:DataList>
