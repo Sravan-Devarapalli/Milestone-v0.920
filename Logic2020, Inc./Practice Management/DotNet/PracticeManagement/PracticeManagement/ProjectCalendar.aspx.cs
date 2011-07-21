@@ -77,7 +77,7 @@ namespace PraticeManagement
                 if (maxDate.CompareTo(ptEnd) < 0) maxDate = ptEnd;
             }
 
-            SetAxisMaxAndMin(repStartDate, repEndDate);
+            SetAxisMaxAndMin(repStartDate, repEndDate.AddDays(1));
             //InitLegends();
 
             chartProjectDetails.Height = 2 * (Resources.Controls.TimelineDetailedHeaderFooterHeigth - 15) +
