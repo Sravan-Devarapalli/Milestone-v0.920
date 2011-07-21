@@ -54,7 +54,8 @@
       <Setting name="EnableSSL" />
       <Setting name="senioritySeparationRangeValue" />
       <Setting name="ShowWithoutDirector" />
-      <Setting name="AttachmentServiceURL"/>
+      <Setting name="AttachmentServiceURL" />
+      <Setting name="PopupTimebeforeFormsAuthTimeOutSec" />
     </ConfigurationSettings>
   </WebRole>
 </ServiceDefinition>
