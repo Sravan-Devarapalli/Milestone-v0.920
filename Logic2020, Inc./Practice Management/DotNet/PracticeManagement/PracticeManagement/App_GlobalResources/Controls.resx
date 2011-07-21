@@ -347,4 +347,7 @@
   <data name="TeMilestoneReportWholePeriod" xml:space="preserve">
     <value>{0} (whole milestone period)</value>
   </data>
+  <data name="CssWeekEndDayOff" xml:space="preserve">
+    <value>WeekEndDayOff</value>
+  </data>
 </root>
