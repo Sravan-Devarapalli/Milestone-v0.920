@@ -31,6 +31,8 @@ namespace PraticeManagement.Config
                     FillAndSelect();
                 }
             }
+
+            base.OnPreRender(e);
         }
 
         protected void FillAndSelect()
