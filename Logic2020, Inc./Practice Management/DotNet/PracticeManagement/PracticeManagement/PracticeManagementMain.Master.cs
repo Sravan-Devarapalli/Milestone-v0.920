@@ -16,6 +16,8 @@ using System.Linq;
 using System.Collections;
 using PraticeManagement.Utils;
 using DataTransferObjects;
+using System.Configuration;
+using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace PraticeManagement
 {
@@ -25,6 +27,7 @@ namespace PraticeManagement
         public const string Level2MenuItemTemplate = " <dd id='{2}'  class='l3'> <a title='{0}' {3}>{0}</a>{1}</dd>";
         public const string Level3MenuItemTemplate = "<a  {1} >{0}</a>";
         public const string AnchorTagpropertiestemplate = " href = '{0}' onclick='return checkDirtyWithRedirect(this.href);'";
+        public const string PopupTimebeforeFormsAuthTimeOutSecKey = "PopupTimebeforeFormsAuthTimeOutSec";
 
         #region Properties
 
@@ -99,14 +102,13 @@ namespace PraticeManagement
             if (!string.IsNullOrEmpty(HttpContext.Current.User.Identity.Name))
             {
                 hlnkChangePassword.Visible = true;
-                
-                
+
                 if (user != null && user.CreationDate.Subtract(user.LastPasswordChangedDate).Duration() < ts)
                 {
-                    if (!(Request.AppRelativeCurrentExecutionFilePath == Constants.ApplicationPages.ChangePasswordPage) )
+                    if (!(Request.AppRelativeCurrentExecutionFilePath == Constants.ApplicationPages.ChangePasswordPage))
                     {
                         if (Session["IsLoggedInthroughLoginPage"] != null && Convert.ToBoolean(Session["IsLoggedInthroughLoginPage"]))
-                        Response.Redirect(Constants.ApplicationPages.ChangePasswordPage);
+                            Response.Redirect(Constants.ApplicationPages.ChangePasswordPage);
                     }
                 }
             }
@@ -116,20 +118,52 @@ namespace PraticeManagement
             }
 
             Page.Header.DataBind();
+
+
+            var formsAuthenticationTimeOutStr = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.FormsAuthenticationTimeOutKey);
+            int formsAuthenticationTimeOutMin;
+            if (!string.IsNullOrEmpty(formsAuthenticationTimeOutStr))
+            {
+                formsAuthenticationTimeOutMin = int.Parse(formsAuthenticationTimeOutStr);
+            }
+            else
+            {
+                formsAuthenticationTimeOutMin = 60;
+            }
+
+            formsAuthenticationTimeOutStr = (formsAuthenticationTimeOutMin * 60 * 1000).ToString();
+
+            hdnRunTimeOutPopuUpScript.Value = (DataHelper.CurrentPerson != null).ToString().ToLower();
+            hdnFormsAuthTimeOut.Value = formsAuthenticationTimeOutStr;
+
+            var popupTimebeforeFormsAutTimeOutSec = GetConfigValueByKey(PopupTimebeforeFormsAuthTimeOutSecKey);
+            if (!string.IsNullOrEmpty(popupTimebeforeFormsAutTimeOutSec))
+            {
+                popupTimebeforeFormsAutTimeOutSec = (int.Parse(popupTimebeforeFormsAutTimeOutSec) * 1000).ToString();
+            }
+            else
+            {
+                popupTimebeforeFormsAutTimeOutSec = "60000"; // 1 min before time out
+            }
+
+            hdnPopupTimebeforeFormsAutTimeOut.Value = popupTimebeforeFormsAutTimeOutSec;
+
+           
             ltrScript.Text =
                 string.Format(ltrScript.Text,
                               hidDirtyData.ClientID,
                               hidDoSaveDirty.ClientID,
                               bool.TrueString,
                               bool.FalseString,
-                              hidAllowContinueWithoutSave.ClientID);
+                              hidAllowContinueWithoutSave.ClientID
+                              );
             string htmltext = GetMenuHtml();
 
             if (user != null
-                && user.CreationDate.Subtract(user.LastPasswordChangedDate).Duration() < ts ) 
+                && user.CreationDate.Subtract(user.LastPasswordChangedDate).Duration() < ts)
             {
                 if (Session["IsLoggedInthroughLoginPage"] != null && Convert.ToBoolean(Session["IsLoggedInthroughLoginPage"]))
-                htmltext = string.Empty;
+                    htmltext = string.Empty;
             }
 
             ltrlMenu.Text = htmltext;
@@ -199,7 +233,7 @@ namespace PraticeManagement
             foreach (SiteMapNode item in ((System.Web.SiteMapNodeCollection)(smdsMain.Provider.RootNode.ChildNodes)))
             {
                 htmltext += GetLevel1MenuItemHtml(item);
-            }       
+            }
 
             return htmltext;
         }
@@ -328,52 +362,16 @@ namespace PraticeManagement
                     }
                 }
             }
-            setCssForMenu();
+
+            UpdateLastServerVisitInfo();
+
         }
 
-        private void setCssForMenu()
+        private void UpdateLastServerVisitInfo()
         {
-            //string nodeTitle = null;
-            //SiteMapNode selectedNode = null;
-
-            //if (smdsSubMenu != null && smdsSubMenu.Controls != null && smdsSubMenu.Controls.Count > 0)
-            //{
-            //    nodeTitle = this.smdsSubMenu.SelectedValue;
-
-            //    if (nodeTitle != string.Empty)
-            //    {
-            //        selectedNode = smdsMain.Provider.CurrentNode;
-            //        var rootNode = smdsMain.Provider.GetParentNode(selectedNode);
-
-            //        if (rootNode.Title == "Reports")
-            //        {
-            //            topMenuBreak.Visible = true;
-            //        }
-            //        if (siteMenu != null && siteMenu.Controls != null && siteMenu.Controls.Count > 0)
-            //        {
-            //            MenuItem item2 = (siteMenu as Menu).FindItem(rootNode.Title);
-            //            if (item2 != null)
-            //                item2.Selected = true;
-            //        }
-            //    }
-            //    else if (siteMenu != null && siteMenu.Controls != null && siteMenu.Controls.Count > 0)
-            //    {
-            //        nodeTitle = this.siteMenu.SelectedValue;
-
-            //        if (nodeTitle == "Configuration" || nodeTitle == "Projects" || nodeTitle == "Opportunities")
-            //        {
-            //            MenuItem item2 = (this.smdsSubMenu as Menu).Items[0];
-            //            if (item2 != null)
-            //                item2.Selected = true;
-            //        }
-            //        else if (nodeTitle == "Reports")
-            //        {
-            //            topMenuBreak.Visible = true;
-            //        }
-            //    }
-
-
-            //}
+            hdnLastServerVisit.Value = DateTime.UtcNow.ToString();
+            Response.Cookies.Set(new HttpCookie("LastServerVisit", hdnLastServerVisit.Value));
+            Response.Cookies.Set(new HttpCookie("IsLoggedIn",(DataHelper.CurrentPerson != null).ToString().ToLower()));
         }
 
         protected void logImpersonateLogin(string oldUserName, string newUserName)
@@ -445,7 +443,6 @@ namespace PraticeManagement
             var item = e.Item;
         }
 
-
         public Unit GetItemWidth(MenuItemTemplateContainer container)
         {
             int width = 0;
@@ -479,7 +476,35 @@ namespace PraticeManagement
                 TimeZoneInfo ctz = TimeZoneInfo.CreateCustomTimeZone("cid", TimeSpan.Parse(timezoneWithoutSign), "customzone", "customzone");
                 return TimeZoneInfo.ConvertTime(DateTime.UtcNow, ctz).ToLongDateString();
             }
-        }       
+        }
+
+        protected void btnLogOutOnSessionTimeOut_OnClick(object sender, EventArgs e)
+        {
+            FormsAuthentication.SignOut();
+
+            Response.Redirect(FormsAuthentication.LoginUrl);
+        }
+
+        private string GetConfigValueByKey(string key)
+        {
+            var val = string.Empty;
+            try
+            {
+                if (WCFClientUtility.IsWebAzureRole())
+                {
+                    val = RoleEnvironment.GetConfigurationSettingValue(key);
+                }
+                else
+                {
+                    val = ConfigurationManager.AppSettings[key];
+                }
+            }
+            catch
+            {
+                val = string.Empty;
+            }
+            return val;
+        }
     }
 }
 
