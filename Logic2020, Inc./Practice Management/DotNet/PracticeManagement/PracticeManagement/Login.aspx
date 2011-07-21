@@ -82,7 +82,7 @@
             <div style="vertical-align: middle; margin-left: auto; margin-right: auto; width: 300px;
                 padding: 5px; background: #E2EBFF;">
                 <asp:Login ID="login" runat="server" OnLoggedIn="login_LoggedIn" OnLoginError="login_LoginError" OnLoggingIn="login_OnLoggingIn"
-                    RememberMeText="Remember me" Font-Bold="true" RememberMeSet="true" />
+                    RememberMeText="Remember me" Font-Bold="true" RememberMeSet="true"  />
                 <div style="padding-bottom: 5px;">
                     <asp:LinkButton ID="lnkbtnForgotPwd" runat="server" Text="Forgot your Password?"
                         OnClientClick="return ConfirmChangePwd('{0}','{1}');" OnClick="lnkbtnForgotPwd_OnClick">
