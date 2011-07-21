@@ -184,6 +184,123 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.ContentPlaceHolder body;
         
         /// <summary>
+        /// upRefreshPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upRefreshPanel;
+        
+        /// <summary>
+        /// mpeAlertTimeOut control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeAlertTimeOut;
+        
+        /// <summary>
+        /// pnlTimeOutAlert control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlTimeOutAlert;
+        
+        /// <summary>
+        /// btnLogOutOnSessionTimeOutOK control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnLogOutOnSessionTimeOutOK;
+        
+        /// <summary>
+        /// btnLogOutOnSessionTimeOutCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnLogOutOnSessionTimeOutCancel;
+        
+        /// <summary>
+        /// lnkHiddenLinkForTimeOutAlert control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button lnkHiddenLinkForTimeOutAlert;
+        
+        /// <summary>
+        /// btnLogOutOnSessionTimeOut control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnLogOutOnSessionTimeOut;
+        
+        /// <summary>
+        /// hpLogOutOnSessionTimeOut control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink hpLogOutOnSessionTimeOut;
+        
+        /// <summary>
+        /// btnRefreshPage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnRefreshPage;
+        
+        /// <summary>
+        /// hdnRunTimeOutPopuUpScript control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnRunTimeOutPopuUpScript;
+        
+        /// <summary>
+        /// hdnPopupTimebeforeFormsAutTimeOut control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnPopupTimebeforeFormsAutTimeOut;
+        
+        /// <summary>
+        /// hdnFormsAuthTimeOut control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnFormsAuthTimeOut;
+        
+        /// <summary>
+        /// hdnLastServerVisit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnLastServerVisit;
+        
+        /// <summary>
         /// footer control.
         /// </summary>
         /// <remarks>
