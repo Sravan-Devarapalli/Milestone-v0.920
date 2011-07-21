@@ -85,7 +85,7 @@
                     </table>
                 </td>
                 <td style="margin-top: 5px; padding-top: 5px;">
-                    - This is a WeekEnd day.
+                    - This is a Weekend day.
                 </td>
             </tr>
         </table>
