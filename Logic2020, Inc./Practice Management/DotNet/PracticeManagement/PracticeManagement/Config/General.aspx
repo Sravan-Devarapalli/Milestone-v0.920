@@ -125,7 +125,6 @@
                             , lock the user account for
                             <asp:DropDownList ID="ddlUnlockUser" onchange="setDirty();" runat="server">
                                 <asp:ListItem Text="" Value=""></asp:ListItem>
-                                <asp:ListItem Text="1 minute" Value="1"></asp:ListItem>
                                 <asp:ListItem Text="15 minutes" Value="15"></asp:ListItem>
                                 <asp:ListItem Text="30 minutes" Selected="True" Value="30"></asp:ListItem>
                                 <asp:ListItem Text="45 minutes" Value="45"></asp:ListItem>
