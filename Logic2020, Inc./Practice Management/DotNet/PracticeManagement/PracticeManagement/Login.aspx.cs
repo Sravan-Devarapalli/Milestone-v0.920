@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using System.Configuration;
 using PraticeManagement.Utils;
+using System.Web;
 namespace PraticeManagement
 {
     public partial class Login : System.Web.UI.Page
@@ -72,6 +73,12 @@ namespace PraticeManagement
                     System.Web.UI.ScriptManager.RegisterStartupScript(this, GetType(), "RaiseCustomForgotPasswordClickEvent", "RaiseCustomForgotPasswordClick();", true);
                 }
             }
+
+            //if (Session["RedirectToLologgedOutPage"] != null)
+            //{
+            //    Session["RedirectToLologgedOutPage"] = null;
+            //    Response.Redirect("~/LoggedOut.aspx");
+            //}
 
             msglblForgotPWDErrorDetails.ClearMessage();
             loginErrorDetails.Text = string.Empty;
@@ -152,6 +159,8 @@ namespace PraticeManagement
                 login.DestinationPageUrl = mapping.Mapping.FindFirstUrl(Roles.GetRolesForUser(login.UserName));
             }
             LogLoginResult(0);
+
+            Generic.SetCustomFormsAuthenticationTicket(login.UserName, login.RememberMeSet, this.Page);
 
             Session["IsLoggedInthroughLoginPage"] = true;
         }
@@ -281,7 +290,7 @@ namespace PraticeManagement
             else
             {
                 MembershipUser user = Membership.GetUser(login.UserName);
-                
+
                 UnlockUserIfLockOutTimeCompleted(user);
 
                 if (user == null)
