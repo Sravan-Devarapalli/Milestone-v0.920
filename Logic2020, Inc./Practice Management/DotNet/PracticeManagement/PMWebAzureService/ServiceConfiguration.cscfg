@@ -32,7 +32,8 @@
       <Setting name="AttachmentServiceURL" value="http://65.52.29.57:8080/AttachmentService.asmx" />
       <Setting name="EnableSSL" value="false" />
       <Setting name="senioritySeparationRangeValue" value="19" />
-      <Setting name="ShowWithoutDirector" value="true"/>
+      <Setting name="ShowWithoutDirector" value="true" />
+      <Setting name="PopupTimebeforeFormsAuthTimeOutSec" value="60" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Practice.logic2020.com" thumbprint="D6B00262CE72E6908C478EBEC234F495404BD60A" thumbprintAlgorithm="sha1" />
