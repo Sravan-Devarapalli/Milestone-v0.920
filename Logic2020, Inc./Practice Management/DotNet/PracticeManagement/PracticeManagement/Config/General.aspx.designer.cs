@@ -94,6 +94,42 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqUnlockUser;
         
         /// <summary>
+        /// txtFormsAuthenticationTimeOutMin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFormsAuthenticationTimeOutMin;
+        
+        /// <summary>
+        /// rqFormsAuthenticationTimeOutMin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rqFormsAuthenticationTimeOutMin;
+        
+        /// <summary>
+        /// valDatatypeCheck control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator valDatatypeCheck;
+        
+        /// <summary>
+        /// valRanage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RangeValidator valRanage;
+        
+        /// <summary>
         /// vsumSave control.
         /// </summary>
         /// <remarks>
