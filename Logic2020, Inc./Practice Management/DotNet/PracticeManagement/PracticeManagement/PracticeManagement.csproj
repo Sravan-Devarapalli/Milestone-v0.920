@@ -22,6 +22,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -124,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ActivityLog.aspx" />
+    <Content Include="LoggedOut.aspx" />
     <Content Include="ProjectCalendar.aspx" />
     <Content Include="Config\BecomeUser.aspx" />
     <Content Include="Config\Branding.aspx" />
@@ -720,6 +722,13 @@
     </Compile>
     <Compile Include="ActivityLog_Old.aspx.designer.cs">
       <DependentUpon>ActivityLog_Old.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LoggedOut.aspx.cs">
+      <DependentUpon>LoggedOut.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LoggedOut.aspx.designer.cs">
+      <DependentUpon>LoggedOut.aspx</DependentUpon>
     </Compile>
     <Compile Include="ProjectCalendar.aspx.cs">
       <DependentUpon>ProjectCalendar.aspx</DependentUpon>
