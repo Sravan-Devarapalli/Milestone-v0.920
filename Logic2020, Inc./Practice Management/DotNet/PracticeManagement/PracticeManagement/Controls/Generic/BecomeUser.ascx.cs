@@ -28,6 +28,7 @@ namespace PraticeManagement.Controls.Generic
                     FillAndSelect();
                 }
             }
+            base.OnPreRender(e);
         }
 
         protected void FillAndSelect()
@@ -58,7 +59,7 @@ namespace PraticeManagement.Controls.Generic
             var roles = Roles.GetRolesForUser(userName);
             var principal = new GenericPrincipal(identity, roles);
             Thread.CurrentPrincipal = principal;
-            FormsAuthentication.SetAuthCookie(userName, true);
+            Utils.Generic.SetCustomFormsAuthenticationTicket(userName, true,this.Page);
             Response.Redirect(Constants.ApplicationPages.Calendar);
         }
 
