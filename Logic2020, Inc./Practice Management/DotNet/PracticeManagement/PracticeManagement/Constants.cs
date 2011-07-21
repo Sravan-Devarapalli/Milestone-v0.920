@@ -61,6 +61,7 @@ namespace PraticeManagement
             public const string PasswordAttemptWindowKey = "PasswordAttemptWindow";
             public const string IsLockOutPolicyEnabledKey = "IsLockOutPolicyEnabled";
             public const string UnlockUserMinituesKey = "UnlockUserMinitues";
+            public const string FormsAuthenticationTimeOutKey = "FormsAuthenticationTimeOutMin";
             
             #endregion
 
