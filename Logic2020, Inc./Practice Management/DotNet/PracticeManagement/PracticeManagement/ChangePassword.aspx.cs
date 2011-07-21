@@ -202,7 +202,7 @@ namespace PraticeManagement
 
         private void LoginUser()
         {
-            FormsAuthentication.SetAuthCookie(changePassword.UserName, true);
+            Generic.SetCustomFormsAuthenticationTicket(changePassword.UserName, true, this.Page);
             UrlRoleMappingElementSection mapping = UrlRoleMappingElementSection.Current;
             if (mapping != null)
             {
