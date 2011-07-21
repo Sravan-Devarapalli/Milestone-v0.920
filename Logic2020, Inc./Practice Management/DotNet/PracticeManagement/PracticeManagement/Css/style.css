@@ -1764,7 +1764,12 @@ TD.CompanyDayOn, TH.CompanyDayOn
     background-color: #FFD1C7;
 }
 
-DIV.DayGrayed
+TD.WeekEndDayOff, TH.WeekEndDayOff
+{
+    background-color: ButtonFace;
+}
+
+DIV.DayGrayed, DIV.WeekEndDayOff
 {
     height: 24px;
     width: 24px;
@@ -1772,7 +1777,7 @@ DIV.DayGrayed
     color: Gray;
 }
 
-DIV.DayGrayed SPAN
+DIV.DayGrayed SPAN, DIV.WeekEndDayOff SPAN
 {
     color: Gray;
 }
