@@ -241,6 +241,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to WeekEndDayOff.
+        /// </summary>
+        internal static string CssWeekEndDayOff {
+            get {
+                return ResourceManager.GetString("CssWeekEndDayOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current.
         /// </summary>
         internal static string CurrentPermissionRowTitle {
