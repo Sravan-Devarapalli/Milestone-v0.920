@@ -46,8 +46,6 @@ BEGIN
 	END
 	ELSE IF (@Step = 30)
 	BEGIN
-		SELECT @StartDate  = @StartDate-DAY(@StartDate)+1,
-				@EndRange = DATEADD(MM,1,@EndRange)-DAY(@EndRange)
                 
 		IF(DATEPART(DW,@StartDate)>2)
 		BEGIN
