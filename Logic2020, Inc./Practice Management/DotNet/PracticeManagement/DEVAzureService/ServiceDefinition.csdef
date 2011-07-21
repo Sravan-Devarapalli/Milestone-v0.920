@@ -21,7 +21,7 @@
       <Import moduleName="Diagnostics" />
     </Imports>
     <ConfigurationSettings>
-      <Setting name="MilestonePersonServiceClient" />      
+      <Setting name="MilestonePersonServiceClient" />
       <Setting name="ActivityLogServiceClient" />
       <Setting name="CalendarServiceClient" />
       <Setting name="ClientServiceClient" />
@@ -47,9 +47,10 @@
       <Setting name="AuthServiceClient" />
       <Setting name="HasHttpsEndPoint" />
       <Setting name="EnableSSL" />
-      <Setting name="senioritySeparationRangeValue"  />
-      <Setting name="ShowWithoutDirector"/>
-      <Setting name="AttachmentServiceURL"/>
+      <Setting name="senioritySeparationRangeValue" />
+      <Setting name="ShowWithoutDirector" />
+      <Setting name="AttachmentServiceURL" />
+      <Setting name="PopupTimebeforeFormsAuthTimeOutSec" />
     </ConfigurationSettings>
   </WebRole>
 </ServiceDefinition>
