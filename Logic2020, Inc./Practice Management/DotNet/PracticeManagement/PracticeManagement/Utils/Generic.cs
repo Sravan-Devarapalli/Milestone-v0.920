@@ -7,6 +7,8 @@ using PraticeManagement.Controls;
 using PraticeManagement.Controls.Generic.Filtering;
 using ErrorEventArgs = PraticeManagement.Events.ErrorEventArgs;
 using DataTransferObjects;
+using System.Web.Security;
+using System.Web.UI;
 
 namespace PraticeManagement.Utils
 {
@@ -167,7 +169,7 @@ namespace PraticeManagement.Utils
             var timezone = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.TimeZoneKey);
             var isDayLightSavingsTimeEffect = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDayLightSavingsTimeEffectKey);
 
-            if (timezone == "-08:00" && isDayLightSavingsTimeEffect == "true")
+            if (timezone == "-08:00" && isDayLightSavingsTimeEffect.ToLower() == "true")
             {
                 return TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
             }
@@ -177,6 +179,34 @@ namespace PraticeManagement.Utils
                 TimeZoneInfo ctz = TimeZoneInfo.CreateCustomTimeZone("cid", TimeSpan.Parse(timezoneWithoutSign), "customzone", "customzone");
                 return TimeZoneInfo.ConvertTime(DateTime.UtcNow, ctz);
             }
+        }
+
+        public static void SetCustomFormsAuthenticationTicket(string userName, bool createPersistentCookie, Page page)
+        {
+            string cookiestr;
+            HttpCookie ck;
+            FormsAuthenticationTicket tkt;
+            var formsAuthenticationTimeOutStr = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.FormsAuthenticationTimeOutKey);
+            int formsAuthenticationTimeOut;
+            if (!string.IsNullOrEmpty(formsAuthenticationTimeOutStr))
+            {
+                formsAuthenticationTimeOut = int.Parse(formsAuthenticationTimeOutStr);
+            }
+            else
+            {
+                formsAuthenticationTimeOut = 60;
+            }
+            tkt = new FormsAuthenticationTicket(2, userName, DateTime.Now, DateTime.Now.AddMinutes(formsAuthenticationTimeOut), createPersistentCookie, string.Empty);
+            cookiestr = FormsAuthentication.Encrypt(tkt);
+            ck = new HttpCookie(FormsAuthentication.FormsCookieName, cookiestr);
+            if (createPersistentCookie)
+                ck.Expires = tkt.Expiration;
+            ck.Path = FormsAuthentication.FormsCookiePath;
+            if((page.Response.Cookies != null) && (page.Response.Cookies[FormsAuthentication.FormsCookieName] != null))
+            {
+                page.Response.Cookies.Remove(FormsAuthentication.FormsCookieName);
+            }
+            page.Response.Cookies.Add(ck);
         }
     }
 }
