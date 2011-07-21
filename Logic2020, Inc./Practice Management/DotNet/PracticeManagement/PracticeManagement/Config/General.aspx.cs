@@ -57,7 +57,7 @@ namespace PraticeManagement.Config
                 ddlPasswordAttemptWindow.SelectedValue = string.Empty;
                 ddlUnlockUser.SelectedValue = string.Empty;
             }
-
+            txtFormsAuthenticationTimeOutMin.Text = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.FormsAuthenticationTimeOutKey);
             EnableOrDisableLockoutPolicyControls();
         }
 
@@ -102,7 +102,16 @@ namespace PraticeManagement.Config
                 SettingsHelper.SaveResourceKeyValuePairItem(SettingsType.Application, Constants.ResourceKeys.PasswordAttemptWindowKey, ddlPasswordAttemptWindow.SelectedValue);
                 SettingsHelper.SaveResourceKeyValuePairItem(SettingsType.Application, Constants.ResourceKeys.IsLockOutPolicyEnabledKey, chbLockOutPolicy.Checked.ToString());
                 SettingsHelper.SaveResourceKeyValuePairItem(SettingsType.Application, Constants.ResourceKeys.UnlockUserMinituesKey, ddlUnlockUser.SelectedValue);
-
+                var formsAuthenticationTimeOut = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.FormsAuthenticationTimeOutKey);
+                if (formsAuthenticationTimeOut != txtFormsAuthenticationTimeOutMin.Text)
+                {
+                    SettingsHelper.SaveResourceKeyValuePairItem(SettingsType.Application, Constants.ResourceKeys.FormsAuthenticationTimeOutKey, txtFormsAuthenticationTimeOutMin.Text);
+                    var person = DataHelper.CurrentPerson;
+                    if(person!=null)
+                    {
+                        Generic.SetCustomFormsAuthenticationTicket(person.Alias, true, this.Page);
+                    }
+                }
                 using (var serviceClient = new PersonServiceClient())
                 {
                     try
