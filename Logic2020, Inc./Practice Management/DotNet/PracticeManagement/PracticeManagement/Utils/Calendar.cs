@@ -14,7 +14,7 @@ namespace PraticeManagement.Utils
                 return string.Empty;
 
             return calendarItem.DayOff
-                        ? (calendarItem.CompanyDayOff ? Resources.Controls.CssDayOff : Resources.Controls.CssCompanyDayOn)
+                        ? (calendarItem.CompanyDayOff ? (calendarItem.Date.DayOfWeek == DayOfWeek.Sunday || calendarItem.Date.DayOfWeek == DayOfWeek.Saturday ? Resources.Controls.CssWeekEndDayOff : Resources.Controls.CssDayOff) : Resources.Controls.CssCompanyDayOn)
                         : (calendarItem.CompanyDayOff ? Resources.Controls.CssCompanyDayOff : Resources.Controls.CssDayOn);
         }
 
