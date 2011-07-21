@@ -157,7 +157,7 @@ namespace PraticeManagement
             string[] roles = Roles.GetRolesForUser(userName); //{DataTransferObjects.Constants.RoleNames.AdministratorRoleName, DataTransferObjects.Constants.RoleNames.SalespersonRoleName};
             GenericPrincipal principal = new GenericPrincipal(identity, roles);
             Thread.CurrentPrincipal = principal;
-            FormsAuthentication.SetAuthCookie(userName, true);
+            Utils.Generic.SetCustomFormsAuthenticationTicket(userName, true, this.Page);
             //Response.Redirect(FormsAuthentication.GetRedirectUrl(userName, false));
             Response.Redirect("~/CompanyCalendar.aspx");
 
