@@ -210,7 +210,7 @@
             <asp:Panel ID="pnlList" runat="server">
                 <uc2:CalendarLegend ID="CalendarLegend" runat="server" />
                 <asp:DataList ID="dlPersons" runat="server" DataSourceID="odsPersonTimeEntries" CssClass="WholeWidth"
-                    OnItemDataBound="dlPersons_OnItemDataBound">
+                    OnItemDataBound="dlPersons_OnItemDataBound" OnItemCreated = "dlPersons_OnItemCreated ">
                     <ItemTemplate>
                         <div style="padding-bottom: 5px;">
                             <font style="font-size: 20px; font-weight: bold;">
