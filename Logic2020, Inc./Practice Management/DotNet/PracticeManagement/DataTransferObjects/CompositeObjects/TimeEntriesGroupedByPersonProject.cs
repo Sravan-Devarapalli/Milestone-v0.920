@@ -15,6 +15,9 @@ namespace DataTransferObjects.CompositeObjects
         public string PersonName { get; set; }
 
         [DataMember]
+        public int PersonId { get; set; }
+
+        [DataMember]
         public Dictionary<Project, List<TimeEntryRecord>> GroupedTimeEtnries
         { get; set; }
     }
