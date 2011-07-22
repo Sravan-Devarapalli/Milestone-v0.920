@@ -19,6 +19,7 @@ namespace PraticeManagement.Sandbox
         protected double GrandTotal;
         protected double ProjectTotals;
         protected int ColspanForTotals;
+        private int calendarPersonId;
         protected void btnUpdate_OnClick(object sender, EventArgs e)
         {
             dlPersons.DataBind();
@@ -161,6 +162,18 @@ namespace PraticeManagement.Sandbox
             }
         }
 
+        protected void dlPersons_OnItemCreated(object sender, DataListItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                if (e.Item.DataItem != null)
+                {
+                    var item = (KeyValuePair<TimeEntriesGroupedByPersonProject, Dictionary<TimeEntryHours, TimeEntryRecord[]>>)e.Item.DataItem;
+                    calendarPersonId = item.Key.PersonId;
+                }
+            }
+        }
+
         protected void gvTimeEntries_OnRowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.Footer)
@@ -232,7 +245,7 @@ namespace PraticeManagement.Sandbox
                 e.Cancel = true;
                 return;
             }
-
+            e.InputParameters["personId"] = calendarPersonId;
             e.InputParameters["startDate"] = this.diRange.FromDate.Value;
             e.InputParameters["endDate"] = this.diRange.ToDate.HasValue ? this.diRange.ToDate.Value : DateTime.Today;
         }
