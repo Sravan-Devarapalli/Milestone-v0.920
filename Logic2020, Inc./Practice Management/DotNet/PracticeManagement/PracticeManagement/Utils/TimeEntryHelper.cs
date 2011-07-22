@@ -500,6 +500,7 @@ namespace PraticeManagement.Utils
                 tEGPP.GroupedTimeEtnries = tEGPP.GroupedTimeEtnries.OrderBy(gTE => gTE.Key.Name).ToDictionary(v => v.Key, v => v.Value);
                 var thisPerson = byPerson._groupedTimeEtnries.First(kvp => kvp.Value.ToList().FindAll(te => te.ParentMilestonePersonEntry.ThisPerson.Id == personId).Any()).Value.ToList().First(te => te.ParentMilestonePersonEntry.ThisPerson.Id == personId).ParentMilestonePersonEntry.ThisPerson;
                 tEGPP.PersonName = thisPerson.LastName + ", " + thisPerson.FirstName;
+                tEGPP.PersonId = thisPerson.Id.Value;
 
                 var teForProjectCumulative = new Dictionary<TimeEntryHours, TimeEntryRecord[]>();
                 foreach (var keyValuePair in byProject._groupedTimeEtnries)
@@ -519,7 +520,8 @@ namespace PraticeManagement.Utils
             {
                 var emptyTEGPP = new TimeEntriesGroupedByPersonProject
                 {
-                    PersonName = person.LastName + ", " + person.FirstName
+                    PersonName = person.LastName + ", " + person.FirstName,
+                    PersonId = person.Id.Value
                 };
 
                 result.Add(emptyTEGPP, null);
