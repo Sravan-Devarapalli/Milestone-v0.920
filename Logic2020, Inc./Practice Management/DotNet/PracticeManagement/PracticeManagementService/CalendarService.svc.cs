@@ -48,6 +48,16 @@ namespace PracticeManagementService
             return CalendarDAL.GetCompanyHolidays(year);
         }
 
+        public List<Triple<int,string,bool>> GetRecurringHolidaysList()
+        {
+            return CalendarDAL.GetRecurringHolidaysList();
+        }
+
+        public void SetRecurringHoliday(int recurringHolidayId, bool isSet)
+        {
+            CalendarDAL.SetRecurringHoliday(recurringHolidayId, isSet);
+        }
+
 		#endregion
 	}
 }
