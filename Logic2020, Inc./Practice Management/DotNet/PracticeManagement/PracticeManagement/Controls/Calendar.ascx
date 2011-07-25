@@ -10,17 +10,12 @@
     <script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
 <script type="text/javascript">
     var updatingCalendarContainer = null;
-
-    function CheckStatus(item) {
-        var hdn = document.getElementById('<%= hdnCheckBoxChanged.ClientID %>');
-        hdn.value = item.parentElement.all[1].innerText;
-    }
 </script>
 <style>
-    .setCheckboxesLeft TD
+    .setCheckboxesLeft TD, .setCheckboxesLeft div
     {
         text-align:left !important;
-        }
+    }
 </style>
 <br />
 <uc2:CalendarLegend ID="CalendarLegend" runat="server" />
@@ -29,7 +24,7 @@
     <tr>
         <td>
             <uc3:LoadingProgress ID="loadingProgress" runat="server" />
-            <asp:UpdatePanel ID="pnlBody" runat="server" ChildrenAsTriggers="False" UpdateMode="Conditional" OnLoad="pnlBody_OnLoad">
+            <asp:UpdatePanel ID="pnlBody" runat="server" ChildrenAsTriggers="False" UpdateMode="Conditional">
                 <ContentTemplate>
                     <div id="divWait" style="display: none; background-color: White; border: solid 1px silver;">
                         <span style="color: Black; font-weight: bold;">
@@ -66,11 +61,11 @@
                             </td>
                         </tr>
                         <tr id="trRecurringHolidaysDetails" runat="server">
-                            <td colspan="3" align="center">
+                            <td colspan="3" align="center" class="setCheckboxesLeft">
                                 Add Recurring Holidays to Calendar:
-                                <uc:ScrollingDropDown ID="cblRecurringHolidays" runat="server" SetDirty="false" Width="240px" Height="240px" AllSelectedReturnType="Null" CssClass="setCheckboxesLeft"
-                                    onclick="scrollingDropdown_onclick('cblRecurringHolidays','RecurringHolidays')" OnSelectedIndexChanged="cblRecurringHolidays_OnSelectedIndexChanged"
-                                    DropDownListType="RecurringHolidays" CellPadding="3" AutoPostBack="true"/>
+                                <uc:ScrollingDropDown ID="cblRecurringHolidays" runat="server" SetDirty="false" Width="240px" Height="240px" AllSelectedReturnType="AllItems"
+                                    onclick="scrollingDropdown_onclick('cblRecurringHolidays','Recurring Holiday')" OnSelectedIndexChanged="cblRecurringHolidays_OnSelectedIndexChanged"
+                                    DropDownListType="Recurring Holiday" CellPadding="3" AutoPostBack="true"/>
                                 <ext:ScrollableDropdownExtender ID="sdecblRecurringHolidays" runat="server" TargetControlID="cblRecurringHolidays"
                                     UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png" Width="240px">
                                 </ext:ScrollableDropdownExtender>
