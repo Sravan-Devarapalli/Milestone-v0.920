@@ -57,6 +57,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<ClientMarginColorInfo> GetMarginColorInfoDefaults(DefaultGoalType goalType);
+
+        [OperationContract]
+        void SavePracticesIsNotesRequiredDetails(string isNotesRequiredPracticeIdsList, string isNotesExemptedPracticeIdsList);
     }
 }
 
