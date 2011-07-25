@@ -23,6 +23,12 @@ namespace PraticeManagement.CalendarService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/GetCompanyHolidays", ReplyAction="http://tempuri.org/ICalendarService/GetCompanyHolidaysResponse")]
         int GetCompanyHolidays(int year);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/GetRecurringHolidaysList", ReplyAction="http://tempuri.org/ICalendarService/GetRecurringHolidaysListResponse")]
+        DataTransferObjects.Triple<int, string, bool>[] GetRecurringHolidaysList();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/SetRecurringHoliday", ReplyAction="http://tempuri.org/ICalendarService/SetRecurringHolidayResponse")]
+        void SetRecurringHoliday(int recurringHolidayId, bool isSet);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -32,7 +38,7 @@ namespace PraticeManagement.CalendarService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class CalendarServiceClient : System.ServiceModel.ClientBase<PraticeManagement.CalendarService.ICalendarService>, PraticeManagement.CalendarService.ICalendarService {
-                
+        
         public CalendarServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -59,6 +65,14 @@ namespace PraticeManagement.CalendarService {
         
         public int GetCompanyHolidays(int year) {
             return base.Channel.GetCompanyHolidays(year);
+        }
+        
+        public DataTransferObjects.Triple<int, string, bool>[] GetRecurringHolidaysList() {
+            return base.Channel.GetRecurringHolidaysList();
+        }
+        
+        public void SetRecurringHoliday(int recurringHolidayId, bool isSet) {
+            base.Channel.SetRecurringHoliday(recurringHolidayId, isSet);
         }
     }
 }
