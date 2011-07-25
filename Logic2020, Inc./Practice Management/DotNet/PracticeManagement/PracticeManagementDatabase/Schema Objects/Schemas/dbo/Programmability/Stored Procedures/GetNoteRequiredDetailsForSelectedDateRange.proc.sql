@@ -19,7 +19,7 @@ SET NOCOUNT ON;
 		FROM DateList as d
 		CROSS JOIN  Person as p
 		LEFT JOIN Practice as P1 on  P1.PracticeId = p.DefaultPractice
-		LEFT JOIN  dbo.Pay  on  d.[Date]  BETWEEN pay.StartDate AND pay.EndDate AND pay.Person = p.PersonId
+		LEFT JOIN  dbo.Pay  on  d.[Date]  BETWEEN pay.StartDate AND pay.EndDate-1 AND pay.Person = p.PersonId
 		LEFT JOIN Practice as P2 on  P2.PracticeId = pay.PracticeId
 		WHERE d.Date is not null and P.PersonId = @PersonId
 
