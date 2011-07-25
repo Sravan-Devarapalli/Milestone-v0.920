@@ -1089,9 +1089,11 @@ namespace PraticeManagement.Controls
             {
                 foreach (Person person in persons)
                 {
-                    control.Items.Add(new ListItem(
+                    var personitem = new ListItem(
                                           person.PersonLastFirstName,
-                                          person.Id.Value.ToString()));
+                                          person.Id.Value.ToString());
+
+                    control.Items.Add(personitem);
                 }
             }
         }
@@ -1432,7 +1434,7 @@ namespace PraticeManagement.Controls
                     ? null
                     : CurrentPerson;
 
-            IEnumerable<Client> clients = GetAllClientsSecure(person, false);
+            IEnumerable<Client> clients = GetAllClientsSecure(person, true);
 
 
             PrepareClientList(clientList, clients);
@@ -1930,9 +1932,17 @@ namespace PraticeManagement.Controls
 
         public static bool IsUserHasPermissionOnProject(string user, int projectId)
         {
-            using (var serviceClient = new ProjectService.ProjectServiceClient())
+            using (var serviceClient = new ProjectServiceClient())
             {
                 return serviceClient.IsUserHasPermissionOnProject(user, projectId);
+            }
+        }
+
+        public static bool IsUserIsOwnerOfProject(string user, int Id, bool isProjectId)
+        {
+            using (var serviceClient = new ProjectServiceClient())
+            {
+                return serviceClient.IsUserIsOwnerOfProject(user, Id, isProjectId);
             }
         }
 
@@ -1963,6 +1973,14 @@ namespace PraticeManagement.Controls
             }
         }
 
+
+        public static Dictionary<DateTime, bool> GetIsNoteRequiredDetailsForSelectedDateRange(DateTime start, DateTime end, int personId)
+        {
+            using (var person = new PersonServiceClient())
+            {
+                return person.GetIsNoteRequiredDetailsForSelectedDateRange(start, end, personId);
+            }
+        }
     }
 }
 
