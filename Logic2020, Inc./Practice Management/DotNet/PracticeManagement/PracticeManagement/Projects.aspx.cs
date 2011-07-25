@@ -1127,7 +1127,7 @@ namespace PraticeManagement
                 PraticeManagement.Controls.DataHelper.FillSalespersonList(
                     person, cblSalesperson,
                     Resources.Controls.AllSalespersonsText,
-                    false);
+                    true);
 
                 PraticeManagement.Controls.DataHelper.FillProjectOwnerList(cblProjectOwner,
                     "All Owners",
