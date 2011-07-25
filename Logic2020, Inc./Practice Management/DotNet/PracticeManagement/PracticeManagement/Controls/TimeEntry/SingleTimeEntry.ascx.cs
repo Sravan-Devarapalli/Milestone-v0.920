@@ -4,6 +4,7 @@ using System.Web.Security;
 using System.Web.UI.WebControls;
 using DataTransferObjects.TimeEntry;
 using PraticeManagement.Utils;
+using System.Collections.Generic;
 
 namespace PraticeManagement.Controls.TimeEntry
 {
@@ -41,7 +42,7 @@ namespace PraticeManagement.Controls.TimeEntry
             get
             {
                 return Array.FindIndex(
-                    UserRoles, 
+                    UserRoles,
                     r => r == DataTransferObjects.Constants.RoleNames.AdministratorRoleName) >= 0;
             }
         }
@@ -72,7 +73,7 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             get
             {
-                return (DateTime) ViewState[DateBehindViewstate];
+                return (DateTime)ViewState[DateBehindViewstate];
             }
             set
             {
@@ -109,6 +110,18 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        public string IsNoteRequired
+        {
+            set
+            {
+                hdnIsNoteRequired.Value = value;
+            }
+            get
+            {
+                return hdnIsNoteRequired.Value;
+            }
+        }
+
         public string TimeTypeDropdownClientId
         {
             set
@@ -140,7 +153,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 hfSpreadSheetTotalCalculatorExtender.Value = value;
             }
         }
-
+      
         #endregion
 
         #region Custom Events
@@ -195,7 +208,7 @@ namespace PraticeManagement.Controls.TimeEntry
             //  Postback check is not needed here
             //  because we're using partial update and need
             //  to register scripts on postback also.
-            AddSctipts();            
+            AddSctipts();
 
             tbActualHours.TabIndex = TimeEntries.TabIndex;
             CanelControlStyle();
@@ -218,13 +231,13 @@ namespace PraticeManagement.Controls.TimeEntry
 
             if (!Modified) return true;
 
-            if (string.IsNullOrEmpty(this.tbNotes.Text) 
-                && string.IsNullOrEmpty(this.tbActualHours.Text) 
+            if (string.IsNullOrEmpty(this.tbNotes.Text)
+                && string.IsNullOrEmpty(this.tbActualHours.Text)
                 && this.TimeEntryBehind != null
                )
             {
-                    TimeEntryHelper.RemoveTimeEntry(this.TimeEntryBehind);
-                    return true;
+                TimeEntryHelper.RemoveTimeEntry(this.TimeEntryBehind);
+                return true;
             }
 
             bool isValidNote = IsValidNote();
@@ -242,7 +255,6 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
-
         private bool IsValidNote()
         {
             imgNote.ImageUrl = string.IsNullOrEmpty(tbNotes.Text) ?
@@ -250,13 +262,27 @@ namespace PraticeManagement.Controls.TimeEntry
                         PraticeManagement.Constants.ApplicationResources.RecentCommentIcon;
 
             var note = tbNotes.Text;
-            if (string.IsNullOrEmpty(note) || note.Length < 3 || note.Length > 1000)
+
+            if (hdnIsNoteRequired.Value == "true")
             {
+                if (string.IsNullOrEmpty(note) || note.Length < 3 || note.Length > 1000)
+                {
+                    Session[Note_ErrorMessageKey] = "Note";
+                    return false;
+                }
+            }
+            else if (!string.IsNullOrEmpty(note))
+            {
+                if(note.Length < 3 || note.Length > 1000)
+                {
                 Session[Note_ErrorMessageKey] = "Note";
                 return false;
+                }
             }
+
             return true;
         }
+
         private bool IsValidHours()
         {
             double hours;
