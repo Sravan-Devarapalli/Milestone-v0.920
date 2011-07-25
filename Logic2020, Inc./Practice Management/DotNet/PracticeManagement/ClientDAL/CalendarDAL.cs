@@ -202,6 +202,65 @@ namespace DataAccess
             }
         }
 
+        public static List<Triple<int, string, bool>> GetRecurringHolidaysList()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Calendar.GetRecurringHolidaysList, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    connection.Open();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        var list = new List<Triple<int, string, bool>>();
+
+                        ReadRecurringHolidaysList(reader, list);
+
+                        return list;
+                    }
+                }
+            }
+        }
+
+        private static void ReadRecurringHolidaysList(SqlDataReader reader, List<Triple<int, string, bool>> list)
+        {
+            if (reader.HasRows)
+            {
+                int idIndex = reader.GetOrdinal(Constants.ColumnNames.Id);
+                int descriptionIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
+                int isSetIndex = reader.GetOrdinal(Constants.ColumnNames.IsSetColumn);
+
+                while (reader.Read())
+                {
+                    var item = new Triple<int, string, bool>( reader.GetInt32(idIndex), reader.GetString(descriptionIndex),reader.GetBoolean(isSetIndex));
+
+                    list.Add(item);
+                }
+            }
+        }
+
+        public static void SetRecurringHoliday(int id, bool isSet)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Calendar.SetRecurringHoliday, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Id, id);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsSet, isSet);
+
+                    connection.Open();
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
         #endregion
     }
 }
