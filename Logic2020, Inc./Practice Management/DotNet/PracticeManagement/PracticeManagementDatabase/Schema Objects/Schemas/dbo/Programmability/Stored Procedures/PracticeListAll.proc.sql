@@ -3,29 +3,47 @@
 	@PersonId		   INT = NULL
 )
 AS
-	SET NOCOUNT ON
+	SET NOCOUNT ON;
 	
-	-- Table variable to store list of salespersons user is allowed to see	
-	DECLARE @SalespersonPermissions TABLE(
-		PersonId INT NULL
+-- Table variable to store list of practices user is allowed to see	
+	DECLARE @PracticePermissions TABLE(
+		PracticeId INT NULL
 	)
 	-- Populate is with the data from the permissions table
 	--		TargetType = 5 means that we are looking for the practices in the permissions table
-	INSERT INTO @SalespersonPermissions (
-		PersonId
+	INSERT INTO @PracticePermissions (
+		PracticeId
 	) SELECT prm.TargetId FROM dbo.Permission AS prm WHERE prm.PersonId = @PersonId AND prm.TargetType = 5
+	
+	-- Table variable to store list of Practices that owner is allowed to see	
+	DECLARE @OwnerProjectPracticeList TABLE(
+		PracticeId INT NULL -- As per #2890
+	)
+	
 	
 	-- If there are nulls in permission table, it means that eveything is allowed to be seen,
 	--		so set @PersonId to NULL which will extract all records from the table
 	DECLARE @NullsNumber INT
-	SELECT @NullsNumber = COUNT(*) FROM @SalespersonPermissions AS sp WHERE sp.PersonId IS NULL 	
-	IF @NullsNumber > 0 SET @PersonId = NULL
+	SELECT @NullsNumber = COUNT(*) FROM @PracticePermissions AS sp WHERE sp.PracticeId IS NULL 	
+	IF @NullsNumber > 0 
+	BEGIN
+		SET @PersonId = NULL
+	END
+	ELSE
+	BEGIN
+		-- Populate is with the data from the v_Project 
+		INSERT INTO @OwnerProjectPracticeList (PracticeId) 
+		SELECT proj.PracticeId 
+		FROM dbo.v_Project AS proj 
+		WHERE proj.ProjectManagerId = @PersonId 
+	END
 	
 	SELECT 
 		p.PracticeId, 
 		p.Name,
 		p.IsActive,
 		p.IsCompanyInternal,
+		p.IsNotesRequired,
 		CASE 
 			WHEN EXISTS(SELECT TOP 1 proj.PracticeId FROM dbo.Project proj WHERE proj.PracticeId = p.PracticeId)
 				THEN CAST(1 AS BIT)
@@ -48,7 +66,8 @@ AS
 	  WHERE (
 			@PersonId IS NULL 
 			OR  
-			p.PracticeId IN (SELECT * FROM @SalespersonPermissions)
+			p.PracticeId IN (SELECT PP.PracticeId  FROM @PracticePermissions AS PP)
+			
+			OR p.PracticeId IN (SELECT OPP.PracticeId FROM @OwnerProjectPracticeList AS OPP)
 		)
 	ORDER BY p.Name
-
