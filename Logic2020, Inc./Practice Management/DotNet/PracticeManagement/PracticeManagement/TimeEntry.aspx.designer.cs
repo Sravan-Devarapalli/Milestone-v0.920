@@ -40,6 +40,15 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.TimeEntry.WeekSelector wsChoose;
         
         /// <summary>
+        /// lblIsNoteRequired control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblIsNoteRequired;
+        
+        /// <summary>
         /// LoadingProgress1 control.
         /// </summary>
         /// <remarks>
@@ -112,15 +121,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnSave;
         
         /// <summary>
-        /// valTeHours control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator valTeHours;
-        
-        /// <summary>
         /// valMileProjTimeTypeDropdown control.
         /// </summary>
         /// <remarks>
@@ -128,6 +128,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator valMileProjTimeTypeDropdown;
+        
+        /// <summary>
+        /// valTeHours control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator valTeHours;
         
         /// <summary>
         /// valTeNote control.
