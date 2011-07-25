@@ -176,6 +176,12 @@
   <wsdl:message name="IPersonService_SendLockedOutNotificationEmail_OutputMessage">
     <wsdl:part name="parameters" element="tns:SendLockedOutNotificationEmailResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_GetIsNoteRequiredDetailsForSelectedDateRange_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetIsNoteRequiredDetailsForSelectedDateRange" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetIsNoteRequiredDetailsForSelectedDateRange_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetIsNoteRequiredDetailsForSelectedDateRangeResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonMilestoneWithFinancials_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonMilestoneWithFinancials" />
   </wsdl:message>
@@ -477,6 +483,10 @@
     <wsdl:operation name="SendLockedOutNotificationEmail">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SendLockedOutNotificationEmail" message="tns:IPersonService_SendLockedOutNotificationEmail_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SendLockedOutNotificationEmailResponse" message="tns:IPersonService_SendLockedOutNotificationEmail_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetIsNoteRequiredDetailsForSelectedDateRange">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetIsNoteRequiredDetailsForSelectedDateRange" message="tns:IPersonService_GetIsNoteRequiredDetailsForSelectedDateRange_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetIsNoteRequiredDetailsForSelectedDateRangeResponse" message="tns:IPersonService_GetIsNoteRequiredDetailsForSelectedDateRange_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetPersonMilestoneWithFinancials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials" message="tns:IPersonService_GetPersonMilestoneWithFinancials_InputMessage" />
@@ -848,6 +858,15 @@
     </wsdl:operation>
     <wsdl:operation name="SendLockedOutNotificationEmail">
       <soap:operation soapAction="http://tempuri.org/IPersonService/SendLockedOutNotificationEmail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIsNoteRequiredDetailsForSelectedDateRange">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetIsNoteRequiredDetailsForSelectedDateRange" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
