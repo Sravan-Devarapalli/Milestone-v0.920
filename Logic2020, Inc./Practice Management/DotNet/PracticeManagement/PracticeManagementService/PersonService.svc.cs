@@ -985,19 +985,19 @@ namespace PracticeManagementService
             //count = count + 1;
             //providerSettings.Parameters.Set("maxInvalidPasswordAttempts", count.ToString());
 
-           
+
             //    // Save the configuration file.
             //    config.Save(ConfigurationSaveMode.Minimal);
-            
+
 
             //ConfigurationManager.RefreshSection("system.web/membership");
             //count = count - 1;
             //providerSettings.Parameters.Set("maxInvalidPasswordAttempts", count.ToString());
 
-            
+
             //    // Save the configuration file.
             //    config.Save(ConfigurationSaveMode.Minimal);
-            
+
 
             //ConfigurationManager.RefreshSection("system.web/membership");
         }
@@ -1005,6 +1005,11 @@ namespace PracticeManagementService
         public void SendLockedOutNotificationEmail(string userName, string loginPageUrl)
         {
             MailUtil.SendLockedOutNotificationEmail(userName, loginPageUrl);
+        }
+
+        public Dictionary<DateTime, bool> GetIsNoteRequiredDetailsForSelectedDateRange(DateTime start, DateTime end, int personId)
+        {
+            return PersonDAL.GetIsNoteRequiredDetailsForSelectedDateRange(start, end, personId);
         }
 
         #endregion
