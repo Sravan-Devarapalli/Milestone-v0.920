@@ -2,9 +2,9 @@
 <wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CalendarService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://server2.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://server2.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://server2.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://system58.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://system58.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://system58.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="ICalendarService_GetCalendar_InputMessage">
@@ -25,6 +25,18 @@
   <wsdl:message name="ICalendarService_GetCompanyHolidays_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyHolidaysResponse" />
   </wsdl:message>
+  <wsdl:message name="ICalendarService_GetRecurringHolidaysList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRecurringHolidaysList" />
+  </wsdl:message>
+  <wsdl:message name="ICalendarService_GetRecurringHolidaysList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRecurringHolidaysListResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICalendarService_SetRecurringHoliday_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetRecurringHoliday" />
+  </wsdl:message>
+  <wsdl:message name="ICalendarService_SetRecurringHoliday_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetRecurringHolidayResponse" />
+  </wsdl:message>
   <wsdl:portType name="ICalendarService">
     <wsdl:operation name="GetCalendar">
       <wsdl:input wsaw:Action="http://tempuri.org/ICalendarService/GetCalendar" message="tns:ICalendarService_GetCalendar_InputMessage" />
@@ -37,6 +49,14 @@
     <wsdl:operation name="GetCompanyHolidays">
       <wsdl:input wsaw:Action="http://tempuri.org/ICalendarService/GetCompanyHolidays" message="tns:ICalendarService_GetCompanyHolidays_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ICalendarService/GetCompanyHolidaysResponse" message="tns:ICalendarService_GetCompanyHolidays_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRecurringHolidaysList">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICalendarService/GetRecurringHolidaysList" message="tns:ICalendarService_GetRecurringHolidaysList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICalendarService/GetRecurringHolidaysListResponse" message="tns:ICalendarService_GetRecurringHolidaysList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetRecurringHoliday">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICalendarService/SetRecurringHoliday" message="tns:ICalendarService_SetRecurringHoliday_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICalendarService/SetRecurringHolidayResponse" message="tns:ICalendarService_SetRecurringHoliday_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_ICalendarService" type="tns:ICalendarService">
@@ -68,10 +88,28 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetRecurringHolidaysList">
+      <soap:operation soapAction="http://tempuri.org/ICalendarService/GetRecurringHolidaysList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetRecurringHoliday">
+      <soap:operation soapAction="http://tempuri.org/ICalendarService/SetRecurringHoliday" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="CalendarService">
     <wsdl:port name="BasicHttpBinding_ICalendarService" binding="tns:BasicHttpBinding_ICalendarService">
-      <soap:address location="http://server2.ggk.com/PracticeManagementService/CalendarService.svc" />
+      <soap:address location="http://system58.ggk.com/PracticeManagementService/CalendarService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
