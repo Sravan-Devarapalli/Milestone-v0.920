@@ -63,6 +63,10 @@ namespace PraticeManagement.ConfigurationService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IConfigurationService/GetMarginColorInfoDefaults", ReplyAction="http://tempuri.org/IConfigurationService/GetMarginColorInfoDefaultsResponse")]
         DataTransferObjects.ClientMarginColorInfo[] GetMarginColorInfoDefaults(DataTransferObjects.DefaultGoalType goalType);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IConfigurationService/SavePracticesIsNotesRequiredDetails", ReplyAction="http://tempuri.org/IConfigurationService/SavePracticesIsNotesRequiredDetailsRespo" +
+            "nse")]
+        void SavePracticesIsNotesRequiredDetails(string isNotesRequiredPracticeIdsList, string isNotesExemptedPracticeIdsList);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -72,7 +76,7 @@ namespace PraticeManagement.ConfigurationService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ConfigurationServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ConfigurationService.IConfigurationService>, PraticeManagement.ConfigurationService.IConfigurationService {
-      
+       
         public ConfigurationServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -151,6 +155,10 @@ namespace PraticeManagement.ConfigurationService {
         
         public DataTransferObjects.ClientMarginColorInfo[] GetMarginColorInfoDefaults(DataTransferObjects.DefaultGoalType goalType) {
             return base.Channel.GetMarginColorInfoDefaults(goalType);
+        }
+        
+        public void SavePracticesIsNotesRequiredDetails(string isNotesRequiredPracticeIdsList, string isNotesExemptedPracticeIdsList) {
+            base.Channel.SavePracticesIsNotesRequiredDetails(isNotesRequiredPracticeIdsList, isNotesExemptedPracticeIdsList);
         }
     }
 }
