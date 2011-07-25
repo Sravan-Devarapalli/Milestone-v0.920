@@ -106,6 +106,12 @@
   <wsdl:message name="IConfigurationService_GetMarginColorInfoDefaults_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetMarginColorInfoDefaultsResponse" />
   </wsdl:message>
+  <wsdl:message name="IConfigurationService_SavePracticesIsNotesRequiredDetails_InputMessage">
+    <wsdl:part name="parameters" element="tns:SavePracticesIsNotesRequiredDetails" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_SavePracticesIsNotesRequiredDetails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SavePracticesIsNotesRequiredDetailsResponse" />
+  </wsdl:message>
   <wsdl:portType name="IConfigurationService">
     <wsdl:operation name="GetAllEmailTemplates">
       <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetAllEmailTemplates" message="tns:IConfigurationService_GetAllEmailTemplates_InputMessage" />
@@ -170,6 +176,10 @@
     <wsdl:operation name="GetMarginColorInfoDefaults">
       <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetMarginColorInfoDefaults" message="tns:IConfigurationService_GetMarginColorInfoDefaults_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/GetMarginColorInfoDefaultsResponse" message="tns:IConfigurationService_GetMarginColorInfoDefaults_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SavePracticesIsNotesRequiredDetails">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/SavePracticesIsNotesRequiredDetails" message="tns:IConfigurationService_SavePracticesIsNotesRequiredDetails_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/SavePracticesIsNotesRequiredDetailsResponse" message="tns:IConfigurationService_SavePracticesIsNotesRequiredDetails_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IConfigurationService" type="tns:IConfigurationService">
@@ -311,6 +321,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetMarginColorInfoDefaults">
       <soap:operation soapAction="http://tempuri.org/IConfigurationService/GetMarginColorInfoDefaults" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SavePracticesIsNotesRequiredDetails">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/SavePracticesIsNotesRequiredDetails" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
