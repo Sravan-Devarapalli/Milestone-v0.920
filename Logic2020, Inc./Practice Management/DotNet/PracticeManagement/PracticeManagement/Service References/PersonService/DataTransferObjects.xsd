@@ -242,6 +242,7 @@
       <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsCompanyInternal" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsNotesRequiredForTimeEnry" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PracticeManagers" nillable="true" type="tns:ArrayOfPracticeManagerHistory" />
       <xs:element minOccurs="0" name="PracticeOwner" nillable="true" type="tns:Person" />
