@@ -226,6 +226,11 @@
             public const string TerminationDateColumn = "TerminationDate";
             public const string SettingsKeyColumn = "SettingsKey";
             public const string ValueColumn = "Value";
+            public const string PriorityTrendTypeColumn = "PriorityTrendType";
+            public const string PriorityTrendCountColumn = "PriorityTrendCount";
+            public const string StatusColumn = "Status";
+            public const string StatusCountColumn = "StatusCount";
+            public const string IsSetColumn = "IsSet";
         }
 
         #endregion
@@ -445,6 +450,9 @@
             public const string CategoryItemsXMLParam = "@CategoryItemsXML";
             public const string IsOnlyActiveAndProjective = "@IsOnlyActiveAndProjective";
             public const string OpportunityIdsParam = "@OpportunityIds";
+            public const string DaysPrevious = "@DaysPrevious";
+            public const string Id = "@Id";
+            public const string IsSet = "@IsSet";
 
         }
 
@@ -587,6 +595,8 @@
                 public const string WorkDaysCompanyNumberProcedure = "dbo.WorkDaysCompanyNumber";
                 public const string WorkDaysPersonNumberProcedure = "dbo.WorkDaysPersonNumber";
                 public const string GetCompanyHolidaysProcedure = "dbo.GetCompanyHolidays";
+                public const string GetRecurringHolidaysList = "dbo.GetRecurringHolidaysList";
+                public const string SetRecurringHoliday = "dbo.SetRecurringHoliday";
             }
 
             public class ProjectGroup
@@ -692,6 +702,8 @@
                 public const string GetPersonsByOpportunityIds = "dbo.GetPersonsByOpportunityIds";
                 public const string OpportunityDelete = "dbo.OpportunityDelete";
                 public const string IsOpportunityPriorityInUse = "dbo.IsOpportunityPriorityInUse";
+                public const string GetOpportunityPriorityTransitionCount = "dbo.GetOpportunityPriorityTransitionCount";
+                public const string GetOpportunityStatusChangeCount = "dbo.GetOpportunityStatusChangeCount";
 
             }
 
