@@ -107,6 +107,23 @@ namespace PraticeManagement
             }
         }
 
+        private bool? IsUserisOwnerOfProject
+        {
+            get
+            {
+                if (ProjectId.HasValue)
+                {
+                    if (ViewState["IsOwnerOfProject"] == null)
+                    {
+                        ViewState["IsOwnerOfProject"] = DataHelper.IsUserIsOwnerOfProject(User.Identity.Name, ProjectId.Value,true);
+                    }
+                    return (bool)ViewState["IsOwnerOfProject"];
+                }
+
+                return null;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -117,7 +134,8 @@ namespace PraticeManagement
             {
                 if (ProjectId.HasValue && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName))
                 {
-                    if (IsUserHasPermissionOnProject.HasValue && !IsUserHasPermissionOnProject.Value)
+                    if (IsUserHasPermissionOnProject.HasValue && !IsUserHasPermissionOnProject.Value
+                        && IsUserisOwnerOfProject.HasValue && !IsUserisOwnerOfProject.Value)
                     {
                         Response.Redirect(@"~\GuestPages\AccessDenied.aspx");
                     }
@@ -824,9 +842,9 @@ namespace PraticeManagement
             lblProjectNumber.Text = project.ProjectNumber;
             chbIsChargeable.Checked = project.IsChargeable;
 
-            SelectClient(project);
+            PopulateClientDropDown(project);
             FillAndSelectProjectGroupList(project);
-            PopulatePracticeDropDown();
+            PopulatePracticeDropDown(project);
             SelectProjectStatus(project);
             ShowStartAndEndDate(project);
             SelectProjectManager(project);
@@ -985,26 +1003,42 @@ namespace PraticeManagement
                 project.Status != null ? project.Status.Id.ToString() : string.Empty));
         }
 
-        private void PopulatePracticeDropDown()
+        private void PopulatePracticeDropDown(Project project)
         {
-            Project = GetCurrentProject(ProjectId);
-
             ListItem selectedPractice = null;
-            if (Project != null && Project.Practice != null)
+            if (project != null && project.Practice != null)
             {
-                selectedPractice = ddlPractice.Items.FindByValue(Project.Practice.Id.ToString());
+                selectedPractice = ddlPractice.Items.FindByValue(project.Practice.Id.ToString());
             }
 
             // For situation, when disabled practice is assigned to project.
             if (selectedPractice == null)
             {
-                selectedPractice = new ListItem(string.Format("{0} ({1})", Project.Practice.Name, Project.Practice.PracticeOwnerName), Project.Practice.Id.ToString());
+                selectedPractice = new ListItem(string.Format("{0} ({1})", project.Practice.Name, project.Practice.PracticeOwnerName), project.Practice.Id.ToString());
                 ddlPractice.Items.Add(selectedPractice);
                 ddlPractice.SortByText();
             }
 
             ddlPractice.SelectedValue = selectedPractice.Value;
+        }
 
+        private void PopulateClientDropDown(Project project)
+        {
+            ListItem selectedClient = null;
+            if (project != null && project.Client != null)
+            {
+                selectedClient = ddlClientName.Items.FindByValue(project.Client.Id.ToString());
+            }
+
+            // For situation, when disabled practice is assigned to project.
+            if (selectedClient == null)
+            {
+                selectedClient = new ListItem(project.Client.Name, project.Client.Id.ToString());
+                ddlClientName.Items.Add(selectedClient);
+                ddlClientName.SortByText();
+            }
+
+            ddlClientName.SelectedValue = selectedClient.Value;
         }
 
         private void FillAndSelectProjectGroupList(Project project)
@@ -1030,16 +1064,7 @@ namespace PraticeManagement
 
                 ddlProjectGroup.SelectedValue = selectedProjectGroup.Value;
             }
-        }
-
-        private void SelectClient(Project project)
-        {
-            ddlClientName.SelectedIndex =
-                ddlClientName.Items.IndexOf(
-                ddlClientName.Items.FindByValue(
-                project.Client != null && project.Client.Id.HasValue ?
-                project.Client.Id.Value.ToString() : string.Empty));
-        }
+        }             
 
         private void PopulateData(Project project)
         {
