@@ -109,6 +109,10 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SendLockedOutNotificationEmail", ReplyAction="http://tempuri.org/IPersonService/SendLockedOutNotificationEmailResponse")]
         void SendLockedOutNotificationEmail(string userName, string loginPageUrl);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetIsNoteRequiredDetailsForSelectedDateRange", ReplyAction="http://tempuri.org/IPersonService/GetIsNoteRequiredDetailsForSelectedDateRangeRes" +
+            "ponse")]
+        System.Collections.Generic.Dictionary<System.DateTime, bool> GetIsNoteRequiredDetailsForSelectedDateRange(System.DateTime start, System.DateTime end, int personId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials", ReplyAction="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancialsResponse")]
         System.Data.DataSet GetPersonMilestoneWithFinancials(int personId);
         
@@ -225,7 +229,7 @@ namespace PraticeManagement.PersonService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
-       
+      
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -348,6 +352,10 @@ namespace PraticeManagement.PersonService {
         
         public void SendLockedOutNotificationEmail(string userName, string loginPageUrl) {
             base.Channel.SendLockedOutNotificationEmail(userName, loginPageUrl);
+        }
+        
+        public System.Collections.Generic.Dictionary<System.DateTime, bool> GetIsNoteRequiredDetailsForSelectedDateRange(System.DateTime start, System.DateTime end, int personId) {
+            return base.Channel.GetIsNoteRequiredDetailsForSelectedDateRange(start, end, personId);
         }
         
         public System.Data.DataSet GetPersonMilestoneWithFinancials(int personId) {
