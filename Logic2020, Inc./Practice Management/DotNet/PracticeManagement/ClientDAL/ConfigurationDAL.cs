@@ -25,6 +25,8 @@ namespace DataAccess
         private const string StartRangeParam = "@StartRange";
         private const string EndRangeParam = "@EndRange";
         private const string isDeletePreviousMarginInfoParam = "@isDeletePreviousMarginInfo";
+        private const string isNotesRequiredPracticeIdsListParam = "@NotesRequiredPracticeIdsList";
+        private const string isNotesExemptedPracticeIdsListParam = "@NotesExemptedPracticeIdsList";
 
         #endregion Parameters
 
@@ -334,6 +336,24 @@ namespace DataAccess
             }
         }
 
+
+        public static void SavePracticesIsNotesRequiredDetails(string isNotesRequiredPracticeIdsList, string isNotesExemptedPracticeIdsList)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.SavePracticesIsNotesRequiredDetailsProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(isNotesRequiredPracticeIdsListParam, isNotesRequiredPracticeIdsList);
+                    command.Parameters.AddWithValue(isNotesExemptedPracticeIdsListParam, isNotesExemptedPracticeIdsList);
+                    
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
 
