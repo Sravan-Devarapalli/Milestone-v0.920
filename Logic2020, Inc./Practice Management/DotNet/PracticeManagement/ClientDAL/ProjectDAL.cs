@@ -2254,6 +2254,29 @@ namespace DataAccess
                 }
             }
         }
+
+
+        public static bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Project.IsUserIsOwnerOfProject, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, user);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IdParam, id);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsProjectIdParam, isProjectId);
+
+                    connection.Open();
+
+                    var result = command.ExecuteScalar();
+
+                    return Convert.ToBoolean(result);
+                }
+            }
+        }
     }
 }
 
