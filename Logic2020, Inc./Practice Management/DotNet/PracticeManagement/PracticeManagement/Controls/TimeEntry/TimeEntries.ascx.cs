@@ -41,6 +41,7 @@ namespace PraticeManagement.Controls.TimeEntry
         private const string CONTROL_columnTotalHours = "extTotalHours";
         private const string CONTROL_lblcolumnTotalHours = "lblTotalHours";
         private const string VIEW_STATE_SELECTED_PERSON = "1F789A8C-DCAC-498C-803D-594725E3C706";
+        private const string VIEW_STATE_ISNOTEREQUIREDLIST = "1F789A8C-DCAC-498C-803D-594725E3C706VIEW_STATE_ISNOTEREQUIREDLIST";
         private const string VIEW_STATE_SELECTED_DATES = "AD8AD17B-AB33-4A39-802B-091E58090FC1";
         private const string VIEW_STATE_SELECTED_MPES = "A753603D-4746-4B07-B914-29F040022F6C";
         private const string dropdown_ErrorMessageKey = "MilestoneProjectTimeType";
@@ -75,6 +76,21 @@ namespace PraticeManagement.Controls.TimeEntry
                 ViewState[VIEW_STATE_SELECTED_DATES] = value;
             }
         }
+
+        public Dictionary<DateTime, bool> IsNoteRequiredList
+        {
+            get
+            {
+                return ViewState[VIEW_STATE_ISNOTEREQUIREDLIST] as Dictionary<DateTime, bool>;
+            }
+
+            set
+            {
+                ViewState[VIEW_STATE_ISNOTEREQUIREDLIST] = value;
+            }
+        }
+
+
 
         public MilestonePersonEntry[] MilestonePersonEntries
         {
@@ -222,43 +238,44 @@ namespace PraticeManagement.Controls.TimeEntry
 
                     extSpreadsheetTotalHours.ControlsToCheck += tbActualHours.ClientID + ";";
                     ste.SpreadSheetTotalCalculatorExtenderId = extSpreadsheetTotalHours.ClientID;
+                    ste.IsNoteRequired = IsNoteRequiredList[ste.DateBehind.Date].ToString().ToLowerInvariant();
                 }
 
             }
 
         }
 
-       /* protected void repTotalHours_ItemDataBound(object sender, RepeaterItemEventArgs e)
-        {
-            var controlIDList = new List<string>();
-            var extColumnTotalHours = (TotalCalculatorExtender)e.Item.FindControl(CONTROL_columnTotalHours);
+        /* protected void repTotalHours_ItemDataBound(object sender, RepeaterItemEventArgs e)
+         {
+             var controlIDList = new List<string>();
+             var extColumnTotalHours = (TotalCalculatorExtender)e.Item.FindControl(CONTROL_columnTotalHours);
 
-            foreach (RepeaterItem barItem in tes.Items)
-            {
-                var bar = barItem.FindControl(CONTROL_TeBar) as TimeEntryBar;
-                var teRepeater = (Repeater)bar.FindControl(CONTROL_TeRepeater);
-                var teSingle = (SingleTimeEntry)teRepeater.Items[e.Item.ItemIndex].FindControl(CONTROL_TeSingle);
-                var tbActualHours = teSingle.FindControl(CONTROL_TeActualHours);
+             foreach (RepeaterItem barItem in tes.Items)
+             {
+                 var bar = barItem.FindControl(CONTROL_TeBar) as TimeEntryBar;
+                 var teRepeater = (Repeater)bar.FindControl(CONTROL_TeRepeater);
+                 var teSingle = (SingleTimeEntry)teRepeater.Items[e.Item.ItemIndex].FindControl(CONTROL_TeSingle);
+                 var tbActualHours = teSingle.FindControl(CONTROL_TeActualHours);
 
-                controlIDList.Add(tbActualHours.ClientID);
-                teSingle.HorizontalTotalCalculatorExtenderId = extColumnTotalHours.ClientID;
-                teSingle.SpreadSheetTotalCalculatorExtenderId = extSpreadsheetTotalHours.ClientID;
-            }
+                 controlIDList.Add(tbActualHours.ClientID);
+                 teSingle.HorizontalTotalCalculatorExtenderId = extColumnTotalHours.ClientID;
+                 teSingle.SpreadSheetTotalCalculatorExtenderId = extSpreadsheetTotalHours.ClientID;
+             }
 
-            extColumnTotalHours.ControlsToCheck = string.Join(";", controlIDList.ToArray());
+             extColumnTotalHours.ControlsToCheck = string.Join(";", controlIDList.ToArray());
 
-            extSpreadsheetTotalHours.ControlsToCheck
-                = string.Format(
-                    "{0};{1}",
-                    extSpreadsheetTotalHours.ControlsToCheck,
-                    extColumnTotalHours.ControlsToCheck).Trim(';');
-        }
+             extSpreadsheetTotalHours.ControlsToCheck
+                 = string.Format(
+                     "{0};{1}",
+                     extSpreadsheetTotalHours.ControlsToCheck,
+                     extColumnTotalHours.ControlsToCheck).Trim(';');
+         }
 
-        protected void repTotalHours_DataBinding(object sender, EventArgs eventArgs)
-        {
-            extSpreadsheetTotalHours.ControlsToCheck = string.Empty;
-        } 
-        */
+         protected void repTotalHours_DataBinding(object sender, EventArgs eventArgs)
+         {
+             extSpreadsheetTotalHours.ControlsToCheck = string.Empty;
+         } 
+         */
     }
 }
 
