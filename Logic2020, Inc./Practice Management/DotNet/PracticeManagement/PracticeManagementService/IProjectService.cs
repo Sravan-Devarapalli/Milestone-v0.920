@@ -342,6 +342,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         bool IsUserHasPermissionOnProject(string user, int projectId);
+
+        [OperationContract]
+        bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId);
     }
 }
 
