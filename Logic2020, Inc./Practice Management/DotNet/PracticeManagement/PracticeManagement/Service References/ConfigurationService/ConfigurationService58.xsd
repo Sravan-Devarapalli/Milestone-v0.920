@@ -226,4 +226,17 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="SavePracticesIsNotesRequiredDetails">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="isNotesRequiredPracticeIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="isNotesExemptedPracticeIdsList" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SavePracticesIsNotesRequiredDetailsResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
 </xs:schema>
