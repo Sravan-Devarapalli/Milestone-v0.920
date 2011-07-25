@@ -169,10 +169,10 @@ namespace PraticeManagement
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            var x = DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
-            teList.IsNoteRequiredList = x;
+            var isNoteRequiredList = DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
+            teList.IsNoteRequiredList = isNoteRequiredList;
 
-            lblIsNoteRequired.Visible = x.Values.Any(p => p == true);
+            lblIsNoteRequired.Visible = isNoteRequiredList.Values.Any(p => p == true);
         }
 
         private void RaiseError()
