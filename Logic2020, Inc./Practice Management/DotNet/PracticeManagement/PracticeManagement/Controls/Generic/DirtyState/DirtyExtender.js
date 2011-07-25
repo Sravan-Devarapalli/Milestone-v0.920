@@ -20,6 +20,7 @@ PraticeManagement.Controls.Generic.DirtyState.DirtyBehavior = function (element)
     this._SpreadSheetExtenderIdValue = null;
     this._TimeTypeDropdownIdValue = null;
     this._ProjectMilestoneDropdownIdValue = null;
+    this._IsNoteRequired = null;
 
     // Add particular STE to the array if it's not there yet
     if (!Array.contains(allSingleTEs, this))
@@ -193,16 +194,30 @@ PraticeManagement.Controls.Generic.DirtyState.DirtyBehavior.prototype = {
     get_ProjectMilestoneDropdown: function () {
         return $get(this._ProjectMilestoneDropdownIdValue);
     },
+    set_IsNoteRequired: function (value) {
+        this._IsNoteRequired = value;
+    },
+    get_IsNoteRequired: function () {
+        return this._IsNoteRequired;
+    },
+
 
     isValidNote: function () {
         if (!this._isDirty())
             return true;
         var note = this._note();
         if (note.trim().length == 0) {
-            if (this._hours().trim().length == 0)
+            if (this._hours().trim().length == 0) {
                 return true;
-            else
-                return false;
+            }
+            else {
+                if ($get(this._IsNoteRequired).value == "true") {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
         }
 
         return note.length >= 3 && note.length <= 1000;
