@@ -9,6 +9,8 @@
         /// </summary>
         public class ColumnNames
         {
+
+            public const string IsNotesRequired = "IsNotesRequired";
             public const string UploadedDate = "UploadedDate";
             public const string AttachmentSize = "AttachmentSize";
             public const string IsMarginColorInfoEnabledColumn = "IsMarginColorInfoEnabled";
@@ -450,9 +452,12 @@
             public const string CategoryItemsXMLParam = "@CategoryItemsXML";
             public const string IsOnlyActiveAndProjective = "@IsOnlyActiveAndProjective";
             public const string OpportunityIdsParam = "@OpportunityIds";
-            public const string DaysPrevious = "@DaysPrevious";
+            public const string IdParam = "@Id";
+            public const string IsProjectIdParam = "@IsProjectId";
+  public const string DaysPrevious = "@DaysPrevious";
             public const string Id = "@Id";
             public const string IsSet = "@IsSet";
+
 
         }
 
@@ -504,6 +509,8 @@
                 public const string GetSettingsKeyValuePairsProcedure = "dbo.GetSettingsKeyValuePairsBySettingsType";
                 public const string SaveMarginInfoDefaultsProcedure = "dbo.SaveMarginInfoDefaults";
                 public const string GetMarginColorInfoDefaultsProcedure = "dbo.GetMarginColorInfoDefaults";
+                public const string SavePracticesIsNotesRequiredDetailsProcedure = "dbo.SavePracticesIsNotesRequiredDetails";
+
             }
 
             #endregion
@@ -518,6 +525,7 @@
                 public const string ListManagersSubordinates = "dbo.ListManagersSubordinates";
                 public const string PersonListByCategoryTypeAndPeriod = "[dbo].[PersonListByCategoryTypeAndPeriod]";
                 public const string UpdateIsWelcomeEmailSentForPerson = "dbo.UpdateIsWelcomeEmailSentForPerson";
+                public const string GetNoteRequiredDetailsForSelectedDateRange = "dbo.GetNoteRequiredDetailsForSelectedDateRange";
 
             }
 
@@ -644,6 +652,8 @@
                 public const string ProjectDelete = "dbo.ProjectDelete";
                 public const string ProjectListAllWithoutFiltering = "dbo.ProjectListAllWithoutFiltering";
                 public const string IsUserHasPermissionOnProject = "dbo.IsUserHasPermissionOnProject";
+                public const string IsUserIsOwnerOfProject = "dbo.IsUserIsOwnerOfProject";
+
             }
 
             public class MilestonePerson
