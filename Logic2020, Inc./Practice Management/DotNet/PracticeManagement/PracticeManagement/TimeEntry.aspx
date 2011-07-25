@@ -94,9 +94,13 @@
                 <asp:AsyncPostBackTrigger ControlID="wsChoose" />
             </Triggers>
         </pcg:StyledUpdatePanel>
-        <div style="padding-left:10px;">
-            <asp:Label ID="lblIsNoteRequired" runat="server" Text="* You are required to enter notes for any/all time you enter on this page."
-                Visible="false" ToolTip="* You are required to enter notes for any/all time you enter on this page."></asp:Label></div>
+        <asp:UpdatePanel ID="upnlIsNoteRequired" runat="server">
+            <ContentTemplate>
+                <div style="padding-left: 10px;">
+                    <asp:Label ID="lblIsNoteRequired" runat="server" Text="* You are required to enter notes for any/all time you enter on this page."
+                        Visible="false" ToolTip="* You are required to enter notes for any/all time you enter on this page."></asp:Label></div>
+            </ContentTemplate>
+        </asp:UpdatePanel>
     </div>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <div id="updateContainer" class="time-entry-grid">
