@@ -5,25 +5,41 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	DECLARE @SalespersonPermissions TABLE(
-		PersonId INT NULL
+	-- Table variable to store list of Clients that owner is allowed to see	
+	DECLARE @OwnerProjectClientList TABLE(
+		ClientId INT NULL -- As per #2890
+	)
+	
+	DECLARE @ClientPermissions TABLE(
+		ClientId INT NULL
 	)
 	-- Populate is with the data from the permissions table
 	--		TargetType = 1 means that we are looking for the clients in the permissions table
-	INSERT INTO @SalespersonPermissions (
-		PersonId
+	INSERT INTO @ClientPermissions (
+		ClientId
 	) SELECT prm.TargetId FROM dbo.Permission AS prm WHERE prm.PersonId = @PersonId AND prm.TargetType = 1
 	
 	-- If there are nulls in permission table, it means that eveything is allowed to be seen,
 	--		so set @PersonId to NULL which will extract all records from the table
 	DECLARE @NullsNumber INT
-	SELECT @NullsNumber = COUNT(*) FROM @SalespersonPermissions AS sp WHERE sp.PersonId IS NULL 	
-	IF @NullsNumber > 0 SET @PersonId = NULL
+	SELECT @NullsNumber = COUNT(*) FROM @ClientPermissions AS sp WHERE sp.ClientId IS NULL 	
+	IF @NullsNumber > 0 
+	BEGIN
+		SET @PersonId = NULL
+	END
+	ELSE
+	BEGIN
+		-- Populate is with the data from the v_Project 
+		INSERT INTO @OwnerProjectClientList (ClientId) 
+		SELECT proj.ClientId 
+		FROM dbo.v_Project AS proj 
+		WHERE proj.ProjectManagerId = @PersonId 
+	END
 
-	If @ShowAll = 0
-	begin
-		Select 
-				c.ClientId
+	IF @ShowAll = 0
+	BEGIN
+		SELECT 
+				  c.ClientId
 				, c.DefaultDiscount
 				, c.DefaultTerms
 				, c.DefaultSalespersonId
@@ -31,19 +47,19 @@ BEGIN
 				, c.[Name]
 				, c.Inactive
 				, c.IsChargeable
-			from Client AS c
-			where Inactive = 0
+			FROM Client AS c
+			WHERE Inactive = 0
 				AND (
 					@PersonId IS NULL 
-					OR  
-					ClientId IN (SELECT TargetId FROM dbo.Permission AS p WHERE p.PersonId = @PersonId AND p.TargetType = 1)
+					OR ClientId IN (SELECT cp.ClientId FROM @ClientPermissions AS cp)
+					OR ClientId IN (SELECT opc.ClientId FROM @OwnerProjectClientList AS opc)
 				)
 			ORDER BY c.[Name]
-	end
-	else
-	begin
-		Select 
-				ClientId
+	END
+	ELSE
+	BEGIN
+		SELECT 
+				  ClientId
 				, DefaultDiscount
 				, DefaultTerms
 				, DefaultSalespersonId
@@ -51,13 +67,13 @@ BEGIN
 				, [Name]
 				, Inactive
 				, IsChargeable
-			from Client
+			FROM Client
 			WHERE (
 				@PersonId IS NULL 
-				OR  
-				ClientId IN (SELECT TargetId FROM dbo.Permission AS p WHERE p.PersonId = @PersonId AND p.TargetType = 1)
+				OR ClientId IN (SELECT cp.ClientId FROM @ClientPermissions AS cp)
+				OR ClientId IN (SELECT opc.ClientId FROM @OwnerProjectClientList AS opc)
 			)
 			ORDER BY [Name]
-	end
+	END
 END
 
