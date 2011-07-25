@@ -22,7 +22,6 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
-
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -125,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ActivityLog.aspx" />
+    <Content Include="Controls\Calendar.ascx" />
     <Content Include="LoggedOut.aspx" />
     <Content Include="ProjectCalendar.aspx" />
     <Content Include="Config\BecomeUser.aspx" />
@@ -722,6 +722,13 @@
     </Compile>
     <Compile Include="ActivityLog_Old.aspx.designer.cs">
       <DependentUpon>ActivityLog_Old.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Calendar.ascx.cs">
+      <DependentUpon>Calendar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Calendar.ascx.designer.cs">
+      <DependentUpon>Calendar.ascx</DependentUpon>
     </Compile>
     <Compile Include="LoggedOut.aspx.cs">
       <DependentUpon>LoggedOut.aspx</DependentUpon>
@@ -2840,4 +2847,3 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
-
