@@ -6,6 +6,7 @@ using PraticeManagement.Controls.TimeEntry;
 using PraticeManagement.Utils;
 using System.Web.Security;
 using System.Web.UI;
+using System.Linq;
 
 namespace PraticeManagement
 {
@@ -164,6 +165,14 @@ namespace PraticeManagement
             {
                 btnSave.Attributes.Add("disabled", "disabled");
             }
+        }
+
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            var x = DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
+            teList.IsNoteRequiredList = x;
+
+            lblIsNoteRequired.Visible = x.Values.Any(p => p == true);
         }
 
         private void RaiseError()
