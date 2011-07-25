@@ -29,6 +29,7 @@ namespace PraticeManagement
         private const string DEFAULT_NUMBER_HOURS_PER_DAY = "8";
         private const string BUTTON_INSERT_ID = "btnInsert";
         private const string DuplPersonName = "The specified person is already assigned on this milestone.";
+        private const string lblTargetMargin = "lblTargetMargin";
 
         #endregion
 
@@ -137,6 +138,26 @@ namespace PraticeManagement
                         ViewState["HasPermission"] = DataHelper.IsUserHasPermissionOnProject(User.Identity.Name, projectId.Value);
                     }
                     return (bool)ViewState["HasPermission"];
+                }
+
+                return null;
+            }
+        }
+
+      
+
+        private bool? IsUserisOwnerOfProject
+        {
+            get
+            {
+                int? id = SelectedId;
+                if (id.HasValue)
+                {
+                    if (ViewState["IsOwnerOfProject"] == null)
+                    {
+                        ViewState["IsOwnerOfProject"] = DataHelper.IsUserIsOwnerOfProject(User.Identity.Name, id.Value , false);
+                    }
+                    return (bool)ViewState["IsOwnerOfProject"];
                 }
 
                 return null;
@@ -401,17 +422,21 @@ namespace PraticeManagement
                         var rowSa = new SeniorityAnalyzer(DataHelper.CurrentPerson);
                         if (rowSa.IsOtherGreater(entry.ThisPerson))
                         {
-                            //We have to hide Cells[6] which is margin based on the seniority levels 
-                            // of Milestone Person and logged in user.
-                            var label = e.Row.Cells[6].Controls[1] as System.Web.UI.WebControls.Label;
+
+                            var label = e.Row.FindControl(lblTargetMargin) as Label;
                             if (label != null)
                                 label.Text = Resources.Controls.HiddenCellText;
 
-                            if (!Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName)
-                                || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName))// #2817: DirectorRoleName is added as per the requirement.
+                            if (!(IsUserisOwnerOfProject.HasValue && IsUserisOwnerOfProject.Value))
                             {
-                                e.Row.Enabled = false;
+                                if (!Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName)
+                                    || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName))// #2817: DirectorRoleName is added as per the requirement.
+                                {
+                                    e.Row.Enabled = false;
+                                }
                             }
+                           
+
                         }
 
                     }
@@ -468,6 +493,7 @@ namespace PraticeManagement
 
         protected void gvMilestonePersonEntries_RowUpdating(object sender, GridViewUpdateEventArgs e)
         {
+             
             Page.Validate(vsumMilestonePersonEntry.ValidationGroup);
             if (Page.IsValid)
             {
@@ -484,7 +510,11 @@ namespace PraticeManagement
                 BindEntriesGrid(MilestonePerson.Entries);
                 e.Cancel = true;
 
+               
+
                 MilestonePerson = milestonePerson;
+               
+
                 IsDirty = true;
 
                 RefreshPersonRate();
@@ -645,7 +675,7 @@ namespace PraticeManagement
             {
                 txtHoursPerDay.Text = DEFAULT_NUMBER_HOURS_PER_DAY;
             }
-                       
+
 
             // Flags
             bool isUpdate = (entry.MilestonePersonId != 0);
@@ -665,7 +695,7 @@ namespace PraticeManagement
                 {
                     var newTotalDays = decimal.Parse(txtHoursInPeriod.Text);
                     // Recalculate hours per day according to HoursInPerod 
-                    hoursPerDay = (days != 0) ? decimal.Round(newTotalDays / (days+entry.VacationDays), 2) : 0;
+                    hoursPerDay = (days != 0) ? decimal.Round(newTotalDays / (days + entry.VacationDays), 2) : 0;
 
                     // If calculated value more then 24 hours set 24 hours as maximum value for working day
                     entry.HoursPerDay = (hoursPerDay > 24M) ? 24M : hoursPerDay;
@@ -765,10 +795,12 @@ namespace PraticeManagement
                     {
                         MilestonePerson = milestonePerson;
 
+                       
 
                         if (!Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName))
                         {
-                            if (IsUserHasPermissionOnProject.HasValue && !IsUserHasPermissionOnProject.Value)
+                            if (IsUserHasPermissionOnProject.HasValue && !IsUserHasPermissionOnProject.Value
+                                && IsUserisOwnerOfProject.HasValue && !IsUserisOwnerOfProject.Value)
                                 Response.Redirect(@"~\GuestPages\AccessDenied.aspx");
                         }
                         ShowPreviousAndNext();
@@ -1011,6 +1043,7 @@ namespace PraticeManagement
 
         private void PopulateControls(Milestone milestone)
         {
+            
             Milestone = milestone;
 
             if (milestone.Project != null)
@@ -1037,7 +1070,7 @@ namespace PraticeManagement
         {
             MilestonePerson milestonePerson = MilestonePerson;
             PopulateData(milestonePerson);
-            
+
 
             using (var serviceClient = new MilestonePersonServiceClient())
             {
@@ -1048,12 +1081,12 @@ namespace PraticeManagement
                 }
                 catch (Exception ex)
                 {
-                    
+
                     serviceClient.Abort();
                     ExMessage = ex.Message;
                     Page.Validate(vsumMilestonePerson.ValidationGroup);
                 }
-                
+
             }
         }
 
@@ -1061,9 +1094,10 @@ namespace PraticeManagement
         {
             milestonePerson.Milestone = new Milestone();
             milestonePerson.Milestone.Id = SelectedId.Value;
+
             var personId = int.Parse(ddlPersonName.SelectedValue);
-            if (MilestonePerson.Person != null && 
-                MilestonePerson.Person.Id.HasValue && 
+            if (MilestonePerson.Person != null &&
+                MilestonePerson.Person.Id.HasValue &&
                 personId == MilestonePerson.Person.Id.Value)
             {
                 milestonePerson.Person = MilestonePerson.Person;
@@ -1075,7 +1109,7 @@ namespace PraticeManagement
                 {
                     milestonePerson.Person = serviceClient.GetPersonDetail(personId);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _internalException = new ExceptionDetail(ex);
                     serviceClient.Abort();
