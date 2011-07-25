@@ -17,6 +17,7 @@ namespace PraticeManagement.Controls
         #region Constants
 
         private const string YearKey = "Year";
+        private const string ViewStatePreviousRecurringList = "ViewStatePreviousRecurringHolidaysList";
 
         private CalendarItem[] days;
         private bool userIsPracticeManager;
@@ -62,6 +63,18 @@ namespace PraticeManagement.Controls
         {
             get;
             set;
+        }
+
+        private Triple<int, string, bool>[] PreviousRecurringHolidaysList
+        {
+            get 
+            {
+                return (Triple<int, string, bool>[])ViewState[ViewStatePreviousRecurringList];
+            }
+            set 
+            {
+                ViewState[ViewStatePreviousRecurringList] = value;
+            }
         }
 
         #endregion
@@ -161,15 +174,14 @@ namespace PraticeManagement.Controls
                 if (!string.IsNullOrEmpty(firstItem))
                 {
                     cblRecurringHolidays.Items.Add(firstItem);
-                    cblRecurringHolidays.Items[0].Enabled = false;
                 }
                 var list = serviceClient.GetRecurringHolidaysList();
+                PreviousRecurringHolidaysList = list;
 
                 foreach (var item in list)
                 {
                     var listItem = new ListItem(item.Second, item.First.ToString());
 
-                    listItem.Attributes["onclick"]+= "CheckStatus(this)";
                     cblRecurringHolidays.Items.Add(listItem);
 
                     listItem.Selected = item.Third;
@@ -196,27 +208,36 @@ namespace PraticeManagement.Controls
         {
             var item = (ScrollingDropDown)sender;
 
-            if (item.SelectedItems.Count() > 0)
+            if (PreviousRecurringHolidaysList != null)
             {
-                using (var serviceClient = new CalendarService.CalendarServiceClient())
+                foreach (var previousItem in PreviousRecurringHolidaysList)
                 {
-                    var text = hdnCheckBoxChanged.Value;
+                    bool check = previousItem.Third;
+                    int id = previousItem.First;
 
-                    var listItem = item.Items.FindByText(text);
-                    serviceClient.SetRecurringHoliday(Convert.ToInt32(listItem.Value), listItem.Selected);
+                    var selectedItems = item.SelectedItems.Split(',');
+
+                    var selectedItem = selectedItems.Where(p => p.ToString() == previousItem.First.ToString());
+
+                    if (selectedItem.Count() > 0 && !check)
+                    {
+                        previousItem.Third = !check;
+                        SetRecurringHoliday(id, !check);
+                    }
+                    else if (check && selectedItem.Count() <= 0)
+                    {
+                        previousItem.Third = !check;
+                        SetRecurringHoliday(id, !check);
+                    }
                 }
             }
         }
 
-        protected void pnlBody_OnLoad(object sender, EventArgs e)
+        private void SetRecurringHoliday(int id, bool isSet)
         {
-            foreach (var item in cblRecurringHolidays.Items)
+            using (var serviceClient = new CalendarService.CalendarServiceClient())
             {
-                var listItem = ((ListItem)item);
-                if (listItem.Attributes["onclick"] == null)
-                {
-                    listItem.Attributes["onclick"] += "CheckStatus(this)";
-                }
+                serviceClient.SetRecurringHoliday(id, isSet);
             }
         }
 
