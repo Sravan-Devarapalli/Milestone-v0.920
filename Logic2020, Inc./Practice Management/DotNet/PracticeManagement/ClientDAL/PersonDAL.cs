@@ -530,8 +530,8 @@ namespace DataAccess
                                 HireDate = (DateTime)reader[hireDateIndex],
                                 Seniority = new Seniority
                                 {
-                                     Id = reader.GetInt32(seniorityIdColumnIndex),
-                                     Name = reader.GetString(SeniorityNameColumnIndex)
+                                    Id = reader.GetInt32(seniorityIdColumnIndex),
+                                    Name = reader.GetString(SeniorityNameColumnIndex)
                                 }
                             };
                         int[] load = Utils.StringToIntArray((string)reader[weeklyLoadIndex]);
@@ -2863,6 +2863,46 @@ namespace DataAccess
                     };
 
                     result.Add(user);
+                }
+            }
+        }
+
+        public static Dictionary<DateTime, bool> GetIsNoteRequiredDetailsForSelectedDateRange(DateTime start, DateTime end,int personId)
+        {
+            var result = new Dictionary<DateTime, bool>();
+
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(
+                                        Constants.ProcedureNames.Person.GetNoteRequiredDetailsForSelectedDateRange,
+                                        connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, start);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, end);
+
+                connection.Open();
+
+                using (var reader = command.ExecuteReader())
+                {
+                    ReadNoteRequiredDetails(reader, result);
+                }
+            }
+
+            return result;
+        }
+
+        private static void ReadNoteRequiredDetails(SqlDataReader reader, Dictionary<DateTime, bool> result)
+        {
+            if (reader.HasRows)
+            {
+                int dateTimeIndex = reader.GetOrdinal("Date");
+                int isNotesRequiredIndex = reader.GetOrdinal(Constants.ColumnNames.IsNotesRequired);
+
+                while (reader.Read())
+                {
+                    result.Add(reader.GetDateTime(dateTimeIndex),reader.GetInt32(isNotesRequiredIndex)==1);
                 }
             }
         }
