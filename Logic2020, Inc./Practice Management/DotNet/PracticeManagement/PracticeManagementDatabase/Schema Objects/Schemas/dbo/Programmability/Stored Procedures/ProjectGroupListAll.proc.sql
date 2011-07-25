@@ -42,7 +42,12 @@ AS
 				,Active
 			FROM ProjectGroup
 			WHERE ((ClientId = @ClientId))
-					AND (@PersonId IS NULL OR GroupId IN (SELECT * FROM @GroupPermissions))
+					AND (@PersonId IS NULL 
+					     OR GroupId IN (SELECT * FROM @GroupPermissions)
+						 OR GroupId IN (SELECT pro.GroupId FROM Project AS pro
+										WHERE ProjectManagerId = @PersonId )
+						 )
+
 	ELSE 
 			SELECT
 				  pg.ClientId
