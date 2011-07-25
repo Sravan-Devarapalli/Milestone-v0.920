@@ -33,13 +33,13 @@ WHERE Id = @Id
 	SET DayOff = @IsSet
 	FROM dbo.Calendar AS C1
 	WHERE [Date] >= @Today
-			AND MONTH([Date]) = @Month
+			AND ((MONTH([Date]) = @Month
 			AND (
 					(@Day IS NOT NULL --If holiday is on exact Date.
 						AND (	--If Holiday comes in 
 								DAY([Date]) = @Day AND DATEPART(DW,[Date]) NOT IN(1,7)
-								OR DAY([Date])+1 = @Day AND DATEPART(DW,[Date]) = 6
-								OR DAY([Date])-1 = @Day AND DATEPART(DW,[Date]) = 2
+								OR DAY(DATEADD(DD,1,[Date])) = @Day AND DATEPART(DW,[Date]) = 6
+								OR DAY(DATEADD(DD,-1,[Date])) = @Day AND DATEPART(DW,[Date]) = 2
 							)
 					 )
 					 OR
@@ -67,19 +67,28 @@ WHERE Id = @Id
 					 )
 				 
 				)
+				)
+				OR 
+				(
+					MONTH([Date])%12 = @Month-1
+					AND MONTH(DATEADD(DD,1,[Date])) = @Month
+					AND @Day IS NOT NULL
+					AND DAY(DATEADD(DD,1,[Date])) = @Day AND DATEPART(DW,[Date]) = 6
+				)
+				)
 
 	
 	UPDATE C1
 	SET DayOff = @IsSet
 	FROM dbo.PersonCalendarAuto C1
 	WHERE [Date] >= @Today
-			AND MONTH([Date]) = @Month
+			AND ((MONTH([Date]) = @Month
 			AND (
 					(@Day IS NOT NULL
 						AND (
 								DAY([Date]) = @Day AND DATEPART(DW,[Date]) NOT IN(1,7)
-								OR DAY([Date])+1 = @Day AND DATEPART(DW,[Date]) = 6
-								OR DAY([Date])-1 = @Day AND DATEPART(DW,[Date]) = 2
+								OR DAY(DATEADD(DD,1,[Date])) = @Day AND DATEPART(DW,[Date]) = 6
+								OR DAY(DATEADD(DD,-1,[Date])) = @Day AND DATEPART(DW,[Date]) = 2
 							)
 					 )
 					 OR
@@ -106,6 +115,14 @@ WHERE Id = @Id
 						
 					 )
 				 
+				))
+				OR
+				(
+					MONTH([Date])%12 = @Month-1
+					AND MONTH(DATEADD(DD,1,[Date])) = @Month
+					AND @Day IS NOT NULL
+					AND DAY(DATEADD(DD,1,[Date])) = @Day AND DATEPART(DW,[Date]) = 6
+				)
 				)
 		
 		COMMIT TRANSACTION Tran_SetRecurringHoliday	
