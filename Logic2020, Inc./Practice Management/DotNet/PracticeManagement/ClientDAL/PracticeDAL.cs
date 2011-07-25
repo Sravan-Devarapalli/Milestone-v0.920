@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using DataAccess.Other;
 using DataTransferObjects;
+using System;
 
 namespace DataAccess
 {
@@ -141,6 +142,18 @@ namespace DataAccess
             var statusIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusId);
             var statusNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusName);
 
+            int isNotesRequiredIndex = -1;
+            try
+            {
+                isNotesRequiredIndex = reader.GetOrdinal(Constants.ColumnNames.IsNotesRequired);
+            }
+            catch
+            {
+                isNotesRequiredIndex = -1;
+            }
+
+
+
             while (reader.Read())
             {
                 var practice =
@@ -164,6 +177,11 @@ namespace DataAccess
                                  }
                              }
                     };
+
+                if (isNotesRequiredIndex > -1)
+                {
+                    practice.IsNotesRequiredForTimeEnry = reader.GetBoolean(isNotesRequiredIndex);
+                }
 
                 list.Add(practice);
             }
