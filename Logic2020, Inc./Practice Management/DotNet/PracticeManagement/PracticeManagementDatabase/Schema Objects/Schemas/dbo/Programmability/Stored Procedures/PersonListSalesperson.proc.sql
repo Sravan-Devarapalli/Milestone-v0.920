@@ -4,9 +4,10 @@
       @PersonId INT = NULL
     )
 AS 
-    SET NOCOUNT ON
+BEGIN
+    SET NOCOUNT ON;
 
-    DECLARE @Now DATETIME
+   DECLARE @Now DATETIME
     SET @Now = dbo.Today()
 
 	-- Table variable to store list of salespersons user is allowed to see	
@@ -20,6 +21,11 @@ AS
             FROM    v_permissions AS prm
             WHERE   prm.PersonId = @PersonId
                     AND prm.PermissionTypeId = 3
+                    
+    -- Table variable to store list of SalesPersons that owner is allowed to see	
+	DECLARE @OwnerProjectSalesPersonList TABLE(
+		PersonId INT NULL -- As per #2890
+	)
 	
 	-- If there are nulls in permission table, it means that eveything is allowed to be seen,
 	--		so set @PersonId to NULL which will extract all records from the table
@@ -29,7 +35,17 @@ AS
     WHERE   sp.PersonId IS NULL 
 
     IF @NullsNumber > 0 
-        SET @PersonId = NULL
+	BEGIN
+		SET @PersonId = NULL
+	END
+	ELSE
+	BEGIN
+		INSERT INTO @OwnerProjectSalesPersonList (PersonId) 
+		SELECT DISTINCT vppc.PersonId
+		FROM v_PersonProjectCommission AS vppc 
+		INNER JOIN  dbo.v_Project AS proj  ON proj.ProjectId = vppc.ProjectId
+		WHERE proj.ProjectManagerId = @PersonId
+	END
 
         ;WITH    Salespersons
                   AS ( SELECT   p.PersonId ,
@@ -59,8 +75,11 @@ AS
                                 )
                                 AND ( @PersonId IS NULL
                                       OR p.PersonId IN (
-                                      SELECT    *
-                                      FROM      @SalespersonPermissions )
+                                      SELECT sp.PersonId
+                                      FROM   @SalespersonPermissions AS sp)
+                                      OR p.PersonId IN (
+                                      SELECT    opsp.PersonId
+                                      FROM      @OwnerProjectSalesPersonList AS opsp )
                                     )
                                 AND EXISTS ( SELECT 1
                                              FROM   dbo.DefaultCommission AS c
@@ -101,12 +120,15 @@ AS
 								(p.PersonStatusId = 1 OR p.PersonStatusId = 3)
                                 AND ( @PersonId IS NULL
                                       OR p.PersonId IN (
-                                      SELECT    *
-                                      FROM      @SalespersonPermissions )
+                                      SELECT sp.PersonId
+                                      FROM   @SalespersonPermissions AS sp)
+                                      OR p.PersonId IN (
+                                      SELECT    opsp.PersonId
+                                      FROM      @OwnerProjectSalesPersonList AS opsp )
                                     )
                      )
         SELECT  DISTINCT *
         FROM    Salespersons AS s
         ORDER BY s.LastName ,
                 s.FirstName
-
+END
