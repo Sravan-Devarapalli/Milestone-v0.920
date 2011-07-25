@@ -515,6 +515,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         void SendLockedOutNotificationEmail(string userName, string loginPageUrl);
+
+        [OperationContract]
+        Dictionary<DateTime, bool> GetIsNoteRequiredDetailsForSelectedDateRange(DateTime start, DateTime end,int personId);
     }
 }
 
