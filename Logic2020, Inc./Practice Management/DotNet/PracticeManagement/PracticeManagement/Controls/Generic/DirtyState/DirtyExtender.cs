@@ -254,6 +254,22 @@ namespace PraticeManagement.Controls.Generic.DirtyState
             }
         }
 
+        [ExtenderControlProperty]
+        [DefaultValue("true")]
+        [IDReferenceProperty(typeof(HiddenField))]
+        [ClientPropertyName("IsNoteRequired")]
+        public string IsNoteRequired
+        {
+            get
+            {
+                return GetPropertyValue("IsNoteRequired", string.Empty);
+            }
+            set
+            {
+                SetPropertyValue("IsNoteRequired", value);
+            }
+        }
+
         #endregion
 
     }
