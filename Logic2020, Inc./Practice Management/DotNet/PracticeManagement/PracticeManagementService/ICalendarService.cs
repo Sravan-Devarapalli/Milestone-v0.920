@@ -39,6 +39,12 @@ namespace PracticeManagementService
         /// <returns></returns>
         [OperationContract]
         int GetCompanyHolidays(int year);
+
+        [OperationContract]
+        List<Triple<int, string, bool>> GetRecurringHolidaysList();
+
+        [OperationContract]
+        void SetRecurringHoliday(int recurringHolidayId, bool isSet);
 	}
 }
 
