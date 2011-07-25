@@ -11,6 +11,13 @@ CREATE PROCEDURE dbo.PracticeInsert
 AS
 BEGIN
 	SET NOCOUNT ON;
+
+	DECLARE @IsNotesRequired BIT = 1
+
+	SELECT @IsNotesRequired =(SELECT  s.Value 
+							FROM dbo.Settings AS s
+							WHERE SettingsKey='NotesRequiredForTimeEntry' AND TypeId=4)
+
 	
 	IF EXISTS(SELECT 1 FROM dbo.Practice WHERE [Name] = @Name)
 	BEGIN
@@ -27,12 +34,14 @@ BEGIN
 		[Name],
 		PracticeManagerId,
 		IsActive,
-		IsCompanyInternal
+		IsCompanyInternal,
+		IsNotesRequired
 	) VALUES ( 
 		@Name,
 		@PracticeManagerId,
 		@IsActive,
-		@IsCompanyInternal)
+		@IsCompanyInternal,
+		@IsNotesRequired)
 		SELECT @PracticeId = SCOPE_IDENTITY()
 	INSERT INTO dbo.PracticeManagerHistory
 					(PracticeId,		
