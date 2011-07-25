@@ -161,6 +161,11 @@ namespace PracticeManagementService
             ConfigurationDAL.SaveMarginInfoDetail(marginInfoList);
         }
 
+        public void SavePracticesIsNotesRequiredDetails(string isNotesRequiredPracticeIdsList, string isNotesExemptedPracticeIdsList)
+        {
+            ConfigurationDAL.SavePracticesIsNotesRequiredDetails(isNotesRequiredPracticeIdsList, isNotesExemptedPracticeIdsList);
+        }
+
         public List<ClientMarginColorInfo> GetMarginColorInfoDefaults(DefaultGoalType goalType)
         {
             return ConfigurationDAL.GetMarginColorInfoDefaults(goalType);
