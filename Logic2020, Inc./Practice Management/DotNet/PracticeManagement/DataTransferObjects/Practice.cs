@@ -76,6 +76,10 @@ namespace DataTransferObjects
         [DataMember]
         public bool IsActive { get; set; }
 
+       
+        [DataMember]
+        public bool IsNotesRequiredForTimeEnry { get; set; }
+
         /// <summary>
         /// Is the practice Company Internal
         /// </summary>
