@@ -16,6 +16,8 @@ namespace DataAccess
     /// </summary>
     public static class OpportunityDAL
     {
+        public const string GetActiveOpportunitiesByOwnerIdProcedure = "dbo.GetActiveOpportunitiesByOwnerId";
+
         #region Methods
 
         /// <summary>
@@ -1086,6 +1088,45 @@ namespace DataAccess
 
                     connection.Open();
                     return (int)command.ExecuteScalar() > 0;
+                }
+            }
+        }
+
+        public static List<Opportunity> GetActiveOpportunitiesByOwnerId(int personId)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(GetActiveOpportunitiesByOwnerIdProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    List<Opportunity> result = new List<Opportunity>();
+
+                    ReadOpportunitiesByOwner(reader, result);
+
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadOpportunitiesByOwner(SqlDataReader reader, List<Opportunity> result)
+        {
+            if (reader.HasRows)
+            {
+                int opportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityName);
+
+                while (reader.Read())
+                {
+                    var opportunity = new Opportunity();
+                    opportunity.Id = reader.GetInt32(opportunityIdIndex);
+                    opportunity.Name = reader.GetString(projectNameIndex);
+                    result.Add(opportunity);
                 }
             }
         }
