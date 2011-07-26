@@ -858,6 +858,75 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="UserPasswordsHistory" nillable="true" type="tns:UserPasswordsHistory" />
+  <xs:complexType name="ArrayOfProject">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Project" nillable="true" type="tns:Project" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfProject" nillable="true" type="tns:ArrayOfProject" />
+  <xs:complexType name="ArrayOfOpportunity">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Opportunity" nillable="true" type="tns:Opportunity" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfOpportunity" nillable="true" type="tns:ArrayOfOpportunity" />
+  <xs:complexType name="Opportunity">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BuyerName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Client" nillable="true" type="tns:Client" />
+      <xs:element minOccurs="0" name="CreateDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EstimatedRevenue" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Group" nillable="true" type="tns:ProjectGroup" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="LastUpdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OpportunityIndex" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="OpportunityNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OpportunityRevenueType" type="tns:RevenueType" />
+      <xs:element minOccurs="0" name="OutSideResources" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Owner" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="Pipeline" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Practice" nillable="true" type="tns:Practice" />
+      <xs:element minOccurs="0" name="Priority" nillable="true" type="tns:OpportunityPriority" />
+      <xs:element minOccurs="0" name="ProjectId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ProjectedEndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ProjectedStartDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Proposed" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProposedPersonIdList" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProposedPersons" nillable="true" type="tns:ArrayOfPerson" />
+      <xs:element minOccurs="0" name="Salesperson" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="SendOut" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Status" nillable="true" type="tns:OpportunityStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Opportunity" nillable="true" type="tns:Opportunity" />
+  <xs:simpleType name="RevenueType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown" />
+      <xs:enumeration value="New" />
+      <xs:enumeration value="Old" />
+      <xs:enumeration value="Undefined" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RevenueType" nillable="true" type="tns:RevenueType" />
+  <xs:complexType name="OpportunityPriority">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Priority" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SortOrder" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="OpportunityPriority" nillable="true" type="tns:OpportunityPriority" />
+  <xs:complexType name="OpportunityStatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="OpportunityStatus" nillable="true" type="tns:OpportunityStatus" />
   <xs:complexType name="ArrayOfQuadrupleOfPersonArrayOfintintintlqlLCQKx">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="QuadrupleOfPersonArrayOfintintintlqlLCQKx" nillable="true" type="tns:QuadrupleOfPersonArrayOfintintintlqlLCQKx" />
