@@ -70,7 +70,7 @@
                         </td>
                         <td align="right" style="padding-right: 4px;">
                             <asp:Button ID="btnSaveNotes" runat="server" CausesValidation="false" Text="Save Notes"
-                                OnClientClick='<%# "assignHiddenValues(\"" + hdnNotes.ClientID + "\",\"" + tbNotes.ClientID + "\",\"" + hdnIsChargeable.ClientID + "\",\"" + chbIsChargeable.ClientID + "\",\"" + hdnForDiffProject.ClientID + "\",\"" + chbForDiffProject.ClientID + "\"); changeIcon(\"" + tbNotes.ClientID + "\",\"" + imgNote.ClientID + "\"); $find(\"" + modalEx.ClientID + "\").hide(); $find(\"" + deActualHours.ClientID + "\").makeDirty(); return false;"%>' />
+                                OnClientClick='<%# "$find(\"" + deActualHours.ClientID + "\").checkDirty(); assignHiddenValues(\"" + hdnNotes.ClientID + "\",\"" + tbNotes.ClientID + "\",\"" + hdnIsChargeable.ClientID + "\",\"" + chbIsChargeable.ClientID + "\",\"" + hdnForDiffProject.ClientID + "\",\"" + chbForDiffProject.ClientID + "\"); changeIcon(\"" + tbNotes.ClientID + "\",\"" + imgNote.ClientID + "\"); $find(\"" + modalEx.ClientID + "\").hide(); $find(\"" + deActualHours.ClientID + "\").makeDirty(); return false;"%>' />
                         </td>
                     </tr>
                     <tr>
