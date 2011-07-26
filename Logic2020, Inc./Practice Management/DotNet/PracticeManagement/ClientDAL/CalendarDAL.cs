@@ -261,6 +261,48 @@ namespace DataAccess
             }
         }
 
+        public static Dictionary<DateTime, string> GetRecurringHolidaysInWeek(DateTime date, int personId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Calendar.GetRecurringHolidaysInWeek,connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, date);
+
+                    connection.Open();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        Dictionary<DateTime, String> recurringHolidaysList = new Dictionary<DateTime, string>();
+
+                        ReadRecurringHolidaysListWithDate(reader, recurringHolidaysList);
+
+                        return recurringHolidaysList;
+                    }
+                }
+            }
+        }
+
+        private static void ReadRecurringHolidaysListWithDate(SqlDataReader reader, Dictionary<DateTime, string> list)
+        {
+            if (reader.HasRows)
+            {
+                int datetimeIndex = reader.GetOrdinal(Constants.ColumnNames.Date);
+                int descriptionIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
+
+                while (reader.Read())
+                {
+                    DateTime date = reader.GetDateTime(datetimeIndex);
+                    string description = reader.GetString(descriptionIndex);
+                    list.Add(date, description);
+                }
+            }
+        }
+
         #endregion
     }
 }
