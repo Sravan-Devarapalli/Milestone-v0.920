@@ -454,7 +454,7 @@
             public const string OpportunityIdsParam = "@OpportunityIds";
             public const string IdParam = "@Id";
             public const string IsProjectIdParam = "@IsProjectId";
-  public const string DaysPrevious = "@DaysPrevious";
+            public const string DaysPrevious = "@DaysPrevious";
             public const string Id = "@Id";
             public const string IsSet = "@IsSet";
 
@@ -605,6 +605,7 @@
                 public const string GetCompanyHolidaysProcedure = "dbo.GetCompanyHolidays";
                 public const string GetRecurringHolidaysList = "dbo.GetRecurringHolidaysList";
                 public const string SetRecurringHoliday = "dbo.SetRecurringHoliday";
+                public const string GetRecurringHolidaysInWeek = "dbo.GetRecurringHolidaysInWeek";
             }
 
             public class ProjectGroup
