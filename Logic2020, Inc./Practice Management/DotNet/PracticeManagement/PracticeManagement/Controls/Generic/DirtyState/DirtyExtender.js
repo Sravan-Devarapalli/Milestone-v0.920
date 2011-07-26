@@ -35,13 +35,13 @@ PraticeManagement.Controls.Generic.DirtyState.DirtyBehavior.prototype = {
         this._initBase();
 
         //  On clicking the label, call the corresponding function
-        $addHandler($get(this.get_NoteIdValue()), 'change', Function.createDelegate(this, this._setDirty));
+        //$addHandler($get(this.get_NoteIdValue()), 'change', Function.createDelegate(this, this._setDirty));
         $addHandler($get(this.get_ActualHoursIdValue()), 'change', Function.createDelegate(this, this._setDirty));
-        $addHandler($get(this.get_IsCorrectIdValue()), 'change', Function.createDelegate(this, this._setDirty));
+        //$addHandler($get(this.get_IsCorrectIdValue()), 'change', Function.createDelegate(this, this._setDirty));
 
-        var isCharg = $get(this.get_IsChargeableIdValue());
-        if (isCharg)
-            $addHandler(isCharg, 'change', Function.createDelegate(this, this._setDirty));
+        //var isCharg = $get(this.get_IsChargeableIdValue());
+        //if (isCharg)
+        //    $addHandler(isCharg, 'change', Function.createDelegate(this, this._setDirty)); //Removing onchange for noteId, IsCorrectId, IsChargeableId as we are checking changes while SaveNotes button click.
     },
     dispose: function () {
         //Add custom dispose actions here
@@ -72,6 +72,30 @@ PraticeManagement.Controls.Generic.DirtyState.DirtyBehavior.prototype = {
         else
             this.get_element().value = "dirty";
     },
+
+    _checkDirty: function () {
+        var note = new String($get(this.get_NoteIdValue()).value);
+        var hours = new String($get(this.get_ActualHoursIdValue()).value);
+
+        var stuff = new String(note + hours);
+
+        if (stuff.trim().length == 0)
+            this.get_element().value = "";
+        else if (note == $get(this.get_HiddenNoteIdValue()).value &&
+            $get(this.get_IsChargeableIdValue()).checked == ($get(this.get_HiddenIsChargeableIdValue()).value == "true") &&
+            $get(this.get_IsCorrectIdValue()).checked == ($get(this.get_HiddenIsCorrectIdValue()).value == "true")) {
+
+            this.get_element().value = "";
+        }
+        else {
+            this._setBackground('gold');
+            this.get_element().value = "dirty";
+        }
+    },
+    checkDirty: function () {
+        this._checkDirty();
+    },
+
     get_NoteIdValue: function () {
         return this._NoteIdValue;
     },
@@ -286,6 +310,7 @@ PraticeManagement.Controls.Generic.DirtyState.DirtyBehavior.prototype = {
                 this.get_element().value = '';
             }
             this.cancelBackground();
+            $get(this.get_ActualHoursIdValue()).style.background = 'white';
         }
     },
 
