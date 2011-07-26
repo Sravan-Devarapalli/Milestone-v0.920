@@ -518,6 +518,12 @@ namespace PracticeManagementService
 
         [OperationContract]
         Dictionary<DateTime, bool> GetIsNoteRequiredDetailsForSelectedDateRange(DateTime start, DateTime end,int personId);
+
+        [OperationContract]
+        List<Project> GetOwnerProjectsAfterTerminationDate(int personId, DateTime terminationDate);
+
+        [OperationContract]
+        List<Opportunity> GetActiveOpportunitiesByOwnerId(int personId);
     }
 }
 
