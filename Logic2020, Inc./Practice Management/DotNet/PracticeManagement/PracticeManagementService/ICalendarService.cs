@@ -45,6 +45,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         void SetRecurringHoliday(int recurringHolidayId, bool isSet);
+
+        [OperationContract]
+        Dictionary<DateTime, string> GetRecurringHolidaysInWeek(DateTime date, int personId);
 	}
 }
 
