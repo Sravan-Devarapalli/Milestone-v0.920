@@ -1322,17 +1322,24 @@ namespace PraticeManagement
             DateTime? terminationDate = (this.dtpTerminationDate.DateValue != DateTime.MinValue) ? new DateTime?(this.dtpTerminationDate.DateValue) : null;
             bool TEsExistsAfterTerminationDate = false;
             List<Milestone> milestonesAfterTerminationDate = new List<Milestone>();
+            List<Project> ownerProjects = new List<Project>();
+            List<Opportunity> ownerOpportunities = new List<Opportunity>();
+
             using (PersonServiceClient serviceClient = new PersonServiceClient())
             {
                 if (this.PersonId.HasValue && terminationDate.HasValue)
                 {
-                    TEsExistsAfterTerminationDate = serviceClient.CheckPersonTimeEntriesAfterTerminationDate(this.PersonId.Value, terminationDate.Value);
-                    milestonesAfterTerminationDate.AddRange(serviceClient.GetPersonMilestonesAfterTerminationDate(this.PersonId.Value, terminationDate.Value));
+                    TEsExistsAfterTerminationDate = serviceClient.CheckPersonTimeEntriesAfterTerminationDate(this.PersonId.Value, terminationDate.Value.AddDays(1));
+                    milestonesAfterTerminationDate.AddRange(serviceClient.GetPersonMilestonesAfterTerminationDate(this.PersonId.Value, terminationDate.Value.AddDays(1)));
+                    ownerProjects.AddRange(serviceClient.GetOwnerProjectsAfterTerminationDate(this.PersonId.Value, terminationDate.Value.AddDays(1)));
+                    ownerOpportunities.AddRange(serviceClient.GetActiveOpportunitiesByOwnerId(this.PersonId.Value));
                 }
             }
-            if (TEsExistsAfterTerminationDate || milestonesAfterTerminationDate.Any<Milestone>())
+            if (TEsExistsAfterTerminationDate || milestonesAfterTerminationDate.Any<Milestone>() || ownerProjects.Any<Project>() || ownerOpportunities.Any<Opportunity>())
             {
                 this.dvTerminationDateErrors.Visible = true;
+                mpeViewTerminationDateErrors.Show();
+
                 if (TEsExistsAfterTerminationDate)
                 {
                     this.lblTimeEntriesExist.Visible = true;
@@ -1353,6 +1360,30 @@ namespace PraticeManagement
                 {
                     this.dvProjectMilestomesExist.Visible = false;
                 }
+
+                if (ownerProjects.Any<Project>())
+                {
+                    this.divOwnerProjectsExist.Visible = true;
+                    // this.lblOwnerProjectsExist.Text = string.Format(this.lblOwnerProjectsExist.Text, terminationDate.Value.ToString("MM/dd/yyy"));
+                    this.dtlOwnerProjects.DataSource = ownerProjects;
+                    this.dtlOwnerProjects.DataBind();
+                }
+                else
+                {
+                    this.divOwnerProjectsExist.Visible = false;
+                }
+
+                if (ownerOpportunities.Any<Opportunity>())
+                {
+                    this.divOwnerOpportunitiesExist.Visible = true;
+                    this.dtlOwnerOpportunities.DataSource = ownerOpportunities;
+                    this.dtlOwnerOpportunities.DataBind();
+                }
+                else
+                {
+                    this.divOwnerOpportunitiesExist.Visible = false;
+                }
+
                 this.dtpTerminationDate.DateValue = terminationDate.Value;
                 args.IsValid = false;
             }
