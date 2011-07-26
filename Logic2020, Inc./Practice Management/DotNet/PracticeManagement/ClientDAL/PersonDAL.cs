@@ -534,6 +534,16 @@ namespace DataAccess
                                     Name = reader.GetString(SeniorityNameColumnIndex)
                                 }
                             };
+
+                        if (Convert.IsDBNull(reader[TerminationDateColumn]))
+                        {
+                            person.TerminationDate = null;
+                        }
+                        else
+                        {
+                            person.TerminationDate = (DateTime)reader[TerminationDateColumn];
+                        }
+
                         int[] load = Utils.StringToIntArray((string)reader[weeklyLoadIndex]);
 
                         int avgUtil = reader.GetInt32(avgUtilIndex);
