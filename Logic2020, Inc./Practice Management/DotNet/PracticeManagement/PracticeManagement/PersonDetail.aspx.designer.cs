@@ -1138,6 +1138,78 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.ValidationSummary valsManager;
         
         /// <summary>
+        /// mlError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.MessageLabel mlError;
+        
+        /// <summary>
+        /// btnSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSave;
+        
+        /// <summary>
+        /// btnCancelAndReturn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.Buttons.CancelAndReturnButton btnCancelAndReturn;
+        
+        /// <summary>
+        /// aeBtnSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.AnimationExtender aeBtnSave;
+        
+        /// <summary>
+        /// hdnField control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnField;
+        
+        /// <summary>
+        /// mpeViewTerminationDateErrors control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeViewTerminationDateErrors;
+        
+        /// <summary>
+        /// pnlTerminationDateErrors control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlTerminationDateErrors;
+        
+        /// <summary>
+        /// btnClose control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnClose;
+        
+        /// <summary>
         /// dvTerminationDateErrors control.
         /// </summary>
         /// <remarks>
@@ -1183,40 +1255,58 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.DataList dtlProjectMilestones;
         
         /// <summary>
-        /// mlError control.
+        /// divOwnerProjectsExist control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.MessageLabel mlError;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divOwnerProjectsExist;
         
         /// <summary>
-        /// btnSave control.
+        /// lblOwnerProjectsExist control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSave;
+        protected global::System.Web.UI.WebControls.Label lblOwnerProjectsExist;
         
         /// <summary>
-        /// btnCancelAndReturn control.
+        /// dtlOwnerProjects control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.Buttons.CancelAndReturnButton btnCancelAndReturn;
+        protected global::System.Web.UI.WebControls.DataList dtlOwnerProjects;
         
         /// <summary>
-        /// aeBtnSave control.
+        /// divOwnerOpportunitiesExist control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.AnimationExtender aeBtnSave;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divOwnerOpportunitiesExist;
+        
+        /// <summary>
+        /// lblOwnerOpportunities control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblOwnerOpportunities;
+        
+        /// <summary>
+        /// dtlOwnerOpportunities control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DataList dtlOwnerOpportunities;
         
         /// <summary>
         /// odsActivePersons control.
