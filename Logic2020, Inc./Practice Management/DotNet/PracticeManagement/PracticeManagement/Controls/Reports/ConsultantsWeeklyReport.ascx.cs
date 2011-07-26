@@ -669,9 +669,28 @@ namespace PraticeManagement.Controls.Reports
 
             var range = AddRange(pointStartDate, pointEndDate, _personsCount);
             bool isHired = p.HireDate < pointEndDate;
-            range.Color = Coloring.GetColorByUtilization(load, load < 0, isHired);
 
-            if (!isHired)
+            bool isTerminated = false;
+
+            if (p.TerminationDate.HasValue && p.TerminationDate.Value < pointStartDate)
+            {
+                isTerminated = true;
+            }
+
+
+            range.Color = Coloring.GetColorByUtilization(load, load < 0, isHired, isTerminated);
+
+            if (isTerminated)
+            {
+                range.ToolTip = p.TerminationDate.Value.ToShortDateString();
+
+                if (!isHired)
+                {
+                    range.ToolTip = string.Format("Hired:{0}{1} Terminated:{2}", p.HireDate.ToShortDateString(), Environment.NewLine, p.TerminationDate.Value.ToShortDateString());
+                }
+
+            }
+            else if (!isHired)
             {
                 range.ToolTip = p.HireDate.ToShortDateString();
             }
