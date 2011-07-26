@@ -29,6 +29,9 @@ namespace PraticeManagement.CalendarService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/SetRecurringHoliday", ReplyAction="http://tempuri.org/ICalendarService/SetRecurringHolidayResponse")]
         void SetRecurringHoliday(int recurringHolidayId, bool isSet);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/GetRecurringHolidaysInWeek", ReplyAction="http://tempuri.org/ICalendarService/GetRecurringHolidaysInWeekResponse")]
+        System.Collections.Generic.Dictionary<System.DateTime, string> GetRecurringHolidaysInWeek(System.DateTime date, int personId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -73,6 +76,10 @@ namespace PraticeManagement.CalendarService {
         
         public void SetRecurringHoliday(int recurringHolidayId, bool isSet) {
             base.Channel.SetRecurringHoliday(recurringHolidayId, isSet);
+        }
+        
+        public System.Collections.Generic.Dictionary<System.DateTime, string> GetRecurringHolidaysInWeek(System.DateTime date, int personId) {
+            return base.Channel.GetRecurringHolidaysInWeek(date, personId);
         }
     }
 }
