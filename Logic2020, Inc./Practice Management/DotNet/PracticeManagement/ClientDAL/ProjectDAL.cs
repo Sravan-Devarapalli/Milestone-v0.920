@@ -17,6 +17,8 @@ namespace DataAccess
     /// </summary>
     public class ProjectDAL
     {
+        public const string GetOwnerProjectsAfterTerminationDateProcedure = "dbo.GetOwnerProjectsAfterTerminationDate";
+
         /// <summary>
         /// Retrieves the list of projects which intended for the specific client.
         /// </summary>
@@ -2274,6 +2276,48 @@ namespace DataAccess
                     var result = command.ExecuteScalar();
 
                     return Convert.ToBoolean(result);
+                }
+            }
+        }
+
+
+        public static List<Project> GetOwnerProjectsAfterTerminationDate(int personId, DateTime terminationDate)
+        {
+
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(GetOwnerProjectsAfterTerminationDateProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TerminationDate, terminationDate);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    List<Project> result = new List<Project>();
+
+                    ReadProjectsAfterTermination(reader, result);
+
+                    return result;
+                }
+            }
+        }
+
+
+        private static void ReadProjectsAfterTermination(SqlDataReader reader, List<Project> result)
+        {
+            if (reader.HasRows)
+            {
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+
+                while (reader.Read())
+                {
+                    var Project = new Project();
+                    Project.Id = reader.GetInt32(projectIdIndex);
+                    Project.Name = reader.GetString(projectNameIndex);
+                    result.Add(Project);
                 }
             }
         }
