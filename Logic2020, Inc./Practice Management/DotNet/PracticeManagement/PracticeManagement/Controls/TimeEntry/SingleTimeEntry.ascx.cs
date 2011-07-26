@@ -423,6 +423,7 @@ namespace PraticeManagement.Controls.TimeEntry
             {
                 var enabled = !value;
 
+                btnSaveNotes.Enabled =
                 tbNotes.Enabled =
                 chbIsChargeable.Enabled =
                 chbForDiffProject.Enabled =
