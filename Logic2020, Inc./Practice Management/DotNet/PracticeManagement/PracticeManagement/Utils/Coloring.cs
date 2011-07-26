@@ -22,13 +22,13 @@ namespace PraticeManagement.Utils
         /// <param name="utilization">Utilization value in percents</param>
         /// <param name="isVac">Is that vacation period</param>
         /// <returns>Color based on config settings</returns>
-        public static Color GetColorByUtilization(int utilization, bool isVac , bool isHired=true)
+        public static Color GetColorByUtilization(int utilization, bool isVac, bool isHired = true, bool isTerminated = false)
         {
             //  Get settings from web.config
-            ConsReportColoringElementSection coloring = 
+            ConsReportColoringElementSection coloring =
                 ConsReportColoringElementSection.ColorSettings;
 
-            if(!isHired)
+            if (!isHired || isTerminated)
                 return coloring.HiredColor;
 
             //  If that's vacation, return vacation color
@@ -58,7 +58,7 @@ namespace PraticeManagement.Utils
             legendItems.Clear();
 
             //  Iterate through all colors and put them on legend
-            ConsReportColoringElementSection coloring = 
+            ConsReportColoringElementSection coloring =
                 ConsReportColoringElementSection.ColorSettings;
             foreach (ConsReportColoringElement color in coloring.Colors)
             {
@@ -79,9 +79,9 @@ namespace PraticeManagement.Utils
             try
             {
                 //  Split colors into R, G, B
-                string[] rgb = 
+                string[] rgb =
                     strColor.Split(
-                        new string[]{separator}, 
+                        new string[] { separator },
                         StringSplitOptions.RemoveEmptyEntries);
 
                 // Init color
