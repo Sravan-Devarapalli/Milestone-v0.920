@@ -113,6 +113,12 @@ namespace PraticeManagement.PersonService {
             "ponse")]
         System.Collections.Generic.Dictionary<System.DateTime, bool> GetIsNoteRequiredDetailsForSelectedDateRange(System.DateTime start, System.DateTime end, int personId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetOwnerProjectsAfterTerminationDate", ReplyAction="http://tempuri.org/IPersonService/GetOwnerProjectsAfterTerminationDateResponse")]
+        DataTransferObjects.Project[] GetOwnerProjectsAfterTerminationDate(int personId, System.DateTime terminationDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerId", ReplyAction="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerIdResponse")]
+        DataTransferObjects.Opportunity[] GetActiveOpportunitiesByOwnerId(int personId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials", ReplyAction="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancialsResponse")]
         System.Data.DataSet GetPersonMilestoneWithFinancials(int personId);
         
@@ -229,7 +235,7 @@ namespace PraticeManagement.PersonService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
-      
+        
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -356,6 +362,14 @@ namespace PraticeManagement.PersonService {
         
         public System.Collections.Generic.Dictionary<System.DateTime, bool> GetIsNoteRequiredDetailsForSelectedDateRange(System.DateTime start, System.DateTime end, int personId) {
             return base.Channel.GetIsNoteRequiredDetailsForSelectedDateRange(start, end, personId);
+        }
+        
+        public DataTransferObjects.Project[] GetOwnerProjectsAfterTerminationDate(int personId, System.DateTime terminationDate) {
+            return base.Channel.GetOwnerProjectsAfterTerminationDate(personId, terminationDate);
+        }
+        
+        public DataTransferObjects.Opportunity[] GetActiveOpportunitiesByOwnerId(int personId) {
+            return base.Channel.GetActiveOpportunitiesByOwnerId(personId);
         }
         
         public System.Data.DataSet GetPersonMilestoneWithFinancials(int personId) {
