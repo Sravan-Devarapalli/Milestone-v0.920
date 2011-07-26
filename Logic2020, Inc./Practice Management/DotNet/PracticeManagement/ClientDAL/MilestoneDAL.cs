@@ -190,9 +190,9 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.TerminationDate, terminationDate);
                 connection.Open();
-                using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.SingleRow))
+                using (var reader = command.ExecuteReader())
                 {
-                    List<Milestone> result = new List<Milestone>(1);
+                    List<Milestone> result = new List<Milestone>();
 
                     ReadMilestonesForPersonTermination(reader, result);
 
