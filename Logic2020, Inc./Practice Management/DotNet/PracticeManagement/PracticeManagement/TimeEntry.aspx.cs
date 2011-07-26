@@ -172,7 +172,15 @@ namespace PraticeManagement
             var isNoteRequiredList = DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
             teList.IsNoteRequiredList = isNoteRequiredList;
 
-            lblIsNoteRequired.Visible = isNoteRequiredList.Values.Any(p => p == true);
+            var result = true;
+
+            if (pcPersons.SelectedPerson.TerminationDate.HasValue)
+                result = isNoteRequiredList.Any(p => p.Value == true && pcPersons.SelectedPerson.TerminationDate >= p.Key);
+
+            lblIsNoteRequired.Visible = isNoteRequiredList.Any(p => p.Value == true 
+                                                                    && pcPersons.SelectedPerson.HireDate <= p.Key
+                                                                    && result
+                                                                    );
         }
 
         private void RaiseError()
