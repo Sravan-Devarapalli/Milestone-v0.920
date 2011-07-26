@@ -58,6 +58,11 @@ namespace PracticeManagementService
             CalendarDAL.SetRecurringHoliday(recurringHolidayId, isSet);
         }
 
+        public Dictionary<DateTime, string> GetRecurringHolidaysInWeek(DateTime date, int personId)
+        {
+            return CalendarDAL.GetRecurringHolidaysInWeek(date, personId);
+        }
+
 		#endregion
 	}
 }
