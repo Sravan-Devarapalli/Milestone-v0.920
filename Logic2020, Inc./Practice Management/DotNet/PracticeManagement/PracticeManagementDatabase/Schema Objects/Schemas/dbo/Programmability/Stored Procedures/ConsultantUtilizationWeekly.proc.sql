@@ -88,6 +88,7 @@ AS
                 p.FirstName,
                 p.LastName,
                 p.HireDate,
+				p.TerminationDate,
                 paytp.TimescaleId,
                 paytp.[Name] AS Timescale,
                 st.[Name],
