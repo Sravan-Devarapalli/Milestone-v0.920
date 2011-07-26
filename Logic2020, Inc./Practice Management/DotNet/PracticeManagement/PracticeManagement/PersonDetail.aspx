@@ -48,6 +48,22 @@
             addListenersToAllCheckBoxes('ctl00_body_rpPermissions_msddPracticeManagers');
             addListenersToAllCheckBoxes('ctl00_body_rpPermissions_msddPractices');
         }
+
+        function printform() {
+            var printContent = document.getElementById('<%= dvTerminationDateErrors.ClientID %>');
+            var windowUrl = 'about:blank';
+            var uniqueName = new Date();
+            var windowName = 'Print' + uniqueName.getTime();
+            var printWindow = window.open(windowUrl, windowName);
+
+            printWindow.document.write(printContent.innerHTML);
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+        } 
+ 
+
     </script>
     <%--
         The following script is needed to implement dirty checks on Projects tab        
@@ -144,6 +160,13 @@
         .info-field
         {
             width: 152px;
+        }
+        
+        .ConfirmBoxClassError
+        {
+            min-height: 60px;
+            min-width:150px;
+            max-width:500px;
         }
         
         /* ------------------------ */
@@ -985,22 +1008,6 @@
                 </tr>
                 <tr>
                     <td>
-                        <div id="dvTerminationDateErrors" runat="server" visible="false" style="padding: 0px 0px 5px 0px;
-                            color: Red;">
-                            Unable to set Termination Date for this person because of following reasons.<br />
-                            <asp:Label ID="lblTimeEntriesExist" runat="server" Visible="false" Text="There are time entries submitted by person on/after {0}.">
-                            </asp:Label>
-                            <div id="dvProjectMilestomesExist" runat="server">
-                                <asp:Label ID="lblProjectMilestomesExist" runat="server" Text="Person is assigned to below Project - Milesones on/after {0}.">
-                                </asp:Label>
-                                <asp:DataList ID="dtlProjectMilestones" runat="server" Style="white-space: normal;">
-                                    <ItemTemplate>
-                                        <%# ((DataTransferObjects.Milestone)Container.DataItem).Project.Name+
-                                             "-" + ((DataTransferObjects.Milestone)Container.DataItem).Description%>
-                                    </ItemTemplate>
-                                </asp:DataList>
-                            </div>
-                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -1029,6 +1036,68 @@
                     </td>
                 </tr>
             </table>
+            <asp:HiddenField ID="hdnField" runat="server" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeViewTerminationDateErrors" runat="server"
+                TargetControlID="hdnField" CancelControlID="btnClose" BackgroundCssClass="modalBackground"
+                PopupControlID="pnlTerminationDateErrors" DropShadow="false" />
+            <asp:Panel ID="pnlTerminationDateErrors" runat="server" BackColor="White" BorderColor="Black"
+                CssClass="ConfirmBoxClassError" Style="display: none;" BorderWidth="2px">
+                <table width="100%">
+                    <tr style="height: 20px;">
+                        <th align="center" style="text-align:center;background-color: Gray;width: 90%;font-weight:bold;font-size:14px;">
+                            Error
+                        </th>
+                        <th align="right" style="padding-right: 3px; background-color: Gray; font-size: 14px;
+                            width: 10%">
+                            <asp:Button ID="btnClose" ToolTip="Close" runat="server" CssClass="mini-report-close"
+                                Text="X"></asp:Button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center" style="padding: 6px 6px 2px 6px; text-align: left;">
+                            <div id="dvTerminationDateErrors" runat="server" visible="false" style="padding: 0px 0px 5px 0px;
+                                color: Red;">
+                                Unable to set Termination Date for this person because of following reasons.<br />
+                                <asp:Label ID="lblTimeEntriesExist" runat="server" Visible="false" Text="There are time entries submitted by person after {0}.">
+                                </asp:Label>
+                                <div id="dvProjectMilestomesExist" runat="server">
+                                    <asp:Label ID="lblProjectMilestomesExist" runat="server" Text="Person is assigned to below Project - Milesones after {0}.">
+                                    </asp:Label>
+                                    <asp:DataList ID="dtlProjectMilestones" runat="server" Style="white-space: normal;">
+                                        <ItemTemplate>
+                                            <%# ((DataTransferObjects.Milestone)Container.DataItem).Project.Name+
+                                             "-" + ((DataTransferObjects.Milestone)Container.DataItem).Description%>
+                                        </ItemTemplate>
+                                    </asp:DataList>
+                                </div>
+                                <div id="divOwnerProjectsExist" runat="server">
+                                    <asp:Label ID="lblOwnerProjectsExist" runat="server" Text="Person is owner to below Active Project(s).">
+                                    </asp:Label>
+                                    <asp:DataList ID="dtlOwnerProjects" runat="server" Style="white-space: normal;">
+                                        <ItemTemplate>
+                                            <%# ((DataTransferObjects.Project)Container.DataItem).Name %>
+                                        </ItemTemplate>
+                                    </asp:DataList>
+                                </div>
+                                <div id="divOwnerOpportunitiesExist" runat="server">
+                                    <asp:Label ID="lblOwnerOpportunities" runat="server" Text="Person is owner to below Active Opportunities.">
+                                    </asp:Label>
+                                    <asp:DataList ID="dtlOwnerOpportunities" runat="server" Style="white-space: normal;">
+                                        <ItemTemplate>
+                                            <%# ((DataTransferObjects.Opportunity)Container.DataItem).Name %>
+                                        </ItemTemplate>
+                                    </asp:DataList>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center" style="padding: 6px 6px 6px 6px;">
+                            <input type='button' value='print' onclick='printform();' />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
         </ContentTemplate>
     </asp:UpdatePanel>
     <asp:ObjectDataSource ID="odsActivePersons" runat="server" SelectMethod="PersonListAllShort"
