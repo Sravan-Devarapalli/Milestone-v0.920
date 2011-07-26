@@ -960,6 +960,16 @@ namespace PracticeManagementService
             return MilestoneDAL.GetPersonMilestonesAfterTerminationDate(personId, terminationDate);
         }
 
+        public List<Project> GetOwnerProjectsAfterTerminationDate(int personId, DateTime terminationDate)
+        {
+            return ProjectDAL.GetOwnerProjectsAfterTerminationDate(personId, terminationDate);
+        }
+
+        public List<Opportunity> GetActiveOpportunitiesByOwnerId(int personId)
+        {
+            return OpportunityDAL.GetActiveOpportunitiesByOwnerId(personId);
+        }
+
         public List<UserPasswordsHistory> GetPasswordHistoryByUserName(string userName)
         {
             return PersonDAL.GetPasswordHistoryByUserName(userName);
