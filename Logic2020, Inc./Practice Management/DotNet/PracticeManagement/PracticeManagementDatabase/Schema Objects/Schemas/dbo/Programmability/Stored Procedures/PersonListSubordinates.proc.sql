@@ -46,5 +46,6 @@ AS
 	 WHERE ISNULL(pr.IsCompanyInternal, 0) = 0
 					AND p.SeniorityValue > @PracticeManagerSeniorityValue -- All the persons, having seniority level below the Practice Manager's seniority level
 					AND @PracticeManagerSeniorityValue <= 65 -- According to 2656, Managers and up should be able to see their subordinates, but not equals.
+					AND p.PersonStatusId = 1 -- According to 2891 we should show only active persons
 	ORDER BY p.LastName, p.FirstName
 
