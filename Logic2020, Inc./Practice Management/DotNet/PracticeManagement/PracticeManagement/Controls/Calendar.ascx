@@ -6,15 +6,64 @@
 <%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc3" %>
-
-    <script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
+<script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
 <script type="text/javascript">
     var updatingCalendarContainer = null;
+
+    function changeAlternateitemscolrsForCBL() {
+        var cbl = document.getElementById('<%=cblRecurringHolidays.ClientID %>');
+        if (cbl != null)
+            SetAlternateColors(cbl);
+    }
+
+    function SetAlternateColors(chkboxList) {
+        var chkboxes = chkboxList.getElementsByTagName('input');
+        var index = 0;
+        if (chkboxes[0].parentNode.style.display != "none") {
+            chkboxes[0].parentNode.style.padding = "6px";
+            chkboxes[0].parentNode.style.paddingLeft = "2px";
+            chkboxes[0].parentNode.style.borderBottom = "1px solid black";
+            chkboxes[0].parentNode.style.borderRight = "5px solid white";
+            chkboxes[0].parentNode.style.borderLeft = "5px solid white";
+        }
+        for (var i = 0; i < chkboxes.length; i++) {
+            if (chkboxes[i].parentNode.style.display != "none") {
+                index++;
+                if ((index) % 2 == 0) {
+                    chkboxes[i].parentNode.style.backgroundColor = "#f9faff";
+                }
+                else {
+                    chkboxes[i].parentNode.style.backgroundColor = "";
+                }
+                chkboxes[i].parentNode.style.padding = "2px";
+            }
+        }
+    }
+
+
+    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+
+
+    function endRequestHandle(sender, Args) {
+
+        changeAlternateitemscolrsForCBL();
+    }
+
 </script>
 <style>
     .setCheckboxesLeft TD, .setCheckboxesLeft div
     {
-        text-align:left !important;
+        text-align: left !important;
+    }
+    
+    .setCheckboxesLeft input
+    {
+        vertical-align: middle;
+        float: right;
+    }
+    .setCheckboxesLeft Table
+    {
+        width: 100%;
     }
 </style>
 <br />
@@ -22,18 +71,31 @@
 <br />
 <table>
     <tr>
+        <td id="tdDescription" colspan="2" align="center" runat="server" style="vertical-align: top;
+            width: 220px; white-space: nowrap; text-align: center; padding-left: 10px;">
+            <div id="divDescription" runat="server" style="border: 1px solid black; padding: 4px;">
+                Days selected on this calendar will be highlighted as Company Holidays throughout
+                Practice Management.
+                <p style="padding-top: 8px;">
+                    Common Recurring Holidays can be selected from the drop-down as well. Once selected
+                    they will be highlighted as<br />
+                    Company Holidays throughout Practice Management for the current year as well as
+                    in future years.</p>
+            </div>
+        </td>
+    </tr>
+    <tr>
         <td>
-            <uc3:LoadingProgress ID="loadingProgress" runat="server" />
             <asp:UpdatePanel ID="pnlBody" runat="server" ChildrenAsTriggers="False" UpdateMode="Conditional">
                 <ContentTemplate>
-                    <div id="divWait" style="display: none; background-color: White; border: solid 1px silver;">
+                    <div id="divWait1" style="display: none; background-color: White; border: solid 1px silver;">
                         <span style="color: Black; font-weight: bold;">
                             <nobr>Please Wait...</nobr>
                         </span>
                         <br />
                         <asp:Image ID="imgLoading" runat="server" AlternateText="Please Wait..." ImageUrl="~/Images/ajax-loader.gif" />
-                        <%--<img id="imgLoading" name="imgLoading" alt="Please Wait..." src="~/../Images/ajax-loader.gif" />--%>
                     </div>
+                    <uc3:LoadingProgress ID="ldProgress" runat="server" />
                     <table class="CalendarTable">
                         <tr id="trPersonDetails" runat="server">
                             <td align="right">
@@ -60,18 +122,6 @@
                                 </AjaxControlToolkit:UpdatePanelAnimationExtender>
                             </td>
                         </tr>
-                        <tr id="trRecurringHolidaysDetails" runat="server">
-                            <td colspan="3" align="center" class="setCheckboxesLeft">
-                                Add Recurring Holidays to Calendar:
-                                <uc:ScrollingDropDown ID="cblRecurringHolidays" runat="server" SetDirty="false" Width="240px" Height="240px" AllSelectedReturnType="AllItems"
-                                    onclick="scrollingDropdown_onclick('cblRecurringHolidays','Recurring Holiday')" OnSelectedIndexChanged="cblRecurringHolidays_OnSelectedIndexChanged"
-                                    DropDownListType="Recurring Holiday" CellPadding="3" AutoPostBack="true"/>
-                                <ext:ScrollableDropdownExtender ID="sdecblRecurringHolidays" runat="server" TargetControlID="cblRecurringHolidays"
-                                    UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png" Width="240px">
-                                </ext:ScrollableDropdownExtender>
-                                <asp:HiddenField ID="hdnCheckBoxChanged" runat="server" />
-                            </td>
-                        </tr>
                         <tr>
                             <td colspan="3" align="left">
                                 <asp:Label ID="lblConsultantMessage" runat="server" Visible="false" Text="You can review your vacation days, but cannot change them. Please see your Practice Manager for updates to your vacation schedule."></asp:Label>
@@ -96,6 +146,11 @@
                                         </td>
                                     </tr>
                                 </table>
+                            </td>
+                            <td id="tdRecurringHolidaysDetails" runat="server" rowspan="9" class="setCheckboxesLeft" style="padding-top: 45px; padding-left: 20px;">
+                                <uc:ScrollingDropDown ID="cblRecurringHolidays" runat="server" SetDirty="false" Height="100%"
+                                    AllSelectedReturnType="AllItems" OnSelectedIndexChanged="cblRecurringHolidays_OnSelectedIndexChanged"
+                                    CellPadding="3" AutoPostBack="true" />
                             </td>
                         </tr>
                         <tr class="HeadRow">
@@ -198,29 +253,10 @@
                 runat="server" Enabled="True" TargetControlID="pnlBody">
                 <Animations>
 			<OnUpdating>
-				<ScriptAction Script="showInProcessImage($get('divWait'), updatingCalendarContainer);" />
+				<ScriptAction Script="showInProcessImage($get('divWait1'), updatingCalendarContainer);" />
 			</OnUpdating>
                 </Animations>
             </AjaxControlToolkit:UpdatePanelAnimationExtender>
-        </td>
-        <td id="tdDescription" align="center" runat="server" style="vertical-align: top; width:220px; white-space:nowrap;
-            text-align: center; padding-left: 10px;">
-            <div id="divDescription" runat="server" style="border: 1px solid black; padding: 4px;
-                text-align: left;">
-                Days selected on this calendar will<br />
-                be highlighted as Company Holidays<br />
-                throughout Practice Management.<br />
-                <p style="padding-top: 8px;">
-                    Common Recurring Holidays can be
-                    <br />
-                    selected from the drop-down as well.<br />
-                    Once selected they will be
-                    <br />
-                    highlighted as Company Holidays<br />
-                    throughout Practice Management for<br />
-                    the current year as well as in future<br />
-                    years.</p>
-            </div>
         </td>
     </tr>
 </table>
