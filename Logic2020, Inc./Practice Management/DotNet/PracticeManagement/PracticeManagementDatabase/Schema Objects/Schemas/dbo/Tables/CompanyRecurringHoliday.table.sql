@@ -6,6 +6,7 @@
 	[Day] [int] NULL,
 	[NumberInMonth] [int] NULL,
 	[DayOfTheWeek] [int] NULL,
+	[DateDescription] [nvarchar](255) NULL,
 	 CONSTRAINT [PK_CompanyRecurringHoliday] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
