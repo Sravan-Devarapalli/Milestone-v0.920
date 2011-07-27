@@ -41,7 +41,7 @@
 	runat="server" Enabled="True" TargetControlID="pnlMonth">
 	<Animations>
 		<OnUpdated>
-			<ScriptAction Script="hideInProcessImage($get('divWait'));" />
+			<ScriptAction Script="hideInProcessImage($get('divWait1'));" />
 		</OnUpdated>
 	</Animations>
 </AjaxControlToolkit:UpdatePanelAnimationExtender>
