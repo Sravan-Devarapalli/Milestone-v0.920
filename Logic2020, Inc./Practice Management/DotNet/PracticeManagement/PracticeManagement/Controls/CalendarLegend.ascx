@@ -13,7 +13,7 @@
     </div>
     <asp:Panel CssClass="filters" ID="pnlFilters" runat="server">
         <table>
-            <tr>
+            <%--<tr>
                 <td style="margin-top: 5px; padding-top: 5px; padding-right: 5px;">
                     <table bgcolor="black" border="1" cellpadding="0" cellspacing="0" width="20">
                         <tr>
@@ -27,7 +27,7 @@
                 <td style="margin-top: 5px; padding-top: 5px;">
                     - This is a company work day, and the person is scheduled to work it.
                 </td>
-            </tr>
+            </tr>--%>
             <tr>
                 <td style="margin-top: 5px; padding-top: 5px; padding-right: 5px;">
                     <table bgcolor="black" border="1" cellpadding="0" cellspacing="0" width="20">
@@ -73,7 +73,7 @@
                     - This is a company holiday, but the person is scheduled to work anyway.
                 </td>
             </tr>
-            <tr>
+            <%--<tr>
                 <td style="margin-top: 5px; padding-top: 5px; padding-right: 5px;">
                     <table bgcolor="black" border="1" cellpadding="0" cellspacing="0" width="20">
                         <tr>
@@ -87,7 +87,7 @@
                 <td style="margin-top: 5px; padding-top: 5px;">
                     - This is a Weekend day.
                 </td>
-            </tr>
+            </tr>--%>
         </table>
     </asp:Panel>
 </div>
