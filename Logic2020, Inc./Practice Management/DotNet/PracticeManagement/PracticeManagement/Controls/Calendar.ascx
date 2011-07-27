@@ -20,8 +20,10 @@
         var chkboxes = chkboxList.getElementsByTagName('input');
         var index = 0;
         if (chkboxes[0].parentNode.style.display != "none") {
-            chkboxes[0].parentNode.style.padding = "6px";
+            chkboxes[0].parentNode.style.paddingTop = "6px";
             chkboxes[0].parentNode.style.paddingLeft = "2px";
+            chkboxes[0].parentNode.style.paddingRight = "0px";
+            chkboxes[0].parentNode.style.paddingBottom = "6px";
             chkboxes[0].parentNode.style.borderBottom = "1px solid black";
             chkboxes[0].parentNode.style.borderRight = "5px solid white";
             chkboxes[0].parentNode.style.borderLeft = "5px solid white";
@@ -35,7 +37,7 @@
                 else {
                     chkboxes[i].parentNode.style.backgroundColor = "";
                 }
-                chkboxes[i].parentNode.style.padding = "2px";
+                chkboxes[i].parentNode.style.paddingRight = "2px";
             }
         }
     }
@@ -66,35 +68,33 @@
         width: 100%;
     }
 </style>
-<br />
-<uc2:CalendarLegend ID="CalendarLegend" runat="server" />
-<br />
-<table>
+<table width="98%">
     <tr>
-        <td id="tdDescription" colspan="2" align="center" runat="server" style="vertical-align: top;
-            width: 220px; white-space: nowrap; text-align: center; padding-left: 10px;">
-            <div id="divDescription" runat="server" style="border: 1px solid black; padding: 4px;">
-                Days selected on this calendar will be highlighted as Company Holidays throughout
-                Practice Management.
+        <td style="width: 15%;">
+            &nbsp;
+        </td>
+        <td id="tdDescription" align="center" runat="server" style="vertical-align: top;
+            width: 70%;">
+            <div style="border: 1px solid black; padding: 5px; white-space: normal;">
+                <p>
+                    Days selected on this calendar will be highlighted as Company Holidays throughout
+                    Practice Management.</p>
                 <p style="padding-top: 8px;">
                     Common Recurring Holidays can be selected from the drop-down as well. Once selected
-                    they will be highlighted as<br />
-                    Company Holidays throughout Practice Management for the current year as well as
-                    in future years.</p>
+                    they will be highlighted as Company Holidays throughout Practice Management for
+                    the current year as well as in future years.</p>
             </div>
         </td>
+        <td style="width: 15%;">
+            &nbsp;
+        </td>
     </tr>
+</table>
+<table width="98%">
     <tr>
-        <td>
+        <td style="width: 100%;">
             <asp:UpdatePanel ID="pnlBody" runat="server" ChildrenAsTriggers="False" UpdateMode="Conditional">
                 <ContentTemplate>
-                    <div id="divWait1" style="display: none; background-color: White; border: solid 1px silver;">
-                        <span style="color: Black; font-weight: bold;">
-                            <nobr>Please Wait...</nobr>
-                        </span>
-                        <br />
-                        <asp:Image ID="imgLoading" runat="server" AlternateText="Please Wait..." ImageUrl="~/Images/ajax-loader.gif" />
-                    </div>
                     <uc3:LoadingProgress ID="ldProgress" runat="server" />
                     <table class="CalendarTable">
                         <tr id="trPersonDetails" runat="server">
@@ -147,7 +147,8 @@
                                     </tr>
                                 </table>
                             </td>
-                            <td id="tdRecurringHolidaysDetails" runat="server" rowspan="9" class="setCheckboxesLeft" style="padding-top: 45px; padding-left: 20px;">
+                            <td id="tdRecurringHolidaysDetails" runat="server" rowspan="9" class="setCheckboxesLeft"
+                                style="padding-top: 45px; padding-left: 20px;">
                                 <uc:ScrollingDropDown ID="cblRecurringHolidays" runat="server" SetDirty="false" Height="100%"
                                     AllSelectedReturnType="AllItems" OnSelectedIndexChanged="cblRecurringHolidays_OnSelectedIndexChanged"
                                     CellPadding="3" AutoPostBack="true" />
@@ -249,15 +250,10 @@
                     <asp:AsyncPostBackTrigger ControlID="cblRecurringHolidays" EventName="SelectedIndexChanged" />
                 </Triggers>
             </asp:UpdatePanel>
-            <AjaxControlToolkit:UpdatePanelAnimationExtender ID="pnlBody_UpdatePanelAnimationExtender"
-                runat="server" Enabled="True" TargetControlID="pnlBody">
-                <Animations>
-			<OnUpdating>
-				<ScriptAction Script="showInProcessImage($get('divWait1'), updatingCalendarContainer);" />
-			</OnUpdating>
-                </Animations>
-            </AjaxControlToolkit:UpdatePanelAnimationExtender>
         </td>
     </tr>
 </table>
+<br />
+<uc2:CalendarLegend ID="CalendarLegend" runat="server" disableChevron="true" />
+<br />
 
