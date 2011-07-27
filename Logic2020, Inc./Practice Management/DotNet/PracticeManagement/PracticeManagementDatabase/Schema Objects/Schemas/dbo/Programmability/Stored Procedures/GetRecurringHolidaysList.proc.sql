@@ -2,7 +2,7 @@
 AS
 BEGIN
 	SELECT Id
-			,Description
+			,Description + '<br />&nbsp;' + DateDescription AS 'Description'
 			,IsSet
 	FROM dbo.CompanyRecurringHoliday
 	
