@@ -21,12 +21,8 @@
         var index = 0;
         if (chkboxes[0].parentNode.style.display != "none") {
             chkboxes[0].parentNode.style.paddingTop = "6px";
-            chkboxes[0].parentNode.style.paddingLeft = "2px";
-            chkboxes[0].parentNode.style.paddingRight = "0px";
             chkboxes[0].parentNode.style.paddingBottom = "6px";
             chkboxes[0].parentNode.style.borderBottom = "1px solid black";
-            chkboxes[0].parentNode.style.borderRight = "5px solid white";
-            chkboxes[0].parentNode.style.borderLeft = "5px solid white";
         }
         for (var i = 0; i < chkboxes.length; i++) {
             if (chkboxes[i].parentNode.style.display != "none") {
@@ -38,6 +34,8 @@
                     chkboxes[i].parentNode.style.backgroundColor = "";
                 }
                 chkboxes[i].parentNode.style.paddingRight = "2px";
+                chkboxes[i].parentNode.style.borderRight = "5px solid white";
+                chkboxes[i].parentNode.style.borderLeft = "5px solid white";
             }
         }
     }
