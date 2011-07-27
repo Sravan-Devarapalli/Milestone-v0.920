@@ -158,11 +158,16 @@ namespace PraticeManagement.Controls
                     FillRecurringHolidaysList(cblRecurringHolidays, "All Recurring Holidays");
                 }
                     
-                trPersonDetails.Visible = !CompanyHolidays;
+                trPersonDetails.Visible = !CompanyHolidays; 
 
-                trRecurringHolidaysDetails.Visible = tdDescription.Visible = CompanyHolidays;
+                tdRecurringHolidaysDetails.Visible = tdDescription.Visible = CompanyHolidays;
 
                 SelectedYear = DateTime.Today.Year;
+            }
+
+            if (tdRecurringHolidaysDetails.Visible)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "", "changeAlternateitemscolrsForCBL();", true);
             }
 
         }
