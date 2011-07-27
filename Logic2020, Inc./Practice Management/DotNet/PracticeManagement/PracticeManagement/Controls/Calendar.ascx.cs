@@ -122,7 +122,7 @@ namespace PraticeManagement.Controls
                     if (userIsAdministrator || userIsRecruiter || userIsConsultant || userIsSalesperson || userIsProjectLead || userIsHR)// #2817: userIsHR is added as per the requirement.
                     {
                         //DataHelper.FillPersonList(ddlPerson, Resources.Controls.CompanyCalendarTitle);
-                        DataHelper.FillPersonList(ddlPerson, null);
+                        DataHelper.FillPersonList(ddlPerson, null, (int) PersonStatusType.Active);
                     }
                     else
                     {
