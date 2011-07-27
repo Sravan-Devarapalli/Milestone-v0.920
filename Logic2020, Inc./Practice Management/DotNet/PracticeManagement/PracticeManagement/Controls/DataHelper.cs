@@ -690,9 +690,9 @@ namespace PraticeManagement.Controls
         /// </summary>
         /// <param name="control">The control to be filled.</param>
         /// <param name="firstItemText">The text to be displayed by default.</param>
-        public static void FillPersonList(ListControl control, string firstItemText)
+        public static void FillPersonList(ListControl control, string firstItemText, int? statusId = null)
         {
-            FillPersonList(control, firstItemText, DateTime.MinValue, DateTime.MinValue);
+            FillPersonList(control, firstItemText, DateTime.MinValue, DateTime.MinValue, statusId);
         }
 
         /// <summary>
@@ -703,13 +703,13 @@ namespace PraticeManagement.Controls
         /// <param name="startDate">mileStone start date</param>
         /// <param name="endDate">mileStone end date</param>
         public static void FillPersonList(ListControl control, string firstItemText, DateTime startDate,
-                                          DateTime endDate)
+                                          DateTime endDate, int? statusId = null )
         {
             using (var serviceClient = new PersonServiceClient())
             {
                 try
                 {
-                    Person[] persons = serviceClient.PersonListAllShort(null, null, startDate, endDate);
+                    Person[] persons = serviceClient.PersonListAllShort(null, statusId, startDate, endDate);
 
                     Array.Sort(persons);
 
