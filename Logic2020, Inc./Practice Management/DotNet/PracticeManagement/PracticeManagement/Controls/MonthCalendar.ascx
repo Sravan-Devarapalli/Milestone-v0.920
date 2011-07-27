@@ -37,13 +37,13 @@
 		</asp:DataList>
 	</ContentTemplate>
 </asp:UpdatePanel>
-<AjaxControlToolkit:UpdatePanelAnimationExtender ID="pnlMonth_UpdatePanelAnimationExtender" 
+<%--<AjaxControlToolkit:UpdatePanelAnimationExtender ID="pnlMonth_UpdatePanelAnimationExtender" 
 	runat="server" Enabled="True" TargetControlID="pnlMonth">
 	<Animations>
 		<OnUpdated>
 			<ScriptAction Script="hideInProcessImage($get('divWait1'));" />
 		</OnUpdated>
 	</Animations>
-</AjaxControlToolkit:UpdatePanelAnimationExtender>
+</AjaxControlToolkit:UpdatePanelAnimationExtender>--%>
 
 
