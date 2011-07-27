@@ -22,13 +22,22 @@ namespace PraticeManagement.Controls {
         protected global::PraticeManagement.Controls.CalendarLegend CalendarLegend;
         
         /// <summary>
-        /// loadingProgress control.
+        /// tdDescription control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.LoadingProgress loadingProgress;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdDescription;
+        
+        /// <summary>
+        /// divDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDescription;
         
         /// <summary>
         /// pnlBody control.
@@ -47,6 +56,15 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Image imgLoading;
+        
+        /// <summary>
+        /// ldProgress control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.LoadingProgress ldProgress;
         
         /// <summary>
         /// trPersonDetails control.
@@ -92,42 +110,6 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.UpdatePanelAnimationExtender pnlButton_UpdatePanelAnimationExtender;
-        
-        /// <summary>
-        /// trRecurringHolidaysDetails control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow trRecurringHolidaysDetails;
-        
-        /// <summary>
-        /// cblRecurringHolidays control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.ScrollingDropDown cblRecurringHolidays;
-        
-        /// <summary>
-        /// sdecblRecurringHolidays control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdecblRecurringHolidays;
-        
-        /// <summary>
-        /// hdnCheckBoxChanged control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnCheckBoxChanged;
         
         /// <summary>
         /// lblConsultantMessage control.
@@ -182,6 +164,24 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Image imgNextYear;
+        
+        /// <summary>
+        /// tdRecurringHolidaysDetails control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdRecurringHolidaysDetails;
+        
+        /// <summary>
+        /// cblRecurringHolidays control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblRecurringHolidays;
         
         /// <summary>
         /// mcJanuary control.
@@ -299,24 +299,6 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.UpdatePanelAnimationExtender pnlBody_UpdatePanelAnimationExtender;
-        
-        /// <summary>
-        /// tdDescription control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdDescription;
-        
-        /// <summary>
-        /// divDescription control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDescription;
     }
 }
 
