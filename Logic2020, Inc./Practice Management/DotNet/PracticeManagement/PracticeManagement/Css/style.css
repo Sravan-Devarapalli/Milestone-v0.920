@@ -1730,6 +1730,13 @@ DIV.DayOn
     background-color: Transparent;
 }
 
+DIV.WeekEndDayOff
+{
+    height: 24px;
+    width: 24px;
+    background-color: Transparent;
+}
+
 DIV.CompanyDayOff
 {
     height: 24px;
