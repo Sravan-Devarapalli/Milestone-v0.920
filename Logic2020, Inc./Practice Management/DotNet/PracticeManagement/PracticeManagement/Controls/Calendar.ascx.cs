@@ -176,12 +176,19 @@ namespace PraticeManagement.Controls
         {
             using (var serviceClient = new CalendarService.CalendarServiceClient())
             {
+                var list = serviceClient.GetRecurringHolidaysList();
+                PreviousRecurringHolidaysList = list;
+
                 if (!string.IsNullOrEmpty(firstItem))
                 {
                     cblRecurringHolidays.Items.Add(firstItem);
+
+                    if (PreviousRecurringHolidaysList.Count() == PreviousRecurringHolidaysList.Where(p => p.Third == true).Count())
+                    {
+                        var listItem = cblRecurringHolidays.Items[0];
+                        listItem.Selected = true;
+                    }
                 }
-                var list = serviceClient.GetRecurringHolidaysList();
-                PreviousRecurringHolidaysList = list;
 
                 foreach (var item in list)
                 {
