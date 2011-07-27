@@ -40,7 +40,9 @@ AS
 	       INNER JOIN dbo.Person AS p ON p.PersonId = @PersonId
 	 WHERE cal.Date BETWEEN @StartDate AND @EndDate
 	   AND @PersonId IS NOT NULL /*AND @PracticeManagerId IS NOT NULL*/
-	   AND p.DefaultPractice <> 4 /* Administration */
+	   AND (p.DefaultPractice <> 4 /* Administration */
+			OR @PersonId = @PracticeManagerId
+			)
 	   AND @PracticeManagerId IS NOT NULL
 	ORDER BY cal.Date
 
