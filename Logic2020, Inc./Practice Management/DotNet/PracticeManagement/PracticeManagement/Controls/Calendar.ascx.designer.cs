@@ -13,15 +13,6 @@ namespace PraticeManagement.Controls {
     public partial class Calendar {
         
         /// <summary>
-        /// CalendarLegend control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.CalendarLegend CalendarLegend;
-        
-        /// <summary>
         /// tdDescription control.
         /// </summary>
         /// <remarks>
@@ -31,15 +22,6 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.HtmlControls.HtmlTableCell tdDescription;
         
         /// <summary>
-        /// divDescription control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDescription;
-        
-        /// <summary>
         /// pnlBody control.
         /// </summary>
         /// <remarks>
@@ -47,15 +29,6 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel pnlBody;
-        
-        /// <summary>
-        /// imgLoading control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Image imgLoading;
         
         /// <summary>
         /// ldProgress control.
@@ -292,13 +265,13 @@ namespace PraticeManagement.Controls {
         protected global::PraticeManagement.Controls.MonthCalendar mcDecember;
         
         /// <summary>
-        /// pnlBody_UpdatePanelAnimationExtender control.
+        /// CalendarLegend control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.UpdatePanelAnimationExtender pnlBody_UpdatePanelAnimationExtender;
+        protected global::PraticeManagement.Controls.CalendarLegend CalendarLegend;
     }
 }
 
