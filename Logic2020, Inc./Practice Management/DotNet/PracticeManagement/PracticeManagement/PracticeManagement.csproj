@@ -86,6 +86,9 @@
     <Reference Include="AjaxControlToolkit">
       <HintPath>Third Party Tools\AjaxControlToolkit\AjaxControlToolkit.dll</HintPath>
     </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>C:\Users\thulasiramip\Desktop\Temporary\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>C:\Program Files\Windows Azure SDK\v1.3\bin\runtimes\base\Microsoft.WindowsAzure.ServiceRuntime.dll</HintPath>
       <Private>True</Private>
@@ -125,6 +128,8 @@
   <ItemGroup>
     <Content Include="ActivityLog.aspx" />
     <Content Include="Controls\Calendar.ascx" />
+    <Content Include="Images\printer.png" />
+    <Content Include="Images\saveToDisk.png" />
     <Content Include="LoggedOut.aspx" />
     <Content Include="ProjectCalendar.aspx" />
     <Content Include="Config\BecomeUser.aspx" />
