@@ -1737,6 +1737,13 @@ DIV.WeekEndDayOff
     background-color: Transparent;
 }
 
+DIV.WeekEndDayOn
+{
+    height: 24px;
+    width: 24px;
+    background-color: #C7FFD1;
+}
+
 DIV.CompanyDayOff
 {
     height: 24px;
@@ -1774,6 +1781,11 @@ TD.CompanyDayOn, TH.CompanyDayOn
 TD.WeekEndDayOff, TH.WeekEndDayOff
 {
     background-color: Transparent;
+}
+
+TD.WeekEndDayOn, TH.WeekEndDayOn
+{
+    background-color: #C7FFD1;
 }
 
 DIV.DayGrayed
