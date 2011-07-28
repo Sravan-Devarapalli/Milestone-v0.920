@@ -96,6 +96,7 @@ namespace DataAccess
         private const string PersonUpdateProcedure = "dbo.PersonUpdate";
         private const string PersonListAllSeniorityFilterProcedure = "dbo.PersonListAllSeniorityFilter";
         private const string PersonListAllShortProcedure = "dbo.PersonListAllShort";
+        private const string OwnerListAllShortProcedure = "dbo.OwnerListAllShort";
         private const string PersonsGetBySeniorityAndStatusProcedure = "dbo.PersonsGetBySeniorityAndStatus";
         private const string PersonListShortByRoleAndStatusProcedure = "dbo.PersonListShortByRoleAndStatus";
         private const string PersonListByStatusListProcedure = "dbo.PersonListAllByStatusList";
@@ -2913,6 +2914,49 @@ namespace DataAccess
                 while (reader.Read())
                 {
                     result.Add(reader.GetDateTime(dateTimeIndex),reader.GetInt32(isNotesRequiredIndex)==1);
+                }
+            }
+        }
+
+        public static List<Person> OwnerListAllShort(int? statusId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(OwnerListAllShortProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(PersonStatusIdParam,
+                                                statusId.HasValue ? (object)statusId.Value : DBNull.Value);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<Person>();
+                    ReadOwnersShort(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadOwnersShort(SqlDataReader reader, List<Person> result)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(PersonIdColumn);
+                int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+                int lastNameIndex = reader.GetOrdinal(LastNameColumn);                
+
+                while (reader.Read())
+                {
+                    var personId = reader.GetInt32(personIdIndex);
+                    var person = new Person
+                    {
+                        Id = personId,
+                        FirstName = reader.GetString(firstNameIndex),
+                        LastName = reader.GetString(lastNameIndex)                        
+                    };                   
+
+                    result.Add(person);
                 }
             }
         }
