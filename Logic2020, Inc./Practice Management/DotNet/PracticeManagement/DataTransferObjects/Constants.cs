@@ -23,6 +23,7 @@ namespace DataTransferObjects
             public const string ProjectDetailedNameFormat = "{0} - {1} - {2} - {3}";
             public const string ProjectNameNumberFormat = "{0} - {1}";
             public const string StringValueSeparator = ",";
+            public const string ErrorLogMessage = @"<Error><NEW_VALUES	Login = ""{0}"" SourcePage = ""{1}"" SourceQuery = ""{2}""  ExcMsg=""{3}"" ExcSrc=""{4}"" InnerExcMsg=""{5}"" InnerExcSrc=""{6}""><OLD_VALUES /></NEW_VALUES></Error>";
         }
 
         public class GroupNames
