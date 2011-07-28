@@ -1309,6 +1309,33 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.DataList dtlOwnerOpportunities;
         
         /// <summary>
+        /// imgPrinter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton imgPrinter;
+        
+        /// <summary>
+        /// lnkSaveReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton lnkSaveReport;
+        
+        /// <summary>
+        /// hdnSaveReportText control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnSaveReportText;
+        
+        /// <summary>
         /// odsActivePersons control.
         /// </summary>
         /// <remarks>
