@@ -15,6 +15,10 @@ namespace PraticeManagement.PersonService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="PersonService.IPersonService")]
     public interface IPersonService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonByAlias", ReplyAction="http://tempuri.org/IPersonService/GetPersonByAliasResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
+        DataTransferObjects.Person GetPersonByAlias(string alias);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SavePersonDetail", ReplyAction="http://tempuri.org/IPersonService/SavePersonDetailResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(DataTransferObjects.DataAccessFault), Action="http://tempuri.org/IPersonService/SavePersonDetailDataAccessFaultFault", Name="DataAccessFault", Namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
@@ -174,6 +178,9 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonListAllShort", ReplyAction="http://tempuri.org/IPersonService/PersonListAllShortResponse")]
         DataTransferObjects.Person[] PersonListAllShort(System.Nullable<int> practice, System.Nullable<int> statusId, System.DateTime startDate, System.DateTime endDate);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/OwnerListAllShort", ReplyAction="http://tempuri.org/IPersonService/OwnerListAllShortResponse")]
+        DataTransferObjects.Person[] OwnerListAllShort(System.Nullable<int> statusId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonsGetBySeniorityAndStatus", ReplyAction="http://tempuri.org/IPersonService/PersonsGetBySeniorityAndStatusResponse")]
         DataTransferObjects.Person[] PersonsGetBySeniorityAndStatus(int seniorityId, System.Nullable<int> statusId);
         
@@ -222,10 +229,6 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonDetail", ReplyAction="http://tempuri.org/IPersonService/GetPersonDetailResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         DataTransferObjects.Person GetPersonDetail(int personId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonByAlias", ReplyAction="http://tempuri.org/IPersonService/GetPersonByAliasResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        DataTransferObjects.Person GetPersonByAlias(string alias);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -235,7 +238,7 @@ namespace PraticeManagement.PersonService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
-        
+       
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -250,6 +253,10 @@ namespace PraticeManagement.PersonService {
         
         public PersonServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public DataTransferObjects.Person GetPersonByAlias(string alias) {
+            return base.Channel.GetPersonByAlias(alias);
         }
         
         public int SavePersonDetail(DataTransferObjects.Person person, string currentUser, string loginPageUrl) {
@@ -436,6 +443,10 @@ namespace PraticeManagement.PersonService {
             return base.Channel.PersonListAllShort(practice, statusId, startDate, endDate);
         }
         
+        public DataTransferObjects.Person[] OwnerListAllShort(System.Nullable<int> statusId) {
+            return base.Channel.OwnerListAllShort(statusId);
+        }
+        
         public DataTransferObjects.Person[] PersonsGetBySeniorityAndStatus(int seniorityId, System.Nullable<int> statusId) {
             return base.Channel.PersonsGetBySeniorityAndStatus(seniorityId, statusId);
         }
@@ -494,10 +505,6 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.Person GetPersonDetail(int personId) {
             return base.Channel.GetPersonDetail(personId);
-        }
-        
-        public DataTransferObjects.Person GetPersonByAlias(string alias) {
-            return base.Channel.GetPersonByAlias(alias);
         }
     }
 }
