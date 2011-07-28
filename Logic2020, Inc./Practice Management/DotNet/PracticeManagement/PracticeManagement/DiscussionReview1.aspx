@@ -7,7 +7,6 @@
 <%@ Register Src="~/Controls/ActivityLogControl.ascx" TagPrefix="uc" TagName="ActivityLogControl" %>
 <%@ Register Src="Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc1" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajax" %>
-<%@ Register Src="~/Controls/Configuration/DefaultUser.ascx" TagPrefix="uc" TagName="DefaultUser" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Opportunities.ViewProjectExtender" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
@@ -678,12 +677,12 @@
                                                 <table width="100%">
                                                     <tr>
                                                         <td style="width: 97%">
-                                                            <uc:DefaultUser ID="dfOwner" runat="server" InsertFirtItem="true" OnClientChange="EnableSaveButton();setDirty();" />
+                                                            <asp:DropDownList ID="ddlOpportunityOwner" runat="server" CssClass="WholeWidth" onchange="EnableSaveButton();setDirty();" />
                                                         </td>
                                                         <td style="width: 3%">
-                                                            <asp:CustomValidator ID="cvDfOwnerRequired" runat="server" Text="*" ToolTip="Owner is required."
-                                                                OnServerValidate="cvDfOwnerRequired_ServerValidate" Width="100%" ValidationGroup="Opportunity"
-                                                                SetFocusOnError="true" Display="Dynamic"></asp:CustomValidator>
+                                                            <asp:RequiredFieldValidator ID="reqOpportunityOwner" runat="server" ControlToValidate="ddlOpportunityOwner"
+                                                                EnableClientScript="false" ValidationGroup="Opportunity" ErrorMessage="The Owner is required."
+                                                                SetFocusOnError="true" Text="*" ToolTip="The Owner is required."></asp:RequiredFieldValidator>
                                                         </td>
                                                     </tr>
                                                 </table>
