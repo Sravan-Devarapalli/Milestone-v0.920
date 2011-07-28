@@ -8,7 +8,6 @@
 <%@ Register Src="~/Controls/ActivityLogControl.ascx" TagPrefix="uc" TagName="ActivityLogControl" %>
 <%@ Register Src="Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc1" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajax" %>
-<%@ Register Src="~/Controls/Configuration/DefaultUser.ascx" TagPrefix="uc" TagName="DefaultUser" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Opportunities.ViewProjectExtender" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
@@ -181,7 +180,7 @@
                                     <table cellpadding="4px;">
                                         <tr>
                                             <td style="padding-right: 4px;">
-                                               <b>Start Date</b>
+                                                <b>Start Date</b>
                                             </td>
                                             <td class="DatePickerPadding" style="padding-left: 4px; padding-right: 4px;">
                                                 <uc1:DatePicker ID="dpStartDate" ValidationGroup="Opportunity" AutoPostBack="false"
@@ -189,8 +188,8 @@
                                             </td>
                                             <td>
                                                 <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpStartDate"
-                                                    ErrorMessage="The Projected Start date is required" ToolTip="The Projected Start date is required." ValidationGroup="Opportunity"
-                                                    Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>
+                                                    ErrorMessage="The Projected Start date is required" ToolTip="The Projected Start date is required."
+                                                    ValidationGroup="Opportunity" Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>
                                                 <asp:CompareValidator ID="cmpStartDateDataTypeCheck" runat="server" ControlToValidate="dpStartDate"
                                                     ValidationGroup="Opportunity" Type="Date" Operator="DataTypeCheck" Text="*" Display="Dynamic"
                                                     ErrorMessage="The Projected Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
@@ -207,7 +206,7 @@
                                                 <asp:RequiredFieldValidator ID="reqEndDate" runat="server" ControlToValidate="dpEndDate"
                                                     ErrorMessage="End date is required to add Proposed Resources to project." ToolTip="End date is required to add Proposed Resources to project."
                                                     ValidationGroup="HasPersons" Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>
-                                                    <asp:CompareValidator ID="cmpEndDateDataTypeCheck" runat="server" ControlToValidate="dpEndDate"
+                                                <asp:CompareValidator ID="cmpEndDateDataTypeCheck" runat="server" ControlToValidate="dpEndDate"
                                                     ValidationGroup="Opportunity" Type="Date" Operator="DataTypeCheck" Text="*" Display="Dynamic"
                                                     ErrorMessage="The Projected End Date has an incorrect format. It must be 'MM/dd/yyyy'."
                                                     ToolTip="The Projected End Date has an incorrect format. It must be 'MM/dd/yyyy'."></asp:CompareValidator>
@@ -438,12 +437,12 @@
                                     <table width="100%">
                                         <tr>
                                             <td style="width: 97%">
-                                                <uc:DefaultUser ID="dfOwner" runat="server" InsertFirtItem="true" OnClientChange="EnableSaveButton();setDirty();" />
+                                                <asp:DropDownList ID="ddlOpportunityOwner" runat="server" CssClass="WholeWidth" onchange="EnableSaveButton();setDirty();" />
                                             </td>
                                             <td style="width: 3%">
-                                                <asp:CustomValidator ID="cvDfOwnerRequired" runat="server" Text="*" ToolTip="Owner is required."
-                                                    OnServerValidate="cvDfOwnerRequired_ServerValidate" Width="100%" ValidationGroup="Opportunity"
-                                                    SetFocusOnError="true" Display="Dynamic"></asp:CustomValidator>
+                                                <asp:RequiredFieldValidator ID="reqOpportunityOwner" runat="server" ControlToValidate="ddlOpportunityOwner"
+                                                    EnableClientScript="false" ValidationGroup="Opportunity" ErrorMessage="The Owner is required."
+                                                    SetFocusOnError="true" Text="*" ToolTip="The Owner is required."></asp:RequiredFieldValidator>
                                             </td>
                                         </tr>
                                     </table>
