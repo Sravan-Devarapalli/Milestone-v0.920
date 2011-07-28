@@ -188,6 +188,9 @@ namespace PracticeManagementService
         [OperationContract]
         List<Person> PersonListAllShort(int? practice, int? statusId, DateTime startDate, DateTime endDate);
 
+         [OperationContract]
+         List<Person> OwnerListAllShort(int? statusId);
+
         /// <summary>
         /// Retrieves a short info on persons.
         /// </summary>
