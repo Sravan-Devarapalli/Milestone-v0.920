@@ -145,7 +145,6 @@ namespace PraticeManagement.Config
             AddAttributesTocblExemptNotes();
             AddAttributesTocblMustEnterNotes();
             ScriptManager.RegisterStartupScript(this, this.GetType(), "GetpracticeIdsList", string.Format("GetpracticeIdsList();EnableOrDisableButtons('{0}');changeAlternateitemscolrsForCBL();", chbNotesRequired.Checked.ToString().ToLowerInvariant()), true);
-
         }
 
         private void PopulateControls()
