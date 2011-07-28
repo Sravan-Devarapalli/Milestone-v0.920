@@ -61,7 +61,16 @@
             printWindow.focus();
             printWindow.print();
             printWindow.close();
+            return false;
+        }
+
+        function saveReport() {
+            var printContent = document.getElementById('<%= dvTerminationDateErrors.ClientID %>');
+            var hdnSaveReportText = document.getElementById('<%= hdnSaveReportText.ClientID %>');
+            hdnSaveReportText.value = printContent.innerHTML;
+
         } 
+ 
  
 
     </script>
@@ -165,8 +174,9 @@
         .ConfirmBoxClassError
         {
             min-height: 60px;
-            min-width:150px;
-            max-width:500px;
+            min-width: 150px;
+            max-width: 500px;
+            max-height: 500px;
         }
         
         /* ------------------------ */
@@ -1044,7 +1054,8 @@
                 CssClass="ConfirmBoxClassError" Style="display: none;" BorderWidth="2px">
                 <table width="100%">
                     <tr style="height: 20px;">
-                        <th align="center" style="text-align:center;background-color: Gray;width: 90%;font-weight:bold;font-size:14px;">
+                        <th align="center" style="text-align: center; background-color: Gray; width: 90%;
+                            font-weight: bold; font-size: 14px;">
                             Error
                         </th>
                         <th align="right" style="padding-right: 3px; background-color: Gray; font-size: 14px;
@@ -1056,7 +1067,7 @@
                     <tr>
                         <td colspan="2" align="center" style="padding: 6px 6px 2px 6px; text-align: left;">
                             <div id="dvTerminationDateErrors" runat="server" visible="false" style="padding: 0px 0px 5px 0px;
-                                color: Red;">
+                                max-height: 200px; overflow-y: auto; color: Red;">
                                 Unable to set Termination Date for this person because of following reasons.<br />
                                 <asp:Label ID="lblTimeEntriesExist" runat="server" Visible="false" Text="There are time entries submitted by person after {0}.">
                                 </asp:Label>
@@ -1071,7 +1082,7 @@
                                     </asp:DataList>
                                 </div>
                                 <div id="divOwnerProjectsExist" runat="server">
-                                    <asp:Label ID="lblOwnerProjectsExist" runat="server" Text="Person is owner to below Active Project(s).">
+                                    <asp:Label ID="lblOwnerProjectsExist" runat="server" Text="Person is designated as the Owner to below Active Project(s).">
                                     </asp:Label>
                                     <asp:DataList ID="dtlOwnerProjects" runat="server" Style="white-space: normal;">
                                         <ItemTemplate>
@@ -1080,7 +1091,7 @@
                                     </asp:DataList>
                                 </div>
                                 <div id="divOwnerOpportunitiesExist" runat="server">
-                                    <asp:Label ID="lblOwnerOpportunities" runat="server" Text="Person is owner to below Active Opportunities.">
+                                    <asp:Label ID="lblOwnerOpportunities" runat="server" Text="Person is designated as the Owner to below Active Opportunities.">
                                     </asp:Label>
                                     <asp:DataList ID="dtlOwnerOpportunities" runat="server" Style="white-space: normal;">
                                         <ItemTemplate>
@@ -1092,13 +1103,28 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" align="center" style="padding: 6px 6px 6px 6px;">
-                            <input type='button' value='print' onclick='printform();' />
+                        <td align="center" colspan="2" style="padding: 6px 6px 6px 6px;">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <asp:ImageButton ID="imgPrinter" runat="server" ImageUrl="~/Images/printer.png" ToolTip="Print" 
+                                            OnClientClick="return printform();" />
+                                    </td>
+                                    <td>
+                                        <asp:ImageButton ID="lnkSaveReport" runat="server" ImageUrl="~/Images/saveToDisk.png"
+                                            Style="margin-left: 10px;" OnClientClick="saveReport();" OnClick="lnkSaveReport_OnClick"
+                                            ToolTip="Save Report" /><asp:HiddenField ID="hdnSaveReportText" runat="server" />
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                 </table>
             </asp:Panel>
         </ContentTemplate>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="lnkSaveReport" />
+        </Triggers>
     </asp:UpdatePanel>
     <asp:ObjectDataSource ID="odsActivePersons" runat="server" SelectMethod="PersonListAllShort"
         TypeName="PraticeManagement.PersonService.PersonServiceClient">
