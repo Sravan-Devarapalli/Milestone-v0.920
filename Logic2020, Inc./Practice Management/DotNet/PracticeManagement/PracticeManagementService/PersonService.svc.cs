@@ -242,6 +242,12 @@ namespace PracticeManagementService
                 .ToList();
         }
 
+
+        public List<Person> OwnerListAllShort(int? statusId)
+        {
+            return PersonDAL.OwnerListAllShort(statusId);
+        }
+
         /// <summary>
         /// Retrieves a short info on persons.
         /// </summary>
