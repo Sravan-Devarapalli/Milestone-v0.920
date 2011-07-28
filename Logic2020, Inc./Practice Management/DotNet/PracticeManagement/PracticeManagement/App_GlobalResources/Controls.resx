@@ -350,4 +350,7 @@
   <data name="CssWeekEndDayOff" xml:space="preserve">
     <value>WeekEndDayOff</value>
   </data>
+  <data name="CssWeekEndDayOn" xml:space="preserve">
+    <value>WeekEndDayOn</value>
+  </data>
 </root>
