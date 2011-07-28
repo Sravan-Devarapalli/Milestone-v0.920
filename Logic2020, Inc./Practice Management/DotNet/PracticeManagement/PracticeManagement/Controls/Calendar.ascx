@@ -90,16 +90,21 @@
 </table>
 <table width="98%">
     <tr>
-        <td style="width: 100%;">
+        <td style="width: 100%; text-align:center;">
             <asp:UpdatePanel ID="pnlBody" runat="server" ChildrenAsTriggers="False" UpdateMode="Conditional">
                 <ContentTemplate>
                     <uc3:LoadingProgress ID="ldProgress" runat="server" />
-                    <table class="CalendarTable">
+                    <table width="98%">
+                        <tr>
+                        <td style="width: 15%">&nbsp;
+                        </td>
+                        <td style="width: 70%">
+                            <table class="CalendarTable">
                         <tr id="trPersonDetails" runat="server">
                             <td align="right">
                                 Select a Person:
                             </td>
-                            <td colspan="2" nowrap="nowrap">
+                            <td colspan="3" nowrap="nowrap" style="text-align:left;">
                                 <asp:DropDownList ID="ddlPerson" runat="server">
                                 </asp:DropDownList>
                                 <asp:UpdatePanel ID="pnlButton" runat="server" RenderMode="Inline">
@@ -121,7 +126,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3" align="left">
+                            <td colspan="4" align="left">
                                 <asp:Label ID="lblConsultantMessage" runat="server" Visible="false" Text="You can review your vacation days, but cannot change them. Please see your Practice Manager for updates to your vacation schedule."></asp:Label>
                             </td>
                         </tr>
@@ -239,6 +244,11 @@
                             <td>
                                 <uc1:MonthCalendar ID="mcDecember" runat="server" Year="2008" Month="12" OnPreRender="calendar_PreRender" />
                             </td>
+                        </tr>
+                    </table>
+                        </td>
+                        <td style="width:15%">&nbsp;
+                        </td>
                         </tr>
                     </table>
                 </ContentTemplate>
