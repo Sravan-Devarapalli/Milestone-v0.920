@@ -176,7 +176,7 @@ namespace PraticeManagement
             if (!IsPostBack)
             {
                 // Salespersons
-                DataHelper.FillSalespersonList(ddlDefaultSalesperson, string.Empty, false);
+                DataHelper.FillSalespersonListOnlyActive(ddlDefaultSalesperson, string.Empty);
 
                 //Directors
                 DataHelper.FillDirectorsList(ddlDefaultDirector, "-- Select Client Director --");
