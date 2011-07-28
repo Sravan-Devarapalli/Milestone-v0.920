@@ -115,7 +115,7 @@ namespace PraticeManagement
                 {
                     if (ViewState["IsOwnerOfProject"] == null)
                     {
-                        ViewState["IsOwnerOfProject"] = DataHelper.IsUserIsOwnerOfProject(User.Identity.Name, ProjectId.Value,true);
+                        ViewState["IsOwnerOfProject"] = DataHelper.IsUserIsOwnerOfProject(User.Identity.Name, ProjectId.Value, true);
                     }
                     return (bool)ViewState["IsOwnerOfProject"];
                 }
@@ -165,6 +165,8 @@ namespace PraticeManagement
 
             btnUpload.Attributes["onclick"] = "return CanShowPrompt();";
 
+           
+
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -193,6 +195,11 @@ namespace PraticeManagement
 
             #region Security
 
+            if (string.IsNullOrEmpty(ddlClientName.SelectedValue))
+            {
+                SetDefaultsToClientDependancyControls();
+            }
+
             bool userIsAdministrator =
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
             bool userIsSalesPerson =
@@ -207,14 +214,30 @@ namespace PraticeManagement
             txtProjectName.ReadOnly = txtClientDiscount.ReadOnly = isReadOnly;
             txtSalesCommission.ReadOnly = !userIsAdministrator;
 
-            ddlProjectGroup.Enabled = ddlClientName.Enabled = ddlPractice.Enabled = !isReadOnly;
+            ddlClientName.Enabled = ddlPractice.Enabled = !isReadOnly;
 
             chbReceiveManagementCommission.Enabled = rlstManagementCommission.Enabled =
                 userIsSalesPerson || userIsAdministrator;
             txtManagementCommission.ReadOnly = !userIsSalesPerson && !userIsAdministrator;
 
             chbReceivesSalesCommission.Enabled = userIsAdministrator;
-            ddlSalesperson.Enabled = userIsAdministrator || userIsDirector;
+            ddlSalesperson.Enabled = (userIsAdministrator || userIsDirector) && !string.IsNullOrEmpty(ddlClientName.SelectedValue);
+            ddlProjectManager.Enabled = ddlDirector.Enabled = (userIsAdministrator || userIsDirector || userIsSalesPerson) && !string.IsNullOrEmpty(ddlClientName.SelectedValue);
+            ddlProjectManager.Enabled = (userIsAdministrator || userIsDirector || userIsSalesPerson);
+
+            if (userIsPracticeManager && !ddlProjectManager.Enabled)
+            {
+                try
+                {
+                    ddlProjectManager.SelectedValue = DataHelper.CurrentPerson.Id.ToString();
+                }
+                catch 
+                {
+                    ddlProjectManager.SelectedValue = string.Empty;
+                }
+            }
+
+            ddlProjectGroup.Enabled = !string.IsNullOrEmpty(ddlClientName.SelectedValue) && !isReadOnly;
 
             ddlProjectStatus.Enabled =
                 // add new project mode
@@ -407,6 +430,17 @@ namespace PraticeManagement
                 int clientId = int.Parse(ddlClientName.SelectedValue);
                 SetClientDefaultValues(clientId);
             }
+            
+        }
+
+        private void SetDefaultsToClientDependancyControls()
+        {
+            chbIsChargeable.Checked = false;
+            txtClientDiscount.Text = string.Empty;
+            ddlSalesperson.SelectedIndex = 0;
+            ddlDirector.SelectedIndex = 0;
+            ddlProjectGroup.SelectedIndex = 0;
+            ddlProjectGroup.Enabled = ddlDirector.Enabled = ddlSalesperson.Enabled = false;
         }
 
         private void SetClientDefaultValues(int clientId)
@@ -757,10 +791,11 @@ namespace PraticeManagement
         protected override void Display()
         {
             DataHelper.FillPracticeWithOwnerListOnlyActive(ddlPractice, string.Empty);
-            DataHelper.FillClientListForProject(ddlClientName, string.Empty, ProjectId);
-            DataHelper.FillSalespersonListOnlyActive(ddlSalesperson, string.Empty);
+            DataHelper.FillClientListForProject(ddlClientName, "-- Select Client --", ProjectId);
+            DataHelper.FillSalespersonListOnlyActive(ddlSalesperson, "-- Select Sales person --");
             DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty);
             DataHelper.FillDirectorsList(ddlDirector, "-- Select Client Director --");
+            DataHelper.FillOwnersList(ddlProjectManager, "-- Select Owner --");
 
             int? id = ProjectId;
             if (id.HasValue)
@@ -796,15 +831,14 @@ namespace PraticeManagement
                     }
                 }
 
+                ddlProjectStatus.SelectedIndex =
+                       ddlProjectStatus.Items.IndexOf(
+                       ddlProjectStatus.Items.FindByValue(((int)ProjectStatusType.Projected).ToString()));
+
                 if (!userIsAdministrator)
                 {
-                    ddlProjectStatus.SelectedIndex =
-                        ddlProjectStatus.Items.IndexOf(
-                        ddlProjectStatus.Items.FindByValue(((int)ProjectStatusType.Projected).ToString()));
                     ddlProjectStatus.Enabled = false;
                 }
-
-                ddlSalesperson.Enabled = userIsAdministrator || userIsDirector;
             }
 
             UpdateSalesCommissionState();
@@ -847,7 +881,7 @@ namespace PraticeManagement
             PopulatePracticeDropDown(project);
             SelectProjectStatus(project);
             ShowStartAndEndDate(project);
-            SelectProjectManager(project);
+            PopulateProjectManagerDropDown(project);
 
             financials.Project = project;
 
@@ -934,24 +968,24 @@ namespace PraticeManagement
             }
         }
 
-        private void SelectProjectManager(Project project)
+        private void PopulateProjectManagerDropDown(Project project)
         {
             if (project.ProjectManager.Id != null)
             {
-                ddlProjectManager.DataBind();
-
                 var managerId = project.ProjectManager.Id.Value.ToString();
-                var managerInTheList = ddlProjectManager.Items.FindByValue(managerId);
-
-                if (managerInTheList == null)
+                ListItem selectedManager = ddlProjectManager.Items.FindByValue(managerId);
+                if (selectedManager == null)
                 {
-                    ddlProjectManager.Items.Insert(
-                        0,
-                        new ListItem(project.ProjectManager.PersonLastFirstName, managerId));
-                    ddlProjectManager.SelectedIndex = 0;
+                    selectedManager = new ListItem(project.ProjectManager.PersonLastFirstName, managerId);
+                    ddlProjectManager.Items.Add(selectedManager);
+                    ddlProjectManager.SortByText();
                 }
-                else
-                    ddlProjectManager.SelectedValue = managerId;
+
+                ddlProjectManager.SelectedValue = selectedManager.Value;
+            }
+            else
+            {
+                ddlProjectManager.SelectedValue = string.Empty;
             }
         }
 
@@ -1064,7 +1098,7 @@ namespace PraticeManagement
 
                 ddlProjectGroup.SelectedValue = selectedProjectGroup.Value;
             }
-        }             
+        }
 
         private void PopulateData(Project project)
         {
