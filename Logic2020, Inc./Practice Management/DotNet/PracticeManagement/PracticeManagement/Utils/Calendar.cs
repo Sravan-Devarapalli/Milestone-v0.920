@@ -14,8 +14,14 @@ namespace PraticeManagement.Utils
                 return string.Empty;
 
             return calendarItem.DayOff
-                        ? (calendarItem.CompanyDayOff ? (calendarItem.Date.DayOfWeek == DayOfWeek.Sunday || calendarItem.Date.DayOfWeek == DayOfWeek.Saturday ? Resources.Controls.CssWeekEndDayOff : Resources.Controls.CssDayOff) : Resources.Controls.CssCompanyDayOn)
-                        : (calendarItem.CompanyDayOff ? Resources.Controls.CssCompanyDayOff : Resources.Controls.CssDayOn);
+                        ? (calendarItem.CompanyDayOff 
+                            ? (calendarItem.Date.DayOfWeek == DayOfWeek.Sunday || calendarItem.Date.DayOfWeek == DayOfWeek.Saturday ? Resources.Controls.CssWeekEndDayOff : Resources.Controls.CssDayOff) 
+                            : (calendarItem.Date.DayOfWeek == DayOfWeek.Sunday || calendarItem.Date.DayOfWeek == DayOfWeek.Saturday ? Resources.Controls.CssWeekEndDayOff : Resources.Controls.CssCompanyDayOn)
+                          )
+                        : (calendarItem.CompanyDayOff 
+                            ? (calendarItem.Date.DayOfWeek == DayOfWeek.Sunday || calendarItem.Date.DayOfWeek == DayOfWeek.Saturday ? Resources.Controls.CssWeekEndDayOn : Resources.Controls.CssCompanyDayOff )
+                            : (calendarItem.Date.DayOfWeek == DayOfWeek.Sunday || calendarItem.Date.DayOfWeek == DayOfWeek.Saturday ? Resources.Controls.CssWeekEndDayOn : Resources.Controls.CssDayOn)
+                          );
         }
 
         public static decimal GetWorkingHoursInCurrentYear(decimal hoursPerWeek)
