@@ -20,16 +20,48 @@ namespace PracticeManagementService
 
         public Project ProjectGetById(int projectId)
         {
-            return ProjectDAL.GetById(projectId, null, null);
+            try
+            {
+                var project = ProjectDAL.GetById(projectId, null, null);
+                return project;
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ProjectGetById", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
         public ComputedFinancials GetProjectsComputedFinancials(int projectId)
         {
-            return ComputedFinancialsDAL.FinancialsGetByProject(projectId);
+            try
+            {
+                return ComputedFinancialsDAL.FinancialsGetByProject(projectId);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectsComputedFinancials", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         public DataSet GetProjectMilestonesFinancials(int projectId)
         {
-            return ProjectDAL.GetProjectMilestonesFinancials(projectId);
+            try
+            {
+                return ProjectDAL.GetProjectMilestonesFinancials(projectId);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectMilestonesFinancials", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -37,7 +69,18 @@ namespace PracticeManagementService
         /// </summary>
         public int ProjectCountByClient(int clientId)
         {
-            return ProjectDAL.ProjectCountByClient(clientId);
+            try
+            {
+                return ProjectDAL.ProjectCountByClient(clientId);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ProjectCountByClient", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         /// <summary>
@@ -46,40 +89,95 @@ namespace PracticeManagementService
         /// <returns>The list of the projects.</returns>
         public List<Project> GetProjectListAll()
         {
-            int? salespersonId = null;
-            int? practiceManagerId = null;
+            try
+            {
+                int? salespersonId = null;
+                int? practiceManagerId = null;
 
-            return ProjectDAL.ProjectListAll(null,
-                true,
-                false,
-                false,
-                true,
-                DateTime.MinValue,
-                DateTime.MaxValue,
-                salespersonId,
-                practiceManagerId,
-                null,
-                null);
+                return ProjectDAL.ProjectListAll(null,
+                    true,
+                    false,
+                    false,
+                    true,
+                    DateTime.MinValue,
+                    DateTime.MaxValue,
+                    salespersonId,
+                    practiceManagerId,
+                    null,
+                    null);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectListAll", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         public List<Project> ListProjectsByClient(int? clientId, string viewerUsername)
         {
-            return clientId != null ? ProjectDAL.ProjectListByClient(clientId.Value, viewerUsername) : null;
+            try
+            {
+                return clientId != null ? ProjectDAL.ProjectListByClient(clientId.Value, viewerUsername) : null;
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ListProjectsByClient", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         public List<Project> ListProjectsByClientShort(int? clientId, bool IsOnlyActiveAndProjective)
         {
-            return clientId != null ? ProjectDAL.ListProjectsByClientShort(clientId.Value, IsOnlyActiveAndProjective) : null;
+            try
+            {
+                return clientId != null ? ProjectDAL.ListProjectsByClientShort(clientId.Value, IsOnlyActiveAndProjective) : null;
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ListProjectsByClientShort", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         public List<Project> ListProjectsByClientWithSort(int? clientId, string viewerUsername, string sortBy)
         {
-            return clientId != null ? ProjectDAL.ProjectListByClientWithSorting(clientId.Value, viewerUsername, sortBy) : null;
+            try
+            {
+                return clientId != null ? ProjectDAL.ProjectListByClientWithSorting(clientId.Value, viewerUsername, sortBy) : null;
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ListProjectsByClientWithSort", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         public int CloneProject(ProjectCloningContext context)
         {
-            return ProjectDAL.CloneProject(context);
+            try
+            {
+                return ProjectDAL.CloneProject(context);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "CloneProject", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         /// <summary>
@@ -87,7 +185,10 @@ namespace PracticeManagementService
         /// </summary>
         public List<Project> GetProjectListCustom(bool projected, bool completed, bool active, bool experimantal)
         {
-            return ProjectDAL.ProjectListAll(
+
+            try
+            {
+                return ProjectDAL.ProjectListAll(
                 null,
                 projected,
                 completed,
@@ -100,6 +201,16 @@ namespace PracticeManagementService
                 null,
                 null,
                 false);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectListCustom", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
+
         }
 
         /// <summary>
@@ -135,7 +246,9 @@ namespace PracticeManagementService
             int? projectGroupId,
             ProjectCalculateRangeType includeCurentYearFinancials)
         {
-            List<Project> result =
+            try
+            {
+                List<Project> result =
                 ProjectRateCalculator.GetProjectList(
                     clientId,
                     showProjected,
@@ -150,7 +263,17 @@ namespace PracticeManagementService
                     projectGroupId,
                     includeCurentYearFinancials);
 
-            return result;
+                return result;
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectList", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
+
         }
 
         /// <summary>
@@ -190,25 +313,37 @@ namespace PracticeManagementService
             ProjectCalculateRangeType includeCurentYearFinancials,
             bool excludeInternalPractices)
         {
-            List<Project> result =
-                ProjectRateCalculator.GetProjectListMultiParameters(
-                    clientIds,
-                    showProjected,
-                    showCompleted,
-                    showActive,
-                    showInternal,
-                    showExperimental,
-                    showInactive,
-                    periodStart,
-                    periodEnd,
-                    salespersonIdsList,
-                    projectOwnerIdsList,
-                    practiceIdsList,
-                    projectGroupIdsList,
-                    includeCurentYearFinancials,
-                    excludeInternalPractices);
 
-            return result;
+            try
+            {
+                List<Project> result =
+               ProjectRateCalculator.GetProjectListMultiParameters(
+                   clientIds,
+                   showProjected,
+                   showCompleted,
+                   showActive,
+                   showInternal,
+                   showExperimental,
+                   showInactive,
+                   periodStart,
+                   periodEnd,
+                   salespersonIdsList,
+                   projectOwnerIdsList,
+                   practiceIdsList,
+                   projectGroupIdsList,
+                   includeCurentYearFinancials,
+                   excludeInternalPractices);
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ProjectListAllMultiParameters", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
 
@@ -223,8 +358,11 @@ namespace PracticeManagementService
                                                     DateTime periodEnd
                                                     )
         {
-            List<Project> result =
-               ProjectDAL.GetProjectListByDateRange(  
+
+            try
+            {
+                List<Project> result =
+               ProjectDAL.GetProjectListByDateRange(
                                                    showProjected,
                                                    showCompleted,
                                                    showActive,
@@ -235,7 +373,17 @@ namespace PracticeManagementService
                                                    periodEnd
                                                    );
 
-            return result;
+                return result;
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectListByDateRange", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
+
         }
 
         public List<Project> GetProjectListWithFinancials(
@@ -256,23 +404,35 @@ namespace PracticeManagementService
             )
         {
 
-            List<Project> result =
-                ProjectDAL.GetProjectListWithFinancials(
-                 clientIds,
-             showProjected,
-             showCompleted,
-             showActive,
-             showInternal,
-             showExperimental,
-             showInactive,
-             periodStart,
-             periodEnd,
-             salespersonIdsList,
-             projectOwnerIdsList,
-             practiceIdsList,
-             projectGroupIdsList,
-             excludeInternalPractices);
-            return result;
+            try
+            {
+                List<Project> result =
+                 ProjectDAL.GetProjectListWithFinancials(
+                  clientIds,
+              showProjected,
+              showCompleted,
+              showActive,
+              showInternal,
+              showExperimental,
+              showInactive,
+              periodStart,
+              periodEnd,
+              salespersonIdsList,
+              projectOwnerIdsList,
+              practiceIdsList,
+              projectGroupIdsList,
+              excludeInternalPractices);
+                return result;
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectListWithFinancials", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
+
         }
 
         public List<MilestonePerson> GetProjectListGroupByPracticeManagers(
@@ -292,7 +452,10 @@ namespace PracticeManagementService
             bool excludeInternalPractices
             )
         {
-            return ProjectDAL.GetProjectListGroupByPracticeManagers(clientIds,
+
+            try
+            {
+                return ProjectDAL.GetProjectListGroupByPracticeManagers(clientIds,
                                                                     showProjected,
                                                                     showCompleted,
                                                                     showActive,
@@ -307,16 +470,47 @@ namespace PracticeManagementService
                                                                     projectGroupIdsList,
                                                                     excludeInternalPractices
                                                                     );
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectListGroupByPracticeManagers", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
+
         }
 
         public List<Project> GetBenchList(BenchReportContext context)
         {
-            return ProjectRateCalculator.GetBenchAndAdmin(context);
+            try
+            {
+                return ProjectRateCalculator.GetBenchAndAdmin(context);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetBenchList", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         public List<Project> GetBenchListWithoutBenchTotalAndAdminCosts(BenchReportContext context)
         {
-            return ProjectRateCalculator.GetBenchListWithoutBenchTotalAndAdminCosts(context);
+            try
+            {
+                return ProjectRateCalculator.GetBenchListWithoutBenchTotalAndAdminCosts(context);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetBenchListWithoutBenchTotalAndAdminCosts", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -327,22 +521,35 @@ namespace PracticeManagementService
         /// <returns>The list of the projects are belong to the specified client.</returns>
         public List<Project> GetProjectListByClient(int clientId, string userName)
         {
-            int? salespersonId = null;
-            int? practiceManagerId = null;
 
-            // ProjectRateCalculator.VerifyPrivileges(userName, ref salespersonId, ref practiceManagerId);
-            return ProjectDAL.ProjectListAll(clientId,
-                true,
-                true,
-                true,
-                true,
-                DateTime.MinValue,
-                DateTime.MaxValue,
-                salespersonId,
-                practiceManagerId,
-                null,
-                null,
-                false);
+            try
+            {
+                int? salespersonId = null;
+                int? practiceManagerId = null;
+
+                // ProjectRateCalculator.VerifyPrivileges(userName, ref salespersonId, ref practiceManagerId);
+                return ProjectDAL.ProjectListAll(clientId,
+                    true,
+                    true,
+                    true,
+                    true,
+                    DateTime.MinValue,
+                    DateTime.MaxValue,
+                    salespersonId,
+                    practiceManagerId,
+                    null,
+                    null,
+                    false);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectListByClient", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
+
         }
 
         /// <summary>
@@ -353,7 +560,17 @@ namespace PracticeManagementService
         /// <returns>A list of the <see cref="Project"/> objects.</returns>
         public List<Project> ProjectSearchText(string looked, int personId)
         {
-            return ProjectDAL.ProjectSearchText(looked, personId);
+            try
+            {
+                return ProjectDAL.ProjectSearchText(looked, personId);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ProjectSearchText", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -364,35 +581,67 @@ namespace PracticeManagementService
         /// <returns>The <see cref="Project"/> record if found and null otherwise.</returns>
         public Project GetProjectDetail(int projectId, string userName)
         {
-            Project result = new ProjectRateCalculator(projectId, userName).Project;
-
-            if (result != null)
+            try
             {
-                if (result.Milestones != null)
+                Project result = new ProjectRateCalculator(projectId, userName).Project;
+
+                if (result != null)
                 {
-                    foreach (Milestone milestone in result.Milestones)
+                    if (result.Milestones != null)
                     {
-                        milestone.ComputedFinancials =
-                            ComputedFinancialsDAL.FinancialsGetByMilestone(milestone.Id.Value);
+                        foreach (Milestone milestone in result.Milestones)
+                        {
+                            milestone.ComputedFinancials =
+                                ComputedFinancialsDAL.FinancialsGetByMilestone(milestone.Id.Value);
+                        }
                     }
+
+                    result.BillingInfo = GetProjectBillingInfo(projectId);
                 }
 
-                result.BillingInfo = GetProjectBillingInfo(projectId);
+                return result;
             }
-
-            return result;
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectDetail", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         public BillingInfo GetProjectBillingInfo(int projectId)
         {
-            var billingInfo = ProjectBillingInfoDAL.ProjectBillingInfoGetById(projectId);
+            try
+            {
+                var billingInfo = ProjectBillingInfoDAL.ProjectBillingInfoGetById(projectId);
 
-            return billingInfo;
+                return billingInfo;
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectBillingInfo", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         public Project GetProjectDetailWithoutMilestones(int projectId, string userName)
         {
-            return ProjectRateCalculator.GetProjectDetail(projectId, userName);
+            try
+            {
+                return ProjectRateCalculator.GetProjectDetail(projectId, userName);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectDetailWithoutMilestones", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         /// <summary>
@@ -403,49 +652,61 @@ namespace PracticeManagementService
         /// <returns>An ID of the saved project.</returns>
         public int SaveProjectDetail(Project project, string userName)
         {
-            SqlTransaction currentTransaction = null;
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            try
             {
-                connection.Open();
-                currentTransaction = connection.BeginTransaction(IsolationLevel.ReadCommitted);
+                SqlTransaction currentTransaction = null;
+                using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+                {
+                    connection.Open();
+                    currentTransaction = connection.BeginTransaction(IsolationLevel.ReadCommitted);
 
-                if (!project.Id.HasValue)
-                {
-                    ProjectDAL.InsertProject(project, userName, connection, currentTransaction);
-                }
-                else
-                {
-                    ProjectDAL.UpdateProject(project, userName, connection, currentTransaction);
-                }
-
-                // Save project's commissions
-                if (project.SalesCommission != null)
-                {
-                    project.SalesCommission.ForEach(delegate(Commission salesCommission)
+                    if (!project.Id.HasValue)
                     {
-                        salesCommission.ProjectWithMargin = project;
-                        CommissionDAL.CommissionSet(salesCommission, connection, currentTransaction);
-                    });
-                }
-                if (project.ManagementCommission != null)
-                {
-                    project.ManagementCommission.ProjectWithMargin = project;
-                    CommissionDAL.CommissionSet(project.ManagementCommission, connection, currentTransaction);
-                }
-                if (project.BillingInfo != null)
-                {
-                    project.BillingInfo.Id = project.Id;
-                    ProjectBillingInfoDAL.ProjectBillingInfoSave(project.BillingInfo, connection, currentTransaction);
-                }
-                else
-                {
-                    ProjectBillingInfoDAL.ProjectBillingInfoDelete(project.Id.Value, connection, currentTransaction);
+                        ProjectDAL.InsertProject(project, userName, connection, currentTransaction);
+                    }
+                    else
+                    {
+                        ProjectDAL.UpdateProject(project, userName, connection, currentTransaction);
+                    }
+
+                    // Save project's commissions
+                    if (project.SalesCommission != null)
+                    {
+                        project.SalesCommission.ForEach(delegate(Commission salesCommission)
+                        {
+                            salesCommission.ProjectWithMargin = project;
+                            CommissionDAL.CommissionSet(salesCommission, connection, currentTransaction);
+                        });
+                    }
+                    if (project.ManagementCommission != null)
+                    {
+                        project.ManagementCommission.ProjectWithMargin = project;
+                        CommissionDAL.CommissionSet(project.ManagementCommission, connection, currentTransaction);
+                    }
+                    if (project.BillingInfo != null)
+                    {
+                        project.BillingInfo.Id = project.Id;
+                        ProjectBillingInfoDAL.ProjectBillingInfoSave(project.BillingInfo, connection, currentTransaction);
+                    }
+                    else
+                    {
+                        ProjectBillingInfoDAL.ProjectBillingInfoDelete(project.Id.Value, connection, currentTransaction);
+                    }
+
+                    currentTransaction.Commit();
                 }
 
-                currentTransaction.Commit();
+                return project.Id.Value;
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "SaveProjectDetail", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
             }
 
-            return project.Id.Value;
+
         }
 
         /// <summary>
@@ -464,27 +725,39 @@ namespace PracticeManagementService
             bool showInternal,
             bool showInactive)
         {
-            var monthStart = new DateTime(month.Year, month.Month, 1);
-            var monthEnd = new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month));
-
-            var res = PersonStartsReport(monthStart, monthEnd, userName, null, null, showProjected, showCompleted, showActive, showExperimental, showInternal, showInactive);
-
-            if (res.Count != 1)
+            try
             {
-                throw new Exception("'PersonStartsReport' method must return just one 'PesonStat' element for the month mini report");
+                var monthStart = new DateTime(month.Year, month.Month, 1);
+                var monthEnd = new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month));
+
+                var res = PersonStartsReport(monthStart, monthEnd, userName, null, null, showProjected, showCompleted, showActive, showExperimental, showInternal, showInactive);
+
+                if (res.Count != 1)
+                {
+                    throw new Exception("'PersonStartsReport' method must return just one 'PesonStat' element for the month mini report");
+                }
+
+                var result = new StringBuilder();
+                using (var writer = XmlWriter.Create(result))
+                {
+                    writer.WriteStartElement("Report");
+                    writer.WriteAttributeString("Date", month.ToString("yyyy-MM-ddTHH:mm:ss"));
+                    writer.WriteAttributeString("Revenue", res[0].Revenue.Value.ToString());
+                    writer.WriteAttributeString("EmployeesCount", res[0].EmployeesCount.ToString());
+                    writer.WriteAttributeString("ConsultantsCount", res[0].ConsultantsCount.ToString());
+                }
+
+                return result.ToString();
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "MonthMiniReport", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
             }
 
-            var result = new StringBuilder();
-            using (var writer = XmlWriter.Create(result))
-            {
-                writer.WriteStartElement("Report");
-                writer.WriteAttributeString("Date", month.ToString("yyyy-MM-ddTHH:mm:ss"));
-                writer.WriteAttributeString("Revenue", res[0].Revenue.Value.ToString());
-                writer.WriteAttributeString("EmployeesCount", res[0].EmployeesCount.ToString());
-                writer.WriteAttributeString("ConsultantsCount", res[0].ConsultantsCount.ToString());
-            }
 
-            return result.ToString();
         }
 
         /// <summary>
@@ -509,62 +782,116 @@ namespace PracticeManagementService
             bool showInactive
             )
         {
-            // ProjectRateCalculator.VerifyPrivileges(userName, ref salespersonId, ref practiceManagerId);
-            var result
-                = ComputedFinancialsDAL.PersonStatsByDateRange(
-                    startDate, //startDate.AddMonths(-1), 
-                    endDate,
-                    salespersonId,
-                    practiceManagerId,
-                    showProjected,
-                    showCompleted,
-                    showActive,
-                    showExperimental,
-                    showInternal,
-                    showInactive);
 
-            for (var i = 1; i < result.Count; i++)
+            try
             {
-                var prevVirtualConsultants = result[i - 1].VirtualConsultants;
-                result[i].VirtualConsultantsChange = result[i].VirtualConsultants - prevVirtualConsultants;
-            }
+                // ProjectRateCalculator.VerifyPrivileges(userName, ref salespersonId, ref practiceManagerId);
+                var result
+                    = ComputedFinancialsDAL.PersonStatsByDateRange(
+                        startDate, //startDate.AddMonths(-1), 
+                        endDate,
+                        salespersonId,
+                        practiceManagerId,
+                        showProjected,
+                        showCompleted,
+                        showActive,
+                        showExperimental,
+                        showInternal,
+                        showInactive);
 
-            // The data for a previous month was retrived to calculate the Virtual Consultants Change
-            if (result.Count > 0 && result[0].Date < startDate)
+                for (var i = 1; i < result.Count; i++)
+                {
+                    var prevVirtualConsultants = result[i - 1].VirtualConsultants;
+                    result[i].VirtualConsultantsChange = result[i].VirtualConsultants - prevVirtualConsultants;
+                }
+
+                // The data for a previous month was retrived to calculate the Virtual Consultants Change
+                if (result.Count > 0 && result[0].Date < startDate)
+                {
+                    result.RemoveAt(0);
+                }
+
+                // Admin costs
+                var allAdmin = ProjectRateCalculator.GetAdminCosts(startDate, endDate, userName);
+                if (allAdmin != null)
+                    foreach (var stats in result)
+                        foreach (var financials in allAdmin.ProjectedFinancialsByMonth)
+                            if (stats.Date.Month == financials.Key.Month && stats.Date.Year == financials.Key.Year)
+                                stats.AdminCosts = financials.Value.Cogs;
+
+                return result;
+            }
+            catch (Exception e)
             {
-                result.RemoveAt(0);
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "PersonStartsReport", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
             }
-
-            // Admin costs
-            var allAdmin = ProjectRateCalculator.GetAdminCosts(startDate, endDate, userName);
-            if (allAdmin != null)
-                foreach (var stats in result)
-                    foreach (var financials in allAdmin.ProjectedFinancialsByMonth)
-                        if (stats.Date.Month == financials.Key.Month && stats.Date.Year == financials.Key.Year)
-                            stats.AdminCosts = financials.Value.Cogs;
-
-            return result;
         }
 
         public int? GetProjectId(string projectNumber)
         {
-            return ProjectDAL.GetProjectId(projectNumber);
+            try
+            {
+                return ProjectDAL.GetProjectId(projectNumber);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectId", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
 
         public List<ProjectsGroupedByPerson> PersonBudgetListByYear(int year, BudgetCategoryType categoryType)
         {
-            return ProjectDAL.PersonBudgetListByYear(year, categoryType);
+            try
+            {
+                return ProjectDAL.PersonBudgetListByYear(year, categoryType);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "PersonBudgetListByYear", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         public List<ProjectsGroupedByPractice> PracticeBudgetListByYear(int year)
         {
-            return ProjectDAL.PracticeBudgetListByYear(year);
+            try
+            {
+                return ProjectDAL.PracticeBudgetListByYear(year);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "PracticeBudgetListByYear", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         public void CategoryItemBudgetSave(int itemId, BudgetCategoryType categoryType, DateTime monthStartDate, PracticeManagementCurrency amount)
         {
-            ProjectDAL.CategoryItemBudgetSave(itemId, categoryType, monthStartDate, amount);
+            try
+            {
+                ProjectDAL.CategoryItemBudgetSave(itemId, categoryType, monthStartDate, amount);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "CategoryItemBudgetSave", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         public List<ProjectsGroupedByPerson> CalculateBudgetForPersons(
@@ -581,19 +908,31 @@ namespace PracticeManagementService
             string personIds,
             BudgetCategoryType categoryType)
         {
-            return ProjectDAL.CalculateBudgetForPersons(
-                                                         startDate,
-                                                         endDate,
-                                                         showProjected,
-                                                         showCompleted,
-                                                         showActive,
-                                                         showInternal,
-                                                         showExperimental,
-                                                         showInactive,
-                                                         practiceIdsList,
-                                                         excludeInternalPractices,
-                                                         personIds,
-                                                         categoryType);
+            try
+            {
+
+                return ProjectDAL.CalculateBudgetForPersons(
+                                                             startDate,
+                                                             endDate,
+                                                             showProjected,
+                                                             showCompleted,
+                                                             showActive,
+                                                             showInternal,
+                                                             showExperimental,
+                                                             showInactive,
+                                                             practiceIdsList,
+                                                             excludeInternalPractices,
+                                                             personIds,
+                                                             categoryType);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "CalculateBudgetForPersons", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         public List<ProjectsGroupedByPractice> CalculateBudgetForPractices
@@ -608,57 +947,135 @@ namespace PracticeManagementService
             string practiceIdsList,
             bool excludeInternalPractices)
         {
-            return ProjectDAL.CalculateBudgetForPractices(
-                                                         startDate,
-                                                         endDate,
-                                                         showProjected,
-                                                         showCompleted,
-                                                         showActive,
-                                                         showInternal,
-                                                         showExperimental,
-                                                         showInactive,
-                                                         practiceIdsList,
-                                                         excludeInternalPractices);
+
+            try
+            {
+
+                return ProjectDAL.CalculateBudgetForPractices(
+                                                          startDate,
+                                                          endDate,
+                                                          showProjected,
+                                                          showCompleted,
+                                                          showActive,
+                                                          showInternal,
+                                                          showExperimental,
+                                                          showInactive,
+                                                          practiceIdsList,
+                                                          excludeInternalPractices);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "CalculateBudgetForPractices", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         public void CategoryItemsSaveFromXML(List<CategoryItemBudget> categoryItems, int year)
         {
-            ProjectDAL.CategoryItemsSaveFromXML(categoryItems, year);
+            try
+            {
+
+                ProjectDAL.CategoryItemsSaveFromXML(categoryItems, year);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "CategoryItemsSaveFromXML", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         public void ProjectDelete(int projectId, string userName)
         {
-            ProjectDAL.ProjectDelete(projectId, userName);//It will delete only Inactive and Experimental Projects as per #2702.
+            try
+            {
+                ProjectDAL.ProjectDelete(projectId, userName);//It will delete only Inactive and Experimental Projects as per #2702.
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ProjectDelete", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         public ProjectExpense[] GetProjectExpensesForProject(ProjectExpense entity)
         {
-            return (new ProjectExpenseDal()).GetForProject(entity);
+            try
+            {
+                return (new ProjectExpenseDal()).GetForProject(entity);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectExpensesForProject", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         public List<Project> AllProjectsWithFinancialTotalsAndPersons()
         {
-            var projectsList = ProjectDAL.ProjectsAll();
+            try
+            {
+                var projectsList = ProjectDAL.ProjectsAll();
 
-            ComputedFinancialsDAL.LoadTotalFinancialsPeriodForProjects(projectsList, null, null);
+                ComputedFinancialsDAL.LoadTotalFinancialsPeriodForProjects(projectsList, null, null);
 
-            MilestonePersonDAL.LoadMilestonePersonListForProject(projectsList);
+                MilestonePersonDAL.LoadMilestonePersonListForProject(projectsList);
 
-            return projectsList;
+                return projectsList;
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "AllProjectsWithFinancialTotalsAndPersons", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         public bool IsUserHasPermissionOnProject(string user, int projectId)
         {
-            return ProjectDAL.IsUserHasPermissionOnProject(user, projectId);
+            try
+            {
+                return ProjectDAL.IsUserHasPermissionOnProject(user, projectId);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "IsUserHasPermissionOnProject", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         public bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId)
         {
-            return ProjectDAL.IsUserIsOwnerOfProject(user, id, isProjectId);
+            try
+            {
+                return ProjectDAL.IsUserIsOwnerOfProject(user, id, isProjectId);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "IsUserHasPermissionOnProject", "ProjectService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
         }
 
         #endregion
     }
 }
- 
+
 
