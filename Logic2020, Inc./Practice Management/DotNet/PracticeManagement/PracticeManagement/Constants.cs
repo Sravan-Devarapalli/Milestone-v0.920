@@ -87,6 +87,7 @@ namespace PraticeManagement
             public const string ConsTimelineReport = "~/Reports/UtilizationTimeline.aspx";
             public const string ConsTimelineReportDetails = "~/Reports/UtilizationTimeline.aspx#details";
             public const string MilestoneDetail = "~/MilestoneDetail.aspx";
+            public const string MilestonePersonList = "~/MilestonePersonList.aspx";
             public const string MilestonePersonDetail = "~/MilestonePersonDetail.aspx";
             public const string PersonOverheadCalculation = "~/PersonOverheadCalculation.aspx";
             public const string OverheadDetail = "~/OverheadDetail.aspx";
