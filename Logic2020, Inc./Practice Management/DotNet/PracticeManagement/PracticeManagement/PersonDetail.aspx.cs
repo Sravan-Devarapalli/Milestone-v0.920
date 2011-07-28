@@ -21,6 +21,7 @@ using PraticeManagement.OpportunityService;
 using DataTransferObjects.ContextObjects;
 using PraticeManagement.Utils;
 using Microsoft.WindowsAzure.ServiceRuntime;
+using System.IO;
 
 namespace PraticeManagement
 {
@@ -217,7 +218,7 @@ namespace PraticeManagement
             }
         }
 
-        protected void defaultManager_OnCustomError(object sender, ErrorEventArgs errorEventArgs)
+        protected void defaultManager_OnCustomError(object sender, PraticeManagement.Events.ErrorEventArgs errorEventArgs)
         {
             mlError.ShowErrorMessage("Line manager of this person is not active. Please select another line manager.");
         }
@@ -238,6 +239,41 @@ namespace PraticeManagement
                 string.Format(Constants.ApplicationPages.DetailRedirectFormat,
                               Constants.ApplicationPages.PersonMargin,
                               PersonId));
+        }
+
+        public static byte[] ConvertStringToBytes(string input)
+        {
+            var stream = new System.IO.MemoryStream();
+            using (var writer = new System.IO.StreamWriter(stream))
+            {
+                writer.Write(input);
+                writer.Flush();
+            }
+            return stream.ToArray();
+        }
+
+        protected void lnkSaveReport_OnClick(object sender, EventArgs e)
+        {
+            string html =hdnSaveReportText.Value;
+            HTMLToPdf(html);
+        }
+
+
+        public void HTMLToPdf(String HTML)
+        {
+            var document = new iTextSharp.text.Document();
+            iTextSharp.text.pdf.PdfWriter.GetInstance(document, new FileStream(Request.PhysicalApplicationPath + @"\Error.pdf", FileMode.Create));
+            
+            document.Open();
+            var styles = new iTextSharp.text.html.simpleparser.StyleSheet();
+            var hw = new iTextSharp.text.html.simpleparser.HTMLWorker(document);
+            hw.Parse(new StringReader(HTML));
+            document.Close();
+            HttpContext.Current.Response.Clear();
+            HttpContext.Current.Response.ContentType = "Application/pdf";
+            HttpContext.Current.Response.AddHeader(
+                "content-disposition", string.Format("attachment; filename={0}", "Error.pdf"));
+            HttpContext.Current.Response.WriteFile(Request.PhysicalApplicationPath + @"\Error.pdf");
         }
 
         /// <summary>
