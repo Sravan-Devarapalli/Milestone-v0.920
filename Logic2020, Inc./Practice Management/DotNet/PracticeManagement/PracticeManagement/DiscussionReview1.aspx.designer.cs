@@ -472,22 +472,22 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqSalesperson;
         
         /// <summary>
-        /// dfOwner control.
+        /// ddlOpportunityOwner control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Configuration.DefaultUser dfOwner;
+        protected global::System.Web.UI.WebControls.DropDownList ddlOpportunityOwner;
         
         /// <summary>
-        /// cvDfOwnerRequired control.
+        /// reqOpportunityOwner control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvDfOwnerRequired;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqOpportunityOwner;
         
         /// <summary>
         /// txtBuyerName control.
