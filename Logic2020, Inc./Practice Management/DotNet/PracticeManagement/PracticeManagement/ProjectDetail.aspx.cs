@@ -456,11 +456,12 @@ namespace PraticeManagement
 
                     chbIsChargeable.Checked = client.IsChargeable;
 
-                    // When the Practice Manager creates a project the salesperson must be default for the client
-                    if (
-                        (!ProjectId.HasValue && Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName)) ||
-                        (!ProjectId.HasValue && Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName)) // #2817: DirectorRoleName is added as per the requirement.
-                       )
+                    //// When the Practice Manager creates a project the salesperson must be default for the client
+                    if (Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName))
+                    {
+                        ddlSalesperson.SelectedValue = DataHelper.CurrentPerson.Id.ToString();
+                    }
+                    else
                     {
                         ddlSalesperson.SelectedIndex =
                             ddlSalesperson.Items.IndexOf(ddlSalesperson.Items.FindByValue(client.DefaultSalespersonId.ToString()));
