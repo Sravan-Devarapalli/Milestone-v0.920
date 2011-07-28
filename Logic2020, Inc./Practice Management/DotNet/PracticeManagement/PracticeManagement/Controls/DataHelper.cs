@@ -1981,6 +1981,24 @@ namespace PraticeManagement.Controls
                 return person.GetIsNoteRequiredDetailsForSelectedDateRange(start, end, personId);
             }
         }
+
+        public static void FillOwnersList(DropDownList ddlProjectManager, string firstItemText)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    Person[] persons = serviceClient.OwnerListAllShort((int)DataTransferObjects.PersonStatusType.Active);
+
+                    FillListDefault(ddlProjectManager, firstItemText, persons, false, "Id", "PersonLastFirstName");
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
     }
 }
 
