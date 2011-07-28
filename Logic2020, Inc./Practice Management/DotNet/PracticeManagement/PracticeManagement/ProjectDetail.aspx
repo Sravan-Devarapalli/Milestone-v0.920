@@ -220,7 +220,7 @@
                                         Group
                                     </td>
                                     <td>
-                                        <asp:DropDownList ID="ddlProjectGroup" runat="server" CssClass="WholeWidth" OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged"
+                                        <asp:DropDownList ID="ddlProjectGroup" runat="server" Enabled="false" CssClass="WholeWidth" OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged"
                                             AutoPostBack="true">
                                         </asp:DropDownList>
                                     </td>
@@ -243,26 +243,33 @@
                                         Salesperson
                                     </td>
                                     <td>
-                                        <asp:DropDownList ID="ddlSalesperson" runat="server" AutoPostBack="True" CssClass="WholeWidth"
+                                        <asp:DropDownList ID="ddlSalesperson" runat="server" AutoPostBack="True" CssClass="WholeWidth" Enabled="false"
                                             onchange="setDirty();" OnSelectedIndexChanged="ddlSalesperson_SelectedIndexChanged">
                                         </asp:DropDownList>
                                         <asp:HiddenField ID="hidSalesCommissionId" runat="server" />
                                     </td>
-                                    <td>
+                                   <td>
+                                        <asp:RequiredFieldValidator ID="reqSalesperson" runat="server" ControlToValidate="ddlProjectManager"
+                                            EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Sales person is required."
+                                            SetFocusOnError="true" Text="*" ToolTip="The Sales person is required."></asp:RequiredFieldValidator>
                                     </td>
                                     <td style="white-space: nowrap;">
                                         Client Director
                                     </td>
                                     <td>
-                                        <asp:DropDownList ID="ddlDirector" runat="server" CssClass="WholeWidth" onchange="setDirty();">
+                                        <asp:DropDownList ID="ddlDirector" runat="server" CssClass="WholeWidth" Enabled="false" onchange="setDirty();">
                                         </asp:DropDownList>
                                     </td>
                                     <td colspan="2">
                                         Owner
                                     </td>
                                     <td colspan="3">
-                                        <asp:DropDownList ID="ddlProjectManager" runat="server" CssClass="WholeWidth" onchange="setDirty();"
-                                            DataSourceID="odsActivePersons" DataValueField="Id" DataTextField="PersonLastFirstName" />
+                                        <asp:DropDownList ID="ddlProjectManager" runat="server" CssClass="WholeWidth" onchange="setDirty();"  />
+                                    </td>
+                                    <td>
+                                        <asp:RequiredFieldValidator ID="reqProjectManager" runat="server" ControlToValidate="ddlProjectManager"
+                                            EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Owner is required."
+                                            SetFocusOnError="true" Text="*" ToolTip="The Owner is required."></asp:RequiredFieldValidator>
                                     </td>
                                 </tr>
                                 <tr>
@@ -320,17 +327,17 @@
                                         white-space: nowrap;">
                                         <table>
                                             <tr>
-                                                <td style="padding:0px;">
+                                                <td style="padding: 0px;">
                                                     <asp:HyperLink ID="hlnkProjectAttachment" runat="server"></asp:HyperLink><asp:LinkButton
                                                         ID="lnkProjectAttachment" runat="server" Visible="false" OnClick="lnkProjectAttachment_OnClick" />
                                                 </td>
-                                                <td style="padding:0px;padding-left:3px;">
+                                                <td style="padding: 0px; padding-left: 3px;">
                                                     &nbsp;<asp:Label ID="lblAttachmentsize" runat="server"></asp:Label>
                                                 </td>
-                                                <td style="padding:0px;">
+                                                <td style="padding: 0px;">
                                                     &nbsp;<asp:Label ID="lblAttachmentUploadedDate" runat="server"></asp:Label>
                                                 </td>
-                                                <td valign="middle" style="padding:0px;">
+                                                <td valign="middle" style="padding: 0px;">
                                                     &nbsp;<asp:ImageButton ID="imgbtnDeleteAttachment" OnClick="imgbtnDeleteAttachment_Click"
                                                         OnClientClick="if(confirm('Do you really want to delete the project attachment?')){ return true;}return false;"
                                                         Visible="false" runat="server" ImageUrl="~/Images/trash-icon-Large.png" ToolTip="Delete Attachment" /><AjaxControlToolkit:ModalPopupExtender
@@ -580,7 +587,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td  style="white-space: nowrap; padding-left: 10px; padding-right: 20px;">
+                        <td style="white-space: nowrap; padding-left: 10px; padding-right: 20px;">
                             <asp:FileUpload ID="fuProjectAttachment" onchange="EnableUploadButton();" BackColor="White"
                                 runat="server" Width="375px" Size="56" />
                             <asp:CustomValidator ID="cvProjectAttachment" runat="server" ControlToValidate="fuProjectAttachment"
@@ -594,12 +601,12 @@
                         </td>
                     </tr>
                     <tr>
-                        <td  style="white-space: nowrap; padding-left: 10px; padding-right: 20px;">
+                        <td style="white-space: nowrap; padding-left: 10px; padding-right: 20px;">
                             <asp:Label ID="lblAttachmentMessage" ForeColor="Gray" runat="server"></asp:Label>
                         </td>
                     </tr>
                     <tr>
-                        <td align="right" style="padding: 10px;padding-right:20px; white-space: nowrap;">
+                        <td align="right" style="padding: 10px; padding-right: 20px; white-space: nowrap;">
                             <asp:Button ID="btnUpload" Enabled="false" ValidationGroup="ProjectAttachment" runat="server"
                                 Text="Upload" OnClick="btnUpload_Click" />
                             &nbsp;&nbsp;&nbsp;
@@ -621,14 +628,5 @@
             <asp:PostBackTrigger ControlID="lnkProjectAttachment" />
         </Triggers>
     </asp:UpdatePanel>
-    <asp:ObjectDataSource ID="odsActivePersons" runat="server" SelectMethod="PersonListAllShort"
-        TypeName="PraticeManagement.PersonService.PersonServiceClient">
-        <SelectParameters>
-            <asp:Parameter Name="practice" Type="Int32" />
-            <asp:Parameter DefaultValue="1" Name="statusId" Type="Int32" />
-            <asp:Parameter Name="startDate" Type="DateTime" />
-            <asp:Parameter Name="endDate" Type="DateTime" />
-        </SelectParameters>
-    </asp:ObjectDataSource>
 </asp:Content>
 
