@@ -195,6 +195,7 @@ namespace PraticeManagement
                 DataHelper.FillOpportunityStatusList(ddlStatus, string.Empty);
                 DataHelper.FillPracticeListOnlyActive(ddlPractice, string.Empty);
                 DataHelper.FillOpportunityPrioritiesList(ddlPriority, string.Empty);
+                DataHelper.FillOwnersList(ddlOpportunityOwner, "-- Select Owner --");
 
                 PopulatePriorityHint();
 
@@ -747,7 +748,7 @@ namespace PraticeManagement
                 ddlSalesperson.Enabled =
                 ddlPractice.Enabled =
                 btnSave.Enabled =
-                dfOwner.Enabled =
+                ddlOpportunityOwner.Enabled =
                 ucProposedResources.Enabled = canEdit;
 
             btnConvertToProject.Enabled =
@@ -884,9 +885,22 @@ namespace PraticeManagement
         private void PopulateOwnerDropDown()
         {
             if (Opportunity.Owner != null)
-                dfOwner.SelectedManager = Opportunity.Owner;
+            {
+                var ownerId = Opportunity.Owner.Id.Value.ToString();
+                ListItem selectedOwner = ddlOpportunityOwner.Items.FindByValue(ownerId);
+                if (selectedOwner == null)
+                {
+                    selectedOwner = new ListItem(Opportunity.Owner.PersonLastFirstName, ownerId);
+                    ddlOpportunityOwner.Items.Add(selectedOwner);
+                    ddlOpportunityOwner.SortByText();
+                }
+
+                ddlOpportunityOwner.SelectedValue = selectedOwner.Value;
+            }
             else
-                dfOwner.SetEmptyItem();
+            {
+                ddlOpportunityOwner.SelectedValue = string.Empty;
+            }
         }
 
         private void PopulateClientGroupDropDown()
@@ -952,8 +966,10 @@ namespace PraticeManagement
                 opportunity.ProjectId = int.Parse(ddlProjects.SelectedValue);
             }
 
-            if (dfOwner.SelectedManager != null)
-                opportunity.Owner = dfOwner.SelectedManager;
+            var selectedValue = ddlOpportunityOwner.SelectedValue;
+            opportunity.Owner = string.IsNullOrEmpty(selectedValue) ?
+                null :
+                new Person(Convert.ToInt32(selectedValue));
 
             opportunity.ProposedPersonIdList = ucProposedResources.GetProposedPersonsIdsList();
         }
@@ -972,12 +988,7 @@ namespace PraticeManagement
         }
 
         #region Validations
-
-        protected void cvDfOwnerRequired_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            e.IsValid = (dfOwner.SelectedManager != null);
-        }
-
+       
         protected void custTransitionStatus_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             int statusId;
