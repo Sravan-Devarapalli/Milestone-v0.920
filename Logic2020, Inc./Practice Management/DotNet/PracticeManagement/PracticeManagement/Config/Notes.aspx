@@ -13,23 +13,60 @@
     <script type="text/javascript">
 
         function changeAlternateitemscolrsForCBL() {
-            var cbl = document.getElementById('<%=cblExemptNotes.ClientID %>');
-            if (cbl != null)
-                SetAlternateColors(cbl);
+            var cblExemptNotesItemsCount = 0;
+            var cblMustEnterNotesItemsCount = 0;
+            var cblExemptNotes = document.getElementById('<%=cblExemptNotes.ClientID %>');
+            if (cblExemptNotes != null) {
+                SetAlternateColors(cblExemptNotes);
+                cblExemptNotesItemsCount = cblExemptNotes.children[0].children.length;
+            }
 
-            var cbl2 = document.getElementById('<%=cblMustEnterNotes.ClientID %>');
-            if (cbl2 != null)
-                SetAlternateColors(cbl2);
+            var cblMustEnterNotes = document.getElementById('<%=cblMustEnterNotes.ClientID %>');
+            if (cblMustEnterNotes != null) {
+                SetAlternateColors(cblMustEnterNotes);
+                cblMustEnterNotesItemsCount = cblMustEnterNotes.children[0].children.length;
+            }
+
+            var divExemptNotes = document.getElementById("<%= divExemptNotes.ClientID%>");
+            var divMustEnterNotes = document.getElementById("<%= divMustEnterNotes.ClientID%>");
+
+
+            if (cblExemptNotesItemsCount >= cblMustEnterNotesItemsCount) {
+                divExemptNotes.style.height = (cblExemptNotesItemsCount * 19).toString() + "px";
+                divMustEnterNotes.style.height = (cblExemptNotesItemsCount * 19).toString() + "px";
+
+            }
+            else {
+                divExemptNotes.style.height = (cblMustEnterNotesItemsCount * 19).toString() + "px";
+                divMustEnterNotes.style.height = (cblMustEnterNotesItemsCount * 19).toString() + "px";
+            }
+
+            var btnSave = document.getElementById("<%= btnSave.ClientID%>");
+            if (!btnSave.disabled && btnSave.disabled != "true" && btnSave.disabled != "disabled") {
+                hideSuccessMessage();
+                btnSave.focus();
+            }
+        }
+
+        function hideSuccessMessage() {
+            message = document.getElementById("<%=mlConfirmation.ClientID %>" + "_lblMessage");
+            if (message != null) {
+                message.style.display = "none";
+            }
+            return true;
         }
 
         function SetAlternateColors(chkboxList) {
+
             var chkboxes = chkboxList.getElementsByTagName('input');
             var index = 0;
             for (var i = 0; i < chkboxes.length; i++) {
                 if (chkboxes[i].parentNode.style.display != "none") {
                     index++;
+
                     if ((index) % 2 == 0) {
                         chkboxes[i].parentNode.parentNode.style.backgroundColor = "#f9faff";
+
                     }
                     else {
                         chkboxes[i].parentNode.parentNode.style.backgroundColor = "";
@@ -68,7 +105,7 @@
                         var divExemptNotes = document.getElementById("<%= divExemptNotes.ClientID%>");
                         cblExemptNotes = document.createElement('table');
                         cblExemptNotes.setAttribute('id', "<%= cblExemptNotes.ClientID%>");
-                        cblExemptNotes.setAttribute('cellpadding', '3');
+                        cblExemptNotes.setAttribute('cellpadding', '0');
                         cblExemptNotes.setAttribute('border', '0');
                         cblExemptNotes.setAttribute('style', 'background-color:White;width:100%;');
                         tableBody = document.createElement('tbody');
@@ -104,7 +141,7 @@
                         var divMustEnterNotes = document.getElementById("<%= divMustEnterNotes.ClientID%>");
                         cblMustEnterNotes = document.createElement('table');
                         cblMustEnterNotes.setAttribute('id', "<%= cblMustEnterNotes.ClientID%>");
-                        cblMustEnterNotes.setAttribute('cellpadding', '3');
+                        cblMustEnterNotes.setAttribute('cellpadding', '0');
                         cblMustEnterNotes.setAttribute('border', '0');
                         cblMustEnterNotes.setAttribute('style', 'background-color:White;width:100%;');
                         tableBody = document.createElement('tbody');
@@ -245,32 +282,25 @@
     </script>
     <asp:UpdatePanel ID="updNotes" runat="server">
         <ContentTemplate>
-            <table width="100%">
+            <b>Time Entry Notes Policy</b>
+            <table width="100%" class="WholeWidth">
                 <tr>
-                    <td align="left" valign="top" style="width: 15%;">
-                        <table width="100%" class="PaddingClass">
-                            <tr>
-                                <td>
-                                    <asp:CheckBox ID="chbNotesRequired" onclick="chbNotesRequired_Change(this);setDirty();"
-                                        runat="server" Text="Notes are required" Checked="true" />
-                                </td>
-                                <td>
-                                    <asp:HiddenField ID="hdnExemptNotes" runat="server" Value="" />
-                                    <asp:HiddenField ID="hdnMustEnterNotes" runat="server" Value="" />
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td align="left" valign="top" style="width: 70%;">
-                    </td>
-                    <td style="width: 15%;">
+                    <td style="padding-top: 5px;">
+                        <asp:CheckBox ID="chbNotesRequired" onclick="chbNotesRequired_Change(this);setDirty();"
+                            runat="server" Text="Notes are required for all of the practices selected below and all newly created practices by default."
+                            Checked="true" />
+                        <asp:HiddenField ID="hdnExemptNotes" runat="server" Value="" />
+                        <asp:HiddenField ID="hdnMustEnterNotes" runat="server" Value="" />
                     </td>
                 </tr>
+            </table>
+            <br />
+            <table class="WholeWidth">
                 <tr>
-                    <td align="left" valign="top" style="width: 15%;">
+                    <td align="left" valign="middle" style="width: 10%;">
                     </td>
-                    <td align="left" valign="top" style="width: 70%;">
-                        <table width="100%">
+                    <td align="left" valign="middle" style="width: 75%; vertical-align: middle;">
+                        <table class="WholeWidth">
                             <tr style="padding-top: 2px;">
                                 <td align="center" style="padding-left: 6px; padding-right: 6px; text-align: center;
                                     padding-top: 2px; width: 44%">
@@ -284,16 +314,15 @@
                                 </td>
                             </tr>
                         </table>
-                        <table width="100%">
-                            <tr style="padding-top: 2px;">
-                                <td align="left" style="padding-left: 6px; padding-right: 6px; padding-top: 2px;
-                                    width: 44%">
+                        <table class="WholeWidth">
+                            <tr>
+                                <td style="padding-left: 6px; padding-right: 6px; padding-top: 0px; width: 44%; margin: auto;">
                                     <div id="divExemptNotes" runat="server" class="cbfloatRight" style="height: 150px;
-                                        width: 100%; overflow-y: scroll; border: 1px solid black; background: white;
-                                        padding-left: 3px;">
+                                        margin: auto; width: 100%; overflow-y: hidden; border: 1px solid black; background: white;line-height: 19px; vertical-align: middle;
+                                        padding-left: 1px;">
                                         <asp:CheckBoxList ID="cblExemptNotes" runat="server" Width="100%" BackColor="White"
-                                            AutoPostBack="false" DataTextField="Name" DataValueField="id" CellSpacing="0"
-                                            CellPadding="3" OnDataBound="cblExemptNotes_DataBound">
+                                            CssClass="WholeWidth" AutoPostBack="false" DataTextField="Name" DataValueField="id"
+                                            CellSpacing="0" CellPadding="0" OnDataBound="cblExemptNotes_DataBound">
                                         </asp:CheckBoxList>
                                     </div>
                                 </td>
@@ -310,27 +339,28 @@
                                     <input id="btnMustEnterToExemptAll" type="button" onclick="MustEnterToExemptAll_Click();GetpracticeIdsList();"
                                         title="Remove All" value="<<" />
                                 </td>
-                                <td align="left" style="padding-left: 6px; padding-right: 6px; padding-top: 2px;
-                                    vertical-align: top; width: 44%">
+                                <td style="padding-left: 6px; padding-right: 6px; padding-top: 0px; width: 44%; margin: auto;
+                                    line-height: 19px; vertical-align: middle;">
                                     <div id="divMustEnterNotes" runat="server" class="cbfloatRight" style="height: 150px;
-                                        width: 100%; overflow-y: scroll; border: 1px solid black; background: white;
-                                        padding-left: 3px;">
+                                        margin: auto; width: 100%; overflow-y: hidden; border: 1px solid black; background: white;
+                                        padding-left: 1px;">
                                         <asp:CheckBoxList ID="cblMustEnterNotes" runat="server" AutoPostBack="false" BackColor="White"
-                                            Width="100%" DataTextField="Name" DataValueField="id" CellPadding="3" CellSpacing="0"
-                                            OnDataBound="cblMustEnterNotes_DataBound">
+                                            CssClass="WholeWidth" Width="100%" DataTextField="Name" DataValueField="id" CellPadding="0"
+                                            CellSpacing="0" OnDataBound="cblMustEnterNotes_DataBound">
                                         </asp:CheckBoxList>
                                     </div>
                                 </td>
                             </tr>
                         </table>
-                        <table style="width: 100%;">
+                        <table class="WholeWidth">
                             <tr>
                                 <td style="padding: 4px; height: 35px; width: 70%;">
                                     <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
                                     <asp:ValidationSummary ID="vsumNotes" runat="server" ValidationGroup="Notes" />
                                 </td>
                                 <td align="right" style="padding: 4px; padding-right: 0px; height: 35px; width: 30%;">
-                                    <asp:Button ID="btnSave" Enabled="false" runat="server" Text="Save Changes" OnClick="btnSave_Click" />
+                                    <asp:Button ID="btnSave" Enabled="false" runat="server" Text="Save Changes" OnClientClick="hideSuccessMessage();"
+                                        OnClick="btnSave_Click" />
                                 </td>
                             </tr>
                         </table>
