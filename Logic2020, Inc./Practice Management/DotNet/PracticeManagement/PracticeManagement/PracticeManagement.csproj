@@ -86,8 +86,9 @@
     <Reference Include="AjaxControlToolkit">
       <HintPath>Third Party Tools\AjaxControlToolkit\AjaxControlToolkit.dll</HintPath>
     </Reference>
-    <Reference Include="itextsharp">
-      <HintPath>C:\Users\thulasiramip\Desktop\Temporary\itextsharp.dll</HintPath>
+    <Reference Include="itextsharp, Version=5.1.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Third Party Tools\PdfGenerator\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>C:\Program Files\Windows Azure SDK\v1.3\bin\runtimes\base\Microsoft.WindowsAzure.ServiceRuntime.dll</HintPath>
@@ -676,6 +677,7 @@
     <None Include="Service References\OverheadService\OverheadService1.disco" />
     <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\OpportunityService\OpportunityService1.disco" />
+    <Content Include="Third Party Tools\PdfGenerator\itextsharp.dll" />
     <Content Include="TimeEntrySetting.aspx" />
     <None Include="Web References\AttachmentService\AttachmentService.disco" />
     <Content Include="Web.config">
