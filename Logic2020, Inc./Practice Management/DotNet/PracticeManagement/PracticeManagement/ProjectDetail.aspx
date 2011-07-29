@@ -249,7 +249,7 @@
                                         <asp:HiddenField ID="hidSalesCommissionId" runat="server" />
                                     </td>
                                    <td>
-                                        <asp:RequiredFieldValidator ID="reqSalesperson" runat="server" ControlToValidate="ddlProjectManager"
+                                        <asp:RequiredFieldValidator ID="reqSalesperson" runat="server" ControlToValidate="ddlSalesperson"
                                             EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Sales person is required."
                                             SetFocusOnError="true" Text="*" ToolTip="The Sales person is required."></asp:RequiredFieldValidator>
                                     </td>
