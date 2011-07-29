@@ -56,6 +56,7 @@ AS
                   OR pers.PersonId IN (
                   SELECT    *
                   FROM      @SalespersonPermissions )
+				   OR proj.ProjectManagerId  = @PersonId
                 )
 	order by pers.lastname, pers.firstname
 
