@@ -157,6 +157,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.HiddenField hidSalesCommissionId;
         
         /// <summary>
+        /// reqSalesperson control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqSalesperson;
+        
+        /// <summary>
         /// ddlDirector control.
         /// </summary>
         /// <remarks>
@@ -173,6 +182,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlProjectManager;
+        
+        /// <summary>
+        /// reqProjectManager control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqProjectManager;
         
         /// <summary>
         /// lblProjectNumber control.
@@ -965,15 +983,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancel;
-        
-        /// <summary>
-        /// odsActivePersons control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource odsActivePersons;
     }
 }
 
