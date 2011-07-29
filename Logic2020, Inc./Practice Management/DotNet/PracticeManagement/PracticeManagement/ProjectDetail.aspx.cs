@@ -439,7 +439,18 @@ namespace PraticeManagement
             txtClientDiscount.Text = string.Empty;
             ddlSalesperson.SelectedIndex = 0;
             ddlDirector.SelectedIndex = 0;
+
+            if (Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName)
+                && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName)
+                && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName)
+                  && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName))
+            {
+                ddlSalesperson.SelectedValue = DataHelper.CurrentPerson.Id.ToString();
+            }          
+
+            if(ddlProjectGroup.Items.Count> 0)
             ddlProjectGroup.SelectedIndex = 0;
+
             ddlProjectGroup.Enabled = ddlDirector.Enabled = ddlSalesperson.Enabled = false;
         }
 
@@ -456,8 +467,9 @@ namespace PraticeManagement
 
                     chbIsChargeable.Checked = client.IsChargeable;
 
-                    //// When the Practice Manager creates a project the salesperson must be default for the client
-                    if (Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName))
+                   
+                    if (Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName) && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName)
+                        && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName))
                     {
                         ddlSalesperson.SelectedValue = DataHelper.CurrentPerson.Id.ToString();
                     }
@@ -819,18 +831,6 @@ namespace PraticeManagement
                 bool userIsDirector =
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName); // #2817: userIsDirector is added as per the requirement.
 
-                if (userIsSalesPerson || userIsPracticeManager || userIsDirector) // #2817: userIsDirector is added as per the requirement.
-                {
-                    Person current = DataHelper.CurrentPerson;
-                    if (current != null && current.Id.HasValue)
-                    {
-                        if (userIsSalesPerson)
-                        {
-                            ddlSalesperson.SelectedValue = current.Id.Value.ToString();
-                            ddlSalesperson_SelectedIndexChanged(ddlSalesperson, EventArgs.Empty);
-                        }
-                    }
-                }
 
                 ddlProjectStatus.SelectedIndex =
                        ddlProjectStatus.Items.IndexOf(
