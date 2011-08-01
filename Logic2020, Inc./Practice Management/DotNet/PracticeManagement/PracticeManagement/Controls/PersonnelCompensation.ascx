@@ -13,17 +13,16 @@
         padding-top: 2px;
         padding-bottom: 2px;
         padding-left: 0px !important;
-        
-        }
+    }
 </style>
 <asp:HiddenField ID="hidOldStartDate" runat="server" />
 <asp:HiddenField ID="hidOldEndDate" runat="server" />
 <table class="VerticalAlign">
-    <tr id="trCompensationDate"  runat="server">
+    <tr id="trCompensationDate" runat="server">
         <td>
             Start Date
         </td>
-        <td colspan="2" class="PaddinLeftNone" style="padding-left:6px !important;">
+        <td colspan="2" class="PaddinLeftNone" style="padding-left: 6px !important;">
             <uc2:DatePicker ID="dpStartDate" runat="server" AutoPostBack="true" OnSelectionChanged="Period_SelectionChanged" />
             <asp:Label ID="lblStartDate" runat="server" Visible="false"></asp:Label>
             <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpStartDate"
@@ -38,7 +37,7 @@
         <td>
             End Date
         </td>
-        <td class="PaddinLeftNone" style="padding-left:6px !important;">
+        <td class="PaddinLeftNone" style="padding-left: 6px !important;">
             <uc2:DatePicker ID="dpEndDate" runat="server" AutoPostBack="true" OnSelectionChanged="Period_SelectionChanged" />
         </td>
         <td colspan="2">
@@ -190,7 +189,7 @@
         </td>
         <td>
             $<asp:TextBox ID="txtBonusHourly" runat="server" Width="120px" onchange="setDirty();"
-                OnTextChanged="Compensation_TextChanged" style="text-align:right;"></asp:TextBox>
+                OnTextChanged="Compensation_TextChanged" Style="text-align: right;"></asp:TextBox>
         </td>
         <td style="padding-left: 5px;" colspan="3">
             <asp:CompareValidator ID="compBonusHourly" runat="server" ControlToValidate="txtBonusHourly"
@@ -224,7 +223,7 @@
         </td>
         <td>
             $<asp:TextBox ID="txtBonusAnnual" runat="server" Enabled="False" Width="120px" onchange="setDirty();"
-                OnTextChanged="Compensation_TextChanged" style="text-align:right;"></asp:TextBox>
+                OnTextChanged="Compensation_TextChanged" Style="text-align: right;"></asp:TextBox>
         </td>
         <td style="padding-left: 5px;">
             per Year
@@ -332,14 +331,28 @@
         <td>
             Practice Area
         </td>
-        <td  colspan="2">
-            <asp:DropDownList ID="ddlPractice"  runat="server">
+        <td colspan="2">
+            <asp:DropDownList ID="ddlPractice" runat="server">
             </asp:DropDownList>
         </td>
         <td colspan="5" style="padding-left: 5px;">
             <asp:CustomValidator ID="custValPractice" runat="server" ToolTip="Please select Practice Area"
                 Display="Dynamic" Text="*" ErrorMessage="Please select Practice Area" OnServerValidate="custValPractice_OnServerValidate">
             </asp:CustomValidator>
+        </td>
+    </tr>
+    <tr id="trSalesCommisiion" runat="server">
+        <td>
+            Sales Commission
+        </td>
+        <td style="padding-left: 12px;">
+            <asp:TextBox ID="txtSalesCommission" runat="server"></asp:TextBox>
+        </td>
+        <td colspan="9">
+            <asp:CustomValidator ID="custValSalesCommission" runat="server" Display="Dynamic"
+                Text="*" OnServerValidate="custValSalesCommission_OnServerValidate">
+            </asp:CustomValidator>
+            &nbsp;%&nbsp;of&nbsp;gross&nbsp;margin.
         </td>
     </tr>
 </table>
