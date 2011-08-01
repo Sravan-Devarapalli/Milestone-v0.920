@@ -22,14 +22,15 @@ CREATE PROCEDURE [dbo].[PaySave]
 	@OLD_StartDate       DATETIME,
 	@OLD_EndDate         DATETIME,
 	@SeniorityId		 INT,
-	@PracticeId			 INT
+	@PracticeId			 INT,
+	@SalesCommissionFractionOfMargin DECIMAL(18,2)
 )
 AS
 	SET NOCOUNT ON
 	SET XACT_ABORT ON
 
 	DECLARE @ErrorMessage NVARCHAR(2048) 
-
+	,@RowsEffected INT
 	DECLARE @PersonHireDate DATETIME 
 	
 	SELECT @PersonHireDate = Hiredate 
@@ -93,11 +94,25 @@ AS
 		   SET EndDate = @StartDate
 		 WHERE Person = @PersonId AND EndDate = @OLD_StartDate
 
+		UPDATE dbo.[DefaultCommission]
+		SET EndDate = @StartDate
+		WHERE PersonId = @PersonId
+			   AND [Type] = 1 -- Sales Commission
+			   AND EndDate = @OLD_StartDate
+
 		-- Auto-adjust a next record
 		UPDATE dbo.Pay
-		   SET StartDate = @EndDate
-		 WHERE Person = @PersonId AND StartDate = @OLD_EndDate
+		SET StartDate = @EndDate
+		WHERE Person = @PersonId AND StartDate = @OLD_EndDate
 
+		--SELECT @RowsEffected = @@ROWCOUNT
+
+		UPDATE dbo.[DefaultCommission]
+		SET StartDate = @EndDate
+		WHERE PersonId = @PersonId
+			   AND [Type] = 1 -- Sales Commission
+			   AND StartDate = @OLD_EndDate
+		
 		UPDATE dbo.Pay
 		   SET Amount = @Amount,
 		       Timescale = @Timescale,
@@ -112,6 +127,42 @@ AS
 		       StartDate = @StartDate,
 		       EndDate = @EndDate
 		 WHERE Person = @PersonId AND StartDate = @OLD_StartDate AND EndDate = @OLD_EndDate
+		 IF EXISTS (SELECT 1 FROM dbo.[DefaultCommission] 
+					WHERE PersonId = @PersonId AND [Type] = 1 
+					AND StartDate = @OLD_StartDate
+					)
+		BEGIN
+			IF(@SalesCommissionFractionOfMargin IS NULL)
+				DELETE FROM dbo.[DefaultCommission]
+				WHERE PersonId = @PersonId AND [Type] = 1 
+							AND StartDate = @OLD_StartDate
+			ELSE
+			 UPDATE  dbo.[DefaultCommission]
+			 SET FractionOfMargin = @SalesCommissionFractionOfMargin,
+				 StartDate = @StartDate,
+				 EndDate = @EndDate
+			 WHERE PersonId = @PersonId AND [Type] = 1 
+							AND StartDate = @OLD_StartDate
+		END
+		ELSE IF @SalesCommissionFractionOfMargin IS NOT NULL
+		BEGIN
+			  DECLARE @TempEndDate DATETIME
+			  IF NOT EXISTS (SELECT 1 FROM dbo.[DefaultCommission]
+							 WHERE [TYPE]=1 AND PersonId = @PersonId 
+							 AND StartDate >  @StartDate)
+				AND NOT EXISTS (SELECT 1 FROM dbo.Pay
+								WHERE Person= @PersonId AND StartDate > @StartDate
+				)
+			  SELECT @TempEndDate = '2029-12-31'
+			  ELSE
+				SELECT @TempEndDate = @EndDate
+
+			INSERT INTO dbo.[DefaultCommission]
+							(PersonId, StartDate, EndDate, FractionOfMargin, [type], MarginTypeId)
+			VALUES (@PersonId, @StartDate, @TempEndDate, @SalesCommissionFractionOfMargin, 1, NULL)
+		END
+		
+
 	END
 	ELSE
 	BEGIN
@@ -120,6 +171,12 @@ AS
 		   SET EndDate = @StartDate
 		 WHERE Person = @PersonId AND EndDate > @StartDate
 
+		UPDATE dbo.[DefaultCommission]
+		SET EndDate = @StartDate
+		WHERE PersonId = @PersonId
+			   AND [Type] = 1 -- Sales Commission
+			   AND EndDate > @StartDate
+		
 		INSERT INTO dbo.Pay
 					(Person, StartDate, EndDate, Amount, Timescale, TimesPaidPerMonth, Terms,
 					 VacationDays, BonusAmount, BonusHoursToCollect,
@@ -127,6 +184,12 @@ AS
 			 VALUES (@PersonId, @StartDate, @EndDate, @Amount, @Timescale, @TimesPaidPerMonth, @Terms,
 					 @VacationDays, @BonusAmount, ISNULL(@BonusHoursToCollect, dbo.GetHoursPerYear()),
 					 @DefaultHoursPerDay,@SeniorityId,@PracticeId)
+
+		IF @SalesCommissionFractionOfMargin IS NOT NULL
+		INSERT INTO dbo.[DefaultCommission]
+						(PersonId, StartDate, EndDate, FractionOfMargin, [type], MarginTypeId)
+			VALUES (@PersonId, @StartDate, '2029-12-31', @SalesCommissionFractionOfMargin, 1, NULL)
+
 	END
 	DECLARE @Today DATETIME
 	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,GETDATE()))
