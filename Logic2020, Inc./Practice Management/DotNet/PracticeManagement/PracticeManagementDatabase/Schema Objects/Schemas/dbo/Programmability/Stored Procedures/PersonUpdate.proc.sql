@@ -27,7 +27,8 @@ AS
 	SET NOCOUNT ON
 	DECLARE @ErrorMessage NVARCHAR(2048),
 			@Today			DATETIME,
-			@CurrentPayEndDate DATETIME
+			@CurrentPayEndDate DATETIME,
+			@CurrentSalesCommEndDate DATETIME
 
 	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETDATE())))
 
@@ -136,12 +137,38 @@ AS
 			FROM dbo.Pay P
 			WHERE Person = @PersonId  
 					AND @Today BETWEEN StartDate AND EndDate-1
+			
+			SELECT @CurrentSalesCommEndDate = EndDate
+			FROM dbo.[DefaultCommission] P
+			WHERE PersonId = @PersonId  
+				 AND [Type] = 1 -- Sales Commission
+				 AND @Today BETWEEN StartDate AND EndDate-1
+
 			BEGIN TRY
 					
 				UPDATE dbo.Pay
 				SET EndDate = @Today
 				WHERE Person = @PersonId 
 						AND @Today BETWEEN StartDate AND EndDate-1
+
+				UPDATE dbo.[DefaultCommission]
+				SET EndDate = @Today
+				WHERE PersonId = @PersonId
+					   AND [Type] = 1 -- Sales Commission
+					   AND @Today BETWEEN StartDate AND EndDate-1
+				
+				INSERT INTO dbo.[DefaultCommission]
+						(PersonId, StartDate, EndDate, FractionOfMargin, [type], MarginTypeId)
+				SELECT [PersonId]
+						,@Today
+						,@CurrentSalesCommEndDate
+						,[FractionOfMargin]
+						,[type]
+						,[MarginTypeId]
+				FROM [dbo].[DefaultCommission]
+				WHERE  PersonId = @PersonId 
+							AND EndDate = @Today
+							AND [Type] = 1
 
 				INSERT INTO [dbo].[Pay]
 							   ([Person]
