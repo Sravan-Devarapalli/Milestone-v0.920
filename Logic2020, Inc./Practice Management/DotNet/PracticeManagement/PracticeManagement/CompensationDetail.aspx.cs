@@ -6,6 +6,7 @@ using DataTransferObjects;
 using PraticeManagement.Controls;
 using PraticeManagement.PersonService;
 using PraticeManagement.TimescaleService;
+using System.Linq;
 
 namespace PraticeManagement
 {
@@ -80,6 +81,11 @@ namespace PraticeManagement
                             {
                                 personnelCompensation.PracticeId = person.DefaultPractice.Id;
                             }
+                            if (person.DefaultPersonCommissions != null && person.DefaultPersonCommissions.Any(cl => cl.TypeOfCommission == CommissionType.Sales))
+                            {
+                                var salesComm = person.DefaultPersonCommissions.First(cl => cl.TypeOfCommission == CommissionType.Sales);
+                                personnelCompensation.SalesCommissionFractionOfMargin = salesComm.FractionOfMargin;
+                            }
                             personnelCompensation.StartDateReadOnly = true;
                         }
                         else
@@ -99,6 +105,7 @@ namespace PraticeManagement
                 }
             }
         }
+
         private void PopulateControls(Pay pay)
         {
             personnelCompensation.StartDate = pay.StartDate;
@@ -114,6 +121,7 @@ namespace PraticeManagement
             personnelCompensation.DefaultHoursPerDay = pay.DefaultHoursPerDay;
             personnelCompensation.SeniorityId = pay.SeniorityId;
             personnelCompensation.PracticeId = pay.PracticeId;
+            personnelCompensation.SalesCommissionFractionOfMargin = pay.SalesCommissionFractionOfMargin;
         }
 
         #region Validation
