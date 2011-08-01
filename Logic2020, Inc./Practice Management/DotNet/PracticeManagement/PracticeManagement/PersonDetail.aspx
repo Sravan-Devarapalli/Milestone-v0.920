@@ -588,7 +588,7 @@
                                         <Columns>
                                             <asp:TemplateField HeaderText="Start">
                                                 <ItemTemplate>
-                                                    <asp:LinkButton ID="btnStartDate" runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToShortDateString() %>'
+                                                    <asp:LinkButton ID="btnStartDate" runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>'
                                                         CommandArgument='<%# Eval("StartDate") %>' OnCommand="btnStartDate_Command" OnClientClick="if (!confirmSaveDirty()) return false;"></asp:LinkButton>
                                                 </ItemTemplate>
                                                 <HeaderTemplate>
@@ -599,7 +599,7 @@
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderText="End">
                                                 <ItemTemplate>
-                                                    <asp:Label ID="lblEndDate" runat="server" Text='<%# ((DateTime?)Eval("EndDate")).HasValue ? ((DateTime?)Eval("EndDate")).Value.AddDays(-1).ToShortDateString() : string.Empty %>'></asp:Label></ItemTemplate>
+                                                    <asp:Label ID="lblEndDate" runat="server" Text='<%# ((DateTime?)Eval("EndDate")).HasValue ? ((DateTime?)Eval("EndDate")).Value.AddDays(-1).ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label></ItemTemplate>
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         End</div>
@@ -659,6 +659,17 @@
                                                     <asp:Label ID="Label2" runat="server" Text='<%# Bind("VacationDays") %>'></asp:Label>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Sales Commission %">
+                                                <HeaderTemplate>
+                                                    <div class="ie-bg">
+                                                        Sales Commission %</div>
+                                                </HeaderTemplate>
+                                                <ItemStyle HorizontalAlign="Center" />
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblSalesCommFraction" runat="server" Text='<%# ((decimal?)Eval("SalesCommissionFractionOfMargin")).HasValue ? 
+                                                    ((decimal?)Eval("SalesCommissionFractionOfMargin")).Value.ToString() : string.Empty %>'></asp:Label>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
                                         </Columns>
                                     </asp:GridView>
                                 </asp:Panel>
@@ -686,14 +697,14 @@
                                             </td>
                                             <td>
                                                 <asp:RequiredFieldValidator ID="reqSalesCommissionsGross" runat="server" ControlToValidate="txtSalesCommissionsGross"
-                                                    ErrorMessage="The Gross Margin is required." ToolTip="The Gross Margin is required."
+                                                    ErrorMessage="The Sales Commission % of Gross Margin is required." ToolTip="The Sales Commission % of Gross Margin is required."
                                                     ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                     Display="Dynamic"></asp:RequiredFieldValidator>
                                                 <asp:CompareValidator ID="compSalesCommissionsGross" runat="server" ControlToValidate="txtSalesCommissionsGross"
-                                                    ErrorMessage="A number with 2 decimal digits is allowed for the Gross Margin."
-                                                    ToolTip="A number with 2 decimal digits is allowed for the Gross Margin." ValidationGroup="Person"
-                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                                    Operator="DataTypeCheck" Type="Currency"></asp:CompareValidator>
+                                                    ErrorMessage="A number with 2 decimal digits is allowed for Sales Commission % of Gross Margin."
+                                                    ToolTip="A number with 2 decimal digits is allowed for Sales Commission % of Gross Margin."
+                                                    ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                    Display="Dynamic" Operator="DataTypeCheck" Type="Currency"></asp:CompareValidator>
                                             </td>
                                             <td colspan="3">
                                                 &nbsp;%&nbsp;of&nbsp;gross&nbsp;margin
@@ -1107,7 +1118,7 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <asp:ImageButton ID="imgPrinter" runat="server" ImageUrl="~/Images/printer.png" ToolTip="Print" 
+                                        <asp:ImageButton ID="imgPrinter" runat="server" ImageUrl="~/Images/printer.png" ToolTip="Print"
                                             OnClientClick="return printform();" />
                                     </td>
                                     <td>
