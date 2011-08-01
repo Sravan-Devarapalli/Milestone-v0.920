@@ -242,6 +242,12 @@ namespace DataTransferObjects
             get;
         }
 
+        [DataMember]
+        public decimal? SalesCommissionFractionOfMargin
+        {
+            set;
+            get;
+        }
 
 		#endregion
     }
