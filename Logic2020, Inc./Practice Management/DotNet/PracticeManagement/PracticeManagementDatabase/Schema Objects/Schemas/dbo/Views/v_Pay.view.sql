@@ -31,7 +31,10 @@ AS
 	       p.DefaultHoursPerDay,
 	       t.Name AS TimescaleName,
 		   p.SeniorityId,
-		   p.PracticeId
+		   p.PracticeId,
+		   DC.FractionOfMargin SalesCommissionFractionOfMargin
 	  FROM dbo.Pay AS p
 	       INNER JOIN dbo.Timescale AS t ON p.Timescale = t.TimescaleId
+		   LEFT JOIN dbo.DefaultCommission DC
+		   ON DC.[type] = 1 AND DC.PersonId = p.Person AND DC.StartDate = p.StartDate
 
