@@ -421,7 +421,7 @@ namespace PraticeManagement.Controls
         {
             set
             {
-                trSeniorityAndPractice.Visible = value;
+                trSeniorityAndPractice.Visible = trSalesCommisiion.Visible = value;
             }
         }
 
@@ -484,6 +484,28 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public decimal? SalesCommissionFractionOfMargin
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(txtSalesCommission.Text))
+                {
+                    return Convert.ToDecimal(txtSalesCommission.Text);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    txtSalesCommission.Text = value.ToString();
+                }
+            }
+        }
+
         /// <summary>
         /// Gets a selected <see cref="Pay"/>.
         /// </summary>
@@ -509,6 +531,7 @@ namespace PraticeManagement.Controls
                 result.OldEndDate = OldEndDate;
                 result.SeniorityId = SeniorityId;
                 result.PracticeId = PracticeId;
+                result.SalesCommissionFractionOfMargin = SalesCommissionFractionOfMargin;
 
                 return result;
             }
@@ -659,6 +682,30 @@ namespace PraticeManagement.Controls
             {
                 CompensationChanged(this, e);
             }
+        }
+
+        protected void custValSalesCommission_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            var salesComm = txtSalesCommission.Text;
+            decimal salecCommValue;
+            if (!string.IsNullOrEmpty(salesComm))
+            {
+                if (!decimal.TryParse(salesComm, out salecCommValue))
+                {
+                    e.IsValid = false;
+                    custValSalesCommission.ErrorMessage = custValSalesCommission.ToolTip =
+                        "A number with 2 decimal digits is allowed for the sales commission %.";
+                    return;
+                }
+                else if (salecCommValue < 0.00M)
+                {
+                    e.IsValid = false;
+                    custValSalesCommission.ErrorMessage = custValSalesCommission.ToolTip =
+                        "Sales Commission % must be greater than or equal 0.";
+                    return;
+                }
+            }
+            e.IsValid = true;
         }
     }
 }
