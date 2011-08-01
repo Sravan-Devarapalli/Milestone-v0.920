@@ -33,7 +33,8 @@ AS
 		   p.SeniorityId,
 		   s.Name SeniorityName,
 		   p.PracticeId,
-		   pr.Name PracticeName
+		   pr.Name PracticeName,
+		   p.SalesCommissionFractionOfMargin
 	  FROM dbo.v_Pay AS p
 	  LEFT JOIN dbo.Seniority s ON s.SeniorityId = p.SeniorityId
 	  LEFT JOIN dbo.Practice pr on pr.PracticeId = p.PracticeId
@@ -59,7 +60,8 @@ AS
 		   p.SeniorityId,
 		   s.Name SeniorityName,
 		   p.PracticeId,
-		   pr.Name PracticeName
+		   pr.Name PracticeName,
+		   p.SalesCommissionFractionOfMargin
 	  FROM dbo.v_Pay AS p
 	  LEFT JOIN dbo.Seniority s ON s.SeniorityId = p.SeniorityId
 	  LEFT JOIN dbo.Practice pr on pr.PracticeId = p.PracticeId
