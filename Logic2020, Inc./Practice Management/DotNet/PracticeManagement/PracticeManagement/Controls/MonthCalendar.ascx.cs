@@ -3,6 +3,7 @@ using System.ServiceModel;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.CalendarService;
+using System.Web;
 
 namespace PraticeManagement.Controls
 {
@@ -147,7 +148,7 @@ namespace PraticeManagement.Controls
 			{
 				try
 				{
-					serviceClient.SaveCalendar(item);
+					serviceClient.SaveCalendar(item, HttpContext.Current.User.Identity.Name);
 				}
 				catch (FaultException<ExceptionDetail>)
 				{
