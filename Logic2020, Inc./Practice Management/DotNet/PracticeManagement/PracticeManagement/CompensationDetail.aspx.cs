@@ -260,7 +260,7 @@ namespace PraticeManagement
             {
                 try
                 {
-                    serviceClient.SavePay(pay);
+                    serviceClient.SavePay(pay, HttpContext.Current.User.Identity.Name);
                     personnelCompensation.StartDate = personnelCompensation.StartDate;
                     personnelCompensation.EndDate = personnelCompensation.EndDate;
                     return true;
