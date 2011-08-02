@@ -33,9 +33,9 @@ namespace PracticeManagementService
 		/// Saves a <see cref="CalendarItem"/> object to the database.
 		/// </summary>
 		/// <param name="item">The data to be saved to.</param>
-		public void SaveCalendar(CalendarItem item)
+		public void SaveCalendar(CalendarItem item, string userLogin)
 		{
-			CalendarDAL.CalendarUpdate(item);
+            CalendarDAL.CalendarUpdate(item, userLogin);
 		}
 
         /// <summary>
@@ -53,9 +53,9 @@ namespace PracticeManagementService
             return CalendarDAL.GetRecurringHolidaysList();
         }
 
-        public void SetRecurringHoliday(int recurringHolidayId, bool isSet)
+        public void SetRecurringHoliday(int recurringHolidayId, bool isSet, string userLogin)
         {
-            CalendarDAL.SetRecurringHoliday(recurringHolidayId, isSet);
+            CalendarDAL.SetRecurringHoliday(recurringHolidayId, isSet, userLogin);
         }
 
         public Dictionary<DateTime, string> GetRecurringHolidaysInWeek(DateTime date, int personId)
