@@ -455,8 +455,7 @@
             public const string IdParam = "@Id";
             public const string IsProjectIdParam = "@IsProjectId";
             public const string DaysPrevious = "@DaysPrevious";
-            public const string Id = "@Id";
-            public const string IsSet = "@IsSet";
+            public const string IsSetParam = "@IsSet";
 
 
         }
