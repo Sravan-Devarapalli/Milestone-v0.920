@@ -29,7 +29,7 @@ namespace PraticeManagement.Config
                 {
                     try
                     {
-                        var practices = serviceClient.GetPracticeList().AsQueryable().ToList();
+                        var practices = serviceClient.GetPracticeList().Where(p=>p.IsActive == true).AsQueryable().ToList();
                         ViewState[PracticeList_KEY] = practices;
                         return practices;
                     }
