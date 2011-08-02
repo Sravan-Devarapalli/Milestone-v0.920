@@ -58,7 +58,7 @@ namespace DataAccess
         /// Saves a <see cref="CalendarItem"/> object to the database.
         /// </summary>
         /// <param name="item">The data to be saved to.</param>
-        public static void CalendarUpdate(CalendarItem item)
+        public static void CalendarUpdate(CalendarItem item, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Calendar.CalendarUpdateProcedure, connection))
@@ -70,6 +70,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.DayOff, item.DayOff);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonId,
                                                 item.PersonId.HasValue ? (object) item.PersonId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -242,7 +243,7 @@ namespace DataAccess
             }
         }
 
-        public static void SetRecurringHoliday(int id, bool isSet)
+        public static void SetRecurringHoliday(int id, bool isSet, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -251,8 +252,9 @@ namespace DataAccess
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
 
-                    command.Parameters.AddWithValue(Constants.ParameterNames.Id, id);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.IsSet, isSet);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IdParam, id);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsSetParam, isSet);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
 
                     connection.Open();
 
