@@ -51,18 +51,6 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
-        private Dictionary<DateTime, string> RecurringHolidaysList
-        {
-            get
-            {
-                return (Dictionary<DateTime, string>)ViewState[ViewStateRecurringHolidaysList];
-            }
-            set
-            {
-                ViewState[ViewStateRecurringHolidaysList] = value;
-            }
-        }
-
         private void UpdateControlStatuses()
         {
             if (RowBehind == null) return;
@@ -160,40 +148,6 @@ namespace PraticeManagement.Controls.TimeEntry
             var selMpe = Array.FindAll(HostingPage.MilestonePersonEntries, mpe => mpe.MilestonePersonId == cell.MilestoneBehind.MilestonePersonId);
 
             DisableInvalidDatesAndChargeability(ste, dateBehind, selMpe);
-
-            if (cell.Day.DayOff && cell.Day.Date.DayOfWeek != DayOfWeek.Sunday && cell.Day.Date.DayOfWeek != DayOfWeek.Saturday)
-            {
-                if (RecurringHolidaysList == null)
-                {
-                    GetRecurringHolidayList(cell.Day.Date, SelectedPerson.Id.Value);
-                }
-                if (RecurringHolidaysList.ContainsKey(cell.Day.Date.Date))
-                {
-                    SetHolidayDescriptionInNote(ste, RecurringHolidaysList[cell.Day.Date.Date]);
-                }
-            }
-        }
-
-        private void GetRecurringHolidayList(DateTime date, int personId)
-        {
-            using (var serviceClient = new CalendarService.CalendarServiceClient())
-            {
-                RecurringHolidaysList = serviceClient.GetRecurringHolidaysInWeek(date, personId);
-            } 
-        }
-
-        private void SetHolidayDescriptionInNote(SingleTimeEntry ste, string description)
-        {
-            var tbNotes = (TextBox)ste.FindControl("tbNotes");
-            var hdnNotes = (HiddenField)ste.FindControl("hdnNotes");
-            var imgNote = (ImageButton)ste.FindControl("imgNote");
-            tbNotes.Text = string.IsNullOrEmpty(tbNotes.Text) ? description : tbNotes.Text;
-            hdnNotes.Value = tbNotes.Text;
-            imgNote.ToolTip = tbNotes.Text;
-            imgNote.ImageUrl
-                = string.IsNullOrEmpty(tbNotes.Text)
-                      ? Constants.ApplicationResources.AddCommentIcon
-                      : Constants.ApplicationResources.RecentCommentIcon;
         }
 
         private void DisableInvalidDatesAndChargeability(SingleTimeEntry ste, DateTime dateBehind, MilestonePersonEntry[] entries)
