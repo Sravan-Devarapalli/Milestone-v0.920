@@ -159,7 +159,7 @@ namespace DataAccess
         /// Saves a <see cref="Pay"/> object to the database.
         /// </summary>
         /// <param name="pay">The <see cref="Pay"/> object to be saved.</param>
-        public static void SavePayDatail(Pay pay, SqlConnection connection = null, SqlTransaction activeTransaction = null)
+        public static void SavePayDatail(Pay pay, SqlConnection connection = null, SqlTransaction activeTransaction = null, string user = null)
         {
             if (connection == null)
             {
@@ -197,7 +197,7 @@ namespace DataAccess
                     pay.PracticeId.HasValue ? (object)pay.PracticeId.Value : DBNull.Value);
                 command.Parameters.AddWithValue(SalesCommFractionOfMarginParam,
                     pay.SalesCommissionFractionOfMargin.HasValue ? (object)pay.SalesCommissionFractionOfMargin.Value : DBNull.Value);
-
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, string.IsNullOrEmpty(user) ? DBNull.Value : (object)user);
                 try
                 {
                     if (connection.State != ConnectionState.Open)
