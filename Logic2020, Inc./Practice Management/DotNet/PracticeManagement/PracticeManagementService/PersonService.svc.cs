@@ -866,9 +866,9 @@ namespace PracticeManagementService
         /// Saves a payment data.
         /// </summary>
         /// <param name="pay">The <see cref="Pay"/> object to be saved.</param>
-        public void SavePay(Pay pay)
+        public void SavePay(Pay pay, string user = null)
         {
-            PayDAL.SavePayDatail(pay);
+            PayDAL.SavePayDatail(pay, null, null, user);
         }
 
         /// <summary>
