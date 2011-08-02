@@ -440,7 +440,7 @@ namespace PracticeManagementService
         /// </summary>
         /// <param name="pay">The <see cref="Pay"/> object to be saved.</param>
         [OperationContract]
-        void SavePay(Pay pay);
+        void SavePay(Pay pay, string user);
 
         /// <summary>
         /// Selects a list of the seniorities.
