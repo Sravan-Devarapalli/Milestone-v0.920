@@ -19,7 +19,7 @@ namespace PraticeManagement.CalendarService {
         DataTransferObjects.CalendarItem[] GetCalendar(System.DateTime startDate, System.DateTime endDate, System.Nullable<int> personId, System.Nullable<int> practiceManagerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/SaveCalendar", ReplyAction="http://tempuri.org/ICalendarService/SaveCalendarResponse")]
-        void SaveCalendar(DataTransferObjects.CalendarItem item);
+        void SaveCalendar(DataTransferObjects.CalendarItem item, string userLogin);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/GetCompanyHolidays", ReplyAction="http://tempuri.org/ICalendarService/GetCompanyHolidaysResponse")]
         int GetCompanyHolidays(int year);
@@ -28,7 +28,7 @@ namespace PraticeManagement.CalendarService {
         DataTransferObjects.Triple<int, string, bool>[] GetRecurringHolidaysList();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/SetRecurringHoliday", ReplyAction="http://tempuri.org/ICalendarService/SetRecurringHolidayResponse")]
-        void SetRecurringHoliday(int recurringHolidayId, bool isSet);
+        void SetRecurringHoliday(int recurringHolidayId, bool isSet, string userLogin);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/GetRecurringHolidaysInWeek", ReplyAction="http://tempuri.org/ICalendarService/GetRecurringHolidaysInWeekResponse")]
         System.Collections.Generic.Dictionary<System.DateTime, string> GetRecurringHolidaysInWeek(System.DateTime date, int personId);
@@ -62,8 +62,8 @@ namespace PraticeManagement.CalendarService {
             return base.Channel.GetCalendar(startDate, endDate, personId, practiceManagerId);
         }
         
-        public void SaveCalendar(DataTransferObjects.CalendarItem item) {
-            base.Channel.SaveCalendar(item);
+        public void SaveCalendar(DataTransferObjects.CalendarItem item, string userLogin) {
+            base.Channel.SaveCalendar(item, userLogin);
         }
         
         public int GetCompanyHolidays(int year) {
@@ -74,8 +74,8 @@ namespace PraticeManagement.CalendarService {
             return base.Channel.GetRecurringHolidaysList();
         }
         
-        public void SetRecurringHoliday(int recurringHolidayId, bool isSet) {
-            base.Channel.SetRecurringHoliday(recurringHolidayId, isSet);
+        public void SetRecurringHoliday(int recurringHolidayId, bool isSet, string userLogin) {
+            base.Channel.SetRecurringHoliday(recurringHolidayId, isSet, userLogin);
         }
         
         public System.Collections.Generic.Dictionary<System.DateTime, string> GetRecurringHolidaysInWeek(System.DateTime date, int personId) {
