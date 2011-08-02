@@ -1079,34 +1079,35 @@
                         <td colspan="2" align="center" style="padding: 6px 6px 2px 6px; text-align: left;">
                             <div id="dvTerminationDateErrors" runat="server" visible="false" style="padding: 0px 0px 5px 0px;
                                 max-height: 200px; overflow-y: auto; color: Red;">
-                                Unable to set Termination Date for this person because of following reasons.<br />
+                                Unable to set Termination Date for this person due to the following:<br />
+                                <br />
                                 <asp:Label ID="lblTimeEntriesExist" runat="server" Visible="false" Text="There are time entries submitted by person after {0}.">
-                                </asp:Label>
-                                <div id="dvProjectMilestomesExist" runat="server">
-                                    <asp:Label ID="lblProjectMilestomesExist" runat="server" Text="Person is assigned to below Project - Milesones after {0}.">
-                                    </asp:Label>
+                                </asp:Label><br />
+                                <div id="dvProjectMilestomesExist" style="padding-top:10px;" runat="server">
+                                    <asp:Label ID="lblProjectMilestomesExist" runat="server" Text="Person is assigned to below Project - Milesones after {0}:">
+                                    </asp:Label><br />
                                     <asp:DataList ID="dtlProjectMilestones" runat="server" Style="white-space: normal;">
                                         <ItemTemplate>
-                                            <%# ((DataTransferObjects.Milestone)Container.DataItem).Project.Name+
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%# ((DataTransferObjects.Milestone)Container.DataItem).Project.Name+
                                              "-" + ((DataTransferObjects.Milestone)Container.DataItem).Description%>
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
-                                <div id="divOwnerProjectsExist" runat="server">
-                                    <asp:Label ID="lblOwnerProjectsExist" runat="server" Text="Person is designated as the Owner to below Active Project(s).">
-                                    </asp:Label>
+                                <div id="divOwnerProjectsExist" style="padding-top:10px;" runat="server">
+                                    <asp:Label ID="lblOwnerProjectsExist" runat="server" Text="Person is designated as the Owner for the following projects:">
+                                    </asp:Label><br />
                                     <asp:DataList ID="dtlOwnerProjects" runat="server" Style="white-space: normal;">
                                         <ItemTemplate>
-                                            <%# ((DataTransferObjects.Project)Container.DataItem).Name %>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%# ((DataTransferObjects.Project)Container.DataItem).Name %>
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
-                                <div id="divOwnerOpportunitiesExist" runat="server">
-                                    <asp:Label ID="lblOwnerOpportunities" runat="server" Text="Person is designated as the Owner to below Active Opportunities.">
-                                    </asp:Label>
+                                <div id="divOwnerOpportunitiesExist" style="padding-top:10px;" runat="server">
+                                    <asp:Label ID="lblOwnerOpportunities" runat="server" Text="Person is designated as the Owner for the following Opportunities.">
+                                    </asp:Label><br />
                                     <asp:DataList ID="dtlOwnerOpportunities" runat="server" Style="white-space: normal;">
                                         <ItemTemplate>
-                                            <%# ((DataTransferObjects.Opportunity)Container.DataItem).Name %>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%# ((DataTransferObjects.Opportunity)Container.DataItem).Name %>
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
