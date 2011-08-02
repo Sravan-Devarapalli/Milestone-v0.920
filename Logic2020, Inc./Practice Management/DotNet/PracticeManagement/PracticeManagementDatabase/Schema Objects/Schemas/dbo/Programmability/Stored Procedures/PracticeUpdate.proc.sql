@@ -14,18 +14,11 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @PreviousPracticeManager INT,
-			@Today					 DATETIME,
-			@IsNotesRequired		 BIT
+			@Today					 DATETIME
 
-	SELECT @PreviousPracticeManager = PracticeManagerId , @IsNotesRequired = IsNotesRequired
+	SELECT @PreviousPracticeManager = PracticeManagerId
 	FROM [dbo].[Practice]
 	WHERE PracticeId = @PracticeId
-
-	IF(@IsActive = 0)
-	BEGIN
-	SET @IsNotesRequired = 1
-	END
-
 
 	SELECT @Today = GETDATE()
 
@@ -33,8 +26,7 @@ BEGIN
 	   SET [Name] = @Name,
 		   PracticeManagerId = @PracticeManagerId,
 		   IsActive = @IsActive,
-		   IsCompanyInternal = @IsCompanyInternal,
-		   IsNotesRequired = @IsNotesRequired
+		   IsCompanyInternal = @IsCompanyInternal
 	 WHERE PracticeId = @PracticeId
  
 	EXEC dbo.PracticeStatusHistoryUpdate
