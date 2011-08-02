@@ -65,6 +65,10 @@
     {
         width: 100%;
     }
+    .setColorToCalendar
+    {
+        background-color: #E9F0F9;
+    }
 </style>
 <table width="98%">
     <tr>
@@ -158,24 +162,24 @@
                             </td>
                         </tr>
                         <tr class="HeadRow">
-                            <td>
+                            <td class="setColorToCalendar">
                                 January
                             </td>
                             <td>
                                 February
                             </td>
-                            <td>
+                            <td class="setColorToCalendar">
                                 March
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td class="setColorToCalendar">
                                 <uc1:MonthCalendar ID="mcJanuary" runat="server" Year="2008" Month="1" OnPreRender="calendar_PreRender" />
                             </td>
                             <td>
                                 <uc1:MonthCalendar ID="mcFebruary" runat="server" Year="2008" Month="2" OnPreRender="calendar_PreRender" />
                             </td>
-                            <td>
+                            <td class="setColorToCalendar">
                                 <uc1:MonthCalendar ID="mcMarch" runat="server" Year="2008" Month="3" OnPreRender="calendar_PreRender" />
                             </td>
                         </tr>
@@ -183,7 +187,7 @@
                             <td>
                                 April
                             </td>
-                            <td>
+                            <td class="setColorToCalendar">
                                 May
                             </td>
                             <td>
@@ -194,7 +198,7 @@
                             <td>
                                 <uc1:MonthCalendar ID="mcApril" runat="server" Year="2008" Month="4" OnPreRender="calendar_PreRender" />
                             </td>
-                            <td>
+                            <td class="setColorToCalendar">
                                 <uc1:MonthCalendar ID="mcMay" runat="server" Year="2008" Month="5" OnPreRender="calendar_PreRender" />
                             </td>
                             <td>
@@ -202,24 +206,24 @@
                             </td>
                         </tr>
                         <tr class="HeadRow">
-                            <td>
+                            <td class="setColorToCalendar">
                                 July
                             </td>
                             <td>
                                 August
                             </td>
-                            <td>
+                            <td class="setColorToCalendar">
                                 September
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td class="setColorToCalendar">
                                 <uc1:MonthCalendar ID="mcJuly" runat="server" Year="2008" Month="7" OnPreRender="calendar_PreRender" />
                             </td>
                             <td>
                                 <uc1:MonthCalendar ID="mcAugust" runat="server" Year="2008" Month="8" OnPreRender="calendar_PreRender" />
                             </td>
-                            <td>
+                            <td class="setColorToCalendar">
                                 <uc1:MonthCalendar ID="mcSeptember" runat="server" Year="2008" Month="9" OnPreRender="calendar_PreRender" />
                             </td>
                         </tr>
@@ -227,7 +231,7 @@
                             <td>
                                 October
                             </td>
-                            <td>
+                            <td class="setColorToCalendar">
                                 November
                             </td>
                             <td>
@@ -238,7 +242,7 @@
                             <td>
                                 <uc1:MonthCalendar ID="mcOctober" runat="server" Year="2008" Month="10" OnPreRender="calendar_PreRender" />
                             </td>
-                            <td>
+                            <td class="setColorToCalendar">
                                 <uc1:MonthCalendar ID="mcNovember" runat="server" Year="2008" Month="11" OnPreRender="calendar_PreRender" />
                             </td>
                             <td>
