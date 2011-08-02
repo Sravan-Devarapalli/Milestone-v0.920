@@ -3427,6 +3427,12 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\OwnerListAllShort.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\CompanyRecurringHolidaysByPeriod.function.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetHolidayTimeTypeId.function.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Schema Comparisons\v0.850.dbschema">
