@@ -1080,10 +1080,9 @@
                             <div id="dvTerminationDateErrors" runat="server" visible="false" style="padding: 0px 0px 5px 0px;
                                 max-height: 200px; overflow-y: auto; color: Red;">
                                 Unable to set Termination Date for this person due to the following:<br />
-                                <br />
-                                <asp:Label ID="lblTimeEntriesExist" runat="server" Visible="false" Text="There are time entries submitted by person after {0}.">
-                                </asp:Label><br />
-                                <div id="dvProjectMilestomesExist" style="padding-top:10px;" runat="server">
+                                <asp:Label ID="lblTimeEntriesExist" runat="server" style="padding-top:7px;" Visible="false" Text="There are time entries submitted by person after {0}.">
+                                </asp:Label>
+                                <div id="dvProjectMilestomesExist" style="padding-top:5px;" runat="server">
                                     <asp:Label ID="lblProjectMilestomesExist" runat="server" Text="Person is assigned to below Project - Milesones after {0}:">
                                     </asp:Label><br />
                                     <asp:DataList ID="dtlProjectMilestones" runat="server" Style="white-space: normal;">
