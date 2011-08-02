@@ -30,7 +30,7 @@ namespace PracticeManagementService
 		/// </summary>
 		/// <param name="item">The data to be saved to.</param>
 		[OperationContract]
-		void SaveCalendar(CalendarItem item);
+		void SaveCalendar(CalendarItem item, string userLogin);
 
         /// <summary>
         /// Returns No. of Company holidays in a given year
@@ -44,7 +44,7 @@ namespace PracticeManagementService
         List<Triple<int, string, bool>> GetRecurringHolidaysList();
 
         [OperationContract]
-        void SetRecurringHoliday(int recurringHolidayId, bool isSet);
+        void SetRecurringHoliday(int recurringHolidayId, bool isSet, string userLogin);
 
         [OperationContract]
         Dictionary<DateTime, string> GetRecurringHolidaysInWeek(DateTime date, int personId);
