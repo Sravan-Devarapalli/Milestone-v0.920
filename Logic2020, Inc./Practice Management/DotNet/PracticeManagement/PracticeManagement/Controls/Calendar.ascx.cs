@@ -219,6 +219,7 @@ namespace PraticeManagement.Controls
         protected void cblRecurringHolidays_OnSelectedIndexChanged(object sender, EventArgs e)
         {
             var item = (ScrollingDropDown)sender;
+            var user = HttpContext.Current.User.Identity.Name;
 
             if (PreviousRecurringHolidaysList != null)
             {
@@ -234,22 +235,22 @@ namespace PraticeManagement.Controls
                     if (selectedItem.Count() > 0 && !check)
                     {
                         previousItem.Third = !check;
-                        SetRecurringHoliday(id, !check);
+                        SetRecurringHoliday(id, !check, user);
                     }
                     else if (check && selectedItem.Count() <= 0)
                     {
                         previousItem.Third = !check;
-                        SetRecurringHoliday(id, !check);
+                        SetRecurringHoliday(id, !check, user);
                     }
                 }
             }
         }
 
-        private void SetRecurringHoliday(int id, bool isSet)
+        private void SetRecurringHoliday(int id, bool isSet, string user)
         {
             using (var serviceClient = new CalendarService.CalendarServiceClient())
             {
-                serviceClient.SetRecurringHoliday(id, isSet);
+                serviceClient.SetRecurringHoliday(id, isSet, user);
             }
         }
 
@@ -303,3 +304,4 @@ namespace PraticeManagement.Controls
         }
     }
 }
+
