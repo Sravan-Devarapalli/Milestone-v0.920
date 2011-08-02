@@ -18,6 +18,10 @@ BEGIN
 							FROM dbo.Settings AS s
 							WHERE SettingsKey='NotesRequiredForTimeEntry' AND TypeId=4)
 
+	IF(@IsActive = 0)
+	BEGIN
+	SET @IsNotesRequired = 1
+	END
 	
 	IF EXISTS(SELECT 1 FROM dbo.Practice WHERE [Name] = @Name)
 	BEGIN
