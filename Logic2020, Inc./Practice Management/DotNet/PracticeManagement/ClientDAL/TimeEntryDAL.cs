@@ -899,6 +899,20 @@ namespace DataAccess
             var isChargeableIndex = reader.GetOrdinal(Constants.ParameterNames.IsChargeable);
             var isCorrectIndex = reader.GetOrdinal(Constants.ParameterNames.IsCorrect);
             var isReviewedIndex = reader.GetOrdinal(Constants.ParameterNames.IsReviewed);
+            var timeTypeNameIndex = -1;
+            try
+            {
+                timeTypeNameIndex = reader.GetOrdinal(Constants.ParameterNames.TimeTypeName);
+            }
+            catch
+            {
+                timeTypeNameIndex = -1;
+            }
+
+            var timeType = new TimeTypeRecord();
+            timeType.Id = reader.GetInt32(timeTypeIdIndex);
+            if (timeTypeIdIndex != -1)
+                timeType.Name = reader.GetString(timeTypeNameIndex);
 
             var timeEntry = new TimeEntryRecord
                                 {
@@ -906,7 +920,7 @@ namespace DataAccess
                                     Note = reader.GetString(noteIndex),
                                     EntryDate = reader.GetDateTime(entryDateIndex),
                                     MilestoneDate = reader.GetDateTime(milestoneDateIndex),
-                                    TimeType = new TimeTypeRecord(reader.GetInt32(timeTypeIdIndex)),
+                                    TimeType = timeType,
                                     ActualHours = reader.GetFloat(actualHrsIndex),
                                     ForecastedHours = reader.GetFloat(forecastedHrsIndex),
                                     ModifiedDate = reader.GetDateTime(modifiedDateIndex),
