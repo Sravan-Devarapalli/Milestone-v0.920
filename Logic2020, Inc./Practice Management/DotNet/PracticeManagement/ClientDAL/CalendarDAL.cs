@@ -243,7 +243,7 @@ namespace DataAccess
             }
         }
 
-        public static void SetRecurringHoliday(int id, bool isSet, string userLogin)
+        public static void SetRecurringHoliday(int? id, bool isSet, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -252,7 +252,8 @@ namespace DataAccess
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
 
-                    command.Parameters.AddWithValue(Constants.ParameterNames.IdParam, id);
+                    if(id.HasValue)
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IdParam, id.Value);
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsSetParam, isSet);
                     command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
 
