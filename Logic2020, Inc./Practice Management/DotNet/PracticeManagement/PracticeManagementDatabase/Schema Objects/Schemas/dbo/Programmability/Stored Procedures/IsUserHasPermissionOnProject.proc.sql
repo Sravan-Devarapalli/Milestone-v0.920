@@ -1,7 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[IsUserHasPermissionOnProject]
 (
 	@UserLogin NVARCHAR(100),
-	@ProjectId INT
+	@Id INT,
+	@IsProjectId BIT = 1
 )
 AS
 	DECLARE @PersonId INT
@@ -14,6 +15,13 @@ AS
 	SELECT @PersonId = PersonId
 	FROM Person
 	WHERE Alias = @UserLogin
+
+	IF(@IsProjectId != 1)
+	BEGIN
+	SELECT @Id = m.ProjectId FROM Milestone AS m
+	WHERE m.MilestoneId = @Id
+	END
+
 	
 	SELECT @SalespersonId = c.PersonId
 			,@ProjectManagerId = proj.ProjectManagerId
@@ -22,7 +30,7 @@ AS
 			,@ProjectGroup = proj.GroupId
 	FROM Project proj
 	LEFT JOIN dbo.Commission c ON c.ProjectId = proj.ProjectId AND c.CommissionType = 1
-	WHERE proj.ProjectId = @ProjectId
+	WHERE proj.ProjectId = @Id
 	
 	
 	IF EXISTS (SELECT 1
