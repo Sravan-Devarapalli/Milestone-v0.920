@@ -74,6 +74,9 @@ namespace PracticeManagementService
 		[OperationContract]
 		void SaveMilestonePerson(ref MilestonePerson milestonePerson, string userName);
 
+        [OperationContract]
+        void SaveMilestonePersons(List<MilestonePerson> milestonePersons, string userName);
+
 		/// <summary>
 		/// Deletes the specified <see cref="Milestone"/>-<see cref="Person"/> link from the database.
 		/// </summary>
@@ -99,6 +102,9 @@ namespace PracticeManagementService
 	    /// <returns>Computed financials</returns>
 	    [OperationContract]
 	    MilestonePersonComputedFinancials CalculateMilestonePersonFinancials(int milestonePersonId);
+
+        [OperationContract]
+        List<MilestonePerson> GetMilestonePersonsDetailsByMileStoneId(int milestoneId);
 	}
 }
 
