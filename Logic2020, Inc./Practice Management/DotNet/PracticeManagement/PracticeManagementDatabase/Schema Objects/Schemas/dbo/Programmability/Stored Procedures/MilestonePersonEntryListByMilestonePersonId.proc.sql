@@ -1,5 +1,4 @@
 ﻿
-
 CREATE PROCEDURE dbo.MilestonePersonEntryListByMilestonePersonId
 (
 	@MilestonePersonId   INT
@@ -18,7 +17,9 @@ AS
 	       mp.RoleName,
 		   mp.VacationDays,	
 	       mp.ExpectedHours,
-		   mp.Location
+		   mp.Location,
+		   mp.LastName,
+		   mp.FirstName
 	  FROM dbo.v_MilestonePerson AS mp
 	 WHERE mp.MilestonePersonId = @MilestonePersonId
 
