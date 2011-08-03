@@ -44,7 +44,7 @@ namespace PracticeManagementService
         List<Triple<int, string, bool>> GetRecurringHolidaysList();
 
         [OperationContract]
-        void SetRecurringHoliday(int recurringHolidayId, bool isSet, string userLogin);
+        void SetRecurringHoliday(int? recurringHolidayId, bool isSet, string userLogin);
 
         [OperationContract]
         Dictionary<DateTime, string> GetRecurringHolidaysInWeek(DateTime date, int personId);
