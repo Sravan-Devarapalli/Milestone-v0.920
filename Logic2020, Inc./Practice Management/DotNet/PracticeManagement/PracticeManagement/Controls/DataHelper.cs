@@ -1075,7 +1075,7 @@ namespace PraticeManagement.Controls
             }
         }
 
-        private static void FillPersonList(ListControl control, string firstItemText, Person[] persons,
+        public static void FillPersonList(ListControl control, string firstItemText, Person[] persons,
                                            string firstItemValue)
         {
             control.Items.Clear();
@@ -1930,7 +1930,7 @@ namespace PraticeManagement.Controls
             return null;
         }
 
-        public static bool IsUserHasPermissionOnProject(string user, int projectId)
+        public static bool IsUserHasPermissionOnProject(string user, int projectId , bool isProjectNotMilestone = true)
         {
             using (var serviceClient = new ProjectServiceClient())
             {
