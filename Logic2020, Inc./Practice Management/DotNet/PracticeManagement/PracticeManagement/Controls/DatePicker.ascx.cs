@@ -99,7 +99,7 @@ namespace PraticeManagement.Controls
                 }
                 else
                 {
-                    txtDate.Text = value.ToString("MM/dd/yyyy");
+                    txtDate.Text = value.ToShortDateString();
                 }
             }
         }
