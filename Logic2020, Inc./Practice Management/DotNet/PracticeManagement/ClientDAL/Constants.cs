@@ -455,6 +455,7 @@
             public const string IdParam = "@Id";
             public const string IsProjectIdParam = "@IsProjectId";
             public const string DaysPrevious = "@DaysPrevious";
+            public const string Id = "@Id";
             public const string IsSetParam = "@IsSet";
 
 
@@ -674,6 +675,7 @@
                 public const string MilestonePersonGetByMilestonePersonId = "dbo.MilestonePersonGetByMilestonePersonId";
                 public const string MilestonePersonEntryListByMilestonePersonId = "dbo.MilestonePersonEntryListByMilestonePersonId";
                 public const string CheckTimeEntriesForMilestonePerson = "dbo.CheckTimeEntriesForMilestonePerson";
+                public const string MilestonePersonsGetByMilestoneId = "dbo.MilestonePersonsGetByMilestoneId";
             }
 
             public class ProjectExpenses
