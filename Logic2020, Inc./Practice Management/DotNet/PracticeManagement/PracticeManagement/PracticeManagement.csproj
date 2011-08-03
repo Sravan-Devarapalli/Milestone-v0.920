@@ -132,6 +132,7 @@
     <Content Include="Images\printer.png" />
     <Content Include="Images\saveToDisk.png" />
     <Content Include="LoggedOut.aspx" />
+    <Content Include="MilestonePersonList.aspx" />
     <Content Include="ProjectCalendar.aspx" />
     <Content Include="Config\BecomeUser.aspx" />
     <Content Include="Config\Branding.aspx" />
@@ -666,7 +667,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService2.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService3.disco" />
     <None Include="Service References\TimescaleService\TimescaleService1.disco" />
@@ -677,6 +677,7 @@
     <None Include="Service References\OverheadService\OverheadService1.disco" />
     <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\OpportunityService\OpportunityService1.disco" />
+    <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
     <Content Include="Third Party Tools\PdfGenerator\itextsharp.dll" />
     <Content Include="TimeEntrySetting.aspx" />
     <None Include="Web References\AttachmentService\AttachmentService.disco" />
@@ -746,6 +747,13 @@
     </Compile>
     <Compile Include="LoggedOut.aspx.designer.cs">
       <DependentUpon>LoggedOut.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MilestonePersonList.aspx.cs">
+      <DependentUpon>MilestonePersonList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MilestonePersonList.aspx.designer.cs">
+      <DependentUpon>MilestonePersonList.aspx</DependentUpon>
     </Compile>
     <Compile Include="ProjectCalendar.aspx.cs">
       <DependentUpon>ProjectCalendar.aspx</DependentUpon>
