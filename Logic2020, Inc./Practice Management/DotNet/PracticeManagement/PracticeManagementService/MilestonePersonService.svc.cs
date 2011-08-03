@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ServiceModel.Activation;
 using System.Transactions;
@@ -130,6 +131,41 @@ namespace PracticeManagementService
             return result;
         }
 
+        public List<MilestonePerson> GetMilestonePersonsDetailsByMileStoneId(int milestoneId)
+        {
+            List<MilestonePerson> result = MilestonePersonDAL.MilestonePersonsGetByMilestoneId(milestoneId);
+
+            if (result != null)
+            {
+                foreach (var mp in result)
+                {
+                    mp.Entries = MilestonePersonDAL.MilestonePersonEntryListByMilestonePersonId(mp.Id.Value);
+
+                    if (mp.Milestone != null && mp.Milestone.Id.HasValue &&
+                        mp.Person != null && mp.Person.Id.HasValue)
+                    {
+                        // Financials for each entry
+                        foreach (MilestonePersonEntry entry in mp.Entries)
+                        {
+                            entry.ComputedFinancials =
+                                ComputedFinancialsDAL.FinancialsGetByMilestonePersonEntry(
+                                mp.Milestone.Id.Value,
+                                mp.Person.Id.Value,
+                                entry.StartDate);
+                        }
+                    }
+
+                    // Financials for the milestone person assignment
+                    mp.ComputedFinancials =
+                        ComputedFinancialsDAL.FinancialsGetByMilestonePerson(
+                        mp.Milestone.Id.Value,
+                        mp.Person.Id.Value);
+                }
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Checks whether there are any time entries for a given MilestonepersonId.
         /// </summary>
@@ -150,6 +186,13 @@ namespace PracticeManagementService
         {
             MilestonePersonDAL.SaveMilestonePersonWrapper(milestonePerson, userName);
         }
+
+        public void SaveMilestonePersons(List<MilestonePerson> milestonePersons, string userName)
+        {
+            MilestonePersonDAL.SaveMilestonePersonsWrapper(milestonePersons, userName);
+        }
+
+        
 
         /// <summary>
         /// Deletes the specified <see cref="Milestone"/>-<see cref="Person"/> link from the database.
