@@ -1043,11 +1043,11 @@ namespace PracticeManagementService
 
         }
 
-        public bool IsUserHasPermissionOnProject(string user, int projectId)
+        public bool IsUserHasPermissionOnProject(string user, int id, bool isProjectId)
         {
             try
             {
-                return ProjectDAL.IsUserHasPermissionOnProject(user, projectId);
+                return ProjectDAL.IsUserHasPermissionOnProject(user, id, isProjectId);
             }
             catch (Exception e)
             {
