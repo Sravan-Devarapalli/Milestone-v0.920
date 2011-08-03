@@ -29,6 +29,7 @@ namespace PraticeManagement.Controls.TimeEntry
         #region Properties
 
         public TeGridRow RowBehind { get; set; }
+        private bool isSpecialTimeType { get; set; }
         public Person SelectedPerson
         {
             get
@@ -115,13 +116,23 @@ namespace PraticeManagement.Controls.TimeEntry
             Page.Validate(ClientID);
         }
 
-        public void UpdateTimeEntries()
+        public void UpdateTimeEntries(List<int> hasSpecialTimeType)
         {
             TimeEntryHelper.FillProjectMilestones(
                 ddlProjectMilestone,
                 HostingPage.MilestonePersonEntries);
 
+            isSpecialTimeType = (RowBehind.TimeTypeBehind != null && hasSpecialTimeType!=null && hasSpecialTimeType.Any(i => i == RowBehind.TimeTypeBehind.Id));
             UpdateControlStatuses();
+
+            if (!isSpecialTimeType && hasSpecialTimeType!= null && hasSpecialTimeType.Count > 0)
+            {
+                foreach (var item in hasSpecialTimeType)
+                {
+                    ddlTimeTypes.Items.Remove(ddlTimeTypes.Items.FindByValue(item.ToString()));
+                }
+            }
+                
 
             tes.DataSource = RowBehind;
             tes.DataBind();
@@ -137,6 +148,10 @@ namespace PraticeManagement.Controls.TimeEntry
             ste.ProjectMilestoneDropdownClientId = this.ddlProjectMilestone.ClientID;
             ste.TimeTypeDropdownClientId = this.ddlTimeTypes.ClientID;
             InitTimeEntryControl(ste, cell);
+            if (isSpecialTimeType && cell.TimeEntry == null)
+            {
+                ste.Disabled = true;
+            }
         }
 
         private void InitTimeEntryControl(SingleTimeEntry ste, TeGridCell cell)
