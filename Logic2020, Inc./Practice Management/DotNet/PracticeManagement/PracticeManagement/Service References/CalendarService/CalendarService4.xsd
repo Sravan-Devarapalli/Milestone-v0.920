@@ -61,7 +61,7 @@
   <xs:element name="SetRecurringHoliday">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="recurringHolidayId" type="xs:int" />
+        <xs:element minOccurs="0" name="recurringHolidayId" nillable="true" type="xs:int" />
         <xs:element minOccurs="0" name="isSet" type="xs:boolean" />
         <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
       </xs:sequence>
