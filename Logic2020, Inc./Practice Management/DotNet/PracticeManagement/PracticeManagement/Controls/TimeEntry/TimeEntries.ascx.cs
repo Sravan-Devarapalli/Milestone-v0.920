@@ -46,6 +46,9 @@ namespace PraticeManagement.Controls.TimeEntry
         private const string VIEW_STATE_SELECTED_MPES = "A753603D-4746-4B07-B914-29F040022F6C";
         private const string dropdown_ErrorMessageKey = "MilestoneProjectTimeType";
         private const int DefaultTabIndex = 5;
+        private const string View_State_SpecialTimeType = "SpecialTimeType";
+        private const string HolidayTimeType = "Holiday";
+        private const string PTOTimeType = "PTO";
 
         #endregion
 
@@ -144,8 +147,23 @@ namespace PraticeManagement.Controls.TimeEntry
                 repEntriesHeader.DataSource = SelectedDates;
                 repEntriesHeader.DataBind();
 
+                var specialTimeTypes = grid.Where(g => g.TimeTypeBehind != null 
+                                                    && (g.TimeTypeBehind.Name.ToLower() == HolidayTimeType.ToLower() || g.TimeTypeBehind.Name.ToLower() == PTOTimeType.ToLower())
+                                                );
+
                 if (addEmpty)
+                {
                     grid.AddEmptyRow();
+                }
+                else if (grid.Count() == specialTimeTypes.Count())
+                {
+                    grid.AddEmptyRow();
+                }
+
+                if (specialTimeTypes.Count() > 0)
+                    ViewState[View_State_SpecialTimeType] = specialTimeTypes.Select(g => g.TimeTypeBehind.Id).ToList();
+                else
+                    ViewState[View_State_SpecialTimeType] = null;
 
                 tes.DataSource = grid;
                 tes.DataBind();
@@ -174,7 +192,7 @@ namespace PraticeManagement.Controls.TimeEntry
             var row = e.Item.DataItem as TeGridRow;
 
             bar.RowBehind = row;
-            bar.UpdateTimeEntries();
+            bar.UpdateTimeEntries((List<int>)ViewState[View_State_SpecialTimeType]);
         }
 
         internal bool SaveData()
