@@ -181,7 +181,8 @@ namespace PraticeManagement.Controls
 
                 if (!string.IsNullOrEmpty(firstItem))
                 {
-                    cblRecurringHolidays.Items.Add(firstItem);
+                    var firstListItem = new ListItem(firstItem, "-1");
+                    cblRecurringHolidays.Items.Add(firstListItem);
 
                     if (PreviousRecurringHolidaysList.Count() == PreviousRecurringHolidaysList.Where(p => p.Third == true).Count())
                     {
@@ -221,7 +222,11 @@ namespace PraticeManagement.Controls
             var item = (ScrollingDropDown)sender;
             var user = HttpContext.Current.User.Identity.Name;
 
-            if (PreviousRecurringHolidaysList != null)
+            if (item.Items[0].Selected)
+            {
+                SetRecurringHoliday(null, true, user);
+            }
+            else if (PreviousRecurringHolidaysList != null)
             {
                 foreach (var previousItem in PreviousRecurringHolidaysList)
                 {
@@ -246,7 +251,7 @@ namespace PraticeManagement.Controls
             }
         }
 
-        private void SetRecurringHoliday(int id, bool isSet, string user)
+        private void SetRecurringHoliday(int? id, bool isSet, string user)
         {
             using (var serviceClient = new CalendarService.CalendarServiceClient())
             {
