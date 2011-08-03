@@ -767,7 +767,7 @@ namespace PraticeManagement
                 // If new row was added successfully or there was no row, save the grid.
                 if (newEntryValid)
                 {
-                    SaveDate();
+                    SaveData();
                     result = Page.IsValid;
                 }
             }
@@ -1066,7 +1066,7 @@ namespace PraticeManagement
             btnDelete.Visible = !isReadOnly;
         }
 
-        private void SaveDate()
+        private void SaveData()
         {
             MilestonePerson milestonePerson = MilestonePerson;
             PopulateData(milestonePerson);
