@@ -2236,7 +2236,7 @@ namespace DataAccess
             }
         }
 
-        public static bool IsUserHasPermissionOnProject(string user, int projectId)
+        public static bool IsUserHasPermissionOnProject(string user, int id, bool isProjectId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -2246,7 +2246,8 @@ namespace DataAccess
                     command.CommandTimeout = connection.ConnectionTimeout;
 
                     command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, user);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IdParam, id);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsProjectIdParam, isProjectId);
 
                     connection.Open();
 
