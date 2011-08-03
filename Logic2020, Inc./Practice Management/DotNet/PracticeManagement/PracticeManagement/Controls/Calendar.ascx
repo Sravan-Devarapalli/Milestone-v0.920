@@ -38,6 +38,7 @@
                 chkboxes[i].parentNode.style.borderLeft = "5px solid white";
             }
         }
+        chkboxList.parentNode.style.height = ((chkboxes.length * 40) - 20) + "px";
     }
 
 
@@ -156,7 +157,7 @@
                             </td>
                             <td id="tdRecurringHolidaysDetails" runat="server" rowspan="9" class="setCheckboxesLeft"
                                 style="padding-top: 45px; padding-left: 20px;">
-                                <uc:ScrollingDropDown ID="cblRecurringHolidays" runat="server" SetDirty="false" Height="100%"
+                                <uc:ScrollingDropDown ID="cblRecurringHolidays" runat="server" SetDirty="false"
                                     AllSelectedReturnType="AllItems" OnSelectedIndexChanged="cblRecurringHolidays_OnSelectedIndexChanged"
                                     CellPadding="3" AutoPostBack="true" />
                             </td>
