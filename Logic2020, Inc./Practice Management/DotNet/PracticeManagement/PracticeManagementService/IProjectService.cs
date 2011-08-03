@@ -50,7 +50,7 @@ namespace PracticeManagementService
         List<Project> GetProjectListAll();
 
         [OperationContract]
-        List<Project> GetProjectListByDateRange(   bool showProjected,
+        List<Project> GetProjectListByDateRange(bool showProjected,
                                                 bool showCompleted,
                                                 bool showActive,
                                                 bool showInternal,
@@ -341,7 +341,7 @@ namespace PracticeManagementService
         List<Project> AllProjectsWithFinancialTotalsAndPersons();
 
         [OperationContract]
-        bool IsUserHasPermissionOnProject(string user, int projectId);
+        bool IsUserHasPermissionOnProject(string user, int id, bool isProjectId);
 
         [OperationContract]
         bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId);
