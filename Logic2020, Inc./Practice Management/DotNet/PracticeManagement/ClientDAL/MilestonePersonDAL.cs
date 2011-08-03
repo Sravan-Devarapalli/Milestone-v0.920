@@ -709,7 +709,14 @@ namespace DataAccess
                                         ProjectedWorkload = reader.GetDecimal(expectedHoursIndex),
                                         HourlyAmount = !reader.IsDBNull(milestoneHourlyRevenueIndex)
                                                            ? reader.GetDecimal(milestoneHourlyRevenueIndex)
-                                                           : 0
+                                                           : 0,
+                                        MilestonePersonId = reader.GetInt32(milestonePersonIdIndex),
+                                        ThisPerson = new Person()
+                                        {
+                                            Id = reader.GetInt32(personIdIndex),
+                                            FirstName = reader.GetString(firstNameIndex),
+                                            LastName = reader.GetString(lastNameIndex)
+                                        }
                                     };
 
                     if (!reader.IsDBNull(personRoleIdIndex))
@@ -820,7 +827,7 @@ namespace DataAccess
                 {
                     var milestonePerson = new MilestonePerson { Id = reader.GetInt32(milestonePersonIdIndex) };
 
-                     
+
 
                     // Person details
                     milestonePerson.Person = new Person
@@ -1033,6 +1040,8 @@ namespace DataAccess
                 var personSeniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
                 var personIdIndex = reader.GetOrdinal(PersonIdColumn);
                 var locationIndex = reader.GetOrdinal(LocationColumn);
+                var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+                var lastNameIndex = reader.GetOrdinal(LastNameColumn);
 
                 while (reader.Read())
                 {
@@ -1055,6 +1064,8 @@ namespace DataAccess
                                 ThisPerson = new Person
                                                  {
                                                      Id = reader.GetInt32(personIdIndex),
+                                                     FirstName = reader.GetString(firstNameIndex),
+                                                     LastName = reader.GetString(lastNameIndex),
                                                      Seniority = new Seniority
                                                                      {
                                                                          Id = reader.GetInt32(personSeniorityIdIndex)
@@ -1079,6 +1090,49 @@ namespace DataAccess
         }
 
         #endregion
+
+        public static List<MilestonePerson> MilestonePersonsGetByMilestoneId(int milestoneId)
+        {
+
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (
+                var command =
+                    new SqlCommand(Constants.ProcedureNames.MilestonePerson.MilestonePersonsGetByMilestoneId,
+                                   connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneIdParam, milestoneId);
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<MilestonePerson>();
+
+                    ReadMilestonePersonAssociations(reader, result);
+
+                    return  result;
+                }
+            }
+
+        }
+
+        public static void SaveMilestonePersonsWrapper(List<MilestonePerson> milestonePersons, string userName)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                connection.Open();
+                var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted);
+
+                foreach (var mp in milestonePersons)
+                {
+                    SaveMilestonePerson(mp, userName, connection, transaction);
+                }
+
+                transaction.Commit();
+            }
+        }
     }
 }
 
