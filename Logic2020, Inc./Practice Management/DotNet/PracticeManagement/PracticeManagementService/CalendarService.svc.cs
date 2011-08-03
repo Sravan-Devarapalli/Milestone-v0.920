@@ -53,7 +53,7 @@ namespace PracticeManagementService
             return CalendarDAL.GetRecurringHolidaysList();
         }
 
-        public void SetRecurringHoliday(int recurringHolidayId, bool isSet, string userLogin)
+        public void SetRecurringHoliday(int? recurringHolidayId, bool isSet, string userLogin)
         {
             CalendarDAL.SetRecurringHoliday(recurringHolidayId, isSet, userLogin);
         }
