@@ -41,6 +41,11 @@ namespace PraticeManagement
         private const string UserNameParameterName = "userName";
         private const string DuplicatePersonName = "There is another Person with the same First Name and Last Name.";
         private const string DuplicateEmail = "There is another Person with the same Email.";
+        private const string lblTimeEntriesExistFormat = "There are time entries submitted by person after {0}.";
+        private const string lblProjectMilestomesExistFormat = "Person is assigned to below Project - Milesones after {0}:";
+        
+        
+
 
         #endregion
 
@@ -1353,6 +1358,7 @@ namespace PraticeManagement
                 }
             }
         }
+
         protected void custTerminationDateTE_ServerValidate(object source, ServerValidateEventArgs args)
         {
             DateTime? terminationDate = (this.dtpTerminationDate.DateValue != DateTime.MinValue) ? new DateTime?(this.dtpTerminationDate.DateValue) : null;
@@ -1379,7 +1385,7 @@ namespace PraticeManagement
                 if (TEsExistsAfterTerminationDate)
                 {
                     this.lblTimeEntriesExist.Visible = true;
-                    this.lblTimeEntriesExist.Text = string.Format(this.lblTimeEntriesExist.Text, terminationDate.Value.ToString("MM/dd/yyy"));
+                    this.lblTimeEntriesExist.Text = string.Format(lblTimeEntriesExistFormat, terminationDate.Value.ToString("MM/dd/yyy"));
                 }
                 else
                 {
@@ -1388,7 +1394,7 @@ namespace PraticeManagement
                 if (milestonesAfterTerminationDate.Any<Milestone>())
                 {
                     this.dvProjectMilestomesExist.Visible = true;
-                    this.lblProjectMilestomesExist.Text = string.Format(this.lblProjectMilestomesExist.Text, terminationDate.Value.ToString("MM/dd/yyy"));
+                    this.lblProjectMilestomesExist.Text = string.Format(lblProjectMilestomesExistFormat, terminationDate.Value.ToString("MM/dd/yyy"));
                     this.dtlProjectMilestones.DataSource = milestonesAfterTerminationDate;
                     this.dtlProjectMilestones.DataBind();
                 }
