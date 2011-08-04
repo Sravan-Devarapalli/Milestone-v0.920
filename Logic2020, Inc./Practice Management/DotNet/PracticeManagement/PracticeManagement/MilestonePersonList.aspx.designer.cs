@@ -13,13 +13,13 @@ namespace PraticeManagement {
     public partial class MilestonePersonList {
         
         /// <summary>
-        /// pnlBody control.
+        /// upnlBody control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel pnlBody;
+        protected global::System.Web.UI.UpdatePanel upnlBody;
         
         /// <summary>
         /// pdProjectInfo control.
@@ -65,6 +65,24 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAddPerson;
+        
+        /// <summary>
+        /// hdnGetDirty control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnGetDirty;
+        
+        /// <summary>
+        /// hdnEnableSaveButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnEnableSaveButton;
         
         /// <summary>
         /// gvMilestonePersonEntries control.
@@ -119,6 +137,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ValidationSummary vsumMilestonePersonEntry;
+        
+        /// <summary>
+        /// vsumMileStonePersons control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary vsumMileStonePersons;
         
         /// <summary>
         /// pnlChangeMilestone control.
@@ -209,15 +236,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancelAndReturn;
-        
-        /// <summary>
-        /// edeSave control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.ElementDisabler.ElementDisablerExtender edeSave;
     }
 }
 
