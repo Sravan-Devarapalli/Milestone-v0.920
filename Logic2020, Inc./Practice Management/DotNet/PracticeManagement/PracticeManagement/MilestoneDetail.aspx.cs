@@ -15,6 +15,7 @@ using PraticeManagement.Security;
 using PraticeManagement.Utils;
 using System.Web.UI.HtmlControls;
 using Resources;
+using System.Reflection;
 
 namespace PraticeManagement
 {
@@ -193,6 +194,28 @@ namespace PraticeManagement
                 }
                 InitPrevNextButtons();
             }
+        }
+
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            if (!IsPostBack && Request.QueryString["Tabindex"] != null)
+            {
+                SelectView(btnDetail, 1, false);
+                LoadActiveTabIndex(1);
+            }
+
+            if (Request.QueryString["Tabindex"] != null)
+            {
+                // reflect to readonly property 
+                PropertyInfo isreadonly = typeof(System.Collections.Specialized.NameValueCollection).GetProperty("IsReadOnly", BindingFlags.Instance | BindingFlags.NonPublic);
+                // make collection editable 
+                isreadonly.SetValue(this.Request.QueryString, false, null);
+                // remove 
+                this.Request.QueryString.Remove("Tabindex");
+
+                isreadonly.SetValue(this.Request.QueryString, true, null);
+            }
+
         }
 
         protected void cstCheckStartDateForExpensesExistance_OnServerValidate(object sender, ServerValidateEventArgs args)
@@ -541,7 +564,7 @@ namespace PraticeManagement
             return Generic.GetTargetUrlWithReturn(mpePageUrl, Request.Url.AbsoluteUri);
         }
 
-        protected void btnAddPerson_Click(object sender, EventArgs e)
+        protected void btnAddResources_Click(object sender, EventArgs e)
         {
             if (!MilestoneId.HasValue)
             {
@@ -551,13 +574,13 @@ namespace PraticeManagement
                 {
                     int milestoneId = SaveData();
                     Redirect(string.Format(Constants.ApplicationPages.DetailRedirectFormat,
-                        Constants.ApplicationPages.MilestonePersonDetail, milestoneId), milestoneId.ToString());
+                        Constants.ApplicationPages.MilestonePersonList, milestoneId), milestoneId.ToString());
                 }
             }
             else if (!SaveDirty || ValidateAndSave())
             {
                 Redirect(string.Format(Constants.ApplicationPages.DetailRedirectFormat,
-                    Constants.ApplicationPages.MilestonePersonDetail, MilestoneId.Value), MilestoneId.Value.ToString());
+                    Constants.ApplicationPages.MilestonePersonList, MilestoneId.Value), MilestoneId.Value.ToString());
             }
         }
 
@@ -851,7 +874,7 @@ namespace PraticeManagement
                 lblTotalRevenue.Text = Milestone.ComputedFinancials.Revenue.ToString();
                 lblTotalRevenueNet.Text = Milestone.ComputedFinancials.RevenueNet.ToString();
 
-                lblClientDiscountAmount.Text = 
+                lblClientDiscountAmount.Text =
                     (Milestone.ComputedFinancials.Revenue - Milestone.ComputedFinancials.RevenueNet).ToString();
 
                 lblClientDiscount.Text = Milestone.Project.Discount.ToString("##0.00");
@@ -922,7 +945,7 @@ namespace PraticeManagement
                 dtpPeriodTo.ReadOnly = txtFixedRevenue.ReadOnly = isReadOnly;
 
             rbtnFixedRevenue.Enabled = rbtnHourlyRevenue.Enabled = !isReadOnly;
-            btnAddPerson.Visible = btnSave.Visible = btnDelete.Visible = btnMoveMilestone.Visible = !isReadOnly;
+            btnAddResources.Visible = btnSave.Visible = btnDelete.Visible = btnMoveMilestone.Visible = !isReadOnly;
         }
 
         private void SetFooterLabelWithSeniority(string labelValue, ITextControl label)
