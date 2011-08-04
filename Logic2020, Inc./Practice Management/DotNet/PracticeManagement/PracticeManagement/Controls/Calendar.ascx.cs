@@ -225,6 +225,10 @@ namespace PraticeManagement.Controls
             if (item.Items[0].Selected)
             {
                 SetRecurringHoliday(null, true, user);
+                foreach (var previousItem in PreviousRecurringHolidaysList)
+                {
+                    previousItem.Third = true;
+                }
             }
             else if (PreviousRecurringHolidaysList != null)
             {
