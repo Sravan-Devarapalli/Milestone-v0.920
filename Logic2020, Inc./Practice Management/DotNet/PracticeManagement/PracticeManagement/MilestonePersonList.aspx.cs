@@ -16,6 +16,7 @@ using Resources;
 using System.Web.UI.HtmlControls;
 using System.Linq;
 using PraticeManagement.PersonRoleService;
+using PraticeManagement.Controls.Milestones;
 
 namespace PraticeManagement
 {
@@ -32,9 +33,15 @@ namespace PraticeManagement
         private const string DDLPERSON_KEY = "ddlPerson";
         private const string DDLROLE_KEY = "ddlRole";
         private const string DEFAULT_NUMBER_HOURS_PER_DAY = "8";
-        private const string BUTTON_INSERT_ID = "btnInsert";
+        private const string PERSON_ID_KEY = "PERSON_ID_KEY";
+        private const string mpbar = "mpbar";
         private const string DuplPersonName = "The specified person is already assigned on this milestone.";
         private const string lblTargetMargin = "lblTargetMargin";
+        private const string dpPersonStartInsert = "dpPersonStartInsert";
+        private const string dpPersonEndInsert = "dpPersonEndInsert";
+        private const string txtAmountInsert = "txtAmountInsert";
+        private const string txtHoursPerDayInsert = "txtHoursPerDayInsert";
+        private const string txtHoursInPeriodInsert = "txtHoursInPeriodInsert";
 
         #endregion
 
@@ -50,9 +57,9 @@ namespace PraticeManagement
 
         #region Properties
 
-        private String ExMessage { get; set; }
+        public String ExMessage { get; set; }
 
-        protected Milestone Milestone
+        public Milestone Milestone
         {
             get
             {
@@ -77,8 +84,60 @@ namespace PraticeManagement
             set { _milestoneValue = value; }
         }
 
+        public GridView gvMilestonePersonEntriesObject
+        {
+            get { return gvMilestonePersonEntries; }
+        }
 
-        private List<MilestonePerson> MilestonePersons
+        public Label lblMoveMilestoneDateObject
+        {
+            get { return lblMoveMilestoneDate; }
+        }
+
+        public TableRow cellTerminationOrCompensationObject
+        {
+            get { return cellTerminationOrCompensation; }
+        }
+
+        public TableRow cellMoveMilestoneObject
+        {
+            get { return cellMoveMilestone; }
+        }
+
+        public MessageLabel lblResultMessageObject
+        {
+            get
+            {
+                return lblResultMessage;
+            }
+        }
+
+        public Panel pnlChangeMilestoneObject
+        {
+            get
+            {
+                return pnlChangeMilestone;
+            }
+        }
+
+        public ValidationSummary vsumMileStonePersonsObject
+        {
+            get
+            {
+                return vsumMileStonePersons;
+            }
+        }
+
+        public LinkButton btnMoveMilestoneObject
+        {
+            get
+            {
+                return btnMoveMilestone;
+            }
+        }
+
+
+        public List<MilestonePerson> MilestonePersons
         {
             get
             {
@@ -90,7 +149,7 @@ namespace PraticeManagement
             }
         }
 
-        private List<MilestonePersonEntry> AddMilestonePersonEntries
+        public List<MilestonePersonEntry> AddMilestonePersonEntries
         {
             get
             {
@@ -103,7 +162,20 @@ namespace PraticeManagement
         }
 
 
-        private Person[] PersonsListForMilestone
+        public List<Dictionary<string, string>> repeaterOldValues
+        {
+            get
+            {
+                return ViewState["REPEATEROLDVALUES_KEY"] as List<Dictionary<string, string>>;
+            }
+            set
+            {
+                ViewState["REPEATEROLDVALUES_KEY"] = value;
+            }
+        }
+
+
+        public Person[] PersonsListForMilestone
         {
             get
             {
@@ -136,7 +208,7 @@ namespace PraticeManagement
         }
 
 
-        private PersonRole[] RoleListForPersons
+        public PersonRole[] RoleListForPersons
         {
             get
             {
@@ -213,209 +285,6 @@ namespace PraticeManagement
 
         #region Validation
 
-
-
-        protected void custPersonStartInsert_ServerValidate(object sender, ServerValidateEventArgs args)
-        {
-            var custPerson = sender as CustomValidator;
-            var bar = custPerson.NamingContainer as RepeaterItem;
-            var dpPersonStartInsert = bar.FindControl("dpPersonStartInsert") as DatePicker;
-
-            args.IsValid = dpPersonStartInsert.DateValue.Date >= Milestone.StartDate.Date;
-        }
-
-        protected void custPersonEndInsert_ServerValidate(object sender, ServerValidateEventArgs args)
-        {
-            var custPerson = sender as CustomValidator;
-
-            var bar = custPerson.NamingContainer as RepeaterItem;
-
-            var dpPersonEndInsert = bar.FindControl("dpPersonEndInsert") as DatePicker;
-            var ddlPerson = bar.FindControl(DDLPERSON_KEY) as DropDownList;
-
-            var dpPersonEnd = dpPersonEndInsert;
-
-            Person person = GetPersonBySelectedValue(ddlPerson.SelectedValue);
-
-            bool isGreaterThanMilestone = dpPersonEnd.DateValue <= Milestone.ProjectedDeliveryDate;
-
-            if (!isGreaterThanMilestone)
-            {
-                lblMoveMilestoneDate.Text = dpPersonEnd.DateValue.ToShortDateString();
-
-                bool terminationAndCompensation =
-                    ChechTerminationAndCompensation(dpPersonEnd.DateValue, person);
-
-                cellMoveMilestone.Visible = terminationAndCompensation;
-                cellTerminationOrCompensation.Visible =
-                    !terminationAndCompensation;
-            }
-
-            //pnlChangeMilestone.Visible = !isGreaterThanMilestone;
-            //btnMoveMilestone.Enabled = SelectedMilestonePersonId.HasValue;
-            args.IsValid = isGreaterThanMilestone;
-        }
-
-        protected void custPeriodOvberlappingInsert_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-
-            var custPerson = sender as CustomValidator;
-
-            var bar = custPerson.NamingContainer as RepeaterItem;
-
-            var dpPersonStartInsert = bar.FindControl("dpPersonStartInsert") as DatePicker;
-            var dpPersonEndInsert = bar.FindControl("dpPersonEndInsert") as DatePicker;
-            var ddlPerson = bar.FindControl(DDLPERSON_KEY) as DropDownList;
-
-            var dpPersonStart = dpPersonStartInsert;
-            var dpPersonEnd = dpPersonEndInsert;
-
-            DateTime startDate = dpPersonStart.DateValue;
-            DateTime endDate =
-                dpPersonEnd.DateValue != DateTime.MinValue ? dpPersonEnd.DateValue : Milestone.ProjectedDeliveryDate;
-
-
-
-            Person person = GetPersonBySelectedValue(ddlPerson.SelectedValue);
-
-            List<MilestonePersonEntry> entries = new List<MilestonePersonEntry>();
-
-            foreach (var item in MilestonePersons)
-            {
-                entries.AddRange(item.Entries);
-            }
-            entries = entries.OrderBy(entry => entry.ThisPerson.LastName).ThenBy(ent => ent.StartDate).AsQueryable().ToList();
-            // Validate overlapping with other entries.
-            for (int i = 0; i < entries.Count; i++)
-            {
-                if (i != gvMilestonePersonEntries.EditIndex && entries[i].ThisPerson.Id == person.Id.Value)
-                {
-                    DateTime entryStartDate = entries[i].StartDate;
-                    DateTime entryEndDate =
-                        entries[i].EndDate.HasValue
-                            ?
-                                entries[i].EndDate.Value
-                            : Milestone.ProjectedDeliveryDate;
-
-                    if ((startDate >= entryStartDate && startDate <= entryEndDate) ||
-                        (endDate >= entryStartDate && endDate <= entryEndDate))
-                    {
-                        e.IsValid = false;
-                        break;
-                    }
-                }
-            }
-        }
-
-
-        protected void custPeriodVacationOverlappingInsert_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-
-            var custPerson = sender as CustomValidator;
-
-            var bar = custPerson.NamingContainer as RepeaterItem;
-
-            var custPersonStartInsert = bar.FindControl("custPersonStartInsert") as CustomValidator;
-            var compPersonEndInsert = bar.FindControl("compPersonEndInsert") as CompareValidator;
-            var dpPersonStartInsert = bar.FindControl("dpPersonStartInsert") as DatePicker;
-            var dpPersonEndInsert = bar.FindControl("dpPersonEndInsert") as DatePicker;
-            var ddlPerson = bar.FindControl(DDLPERSON_KEY) as DropDownList;
-
-            var custPersonStartDate = custPersonStartInsert;
-            var compPersonEnd = compPersonEndInsert;
-
-            var ddlPersonName = ddlPerson;
-
-            var isStartDateValid = ((System.Web.UI.WebControls.BaseValidator)(custPersonStartDate)).IsValid;
-            var isEndDateValid = compPersonEnd.IsValid;
-
-            if (isStartDateValid && isEndDateValid)
-            {
-                var dpPersonStart = dpPersonStartInsert;
-                var dpPersonEnd = dpPersonEndInsert;
-
-                DateTime startDate = dpPersonStart.DateValue;
-                DateTime endDate =
-                    dpPersonEnd.DateValue != DateTime.MinValue ? dpPersonEnd.DateValue : Milestone.ProjectedDeliveryDate;
-
-                // Validate overlapping with other entries.
-                int days = GetPersonWorkDaysNumber(startDate, endDate, ddlPersonName);
-                if (days == 0)
-                {
-                    e.IsValid = false;
-                }
-            }
-        }
-
-
-        protected void custPersonInsert_ServerValidate(object sender, ServerValidateEventArgs args)
-        {
-            CustomValidator custPerson = sender as CustomValidator;
-
-            var bar = custPerson.NamingContainer as RepeaterItem;
-
-            var ddlPerson = bar.FindControl(DDLPERSON_KEY) as DropDownList;
-
-            Person person = GetPersonBySelectedValue(ddlPerson.SelectedValue);
-
-            List<MilestonePerson> MilestonePersonList = MilestonePersons.Where(mp => mp.Person.Id.Value == person.Id.Value).AsQueryable().ToList();
-
-            List<MilestonePersonEntry> entries = new List<MilestonePersonEntry>();
-
-            foreach (var item in MilestonePersonList)
-            {
-                entries.AddRange(item.Entries);
-            }
-
-            foreach (MilestonePersonEntry entry in entries)
-            {
-                if (person == null ||
-                    person.HireDate > entry.StartDate ||
-                    (person.TerminationDate.HasValue && entry.EndDate.HasValue &&
-                     person.TerminationDate.Value < entry.EndDate))
-                {
-                    args.IsValid = false;
-                    break;
-                }
-            }
-        }
-
-
-        protected void custEntriesInsert_ServerValidate(object sender, ServerValidateEventArgs args)
-        {
-            CustomValidator custPerson = sender as CustomValidator;
-
-            var bar = custPerson.NamingContainer as RepeaterItem;
-
-            var ddlPerson = bar.FindControl(DDLPERSON_KEY) as DropDownList;
-
-            Person person = GetPersonBySelectedValue(ddlPerson.SelectedValue);
-
-            List<MilestonePerson> MilestonePersonList = MilestonePersons.Where(mp => mp.Person.Id.Value == person.Id.Value).AsQueryable().ToList();
-
-            List<MilestonePersonEntry> entries = new List<MilestonePersonEntry>();
-
-            foreach (var item in MilestonePersonList)
-            {
-                entries.AddRange(item.Entries);
-            }
-
-            args.IsValid = entries.Count > 0;
-        }
-
-        protected void custDuplicatedPersonInsert_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            if (!String.IsNullOrEmpty(ExMessage))
-            {
-                args.IsValid = !(ExMessage == DuplPersonName);
-            }
-            else
-            {
-                args.IsValid = true;
-            }
-        }
-
-
         protected void custPersonStart_ServerValidate(object source, ServerValidateEventArgs args)
         {
             var dpPersonStart = ((Control)source).Parent.FindControl("dpPersonStart") as DatePicker;
@@ -445,7 +314,22 @@ namespace PraticeManagement
             }
 
             pnlChangeMilestone.Visible = !isGreaterThanMilestone;
-            ////  btnMoveMilestone.Enabled = SelectedMilestonePersonId.HasValue;
+
+            var entries = new List<MilestonePersonEntry>();
+
+            foreach (var milestonePerson in MilestonePersons)
+            {
+                entries.AddRange(milestonePerson.Entries);
+            }
+
+            entries = entries.OrderBy(entry => entry.ThisPerson.LastName).ThenBy(ent => ent.StartDate).AsQueryable().ToList();
+
+            TimeSpan shift = dpPersonEnd.DateValue.Subtract(Milestone.ProjectedDeliveryDate);
+
+            pnlChangeMilestone.Attributes[MILESTONE_PERSON_ID_ARGUMENT] = entries[gvRow.DataItemIndex].MilestonePersonId.ToString();
+            pnlChangeMilestone.Attributes["ShiftDays"] = shift.Days.ToString();
+
+            btnMoveMilestone.Enabled = !(string.IsNullOrEmpty(entries[gvRow.DataItemIndex].MilestonePersonId.ToString()) && entries[gvRow.DataItemIndex].MilestonePersonId.ToString() != "0");
             args.IsValid = isGreaterThanMilestone;
         }
 
@@ -604,15 +488,22 @@ namespace PraticeManagement
                 DataHelper.IsCompensationCoversMilestone(person, person.HireDate, endDate);
         }
 
-        private Person GetPersonBySelectedValue(String id)
+        public Person GetPersonBySelectedValue(String id)
         {
             if (!string.IsNullOrEmpty(id))
             {
+                if (ViewState[PERSON_ID_KEY] != null && (ViewState[PERSON_ID_KEY] as Person) != null && (ViewState[PERSON_ID_KEY] as Person).Id.ToString() == id)
+                {
+                    return (ViewState[PERSON_ID_KEY] as Person);
+                }
+
                 using (var serviceCLient = new PersonServiceClient())
                 {
                     try
                     {
-                        return serviceCLient.GetPersonById(int.Parse(id));
+                        var person = serviceCLient.GetPersonById(int.Parse(id));
+                        ViewState[PERSON_ID_KEY] = person;
+                        return person;
                     }
                     catch (CommunicationException)
                     {
@@ -626,18 +517,8 @@ namespace PraticeManagement
 
         protected void btnMoveMilestone_Click(object sender, EventArgs e)
         {
-            var editIndex = gvMilestonePersonEntries.EditIndex;
-
-            //  We're using footer row when entering the page, so it's not
-            //  get counted as editable row, so it's index is Count-1
-            GridViewRow gridViewRow =
-                editIndex < 0 ? gvMilestonePersonEntries.FooterRow : gvMilestonePersonEntries.Rows[editIndex];
-            var dpPersonEnd = gridViewRow.FindControl("dpPersonEnd") as DatePicker;
-
-            TimeSpan shift = dpPersonEnd.DateValue.Subtract(Milestone.ProjectedDeliveryDate);
-
-            // DataHelper.ShiftMilestoneEnd(shift.Days, SelectedMilestonePersonId.Value, _milestoneValue.Id.Value);
-
+            var selectedMilestonePersonId = pnlChangeMilestone.Attributes[MILESTONE_PERSON_ID_ARGUMENT];
+            DataHelper.ShiftMilestoneEnd(int.Parse(pnlChangeMilestone.Attributes["ShiftDays"]), int.Parse(selectedMilestonePersonId), Milestone.Id.Value);
             ReturnToPreviousPage();
         }
 
@@ -653,6 +534,16 @@ namespace PraticeManagement
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName) ||
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName) ||
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);// #2817: DirectorRoleName is added as per the requirement.
+            if (gvMilestonePersonEntries.EditIndex < 0 && repPerson.Items.Count == 0 && hdnGetDirty.Value.ToLowerInvariant() == "true")
+            {
+                hdnEnableSaveButton.Value = "true";
+            }
+            else
+            {
+                hdnEnableSaveButton.Value = "false";
+            }
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "EnableOrDisableSaveButton", "EnableOrDisableSaveButton();", true);
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
@@ -683,7 +574,8 @@ namespace PraticeManagement
 
         protected void btnCancelAndReturn_OnClick(object sender, EventArgs e)
         {
-            ReturnToPreviousPage();
+            var returnUrl = Request.QueryString["returnTo"] + "&Tabindex=1";
+            Response.Redirect(returnUrl);
         }
 
         protected override void OnInit(EventArgs e)
@@ -715,6 +607,8 @@ namespace PraticeManagement
                 if (result)
                 {
                     ClearDirty();
+                    hdnGetDirty.Value = "false";
+                    hdnEnableSaveButton.Value = "false";
                 }
             }
 
@@ -862,8 +756,8 @@ namespace PraticeManagement
                             }
                         }
 
-                        ddlPersonName.Enabled = result || MilestonePersons.Where(mp => mp.Id == entry.MilestonePersonId).Count() > 1 ? false : true;
-                        ddlPersonName.SelectedValue = MilestonePersonList[0].Person.Id.Value.ToString();
+                        ddlPersonName.Enabled = result || MilestonePersons.Where(mp => mp.Id == entry.MilestonePersonId).Count() > 0 ? false : true;
+                        ddlPersonName.SelectedValue = entry.ThisPerson.Id.Value.ToString();
 
                     }
 
@@ -901,35 +795,67 @@ namespace PraticeManagement
 
         protected void repPerson_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
+            var repItem = e.Item;
+            var bar = repItem.FindControl(mpbar) as MilestonePersonBar;
+
+            if (gvMilestonePersonEntries.Rows.Count > 0)
+            {
+                if (!(gvMilestonePersonEntries.Rows.Count % 2 == 0))
+                {
+                    if (e.Item.ItemType == ListItemType.Item)
+                    {
+                        bar.BarColor = "#F9FAFF";
+                    }
+                    else if (e.Item.ItemType == ListItemType.AlternatingItem)
+                    {
+                        bar.BarColor = "White";
+                    }
+                }
+            }
 
             DateTime startDate = Milestone.StartDate;
             DateTime endDate = Milestone.ProjectedDeliveryDate;
 
-            var ddlPerson = e.Item.FindControl(DDLPERSON_KEY) as DropDownList;
-            var ddlRole = e.Item.FindControl(DDLROLE_KEY) as DropDownList;
-            var dpPersonStartInsert = e.Item.FindControl("dpPersonStartInsert") as DatePicker;
-            var dpPersonEndInsert = e.Item.FindControl("dpPersonEndInsert") as DatePicker;
 
+            var ddlPerson = bar.FindControl(DDLPERSON_KEY) as DropDownList;
+            var ddlRole = bar.FindControl(DDLROLE_KEY) as DropDownList;
+            var dpPersonStart = bar.FindControl(dpPersonStartInsert) as DatePicker;
+            var dpPersonEnd = bar.FindControl(dpPersonEndInsert) as DatePicker;
+            var txtAmount = bar.FindControl(txtAmountInsert) as TextBox;
+            var txtHoursPerDay = bar.FindControl(txtHoursPerDayInsert) as TextBox;
+            var txtHoursInPeriod = bar.FindControl(txtHoursInPeriodInsert) as TextBox;
 
-            if (dpPersonStartInsert != null)
-                dpPersonStartInsert.DateValue = Milestone.StartDate;
+            if (dpPersonStart != null)
+                dpPersonStart.DateValue = DateTime.Parse(repeaterOldValues[e.Item.ItemIndex][dpPersonStartInsert]);
 
-            if (dpPersonEndInsert != null)
-                dpPersonEndInsert.DateValue = Milestone.ProjectedDeliveryDate;
+            if (dpPersonEnd != null)
+                dpPersonEnd.DateValue = DateTime.Parse(repeaterOldValues[e.Item.ItemIndex][dpPersonEndInsert]);
 
             if (ddlPerson != null)
+            {
                 DataHelper.FillPersonList(ddlPerson, string.Empty, PersonsListForMilestone, string.Empty);
 
+                if (!string.IsNullOrEmpty(repeaterOldValues[e.Item.ItemIndex][DDLPERSON_KEY]))
+                    ddlPerson.SelectedValue = repeaterOldValues[e.Item.ItemIndex][DDLPERSON_KEY];
+            }
+
             if (ddlRole != null)
+            {
                 DataHelper.FillListDefault(ddlRole, string.Empty, RoleListForPersons, false);
 
+                if (!string.IsNullOrEmpty(repeaterOldValues[e.Item.ItemIndex][DDLROLE_KEY]))
+                    ddlRole.SelectedValue = repeaterOldValues[e.Item.ItemIndex][DDLROLE_KEY];
+            }
+
+
+            if (txtAmount != null)
+                txtAmount.Text = repeaterOldValues[e.Item.ItemIndex][txtAmountInsert];
+
+            if (txtHoursPerDay != null)
+                txtHoursPerDay.Text = repeaterOldValues[e.Item.ItemIndex][txtHoursPerDayInsert];
+            if (txtHoursInPeriod != null)
+                txtHoursInPeriod.Text = repeaterOldValues[e.Item.ItemIndex][txtHoursInPeriodInsert];
         }
-
-        private void FillPersonListForMilestone(ListControl control, string firstItemText, int? milestonePersonId, DateTime startDate, DateTime endDate)
-        {
-
-        }
-
 
 
         private List<MilestonePerson> GetMilestonePersons()
@@ -979,43 +905,32 @@ namespace PraticeManagement
             int index = gvRow.DataItemIndex;
 
 
-            if (IsDirty)
+            if (string.IsNullOrEmpty(milestonePersonId) || milestonePersonId == "0")
             {
                 if (ValidateAndSave())
                 {
-                    if (!string.IsNullOrEmpty(milestonePersonId) && milestonePersonId != "0")
+                    List<MilestonePerson> milestonePersons = GetMilestonePersons();
+
+                    var entries = new List<MilestonePersonEntry>();
+
+                    foreach (var milestonePerson in milestonePersons)
                     {
-                        Redirect(GetMpeRedirectUrl(milestonePersonId));
-                    }
-                    else
-                    {
-                        List<MilestonePerson> milestonePersons = GetMilestonePersons();
-
-                        var entries = new List<MilestonePersonEntry>();
-
-                        foreach (var milestonePerson in milestonePersons)
-                        {
-                            entries.AddRange(milestonePerson.Entries);
-                        }
-
-                        entries = entries.OrderBy(entry => entry.ThisPerson.LastName).ThenBy(ent => ent.StartDate).AsQueryable().ToList();
-
-                        if (entries.Count > index)
-                        {
-                            Redirect(GetMpeRedirectUrl(entries[index].MilestonePersonId));
-                        }
-
+                        entries.AddRange(milestonePerson.Entries);
                     }
 
+                    entries = entries.OrderBy(entry => entry.ThisPerson.LastName).ThenBy(ent => ent.StartDate).AsQueryable().ToList();
+
+                    if (entries.Count > index)
+                    {
+                        Redirect(GetMpeRedirectUrl(entries[index].MilestonePersonId));
+                    }
                 }
+
             }
-            else
+            else if (!SaveDirty || ValidateAndSave())
             {
                 Redirect(GetMpeRedirectUrl(milestonePersonId));
             }
-
-
-
         }
 
         protected string GetMpeRedirectUrl(object milestonePersonId)
@@ -1027,11 +942,38 @@ namespace PraticeManagement
                        SelectedId.Value,
                        milestonePersonId);
 
-            return Generic.GetTargetUrlWithReturn(mpePageUrl, Request.Url.AbsoluteUri);
+            return mpePageUrl;
         }
 
         protected void btnAddPerson_Click(object sender, EventArgs e)
         {
+            var repoldValues = new List<Dictionary<string, string>>();
+
+            foreach (RepeaterItem repItem in repPerson.Items)
+            {
+                var bar = repItem.FindControl(mpbar) as MilestonePersonBar;
+
+                var ddlPerson = bar.FindControl(DDLPERSON_KEY) as DropDownList;
+                var ddlRole = bar.FindControl(DDLROLE_KEY) as DropDownList;
+                var dpPersonStart = bar.FindControl(dpPersonStartInsert) as DatePicker;
+                var dpPersonEnd = bar.FindControl(dpPersonEndInsert) as DatePicker;
+                var txtAmount = bar.FindControl(txtAmountInsert) as TextBox;
+                var txtHoursPerDay = bar.FindControl(txtHoursPerDayInsert) as TextBox;
+                var txtHoursInPeriod = bar.FindControl(txtHoursInPeriodInsert) as TextBox;
+
+                var dic = new Dictionary<string, string>();
+                dic.Add(DDLPERSON_KEY, ddlPerson.SelectedValue);
+                dic.Add(DDLROLE_KEY, ddlRole.SelectedValue);
+                dic.Add(dpPersonStartInsert, dpPersonStart.DateValue.ToString());
+                dic.Add(dpPersonEndInsert, dpPersonEnd.DateValue.ToString());
+                dic.Add(txtAmountInsert, txtAmount.Text);
+                dic.Add(txtHoursPerDayInsert, txtHoursPerDay.Text);
+                dic.Add(txtHoursInPeriodInsert, txtHoursInPeriod.Text);
+                repoldValues.Add(dic);
+            }
+
+            repeaterOldValues = repoldValues;
+
             AddRowAndBindRepeater();
         }
 
@@ -1042,65 +984,59 @@ namespace PraticeManagement
                 AddMilestonePersonEntries = new List<MilestonePersonEntry>();
             }
 
-            AddMilestonePersonEntries.Add(new MilestonePersonEntry());
+            if (repeaterOldValues == null)
+            {
+                repeaterOldValues = new List<Dictionary<string, string>>();
+            }
+
+            var entry = new MilestonePersonEntry() { };
+
+            entry.StartDate = Milestone.StartDate;
+            entry.EndDate = Milestone.ProjectedDeliveryDate;
+
+            var dic = new Dictionary<string, string>();
+            dic.Add(DDLPERSON_KEY, string.Empty);
+            dic.Add(DDLROLE_KEY, string.Empty);
+            dic.Add(dpPersonStartInsert, Milestone.StartDate.ToString());
+            dic.Add(dpPersonEndInsert, Milestone.ProjectedDeliveryDate.ToString());
+            dic.Add(txtAmountInsert, string.Empty);
+            dic.Add(txtHoursPerDayInsert, string.Empty);
+            dic.Add(txtHoursInPeriodInsert, string.Empty);
+            repeaterOldValues.Add(dic);
+            repeaterOldValues = repeaterOldValues;
+
+            AddMilestonePersonEntries.Add(entry);
 
             AddMilestonePersonEntries = AddMilestonePersonEntries;
             repPerson.DataSource = AddMilestonePersonEntries;
             repPerson.DataBind();
         }
 
-        //private void plusMakeVisible(bool isplusVisible)
-        //{
-        //    //if (isplusVisible)
-        //    //{
-        //    //    btnPlus.Visible = true;
-        //    //    btnInsert.Visible = false;
-        //    //    btnCancel.Visible = false;
-        //    //    ddlPerson.Visible = ddlRole.Visible = dpPersonStartInsert.Visible = dpPersonEndInsert.Visible = lblAmountInsert.Visible =
-        //    //    txtAmountInsert.Visible = txtHoursInPeriodInsert.Visible = txtHoursPerDayInsert.Visible = false;
-        //    //}
-        //    //else
-        //    //{
-        //    //    btnPlus.Visible = false;
-        //    //    btnInsert.Visible = true;
-        //    //    btnCancel.Visible = true;
-        //    //    ddlPerson.Visible = ddlRole.Visible = dpPersonStartInsert.Visible = dpPersonEndInsert.Visible = lblAmountInsert.Visible =
-        //    //    txtAmountInsert.Visible = txtHoursInPeriodInsert.Visible = txtHoursPerDayInsert.Visible = true;
-        //    //}
-
-        //}
-
-        protected void btnCancel_OnClick(object sender, EventArgs e)
-        {
-            ImageButton btnCancel = sender as ImageButton;
-            var bar = btnCancel.NamingContainer as RepeaterItem;
-            RemoveItemAndDaabindRepeater(bar.ItemIndex);
-        }
-
-        private void RemoveItemAndDaabindRepeater(int barIndex)
+        public void RemoveItemAndDaabindRepeater(int barIndex)
         {
             AddMilestonePersonEntries.RemoveAt(barIndex);
+            repeaterOldValues.RemoveAt(barIndex);
             AddMilestonePersonEntries = AddMilestonePersonEntries;
             repPerson.DataSource = AddMilestonePersonEntries;
             repPerson.DataBind();
         }
 
-        private void AddAndBindRow(RepeaterItem bar)
+        public void AddAndBindRow(RepeaterItem bar)
         {
-            var ddlPerson = bar.FindControl(DDLPERSON_KEY) as DropDownList;
-            var ddlRole = bar.FindControl(DDLROLE_KEY) as DropDownList;
-            var dpPersonStartInsert = bar.FindControl("dpPersonStartInsert") as DatePicker;
-            var dpPersonEndInsert = bar.FindControl("dpPersonEndInsert") as DatePicker;
-            var txtAmountInsert = bar.FindControl("txtAmountInsert") as TextBox;
-            var txtHoursPerDayInsert = bar.FindControl("txtHoursPerDayInsert") as TextBox;
-            var txtHoursInPeriodInsert = bar.FindControl("txtHoursInPeriodInsert") as TextBox;
+            var ddlPerson = bar.FindControl(mpbar).FindControl(DDLPERSON_KEY) as DropDownList;
+            var ddlRole = bar.FindControl(mpbar).FindControl(DDLROLE_KEY) as DropDownList;
+            var dpPersonStart = bar.FindControl(mpbar).FindControl(dpPersonStartInsert) as DatePicker;
+            var dpPersonEnd = bar.FindControl(mpbar).FindControl(dpPersonEndInsert) as DatePicker;
+            var txtAmount = bar.FindControl(mpbar).FindControl(txtAmountInsert) as TextBox;
+            var txtHoursPerDay = bar.FindControl(mpbar).FindControl(txtHoursPerDayInsert) as TextBox;
+            var txtHoursInPeriod = bar.FindControl(mpbar).FindControl(txtHoursInPeriodInsert) as TextBox;
 
             MilestonePerson milestonePerson = new MilestonePerson();
             milestonePerson.Milestone = Milestone;
             milestonePerson.Entries = new List<MilestonePersonEntry>();
             var entry = new MilestonePersonEntry();
-            entry.StartDate = dpPersonStartInsert.DateValue;
-            entry.EndDate = dpPersonEndInsert.DateValue != DateTime.MinValue ? (DateTime?)dpPersonEndInsert.DateValue : null;
+            entry.StartDate = dpPersonStart.DateValue;
+            entry.EndDate = dpPersonEnd.DateValue != DateTime.MinValue ? (DateTime?)dpPersonEnd.DateValue : null;
             if (!string.IsNullOrEmpty(ddlPerson.SelectedValue))
             {
                 var person = GetPersonBySelectedValue(ddlPerson.SelectedValue);
@@ -1123,21 +1059,21 @@ namespace PraticeManagement
                 entry.Role = null;
 
             // Amount
-            if (!string.IsNullOrEmpty(txtAmountInsert.Text))
+            if (!string.IsNullOrEmpty(txtAmount.Text))
             {
-                entry.HourlyAmount = decimal.Parse(txtAmountInsert.Text);
+                entry.HourlyAmount = decimal.Parse(txtAmount.Text);
             }
 
-            if (String.IsNullOrEmpty(txtHoursPerDayInsert.Text) && String.IsNullOrEmpty(txtHoursInPeriodInsert.Text))
+            if (String.IsNullOrEmpty(txtHoursPerDay.Text) && String.IsNullOrEmpty(txtHoursInPeriod.Text))
             {
-                txtHoursPerDayInsert.Text = DEFAULT_NUMBER_HOURS_PER_DAY;
+                txtHoursPerDay.Text = DEFAULT_NUMBER_HOURS_PER_DAY;
             }
 
 
             // Flags
 
-            bool isHoursInPeriodChanged = !String.IsNullOrEmpty(txtHoursInPeriodInsert.Text) &&
-                                          (entry.ProjectedWorkloadWithVacation != decimal.Parse(txtHoursInPeriodInsert.Text));
+            bool isHoursInPeriodChanged = !String.IsNullOrEmpty(txtHoursInPeriod.Text) &&
+                                          (entry.ProjectedWorkloadWithVacation != decimal.Parse(txtHoursInPeriod.Text));
 
             // Check if need to recalculate Hours per day value
             // Get working days person on Milestone for current person
@@ -1148,7 +1084,7 @@ namespace PraticeManagement
             if (isHoursInPeriodChanged)
             {
                 // Recalculate hours per day according to HoursInPerod 
-                hoursPerDay = (days != 0) ? decimal.Round(decimal.Parse(txtHoursInPeriodInsert.Text) / days, 2) : 0;
+                hoursPerDay = (days != 0) ? decimal.Round(decimal.Parse(txtHoursInPeriod.Text) / days, 2) : 0;
                 // If calculated value more then 24 hours set 24 hours as maximum value for working day
                 entry.HoursPerDay = (hoursPerDay > 24M) ? 24M : hoursPerDay;
                 // Recalculate Hours In Period
@@ -1157,8 +1093,8 @@ namespace PraticeManagement
             else
             {
                 // If Hours Per Day is ommited set 8 hours as default value for working day
-                entry.HoursPerDay = !String.IsNullOrEmpty(txtHoursPerDayInsert.Text)
-                                        ? decimal.Parse(txtHoursPerDayInsert.Text)
+                entry.HoursPerDay = !String.IsNullOrEmpty(txtHoursPerDay.Text)
+                                        ? decimal.Parse(txtHoursPerDay.Text)
                                         : 8M;
                 // Recalculate Hours In Period
                 entry.ProjectedWorkload = entry.HoursPerDay * days;
@@ -1172,27 +1108,9 @@ namespace PraticeManagement
 
             FillMilestonePersonEntries(MilestonePersons);
 
-            IsDirty = true;
-
         }
 
-        protected void btnInsertPerson_Click(object sender, EventArgs e)
-        {
-            ImageButton btnCancel = sender as ImageButton;
-            var bar = btnCancel.NamingContainer as RepeaterItem;
 
-            Page.Validate(vsumMilestonePersonEntry.ValidationGroup);
-            if (Page.IsValid)
-            {
-                lblResultMessage.ClearMessage();
-                AddAndBindRow(bar);
-
-                pnlChangeMilestone.Visible = false;
-                RemoveItemAndDaabindRepeater(bar.ItemIndex);
-            }
-
-
-        }
 
 
         protected void imgMilestonePersonEntryEdit_OnClick(object sender, EventArgs e)
