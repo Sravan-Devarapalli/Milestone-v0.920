@@ -129,6 +129,7 @@
   <ItemGroup>
     <Content Include="ActivityLog.aspx" />
     <Content Include="Controls\Calendar.ascx" />
+    <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Images\printer.png" />
     <Content Include="Images\saveToDisk.png" />
     <Content Include="LoggedOut.aspx" />
@@ -740,6 +741,13 @@
     </Compile>
     <Compile Include="Controls\Calendar.ascx.designer.cs">
       <DependentUpon>Calendar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Milestones\MilestonePersonBar.ascx.cs">
+      <DependentUpon>MilestonePersonBar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Milestones\MilestonePersonBar.ascx.designer.cs">
+      <DependentUpon>MilestonePersonBar.ascx</DependentUpon>
     </Compile>
     <Compile Include="LoggedOut.aspx.cs">
       <DependentUpon>LoggedOut.aspx</DependentUpon>
