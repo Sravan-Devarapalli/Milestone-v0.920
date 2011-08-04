@@ -292,13 +292,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CheckBox chbConsultantsCanAdjust;
         
         /// <summary>
-        /// btnAddPerson control.
+        /// btnAddResources control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedTextButton btnAddPerson;
+        protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedTextButton btnAddResources;
         
         /// <summary>
         /// tblMilestoneDetailTabViewSwitch control.
