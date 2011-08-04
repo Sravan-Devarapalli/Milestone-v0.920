@@ -351,6 +351,13 @@ namespace PraticeManagement
                 mpCumulativeDaily.ActivityPeriod = MilestonePerson;
                 DisplayPersonRate(MilestonePerson.ComputedFinancials);
             }
+
+            ddlPersonName.Enabled = !SelectedMilestonePersonId.HasValue;
+
+            if (MilestonePerson != null && MilestonePerson.Id.HasValue && MilestonePerson.Id.Value > 0)
+            {
+                ddlPersonName.Enabled = false;
+            }
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
