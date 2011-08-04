@@ -153,8 +153,9 @@
                             <asp:RequiredFieldValidator ID="reqMilestoneName" runat="server" ControlToValidate="txtMilestoneName"
                                 ErrorMessage="The Milestone Name is required." ToolTip="The Milestone Name is required."
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="Milestone"></asp:RequiredFieldValidator>
-                            <asp:CustomValidator ID="cvMilestoneName" runat="server" ControlToValidate="txtMilestoneName" OnServerValidate="cvMilestoneName_Validate"
-                                ErrorMessage="The Milestone Name should be less than or equal to 55 characters" ToolTip="The Milestone Name should be less than or equal to 55 characters" Text="*"
+                            <asp:CustomValidator ID="cvMilestoneName" runat="server" ControlToValidate="txtMilestoneName"
+                                OnServerValidate="cvMilestoneName_Validate" ErrorMessage="The Milestone Name should be less than or equal to 55 characters"
+                                ToolTip="The Milestone Name should be less than or equal to 55 characters" Text="*"
                                 EnableClientScript="false" SetFocusOnError="true" ValidationGroup="Milestone"></asp:CustomValidator>
                         </td>
                         <td>
@@ -262,8 +263,8 @@
                     </tr>
                 </table>
             </div>
-            <asp:ShadowedTextButton ID="btnAddPerson" runat="server" OnClick="btnAddPerson_Click"
-                OnClientClick="if (!confirmSaveDirty()) return false;" Text="Add Person" CssClass="add-btn" />
+            <asp:ShadowedTextButton ID="btnAddResources" runat="server" OnClick="btnAddResources_Click"
+                OnClientClick="if (!confirmSaveDirty()) return false;" Text="Add Resources" CssClass="add-btn" />
             <asp:Table ID="tblMilestoneDetailTabViewSwitch" runat="server" CssClass="CustomTabStyle">
                 <asp:TableRow ID="rowSwitcher" runat="server">
                     <asp:TableCell ID="cellFinancials" runat="server" CssClass="SelectedSwitch">
@@ -542,10 +543,11 @@
                 <asp:View ID="vwExpenses" runat="server">
                     <asp:Panel ID="pnlExpenses" runat="server" CssClass="tab-pane">
                         <asp:GridView ID="gvMilestoneExpenses" runat="server" DataSourceID="odsMilestoneExpenses"
-                            EmptyDataText="No expenses are there for this Milestone period." ShowFooter="True" AutoGenerateColumns="False"
-                            AlternatingRowStyle-BackColor="#e0e0e0" DataKeyNames="Id" OnRowDataBound="gvMilestoneExpenses_OnRowDataBound"
-                            FooterStyle-Font-Bold="true" FooterStyle-VerticalAlign="Top" CssClass="CompPerfTable WholeWidth"
-                            GridLines="None" BackColor="White">
+                            EmptyDataText="No expenses are there for this Milestone period." ShowFooter="True"
+                            AutoGenerateColumns="False" AlternatingRowStyle-BackColor="#e0e0e0" DataKeyNames="Id"
+                            OnRowDataBound="gvMilestoneExpenses_OnRowDataBound" FooterStyle-Font-Bold="true"
+                            FooterStyle-VerticalAlign="Top" CssClass="CompPerfTable WholeWidth" GridLines="None"
+                            BackColor="White">
                             <AlternatingRowStyle BackColor="#F9FAFF" />
                             <RowStyle BackColor="White" />
                             <Columns>
@@ -773,7 +775,7 @@
         runat="server" Enabled="True" TargetControlID="upnlBody">
         <Animations>
 			<OnUpdating>
-				<EnableAction AnimationTarget="btnAddPerson" Enabled="false" />
+				<EnableAction AnimationTarget="btnAddResources" Enabled="false" />
 			</OnUpdating>
         </Animations>
     </AjaxControlToolkit:UpdatePanelAnimationExtender>
