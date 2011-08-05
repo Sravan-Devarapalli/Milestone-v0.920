@@ -225,7 +225,7 @@ namespace PraticeManagement
             ddlProjectManager.Enabled = ddlDirector.Enabled = (userIsAdministrator || userIsDirector || userIsSalesPerson) && !string.IsNullOrEmpty(ddlClientName.SelectedValue);
             ddlProjectManager.Enabled = (userIsAdministrator || userIsDirector || userIsSalesPerson);
 
-            if (userIsPracticeManager && !ddlProjectManager.Enabled)
+            if (userIsPracticeManager && !ddlProjectManager.Enabled && !ProjectId.HasValue)
             {
                 try
                 {
