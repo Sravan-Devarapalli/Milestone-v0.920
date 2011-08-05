@@ -1934,7 +1934,7 @@ namespace PraticeManagement.Controls
         {
             using (var serviceClient = new ProjectServiceClient())
             {
-                return serviceClient.IsUserHasPermissionOnProject(user, projectId);
+                return serviceClient.IsUserHasPermissionOnProject(user, projectId, isProjectNotMilestone);
             }
         }
 
