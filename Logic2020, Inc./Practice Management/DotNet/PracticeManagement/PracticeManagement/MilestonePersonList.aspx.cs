@@ -25,7 +25,7 @@ namespace PraticeManagement
         #region Constants
 
         private const string MILESTONE_PERSON_ID_ARGUMENT = "milestonePersonId";
-        private const int AMOUNT_COLUMN_INDEX = 4;
+        private const int AMOUNT_COLUMN_INDEX = 6;
         private const string MILESTONE_PERSONS_KEY = "MilestonePersons";
         private const string ADD_MILESTONE_PERSON_ENTRIES_KEY = "ADD_MILESTONE_PERSON_ENTRIES_KEY";
         private const string PERSONSLISTFORMILESTONE_KEY = "PERSONSLISTFORMILESTONE_KEY";
@@ -543,7 +543,7 @@ namespace PraticeManagement
                 hdnEnableSaveButton.Value = "false";
             }
 
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "EnableOrDisableSaveButton", "EnableOrDisableSaveButton();", true);
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "EnableOrDisableSaveButton", "EnableOrDisableSaveButton();SetTooltipsForallDropDowns();", true);
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
@@ -729,63 +729,53 @@ namespace PraticeManagement
                 DateTime startDate = Milestone.StartDate;
                 DateTime endDate = Milestone.ProjectedDeliveryDate;
 
-                if (entry.MilestonePersonId < 0)
+                if (ddlPersonName != null)
                 {
-                    if (ddlPersonName != null)
-                        DataHelper.FillPersonListForMilestone(ddlPersonName, string.Empty, null, startDate,
-                                                              endDate);
-                    label.Text = string.Empty;
-                }
-                else
-                {
-                    if (ddlPersonName != null)
+                    DataHelper.FillPersonList(ddlPersonName, string.Empty, PersonsListForMilestone, string.Empty);
+
+                    List<MilestonePerson> MilestonePersonList = MilestonePersons.Where(mp => mp.Id == entry.MilestonePersonId).AsQueryable().ToList();
+
+                    bool result = false;
+
+                    foreach (var item in MilestonePersonList)
                     {
-                        DataHelper.FillPersonListForMilestone(ddlPersonName, string.Empty, entry.MilestonePersonId, startDate,
-                                                            endDate);
-
-                        List<MilestonePerson> MilestonePersonList = MilestonePersons.Where(mp => mp.Id == entry.MilestonePersonId).AsQueryable().ToList();
-
-                        bool result = false;
-
-                        foreach (var item in MilestonePersonList)
+                        if (item.ActualActivity.Count > 0)
                         {
-                            if (item.ActualActivity.Count > 0)
-                            {
-                                result = true;
-                                break;
-                            }
+                            result = true;
+                            break;
                         }
-
-                        ddlPersonName.Enabled = result || MilestonePersons.Where(mp => mp.Id == entry.MilestonePersonId).Count() > 0 ? false : true;
-                        ddlPersonName.SelectedValue = entry.ThisPerson.Id.Value.ToString();
-
                     }
 
-                    if (ddlRole != null)
+                    ddlPersonName.Enabled = result || MilestonePersons.Where(mp => mp.Id == entry.MilestonePersonId).Count() > 0 ? false : true;
+                    ddlPersonName.SelectedValue = entry.ThisPerson.Id.Value.ToString();
+
+                }
+
+                if (ddlRole != null)
+                {
+                    DataHelper.FillListDefault(ddlRole, string.Empty, RoleListForPersons, false);
+
+                    ddlRole.SelectedIndex =
+                        ddlRole.Items.IndexOf(
+                                                 ddlRole.Items.FindByValue(entry.Role != null
+                                                                               ? entry.Role.Id.ToString()
+                                                                               : string.Empty));
+
+                }
+
+
+                var rowSa = new SeniorityAnalyzer(DataHelper.CurrentPerson);
+                if (rowSa.IsOtherGreater(entry.ThisPerson))
+                {
+                    if (label != null)
+                        label.Text = Resources.Controls.HiddenCellText;
+
+                    if (!(IsUserisOwnerOfProject.HasValue && IsUserisOwnerOfProject.Value))
                     {
-                        DataHelper.FillPersonRoleList(ddlRole, string.Empty);
-
-                        ddlRole.SelectedIndex =
-                            ddlRole.Items.IndexOf(
-                                                     ddlRole.Items.FindByValue(entry.Role != null
-                                                                                   ? entry.Role.Id.ToString()
-                                                                                   : string.Empty));
-
-                    }
-
-                    var rowSa = new SeniorityAnalyzer(DataHelper.CurrentPerson);
-                    if (rowSa.IsOtherGreater(entry.ThisPerson))
-                    {
-                        if (label != null)
-                            label.Text = Resources.Controls.HiddenCellText;
-
-                        if (!(IsUserisOwnerOfProject.HasValue && IsUserisOwnerOfProject.Value))
+                        if (!Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName)
+                            || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName))// #2817: DirectorRoleName is added as per the requirement.
                         {
-                            if (!Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName)
-                                || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName))// #2817: DirectorRoleName is added as per the requirement.
-                            {
-                                e.Row.Enabled = false;
-                            }
+                            e.Row.Enabled = false;
                         }
                     }
                 }
@@ -1021,15 +1011,16 @@ namespace PraticeManagement
             repPerson.DataBind();
         }
 
-        public void AddAndBindRow(RepeaterItem bar)
+        public void AddAndBindRow(RepeaterItem repItem)
         {
-            var ddlPerson = bar.FindControl(mpbar).FindControl(DDLPERSON_KEY) as DropDownList;
-            var ddlRole = bar.FindControl(mpbar).FindControl(DDLROLE_KEY) as DropDownList;
-            var dpPersonStart = bar.FindControl(mpbar).FindControl(dpPersonStartInsert) as DatePicker;
-            var dpPersonEnd = bar.FindControl(mpbar).FindControl(dpPersonEndInsert) as DatePicker;
-            var txtAmount = bar.FindControl(mpbar).FindControl(txtAmountInsert) as TextBox;
-            var txtHoursPerDay = bar.FindControl(mpbar).FindControl(txtHoursPerDayInsert) as TextBox;
-            var txtHoursInPeriod = bar.FindControl(mpbar).FindControl(txtHoursInPeriodInsert) as TextBox;
+            var bar = repItem.FindControl(mpbar) as MilestonePersonBar;
+            var ddlPerson = bar.FindControl(DDLPERSON_KEY) as DropDownList;
+            var ddlRole = bar.FindControl(DDLROLE_KEY) as DropDownList;
+            var dpPersonStart = bar.FindControl(dpPersonStartInsert) as DatePicker;
+            var dpPersonEnd = bar.FindControl(dpPersonEndInsert) as DatePicker;
+            var txtAmount = bar.FindControl(txtAmountInsert) as TextBox;
+            var txtHoursPerDay = bar.FindControl(txtHoursPerDayInsert) as TextBox;
+            var txtHoursInPeriod = bar.FindControl(txtHoursInPeriodInsert) as TextBox;
 
             MilestonePerson milestonePerson = new MilestonePerson();
             milestonePerson.Milestone = Milestone;
