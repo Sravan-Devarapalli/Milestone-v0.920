@@ -77,10 +77,21 @@
                 hdnGetDirty.value = "false";
             }
         }
+
+        function SetTooltipsForallDropDowns() {
+            var optionList = document.getElementsByTagName('option');
+
+            for (var i = 0; i < optionList.length; ++i) {
+
+                optionList[i].title = optionList[i].innerHTML;
+            }
+
+        }
+
     </script>
     <asp:UpdatePanel ID="upnlBody" ChildrenAsTriggers="true" runat="server">
         <ContentTemplate>
-            <uc1:ProjectInfo ID="pdProjectInfo" runat="server"  />
+            <uc1:ProjectInfo ID="pdProjectInfo" runat="server" />
             <p style="margin-top: 10px; margin-bottom: 10px;">
                 Milestone
                 <asp:Label ID="lblMilestoneName" runat="server" Font-Bold="true"></asp:Label>
@@ -90,7 +101,7 @@
             <br />
             <table class="WholeWidth">
                 <tr>
-                    <td align="right" style="padding: 10px;padding-right:0px;">
+                    <td align="right" style="padding: 10px; padding-right: 0px;">
                         <asp:Button ID="btnAddPerson" runat="server" Text="Add Person" OnClick="btnAddPerson_Click"
                             ToolTip="Add Person" />
                         <asp:HiddenField ID="hdnGetDirty" Value="false" runat="server" />
@@ -100,8 +111,8 @@
             </table>
             <asp:GridView ID="gvMilestonePersonEntries" runat="server" AutoGenerateColumns="False"
                 OnRowDataBound="gvMilestonePersonEntries_RowDataBound" CellPadding="0" CssClass="CompPerfTable WholeWidth"
-                OnRowUpdating="gvMilestonePersonEntries_RowUpdating" FooterStyle-Height="25px"
-                GridLines="None" BackColor="White">
+                OnRowUpdating="gvMilestonePersonEntries_RowUpdating" EditRowStyle-Wrap="false"
+                RowStyle-Wrap="false" HeaderStyle-Wrap="false" GridLines="None" BackColor="White">
                 <AlternatingRowStyle BackColor="#F9FAFF" Height="25px" />
                 <RowStyle BackColor="White" Height="25px" />
                 <Columns>
@@ -111,7 +122,7 @@
                                 &nbsp;
                             </div>
                         </HeaderTemplate>
-                        <ItemStyle Width="4%" HorizontalAlign="Center" Height="20px" Wrap="false" />
+                        <ItemStyle Width="5%" HorizontalAlign="Center" Height="20px" Wrap="false" />
                         <ItemTemplate>
                             <asp:ImageButton ID="imgMilestonePersonEntryEdit" ToolTip="Edit" runat="server" OnClientClick="startUpdating();"
                                 OnClick="imgMilestonePersonEntryEdit_OnClick" ImageUrl="~/Images/icon-edit.png" />
@@ -128,7 +139,7 @@
                             <div class="ie-bg no-wrap">
                                 Person</div>
                         </HeaderTemplate>
-                        <ItemStyle Width="28%" Height="20px" />
+                        <ItemStyle Width="22%" Height="20px" />
                         <ItemTemplate>
                             <asp:LinkButton ID="lnkPersonName" runat="server" OnClick="lnkPersonName_OnClick"
                                 MilestonePersonId='<%# Eval("MilestonePersonId") %>' Text='<%# HttpUtility.HtmlEncode(string.Format("{0}, {1}", Eval("ThisPerson.LastName"), Eval("ThisPerson.FirstName"))) %>'
@@ -240,6 +251,11 @@
                                 ToolTip="The Person End Date has an incorrect format. It must be 'MM/dd/yyyy'."
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                 Operator="DataTypeCheck" Type="Date" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
+                            <asp:CompareValidator ID="compPersonEnd" runat="server" ControlToValidate="dpPersonEnd"
+                                ControlToCompare="dpPersonStart" ErrorMessage="The Person End Date must be greater than or equal to the Person Start Date."
+                                ToolTip="The Person End Date must be greater than or equal to the Person Start Date."
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                ValidationGroup="MilestonePersonEntry" Operator="GreaterThanEqual" Type="Date"></asp:CompareValidator>
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
@@ -247,7 +263,7 @@
                             <div class="ie-bg no-wrap">
                                 Hours per day</div>
                         </HeaderTemplate>
-                        <ItemStyle Width="8%" HorizontalAlign="Center" />
+                        <ItemStyle Width="10%" Height="20px" HorizontalAlign="Center" />
                         <ItemTemplate>
                             <asp:Label ID="lblHoursPerDay" runat="server" Text='<%# Eval("HoursPerDay") %>'></asp:Label>
                         </ItemTemplate>
@@ -271,12 +287,13 @@
                             <div class="ie-bg no-wrap">
                                 Hourly Rate</div>
                         </HeaderTemplate>
-                        <ItemStyle Width="8%" Wrap="false" HorizontalAlign="Center" />
+                        <ItemStyle Width="8%" Wrap="false" Height="20px" HorizontalAlign="Center" />
                         <ItemTemplate>
                             <asp:Label ID="lblAmount" runat="server" Text='<%# Eval("HourlyAmount") != null ? Eval("HourlyAmount") : string.Empty %>'></asp:Label>
                         </ItemTemplate>
                         <EditItemTemplate>
-                            $<asp:TextBox ID="txtAmount" runat="server" onchange="setDirty();" Width="70%" Text='<%# Eval("HourlyAmount") != null ? Eval("HourlyAmount.Value") : string.Empty %>'></asp:TextBox>
+                            <asp:Label ID="lblAmountInsert" runat="server" Text="$"></asp:Label>
+                            <asp:TextBox ID="txtAmount" runat="server" onchange="setDirty();" Width="70%" Text='<%# Eval("HourlyAmount") != null ? Eval("HourlyAmount.Value") : string.Empty %>'></asp:TextBox>
                             <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmount"
                                 ErrorMessage="The Amount is required." ToolTip="The Amount is required." Text="*"
                                 SetFocusOnError="true" EnableClientScript="false" Display="Dynamic" ValidationGroup="MilestonePersonEntry"
@@ -292,7 +309,7 @@
                             <div class="ie-bg no-wrap">
                                 Margin %</div>
                         </HeaderTemplate>
-                        <ItemStyle Width="7%" HorizontalAlign="Right" />
+                        <ItemStyle Width="7%" Height="20px" HorizontalAlign="Right" />
                         <ItemTemplate>
                             <asp:Label ID="lblTargetMargin" runat="server" Text='<%# string.Format(Constants.Formatting.PercentageFormat, Eval("ComputedFinancials.TargetMargin") ?? 0) %>'></asp:Label>
                         </ItemTemplate>
@@ -302,7 +319,7 @@
                             <div class="ie-bg no-wrap">
                                 Total Hours in Milestone</div>
                         </HeaderTemplate>
-                        <ItemStyle Width="12%" HorizontalAlign="Center" />
+                        <ItemStyle Width="16%" Height="20px" HorizontalAlign="Center" />
                         <ItemTemplate>
                             <asp:Label ID="lblHoursInPeriodDay" runat="server" Text='<%# Eval("ProjectedWorkloadWithVacation")  %>'></asp:Label>
                             <asp:Label ID="lblVacationIncludedAsterix" runat="server" Text="*" ForeColor="Red"
@@ -323,30 +340,18 @@
                                 MinimumValue="0" MaximumValue="15000" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
                         </EditItemTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField>
-                        <ItemTemplate>
-                            &nbsp;</ItemTemplate>
-                        <ItemStyle Width="1%" />
-                        <EditItemTemplate>
-                            <asp:CompareValidator ID="compPersonEnd" runat="server" ControlToValidate="dpPersonEnd"
-                                ControlToCompare="dpPersonStart" ErrorMessage="The Person End Date must be greater than or equal to the Person Start Date."
-                                ToolTip="The Person End Date must be greater than or equal to the Person Start Date."
-                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                ValidationGroup="MilestonePersonEntry" Operator="GreaterThanEqual" Type="Date"></asp:CompareValidator>
-                        </EditItemTemplate>
-                    </asp:TemplateField>
                 </Columns>
             </asp:GridView>
-            <asp:Panel ID="pnlInsertMilestonePerson" runat="server" Wrap="False">
+            <asp:Panel ID="pnlInsertMilestonePerson" runat="server">
                 <table width="100%" class="CompPerfTable WholeWidth" cellspacing="0" border="0" style="background-color: White;
                     border-collapse: collapse;">
-                    <tr id="thInsertMilestonePerson" runat="server" visible="false">
-                        <th align="center" style="height: 20px; width: 4%; white-space: nowrap;" scope="col">
+                    <tr id="thInsertMilestonePerson" runat="server" style="white-space: nowrap;" visible="false">
+                        <th align="center" style="height: 20px; width: 5%; white-space: nowrap;" scope="col">
                             <div class="ie-bg">
                                 &nbsp;
                             </div>
                         </th>
-                        <th align="center" style="height: 20px; width: 30%;" scope="col">
+                        <th align="center" style="height: 20px; width: 22%;" scope="col">
                             <div class="ie-bg no-wrap">
                                 Person</div>
                         </th>
@@ -354,15 +359,15 @@
                             <div class="ie-bg no-wrap">
                                 Role</div>
                         </th>
-                        <th align="center" style="height: 20px; width: 10%;" scope="col">
+                        <th align="center" style="height: 20px; width: 11%;" scope="col">
                             <div class="ie-bg no-wrap">
                                 Start Date</div>
                         </th>
-                        <th align="center" style="height: 20px; width: 10%;" scope="col">
+                        <th align="center" style="height: 20px; width: 11%;" scope="col">
                             <div class="ie-bg no-wrap">
                                 End Date</div>
                         </th>
-                        <th align="center" style="width: 8%;" scope="col">
+                        <th align="center" style="width: 10%;" scope="col">
                             <div class="ie-bg no-wrap">
                                 Hours per day</div>
                         </th>
@@ -374,12 +379,9 @@
                             <div class="ie-bg no-wrap">
                                 Margin %</div>
                         </th>
-                        <th align="center" style="width: 12%;" scope="col">
+                        <th align="center" style="width: 16%;" scope="col">
                             <div class="ie-bg no-wrap">
                                 Total Hours in Milestone</div>
-                        </th>
-                        <th style="width: 1%;" scope="col">
-                            &nbsp;
                         </th>
                     </tr>
                     <asp:Repeater ID="repPerson" OnItemDataBound="repPerson_ItemDataBound" runat="server">
@@ -443,7 +445,8 @@
                 </tr>
                 <tr>
                     <td align="left" colspan="4">
-                        <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" ValidationGroup="MilestonePerson" Enabled="false" />&nbsp;
+                        <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" ValidationGroup="MilestonePerson"
+                            Enabled="false" />&nbsp;
                         <asp:Button ID="btnCancelAndReturn" Text="Return to Person List" runat="server" OnClick="btnCancelAndReturn_OnClick" />
                     </td>
                 </tr>
