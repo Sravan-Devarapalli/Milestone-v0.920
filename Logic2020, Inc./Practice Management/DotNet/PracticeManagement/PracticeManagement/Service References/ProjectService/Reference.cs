@@ -28,7 +28,7 @@ namespace PraticeManagement.ProjectService {
         DataTransferObjects.Project[] AllProjectsWithFinancialTotalsAndPersons();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/IsUserHasPermissionOnProject", ReplyAction="http://tempuri.org/IProjectService/IsUserHasPermissionOnProjectResponse")]
-        bool IsUserHasPermissionOnProject(string user, int projectId);
+        bool IsUserHasPermissionOnProject(string user, int id, bool isProjectId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/IsUserIsOwnerOfProject", ReplyAction="http://tempuri.org/IProjectService/IsUserIsOwnerOfProjectResponse")]
         bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId);
@@ -164,7 +164,7 @@ namespace PraticeManagement.ProjectService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
-        
+       
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -193,8 +193,8 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.AllProjectsWithFinancialTotalsAndPersons();
         }
         
-        public bool IsUserHasPermissionOnProject(string user, int projectId) {
-            return base.Channel.IsUserHasPermissionOnProject(user, projectId);
+        public bool IsUserHasPermissionOnProject(string user, int id, bool isProjectId) {
+            return base.Channel.IsUserHasPermissionOnProject(user, id, isProjectId);
         }
         
         public bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId) {
