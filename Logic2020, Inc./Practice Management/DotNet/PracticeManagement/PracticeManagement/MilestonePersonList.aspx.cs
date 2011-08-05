@@ -775,7 +775,18 @@ namespace PraticeManagement
                         if (!Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName)
                             || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName))// #2817: DirectorRoleName is added as per the requirement.
                         {
-                            e.Row.Enabled = false;
+                          
+                            var imgMilestonePersonEntryEdit = e.Row.FindControl("imgMilestonePersonEntryEdit") as ImageButton;
+
+                            if (imgMilestonePersonEntryEdit != null)
+                            {
+                                imgMilestonePersonEntryEdit.Enabled = false;
+                            }
+                            else
+                            {
+                                e.Row.Enabled = false;
+                            }
+
                         }
                     }
                 }
