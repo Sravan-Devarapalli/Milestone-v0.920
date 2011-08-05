@@ -42,14 +42,15 @@ AS
 		SELECT 'True'
 	END
 	
-	IF 5 = (SELECT COUNT(PermissionId)
+	IF 4 <= (SELECT COUNT(PermissionId)
 				FROM dbo.Permission permit
 				WHERE PersonId = @PersonId 
-					AND (((permit.TargetType = 1 AND permit.TargetId = @ClientId) OR (permit.TargetType IS NOT NULL AND permit.TargetId IS NULL))
-							OR ((permit.TargetType = 2 AND permit.TargetId = @ProjectGroup) OR (permit.TargetType IS NOT NULL AND permit.TargetId IS NULL))
-							OR ((permit.TargetType = 3 AND permit.TargetId = @SalespersonId) OR (permit.TargetType IS NOT NULL AND permit.TargetId IS NULL))
-							OR ((permit.TargetType = 4 AND permit.TargetId = @ProjectManagerId) OR (permit.TargetType IS NOT NULL AND permit.TargetId IS NULL))
-							OR ((permit.TargetType = 5 AND permit.TargetId = @PracticeId) OR (permit.TargetType IS NOT NULL AND permit.TargetId IS NULL))
+					AND ((permit.TargetType = 1 AND permit.TargetId = @ClientId) 
+							OR (permit.TargetType = 2 AND permit.TargetId = @ProjectGroup)
+							--OR (permit.TargetType = 3 AND permit.TargetId = @SalespersonId)
+							OR (permit.TargetType = 4 AND permit.TargetId = @ProjectManagerId)
+							OR (permit.TargetType = 5 AND permit.TargetId = @PracticeId)
+							OR (permit.TargetType IS NOT NULL AND permit.TargetId IS NULL)
 						)
 			)
 	BEGIN
