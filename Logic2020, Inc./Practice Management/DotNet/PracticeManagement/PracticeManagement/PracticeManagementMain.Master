@@ -28,7 +28,7 @@
         }
 
         function checkDirtyWithRedirect(url) {
-            if ((document.location.pathname.match("/OpportunityDetail.aspx") != null && getDirty()) ||
+            if ((document.location.pathname.match("/OpportunityDetail.aspx") != null) ||
                 showDialod()) {
                 __doPostBack("__Page", url);
                 return false;
