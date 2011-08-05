@@ -432,6 +432,7 @@
       <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsCompanyInternal" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsNotesRequiredForTimeEnry" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PracticeManagers" nillable="true" type="tns:ArrayOfPracticeManagerHistory" />
       <xs:element minOccurs="0" name="PracticeOwner" nillable="true" type="tns:Person" />
@@ -497,6 +498,7 @@
       <xs:element minOccurs="0" name="PersonId" type="xs:int" />
       <xs:element minOccurs="0" name="PracticeId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="PracticeName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SalesCommissionFractionOfMargin" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="SeniorityId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="SeniorityName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
