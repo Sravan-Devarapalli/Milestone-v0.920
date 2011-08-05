@@ -988,7 +988,7 @@ namespace PraticeManagement
         }
 
         #region Validations
-       
+
         protected void custTransitionStatus_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             int statusId;
@@ -1052,9 +1052,20 @@ namespace PraticeManagement
 
         public void RaisePostBackEvent(string eventArgument)
         {
-            if (ValidateAndSave())
+            if (IsDirty)
             {
-                Redirect(eventArgument == string.Empty ? Constants.ApplicationPages.OpportunityList : eventArgument);
+                if (ValidateAndSave())
+                {
+                    Redirect(eventArgument == string.Empty ? Constants.ApplicationPages.OpportunityList : eventArgument);
+                }
+            }
+            else
+            {
+                Page.Validate(vsumOpportunity.ValidationGroup);
+                if (Page.IsValid)
+                {
+                    Redirect(eventArgument == string.Empty ? Constants.ApplicationPages.OpportunityList : eventArgument);
+                }
             }
         }
         #endregion
