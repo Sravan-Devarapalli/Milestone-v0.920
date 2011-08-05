@@ -193,6 +193,15 @@ namespace PraticeManagement.Controls.Milestones {
         protected global::System.Web.UI.WebControls.CompareValidator compPersonEndType;
         
         /// <summary>
+        /// compPersonEndInsert control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compPersonEndInsert;
+        
+        /// <summary>
         /// txtHoursPerDayInsert control.
         /// </summary>
         /// <remarks>
@@ -281,15 +290,6 @@ namespace PraticeManagement.Controls.Milestones {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RangeValidator rangHoursInPeriod;
-        
-        /// <summary>
-        /// compPersonEndInsert control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CompareValidator compPersonEndInsert;
     }
 }
 
