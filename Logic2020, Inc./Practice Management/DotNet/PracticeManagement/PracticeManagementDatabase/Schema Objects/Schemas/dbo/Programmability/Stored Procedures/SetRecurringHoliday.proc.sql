@@ -71,7 +71,12 @@ WHERE Alias = @UserLogin
 
 	--Update Calendar table.
 	UPDATE  C1
-	SET DayOff = @IsSet
+	SET DayOff = @IsSet,
+		IsRecurring = @IsSet,
+		RecurringHolidayId = CASE WHEN @IsSet = 0 THEN null ELSE @Id END,
+		HolidayDescription = CASE WHEN @IsSet = 1 THEN rhd.Description
+								ELSE NULL END,
+		RecurringHolidayDate = NULL
 	FROM dbo.Calendar AS C1
 	JOIN @RecurringHolidaysDates rhd ON C1.Date = rhd.Date
 	
@@ -150,6 +155,14 @@ WHERE Alias = @UserLogin
 																															END)
 		LEFT JOIN TimeEntries te ON te.MilestonePersonId = mpe.MilestonePersonId AND te.MilestoneDate = rhd.Date
 		WHERE  mp.MilestoneId = @DefaultMilestoneId AND te.MilestoneDate IS NULL
+
+
+		UPDATE TE
+			SET TE.Note = rhd.[Description]
+		FROM TimeEntries AS TE
+		JOIN Calendar AS C ON C.Date = TE.MilestoneDate
+		JOIN @RecurringHolidaysDates AS rhd ON rhd.Date = TE.MilestoneDate
+		WHERE C.IsRecurring = 1 AND TE.Note <> rhd.Description
 		
 	END
 	ELSE IF @IsSet = 0
