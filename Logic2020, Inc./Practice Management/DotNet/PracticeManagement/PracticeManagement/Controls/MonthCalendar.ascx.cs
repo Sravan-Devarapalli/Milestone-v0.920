@@ -118,7 +118,7 @@ namespace PraticeManagement.Controls
             if (dateValue >= SettingsHelper.GetCurrentPMTime())
             {
                 return string.Format(@"updatingCalendarContainer = $get('{0}');
-                    return ShowPopup(this,'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}');"
+                    return ShowPopup(this,'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}');"
                     , lstCalendar.ClientID
                     , mpeHoliday.BehaviorID + Month
                     , btnSaveDay.ClientID
@@ -129,7 +129,8 @@ namespace PraticeManagement.Controls
                     , hdnRecurringHolidayId.ClientID
                     , hdnRecurringHolidayDate.ClientID
                     , lblDate.ClientID
-                    , lblValidationMessage.ClientID);
+                    , lblValidationMessage.ClientID
+                    , btnDayOK.ClientID);
             }
             else
             {
