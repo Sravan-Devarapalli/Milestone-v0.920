@@ -192,5 +192,26 @@ namespace PraticeManagement.Utils
             HttpContext.Current.Cache.Remove(CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY);
             HttpContext.Current.Cache.Remove(PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY);
         }
+
+        public static DateTime GetCurrentPMTime()
+        {
+            DateTime currentDate;
+
+            var timezone = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.TimeZoneKey);
+            var isDayLightSavingsTimeEffect = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDayLightSavingsTimeEffectKey);
+
+            if (timezone == "-08:00" && isDayLightSavingsTimeEffect.ToLower() == "true")
+            {
+                currentDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
+            }
+            else
+            {
+                var timezoneWithoutSign = timezone.Replace("+", string.Empty);
+                TimeZoneInfo ctz = TimeZoneInfo.CreateCustomTimeZone("cid", TimeSpan.Parse(timezoneWithoutSign), "customzone", "customzone");
+                currentDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, ctz);
+            }
+
+            return currentDate;
+        }
     }
 }
