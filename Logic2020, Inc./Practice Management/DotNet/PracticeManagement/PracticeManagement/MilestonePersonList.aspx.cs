@@ -704,6 +704,7 @@ namespace PraticeManagement
             if (tmp.Count == 0)
             {
                 thInsertMilestonePerson.Visible = true;
+                thHourlyRate.Visible = Milestone.IsHourlyAmount;
             }
             else
             {
@@ -775,7 +776,7 @@ namespace PraticeManagement
                         if (!Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName)
                             || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName))// #2817: DirectorRoleName is added as per the requirement.
                         {
-                          
+
                             var imgMilestonePersonEntryEdit = e.Row.FindControl("imgMilestonePersonEntryEdit") as ImageButton;
 
                             if (imgMilestonePersonEntryEdit != null)
@@ -817,7 +818,7 @@ namespace PraticeManagement
             DateTime startDate = Milestone.StartDate;
             DateTime endDate = Milestone.ProjectedDeliveryDate;
 
-
+            var tdAmountInsert = bar.FindControl("tdAmountInsert") as HtmlTableCell;
             var ddlPerson = bar.FindControl(DDLPERSON_KEY) as DropDownList;
             var ddlRole = bar.FindControl(DDLROLE_KEY) as DropDownList;
             var dpPersonStart = bar.FindControl(dpPersonStartInsert) as DatePicker;
@@ -849,7 +850,10 @@ namespace PraticeManagement
             }
 
 
-            if (txtAmount != null)
+            if (tdAmountInsert != null)
+                tdAmountInsert.Visible = Milestone.IsHourlyAmount;
+
+            if (tdAmountInsert.Visible && txtAmount != null)
                 txtAmount.Text = repeaterOldValues[e.Item.ItemIndex][txtAmountInsert];
 
             if (txtHoursPerDay != null)
@@ -948,6 +952,7 @@ namespace PraticeManagement
 
         protected void btnAddPerson_Click(object sender, EventArgs e)
         {
+            lblResultMessage.ClearMessage();
             var repoldValues = new List<Dictionary<string, string>>();
 
             foreach (RepeaterItem repItem in repPerson.Items)
@@ -1346,6 +1351,12 @@ namespace PraticeManagement
                     throw;
                 }
             }
+        }
+
+
+        protected bool GetIsHourlyRate()
+        {  
+            return Milestone.IsHourlyAmount;
         }
 
         private int GetPersonWorkDaysNumber(DateTime startDate, DateTime endDate, DropDownList ddlPersonName)
