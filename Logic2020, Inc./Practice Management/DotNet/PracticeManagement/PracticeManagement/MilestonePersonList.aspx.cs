@@ -1102,9 +1102,19 @@ namespace PraticeManagement
                 entry.ProjectedWorkload = entry.HoursPerDay * days;
             }
 
-            milestonePerson.Entries.Add(entry);
 
-            MilestonePersons.Add(milestonePerson);
+
+            if (MilestonePersons.Any(mp => mp.Person.Id == entry.ThisPerson.Id))
+            {
+                var mperson = MilestonePersons.First(mp => mp.Person.Id == entry.ThisPerson.Id);
+                mperson.Entries.Add(entry);
+
+            }
+            else
+            {
+                milestonePerson.Entries.Add(entry);
+                MilestonePersons.Add(milestonePerson);
+            }
 
             MilestonePersons = MilestonePersons;
 
