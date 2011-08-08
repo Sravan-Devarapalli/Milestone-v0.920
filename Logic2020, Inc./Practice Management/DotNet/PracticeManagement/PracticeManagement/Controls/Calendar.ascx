@@ -41,7 +41,7 @@
         chkboxList.parentNode.style.height = ((chkboxes.length * 40) - 20) + "px";
     }
     function ShowPopup(dayLink, peBehaviourId, saveDayButtonID, hiddenDayOffID, hiddenDateID,
-                        txtHolidayDescriptionID, chkMakeRecurringHolidayId, hdnRecurringHolidayIdClientID, hdnRecurringHolidayDateClientID, lblDateID, ErrorMessageID) {
+                        txtHolidayDescriptionID, chkMakeRecurringHolidayId, hdnRecurringHolidayIdClientID, hdnRecurringHolidayDateClientID, lblDateID, ErrorMessageID, btnOkID) {
         var txtHolidayDescription = $get(txtHolidayDescriptionID);
         var lblDateDescription = $get(lblDateID);
         var chkMakeRecurringHoliday = $get(chkMakeRecurringHolidayId);
@@ -79,7 +79,7 @@
         else {
             var date = new Date(hdnDate.value);
             var popupExtendar = $find(peBehaviourId);
-            var OkButton = $get(popupExtendar._OkControlID);
+            var OkButton = $get(btnOkID);
             OkButton.attributes['SaveDayButtonID'].value = saveDayButtonID;
 
             var errorMessage = $get(ErrorMessageID);
