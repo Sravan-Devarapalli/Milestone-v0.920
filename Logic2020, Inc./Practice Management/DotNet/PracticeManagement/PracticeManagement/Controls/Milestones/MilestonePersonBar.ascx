@@ -4,7 +4,7 @@
 <tr id="trBar" style="height: 25px; white-space: nowrap;" runat="server">
     <td align="center" style="width: 5%; height: 20px;">
         <asp:ImageButton ID="btnInsert" runat="server" ImageUrl="~/Images/icon-check.png"
-            OnClientClick="SetValueForhdnField();" ValidationGroup="<%# GetValidationGroup() %>"
+            OnClientClick="setDirty();SetValueForhdnField();" ValidationGroup="<%# GetValidationGroup() %>"
             ToolTip="Save" OnClick="btnInsertPerson_Click" />
         <asp:ImageButton ID="btnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="btnCancel_OnClick"
             OnClientClick="SetValueForhdnField();" ToolTip="Cancel" />
