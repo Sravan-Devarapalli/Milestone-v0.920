@@ -296,9 +296,9 @@
                             <asp:Label ID="lblAmountInsert" runat="server" Text="$"></asp:Label>
                             <asp:TextBox ID="txtAmount" runat="server" onchange="setDirty();" Width="70%" Text='<%# Eval("HourlyAmount") != null ? Eval("HourlyAmount.Value") : string.Empty %>'></asp:TextBox>
                             <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmount"
-                                ErrorMessage="The Amount is required." ToolTip="The Amount is required." Text="*"
-                                SetFocusOnError="true" EnableClientScript="false" Display="Dynamic" ValidationGroup="MilestonePersonEntry"
-                                OnServerValidate="reqHourlyRevenue_ServerValidate"></asp:CustomValidator>
+                                ValidateEmptyText="true" ErrorMessage="The Amount is required." ToolTip="The Amount is required."
+                                Text="*" SetFocusOnError="true" EnableClientScript="false" Display="Dynamic"
+                                ValidationGroup="MilestonePersonEntry" OnServerValidate="reqHourlyRevenue_ServerValidate"></asp:CustomValidator>
                             <asp:CompareValidator ID="compHourlyRevenue" runat="server" ControlToValidate="txtAmount"
                                 ErrorMessage="A number with 2 decimal digits is allowed for the Revenue." ToolTip="A number with 2 decimal digits is allowed for the Revenue."
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
@@ -372,7 +372,8 @@
                             <div class="ie-bg no-wrap">
                                 Hours per day</div>
                         </th>
-                        <th align="center" style="width: 8%; white-space: nowrap;" scope="col">
+                        <th id="thHourlyRate" runat="server" align="center" style="width: 8%; white-space: nowrap;"
+                            scope="col">
                             <div class="ie-bg no-wrap">
                                 Hourly Rate</div>
                         </th>
