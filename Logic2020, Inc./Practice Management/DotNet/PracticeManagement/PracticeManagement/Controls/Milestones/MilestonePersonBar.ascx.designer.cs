@@ -229,6 +229,15 @@ namespace PraticeManagement.Controls.Milestones {
         protected global::System.Web.UI.WebControls.RangeValidator rangHoursPerDay;
         
         /// <summary>
+        /// tdAmountInsert control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdAmountInsert;
+        
+        /// <summary>
         /// lblAmountInsert control.
         /// </summary>
         /// <remarks>
