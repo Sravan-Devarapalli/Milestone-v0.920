@@ -101,10 +101,10 @@
             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
             MinimumValue="0.01" MaximumValue="24" Type="Double" ValidationGroup="<%# GetValidationGroup() %>"></asp:RangeValidator>
     </td>
-    <td align="center" style="width: 8%; height: 20px;">
+    <td id="tdAmountInsert" runat="server" align="center"  style="width: 8%; height: 20px;">
         <asp:Label ID="lblAmountInsert" runat="server" Text="$"></asp:Label>
         <asp:TextBox ID="txtAmountInsert" runat="server" onchange="setDirty();" Width="70%"></asp:TextBox>
-        <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmountInsert"
+        <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmountInsert" ValidateEmptyText="true"
             ErrorMessage="The Amount is required." ToolTip="The Amount is required." Text="*"
             SetFocusOnError="true" EnableClientScript="false" Display="Dynamic" OnServerValidate="reqHourlyRevenue_ServerValidate"
             ValidationGroup="<%# GetValidationGroup() %>"></asp:CustomValidator>
