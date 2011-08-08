@@ -87,7 +87,7 @@
             OkButton.attributes['ErrorMessageID'].value = ErrorMessageID;
             OkButton.attributes['TextID'].value = txtHolidayDescriptionID;
             OkButton.attributes['ExtendarId'].value = peBehaviourId;
-            lblDateDescription.innerText = date.format('MM/dd/yyyy');
+            lblDateDescription.innerHTML = date.format('MM/dd/yyyy');
             txtHolidayDescription.value = dayLink.attributes['HolidayDescription'].value;
             chkMakeRecurringHoliday.checked = (dayLink.attributes['IsRecurringHoliday'].value == 'true');
             popupExtendar.show();
