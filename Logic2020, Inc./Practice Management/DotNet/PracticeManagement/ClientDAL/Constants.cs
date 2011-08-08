@@ -233,6 +233,11 @@
             public const string StatusColumn = "Status";
             public const string StatusCountColumn = "StatusCount";
             public const string IsSetColumn = "IsSet";
+            public const string IsRecurringColumn = "IsRecurring";
+            public const string RecurringHolidayIdColumn = "RecurringHolidayId";
+            public const string HolidayDescriptionColumn = "HolidayDescription";
+            public const string RecurringHolidayDateColumn = "RecurringHolidayDate";
+
         }
 
         #endregion
@@ -457,7 +462,10 @@
             public const string DaysPrevious = "@DaysPrevious";
             public const string Id = "@Id";
             public const string IsSetParam = "@IsSet";
-
+            public const string IsRecurringHoliday = "@IsRecurringHoliday";
+            public const string RecurringHolidayId = "@RecurringHolidayId";
+            public const string HolidayDescription = "@HolidayDescription";
+            public const string RecurringHolidayDate = "@RecurringHolidayDate";
 
         }
 
