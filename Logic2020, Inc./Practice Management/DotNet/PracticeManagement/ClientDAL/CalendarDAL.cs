@@ -36,10 +36,10 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonId,
-                                                personId.HasValue ? (object) personId.Value : DBNull.Value);
+                                                personId.HasValue ? (object)personId.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeManagerIdParam,
                                                 practiceManagerId.HasValue
-                                                    ? (object) practiceManagerId.Value
+                                                    ? (object)practiceManagerId.Value
                                                     : DBNull.Value);
 
                 connection.Open();
@@ -69,8 +69,12 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.Date, item.Date);
                 command.Parameters.AddWithValue(Constants.ParameterNames.DayOff, item.DayOff);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonId,
-                                                item.PersonId.HasValue ? (object) item.PersonId.Value : DBNull.Value);
+                                                item.PersonId.HasValue ? (object)item.PersonId.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsRecurringHoliday, item.IsRecurringHoliday);
+                command.Parameters.AddWithValue(Constants.ParameterNames.RecurringHolidayId, item.RecurringHolidayId.HasValue ? (object)item.RecurringHolidayId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.HolidayDescription, string.IsNullOrEmpty(item.HolidayDescription) ? DBNull.Value : (object)item.HolidayDescription);
+                command.Parameters.AddWithValue(Constants.ParameterNames.RecurringHolidayDate, item.RecurringHolidayDate.HasValue ? (object)item.RecurringHolidayDate.Value : DBNull.Value);
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -97,7 +101,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
 
                 connection.Open();
-                return (int) command.ExecuteScalar();
+                return (int)command.ExecuteScalar();
             }
         }
 
@@ -123,7 +127,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
 
                 connection.Open();
-                return (int) command.ExecuteScalar();
+                return (int)command.ExecuteScalar();
             }
         }
 
@@ -135,10 +139,14 @@ namespace DataAccess
                 int dayOffIndex;
                 int companyDayOffIndex;
                 int readOnlyIndex;
-                GetCalendarItemIndexes(reader, out dateIndex, out dayOffIndex, out companyDayOffIndex, out readOnlyIndex);
+                int isRecurringIndex;
+                int recurringHolidayIdIndex;
+                int holidayDescriptionIndex;
+                int recurringHolidayDateIndex;
+                GetCalendarItemIndexes(reader, out dateIndex, out dayOffIndex, out companyDayOffIndex, out readOnlyIndex, out isRecurringIndex, out recurringHolidayIdIndex, out holidayDescriptionIndex, out recurringHolidayDateIndex);
 
                 while (reader.Read())
-                    result.Add(ReadSingleCalendarItem(reader, dateIndex, dayOffIndex, companyDayOffIndex, readOnlyIndex));
+                    result.Add(ReadSingleCalendarItem(reader, dateIndex, dayOffIndex, companyDayOffIndex, readOnlyIndex, isRecurringIndex, recurringHolidayIdIndex, holidayDescriptionIndex, recurringHolidayDateIndex));
             }
         }
 
@@ -151,7 +159,7 @@ namespace DataAccess
         /// <param name="companyDayOffIndex"></param>
         /// <param name="readOnlyIndex"></param>
         /// <returns>True if indexes have been initialized, false otherwise</returns>
-        public static bool GetCalendarItemIndexes(SqlDataReader reader, out int dateIndex, out int dayOffIndex, out int companyDayOffIndex, out int readOnlyIndex)
+        public static bool GetCalendarItemIndexes(SqlDataReader reader, out int dateIndex, out int dayOffIndex, out int companyDayOffIndex, out int readOnlyIndex, out int isRecurringIndex, out int recurringHolidayIdIndex, out int holidayDescriptionIndex, out int recurringHolidayDateIndex)
         {
             try
             {
@@ -159,25 +167,44 @@ namespace DataAccess
                 dayOffIndex = reader.GetOrdinal(Constants.ColumnNames.DayOff);
                 companyDayOffIndex = reader.GetOrdinal(Constants.ColumnNames.CompanyDayOff);
                 readOnlyIndex = reader.GetOrdinal(Constants.ColumnNames.ReadOnly);
+                try
+                {
+                    isRecurringIndex = reader.GetOrdinal(Constants.ColumnNames.IsRecurringColumn);
+                    recurringHolidayIdIndex = reader.GetOrdinal(Constants.ColumnNames.RecurringHolidayIdColumn);
+                    holidayDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.HolidayDescriptionColumn);
+                    recurringHolidayDateIndex = reader.GetOrdinal(Constants.ColumnNames.RecurringHolidayDateColumn);
+                }
+                catch
+                {
+                    isRecurringIndex = recurringHolidayIdIndex = holidayDescriptionIndex = recurringHolidayDateIndex = -1;
+                }
 
                 return true;
             }
             catch (Exception)
             {
-                dateIndex = dayOffIndex = companyDayOffIndex = readOnlyIndex = -1;
+                dateIndex = dayOffIndex = companyDayOffIndex = readOnlyIndex = isRecurringIndex = recurringHolidayIdIndex = holidayDescriptionIndex = recurringHolidayDateIndex = -1;
             }
 
             return false;
         }
 
-        public static CalendarItem ReadSingleCalendarItem(SqlDataReader reader, int dateIndex, int dayOffIndex, int companyDayOffIndex, int readOnlyIndex)
+        public static CalendarItem ReadSingleCalendarItem(SqlDataReader reader, int dateIndex, int dayOffIndex, int companyDayOffIndex, int readOnlyIndex, int isRecurringIndex, int recurringHolidayIdIndex, int holidayDescriptionIndex, int recurringHolidayDateIndex)
         {
+            bool isrecurring = Convert.ToBoolean(reader.IsDBNull(isRecurringIndex) ? null : (object)reader.GetBoolean(isRecurringIndex));
+            int? recurringHoliday = reader.IsDBNull(recurringHolidayIdIndex) ? null : (int?)reader.GetInt32(recurringHolidayIdIndex);
+            var description = reader.IsDBNull(holidayDescriptionIndex) ? string.Empty : reader.GetString(holidayDescriptionIndex);
+            DateTime? recurringHolidayDate = reader.IsDBNull(recurringHolidayDateIndex) ? null : (DateTime?)reader.GetDateTime(recurringHolidayDateIndex);
             return new CalendarItem
                        {
                            Date = reader.GetDateTime(dateIndex),
                            DayOff = reader.GetBoolean(dayOffIndex),
                            CompanyDayOff = reader.GetBoolean(companyDayOffIndex),
-                           ReadOnly = reader.GetBoolean(readOnlyIndex)
+                           ReadOnly = reader.GetBoolean(readOnlyIndex),
+                           IsRecurringHoliday = isrecurring,
+                           RecurringHolidayId = recurringHoliday,
+                           HolidayDescription = description,
+                           RecurringHolidayDate = recurringHolidayDate
                        };
         }
 
@@ -236,7 +263,7 @@ namespace DataAccess
 
                 while (reader.Read())
                 {
-                    var item = new Triple<int, string, bool>( reader.GetInt32(idIndex), reader.GetString(descriptionIndex),reader.GetBoolean(isSetIndex));
+                    var item = new Triple<int, string, bool>(reader.GetInt32(idIndex), reader.GetString(descriptionIndex), reader.GetBoolean(isSetIndex));
 
                     list.Add(item);
                 }
@@ -252,8 +279,8 @@ namespace DataAccess
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
 
-                    if(id.HasValue)
-                    command.Parameters.AddWithValue(Constants.ParameterNames.IdParam, id.Value);
+                    if (id.HasValue)
+                        command.Parameters.AddWithValue(Constants.ParameterNames.IdParam, id.Value);
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsSetParam, isSet);
                     command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
 
@@ -268,7 +295,7 @@ namespace DataAccess
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(Constants.ProcedureNames.Calendar.GetRecurringHolidaysInWeek,connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Calendar.GetRecurringHolidaysInWeek, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
