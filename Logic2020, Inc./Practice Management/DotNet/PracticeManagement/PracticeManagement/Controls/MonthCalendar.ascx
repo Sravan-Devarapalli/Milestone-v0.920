@@ -1,27 +1,49 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="MonthCalendar.ascx.cs" Inherits="PraticeManagement.Controls.MonthCalendar" %>
-
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="MonthCalendar.ascx.cs"
+    Inherits="PraticeManagement.Controls.MonthCalendar" %>
 <asp:UpdatePanel ID="pnlMonth" runat="server">
-	<ContentTemplate>
-		<asp:DataList ID="lstCalendar" runat="server" RepeatColumns="7" RepeatDirection="Horizontal">
-			<HeaderTemplate>
-				</td>
-				</tr>
-				<tr>
-					<th>Sun</th>
-					<th>Mon</th>
-					<th>Tue</th>
-					<th>Wed</th>
-					<th>Thu</th>
-					<th>Fri</th>
-					<th>Sat</th>
-				</tr>
-				<tr>
-				<td colspan="7">
-			</HeaderTemplate>
-			<ItemStyle HorizontalAlign="Center" />
-			<ItemTemplate>
-				<asp:Panel ID="pnlDay" runat="server"
-					CssClass='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year ? (  
+    <ContentTemplate>
+        <script type="text/javascript" language="javascript">
+            function ClickSaveDay(btnOk) {
+                var noteText = $get(btnOk.attributes['TextID'].value);
+                if (noteText.Length > 0) {
+                    btnSave = $get(btnOk.attributes['SaveDayButtonID'].value);
+                    btnSave.click();
+                }
+                return false;
+            }
+        </script>
+        <asp:DataList ID="lstCalendar" runat="server" RepeatColumns="7" RepeatDirection="Horizontal">
+            <HeaderTemplate>
+                </td> </tr>
+                <tr>
+                    <th>
+                        Sun
+                    </th>
+                    <th>
+                        Mon
+                    </th>
+                    <th>
+                        Tue
+                    </th>
+                    <th>
+                        Wed
+                    </th>
+                    <th>
+                        Thu
+                    </th>
+                    <th>
+                        Fri
+                    </th>
+                    <th>
+                        Sat
+                    </th>
+                </tr>
+                <tr>
+                    <td colspan="7">
+            </HeaderTemplate>
+            <ItemStyle HorizontalAlign="Center" />
+            <ItemTemplate>
+                <asp:Panel ID="pnlDay" runat="server" CssClass='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year ? (  
             (    ((bool)Eval("DayOff") 
                     ? ((bool)Eval("CompanyDayOff") 
                         ? (((DateTime)Eval("Date")).DayOfWeek == DayOfWeek.Sunday || ((DateTime)Eval("Date")).DayOfWeek == DayOfWeek.Saturday ? "WeekEndDayOff" : "DayOff") 
@@ -33,21 +55,77 @@
                       )
                 )
             )
-            ) : "" %>'>
-					<asp:LinkButton ID="btnDay" runat="server" Text='<%# Eval("Date.Day") %>'
-						OnCommand="btnDay_Command"
-						CommandName='<%# (bool)Eval("DayOff") ? false : true %>'
-						CommandArgument='<%# Eval("Date") %>'
-						Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year && !(bool)Eval("ReadOnly") %>'
-						OnClientClick='<%# DayOnClientClick() %>'></asp:LinkButton>
-					<asp:Label ID="lblDay" runat="server" Text='<%# Eval("Date.Day") %>'
-						Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year && (bool)Eval("ReadOnly") %>'></asp:Label>
-					<%--<asp:Label ID="lblDayOut" runat="server" Text='<%# Eval("Date.Day") %>'
+            ) : "" %>' ToolTip='<%# string.IsNullOrEmpty((string)Eval("HolidayDescription"))? "":((string)Eval("HolidayDescription"))%>'>
+                    <% if (!IsPersonCalendar)
+                       { %>
+                    <asp:LinkButton ID="btnDay" runat="server" Text='<%# Eval("Date.Day") %>' Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year && !(bool)Eval("ReadOnly") %>'
+                        DayOff='<%# (bool)Eval("DayOff") ? "true":"false" %>' Date='<%# Eval("Date") %>'
+                        OnClientClick='<%# DayOnClientClick((DateTime)Eval("Date")) %>' IsRecurringHoliday='<%# (bool)Eval("IsRecurringHoliday") %>'
+                        ToolTip='<%# string.IsNullOrEmpty((string)Eval("HolidayDescription"))? "":((string)Eval("HolidayDescription"))%>'
+                        HolidayDescription='<%# string.IsNullOrEmpty((string)Eval("HolidayDescription"))? "":((string)Eval("HolidayDescription"))%>'
+                        RecurringHolidayId='<%# (int?) Eval("RecurringHolidayId")%>' RecurringHolidayDate='<%# (DateTime?) Eval("RecurringHolidayDate") %>'
+                        IsWeekEnd='<%# GetIsWeekend(((DateTime)Eval("Date"))) %>' Enabled='<%# NeedToEnable((DateTime)Eval("Date")) %>'></asp:LinkButton>
+                    <% }
+                       else
+                       { %>
+                    <asp:LinkButton ID="btnDayWithOutPopUp" runat="server" Text='<%# Eval("Date.Day") %>'
+                        ToolTip='<%# string.IsNullOrEmpty((string)Eval("HolidayDescription"))? "":((string)Eval("HolidayDescription"))%>'
+                        OnCommand="btnDay_Command" CommandName='<%# (bool)Eval("DayOff") ? false : true %>'
+                        CommandArgument='<%# Eval("Date") %>' Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year && !(bool)Eval("ReadOnly") %>'
+                        OnClientClick='<%# DayOnClientClickNoPopUp() %>'></asp:LinkButton>
+                    <% } %>
+                    <asp:Label ID="lblDay" runat="server" Text='<%# Eval("Date.Day") %>' Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year && (bool)Eval("ReadOnly") %>'></asp:Label>
+                    <%--<asp:Label ID="lblDayOut" runat="server" Text='<%# Eval("Date.Day") %>'
 						Visible='<%# ((DateTime)Eval("Date")).Month != Month || ((DateTime)Eval("Date")).Year != Year %>'></asp:Label>--%>
-				</asp:Panel>
-			</ItemTemplate>
-		</asp:DataList>
-	</ContentTemplate>
+                </asp:Panel>
+            </ItemTemplate>
+        </asp:DataList>
+        <asp:HiddenField ID="hdnDummyFieldForModalPopup" runat="server" />
+        <asp:HiddenField ID="hndDayOff" runat="server" />
+        <asp:HiddenField ID="hdnDate" runat="server" />
+        <asp:HiddenField ID="hdnRecurringHolidayId" runat="server" />
+        <asp:HiddenField ID="hdnRecurringHolidayDate" runat="server" />
+        <asp:Button ID="btnSaveDay" runat="server" OnClick="btnDayOK_OnClick" Style="display: none;" />
+        <AjaxControlToolkit:ModalPopupExtender ID="mpeHoliday" runat="server" TargetControlID="hdnDummyFieldForModalPopup"
+            CancelControlID="btnDayCancel" OkControlID="btnDayOK" BackgroundCssClass="modalBackground"
+            PopupControlID="pnlHolidayDetails" BehaviorID="bhCompanyHoliday" DropShadow="false" />
+        <asp:Panel ID="pnlHolidayDetails" runat="server" BackColor="White" BorderColor="Black"
+            CssClass="ConfirmBoxClass" Style="padding-top: 20px; padding-left: 10px; padding-right: 10px;
+            display: none;" BorderWidth="2px">
+            <table class="WholeWidth">
+                <tr>
+                    <td colspan="2" align="left" style="font-weight:bold;">
+                        Date :
+                        <label id="lblDate" runat="server" text="">
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <asp:TextBox ID="txtHolidayDescription" runat="server" placeholder="Enter Note."
+                            TextMode="MultiLine" Height="50px" Style="resize: none; width: 300px; overflow: auto;"></asp:TextBox>
+                    </td>
+                </tr>
+                <td colspan="2" style="text-align: left;">
+                    <asp:CheckBox ID="chkMakeRecurringHoliday" runat="server" Text="Make Recurring" />
+                </td>
+                <tr>
+                    <td align="center" style="padding: 10px 0px 10px 0px;">
+                        <asp:Button ID="btnDayOK" runat="server" Text="OK" HiddenDayOffID="" HiddenDateID="" CausesValidation="true"
+                            SaveDayButtonID="" TextID="" ErrorMessageID="" ExtendarId="" OnClientClick="ClickSaveDay(this); return false;" />
+                        &nbsp; &nbsp;
+                        <asp:Button ID="btnDayCancel" runat="server" Text="Cancel" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center">
+                        <asp:Label ID="lblValidationMessage" runat="server" Text="* Please Enter Holiday Description."
+                            ForeColor="Red" Style="display: none;"></asp:Label>
+                    </td>
+                </tr>
+            </table>
+        </asp:Panel>
+    </ContentTemplate>
 </asp:UpdatePanel>
 <%--<AjaxControlToolkit:UpdatePanelAnimationExtender ID="pnlMonth_UpdatePanelAnimationExtender" 
 	runat="server" Enabled="True" TargetControlID="pnlMonth">
@@ -57,5 +135,4 @@
 		</OnUpdated>
 	</Animations>
 </AjaxControlToolkit:UpdatePanelAnimationExtender>--%>
-
 
