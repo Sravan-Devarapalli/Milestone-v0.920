@@ -4,160 +4,233 @@ using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.CalendarService;
 using System.Web;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement.Controls
 {
-	public partial class MonthCalendar : System.Web.UI.UserControl
-	{
-		#region Constants
+    public partial class MonthCalendar : System.Web.UI.UserControl
+    {
+        #region Constants
 
-		private const string YearKey = "Year";
-		private const string MonthKey = "Month";
-		private const string PersonIdKey = "PersonId";
-		private const string ValueArgument = "value";
-		
-		#endregion
+        private const string YearKey = "Year";
+        private const string MonthKey = "Month";
+        private const string PersonIdKey = "PersonId";
+        private const string ValueArgument = "value";
 
-		#region Fields
+        #endregion
 
-		private bool wasChanged;
+        #region Fields
 
-		#endregion
+        private bool wasChanged;
 
-		#region Properties
+        #endregion
 
-		/// <summary>
-		/// Gest or sets a year to be displayed.
-		/// </summary>
-		public int Year
-		{
-			get
-			{
-				return Convert.ToInt32(ViewState[YearKey]);
-			}
-			set
-			{
-				if (value < DateTime.MinValue.Year || value > DateTime.MaxValue.Year)
-				{
-					throw new ArgumentException(
-						string.Format(Resources.Messages.InvalidYearNumber,
-						DateTime.MinValue.Year,
-						DateTime.MaxValue.Year),
-						ValueArgument);
-				}
+        #region Properties
 
-				wasChanged = wasChanged || Year != value;
-				ViewState[YearKey] = value;
-			}
-		}
+        /// <summary>
+        /// Gest or sets a year to be displayed.
+        /// </summary>
+        public int Year
+        {
+            get
+            {
+                return Convert.ToInt32(ViewState[YearKey]);
+            }
+            set
+            {
+                if (value < DateTime.MinValue.Year || value > DateTime.MaxValue.Year)
+                {
+                    throw new ArgumentException(
+                        string.Format(Resources.Messages.InvalidYearNumber,
+                        DateTime.MinValue.Year,
+                        DateTime.MaxValue.Year),
+                        ValueArgument);
+                }
 
-		/// <summary>
-		/// Gets or sets a month to be displayed.
-		/// </summary>
-		public int Month
-		{
-			get
-			{
-				return Convert.ToInt32(ViewState[MonthKey]);
-			}
-			set
-			{
-				if (value < 1 || value > 12)
-				{
-					throw new ArgumentException(
-						string.Format(Resources.Messages.InvalidMonthNumber, 1, 12),
-						ValueArgument);
-				}
+                wasChanged = wasChanged || Year != value;
+                ViewState[YearKey] = value;
+            }
+        }
 
-				wasChanged = wasChanged || Month != value;
-				ViewState[MonthKey] = value;
-			}
-		}
+        /// <summary>
+        /// Gets or sets a month to be displayed.
+        /// </summary>
+        public int Month
+        {
+            get
+            {
+                return Convert.ToInt32(ViewState[MonthKey]);
+            }
+            set
+            {
+                if (value < 1 || value > 12)
+                {
+                    throw new ArgumentException(
+                        string.Format(Resources.Messages.InvalidMonthNumber, 1, 12),
+                        ValueArgument);
+                }
 
-		public int? PersonId
-		{
-			get
-			{
-				return (int?)ViewState[PersonIdKey];
-			}
-			set
-			{
-				wasChanged = wasChanged || PersonId != value;
-				ViewState[PersonIdKey] = value;
-			}
-		}
+                wasChanged = wasChanged || Month != value;
+                ViewState[MonthKey] = value;
+            }
+        }
 
-		public CalendarItem[] CalendarItems
-		{
-			private get;
-			set;
-		}
+        public int? PersonId
+        {
+            get
+            {
+                return (int?)ViewState[PersonIdKey];
+            }
+            set
+            {
+                wasChanged = wasChanged || PersonId != value;
+                ViewState[PersonIdKey] = value;
+            }
+        }
 
-		#endregion
+        public CalendarItem[] CalendarItems
+        {
+            private get;
+            set;
+        }
 
-		#region Methods
+        public bool IsPersonCalendar
+        {
+            get
+            {
+                return ViewState["PersonCalendarKey"] == null ? false : (bool)ViewState["PersonCalendarKey"];
+            }
+            set
+            {
+                ViewState["PersonCalendarKey"] = value;
+            }
+        }
 
-		protected string DayOnClientClick()
-		{
-			return string.Format("updatingCalendarContainer = $get('{0}');", lstCalendar.ClientID);
-		}
+        #endregion
 
-		protected override void OnPreRender(EventArgs e)
-		{
-			base.OnPreRender(e);
-		
-			if (!IsPostBack || wasChanged)
-			{
-				Display();
-			}
-		}
+        #region Methods
+        protected string GetExtenderBehaviourId()
+        {
+            return "";
+        }
+        protected string DayOnClientClick(DateTime dateValue)
+        {
+            if (dateValue >= SettingsHelper.GetCurrentPMTime())
+            {
+                return string.Format(@"updatingCalendarContainer = $get('{0}');
+                    return ShowPopup(this,'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}');"
+                    , lstCalendar.ClientID
+                    , mpeHoliday.BehaviorID + Month
+                    , btnSaveDay.ClientID
+                    , hndDayOff.ClientID
+                    , hdnDate.ClientID
+                    , txtHolidayDescription.ClientID
+                    , chkMakeRecurringHoliday.ClientID
+                    , hdnRecurringHolidayId.ClientID
+                    , hdnRecurringHolidayDate.ClientID
+                    , lblDate.ClientID
+                    , lblValidationMessage.ClientID);
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
 
-		private void Display()
-		{
-			if (CalendarItems != null)
-			{
-				DateTime firstMonthDay = new DateTime(Year, Month, 1);
-				DateTime lastMonthDay = new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month));
+        protected string DayOnClientClickNoPopUp()
+        {
+            return string.Format("updatingCalendarContainer = $get('{0}');", lstCalendar.ClientID);
+        }
 
-				DateTime firstDisplayedDay = firstMonthDay.AddDays(-(double)firstMonthDay.DayOfWeek);
-				DateTime lastDisplayedDay = lastMonthDay.AddDays(6.0 - (double)lastMonthDay.DayOfWeek);
 
-				CalendarItem[] itemsToDisplay = Array.FindAll<CalendarItem>(CalendarItems, delegate(CalendarItem item)
-					{
-						return item.Date >= firstDisplayedDay && item.Date <= lastDisplayedDay;
-					});
-				lstCalendar.DataSource = itemsToDisplay;
-				lstCalendar.DataBind();
-			}
-		}
+        protected override void OnPreRender(EventArgs e)
+        {
+            base.OnPreRender(e);
 
-		protected void btnDay_Command(object sender, CommandEventArgs e)
-		{
-			CalendarItem item = new CalendarItem();
-			item.Date = DateTime.Parse((string)e.CommandArgument);
-			item.DayOff = bool.Parse(e.CommandName);
-			item.PersonId = PersonId;
+            if (!IsPostBack || wasChanged)
+            {
+                Display();
+            }
+        }
 
-			SaveDate(item);
-			Display();
-		}
+        private void Display()
+        {
+            if (CalendarItems != null)
+            {
+                DateTime firstMonthDay = new DateTime(Year, Month, 1);
+                DateTime lastMonthDay = new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month));
 
-		private void SaveDate(CalendarItem item)
-		{
-			using (CalendarServiceClient serviceClient = new CalendarServiceClient())
-			{
-				try
-				{
-					serviceClient.SaveCalendar(item, HttpContext.Current.User.Identity.Name);
-				}
-				catch (FaultException<ExceptionDetail>)
-				{
-					serviceClient.Abort();
-					throw;
-				}
-			}
-		}
+                DateTime firstDisplayedDay = firstMonthDay.AddDays(-(double)firstMonthDay.DayOfWeek);
+                DateTime lastDisplayedDay = lastMonthDay.AddDays(6.0 - (double)lastMonthDay.DayOfWeek);
 
-		#endregion
-	}
+                CalendarItem[] itemsToDisplay = Array.FindAll<CalendarItem>(CalendarItems, delegate(CalendarItem item)
+                {
+                    return item.Date >= firstDisplayedDay && item.Date <= lastDisplayedDay;
+                });
+
+                lstCalendar.DataSource = itemsToDisplay;
+                lstCalendar.DataBind();
+                mpeHoliday.BehaviorID = mpeHoliday.BehaviorID + Month;
+            }
+        }
+
+        protected void btnDayOK_OnClick(object sender, EventArgs e)
+        {
+            CalendarItem item = new CalendarItem();
+            item.Date = DateTime.Parse(hdnDate.Value);
+            item.DayOff = !(bool.Parse(hndDayOff.Value));
+            item.PersonId = PersonId;
+            item.IsRecurringHoliday = chkMakeRecurringHoliday.Checked;
+            item.HolidayDescription = txtHolidayDescription.Text;
+            item.RecurringHolidayId = string.IsNullOrEmpty(hdnRecurringHolidayId.Value) ? null : (int?)Convert.ToInt32(hdnRecurringHolidayId.Value);
+            item.RecurringHolidayDate = item.IsRecurringHoliday && !item.RecurringHolidayId.HasValue ? (DateTime?)(item.DayOff ? item.Date : Convert.ToDateTime(hdnRecurringHolidayDate.Value)) : null;
+            SaveDate(item);
+            Display();
+        }
+
+        protected void btnDay_Command(object sender, CommandEventArgs e)
+        {
+            CalendarItem item = new CalendarItem();
+            item.Date = DateTime.Parse((string)e.CommandArgument);
+            item.DayOff = bool.Parse(e.CommandName);
+            item.PersonId = PersonId;
+
+            SaveDate(item);
+            Display();
+        }
+
+        private void SaveDate(CalendarItem item)
+        {
+            using (CalendarServiceClient serviceClient = new CalendarServiceClient())
+            {
+                try
+                {
+                    serviceClient.SaveCalendar(item, HttpContext.Current.User.Identity.Name);
+                }
+                catch (FaultException<ExceptionDetail>)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        protected string GetIsWeekend(DateTime dateValue)
+        {
+            string result = (dateValue.DayOfWeek == DayOfWeek.Saturday
+                                        || dateValue.DayOfWeek == DayOfWeek.Sunday) ? "true" : "false";
+
+            return result;
+        }
+
+        protected bool NeedToEnable(DateTime dateValue)
+        {
+            var currentDate = SettingsHelper.GetCurrentPMTime();
+
+            var result = (dateValue >= currentDate);
+            return result;
+        }
+
+        #endregion
+    }
 }
