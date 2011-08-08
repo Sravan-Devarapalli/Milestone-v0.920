@@ -67,11 +67,11 @@ namespace PraticeManagement.Controls
 
         private Triple<int, string, bool>[] PreviousRecurringHolidaysList
         {
-            get 
+            get
             {
                 return (Triple<int, string, bool>[])ViewState[ViewStatePreviousRecurringList];
             }
-            set 
+            set
             {
                 ViewState[ViewStatePreviousRecurringList] = value;
             }
@@ -94,6 +94,11 @@ namespace PraticeManagement.Controls
                 mcOctober.PersonId = mcNovember.PersonId = mcDecember.PersonId = personId;
 
             lblYear.Text = SelectedYear.ToString();
+
+            mcJanuary.IsPersonCalendar = mcFebruary.IsPersonCalendar = mcMarch.IsPersonCalendar =
+                mcApril.IsPersonCalendar = mcMay.IsPersonCalendar = mcJune.IsPersonCalendar =
+                mcJuly.IsPersonCalendar = mcAugust.IsPersonCalendar = mcSeptember.IsPersonCalendar =
+                mcOctober.IsPersonCalendar = mcNovember.IsPersonCalendar = mcDecember.IsPersonCalendar = !CompanyHolidays;
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -122,7 +127,7 @@ namespace PraticeManagement.Controls
                     if (userIsAdministrator || userIsRecruiter || userIsConsultant || userIsSalesperson || userIsProjectLead || userIsHR)// #2817: userIsHR is added as per the requirement.
                     {
                         //DataHelper.FillPersonList(ddlPerson, Resources.Controls.CompanyCalendarTitle);
-                        DataHelper.FillPersonList(ddlPerson, null, (int) PersonStatusType.Active);
+                        DataHelper.FillPersonList(ddlPerson, null, (int)PersonStatusType.Active);
                     }
                     else
                     {
@@ -157,8 +162,8 @@ namespace PraticeManagement.Controls
                 {
                     FillRecurringHolidaysList(cblRecurringHolidays, "All Recurring Holidays");
                 }
-                    
-                trPersonDetails.Visible = !CompanyHolidays; 
+
+                trPersonDetails.Visible = !CompanyHolidays;
 
                 tdRecurringHolidaysDetails.Visible = tdDescription.Visible = CompanyHolidays;
 
