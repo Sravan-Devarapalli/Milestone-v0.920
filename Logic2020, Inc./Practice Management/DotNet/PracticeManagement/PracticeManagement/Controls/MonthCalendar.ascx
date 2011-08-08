@@ -5,10 +5,15 @@
         <script type="text/javascript" language="javascript">
             function ClickSaveDay(btnOk) {
                 var noteText = $get(btnOk.attributes['TextID'].value);
-                if (noteText.Length > 0) {
+                var popupExtendar = $find(btnOk.attributes['ExtendarId'].value);
+                var noteTextStr = noteText.value.toString();
+                if (noteTextStr.length > 0) {
                     btnSave = $get(btnOk.attributes['SaveDayButtonID'].value);
+                    popupExtendar.hide();
                     btnSave.click();
                 }
+                var errorText = $get(btnOk.attributes['ErrorMessageID'].value);
+                errorText.style.display = 'block';
                 return false;
             }
         </script>
@@ -87,14 +92,14 @@
         <asp:HiddenField ID="hdnRecurringHolidayDate" runat="server" />
         <asp:Button ID="btnSaveDay" runat="server" OnClick="btnDayOK_OnClick" Style="display: none;" />
         <AjaxControlToolkit:ModalPopupExtender ID="mpeHoliday" runat="server" TargetControlID="hdnDummyFieldForModalPopup"
-            CancelControlID="btnDayCancel" OkControlID="btnDayOK" BackgroundCssClass="modalBackground"
+            CancelControlID="btnDayCancel" OkControlID="hdnDummyFieldForModalPopup" BackgroundCssClass="modalBackground"
             PopupControlID="pnlHolidayDetails" BehaviorID="bhCompanyHoliday" DropShadow="false" />
         <asp:Panel ID="pnlHolidayDetails" runat="server" BackColor="White" BorderColor="Black"
             CssClass="ConfirmBoxClass" Style="padding-top: 20px; padding-left: 10px; padding-right: 10px;
             display: none;" BorderWidth="2px">
             <table class="WholeWidth">
                 <tr>
-                    <td colspan="2" align="left" style="font-weight:bold;">
+                    <td colspan="2" align="left" style="font-weight: bold;">
                         Date :
                         <label id="lblDate" runat="server" text="">
                         </label>
@@ -111,7 +116,7 @@
                 </td>
                 <tr>
                     <td align="center" style="padding: 10px 0px 10px 0px;">
-                        <asp:Button ID="btnDayOK" runat="server" Text="OK" HiddenDayOffID="" HiddenDateID="" CausesValidation="true"
+                        <asp:Button ID="btnDayOK" runat="server" Text="OK" HiddenDayOffID="" HiddenDateID=""
                             SaveDayButtonID="" TextID="" ErrorMessageID="" ExtendarId="" OnClientClick="ClickSaveDay(this); return false;" />
                         &nbsp; &nbsp;
                         <asp:Button ID="btnDayCancel" runat="server" Text="Cancel" />
