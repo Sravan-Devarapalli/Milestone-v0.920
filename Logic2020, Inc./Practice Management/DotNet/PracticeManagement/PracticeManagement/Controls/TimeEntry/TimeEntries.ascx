@@ -112,9 +112,12 @@
     </asp:Repeater>
     <table class="CompPerfTable WholeWidth">
         <tr class="CompPerfTotalSummary">
-            <td class="time-entry-bar-project-milestones">
+            <%--<td class="time-entry-bar-project-milestones">
             </td>
             <td class="time-entry-bar-time-types">
+            </td>--%>
+            <td colspan="9" style="text-align:center;">
+                <span style="color:Red;">ALERT</span><asp:Label id="lblAlertNote" runat="server"></asp:Label>
             </td>
             <asp:Repeater ID="repTotalHours" runat="server">
                 <ItemTemplate>
@@ -122,9 +125,9 @@
                         <Label ID="lblTotalHours" runat="server"/>
                         <ext1:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lblTotalHours"/>                              
                     </td>--%>
-                    <td class="time-entry-total-hours-by-day">
+                    <%--<td class="time-entry-total-hours-by-day">
                         &nbsp;
-                    </td>
+                    </td>--%>
                 </ItemTemplate>
             </asp:Repeater>
             <td class="time-entry-total-hours" style="border-top: 1px solid black;">
@@ -135,7 +138,9 @@
             </td>
         </tr>
     </table>
+    <div style="padding-top:5px;">
     <asp:ValidationSummary ID="valSummary" runat="server" ValidationGroup="TE" />
+    </div>
 </asp:Panel>
 <uc:MessageLabel ID="mlMessage" runat="server" ErrorColor="Red" InfoColor="DarkGreen"
     WarningColor="Orange" EnableViewState="false" />
