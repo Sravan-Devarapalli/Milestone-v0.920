@@ -26,6 +26,9 @@ namespace DataTransferObjects.TimeEntry
         [DataMember]
         public bool IsDefault { get; set; }
 
+        [DataMember]
+        public bool IsSystemTimeType { get; set; }
+
         #endregion
 
         #region Constructors
