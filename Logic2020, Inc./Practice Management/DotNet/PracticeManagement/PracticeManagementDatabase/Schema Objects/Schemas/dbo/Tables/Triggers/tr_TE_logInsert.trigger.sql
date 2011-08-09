@@ -56,6 +56,10 @@ BEGIN
 							  ,CASE NEW_VALUES.[IsReviewed] WHEN 1 THEN 'Approved'
 									WHEN 0 THEN 'Declined'
 									 ELSE 'Pending' END AS 'NEW_VALUES!1!ReviewStatus' 
+							  ,CASE NEW_VALUES.[IsCorrect] WHEN 1 THEN 'Correct'
+													 ELSE 'InCorrect' END AS 'NEW_VALUES!1!IsCorrect'
+							  ,CASE NEW_VALUES.[IsChargeable] WHEN 1 THEN 'Billable'
+														ELSE 'Not Billable' END AS 'NEW_VALUES!1!IsBillable'
 							  ,CONVERT(VARCHAR(10), NEW_VALUES.[MilestoneDate], 101) AS 'NEW_VALUES!1!MilestoneDate'
 							  ,modp.LastName + ', ' + modp.FirstName AS 'NEW_VALUES!1!ModifiedByName'
 							  ,objp.LastName + ', ' + objp.FirstName AS 'NEW_VALUES!1!ObjectName'
@@ -109,6 +113,4 @@ BEGIN
 	 EXEC dbo.SessionLogUnprepare
 	 END
 END
-
-
 
