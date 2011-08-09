@@ -236,6 +236,17 @@
                 btnddlPeriodChanged.click();
             }
         }
+
+        function ChangeDefaultFocus(e) {
+            if (window.event) {
+                e = window.event;
+            }
+            if (e.keyCode == 13) {
+                var btn = document.getElementById('<%= btnSearchAll.ClientID %>');
+                btn.click();
+            }               
+            
+        }
     </script>
     <style>
         ul, li
@@ -384,7 +395,7 @@
                                     <table class="WholeWidth">
                                         <tr>
                                             <td style="padding-right: 8px; padding-left: 4px;">
-                                                <asp:TextBox ID="txtSearchText" runat="server" CssClass="WholeWidth" EnableViewState="False" />
+                                                <asp:TextBox ID="txtSearchText" runat="server" CssClass="WholeWidth" onkeypress="ChangeDefaultFocus(event);"  EnableViewState="False" />
                                             </td>
                                             <td style="width: 10px;">
                                                 <asp:RequiredFieldValidator ID="reqSearchText" runat="server" ControlToValidate="txtSearchText"
