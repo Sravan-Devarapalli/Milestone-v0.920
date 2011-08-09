@@ -57,8 +57,9 @@ namespace PraticeManagement.Config
 
         protected void lbBecomeUserOk_OnClick(object sender, EventArgs e)
         {
+            var oldUserName = DataHelper.CurrentPerson.PersonLastFirstName;
             var userName = ddlBecomeUserList.SelectedValue;
-            logImpersonateLogin(Thread.CurrentPrincipal.Identity.Name, userName);
+            logImpersonateLogin(oldUserName, ddlBecomeUserList.Items[ddlBecomeUserList.SelectedIndex].Text);
             var identity = new GenericIdentity(userName);
             var roles = Roles.GetRolesForUser(userName);
             var principal = new GenericPrincipal(identity, roles);
@@ -72,7 +73,7 @@ namespace PraticeManagement.Config
             var ipAddress = Request.ServerVariables["REMOTE_ADDR"];
             var logText =
                 string.Format(
-                    @"<Login><NEW_VALUES user = ""{0}"" become = ""{1}"" IPAddress = ""{2}""><OLD_VALUES /></NEW_VALUES></Login>",
+                    @"<BecomeUser><NEW_VALUES User = ""{0}"" Become = ""{1}"" IPAddress = ""{2}""><OLD_VALUES /></NEW_VALUES></BecomeUser>",
                     oldUserName,
                     newUserName,
                     ipAddress);
