@@ -5,7 +5,7 @@
 -- Update date: 11-11-2008
 -- Description:	Insert a new opportunity transition.
 -- =============================================
-CREATE PROCEDURE dbo.OpportunityTransitionInsert
+CREATE PROCEDURE [dbo].[OpportunityTransitionInsert]
 (
 	@OpportunityId                   INT,
 	@OpportunityTransitionStatusId   INT,
@@ -16,6 +16,14 @@ CREATE PROCEDURE dbo.OpportunityTransitionInsert
 )
 AS
 	SET NOCOUNT ON
+	
+	DECLARE @UserLogin NVARCHAR(255)
+	SELECT @UserLogin = p.Alias
+	FROM dbo.Person p 
+	WHERE p.PersonId = @PersonId
+	
+	-- Start logging session
+	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
 	INSERT INTO dbo.OpportunityTransition
 	            (OpportunityId, OpportunityTransitionStatusId, PersonId, NoteText, TargetPersonId)
@@ -30,5 +38,8 @@ AS
 	END
 
 	SET @OpportunityTransitionId = SCOPE_IDENTITY()
-
+	
+	
+	-- End logging session
+	EXEC dbo.SessionLogUnprepare
 
