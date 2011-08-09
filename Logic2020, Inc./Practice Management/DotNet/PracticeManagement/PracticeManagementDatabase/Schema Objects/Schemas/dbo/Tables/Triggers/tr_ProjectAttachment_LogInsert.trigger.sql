@@ -32,12 +32,14 @@ BEGIN
 	       l.PersonID,
 	       l.LastName,
 	       l.FirstName,
-	       Data =  CONVERT(NVARCHAR(MAX),(SELECT NEW_VALUES.Id,NEW_VALUES.ProjectId, NEW_VALUES.[FileName],NEW_VALUES.UploadedDate
+	       Data =  CONVERT(NVARCHAR(MAX),(SELECT NEW_VALUES.Id,NEW_VALUES.ProjectId,proj.Name as 'ProjectName', NEW_VALUES.[FileName],NEW_VALUES.UploadedDate
 					    FROM inserted AS NEW_VALUES
+					    LEFT JOIN Project proj on proj.ProjectId = NEW_VALUES.ProjectId
 			           WHERE NEW_VALUES.Id = i.Id
 					  FOR XML AUTO, ROOT('ProjectAttachment'))),
-			LogData = (SELECT NEW_VALUES.Id,NEW_VALUES.ProjectId, NEW_VALUES.[FileName],NEW_VALUES.UploadedDate
+			LogData = (SELECT NEW_VALUES.Id,NEW_VALUES.ProjectId,proj.Name as 'ProjectName', NEW_VALUES.[FileName],NEW_VALUES.UploadedDate
 					    FROM inserted AS NEW_VALUES
+					    LEFT JOIN Project proj on proj.ProjectId = NEW_VALUES.ProjectId
 			           WHERE NEW_VALUES.Id = i.Id
 					  FOR XML AUTO, ROOT('ProjectAttachment'), TYPE),
 			@CurrentPMTime
@@ -47,4 +49,3 @@ BEGIN
 	  -- End logging session
 	 EXEC dbo.SessionLogUnprepare
 END
-GO
