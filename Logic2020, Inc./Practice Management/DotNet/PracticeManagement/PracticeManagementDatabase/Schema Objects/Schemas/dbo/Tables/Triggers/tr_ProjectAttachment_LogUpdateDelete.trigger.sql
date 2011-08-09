@@ -11,14 +11,24 @@ BEGIN
 
 	;WITH NEW_VALUES AS
 	(
-		SELECT i.Id,i.ProjectId,i.UploadedDate,i.[FileName]
+		SELECT i.Id
+				,i.ProjectId
+				,proj.Name AS 'ProjectName'
+				,i.UploadedDate
+				,i.[FileName]
 		  FROM inserted AS i
+		  LEFT JOIN Project proj ON proj.ProjectId = i.ProjectId
 	),
 
 	OLD_VALUES AS
 	(
-		SELECT d.Id,d.ProjectId,d.UploadedDate,d.[FileName]
+		SELECT d.Id
+				,d.ProjectId
+				,proj.Name AS 'ProjectName'
+				,d.UploadedDate
+				,d.[FileName]
 		  FROM deleted AS d
+		  LEFT JOIN Project proj ON proj.ProjectId = d.ProjectId
 	)
 
 	-- Log an activity
@@ -69,4 +79,3 @@ BEGIN
 	-- End logging session
 	 EXEC dbo.SessionLogUnprepare
 END
-GO
