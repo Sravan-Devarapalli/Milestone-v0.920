@@ -5,6 +5,7 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register Src="~/Controls/TimeEntry/WeekSelector.ascx" TagName="WeekSelector"
     TagPrefix="uc" %>
+<%@ Register Src="~/Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Persons/PersonChooser.ascx" TagName="PersonChooser"
     TagPrefix="uc" %>
 <%@ Register Src="~/Controls/TimeEntry/TimeEntries.ascx" TagName="TimeEntries" TagPrefix="uc" %>
@@ -94,13 +95,6 @@
                 <asp:AsyncPostBackTrigger ControlID="wsChoose" />
             </Triggers>
         </pcg:StyledUpdatePanel>
-        <asp:UpdatePanel ID="upnlIsNoteRequired" runat="server">
-            <ContentTemplate>
-                <div style="padding-left: 10px;">
-                    <asp:Label ID="lblIsNoteRequired" runat="server" Text="* You are required to enter notes for any/all time you enter on this page."
-                        Visible="false" ToolTip="* You are required to enter notes for any/all time you enter on this page."></asp:Label></div>
-            </ContentTemplate>
-        </asp:UpdatePanel>
     </div>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <div id="updateContainer" class="time-entry-grid">
