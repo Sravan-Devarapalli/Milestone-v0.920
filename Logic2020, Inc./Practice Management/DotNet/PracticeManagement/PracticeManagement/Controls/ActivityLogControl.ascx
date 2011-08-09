@@ -1,6 +1,15 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ActivityLogControl.ascx.cs"
     Inherits="PraticeManagement.Controls.ActivityLogControl" %>
 <%@ Register src="~/Controls/Generic/LoadingProgress.ascx" tagname="LoadingProgress" tagprefix="uc" %>
+<style>    
+        .WordWrap
+        {
+            word-wrap: break word !important; /* Internet Explorer 5.5+ */
+            word-break: break-all !important;
+            white-space: -moz-pre-wrap !important; /*Mozilla */
+            white-space: normal;
+        }
+</style>
 <uc:LoadingProgress ID="lpActivityLog" runat="server" />
 <asp:UpdatePanel ID="updActivityLog" runat="server" UpdateMode="Conditional">
     <ContentTemplate>
@@ -69,23 +78,23 @@
                                 </HeaderTemplate>
                                 <ItemTemplate>
                                     <asp:Label ID="lblCreateDate" runat="server" Text='<%# ((DateTime)Eval("LogDate")).ToShortDateString() + " " + ((DateTime)Eval("LogDate")).ToShortTimeString() %>' /> by 
-                                    <asp:Label ID="lblUserName" runat="server" Text='<%# Eval("Person.Id") != null ? Eval("Person.PersonLastFirstName") : Eval("SystemUser") %>'/>
+                                    <asp:Label ID="lblUserName" runat="server" Text='<%# GetModifiedByDetails( Eval("Person.Id"), Eval("Person.PersonLastFirstName"), Eval("SystemUser").ToString(), Eval("LogData")) %>'/>
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField>
-                                <ItemStyle Width="11%" />
+                                <ItemStyle Width="12%" CssClass="WordWrap" Wrap="true" />
                                 <HeaderTemplate>
                                     <div class="ie-bg" style="padding-right:'2px';">
                                         Activity</div>
                                 </HeaderTemplate>
                                 <ItemTemplate>
-                                    <asp:Label ID="lblActivityType" runat="server" Text='<%# Eval("ActivityName") %>'></asp:Label>
+                                    <asp:Label ID="lblActivityType" runat="server" Text='<%# NoNeedToShowActivityType(Eval("ActivityName")) %>'></asp:Label>
                                     <asp:Xml ID="xmlActivityItem" runat="server" DocumentContent='<%# AddDefaultProjectAndMileStoneInfo(Eval("LogData")) %>' 
                                         TransformSource="~/Reports/Xslt/ActivityLogItem.xslt"></asp:Xml>
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField>
-                                <ItemStyle Width="78%" />
+                                <ItemStyle Width="77%" CssClass="WordWrap" Wrap="true" />
                                 <HeaderTemplate>
                                     <div class="ie-bg">
                                         Changes</div>
