@@ -58,7 +58,8 @@ BEGIN
 			IF EXISTS (SELECT 1 FROM Opportunity WHERE ProjectId = @ProjectID)
 			BEGIN
 				UPDATE Opportunity
-				SET ProjectId = NULL
+				SET ProjectId = NULL,
+					LastUpdated = GETDATE()
 				WHERE ProjectId = @ProjectID
 			END
 			
