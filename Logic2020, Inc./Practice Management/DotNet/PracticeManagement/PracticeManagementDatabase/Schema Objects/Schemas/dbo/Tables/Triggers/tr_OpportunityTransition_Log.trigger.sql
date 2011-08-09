@@ -13,36 +13,38 @@ BEGIN
 	(
 		SELECT i.[OpportunityTransitionId]
 			   ,i.[OpportunityTransitionStatusId]
+			   ,transitionStatus.Name AS 'TransitionType'
 			   ,i.[TransitionDate]
-			   ,i.[PersonId]
+			   ,i.[PersonId] --Modified person
 			   ,i.[NoteText]
 			   ,i.OpportunityId
-			   ,i.TargetPersonId 
 			   ,opp.[Name] as 'OpportunityName'
+			   ,i.TargetPersonId 
 			   ,pers.LastName + ', ' + pers.FirstName as 'Person'
-			   ,transitionStatus.Name as 'TransitionType'
 		  FROM inserted AS i
 		       INNER JOIN Opportunity as opp ON i.OpportunityId = opp.OpportunityId
-			   inner join person as pers on pers.PersonId = i.TargetPersonId
-			   inner join OpportunityTransitionStatus as transitionStatus on transitionStatus.OpportunityTransitionStatusId = i.OpportunityTransitionStatusId
+		       INNER JOIN OpportunityTransitionStatus transitionStatus ON i.OpportunityTransitionStatusId  = transitionStatus.OpportunityTransitionStatusId
+		       INNER JOIN Person as p ON p.PersonId = i.PersonId
+			   LEFT JOIN person as pers on pers.PersonId = i.TargetPersonId
 	),
 
 	OLD_VALUES AS
 	(
 		SELECT d.[OpportunityTransitionId]
 			   ,d.[OpportunityTransitionStatusId]
+			   ,transitionStatus.Name AS 'TransitionType'
 			   ,d.[TransitionDate]
-			   ,d.[PersonId]
+			   ,d.[PersonId] --Modified person
 			   ,d.[NoteText]
-			   ,d.OpportunityId 
-			   ,d.TargetPersonId 
+			   ,d.OpportunityId
 			   ,opp.[Name] as 'OpportunityName'
+			   ,d.TargetPersonId 
 			   ,pers.LastName + ', ' + pers.FirstName as 'Person'
-			   ,transitionStatus.Name as 'TransitionType'
 		  FROM deleted AS d
 		       INNER JOIN Opportunity as opp ON d.OpportunityId = opp.OpportunityId
-			   inner join person as pers on pers.PersonId = d.TargetPersonId
-			   inner join OpportunityTransitionStatus as transitionStatus on transitionStatus.OpportunityTransitionStatusId = d.OpportunityTransitionStatusId
+		       INNER JOIN OpportunityTransitionStatus transitionStatus ON d.OpportunityTransitionStatusId  = transitionStatus.OpportunityTransitionStatusId
+		       INNER JOIN Person as p ON p.PersonId = d.PersonId
+			   LEFT JOIN person as pers on pers.PersonId = d.TargetPersonId
 	)
 
 	-- Log an activity
@@ -104,9 +106,6 @@ BEGIN
 	EXEC dbo.SessionLogUnprepare
 
 END
-
-
-GO
 
 
 
