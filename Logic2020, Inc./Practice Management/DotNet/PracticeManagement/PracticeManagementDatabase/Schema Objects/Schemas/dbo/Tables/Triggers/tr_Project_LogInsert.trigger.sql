@@ -16,6 +16,36 @@ BEGIN
 	DECLARE @CurrentPMTime DATETIME 
 	SET @CurrentPMTime = dbo.InsertingTime()
 
+	;WITH NEW_VALUES AS
+	(
+		SELECT i.ProjectId
+				,i.ProjectNumber AS 'ProjectNumber'
+				,i.Name AS 'Name'
+				,i.ClientId
+				,C.Name AS 'Client'
+				,i.PracticeId
+				,prac.Name AS 'PracticeArea'
+				,i.ProjectStatusId
+				,ps.Name AS 'ProjectStatus'
+				,i.Discount
+				,i.BuyerName AS 'BuyerName'
+				,i.GroupId
+				,PG.Name AS 'ProjectGroup'
+				,i.ProjectManagerId
+				,PM.LastName + ', ' + PM.FirstName AS 'Owner'
+				,i.DirectorId
+				,D.LastName + ', ' + D.FirstName AS 'ProjectDirector'
+				,CASE WHEN i.IsChargeable = 1 THEN 'Yes'
+						ELSE 'No' END AS 'IsChargeable'
+		FROM inserted AS i
+		JOIN Client AS C ON C.ClientId = i.ClientId
+		JOIN Practice AS prac ON prac.PracticeId = i.PracticeId
+		JOIN ProjectStatus AS ps ON ps.ProjectStatusId = i.ProjectStatusId
+		JOIN ProjectGroup AS PG ON PG.GroupId = i.GroupId
+		JOIN Person AS PM ON PM.PersonId = i.ProjectManagerId
+		JOIN Person AS D ON D.PersonId = i.DirectorId
+	)
+	
 	-- Log an activity
 	INSERT INTO dbo.UserActivityLog
 	            (ActivityTypeID,
@@ -39,9 +69,9 @@ BEGIN
 	       l.PersonID,
 	       l.LastName,
 	       l.FirstName,
-	       Data =  CONVERT(NVARCHAR(MAX),(SELECT NEW_VALUES.ProjectId, NEW_VALUES.Name
-					    FROM inserted AS NEW_VALUES
-			           WHERE NEW_VALUES.ProjectId = i.ProjectId
+	       Data =  CONVERT(NVARCHAR(MAX),(SELECT *
+										FROM NEW_VALUES
+										WHERE NEW_VALUES.ProjectId = i.ProjectId
 					  FOR XML AUTO, ROOT('Project'))),
 			LogData = (SELECT NEW_VALUES.ProjectId
 					    FROM inserted AS NEW_VALUES
@@ -54,9 +84,6 @@ BEGIN
 	  -- End logging session
 	 EXEC dbo.SessionLogUnprepare
 END
-
-
-GO
 
 
 
