@@ -34,7 +34,11 @@ BEGIN
 			  ,ins.[Note] AS 'Note'
 			  ,CASE ins.[IsReviewed] WHEN 1 THEN 'Approved'
 									WHEN 0 THEN 'Declined'
-									 ELSE 'Pending' END AS 'ReviewStatus'  
+									 ELSE 'Pending' END AS 'ReviewStatus'
+			  ,CASE ins.[IsCorrect] WHEN 1 THEN 'Correct'
+									 ELSE 'InCorrect' END AS 'IsCorrect'
+			  ,CASE ins.[IsChargeable] WHEN 1 THEN 'Billable'
+										ELSE 'Not Billable' END AS 'IsBillable'
 			  ,CONVERT(VARCHAR(10), ins.[MilestoneDate], 101) AS 'MilestoneDate'
 			  ,modp.LastName + ', ' + modp.FirstName AS 'ModifiedByName'
 			  ,objp.LastName + ', ' + objp.FirstName AS 'ObjectName'
@@ -71,7 +75,11 @@ BEGIN
 			  ,del.[Note] AS 'Note'
 			  ,CASE del.[IsReviewed] WHEN 1 THEN 'Approved'
 									WHEN 0 THEN 'Declined'
-									 ELSE 'Pending' END AS 'ReviewStatus' 
+									 ELSE 'Pending' END AS 'ReviewStatus'
+			  ,CASE del.[IsCorrect] WHEN 1 THEN 'Correct'
+									 ELSE 'InCorrect' END AS 'IsCorrect'
+			  ,CASE del.[IsChargeable] WHEN 1 THEN 'Billable'
+										ELSE 'Not Billable' END AS 'IsBillable'
 			  ,CONVERT(VARCHAR(10), del.[MilestoneDate], 101) AS 'MilestoneDate'
 			  ,modp.LastName + ', ' + modp.FirstName AS 'ModifiedByName'
 			  ,objp.LastName + ', ' + objp.FirstName AS 'ObjectName'
@@ -161,6 +169,4 @@ BEGIN
 	 EXEC dbo.SessionLogUnprepare
  END
 END
-
-
 
