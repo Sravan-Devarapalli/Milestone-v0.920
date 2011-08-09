@@ -134,7 +134,7 @@
                 <label id="lblSpreadsheetTotalHours" runat="server" style="font-size: small; font-weight: bold;" />
                 <ext1:TotalCalculatorExtender ID="extSpreadsheetTotalHours" runat="server" TargetControlID="lblSpreadsheetTotalHours" />
             </td>
-            <td style="width: 4%">
+            <td style="width: 3%">
             </td>
         </tr>
     </table>
