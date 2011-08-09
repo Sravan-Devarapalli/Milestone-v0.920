@@ -36,6 +36,7 @@ BEGIN
 		WHERE op.PersonId IS NULL 
 	END
 	UPDATE dbo.Opportunity
-	SET OutSideResources = @OutSideResources
+	SET OutSideResources = @OutSideResources,
+		LastUpdated = GETDATE()
 	WHERE OpportunityId = @OpportunityId
 END
