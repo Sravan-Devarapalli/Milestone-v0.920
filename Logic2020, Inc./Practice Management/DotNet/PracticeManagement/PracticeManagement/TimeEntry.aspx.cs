@@ -75,6 +75,10 @@ namespace PraticeManagement
                 Roles.IsUserInRole(
                     DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
 
+
+            var isNoteRequiredList = DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
+            teList.IsNoteRequiredList = isNoteRequiredList;
+
             var showGrid = isSelectedActive || currentIsAdmin;
             teList.Visible = showGrid;
             if (showGrid)
@@ -169,18 +173,18 @@ namespace PraticeManagement
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            var isNoteRequiredList = DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
-            teList.IsNoteRequiredList = isNoteRequiredList;
+            //var isNoteRequiredList = DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
+            //teList.IsNoteRequiredList = isNoteRequiredList;
 
-            var result = true;
+            //var result = true;
 
-            if (pcPersons.SelectedPerson.TerminationDate.HasValue)
-                result = isNoteRequiredList.Any(p => p.Value == true && pcPersons.SelectedPerson.TerminationDate >= p.Key);
+            //if (pcPersons.SelectedPerson.TerminationDate.HasValue)
+            //    result = isNoteRequiredList.Any(p => p.Value == true && pcPersons.SelectedPerson.TerminationDate >= p.Key);
 
-            lblIsNoteRequired.Visible = isNoteRequiredList.Any(p => p.Value == true 
-                                                                    && pcPersons.SelectedPerson.HireDate <= p.Key
-                                                                    && result
-                                                                    );
+            //lblIsNoteRequired.Visible = isNoteRequiredList.Any(p => p.Value == true 
+            //                                                        && pcPersons.SelectedPerson.HireDate <= p.Key
+            //                                                        && result
+            //                                                        );
         }
 
         private void RaiseError()
