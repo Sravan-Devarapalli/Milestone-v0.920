@@ -19,33 +19,42 @@ BEGIN
 		SELECT i.OpportunityId 
 			   ,i.[Name]
 			   ,i.[ClientId]
-			   ,opp.ClientName
+			   ,C.Name as 'ClientName'
 			   ,i.[SalespersonId]
-			   ,opp.SalespersonFirstName + ', ' + opp.SalespersonLastName as 'Salesperson'
+			   ,S.LastName + ', ' + S.FirstName as 'Salesperson'
 			   ,i.[OpportunityStatusId]
-			   ,opp.OpportunityStatusName
+			   ,OS.Name AS 'OpportunityStatus'
 			   ,OP.[Priority]
 			   ,i.[ProjectedStartDate]
 			   ,i.[ProjectedEndDate]
 			   ,i.[OpportunityNumber]
 			   ,i.[Description]
 			   ,i.[PracticeId]
-			   ,opp.PracticeName
+			   ,Prac.Name AS 'PracticeName'
 			   ,i.[BuyerName]
 			   ,i.[CreateDate]
 			   ,i.[Pipeline]
 			   ,i.[Proposed]
 			   ,i.[SendOut]
 			   ,i.[ProjectId]
+			   ,proj.Name AS 'ProjectName'
 			   ,i.[OpportunityIndex]
-			   ,i.[RevenueType]
+			   ,i.[EstimatedRevenue]
 			   ,i.[OwnerId]
+			   ,p.LastName + ', ' + p.FirstName as 'Owner'
 			   ,i.[GroupId]
-			   ,opp.GroupName
+			   ,g.Name 'GroupName'
 			   ,i.[LastUpdated]
 		  FROM inserted AS i
-		       INNER JOIN v_Opportunity as opp ON i.OpportunityId = opp.OpportunityId
+		       --INNER JOIN v_Opportunity as opp ON i.OpportunityId = opp.OpportunityId
 		       INNER JOIN OpportunityPriorities OP ON i.PriorityId = Op.Id
+		       INNER JOIN OpportunityStatus OS ON i.OpportunityStatusId = OS.OpportunityStatusId
+		       INNER JOIN Practice Prac ON i.PracticeId = Prac.PracticeId
+		       INNER JOIN Person S ON i.SalespersonId = S.PersonId
+		       INNER JOIN Client C ON i.ClientId = C.ClientId
+		       INNER JOIN Person p ON i.OwnerId = p.PersonId
+		       LEFT JOIN Project proj ON i.ProjectId = proj.ProjectId
+		       LEFT JOIN ProjectGroup g ON i.GroupId = g.GroupId
 	),
 
 	OLD_VALUES AS
@@ -53,33 +62,42 @@ BEGIN
 		SELECT d.OpportunityId
 			   ,d.[Name]
 			   ,d.[ClientId]
-			   ,opp.ClientName
+			   ,C.Name as 'ClientName'
 			   ,d.[SalespersonId]
-			   ,opp.SalespersonFirstName + ', ' + opp.SalespersonLastName as 'Salesperson'
+			   ,S.LastName + ', ' + S.FirstName as 'Salesperson'
 			   ,d.[OpportunityStatusId]
-			   ,opp.OpportunityStatusName
+			   ,os.Name AS 'OpportunityStatus'
 			   ,OP.[Priority]
 			   ,d.[ProjectedStartDate]
 			   ,d.[ProjectedEndDate]
 			   ,d.[OpportunityNumber]
 			   ,d.[Description]
 			   ,d.[PracticeId]
-			   ,opp.PracticeName
+			   ,Prac.Name AS 'PracticeName'
 			   ,d.[BuyerName]
 			   ,d.[CreateDate]
 			   ,d.[Pipeline]
 			   ,d.[Proposed]
 			   ,d.[SendOut]
 			   ,d.[ProjectId]
+			   ,proj.Name AS 'ProjectName'
 			   ,d.[OpportunityIndex]
-			   ,d.[RevenueType]
+			   ,d.[EstimatedRevenue]
 			   ,d.[OwnerId]
+			   ,p.LastName + ', ' + p.FirstName as 'Owner'
 			   ,d.[GroupId]
-			   ,opp.GroupName
+			   ,g.Name 'GroupName'
 			   ,d.[LastUpdated]
 		  FROM deleted AS d
-		       INNER JOIN v_Opportunity as opp ON d.OpportunityId = opp.OpportunityId
+		       --INNER JOIN v_Opportunity as opp ON d.OpportunityId = opp.OpportunityId
 		       INNER JOIN OpportunityPriorities OP ON d.PriorityId = Op.Id
+		       INNER JOIN OpportunityStatus os ON d.OpportunityStatusId = os.OpportunityStatusId
+		       INNER JOIN Practice Prac ON d.PracticeId = Prac.PracticeId
+		       INNER JOIN Person S ON d.SalespersonId = S.PersonId
+		       INNER JOIN Client C ON d.ClientId = C.ClientId
+		       INNER JOIN Person p ON d.OwnerId = p.PersonId
+		       LEFT JOIN Project proj ON d.ProjectId = proj.ProjectId
+		       LEFT JOIN ProjectGroup g ON d.GroupId = g.GroupId
 	)
 
 	-- Log an activity
@@ -123,7 +141,6 @@ BEGIN
 							,NEW_VALUES.[PracticeId]
 							,NEW_VALUES.[ProjectId]
 							,NEW_VALUES.[OpportunityIndex]
-							,NEW_VALUES.[RevenueType]
 							,NEW_VALUES.[OwnerId]
 							,NEW_VALUES.[GroupId]
 							,NEW_VALUES.[LastUpdated]
@@ -135,7 +152,6 @@ BEGIN
 							,OLD_VALUES.[PracticeId]
 							,OLD_VALUES.[ProjectId]
 							,OLD_VALUES.[OpportunityIndex]
-							,OLD_VALUES.[RevenueType]
 							,OLD_VALUES.[OwnerId]
 							,OLD_VALUES.[GroupId]
 							,OLD_VALUES.[LastUpdated]
@@ -147,6 +163,28 @@ BEGIN
 	  FROM inserted AS i
 	       FULL JOIN deleted AS d ON i.OpportunityId = d.OpportunityId
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
+		WHERE i.Name <> d.Name
+				OR i.ClientId <> d.ClientId
+				OR i.SalespersonId <> d.SalespersonId
+				OR i.OpportunityStatusId <> d.OpportunityStatusId
+				OR i.PracticeId <> d.PracticeId
+				OR i.RevenueType <> d.RevenueType
+				OR i.PriorityId <> d.PriorityId
+				OR (ISNULL(i.OwnerId,0) <> ISNULL(d.OwnerId,0))
+				OR (ISNULL(i.GroupId,0) <> ISNULL(d.GroupId,0))
+				OR (ISNULL(i.SalespersonId,0) <> ISNULL(d.SalespersonId,0))
+				OR (ISNULL(i.Priority,'') <> ISNULL(d.Priority,''))
+				OR (ISNULL(i.ProjectedStartDate,'1900-01-01') <> ISNULL(d.ProjectedStartDate,'1900-01-01'))
+				OR (ISNULL(i.ProjectedEndDate,'1900-01-01') <> ISNULL(d.ProjectedEndDate,'1900-01-01'))
+				OR (ISNULL(i.[Description],'') <> ISNULL(d.[Description],''))
+				OR (ISNULL(i.BuyerName,'') <> ISNULL(d.BuyerName,''))
+				OR (ISNULL(i.ProjectId,0) <> ISNULL(d.ProjectId,0))
+				OR (ISNULL(i.OpportunityIndex,0) <> ISNULL(d.OpportunityIndex,0))
+				OR (ISNULL(i.EstimatedRevenue,0) <> ISNULL(d.EstimatedRevenue,0))
+				OR (ISNULL(i.OutSideResources,'') <> ISNULL(d.OutSideResources,''))
+				OR (ISNULL(i.Pipeline,'') <> ISNULL(d.Pipeline,''))
+				OR (ISNULL(i.Proposed,'') <> ISNULL(d.Proposed,''))
+				OR (ISNULL(i.SendOut,'') <> ISNULL(d.SendOut,''))
 	 --WHERE i.OpportunityId IS NULL -- Deleted record
 	 --   OR d.OpportunityId IS NULL -- Added record
 
@@ -156,10 +194,10 @@ END
 
 GO
 
-EXEC sp_settriggerorder @triggername=N'[dbo].[tr_Opportunity_Log]', @order=N'Last', @stmttype=N'INSERT'
+--EXEC sp_settriggerorder @triggername=N'[dbo].[tr_Opportunity_Log]', @order=N'Last', @stmttype=N'INSERT'
 GO
 
-EXEC sp_settriggerorder @triggername=N'[dbo].[tr_Opportunity_Log]', @order=N'Last', @stmttype=N'UPDATE'
+--EXEC sp_settriggerorder @triggername=N'[dbo].[tr_Opportunity_Log]', @order=N'Last', @stmttype=N'UPDATE'
 GO
 
 
