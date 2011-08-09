@@ -32,6 +32,13 @@ namespace PraticeManagement.Controls
         private const string ViewstateEventSource = "EVENT_SOURCE";
         private const string OpportunityIdViewstate = "OPPORTUNITY_ID";
         private const string MilestoneIdViewstate = "MILESTONE_ID";
+        private const string ModifiedByNameAttribute = "ModifiedByName";
+        private const string UserNameAttribute = "UserName";
+        private const string UserAttribute = "User";
+
+        private const string LoggedInActivity = "logged in";
+        private const string NewValuesTag = "new_values";
+        private const string LoginTag = "login";
 
         #endregion
 
@@ -365,7 +372,7 @@ namespace PraticeManagement.Controls
 
         }
 
-        public object  AddDefaultProjectAndMileStoneInfo(object logDataObject)
+        public object AddDefaultProjectAndMileStoneInfo(object logDataObject)
         {
             if (logDataObject != null)
             {
@@ -394,6 +401,70 @@ namespace PraticeManagement.Controls
             {
                 return logDataObject;
             }
+        }
+
+        public string GetModifiedByDetails(object personId, object personLastFirstName, string SystemUser, object logData)
+        {
+            if (personId != null)
+            {
+                return personLastFirstName.ToString();
+            }
+
+            string modifiedOrUser = string.Empty;
+
+            if (logData != null)
+            {
+                var logDataStr = logData.ToString();
+                var XmlDoc = new XmlDocument();
+                XmlDoc.LoadXml(logDataStr);
+                var Root = XmlDoc.FirstChild;
+                if (Root.HasChildNodes)
+                {
+                    var newValues = Root.FirstChild;
+                    if (Root.Name.ToLower() == LoginTag)
+                    {
+                        modifiedOrUser = GetAttribute(newValues, UserNameAttribute);
+                    }
+                    else if (Root.Name.ToLower() == "becomeuser" || Root.Name.ToLower() == "export")
+                    {
+                        modifiedOrUser = GetAttribute(newValues, UserAttribute);
+                    }
+                    else if (Root.Name.ToLower() == "note")
+                    {
+                        modifiedOrUser = GetAttribute(newValues, "By");
+                    }
+                    //else if (Root.Name.ToLower() == "error")
+                    //{
+                    //    modifiedOrUser = GetAttribute(newValues, "Login");
+                    //}
+                    else if (logData.ToString().Contains(ModifiedByNameAttribute))
+                    {
+                        modifiedOrUser = GetAttribute(newValues, ModifiedByNameAttribute);
+                    }
+                    else if (logData.ToString().Contains(UserNameAttribute))
+                    {
+                        modifiedOrUser = GetAttribute(newValues, UserNameAttribute);
+                    }
+                }
+            }
+
+            return string.IsNullOrEmpty(modifiedOrUser) ? SystemUser : modifiedOrUser;
+        }
+
+        private string GetAttribute(XmlNode newValues, string attribute)
+        {
+            if (newValues.Name.ToLower() == NewValuesTag && newValues.OuterXml.Contains(attribute))
+            {
+                var modifiedBy = newValues.Attributes.GetNamedItem(attribute);
+                if (modifiedBy != null)
+                    return modifiedBy.Value;
+            }
+            return null;
+        }
+
+        public string NoNeedToShowActivityType(object activityName)
+        {
+            return activityName.ToString().ToLower() == LoggedInActivity ? string.Empty : activityName.ToString();
         }
     }
 }
