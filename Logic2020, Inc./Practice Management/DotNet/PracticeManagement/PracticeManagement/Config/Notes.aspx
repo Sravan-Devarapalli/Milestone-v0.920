@@ -304,13 +304,13 @@
                             <tr style="padding-top: 2px;">
                                 <td align="center" style="padding-left: 6px; padding-right: 6px; text-align: center;
                                     padding-top: 2px; width: 44%">
-                                    <b>Exempt from notes</b>
+                                    <b>Notes Optional</b>
                                 </td>
                                 <td valign="middle" align="center" style="width: 12%">
                                 </td>
                                 <td align="center" style="padding-left: 6px; padding-right: 6px; padding-top: 2px;
                                     vertical-align: top; text-align: center; width: 44%">
-                                    <b>Must Enter Notes</b>
+                                    <b>Notes Required</b>
                                 </td>
                             </tr>
                         </table>
