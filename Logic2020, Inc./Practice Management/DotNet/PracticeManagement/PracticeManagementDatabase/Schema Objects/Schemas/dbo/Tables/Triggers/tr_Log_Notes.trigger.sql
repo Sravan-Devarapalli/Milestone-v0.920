@@ -30,9 +30,17 @@ BEGIN
 			   ,n.NoteTargetId
 			   ,n.NoteTargetName
 			   ,m.ProjectId as ParentTargetId
+			   ,(CASE WHEN n.NoteTargetId = 1 THEN m.Description 
+						WHEN n.NoteTargetId = 2 THEN proj.Name 
+						WHEN n.NoteTargetId = 3 THEN p.LastName + ', '+p.FirstName
+						WHEN n.NoteTargetId = 4 THEN o.Name
+						END ) AS NoteAddedTo
 		FROM inserted AS i
 			inner join v_Notes as n on n.NoteId = i.NoteId	
 			left join dbo.Milestone m on n.NoteTargetId = 1 AND m.MilestoneId = i.TargetId
+			  LEFT JOIN Project proj on n.NoteTargetId = 2 AND proj.ProjectId = i.TargetId
+			  LEFT JOIN Person p on n.NoteTargetId = 3 AND p.PersonId = i.TargetId
+			  LEFT JOIN Opportunity o on n.NoteTargetId = 4 AND o.OpportunityId = i.TargetId
 	),
 
 	OLD_VALUES AS
@@ -46,9 +54,17 @@ BEGIN
 			   ,n.NoteTargetId
 			   ,n.NoteTargetName
 			   ,m.ProjectId as ParentTargetId
+			   ,(CASE WHEN n.NoteTargetId = 1 THEN m.Description 
+						WHEN n.NoteTargetId = 2 THEN proj.Name 
+						WHEN n.NoteTargetId = 3 THEN p.LastName + ', '+p.FirstName
+						WHEN n.NoteTargetId = 4 THEN o.Name
+						END ) AS NoteAddedTo
 		  FROM deleted AS d
 			inner join v_Notes as n on n.NoteId = d.NoteId	
 			left join dbo.Milestone m on n.NoteTargetId = 1 AND m.MilestoneId = d.TargetId
+			  LEFT JOIN Project proj on n.NoteTargetId = 2 AND proj.ProjectId = d.TargetId
+			  LEFT JOIN Person p on n.NoteTargetId = 3 AND p.PersonId = d.TargetId
+			  LEFT JOIN Opportunity o on n.NoteTargetId = 4 AND o.OpportunityId = d.TargetId
 	)
 
 	-- Log an activity
@@ -114,8 +130,6 @@ BEGIN
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
 END
-
-GO
 
 
 
