@@ -102,6 +102,7 @@ namespace DataAccess
                 int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
                 int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
                 int isDefaultIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefault);
+                int isSystemTimeTypeIndex = reader.GetOrdinal(Constants.ColumnNames.IsSystemTimeTypeColumn);
 
                 while (reader.Read())
                 {
@@ -113,6 +114,7 @@ namespace DataAccess
                                  };
                     //  Make default time types marked as InUse to disallow removing them
                     tt.InUse = bool.Parse(reader.GetString(inUseIndex)) || tt.IsDefault;
+                    tt.IsSystemTimeType = reader.GetBoolean(isSystemTimeTypeIndex);
                     yield return tt;
                 }
             }
@@ -899,20 +901,20 @@ namespace DataAccess
             var isChargeableIndex = reader.GetOrdinal(Constants.ParameterNames.IsChargeable);
             var isCorrectIndex = reader.GetOrdinal(Constants.ParameterNames.IsCorrect);
             var isReviewedIndex = reader.GetOrdinal(Constants.ParameterNames.IsReviewed);
-            var timeTypeNameIndex = -1;
+            var isSystemTimeTypeIndex = -1;
             try
             {
-                timeTypeNameIndex = reader.GetOrdinal(Constants.ParameterNames.TimeTypeName);
+                isSystemTimeTypeIndex = reader.GetOrdinal(Constants.ColumnNames.IsSystemTimeTypeColumn);
             }
             catch
             {
-                timeTypeNameIndex = -1;
+                isSystemTimeTypeIndex = -1;
             }
 
             var timeType = new TimeTypeRecord();
             timeType.Id = reader.GetInt32(timeTypeIdIndex);
             if (timeTypeIdIndex != -1)
-                timeType.Name = reader.GetString(timeTypeNameIndex);
+                timeType.IsSystemTimeType = reader.GetBoolean(isSystemTimeTypeIndex);
 
             var timeEntry = new TimeEntryRecord
                                 {
