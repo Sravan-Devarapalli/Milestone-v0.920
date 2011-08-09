@@ -5,8 +5,7 @@
 
   <xsl:param name="currentUrl" />
 
-  <xsl:variable name="redirectUrl">
-    &amp;returnTo=<xsl:value-of select="$currentUrl"/>
+  <xsl:variable name="redirectUrl">&amp;returnTo=<xsl:value-of select="$currentUrl"/>
   </xsl:variable>
 
   <xsl:template match="/*">
@@ -16,7 +15,7 @@
     <xsl:variable name="needHyperlink">
       <xsl:call-template name="CheckForHyperlink"></xsl:call-template>
     </xsl:variable>
-    &#160;
+    <p>
     <xsl:choose>
       <xsl:when test="$needHyperlink = 'true'">
         <xsl:choose>
@@ -80,12 +79,14 @@
               Pr: <xsl:value-of select="//NEW_VALUES/@ProjectName"/><br/>
             </p>
           </xsl:when>
+          <xsl:when test="name() = 'Export' "></xsl:when>
           <xsl:otherwise>
             <xsl:call-template name="DisplayValue" />
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
+  </p>
   </xsl:template>
 
   <xsl:template name="CheckForHyperlink">
@@ -120,6 +121,9 @@
       <xsl:when test="name() = 'Export' and //NEW_VALUES/@User">
         <!--<xsl:text>&#160;</xsl:text>-->
         <xsl:value-of select="//NEW_VALUES/@User"/>
+      </xsl:when>
+      <xsl:when test="name() = 'MilestonePerson' and //NEW_VALUES/@FullName">
+        <xsl:value-of select="//NEW_VALUES/@FullName"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="//NEW_VALUES/@Name"/>
