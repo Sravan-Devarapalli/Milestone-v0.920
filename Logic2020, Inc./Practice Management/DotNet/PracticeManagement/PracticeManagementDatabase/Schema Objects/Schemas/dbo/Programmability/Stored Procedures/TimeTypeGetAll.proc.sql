@@ -12,7 +12,8 @@ BEGIN
 		tt.TimeTypeId, 
 		tt.[Name], 
 		'True' AS InUse,
-		tt.IsDefault
+		tt.IsDefault,
+		tt.IsSystemTimeType
 	FROM TimeType AS tt
 	WHERE tt.TimeTypeId IN (SELECT DISTINCT(TimeTypeId) FROM TimeEntries)
 	UNION 
@@ -20,7 +21,8 @@ BEGIN
 		tt.TimeTypeId, 
 		tt.[Name], 
 		'False' AS InUse,
-		tt.IsDefault
+		tt.IsDefault,
+		tt.IsSystemTimeType
 	FROM TimeType AS tt
 	WHERE tt.TimeTypeId NOT IN (SELECT DISTINCT(TimeTypeId) FROM TimeEntries)
 	)
