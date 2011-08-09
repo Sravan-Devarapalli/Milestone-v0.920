@@ -107,8 +107,8 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <asp:TextBox ID="txtHolidayDescription" runat="server" placeholder="Enter Note."
-                            TextMode="MultiLine" Height="50px" Style="resize: none; width: 300px; overflow: auto;"></asp:TextBox>
+                        <asp:TextBox ID="txtHolidayDescription" runat="server" placeholder="Enter Holiday Description."
+                            TextMode="MultiLine" Height="50px" Style="resize: none; width: 300px; overflow: auto; margin-left:4px;"></asp:TextBox>
                     </td>
                 </tr>
                 <td colspan="2" style="text-align: left;">
