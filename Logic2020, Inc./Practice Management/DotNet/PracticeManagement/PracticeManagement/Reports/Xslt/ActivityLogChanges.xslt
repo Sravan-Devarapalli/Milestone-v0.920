@@ -22,21 +22,24 @@
       <xsl:when test="$rootName = 'Note'">
         <xsl:call-template name="NEW_VALUES_NOTES"></xsl:call-template>
       </xsl:when>
+      <xsl:when test="$rootName = 'Export'">
+        <xsl:call-template name="NEW_VALUES_EXPORT"></xsl:call-template>
+      </xsl:when>
       <xsl:when test="count(./OLD_VALUES/attribute::*) = 0">
         <xsl:apply-templates select="." mode="insert_delete"></xsl:apply-templates>
       </xsl:when>
       <xsl:when test="count(./attribute::*) = 0">
         <xsl:apply-templates select="OLD_VALUES" mode="insert_delete"></xsl:apply-templates>
       </xsl:when>
-      <xsl:when test="$rootName = 'Milestone'">
+      <!--<xsl:when test="$rootName = 'Milestone'">
         <xsl:apply-templates select="." mode="insert_delete"></xsl:apply-templates>
-      </xsl:when>
-      <xsl:when test="$rootName = 'ProjectAttachment'">
+      </xsl:when>-->
+      <!--<xsl:when test="$rootName = 'ProjectAttachment'">
         <xsl:apply-templates select="." mode="insert_delete"></xsl:apply-templates>
-      </xsl:when>
-      <xsl:when test="$rootName = 'Opportunity'">
+      </xsl:when>-->
+      <!--<xsl:when test="$rootName = 'Opportunity'">
         <xsl:apply-templates select="." mode="insert_delete"></xsl:apply-templates>
-      </xsl:when>
+      </xsl:when>-->
       <xsl:otherwise>
         <xsl:apply-templates select="." mode="update"></xsl:apply-templates>
       </xsl:otherwise>
@@ -48,41 +51,62 @@
       <xsl:variable name="value" select="." />
       <xsl:variable name="attrName" select="name()" />
 
-      <xsl:for-each select="parent::*/OLD_VALUES/attribute::*">
-        <xsl:if test="name() = $attrName and . != $value">
-          <xsl:call-template name="DisplayChange">
-            <xsl:with-param name="attrName" select="name()" />
-            <xsl:with-param name="newValue" select="$value" />
-            <xsl:with-param name="oldValue" select="." />
-          </xsl:call-template>
-        </xsl:if>
-      </xsl:for-each>
 
-      <xsl:if test="not(parent::*/OLD_VALUES/attribute::*[name() = $attrName])">
-        <xsl:call-template name="DisplayChange">
-          <xsl:with-param name="attrName" select="name()" />
-          <xsl:with-param name="newValue" select="$value" />
-          <xsl:with-param name="oldValue" />
-        </xsl:call-template>
-      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="$attrName = 'ProjectId' or $attrName = 'ObjectPersonId' or $attrName = 'TimeEntryId' or $attrName = 'ClientId' or $attrName = 'PersonId' 
+                  or $attrName = 'ModifiedByPersonId' or $attrName = 'ModifiedBy' or $attrName = 'MilestoneId' or $attrName = 'MilestoneProjectId'
+                  or $attrName = 'MilestonePersonId' or $attrName = 'Id' or $attrName = 'ModifiedByName' or $attrName = 'TimeTypeId' or $attrName = 'OpportunityId'
+                  or $attrName = 'SalespersonId' or $attrName = 'PracticeId' or $attrName = 'OpportunityStatusId' or $attrName = 'OwnerId' or $attrName = 'GroupId'
+                  or $attrName = 'LastUpdated' or $attrName = 'Tag' or $attrName = 'OpportunityTransitionStatusId' or $attrName='ProjectStatusId' or $attrName = 'ProjectManagerId'
+                  or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId'"></xsl:when>
+        <xsl:otherwise>
+          <xsl:for-each select="parent::*/OLD_VALUES/attribute::*">
+            <xsl:if test="name() = $attrName and . != $value">
+              <xsl:call-template name="DisplayChange">
+                <xsl:with-param name="attrName" select="name()" />
+                <xsl:with-param name="newValue" select="$value" />
+                <xsl:with-param name="oldValue" select="." />
+              </xsl:call-template>
+            </xsl:if>
+          </xsl:for-each>
+
+          <xsl:if test="not(parent::*/OLD_VALUES/attribute::*[name() = $attrName])">
+            <xsl:call-template name="DisplayChange">
+              <xsl:with-param name="attrName" select="name()" />
+              <xsl:with-param name="newValue" select="$value" />
+              <xsl:with-param name="oldValue" />
+            </xsl:call-template>
+          </xsl:if>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:for-each>
 
     <xsl:for-each select="./OLD_VALUES/attribute::*">
       <xsl:variable name="value" select="." />
       <xsl:variable name="attrName" select="name()" />
 
-      <xsl:if test="not(parent::*/parent::*/attribute::*[name() = $attrName])">
-        <xsl:call-template name="DisplayChange">
-          <xsl:with-param name="attrName" select="name()" />
-          <xsl:with-param name="newValue" ></xsl:with-param>
-          <xsl:with-param name="oldValue" select="." />
-        </xsl:call-template>
-      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="$attrName = 'ProjectId' or $attrName = 'ObjectPersonId' or $attrName = 'TimeEntryId' or $attrName = 'ClientId' or $attrName = 'PersonId' 
+                  or $attrName = 'ModifiedByPersonId' or $attrName = 'ModifiedBy' or $attrName = 'MilestoneId' or $attrName = 'MilestoneProjectId'
+                  or $attrName = 'MilestonePersonId' or $attrName = 'Id' or $attrName = 'ModifiedByName' or $attrName = 'TimeTypeId' or $attrName = 'OpportunityId'
+                  or $attrName = 'SalespersonId' or $attrName = 'PracticeId' or $attrName = 'OpportunityStatusId' or $attrName = 'OwnerId' or $attrName = 'GroupId'
+                  or $attrName = 'LastUpdated' or $attrName = 'Tag' or $attrName = 'OpportunityTransitionStatusId' or $attrName='ProjectStatusId' or $attrName = 'ProjectManagerId'
+                  or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId'"></xsl:when>
+        <xsl:otherwise>
+          <xsl:if test="not(parent::*/parent::*/attribute::*[name() = $attrName])">
+            <xsl:call-template name="DisplayChange">
+              <xsl:with-param name="attrName" select="name()" />
+              <xsl:with-param name="newValue" ></xsl:with-param>
+              <xsl:with-param name="oldValue" select="." />
+            </xsl:call-template>
+          </xsl:if>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="NEW_VALUES_NOTES">
-    <xsl:for-each select="./attribute::*[name() = 'By' or name() = 'NoteText']">
+    <xsl:for-each select="./attribute::*[name() = 'NoteText' or name() = 'NoteTargetName' or name() = 'NoteAddedTo']">
       <xsl:variable name="value" select="." />
       <xsl:variable name="attrName" select="name()" />
 
@@ -90,36 +114,68 @@
         <xsl:with-param name="attrName" select="name()" />
       </xsl:call-template>:
       <b>
-        <xsl:if test="$attrName = 'By'">
+        <xsl:choose>
+          <!--<xsl:when test="$attrName = 'By'">
+            <xsl:call-template name="DisplayRedirect">
+              <xsl:with-param name="needHyperlink" select="'true'" />
+            </xsl:call-template>
+          </xsl:when>-->
+          <xsl:when test="$attrName = 'NoteText'">
+            <xsl:call-template name="DisplayValue"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="DisplayValue"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <!--<xsl:if test="$attrName = 'By'">
           <xsl:call-template name="DisplayRedirect">
             <xsl:with-param name="needHyperlink" select="'true'" />
           </xsl:call-template>
         </xsl:if>
         <xsl:if test="$attrName = 'NoteText'">
           <xsl:call-template name="DisplayValue"/>
-        </xsl:if>
+        </xsl:if>-->
       </b>
       <xsl:element name="br"></xsl:element>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="NEW_VALUES_EXPORT">
+    <xsl:for-each select="./attribute::*[name() = 'From']">
+      <xsl:value-of select="name()"/>:&#160;
+      <b><xsl:value-of select="."/>
+      </b>
     </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="NEW_VALUES | OLD_VALUES" mode="insert_delete">
     <xsl:variable name="isNew" select="name() = 'NEW_VALUES' and count(./attribute::*) > 0" />
     <xsl:for-each select="./attribute::*">
-      <xsl:call-template name="FriendlyName">
-        <xsl:with-param name="attrName" select="name()" />
-      </xsl:call-template>:
-      <b>
-        <xsl:choose>
-          <xsl:when test="$isNew">
-            <xsl:call-template name="DisplayRedirect" />
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="DisplayValue" />
-          </xsl:otherwise>
-        </xsl:choose>
-      </b>
-      <xsl:element name="br"></xsl:element>
+      <xsl:variable name="attrName" select="name()"/>
+      <xsl:choose>
+        <xsl:when test="$attrName = 'ProjectId' or $attrName = 'ObjectPersonId' or $attrName = 'TimeEntryId' or $attrName = 'ClientId' or $attrName = 'PersonId' 
+                  or $attrName = 'ModifiedByPersonId' or $attrName = 'ModifiedBy' or $attrName = 'MilestoneId' or $attrName = 'MilestoneProjectId'
+                  or $attrName = 'MilestonePersonId' or $attrName = 'Id' or $attrName = 'ModifiedByName' or $attrName = 'TimeTypeId' or $attrName = 'OpportunityId'
+                  or $attrName = 'SalespersonId' or $attrName = 'PracticeId' or $attrName = 'OpportunityStatusId' or $attrName = 'OwnerId' or $attrName = 'GroupId'
+                  or $attrName = 'LastUpdated' or $attrName = 'Tag' or $attrName = 'OpportunityTransitionStatusId' or $attrName='ProjectStatusId' or $attrName = 'ProjectManagerId'
+                  or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId'"></xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="FriendlyName">
+            <xsl:with-param name="attrName" select="name()" />
+          </xsl:call-template>:
+          <b>
+            <xsl:choose>
+              <xsl:when test="$isNew">
+                <xsl:call-template name="DisplayRedirect" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="DisplayValue" />
+              </xsl:otherwise>
+            </xsl:choose>
+          </b>
+          <xsl:element name="br"></xsl:element>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:for-each>
   </xsl:template>
 
@@ -148,7 +204,8 @@
                     or (($rootName = 'MilestonePerson' or $rootName = 'TimeEntry') and (name() = 'MilestoneId' or name() = 'Name' or name() = 'Description')
                         and //DefaultMileStoneId =./../@MilestoneId)
                     or (($rootName = 'MilestonePerson' or $rootName = 'TimeEntry') and name() = 'MilestonePersonId'
-                        and //DefaultMileStoneId = ./../@MilestoneId)">
+                        and //DefaultMileStoneId = ./../@MilestoneId)
+                    or ($rootName = 'Opportunity' and name() = 'Description')">
             <xsl:call-template name="DisplayValue" />
           </xsl:when>
           <xsl:otherwise>
@@ -182,7 +239,7 @@
                     <xsl:value-of select="./../@ProjectId"/>
                     <xsl:value-of select="$redirectUrl"/>
                   </xsl:when>
-                  <xsl:when test="$rootName = 'Milestone' and (name() = 'MilestoneId' or name() = 'Name')">
+                  <xsl:when test="($rootName = 'Milestone' or $rootName = 'TimeEntry') and (name() = 'MilestoneId' or name() = 'Name' or name() = 'Description')">
                     <xsl:text>MilestoneDetail.aspx?id=</xsl:text>
                     <xsl:value-of select="./../@MilestoneId"/>
                     <xsl:text>&amp;projectId=</xsl:text>
@@ -253,7 +310,9 @@
 
   <xsl:template name="CheckForHyperlink">
     <xsl:choose>
-      <xsl:when test="name() = 'ClientId' or name() = 'OpportunityId' or name() = 'ClientName' or name() = 'ModifiedByName' or name() = 'ModifiedBy' or name() = 'ObjectName' or name() = 'ObjectPersonId' or name() = 'Description' or name() = 'PersonId' or name() = 'Name' or name() = 'ProjectId' or name() = 'MilestoneId' or name() = 'ProjectName' or name() = 'MilestoneProjectId' or name() = 'MilestonePersonId' or name() = 'By'">
+      <xsl:when test="name() = 'ClientId' or name() = 'OpportunityId' or name() = 'ClientName' or name() = 'ModifiedByName' or name() = 'ModifiedBy' 
+                or name() = 'ObjectName' or name() = 'ObjectPersonId' or name() = 'Description' or name() = 'PersonId' or name() = 'Name' or name() = 'ProjectId' 
+                or name() = 'MilestoneId' or name() = 'ProjectName' or name() = 'MilestoneProjectId' or name() = 'MilestonePersonId' or name() = 'By'">
         <xsl:value-of select="true()"/>
       </xsl:when>
       <xsl:otherwise>
@@ -300,6 +359,7 @@
       <xsl:when test="$attrName = 'ActualHours'">Actual Hours</xsl:when>
       <xsl:when test="$attrName = 'ForecastedHours'">Forecasted Hours</xsl:when>
       <xsl:when test="$attrName = 'TimeTypeId'">Time Type</xsl:when>
+      <xsl:when test="$attrName = 'TimeTypeName'">Time Type</xsl:when>
       <xsl:when test="$attrName = 'ModifiedBy'">Modified By Id</xsl:when>
       <xsl:when test="$attrName = 'IsReviewed'">Is Reviewed</xsl:when>
       <xsl:when test="$attrName = 'ModifiedByName'">Modified By Name</xsl:when>
