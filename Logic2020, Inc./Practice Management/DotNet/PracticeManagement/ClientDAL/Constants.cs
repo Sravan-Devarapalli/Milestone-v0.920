@@ -237,6 +237,7 @@
             public const string RecurringHolidayIdColumn = "RecurringHolidayId";
             public const string HolidayDescriptionColumn = "HolidayDescription";
             public const string RecurringHolidayDateColumn = "RecurringHolidayDate";
+            public const string IsSystemTimeTypeColumn = "IsSystemTimeType";
 
         }
 
