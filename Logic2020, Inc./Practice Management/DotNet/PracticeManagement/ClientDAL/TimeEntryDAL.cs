@@ -913,8 +913,16 @@ namespace DataAccess
 
             var timeType = new TimeTypeRecord();
             timeType.Id = reader.GetInt32(timeTypeIdIndex);
-            if (timeTypeIdIndex != -1)
-                timeType.IsSystemTimeType = reader.GetBoolean(isSystemTimeTypeIndex);
+
+            if (isSystemTimeTypeIndex != -1)
+            {
+                try
+                {
+                    timeType.IsSystemTimeType = reader.GetBoolean(isSystemTimeTypeIndex);
+                }
+                catch
+                { }
+            }
 
             var timeEntry = new TimeEntryRecord
                                 {
