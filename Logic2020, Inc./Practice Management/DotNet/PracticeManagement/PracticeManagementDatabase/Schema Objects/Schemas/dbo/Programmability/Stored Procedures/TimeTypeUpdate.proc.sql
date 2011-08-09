@@ -12,7 +12,8 @@ BEGIN
 	SET NOCOUNT ON;
 	
 	UPDATE TimeType
-	SET [Name] = @Name
+	SET [Name] = @Name,
+		[IsSystemTimeType] = 0
 	WHERE TimeTypeId = @TimeTypeId
 
 	-- If IsDefault value has changed, update table	
