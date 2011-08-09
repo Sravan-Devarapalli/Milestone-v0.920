@@ -5,6 +5,7 @@ using System.Web;
 using DataTransferObjects;
 using PraticeManagement.ConfigurationService;
 using System.ServiceModel;
+using DataTransferObjects.TimeEntry;
 namespace PraticeManagement.Utils
 {
     public class SettingsHelper
@@ -12,6 +13,7 @@ namespace PraticeManagement.Utils
         const string ApplicationSettingskey = "ApplicationSettings";
         const string CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY = "CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY";
         const string PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY = "PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY";
+        const string TimeType_System = "Time_Type_System";
 
         public static Dictionary<string, string> GetResourceKeyValuePairs(SettingsType settingType)
         {
@@ -212,6 +214,19 @@ namespace PraticeManagement.Utils
             }
 
             return currentDate;
+        }
+
+        public static List<TimeTypeRecord> GetSystemTimeTypes()
+        {
+            if (HttpContext.Current.Cache[TimeType_System] == null)
+            {
+                using (var serviceClient = new TimeEntryService.TimeEntryServiceClient())
+                {
+                    HttpContext.Current.Cache[TimeType_System] = serviceClient.GetAllTimeTypes().Where(tt => tt.IsSystemTimeType).ToList();
+                }
+            }
+            
+            return HttpContext.Current.Cache[TimeType_System] as List<TimeTypeRecord>;
         }
     }
 }
