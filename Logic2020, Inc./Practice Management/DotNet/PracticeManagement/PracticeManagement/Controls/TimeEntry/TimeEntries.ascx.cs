@@ -47,8 +47,7 @@ namespace PraticeManagement.Controls.TimeEntry
         private const string dropdown_ErrorMessageKey = "MilestoneProjectTimeType";
         private const int DefaultTabIndex = 5;
         private const string View_State_SpecialTimeType = "SpecialTimeType";
-        private const string HolidayTimeType = "Holiday";
-        private const string PTOTimeType = "PTO";
+        private const string AlertTextFormat = " :  Notes are {0} for time entered.";
 
         #endregion
 
@@ -148,7 +147,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 repEntriesHeader.DataBind();
 
                 var specialTimeTypes = grid.Where(g => g.TimeTypeBehind != null 
-                                                    && (g.TimeTypeBehind.Name.ToLower() == HolidayTimeType.ToLower() || g.TimeTypeBehind.Name.ToLower() == PTOTimeType.ToLower())
+                                                    && g.TimeTypeBehind.IsSystemTimeType
                                                 );
 
                 if (addEmpty)
@@ -159,11 +158,6 @@ namespace PraticeManagement.Controls.TimeEntry
                 {
                     grid.AddEmptyRow();
                 }
-
-                if (specialTimeTypes.Count() > 0)
-                    ViewState[View_State_SpecialTimeType] = specialTimeTypes.Select(g => g.TimeTypeBehind.Id).ToList();
-                else
-                    ViewState[View_State_SpecialTimeType] = null;
 
                 tes.DataSource = grid;
                 tes.DataBind();
@@ -179,6 +173,16 @@ namespace PraticeManagement.Controls.TimeEntry
             }
 
             pnlGrid.Visible = !isEmpty;
+
+            var result = true;
+
+            if (SelectedPerson.TerminationDate.HasValue)
+                result = IsNoteRequiredList.Any(p => p.Value == true && SelectedPerson.TerminationDate >= p.Key);
+
+            lblAlertNote.Text = string.Format(AlertTextFormat, IsNoteRequiredList.Any(p => p.Value == true
+                                                                    && SelectedPerson.HireDate <= p.Key
+                                                                    && result
+                                                                    ) ? "Required" : "Optional" );
         }
 
         //public void bar_OnRowRemoved(object sender, EventArgs e)
@@ -192,7 +196,7 @@ namespace PraticeManagement.Controls.TimeEntry
             var row = e.Item.DataItem as TeGridRow;
 
             bar.RowBehind = row;
-            bar.UpdateTimeEntries((List<int>)ViewState[View_State_SpecialTimeType]);
+            bar.UpdateTimeEntries();
         }
 
         internal bool SaveData()
