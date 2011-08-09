@@ -55,6 +55,8 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExport_Click(object sender, EventArgs e)
         {
+            DataHelper.InsertExportActivityLogMessage("Consultants Util. Table");
+
             GridViewExportUtil.Export(
                 string.Format(EXCEL_FILE_NAME, ReportFilter.MonthBegin.ToString("MMM_yyyy")), 
                 gvConsultantsReport, 
