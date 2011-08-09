@@ -24,7 +24,7 @@ BEGIN
 		SET IsDefault = 0
 	END
 
-	INSERT INTO dbo.TimeType ([Name],[IsDefault]) VALUES (@Name, @IsDefault)
+	INSERT INTO dbo.TimeType ([Name],[IsDefault],[IsSystemTimeType]) VALUES (@Name, @IsDefault, 0)
 END
 
 GO
