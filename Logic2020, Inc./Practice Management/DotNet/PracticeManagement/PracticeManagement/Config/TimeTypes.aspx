@@ -31,7 +31,7 @@
                         <ItemStyle HorizontalAlign="Center" Width="10%" />
                         <ItemTemplate>
                             <asp:ImageButton ID="imgEdit" runat="server" CommandName="edit" ImageUrl="~/Images/icon-edit.png"
-                                ToolTip="Edit Time Type" />
+                                ToolTip="Edit Time Type" Visible='<%# !(bool)Eval("IsSystemTimeType") %>' />
                         </ItemTemplate>
                         <EditItemTemplate>
                             <asp:ImageButton ID="imgUpdate" runat="server" CommandName="update" ImageUrl="~/Images/icon-check.png"
