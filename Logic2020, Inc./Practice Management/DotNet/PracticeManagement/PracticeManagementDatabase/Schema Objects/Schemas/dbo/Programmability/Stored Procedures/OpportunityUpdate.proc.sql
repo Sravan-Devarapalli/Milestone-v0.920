@@ -25,7 +25,12 @@ CREATE PROCEDURE [dbo].[OpportunityUpdate]
 )
 AS
 BEGIN
-	SET NOCOUNT ON
+	SET NOCOUNT ON	
+		
+		-- Start logging session
+		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
+		
+		
 		DECLARE @PrevOpportunityStatusId INT
 		DECLARE @PrevPriority NVARCHAR(255)
 		DECLARE @PrevPriorityId INT
@@ -67,6 +72,7 @@ BEGIN
 			   OwnerId = @OwnerId,
 			   GroupId = @GroupId,
 			   EstimatedRevenue = @EstimatedRevenue
+			   ,LastUpdated = GETDATE()
 		 WHERE OpportunityId = @OpportunityId
 
 		-- Logging changes
@@ -155,5 +161,9 @@ BEGIN
 			ON p.ResultId = op.PersonId AND op.OpportunityId=@OpportunityId
 			WHERE op.PersonId IS NULL 
 		END
+		
+		
+		-- End logging session
+		EXEC dbo.SessionLogUnprepare
 END
 
