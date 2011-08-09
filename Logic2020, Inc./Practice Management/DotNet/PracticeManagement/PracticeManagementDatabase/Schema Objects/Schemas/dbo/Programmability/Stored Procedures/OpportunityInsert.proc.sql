@@ -25,6 +25,9 @@
 AS
 BEGIN
 	SET NOCOUNT ON
+		
+		-- Start logging session
+		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
 		-- Generating Opportunity Number
 		DECLARE @OpportunityNumber NVARCHAR(12)
@@ -47,6 +50,7 @@ BEGIN
 
 			SET @Counter = @Counter + 1
 		END
+		
 
 		INSERT INTO dbo.Opportunity
 					(Name, ClientId, SalespersonId, OpportunityStatusId, PriorityId,
@@ -65,6 +69,7 @@ BEGIN
 		SELECT @CreatedMessage = 'Opportunity created ' + o.ClientName + ' ' + o.Name
 		  FROM dbo.v_Opportunity AS o
 		 WHERE o.OpportunityId = @OpportunityId
+		 		
 
 		EXEC dbo.OpportunityTransitionInsert @OpportunityId = @OpportunityId,
 			@OpportunityTransitionStatusId = 1,
@@ -73,15 +78,18 @@ BEGIN
 			@OpportunityTransitionId = NULL
 
 
-IF(@PersonIdList IS NOT NULL)
-BEGIN
-	INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId)
-	SELECT @OpportunityId ,P.ResultId,P.ResultType
-	FROM dbo.[ConvertStringListIntoTableWithTwoColoumns] (@PersonIdList) AS p 
-	LEFT JOIN OpportunityPersons op
-	ON p.ResultId = op.PersonId AND op.OpportunityId=@OpportunityId
-	WHERE op.PersonId IS NULL 
-END
+		IF(@PersonIdList IS NOT NULL)
+		BEGIN
+			INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId)
+			SELECT @OpportunityId ,P.ResultId,P.ResultType
+			FROM dbo.[ConvertStringListIntoTableWithTwoColoumns] (@PersonIdList) AS p 
+			LEFT JOIN OpportunityPersons op
+			ON p.ResultId = op.PersonId AND op.OpportunityId=@OpportunityId
+			WHERE op.PersonId IS NULL 
+		END
+		
+		-- End logging session
+		EXEC dbo.SessionLogUnprepare
 	
 END
 
