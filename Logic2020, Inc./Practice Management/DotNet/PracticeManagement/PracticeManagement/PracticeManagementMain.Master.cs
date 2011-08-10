@@ -202,11 +202,6 @@ namespace PraticeManagement
 
         private string GetPageTitle(SiteMapNode siteMapNode, string pageNavPath, string url)
         {
-            if (Request.Url.AbsolutePath.Contains("MilestonePersonList.aspx"))
-            {
-                return "Milestone-Person List";
-            }
-
             if (url.Contains(siteMapNode.Url) && !string.IsNullOrEmpty(siteMapNode.Url))
             {
                 return pageNavPath + (string.IsNullOrEmpty(pageNavPath) ? siteMapNode.Title : " / " + siteMapNode.Title);
