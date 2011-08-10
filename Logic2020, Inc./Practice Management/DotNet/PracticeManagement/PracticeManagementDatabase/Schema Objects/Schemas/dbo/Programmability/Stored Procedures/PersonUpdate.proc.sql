@@ -327,7 +327,7 @@ AS
 				,@PersonUserId
 				,crh.Description
 				,m.IsChargeable
-				,0
+				,1
 				,1 --Here it is Auto generated.
 			FROM CompanyRecurringHolidaysByPeriod(@Today, dbo.GetFutureDate() -1) crh
 			JOIN Pay p ON crh.Date BETWEEN p.StartDate and ( CASE WHEN @TerminationDate IS NOT NULL AND @TerminationDate < p.EndDate - 1 THEN @TerminationDate
