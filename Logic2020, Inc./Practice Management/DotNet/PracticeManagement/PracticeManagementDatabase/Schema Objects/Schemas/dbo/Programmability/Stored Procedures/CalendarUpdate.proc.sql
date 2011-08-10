@@ -210,7 +210,7 @@ AS
 				,@ModifiedBy
 				,CASE WHEN @PersonId IS NOT NULL AND c.DayOff <> @DayOff THEN 'PTO' ELSE C.HolidayDescription END
 				,m.IsChargeable
-				,0
+				,1
 				,1 --Here it is Auto generated.
 		FROM MilestonePerson mp 
 		JOIN MilestonePersonEntry mpe ON mp.MilestonePersonId = mpe.MilestonePersonId
