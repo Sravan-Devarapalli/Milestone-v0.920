@@ -4,16 +4,15 @@
 <tr id="trBar" style="height: 25px; white-space: nowrap;" runat="server">
     <td align="center" style="width: 5%; height: 20px;">
         <asp:ImageButton ID="btnInsert" runat="server" ImageUrl="~/Images/icon-check.png"
-            OnClientClick="setDirty();SetValueForhdnField();" ValidationGroup="<%# GetValidationGroup() %>"
-            ToolTip="Save" OnClick="btnInsertPerson_Click" />
+            ValidationGroup="<%# GetValidationGroup() %>" ToolTip="Save" OnClick="btnInsertPerson_Click" />
         <asp:ImageButton ID="btnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="btnCancel_OnClick"
-            OnClientClick="SetValueForhdnField();" ToolTip="Cancel" />
+            ToolTip="Cancel" />
     </td>
     <td style="width: 22%; height: 20px;">
-        <asp:DropDownList ID="ddlPerson" onchange="setDirty();" Width="98%" runat="server" />
+        <asp:DropDownList ID="ddlPerson" Width="98%" runat="server" />
         <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPerson"
             ErrorMessage="The Person Name is required." ToolTip="The Person Name is required."
-            Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="MilestonePerson"></asp:RequiredFieldValidator>
+            Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="<%# GetValidationGroup() %>"></asp:RequiredFieldValidator>
         <asp:RequiredFieldValidator ID="reqMilestonePersonName" runat="server" ControlToValidate="ddlPerson"
             ErrorMessage="The Person Name is required." ToolTip="The Person Name is required."
             Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="<%# GetValidationGroup() %>"></asp:RequiredFieldValidator>
@@ -21,24 +20,19 @@
             ErrorMessage="The person you are trying to add is not set as being active during the entire length of their participation in the milestone.  Please adjust the person's hire and compensation records, or change the dates that they are attached to this milestone."
             ToolTip="The person you are trying to add is not set as being active during the entire length of their participation in the milestone.  Please adjust the person's hire and compensation records, or change the dates that they are attached to this milestone."
             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-            ValidationGroup="MilestonePerson" OnServerValidate="custPersonInsert_ServerValidate"></asp:CustomValidator>
-        <asp:CustomValidator ID="custEntries" runat="server" ControlToValidate="ddlPerson"
-            ErrorMessage="You must specify at least one detail record." ToolTip="You must specify at least one detail record."
-            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-            ValidationGroup="MilestonePerson" OnServerValidate="custEntriesInsert_ServerValidate"></asp:CustomValidator>
+            ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custPersonInsert_ServerValidate"></asp:CustomValidator>
         <asp:CustomValidator ID="custDuplicatedPerson" runat="server" ControlToValidate="ddlPerson"
             ErrorMessage="The specified person is already assigned on this milestone." ToolTip="The specified person is already assigned on this milestone."
             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-            ValidationGroup="MilestonePerson" OnServerValidate="custDuplicatedPersonInsert_ServerValidate"></asp:CustomValidator>
+            ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custDuplicatedPersonInsert_ServerValidate"></asp:CustomValidator>
     </td>
     <td style="width: 10%; height: 20px;">
-        <asp:DropDownList ID="ddlRole" onchange="setDirty();" Width="98%" runat="server">
+        <asp:DropDownList ID="ddlRole" Width="98%" runat="server">
         </asp:DropDownList>
     </td>
     <td align="center" style="width: 11%; height: 20px;">
-        <uc2:DatePicker ID="dpPersonStartInsert" runat="server" ValidationGroup="<%# GetValidationGroup() %>"
-            OnClientChange="setDirty();" OnSelectionChanged="dpPersonStart_SelectionChanged"
-            AutoPostBack="true" TextBoxWidth="85%" />
+        <uc2:DatePicker ID="dpPersonStartInsert" runat="server" ValidationGroup="<%# GetValidationGroup() %>" OnClientChange="return true;"
+            AutoPostBack="false" TextBoxWidth="85%" />
         <asp:RequiredFieldValidator ID="reqPersonStart" runat="server" ControlToValidate="dpPersonStartInsert"
             ErrorMessage="The Person Start Date is required." ToolTip="The Person Start Date is required."
             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
@@ -65,9 +59,8 @@
             ValidateEmptyText="false" ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custPeriodVacationOverlappingInsert_ServerValidate"></asp:CustomValidator>
     </td>
     <td align="center" style="width: 11%; height: 20px;">
-        <uc2:DatePicker ID="dpPersonEndInsert" runat="server" ValidationGroup="<%# GetValidationGroup() %>"
-            OnClientChange="setDirty();" OnSelectionChanged="dpPersonEnd_SelectionChanged"
-            AutoPostBack="true" TextBoxWidth="85%" />
+        <uc2:DatePicker ID="dpPersonEndInsert" runat="server" ValidationGroup="<%# GetValidationGroup() %>" OnClientChange="return true;"
+             AutoPostBack="false" TextBoxWidth="85%" />
         <asp:RequiredFieldValidator ID="reqPersonEnd" runat="server" ControlToValidate="dpPersonEndInsert"
             ErrorMessage="The Person End Date is required." ToolTip="The Person End Date is required."
             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
@@ -89,7 +82,7 @@
             ValidationGroup="<%# GetValidationGroup() %>" Operator="GreaterThanEqual" Type="Date"></asp:CompareValidator>
     </td>
     <td align="center" style="width: 10%; height: 20px;">
-        <asp:TextBox ID="txtHoursPerDayInsert" runat="server" onchange="setDirty();" Width="70%"></asp:TextBox>
+        <asp:TextBox ID="txtHoursPerDayInsert" runat="server" Width="70%"></asp:TextBox>
         <asp:CompareValidator ID="compHoursPerDay" runat="server" ControlToValidate="txtHoursPerDayInsert"
             ErrorMessage="A number with 2 decimal digits is allowed for the Hours Per Day."
             ToolTip="A number with 2 decimal digits is allowed for the Hours Per Day." Text="*"
@@ -101,13 +94,13 @@
             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
             MinimumValue="0.01" MaximumValue="24" Type="Double" ValidationGroup="<%# GetValidationGroup() %>"></asp:RangeValidator>
     </td>
-    <td id="tdAmountInsert" runat="server" align="center"  style="width: 8%; height: 20px;">
+    <td id="tdAmountInsert" runat="server" align="center" style="width: 8%; height: 20px;">
         <asp:Label ID="lblAmountInsert" runat="server" Text="$"></asp:Label>
-        <asp:TextBox ID="txtAmountInsert" runat="server" onchange="setDirty();" Width="70%"></asp:TextBox>
-        <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmountInsert" ValidateEmptyText="true"
-            ErrorMessage="The Amount is required." ToolTip="The Amount is required." Text="*"
-            SetFocusOnError="true" EnableClientScript="false" Display="Dynamic" OnServerValidate="reqHourlyRevenue_ServerValidate"
-            ValidationGroup="<%# GetValidationGroup() %>"></asp:CustomValidator>
+        <asp:TextBox ID="txtAmountInsert" runat="server" Width="70%"></asp:TextBox>
+        <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmountInsert"
+            ValidateEmptyText="true" ErrorMessage="The Amount is required." ToolTip="The Amount is required."
+            Text="*" SetFocusOnError="true" EnableClientScript="false" Display="Dynamic"
+            OnServerValidate="reqHourlyRevenue_ServerValidate" ValidationGroup="<%# GetValidationGroup() %>"></asp:CustomValidator>
         <asp:CompareValidator ID="compHourlyRevenue" runat="server" ControlToValidate="txtAmountInsert"
             ErrorMessage="A number with 2 decimal digits is allowed for the Revenue." ToolTip="A number with 2 decimal digits is allowed for the Revenue."
             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
@@ -116,7 +109,7 @@
     <td align="center" style="width: 7%; height: 20px;">
     </td>
     <td align="center" style="width: 16%; height: 20px;">
-        <asp:TextBox ID="txtHoursInPeriodInsert" onchange="setDirty();" runat="server" Width="50%"></asp:TextBox>
+        <asp:TextBox ID="txtHoursInPeriodInsert" runat="server" Width="50%"></asp:TextBox>
         <asp:CompareValidator ID="compHoursInPeriod" runat="server" ControlToValidate="txtHoursInPeriodInsert"
             ErrorMessage="A number with 2 decimal digits is allowed for the Hours In Period."
             ToolTip="A number with 2 decimal digits is allowed for the Hours In Period."
