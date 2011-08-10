@@ -228,7 +228,7 @@ namespace PraticeManagement.Controls
         {
             var currentDate = SettingsHelper.GetCurrentPMTime();
 
-            var result = (dateValue >= currentDate);
+            var result = (dateValue.Date >= currentDate.Date);
             return result;
         }
 
