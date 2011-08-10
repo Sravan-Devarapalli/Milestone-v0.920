@@ -66,6 +66,8 @@ namespace PraticeManagement.Controls.TimeEntry
                 {
                     ddlProjectMilestone.SelectedValue =
                         RowBehind.MilestoneBehind.MilestonePersonId.ToString();
+
+                    ddlProjectMilestone.Enabled = !isSystemTimeType;
                 }
             }
 
@@ -73,6 +75,8 @@ namespace PraticeManagement.Controls.TimeEntry
             {
                 ddlTimeTypes.SelectedValue =
                     RowBehind.TimeTypeBehind.Id.ToString();
+
+                ddlTimeTypes.Enabled = !isSystemTimeType;
             }
             //else
             //{
