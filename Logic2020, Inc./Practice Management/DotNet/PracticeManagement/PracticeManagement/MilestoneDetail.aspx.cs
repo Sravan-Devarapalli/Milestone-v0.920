@@ -203,6 +203,11 @@ namespace PraticeManagement
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            LoadPrevNextMilestones();
+        }
+
+        private void LoadPrevNextMilestones()
+        {
             if (MilestoneId.HasValue)
             {
                 seniorityAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
@@ -213,7 +218,10 @@ namespace PraticeManagement
                             GetMilestonePersons(Milestone)
                             );
                 }
+
+
                 InitPrevNextButtons();
+
             }
         }
 
@@ -267,7 +275,7 @@ namespace PraticeManagement
         /// </summary>
         protected void InitPrevNextButtons()
         {
-            if (Milestone.Project.Id.HasValue && MilestoneId.HasValue)
+            if (Milestone.Project.Id.HasValue && MilestoneId.HasValue && Project.Milestones != null)
             {
                 var projectMiles = Project.Milestones.ToArray();
 
@@ -281,6 +289,8 @@ namespace PraticeManagement
 
                     if (mIndex < projMilesNum - 1)
                         InitLink(projectMiles[mIndex + 1], lnkNextMilestone, divRight, captionRight, lblRight, ref nextMilestoneId);
+
+                    divPrevNextMainContent.Visible = true;
                 }
                 else
                 {
@@ -435,6 +445,7 @@ namespace PraticeManagement
                     MilestonePersonEntryListControlObject.GetLatestData();
                     mvMilestoneDetailTab.Visible = true;
                     tblMilestoneDetailTabViewSwitch.Visible = true;
+                    LoadPrevNextMilestones();
                 }
 
                 lblResult.ShowInfoMessage(Messages.MilestoneSavedMessage);
@@ -591,7 +602,7 @@ namespace PraticeManagement
             if (!SelectedId.HasValue)
             {
 
-                url = url.Replace("?", "?id=" + MilestoneId.Value.ToString()+"&");
+                url = url.Replace("?", "?id=" + MilestoneId.Value.ToString() + "&");
             }
 
             return Generic.GetTargetUrlWithReturn(mpePageUrl, url);
