@@ -192,7 +192,7 @@ namespace PracticeManagementService
             MilestonePersonDAL.SaveMilestonePersonsWrapper(milestonePersons, userName);
         }
 
-        
+
 
         /// <summary>
         /// Deletes the specified <see cref="Milestone"/>-<see cref="Person"/> link from the database.
@@ -202,6 +202,13 @@ namespace PracticeManagementService
         {
             MilestonePersonDAL.MilestonePersonDelete(milestonePerson);
         }
+
+
+        public ComputedFinancials FinancialsGetByMilestonePersonEntry(int milestoneId, int personId, DateTime startDate)
+        {
+            return ComputedFinancialsDAL.FinancialsGetByMilestonePersonEntry(milestoneId, personId, startDate);
+        }
+
 
         #endregion
     }
