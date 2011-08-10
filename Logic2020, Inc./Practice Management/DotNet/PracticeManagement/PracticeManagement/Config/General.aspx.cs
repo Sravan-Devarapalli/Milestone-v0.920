@@ -109,7 +109,8 @@ namespace PraticeManagement.Config
                     var person = DataHelper.CurrentPerson;
                     if(person!=null)
                     {
-                        Generic.SetCustomFormsAuthenticationTicket(person.Alias, true, this.Page);
+                        var ticket = ((System.Web.Security.FormsIdentity)(HttpContext.Current.User.Identity)).Ticket;
+                        Generic.SetCustomFormsAuthenticationTicket(person.Alias, ticket.IsPersistent, this.Page,ticket.UserData);
                     }
                 }
                 using (var serviceClient = new PersonServiceClient())
