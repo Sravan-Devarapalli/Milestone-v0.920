@@ -19,6 +19,10 @@
 <%@ Register Assembly="AjaxControlToolkit" TagPrefix="ajaxToolkit" Namespace="AjaxControlToolkit" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ElementDisabler" %>
 <%@ Register TagPrefix="uc" TagName="MessageLabel" Src="~/Controls/MessageLabel.ascx" %>
+<%@ Register Src="~/Controls/Milestones/MilestonePersonList.ascx" TagName="MilestonePersonList"
+    TagPrefix="uc" %>
+<%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
+    TagPrefix="uc" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Practice Management - Milestone Details</title>
 </asp:Content>
@@ -35,6 +39,24 @@
 
             return false;
         }
+
+        function SetTooltipsForallDropDowns() {
+            var optionList = document.getElementsByTagName('option');
+
+            for (var i = 0; i < optionList.length; ++i) {
+
+                optionList[i].title = optionList[i].innerHTML;
+            }
+
+        }
+
+        function ChangeActiveViewIndex(cntrl) {
+         var rowindex =  cntrl.attributes["RowIndex"].value;
+         var hdnEditRowIndex = document.getElementById("<%= hdnEditRowIndex.ClientID %>");
+         hdnEditRowIndex.value = rowindex;
+            return true;
+        }
+
     </script>
     <style type="text/css">
         /* --------- Tabs for person and project details pages ------ */
@@ -144,6 +166,7 @@
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
             <asp:HiddenField ID="hidDirty" runat="server" />
+            <asp:HiddenField ID="hdnEditRowIndex" runat="server" Value="" />
             <div style="background-color: #E2EBFF; padding: 5px; margin-bottom: 10px; margin-top: 10px;">
                 <table>
                     <tr>
@@ -263,8 +286,6 @@
                     </tr>
                 </table>
             </div>
-            <asp:ShadowedTextButton ID="btnAddResources" runat="server" OnClick="btnAddResources_Click"
-                OnClientClick="if (!confirmSaveDirty()) return false;" Text="Add Resources" CssClass="add-btn" />
             <asp:Table ID="tblMilestoneDetailTabViewSwitch" runat="server" CssClass="CustomTabStyle">
                 <asp:TableRow ID="rowSwitcher" runat="server">
                     <asp:TableCell ID="cellFinancials" runat="server" CssClass="SelectedSwitch">
@@ -279,40 +300,46 @@
                                 OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
                         </span>
                     </asp:TableCell>
+                    <asp:TableCell ID="cellResources" Visible='<%# GetVisibleValue()  %>' runat="server">
+                        <span class="bg"><span>
+                            <asp:LinkButton ID="btnResources" runat="server" Text="Resources" CausesValidation="false"
+                                OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
+                        </span>
+                    </asp:TableCell>
                     <asp:TableCell ID="cellExpenses" runat="server">
                         <span class="bg"><span>
                             <asp:LinkButton ID="btnExpenses" runat="server" Text="Expenses" CausesValidation="false"
-                                OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
+                                OnCommand="btnView_Command" CommandArgument="3"></asp:LinkButton></span>
                         </span>
                     </asp:TableCell>
                     <asp:TableCell ID="cellDailyActivity" runat="server">
                         <span class="bg"><span>
                             <asp:LinkButton ID="btnDailyActivity" runat="server" Text="Daily Activity" CausesValidation="false"
-                                OnCommand="btnView_Command" CommandArgument="3"></asp:LinkButton></span>
+                                OnCommand="btnView_Command" CommandArgument="4"></asp:LinkButton></span>
                         </span>
                     </asp:TableCell>
                     <asp:TableCell ID="cellCumulativeActivity" runat="server">
                         <span class="bg"><span>
                             <asp:LinkButton ID="btnCumulativeActivity" runat="server" Text="Cumulative Activity"
-                                CausesValidation="false" OnCommand="btnView_Command" CommandArgument="4"></asp:LinkButton></span>
+                                CausesValidation="false" OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton></span>
                         </span>
                     </asp:TableCell>
                     <asp:TableCell ID="cellActivitySummary" runat="server">
                         <span class="bg"><span>
                             <asp:LinkButton ID="btnActivitySummary" runat="server" Text="Activity Summary" CausesValidation="false"
-                                OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton></span>
+                                OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton></span>
                         </span>
                     </asp:TableCell>
                     <asp:TableCell ID="cellHistory" runat="server">
                         <span class="bg"><span>
                             <asp:LinkButton ID="btnHistory" runat="server" Text="History" CausesValidation="false"
-                                OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton></span>
+                                OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton></span>
                         </span>
                     </asp:TableCell>
                     <asp:TableCell ID="cellTools" runat="server">
                         <span class="bg"><span>
                             <asp:LinkButton ID="btnTools" runat="server" Text="Tools" CausesValidation="false"
-                                OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton></span>
+                                OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton></span>
                         </span>
                     </asp:TableCell>
                 </asp:TableRow>
@@ -425,6 +452,18 @@
                             <AlternatingRowStyle BackColor="#F9FAFF" />
                             <RowStyle BackColor="White" />
                             <Columns>
+                                <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+                                    <HeaderTemplate>
+                                        <div class="ie-bg">
+                                            &nbsp;
+                                        </div>
+                                    </HeaderTemplate>
+                                    <ItemStyle HorizontalAlign="Center"/>
+                                    <ItemTemplate>
+                                        <asp:ImageButton ID="imgEdit" ToolTip="Edit" runat="server"  OnClientClick="return ChangeActiveViewIndex(this);"
+                                            ImageUrl="~/Images/icon-edit.png" />
+                                    </ItemTemplate>
+                                </asp:TemplateField>
                                 <asp:TemplateField>
                                     <HeaderTemplate>
                                         <div class="ie-bg no-wrap">
@@ -538,6 +577,18 @@
                                 </asp:TemplateField>
                             </Columns>
                         </asp:GridView>
+                    </asp:Panel>
+                </asp:View>
+                <asp:View ID="vwResources" runat="server">
+                    <asp:Panel ID="pnlResources" runat="server" CssClass="tab-pane" Style="overflow: auto;">
+                        <asp:UpdatePanel ID="upnlMilestonePersons" ChildrenAsTriggers="true" runat="server">
+                            <ContentTemplate>
+                                <% if (IsShowResources)
+                                   { %>
+                                <uc:MilestonePersonList runat="server" ID="MilestonePersonEntryListControl"></uc:MilestonePersonList>
+                                <% } %>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
                     </asp:Panel>
                 </asp:View>
                 <asp:View ID="vwExpenses" runat="server">
@@ -769,15 +820,8 @@
                     </td>
                 </tr>
             </table>
+            <uc:LoadingProgress ID="lpOpportunityDetails" runat="server" />
         </ContentTemplate>
     </asp:UpdatePanel>
-    <AjaxControlToolkit:UpdatePanelAnimationExtender ID="upnlBody_UpdatePanelAnimationExtender"
-        runat="server" Enabled="True" TargetControlID="upnlBody">
-        <Animations>
-			<OnUpdating>
-				<EnableAction AnimationTarget="btnAddResources" Enabled="false" />
-			</OnUpdating>
-        </Animations>
-    </AjaxControlToolkit:UpdatePanelAnimationExtender>
 </asp:Content>
 
