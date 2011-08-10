@@ -216,7 +216,7 @@
                                         <asp:Label ID="lblAmount" runat="server" Text='<%# Eval("HourlyAmount") != null ? Eval("HourlyAmount") : string.Empty %>'></asp:Label>
                                     </ItemTemplate>
                                     <EditItemTemplate>
-                                        <asp:TextBox ID="txtAmount" runat="server" onchange="setDirty();" Width="60" Text='<%# Eval("HourlyAmount") != null ? Eval("HourlyAmount.Value") : string.Empty %>'></asp:TextBox>
+                                        <asp:TextBox ID="txtAmount" runat="server"  onchange="setDirty();" Width="60" Text='<%# Eval("HourlyAmount") != null ? Eval("HourlyAmount.Value") : string.Empty %>'></asp:TextBox>
                                     </EditItemTemplate>
                                     <FooterTemplate>
                                         <asp:TextBox ID="txtAmount" runat="server" Width="60" onchange="setDirty();"></asp:TextBox>
@@ -310,7 +310,7 @@
                                             ToolTip=" The Hours Per Day must be greater than 0 and less or equals to 24." Text="*"
                                             EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" MinimumValue="0.01"
                                             MaximumValue="24" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
-                                        <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmount"
+                                        <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmount" ValidateEmptyText="true"
                                             ErrorMessage="The Amount is required." ToolTip="The Amount is required." Text="*"
                                             SetFocusOnError="true" EnableClientScript="false" Display="Dynamic" ValidationGroup="MilestonePersonEntry"
                                             OnServerValidate="reqHourlyRevenue_ServerValidate"></asp:CustomValidator>
@@ -383,7 +383,7 @@
                                             ErrorMessage=" The Hours Per Day must be greater than 0 and less or equals to 24." ToolTip=" The Hours Per Day must be greater than 0 and less or equals to 24."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             MinimumValue="0.01" MaximumValue="24" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
-                                        <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmount"
+                                        <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmount"  ValidateEmptyText="true"
                                             ErrorMessage="The Amount is required." ToolTip="The Amount is required." Text="*"
                                             SetFocusOnError="true" EnableClientScript="false" Display="Dynamic" OnServerValidate="reqHourlyRevenue_ServerValidate"
                                             ValidationGroup="MilestonePersonEntry"></asp:CustomValidator>
