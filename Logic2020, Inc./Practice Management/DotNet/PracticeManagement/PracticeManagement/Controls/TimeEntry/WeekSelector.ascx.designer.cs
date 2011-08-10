@@ -31,6 +31,33 @@ namespace PraticeManagement.Controls.TimeEntry {
         protected global::System.Web.UI.WebControls.HyperLink hprlnkPreviousWeek;
         
         /// <summary>
+        /// txtDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDate;
+        
+        /// <summary>
+        /// lnkCalendar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkCalendar;
+        
+        /// <summary>
+        /// txtDate_CalendarExtender control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.CalendarExtender txtDate_CalendarExtender;
+        
+        /// <summary>
         /// lblWeek control.
         /// </summary>
         /// <remarks>
