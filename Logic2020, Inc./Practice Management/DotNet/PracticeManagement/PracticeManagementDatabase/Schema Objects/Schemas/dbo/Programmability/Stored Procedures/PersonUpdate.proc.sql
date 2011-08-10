@@ -28,9 +28,11 @@ AS
 	DECLARE @ErrorMessage NVARCHAR(2048),
 			@Today			DATETIME,
 			@CurrentPayEndDate DATETIME,
-			@CurrentSalesCommEndDate DATETIME
+			@CurrentSalesCommEndDate DATETIME,
+			@W2SalaryId INT
 
 	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETDATE())))
+	SELECT @W2SalaryId = TimescaleId FROM Timescale WHERE Name = 'W2-Salary'
 
 	SELECT @PersonStatusId = CASE WHEN @TerminationDate<= @Today THEN 2 ELSE @PersonStatusId END
 
@@ -325,18 +327,20 @@ AS
 				,mpe.HoursPerDay
 				,@HolidayTimeId
 				,@PersonUserId
-				,crh.Description
+				,crh.HolidayDescription
 				,m.IsChargeable
 				,1
 				,1 --Here it is Auto generated.
-			FROM CompanyRecurringHolidaysByPeriod(@Today, dbo.GetFutureDate() -1) crh
+			FROM Calendar crh
 			JOIN Pay p ON crh.Date BETWEEN p.StartDate and ( CASE WHEN @TerminationDate IS NOT NULL AND @TerminationDate < p.EndDate - 1 THEN @TerminationDate
-																ELSE p.EndDate- 1 END) AND p.Person = @PersonId
+																ELSE p.EndDate- 1 END) AND p.Person = @PersonId AND p.Timescale = @W2SalaryId
 			JOIN MilestonePerson mp ON mp.MilestoneId = @DefaultMilestoneId AND mp.PersonId = p.Person
 			JOIN Milestone m ON mp.MilestoneId = m.MilestoneId
 			JOIN MilestonePersonEntry mpe ON mpe.MilestonePersonId = mp.MilestonePersonId
 			LEFT JOIN TimeEntries te ON te.MilestonePersonId = mpe.MilestonePersonId AND te.MilestoneDate = crh.Date
-			WHERE crh.IsSet = 1 AND te.TimeEntryId IS NULL
+			WHERE crh.DayOff = 1 AND (crh.RecurringHolidayId IS NOT NULL OR crh.RecurringHolidayDate IS NOT NULL) 
+				AND te.TimeEntryId IS NULL
+				AND crh.Date >= @Today
 		END
 
 		-- End logging session
