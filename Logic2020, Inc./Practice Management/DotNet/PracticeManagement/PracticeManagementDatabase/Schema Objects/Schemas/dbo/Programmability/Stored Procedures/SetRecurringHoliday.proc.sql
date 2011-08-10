@@ -143,7 +143,7 @@ WHERE Alias = @UserLogin
 				,@ModifiedBy
 				,rhd.[Description]
 				,m.IsChargeable
-				,0
+				,1
 				,1 --Here it is Auto generated.
 		FROM MilestonePerson mp 
 		JOIN MilestonePersonEntry mpe ON mp.MilestonePersonId = mpe.MilestonePersonId
