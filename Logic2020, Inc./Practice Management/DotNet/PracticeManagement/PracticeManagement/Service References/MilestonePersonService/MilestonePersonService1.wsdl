@@ -94,6 +94,12 @@
   <wsdl:message name="IMilestonePersonService_GetMilestonePersonsDetailsByMileStoneId_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetMilestonePersonsDetailsByMileStoneIdResponse" />
   </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_FinancialsGetByMilestonePersonEntry_InputMessage">
+    <wsdl:part name="parameters" element="tns:FinancialsGetByMilestonePersonEntry" />
+  </wsdl:message>
+  <wsdl:message name="IMilestonePersonService_FinancialsGetByMilestonePersonEntry_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FinancialsGetByMilestonePersonEntryResponse" />
+  </wsdl:message>
   <wsdl:portType name="IMilestonePersonService">
     <wsdl:operation name="GetMilestonePersonListByProject">
       <wsdl:input wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByProject" message="tns:IMilestonePersonService_GetMilestonePersonListByProject_InputMessage" />
@@ -150,6 +156,10 @@
     <wsdl:operation name="GetMilestonePersonsDetailsByMileStoneId">
       <wsdl:input wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonsDetailsByMileStoneId" message="tns:IMilestonePersonService_GetMilestonePersonsDetailsByMileStoneId_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonsDetailsByMileStoneIdResponse" message="tns:IMilestonePersonService_GetMilestonePersonsDetailsByMileStoneId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FinancialsGetByMilestonePersonEntry">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestonePersonService/FinancialsGetByMilestonePersonEntry" message="tns:IMilestonePersonService_FinancialsGetByMilestonePersonEntry_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestonePersonService/FinancialsGetByMilestonePersonEntryResponse" message="tns:IMilestonePersonService_FinancialsGetByMilestonePersonEntry_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IMilestonePersonService" type="tns:IMilestonePersonService">
@@ -273,6 +283,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetMilestonePersonsDetailsByMileStoneId">
       <soap:operation soapAction="http://tempuri.org/IMilestonePersonService/GetMilestonePersonsDetailsByMileStoneId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FinancialsGetByMilestonePersonEntry">
+      <soap:operation soapAction="http://tempuri.org/IMilestonePersonService/FinancialsGetByMilestonePersonEntry" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
