@@ -178,6 +178,22 @@ namespace PraticeManagement
             }
         }
 
+        public bool IsShowResources
+        {
+            get
+            {
+                return MilestoneId.HasValue;
+            }
+        }
+
+        public PraticeManagement.Controls.Milestones.MilestonePersonList MilestonePersonEntryListControlObject
+        {
+            get
+            {
+                return MilestonePersonEntryListControl;
+            }
+        }
+
         #endregion
 
         protected void Page_Init(object sender, EventArgs e)
@@ -198,24 +214,15 @@ namespace PraticeManagement
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            if (!IsPostBack && Request.QueryString["Tabindex"] != null)
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTooltipsForallDropDowns", "SetTooltipsForallDropDowns();", true);
+            
+            if (!string.IsNullOrEmpty(hdnEditRowIndex.Value))
             {
-                SelectView(btnDetail, 1, false);
-                LoadActiveTabIndex(1);
+                SelectView(btnResources, 2, false);
+                LoadActiveTabIndex(2);
+                MilestonePersonEntryListControl.OnEditClick(Convert.ToInt32(hdnEditRowIndex.Value));
+                hdnEditRowIndex.Value = string.Empty;
             }
-
-            if (Request.QueryString["Tabindex"] != null)
-            {
-                // reflect to readonly property 
-                PropertyInfo isreadonly = typeof(System.Collections.Specialized.NameValueCollection).GetProperty("IsReadOnly", BindingFlags.Instance | BindingFlags.NonPublic);
-                // make collection editable 
-                isreadonly.SetValue(this.Request.QueryString, false, null);
-                // remove 
-                this.Request.QueryString.Remove("Tabindex");
-
-                isreadonly.SetValue(this.Request.QueryString, true, null);
-            }
-
         }
 
         protected void cstCheckStartDateForExpensesExistance_OnServerValidate(object sender, ServerValidateEventArgs args)
@@ -370,6 +377,16 @@ namespace PraticeManagement
                     row.BackColor = Color.FromArgb(0xff, 0xe6, 0xe0);
                     lblError.ShowErrorMessage(Messages.PersonsStartGreaterMilestoneStart);
                 }
+
+
+                var imgEdit = row.FindControl("imgEdit") as ImageButton;
+
+                if (imgEdit != null)
+                {
+                    imgEdit.Attributes.Add("RowIndex", row.RowIndex.ToString());
+                }
+
+
             }
         }
 
@@ -410,6 +427,7 @@ namespace PraticeManagement
                 {
                     MilestoneId = id;
                     GetMilestoneById(MilestoneId);
+                    MilestonePersonEntryListControlObject.GetLatestData();
                 }
 
                 lblResult.ShowInfoMessage(Messages.MilestoneSavedMessage);
@@ -564,26 +582,6 @@ namespace PraticeManagement
             return Generic.GetTargetUrlWithReturn(mpePageUrl, Request.Url.AbsoluteUri);
         }
 
-        protected void btnAddResources_Click(object sender, EventArgs e)
-        {
-            if (!MilestoneId.HasValue)
-            {
-                // Save a New Record
-                Page.Validate(vsumMilestone.ValidationGroup);
-                if (Page.IsValid)
-                {
-                    int milestoneId = SaveData();
-                    Redirect(string.Format(Constants.ApplicationPages.DetailRedirectFormat,
-                        Constants.ApplicationPages.MilestonePersonList, milestoneId), milestoneId.ToString());
-                }
-            }
-            else if (!SaveDirty || ValidateAndSave())
-            {
-                Redirect(string.Format(Constants.ApplicationPages.DetailRedirectFormat,
-                    Constants.ApplicationPages.MilestonePersonList, MilestoneId.Value), MilestoneId.Value.ToString());
-            }
-        }
-
         protected override bool ValidateAndSave()
         {
             bool result = false;
@@ -656,7 +654,7 @@ namespace PraticeManagement
             if (Milestone == null)
                 return;
 
-            _milestonePersons = Milestone.MilestonePersons;
+            _milestonePersons = Milestone.MilestonePersons.OrderBy(mp => mp.Entries[0].ThisPerson.LastName).ThenBy(mp => mp.StartDate).AsQueryable().ToArray();
 
             if (_milestonePersons.Length > 0)
             {
@@ -945,7 +943,7 @@ namespace PraticeManagement
                 dtpPeriodTo.ReadOnly = txtFixedRevenue.ReadOnly = isReadOnly;
 
             rbtnFixedRevenue.Enabled = rbtnHourlyRevenue.Enabled = !isReadOnly;
-            btnAddResources.Visible = btnSave.Visible = btnDelete.Visible = btnMoveMilestone.Visible = !isReadOnly;
+            btnSave.Visible = btnDelete.Visible = btnMoveMilestone.Visible = !isReadOnly;
         }
 
         private void SetFooterLabelWithSeniority(string labelValue, ITextControl label)
@@ -1076,10 +1074,10 @@ namespace PraticeManagement
             {
                 case 0: PopulatePeopleGrid(); break;
                 case 1: PopulatePeopleGrid(); break;
-                case 3: mpaDaily.ActivityPeriod = Milestone; break;
-                case 4: mpaCumulative.ActivityPeriod = Milestone; break;
-                case 5: mpaTotal.ActivityPeriod = Milestone; break;
-                case 6: activityLog.Update(); break;
+                case 4: mpaDaily.ActivityPeriod = Milestone; break;
+                case 5: mpaCumulative.ActivityPeriod = Milestone; break;
+                case 6: mpaTotal.ActivityPeriod = Milestone; break;
+                case 7: activityLog.Update(); break;
             }
         }
 
@@ -1095,6 +1093,10 @@ namespace PraticeManagement
             ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
         }
 
+        protected bool GetVisibleValue()
+        {
+            return MilestoneId.HasValue;
+        }
     }
 }
 
