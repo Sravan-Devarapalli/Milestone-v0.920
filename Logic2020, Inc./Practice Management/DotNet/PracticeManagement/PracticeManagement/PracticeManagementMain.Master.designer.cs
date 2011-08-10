@@ -265,6 +265,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnRefreshPage;
         
         /// <summary>
+        /// hdnLastServerVisit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnLastServerVisit;
+        
+        /// <summary>
         /// hdnRunTimeOutPopuUpScript control.
         /// </summary>
         /// <remarks>
@@ -292,13 +301,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.HiddenField hdnFormsAuthTimeOut;
         
         /// <summary>
-        /// hdnLastServerVisit control.
+        /// hdnFormsAuthTicketExpiry control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnLastServerVisit;
+        protected global::System.Web.UI.WebControls.HiddenField hdnFormsAuthTicketExpiry;
         
         /// <summary>
         /// footer control.
