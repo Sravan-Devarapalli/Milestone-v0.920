@@ -181,7 +181,7 @@ namespace PraticeManagement.Utils
             }
         }
 
-        public static void SetCustomFormsAuthenticationTicket(string userName, bool createPersistentCookie, Page page)
+        public static FormsAuthenticationTicket SetCustomFormsAuthenticationTicket(string userName, bool createPersistentCookie, Page page, string userDate = "")
         {
             string cookiestr;
             HttpCookie ck;
@@ -196,17 +196,18 @@ namespace PraticeManagement.Utils
             {
                 formsAuthenticationTimeOut = 60;
             }
-            tkt = new FormsAuthenticationTicket(2, userName, DateTime.Now, DateTime.Now.AddMinutes(formsAuthenticationTimeOut), createPersistentCookie, string.Empty);
+            tkt = new FormsAuthenticationTicket(2, userName, DateTime.Now, (DateTime.Now.AddSeconds(3)).AddMinutes(formsAuthenticationTimeOut), createPersistentCookie, string.Empty);
             cookiestr = FormsAuthentication.Encrypt(tkt);
             ck = new HttpCookie(FormsAuthentication.FormsCookieName, cookiestr);
             if (createPersistentCookie)
                 ck.Expires = tkt.Expiration;
             ck.Path = FormsAuthentication.FormsCookiePath;
-            if((page.Response.Cookies != null) && (page.Response.Cookies[FormsAuthentication.FormsCookieName] != null))
+            if ((page.Response.Cookies != null) && (page.Response.Cookies[FormsAuthentication.FormsCookieName] != null))
             {
                 page.Response.Cookies.Remove(FormsAuthentication.FormsCookieName);
             }
             page.Response.Cookies.Add(ck);
+            return tkt;
         }
     }
 }
