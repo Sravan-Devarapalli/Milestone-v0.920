@@ -182,7 +182,7 @@ namespace PraticeManagement.Controls.TimeEntry
             lblAlertNote.Text = string.Format(AlertTextFormat, IsNoteRequiredList.Any(p => p.Value == true
                                                                     && SelectedPerson.HireDate <= p.Key
                                                                     && result
-                                                                    ) ? "Required" : "Optional" );
+                                                                    ) ? "REQUIRED" : "OPTIONAL" );
         }
 
         //public void bar_OnRowRemoved(object sender, EventArgs e)
