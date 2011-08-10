@@ -51,9 +51,9 @@
         }
 
         function ChangeActiveViewIndex(cntrl) {
-         var rowindex =  cntrl.attributes["RowIndex"].value;
-         var hdnEditRowIndex = document.getElementById("<%= hdnEditRowIndex.ClientID %>");
-         hdnEditRowIndex.value = rowindex;
+            var rowindex = cntrl.attributes["RowIndex"].value;
+            var hdnEditRowIndex = document.getElementById("<%= hdnEditRowIndex.ClientID %>");
+            hdnEditRowIndex.value = rowindex;
             return true;
         }
 
@@ -458,9 +458,9 @@
                                             &nbsp;
                                         </div>
                                     </HeaderTemplate>
-                                    <ItemStyle HorizontalAlign="Center"/>
+                                    <ItemStyle HorizontalAlign="Center" />
                                     <ItemTemplate>
-                                        <asp:ImageButton ID="imgEdit" ToolTip="Edit" runat="server"  OnClientClick="return ChangeActiveViewIndex(this);"
+                                        <asp:ImageButton ID="imgEdit" ToolTip="Edit" runat="server" OnClientClick="return ChangeActiveViewIndex(this);"
                                             ImageUrl="~/Images/icon-edit.png" />
                                     </ItemTemplate>
                                 </asp:TemplateField>
@@ -668,7 +668,10 @@
                 </asp:View>
                 <asp:View ID="vwDaily" runat="server">
                     <asp:Panel ID="pnlDaily" runat="server" CssClass="tab-pane">
+                        <% if (IsShowResources)
+                           { %>
                         <mp:Activity ID="mpaDaily" runat="server" />
+                        <% } %>
                     </asp:Panel>
                 </asp:View>
                 <asp:View ID="vwCumulativeActivity" runat="server">
