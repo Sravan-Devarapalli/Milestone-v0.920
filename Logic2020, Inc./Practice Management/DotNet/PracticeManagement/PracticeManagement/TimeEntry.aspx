@@ -85,7 +85,7 @@
                     <uc:PersonChooser ID="pcPersons" runat="server" OnPersonChanged="pcPersons_PersonChanged" />
                 </div>
                 <div class="tem-week-of">
-                    <uc:WeekSelector ID="wsChoose" runat="server" OnWeekChanged="wsChoose_WeekChanged" />
+                    <uc:WeekSelector ID="wsChoose" runat="server" OnWeekChanged="wsChoose_WeekChanged" OnDatePickerChanged="dpChoose_OnSelectionChanged" />
                 </div>
                 <div class="clear0">
                 </div>
