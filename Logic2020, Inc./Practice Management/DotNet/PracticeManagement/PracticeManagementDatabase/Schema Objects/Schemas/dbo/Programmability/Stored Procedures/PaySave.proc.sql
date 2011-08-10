@@ -295,7 +295,7 @@ AS
 		,@UserId
 		,C.HolidayDescription
 		,m.IsChargeable
-		,0
+		,1
 		,1 --Here it is Auto generated.
 	FROM Calendar C 
 	JOIN Pay p ON C.Date BETWEEN p.StartDate AND P.EndDate-1 AND p.Timescale = @W2SalaryId
