@@ -584,7 +584,28 @@ namespace PraticeManagement
                                            MilestoneId.Value,
                                            args));
                 else
+                {
+                    string url =args.ToString();
+                    bool isQueryStringExists = false; 
+
+                    try
+                    {
+                        url = args.ToString().Remove(args.ToString().IndexOf('?'));
+                        isQueryStringExists = true;
+                    }
+                    catch
+                    { 
+                        url=args.ToString();
+                        isQueryStringExists = false;
+                    }
+
+                    if (isQueryStringExists)
+                    {
+                        Response.Redirect(args.ToString());
+                    }
+                    else
                     Redirect(args.ToString());
+                }
             }
         }
 
