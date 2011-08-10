@@ -26,7 +26,11 @@ namespace PraticeManagement.Controls.TimeEntry
 
         public delegate void WeekChangedHandler(object sender, WeekChangedEventArgs args);
 
+        public delegate void DatePickerChangedHandler(object sender, EventArgs args);
+
         #endregion
+
+        public event DatePickerChangedHandler DatePickerChanged;
 
         public event WeekChangedHandler WeekChanged;
 
@@ -208,6 +212,7 @@ namespace PraticeManagement.Controls.TimeEntry
             SetSelectedDates();
 
             calendar.VisibleDate = EndDate;
+            txtDate.Text = StartDate.ToShortDateString();
         }
 
         private void SetSelectedDates()
@@ -219,6 +224,11 @@ namespace PraticeManagement.Controls.TimeEntry
         protected void calendar_SelectionChanged(object sender, EventArgs e)
         {
             OnWeekChanged(calendar.SelectedDate);
+        }
+
+        protected void txtDate_TextChanged(object sender, EventArgs e)
+        {
+            DatePickerChanged(sender, e);
         }
 
         //protected void btnPreviousWeek_Click(object sender, ImageClickEventArgs e)
@@ -239,6 +249,12 @@ namespace PraticeManagement.Controls.TimeEntry
         protected void calendar_OnVisibleMonthChanged(object sender, MonthChangedEventArgs e)
         {
             OnWeekChanged(e.NewDate);
+        }
+
+        public void SetDate(DateTime dateValue)
+        {
+            calendar.SelectedDate = dateValue;
+            OnWeekChanged(calendar.SelectedDate);
         }
     }
 }
