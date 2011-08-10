@@ -69,6 +69,10 @@ namespace PraticeManagement.MilestonePersonService {
             "d", ReplyAction="http://tempuri.org/IMilestonePersonService/GetMilestonePersonsDetailsByMileStoneI" +
             "dResponse")]
         DataTransferObjects.MilestonePerson[] GetMilestonePersonsDetailsByMileStoneId(int milestoneId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestonePersonService/FinancialsGetByMilestonePersonEntry", ReplyAction="http://tempuri.org/IMilestonePersonService/FinancialsGetByMilestonePersonEntryRes" +
+            "ponse")]
+        DataTransferObjects.ComputedFinancials FinancialsGetByMilestonePersonEntry(int milestoneId, int personId, System.DateTime startDate);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -149,6 +153,10 @@ namespace PraticeManagement.MilestonePersonService {
         
         public DataTransferObjects.MilestonePerson[] GetMilestonePersonsDetailsByMileStoneId(int milestoneId) {
             return base.Channel.GetMilestonePersonsDetailsByMileStoneId(milestoneId);
+        }
+        
+        public DataTransferObjects.ComputedFinancials FinancialsGetByMilestonePersonEntry(int milestoneId, int personId, System.DateTime startDate) {
+            return base.Channel.FinancialsGetByMilestonePersonEntry(milestoneId, personId, startDate);
         }
     }
 }
