@@ -29,7 +29,14 @@ namespace PraticeManagement
         public const string AnchorTagpropertiestemplate = " href = '{0}' onclick='return checkDirtyWithRedirect(this.href);'";
         public const string PopupTimebeforeFormsAuthTimeOutSecKey = "PopupTimebeforeFormsAuthTimeOutSec";
 
+
         #region Properties
+
+        public bool SkipTicketRenewal
+        {
+            set;
+            get;
+        }
 
         /// <summary>
         /// 	Gets or sets whether data on the page are dirty (not saved).
@@ -96,6 +103,12 @@ namespace PraticeManagement
         {
             SetPageTitle();
 
+            if (Request.Url.AbsoluteUri.Contains("LoggedOut.aspx") && HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                FormsAuthentication.SignOut();
+                SkipTicketRenewal = true;
+            }
+
             MembershipUser user = Membership.GetUser(HttpContext.Current.User.Identity.Name);
             TimeSpan ts = new TimeSpan(00, 00, 20);
 
@@ -131,10 +144,7 @@ namespace PraticeManagement
                 formsAuthenticationTimeOutMin = 60;
             }
 
-            formsAuthenticationTimeOutStr = (formsAuthenticationTimeOutMin * 60 * 1000).ToString();
-
-            hdnRunTimeOutPopuUpScript.Value = (DataHelper.CurrentPerson != null).ToString().ToLower();
-            hdnFormsAuthTimeOut.Value = formsAuthenticationTimeOutStr;
+            hdnRunTimeOutPopuUpScript.Value = HttpContext.Current.User.Identity.IsAuthenticated.ToString().ToLower();
 
             var popupTimebeforeFormsAutTimeOutSec = GetConfigValueByKey(PopupTimebeforeFormsAuthTimeOutSecKey);
             if (!string.IsNullOrEmpty(popupTimebeforeFormsAutTimeOutSec))
@@ -148,7 +158,6 @@ namespace PraticeManagement
 
             hdnPopupTimebeforeFormsAutTimeOut.Value = popupTimebeforeFormsAutTimeOutSec;
 
-           
             ltrScript.Text =
                 string.Format(ltrScript.Text,
                               hidDirtyData.ClientID,
@@ -202,6 +211,11 @@ namespace PraticeManagement
 
         private string GetPageTitle(SiteMapNode siteMapNode, string pageNavPath, string url)
         {
+            if (Request.Url.AbsolutePath.Contains("MilestonePersonList.aspx"))
+            {
+                return "Milestone-Person List";
+            }
+
             if (url.Contains(siteMapNode.Url) && !string.IsNullOrEmpty(siteMapNode.Url))
             {
                 return pageNavPath + (string.IsNullOrEmpty(pageNavPath) ? siteMapNode.Title : " / " + siteMapNode.Title);
@@ -368,9 +382,20 @@ namespace PraticeManagement
 
         private void UpdateLastServerVisitInfo()
         {
-            hdnLastServerVisit.Value = DateTime.UtcNow.ToString();
-            Response.Cookies.Set(new HttpCookie("LastServerVisit", hdnLastServerVisit.Value));
-            Response.Cookies.Set(new HttpCookie("IsLoggedIn",(DataHelper.CurrentPerson != null).ToString().ToLower()));
+            if (HttpContext.Current.User.Identity.IsAuthenticated && !SkipTicketRenewal)
+            {
+
+                //as part of 2800
+                var ticket = ((System.Web.Security.FormsIdentity)(HttpContext.Current.User.Identity)).Ticket;
+                ticket = Generic.SetCustomFormsAuthenticationTicket(HttpContext.Current.User.Identity.Name, ticket.IsPersistent, this.Page);
+                var formsAuthTicketExpiry = ticket.Expiration.ToString();
+                Response.Cookies.Set(new HttpCookie("FormsAuthTicketExpiry", formsAuthTicketExpiry));
+                hdnFormsAuthTicketExpiry.Value = formsAuthTicketExpiry;
+                var now = DateTime.Now.ToString();
+                hdnLastServerVisit.Value = now;
+                Response.Cookies.Set(new HttpCookie("LastServerVisit", now));
+                Response.Cookies.Set(new HttpCookie("IsLoggedIn", (DataHelper.CurrentPerson != null).ToString().ToLower()));
+            }
         }
 
         protected void logImpersonateLogin(string oldUserName, string newUserName)
@@ -421,6 +446,8 @@ namespace PraticeManagement
             var ne = FireNavigating();
 
             e.Cancel = ne.Cancel;
+            SkipTicketRenewal = !e.Cancel;
+
         }
 
         protected void smdsSubMenu_OnMenuItemDataBound(object sender, MenuEventArgs e)
