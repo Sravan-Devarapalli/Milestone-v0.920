@@ -151,7 +151,7 @@ namespace PraticeManagement
             }
         }
 
-        private int? MilestoneId
+        public int? MilestoneId
         {
             get
             {
@@ -428,6 +428,8 @@ namespace PraticeManagement
                     MilestoneId = id;
                     GetMilestoneById(MilestoneId);
                     MilestonePersonEntryListControlObject.GetLatestData();
+                    mvMilestoneDetailTab.Visible = true;
+                    tblMilestoneDetailTabViewSwitch.Visible = true;
                 }
 
                 lblResult.ShowInfoMessage(Messages.MilestoneSavedMessage);
