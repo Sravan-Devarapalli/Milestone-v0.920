@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="LoggedOut.aspx.cs" Inherits="PraticeManagement.LoggedOut" %>
 
+<%@ OutputCache Duration="1" Location="None" NoStore="true" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Logged Out</title>
 </asp:Content>
