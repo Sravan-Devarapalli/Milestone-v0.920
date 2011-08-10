@@ -1079,8 +1079,9 @@
                         <td colspan="2" align="center" style="padding: 6px 6px 2px 6px; text-align: left;">
                             <div id="dvTerminationDateErrors" runat="server" visible="false" style="padding: 0px 0px 5px 0px;
                                 max-height: 200px; overflow-y: auto; color: Red;">
-                                Unable to set Termination Date for this person due to the following:<br />
-                                <asp:Label ID="lblTimeEntriesExist" runat="server" style="padding-top:7px;" Visible="false" >
+                                 <asp:Label ID="lblTerminationDateError" runat="server" style="padding-top:7px;" >
+                                </asp:Label><br />
+                                <asp:Label ID="lblTimeEntriesExist" runat="server" style="padding-top:7px;"  >
                                 </asp:Label>
                                 <div id="dvProjectMilestomesExist" style="padding-top:5px;" runat="server">
                                     <asp:Label ID="lblProjectMilestomesExist" runat="server" >
