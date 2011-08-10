@@ -125,46 +125,46 @@
             padding-left: 4px;
         }
     </style>
-    <table class="WholeWidth">
-        <tr>
-            <td>
-                <uc1:ProjectInfo ID="pdProjectInfo" runat="server" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                &nbsp;
-            </td>
-        </tr>
-        <tr>
-            <td class="WholeWidth">
-                <div id="divPrevNextMainContent" class="main-content" runat="server">
-                    <div class="page-hscroll-wrapper">
-                        <div class="side-r">
-                        </div>
-                        <div class="side-l">
-                        </div>
-                        <div id="divLeft" class="scroll-left" runat="server" visible="false">
-                            <asp:HyperLink ID="lnkPrevMilestone" runat="server" ToolTip="Previous milestone">
-                                <span id="captionLeft" runat="server"></span>
-                            </asp:HyperLink>
-                            <label id="lblLeft" runat="server">
-                            </label>
-                        </div>
-                        <div id="divRight" class="scroll-right" runat="server" visible="false">
-                            <asp:HyperLink ID="lnkNextMilestone" runat="server" ToolTip="Next milestone">
-                                <span id="captionRight" runat="server"></span>
-                            </asp:HyperLink>
-                            <label id="lblRight" runat="server">
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </td>
-        </tr>
-    </table>
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
+            <table class="WholeWidth">
+                <tr>
+                    <td>
+                        <uc1:ProjectInfo ID="pdProjectInfo" runat="server" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td class="WholeWidth">
+                        <div id="divPrevNextMainContent" class="main-content" runat="server">
+                            <div class="page-hscroll-wrapper">
+                                <div class="side-r">
+                                </div>
+                                <div class="side-l">
+                                </div>
+                                <div id="divLeft" class="scroll-left" runat="server" visible="false">
+                                    <asp:HyperLink ID="lnkPrevMilestone" runat="server" ToolTip="Previous milestone">
+                                        <span id="captionLeft" runat="server"></span>
+                                    </asp:HyperLink>
+                                    <label id="lblLeft" runat="server">
+                                    </label>
+                                </div>
+                                <div id="divRight" class="scroll-right" runat="server" visible="false">
+                                    <asp:HyperLink ID="lnkNextMilestone" runat="server" ToolTip="Next milestone">
+                                        <span id="captionRight" runat="server"></span>
+                                    </asp:HyperLink>
+                                    <label id="lblRight" runat="server">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
             <asp:HiddenField ID="hidDirty" runat="server" />
             <asp:HiddenField ID="hdnEditRowIndex" runat="server" Value="" />
             <div style="background-color: #E2EBFF; padding: 5px; margin-bottom: 10px; margin-top: 10px;">
