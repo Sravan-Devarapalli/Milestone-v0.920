@@ -177,30 +177,23 @@
         function fnShowTimeOutPopup() {
             var cookie_LastServerVisit = new Date(getCookie("LastServerVisit"));
             var cookie_IsLoggedIn = getCookie("IsLoggedIn");
-            hdnLastServerVisit = document.getElementById('<%= hdnLastServerVisit.ClientID %>');
-            var hdnLastServerVisitTime = new Date(hdnLastServerVisit.value);
+            var cookie_FormsAuthTicketExpiry = getCookie("FormsAuthTicketExpiry");
+            var Cookie_FormsAuthTicketExpiryDate = new Date(getCookie("FormsAuthTicketExpiry"));
+            hdnFormsAuthTicketExpiry = document.getElementById('<%= hdnFormsAuthTicketExpiry.ClientID %>');
+            FormsAuthTicketExpiry = new Date(hdnFormsAuthTicketExpiry.value);
             if (cookie_IsLoggedIn == 'true') {
-                if (cookie_LastServerVisit - hdnLastServerVisitTime == 0) {
+                if (Cookie_FormsAuthTicketExpiryDate - FormsAuthTicketExpiry == 0) {
                     var lnkHiddenLinkForTimeOutAlert = document.getElementById('<%= lnkHiddenLinkForTimeOutAlert.ClientID %>');
                     lnkHiddenLinkForTimeOutAlert.click();
                 }
-                else if (cookie_LastServerVisit > hdnLastServerVisitTime) {
-                    hdnLastServerVisit.value = cookie_LastServerVisit;
+                else if (Cookie_FormsAuthTicketExpiryDate > FormsAuthTicketExpiry) {
+                    hdnFormsAuthTicketExpiry.value = cookie_FormsAuthTicketExpiry;
                     clearTimeout(logOffUserSession);
-                    var hdnFormsAuthTimeOut = document.getElementById('<%= hdnFormsAuthTimeOut.ClientID %>');
-                    var formsAuthTimeOut = parseInt(hdnFormsAuthTimeOut.value);
-                    var clientNow = new Date((new Date()).toUTCString());
-                    var timeOut = formsAuthTimeOut - ((clientNow - cookie_LastServerVisit) - serverClientTimeDiff);
                     var hdnPopupTimebeforeFormsAutTimeOut = document.getElementById('<%= hdnPopupTimebeforeFormsAutTimeOut.ClientID %>');
                     var popupTimebeforeFormsAutTimeOut = parseInt(hdnPopupTimebeforeFormsAutTimeOut.value);
-                    if ((timeOut - popupTimebeforeFormsAutTimeOut) > 0) {
-                        showTimeOutPopup = setTimeout("fnShowTimeOutPopup();", timeOut - popupTimebeforeFormsAutTimeOut);
-                        logOffUserSession = setTimeout("fnLogOffUserSession();", timeOut + 3000)
-                    }
-                    else {
-                        fnShowTimeOutPopup();
-                        logOffUserSession = setTimeout("fnLogOffUserSession();", 3000);
-                    }
+                    var clientNow = new Date();
+                    showTimeOutPopup = setTimeout("fnShowTimeOutPopup();", (Cookie_FormsAuthTicketExpiryDate - clientNow) + serverClientTimeDiff - popupTimebeforeFormsAutTimeOut - 3000);
+                    logOffUserSession = setTimeout("fnLogOffUserSession();", (Cookie_FormsAuthTicketExpiryDate - clientNow) + serverClientTimeDiff - 3000);
                 }
                 else {
                     fnLogOffUserSession();
@@ -212,36 +205,26 @@
             }
         }
         function fnLogOffUserSession() {
-            var hpLogOutOnSessionTimeOut = document.getElementById('<%= hpLogOutOnSessionTimeOut.ClientID %>');
             var cookie_LastServerVisit = new Date(getCookie("LastServerVisit"));
             var cookie_IsLoggedIn = getCookie("IsLoggedIn");
-            hdnLastServerVisit = document.getElementById('<%= hdnLastServerVisit.ClientID %>');
+            var cookie_FormsAuthTicketExpiry = getCookie("FormsAuthTicketExpiry");
+            var Cookie_FormsAuthTicketExpiryDate = new Date(cookie_FormsAuthTicketExpiry);
+            hdnFormsAuthTicketExpiry = document.getElementById('<%= hdnFormsAuthTicketExpiry.ClientID %>');
+            FormsAuthTicketExpiry = new Date(hdnFormsAuthTicketExpiry.value);
             if (cookie_IsLoggedIn == 'true') {
-                var hdnLastServerVisitTime = new Date(hdnLastServerVisit.value);
-                if (cookie_LastServerVisit - hdnLastServerVisitTime <= 0) {
+                if (Cookie_FormsAuthTicketExpiryDate - FormsAuthTicketExpiry <= 0) {
+                    var hpLogOutOnSessionTimeOut = document.getElementById('<%= hpLogOutOnSessionTimeOut.ClientID %>');
                     window.location = hpLogOutOnSessionTimeOut.href;
                 }
-                else if (cookie_LastServerVisit > hdnLastServerVisitTime) {
-                    hdnLastServerVisit.value = cookie_LastServerVisit;
-                    var hdnFormsAuthTimeOut = document.getElementById('<%= hdnFormsAuthTimeOut.ClientID %>');
-                    var formsAuthTimeOut = parseInt(hdnFormsAuthTimeOut.value);
-                    var clientNow = new Date();
-                    var timeOut = formsAuthTimeOut - ((clientNow - cookie_LastServerVisit) - serverClientTimeDiff);
+                else if (Cookie_FormsAuthTicketExpiryDate > FormsAuthTicketExpiry) {
+                    $find('bhAlterTimeOut').hide();
+                    hdnFormsAuthTicketExpiry.value = cookie_FormsAuthTicketExpiry;
                     var hdnPopupTimebeforeFormsAutTimeOut = document.getElementById('<%= hdnPopupTimebeforeFormsAutTimeOut.ClientID %>');
                     var popupTimebeforeFormsAutTimeOut = parseInt(hdnPopupTimebeforeFormsAutTimeOut.value);
-                    if ((timeOut - popupTimebeforeFormsAutTimeOut) > 0) {
-                        showTimeOutPopup = setTimeout("fnShowTimeOutPopup();", timeOut - popupTimebeforeFormsAutTimeOut);
-                        $find('bhAlterTimeOut').hide();
-                    }
-                    else {
-
-                        fnShowTimeOutPopup();
-                    }
-                    logOffUserSession = setTimeout("fnLogOffUserSession();", timeOut + 3000)
+                    var clientNow = new Date();
+                    showTimeOutPopup = setTimeout("fnShowTimeOutPopup();", (Cookie_FormsAuthTicketExpiryDate - clientNow) - serverClientTimeDiff - popupTimebeforeFormsAutTimeOut - 3000);
+                    logOffUserSession = setTimeout("fnLogOffUserSession();", (Cookie_FormsAuthTicketExpiryDate - clientNow) - serverClientTimeDiff - 3000);
                 }
-            }
-            else {
-                window.location = hpLogOutOnSessionTimeOut.href;
             }
         }
         function fnLogOffUserSessionatServer() {
@@ -251,17 +234,21 @@
         function RunTimerToRefreshPage() {
             var hdnRunTimeOutPopuUpScript = document.getElementById('<%= hdnRunTimeOutPopuUpScript.ClientID %>');
             if (hdnRunTimeOutPopuUpScript.value == 'true') {
-                var clientNow = new Date((new Date()).toUTCString());
-                var hdnLastServerVisit = new Date(document.getElementById('<%= hdnLastServerVisit.ClientID %>').value)
-                serverClientTimeDiff = clientNow - hdnLastServerVisit;
-                var hdnFormsAuthTimeOut = document.getElementById('<%= hdnFormsAuthTimeOut.ClientID %>');
+                hdnFormsAuthTicketExpiry = document.getElementById('<%= hdnFormsAuthTicketExpiry.ClientID %>');
+                FormsAuthTicketExpiry = new Date(hdnFormsAuthTicketExpiry.value);
+                var clientNow = new Date();
+                var cookie_LastServerVisit = new Date(getCookie("LastServerVisit"));
+                var hdnLastServerVisit = new Date(document.getElementById('<%= hdnLastServerVisit.ClientID %>').value);
+                serverClientTimeDiff = clientNow - hdnLastServerVisit;     
+                var Cookie_FormsAuthTicketExpiry = new Date(getCookie("FormsAuthTicketExpiry"));
                 var hdnPopupTimebeforeFormsAutTimeOut = document.getElementById('<%= hdnPopupTimebeforeFormsAutTimeOut.ClientID %>');
-                showTimeOutPopup = setTimeout("fnShowTimeOutPopup();", parseInt(hdnFormsAuthTimeOut.value) - parseInt(hdnPopupTimebeforeFormsAutTimeOut.value));
-                logOffUserSession = setTimeout("fnLogOffUserSession();", parseInt(hdnFormsAuthTimeOut.value) + 3000); 
+                showTimeOutPopup = setTimeout("fnShowTimeOutPopup();", (Cookie_FormsAuthTicketExpiry - cookie_LastServerVisit) - parseInt(hdnPopupTimebeforeFormsAutTimeOut.value) - 3000);
+                logOffUserSession = setTimeout("fnLogOffUserSession();", (Cookie_FormsAuthTicketExpiry - cookie_LastServerVisit) - 3000);
             }
         }
 
         function RefreshPage() {
+            clearTimeout(logOffUserSession);
             var btnRefreshPage = document.getElementById('<%= btnRefreshPage.ClientID %>');
             btnRefreshPage.click();
         }
@@ -372,18 +359,18 @@
                             </table>
                         </asp:Panel>
                         <asp:Button ID="lnkHiddenLinkForTimeOutAlert" runat="server" Style="display: none;"
-                            CausesValidation="false">
-                        </asp:Button>
+                            CausesValidation="false"></asp:Button>
                         <asp:Button ID="btnLogOutOnSessionTimeOut" runat="server" OnClick="btnLogOutOnSessionTimeOut_OnClick"
                             Style="display: none;" CausesValidation="false" />
                         <asp:HyperLink ID="hpLogOutOnSessionTimeOut" runat="server" Style="display: none;"
                             TabIndex="2000" NavigateUrl="~/LoggedOut.aspx" />
                         <asp:Button ID="btnRefreshPage" runat="server" Style="display: none;" TabIndex="2001"
                             CausesValidation="false" />
+                        <asp:HiddenField ID="hdnLastServerVisit" runat="server" />
                         <asp:HiddenField ID="hdnRunTimeOutPopuUpScript" runat="server" Value="false" />
                         <asp:HiddenField ID="hdnPopupTimebeforeFormsAutTimeOut" runat="server" Value="60000" />
                         <asp:HiddenField ID="hdnFormsAuthTimeOut" runat="server" Value="3600000" />
-                        <asp:HiddenField ID="hdnLastServerVisit" runat="server" />
+                        <asp:HiddenField ID="hdnFormsAuthTicketExpiry" runat="server" />
                     </ContentTemplate>
                 </asp:UpdatePanel>
             </div>
