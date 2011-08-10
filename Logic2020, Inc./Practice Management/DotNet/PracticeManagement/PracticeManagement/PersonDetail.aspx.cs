@@ -42,9 +42,10 @@ namespace PraticeManagement
         private const string DuplicatePersonName = "There is another Person with the same First Name and Last Name.";
         private const string DuplicateEmail = "There is another Person with the same Email.";
         private const string lblTimeEntriesExistFormat = "There are time entries submitted by person after {0}.";
-        private const string lblProjectMilestomesExistFormat = "Person is assigned to below Project - Milesones after {0}:";
-        
-        
+        private const string lblProjectMilestomesExistFormat = "{0} is assigned to below Project - Milesone(s) after {1}:";
+        private const string lblTerminationDateErrorFormat = "Unable to set Termination Date for {0} due to the following:";
+        private const string lblOwnerProjectsExistFormat = "{0} is designated as the Owner for the following project(s):";
+        private const string lblOwnerOpportunitiesFormat = "{0} is designated as the Owner for the following Opportunities:";
 
 
         #endregion
@@ -167,6 +168,7 @@ namespace PraticeManagement
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            
             if (!IsPostBack)
             {
                 DataHelper.FillPracticeListOnlyActive(ddlDefaultPractice, string.Empty);
@@ -1380,6 +1382,10 @@ namespace PraticeManagement
             if (TEsExistsAfterTerminationDate || milestonesAfterTerminationDate.Any<Milestone>() || ownerProjects.Any<Project>() || ownerOpportunities.Any<Opportunity>())
             {
                 this.dvTerminationDateErrors.Visible = true;
+
+                var person = DataHelper.GetPerson(this.PersonId.Value);
+                lblTerminationDateError.Text = string.Format(lblTerminationDateErrorFormat, person.Name);
+
                 mpeViewTerminationDateErrors.Show();
 
                 if (TEsExistsAfterTerminationDate)
@@ -1394,7 +1400,7 @@ namespace PraticeManagement
                 if (milestonesAfterTerminationDate.Any<Milestone>())
                 {
                     this.dvProjectMilestomesExist.Visible = true;
-                    this.lblProjectMilestomesExist.Text = string.Format(lblProjectMilestomesExistFormat, terminationDate.Value.ToString("MM/dd/yyy"));
+                    this.lblProjectMilestomesExist.Text = string.Format(lblProjectMilestomesExistFormat, person.Name, terminationDate.Value.ToString("MM/dd/yyy"));
                     this.dtlProjectMilestones.DataSource = milestonesAfterTerminationDate;
                     this.dtlProjectMilestones.DataBind();
                 }
@@ -1406,7 +1412,7 @@ namespace PraticeManagement
                 if (ownerProjects.Any<Project>())
                 {
                     this.divOwnerProjectsExist.Visible = true;
-                    // this.lblOwnerProjectsExist.Text = string.Format(this.lblOwnerProjectsExist.Text, terminationDate.Value.ToString("MM/dd/yyy"));
+                    this.lblOwnerProjectsExist.Text = string.Format(lblOwnerProjectsExistFormat, person.Name);
                     this.dtlOwnerProjects.DataSource = ownerProjects;
                     this.dtlOwnerProjects.DataBind();
                 }
@@ -1418,6 +1424,7 @@ namespace PraticeManagement
                 if (ownerOpportunities.Any<Opportunity>())
                 {
                     this.divOwnerOpportunitiesExist.Visible = true;
+                    this.lblOwnerOpportunities.Text = string.Format(lblOwnerOpportunitiesFormat, person.Name);
                     this.dtlOwnerOpportunities.DataSource = ownerOpportunities;
                     this.dtlOwnerOpportunities.DataBind();
                 }
