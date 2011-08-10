@@ -7,6 +7,7 @@ using PraticeManagement.Utils;
 using System.Web.Security;
 using System.Web.UI;
 using System.Linq;
+using System.Web.UI.WebControls;
 
 namespace PraticeManagement
 {
@@ -116,6 +117,23 @@ namespace PraticeManagement
         protected void wsChoose_WeekChanged(object sender, WeekChangedEventArgs args)
         {
             UpdateTimeEntries();
+        }
+
+        protected void dpChoose_OnSelectionChanged(object sender, EventArgs args)
+        {
+            var dp = (TextBox)sender;
+
+            var pageBase = this.Page as PracticeManagementPageBase;
+            if (pageBase.IsDirty && !teList.SaveData())
+            {
+                dp.Text = wsChoose.SelectedStartDate.ToShortDateString();
+                RaiseError();
+            }
+            else
+            {
+                ClearDirtyState();
+                wsChoose.SetDate(Convert.ToDateTime(dp.Text));
+            }
         }
 
         protected void pcPersons_PersonChanged(object sender, PersonChangedEventArguments args)
