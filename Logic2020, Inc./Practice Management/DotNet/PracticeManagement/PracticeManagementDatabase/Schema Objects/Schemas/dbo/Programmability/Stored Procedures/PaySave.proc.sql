@@ -298,13 +298,13 @@ AS
 		,1
 		,1 --Here it is Auto generated.
 	FROM Calendar C 
-	JOIN Pay p ON C.Date BETWEEN p.StartDate AND P.EndDate-1 AND p.Timescale = @W2SalaryId
+	JOIN Pay p ON C.Date BETWEEN p.StartDate AND P.EndDate-1 AND p.Timescale = @W2SalaryId AND p.Person = @PersonId
 	JOIN MilestonePerson mp ON mp.MilestoneId = @DefaultMilestoneId AND mp.PersonId = p.Person
 	JOIN Milestone m ON mp.MilestoneId = m.MilestoneId
 	JOIN MilestonePersonEntry mpe ON mpe.MilestonePersonId = mp.MilestonePersonId
 	LEFT JOIN TimeEntries te ON te.MilestonePersonId = mpe.MilestonePersonId AND te.MilestoneDate = C.Date
 	WHERE (C.Date BETWEEN ISNULL(@PreviousRecordStartDate,@StartDate) AND ISNULL(@NextRecordEndDate,@EndDate)-1)
-	AND C.DayOff = 1 AND DATEPART(DW,C.Date) IN (1,7) AND te.TimeEntryId IS NULL
+	AND C.DayOff = 1 AND (C.RecurringHolidayId IS NOT NULL OR C.RecurringHolidayDate IS NOT NULL) AND te.TimeEntryId IS NULL
 	AND C.Date >= @Today
 	AND (C.Date <= @TerminationDate OR @TerminationDate IS NULL)
 
