@@ -571,6 +571,18 @@ namespace PraticeManagement.Controls.Milestones
                 var ddlRole = e.Row.FindControl("ddlRole") as DropDownList;
                 var lableTargetMargin = e.Row.FindControl(lblTargetMargin) as Label;
                 var lnkPersonName = e.Row.FindControl("lnkPersonName") as HyperLink;
+                var lblHoursPerDay = e.Row.FindControl("lblHoursPerDay") as Label;
+                var lblHoursInPeriodDay = e.Row.FindControl("lblHoursInPeriodDay") as Label;
+
+                if (lblHoursPerDay != null)
+                {
+                    lblHoursPerDay.Text = entry.HoursPerDay.ToString("0.00");
+                }
+
+                if (lblHoursInPeriodDay != null)
+                {
+                    lblHoursInPeriodDay.Text = entry.ProjectedWorkload.ToString("0.00");
+                }
 
                 if (lnkPersonName != null)
                 {
@@ -758,7 +770,15 @@ namespace PraticeManagement.Controls.Milestones
                       Milestone.Id.Value,
                       milestonePersonId);
 
-            return PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(mpePageUrl, Request.Url.AbsoluteUri);
+            var url = Request.Url.AbsoluteUri;
+
+            if (!HostingPage.SelectedId.HasValue)
+            {
+
+                url = url.Replace("?", "?id=" + HostingPage.MilestoneId.Value.ToString() + "&");
+            }
+
+            return PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(mpePageUrl, url);
         }
 
         protected void btnAddPerson_Click(object sender, EventArgs e)
@@ -1196,6 +1216,11 @@ namespace PraticeManagement.Controls.Milestones
                 }
 
             }
+
+            HostingPage.Milestone = HostingPage.GetMilestoneById(HostingPage.MilestoneId);
+            HostingPage.Project = HostingPage.Milestone.Project;
+            HostingPage.FillComputedFinancials(HostingPage.Milestone);
+           
         }
 
         protected bool GetIsHourlyRate()
