@@ -121,6 +121,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.HiddenField hidDirty;
         
         /// <summary>
+        /// hdnEditRowIndex control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnEditRowIndex;
+        
+        /// <summary>
         /// txtMilestoneName control.
         /// </summary>
         /// <remarks>
@@ -292,15 +301,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CheckBox chbConsultantsCanAdjust;
         
         /// <summary>
-        /// btnAddResources control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedTextButton btnAddResources;
-        
-        /// <summary>
         /// tblMilestoneDetailTabViewSwitch control.
         /// </summary>
         /// <remarks>
@@ -353,6 +353,24 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnDetail;
+        
+        /// <summary>
+        /// cellResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableCell cellResources;
+        
+        /// <summary>
+        /// btnResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnResources;
         
         /// <summary>
         /// cellExpenses control.
@@ -641,6 +659,42 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvPeople;
+        
+        /// <summary>
+        /// vwResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.View vwResources;
+        
+        /// <summary>
+        /// pnlResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlResources;
+        
+        /// <summary>
+        /// upnlMilestonePersons control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upnlMilestonePersons;
+        
+        /// <summary>
+        /// MilestonePersonEntryListControl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Milestones.MilestonePersonList MilestonePersonEntryListControl;
         
         /// <summary>
         /// vwExpenses control.
@@ -1039,13 +1093,13 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.AnimationExtender aeBtnSave;
         
         /// <summary>
-        /// upnlBody_UpdatePanelAnimationExtender control.
+        /// lpOpportunityDetails control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.UpdatePanelAnimationExtender upnlBody_UpdatePanelAnimationExtender;
+        protected global::PraticeManagement.Controls.Generic.LoadingProgress lpOpportunityDetails;
     }
 }
 
