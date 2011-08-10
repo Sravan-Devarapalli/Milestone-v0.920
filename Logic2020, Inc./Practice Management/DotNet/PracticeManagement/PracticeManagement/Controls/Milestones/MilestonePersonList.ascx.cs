@@ -480,10 +480,12 @@ namespace PraticeManagement.Controls.Milestones
 
         protected void Page_Load(object sender, EventArgs e)
         {
+           
             if (!IsPostBack) 
             {
                 GetLatestData(); 
             }
+            StoreRepeterEntriiesInViewState();
         }
 
         public void GetLatestData()
@@ -784,6 +786,12 @@ namespace PraticeManagement.Controls.Milestones
         protected void btnAddPerson_Click(object sender, EventArgs e)
         {
             lblResultMessage.ClearMessage();
+
+            AddRowAndBindRepeater();
+        }
+
+        private void StoreRepeterEntriiesInViewState()
+        {
             var repoldValues = new List<Dictionary<string, string>>();
 
             foreach (RepeaterItem repItem in repPerson.Items)
@@ -810,8 +818,6 @@ namespace PraticeManagement.Controls.Milestones
             }
 
             repeaterOldValues = repoldValues;
-
-            AddRowAndBindRepeater();
         }
 
         private void AddRowAndBindRepeater()
