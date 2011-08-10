@@ -63,7 +63,7 @@ namespace PraticeManagement
             }
         }
 
-        private Project Project
+        public Project Project
         {
             get
             {
@@ -110,9 +110,14 @@ namespace PraticeManagement
 
                 return milestoneValue;
             }
+            set
+            {
+                ViewState["MileStone"] = value;
+            }
+
         }
 
-        private Milestone GetMilestoneById(int? id)
+        public Milestone GetMilestoneById(int? id)
         {
             if (id.HasValue)
             {
@@ -196,7 +201,7 @@ namespace PraticeManagement
 
         #endregion
 
-        protected void Page_Init(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
             if (MilestoneId.HasValue)
             {
@@ -215,7 +220,7 @@ namespace PraticeManagement
         protected void Page_PreRender(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTooltipsForallDropDowns", "SetTooltipsForallDropDowns();", true);
-            
+
             if (!string.IsNullOrEmpty(hdnEditRowIndex.Value))
             {
                 SelectView(btnResources, 2, false);
@@ -426,7 +431,7 @@ namespace PraticeManagement
                 if (id.HasValue)
                 {
                     MilestoneId = id;
-                    GetMilestoneById(MilestoneId);
+                    Milestone = GetMilestoneById(MilestoneId);
                     MilestonePersonEntryListControlObject.GetLatestData();
                     mvMilestoneDetailTab.Visible = true;
                     tblMilestoneDetailTabViewSwitch.Visible = true;
@@ -445,7 +450,7 @@ namespace PraticeManagement
                 if (Milestone != null)
                 {
                     Project = Milestone.Project;
-                    PopulateControls(Milestone, SelectedId.HasValue ? true : false);
+                    PopulateControls(Milestone, true);
                 }
             }
 
@@ -581,7 +586,16 @@ namespace PraticeManagement
                        MilestoneId.Value,
                        args);
 
-            return Generic.GetTargetUrlWithReturn(mpePageUrl, Request.Url.AbsoluteUri);
+            var url = Request.Url.AbsoluteUri;
+
+            if (!SelectedId.HasValue)
+            {
+
+                url = url.Replace("?", "?id=" + MilestoneId.Value.ToString()+"&");
+            }
+
+            return Generic.GetTargetUrlWithReturn(mpePageUrl, url);
+
         }
 
         protected override bool ValidateAndSave()
@@ -657,6 +671,7 @@ namespace PraticeManagement
                 return;
 
             _milestonePersons = Milestone.MilestonePersons.OrderBy(mp => mp.Entries[0].ThisPerson.LastName).ThenBy(mp => mp.StartDate).AsQueryable().ToArray();
+
 
             if (_milestonePersons.Length > 0)
             {
@@ -837,7 +852,7 @@ namespace PraticeManagement
             SetControlsChangebility();
         }
 
-        private void FillComputedFinancials(Milestone milestone)
+        public void FillComputedFinancials(Milestone milestone)
         {
             //Fill Projected Sales Commission Cell
             SetFooterLabelWithSeniority(
