@@ -74,7 +74,7 @@ namespace PraticeManagement.Controls.Milestones
                     {
                         try
                         {
-                            _milestoneValue = serviceClient.GetMilestoneById(HostingPage.SelectedId.Value);
+                            _milestoneValue = serviceClient.GetMilestoneById(HostingPage.MilestoneId.Value);
                         }
                         catch (CommunicationException)
                         {
@@ -489,7 +489,7 @@ namespace PraticeManagement.Controls.Milestones
         public void GetLatestData()
         {
             lblResultMessage.ClearMessage();
-            int? id = HostingPage.SelectedId;
+            int? id = HostingPage.MilestoneId;
             if (id.HasValue)
             {
                 List<MilestonePerson> milestonePersons = GetMilestonePersons();
@@ -725,7 +725,7 @@ namespace PraticeManagement.Controls.Milestones
             {
                 try
                 {
-                    return serviceClient.GetMilestonePersonsDetailsByMileStoneId(HostingPage.SelectedId.Value).AsQueryable().ToList();
+                    return serviceClient.GetMilestonePersonsDetailsByMileStoneId(HostingPage.MilestoneId.Value).AsQueryable().ToList();
                 }
                 catch (CommunicationException)
                 {
