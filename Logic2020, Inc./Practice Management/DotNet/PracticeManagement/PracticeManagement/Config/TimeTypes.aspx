@@ -81,7 +81,7 @@
                         <ItemStyle HorizontalAlign="Center" Width="5%" />
                         <ItemTemplate>
                             <asp:ImageButton ID="imgDelete" runat="server" CommandName="delete" ImageUrl="~/Images/icon-delete.png"
-                                ToolTip="Delete Time Type" />
+                                ToolTip="Delete Time Type" Visible='<%# !(bool)Eval("IsSystemTimeType") %>' />
                         </ItemTemplate>
                         <EditItemTemplate></EditItemTemplate>
                     </asp:TemplateField>
