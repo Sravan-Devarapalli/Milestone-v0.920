@@ -16,9 +16,14 @@ namespace PraticeManagement.Controls.Milestones
         private const string DuplPersonName = "The specified person is already assigned on this milestone.";
         private ExceptionDetail _internalException;
 
-        private PraticeManagement.MilestonePersonList HostingPage
+        private PraticeManagement.MilestoneDetail HostingPage
         {
-            get { return ((PraticeManagement.MilestonePersonList)Page); }
+            get { return ((PraticeManagement.MilestoneDetail)Page); }
+        }
+
+        private MilestonePersonList HostingControl
+        {
+            get { return HostingPage.MilestonePersonEntryListControlObject; }
         }
 
         public string BarColor
@@ -54,32 +59,9 @@ namespace PraticeManagement.Controls.Milestones
 
             var bar = btnInsert.NamingContainer.NamingContainer as RepeaterItem;
 
-            Person person = HostingPage.GetPersonBySelectedValue(ddlPerson.SelectedValue);
+            Person person = HostingControl.GetPersonBySelectedValue(ddlPerson.SelectedValue);
 
             bool isGreaterThanMilestone = dpPersonEnd.DateValue <= HostingPage.Milestone.ProjectedDeliveryDate;
-
-            if (!isGreaterThanMilestone)
-            {
-                HostingPage.lblMoveMilestoneDateObject.Text = dpPersonEnd.DateValue.ToShortDateString();
-
-                bool terminationAndCompensation =
-                    ChechTerminationAndCompensation(dpPersonEnd.DateValue, person);
-
-                HostingPage.cellMoveMilestoneObject.Visible = terminationAndCompensation;
-                HostingPage.cellTerminationOrCompensationObject.Visible =
-                    !terminationAndCompensation;
-            }
-
-
-            //HostingPage.pnlChangeMilestoneObject.Visible = !isGreaterThanMilestone;
-
-            //TimeSpan shift = dpPersonEnd.DateValue.Subtract(HostingPage.Milestone.ProjectedDeliveryDate);
-
-            //HostingPage.pnlChangeMilestoneObject.Attributes["milestonePersonId"] = "";
-            //HostingPage.pnlChangeMilestoneObject.Attributes["ShiftDays"] = shift.Days.ToString();
-
-            //HostingPage.btnMoveMilestoneObject.Enabled = false;
-
             args.IsValid = isGreaterThanMilestone;
         }
 
@@ -92,11 +74,11 @@ namespace PraticeManagement.Controls.Milestones
             DateTime endDate =
                 dpPersonEnd.DateValue != DateTime.MinValue ? dpPersonEnd.DateValue : HostingPage.Milestone.ProjectedDeliveryDate;
 
-            Person person = HostingPage.GetPersonBySelectedValue(ddlPerson.SelectedValue);
+            Person person = HostingControl.GetPersonBySelectedValue(ddlPerson.SelectedValue);
 
             List<MilestonePersonEntry> entries = new List<MilestonePersonEntry>();
 
-            foreach (var item in HostingPage.MilestonePersons)
+            foreach (var item in HostingControl.MilestonePersons)
             {
                 entries.AddRange(item.Entries);
             }
@@ -104,7 +86,7 @@ namespace PraticeManagement.Controls.Milestones
             // Validate overlapping with other entries.
             for (int i = 0; i < entries.Count; i++)
             {
-                if (i != HostingPage.gvMilestonePersonEntriesObject.EditIndex && entries[i].ThisPerson.Id == person.Id.Value)
+                if (i != HostingControl.gvMilestonePersonEntriesObject.EditIndex && entries[i].ThisPerson.Id == person.Id.Value)
                 {
                     DateTime entryStartDate = entries[i].StartDate;
                     DateTime entryEndDate =
@@ -154,9 +136,9 @@ namespace PraticeManagement.Controls.Milestones
         protected void custPersonInsert_ServerValidate(object sender, ServerValidateEventArgs args)
         {
 
-            Person person = HostingPage.GetPersonBySelectedValue(ddlPerson.SelectedValue);
+            Person person = HostingControl.GetPersonBySelectedValue(ddlPerson.SelectedValue);
 
-            List<MilestonePerson> MilestonePersonList = HostingPage.MilestonePersons.Where(mp => mp.Person.Id.Value == person.Id.Value).AsQueryable().ToList();
+            List<MilestonePerson> MilestonePersonList = HostingControl.MilestonePersons.Where(mp => mp.Person.Id.Value == person.Id.Value).AsQueryable().ToList();
 
             List<MilestonePersonEntry> entries = new List<MilestonePersonEntry>();
 
@@ -178,28 +160,11 @@ namespace PraticeManagement.Controls.Milestones
             }
         }
 
-        protected void custEntriesInsert_ServerValidate(object sender, ServerValidateEventArgs args)
-        {
-
-            Person person = HostingPage.GetPersonBySelectedValue(ddlPerson.SelectedValue);
-
-            List<MilestonePerson> MilestonePersonList = HostingPage.MilestonePersons.Where(mp => mp.Person.Id.Value == person.Id.Value).AsQueryable().ToList();
-
-            List<MilestonePersonEntry> entries = new List<MilestonePersonEntry>();
-
-            foreach (var item in MilestonePersonList)
-            {
-                entries.AddRange(item.Entries);
-            }
-
-            args.IsValid = entries.Count > 0;
-        }
-
         protected void custDuplicatedPersonInsert_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            if (!String.IsNullOrEmpty(HostingPage.ExMessage))
+            if (!String.IsNullOrEmpty(HostingControl.ExMessage))
             {
-                args.IsValid = !(HostingPage.ExMessage == DuplPersonName);
+                args.IsValid = !(HostingControl.ExMessage == DuplPersonName);
             }
             else
             {
@@ -257,16 +222,14 @@ namespace PraticeManagement.Controls.Milestones
         {
             var bar = btnInsert.NamingContainer.NamingContainer as RepeaterItem;
 
-            HostingPage.vsumMileStonePersonsObject.ValidationGroup = "MilestonePersonEntry" + bar.ItemIndex.ToString();
+            HostingControl.vsumMileStonePersonsObject.ValidationGroup = "MilestonePersonEntry" + bar.ItemIndex.ToString();
 
-            Page.Validate(HostingPage.vsumMileStonePersonsObject.ValidationGroup);
+            Page.Validate(HostingControl.vsumMileStonePersonsObject.ValidationGroup);
             if (Page.IsValid)
             {
-                HostingPage.lblResultMessageObject.ClearMessage();
-                HostingPage.AddAndBindRow(bar);
-
-                HostingPage.pnlChangeMilestoneObject.Visible = false;
-                HostingPage.RemoveItemAndDaabindRepeater(bar.ItemIndex);
+                HostingControl.lblResultMessageObject.ClearMessage();
+                HostingControl.AddAndBindRow(bar);
+                HostingControl.RemoveItemAndDaabindRepeater(bar.ItemIndex);
             }
         }
 
@@ -274,22 +237,8 @@ namespace PraticeManagement.Controls.Milestones
         {
             var bar = btnCancel.NamingContainer.NamingContainer as RepeaterItem;
 
-            HostingPage.RemoveItemAndDaabindRepeater(bar.ItemIndex);
+            HostingControl.RemoveItemAndDaabindRepeater(bar.ItemIndex);
         }
-
-
-        protected void dpPersonStart_SelectionChanged(object sender, EventArgs e)
-        {
-            HostingPage.IsDirty = true;
-            ((Control)sender).Focus();
-        }
-
-        protected void dpPersonEnd_SelectionChanged(object sender, EventArgs e)
-        {
-            HostingPage.IsDirty = true;
-            ((Control)sender).Focus();
-        }
-
 
         protected string GetValidationGroup()
         {
