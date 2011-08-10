@@ -1061,8 +1061,15 @@ namespace PraticeManagement
             }
             else
             {
-                Page.Validate(vsumOpportunity.ValidationGroup);
-                if (Page.IsValid)
+                if (OpportunityId.HasValue)
+                {
+                    Page.Validate(vsumOpportunity.ValidationGroup);
+                    if (Page.IsValid)
+                    {
+                        Redirect(eventArgument == string.Empty ? Constants.ApplicationPages.OpportunityList : eventArgument);
+                    }
+                }
+                else
                 {
                     Redirect(eventArgument == string.Empty ? Constants.ApplicationPages.OpportunityList : eventArgument);
                 }
