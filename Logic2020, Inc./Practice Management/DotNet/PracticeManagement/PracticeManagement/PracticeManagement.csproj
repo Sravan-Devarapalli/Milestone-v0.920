@@ -22,6 +22,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -130,6 +131,7 @@
     <Content Include="ActivityLog.aspx" />
     <Content Include="Controls\Calendar.ascx" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
+    <Content Include="Images\copy.png" />
     <Content Include="Images\printer.png" />
     <Content Include="Images\saveToDisk.png" />
     <Content Include="LoggedOut.aspx" />
