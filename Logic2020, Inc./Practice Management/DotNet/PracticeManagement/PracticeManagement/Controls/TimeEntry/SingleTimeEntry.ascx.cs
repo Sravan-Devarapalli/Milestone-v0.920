@@ -413,7 +413,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
         private void ApplyControlStyle()
         {
-            if (tbActualHours.ReadOnly)
+            if (tbActualHours.ReadOnly && string.IsNullOrEmpty(tbActualHours.Text))
                 tbActualHours.BackColor = Color.Gray;
         }
 
