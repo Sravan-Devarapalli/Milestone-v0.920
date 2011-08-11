@@ -30,7 +30,19 @@
                     &nbsp;
                 </div>
             </HeaderTemplate>
-            <ItemStyle Width="5%" HorizontalAlign="Center" Height="20px" Wrap="false" />
+            <ItemStyle Width="3%" HorizontalAlign="Center" Height="20px" Wrap="false" />
+            <ItemTemplate>
+                <asp:ImageButton ID="imgCopy" ToolTip="Copy" runat="server" OnClick="imgCopy_OnClick"
+                    ImageUrl="~/Images/copy.png" />
+            </ItemTemplate>
+        </asp:TemplateField>
+        <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+            <HeaderTemplate>
+                <div class="ie-bg">
+                    &nbsp;
+                </div>
+            </HeaderTemplate>
+            <ItemStyle Width="4%" HorizontalAlign="Center" Height="20px" Wrap="false" />
             <ItemTemplate>
                 <asp:ImageButton ID="imgMilestonePersonEntryEdit" ToolTip="Edit" runat="server" OnClick="imgMilestonePersonEntryEdit_OnClick"
                     ImageUrl="~/Images/icon-edit.png" />
@@ -47,10 +59,11 @@
                 <div class="ie-bg no-wrap">
                     Person</div>
             </HeaderTemplate>
-            <ItemStyle Width="22%" Height="20px" />
+            <ItemStyle Width="17%" Height="20px" />
             <ItemTemplate>
                 <asp:HyperLink ID="lnkPersonName" runat="server" NavigateUrl='<%# GetMpeRedirectUrl((Eval("MilestonePersonId"))) %>'
-                    onclick="return checkDirtyWithRedirect(this.href);" Text='<%# HttpUtility.HtmlEncode(string.Format("{0}, {1}", Eval("ThisPerson.LastName"), Eval("ThisPerson.FirstName"))) %>' />
+                    PersonId='<%# Eval("ThisPerson.Id") %>' onclick="return checkDirtyWithRedirect(this.href);"
+                    Width="98%" Text='<%# HttpUtility.HtmlEncode(string.Format("{0}, {1}", Eval("ThisPerson.LastName"), Eval("ThisPerson.FirstName"))) %>' />
             </ItemTemplate>
             <EditItemTemplate>
                 <asp:DropDownList ID="ddlPersonName" Width="98%" runat="server" />
@@ -81,7 +94,7 @@
             </HeaderTemplate>
             <ItemStyle Width="10%" Height="20px" Wrap="false" />
             <ItemTemplate>
-                <asp:Label ID="lblRole" runat="server" Text='<%# Eval("Role.Name") %>'></asp:Label>
+                <asp:Label ID="lblRole" runat="server" RoleId='<%# Eval("Role.Id") %>' Text='<%# Eval("Role.Name") %>'></asp:Label>
             </ItemTemplate>
             <EditItemTemplate>
                 <asp:DropDownList ID="ddlRole" runat="server" Width="98%">
@@ -98,8 +111,8 @@
                 <asp:Label ID="lblStartDate" runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>'></asp:Label>
             </ItemTemplate>
             <EditItemTemplate>
-                <uc2:DatePicker ID="dpPersonStart" runat="server" ValidationGroup="MilestonePersonEntry" OnClientChange="return true;"
-                    TextBoxWidth="85%" AutoPostBack="false" DateValue='<%# Eval("StartDate") %>' />
+                <uc2:DatePicker ID="dpPersonStart" runat="server" ValidationGroup="MilestonePersonEntry"
+                    OnClientChange="return true;" TextBoxWidth="85%" AutoPostBack="false" DateValue='<%# Eval("StartDate") %>' />
                 <asp:RequiredFieldValidator ID="reqPersonStart" runat="server" ControlToValidate="dpPersonStart"
                     ErrorMessage="The Person Start Date is required." ToolTip="The Person Start Date is required."
                     Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
@@ -136,8 +149,8 @@
                 <asp:Label ID="lblEndDate" runat="server" Text='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value.ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label>
             </ItemTemplate>
             <EditItemTemplate>
-                <uc2:DatePicker ID="dpPersonEnd" runat="server" ValidationGroup="MilestonePersonEntry" OnClientChange="return true;"
-                    TextBoxWidth="85%" AutoPostBack="false" DateValue='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value : DateTime.MinValue %>' />
+                <uc2:DatePicker ID="dpPersonEnd" runat="server" ValidationGroup="MilestonePersonEntry"
+                    OnClientChange="return true;" TextBoxWidth="85%" AutoPostBack="false" DateValue='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value : DateTime.MinValue %>' />
                 <asp:RequiredFieldValidator ID="reqPersonEnd" runat="server" ControlToValidate="dpPersonEnd"
                     ErrorMessage="The Person End Date is required." ToolTip="The Person End Date is required."
                     Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
@@ -239,18 +252,40 @@
                     MinimumValue="0" MaximumValue="15000" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
             </EditItemTemplate>
         </asp:TemplateField>
+        <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+            <HeaderTemplate>
+                <div class="ie-bg">
+                    &nbsp;
+                </div>
+            </HeaderTemplate>
+            <ItemStyle Width="3%" HorizontalAlign="Center" Height="20px" Wrap="false" />
+            <ItemTemplate>
+                <asp:ImageButton ID="imgMilestonePersonDelete" ToolTip="Delete" runat="server" OnClick="imgMilestonePersonDelete_OnClick"
+                    ImageUrl="~/Images/cross_icon.png" />
+                <ajaxToolkit:ConfirmButtonExtender ConfirmText="Are you sure you want to delete this person?"
+                    runat="server" TargetControlID="imgMilestonePersonDelete">
+                </ajaxToolkit:ConfirmButtonExtender>
+            </ItemTemplate>
+            <EditItemTemplate>
+            </EditItemTemplate>
+        </asp:TemplateField>
     </Columns>
 </asp:GridView>
-<asp:Panel ID="pnlInsertMilestonePerson" runat="server">
-    <table width="100%" class="CompPerfTable WholeWidth" cellspacing="0" border="0" style="background-color: White;
+<asp:Panel ID="pnlInsertMilestonePerson" runat="server" Wrap="False">
+    <table width="100%" class="CompPerfTable" cellspacing="0" border="0" style="background-color: White;
         border-collapse: collapse;">
         <tr id="thInsertMilestonePerson" runat="server" style="white-space: nowrap;" visible="false">
-            <th align="center" style="height: 20px; width: 5%; white-space: nowrap;" scope="col">
+            <th align="center" style="height: 20px; width: 3%; white-space: nowrap;" scope="col">
                 <div class="ie-bg">
                     &nbsp;
                 </div>
             </th>
-            <th align="center" style="height: 20px; width: 22%;" scope="col">
+            <th align="center" style="height: 20px; width: 4%; white-space: nowrap;" scope="col">
+                <div class="ie-bg">
+                    &nbsp;
+                </div>
+            </th>
+            <th align="center" style="height: 20px; width: 17%;" scope="col">
                 <div class="ie-bg no-wrap">
                     Person</div>
             </th>
@@ -282,6 +317,11 @@
             <th align="center" style="width: 16%;" scope="col">
                 <div class="ie-bg no-wrap">
                     Total Hours in Milestone</div>
+            </th>
+            <th align="center" style="height: 20px; width: 3%; white-space: nowrap;" scope="col">
+                <div class="ie-bg">
+                    &nbsp;
+                </div>
             </th>
         </tr>
         <asp:Repeater ID="repPerson" OnItemDataBound="repPerson_ItemDataBound" runat="server">
