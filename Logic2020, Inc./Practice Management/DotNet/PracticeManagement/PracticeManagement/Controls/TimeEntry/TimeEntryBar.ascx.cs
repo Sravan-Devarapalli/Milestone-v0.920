@@ -128,6 +128,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
             isSystemTimeType = (RowBehind.TimeTypeBehind != null && RowBehind.TimeTypeBehind.IsSystemTimeType);
             UpdateControlStatuses();
+            imgDropTes.Enabled = !isSystemTimeType;
 
             var systemTimeTypes = SettingsHelper.GetSystemTimeTypes();
             if (isSystemTimeType)
@@ -153,9 +154,13 @@ namespace PraticeManagement.Controls.TimeEntry
             ste.ProjectMilestoneDropdownClientId = this.ddlProjectMilestone.ClientID;
             ste.TimeTypeDropdownClientId = this.ddlTimeTypes.ClientID;
             InitTimeEntryControl(ste, cell);
-            if (isSystemTimeType && cell.TimeEntry == null)
+            if (isSystemTimeType)
             {
                 ste.Disabled = true;
+                if (cell.TimeEntry != null)
+                {
+                    ste.CanelControlStyle();
+                } 
             }
         }
 
