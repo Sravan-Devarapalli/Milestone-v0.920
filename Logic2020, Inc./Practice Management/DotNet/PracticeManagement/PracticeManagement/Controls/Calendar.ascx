@@ -38,6 +38,7 @@
                 chkboxes[i].parentNode.style.borderLeft = "5px solid white";
             }
         }
+        chkboxList.parentNode.style.overflow = "hidden";
         chkboxList.parentNode.style.height = ((chkboxes.length * 40) - 20) + "px";
     }
     function ShowPopup(dayLink, peBehaviourId, saveDayButtonID, hiddenDayOffID, hiddenDateID,
@@ -210,9 +211,9 @@
                                             </table>
                                         </td>
                                         <td id="tdRecurringHolidaysDetails" runat="server" rowspan="9" class="setCheckboxesLeft"
-                                            style="padding-top: 45px; padding-left: 20px;">
+                                            style="padding-top: 45px; padding-left: 2%;">
                                             <uc:ScrollingDropDown ID="cblRecurringHolidays" runat="server" SetDirty="false" AllSelectedReturnType="AllItems"
-                                                OnSelectedIndexChanged="cblRecurringHolidays_OnSelectedIndexChanged" CellPadding="3"
+                                                OnSelectedIndexChanged="cblRecurringHolidays_OnSelectedIndexChanged"
                                                 AutoPostBack="true" />
                                         </td>
                                     </tr>
