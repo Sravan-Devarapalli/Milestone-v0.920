@@ -25,7 +25,7 @@ namespace PraticeManagement.Controls.Milestones
         #region Constants
 
         private const string MILESTONE_PERSON_ID_ARGUMENT = "milestonePersonId";
-        private const int AMOUNT_COLUMN_INDEX = 6;
+        private const int AMOUNT_COLUMN_INDEX = 7;
         private const string MILESTONE_PERSONS_KEY = "MilestonePersons";
         private const string ADD_MILESTONE_PERSON_ENTRIES_KEY = "ADD_MILESTONE_PERSON_ENTRIES_KEY";
         private const string PERSONSLISTFORMILESTONE_KEY = "PERSONSLISTFORMILESTONE_KEY";
@@ -42,6 +42,7 @@ namespace PraticeManagement.Controls.Milestones
         private const string txtAmountInsert = "txtAmountInsert";
         private const string txtHoursPerDayInsert = "txtHoursPerDayInsert";
         private const string txtHoursInPeriodInsert = "txtHoursInPeriodInsert";
+        private const string milestoneHasTimeEntries="Cannot delete milesone person because this person has already entered time for this milestone.";
 
         #endregion
 
@@ -93,14 +94,14 @@ namespace PraticeManagement.Controls.Milestones
         {
             get { return gvMilestonePersonEntries; }
         }
-       
+
         public MessageLabel lblResultMessageObject
         {
             get
             {
                 return lblResultMessage;
             }
-        }       
+        }
 
         public ValidationSummary vsumMileStonePersonsObject
         {
@@ -276,11 +277,11 @@ namespace PraticeManagement.Controls.Milestones
 
             if (!isGreaterThanMilestone)
             {
-                
+
                 bool terminationAndCompensation =
                     ChechTerminationAndCompensation(dpPersonEnd.DateValue, person);
 
-              
+
             }
 
             var entries = new List<MilestonePersonEntry>();
@@ -461,7 +462,7 @@ namespace PraticeManagement.Controls.Milestones
         {
             if (gvMilestonePersonEntries.Rows.Count == 0 && repPerson.Items.Count == 0)
             {
-                AddRowAndBindRepeater();
+                AddRowAndBindRepeater(null);
             }
         }
 
@@ -480,10 +481,10 @@ namespace PraticeManagement.Controls.Milestones
 
         protected void Page_Load(object sender, EventArgs e)
         {
-           
-            if (!IsPostBack) 
+
+            if (!IsPostBack)
             {
-                GetLatestData(); 
+                GetLatestData();
             }
             StoreRepeterEntriiesInViewState();
         }
@@ -518,20 +519,6 @@ namespace PraticeManagement.Controls.Milestones
                     _seniorityAnalyzer.IsOtherGreater(milestonePerson.Person);
 
                     entries.AddRange(milestonePerson.Entries);
-
-                    if (milestonePerson.Id.HasValue)
-                    {
-                        milestonePerson.ActualActivity =
-                            new List<TimeEntryRecord>(TimeEntryHelper.GetTimeEntriesMilestonePerson(milestonePerson));
-                        milestonePerson.EmptyPeriodPoints =
-                            DataHelper.GetDatePointsForPerson(
-                                                                 milestonePerson.StartDate,
-                                                                 milestonePerson.EndDate,
-                                                                 milestonePerson.Person
-                                );
-                    }
-
-
                 }
             }
 
@@ -589,6 +576,8 @@ namespace PraticeManagement.Controls.Milestones
                 if (lnkPersonName != null)
                 {
                     lnkPersonName.NavigateUrl = GetMpeRedirectUrl(entry.MilestonePersonId);
+                    lnkPersonName.Attributes["PersonId"] = entry.ThisPerson.Id.ToString();
+
                 }
 
                 DateTime startDate = Milestone.StartDate;
@@ -600,20 +589,20 @@ namespace PraticeManagement.Controls.Milestones
 
                     List<MilestonePerson> MilestonePersonList = MilestonePersons.Where(mp => mp.Id == entry.MilestonePersonId).AsQueryable().ToList();
 
+
                     bool result = false;
 
-                    foreach (var item in MilestonePersonList)
+                    foreach (var mp in MilestonePersonList)
                     {
-                        if (item != null && item.ActualActivity!= null && item.ActualActivity.Count > 0)
+                        if (mp.Entries.Any(en => en.HasTimeEntries == true))
                         {
                             result = true;
                             break;
                         }
                     }
-
-                    ddlPersonName.Enabled = result || MilestonePersons.Where(mp => mp.Id == entry.MilestonePersonId).Count() > 0 ? false : true;
+                  
                     ddlPersonName.SelectedValue = entry.ThisPerson.Id.Value.ToString();
-
+                    ddlPersonName.Enabled = !result;
                 }
 
                 if (ddlRole != null)
@@ -739,7 +728,7 @@ namespace PraticeManagement.Controls.Milestones
             {
                 try
                 {
-                    return serviceClient.GetMilestonePersonsDetailsByMileStoneId(HostingPage.MilestoneId.Value).AsQueryable().ToList();
+                   return serviceClient.GetMilestonePersonsDetailsByMileStoneId(HostingPage.MilestoneId.Value).AsQueryable().ToList();
                 }
                 catch (CommunicationException)
                 {
@@ -786,8 +775,7 @@ namespace PraticeManagement.Controls.Milestones
         protected void btnAddPerson_Click(object sender, EventArgs e)
         {
             lblResultMessage.ClearMessage();
-
-            AddRowAndBindRepeater();
+            AddRowAndBindRepeater(null);
         }
 
         private void StoreRepeterEntriiesInViewState()
@@ -820,7 +808,7 @@ namespace PraticeManagement.Controls.Milestones
             repeaterOldValues = repoldValues;
         }
 
-        private void AddRowAndBindRepeater()
+        internal void AddRowAndBindRepeater(Dictionary<string, string> dic)
         {
             if (AddMilestonePersonEntries == null)
             {
@@ -837,14 +825,18 @@ namespace PraticeManagement.Controls.Milestones
             entry.StartDate = Milestone.StartDate;
             entry.EndDate = Milestone.ProjectedDeliveryDate;
 
-            var dic = new Dictionary<string, string>();
-            dic.Add(DDLPERSON_KEY, string.Empty);
-            dic.Add(DDLROLE_KEY, string.Empty);
-            dic.Add(dpPersonStartInsert, Milestone.StartDate.ToString());
-            dic.Add(dpPersonEndInsert, Milestone.ProjectedDeliveryDate.ToString());
-            dic.Add(txtAmountInsert, string.Empty);
-            dic.Add(txtHoursPerDayInsert, string.Empty);
-            dic.Add(txtHoursInPeriodInsert, string.Empty);
+            if (dic == null)
+            {
+                dic = new Dictionary<string, string>();
+                dic.Add(DDLPERSON_KEY, string.Empty);
+                dic.Add(DDLROLE_KEY, string.Empty);
+                dic.Add(dpPersonStartInsert, Milestone.StartDate.ToString());
+                dic.Add(dpPersonEndInsert, Milestone.ProjectedDeliveryDate.ToString());
+                dic.Add(txtAmountInsert, string.Empty);
+                dic.Add(txtHoursPerDayInsert, string.Empty);
+                dic.Add(txtHoursInPeriodInsert, string.Empty);
+            }
+
             repeaterOldValues.Add(dic);
             repeaterOldValues = repeaterOldValues;
 
@@ -887,6 +879,7 @@ namespace PraticeManagement.Controls.Milestones
 
                 entry.ThisPerson = person;
                 milestonePerson.Person = person;
+                
             }
 
             // Role
@@ -971,8 +964,75 @@ namespace PraticeManagement.Controls.Milestones
         {
             ImageButton imgEdit = sender as ImageButton;
             GridViewRow row = imgEdit.NamingContainer as GridViewRow;
-            OnEditClick(row.DataItemIndex); 
+            OnEditClick(row.DataItemIndex);
         }
+
+        protected void imgMilestonePersonDelete_OnClick(object sender, EventArgs e)
+        {
+            ImageButton imgDelete = sender as ImageButton;
+            GridViewRow row = imgDelete.NamingContainer as GridViewRow;
+
+            var entries = new List<MilestonePersonEntry>();
+
+            foreach (var mP in MilestonePersons)
+            {
+                entries.AddRange(mP.Entries);
+            }
+            entries = entries.OrderBy(entry => entry.ThisPerson.LastName).ThenBy(ent => ent.StartDate).AsQueryable().ToList();
+
+            MilestonePersonEntry mpentry = entries[row.DataItemIndex];
+            var index = MilestonePersons.FindIndex(mp => mp.Id == mpentry.MilestonePersonId);
+            var mperson = MilestonePersons[index];
+
+            mperson.Person = GetPersonBySelectedValue(mperson.Person.Id.Value.ToString());
+
+            lblResultMessage.ClearMessage();
+            if (CheckTimeEntriesExist(mpentry.MilestonePersonId, mpentry.StartDate, mpentry.EndDate, true, true))
+            {
+                lblResultMessage.ShowErrorMessage(milestoneHasTimeEntries);
+                return;
+            }
+
+            if (mperson.Entries.Count > 1)
+            {
+                mperson.Entries.Remove(mpentry);
+                entries.RemoveAt(row.DataItemIndex);
+                SaveData(ref mperson);
+                MilestonePersons[index] = mperson;
+
+            }
+            else
+            {
+                try
+                {
+                    var milestonePerson = new MilestonePerson { Id = mpentry.MilestonePersonId };
+                    ServiceCallers.Custom.MilestonePerson(serviceClient => serviceClient.DeleteMilestonePerson(milestonePerson));
+                    MilestonePersons.RemoveAt(index);
+                    HostingPage.Milestone = HostingPage.GetMilestoneById(HostingPage.MilestoneId);
+                    HostingPage.Project = HostingPage.Milestone.Project;
+                    HostingPage.FillComputedFinancials(HostingPage.Milestone);
+
+                }
+                catch (Exception exc)
+                {
+                    lblVacationIncludedText.Text = exc.Message;
+                    lblVacationIncludedText.Visible = true;
+                }
+            }
+
+
+            MilestonePersons = MilestonePersons;
+            var entrieslist = new List<MilestonePersonEntry>();
+
+            foreach (var mP in MilestonePersons)
+            {
+                entrieslist.AddRange(mP.Entries);
+            }
+
+            entrieslist = entrieslist.OrderBy(en => en.ThisPerson.LastName).ThenBy(en => en.StartDate).AsQueryable().ToList();
+            BindEntriesGrid(entrieslist);
+        }
+
 
         public void OnEditClick(int editRowIndex)
         {
@@ -1004,6 +1064,59 @@ namespace PraticeManagement.Controls.Milestones
             BindEntriesGrid(entries);
 
             lblResultMessage.ClearMessage();
+        }
+
+
+        protected void imgCopy_OnClick(object sender, EventArgs e)
+        {
+            ImageButton imgCopy = sender as ImageButton;
+            GridViewRow row = imgCopy.NamingContainer as GridViewRow;
+            var dic = new Dictionary<string, string>();
+
+            if (gvMilestonePersonEntries.EditIndex == row.DataItemIndex)
+            {
+                var ddlPersonName = row.FindControl("ddlPersonName") as DropDownList;
+                var ddlRole = row.FindControl("ddlRole") as DropDownList;
+                var dpPersonStart = row.FindControl("dpPersonStart") as DatePicker;
+                var dpPersonEnd = row.FindControl("dpPersonEnd") as DatePicker;
+                var txtHoursPerDay = row.FindControl("txtHoursPerDay") as TextBox;
+                var txtAmount = row.FindControl("txtAmount") as TextBox;
+                var txtHoursInPeriod = row.FindControl("txtHoursInPeriod") as TextBox;
+
+
+                dic.Add(DDLPERSON_KEY, ddlPersonName.SelectedValue);
+                dic.Add(DDLROLE_KEY, ddlRole.SelectedValue);
+                dic.Add(dpPersonStartInsert, dpPersonStart.DateValue.ToString());
+                dic.Add(dpPersonEndInsert, dpPersonEnd.DateValue.ToString());
+                dic.Add(txtAmountInsert, txtAmount.Text);
+                dic.Add(txtHoursPerDayInsert, txtHoursPerDay.Text);
+                dic.Add(txtHoursInPeriodInsert, txtHoursInPeriod.Text);
+
+
+            }
+            else
+            {
+                var lnkPersonName = row.FindControl("lnkPersonName") as HyperLink;
+                var lblRole = row.FindControl("lblRole") as Label;
+                var lblStartDate = row.FindControl("lblStartDate") as Label;
+                var lblEndDate = row.FindControl("lblEndDate") as Label;
+                var lblHoursPerDay = row.FindControl("lblHoursPerDay") as Label;
+                var lblAmount = row.FindControl("lblAmount") as Label;
+                var lblHoursInPeriodDay = row.FindControl("lblHoursInPeriodDay") as Label;
+
+                var hourlyrate = lblAmount.Text.Replace("$", "");
+
+                dic.Add(DDLPERSON_KEY, lnkPersonName.Attributes["PersonId"]);
+                dic.Add(DDLROLE_KEY, lblRole.Attributes["RoleId"]);
+                dic.Add(dpPersonStartInsert, lblStartDate.Text);
+                dic.Add(dpPersonEndInsert, lblEndDate.Text);
+                dic.Add(txtAmountInsert, hourlyrate);
+                dic.Add(txtHoursPerDayInsert, lblHoursPerDay.Text);
+                dic.Add(txtHoursInPeriodInsert, lblHoursInPeriodDay.Text);
+            }
+
+            AddRowAndBindRepeater(dic);
+
         }
 
         protected void gvMilestonePersonEntries_RowUpdating(object sender, GridViewUpdateEventArgs e)
@@ -1209,13 +1322,12 @@ namespace PraticeManagement.Controls.Milestones
 
                     foreach (var entry in milestonePerson.Entries)
                     {
-                        entry.ComputedFinancials = serviceClient.FinancialsGetByMilestonePersonEntry(milestonePerson.Milestone.Id.Value,milestonePerson.Person.Id.Value,entry.StartDate);
+                        entry.ComputedFinancials = serviceClient.FinancialsGetByMilestonePersonEntry(milestonePerson.Milestone.Id.Value, milestonePerson.Person.Id.Value, entry.StartDate);
                     }
-                    
+
                 }
                 catch (Exception ex)
                 {
-
                     serviceClient.Abort();
                     ExMessage = ex.Message;
                     Page.Validate();
@@ -1226,7 +1338,7 @@ namespace PraticeManagement.Controls.Milestones
             HostingPage.Milestone = HostingPage.GetMilestoneById(HostingPage.MilestoneId);
             HostingPage.Project = HostingPage.Milestone.Project;
             HostingPage.FillComputedFinancials(HostingPage.Milestone);
-           
+
         }
 
         protected bool GetIsHourlyRate()
@@ -1264,5 +1376,19 @@ namespace PraticeManagement.Controls.Milestones
         }
 
         #endregion
+
+
+
+        internal void CopyItemAndDaabindRepeater(int barIndex)
+        {
+            MilestonePersonEntry mpentry = AddMilestonePersonEntries[barIndex];
+            AddMilestonePersonEntries.Add(mpentry);
+            Dictionary<string, string> dic = repeaterOldValues[barIndex];
+            repeaterOldValues.Add(dic);
+            AddMilestonePersonEntries = AddMilestonePersonEntries;
+            repeaterOldValues = repeaterOldValues;
+            repPerson.DataSource = AddMilestonePersonEntries;
+            repPerson.DataBind();
+        }
     }
 }
