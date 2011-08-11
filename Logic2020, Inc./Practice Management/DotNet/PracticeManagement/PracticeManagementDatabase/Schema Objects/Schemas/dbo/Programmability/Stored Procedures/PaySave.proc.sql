@@ -41,6 +41,7 @@ AS
 	, @TerminationDate DATETIME
 	, @PreviousRecordStartDate DATETIME
 	, @NextRecordEndDate DateTIME
+	, @TempEndDate DATETIME
 
  
 	
@@ -127,6 +128,12 @@ AS
 	           WHERE Person = @PersonId AND StartDate = @OLD_StartDate AND EndDate = @OLD_EndDate)
 	BEGIN
 	
+
+		DELETE DF
+		FROM  dbo.[DefaultCommission] DF
+		LEFT JOIN dbo.Pay P ON DF.StartDate = P.StartDate AND DF.PersonId = P.Person  
+		WHERE DF.StartDate >= @StartDate AND  Type =1 AND DF.PersonId = @PersonId AND P.Person IS NULL
+				AND DF.StartDate < @EndDate
 		
 		-- Auto-adjust a previous record
 		UPDATE dbo.Pay
@@ -166,6 +173,8 @@ AS
 		       StartDate = @StartDate,
 		       EndDate = @EndDate
 		 WHERE Person = @PersonId AND StartDate = @OLD_StartDate AND EndDate = @OLD_EndDate
+
+
 		 IF EXISTS (SELECT 1 FROM dbo.[DefaultCommission] 
 					WHERE PersonId = @PersonId AND [Type] = 1 
 					AND StartDate = @OLD_StartDate
@@ -176,16 +185,27 @@ AS
 				WHERE PersonId = @PersonId AND [Type] = 1 
 							AND StartDate = @OLD_StartDate
 			ELSE
-			 UPDATE  dbo.[DefaultCommission]
-			 SET FractionOfMargin = @SalesCommissionFractionOfMargin,
-				 StartDate = @StartDate,
-				 EndDate = @EndDate
-			 WHERE PersonId = @PersonId AND [Type] = 1 
-							AND StartDate = @OLD_StartDate
+			BEGIN
+				 
+				  IF NOT EXISTS (SELECT 1 FROM dbo.[DefaultCommission]
+								 WHERE [TYPE]=1 AND PersonId = @PersonId 
+								 AND StartDate >  @StartDate)
+					AND NOT EXISTS (SELECT 1 FROM dbo.Pay
+									WHERE Person= @PersonId AND StartDate > @StartDate
+					)
+					 SELECT @TempEndDate = '2029-12-31'
+				  ELSE
+					SELECT @TempEndDate = @EndDate
+				 UPDATE  dbo.[DefaultCommission]
+				 SET FractionOfMargin = @SalesCommissionFractionOfMargin,
+					 StartDate = @StartDate,
+					 EndDate = @TempEndDate
+				 WHERE PersonId = @PersonId AND [Type] = 1 
+								AND StartDate = @OLD_StartDate
+			END
 		END
 		ELSE IF @SalesCommissionFractionOfMargin IS NOT NULL
 		BEGIN
-			  DECLARE @TempEndDate DATETIME
 			  IF NOT EXISTS (SELECT 1 FROM dbo.[DefaultCommission]
 							 WHERE [TYPE]=1 AND PersonId = @PersonId 
 							 AND StartDate >  @StartDate)
@@ -209,7 +229,11 @@ AS
 		   SET EndDate = @StartDate
 		 WHERE Person = @PersonId AND EndDate > @StartDate
 
-		 
+		DELETE DF
+		FROM  dbo.[DefaultCommission] DF
+		LEFT JOIN dbo.Pay P ON DF.StartDate = P.StartDate AND DF.PersonId = P.Person  
+		WHERE DF.StartDate >= @StartDate AND  Type =1 AND DF.PersonId = @PersonId AND P.Person IS NULL
+				AND DF.StartDate < @EndDate
 	
 		INSERT INTO dbo.Pay
 					(Person, StartDate, EndDate, Amount, Timescale, TimesPaidPerMonth, Terms,
@@ -219,22 +243,30 @@ AS
 					 @VacationDays, @BonusAmount, ISNULL(@BonusHoursToCollect, dbo.GetHoursPerYear()),
 					 @DefaultHoursPerDay,@SeniorityId,@PracticeId)
 		
-		DELETE DF
-		FROM  dbo.[DefaultCommission] DF
-		LEFT JOIN dbo.Pay P ON DF.StartDate = P.StartDate AND DF.PersonId = P.Person  
-		WHERE DF.StartDate >= @StartDate AND  Type =1 AND DF.PersonId = @PersonId AND P.Person IS NULL
-				AND DF.StartDate < @EndDate
+		
 
 		UPDATE dbo.[DefaultCommission]
 			SET EndDate = @StartDate
 			WHERE PersonId = @PersonId
 				   AND [Type] = 1 -- Sales Commission
 				   AND EndDate > @StartDate
+				   AND StartDate < @StartDate
 
+		DECLARE @DefaultCommissionEndDate DATETIME
+		 
+
+		SELECT @DefaultCommissionEndDate = '2029-12-31'
+
+
+		IF EXISTS (SELECT 1 FROM dbo.[DefaultCommission] 
+					WHERE PersonId = @PersonId AND TYPE = 1 
+						AND StartDate > @StartDate)
+		SELECT @DefaultCommissionEndDate = @EndDate
+		
 		IF @SalesCommissionFractionOfMargin IS NOT NULL
 		INSERT INTO dbo.[DefaultCommission]
 						(PersonId, StartDate, EndDate, FractionOfMargin, [type], MarginTypeId)
-			VALUES (@PersonId, @StartDate, '2029-12-31', @SalesCommissionFractionOfMargin, 1, NULL)
+			VALUES (@PersonId, @StartDate, @DefaultCommissionEndDate, @SalesCommissionFractionOfMargin, 1, NULL)
 
 	END
 	--DECLARE @Today DATETIME
@@ -329,5 +361,15 @@ AS
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN Tran_PaySave
+		DECLARE	 @ERROR_STATE			tinyint
+		,@ERROR_SEVERITY		tinyint
+		,@ERROR_MESSAGE		    nvarchar(2000)
+		,@InitialTranCount		tinyint
+
+		SET	 @ERROR_MESSAGE		= ERROR_MESSAGE()
+		SET  @ERROR_SEVERITY	= ERROR_SEVERITY()
+		SET  @ERROR_STATE		= ERROR_STATE()
+		RAISERROR ('%s', @ERROR_SEVERITY, @ERROR_STATE, @ERROR_MESSAGE)
+
 	END CATCH
 
