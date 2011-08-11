@@ -152,6 +152,9 @@ namespace PracticeManagementService
                                 mp.Milestone.Id.Value,
                                 mp.Person.Id.Value,
                                 entry.StartDate);
+
+                            entry.HasTimeEntries = MilestonePersonDAL.CheckTimeEntriesForMilestonePerson(mp.Id.Value, entry.StartDate, entry.EndDate,
+                                                                            true, true);
                         }
                     }
 
