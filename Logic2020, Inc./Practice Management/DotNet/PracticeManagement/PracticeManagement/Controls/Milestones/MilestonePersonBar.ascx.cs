@@ -240,6 +240,13 @@ namespace PraticeManagement.Controls.Milestones
             HostingControl.RemoveItemAndDaabindRepeater(bar.ItemIndex);
         }
 
+        protected void imgCopy_OnClick(object sender, EventArgs e)
+        {
+            var bar = imgCopy.NamingContainer.NamingContainer as RepeaterItem;
+            HostingControl.CopyItemAndDaabindRepeater(bar.ItemIndex);
+        }
+
+
         protected string GetValidationGroup()
         {
             var bar = btnInsert.NamingContainer.NamingContainer as RepeaterItem;
