@@ -106,6 +106,13 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public bool HasTimeEntries
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Gets or sets a calculated person's rate for the milestone.
         /// </summary>
