@@ -34,7 +34,7 @@
         </tr>
         <tr>
             <td class="comment">
-                <asp:TextBox ID="tbNotes" runat="server" Columns="50" MaxLength="1000" Rows="5" TextMode="MultiLine"
+                <asp:TextBox ID="tbNotes" runat="server" Columns="50" MaxLength="1000" Rows="5" TextMode="MultiLine" style="resize:none"
                     TabIndex="1"  />
                 <asp:HiddenField ID="hdnNotes" runat="server" Value="" />
             </td>
