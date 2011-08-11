@@ -30,6 +30,7 @@ namespace PraticeManagement
         private const string BUTTON_INSERT_ID = "btnInsert";
         private const string DuplPersonName = "The specified person is already assigned on this milestone.";
         private const string lblTargetMargin = "lblTargetMargin";
+        private const string milestoneHasTimeEntries = "Cannot delete milesone person because this person has already entered time for this milestone.";
 
         #endregion
 
@@ -352,12 +353,6 @@ namespace PraticeManagement
                 DisplayPersonRate(MilestonePerson.ComputedFinancials);
             }
 
-            ddlPersonName.Enabled = !SelectedMilestonePersonId.HasValue;
-
-            if (MilestonePerson != null && MilestonePerson.Id.HasValue && MilestonePerson.Id.Value > 0)
-            {
-                ddlPersonName.Enabled = false;
-            }
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
@@ -484,7 +479,7 @@ namespace PraticeManagement
             lblResultMessage.ClearMessage();
             if (CheckTimeEntriesExist(entry.MilestonePersonId, entry.StartDate, entry.EndDate, true, true))
             {
-                lblResultMessage.ShowErrorMessage(string.Format(Messages.CannotModifyMilestonePerson, "delete"));
+                lblResultMessage.ShowErrorMessage(milestoneHasTimeEntries);
                 return;
             }
             milestonePerson.Entries.RemoveAt(e.RowIndex);
