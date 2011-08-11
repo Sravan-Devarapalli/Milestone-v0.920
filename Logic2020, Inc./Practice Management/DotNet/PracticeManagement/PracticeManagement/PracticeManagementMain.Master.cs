@@ -507,8 +507,15 @@ namespace PraticeManagement
         protected void btnLogOutOnSessionTimeOut_OnClick(object sender, EventArgs e)
         {
             FormsAuthentication.SignOut();
-
-            Response.Redirect(FormsAuthentication.LoginUrl);
+            if (hdnRedirectToLogedOutPage.Value == "true")
+            {
+                hdnRedirectToLogedOutPage.Value = "";
+                Response.Redirect("~/LoggedOut.aspx");
+            }
+            else
+            {
+                Response.Redirect(FormsAuthentication.LoginUrl);
+            }
         }
 
         private string GetConfigValueByKey(string key)
