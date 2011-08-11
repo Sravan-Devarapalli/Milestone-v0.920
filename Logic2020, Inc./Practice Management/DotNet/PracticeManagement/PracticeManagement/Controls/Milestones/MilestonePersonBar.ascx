@@ -1,14 +1,18 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="MilestonePersonBar.ascx.cs"
     Inherits="PraticeManagement.Controls.Milestones.MilestonePersonBar" %>
 <%@ Register Src="~/Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc2" %>
-<tr id="trBar" style="height: 25px; white-space: nowrap;" runat="server">
-    <td align="center" style="width: 5%; height: 20px;">
+
+<tr id="trBar" style="height: 25px; white-space: nowrap;"  runat="server">
+    <td align="center" style="width: 3%; height: 20px;">
+        <asp:ImageButton ID="imgCopy" ToolTip="Copy" runat="server" OnClick="imgCopy_OnClick" ImageUrl="~/Images/copy.png" />
+    </td>
+    <td align="center" style="width: 4%; height: 20px;">
         <asp:ImageButton ID="btnInsert" runat="server" ImageUrl="~/Images/icon-check.png"
             ValidationGroup="<%# GetValidationGroup() %>" ToolTip="Save" OnClick="btnInsertPerson_Click" />
         <asp:ImageButton ID="btnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="btnCancel_OnClick"
             ToolTip="Cancel" />
     </td>
-    <td style="width: 22%; height: 20px;">
+    <td  style="width: 17%; height: 20px;">
         <asp:DropDownList ID="ddlPerson" Width="98%" runat="server" />
         <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPerson"
             ErrorMessage="The Person Name is required." ToolTip="The Person Name is required."
@@ -31,8 +35,8 @@
         </asp:DropDownList>
     </td>
     <td align="center" style="width: 11%; height: 20px;">
-        <uc2:DatePicker ID="dpPersonStartInsert" runat="server" ValidationGroup="<%# GetValidationGroup() %>" OnClientChange="return true;"
-            AutoPostBack="false" TextBoxWidth="85%" />
+        <uc2:DatePicker ID="dpPersonStartInsert" runat="server" ValidationGroup="<%# GetValidationGroup() %>"
+            OnClientChange="return true;" AutoPostBack="false" TextBoxWidth="85%" />
         <asp:RequiredFieldValidator ID="reqPersonStart" runat="server" ControlToValidate="dpPersonStartInsert"
             ErrorMessage="The Person Start Date is required." ToolTip="The Person Start Date is required."
             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
@@ -59,8 +63,8 @@
             ValidateEmptyText="false" ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custPeriodVacationOverlappingInsert_ServerValidate"></asp:CustomValidator>
     </td>
     <td align="center" style="width: 11%; height: 20px;">
-        <uc2:DatePicker ID="dpPersonEndInsert" runat="server" ValidationGroup="<%# GetValidationGroup() %>" OnClientChange="return true;"
-             AutoPostBack="false" TextBoxWidth="85%" />
+        <uc2:DatePicker ID="dpPersonEndInsert" runat="server" ValidationGroup="<%# GetValidationGroup() %>"
+            OnClientChange="return true;" AutoPostBack="false" TextBoxWidth="85%" />
         <asp:RequiredFieldValidator ID="reqPersonEnd" runat="server" ControlToValidate="dpPersonEndInsert"
             ErrorMessage="The Person End Date is required." ToolTip="The Person End Date is required."
             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
@@ -120,6 +124,8 @@
             ToolTip="The Hours In Period must be more then 0 and less or equals to 15,000."
             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
             MinimumValue="0" MaximumValue="15000" Type="Double" ValidationGroup="<%# GetValidationGroup() %>"></asp:RangeValidator>
+    </td>
+     <td align="center" style="width: 3%; height: 20px;">
     </td>
 </tr>
 
