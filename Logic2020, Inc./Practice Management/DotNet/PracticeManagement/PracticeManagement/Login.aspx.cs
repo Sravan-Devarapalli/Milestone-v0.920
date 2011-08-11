@@ -74,12 +74,6 @@ namespace PraticeManagement
                 }
             }
 
-            //if (Session["RedirectToLologgedOutPage"] != null)
-            //{
-            //    Session["RedirectToLologgedOutPage"] = null;
-            //    Response.Redirect("~/LoggedOut.aspx");
-            //}
-
             msglblForgotPWDErrorDetails.ClearMessage();
             loginErrorDetails.Text = string.Empty;
             var userNameTextBox = login.FindControl("UserName") as TextBox;
