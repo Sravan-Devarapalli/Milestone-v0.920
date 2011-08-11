@@ -10,7 +10,7 @@ BEGIN
 DECLARE @Today DATETIME,
 	@ModifiedBy INT
 
-DECLARE @RecurringHolidaysDates TABLE( [Date] DATETIME, [Description] NVARCHAR(255))
+DECLARE @RecurringHolidaysDates TABLE( [Date] DATETIME, [Description] NVARCHAR(255), [Id] INT)
 
 SELECT @Today = dbo.GettingPMTime(GETUTCDATE())
 
@@ -29,8 +29,8 @@ WHERE Alias = @UserLogin
 	SET IsSet = @IsSet
 	WHERE Id = @Id OR @Id IS NULL
 
-	INSERT INTO @RecurringHolidaysDates([Date], [Description])
-	SELECT C1.Date, crh.Description
+	INSERT INTO @RecurringHolidaysDates([Date], [Description], [Id])
+	SELECT C1.Date, crh.Description, crh.Id
 	FROM dbo.Calendar AS C1
 	JOIN dbo.CompanyRecurringHoliday crh ON C1.[Date] >= @Today
 			AND 
@@ -73,7 +73,7 @@ WHERE Alias = @UserLogin
 	UPDATE  C1
 	SET DayOff = @IsSet,
 		IsRecurring = @IsSet,
-		RecurringHolidayId = CASE WHEN @IsSet = 0 THEN null ELSE @Id END,
+		RecurringHolidayId = CASE WHEN @IsSet = 0 THEN null ELSE rhd.Id END,
 		HolidayDescription = CASE WHEN @IsSet = 1 THEN rhd.Description
 								ELSE NULL END,
 		RecurringHolidayDate = NULL
