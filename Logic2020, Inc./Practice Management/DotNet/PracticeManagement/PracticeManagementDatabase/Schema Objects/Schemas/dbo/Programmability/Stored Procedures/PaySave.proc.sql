@@ -209,12 +209,8 @@ AS
 		   SET EndDate = @StartDate
 		 WHERE Person = @PersonId AND EndDate > @StartDate
 
-		UPDATE dbo.[DefaultCommission]
-		SET EndDate = @StartDate
-		WHERE PersonId = @PersonId
-			   AND [Type] = 1 -- Sales Commission
-			   AND EndDate > @StartDate
-		
+		 
+	
 		INSERT INTO dbo.Pay
 					(Person, StartDate, EndDate, Amount, Timescale, TimesPaidPerMonth, Terms,
 					 VacationDays, BonusAmount, BonusHoursToCollect,
@@ -222,6 +218,18 @@ AS
 			 VALUES (@PersonId, @StartDate, @EndDate, @Amount, @Timescale, @TimesPaidPerMonth, @Terms,
 					 @VacationDays, @BonusAmount, ISNULL(@BonusHoursToCollect, dbo.GetHoursPerYear()),
 					 @DefaultHoursPerDay,@SeniorityId,@PracticeId)
+		
+		DELETE DF
+		FROM  dbo.[DefaultCommission] DF
+		LEFT JOIN dbo.Pay P ON DF.StartDate = P.StartDate AND DF.PersonId = P.Person  
+		WHERE DF.StartDate >= @StartDate AND  Type =1 AND DF.PersonId = @PersonId AND P.Person IS NULL
+				AND DF.StartDate < @EndDate
+
+		UPDATE dbo.[DefaultCommission]
+			SET EndDate = @StartDate
+			WHERE PersonId = @PersonId
+				   AND [Type] = 1 -- Sales Commission
+				   AND EndDate > @StartDate
 
 		IF @SalesCommissionFractionOfMargin IS NOT NULL
 		INSERT INTO dbo.[DefaultCommission]
