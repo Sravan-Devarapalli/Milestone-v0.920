@@ -159,7 +159,14 @@ namespace PraticeManagement.Controls.TimeEntry
                     grid.AddEmptyRow();
                 }
 
-                tes.DataSource = grid;
+                if (specialTimeTypes.Count() > 0)
+                {
+                    tes.DataSource = grid.OrderByDescending(g => g.TimeTypeBehind !=null && g.TimeTypeBehind.IsSystemTimeType);
+                }
+                else
+                {
+                    tes.DataSource = grid;
+                }
                 tes.DataBind();
 
                 repTotalHours.DataSource = SelectedDates;
