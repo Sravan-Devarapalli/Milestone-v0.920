@@ -441,24 +441,6 @@ namespace PraticeManagement
             StyledUpdatePanel.Update();
         }
 
-        public void btnSearch_Clicked(object sender, EventArgs e)
-        {
-
-            var projectList = ProjectList.Where(pro => pro.Name.ToLower().Contains(txtSearchText.Text.ToLower()) ||
-                                                pro.Client.Name.ToLower().Contains(txtSearchText.Text.ToLower()) ||
-                                                (pro.Milestones != null && pro.Milestones.Any(m => m.Description.ToLower().Contains(txtSearchText.Text.ToLower())))
-                                            ).ToList();
-            if (projectList != null)
-            {
-                CompanyPerformanceState.ProjectList = projectList.ToArray<Project>();
-                lvProjects.DataSource = ProjectList;
-                lvProjects.DataBind();
-            }
-            IsSearchClicked = true;
-
-            StyledUpdatePanel.Update();
-        }
-
         private void SetddlView()
         {
             DataPager pager = GetPager();
