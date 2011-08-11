@@ -200,8 +200,9 @@
                 }
             }
             else {
-                var hpLogOutOnSessionTimeOut = document.getElementById('<%= hpLogOutOnSessionTimeOut.ClientID %>');
-                window.location = hpLogOutOnSessionTimeOut.href;
+                var hdnRedirectToLogedOutPage = document.getElementById('<%= hdnRedirectToLogedOutPage.ClientID %>');
+                hdnRedirectToLogedOutPage.value = 'true';
+                fnLogOffUserSessionatServer()
             }
         }
         function fnLogOffUserSession() {
@@ -213,8 +214,9 @@
             FormsAuthTicketExpiry = new Date(hdnFormsAuthTicketExpiry.value);
             if (cookie_IsLoggedIn == 'true') {
                 if (Cookie_FormsAuthTicketExpiryDate - FormsAuthTicketExpiry <= 0) {
-                    var hpLogOutOnSessionTimeOut = document.getElementById('<%= hpLogOutOnSessionTimeOut.ClientID %>');
-                    window.location = hpLogOutOnSessionTimeOut.href;
+                    var hdnRedirectToLogedOutPage = document.getElementById('<%= hdnRedirectToLogedOutPage.ClientID %>');
+                    hdnRedirectToLogedOutPage.value = 'true';
+                    fnLogOffUserSessionatServer()
                 }
                 else if (Cookie_FormsAuthTicketExpiryDate > FormsAuthTicketExpiry) {
                     $find('bhAlterTimeOut').hide();
@@ -367,6 +369,7 @@
                         <asp:Button ID="btnRefreshPage" runat="server" Style="display: none;" TabIndex="2001"
                             CausesValidation="false" />
                         <asp:HiddenField ID="hdnLastServerVisit" runat="server" />
+                        <asp:HiddenField ID="hdnRedirectToLogedOutPage" runat="server" />
                         <asp:HiddenField ID="hdnRunTimeOutPopuUpScript" runat="server" Value="false" />
                         <asp:HiddenField ID="hdnPopupTimebeforeFormsAutTimeOut" runat="server" Value="60000" />
                         <asp:HiddenField ID="hdnFormsAuthTimeOut" runat="server" Value="3600000" />
