@@ -66,19 +66,27 @@
                     Width="98%" Text='<%# HttpUtility.HtmlEncode(string.Format("{0}, {1}", Eval("ThisPerson.LastName"), Eval("ThisPerson.FirstName"))) %>' />
             </ItemTemplate>
             <EditItemTemplate>
-                <asp:DropDownList ID="ddlPersonName" Width="98%" runat="server" />
-                <asp:HiddenField ID="hdnPersonId" runat="server" Value='<%# Eval("ThisPerson.Id") %>' />
-                <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPersonName"
-                    ErrorMessage="" ToolTip="The Person Name is required." Display="Dynamic" Text="*"
-                    EnableClientScript="false" SetFocusOnError="true" ValidationGroup="MilestonePersonEntry"></asp:RequiredFieldValidator>
-                <asp:CustomValidator ID="custPeriod" runat="server" ControlToValidate="ddlPersonName"
-                    ErrorMessage="" ToolTip="The person you are trying to add is not set as being active during the entire length of their participation in the milestone.  Please adjust the person's hire and compensation records, or change the dates that they are attached to this milestone."
-                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                    ValidationGroup="MilestonePersonEntry" OnServerValidate="custPerson_ServerValidate"></asp:CustomValidator>
-                <asp:CustomValidator ID="custDuplicatedPerson" runat="server" ControlToValidate="ddlPersonName"
-                    ErrorMessage="" ToolTip="The specified person is already assigned on this milestone."
-                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                    ValidationGroup="MilestonePersonEntry" OnServerValidate="custDuplicatedPerson_ServerValidate"></asp:CustomValidator>
+                <table width="100%">
+                    <tr>
+                        <td style="width: 85%;">
+                            <asp:DropDownList ID="ddlPersonName" Width="98%" runat="server" />
+                            <asp:HiddenField ID="hdnPersonId" runat="server" Value='<%# Eval("ThisPerson.Id") %>' />
+                        </td>
+                        <td style="width: 15%;">
+                            <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPersonName"
+                                ErrorMessage="" ToolTip="The Person Name is required." Display="Dynamic" Text="*"
+                                EnableClientScript="false" SetFocusOnError="true" ValidationGroup="MilestonePersonEntry"></asp:RequiredFieldValidator>
+                            <asp:CustomValidator ID="custPeriod" runat="server" ControlToValidate="ddlPersonName"
+                                ErrorMessage="" ToolTip="The person you are trying to add is not set as being active during the entire length of their participation in the milestone.  Please adjust the person's hire and compensation records, or change the dates that they are attached to this milestone."
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                ValidationGroup="MilestonePersonEntry" OnServerValidate="custPerson_ServerValidate"></asp:CustomValidator>
+                            <asp:CustomValidator ID="custDuplicatedPerson" runat="server" ControlToValidate="ddlPersonName"
+                                ErrorMessage="" ToolTip="The specified person is already assigned on this milestone."
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                ValidationGroup="MilestonePersonEntry" OnServerValidate="custDuplicatedPerson_ServerValidate"></asp:CustomValidator>
+                        </td>
+                    </tr>
+                </table>
             </EditItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
