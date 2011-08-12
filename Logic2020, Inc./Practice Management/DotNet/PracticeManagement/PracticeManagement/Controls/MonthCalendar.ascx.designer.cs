@@ -121,6 +121,24 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.TextBox txtHolidayDescription;
         
         /// <summary>
+        /// lblActualHours control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblActualHours;
+        
+        /// <summary>
+        /// txtActualHours control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtActualHours;
+        
+        /// <summary>
         /// chkMakeRecurringHoliday control.
         /// </summary>
         /// <remarks>
