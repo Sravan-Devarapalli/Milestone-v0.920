@@ -236,6 +236,10 @@ namespace PraticeManagement
                 MilestonePersonEntryListControl.OnEditClick(Convert.ToInt32(hdnEditRowIndex.Value));
                 hdnEditRowIndex.Value = string.Empty;
             }
+
+            btnAddPerson.Visible = MilestoneId.HasValue;
+            btnAddPerson.Attributes["ViewIndex"] = mvMilestoneDetailTab.ActiveViewIndex.ToString();
+
         }
 
         protected void cstCheckStartDateForExpensesExistance_OnServerValidate(object sender, ServerValidateEventArgs args)
@@ -585,8 +589,8 @@ namespace PraticeManagement
                                            args));
                 else
                 {
-                    string url =args.ToString();
-                    bool isQueryStringExists = false; 
+                    string url = args.ToString();
+                    bool isQueryStringExists = false;
 
                     try
                     {
@@ -594,8 +598,8 @@ namespace PraticeManagement
                         isQueryStringExists = true;
                     }
                     catch
-                    { 
-                        url=args.ToString();
+                    {
+                        url = args.ToString();
                         isQueryStringExists = false;
                     }
 
@@ -604,7 +608,7 @@ namespace PraticeManagement
                         Response.Redirect(args.ToString());
                     }
                     else
-                    Redirect(args.ToString());
+                        Redirect(args.ToString());
                 }
             }
         }
@@ -1146,6 +1150,15 @@ namespace PraticeManagement
         {
             return MilestoneId.HasValue;
         }
+
+
+        protected void btnAddPerson_Click(object sender, EventArgs e)
+        {
+            SelectView(btnResources, 2, false);
+            LoadActiveTabIndex(2);
+        }
+
+
     }
 }
 
