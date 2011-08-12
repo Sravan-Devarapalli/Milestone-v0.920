@@ -6,15 +6,43 @@
             function ClickSaveDay(btnOk) {
                 var noteText = $get(btnOk.attributes['TextID'].value);
                 var popupExtendar = $find(btnOk.attributes['ExtendarId'].value);
-                var noteTextStr = noteText.value.toString();
-                if (noteTextStr.length > 0) {
-                    btnSave = $get(btnOk.attributes['SaveDayButtonID'].value);
-                    popupExtendar.hide();
-                    btnSave.click();
-                }
+                var actualHoursText = $get(btnOk.attributes['TxtActualHoursID'].value);
                 var errorText = $get(btnOk.attributes['ErrorMessageID'].value);
+                var error;
+
+                if (actualHoursText == null && noteText != '') {
+                    var noteTextStr = noteText.value.toString();
+                    if (noteTextStr.length > 0) {
+                        SaveDetails(popupExtendar, btnOk);
+                    }
+                    else {
+                        errorText.innerHTML = '* Please Enter Holiday Description.';
+                    }
+                }
+                else {
+                    var hoursTextStr = actualHoursText.value.toString();
+                    if (hoursTextStr.length > 0) {
+                        var hours = parseFloat(hoursTextStr);
+                        if (hours >= 0.0 && hours <= 24.0 && hours == hoursTextStr) {
+                            
+                            SaveDetails(popupExtendar, btnOk);
+                        }
+                        else {
+                            errorText.innerHTML = '* Hours should be real and 0.00-24.00.';
+                        }
+                    }
+                    else {
+                        errorText.innerHTML = '* Please Enter Hours';
+                    }
+                }
                 errorText.style.display = 'block';
                 return false;
+            }
+
+            function SaveDetails(popupExtendar, btnOk) {
+                btnSave = $get(btnOk.attributes['SaveDayButtonID'].value);
+                popupExtendar.hide();
+                btnSave.click();
             }
         </script>
         <asp:DataList ID="lstCalendar" runat="server" RepeatColumns="7" RepeatDirection="Horizontal">
@@ -61,8 +89,6 @@
                 )
             )
             ) : "" %>' ToolTip='<%# string.IsNullOrEmpty((string)Eval("HolidayDescription"))? "":((string)Eval("HolidayDescription"))%>'>
-                    <% if (!IsPersonCalendar)
-                       { %>
                     <asp:LinkButton ID="btnDay" runat="server" Text='<%# Eval("Date.Day") %>' Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year && !(bool)Eval("ReadOnly") %>'
                         DayOff='<%# (bool)Eval("DayOff") ? "true":"false" %>' Date='<%# Eval("Date") %>'
                         OnClientClick='<%# DayOnClientClick((DateTime)Eval("Date")) %>' IsRecurringHoliday='<%# (bool)Eval("IsRecurringHoliday") %>'
@@ -70,15 +96,6 @@
                         HolidayDescription='<%# string.IsNullOrEmpty((string)Eval("HolidayDescription"))? "":((string)Eval("HolidayDescription"))%>'
                         RecurringHolidayId='<%# (int?) Eval("RecurringHolidayId")%>' RecurringHolidayDate='<%# (DateTime?) Eval("RecurringHolidayDate") %>'
                         IsWeekEnd='<%# GetIsWeekend(((DateTime)Eval("Date"))) %>' Enabled='<%# NeedToEnable((DateTime)Eval("Date")) %>'></asp:LinkButton>
-                    <% }
-                       else
-                       { %>
-                    <asp:LinkButton ID="btnDayWithOutPopUp" runat="server" Text='<%# Eval("Date.Day") %>'
-                        ToolTip='<%# string.IsNullOrEmpty((string)Eval("HolidayDescription"))? "":((string)Eval("HolidayDescription"))%>'
-                        OnCommand="btnDay_Command" CommandName='<%# (bool)Eval("DayOff") ? false : true %>'
-                        CommandArgument='<%# Eval("Date") %>' Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year && !(bool)Eval("ReadOnly") %>'
-                        OnClientClick='<%# DayOnClientClickNoPopUp() %>'></asp:LinkButton>
-                    <% } %>
                     <asp:Label ID="lblDay" runat="server" Text='<%# Eval("Date.Day") %>' Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year && (bool)Eval("ReadOnly") %>'></asp:Label>
                     <%--<asp:Label ID="lblDayOut" runat="server" Text='<%# Eval("Date.Day") %>'
 						Visible='<%# ((DateTime)Eval("Date")).Month != Month || ((DateTime)Eval("Date")).Year != Year %>'></asp:Label>--%>
@@ -109,6 +126,8 @@
                     <td colspan="2">
                         <asp:TextBox ID="txtHolidayDescription" runat="server" placeholder="Enter Holiday Description."
                             TextMode="MultiLine" Height="50px" Style="resize: none; width: 300px; overflow: auto; margin-left:4px;"></asp:TextBox>
+                        <asp:Label ID="lblActualHours" runat="server" Text="PTO Hours : "></asp:Label>
+                        <asp:TextBox ID="txtActualHours" runat="server" Width="50px" Style="resize: none;"></asp:TextBox>
                     </td>
                 </tr>
                 <td colspan="2" style="text-align: left;">
@@ -117,7 +136,7 @@
                 <tr>
                     <td align="center" style="padding: 10px 0px 10px 0px;">
                         <asp:Button ID="btnDayOK" runat="server" Text="OK" HiddenDayOffID="" HiddenDateID=""
-                            SaveDayButtonID="" TextID="" ErrorMessageID="" ExtendarId="" OnClientClick="ClickSaveDay(this); return false;" />
+                            SaveDayButtonID="" TextID="" ErrorMessageID="" ExtendarId="" TxtActualHoursID="" OnClientClick="ClickSaveDay(this); return false;" />
                         &nbsp; &nbsp;
                         <asp:Button ID="btnDayCancel" runat="server" Text="Cancel" />
                     </td>
