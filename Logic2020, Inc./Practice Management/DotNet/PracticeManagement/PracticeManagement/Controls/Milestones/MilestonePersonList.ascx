@@ -12,8 +12,8 @@
 <table class="WholeWidth">
     <tr>
         <td align="right" style="padding: 10px; padding-right: 0px;">
-            <asp:Button ID="btnAddPerson" runat="server" Text="Add Person" OnClick="btnAddPerson_Click"
-                ToolTip="Add Person" />
+            <asp:Button ID="btnAddPerson" runat="server" Text="Add Resource" OnClick="btnAddPerson_Click"
+                ToolTip="Add Resource" />
         </td>
     </tr>
 </table>
