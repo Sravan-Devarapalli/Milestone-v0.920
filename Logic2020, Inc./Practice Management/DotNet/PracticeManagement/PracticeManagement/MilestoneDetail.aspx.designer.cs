@@ -13,6 +13,15 @@ namespace PraticeManagement {
     public partial class MilestoneDetail {
         
         /// <summary>
+        /// upnlBody control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upnlBody;
+        
+        /// <summary>
         /// pdProjectInfo control.
         /// </summary>
         /// <remarks>
@@ -101,15 +110,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblRight;
-        
-        /// <summary>
-        /// upnlBody control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upnlBody;
         
         /// <summary>
         /// hidDirty control.
@@ -299,6 +299,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chbConsultantsCanAdjust;
+        
+        /// <summary>
+        /// btnAddPerson control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedTextButton btnAddPerson;
         
         /// <summary>
         /// tblMilestoneDetailTabViewSwitch control.
