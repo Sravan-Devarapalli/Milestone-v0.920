@@ -115,10 +115,10 @@ namespace PraticeManagement.Controls
         }
         protected string DayOnClientClick(DateTime dateValue)
         {
-            if (dateValue >= SettingsHelper.GetCurrentPMTime())
+            if (dateValue >= SettingsHelper.GetCurrentPMTime() || IsPersonCalendar)
             {
                 return string.Format(@"updatingCalendarContainer = $get('{0}');
-                    return ShowPopup(this,'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}');"
+                return ShowPopup(this,'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}');"
                     , lstCalendar.ClientID
                     , mpeHoliday.BehaviorID + Month
                     , btnSaveDay.ClientID
@@ -130,19 +130,16 @@ namespace PraticeManagement.Controls
                     , hdnRecurringHolidayDate.ClientID
                     , lblDate.ClientID
                     , lblValidationMessage.ClientID
-                    , btnDayOK.ClientID);
+                    , btnDayOK.ClientID
+                    , PersonId
+                    , txtActualHours.ClientID
+                    , lblActualHours.ClientID);
             }
             else
             {
                 return string.Empty;
             }
         }
-
-        protected string DayOnClientClickNoPopUp()
-        {
-            return string.Format("updatingCalendarContainer = $get('{0}');", lstCalendar.ClientID);
-        }
-
 
         protected override void OnPreRender(EventArgs e)
         {
@@ -183,19 +180,9 @@ namespace PraticeManagement.Controls
             item.PersonId = PersonId;
             item.IsRecurringHoliday = chkMakeRecurringHoliday.Checked;
             item.HolidayDescription = txtHolidayDescription.Text;
+            item.ActualHours = string.IsNullOrEmpty(txtActualHours.Text) ? null : (Double?)Convert.ToDouble(txtActualHours.Text);
             item.RecurringHolidayId = string.IsNullOrEmpty(hdnRecurringHolidayId.Value) ? null : (int?)Convert.ToInt32(hdnRecurringHolidayId.Value);
             item.RecurringHolidayDate = item.IsRecurringHoliday && !item.RecurringHolidayId.HasValue ? (DateTime?)(item.DayOff ? item.Date : Convert.ToDateTime(hdnRecurringHolidayDate.Value)) : null;
-            SaveDate(item);
-            Display();
-        }
-
-        protected void btnDay_Command(object sender, CommandEventArgs e)
-        {
-            CalendarItem item = new CalendarItem();
-            item.Date = DateTime.Parse((string)e.CommandArgument);
-            item.DayOff = bool.Parse(e.CommandName);
-            item.PersonId = PersonId;
-
             SaveDate(item);
             Display();
         }
@@ -226,10 +213,14 @@ namespace PraticeManagement.Controls
 
         protected bool NeedToEnable(DateTime dateValue)
         {
-            var currentDate = SettingsHelper.GetCurrentPMTime();
+            if (!IsPersonCalendar)
+            {
+                var currentDate = SettingsHelper.GetCurrentPMTime();
 
-            var result = (dateValue.Date >= currentDate.Date);
-            return result;
+                var result = (dateValue.Date >= currentDate.Date);
+                return result;
+            }
+            return true;
         }
 
         #endregion
