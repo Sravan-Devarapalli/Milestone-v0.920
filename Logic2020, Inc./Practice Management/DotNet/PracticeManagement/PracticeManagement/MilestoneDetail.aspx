@@ -808,7 +808,7 @@
                         <asp:HiddenField ID="hdnMilestoneId" runat="server" />
                         <asp:Button ID="btnDelete" runat="server" Text="Delete Milestone" ToolTip="Delete the milestone"
                             CausesValidation="False" OnClick="btnDelete_Click" OnClientClick="if (!confirm('Do you really want to delete the milestone?')) return false;" />&nbsp;
-                        <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" CausesValidation="true"
+                        <asp:Button ID="btnSave" runat="server" Text="Save All" OnClick="btnSave_Click" CausesValidation="true"
                             ValidationGroup="Milestone" />&nbsp;
                         <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" />
                         <script type="text/javascript">
