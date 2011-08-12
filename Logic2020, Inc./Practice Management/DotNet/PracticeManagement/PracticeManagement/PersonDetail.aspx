@@ -384,20 +384,23 @@
                                     </td>
                                     <td>
                                         <asp:CompareValidator ID="compTerminationDate" runat="server" ControlToValidate="dtpTerminationDate"
-                                            EnableClientScript="False" Enabled="False" EnableTheming="True" ErrorMessage="The Termination Date must be in the format 'MM/dd/yyyy'"
-                                            Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="Person" ToolTip="The Termination Date must be in the format 'MM/dd/yyyy'"
+                                            Display="Dynamic" EnableClientScript="False" Enabled="False" EnableTheming="True"
+                                            ErrorMessage="The Termination Date must be in the format 'MM/dd/yyyy'" Operator="DataTypeCheck"
+                                            SetFocusOnError="True" ValidationGroup="Person" ToolTip="The Termination Date must be in the format 'MM/dd/yyyy'"
                                             Type="Date">*</asp:CompareValidator>
                                         <asp:CustomValidator ID="custTerminationDate" runat="server" ErrorMessage="To terminate the person the Termination Date should be specified."
                                             ToolTip="The Termination Date is not correct" ValidationGroup="Person" Text="*"
-                                            EnableClientScript="false" OnServerValidate="custTerminationDate_ServerValidate"></asp:CustomValidator>
+                                            Display="Dynamic" EnableClientScript="false" OnServerValidate="custTerminationDate_ServerValidate"></asp:CustomValidator>
                                         <asp:CompareValidator ID="cmpTerminateDate" runat="server" ControlToValidate="dtpTerminationDate"
                                             ControlToCompare="dtpHireDate" Operator="GreaterThan" Type="Date" ErrorMessage="Termination date should be greater than Hire date."
-                                            Text="*" ValidationGroup="Person" ToolTip="Termination date should be greater than Hire date."
+                                            Display="Dynamic" Text="*" ValidationGroup="Person" ToolTip="Termination date should be greater than Hire date."
                                             SetFocusOnError="true"></asp:CompareValidator>
                                         <asp:CustomValidator ID="custTerminateDateTE" runat="server" ErrorMessage="" ToolTip=""
-                                            ValidationGroup="Person" Text="*" EnableClientScript="false" OnServerValidate="custTerminationDateTE_ServerValidate"></asp:CustomValidator>
+                                            Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
+                                            OnServerValidate="custTerminationDateTE_ServerValidate"></asp:CustomValidator>
                                         <asp:CustomValidator ID="custIsDefautManager" runat="server" ErrorMessage="Unable to set Termination Date for this person because this person is set as default line manager. Please select another default line manager and refresh this page to enter termination date for this person."
-                                            ValidationGroup="Person" Text="*" EnableClientScript="false" OnServerValidate="custIsDefautManager_ServerValidate"></asp:CustomValidator>
+                                            Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
+                                            OnServerValidate="custIsDefautManager_ServerValidate"></asp:CustomValidator>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1079,12 +1082,12 @@
                         <td colspan="2" align="center" style="padding: 6px 6px 2px 6px; text-align: left;">
                             <div id="dvTerminationDateErrors" runat="server" visible="false" style="padding: 0px 0px 5px 0px;
                                 max-height: 200px; overflow-y: auto; color: Red;">
-                                 <asp:Label ID="lblTerminationDateError" runat="server" style="padding-top:7px;" >
+                                <asp:Label ID="lblTerminationDateError" runat="server" Style="padding-top: 7px;">
                                 </asp:Label><br />
-                                <asp:Label ID="lblTimeEntriesExist" runat="server" style="padding-top:7px;"  >
+                                <asp:Label ID="lblTimeEntriesExist" runat="server" Style="padding-top: 7px;">
                                 </asp:Label>
-                                <div id="dvProjectMilestomesExist" style="padding-top:5px;" runat="server">
-                                    <asp:Label ID="lblProjectMilestomesExist" runat="server" >
+                                <div id="dvProjectMilestomesExist" style="padding-top: 5px;" runat="server">
+                                    <asp:Label ID="lblProjectMilestomesExist" runat="server">
                                     </asp:Label><br />
                                     <asp:DataList ID="dtlProjectMilestones" runat="server" Style="white-space: normal;">
                                         <ItemTemplate>
@@ -1093,7 +1096,7 @@
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
-                                <div id="divOwnerProjectsExist" style="padding-top:10px;" runat="server">
+                                <div id="divOwnerProjectsExist" style="padding-top: 10px;" runat="server">
                                     <asp:Label ID="lblOwnerProjectsExist" runat="server" Text="Person is designated as the Owner for the following projects:">
                                     </asp:Label><br />
                                     <asp:DataList ID="dtlOwnerProjects" runat="server" Style="white-space: normal;">
@@ -1102,7 +1105,7 @@
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
-                                <div id="divOwnerOpportunitiesExist" style="padding-top:10px;" runat="server">
+                                <div id="divOwnerOpportunitiesExist" style="padding-top: 10px;" runat="server">
                                     <asp:Label ID="lblOwnerOpportunities" runat="server" Text="Person is designated as the Owner for the following Opportunities:">
                                     </asp:Label><br />
                                     <asp:DataList ID="dtlOwnerOpportunities" runat="server" Style="white-space: normal;">
