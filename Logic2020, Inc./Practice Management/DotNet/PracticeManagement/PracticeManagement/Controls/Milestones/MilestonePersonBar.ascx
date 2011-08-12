@@ -13,21 +13,29 @@
             ToolTip="Cancel" />
     </td>
     <td style="width: 22%; height: 20px;">
-        <asp:DropDownList ID="ddlPerson" Width="98%" runat="server" />
-        <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPerson"
-            ErrorMessage="" ToolTip="The Person Name is required." Text="*" EnableClientScript="false"
-            SetFocusOnError="true" ValidationGroup="<%# GetValidationGroup() %>"></asp:RequiredFieldValidator>
-        <asp:RequiredFieldValidator ID="reqMilestonePersonName" runat="server" ControlToValidate="ddlPerson"
-            ErrorMessage="" ToolTip="The Person Name is required." Text="*" EnableClientScript="false"
-            SetFocusOnError="true" ValidationGroup="<%# GetValidationGroup() %>"></asp:RequiredFieldValidator>
-        <asp:CustomValidator ID="custPeriod" runat="server" ControlToValidate="ddlPerson"
-            ErrorMessage="" ToolTip="The person you are trying to add is not set as being active during the entire length of their participation in the milestone.  Please adjust the person's hire and compensation records, or change the dates that they are attached to this milestone."
-            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-            ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custPersonInsert_ServerValidate"></asp:CustomValidator>
-        <asp:CustomValidator ID="custDuplicatedPerson" runat="server" ControlToValidate="ddlPerson"
-            ErrorMessage="" ToolTip="The specified person is already assigned on this milestone."
-            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-            ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custDuplicatedPersonInsert_ServerValidate"></asp:CustomValidator>
+        <table width="100%">
+            <tr>
+                <td style="width: 85%;">
+                    <asp:DropDownList ID="ddlPerson" Width="98%" runat="server" />
+                </td>
+                <td style="width: 15%;">
+                    <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPerson"
+                        ErrorMessage="" ToolTip="The Person Name is required." Text="*" EnableClientScript="false"
+                        SetFocusOnError="true" ValidationGroup="<%# GetValidationGroup() %>"></asp:RequiredFieldValidator>
+                    <asp:RequiredFieldValidator ID="reqMilestonePersonName" runat="server" ControlToValidate="ddlPerson"
+                        ErrorMessage="" ToolTip="The Person Name is required." Text="*" EnableClientScript="false"
+                        SetFocusOnError="true" ValidationGroup="<%# GetValidationGroup() %>"></asp:RequiredFieldValidator>
+                    <asp:CustomValidator ID="custPeriod" runat="server" ControlToValidate="ddlPerson"
+                        ErrorMessage="" ToolTip="The person you are trying to add is not set as being active during the entire length of their participation in the milestone.  Please adjust the person's hire and compensation records, or change the dates that they are attached to this milestone."
+                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                        ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custPersonInsert_ServerValidate"></asp:CustomValidator>
+                    <asp:CustomValidator ID="custDuplicatedPerson" runat="server" ControlToValidate="ddlPerson"
+                        ErrorMessage="" ToolTip="The specified person is already assigned on this milestone."
+                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                        ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custDuplicatedPersonInsert_ServerValidate"></asp:CustomValidator>
+                </td>
+            </tr>
+        </table>
     </td>
     <td style="width: 10%; height: 20px;">
         <asp:DropDownList ID="ddlRole" Width="98%" runat="server">
