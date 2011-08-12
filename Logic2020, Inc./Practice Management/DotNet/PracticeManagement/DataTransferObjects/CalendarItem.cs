@@ -93,7 +93,13 @@ namespace DataTransferObjects
             set;
         }
 
-
+        [DataMember]
+        public double? ActualHours
+        {
+            get;
+            set;
+        }
+        
 
         #endregion
 
