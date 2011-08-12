@@ -305,6 +305,10 @@ AS
 			LEFT JOIN MilestonePersonEntry mpe ON mpe.MilestonePersonId = mp.MilestonePersonId
 			WHERE mp.MilestoneId = @DefaultMilestoneId AND mp.PersonId = @PersonId AND mpe.MilestonePersonId IS NULL
 			
+			
+			DECLARE @PTOTimeTypeId INT
+			SELECT @PTOTimeTypeId = TimeTypeId FROM TimeType WHERE Name = 'PTO'
+
 			INSERT  INTO [dbo].[TimeEntries]
 		                ( [EntryDate] ,
 		                  [MilestoneDate] ,
@@ -323,11 +327,11 @@ AS
 				,crh.Date AS MilestoneDate
 				,@CurrentPMTime AS ModifiedDate
 				,mp.MilestonePersonId
-				,8
+				,CASE WHEN PC.PersonId IS NOT NULL AND PC.DayOff = 1 AND PC.ActualHours IS NOT NULL THEN PC.ActualHours ELSE 8 END
 				,mpe.HoursPerDay
-				,@HolidayTimeId
+				,CASE WHEN PC.PersonId IS NOT NULL AND PC.DayOff = 1 THEN @PTOTimeTypeId ELSE @HolidayTimeId END
 				,@PersonUserId
-				,crh.HolidayDescription
+				,CASE WHEN PC.PersonId IS NOT NULL AND PC.DayOff = 1 THEN 'PTO' ELSE crh.HolidayDescription END
 				,m.IsChargeable
 				,1
 				,1 --Here it is Auto generated.
@@ -338,7 +342,10 @@ AS
 			JOIN Milestone m ON mp.MilestoneId = m.MilestoneId
 			JOIN MilestonePersonEntry mpe ON mpe.MilestonePersonId = mp.MilestonePersonId
 			LEFT JOIN TimeEntries te ON te.MilestonePersonId = mpe.MilestonePersonId AND te.MilestoneDate = crh.Date
-			WHERE crh.DayOff = 1 AND (crh.RecurringHolidayId IS NOT NULL OR crh.RecurringHolidayDate IS NOT NULL) 
+			LEFT JOIN PersonCalendar PC ON PC.Date = crh.Date AND PC.PersonId = p.Person AND PC.DayOff = 1
+			WHERE ((crh.DayOff = 1 AND (crh.RecurringHolidayId IS NOT NULL OR crh.RecurringHolidayDate IS NOT NULL) )
+					OR (PC.PersonId IS NOT NULL AND PC.DayOff = 1)
+					) 
 				AND te.TimeEntryId IS NULL
 				AND crh.Date >= @Today
 		END
