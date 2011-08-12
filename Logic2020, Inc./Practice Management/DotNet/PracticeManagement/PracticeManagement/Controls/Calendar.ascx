@@ -42,8 +42,9 @@
         chkboxList.parentNode.style.height = ((chkboxes.length * 40) - 20) + "px";
     }
     function ShowPopup(dayLink, peBehaviourId, saveDayButtonID, hiddenDayOffID, hiddenDateID,
-                        txtHolidayDescriptionID, chkMakeRecurringHolidayId, hdnRecurringHolidayIdClientID, hdnRecurringHolidayDateClientID, lblDateID, ErrorMessageID, btnOkID) {
+                        txtHolidayDescriptionID, chkMakeRecurringHolidayId, hdnRecurringHolidayIdClientID, hdnRecurringHolidayDateClientID, lblDateID, ErrorMessageID, btnOkID, personId, txtActualHoursID, lblActualHoursClientID) {
         var txtHolidayDescription = $get(txtHolidayDescriptionID);
+        var txtActualHours = $get(txtActualHoursID);
         var lblDateDescription = $get(lblDateID);
         var chkMakeRecurringHoliday = $get(chkMakeRecurringHolidayId);
         var hndDayOff = $get(hiddenDayOffID);
@@ -55,43 +56,73 @@
         hdnRecurringHolidayId.value = dayLink.attributes['RecurringHolidayId'].value;
         hdnRecurringHolidayDate.value = dayLink.attributes['RecurringHolidayDate'].value;
         
-        if (hndDayOff.value == 'true'
+        if (personId == "") {
+            if (hndDayOff.value == 'true'
                 && dayLink.attributes['IsRecurringHoliday'].value == 'True'
                 && hdnRecurringHolidayId.value == "") {
-            if (confirm("This is a recurring holiday. Do you want to remove all instances of this holiday going forward?")) {
-                chkMakeRecurringHoliday.checked = true;
+                if (confirm("This is a recurring holiday. Do you want to remove all instances of this holiday going forward?")) {
+                    chkMakeRecurringHoliday.checked = true;
 
-                if (hdnRecurringHolidayId != null) {
-                    var cbl = document.getElementById('<%=cblRecurringHolidays.ClientID %>');
+                    if (hdnRecurringHolidayId != null) {
+                        var cbl = document.getElementById('<%=cblRecurringHolidays.ClientID %>');
+                    }
                 }
+                else {
+                    chkMakeRecurringHoliday.checked = false;
+                }
+                $get(saveDayButtonID).click();
+            }
+            else if (dayLink.attributes['IsWeekEnd'].value == 'true' || hdnRecurringHolidayId.value != "" ||
+                    (dayLink.attributes['DayOff'].value == 'true' && dayLink.attributes['IsRecurringHoliday'].value == 'False')) {
+                if (dayLink.attributes['IsWeekEnd'].value == 'true') {
+                    chkMakeRecurringHoliday.checked = false;
+                }
+                $get(saveDayButtonID).click();
             }
             else {
-                chkMakeRecurringHoliday.checked = false;
+                var date = new Date(hdnDate.value);
+                var popupExtendar = $find(peBehaviourId);
+                var OkButton = $get(btnOkID);
+                var errorMessage = $get(ErrorMessageID);
+                var lblActualHours = $get(lblActualHoursClientID);
+                OkButton.attributes['SaveDayButtonID'].value = saveDayButtonID;
+                OkButton.attributes['ErrorMessageID'].value = ErrorMessageID;
+                OkButton.attributes['TextID'].value = txtHolidayDescriptionID;
+                OkButton.attributes['ExtendarId'].value = peBehaviourId;
+
+                errorMessage.style.display = 'none';
+                lblActualHours.style.display = 'none';
+                txtActualHours.style.display = 'none';
+                txtActualHours.value = '';
+                lblDateDescription.innerHTML = date.format('MM/dd/yyyy');
+                txtHolidayDescription.value = dayLink.attributes['HolidayDescription'].value;
+                chkMakeRecurringHoliday.checked = (dayLink.attributes['IsRecurringHoliday'].value == 'true');
+                popupExtendar.show();
             }
-            $get(saveDayButtonID).click();
-        }
-        else if (dayLink.attributes['IsWeekEnd'].value == 'true' || hdnRecurringHolidayId.value != "" ||
-                    (dayLink.attributes['DayOff'].value == 'true' && dayLink.attributes['IsRecurringHoliday'].value == 'False')) {
-            if (dayLink.attributes['IsWeekEnd'].value == 'true') {
-                chkMakeRecurringHoliday.checked = false;
-            }
-            $get(saveDayButtonID).click();
         }
         else {
-            var date = new Date(hdnDate.value);
-            var popupExtendar = $find(peBehaviourId);
-            var OkButton = $get(btnOkID);
-            OkButton.attributes['SaveDayButtonID'].value = saveDayButtonID;
+            if (dayLink.attributes['DayOff'].value == 'false' && dayLink.attributes['IsWeekEnd'].value == 'false' && dayLink.attributes['HolidayDescription'].value == '') {
+                
+                var date = new Date(hdnDate.value);
+                var popupExtendar = $find(peBehaviourId);
+                var OkButton = $get(btnOkID);
+                var errorMessage = $get(ErrorMessageID);
+                OkButton.attributes['ErrorMessageID'].value = ErrorMessageID;
+                OkButton.attributes['SaveDayButtonID'].value = saveDayButtonID;
+                OkButton.attributes['TxtActualHoursID'].value = txtActualHoursID;
+                OkButton.attributes['ExtendarId'].value = peBehaviourId;
 
-            var errorMessage = $get(ErrorMessageID);
-            errorMessage.style.display = 'none';
-            OkButton.attributes['ErrorMessageID'].value = ErrorMessageID;
-            OkButton.attributes['TextID'].value = txtHolidayDescriptionID;
-            OkButton.attributes['ExtendarId'].value = peBehaviourId;
-            lblDateDescription.innerHTML = date.format('MM/dd/yyyy');
-            txtHolidayDescription.value = dayLink.attributes['HolidayDescription'].value;
-            chkMakeRecurringHoliday.checked = (dayLink.attributes['IsRecurringHoliday'].value == 'true');
-            popupExtendar.show();
+                txtActualHours.value = '8.00';
+                lblDateDescription.innerHTML = date.format('MM/dd/yyyy');
+                errorMessage.style.display = 'none';
+                txtHolidayDescription.style.display = 'none';
+                chkMakeRecurringHoliday.nextSibling.style.display = 'none'
+                chkMakeRecurringHoliday.style.display = 'none';
+                popupExtendar.show();
+            }
+            else {
+                $get(saveDayButtonID).click();
+            }
         }
         return false;
     }
