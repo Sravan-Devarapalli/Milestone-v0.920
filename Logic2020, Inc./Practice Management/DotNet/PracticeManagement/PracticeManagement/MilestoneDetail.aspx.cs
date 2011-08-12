@@ -16,6 +16,7 @@ using PraticeManagement.Utils;
 using System.Web.UI.HtmlControls;
 using Resources;
 using System.Reflection;
+using PraticeManagement.MilestonePersonService;
 
 namespace PraticeManagement
 {
@@ -54,6 +55,44 @@ namespace PraticeManagement
         #endregion
 
         #region Properties
+
+        private bool? IsUserHasPermissionOnProject
+        {
+            get
+            {
+                int? milestoneId = MilestoneId;
+
+                if (milestoneId.HasValue)
+                {
+                    if (ViewState["HasPermission"] == null)
+                    {
+                        ViewState["HasPermission"] = DataHelper.IsUserHasPermissionOnProject(User.Identity.Name, milestoneId.Value, false);
+                    }
+                    return (bool)ViewState["HasPermission"];
+                }
+
+                return null;
+            }
+        }
+
+        private bool? IsUserisOwnerOfProject
+        {
+            get
+            {
+                int? id = MilestoneId;
+                if (id.HasValue)
+                {
+                    if (ViewState["IsOwnerOfProject"] == null)
+                    {
+                        ViewState["IsOwnerOfProject"] = DataHelper.IsUserIsOwnerOfProject(User.Identity.Name, id.Value, false);
+                    }
+                    return (bool)ViewState["IsOwnerOfProject"];
+                }
+
+                return null;
+            }
+        }
+
 
         public SeniorityAnalyzer PersonListSeniorityAnalyzer
         {
@@ -203,6 +242,7 @@ namespace PraticeManagement
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            lblResult.ClearMessage();
             LoadPrevNextMilestones();
         }
 
@@ -402,6 +442,21 @@ namespace PraticeManagement
 
                 if (imgEdit != null)
                 {
+                    var rowSa = new SeniorityAnalyzer(DataHelper.CurrentPerson);
+                    if (rowSa.IsOtherGreater(milestonePerson.Person))
+                    {
+                        if (!(IsUserisOwnerOfProject.HasValue && IsUserisOwnerOfProject.Value))
+                        {
+                            if (!Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName)
+                                || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName))// #2817: DirectorRoleName is added as per the requirement.
+                            {
+                                imgEdit.Enabled = false;
+
+                            }
+                        }
+                    }
+
+
                     imgEdit.Attributes.Add("RowIndex", row.RowIndex.ToString());
                 }
 
@@ -437,30 +492,41 @@ namespace PraticeManagement
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
+            var result = true;
             Page.Validate(vsumMilestone.ValidationGroup);
             if (Page.IsValid)
             {
-                int? id = SaveData();
-
-                if (id.HasValue)
+                if (!MilestoneId.HasValue)
                 {
-                    MilestoneId = id;
+                    int? id = SaveData();
+
+                    if (id.HasValue)
+                    {
+                        MilestoneId = id;
+                    }
+                }
+                else
+                {
+                    result = ValidateAndSave();
+                }
+
+                if (MilestoneId.HasValue && result)
+                {
                     Milestone = GetMilestoneById(MilestoneId);
                     MilestonePersonEntryListControlObject.GetLatestData();
                     mvMilestoneDetailTab.Visible = true;
                     tblMilestoneDetailTabViewSwitch.Visible = true;
                     LoadPrevNextMilestones();
+                    lblResult.ShowInfoMessage(Messages.MilestoneSavedMessage);
+                    ClearDirty();
                 }
-
-                lblResult.ShowInfoMessage(Messages.MilestoneSavedMessage);
-                ClearDirty();
             }
             else
             {
                 lblResult.ClearMessage();
             }
 
-            if (Page.IsValid && MilestoneId.HasValue)
+            if (Page.IsValid && MilestoneId.HasValue && result)
             {
                 if (Milestone != null)
                 {
@@ -640,7 +706,27 @@ namespace PraticeManagement
             Page.Validate(vsumMilestone.ValidationGroup);
             if (Page.IsValid)
             {
-                result = SaveData() > 0;
+                if (!MilestonePersonEntryListControl.isInsertedRowsAreNotsaved)
+                {
+                    result = SaveData() > 0;
+                }
+                else
+                {
+                    result = MilestonePersonEntryListControl.ValidateAll();
+                    if (result)
+                    {
+                        result = SaveData() > 0;
+                        if (result)
+                        {
+                            result = MilestonePersonEntryListControl.SaveAll();
+                        }
+
+                    }
+                    else
+                    {
+                        lblResult.ShowErrorMessage("Error occured while saving resources.");
+                    }
+                }
             }
             return result;
         }
