@@ -59,7 +59,7 @@
                 <div class="ie-bg no-wrap">
                     Person</div>
             </HeaderTemplate>
-            <ItemStyle Width="17%" Height="20px" />
+            <ItemStyle Width="22%" Height="20px" />
             <ItemTemplate>
                 <asp:HyperLink ID="lnkPersonName" runat="server" NavigateUrl='<%# GetMpeRedirectUrl((Eval("MilestonePersonId"))) %>'
                     PersonId='<%# Eval("ThisPerson.Id") %>' onclick="return checkDirtyWithRedirect(this.href);"
@@ -69,20 +69,14 @@
                 <asp:DropDownList ID="ddlPersonName" Width="98%" runat="server" />
                 <asp:HiddenField ID="hdnPersonId" runat="server" Value='<%# Eval("ThisPerson.Id") %>' />
                 <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPersonName"
-                    ErrorMessage="The Person Name is required." ToolTip="The Person Name is required."
-                    Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                    ValidationGroup="MilestonePersonEntry"></asp:RequiredFieldValidator>
-                <asp:RequiredFieldValidator ID="reqMilestonePersonName" runat="server" ControlToValidate="ddlPersonName"
-                    ErrorMessage="The Person Name is required." ToolTip="The Person Name is required."
-                    Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                    ValidationGroup="MilestonePersonEntry"></asp:RequiredFieldValidator>
+                    ErrorMessage="" ToolTip="The Person Name is required." Display="Dynamic" Text="*"
+                    EnableClientScript="false" SetFocusOnError="true" ValidationGroup="MilestonePersonEntry"></asp:RequiredFieldValidator>
                 <asp:CustomValidator ID="custPeriod" runat="server" ControlToValidate="ddlPersonName"
-                    ErrorMessage="The person you are trying to add is not set as being active during the entire length of their participation in the milestone.  Please adjust the person's hire and compensation records, or change the dates that they are attached to this milestone."
-                    ToolTip="The person you are trying to add is not set as being active during the entire length of their participation in the milestone.  Please adjust the person's hire and compensation records, or change the dates that they are attached to this milestone."
+                    ErrorMessage="" ToolTip="The person you are trying to add is not set as being active during the entire length of their participation in the milestone.  Please adjust the person's hire and compensation records, or change the dates that they are attached to this milestone."
                     Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                     ValidationGroup="MilestonePersonEntry" OnServerValidate="custPerson_ServerValidate"></asp:CustomValidator>
                 <asp:CustomValidator ID="custDuplicatedPerson" runat="server" ControlToValidate="ddlPersonName"
-                    ErrorMessage="The specified person is already assigned on this milestone." ToolTip="The specified person is already assigned on this milestone."
+                    ErrorMessage="" ToolTip="The specified person is already assigned on this milestone."
                     Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                     ValidationGroup="MilestonePersonEntry" OnServerValidate="custDuplicatedPerson_ServerValidate"></asp:CustomValidator>
             </EditItemTemplate>
@@ -111,32 +105,35 @@
                 <asp:Label ID="lblStartDate" runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>'></asp:Label>
             </ItemTemplate>
             <EditItemTemplate>
-                <uc2:DatePicker ID="dpPersonStart" runat="server" ValidationGroup="MilestonePersonEntry"
-                    OnClientChange="return true;" TextBoxWidth="85%" AutoPostBack="false" DateValue='<%# Eval("StartDate") %>' />
-                <asp:RequiredFieldValidator ID="reqPersonStart" runat="server" ControlToValidate="dpPersonStart"
-                    ErrorMessage="The Person Start Date is required." ToolTip="The Person Start Date is required."
-                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                    ValidationGroup="MilestonePersonEntry"></asp:RequiredFieldValidator>
-                <asp:CompareValidator ID="compPersonStartType" runat="server" ControlToValidate="dpPersonStart"
-                    ErrorMessage="The Person Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
-                    ToolTip="The Person Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
-                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                    Operator="DataTypeCheck" Type="Date" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
-                <asp:CustomValidator ID="custPersonStart" runat="server" ControlToValidate="dpPersonStart"
-                    ErrorMessage="The Person Start Date must be greater than or equal to the Milestone Start Date."
-                    ToolTip="The Person Start Date must be greater than or equal to the Milestone Start Date."
-                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                    ValidationGroup="MilestonePersonEntry" OnServerValidate="custPersonStart_ServerValidate"></asp:CustomValidator>
-                <asp:CustomValidator ID="custPeriodOvberlapping" runat="server" ControlToValidate="dpPersonStart"
-                    ErrorMessage="The specified period overlaps with another for this person on the milestone."
-                    ToolTip="The specified period overlaps with another for this person on the milestone."
-                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                    ValidateEmptyText="false" ValidationGroup="MilestonePersonEntry" OnServerValidate="custPeriodOvberlapping_ServerValidate"></asp:CustomValidator>
-                <asp:CustomValidator ID="custPeriodVacationOverlapping" runat="server" ControlToValidate="dpPersonStart"
-                    ErrorMessage="The specified period overlaps with Vacation days for this person on the milestone."
-                    ToolTip="The specified period overlaps with Vacation days for this person on the milestone."
-                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                    ValidateEmptyText="false" ValidationGroup="MilestonePersonEntry" OnServerValidate="custPeriodVacationOverlapping_ServerValidate"></asp:CustomValidator>
+                <table width="100%">
+                    <tr>
+                        <td style="width: 85%;">
+                            <uc2:DatePicker ID="dpPersonStart" runat="server" ValidationGroup="MilestonePersonEntry"
+                                OnClientChange="return true;" TextBoxWidth="95%" AutoPostBack="false" DateValue='<%# Eval("StartDate") %>' />
+                        </td>
+                        <td style="width: 15%;">
+                            <asp:RequiredFieldValidator ID="reqPersonStart" runat="server" ControlToValidate="dpPersonStart"
+                                ErrorMessage="" ToolTip="The Person Start Date is required." Text="*" EnableClientScript="false"
+                                SetFocusOnError="true" Display="Dynamic" ValidationGroup="MilestonePersonEntry"></asp:RequiredFieldValidator>
+                            <asp:CompareValidator ID="compPersonStartType" runat="server" ControlToValidate="dpPersonStart"
+                                ErrorMessage="" ToolTip="The Person Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                Operator="DataTypeCheck" Type="Date" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
+                            <asp:CustomValidator ID="custPersonStart" runat="server" ControlToValidate="dpPersonStart"
+                                ErrorMessage="" ToolTip="The Person Start Date must be greater than or equal to the Milestone Start Date."
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                ValidationGroup="MilestonePersonEntry" OnServerValidate="custPersonStart_ServerValidate"></asp:CustomValidator>
+                            <asp:CustomValidator ID="custPeriodOvberlapping" runat="server" ControlToValidate="dpPersonStart"
+                                ErrorMessage="" ToolTip="The specified period overlaps with another for this person on the milestone."
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                ValidateEmptyText="false" ValidationGroup="MilestonePersonEntry" OnServerValidate="custPeriodOvberlapping_ServerValidate"></asp:CustomValidator>
+                            <asp:CustomValidator ID="custPeriodVacationOverlapping" runat="server" ControlToValidate="dpPersonStart"
+                                ErrorMessage="" ToolTip="The specified period overlaps with Vacation days for this person on the milestone."
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                ValidateEmptyText="false" ValidationGroup="MilestonePersonEntry" OnServerValidate="custPeriodVacationOverlapping_ServerValidate"></asp:CustomValidator>
+                        </td>
+                    </tr>
+                </table>
             </EditItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
@@ -149,27 +146,31 @@
                 <asp:Label ID="lblEndDate" runat="server" Text='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value.ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label>
             </ItemTemplate>
             <EditItemTemplate>
-                <uc2:DatePicker ID="dpPersonEnd" runat="server" ValidationGroup="MilestonePersonEntry"
-                    OnClientChange="return true;" TextBoxWidth="85%" AutoPostBack="false" DateValue='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value : DateTime.MinValue %>' />
-                <asp:RequiredFieldValidator ID="reqPersonEnd" runat="server" ControlToValidate="dpPersonEnd"
-                    ErrorMessage="The Person End Date is required." ToolTip="The Person End Date is required."
-                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                    ValidationGroup="MilestonePersonEntry"></asp:RequiredFieldValidator>
-                <asp:CustomValidator ID="custPersonEnd" runat="server" ControlToValidate="dpPersonEnd"
-                    ErrorMessage="The Person End Date must be less than or equal to the Milestone End Date."
-                    ToolTip="The Person End Date must be less than or equal to the Milestone End Date."
-                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                    OnServerValidate="custPersonEnd_ServerValidate" ValidationGroup="MilestonePersonEntry"></asp:CustomValidator>
-                <asp:CompareValidator ID="compPersonEndType" runat="server" ControlToValidate="dpPersonEnd"
-                    ErrorMessage="The Person End Date has an incorrect format. It must be 'MM/dd/yyyy'."
-                    ToolTip="The Person End Date has an incorrect format. It must be 'MM/dd/yyyy'."
-                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                    Operator="DataTypeCheck" Type="Date" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
-                <asp:CompareValidator ID="compPersonEnd" runat="server" ControlToValidate="dpPersonEnd"
-                    ControlToCompare="dpPersonStart" ErrorMessage="The Person End Date must be greater than or equal to the Person Start Date."
-                    ToolTip="The Person End Date must be greater than or equal to the Person Start Date."
-                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                    ValidationGroup="MilestonePersonEntry" Operator="GreaterThanEqual" Type="Date"></asp:CompareValidator>
+                <table width="100%">
+                    <tr>
+                        <td style="width: 85%;">
+                            <uc2:DatePicker ID="dpPersonEnd" runat="server" ValidationGroup="MilestonePersonEntry"
+                                OnClientChange="return true;" TextBoxWidth="95%" AutoPostBack="false" DateValue='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value : DateTime.MinValue %>' />
+                        </td>
+                        <td style="width: 15%;">
+                            <asp:RequiredFieldValidator ID="reqPersonEnd" runat="server" ControlToValidate="dpPersonEnd"
+                                ErrorMessage="" ToolTip="The Person End Date is required." Text="*" EnableClientScript="false"
+                                SetFocusOnError="true" Display="Dynamic" ValidationGroup="MilestonePersonEntry"></asp:RequiredFieldValidator>
+                            <asp:CustomValidator ID="custPersonEnd" runat="server" ControlToValidate="dpPersonEnd"
+                                ErrorMessage="" ToolTip="The Person End Date must be less than or equal to the Milestone End Date."
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                OnServerValidate="custPersonEnd_ServerValidate" ValidationGroup="MilestonePersonEntry"></asp:CustomValidator>
+                            <asp:CompareValidator ID="compPersonEndType" runat="server" ControlToValidate="dpPersonEnd"
+                                ErrorMessage="" ToolTip="The Person End Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                Operator="DataTypeCheck" Type="Date" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
+                            <asp:CompareValidator ID="compPersonEnd" runat="server" ControlToValidate="dpPersonEnd"
+                                ControlToCompare="dpPersonStart" ErrorMessage="" ToolTip="The Person End Date must be greater than or equal to the Person Start Date."
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                ValidationGroup="MilestonePersonEntry" Operator="GreaterThanEqual" Type="Date"></asp:CompareValidator>
+                        </td>
+                    </tr>
+                </table>
             </EditItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
@@ -177,22 +178,28 @@
                 <div class="ie-bg no-wrap">
                     Hours per day</div>
             </HeaderTemplate>
-            <ItemStyle Width="10%" Height="20px" HorizontalAlign="Center" />
+            <ItemStyle Width="11%" Height="20px" HorizontalAlign="Center" />
             <ItemTemplate>
                 <asp:Label ID="lblHoursPerDay" runat="server" Text='<%# Eval("HoursPerDay") %>'></asp:Label>
             </ItemTemplate>
             <EditItemTemplate>
-                <asp:TextBox ID="txtHoursPerDay" runat="server" Width="70%" Text='<%# Eval("HoursPerDay") %>'></asp:TextBox>
-                <asp:CompareValidator ID="compHoursPerDay" runat="server" ControlToValidate="txtHoursPerDay"
-                    ErrorMessage="A number with 2 decimal digits is allowed for the Hours Per Day."
-                    ToolTip="A number with 2 decimal digits is allowed for the Hours Per Day." Text="*"
-                    EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
-                    Type="Currency" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
-                <asp:RangeValidator ID="rangHoursPerDay" runat="server" ControlToValidate="txtHoursPerDay"
-                    ErrorMessage=" The Hours Per Day must be greater than 0 and less or equals to 24."
-                    ToolTip=" The Hours Per Day must be greater than 0 and less or equals to 24."
-                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                    MinimumValue="0.01" MaximumValue="24" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
+                <table width="100%">
+                    <tr>
+                        <td style="width: 85%;">
+                            <asp:TextBox ID="txtHoursPerDay" runat="server" Width="90%" Text='<%# Eval("HoursPerDay") %>'></asp:TextBox>
+                        </td>
+                        <td style="width: 15%;">
+                            <asp:CompareValidator ID="compHoursPerDay" runat="server" ControlToValidate="txtHoursPerDay"
+                                ErrorMessage="" ToolTip="A number with 2 decimal digits is allowed for the Hours Per Day."
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                Operator="DataTypeCheck" Type="Currency" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
+                            <asp:RangeValidator ID="rangHoursPerDay" runat="server" ControlToValidate="txtHoursPerDay"
+                                ErrorMessage="" ToolTip=" The Hours Per Day must be greater than 0 and less or equals to 24."
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                MinimumValue="0.01" MaximumValue="24" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
+                        </td>
+                    </tr>
+                </table>
             </EditItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
@@ -200,21 +207,29 @@
                 <div class="ie-bg no-wrap">
                     Hourly Rate</div>
             </HeaderTemplate>
-            <ItemStyle Width="8%" Wrap="false" Height="20px" HorizontalAlign="Center" />
+            <ItemStyle Width="9%" Wrap="false" Height="20px" HorizontalAlign="Center" />
             <ItemTemplate>
                 <asp:Label ID="lblAmount" runat="server" Text='<%# Eval("HourlyAmount") != null ? Eval("HourlyAmount") : string.Empty %>'></asp:Label>
             </ItemTemplate>
             <EditItemTemplate>
-                <asp:Label ID="lblAmountInsert" runat="server" Text="$"></asp:Label>
-                <asp:TextBox ID="txtAmount" runat="server" Width="70%" Text='<%# Eval("HourlyAmount") != null ? Eval("HourlyAmount.Value") : string.Empty %>'></asp:TextBox>
-                <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmount"
-                    ValidateEmptyText="true" ErrorMessage="The Amount is required." ToolTip="The Amount is required."
-                    Text="*" SetFocusOnError="true" EnableClientScript="false" Display="Dynamic"
-                    ValidationGroup="MilestonePersonEntry" OnServerValidate="reqHourlyRevenue_ServerValidate"></asp:CustomValidator>
-                <asp:CompareValidator ID="compHourlyRevenue" runat="server" ControlToValidate="txtAmount"
-                    ErrorMessage="A number with 2 decimal digits is allowed for the Revenue." ToolTip="A number with 2 decimal digits is allowed for the Revenue."
-                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                    Operator="DataTypeCheck" Type="Currency" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
+                <table width="100%">
+                    <tr>
+                        <td style="width: 85%;">
+                            <asp:Label ID="lblAmountInsert" runat="server" Text="$"></asp:Label>
+                            <asp:TextBox ID="txtAmount" runat="server" Width="80%" Text='<%# Eval("HourlyAmount") != null ? Eval("HourlyAmount.Value") : string.Empty %>'></asp:TextBox>
+                        </td>
+                        <td style="width: 15%;">
+                            <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmount"
+                                ValidateEmptyText="true" ErrorMessage="" ToolTip="The Amount is required." Text="*"
+                                SetFocusOnError="true" EnableClientScript="false" Display="Dynamic" ValidationGroup="MilestonePersonEntry"
+                                OnServerValidate="reqHourlyRevenue_ServerValidate"></asp:CustomValidator>
+                            <asp:CompareValidator ID="compHourlyRevenue" runat="server" ControlToValidate="txtAmount"
+                                ErrorMessage="" ToolTip="A number with 2 decimal digits is allowed for the Revenue."
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                Operator="DataTypeCheck" Type="Currency" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
+                        </td>
+                    </tr>
+                </table>
             </EditItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
@@ -230,26 +245,32 @@
         <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
             <HeaderTemplate>
                 <div class="ie-bg no-wrap">
-                    Total Hours in Milestone</div>
+                    Total Hours</div>
             </HeaderTemplate>
-            <ItemStyle Width="16%" Height="20px" HorizontalAlign="Center" />
+            <ItemStyle Width="9%" Height="20px" HorizontalAlign="Center" />
             <ItemTemplate>
                 <asp:Label ID="lblHoursInPeriodDay" runat="server" Text='<%# Eval("ProjectedWorkloadWithVacation")  %>'></asp:Label>
                 <asp:Label ID="lblVacationIncludedAsterix" runat="server" Text="*" ForeColor="Red"
                     Visible="false" />
             </ItemTemplate>
             <EditItemTemplate>
-                <asp:TextBox ID="txtHoursInPeriod" Width="50%" runat="server" Text='<%# Eval("ProjectedWorkloadWithVacation") %>'></asp:TextBox>
-                <asp:CompareValidator ID="compHoursInPeriod" runat="server" ControlToValidate="txtHoursInPeriod"
-                    ErrorMessage="A number with 2 decimal digits is allowed for the Hours In Period."
-                    ToolTip="A number with 2 decimal digits is allowed for the Hours In Period."
-                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                    Operator="DataTypeCheck" Type="Currency" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
-                <asp:RangeValidator ID="rangHoursInPeriod" runat="server" ControlToValidate="txtHoursInPeriod"
-                    ErrorMessage="The Hours In Period must be more then 0 and less or equals to 15,000."
-                    ToolTip="The Hours In Period must be more then 0 and less or equals to 15,000."
-                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                    MinimumValue="0" MaximumValue="15000" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
+                <table width="100%">
+                    <tr>
+                        <td style="width: 85%;">
+                            <asp:TextBox ID="txtHoursInPeriod" Width="90%" runat="server" Text='<%# Eval("ProjectedWorkloadWithVacation") %>'></asp:TextBox>
+                        </td>
+                        <td style="width: 15%;">
+                            <asp:CompareValidator ID="compHoursInPeriod" runat="server" ControlToValidate="txtHoursInPeriod"
+                                ErrorMessage="" ToolTip="A number with 2 decimal digits is allowed for the Hours In Period."
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                Operator="DataTypeCheck" Type="Currency" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
+                            <asp:RangeValidator ID="rangHoursInPeriod" runat="server" ControlToValidate="txtHoursInPeriod"
+                                ErrorMessage="" ToolTip="The Hours In Period must be more then 0 and less or equals to 15,000."
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                MinimumValue="0" MaximumValue="15000" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
+                        </td>
+                    </tr>
+                </table>
             </EditItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
@@ -285,7 +306,7 @@
                     &nbsp;
                 </div>
             </th>
-            <th align="center" style="height: 20px; width: 17%;" scope="col">
+            <th align="center" style="height: 20px; width: 22%;" scope="col">
                 <div class="ie-bg no-wrap">
                     Person</div>
             </th>
@@ -301,11 +322,11 @@
                 <div class="ie-bg no-wrap">
                     End Date</div>
             </th>
-            <th align="center" style="width: 10%;" scope="col">
+            <th align="center" style="width: 11%;" scope="col">
                 <div class="ie-bg no-wrap">
                     Hours per day</div>
             </th>
-            <th id="thHourlyRate" runat="server" align="center" style="width: 8%; white-space: nowrap;"
+            <th id="thHourlyRate" runat="server" align="center" style="width: 9%; white-space: nowrap;"
                 scope="col">
                 <div class="ie-bg no-wrap">
                     Hourly Rate</div>
@@ -314,9 +335,9 @@
                 <div class="ie-bg no-wrap">
                     Margin %</div>
             </th>
-            <th align="center" style="width: 16%;" scope="col">
+            <th align="center" style="width: 9%;" scope="col">
                 <div class="ie-bg no-wrap">
-                    Total Hours in Milestone</div>
+                    Total Hours</div>
             </th>
             <th align="center" style="height: 20px; width: 3%; white-space: nowrap;" scope="col">
                 <div class="ie-bg">
