@@ -86,7 +86,7 @@ namespace PraticeManagement.Controls.Milestones
             // Validate overlapping with other entries.
             for (int i = 0; i < entries.Count; i++)
             {
-                if (i != HostingControl.gvMilestonePersonEntriesObject.EditIndex && entries[i].ThisPerson.Id == person.Id.Value)
+                if (entries[i].ThisPerson.Id == person.Id.Value)
                 {
                     DateTime entryStartDate = entries[i].StartDate;
                     DateTime entryEndDate =
@@ -221,6 +221,11 @@ namespace PraticeManagement.Controls.Milestones
         protected void btnInsertPerson_Click(object sender, EventArgs e)
         {
             var bar = btnInsert.NamingContainer.NamingContainer as RepeaterItem;
+            InsertPerson(bar);
+        }
+
+        private bool InsertPerson(RepeaterItem bar, bool isSaveCommit = true, bool iSDatBindRows = true)
+        {
 
             HostingControl.vsumMileStonePersonsObject.ValidationGroup = "MilestonePersonEntry" + bar.ItemIndex.ToString();
 
@@ -228,9 +233,14 @@ namespace PraticeManagement.Controls.Milestones
             if (Page.IsValid)
             {
                 HostingControl.lblResultMessageObject.ClearMessage();
-                HostingControl.AddAndBindRow(bar);
+                HostingControl.AddAndBindRow(bar, isSaveCommit, iSDatBindRows);
+
+                if (isSaveCommit && iSDatBindRows)
                 HostingControl.RemoveItemAndDaabindRepeater(bar.ItemIndex);
             }
+
+            return Page.IsValid;
+
         }
 
         protected void btnCancel_OnClick(object sender, EventArgs e)
@@ -252,6 +262,17 @@ namespace PraticeManagement.Controls.Milestones
             var bar = btnInsert.NamingContainer.NamingContainer as RepeaterItem;
             return "MilestonePersonEntry" + bar.ItemIndex.ToString();
         }
+
+        internal bool ValidateAll(RepeaterItem mpBar, bool isSaveCommit)
+        {
+            return InsertPerson(mpBar, isSaveCommit);
+        }
+
+        internal bool SaveAll(RepeaterItem mpBar, bool isSaveCommit, bool iSDatBindRows)
+        {
+            return InsertPerson(mpBar, isSaveCommit, iSDatBindRows);
+        }
+
     }
 }
 
