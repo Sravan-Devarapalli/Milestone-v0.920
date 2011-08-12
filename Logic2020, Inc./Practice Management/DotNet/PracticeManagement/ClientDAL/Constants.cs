@@ -467,6 +467,7 @@
             public const string RecurringHolidayId = "@RecurringHolidayId";
             public const string HolidayDescription = "@HolidayDescription";
             public const string RecurringHolidayDate = "@RecurringHolidayDate";
+            public const string ActualHoursParam = "@ActualHours";
 
         }
 
