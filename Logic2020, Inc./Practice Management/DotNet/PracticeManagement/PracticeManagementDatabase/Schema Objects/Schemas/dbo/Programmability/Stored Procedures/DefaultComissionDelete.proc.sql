@@ -30,43 +30,54 @@ AS
 	   AND StartDate = @Today
 
 	-- Expire previously set commission
-	UPDATE dbo.DefaultCommission
-	   SET EndDate = @Today
-	 WHERE PersonId = @PersonId
-	   AND [Type] = @Type
-	   AND @Today >= StartDate
-	   AND @Today < EndDate
-	   IF @Type = 1 
-	   BEGIN
-		  SELECT @PayEndDate = EndDate,
-				 @IsActivePay = [IsActivePay]
-		  FROM dbo.Pay
-		  WHERE Person = @PersonId AND StartDate < @Today AND EndDate > @Today
-				IF(@PayEndDate IS NOT NULL)
-				BEGIN
-					UPDATE dbo.Pay
-					SET EndDate = @Today,
-						[IsActivePay] = 0
-					WHERE EndDate = @PayEndDate AND Person = @PersonId
+	IF EXISTS (SELECT 1 FROM dbo.DefaultCommission 
+	WHERE PersonId = @PersonId AND [Type] = @Type AND @Today >= StartDate AND @Today < EndDate AND TYPE = 1)
+	BEGIN
+		UPDATE dbo.DefaultCommission
+		   SET EndDate = @Today
+		 WHERE PersonId = @PersonId
+		   AND [Type] = @Type
+		   AND @Today >= StartDate
+		   AND @Today < EndDate
+   
+		SELECT @PayEndDate = EndDate,
+				@IsActivePay = [IsActivePay]
+		FROM dbo.Pay
+		WHERE Person = @PersonId AND StartDate < @Today AND EndDate > @Today
+			IF(@PayEndDate IS NOT NULL)
+			BEGIN
+				UPDATE dbo.Pay
+				SET EndDate = @Today,
+					[IsActivePay] = 0
+				WHERE EndDate = @PayEndDate AND Person = @PersonId
 			
-					INSERT INTO dbo.Pay
-					SELECT [Person]
-						,@Today
-						,@PayEndDate
-						,[Amount]
-						,[Timescale]
-						,[TimesPaidPerMonth]
-						,[Terms]
-						,[VacationDays]
-						,[BonusAmount]
-						,[BonusHoursToCollect]
-						,[DefaultHoursPerDay]
-						,[SeniorityId]
-						,[PracticeId]
-						,@IsActivePay
-					FROM [dbo].[Pay]
-					WHERE Person = @PersonId AND EndDate = @Today	
-				END
-		END
+				INSERT INTO dbo.Pay
+				SELECT [Person]
+					,@Today
+					,@PayEndDate
+					,[Amount]
+					,[Timescale]
+					,[TimesPaidPerMonth]
+					,[Terms]
+					,[VacationDays]
+					,[BonusAmount]
+					,[BonusHoursToCollect]
+					,[DefaultHoursPerDay]
+					,[SeniorityId]
+					,[PracticeId]
+					,@IsActivePay
+				FROM [dbo].[Pay]
+				WHERE Person = @PersonId AND EndDate = @Today	
+			END
+	END
+	ELSE
+	BEGIN
+		UPDATE dbo.DefaultCommission
+		SET EndDate = @Today
+		 WHERE PersonId = @PersonId
+		   AND [Type] = @Type
+		   AND @Today >= StartDate
+		   AND @Today < EndDate
+	END
 	COMMIT TRAN
 
