@@ -715,7 +715,6 @@ namespace PraticeManagement.Controls.Milestones
             var dpPersonEnd = bar.FindControl(dpPersonEndInsert) as DatePicker;
             var txtAmount = bar.FindControl(txtAmountInsert) as TextBox;
             var txtHoursPerDay = bar.FindControl(txtHoursPerDayInsert) as TextBox;
-            var txtHoursInPeriod = bar.FindControl(txtHoursInPeriodInsert) as TextBox;
 
             if (dpPersonStart != null)
                 dpPersonStart.DateValue = DateTime.Parse(repeaterOldValues[e.Item.ItemIndex][dpPersonStartInsert]);
@@ -748,8 +747,7 @@ namespace PraticeManagement.Controls.Milestones
 
             if (txtHoursPerDay != null)
                 txtHoursPerDay.Text = repeaterOldValues[e.Item.ItemIndex][txtHoursPerDayInsert];
-            if (txtHoursInPeriod != null)
-                txtHoursInPeriod.Text = repeaterOldValues[e.Item.ItemIndex][txtHoursInPeriodInsert];
+           
         }
 
 
@@ -1448,6 +1446,7 @@ namespace PraticeManagement.Controls.Milestones
         internal void CopyItemAndDaabindRepeater(int barIndex)
         {
             MilestonePersonEntry mpentry = AddMilestonePersonEntries[barIndex];
+
             AddMilestonePersonEntries.Add(mpentry);
             Dictionary<string, string> dic = repeaterOldValues[barIndex];
             repeaterOldValues.Add(dic);
@@ -1462,7 +1461,7 @@ namespace PraticeManagement.Controls.Milestones
             var result = true;
             var mpersons = new List<MilestonePerson>();
 
-            mpersons.AddRange(MilestonePersons);
+            
 
             if (gvMilestonePersonEntries.EditIndex > -1)
             {
@@ -1501,7 +1500,7 @@ namespace PraticeManagement.Controls.Milestones
                     }
                 }
             }
-            MilestonePersons = mpersons;
+            MilestonePersons = GetMilestonePersons();
             return result;
         }
 
