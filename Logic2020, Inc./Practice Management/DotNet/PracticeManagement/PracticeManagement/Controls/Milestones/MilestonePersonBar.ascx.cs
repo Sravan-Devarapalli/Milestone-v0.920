@@ -221,7 +221,11 @@ namespace PraticeManagement.Controls.Milestones
         protected void btnInsertPerson_Click(object sender, EventArgs e)
         {
             var bar = btnInsert.NamingContainer.NamingContainer as RepeaterItem;
-            InsertPerson(bar);
+           var result = InsertPerson(bar);
+           if (!result)
+           {
+               HostingPage.lblResultObject.ShowErrorMessage("Error occured while saving resources.");
+           }
         }
 
         private bool InsertPerson(RepeaterItem bar, bool isSaveCommit = true, bool iSDatBindRows = true)
