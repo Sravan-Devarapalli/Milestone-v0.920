@@ -710,7 +710,7 @@ namespace PraticeManagement
                 {
                     result = SaveData() > 0;
                 }
-                else
+                else if (mvMilestoneDetailTab.ActiveViewIndex == 2)
                 {
                     result = MilestonePersonEntryListControl.ValidateAll();
                     if (result)
@@ -726,6 +726,10 @@ namespace PraticeManagement
                     {
                         lblResult.ShowErrorMessage("Error occured while saving resources.");
                     }
+                }
+                else
+                {
+                    result = SaveData() > 0;
                 }
             }
             return result;
