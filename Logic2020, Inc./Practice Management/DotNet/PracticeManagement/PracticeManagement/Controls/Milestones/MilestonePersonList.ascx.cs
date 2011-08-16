@@ -1039,7 +1039,7 @@ namespace PraticeManagement.Controls.Milestones
 
             if (mperson.Entries.Count > 1)
             {
-                mperson.Entries.Remove(mpentry);
+                mperson.Entries.RemoveAll(mpe => mpe.MilestonePersonId == mpentry.MilestonePersonId && mpe.StartDate == mpentry.StartDate);
                 entries.RemoveAt(row.DataItemIndex);
                 SaveData(ref mperson);
                 MilestonePersons[index] = mperson;
