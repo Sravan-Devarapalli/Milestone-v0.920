@@ -238,6 +238,14 @@ namespace PraticeManagement
             }
         }
 
+        public MessageLabel lblResultObject
+        {
+            get 
+            {
+                return lblResult;
+            }
+        }
+
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
@@ -710,8 +718,12 @@ namespace PraticeManagement
                 {
                     result = SaveData() > 0;
                 }
-                else if (mvMilestoneDetailTab.ActiveViewIndex == 2)
+                else 
                 {
+                     var index = mvMilestoneDetailTab.ActiveViewIndex;
+                     var control = rowSwitcher.Cells[index].Controls[0];
+                   
+                    SelectView(btnResources, 2, true);
                     result = MilestonePersonEntryListControl.ValidateAll();
                     if (result)
                     {
@@ -721,16 +733,21 @@ namespace PraticeManagement
                             result = MilestonePersonEntryListControl.SaveAll();
                         }
 
+                        if (result)
+                        {
+                            if (index != 2)
+                            {
+                                SelectView(control, index, true);
+                            }
+                        }
+
                     }
                     else
                     {
                         lblResult.ShowErrorMessage("Error occured while saving resources.");
                     }
                 }
-                else
-                {
-                    result = SaveData() > 0;
-                }
+                
             }
             return result;
         }
@@ -881,27 +898,32 @@ namespace PraticeManagement
                         }
                     }
                 }
+            }
 
-                // Calculate and display totals
-                if (Milestone.ComputedFinancials != null)
-                {
-                    lblTotalCogs.Text =
-                        PersonListSeniorityAnalyzer.GreaterSeniorityExists ?
-                        Resources.Controls.HiddenCellText : Milestone.ComputedFinancials.Cogs.ToString();
-                    lblTotalRevenue.Text = Milestone.ComputedFinancials.Revenue.ToString();
-                    lblTotalRevenueNet.Text = Milestone.ComputedFinancials.RevenueNet.ToString();
+            // Calculate and display totals
+            if (Milestone.ComputedFinancials != null)
+            {
+                lblTotalCogs.Text =
+                    PersonListSeniorityAnalyzer.GreaterSeniorityExists ?
+                    Resources.Controls.HiddenCellText : Milestone.ComputedFinancials.Cogs.ToString();
+                lblTotalRevenue.Text = Milestone.ComputedFinancials.Revenue.ToString();
+                lblTotalRevenueNet.Text = Milestone.ComputedFinancials.RevenueNet.ToString();
 
-                    lblClientDiscount.Text = Milestone.Project.Discount.ToString("##0.00");
+                lblClientDiscount.Text = Milestone.Project.Discount.ToString("##0.00");
 
-                    lblClientDiscountAmount.Text =
-                        (Milestone.ComputedFinancials.Revenue - Milestone.ComputedFinancials.RevenueNet).ToString();
+                lblClientDiscountAmount.Text =
+                    (Milestone.ComputedFinancials.Revenue - Milestone.ComputedFinancials.RevenueNet).ToString();
 
-                    // Sales commission
-                    lblSalesCommissionPercentage.Text =
-                        PersonListSeniorityAnalyzer.GreaterSeniorityExists ?
-                        Resources.Controls.HiddenCellText :
-                        Project.SalesCommission.Sum(commission => commission.FractionOfMargin).ToString("##0.00");
-                }
+                // Sales commission
+                lblSalesCommissionPercentage.Text =
+                    PersonListSeniorityAnalyzer.GreaterSeniorityExists ?
+                    Resources.Controls.HiddenCellText :
+                    Project.SalesCommission.Sum(commission => commission.FractionOfMargin).ToString("##0.00");
+            }
+            else
+            {
+                lblSalesCommissionPercentage.Text = lblClientDiscountAmount.Text = lblClientDiscount.Text = lblTotalRevenueNet.Text = lblTotalRevenue.Text = lblTotalCogs.Text = string.Empty;
+                tdTargetMargin.Style["background-color"] = "";
             }
         }
 
@@ -1248,7 +1270,12 @@ namespace PraticeManagement
             LoadActiveTabIndex(2);
         }
 
+        protected void vwResources_OnActivate(object sender, EventArgs e)
+        {
+            MilestonePersonEntryListControl.AddEmptyRow();
+        }
 
+        
     }
 }
 
