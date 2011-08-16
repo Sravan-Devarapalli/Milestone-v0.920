@@ -476,10 +476,7 @@ namespace PraticeManagement.Controls.Milestones
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            if (gvMilestonePersonEntries.Rows.Count == 0 && repPerson.Items.Count == 0)
-            {
-                AddRowAndBindRepeater(null);
-            }
+           
         }
 
         protected override void OnInit(EventArgs e)
@@ -976,7 +973,11 @@ namespace PraticeManagement.Controls.Milestones
             if (MilestonePersons.Any(mp => mp.Person.Id == entry.ThisPerson.Id))
             {
                 var mperson = MilestonePersons.First(mp => mp.Person.Id == entry.ThisPerson.Id);
-                entry.MilestonePersonId = mperson.Id.Value;
+                if (mperson.Id.HasValue)
+                {
+                    entry.MilestonePersonId = mperson.Id.Value;
+                }
+
                 mperson.Entries.Add(entry);
 
                 if (isSaveCommit)
@@ -1189,6 +1190,7 @@ namespace PraticeManagement.Controls.Milestones
                 if (!UpdateMilestonePersonEntry(entry, gvMilestonePersonEntries.Rows[e.RowIndex], true))
                 {
                     IsErrorOccuredWhileUpdatingRow = true;
+                    HostingPage.lblResultObject.ShowErrorMessage("Error occured while saving resources.");
                     return;
                 }
 
@@ -1220,6 +1222,10 @@ namespace PraticeManagement.Controls.Milestones
                 }
 
                 e.Cancel = true;
+            }
+            else
+            {
+                HostingPage.lblResultObject.ShowErrorMessage("Error occured while saving resources.");
             }
         }
 
@@ -1560,5 +1566,13 @@ namespace PraticeManagement.Controls.Milestones
         }
 
 
+
+        internal void AddEmptyRow()
+        {
+            if (gvMilestonePersonEntries.Rows.Count == 0 && repPerson.Items.Count == 0)
+            {
+                AddRowAndBindRepeater(null);
+            }
+        }
     }
 }
