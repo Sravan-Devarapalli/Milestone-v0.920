@@ -316,7 +316,7 @@ FROM
 FROM CTEMonthlyFinancials MF1
 JOIN CTEMonthlyFinancials MF2
 ON MF1.PersonId = MF2.PersonId  AND MF2.RowNumber = 1
-		AND (MF2.MonthBenchHours > 0 OR @IncludeZeroCostEmployeesLocal = 1)
+		AND (MF2.Margin < 0.0 OR @IncludeZeroCostEmployeesLocal = 1)
 WHERE MF1.RowNumber = 1
 		) Temp
 
