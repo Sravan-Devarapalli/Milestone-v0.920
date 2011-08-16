@@ -115,7 +115,7 @@ namespace PraticeManagement.Controls
         }
         protected string DayOnClientClick(DateTime dateValue)
         {
-            if (dateValue >= SettingsHelper.GetCurrentPMTime() || IsPersonCalendar)
+            if (dateValue.Date >= SettingsHelper.GetCurrentPMTime().Date || IsPersonCalendar)
             {
                 return string.Format(@"updatingCalendarContainer = $get('{0}');
                 return ShowPopup(this,'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}');"
