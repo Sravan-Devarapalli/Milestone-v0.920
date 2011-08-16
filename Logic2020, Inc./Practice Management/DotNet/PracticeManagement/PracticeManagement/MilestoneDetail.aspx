@@ -347,7 +347,7 @@
                     </asp:TableCell>
                 </asp:TableRow>
             </asp:Table>
-            <asp:MultiView ID="mvMilestoneDetailTab" runat="server" ActiveViewIndex="0">
+            <asp:MultiView ID="mvMilestoneDetailTab" runat="server"   ActiveViewIndex="0">
                 <asp:View ID="vwFinancials" runat="server">
                     <asp:Panel ID="pnlFinancials" runat="server" CssClass="tab-pane">
                         <table style="background-color: #F9FAFF">
@@ -582,7 +582,7 @@
                         </asp:GridView>
                     </asp:Panel>
                 </asp:View>
-                <asp:View ID="vwResources" runat="server">
+                <asp:View ID="vwResources" OnActivate="vwResources_OnActivate" runat="server">
                     <asp:Panel ID="pnlResources" runat="server" CssClass="tab-pane" Style="overflow: auto;">
                         <asp:UpdatePanel ID="upnlMilestonePersons" ChildrenAsTriggers="true" runat="server">
                             <ContentTemplate>
