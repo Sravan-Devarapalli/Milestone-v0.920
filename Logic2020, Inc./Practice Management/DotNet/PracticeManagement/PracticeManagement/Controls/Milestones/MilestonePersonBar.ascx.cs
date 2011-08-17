@@ -158,6 +158,17 @@ namespace PraticeManagement.Controls.Milestones
                     break;
                 }
             }
+
+            if (entries.Count == 0)
+            {
+                if (person == null ||
+                                   person.HireDate > dpPersonStartInsert.DateValue.Date ||
+                                   (person.TerminationDate.HasValue &&
+                                    person.TerminationDate.Value < dpPersonEndInsert.DateValue.Date))
+                {
+                    args.IsValid = false;
+                }
+            }
         }
 
         protected void custDuplicatedPersonInsert_ServerValidate(object source, ServerValidateEventArgs args)
@@ -221,11 +232,11 @@ namespace PraticeManagement.Controls.Milestones
         protected void btnInsertPerson_Click(object sender, EventArgs e)
         {
             var bar = btnInsert.NamingContainer.NamingContainer as RepeaterItem;
-           var result = InsertPerson(bar);
-           if (!result)
-           {
-               HostingPage.lblResultObject.ShowErrorMessage("Error occured while saving resources.");
-           }
+            var result = InsertPerson(bar);
+            if (!result)
+            {
+                HostingPage.lblResultObject.ShowErrorMessage("Error occured while saving resources.");
+            }
         }
 
         private bool InsertPerson(RepeaterItem bar, bool isSaveCommit = true, bool iSDatBindRows = true)
@@ -240,7 +251,7 @@ namespace PraticeManagement.Controls.Milestones
                 HostingControl.AddAndBindRow(bar, isSaveCommit, iSDatBindRows);
 
                 if (isSaveCommit && iSDatBindRows)
-                HostingControl.RemoveItemAndDaabindRepeater(bar.ItemIndex);
+                    HostingControl.RemoveItemAndDaabindRepeater(bar.ItemIndex);
             }
 
             return Page.IsValid;
