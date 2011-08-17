@@ -101,7 +101,7 @@
             }
         }
         else {
-            if (dayLink.attributes['DayOff'].value == 'false' && dayLink.attributes['IsWeekEnd'].value == 'false' && dayLink.attributes['HolidayDescription'].value == '') {
+            if (dayLink.attributes['DayOff'].value == 'false' && dayLink.attributes['CompanyDayOff'].value == 'false' && dayLink.attributes['IsWeekEnd'].value == 'false' && dayLink.attributes['HolidayDescription'].value == '') {
                 
                 var date = new Date(hdnDate.value);
                 var popupExtendar = $find(peBehaviourId);
