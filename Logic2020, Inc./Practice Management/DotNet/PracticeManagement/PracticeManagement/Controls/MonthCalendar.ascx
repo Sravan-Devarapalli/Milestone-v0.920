@@ -95,7 +95,8 @@
                         ToolTip='<%# string.IsNullOrEmpty((string)Eval("HolidayDescription"))? "":((string)Eval("HolidayDescription"))%>'
                         HolidayDescription='<%# string.IsNullOrEmpty((string)Eval("HolidayDescription"))? "":((string)Eval("HolidayDescription"))%>'
                         RecurringHolidayId='<%# (int?) Eval("RecurringHolidayId")%>' RecurringHolidayDate='<%# (DateTime?) Eval("RecurringHolidayDate") %>'
-                        IsWeekEnd='<%# GetIsWeekend(((DateTime)Eval("Date"))) %>' Enabled='<%# NeedToEnable((DateTime)Eval("Date")) %>'></asp:LinkButton>
+                        IsWeekEnd='<%# GetIsWeekend(((DateTime)Eval("Date"))) %>' Enabled='<%# NeedToEnable((DateTime)Eval("Date")) %>'
+                        CompanyDayOff='<%# (bool)Eval("CompanyDayOff") ? "true" : "false" %>'></asp:LinkButton>
                     <asp:Label ID="lblDay" runat="server" Text='<%# Eval("Date.Day") %>' Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year && (bool)Eval("ReadOnly") %>'></asp:Label>
                     <%--<asp:Label ID="lblDayOut" runat="server" Text='<%# Eval("Date.Day") %>'
 						Visible='<%# ((DateTime)Eval("Date")).Month != Month || ((DateTime)Eval("Date")).Year != Year %>'></asp:Label>--%>
