@@ -159,15 +159,12 @@ namespace PraticeManagement.Controls.Milestones
                 }
             }
 
-            if (entries.Count == 0)
+            if (person == null ||
+                               person.HireDate > dpPersonStartInsert.DateValue.Date ||
+                               (person.TerminationDate.HasValue &&
+                                person.TerminationDate.Value < dpPersonEndInsert.DateValue.Date))
             {
-                if (person == null ||
-                                   person.HireDate > dpPersonStartInsert.DateValue.Date ||
-                                   (person.TerminationDate.HasValue &&
-                                    person.TerminationDate.Value < dpPersonEndInsert.DateValue.Date))
-                {
-                    args.IsValid = false;
-                }
+                args.IsValid = false;
             }
         }
 
