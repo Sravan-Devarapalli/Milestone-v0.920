@@ -8,6 +8,7 @@ using PraticeManagement.Utils;
 using PraticeManagement.TimeEntryService;
 using System.ServiceModel;
 using System.Linq;
+using System.Web.Security;
 
 namespace PraticeManagement.Controls.TimeEntry
 {
@@ -128,7 +129,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
             isSystemTimeType = (RowBehind.TimeTypeBehind != null && RowBehind.TimeTypeBehind.IsSystemTimeType);
             UpdateControlStatuses();
-            imgDropTes.Enabled = !isSystemTimeType;
+            imgDropTes.Enabled = !(isSystemTimeType && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName));
 
             var systemTimeTypes = SettingsHelper.GetSystemTimeTypes();
             if (isSystemTimeType)
