@@ -322,7 +322,10 @@ namespace DataTransferObjects
         public bool IsChargeable { get; set; }
 
         [DataMember]
-        public ProjectAttachment Attachment { get; set; }
+        public bool HasAttachments { get; set; }
+
+        [DataMember]
+        public List<ProjectAttachment> Attachments { get; set; }
 
         #endregion
 
