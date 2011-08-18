@@ -636,7 +636,7 @@ namespace PraticeManagement
                                                 string.IsNullOrEmpty(cssClass) ? row.Attributes["class"] : string.Format("{0} {1}", cssClass, AlternatingRowCssClass) :
                                                 cssClass;*/
 
-                    if (project.Status.Id == 3 && project.Attachment == null)
+                    if (project.Status.Id == 3 && !project.HasAttachments)
                     {
                         cssClass = "ActiveProjectWithoutSOW";
                     }
