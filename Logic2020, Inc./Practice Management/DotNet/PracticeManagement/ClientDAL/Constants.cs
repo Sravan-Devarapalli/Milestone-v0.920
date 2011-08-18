@@ -238,6 +238,7 @@
             public const string HolidayDescriptionColumn = "HolidayDescription";
             public const string RecurringHolidayDateColumn = "RecurringHolidayDate";
             public const string IsSystemTimeTypeColumn = "IsSystemTimeType";
+            public const string HasAttachmentsColumn = "HasAttachments";
 
         }
 
@@ -468,6 +469,7 @@
             public const string HolidayDescription = "@HolidayDescription";
             public const string RecurringHolidayDate = "@RecurringHolidayDate";
             public const string ActualHoursParam = "@ActualHours";
+            public const string AttachmentIdParam = "@AttachmentId";
 
         }
 
@@ -664,6 +666,7 @@
                 public const string ProjectListAllWithoutFiltering = "dbo.ProjectListAllWithoutFiltering";
                 public const string IsUserHasPermissionOnProject = "dbo.IsUserHasPermissionOnProject";
                 public const string IsUserIsOwnerOfProject = "dbo.IsUserIsOwnerOfProject";
+                public const string GetProjectAttachments = "dbo.GetProjectAttachments";
 
             }
 
