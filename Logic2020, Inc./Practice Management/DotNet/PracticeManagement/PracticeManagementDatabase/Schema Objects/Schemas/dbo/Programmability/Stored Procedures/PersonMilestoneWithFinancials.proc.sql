@@ -22,18 +22,18 @@ BEGIN
 			r.Name AS 'RoleName',
 			f.Revenue,
 			f.GrossMargin,
-			pa.[FileName]
+			CASE WHEN A.ProjectId IS NOT NULL THEN 1 
+					ELSE 0 END AS HasAttachments
 	FROM    dbo.Project AS p
 			INNER JOIN dbo.ProjectStatus AS s ON p.ProjectStatusId = s.ProjectStatusId
 			INNER JOIN dbo.Milestone AS m ON p.ProjectId = m.ProjectId
 			INNER JOIN dbo.MilestonePerson AS mp ON m.MilestoneId = mp.MilestoneId
 			INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId
 			LEFT JOIN dbo.PersonRole AS r ON mpe.PersonRoleId = r.PersonRoleId
-			LEFT JOIN dbo.ProjectAttachment AS pa ON p.ProjectId = pa.ProjectId
+			OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = p.ProjectId) A
 			INNER JOIN v_FinancialsForMilestones AS f ON m.MilestoneId = f.MilestoneId
 														 AND mp.PersonId = f.PersonId
 	WHERE   f.PersonId = @PersonId AND P.ProjectId <> @DefaultProjectId
 	ORDER BY mpe.StartDate
 END
-
 
