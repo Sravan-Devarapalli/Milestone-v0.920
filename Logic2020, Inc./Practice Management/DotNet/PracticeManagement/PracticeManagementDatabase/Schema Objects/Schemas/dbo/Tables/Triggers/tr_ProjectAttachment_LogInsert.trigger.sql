@@ -8,6 +8,17 @@ BEGIN
 	
 	DECLARE @CurrentPMTime DATETIME 
 	SET @CurrentPMTime = dbo.InsertingTime()
+	
+	;WITH NEW_VALUES AS
+	(
+		SELECT i.Id
+				,i.ProjectId
+				,proj.Name as 'ProjectName'
+				,i.[FileName]
+				,i.UploadedDate
+		FROM inserted AS i
+		LEFT JOIN Project proj ON proj.ProjectId = i.ProjectId
+	)
 
 	-- Log an activity
 	INSERT INTO dbo.UserActivityLog
@@ -32,14 +43,12 @@ BEGIN
 	       l.PersonID,
 	       l.LastName,
 	       l.FirstName,
-	       Data =  CONVERT(NVARCHAR(MAX),(SELECT NEW_VALUES.Id,NEW_VALUES.ProjectId,proj.Name as 'ProjectName', NEW_VALUES.[FileName],NEW_VALUES.UploadedDate
-					    FROM inserted AS NEW_VALUES
-					    LEFT JOIN Project proj on proj.ProjectId = NEW_VALUES.ProjectId
+	       Data =  CONVERT(NVARCHAR(MAX),(SELECT *
+					    FROM NEW_VALUES
 			           WHERE NEW_VALUES.Id = i.Id
 					  FOR XML AUTO, ROOT('ProjectAttachment'))),
-			LogData = (SELECT NEW_VALUES.Id,NEW_VALUES.ProjectId,proj.Name as 'ProjectName', NEW_VALUES.[FileName],NEW_VALUES.UploadedDate
-					    FROM inserted AS NEW_VALUES
-					    LEFT JOIN Project proj on proj.ProjectId = NEW_VALUES.ProjectId
+			LogData = (SELECT *
+					    FROM NEW_VALUES
 			           WHERE NEW_VALUES.Id = i.Id
 					  FOR XML AUTO, ROOT('ProjectAttachment'), TYPE),
 			@CurrentPMTime
