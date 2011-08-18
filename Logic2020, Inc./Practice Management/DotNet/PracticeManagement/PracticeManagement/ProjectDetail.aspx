@@ -306,7 +306,7 @@
                                     <td align="left" valign="middle" colspan="5" style="padding-left: 10px; vertical-align: middle;
                                         white-space: nowrap;">
                                         <asp:GridView ID="gvProjectAttachments" runat="server" AutoGenerateColumns="false"
-                                            EmptyDataText="" DataKeyNames="AttachmentId" GridLines="None">
+                                            EmptyDataText="" DataKeyNames="AttachmentId" GridLines="None" ShowHeader="false">
                                             <Columns>
                                                 <asp:TemplateField>
                                                     <ItemTemplate>
