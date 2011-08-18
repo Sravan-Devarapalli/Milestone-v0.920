@@ -274,51 +274,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnAttachSOW;
         
         /// <summary>
-        /// hlnkProjectAttachment control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink hlnkProjectAttachment;
-        
-        /// <summary>
-        /// lnkProjectAttachment control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkProjectAttachment;
-        
-        /// <summary>
-        /// lblAttachmentsize control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAttachmentsize;
-        
-        /// <summary>
-        /// lblAttachmentUploadedDate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAttachmentUploadedDate;
-        
-        /// <summary>
-        /// imgbtnDeleteAttachment control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton imgbtnDeleteAttachment;
-        
-        /// <summary>
         /// mpeAttachSOW control.
         /// </summary>
         /// <remarks>
@@ -326,6 +281,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.ModalPopupExtender mpeAttachSOW;
+        
+        /// <summary>
+        /// gvProjectAttachments control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvProjectAttachments;
         
         /// <summary>
         /// lbOpportunity control.
