@@ -26,10 +26,11 @@ DECLARE @DefaultProjectId INT
 			p.ProjectNumber,
 			p.ProjectManagerId,
 		    p.ProjectManagerFirstName,
-		    p.ProjectManagerLastName,
-			pa.[FileName]
+		    p.ProjectManagerLastName,	
+			CASE WHEN A.ProjectId IS NOT NULL THEN 1 
+					ELSE 0 END AS HasAttachments
 	FROM	dbo.v_Project AS p
-	LEFT JOIN dbo.ProjectAttachment AS pa ON p.ProjectId = pa.ProjectId
+	OUTER APPLY (SELECT TOP 1 pa.ProjectId FROM ProjectAttachment pa WHERE pa.ProjectId = p.ProjectId) A
 	WHERE	(dbo.IsDateRangeWithingTimeInterval(p.StartDate, p.EndDate, @StartDate, @EndDate) = 1)
 			AND (    ( @ShowProjected = 1 AND p.ProjectStatusId = 2 )
 				  OR ( @ShowActive = 1 AND p.ProjectStatusId = 3 )
