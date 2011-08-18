@@ -28,15 +28,15 @@ namespace PracticeManagementService
         }
 
         [WebMethod]
-        public byte[] GetProjectAttachmentData(int projectId)
+        public byte[] GetProjectAttachmentData(int projectId, int attachmentId)
         {
-           return ProjectDAL.GetProjectAttachmentData(projectId);
+           return ProjectDAL.GetProjectAttachmentData(projectId, attachmentId);
         }
 
         [WebMethod]
-        public void DeleteProjectAttachmentByProjectId(int projectId, string userName)
+        public void DeleteProjectAttachmentByProjectId(int? attachmentId, int projectId, string userName)
         {
-            ProjectDAL.DeleteProjectAttachmentByProjectId(projectId, userName);
+            ProjectDAL.DeleteProjectAttachmentByProjectId(attachmentId, projectId, userName);
         }
 
     }
