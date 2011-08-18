@@ -19,6 +19,7 @@ using PraticeManagement.DefaultCommissionService;
 using PraticeManagement.ProjectService;
 using PraticeManagement.Utils;
 using BillingInfo = DataTransferObjects.BillingInfo;
+using ProjectAttachment = DataTransferObjects.ProjectAttachment;
 
 namespace PraticeManagement
 {
@@ -28,10 +29,10 @@ namespace PraticeManagement
 
         private const string ProjectIdFormat = "projectId={0}";
         private const string ProjectKey = "Project";
-        private const string ProjectAttachmentHandlerUrl = "~/Controls/Projects/ProjectAttachmentHandler.ashx?ProjectId={0}&FileName={1}";
+        private const string ProjectAttachmentHandlerUrl = "~/Controls/Projects/ProjectAttachmentHandler.ashx?ProjectId={0}&FileName={1}&AttachmentId={2}";
         private const string AttachSOWMessage = "File must be in PDF format and no larger than {0}kb";
         private const string AttachmentFileSize = "AttachmentFileSize";
-        private const string ProjectAttachmentKey = "ProjectAttachmentKey";
+        private const string ProjectAttachmentsKey = "ProjectAttachmentsKey";
         #endregion
 
         #region Properties
@@ -78,15 +79,15 @@ namespace PraticeManagement
             }
         }
 
-        private AttachmentService.ProjectAttachment AttachmentForNewProject
+        private List<AttachmentService.ProjectAttachment> AttachmentsForNewProject
         {
             get
             {
-                return ViewState[ProjectAttachmentKey] as AttachmentService.ProjectAttachment;
+                return ViewState[ProjectAttachmentsKey] as List<AttachmentService.ProjectAttachment>;
             }
             set
             {
-                ViewState[ProjectAttachmentKey] = value;
+                ViewState[ProjectAttachmentsKey] = value;
             }
         }
 
@@ -171,10 +172,6 @@ namespace PraticeManagement
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            if (ProjectId.HasValue)
-            {
-                lnkProjectAttachment.Visible = false;
-            }
             if (ProjectId.HasValue && Project != null && Project.Milestones != null && Project.Milestones.Count > 0)
             {
                 cellExpenses.Visible = true;
@@ -303,26 +300,28 @@ namespace PraticeManagement
 
         protected void imgbtnDeleteAttachment_Click(object sender, EventArgs e)
         {
+            var deleteBtn = (ImageButton)sender;
+            var id = Convert.ToInt32(deleteBtn.Attributes["AttachmentId"]);
+
             if (ProjectId.HasValue)
             {
                 AttachmentService.AttachmentService svc = Utils.WCFClientUtility.GetAttachmentService();
 
-                svc.DeleteProjectAttachmentByProjectId(ProjectId.Value, User.Identity.Name);
+                svc.DeleteProjectAttachmentByProjectId(id, ProjectId.Value, User.Identity.Name);
+                Project.Attachments.Remove(Project.Attachments.Find(pa => pa.AttachmentId == id));
 
-                Project.Attachment = null;
                 PopulateAttachmentControl(Project);
             }
             else
             {
-                ViewState.Remove(ProjectAttachmentKey);
-                hlnkProjectAttachment.Text = string.Empty;
-                hlnkProjectAttachment.NavigateUrl = string.Empty;
-                lblAttachmentsize.Text = string.Empty;
-                lblAttachmentUploadedDate.Text = string.Empty;
-                lnkProjectAttachment.Text = string.Empty;
-                imgbtnDeleteAttachment.Visible = false;
-                lnkProjectAttachment.Visible = false;
+                var list = AttachmentsForNewProject;
+                list.Remove(list.Find(pa => pa.AttachmentId == id));
+
+                AttachmentsForNewProject = list;
+                gvProjectAttachments.DataSource = list;
             }
+
+            gvProjectAttachments.DataBind();
 
         }
 
@@ -367,24 +366,27 @@ namespace PraticeManagement
             Page.Validate(vsumProjectAttachment.ValidationGroup);
             if (Page.IsValid)
             {
+                AttachmentService.ProjectAttachment attachment = PopulateProjectAttachment();
+
                 if (ProjectId.HasValue)
                 {
-                    AttachmentService.ProjectAttachment attachment = PopulateProjectAttachment();
                     AttachmentService.AttachmentService svc = Utils.WCFClientUtility.GetAttachmentService();
                     svc.SaveProjectAttachment(attachment, ProjectId.Value, User.Identity.Name);
                 }
                 else
                 {
-                    AttachmentService.ProjectAttachment attachment = PopulateProjectAttachment();
-                    attachment.AttachmentSize = fuProjectAttachment.FileBytes.Length;
                     attachment.UploadedDate = DateTime.Now;
-                    ViewState[ProjectAttachmentKey] = attachment;
 
-                    lblAttachmentsize.Text = string.Format("({0}Kb)", attachment.AttachmentSize / 1000);
-                    lblAttachmentUploadedDate.Text = attachment.UploadedDate != null ? string.Format(" - Uploaded: {0}", attachment.UploadedDate.Value.ToString(Constants.Formatting.EntryDateFormat)) : string.Empty;
-                    imgbtnDeleteAttachment.Visible = true;
-                    lnkProjectAttachment.Visible = true;
-                    lnkProjectAttachment.Text = attachment.AttachmentFileName;
+                    if (AttachmentsForNewProject == null)
+                    {
+                        AttachmentsForNewProject = new List<AttachmentService.ProjectAttachment>();
+                    }
+
+                    attachment.AttachmentId = AttachmentsForNewProject.Count + 1;
+                    AttachmentsForNewProject.Add(attachment);
+
+                    gvProjectAttachments.DataSource = AttachmentsForNewProject;
+                    gvProjectAttachments.DataBind();
                 }
             }
 
@@ -788,13 +790,15 @@ namespace PraticeManagement
                     throw;
                 }
             }
-            if (AttachmentForNewProject != null && result != -1)
+
+            if (AttachmentsForNewProject != null && result != -1)
             {
                 AttachmentService.AttachmentService svc = Utils.WCFClientUtility.GetAttachmentService();
-                svc.SaveProjectAttachment(AttachmentForNewProject, result, User.Identity.Name);
-                ViewState.Remove(ProjectAttachmentKey);
-                lnkProjectAttachment.Visible = false;
-                lnkProjectAttachment.Text = string.Empty;
+                foreach (var attachment in AttachmentsForNewProject)
+                {
+                    svc.SaveProjectAttachment(attachment, result, User.Identity.Name);
+                }
+                ViewState.Remove(ProjectAttachmentsKey);
             }
 
             return result;
@@ -930,22 +934,25 @@ namespace PraticeManagement
 
         private void PopulateAttachmentControl(Project project)
         {
-            if (project.Attachment != null && !string.IsNullOrEmpty(project.Attachment.AttachmentFileName))
+            if (project.Attachments != null && project.Attachments.Count > 0)
             {
-                hlnkProjectAttachment.Text = project.Attachment.AttachmentFileName;
-                hlnkProjectAttachment.NavigateUrl = string.Format(ProjectAttachmentHandlerUrl, project.Id.ToString(), project.Attachment.AttachmentFileName);
-                lblAttachmentsize.Text = string.Format("({0}Kb)", project.Attachment.AttachmentSize / 1000);
-                lblAttachmentUploadedDate.Text = project.Attachment.UploadedDate != null ? string.Format(" - Uploaded: {0}", project.Attachment.UploadedDate.Value.ToString(Constants.Formatting.EntryDateFormat)) : string.Empty;
-                imgbtnDeleteAttachment.Visible = true;
+                gvProjectAttachments.DataSource = project.Attachments;
             }
-            else
+            gvProjectAttachments.DataBind();
+        }
+
+        public string GetNavigateUrl(string attachmentFileName, int attachmentId)
+        {
+            if (Project != null && Project.Id.HasValue)
             {
-                hlnkProjectAttachment.Text = string.Empty;
-                hlnkProjectAttachment.NavigateUrl = string.Empty;
-                lblAttachmentsize.Text = string.Empty;
-                lblAttachmentUploadedDate.Text = string.Empty;
-                imgbtnDeleteAttachment.Visible = false;
+                return string.Format(ProjectAttachmentHandlerUrl, Project.Id.ToString(), attachmentFileName, attachmentId);
             }
+            return string.Empty;
+        }
+
+        public bool IsProjectCreated()
+        {
+            return (Project == null || !Project.Id.HasValue);
         }
 
         private void PopulateSalesPersonDropDown()
@@ -961,7 +968,7 @@ namespace PraticeManagement
 
                     selectedSalesPerson = new ListItem(selectedPerson.PersonLastFirstName, selectedPerson.Id.Value.ToString());
                     ddlSalesperson.Items.Add(selectedSalesPerson);
-                    ddlSalesperson.SortByText();
+                    ddlSalesperson.SortByText();    
                 }
 
                 ddlSalesperson.SelectedValue = selectedSalesPerson.Value;
@@ -1129,6 +1136,7 @@ namespace PraticeManagement
                 AttachmentService.ProjectAttachment attachment = new AttachmentService.ProjectAttachment();
                 attachment.AttachmentFileName = fuProjectAttachment.FileName;
                 attachment.AttachmentData = fuProjectAttachment.FileBytes;
+                attachment.AttachmentSize = fuProjectAttachment.FileBytes.Length;
                 return attachment;
             }
             return null;
@@ -1226,8 +1234,12 @@ namespace PraticeManagement
 
         protected void lnkProjectAttachment_OnClick(object sender, EventArgs e)
         {
-            string FileName = AttachmentForNewProject.AttachmentFileName;
-            byte[] attachmentData = AttachmentForNewProject.AttachmentData;
+            var id = Convert.ToInt32(((LinkButton)sender).CommandName);
+            var list = AttachmentsForNewProject;
+            var attachment = list[list.FindIndex(pa => pa.AttachmentId == id)];
+
+            string FileName = attachment.AttachmentFileName;
+            byte[] attachmentData = attachment.AttachmentData;
 
             HttpContext.Current.Response.Clear();
             HttpContext.Current.Response.ContentType = "Application/pdf";
