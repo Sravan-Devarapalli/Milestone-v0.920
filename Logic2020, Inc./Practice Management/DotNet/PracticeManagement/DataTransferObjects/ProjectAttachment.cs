@@ -11,6 +11,13 @@ namespace DataTransferObjects
     public class ProjectAttachment
     {
         [DataMember]
+        public int AttachmentId
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public String AttachmentFileName
         {
             get;
