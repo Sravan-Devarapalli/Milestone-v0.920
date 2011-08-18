@@ -188,11 +188,7 @@ namespace PraticeManagement
 
         protected string GetProjectNameCellToolTip(Project project)
         {
-            string cssClass = ProjectHelper.GetIndicatorClassByStatusId(project.Status.Id);
-            if (project.Status.Id == 3 && project.Attachment == null)
-            {
-                cssClass = "ActiveProjectWithoutSOW";
-            }
+            string cssClass = GetProjectNameCellCssClass(project);
 
             var statusName = project.Status.Name;
 
@@ -215,7 +211,7 @@ namespace PraticeManagement
         protected string GetProjectNameCellCssClass(Project project)
         {
             string cssClass = ProjectHelper.GetIndicatorClassByStatusId(project.Status.Id);
-            if (project.Status.Id == 3 && project.Attachment == null)
+            if (project.Status.Id == 3 && !project.HasAttachments)
             {
                 cssClass = "ActiveProjectWithoutSOW";
             }
