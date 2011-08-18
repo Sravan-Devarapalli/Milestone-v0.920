@@ -12,13 +12,7 @@ AS
 	
 	-- Start logging session
 	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
-	IF (
-	    NOT EXISTS(SELECT 1 
-				   FROM [dbo].ProjectAttachment 
-				   WHERE [ProjectId] = @ProjectId 
-				   )
-	    )
-	  BEGIN
+
 	  INSERT INTO ProjectAttachment
 			   ([ProjectId]
 			   ,[FileName]
@@ -30,15 +24,6 @@ AS
 			   ,@FileName			   
 			   ,@AttachmentData
 			   ,@UploadedDate)
-      END
-      ELSE
-      BEGIN
-		UPDATE ProjectAttachment
-		SET [FileName] = @FileName			
-			,AttachmentData =  @AttachmentData
-			,UploadedDate   = @UploadedDate
-		WHERE ProjectId = @ProjectId
-      END
       
       EXEC dbo.SessionLogUnprepare
 	END
