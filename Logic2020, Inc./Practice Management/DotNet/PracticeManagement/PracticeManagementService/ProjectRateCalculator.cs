@@ -410,6 +410,11 @@ namespace PracticeManagementService
             {
                 result.Milestones = MilestoneDAL.MilestoneListByProject(projectId);
 
+                if (result.HasAttachments)
+                {
+                    result.Attachments = ProjectDAL.GetProjectAttachments(projectId);
+                }
+
                 // Project's commissions
                 result.SalesCommission = CommissionDAL.CommissionGetByProjectType(projectId, CommissionType.Sales);
                 List<Commission> managementCommission =
