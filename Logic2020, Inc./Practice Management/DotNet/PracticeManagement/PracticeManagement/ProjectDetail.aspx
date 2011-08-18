@@ -57,31 +57,7 @@
             }
         }
 
-        function CanShowPrompt() {
-            var hlnk = document.getElementById('<%= hlnkProjectAttachment.ClientID %>');
-            var lnk = document.getElementById('<%= lnkProjectAttachment.ClientID %>');
-            var showPrompt = false;
-
-            if (lnk != null && lnk.value != "") {
-                showPrompt = true;
-            }
-
-            if (!(hlnk.href == "")) {
-                showPrompt = true;
-            }
-
-            if (showPrompt) {
-                var result = confirm("SOW already exists for this project. Click Ok to replace the file or Cancel to continue without replacing.");
-                if (result == true) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }
-            else {
-                return true;
-            }
+        function CanShowPrompt() {return true;
         }
 
         function ConfirmToDeleteProject() {
@@ -220,8 +196,8 @@
                                         Group
                                     </td>
                                     <td>
-                                        <asp:DropDownList ID="ddlProjectGroup" runat="server" Enabled="false" CssClass="WholeWidth" OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged"
-                                            AutoPostBack="true">
+                                        <asp:DropDownList ID="ddlProjectGroup" runat="server" Enabled="false" CssClass="WholeWidth"
+                                            OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged" AutoPostBack="true">
                                         </asp:DropDownList>
                                     </td>
                                     <td colspan="2" style="white-space: nowrap">
@@ -243,12 +219,12 @@
                                         Salesperson
                                     </td>
                                     <td>
-                                        <asp:DropDownList ID="ddlSalesperson" runat="server" AutoPostBack="True" CssClass="WholeWidth" Enabled="false"
-                                            onchange="setDirty();" OnSelectedIndexChanged="ddlSalesperson_SelectedIndexChanged">
+                                        <asp:DropDownList ID="ddlSalesperson" runat="server" AutoPostBack="True" CssClass="WholeWidth"
+                                            Enabled="false" onchange="setDirty();" OnSelectedIndexChanged="ddlSalesperson_SelectedIndexChanged">
                                         </asp:DropDownList>
                                         <asp:HiddenField ID="hidSalesCommissionId" runat="server" />
                                     </td>
-                                   <td>
+                                    <td>
                                         <asp:RequiredFieldValidator ID="reqSalesperson" runat="server" ControlToValidate="ddlSalesperson"
                                             EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Sales person is required."
                                             SetFocusOnError="true" Text="*" ToolTip="The Sales person is required."></asp:RequiredFieldValidator>
@@ -257,14 +233,15 @@
                                         Client Director
                                     </td>
                                     <td>
-                                        <asp:DropDownList ID="ddlDirector" runat="server" CssClass="WholeWidth" Enabled="false" onchange="setDirty();">
+                                        <asp:DropDownList ID="ddlDirector" runat="server" CssClass="WholeWidth" Enabled="false"
+                                            onchange="setDirty();">
                                         </asp:DropDownList>
                                     </td>
                                     <td colspan="2">
                                         Owner
                                     </td>
                                     <td colspan="3">
-                                        <asp:DropDownList ID="ddlProjectManager" runat="server" CssClass="WholeWidth" onchange="setDirty();"  />
+                                        <asp:DropDownList ID="ddlProjectManager" runat="server" CssClass="WholeWidth" onchange="setDirty();" />
                                     </td>
                                     <td>
                                         <asp:RequiredFieldValidator ID="reqProjectManager" runat="server" ControlToValidate="ddlProjectManager"
@@ -322,30 +299,46 @@
                                 <tr>
                                     <td valign="middle">
                                         <asp:Button ID="btnAttachSOW" runat="server" Text="Attach SOW" ToolTip="Attach SOW" />
+                                        <AjaxControlToolkit:ModalPopupExtender
+                                            ID="mpeAttachSOW" runat="server" TargetControlID="btnAttachSOW" BackgroundCssClass="modalBackground"
+                                            PopupControlID="pnlAttachSOW" DropShadow="false" />
                                     </td>
                                     <td align="left" valign="middle" colspan="5" style="padding-left: 10px; vertical-align: middle;
                                         white-space: nowrap;">
-                                        <table>
-                                            <tr>
-                                                <td style="padding: 0px;">
-                                                    <asp:HyperLink ID="hlnkProjectAttachment" runat="server"></asp:HyperLink><asp:LinkButton
-                                                        ID="lnkProjectAttachment" runat="server" Visible="false" OnClick="lnkProjectAttachment_OnClick" />
-                                                </td>
-                                                <td style="padding: 0px; padding-left: 3px;">
-                                                    &nbsp;<asp:Label ID="lblAttachmentsize" runat="server"></asp:Label>
-                                                </td>
-                                                <td style="padding: 0px;">
-                                                    &nbsp;<asp:Label ID="lblAttachmentUploadedDate" runat="server"></asp:Label>
-                                                </td>
-                                                <td valign="middle" style="padding: 0px;">
-                                                    &nbsp;<asp:ImageButton ID="imgbtnDeleteAttachment" OnClick="imgbtnDeleteAttachment_Click"
-                                                        OnClientClick="if(confirm('Do you really want to delete the project attachment?')){ return true;}return false;"
-                                                        Visible="false" runat="server" ImageUrl="~/Images/trash-icon-Large.png" ToolTip="Delete Attachment" /><AjaxControlToolkit:ModalPopupExtender
-                                                            ID="mpeAttachSOW" runat="server" TargetControlID="btnAttachSOW" BackgroundCssClass="modalBackground"
-                                                            PopupControlID="pnlAttachSOW" DropShadow="false" />
-                                                </td>
-                                            </tr>
-                                        </table>
+                                        <asp:GridView ID="gvProjectAttachments" runat="server" AutoGenerateColumns="false"
+                                            EmptyDataText="" DataKeyNames="AttachmentId" GridLines="None">
+                                            <Columns>
+                                                <asp:TemplateField>
+                                                    <ItemTemplate>
+                                                        <% if(Project != null && Project.Id.HasValue)
+                                                           { %>
+                                                        <asp:HyperLink ID="hlnkProjectAttachment1" runat="server" Text='<%# Eval("AttachmentFileName") %>' NavigateUrl='<%# GetNavigateUrl((string)Eval("AttachmentFileName"), (int)Eval("AttachmentId")) %>'></asp:HyperLink>
+                                                        <% }
+                                                           else
+                                                           { %>
+                                                        <asp:LinkButton ID="lnkProjectAttachment1" runat="server" Visible="<%# IsProjectCreated() %>" CommandName='<%# Eval("AttachmentId") %>' Text='<%# Eval("AttachmentFileName") %>' OnClick="lnkProjectAttachment_OnClick" />
+                                                        <% } %>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblAttachmentSize" runat="server" Text='<%# string.Format("({0}Kb)", (int)Eval("AttachmentSize")/1000)  %>' ></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblUploadedDate" runat="server" Text='<%# ((DateTime?)Eval("UploadedDate")).HasValue ? string.Format(" - Uploaded: {0}", ((DateTime?)Eval("UploadedDate")).Value.ToString("MM/dd/yyyy")) : string.Empty %>' ></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <ItemTemplate>
+                                                        <asp:ImageButton ID="imgbtnDeleteAttachment1" OnClick="imgbtnDeleteAttachment_Click" AttachmentId='<%# Eval("AttachmentId") %>'
+                                                            OnClientClick="if(confirm('Do you really want to delete the project attachment?')){ return true;}return false;"
+                                                            Visible="true" runat="server" ImageUrl="~/Images/trash-icon-Large.png" ToolTip="Delete Attachment" />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                            </Columns>
+                                        </asp:GridView>
                                     </td>
                                 </tr>
                                 <tr>
@@ -625,7 +618,7 @@
             <asp:PostBackTrigger ControlID="btnSave" />
             <asp:PostBackTrigger ControlID="btnUpload" />
             <asp:PostBackTrigger ControlID="btnCancel" />
-            <asp:PostBackTrigger ControlID="lnkProjectAttachment" />
+            <asp:PostBackTrigger ControlID="gvProjectAttachments" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
