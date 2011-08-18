@@ -940,10 +940,17 @@ namespace DataAccess
                     int projectGroupIdIndex = -1;
                     int projectGroupNameIndex = -1;
                     int groupInUseIndex = -1;
-                    int attachmentFileNameIndex = -1;
-                    int attachmentSizeIndex = -1;
-                    int uploadedDateIndex = -1;
                     int isMarginColorInfoEnabledIndex = -1;
+                    int hasAttachmentsIndex = -1;
+
+                    try
+                    {
+                        hasAttachmentsIndex = reader.GetOrdinal(Constants.ColumnNames.HasAttachmentsColumn);
+                    }
+                    catch
+                    {
+                        hasAttachmentsIndex = -1;
+                    }
                     try
                     {
                         projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
@@ -976,39 +983,13 @@ namespace DataAccess
 
                     try
                     {
-                        attachmentFileNameIndex = reader.GetOrdinal(Constants.ColumnNames.FileName);
-                    }
-                    catch
-                    {
-                        attachmentFileNameIndex = -1;
-                    }
-                    try
-                    {
                         isMarginColorInfoEnabledIndex = reader.GetOrdinal(Constants.ColumnNames.IsMarginColorInfoEnabledColumn);
                     }
                     catch
                     {
                         isMarginColorInfoEnabledIndex = -1;
                     }
-
-                    try
-                    {
-                        attachmentSizeIndex = reader.GetOrdinal(Constants.ColumnNames.AttachmentSize);
-                    }
-                    catch
-                    {
-                        attachmentSizeIndex = -1;
-                    }
-
-                    try
-                    {
-                        uploadedDateIndex = reader.GetOrdinal(Constants.ColumnNames.UploadedDate);
-                    }
-                    catch
-                    {
-                        uploadedDateIndex = -1;
-                    }
-
+                    
                     while (reader.Read())
                     {
                         var project = new Project
@@ -1036,6 +1017,10 @@ namespace DataAccess
                                                                        LastName = reader.GetString(pmLastNameIndex)
                                                                    }
                                           };
+                        if (hasAttachmentsIndex >= 0)
+                        {
+                            project.HasAttachments = (int)reader[hasAttachmentsIndex] == 1;
+                        }
 
                         if (practiceOwnerNameIndex >= 0)
                         {
@@ -1058,53 +1043,6 @@ namespace DataAccess
                             catch
                             {
                                 project.SalesPersonName = string.Empty;
-                            }
-                        }
-                        if (attachmentFileNameIndex >= 0)
-                        {
-                            try
-                            {
-                                project.Attachment = new ProjectAttachment { AttachmentFileName = reader.GetString(attachmentFileNameIndex) };
-                            }
-                            catch
-                            {
-                            }
-                        }
-
-                        if (attachmentSizeIndex >= 0)
-                        {
-                            try
-                            {
-                                if (project.Attachment != null)
-                                {
-                                    project.Attachment.AttachmentSize = (int)reader.GetInt64(attachmentSizeIndex);
-                                }
-                                else
-                                {
-                                    project.Attachment = new ProjectAttachment { AttachmentSize = (int)reader.GetInt64(attachmentSizeIndex) };
-                                }
-                            }
-                            catch
-                            {
-                            }
-                        }
-
-                        if (uploadedDateIndex >= 0)
-                        {
-                            try
-                            {
-                                if (project.Attachment != null)
-                                {
-                                    project.Attachment.UploadedDate = reader.GetDateTime(uploadedDateIndex);
-                                }
-                                else
-                                {
-                                    project.Attachment = new ProjectAttachment { UploadedDate = reader.GetDateTime(uploadedDateIndex) };
-                                }
-                            }
-                            catch
-                            {
-
                             }
                         }
 
@@ -1219,7 +1157,7 @@ namespace DataAccess
                     int projectGroupIdIndex = -1;
                     int projectGroupNameIndex = -1;
                     int groupInUseIndex = -1;
-                    int attachmentFileNameIndex = -1;
+                    int hasAttachments = -1;
                     try
                     {
                         projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
@@ -1252,11 +1190,11 @@ namespace DataAccess
 
                     try
                     {
-                        attachmentFileNameIndex = reader.GetOrdinal(Constants.ColumnNames.FileName);
+                        hasAttachments = reader.GetOrdinal(Constants.ColumnNames.HasAttachmentsColumn);
                     }
                     catch
                     {
-                        attachmentFileNameIndex = -1;
+                        hasAttachments = -1;
                     }
 
                     while (reader.Read())
@@ -1338,15 +1276,10 @@ namespace DataAccess
                                     project.SalesPersonName = string.Empty;
                                 }
                             }
-                            if (attachmentFileNameIndex >= 0)
+
+                            if (hasAttachments >= 0)
                             {
-                                try
-                                {
-                                    project.Attachment = new ProjectAttachment { AttachmentFileName = reader.GetString(attachmentFileNameIndex) };
-                                }
-                                catch
-                                {
-                                }
+                                project.HasAttachments = (int)reader[hasAttachments] == 1;
                             }
 
                             project.Client = new Client
@@ -1425,15 +1358,15 @@ namespace DataAccess
                 int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusIdColumn);
                 int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
                 int projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
-                int attachmentFileNameIndex = -1;
+                int hasAttachmentIndex = -1;
 
                 try
                 {
-                    attachmentFileNameIndex = reader.GetOrdinal(Constants.ColumnNames.FileName);
+                    hasAttachmentIndex = reader.GetOrdinal(Constants.ColumnNames.HasAttachmentsColumn);
                 }
                 catch
                 {
-                    attachmentFileNameIndex = -1;
+                    hasAttachmentIndex = -1;
                 }
 
                 while (reader.Read())
@@ -1483,15 +1416,9 @@ namespace DataAccess
                         project.Milestones.Add(milestone);
                     }
 
-                    if (attachmentFileNameIndex >= 0)
+                    if (hasAttachmentIndex >= 0)
                     {
-                        try
-                        {
-                            project.Attachment = new ProjectAttachment { AttachmentFileName = reader.GetString(attachmentFileNameIndex) };
-                        }
-                        catch
-                        {
-                        }
+                        project.HasAttachments = (int)reader[hasAttachmentIndex] == 1;
                     }
 
                     result.Add(project);
@@ -2012,7 +1939,7 @@ namespace DataAccess
             }
         }
 
-        public static byte[] GetProjectAttachmentData(int projectId)
+        public static byte[] GetProjectAttachmentData(int projectId, int attachmentId)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -2021,7 +1948,8 @@ namespace DataAccess
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
 
-                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, projectId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.AttachmentIdParam, attachmentId);
 
                     connection.Open();
 
@@ -2054,7 +1982,52 @@ namespace DataAccess
 
         }
 
-        public static void DeleteProjectAttachmentByProjectId(int projectId, string userName)
+        public static List<ProjectAttachment> GetProjectAttachments(int projectId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Project.GetProjectAttachments, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        var result = new List<ProjectAttachment>();
+                        ReadProjectAttachments(reader, result);
+                        return result;
+                    }
+                }
+            }
+        }
+
+        public static void ReadProjectAttachments(SqlDataReader reader, List<ProjectAttachment> attachments)
+        {
+            if (reader.HasRows)
+            {
+                int idIndex = reader.GetOrdinal(Constants.ColumnNames.Id);
+                int attachmentFileNameIndex = reader.GetOrdinal(Constants.ColumnNames.FileName);
+                int uploadedDateIndex = reader.GetOrdinal(Constants.ColumnNames.UploadedDate);
+                int attachmentSizeIndex = reader.GetOrdinal(Constants.ColumnNames.AttachmentSize);
+
+                while (reader.Read())
+                {
+                    ProjectAttachment attachment = new ProjectAttachment();
+                    attachment.AttachmentId = reader.GetInt32(idIndex);
+                    attachment.AttachmentFileName = reader.GetString(attachmentFileNameIndex);
+                    attachment.AttachmentSize = (int)reader.GetInt64(attachmentSizeIndex);
+                    attachment.UploadedDate = reader.IsDBNull(uploadedDateIndex) ? null : (DateTime?)reader.GetDateTime(uploadedDateIndex);
+
+                    attachments.Add(attachment);
+                }
+            }
+        }
+
+        public static void DeleteProjectAttachmentByProjectId(int? attachmentId, int projectId, string userName)
         {
             var connection = new SqlConnection(DataSourceHelper.DataConnection);
 
@@ -2063,6 +2036,7 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
+                command.Parameters.AddWithValue(Constants.ParameterNames.AttachmentIdParam, attachmentId.HasValue ? (object)attachmentId : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam,
                     !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
@@ -2161,20 +2135,19 @@ namespace DataAccess
                     int pmIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerId);
                     int pmFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerFirstName);
                     int pmLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerLastName);
-                    int attachmentFileNameIndex = -1;
+                    int hasAttachmentIndex = -1;
+
+                    try
+                    {
+                        hasAttachmentIndex = reader.GetOrdinal(Constants.ColumnNames.HasAttachmentsColumn);
+                    }
+                    catch
+                    {
+                        hasAttachmentIndex = -1;
+                    }
 
                     while (reader.Read())
                     {
-
-                        try
-                        {
-                            attachmentFileNameIndex = reader.GetOrdinal(Constants.ColumnNames.FileName);
-                        }
-                        catch
-                        {
-                            attachmentFileNameIndex = -1;
-                        }
-
                         var projectId = reader.GetInt32(projectIdIndex);
                         Project project;
 
@@ -2213,17 +2186,10 @@ namespace DataAccess
                                 Name = reader.GetString(projectStatusNameIndex)
                             };
 
-                            if (attachmentFileNameIndex >= 0)
+                            if (hasAttachmentIndex >= 0)
                             {
-                                try
-                                {
-                                    project.Attachment = new ProjectAttachment { AttachmentFileName = reader.GetString(attachmentFileNameIndex) };
-                                }
-                                catch
-                                {
-                                }
+                                project.HasAttachments = (int)reader[hasAttachmentIndex] == 1;
                             }
-
 
                             resultList.Add(project);
                         }
