@@ -205,7 +205,8 @@
                         and //DefaultMileStoneId =./../@MilestoneId)
                     or (($rootName = 'MilestonePerson' or $rootName = 'TimeEntry') and name() = 'MilestonePersonId'
                         and //DefaultMileStoneId = ./../@MilestoneId)
-                    or ($rootName = 'Opportunity' and name() = 'Description')">
+                    or ($rootName = 'Opportunity' and name() = 'Description')
+                    or ($rootName = 'ProjectAttachment' and name() = 'ProjectName')">
             <xsl:call-template name="DisplayValue" />
           </xsl:when>
           <xsl:otherwise>
