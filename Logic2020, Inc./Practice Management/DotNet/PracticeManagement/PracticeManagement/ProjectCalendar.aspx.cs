@@ -67,7 +67,7 @@ namespace PraticeManagement
                 SetBarTextAndTooltip(repStartDate, repEndDate, bars[barIndex], pt);
 
                 if (bars[barIndex].Project.Status.Id == (int)ProjectStatusType.Active
-                    && bars[barIndex].Project.Attachment == null)
+                    && !bars[barIndex].Project.HasAttachments)
                 {
                     SetAlterNativeColorsForBar(ptStart, ptEnd, barIndex, points);
                 }
