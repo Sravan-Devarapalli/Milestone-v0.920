@@ -89,7 +89,8 @@ AS
 		   p.DirectorId,
 		   p.DirectorLastName,
 		   p.DirectorFirstName,
-		   pa.[FileName],
+		   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
+					ELSE 0 END AS HasAttachments,
 		   M.MilestoneId,
 		   M.Description MilestoneName
 	FROM	dbo.v_Project AS p
@@ -98,7 +99,7 @@ AS
 	LEFT JOIN dbo.v_PersonProjectCommission AS c on c.ProjectId = p.ProjectId
 	LEFT JOIN dbo.ProjectGroup PG	ON PG.GroupId = p.GroupId
 	LEFT JOIN v_Person AS person ON person.PersonId = c.PersonId
-	LEFT JOIN dbo.ProjectAttachment AS pa ON p.ProjectId = pa.ProjectId
+	OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = p.ProjectId) A
 	WHERE	    (c.CommissionType is NULL OR c.CommissionType = 1)
 		    AND (dbo.IsDateRangeWithingTimeInterval(p.StartDate, p.EndDate, @StartDate, @EndDate) = 1 OR (p.StartDate IS NULL AND p.EndDate IS NULL))
 			AND ( @ClientIds IS NULL OR p.ClientId IN (select * from @ClientsList) )
