@@ -50,13 +50,12 @@ AS
 		   p.DirectorFirstName,
 		   pg.Name AS GroupName,
 		   1 InUse,
-		   pa.[FileName],
-		   DATALENGTH(PA.AttachmentData) AS AttachmentSize,
-		   pa.UploadedDate
+		   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
+					ELSE 0 END AS HasAttachments
 	  FROM dbo.v_Project AS p
 	  INNER JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	  INNER JOIN Person AS person ON p.PracticeManagerId = person.PersonId
-	  LEFT JOIN dbo.ProjectAttachment AS pa ON p.ProjectId = pa.ProjectId
+	  OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = p.ProjectId) A
 	  WHERE p.ProjectId = @ProjectId
        AND (   (@SalespersonId IS NULL AND @PracticeManagerId IS NULL)
 	        OR EXISTS (SELECT 1
@@ -68,7 +67,4 @@ AS
 	                    WHERE c.ProjectId = p.ProjectId AND c.PersonId = @PracticeManagerId AND c.CommissionType = 2 
 	                   )
 	       )
-
-
-GO
 
