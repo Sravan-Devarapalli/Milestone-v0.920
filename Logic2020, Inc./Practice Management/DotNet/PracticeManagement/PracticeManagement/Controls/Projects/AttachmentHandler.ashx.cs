@@ -15,12 +15,13 @@ namespace PraticeManagement.Controls.Projects
         public void ProcessRequest(HttpContext context)
         {
             int projectId = Convert.ToInt32(context.Request.QueryString["ProjectId"]);
+            int attachmentId = Convert.ToInt32(context.Request.QueryString["AttachmentId"]);
             string FileName = context.Request.QueryString["FileName"];
             byte[] attachmentData = null;
 
             AttachmentService.AttachmentService svc = Utils.WCFClientUtility.GetAttachmentService();
 
-            attachmentData = svc.GetProjectAttachmentData(projectId);
+            attachmentData = svc.GetProjectAttachmentData(projectId, attachmentId);
 
             context.Response.ContentType = "Application/pdf";
             context.Response.AddHeader(
