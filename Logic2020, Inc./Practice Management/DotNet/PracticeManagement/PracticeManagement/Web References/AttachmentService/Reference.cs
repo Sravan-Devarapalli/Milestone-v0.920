@@ -117,24 +117,26 @@ namespace PraticeManagement.AttachmentService {
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetProjectAttachmentData", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary")]
-        public byte[] GetProjectAttachmentData(int projectId) {
+        public byte[] GetProjectAttachmentData(int projectId, int attachmentId) {
             object[] results = this.Invoke("GetProjectAttachmentData", new object[] {
-                        projectId});
+                        projectId,
+                        attachmentId});
             return ((byte[])(results[0]));
         }
         
         /// <remarks/>
-        public void GetProjectAttachmentDataAsync(int projectId) {
-            this.GetProjectAttachmentDataAsync(projectId, null);
+        public void GetProjectAttachmentDataAsync(int projectId, int attachmentId) {
+            this.GetProjectAttachmentDataAsync(projectId, attachmentId, null);
         }
         
         /// <remarks/>
-        public void GetProjectAttachmentDataAsync(int projectId, object userState) {
+        public void GetProjectAttachmentDataAsync(int projectId, int attachmentId, object userState) {
             if ((this.GetProjectAttachmentDataOperationCompleted == null)) {
                 this.GetProjectAttachmentDataOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetProjectAttachmentDataOperationCompleted);
             }
             this.InvokeAsync("GetProjectAttachmentData", new object[] {
-                        projectId}, this.GetProjectAttachmentDataOperationCompleted, userState);
+                        projectId,
+                        attachmentId}, this.GetProjectAttachmentDataOperationCompleted, userState);
         }
         
         private void OnGetProjectAttachmentDataOperationCompleted(object arg) {
@@ -146,23 +148,25 @@ namespace PraticeManagement.AttachmentService {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/DeleteProjectAttachmentByProjectId", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public void DeleteProjectAttachmentByProjectId(int projectId, string userName) {
+        public void DeleteProjectAttachmentByProjectId([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] System.Nullable<int> attachmentId, int projectId, string userName) {
             this.Invoke("DeleteProjectAttachmentByProjectId", new object[] {
+                        attachmentId,
                         projectId,
                         userName});
         }
         
         /// <remarks/>
-        public void DeleteProjectAttachmentByProjectIdAsync(int projectId, string userName) {
-            this.DeleteProjectAttachmentByProjectIdAsync(projectId, userName, null);
+        public void DeleteProjectAttachmentByProjectIdAsync(System.Nullable<int> attachmentId, int projectId, string userName) {
+            this.DeleteProjectAttachmentByProjectIdAsync(attachmentId, projectId, userName, null);
         }
         
         /// <remarks/>
-        public void DeleteProjectAttachmentByProjectIdAsync(int projectId, string userName, object userState) {
+        public void DeleteProjectAttachmentByProjectIdAsync(System.Nullable<int> attachmentId, int projectId, string userName, object userState) {
             if ((this.DeleteProjectAttachmentByProjectIdOperationCompleted == null)) {
                 this.DeleteProjectAttachmentByProjectIdOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeleteProjectAttachmentByProjectIdOperationCompleted);
             }
             this.InvokeAsync("DeleteProjectAttachmentByProjectId", new object[] {
+                        attachmentId,
                         projectId,
                         userName}, this.DeleteProjectAttachmentByProjectIdOperationCompleted, userState);
         }
@@ -194,12 +198,14 @@ namespace PraticeManagement.AttachmentService {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.225")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
     public partial class ProjectAttachment {
+        
+        private int attachmentIdField;
         
         private string attachmentFileNameField;
         
@@ -208,6 +214,16 @@ namespace PraticeManagement.AttachmentService {
         private int attachmentSizeField;
         
         private System.Nullable<System.DateTime> uploadedDateField;
+        
+        /// <remarks/>
+        public int AttachmentId {
+            get {
+                return this.attachmentIdField;
+            }
+            set {
+                this.attachmentIdField = value;
+            }
+        }
         
         /// <remarks/>
         public string AttachmentFileName {
