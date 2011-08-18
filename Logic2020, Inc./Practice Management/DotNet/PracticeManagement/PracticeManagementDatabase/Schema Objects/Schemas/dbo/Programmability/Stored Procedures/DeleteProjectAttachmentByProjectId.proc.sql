@@ -1,7 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[DeleteProjectAttachmentByProjectId]
 (
+	@AttachmentId	INT,
 	@ProjectId		INT,
-	@UserLogin          NVARCHAR(255)
+	@UserLogin      NVARCHAR(255)
 )
 AS
 BEGIN
@@ -13,6 +14,7 @@ BEGIN
 		DELETE
 		FROM [dbo].ProjectAttachment
 		WHERE ProjectId = @ProjectId
+			AND (Id = @AttachmentId OR @AttachmentId IS NULL)
 		
 	EXEC dbo.SessionLogUnprepare
 	END
