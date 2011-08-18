@@ -19,8 +19,8 @@
             <ItemTemplate>
                 <div class="cell-pad">
                     <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25" 
-                    ButtonProjectNameToolTip='<%# GetProjectNameCellToolTip((int)Eval("ProjectStatusId"),(object) Eval("FileName"),(string)Eval("ProjectStatus")) %>' 
-                    ButtonCssClass='<%# GetProjectNameCellCssClass((int)Eval("ProjectStatusId") , (object) Eval("FileName") )%>' />
+                    ButtonProjectNameToolTip='<%# GetProjectNameCellToolTip((int)Eval("ProjectStatusId"),(int)Eval("HasAttachments"),(string)Eval("ProjectStatus")) %>' 
+                    ButtonCssClass='<%# GetProjectNameCellCssClass((int)Eval("ProjectStatusId") , (int)Eval("HasAttachments") )%>' />
                 </div>
             </ItemTemplate>
         </asp:TemplateField>
