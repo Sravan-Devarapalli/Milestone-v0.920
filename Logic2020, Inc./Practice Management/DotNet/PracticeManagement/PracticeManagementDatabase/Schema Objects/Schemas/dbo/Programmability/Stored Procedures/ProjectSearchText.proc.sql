@@ -65,10 +65,11 @@ AS
 	       m.ProjectStatusId,
 	       s.Name AS ProjectStatusName,
            m.GroupId,
-		   pa.[FileName]
+		   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
+					ELSE 0 END AS HasAttachments
 	  FROM dbo.v_Milestone AS m
 	       INNER JOIN dbo.ProjectStatus AS s ON m.ProjectStatusId = s.ProjectStatusId
-	       LEFT JOIN dbo.ProjectAttachment AS pa ON m.ProjectId = pa.ProjectId
+	  OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = m.ProjectId) A
 	 WHERE (
 			m.ProjectName LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
 	        OR m.ProjectNumber LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
@@ -92,9 +93,10 @@ AS
 	       p.ProjectStatusId,
 	       p.ProjectStatusName,
            p.GroupId,
-		   pa.[FileName]
+		   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
+					ELSE 0 END AS HasAttachments
 	  FROM dbo.v_Project AS p
-	  LEFT JOIN dbo.ProjectAttachment AS pa ON p.ProjectId = pa.ProjectId
+	  OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = p.ProjectId) A
 	 WHERE NOT EXISTS (SELECT 1 FROM dbo.Milestone AS m WHERE m.ProjectId = p.ProjectId)
 	   AND (   
 			p.Name LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
