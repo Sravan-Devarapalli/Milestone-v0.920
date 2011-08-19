@@ -316,6 +316,8 @@ namespace PraticeManagement.Controls.Milestones
             CustomValidator custPerson = sender as CustomValidator;
             GridViewRow gvRow = custPerson.NamingContainer as GridViewRow;
             var ddl = gvRow.FindControl("ddlPersonName") as DropDownList;
+            var dpPersonStart = ((Control)sender).Parent.FindControl("dpPersonStart") as DatePicker;
+            var dpPersonEnd = ((Control)sender).Parent.FindControl("dpPersonEnd") as DatePicker;
             Person person = GetPersonBySelectedValue(ddl.SelectedValue);
 
             List<MilestonePerson> MilestonePersonList = MilestonePersons.Where(mp => mp.Person.Id.Value == person.Id.Value).AsQueryable().ToList();
@@ -337,6 +339,14 @@ namespace PraticeManagement.Controls.Milestones
                     args.IsValid = false;
                     break;
                 }
+            }
+
+            if (person == null ||
+                               person.HireDate > dpPersonStart.DateValue.Date ||
+                               (person.TerminationDate.HasValue &&
+                                person.TerminationDate.Value < dpPersonEnd.DateValue.Date))
+            {
+                args.IsValid = false;
             }
         }
 
