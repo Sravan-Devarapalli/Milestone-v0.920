@@ -158,7 +158,7 @@ namespace PraticeManagement.Controls.TimeEntry
                                     Constants.ApplicationPages.MilestonePersonDetail,
                                     mpe.ParentMilestone.Id.Value,
                                     mpe.MilestonePersonId,
-                                    HttpUtility.UrlEncode(GetMilestoneUrl(mpe.ParentMilestone))
+                                    Constants.ApplicationPages.TimeEntryReport
                                 );
             }
             return string.Empty;
