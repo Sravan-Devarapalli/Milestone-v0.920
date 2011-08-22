@@ -158,9 +158,9 @@
                         ExpandControlID="btnExpandCollapseSummary" Collapsed="True" TextLabelID="lblSummary" />                        
             <asp:Label ID="lblSummary" runat="server"></asp:Label>&nbsp;
             <asp:Image ID="btnExpandCollapseSummary" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Summary Details" />
-            <asp:Panel CssClass="summary" ID="pnlSummary" runat="server">
-            </asp:Panel>
         </div>
+        <asp:Panel CssClass="summary" style="white-space:nowrap;overflow-x:auto;" ID="pnlSummary" runat="server">
+            </asp:Panel>
         <div id="opportunity-list">
             <table cellpadding="0" cellspacing="0" align="center" style="width: 100%; padding-bottom: 10px;
                 margin-bottom: 10px;">
