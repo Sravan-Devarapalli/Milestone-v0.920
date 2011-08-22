@@ -52,7 +52,7 @@
             <asp:Panel CssClass="filters" ID="pnlFilters" runat="server">
                 <uc:OpportunityFilter ID="ofOpportunityList" runat="server" OnFilterOptionsChanged="ofOpportunityList_OnFilterOptionsChanged" />
             </asp:Panel>
-            <asp:Panel CssClass="summary" ID="pnlSummary" runat="server">
+            <asp:Panel CssClass="summary" style="white-space:nowrap;overflow-x:auto;" ID="pnlSummary" runat="server">
             </asp:Panel>
             <br />
             <uc2:OpportunityList id="opportunities" runat="server" FilterMode="GenericFilter"
