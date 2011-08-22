@@ -29,7 +29,12 @@
                              <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Filters" />
                        </td>
                         <td>
-                            &nbsp;
+                             <ajaxToolkit:CollapsiblePanelExtender ID="cpeSummary" runat="Server"
+                                            TargetControlID="pnlSummary" ImageControlID="btnExpandCollapseSummary"
+                                            CollapsedImage="Images/expand.jpg" ExpandedImage="Images/collapse.jpg" CollapseControlID="btnExpandCollapseSummary"
+                                            ExpandControlID="btnExpandCollapseSummary" Collapsed="True" TextLabelID="lblSummary" />                        
+                             <asp:Label ID="lblSummary" runat="server"></asp:Label>&nbsp;
+                             <asp:Image ID="btnExpandCollapseSummary" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Summary Details" />
                         </td>
                         <td>
                              <asp:Button ID="btnExportToExcel" runat="server" OnClick="btnExportToExcel_Click"
@@ -46,6 +51,8 @@
             </div>
             <asp:Panel CssClass="filters" ID="pnlFilters" runat="server">
                 <uc:OpportunityFilter ID="ofOpportunityList" runat="server" OnFilterOptionsChanged="ofOpportunityList_OnFilterOptionsChanged" />
+            </asp:Panel>
+            <asp:Panel CssClass="summary" ID="pnlSummary" runat="server">
             </asp:Panel>
             <br />
             <uc2:OpportunityList id="opportunities" runat="server" FilterMode="GenericFilter"
