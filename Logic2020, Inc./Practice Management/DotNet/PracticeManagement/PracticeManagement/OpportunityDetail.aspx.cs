@@ -283,6 +283,8 @@ namespace PraticeManagement
             UpdatePanel1.Update();
 
             NeedToShowDeleteButton();
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "EnableOrDisableConvertOrAttachToProj", "EnableOrDisableConvertOrAttachToProj();", true);
         }
 
         private void NeedToShowDeleteButton()
@@ -753,6 +755,7 @@ namespace PraticeManagement
 
             btnConvertToProject.Enabled =
                btnAttachToProject.Enabled = canEdit && !opportunity.ProjectId.HasValue;
+            hdnHasProjectIdOrPermission.Value = canEdit && !opportunity.ProjectId.HasValue ? "false" : "true";
 
             ddlClientGroup.Visible = canEdit;
 
