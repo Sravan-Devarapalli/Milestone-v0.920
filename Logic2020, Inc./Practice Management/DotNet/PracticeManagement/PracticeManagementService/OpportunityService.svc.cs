@@ -228,6 +228,16 @@ namespace PracticeManagementService
             OpportunityDAL.OpportunityDelete(opportunityId, userName);//It will delete only Inactive and Experimental Opportunities as per #2702.
         }
 
+        public IDictionary<string, int> GetOpportunityPriorityTransitionCount(int daysPrevious)
+        {
+            return OpportunityDAL.GetOpportunityPriorityTransitionCount(daysPrevious);
+        }
+
+        public IDictionary<string, int> GetOpportunityStatusChangeCount(int daysPrevious)
+        {
+            return OpportunityDAL.GetOpportunityStatusChangeCount(daysPrevious);
+        }
+
         #endregion
     }
 }
