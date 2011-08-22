@@ -1130,6 +1130,82 @@ namespace DataAccess
                 }
             }
         }
+	
+	public static IDictionary<string, int> GetOpportunityPriorityTransitionCount(int daysPrevious)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.GetOpportunityPriorityTransitionCount, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.DaysPrevious, daysPrevious);
+
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        var result = new Dictionary<string, int>();
+                        ReadOpportunityPriorityTrend(reader, result);
+                        return result;
+                    }
+                }
+            }
+        }
+
+        private static void ReadOpportunityPriorityTrend(SqlDataReader reader, Dictionary<string, int> result)
+        {
+            if (reader.HasRows)
+            {
+                int priorityTrendTypeIndex = reader.GetOrdinal(Constants.ColumnNames.PriorityTrendTypeColumn);
+                int priorityTrendCountIndex = reader.GetOrdinal(Constants.ColumnNames.PriorityTrendCountColumn);
+                while (reader.Read())
+                {
+                    string key = reader.GetString(priorityTrendTypeIndex);
+                    int value = reader.GetInt32(priorityTrendCountIndex);
+
+                    result.Add(key, value);
+                }
+            }
+        }
+
+        public static IDictionary<string, int> GetOpportunityStatusChangeCount(int daysPrevious)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.GetOpportunityStatusChangeCount, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.DaysPrevious, daysPrevious);
+
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        var result = new Dictionary<string, int>();
+                        ReadOpportunityStatusChangesRecord(reader, result);
+                        return result;
+                    }
+                }
+            }
+        }
+
+        private static void ReadOpportunityStatusChangesRecord(SqlDataReader reader, Dictionary<string, int> result)
+        {
+            if (reader.HasRows)
+            {
+                int statusIndex = reader.GetOrdinal(Constants.ColumnNames.StatusColumn);
+                int statusCountIndex = reader.GetOrdinal(Constants.ColumnNames.StatusCountColumn);
+                while (reader.Read())
+                {
+                    string key = reader.GetString(statusIndex);
+                    int value = reader.GetInt32(statusCountIndex);
+
+                    result.Add(key, value);
+                }
+            }
+        }
     }
 }
 
