@@ -288,6 +288,7 @@ namespace PraticeManagement
 
             upTopBarPane.Update();
             UpdatePanel1.Update();
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "EnableOrDisableConvertOrAttachToProj", "EnableOrDisableConvertOrAttachToProj();", true);
         }
 
         #endregion
@@ -394,7 +395,7 @@ namespace PraticeManagement
             upActivityLog.Update();
         }
 
-       
+
 
         public void LoadOpportunityDetails()
         {
@@ -820,6 +821,7 @@ namespace PraticeManagement
 
             btnConvertToProject.Enabled =
                 btnAttachToProject.Enabled = canEdit && !opportunity.ProjectId.HasValue;
+            hdnHasProjectIdOrPermission.Value = canEdit && !opportunity.ProjectId.HasValue ? "false" : "true";
 
             ddlClientGroup.Visible = canEdit;
 
