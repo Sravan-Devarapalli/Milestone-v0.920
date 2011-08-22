@@ -163,6 +163,19 @@ namespace PracticeManagementService
         ///<param name="userName">Name of the User</param>
         [OperationContract]
         void OpportunityDelete(int opportunityId, string userName);
+
+        
+        ///<summary>
+        /// Reads an Opportunity Priority Changes count
+        ///</summary>
+        [OperationContract]
+        IDictionary<string, int> GetOpportunityPriorityTransitionCount(int daysPrevious);
+
+        ///<summary>
+        /// Reads an Opportunity Status Changes count
+        ///</summary>
+        [OperationContract]
+        IDictionary<string, int> GetOpportunityStatusChangeCount(int daysPrevious);
     }
 }
 
