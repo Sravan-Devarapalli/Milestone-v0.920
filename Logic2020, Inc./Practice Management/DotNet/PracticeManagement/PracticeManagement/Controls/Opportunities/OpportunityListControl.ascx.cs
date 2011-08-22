@@ -56,6 +56,8 @@ namespace PraticeManagement.Controls.Opportunities
                         	</Sequence>
                         </OnClick>";
 
+        #region Properties
+
         public bool AllowAutoRedirectToDetails { get; set; }
 
         public int? TargetPersonId { get; set; }
@@ -111,6 +113,39 @@ namespace PraticeManagement.Controls.Opportunities
                 SetViewStateValue(ViewStateSortDirection, value);
             }
         }
+
+
+        private Opportunity[] OpportunitiesList
+        {
+            get
+            {
+                return DataHelper.GetFilteredOpportunitiesForDiscussionReview2();
+            }
+        }
+
+        private Dictionary<string, int> PriorityTrendList
+        {
+            get
+            {
+                using (var serviceClient = new OpportunityService.OpportunityServiceClient())
+                {
+                    return serviceClient.GetOpportunityPriorityTransitionCount(Constants.Dates.HistoryDays);
+                }
+            }
+        }
+
+        private Dictionary<string, int> StatusChangesList
+        {
+            get
+            {
+                using (var serviceClient = new OpportunityService.OpportunityServiceClient())
+                {
+                    return serviceClient.GetOpportunityStatusChangeCount(Constants.Dates.HistoryDays);
+                }
+            }
+        }
+
+        #endregion
 
         public Opportunity[] GetOpportunities()
         {
@@ -210,6 +245,7 @@ namespace PraticeManagement.Controls.Opportunities
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            pnlSummary.Controls.Add(GetSummaryDetails());
             PopulatePriorityHint();
         }
 
@@ -494,7 +530,6 @@ namespace PraticeManagement.Controls.Opportunities
             args.IsValid = length > 0 && length <= 2000;
         }
 
-
         protected void lvOpportunities_OnItemDataBound(object sender, ListViewItemEventArgs e)
         {
             if (e.Item.ItemType == ListViewItemType.DataItem)
@@ -593,10 +628,14 @@ namespace PraticeManagement.Controls.Opportunities
             {
                 return "<strike>"+ personLastFirstName + "</strike>";
             }
- 
+
         }
 
-
+        private Table GetSummaryDetails()
+        {
+            return OpportunitiesHelper.GetFormatedSummaryDetails(OpportunitiesList, PriorityTrendList, StatusChangesList);
+        }
+        
     }
 }
 
