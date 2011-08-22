@@ -69,6 +69,15 @@ namespace PraticeManagement
 
         }
 
+        public static class FilterKeys
+        {
+            public const string ApplyFilterFromCookieKey = "ApplyFilterFromCookie";
+            public const string QueryStringOfApplyFilterFromCookie = "?ApplyFilterFromCookie=true";
+            public const string PersonFilterCookie = "PersonFilter";
+            public const string ActivityLogFilterCookie = "ActivityLogFilter";
+            public const string BenchReportFilterCookie = "BenchReportFilter";
+        }
+
         /// <summary>
         /// Contains the names of the application's pages
         /// </summary>
@@ -160,6 +169,7 @@ namespace PraticeManagement
             public const string ValidMaxDate = "12/31/2100";
             public const int FYFirstMonth = 1;
             public const int FYLastMonth = 12;
+            public const int HistoryDays = 7;
         }
 
         /// <summary>
