@@ -88,6 +88,8 @@ namespace PraticeManagement.Utils
 
             col1.VerticalAlign = col2.VerticalAlign = col3.VerticalAlign = col4.VerticalAlign = col5.VerticalAlign = VerticalAlign.Top;
 
+            col1.Style["padding-right"] = col2.Style["padding-right"] = col3.Style["padding-right"] = col4.Style["padding-right"] = col5.Style["padding-right"] = "10px";
+
             var col1data = ExportSummaryColumn1(opportunityList, totalOpportunities, uniqueClientsCount);
 
             var col2data = ExportSummaryColumn2(opportunityList, totalOpportunities);
@@ -336,23 +338,27 @@ namespace PraticeManagement.Utils
 
             TableCell headerLabel = new TableCell();
             headerLabel.Font.Bold = true;
+           
             headerLabel.HorizontalAlign = HorizontalAlign.Left;
 
             TableRow age1 = new TableRow();
             TableRow age2 = new TableRow();
             TableRow age3 = new TableRow();
 
-            TableCell label1 = new TableCell();
-            label1.Text = "00-30 Days =";
-            label1.HorizontalAlign = HorizontalAlign.Justify;
+            TableCell tblCell1 = new TableCell();
+            tblCell1.Text = "00-30 Days =";
+            tblCell1.Font.Bold = false;
+            tblCell1.HorizontalAlign = HorizontalAlign.Justify;
 
-            TableCell label2 = new TableCell();
-            label2.Text = "31-60 Days =";
-            label2.HorizontalAlign = HorizontalAlign.Justify;
+            TableCell tblCell2 = new TableCell();
+            tblCell2.Text = "31-60 Days =";
+            tblCell2.Font.Bold = false;
+            tblCell2.HorizontalAlign = HorizontalAlign.Justify;
 
-            TableCell label3 = new TableCell();
-            label3.Text = "61-120+ Days =";
-            label3.HorizontalAlign = HorizontalAlign.Justify;
+            TableCell tblCell3 = new TableCell();
+            tblCell3.Text = "61-120+ Days =";
+            tblCell3.Font.Bold = false;
+            tblCell3.HorizontalAlign = HorizontalAlign.Justify;
 
             var priorityOrderList = opportunityList.OrderBy(opp => opp.Priority.SortOrder).ToArray();
             var priorities = priorityOrderList.Select(opp => opp.Priority.Priority).Distinct().ToArray();
@@ -373,9 +379,9 @@ namespace PraticeManagement.Utils
 
             headerRow.Controls.Add(headerCell);
             headerRow.Controls.Add(headerLabel);
-            age1.Controls.Add(label1);
-            age2.Controls.Add(label2);
-            age3.Controls.Add(label3);
+            age1.Controls.Add(tblCell1);
+            age2.Controls.Add(tblCell2);
+            age3.Controls.Add(tblCell3);
             age1.Controls.Add(age1Count);
             age2.Controls.Add(age2Count);
             age3.Controls.Add(age3Count);
@@ -548,3 +554,4 @@ namespace PraticeManagement.Utils
         #endregion
     }
 }
+
