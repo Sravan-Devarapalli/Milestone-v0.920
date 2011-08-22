@@ -137,6 +137,22 @@
             }
         }
 
+        function EnableOrDisableConvertOrAttachToProj() {
+            var ddlStatus = document.getElementById("<%= ddlStatus.ClientID%>");
+            var btnAttachToProject = document.getElementById("<%= btnAttachToProject.ClientID%>");
+            var btnConvertToProject = document.getElementById("<%= btnConvertToProject.ClientID%>");
+            var hdnHasProjectIdOrPermission = document.getElementById("<%= hdnHasProjectIdOrPermission.ClientID%>");
+
+            if (hdnHasProjectIdOrPermission.value != "true" && ddlStatus.value == "1") { //1 active
+                btnAttachToProject.disabled = false;
+                btnConvertToProject.disabled = false;
+            } else {
+                btnAttachToProject.disabled = true;
+                btnConvertToProject.disabled = true;
+            }
+
+        }
+
         function FadeOutLabel() {
             $("#" + "<%= lblSaved.ClientID%>").fadeOut(10000);
             document.getElementById("<%= lblSaved.ClientID%>").value = "";
@@ -405,6 +421,7 @@
                         <td style="width: 100%;">
                             <asp:UpdatePanel ID="upOpportunityDetail" UpdateMode="Conditional" runat="server">
                                 <ContentTemplate>
+                                    <asp:HiddenField ID="hdnHasProjectIdOrPermission" runat="server" />
                                     <asp:Label ID="lblReadOnlyWarning" runat="server" ForeColor="Red" Visible="false">Since you are not the designated owner of this opportunity, you will not be able to make any changes.</asp:Label>
                                     <table style="padding-left: 5px;" class="PaddingClass WholeWidth">
                                         <tr style="height: 30px;">
@@ -486,7 +503,7 @@
                                                 <table width="100%">
                                                     <tr>
                                                         <td style="width: 97%">
-                                                            <asp:DropDownList ID="ddlStatus" Width="100%" runat="server" onchange="EnableSaveButton();setDirty();"
+                                                            <asp:DropDownList ID="ddlStatus" Width="100%" runat="server" onchange="EnableSaveButton();EnableOrDisableConvertOrAttachToProj();setDirty();"
                                                                 CssClass="WholeWidth">
                                                             </asp:DropDownList>
                                                         </td>
