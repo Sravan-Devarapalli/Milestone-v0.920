@@ -12,9 +12,18 @@ AS
 		   m.ProjectId,
 		   cal.Date,
 		   m.IsHourlyAmount,
-	       ISNULL((m.Amount / (SELECT SUM(HoursPerDay) AS TotalMilestoneHours
-					    	FROM dbo.v_MilestonePersonSchedule AS s
-                            WHERE s.MileStoneId = m.MilestoneId)) * ISNULL(d.HoursPerDay, 0),
+	       ISNULL((m.Amount / (
+							SELECT SUM(HoursPerDay*DayCount)
+							FROM(
+								SELECT MP.MilestoneId,MPE.HoursPerDay,MP.MilestonePersonId,MPE.StartDate,COUNT(*) DayCount
+								FROM   MilestonePerson MP  
+								JOIN MilestonePersonEntry  MPE ON MP.MileStonePersonId = MPE.MileStonePersonId
+								JOIN PersonCalendarAuto cal ON cal.Date BETWEEN mpe.Startdate AND ISNULL(mpe.EndDate, m.ProjectedDeliveryDate) AND cal.DayOff=0
+								AND cal.PersonId = mp.PersonId
+								GROUP BY MP.MilestoneId,MPE.HoursPerDay,MP.MilestonePersonId,MPE.StartDate
+								) Temp
+							WHERE  Temp.MileStoneId = m.MilestoneId
+                            ))* ISNULL(d.HoursPerDay, 0),
 	              (CASE (DATEDIFF(dd, m.StartDate, m.ProjectedDeliveryDate) + 1)
 	                   WHEN 0 THEN 0
 	                   ELSE m.Amount / (DATEDIFF(dd, m.StartDate, m.ProjectedDeliveryDate) + 1)
