@@ -251,7 +251,7 @@ namespace PraticeManagement.Controls.Generic
 
         protected static string GetDaysOld(DateTime date, bool IsCreateDate)
         {
-            var span = DateTime.Now.Subtract(date);
+            var span = (Utils.Generic.GetNowWithTimeZone()).Date.Subtract(date.Date);
 
             var days = span.Days;
 
