@@ -64,6 +64,53 @@ public class GridViewExportUtil
         }
     }
 
+    public static void Export(string fileName, GridView gv, Table summaryTable, string title)
+    {
+        HttpContext.Current.Response.Clear();
+        HttpContext.Current.Response.AddHeader(
+            "content-disposition", string.Format("attachment; filename={0}", fileName));
+        HttpContext.Current.Response.ContentType = "application/ms-excel";
+
+        using (StringWriter sw = new StringWriter())
+        {
+            using (HtmlTextWriter htw = new HtmlTextWriter(sw))
+            {
+                if (title != null)
+                {
+                    Table titleTable = new Table();
+                    titleTable.GridLines = GridLines.None;
+
+                    TableCell titleCell = new TableCell();
+                    titleCell.Text = title;
+                    titleCell.Font.Bold = true;
+                    titleCell.Font.Size = new FontUnit(FontSize.Medium);
+                    if (gv.HeaderRow != null)
+                        titleCell.ColumnSpan = gv.HeaderRow.Cells.Count;
+                    titleCell.RowSpan = 2;
+                    titleCell.HorizontalAlign = HorizontalAlign.Center;
+                    titleCell.Style.Add("border-bottom", "1px solid black");
+                    titleCell.Style.Add("vertical-align", "middle");
+
+                    TableRow titleRow = new TableRow();
+                    titleRow.Cells.Add(titleCell);
+                    titleTable.Rows.Add(titleRow);
+
+                    titleTable.RenderControl(htw);
+                }
+
+                summaryTable.RenderControl(htw);
+
+                Table reportTable = PrepareReportTable(gv);
+                //  render the table into the htmlwriter
+                reportTable.RenderControl(htw);
+
+                //  render the htmlwriter into the response
+                HttpContext.Current.Response.Write(sw.ToString());
+                HttpContext.Current.Response.End();
+            }
+        }
+    }
+
     private static Table PrepareReportTable(GridView gv)
     {
         //  Create a table to contain the grid
