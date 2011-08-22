@@ -9,6 +9,7 @@
 <%@ Register Src="~/Controls/Opportunities/ProposedResources.ascx" TagName="ProposedResources"
     TagPrefix="uc" %>
 <%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
 <script src="Scripts/jquery.blockUI.js" type="text/javascript"></script>
 <script type="text/javascript" language="javascript">
@@ -150,6 +151,16 @@
 </script>
 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
     <ContentTemplate>
+        <div class="buttons-block">
+            <ajaxToolkit:CollapsiblePanelExtender ID="cpeSummary" runat="Server"
+                        TargetControlID="pnlSummary" ImageControlID="btnExpandCollapseSummary"
+                        CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg" CollapseControlID="btnExpandCollapseSummary"
+                        ExpandControlID="btnExpandCollapseSummary" Collapsed="True" TextLabelID="lblSummary" />                        
+            <asp:Label ID="lblSummary" runat="server"></asp:Label>&nbsp;
+            <asp:Image ID="btnExpandCollapseSummary" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Summary Details" />
+            <asp:Panel CssClass="summary" ID="pnlSummary" runat="server">
+            </asp:Panel>
+        </div>
         <div id="opportunity-list">
             <table cellpadding="0" cellspacing="0" align="center" style="width: 100%; padding-bottom: 10px;
                 margin-bottom: 10px;">
