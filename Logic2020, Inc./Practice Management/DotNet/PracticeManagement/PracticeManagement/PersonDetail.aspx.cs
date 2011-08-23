@@ -1205,7 +1205,9 @@ namespace PraticeManagement
             int personStatus;
             if (int.TryParse(this.ddlPersonStatus.SelectedValue, out personStatus))
             {
-                bool isTerminationDateEmpty = string.IsNullOrEmpty(this.dtpTerminationDate.TextValue);
+                string controlValidationValue = this.dtpTerminationDate.TextValue;
+
+                bool isTerminationDateEmpty = ((controlValidationValue == null) || controlValidationValue.Trim().Equals(string.Empty));
                 args.IsValid = true;
                 if (personStatus == 2)
                 {
