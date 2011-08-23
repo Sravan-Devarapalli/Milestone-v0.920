@@ -71,7 +71,7 @@ AS
 	                       ELSE o.Rate
 	                   END)) AS OverheadRate,
 	                   
-			ISNULL((SELECT CASE MLFO.OverheadRateTypeId
+			ISNULL((CASE MLFO.OverheadRateTypeId
 	                       -- Multipliers
 	                       WHEN 2 THEN
 	                           (CASE
@@ -85,20 +85,16 @@ AS
 	                       -- Fixed
 	                       WHEN 3 THEN MLFO.Rate * 12 / HY.HoursInYear
 	                       ELSE MLFO.Rate
-						   END  
-					   FROM dbo.v_MLFOverheadFixedRateTimescale MLFO 
-					   WHERE MLFO.TimescaleId = p.Timescale
-								AND r.Date >= MLFO.StartDate 
-								AND (r.Date <=MLFO.EndDate OR MLFO.EndDate IS NULL)
-								)
+						   END)
 	                   ,0) MLFOverheadRate,
 		   (CASE 
 			WHEN p.Timescale = 4
 			THEN p.HourlyRate * 0.01 * m.Amount
 			ELSE p.HourlyRate END) * ISNULL(p.VacationDays,0)*m.HoursPerDay/HY.HoursInYear VacationRate,
-	       ISNULL(MIN(pmcOwn.FractionOfMargin), 0) AS PracticeManagementCommissionOwn,
-	       ISNULL(MIN(pmcSub.FractionOfMargin), 0) AS PracticeManagementCommissionSub,
-
+	       --ISNULL(MIN(pmcOwn.FractionOfMargin), 0) AS PracticeManagementCommissionOwn,
+	       --ISNULL(MIN(pmcSub.FractionOfMargin), 0) AS PracticeManagementCommissionSub,
+		   0 AS PracticeManagementCommissionOwn,
+	       0 AS PracticeManagementCommissionSub,
 	       (SELECT SUM(CASE
 	                       WHEN DATEDIFF(DD, Person.HireDate, Calendar.Date)*8 <= rc.HoursToCollect
 								AND rc.HoursToCollect > 0 
@@ -123,16 +119,19 @@ AS
 	           ON     p.Date BETWEEN o.StartDate AND ISNULL(o.EndDate, dbo.GetFutureDate())
 	              AND o.Inactive = 0
 	              AND o.TimescaleId = p.Timescale
-	       LEFT JOIN (SELECT pmc.ProjectId, SUM(pmc.FractionOfMargin) AS FractionOfMargin
-	                    FROM dbo.Commission AS pmc
-	                   WHERE pmc.CommissionType = 2 AND MarginTypeId = 1
-	                  GROUP BY pmc.ProjectId) AS pmcOwn ON pmcOwn.ProjectId = r.ProjectId
-	       LEFT JOIN (SELECT pmc.ProjectId, SUM(pmc.FractionOfMargin) AS FractionOfMargin
-	                    FROM dbo.Commission AS pmc
-	                   WHERE pmc.CommissionType = 2 AND MarginTypeId = 2
-	                  GROUP BY pmc.ProjectId) AS pmcSub ON pmcSub.ProjectId = r.ProjectId
+	       --LEFT JOIN (SELECT pmc.ProjectId, SUM(pmc.FractionOfMargin) AS FractionOfMargin
+	       --             FROM dbo.Commission AS pmc
+	       --            WHERE pmc.CommissionType = 2 AND MarginTypeId = 1
+	       --           GROUP BY pmc.ProjectId) AS pmcOwn ON pmcOwn.ProjectId = r.ProjectId
+	       --LEFT JOIN (SELECT pmc.ProjectId, SUM(pmc.FractionOfMargin) AS FractionOfMargin
+	       --             FROM dbo.Commission AS pmc
+	       --            WHERE pmc.CommissionType = 2 AND MarginTypeId = 2
+	       --           GROUP BY pmc.ProjectId) AS pmcSub ON pmcSub.ProjectId = r.ProjectId
 		  LEFT JOIN V_WorkinHoursByYear HY ON HY.[Year] = YEAR(r.Date)
+		  LEFT JOIN v_MLFOverheadFixedRateTimescale MLFO ON MLFO.TimescaleId = p.Timescale
+								AND r.Date >= MLFO.StartDate 
+								AND (r.Date <=MLFO.EndDate OR MLFO.EndDate IS NULL)
 	GROUP BY r.Date, r.ProjectId, r.MilestoneId, r.MilestoneDailyAmount, r.Discount, p.HourlyRate,p.VacationDays,HY.HoursInYear,
 	         m.Amount, p.BonusAmount,p.IsYearBonus, p.BonusHoursToCollect, p.Timescale, s.HoursPerDay,
-	         r.IsHourlyAmount, m.HoursPerDay, m.PersonId, m.EntryStartDate, r.PracticeManagerId
+	         r.IsHourlyAmount, m.HoursPerDay, m.PersonId, m.EntryStartDate, r.PracticeManagerId,MLFO.OverheadRateTypeId,MLFO.Rate
 
