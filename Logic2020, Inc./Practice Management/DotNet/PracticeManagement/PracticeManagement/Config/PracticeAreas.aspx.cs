@@ -198,7 +198,7 @@ namespace PraticeManagement.Config
         private bool IsPracticeAlreadyExisting(string newPractice)
         {
             IEnumerable<PracticeExtended> practiceList = PracticesHelper.GetAllPractices();
-            return practiceList.Any(practice => practice.Name == newPractice);
+            return practiceList.Any(practice => practice.Name.ToLowerInvariant() == newPractice.ToLowerInvariant());
         }
     }
 }
