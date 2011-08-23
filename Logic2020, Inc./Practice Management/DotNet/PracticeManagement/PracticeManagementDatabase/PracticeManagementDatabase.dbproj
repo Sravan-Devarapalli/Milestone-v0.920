@@ -3439,10 +3439,7 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetProjectAttachments.proc.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetOpportunityPriorityTransitionCount.proc.sql">
-      <SubType>Code</SubType>
-    </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetOpportunityStatusChangeCount.proc.sql">
+    <Build Include="Schema Objects\Schemas\dbo\Views\V_ProjectFinancialsTotal.view.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>
