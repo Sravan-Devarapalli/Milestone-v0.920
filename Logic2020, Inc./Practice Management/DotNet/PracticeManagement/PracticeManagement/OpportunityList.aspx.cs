@@ -86,6 +86,8 @@ namespace PraticeManagement
             opportunities.ResetFilter();
 
             DatabindOpportunities();
+            var summary = GetSummaryDetails();
+            pnlSummary.Controls.Add(summary);
         }
 
         #region Export
@@ -130,14 +132,14 @@ namespace PraticeManagement
             excelGrid.DataBind();
             excelGrid.Visible = true;
 
-            var summaryDetails = GetSummaryDetails();
-
+           
+            var summaryDetails = GetSummaryDetails(true);
             GridViewExportUtil.Export("Opportunities.xls", excelGrid, summaryDetails, "Logic20/20 Opportunities");
         }
 
-        private Table GetSummaryDetails()
+        private Table GetSummaryDetails(bool isExporting = false)
         {
-            return OpportunitiesHelper.GetFormatedSummaryDetails(OpportunitiesList, PriorityTrendList, StatusChangesList);
+            return OpportunitiesHelper.GetFormatedSummaryDetails(OpportunitiesList, PriorityTrendList, StatusChangesList, isExporting);
         }
 
         public void excelGrid_RowDataBound(object sender, GridViewRowEventArgs e)
