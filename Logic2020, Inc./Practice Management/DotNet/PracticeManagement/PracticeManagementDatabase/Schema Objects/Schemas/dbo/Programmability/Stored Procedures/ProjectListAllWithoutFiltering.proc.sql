@@ -1,5 +1,10 @@
 ﻿CREATE PROCEDURE [dbo].[ProjectListAllWithoutFiltering]
 AS
+
+	DECLARE @DefaultProjectId INT
+	SELECT @DefaultProjectId = ProjectId
+	FROM dbo.DefaultMilestoneSetting
+
 	SELECT DISTINCT p.ClientId,
 		   p.ProjectId,
 		   p.Discount,
@@ -32,7 +37,8 @@ AS
 	FROM v_Project p
 	LEFT JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	LEFT JOIN dbo.Commission c ON c.ProjectId = p.ProjectId AND c.CommissionType = 1
-	LEFT JOIN dbo.Person cp ON cp.PersonId = c.PersonId 
+	LEFT JOIN dbo.Person cp ON cp.PersonId = c.PersonId
+	WHERE P.ProjectId <> @DefaultProjectId
 
 GO
 
