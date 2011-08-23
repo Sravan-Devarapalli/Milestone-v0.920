@@ -25,6 +25,8 @@ namespace PraticeManagement.Utils
             return _opportunityStatuses[statusName];
         }
 
+
+
         #region Summary
 
         #region Constants
@@ -58,14 +60,17 @@ namespace PraticeManagement.Utils
 
         private static Dictionary<string, int> StatusChangesList { get; set; }
 
+        private static bool? IsExporting { get; set; }
+
         #endregion
 
         #region Methods
 
         #region Export
 
-        public static Table GetFormatedSummaryDetails(Opportunity[] opportunityList, Dictionary<string, int> priorityTrendList, Dictionary<string, int> statusChangesList)
+        public static Table GetFormatedSummaryDetails(Opportunity[] opportunityList, Dictionary<string, int> priorityTrendList, Dictionary<string, int> statusChangesList,bool isExporting = false)
         {
+            IsExporting = isExporting;
             OpportunitiesList = opportunityList;
             PriorityTrendList = priorityTrendList;
             StatusChangesList = statusChangesList;
@@ -137,7 +142,14 @@ namespace PraticeManagement.Utils
         private static Table ExportSummaryColumn3(Opportunity[] opportunityList)
         {
             var data1 = AddOpportunityStatusChangesCell();
-            var data2 = AddOpportunityPriorityAgingCell(opportunityList);
+
+            Table data2 = null;
+            if (IsExporting != null && IsExporting.Value == false)
+                data2 = AddOpportunityPriorityAgingCell(opportunityList);
+            else
+            {
+                data2 = AddOpportunityPriorityAgingCellForExport(opportunityList);
+            }
 
             return ExportSummaryColumnWithMultipleRows(data1, data2);
         }
@@ -329,6 +341,112 @@ namespace PraticeManagement.Utils
 
         private static Table AddOpportunityPriorityAgingCell(Opportunity[] opportunityList)
         {
+            Table tholder = new Table();
+            var row = new TableRow();
+            TableCell cell = new TableCell();
+
+            Table table = new Table();
+            table.CssClass = "CellPaddingClass";
+            var headerRow = new TableRow();
+            TableCell headerCell = new TableCell();
+            headerCell.Text = "Opportunity Aging";
+            headerCell.Font.Bold = true;
+            headerCell.HorizontalAlign = HorizontalAlign.Center;
+
+
+
+            TableRow age1 = new TableRow();
+            TableRow age2 = new TableRow();
+            TableRow age3 = new TableRow();
+
+            TableCell tblCell1 = new TableCell();
+            tblCell1.Text = "00-30 Days =";
+            tblCell1.Font.Bold = false;
+            tblCell1.HorizontalAlign = HorizontalAlign.Justify;
+
+            TableCell tblCell2 = new TableCell();
+            tblCell2.Text = "31-60 Days =";
+            tblCell2.Font.Bold = false;
+            tblCell2.HorizontalAlign = HorizontalAlign.Justify;
+
+            TableCell tblCell3 = new TableCell();
+            tblCell3.Text = "61-120+ Days =";
+            tblCell3.Font.Bold = false;
+            tblCell3.HorizontalAlign = HorizontalAlign.Justify;
+
+            headerRow.Controls.Add(headerCell);
+
+            var priorityOrderList = opportunityList.OrderBy(opp => opp.Priority.SortOrder).ToArray();
+            var priorities = priorityOrderList.Select(opp => opp.Priority.Priority).Distinct().ToArray();
+            foreach (var priorityName in priorities)
+            {
+                TableCell headerLabel = new TableCell();
+                headerLabel.Font.Bold = true;
+                headerLabel.HorizontalAlign = HorizontalAlign.Center;
+                headerLabel.Text = priorityName;
+                headerRow.Controls.Add(headerLabel);
+            }
+
+            age1.Controls.Add(tblCell1);
+            age2.Controls.Add(tblCell2);
+            age3.Controls.Add(tblCell3);
+
+            FillOpportunityPriorityAgeCell(priorityOrderList, null, 30, priorities, age1);
+            FillOpportunityPriorityAgeCell(priorityOrderList, 31, 60, priorities, age2);
+            FillOpportunityPriorityAgeCell(priorityOrderList, 61, null, priorities, age3);
+
+            table.Controls.Add(headerRow);
+            table.Controls.Add(age1);
+            table.Controls.Add(age2);
+            table.Controls.Add(age3);
+            AddEmptyDataRow(table);
+
+            cell.Controls.Add(table);
+            row.Controls.Add(cell);
+            tholder.Controls.Add(row);
+            return tholder;
+        }
+
+        private static void FillOpportunityPriorityAgeCell(Opportunity[] opportunityList, int? startAge, int? endAge, string[] opportunityPriorities, TableRow tr)
+        {
+
+            var list = opportunityList.Where(opp => (startAge.HasValue && DateTime.Now.Subtract(opp.CreateDate).Days >= startAge) && (endAge.HasValue && DateTime.Now.Subtract(opp.CreateDate).Days <= endAge)
+                                                                                || (!startAge.HasValue && DateTime.Now.Subtract(opp.CreateDate).Days <= endAge)
+                                                                                || (!endAge.HasValue && DateTime.Now.Subtract(opp.CreateDate).Days >= startAge)
+                                                                        ).ToArray();
+            var ageLessThan31List = (from o in list
+                                     orderby o.Priority.SortOrder ascending
+                                     group o by o.Priority.Priority into result
+                                     select new
+                                     {
+                                         priority = result.Key,
+                                         priorityCount = result.Count()
+                                     }
+                                        );
+
+            foreach (var item in opportunityPriorities)
+            {
+                TableCell td = new TableCell();
+
+                var ite = ageLessThan31List.Where(a => a.priority.ToString() == item);
+
+                if (ite.Count() == 0)
+                {
+                    td.Text = ite.Count().ToString("#00");
+                }
+                else
+                {
+                    td.Text = ite.Select(a => a.priorityCount).First().ToString("#00");
+                }
+                td.HorizontalAlign = HorizontalAlign.Center;
+                td.Font.Bold = false;
+                tr.Controls.Add(td);
+            }
+
+        }
+
+        private static Table AddOpportunityPriorityAgingCellForExport(Opportunity[] opportunityList)
+        {
             Table table = new Table();
             var headerRow = new TableRow();
             TableCell headerCell = new TableCell();
@@ -338,7 +456,7 @@ namespace PraticeManagement.Utils
 
             TableCell headerLabel = new TableCell();
             headerLabel.Font.Bold = true;
-           
+
             headerLabel.HorizontalAlign = HorizontalAlign.Left;
 
             TableRow age1 = new TableRow();
@@ -368,13 +486,13 @@ namespace PraticeManagement.Utils
             }
 
             TableCell age1Count = new TableCell();
-            age1Count.Text = FillOpportunityPriorityAgeCell(priorityOrderList, null, 30, priorities);
+            age1Count.Text = FillOpportunityPriorityAgeCellForExport(priorityOrderList, null, 30, priorities);
             age1Count.Font.Bold = false;
             TableCell age2Count = new TableCell();
-            age2Count.Text = FillOpportunityPriorityAgeCell(priorityOrderList, 31, 60, priorities);
+            age2Count.Text = FillOpportunityPriorityAgeCellForExport(priorityOrderList, 31, 60, priorities);
             age2Count.Font.Bold = false;
             TableCell age3Count = new TableCell();
-            age3Count.Text = FillOpportunityPriorityAgeCell(priorityOrderList, 61, null, priorities);
+            age3Count.Text = FillOpportunityPriorityAgeCellForExport(priorityOrderList, 61, null, priorities);
             age3Count.Font.Bold = false;
 
             headerRow.Controls.Add(headerCell);
@@ -394,7 +512,7 @@ namespace PraticeManagement.Utils
             return table;
         }
 
-        private static string FillOpportunityPriorityAgeCell(Opportunity[] opportunityList, int? startAge, int? endAge, string[] opportunityPriorities)
+        private static string FillOpportunityPriorityAgeCellForExport(Opportunity[] opportunityList, int? startAge, int? endAge, string[] opportunityPriorities)
         {
             string cellText = string.Empty;
             var list = opportunityList.Where(opp => (startAge.HasValue && DateTime.Now.Subtract(opp.CreateDate).Days >= startAge) && (endAge.HasValue && DateTime.Now.Subtract(opp.CreateDate).Days <= endAge)
@@ -426,6 +544,7 @@ namespace PraticeManagement.Utils
             }
             return cellText;
         }
+
 
         private static Table AddTotalEstimatedRevenueCell(Opportunity[] opportunityList, decimal totalEstimateRevenue)
         {
