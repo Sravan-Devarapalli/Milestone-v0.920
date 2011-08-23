@@ -59,7 +59,7 @@ namespace PraticeManagement.Controls.Clients
 
         protected void custNewGroupName_ServerValidate(object sender, ServerValidateEventArgs e)
         {
-            e.IsValid = ClientGroupsList.Where(p => p.Value.Name == e.Value).Count() == 0;
+            e.IsValid = ClientGroupsList.Where(p => p.Value.Name.ToLowerInvariant() == e.Value.ToLowerInvariant()).Count() == 0;
         }
 
         protected void gvGroups_RowEditing(object sender, GridViewEditEventArgs e)
@@ -79,9 +79,9 @@ namespace PraticeManagement.Controls.Clients
             string groupName = ((TextBox)gvGroups.Rows[e.RowIndex].FindControl("txtGroupName")).Text;
             Page.Validate("UpdateGroup");
 
-            if (oldGroupName != groupName)
+            if (oldGroupName.ToLowerInvariant() != groupName.ToLowerInvariant())
             {
-                custGroupName.IsValid = ClientGroupsList.Where(p => p.Value.Name == groupName).Count() == 0;
+                custGroupName.IsValid = ClientGroupsList.Where(p => p.Value.Name.ToLowerInvariant() == groupName.ToLowerInvariant()).Count() == 0;
             }
 
             
