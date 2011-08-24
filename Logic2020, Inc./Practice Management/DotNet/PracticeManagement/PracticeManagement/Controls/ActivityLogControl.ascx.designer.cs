@@ -31,6 +31,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.UpdatePanel updActivityLog;
         
         /// <summary>
+        /// divActivitylog control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divActivitylog;
+        
+        /// <summary>
         /// lblDisplay control.
         /// </summary>
         /// <remarks>
@@ -49,13 +58,13 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.DropDownList ddlEventSource;
         
         /// <summary>
-        /// ddlPeriod control.
+        /// diYear control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlPeriod;
+        protected global::PraticeManagement.Controls.Generic.Filtering.DateInterval1 diYear;
         
         /// <summary>
         /// spnPersons control.
@@ -92,6 +101,24 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlProjects;
+        
+        /// <summary>
+        /// hdnResetFilter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnResetFilter;
+        
+        /// <summary>
+        /// btnResetFilter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnResetFilter;
         
         /// <summary>
         /// btnUpdateView control.
