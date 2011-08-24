@@ -184,7 +184,7 @@ namespace PraticeManagement
 
             if (!isGreaterThanMilestone)
             {
-                lblMoveMilestoneDate.Text = dpPersonEnd.DateValue.ToShortDateString();
+                lblMoveMilestoneDate.Text = dpPersonEnd.DateValue.ToString("MM/dd/yyyy");
 
                 bool terminationAndCompensation =
                     ChechTerminationAndCompensation(dpPersonEnd.DateValue);
@@ -1054,8 +1054,8 @@ namespace PraticeManagement
             }
 
             lblMilestoneName.Text = milestone.Description;
-            lblMilestoneStartDate.Text = milestone.StartDate.ToShortDateString();
-            lblMilestoneEndDate.Text = milestone.ProjectedDeliveryDate.ToShortDateString();
+            lblMilestoneStartDate.Text = milestone.StartDate.ToString("MM/dd/yyyy");
+            lblMilestoneEndDate.Text = milestone.ProjectedDeliveryDate.ToString("MM/dd/yyyy");
 
             // Security
             bool isReadOnly =
