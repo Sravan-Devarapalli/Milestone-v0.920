@@ -170,6 +170,16 @@
 
         }
 
+        function SetTooltipsForallDropDowns() {
+            var optionList = document.getElementsByTagName('option');
+
+            for (var i = 0; i < optionList.length; ++i) {
+
+                optionList[i].title = optionList[i].innerHTML;
+            }
+
+        }
+
     </script>
     <table class="CompPerfTable WholeWidth">
         <tr>
