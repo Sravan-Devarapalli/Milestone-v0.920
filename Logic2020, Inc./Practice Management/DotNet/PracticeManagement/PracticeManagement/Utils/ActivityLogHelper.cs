@@ -10,7 +10,8 @@ namespace PraticeManagement.Utils
     {
         public static ActivityLogItem[] GetActivities(
             string sourceFilter,
-            string periodFilter,
+            DateTime startDateFilter,
+            DateTime endDateFilter,
             string personId,
             string projectId,
             string opportunityId,
@@ -18,45 +19,21 @@ namespace PraticeManagement.Utils
             int startRow,
             int maxRows)
         {
-            var context = GetContext(periodFilter, sourceFilter, personId, projectId, opportunityId, milestoneId);
+            var context = GetContext(startDateFilter,endDateFilter, sourceFilter, personId, projectId, opportunityId, milestoneId);
 
             return ServiceCallers.Custom.ActivityLog(
                 client => client.ActivityLogList(context, maxRows, startRow / maxRows));
         }
 
         private static ActivityLogSelectContext GetContext(
-            string periodFilter,
+            DateTime startDateFilter,
+            DateTime endDateFilter,
             string sourceFilter,
             string personId,
             string projectId,
             string opportunityId,
             string milestoneId)
         {
-            DateTime startDate;
-            var today = DateTime.Today;
-            var endDate = today.AddDays(1.0);
-
-            switch ((DateFilterType)int.Parse(periodFilter))
-            {
-                case DateFilterType.Today:
-                    startDate = today;
-                    break;
-                case DateFilterType.Week:
-                    startDate = endDate.AddDays(-7.0);
-                    break;
-                case DateFilterType.Month:
-                    startDate = endDate.AddMonths(-1);
-                    break;
-                case DateFilterType.Year:
-                    startDate = endDate.AddYears(-1);
-                    break;
-                case DateFilterType.Unrestircted:
-                    startDate = SqlDateTime.MinValue.Value;
-                    break;
-                default:
-                    throw new InvalidOperationException(Resources.Controls.ActivityLogUnknownFilter);
-            }
-
             var prsId = Generic.ParseNullableInt(personId);
             var prjId = Generic.ParseNullableInt(projectId);
             var optId = Generic.ParseNullableInt(opportunityId);
@@ -66,8 +43,8 @@ namespace PraticeManagement.Utils
             return new ActivityLogSelectContext
             {
                 Source = source,
-                StartDate = startDate,
-                EndDate = endDate,
+                StartDate = startDateFilter,
+                EndDate = endDateFilter,
                 PersonId = prsId,
                 ProjectId = prjId,
                 OpportunityId = optId,
@@ -77,13 +54,14 @@ namespace PraticeManagement.Utils
 
         public static int GetActivitiesCount(
             string sourceFilter,
-            string periodFilter,
+            DateTime startDateFilter,
+            DateTime endDateFilter,
             string personId,
             string projectId,
             string opportunityId,
             string milestoneId)
         {
-            var context = GetContext(periodFilter, sourceFilter, personId, projectId, opportunityId, milestoneId);
+            var context = GetContext(startDateFilter,endDateFilter, sourceFilter, personId, projectId, opportunityId, milestoneId);
 
             return ServiceCallers.Custom.ActivityLog(client => client.ActivityLogGetCount(context));
         }
