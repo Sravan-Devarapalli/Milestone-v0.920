@@ -258,7 +258,7 @@ namespace PraticeManagement.Controls
             {
                 lblDisplay.Width = Unit.Percentage(20);
                 ddlEventSource.Width = Unit.Percentage(80);
-                Label1.Width =Unit.Percentage(18);
+                Label1.Width = Unit.Percentage(18);
                 ddlPersonName.Width = Unit.Percentage(82);
                 Label2.Width = Unit.Percentage(10);
                 ddlProjects.Width = Unit.Percentage(90);
@@ -271,6 +271,12 @@ namespace PraticeManagement.Controls
                 tdBtnList.Align = "right";
                 divActivitylog.Style.Add("background-color", "#d4dff8");
                 btnResetFilter.Visible = true;
+            }
+            else
+            {
+                ddlEventSource.Width = Unit.Pixel(100);
+                ddlPersonName.Width = Unit.Pixel(150);
+                ddlProjects.Width = Unit.Pixel(150);
             }
         }
 
