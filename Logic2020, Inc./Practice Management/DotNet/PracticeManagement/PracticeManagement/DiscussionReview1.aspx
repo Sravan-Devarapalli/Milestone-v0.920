@@ -197,6 +197,16 @@
 
         }
 
+        function SetTooltipsForallDropDowns() {
+            var optionList = document.getElementsByTagName('option');
+
+            for (var i = 0; i < optionList.length; ++i) {
+
+                optionList[i].title = optionList[i].innerHTML;
+            }
+
+        }
+
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
         function endRequestHandle(sender, Args) {
             GetProposedPersonIdsListWithPersonType();
