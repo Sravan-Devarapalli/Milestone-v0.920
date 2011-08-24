@@ -69,7 +69,17 @@ namespace PraticeManagement.Controls.Reports
             {
                 DataHelper.FillPracticeList(this.cblPractices, Resources.Controls.AllPracticesText);
                 SelectAllItems(this.cblPractices);
-                DatabindGrid();
+            }
+
+            AddAttributesToCheckBoxes(this.cblPractices);
+
+            if (hdnFiltersChanged.Value == "false")
+            {
+                btnResetFilter.Attributes.Add("disabled", "true");
+            }
+            else
+            {
+                btnResetFilter.Attributes.Remove("disabled");
             }
         }
 
@@ -127,6 +137,27 @@ namespace PraticeManagement.Controls.Reports
                 gvBench.Attributes[ConsultantNameSortOrder] = Descending;
                 gvBench.Attributes[PracticeSortOrder] = Ascending;
                 gvBench.Attributes[StatusSortOrder] = Ascending;
+            }
+        }
+
+        protected void btnResetFilter_OnClick(object sender, EventArgs e)
+        {
+            mpStartDate.SelectedYear = DateTime.Today.Year;
+            mpStartDate.SelectedMonth = DateTime.Today.Month;
+            mpEndDate.SelectedYear = DateTime.Today.Year;
+            mpEndDate.SelectedMonth = DateTime.Today.Month;
+            SelectAllItems(this.cblPractices);
+            cbActivePersons.Checked = true;
+            cbProjectedPersons.Checked = true;
+            hdnFiltersChanged.Value = "false";
+            btnResetFilter.Attributes.Add("disabled", "true");
+        }
+
+        private void AddAttributesToCheckBoxes(ScrollingDropDown ddl)
+        {
+            foreach (ListItem item in ddl.Items)
+            {
+                item.Attributes.Add("onclick", "EnableResetButton();");
             }
         }
 
