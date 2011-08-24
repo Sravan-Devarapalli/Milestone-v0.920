@@ -256,7 +256,7 @@ namespace PraticeManagement.Controls
 
             if (IsActivityLogPage)
             {
-                divActivitylog.Attributes["class"] = "buttons-block";
+                divActivitylog.Style.Add("background-color","#d4dff8");//.Attributes["class"] = "buttons-block";
                 btnResetFilter.Visible = true;
             }
         }
@@ -278,6 +278,7 @@ namespace PraticeManagement.Controls
 
         protected void Page_Prerender(object sender, EventArgs e)
         {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTooltipsForallDropDowns", "SetTooltipsForallDropDowns();", true);
             if (IsFreshRequest)
             {
                 Update();
