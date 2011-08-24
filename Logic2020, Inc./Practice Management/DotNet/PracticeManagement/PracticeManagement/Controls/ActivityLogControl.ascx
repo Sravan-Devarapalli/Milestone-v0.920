@@ -33,16 +33,6 @@
         }
     }
 
-    function SetTooltipsForallDropDowns() {
-        var optionList = document.getElementsByTagName('option');
-
-        for (var i = 0; i < optionList.length; ++i) {
-
-            optionList[i].title = optionList[i].innerHTML;
-        }
-
-    }
-
 </script>
 <uc:LoadingProgress ID="lpActivityLog" runat="server" />
 <asp:UpdatePanel ID="updActivityLog" runat="server" UpdateMode="Conditional">
