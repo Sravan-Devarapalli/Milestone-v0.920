@@ -36,7 +36,8 @@ namespace PraticeManagement.Controls.Generic
 
         public static ActivityLogItem[] GetActivities(
             string sourceFilter,
-            string periodFilter,
+            DateTime startDateFilter,
+            DateTime endDateFilter,
             string personId,
             string projectId,
             string opportunityId,
@@ -44,7 +45,8 @@ namespace PraticeManagement.Controls.Generic
         {
             return ActivityLogHelper.GetActivities(
                     sourceFilter,
-                    periodFilter,
+                    startDateFilter,
+                    endDateFilter,
                     personId,
                     projectId,
                     opportunityId,
@@ -57,7 +59,8 @@ namespace PraticeManagement.Controls.Generic
 
         public static int GetActivitiesCount(
             string sourceFilter,
-            string periodFilter,
+           DateTime startDateFilter,
+            DateTime endDateFilter,
             string personId,
             string projectId,
             string opportunityId,
@@ -65,7 +68,8 @@ namespace PraticeManagement.Controls.Generic
         {
             return ActivityLogHelper.GetActivitiesCount(
                     sourceFilter,
-                    periodFilter,
+                    startDateFilter,
+                    endDateFilter,
                     personId,
                     projectId,
                     opportunityId,
