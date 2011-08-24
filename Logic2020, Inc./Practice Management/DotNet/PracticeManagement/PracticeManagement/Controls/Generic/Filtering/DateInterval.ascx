@@ -15,7 +15,7 @@
         </td>
         <td>
             <asp:RequiredFieldValidator ID="reqValFrom" runat="server" ControlToValidate="tbFrom"
-                Enabled="false" ErrorMessage="From Date Is Required" ValidationGroup='<%# ClientID %>'>*</asp:RequiredFieldValidator>
+                Enabled="false" ErrorMessage="From Date Is Required." ToolTip="From Date Is Required." ValidationGroup='<%# ClientID %>'>*</asp:RequiredFieldValidator>
             <asp:RegularExpressionValidator ID="valFrom" runat="server" ControlToValidate="tbFrom"
                 ToolTip="The Date has an incorrect format. It must be 'MM/dd/yyyy'." ErrorMessage="The Date has an incorrect format. It must be 'MM/dd/yyyy'."
                 ValidationExpression="^([1-9]|0[1-9]|1[012])[/]([1-9]|0[1-9]|[12][0-9]|3[01])[/][0-9]{4}$"
@@ -37,7 +37,7 @@
         </td>
         <td>
             <asp:RequiredFieldValidator ID="reqValTo" runat="server" ControlToValidate="tbTo"
-                Display="Dynamic" Enabled="false" ErrorMessage="To Date Is Required" ValidationGroup='<%# ClientID %>'>*</asp:RequiredFieldValidator>
+                Display="Dynamic" Enabled="false" ErrorMessage="To Date Is Required." ToolTip="To Date Is Required." ValidationGroup='<%# ClientID %>'>*</asp:RequiredFieldValidator>
             <asp:RegularExpressionValidator ID="valTo" runat="server" ControlToValidate="tbTo"
                 Display="Dynamic" ToolTip="The Date has an incorrect format. It must be 'MM/dd/yyyy'."
                 ErrorMessage="The Date has an incorrect format. It must be 'MM/dd/yyyy'." ValidationExpression="^([1-9]|0[1-9]|1[012])[/]([1-9]|0[1-9]|[12][0-9]|3[01])[/][0-9]{4}$"
