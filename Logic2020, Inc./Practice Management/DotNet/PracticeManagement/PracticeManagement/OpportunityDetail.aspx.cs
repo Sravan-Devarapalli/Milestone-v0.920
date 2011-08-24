@@ -801,7 +801,7 @@ namespace PraticeManagement
 
             txtDescription.Text = opportunity.Description;
             txtBuyerName.Text = opportunity.BuyerName;
-            lblLastUpdate.Text = opportunity.LastUpdate.ToShortDateString();
+            lblLastUpdate.Text = opportunity.LastUpdate.ToString("MM/dd/yyyy");
 
             ddlStatus.SelectedIndex =
                 ddlStatus.Items.IndexOf(
