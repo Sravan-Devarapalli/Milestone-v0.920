@@ -256,7 +256,20 @@ namespace PraticeManagement.Controls
 
             if (IsActivityLogPage)
             {
-                divActivitylog.Style.Add("background-color","#d4dff8");//.Attributes["class"] = "buttons-block";
+                lblDisplay.Width = Unit.Percentage(20);
+                ddlEventSource.Width = Unit.Percentage(80);
+                Label1.Width =Unit.Percentage(18);
+                ddlPersonName.Width = Unit.Percentage(82);
+                Label2.Width = Unit.Percentage(10);
+                ddlProjects.Width = Unit.Percentage(90);
+                tblActivitylog.Attributes["class"] = "CompPerfTable WholeWidth";
+                tdEventSource.Style.Add("width", "19%");
+                tdYear.Style.Add("width", "27%");
+                spnPersons.Style.Add("width", "19%");
+                spnProjects.Style.Add("width", "20%");
+                tdBtnList.Style.Add("width", "15%");
+                tdBtnList.Align = "right";
+                divActivitylog.Style.Add("background-color", "#d4dff8");
                 btnResetFilter.Visible = true;
             }
         }
