@@ -215,7 +215,8 @@ namespace PraticeManagement
             activityLog.IsFreshRequest = true;
             activityLog.OpportunityId = OpportunityId;
             activityLog.DisplayDropDownValue = ActivityEventSource.Opportunity;
-            activityLog.DateFilterValue = DateFilterType.Year;
+            activityLog.FromDateFilterValue = SettingsHelper.GetCurrentPMTime().AddYears(-1);
+            activityLog.ToDateFilterValue = SettingsHelper.GetCurrentPMTime();
             activityLog.ShowDisplayDropDown = false;
             activityLog.ShowProjectDropDown = false;
             phActivityLog.Controls.Add(activityLog);
