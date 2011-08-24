@@ -43,11 +43,11 @@ namespace PraticeManagement.Controls
 			}
 			if (project.StartDate.HasValue)
 			{
-				lblStartDate.Text = project.StartDate.Value.ToShortDateString();
+                lblStartDate.Text = project.StartDate.Value.ToString("MM/dd/yyyy");
 			}
 			if (project.EndDate.HasValue)
 			{
-				lblEndDate.Text = project.EndDate.Value.ToShortDateString();
+                lblEndDate.Text = project.EndDate.Value.ToString("MM/dd/yyyy");
 			}
 		}
 
