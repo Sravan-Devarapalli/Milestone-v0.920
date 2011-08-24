@@ -10,6 +10,6 @@
     Activity Log
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <uc:ActivityLogControl runat="server" ID="activityLog" />
+    <uc:ActivityLogControl runat="server" ID="activityLog"  IsActivityLogPage="true" />
 </asp:Content>
 
