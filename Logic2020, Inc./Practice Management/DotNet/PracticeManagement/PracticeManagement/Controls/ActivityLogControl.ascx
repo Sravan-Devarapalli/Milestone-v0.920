@@ -33,6 +33,16 @@
         }
     }
 
+    function SetTooltipsForallDropDowns() {
+        var optionList = document.getElementsByTagName('option');
+
+        for (var i = 0; i < optionList.length; ++i) {
+
+            optionList[i].title = optionList[i].innerHTML;
+        }
+
+    }
+
 </script>
 <uc:LoadingProgress ID="lpActivityLog" runat="server" />
 <asp:UpdatePanel ID="updActivityLog" runat="server" UpdateMode="Conditional">
@@ -40,35 +50,41 @@
         <table cellpadding="5" class="WholeWidth">
             <tr>
                 <td>
-                    <div id="divActivitylog" runat="server">
-                        <table>
+                    <div id="divActivitylog" style="padding: 10px;" runat="server">
+                        <table style="white-space: nowrap;" class="CompPerfTable WholeWidth">
                             <tr>
-                                <td>
-                                    <asp:Label ID="lblDisplay" runat="server" Text="Show"></asp:Label>
-                                    <asp:DropDownList ID="ddlEventSource" runat="server" Width="150" EnableViewState="true">
+                                <td style="width: 19%;">
+                                    <asp:Label ID="lblDisplay" Width="20%" runat="server" Text="Show"></asp:Label>
+                                    <asp:DropDownList Width="80%" ID="ddlEventSource" runat="server" EnableViewState="true">
                                     </asp:DropDownList>
                                 </td>
-                                <td>
-                                    <uc:DateInterval ID="diYear" runat="server" FromToDateFieldWidth="70" />
+                                <td style="width: 27%; padding-left: 4px;">
+                                    <uc:DateInterval ID="diYear" IsFromDateRequired="true" IsToDateRequired="true" runat="server"
+                                        FromToDateFieldWidth="65" />
                                 </td>
-                                <td>
-                                    <span id="spnPersons" runat="server">&nbsp;user&nbsp;
-                                        <asp:DropDownList ID="ddlPersonName" runat="server" Width="150" DataSourceID="odsPersons"
-                                            DataTextField="PersonLastFirstName" DataValueField="Id" OnDataBound="ddlPersonName_OnDataBound" />
-                                    </span>
+                                <td id="spnPersons" runat="server" style="width: 19%;">
+                                    <asp:Label ID="Label1" Width="18%" runat="server" Text="user"></asp:Label><asp:DropDownList
+                                        ID="ddlPersonName" Width="82%" runat="server" DataSourceID="odsPersons" DataTextField="PersonLastFirstName"
+                                        DataValueField="Id" OnDataBound="ddlPersonName_OnDataBound" />
                                 </td>
-                                <td>
-                                    <span id="spnProjects" runat="server">&nbsp;for&nbsp;
-                                        <asp:DropDownList ID="ddlProjects" runat="server" Width="200" DataSourceID="odsProjects"
-                                            DataTextField="Name" DataValueField="Id" OnDataBound="ddlProjects_OnDataBound" />
-                                    </span>
+                                <td id="spnProjects" runat="server" style="width: 20%;padding-left:4px;">
+                                    <asp:Label ID="Label2" Width="10%" runat="server" Text="for"></asp:Label><asp:DropDownList
+                                        ID="ddlProjects" runat="server" DataSourceID="odsProjects" Width="90%" DataTextField="Name"
+                                        DataValueField="Id" OnDataBound="ddlProjects_OnDataBound" />
                                 </td>
-                                <td align="right">
+                                <td style="width: 15%;" align="right">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <asp:Button ID="btnUpdateView" runat="server" Text="Update" ToolTip="Update" OnClick="btnUpdateView_Click" />
+                                            </td>
+                                            <td style="padding-left:4px;">
+                                                <asp:Button ID="btnResetFilter" runat="server" Text="Reset" ToolTip="Reset" OnClick="btnResetFilter_Click"
+                                                    Visible="false" />
+                                            </td>
+                                        </tr>
+                                    </table>
                                     <asp:HiddenField ID="hdnResetFilter" runat="server" />
-                                    &nbsp;<asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" OnClick="btnResetFilter_Click"
-                                        Visible="false" Width="100px" CssClass="pm-button" />
-                                    &nbsp;<asp:Button ID="btnUpdateView" runat="server" Text="Update View" OnClick="btnUpdateView_Click"
-                                        Width="100px" CssClass="pm-button" />
                                 </td>
                             </tr>
                         </table>
