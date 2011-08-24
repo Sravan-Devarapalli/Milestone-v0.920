@@ -40,6 +40,24 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divActivitylog;
         
         /// <summary>
+        /// tblActivitylog control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTable tblActivitylog;
+        
+        /// <summary>
+        /// tdEventSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdEventSource;
+        
+        /// <summary>
         /// lblDisplay control.
         /// </summary>
         /// <remarks>
@@ -56,6 +74,15 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlEventSource;
+        
+        /// <summary>
+        /// tdYear control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdYear;
         
         /// <summary>
         /// diYear control.
@@ -119,6 +146,15 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlProjects;
+        
+        /// <summary>
+        /// tdBtnList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdBtnList;
         
         /// <summary>
         /// btnUpdateView control.
