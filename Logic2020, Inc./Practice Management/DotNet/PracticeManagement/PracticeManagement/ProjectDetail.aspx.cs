@@ -1029,11 +1029,11 @@ namespace PraticeManagement
         {
             if (project.StartDate.HasValue)
             {
-                lblProjectStart.Text = project.StartDate.Value.ToShortDateString();
+                lblProjectStart.Text = project.StartDate.Value.ToString("MM/dd/yyyy");
             }
             if (project.EndDate.HasValue)
             {
-                lblProjectEnd.Text = project.EndDate.Value.ToShortDateString();
+                lblProjectEnd.Text = project.EndDate.Value.ToString("MM/dd/yyyy");
             }
         }
 
