@@ -73,7 +73,16 @@ namespace PraticeManagement.Controls {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl spnPersons;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell spnPersons;
+        
+        /// <summary>
+        /// Label1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label1;
         
         /// <summary>
         /// ddlPersonName control.
@@ -91,7 +100,16 @@ namespace PraticeManagement.Controls {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl spnProjects;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell spnProjects;
+        
+        /// <summary>
+        /// Label2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label2;
         
         /// <summary>
         /// ddlProjects control.
@@ -103,13 +121,13 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.DropDownList ddlProjects;
         
         /// <summary>
-        /// hdnResetFilter control.
+        /// btnUpdateView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnResetFilter;
+        protected global::System.Web.UI.WebControls.Button btnUpdateView;
         
         /// <summary>
         /// btnResetFilter control.
@@ -121,13 +139,13 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.Button btnResetFilter;
         
         /// <summary>
-        /// btnUpdateView control.
+        /// hdnResetFilter control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUpdateView;
+        protected global::System.Web.UI.WebControls.HiddenField hdnResetFilter;
         
         /// <summary>
         /// gvActivities control.
