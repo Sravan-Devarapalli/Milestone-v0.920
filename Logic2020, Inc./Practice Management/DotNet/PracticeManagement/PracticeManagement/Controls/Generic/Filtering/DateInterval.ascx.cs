@@ -9,6 +9,14 @@ namespace PraticeManagement.Controls.Generic.Filtering
         public bool IsFromDateRequired { get; set; }
         public bool IsToDateRequired { get; set; }
 
+        public string OnClientChange 
+        {
+            set 
+            {
+                this.clFromDate.OnClientDateSelectionChanged = this.clToDate.OnClientDateSelectionChanged = value;
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (this.FromToDateFieldWidth.HasValue)
@@ -82,5 +90,7 @@ namespace PraticeManagement.Controls.Generic.Filtering
             tbTo.Text = string.Empty;
             tbFrom.Text = string.Empty;
         }
+
+
     }
 }
