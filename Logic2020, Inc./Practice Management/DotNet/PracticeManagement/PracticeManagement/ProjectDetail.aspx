@@ -66,6 +66,16 @@
             hdnProject.value = result ? 1 : 0;
         }
 
+        function SetTooltipsForallDropDowns() {
+            var optionList = document.getElementsByTagName('option');
+
+            for (var i = 0; i < optionList.length; ++i) {
+
+                optionList[i].title = optionList[i].innerHTML;
+            }
+
+        }
+
     </script>
     <style type="text/css">
         /* --------- Tabs for person and project details pages ------ */
