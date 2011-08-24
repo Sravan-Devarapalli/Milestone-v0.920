@@ -10,6 +10,18 @@
     Activity Log
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
+<script type="text/javascript" language="javascript">
+    function SetTooltipsForallDropDowns() {
+        var optionList = document.getElementsByTagName('option');
+
+        for (var i = 0; i < optionList.length; ++i) {
+
+            optionList[i].title = optionList[i].innerHTML;
+        }
+
+    }
+
+</script>
     <uc:ActivityLogControl runat="server" ID="activityLog"  IsActivityLogPage="true" />
 </asp:Content>
 
