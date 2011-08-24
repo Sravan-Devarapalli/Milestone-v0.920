@@ -10,18 +10,10 @@ using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
 using System.Xml;
 using PraticeManagement.Configuration;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement.Controls
 {
-    public enum DateFilterType
-    {
-        Today = 1,
-        Week = 2,
-        Month = 3,
-        Year = 4,
-        Unrestircted = 5
-    }
-
     public partial class ActivityLogControl : UserControl
     {
         #region Constants
@@ -217,18 +209,22 @@ namespace PraticeManagement.Controls
 
         public bool IsFreshRequest { get; set; }
 
+        public bool IsActivityLogPage { get; set; }
+
         #endregion
 
-        public DateFilterType DateFilterValue
+        public DateTime? FromDateFilterValue
         {
-            get { return (DateFilterType)Enum.Parse(typeof(DateFilterType), ddlPeriod.SelectedValue); }
-            set
-            {
-                ddlPeriod.SelectedValue =
-                    ((IConvertible)Enum.Parse(typeof(DateFilterType), value.ToString())).
-                        ToInt32(new NumberFormatInfo()).ToString();
-            }
+            get { return diYear.FromDate; }
+            set { diYear.FromDate = value; }
         }
+
+        public DateTime? ToDateFilterValue
+        {
+            get { return diYear.ToDate; }
+            set { diYear.ToDate = value; }
+        }
+
 
         private static string GetStringByValue(ActivityEventSource value)
         {
@@ -252,6 +248,32 @@ namespace PraticeManagement.Controls
             }
 
             InitXsltParams();
+
+            if (!IsPostBack)
+            {
+                ResetFilters();
+            }
+
+            if (IsActivityLogPage)
+            {
+                divActivitylog.Attributes["class"] = "buttons-block";
+                btnResetFilter.Visible = true;
+            }
+        }
+
+        private void ResetFilters()
+        {
+            diYear.FromDate = SettingsHelper.GetCurrentPMTime().AddYears(-1);
+            diYear.ToDate = SettingsHelper.GetCurrentPMTime();
+
+            if (IsActivityLogPage)
+            {
+                hdnResetFilter.Value = "false";
+                ddlEventSource.SelectedIndex = ddlPersonName.SelectedIndex = ddlProjects.SelectedIndex = 0;
+                btnResetFilter.Enabled = false;
+                ddlEventSource.Attributes["onchange"] = ddlPersonName.Attributes["onchange"] = ddlProjects.Attributes["onchange"] = "EnableResetButton();";
+                diYear.OnClientChange = "EnableResetButtonForDateIntervalChange";
+            }
         }
 
         protected void Page_Prerender(object sender, EventArgs e)
@@ -299,6 +321,18 @@ namespace PraticeManagement.Controls
         protected void btnUpdateView_Click(object sender, EventArgs e)
         {
             UpdateGrid();
+
+            if (hdnResetFilter.Value == "true")
+                btnResetFilter.Enabled = true;
+            else
+                btnResetFilter.Enabled = false;
+
+        }
+
+        protected void btnResetFilter_Click(object sender, EventArgs e)
+        {
+            ResetFilters();
+            Update();
         }
 
         private void UpdateGrid()
@@ -361,7 +395,8 @@ namespace PraticeManagement.Controls
 
         protected void odsActivities_Selecting(object sender, ObjectDataSourceSelectingEventArgs e)
         {
-            e.InputParameters["periodFilter"] = ddlPeriod.SelectedValue;
+            e.InputParameters["startDateFilter"] = diYear.FromDate.HasValue ? diYear.FromDate : SettingsHelper.GetCurrentPMTime().AddYears(-1);
+            e.InputParameters["endDateFilter"] = diYear.ToDate.HasValue ? diYear.ToDate : SettingsHelper.GetCurrentPMTime();
             e.InputParameters["sourceFilter"] = ddlEventSource.SelectedValue;
             e.InputParameters["opportunityId"] = (this.OpportunityId == null ? null : this.OpportunityId.ToString());
             e.InputParameters["milestoneId"] = (this.MilestoneId == null ? null : this.MilestoneId.ToString());
