@@ -135,7 +135,7 @@
                                     </HeaderTemplate>
                                     <ItemStyle Width="125px" HorizontalAlign="Center" />
                                     <ItemTemplate>
-                                        <asp:Label ID="lblStartDate" runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToShortDateString() %>'></asp:Label>
+                                        <asp:Label ID="lblStartDate" runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>'></asp:Label>
                                     </ItemTemplate>
                                     <EditItemTemplate>
                                         <uc2:DatePicker ID="dpPersonStart" runat="server" ValidationGroup="MilestonePersonEntry"
@@ -155,7 +155,7 @@
                                     </HeaderTemplate>
                                     <ItemStyle Width="120px" HorizontalAlign="Center" />
                                     <ItemTemplate>
-                                        <asp:Label ID="lblEndDate" runat="server" Text='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value.ToShortDateString() : string.Empty %>'></asp:Label>
+                                        <asp:Label ID="lblEndDate" runat="server" Text='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value.ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label>
                                     </ItemTemplate>
                                     <EditItemTemplate>
                                         <uc2:DatePicker ID="dpPersonEnd" runat="server" ValidationGroup="MilestonePersonEntry"
