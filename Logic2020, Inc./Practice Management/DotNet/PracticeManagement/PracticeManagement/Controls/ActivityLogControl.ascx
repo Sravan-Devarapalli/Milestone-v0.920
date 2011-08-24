@@ -51,34 +51,34 @@
             <tr>
                 <td>
                     <div id="divActivitylog" style="padding: 10px;" runat="server">
-                        <table style="white-space: nowrap;" class="CompPerfTable WholeWidth">
+                        <table id="tblActivitylog" runat="server" style="white-space: nowrap;" >
                             <tr>
-                                <td style="width: 19%;">
-                                    <asp:Label ID="lblDisplay" Width="20%" runat="server" Text="Show"></asp:Label>
-                                    <asp:DropDownList Width="80%" ID="ddlEventSource" runat="server" EnableViewState="true">
+                                <td id="tdEventSource" runat="server">
+                                    <asp:Label ID="lblDisplay" runat="server" Text="Show"></asp:Label>
+                                    <asp:DropDownList ID="ddlEventSource" runat="server" EnableViewState="true">
                                     </asp:DropDownList>
                                 </td>
-                                <td style="width: 27%; padding-left: 4px;">
+                                <td id="tdYear" runat="server" style="padding-left: 4px;">
                                     <uc:DateInterval ID="diYear" IsFromDateRequired="true" IsToDateRequired="true" runat="server"
                                         FromToDateFieldWidth="65" />
                                 </td>
-                                <td id="spnPersons" runat="server" style="width: 19%;">
-                                    <asp:Label ID="Label1" Width="18%" runat="server" Text="user"></asp:Label><asp:DropDownList
-                                        ID="ddlPersonName" Width="82%" runat="server" DataSourceID="odsPersons" DataTextField="PersonLastFirstName"
+                                <td id="spnPersons" runat="server">
+                                    <asp:Label ID="Label1" runat="server"  Text="user "></asp:Label><asp:DropDownList ID="ddlPersonName"
+                                        runat="server" DataSourceID="odsPersons" DataTextField="PersonLastFirstName"
                                         DataValueField="Id" OnDataBound="ddlPersonName_OnDataBound" />
                                 </td>
-                                <td id="spnProjects" runat="server" style="width: 20%;padding-left:4px;">
-                                    <asp:Label ID="Label2" Width="10%" runat="server" Text="for"></asp:Label><asp:DropDownList
-                                        ID="ddlProjects" runat="server" DataSourceID="odsProjects" Width="90%" DataTextField="Name"
-                                        DataValueField="Id" OnDataBound="ddlProjects_OnDataBound" />
+                                <td id="spnProjects" runat="server" style="padding-left: 4px;">
+                                    <asp:Label ID="Label2" runat="server" Text="for "></asp:Label><asp:DropDownList ID="ddlProjects"
+                                        runat="server" DataSourceID="odsProjects" DataTextField="Name" DataValueField="Id"
+                                        OnDataBound="ddlProjects_OnDataBound" />
                                 </td>
-                                <td style="width: 15%;" align="right">
+                                <td id="tdBtnList" runat="server">
                                     <table>
                                         <tr>
                                             <td>
                                                 <asp:Button ID="btnUpdateView" runat="server" Text="Update" ToolTip="Update" OnClick="btnUpdateView_Click" />
                                             </td>
-                                            <td style="padding-left:4px;">
+                                            <td style="padding-left: 4px;">
                                                 <asp:Button ID="btnResetFilter" runat="server" Text="Reset" ToolTip="Reset" OnClick="btnResetFilter_Click"
                                                     Visible="false" />
                                             </td>
