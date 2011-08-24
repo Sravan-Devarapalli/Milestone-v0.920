@@ -1,58 +1,78 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ActivityLogControl.ascx.cs"
     Inherits="PraticeManagement.Controls.ActivityLogControl" %>
-<%@ Register src="~/Controls/Generic/LoadingProgress.ascx" tagname="LoadingProgress" tagprefix="uc" %>
-<style>    
-        .WordWrap
-        {
-            word-wrap: break word !important; /* Internet Explorer 5.5+ */
-            word-break: break-all !important;
-            white-space: -moz-pre-wrap !important; /*Mozilla */
-            white-space: normal;
-        }
+<%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
+    TagPrefix="uc" %>
+<%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
+    TagName="DateInterval" %>
+<style>
+    .WordWrap
+    {
+        word-wrap: break word !important; /* Internet Explorer 5.5+ */
+        word-break: break-all !important;
+        white-space: -moz-pre-wrap !important; /*Mozilla */
+        white-space: normal;
+    }
 </style>
+<script type="text/javascript" language="javascript">
+
+    function EnableResetButtonForDateIntervalChange(sender, args) {
+        var btnreset = document.getElementById('<%= btnResetFilter.ClientID %>');
+        var hdnResetFilter = document.getElementById('<%= hdnResetFilter.ClientID %>');
+        if (btnreset != null && btnreset != "undefined") {
+            hdnResetFilter.value = 'true';
+            btnreset.disabled = '';
+        }
+    }
+
+    function EnableResetButton() {
+        var btnreset = document.getElementById('<%= btnResetFilter.ClientID %>');
+        var hdnResetFilter = document.getElementById('<%= hdnResetFilter.ClientID %>');
+        if (btnreset != null && btnreset != "undefined") {
+            btnreset.disabled = '';
+            hdnResetFilter.value = 'true';
+        }
+    }
+
+</script>
 <uc:LoadingProgress ID="lpActivityLog" runat="server" />
 <asp:UpdatePanel ID="updActivityLog" runat="server" UpdateMode="Conditional">
     <ContentTemplate>
         <table cellpadding="5" class="WholeWidth">
             <tr>
                 <td>
-                    <table>
-                        <tr>
-                            <td>
-                                <asp:Label ID="lblDisplay" runat="server" Text="Display"></asp:Label>
-                                <asp:DropDownList ID="ddlEventSource" runat="server" Width="150" EnableViewState="true">
-                                </asp:DropDownList>
-                            </td>
-                            <td>
-                                &nbsp;over period&nbsp;
-                                <asp:DropDownList ID="ddlPeriod" runat="server" Width="100">
-                                    <asp:ListItem Text="Day" Value="1"></asp:ListItem>
-                                    <asp:ListItem Text="Week" Value="2"></asp:ListItem>
-                                    <asp:ListItem Text="Month" Value="3"></asp:ListItem>
-                                    <asp:ListItem Text="Year" Value="4" Selected="True"></asp:ListItem>
-                                    <asp:ListItem Text="Unrestricted" Value="5"></asp:ListItem>
-                                </asp:DropDownList>
-                            </td>
-                            <td>
-                                <span id="spnPersons" runat="server">&nbsp;user&nbsp;
-                                <asp:DropDownList ID="ddlPersonName" runat="server" Width="150"
-                                    DataSourceID="odsPersons" DataTextField="PersonLastFirstName" DataValueField="Id"
-                                    OnDataBound="ddlPersonName_OnDataBound"/>
-                                </span>
-                            </td>
-                            <td>
-                                <span id="spnProjects" runat="server">&nbsp;for&nbsp;
-                                    <asp:DropDownList ID="ddlProjects" runat="server" Width="200"
-                                        DataSourceID="odsProjects" DataTextField="Name" DataValueField="Id"
-                                        OnDataBound="ddlProjects_OnDataBound"
-                                     /></span>
-                            </td>
-                            <td align="right">
-                                &nbsp;<asp:Button ID="btnUpdateView" runat="server" Text="Update View" OnClick="btnUpdateView_Click"
-                                    Width="100px" CssClass="pm-button" />
-                            </td>
-                        </tr>
-                    </table>
+                    <div id="divActivitylog" runat="server">
+                        <table>
+                            <tr>
+                                <td>
+                                    <asp:Label ID="lblDisplay" runat="server" Text="Show"></asp:Label>
+                                    <asp:DropDownList ID="ddlEventSource" runat="server" Width="150" EnableViewState="true">
+                                    </asp:DropDownList>
+                                </td>
+                                <td>
+                                    <uc:DateInterval ID="diYear" runat="server" FromToDateFieldWidth="70" />
+                                </td>
+                                <td>
+                                    <span id="spnPersons" runat="server">&nbsp;user&nbsp;
+                                        <asp:DropDownList ID="ddlPersonName" runat="server" Width="150" DataSourceID="odsPersons"
+                                            DataTextField="PersonLastFirstName" DataValueField="Id" OnDataBound="ddlPersonName_OnDataBound" />
+                                    </span>
+                                </td>
+                                <td>
+                                    <span id="spnProjects" runat="server">&nbsp;for&nbsp;
+                                        <asp:DropDownList ID="ddlProjects" runat="server" Width="200" DataSourceID="odsProjects"
+                                            DataTextField="Name" DataValueField="Id" OnDataBound="ddlProjects_OnDataBound" />
+                                    </span>
+                                </td>
+                                <td align="right">
+                                    <asp:HiddenField ID="hdnResetFilter" runat="server" />
+                                    &nbsp;<asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" OnClick="btnResetFilter_Click"
+                                        Visible="false" Width="100px" CssClass="pm-button" />
+                                    &nbsp;<asp:Button ID="btnUpdateView" runat="server" Text="Update View" OnClick="btnUpdateView_Click"
+                                        Width="100px" CssClass="pm-button" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </td>
             </tr>
             <tr>
@@ -66,30 +86,31 @@
                         DataSourceID="odsActivities" AllowPaging="True" PageSize="20" CssClass="CompPerfTable WholeWidth"
                         GridLines="None" BackColor="White" OnRowDataBound="gvActivities_OnRowDataBound">
                         <AlternatingRowStyle BackColor="#F9FAFF" />
-                        <PagerSettings Mode="NumericFirstLast"/>
-                        <PagerStyle CssClass="cssPager"/>
-                        <RowStyle CssClass="al-row"/>
+                        <PagerSettings Mode="NumericFirstLast" />
+                        <PagerStyle CssClass="cssPager" />
+                        <RowStyle CssClass="al-row" />
                         <Columns>
                             <asp:TemplateField>
                                 <ItemStyle Width="11%" />
                                 <HeaderTemplate>
-                                    <div class="ie-bg" style="padding-right:'2px';">
+                                    <div class="ie-bg" style="padding-right: '2px';">
                                         Modified / User</div>
                                 </HeaderTemplate>
                                 <ItemTemplate>
-                                    <asp:Label ID="lblCreateDate" runat="server" Text='<%# ((DateTime)Eval("LogDate")).ToShortDateString() + " " + ((DateTime)Eval("LogDate")).ToShortTimeString() %>' /> by 
-                                    <asp:Label ID="lblUserName" runat="server" Text='<%# GetModifiedByDetails( Eval("Person.Id"), Eval("Person.PersonLastFirstName"), Eval("SystemUser").ToString(), Eval("LogData")) %>'/>
+                                    <asp:Label ID="lblCreateDate" runat="server" Text='<%# ((DateTime)Eval("LogDate")).ToShortDateString() + " " + ((DateTime)Eval("LogDate")).ToShortTimeString() %>' />
+                                    by
+                                    <asp:Label ID="lblUserName" runat="server" Text='<%# GetModifiedByDetails( Eval("Person.Id"), Eval("Person.PersonLastFirstName"), Eval("SystemUser").ToString(), Eval("LogData")) %>' />
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField>
                                 <ItemStyle Width="12%" CssClass="WordWrap" Wrap="true" />
                                 <HeaderTemplate>
-                                    <div class="ie-bg" style="padding-right:'2px';">
+                                    <div class="ie-bg" style="padding-right: '2px';">
                                         Activity</div>
                                 </HeaderTemplate>
                                 <ItemTemplate>
                                     <asp:Label ID="lblActivityType" runat="server" Text='<%# NoNeedToShowActivityType(Eval("ActivityName")) %>'></asp:Label>
-                                    <asp:Xml ID="xmlActivityItem" runat="server" DocumentContent='<%# AddDefaultProjectAndMileStoneInfo(Eval("LogData")) %>' 
+                                    <asp:Xml ID="xmlActivityItem" runat="server" DocumentContent='<%# AddDefaultProjectAndMileStoneInfo(Eval("LogData")) %>'
                                         TransformSource="~/Reports/Xslt/ActivityLogItem.xslt"></asp:Xml>
                                 </ItemTemplate>
                             </asp:TemplateField>
@@ -106,8 +127,7 @@
                             </asp:TemplateField>
                         </Columns>
                     </asp:GridView>
-                    <asp:ObjectDataSource ID="odsProjects" runat="server" 
-                        SelectMethod="GetProjectListCustom" 
+                    <asp:ObjectDataSource ID="odsProjects" runat="server" SelectMethod="GetProjectListCustom"
                         TypeName="PraticeManagement.ProjectService.ProjectServiceClient">
                         <SelectParameters>
                             <asp:Parameter DefaultValue="true" Name="projected" Type="Boolean" />
@@ -116,18 +136,16 @@
                             <asp:Parameter DefaultValue="true" Name="experimantal" Type="Boolean" />
                         </SelectParameters>
                     </asp:ObjectDataSource>
-                    <asp:ObjectDataSource ID="odsPersons" runat="server" 
-                        SelectMethod="GetAllPersons" 
-                        TypeName="PraticeManagement.Controls.DataHelper">
-                    </asp:ObjectDataSource>
+                    <asp:ObjectDataSource ID="odsPersons" runat="server" SelectMethod="GetAllPersons"
+                        TypeName="PraticeManagement.Controls.DataHelper"></asp:ObjectDataSource>
                     <asp:ObjectDataSource ID="odsActivities" runat="server" TypeName="PraticeManagement.Utils.ActivityLogHelper"
                         SelectCountMethod="GetActivitiesCount" SelectMethod="GetActivities" StartRowIndexParameterName="startRow"
-                        MaximumRowsParameterName="maxRows" EnablePaging="true"
-                         OnSelecting="odsActivities_Selecting"> <%-- OnDataBinding="odsActivities_OnDataBinding" --%>
+                        MaximumRowsParameterName="maxRows" EnablePaging="true" OnSelecting="odsActivities_Selecting">
                         <SelectParameters>
-                            <asp:Parameter Name="periodFilter" />
+                            <asp:Parameter Name="startDateFilter" Type="DateTime" />
+                            <asp:Parameter Name="endDateFilter" Type="DateTime" />
                             <asp:Parameter Name="personId" />
-                            <asp:Parameter Name="sourceFilter"  />
+                            <asp:Parameter Name="sourceFilter" />
                             <asp:Parameter Name="projectId" />
                             <asp:Parameter Name="opportunityId" />
                             <asp:Parameter Name="milestoneId" />
@@ -139,7 +157,7 @@
     </ContentTemplate>
     <Triggers>
         <asp:AsyncPostBackTrigger ControlID="btnUpdateView" EventName="Click" />
+        <asp:AsyncPostBackTrigger ControlID="btnResetFilter" EventName="Click" />
     </Triggers>
 </asp:UpdatePanel>
-
 
