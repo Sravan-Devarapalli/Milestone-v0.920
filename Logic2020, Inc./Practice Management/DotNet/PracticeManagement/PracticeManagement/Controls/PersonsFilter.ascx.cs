@@ -88,6 +88,10 @@ namespace PraticeManagement.Controls
                 }
                 return this.cblPractices.SelectedItems;
             }
+            set
+            {
+                this.cblPractices.SelectedItems = value;
+            }
         }
 
         /// <summary>
@@ -102,6 +106,10 @@ namespace PraticeManagement.Controls
                     return null;
                 }
                 return this.cblTimeScales.SelectedItems;
+            }
+            set
+            {
+                this.cblTimeScales.SelectedItems = value;
             }
         }
 
@@ -141,7 +149,7 @@ namespace PraticeManagement.Controls
         private void FillPracticeList()
         {
             DataHelper.FillPracticeList(this.cblPractices, Resources.Controls.AllPracticesText);
-             SelectAllItems(this.cblPractices);
+            SelectAllItems(this.cblPractices);
         }
 
         private void FillPayTypeList()
