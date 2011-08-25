@@ -334,6 +334,7 @@ namespace PraticeManagement.Controls
                     SelectAll();
                 else
                 {
+                    UnSelectAll();
                     foreach (var itm in StringToLEnumerable(value))
                     {
                         var listItm = Items.FindByValue(itm);
@@ -462,6 +463,13 @@ namespace PraticeManagement.Controls
             if (Items.Count > 1)
                 foreach (ListItem item in Items)
                     item.Selected = true;
+        }
+
+        private void UnSelectAll()
+        {
+            if (Items.Count > 1)
+                foreach (ListItem item in Items)
+                    item.Selected = false;
         }
 
         /// <summary>
