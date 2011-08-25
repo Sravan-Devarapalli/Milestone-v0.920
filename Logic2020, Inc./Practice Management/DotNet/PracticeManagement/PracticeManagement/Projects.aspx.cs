@@ -1217,8 +1217,8 @@ namespace PraticeManagement
             return string.Format(ToolTipView,
                 Environment.NewLine,
                 HttpUtility.HtmlEncode(project.Name),
-                project.StartDate,
-                project.EndDate,
+                project.StartDate.HasValue ? project.StartDate.Value.ToString("MM/dd/yyyy") : string.Empty,
+                 project.EndDate.HasValue ? project.EndDate.Value.ToString("MM/dd/yyyy") : string.Empty,
                 persons,
                 HttpUtility.HtmlEncode(project.BuyerName));
         }
