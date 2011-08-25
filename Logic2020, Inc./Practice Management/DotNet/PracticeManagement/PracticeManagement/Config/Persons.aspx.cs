@@ -12,7 +12,8 @@ using PraticeManagement.Utils;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Drawing;
-
+using PraticeManagement.FilterObjects;
+using System.Reflection;
 namespace PraticeManagement.Config
 {
     public partial class Persons : PracticeManagementPageBase
@@ -95,6 +96,13 @@ namespace PraticeManagement.Config
                 }
 
             }
+            set
+            {
+                if (value != null)
+                {
+                    hdnAlphabet.Value = value.ToString();
+                }
+            }
         }
 
         private string previousLetter
@@ -158,10 +166,9 @@ namespace PraticeManagement.Config
         protected void Page_Load(object sender, EventArgs e)
         {
             Display();
-
+            AddAlphabetButtons();
             if (!IsPostBack)
             {
-                CurrentIndex = 0;
 
                 bool userIsAdministrator =
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
@@ -170,10 +177,6 @@ namespace PraticeManagement.Config
 
                 // Recruiters should see a complete list their recruits
                 //practiceFilter.ActiveOnly = userIsAdministrator || userIsHR; //#2817: userIsHR is added as per  requirement.
-
-
-                personsFilter.Active = true;   //Always active on load
-                //personsFilter.Projected = personsFilter.Terminated = personsFilter.Inactive = !(userIsAdministrator || userIsHR);
 
                 DataHelper.FillRecruiterList(
                     cblRecruiters,
@@ -196,14 +199,52 @@ namespace PraticeManagement.Config
                     btnExportToExcel.Visible = false;
                 }
 
-                SelectAllItems(this.cblRecruiters);
-                previousLetter = lnkbtnAll.ID;
+                var cookie = SerializationHelper.DeserializeCookie(Constants.FilterKeys.PersonFilterCookie) as PersonFilter;
+                if (Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true" && cookie != null)
+                {
+                    CurrentIndex = cookie.CurrentIndex;
+                    personsFilter.Active = cookie.ShowActive;
+                    personsFilter.Inactive = cookie.ShowInactive;
+                    personsFilter.Projected = cookie.ShowProjected;
+                    personsFilter.Terminated = cookie.ShowTerminated;
+                    personsFilter.PracticeIds = cookie.SelectedPracticeIds;
+                    personsFilter.PayTypeIds = cookie.SelectedPayTypeIds;
+                    cblRecruiters.SelectedItems = cookie.SelectedRecruiterIds;
+                    ddlView.SelectedIndex = cookie.SelectedPageSizeIndex;
+                    Alphabet = cookie.Alphabet;
+                    txtSearch.Text = cookie.SearchText;
+                    gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
+                    gvPersons.Sort(cookie.SortBy, cookie.SortOrder);
+                    SetFilterValues();
+                    if (cookie.Alphabet.HasValue)
+                    {
+                        LinkButton topButton = (LinkButton)trAlphabeticalPaging.FindControl("lnkbtn" + cookie.Alphabet.Value);
+                        LinkButton bottomButton = (LinkButton)trAlphabeticalPaging1.FindControl("lnkbtn1" + cookie.Alphabet.Value);
+                        topButton.Font.Bold = bottomButton.Font.Bold = true;
 
-                gvPersons.Sort("LastName", SortDirection.Ascending);
-                SetFilterValues();
+                        lnkbtnAll.Font.Bold = lnkbtnAll1.Font.Bold = false;
+                        hdnAlphabet.Value = topButton.Text != "All" ? topButton.Text : null;
+                        previousLetter = topButton.ID;
+                    }
+                    else if (cookie.DisplaySearchResuts)
+                    {
+                        SearchPersons();
+                        SaveFilterSettings();
+                    }
+                }
+                else
+                {
+                    CurrentIndex = 0;
+                    personsFilter.Active = true;   //Always active on load
+                    SelectAllItems(this.cblRecruiters);
+                    previousLetter = lnkbtnAll.ID;
+                    gvPersons.Sort("LastName", SortDirection.Ascending);
+                    SetFilterValues();
+                }
+
+
             }
 
-            AddAlphabetButtons();
 
             gvPersons.EmptyDataText = "No results found.";
 
@@ -235,11 +276,12 @@ namespace PraticeManagement.Config
         protected void personsFilter_FilterChanged(object sebder, EventArgs e)
         {
             Display();
-        }            
+        }
 
         protected void btnSearchAll_OnClick(object sender, EventArgs e)
         {
             SearchPersons();
+            SaveFilterSettings();
         }
 
         private void SearchPersons()
@@ -261,8 +303,8 @@ namespace PraticeManagement.Config
             btnClearResults.Enabled = true;
             if (gvPersons.Rows.Count == 0)
             {
-                string txt =txtSearch.Text;
-                txt= "<b>"+txt +"</b>";
+                string txt = txtSearch.Text;
+                txt = "<b>" + txt + "</b>";
                 gvPersons.EmptyDataText = string.Format("No results found for {0}", txt);
             }
 
@@ -313,7 +355,7 @@ namespace PraticeManagement.Config
                 SetFilterValues();
                 hdnCleartoDefaultView.Value = "false";
             }
-
+            SaveFilterSettings();
             gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
             gvPersons.DataBind();
         }
@@ -325,8 +367,39 @@ namespace PraticeManagement.Config
             txtSearch.Text = string.Empty;
             CurrentIndex = 0;
             SetFilterValues();
+            SaveFilterSettings();
             gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
             gvPersons.DataBind();
+        }
+
+        private void SaveFilterSettings()
+        {
+            PersonFilter filter = GetFilterSettings();
+            SerializationHelper.SerializeCookie(filter, Constants.FilterKeys.PersonFilterCookie);
+
+        }
+
+        private PersonFilter GetFilterSettings()
+        {
+            var filter = new PersonFilter
+            {
+                SearchText = txtSearch.Text,
+                SelectedPageSizeIndex = ddlView.SelectedIndex,
+                SelectedPayTypeIds = personsFilter.PayTypeIds,
+                SelectedPracticeIds = personsFilter.PracticeIds,
+                SelectedRecruiterIds = cblRecruiters.Items[0].Selected ? null : cblRecruiters.SelectedItems,
+                ShowActive = personsFilter.Active,
+                ShowInactive = personsFilter.Inactive,
+                ShowProjected = personsFilter.Projected,
+                ShowTerminated = personsFilter.Terminated,
+                Alphabet = Alphabet,
+                CurrentIndex = CurrentIndex,
+                SortOrder = GridViewSortDirection == "Ascending" ? SortDirection.Ascending : SortDirection.Descending,
+                SortBy = PrevGridViewSortExpression,
+                DisplaySearchResuts = hdnCleartoDefaultView.Value == "true"
+
+            };
+            return filter;
         }
 
         protected void ResetFilter_Clicked(object sender, EventArgs e)
@@ -339,12 +412,14 @@ namespace PraticeManagement.Config
             gvPersons.Sort("LastName", SortDirection.Ascending);
             gvPersons.PageIndex = 0;
             CurrentIndex = 0;
+            SaveFilterSettings();
         }
 
         protected void DdlView_SelectedIndexChanged(object sender, EventArgs e)
         {
             gvPersons.PageSize = GetPageSize(((DropDownList)sender).SelectedValue);
             gvPersons.DataBind();
+            SaveFilterSettings();
         }
 
         protected void Previous_Clicked(object sender, EventArgs e)
@@ -353,6 +428,7 @@ namespace PraticeManagement.Config
             {
                 CurrentIndex = (int)CurrentIndex - 1;
             }
+            SaveFilterSettings();
             gvPersons.DataBind();
         }
 
@@ -362,6 +438,7 @@ namespace PraticeManagement.Config
             {
                 CurrentIndex = (int)CurrentIndex + 1;
             }
+            SaveFilterSettings();
             gvPersons.DataBind();
         }
 
@@ -403,7 +480,7 @@ namespace PraticeManagement.Config
             {
                 GridViewSortDirection = GetSortDirection();
             }
-
+            SaveFilterSettings();
             //GridViewSortColumnId = GetSortColumnId(e.SortExpression);
         }
 
@@ -456,7 +533,7 @@ namespace PraticeManagement.Config
 
             if (ddlView.SelectedValue == "-1")
             {
-                lnkbtnPrevious.Enabled = lnkbtnPrevious1.Enabled = lnkbtnNext.Enabled = lnkbtnNext1.Enabled =false;                
+                lnkbtnPrevious.Enabled = lnkbtnPrevious1.Enabled = lnkbtnNext.Enabled = lnkbtnNext1.Enabled = false;
             }
             else
             {
@@ -751,7 +828,8 @@ namespace PraticeManagement.Config
 
         protected string GetPersonDetailsUrlWithReturn(object id)
         {
-            return PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(GetPersonDetailsUrl(id), Request.Url.AbsoluteUri);
+            return PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(GetPersonDetailsUrl(id),
+                Request.Url.AbsoluteUri + (Request.Url.Query.Length > 0 ? string.Empty : Constants.FilterKeys.QueryStringOfApplyFilterFromCookie));
         }
 
         private string GetSortDirection()
@@ -811,8 +889,8 @@ namespace PraticeManagement.Config
             //Reset to All button.
             if (previousLetter != null)
             {
-                LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLetter);                
-                                
+                LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLetter);
+
                 LinkButton prevtopButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLinkButton.Attributes["Top"]);
                 LinkButton prevbottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(previousLinkButton.Attributes["Bottom"]);
 
