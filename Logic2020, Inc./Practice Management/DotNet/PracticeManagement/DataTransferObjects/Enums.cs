@@ -54,5 +54,16 @@ namespace DataTransferObjects
         [EnumMember]
         Person = 2,
     }
+
+    [DataContract]
+    public enum BenchReportSortExpression
+    {
+        [EnumMember]
+        ConsultantName = 1,
+        [EnumMember]
+        Practice = 2,
+        [EnumMember]
+        Status = 3
+    }
 }
 
