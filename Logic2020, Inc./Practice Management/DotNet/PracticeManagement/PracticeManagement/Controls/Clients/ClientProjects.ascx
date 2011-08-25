@@ -23,12 +23,12 @@
         </asp:TemplateField>
         <asp:TemplateField HeaderText="<div class='ie-bg' >Start Date</div>" SortExpression="StartDate">
             <ItemTemplate>
-                <asp:Label ID="lblStartDate" runat="server" Text='<%# Eval("StartDate") != null ? ((DateTime)Eval("StartDate")).ToString("d") : string.Empty %>' />
+                <asp:Label ID="lblStartDate" runat="server" Text='<%# Eval("StartDate") != null ? ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") : string.Empty %>' />
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderText="<div class='ie-bg' >End Date</div>" SortExpression="EndDate">
             <ItemTemplate>
-                <asp:Label ID="lblEndDate" runat="server" Text='<%# Eval("EndDate") != null ? ((DateTime)Eval("EndDate")).ToString("d") : string.Empty %>' />
+                <asp:Label ID="lblEndDate" runat="server" Text='<%# Eval("EndDate") != null ? ((DateTime)Eval("EndDate")).ToString("MM/dd/yyyy") : string.Empty %>' />
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderText="<div class='ie-bg' >Practice Area</div>" SortExpression="PracticeName">
