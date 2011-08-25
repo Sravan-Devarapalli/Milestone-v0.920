@@ -601,7 +601,7 @@ namespace PraticeManagement.Controls.Reports
                 string.Format(
                     DateTime.MinValue != p.HireDate ? PERSON_TOOLTIP_FORMAT : NOT_HIRED_PERSON_TOOLTIP_FORMAT,
                      p.CurrentPay.TimescaleName, // Current Pay Type
-                    p.HireDate.ToShortDateString() // Hire date
+                    p.HireDate.ToString("MM/dd/yyyy") // Hire date
                 //,avg // Average U%
                     );
 
@@ -682,17 +682,17 @@ namespace PraticeManagement.Controls.Reports
 
             if (isTerminated)
             {
-                range.ToolTip = p.TerminationDate.Value.ToShortDateString();
+                range.ToolTip = p.TerminationDate.Value.ToString("MM/dd/yyyy");
 
                 if (!isHired)
                 {
-                    range.ToolTip = string.Format("Hired:{0}{1} Terminated:{2}", p.HireDate.ToShortDateString(), Environment.NewLine, p.TerminationDate.Value.ToShortDateString());
+                    range.ToolTip = string.Format("Hired:{0}{1} Terminated:{2}", p.HireDate.ToString("MM/dd/yyyy"), Environment.NewLine, p.TerminationDate.Value.ToString("MM/dd/yyyy"));
                 }
 
             }
             else if (!isHired)
             {
-                range.ToolTip = p.HireDate.ToShortDateString();
+                range.ToolTip = p.HireDate.ToString("MM/dd/yyyy");
             }
             else
             {
