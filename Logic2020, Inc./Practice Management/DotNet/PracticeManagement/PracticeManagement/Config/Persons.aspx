@@ -99,7 +99,7 @@
                                     </td>
                                     <td align="right" style="width: 12%; text-align: right">
                                         <asp:ShadowedHyperlink runat="server" Text="Add Person" ID="lnkAddPerson" CssClass="add-btn"
-                                            NavigateUrl="~/PersonDetail.aspx?returnTo=Config/Persons.aspx" />
+                                            NavigateUrl="~/PersonDetail.aspx?returnTo=Config/Persons.aspx?ApplyFilterFromCookie=true" />
                                     </td>
                                 </tr>
                             </table>
