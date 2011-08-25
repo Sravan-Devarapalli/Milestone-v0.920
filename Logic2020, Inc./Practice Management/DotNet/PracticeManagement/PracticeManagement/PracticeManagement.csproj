@@ -750,6 +750,9 @@
     <Compile Include="Controls\Milestones\MilestonePersonBar.ascx.designer.cs">
       <DependentUpon>MilestonePersonBar.ascx</DependentUpon>
     </Compile>
+    <Compile Include="FilterObjects\ActivityLogFilter.cs" />
+    <Compile Include="FilterObjects\BenchReportFilter.cs" />
+    <Compile Include="FilterObjects\PersonFilter.cs" />
     <Compile Include="LoggedOut.aspx.cs">
       <DependentUpon>LoggedOut.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2817,7 +2820,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="FilterObjects\" />
     <Folder Include="MemberPages\" />
   </ItemGroup>
   <ItemGroup>
