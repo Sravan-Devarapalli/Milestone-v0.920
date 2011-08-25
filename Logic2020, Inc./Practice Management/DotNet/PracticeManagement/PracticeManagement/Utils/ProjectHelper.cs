@@ -13,7 +13,7 @@ namespace PraticeManagement.Utils
                     {ProjectStatusType.Completed, "CompletedProject"},
                     {ProjectStatusType.Active, "pr-indicator"},
                     {ProjectStatusType.Internal, "pr-internal"},
-                    {ProjectStatusType.Inactive, "ProjectedProject"}
+                    {ProjectStatusType.Inactive, "InactiveProject"}
                 };
 
         public static string GetIndicatorClassByStatusId(int statusId)
