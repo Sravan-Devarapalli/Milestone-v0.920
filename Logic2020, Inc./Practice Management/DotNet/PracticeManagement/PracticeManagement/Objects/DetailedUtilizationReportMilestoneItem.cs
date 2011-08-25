@@ -87,9 +87,9 @@ namespace PraticeManagement.Objects
                     Entry.ParentMilestone.Project.Name,
                     Entry.ParentMilestone.Project.ProjectNumber,
                     Entry.ParentMilestone.Description,
-                    Entry.StartDate.ToShortDateString(),
+                    Entry.StartDate.ToString("MM/dd/yyyy"),
                     Entry.EndDate.HasValue
-                        ? Entry.EndDate.Value.ToShortDateString()
+                        ? Entry.EndDate.Value.ToString("MM/dd/yyyy")
                         : NotEndDate,
                     Entry.ParentMilestone.Project.ProjectManager.Name);
             }
