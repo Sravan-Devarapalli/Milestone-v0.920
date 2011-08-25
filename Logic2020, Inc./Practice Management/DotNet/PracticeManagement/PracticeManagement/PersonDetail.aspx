@@ -743,10 +743,10 @@
                                                         <asp:TemplateField HeaderText="Start  Date">
                                                             <ItemTemplate>
                                                                 <asp:LinkButton ID="btnRecruitingCommissionStartDate" runat="server" CausesValidation="false"
-                                                                    OnClientClick="if (!confirmSaveDirty()) return false;" Text='<%# ((DateTime)Eval("StartDate")).ToShortDateString() %>'
+                                                                    OnClientClick="if (!confirmSaveDirty()) return false;" Text='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>'
                                                                     CommandArgument='<%# Eval("CommissionHeaderId") %>' OnCommand="btnRecruitingCommissionStartDate_Command"
                                                                     Visible='<%# UserIsAdministrator %>'></asp:LinkButton><asp:Label ID="lblRecruitingCommissionStartDate"
-                                                                        runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToShortDateString() %>'
+                                                                        runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>'
                                                                         Visible='<%# !UserIsAdministrator %>'></asp:Label>
                                                             </ItemTemplate>
                                                             <HeaderTemplate>
@@ -760,7 +760,7 @@
                                                                     End Date</div>
                                                             </HeaderTemplate>
                                                             <ItemTemplate>
-                                                                <asp:Label ID="lblEndDate" runat="server" Text='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value.AddDays(-1).ToShortDateString() : string.Empty %>' />
+                                                                <asp:Label ID="lblEndDate" runat="server" Text='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value.AddDays(-1).ToString("MM/dd/yyyy") : string.Empty %>' />
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="Commissions">
