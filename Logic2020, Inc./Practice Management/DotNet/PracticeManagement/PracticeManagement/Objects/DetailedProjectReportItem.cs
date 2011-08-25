@@ -119,7 +119,7 @@ namespace PraticeManagement.Objects
 
         private static string GetRedirectUrl(int argProjectId, string targetUrl)
         {
-            return  string.Format(Constants.ApplicationPages.DetailRedirectWithReturnFormat,
+            return string.Format(Constants.ApplicationPages.DetailRedirectWithReturnFormat,
                                  targetUrl,
                                  argProjectId,
                                  Constants.ApplicationPages.Projects);
@@ -148,19 +148,19 @@ namespace PraticeManagement.Objects
             }
             for (int i = 0; i < personList.Count; i++)
             {
-               
-                    persons.AppendFormat(AppendPersonFormat,
-                                         "<br />",
-                                         HttpUtility.HtmlEncode(personList[i].Person.FirstName),
-                                         HttpUtility.HtmlEncode(personList[i].Person.LastName));
+
+                persons.AppendFormat(AppendPersonFormat,
+                                     "<br />",
+                                     HttpUtility.HtmlEncode(personList[i].Person.FirstName),
+                                     HttpUtility.HtmlEncode(personList[i].Person.LastName));
             }
 
             return string.Format(ToolTipView,
                 "<br />",
                 HttpUtility.HtmlEncode(project.Client.Name),
                 HttpUtility.HtmlEncode(project.Name),
-                project.StartDate,
-                project.EndDate,
+                project.StartDate.HasValue ? project.StartDate.Value.ToString("MM/dd/yyyy") : string.Empty,
+                project.EndDate.HasValue ? project.EndDate.Value.ToString("MM/dd/yyyy") : string.Empty,
                 HttpUtility.HtmlEncode(string.Format(ProjectOwnerFormat, project.ProjectManager.LastName, project.ProjectManager.FirstName)),
                 persons
                 );
