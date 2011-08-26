@@ -4,6 +4,7 @@ using System.Web.UI.WebControls;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
 using System.Linq;
+using PraticeManagement.FilterObjects;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -16,7 +17,8 @@ namespace PraticeManagement.Controls.Reports
         private const string Ascending = "Ascending";
         private const string ReportContextKey = "ReportContext";
         private const string BenchListKey = "BenchList";
-
+        private const string ViewStatePreviousSortExpression = "PreviousSortExpression";
+        private const string ViewStatePreviousSortOrder = "PreviousSortOrder";
 
         private BenchReportContext ReportContext
         {
@@ -63,24 +65,75 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
+        private BenchReportSortExpression SortExpression
+        {
+            get
+            {
+                return (BenchReportSortExpression)ViewState[ViewStatePreviousSortExpression];
+            }
+            set
+            {
+                ViewState[ViewStatePreviousSortExpression] = value;
+            }
+        }
+
+        private SortDirection SortOrder
+        {
+            get
+            {
+                return ViewState[ViewStatePreviousSortOrder] == null ? SortDirection.Ascending : (SortDirection)ViewState[ViewStatePreviousSortOrder];
+            }
+            set
+            {
+                ViewState[ViewStatePreviousSortOrder] = value;
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
                 DataHelper.FillPracticeList(this.cblPractices, Resources.Controls.AllPracticesText);
-                SelectAllItems(this.cblPractices);
-            }
+                var cookie = SerializationHelper.DeserializeCookie(Constants.FilterKeys.BenchReportFilterCookie);
+                if (Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true" && cookie != null)
+                {
+                    SetFilters(cookie);
+                    DatabindGrid(false);
+                }
+                else
+                {
+                    SelectAllItems(this.cblPractices);
+                    DatabindGrid(true);
+                }
 
-            AddAttributesToCheckBoxes(this.cblPractices);
+                AddAttributesToCheckBoxes(this.cblPractices);
 
-            if (hdnFiltersChanged.Value == "false")
-            {
-                btnResetFilter.Attributes.Add("disabled", "true");
+                if (hdnFiltersChanged.Value == "false")
+                {
+                    btnResetFilter.Attributes.Add("disabled", "true");
+                }
+                else
+                {
+                    btnResetFilter.Attributes.Remove("disabled");
+                }
             }
-            else
-            {
-                btnResetFilter.Attributes.Remove("disabled");
-            }
+        }
+
+        private void SetFilters(object cookie)
+        {
+            var filter = cookie as BenchReportFilter;
+
+            mpStartDate.SelectedYear = filter.Start.Year;
+            mpStartDate.SelectedMonth = filter.Start.Month;
+            mpEndDate.SelectedYear = filter.End.Year;
+            mpEndDate.SelectedMonth = filter.End.Month;
+            cblPractices.SelectedItems = filter.PracticeIds;
+            cbActivePersons.Checked = (bool)filter.ActivePersons;
+            cbProjectedPersons.Checked = (bool)filter.ProjectedPersons;
+            hdnFiltersChanged.Value = filter.FiltersChanged.ToString();
+
+            SortOrder = filter.SortOrder;
+            SortExpression = filter.SortExpression;
         }
 
         protected void btnExportToExcel_Click(object sender, EventArgs e)
@@ -108,12 +161,19 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
-        private void DatabindGrid()
+        private void DatabindGrid(bool defaultSortOrder)
         {
             var benchList = BenchList;
             AddMonthColumn(3, new DateTime(ReportContext.Start.Year, ReportContext.Start.Month, Constants.Dates.FirstDay), GetPeriodLength());
 
-            gvBench.DataSource = benchList.OrderBy(P => P.Name);
+            if (defaultSortOrder)
+            {
+                gvBench.DataSource = BenchListWithSort(BenchReportSortExpression.ConsultantName, SortDirection.Ascending);
+            }
+            else
+            {
+                gvBench.DataSource = BenchListWithSort(SortExpression, SortOrder);
+            }
             gvBench.DataBind();
 
             if (gvBench.Rows.Count > 0)
@@ -126,6 +186,62 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
+        private IEnumerable<Project> BenchListWithSort(BenchReportSortExpression sortExpression, SortDirection sortDirection)
+        {
+            IEnumerable<Project> benchList = BenchList;
+            switch (sortExpression)
+            {
+                case BenchReportSortExpression.ConsultantName:
+                    if (sortDirection == SortDirection.Descending)
+                    {
+                        benchList = benchList.OrderByDescending(p => p.Name);
+                        gvBench.Attributes[ConsultantNameSortOrder] = Ascending;
+                    }
+                    else
+                    {
+                        benchList = benchList.OrderBy(p => p.Name);
+                        gvBench.Attributes[ConsultantNameSortOrder] = Descending;
+                    }
+                    gvBench.Attributes[PracticeSortOrder] = Ascending;
+                    gvBench.Attributes[StatusSortOrder] = Ascending;
+                    break;
+
+                case BenchReportSortExpression.Practice:
+                    if (sortDirection == SortDirection.Descending)
+                    {
+                        benchList = benchList.OrderByDescending(P => P.Practice == null ? string.Empty : P.Practice.Name);
+                        gvBench.Attributes[PracticeSortOrder] = Ascending;
+                    }
+                    else
+                    {
+                        benchList = benchList.OrderBy(P => P.Practice == null ? string.Empty : P.Practice.Name);
+                        gvBench.Attributes[PracticeSortOrder] = Descending;
+                    }
+                    gvBench.Attributes[ConsultantNameSortOrder] = Ascending;
+                    gvBench.Attributes[StatusSortOrder] = Ascending;
+                    break;
+
+                case BenchReportSortExpression.Status:
+                    if (sortDirection == SortDirection.Descending)
+                    {
+                        benchList = benchList.OrderByDescending(P => P.ProjectNumber);
+                        gvBench.Attributes[StatusSortOrder] = Ascending;
+                    }
+                    else
+                    {
+                        benchList = benchList.OrderBy(P => P.ProjectNumber);
+                        gvBench.Attributes[StatusSortOrder] = Descending;
+                    }
+                    gvBench.Attributes[ConsultantNameSortOrder] = Ascending;
+                    gvBench.Attributes[PracticeSortOrder] = Ascending;
+                    break;
+            }
+
+            SortExpression = sortExpression;
+            SortOrder = sortDirection;
+            return benchList;
+        }
+
         protected void btnUpdateReport_Click(object sender, EventArgs e)
         {
             Page.Validate(valSummaryPerformance.ValidationGroup);
@@ -133,14 +249,11 @@ namespace PraticeManagement.Controls.Reports
             {
                 ReportContext = null;
                 BenchList = null;
-                DatabindGrid();
-                gvBench.Attributes[ConsultantNameSortOrder] = Descending;
-                gvBench.Attributes[PracticeSortOrder] = Ascending;
-                gvBench.Attributes[StatusSortOrder] = Ascending;
+                DatabindGrid(true);
             }
         }
-
-        protected void btnResetFilter_OnClick(object sender, EventArgs e)
+	
+	protected void btnResetFilter_OnClick(object sender, EventArgs e)
         {
             mpStartDate.SelectedYear = DateTime.Today.Year;
             mpStartDate.SelectedMonth = DateTime.Today.Month;
@@ -167,16 +280,13 @@ namespace PraticeManagement.Controls.Reports
             var benchList = BenchList;
             if (string.IsNullOrEmpty(sortOrder) || sortOrder == Descending)
             {
-                benchList = benchList.OrderByDescending(P => P.Name);
-                gvBench.Attributes[ConsultantNameSortOrder] = Ascending;
+                benchList = BenchListWithSort(BenchReportSortExpression.ConsultantName, SortDirection.Descending);
             }
             else
             {
-                benchList = benchList.OrderBy(P => P.Name);
-                gvBench.Attributes[ConsultantNameSortOrder] = Descending;
+                benchList = BenchListWithSort(BenchReportSortExpression.ConsultantName, SortDirection.Ascending);
             }
-            gvBench.Attributes[PracticeSortOrder] = Ascending;
-            gvBench.Attributes[StatusSortOrder] = Ascending;
+
             AddMonthColumn(3, ReportContext.Start, GetPeriodLength());
             gvBench.DataSource = benchList;
             gvBench.DataBind();
@@ -189,16 +299,13 @@ namespace PraticeManagement.Controls.Reports
             var benchList = BenchList;
             if (string.IsNullOrEmpty(sortOrder) || sortOrder == Ascending)
             {
-                benchList = benchList.OrderBy(P => P.Practice == null ? string.Empty : P.Practice.Name);
-                gvBench.Attributes[PracticeSortOrder] = Descending;
+                benchList = BenchListWithSort(BenchReportSortExpression.Practice, SortDirection.Ascending);
             }
             else
             {
-                benchList = benchList.OrderByDescending(P => P.Practice == null ? string.Empty : P.Practice.Name);
-                gvBench.Attributes[PracticeSortOrder] = Ascending;
+                benchList = BenchListWithSort(BenchReportSortExpression.Practice, SortDirection.Descending);
             }
-            gvBench.Attributes[ConsultantNameSortOrder] = Ascending;
-            gvBench.Attributes[StatusSortOrder] = Ascending;
+
             AddMonthColumn(3, ReportContext.Start, GetPeriodLength());
             gvBench.DataSource = benchList;
             gvBench.DataBind();
@@ -207,23 +314,18 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnSortStatus_Click(object sender, EventArgs e)
         {
-
             var sortOrder = gvBench.Attributes[StatusSortOrder];
             var benchList = BenchList;
 
             if (string.IsNullOrEmpty(sortOrder) || sortOrder == Ascending)
             {
-                benchList = benchList.OrderBy(P => P.ProjectNumber);
-                gvBench.Attributes[StatusSortOrder] = Descending;
+                benchList = BenchListWithSort(BenchReportSortExpression.Status, SortDirection.Ascending);
             }
             else
             {
-
-                benchList = benchList.OrderByDescending(P => P.ProjectNumber);
-                gvBench.Attributes[StatusSortOrder] = Ascending;
+                benchList = BenchListWithSort(BenchReportSortExpression.Status, SortDirection.Descending);
             }
-            gvBench.Attributes[ConsultantNameSortOrder] = Ascending;
-            gvBench.Attributes[PracticeSortOrder] = Ascending;
+
             AddMonthColumn(3, ReportContext.Start, GetPeriodLength());
             gvBench.DataSource = benchList;
             gvBench.DataBind();
@@ -316,6 +418,35 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
+        protected void gvBench_OnDataBound(object sender, EventArgs e)
+        {
+            SaveFilterSettings();
+        }
+
+        protected void SaveFilterSettings()
+        {
+            var filter = GetFilterSettings();
+            SerializationHelper.SerializeCookie(filter, Constants.FilterKeys.BenchReportFilterCookie);
+        }
+
+        protected BenchReportFilter GetFilterSettings()
+        {
+            var filter = new BenchReportFilter
+            {
+                Start = mpStartDate.MonthBegin,
+                End = mpEndDate.MonthEnd,
+                ActivePersons = cbActivePersons.Checked,
+                ProjectedPersons = cbProjectedPersons.Checked,
+                UserName = DataHelper.CurrentPerson.Alias,
+                PracticeIds = cblPractices.Items[0].Selected ? null : cblPractices.SelectedItems,
+                SortExpression = SortExpression,
+                SortOrder = SortOrder,
+                FiltersChanged = btnResetFilter.Enabled
+            };
+
+            return filter;
+        }
+
         private static bool IsInMonth(DateTime date, DateTime periodStart, DateTime periodEnd)
         {
             bool result =
@@ -348,7 +479,7 @@ namespace PraticeManagement.Controls.Reports
 
         protected string GetPersonDetailsUrlWithReturn(object id)
         {
-            return Utils.Generic.GetTargetUrlWithReturn(GetPersonDetailsUrl(id), Request.Url.AbsoluteUri);
+            return Utils.Generic.GetTargetUrlWithReturn(GetPersonDetailsUrl(id), Request.Url.AbsoluteUri + (Request.Url.Query.Length > 0 ? string.Empty : Constants.FilterKeys.QueryStringOfApplyFilterFromCookie));
         }
 
         protected void custPeriod_ServerValidate(object sender, ServerValidateEventArgs args)
