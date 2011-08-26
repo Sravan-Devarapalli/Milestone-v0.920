@@ -11,6 +11,7 @@ using DataTransferObjects.ContextObjects;
 using System.Xml;
 using PraticeManagement.Configuration;
 using PraticeManagement.Utils;
+using PraticeManagement.FilterObjects;
 
 namespace PraticeManagement.Controls
 {
@@ -64,7 +65,7 @@ namespace PraticeManagement.Controls
 
         protected void InitXsltParams()
         {
-            _currentUrl = HttpUtility.UrlEncode(Request.Url.AbsoluteUri);
+            _currentUrl = HttpUtility.UrlEncode(Request.Url.AbsoluteUri) + (IsActivityLogPage ? (Request.Url.Query.Length > 0 ? string.Empty : Constants.FilterKeys.QueryStringOfApplyFilterFromCookie) : string.Empty);
 
             _argumentList = new XsltArgumentList();
             _argumentList.AddParam("currentUrl", string.Empty, _currentUrl);
@@ -225,6 +226,8 @@ namespace PraticeManagement.Controls
             set { diYear.ToDate = value; }
         }
 
+        public bool IsFiltersReadingFromCookie { get; set; }
+
 
         private static string GetStringByValue(ActivityEventSource value)
         {
@@ -235,16 +238,43 @@ namespace PraticeManagement.Controls
         {
             if (!IsPostBack || IsFreshRequest)
             {
+                if (IsActivityLogPage)
+                {
+                    var cookie = SerializationHelper.DeserializeCookie(Constants.FilterKeys.ActivityLogFilterCookie) as ActivityLogFilter;
+                    if (Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true" && cookie != null)
+                    {
+                        if (cookie.FiltersChanged)
+                        {
+                            IsFiltersReadingFromCookie = true;
+                            DisplayDropDownValue = (ActivityEventSource)Enum.Parse(typeof(ActivityEventSource), cookie.EventSourceSelected);
+                            FromDateFilterValue = cookie.FromDateFilterValue;
+                            ToDateFilterValue = cookie.ToDateFilterValue;
+                            if (!string.IsNullOrEmpty(cookie.ProjectSelected))
+                                ddlProjects.SelectedValue = cookie.ProjectSelected.Trim();
+                            if (!string.IsNullOrEmpty(cookie.PersonSelected))
+                                ddlPersonName.SelectedValue = cookie.PersonSelected.Trim();
+
+                            hdnResetFilter.Value = cookie.FiltersChanged.ToString();
+                            btnResetFilter.Enabled = cookie.FiltersChanged;
+                        }
+                        gvActivities.PageIndex = cookie.CurrentIndex;
+                    }
+                    spnProjects.Disabled = false;
+                }
+
                 FillEventList();
 
                 ddlProjects.DataBind();
                 ddlPersonName.DataBind();
 
-                var display = ShowDisplayDropDown;
-                ddlEventSource.Visible = display;
-                lblDisplay.Visible = display;
-                spnProjects.Visible = ShowProjectDropDown;
-                spnPersons.Visible = ShowPersonDropDown;
+                if (!IsActivityLogPage)
+                {
+                    var display = ShowDisplayDropDown;
+                    ddlEventSource.Visible = display;
+                    lblDisplay.Visible = display;
+                    spnProjects.Visible = ShowProjectDropDown;
+                    spnPersons.Visible = ShowPersonDropDown;
+                }
             }
 
             InitXsltParams();
@@ -253,6 +283,7 @@ namespace PraticeManagement.Controls
             {
                 ResetFilters();
             }
+
 
             if (IsActivityLogPage)
             {
@@ -282,14 +313,20 @@ namespace PraticeManagement.Controls
 
         private void ResetFilters()
         {
-            diYear.FromDate = SettingsHelper.GetCurrentPMTime().AddYears(-1);
-            diYear.ToDate = SettingsHelper.GetCurrentPMTime();
+            if (!IsFiltersReadingFromCookie)
+            {
+                diYear.FromDate = SettingsHelper.GetCurrentPMTime().AddYears(-1);
+                diYear.ToDate = SettingsHelper.GetCurrentPMTime();
+            }
 
             if (IsActivityLogPage)
             {
-                hdnResetFilter.Value = "false";
-                ddlEventSource.SelectedIndex = ddlPersonName.SelectedIndex = ddlProjects.SelectedIndex = 0;
-                btnResetFilter.Enabled = false;
+                if (!IsFiltersReadingFromCookie)
+                {
+                    ddlEventSource.SelectedIndex = ddlPersonName.SelectedIndex = ddlProjects.SelectedIndex = 0;
+                    hdnResetFilter.Value = "false";
+                    btnResetFilter.Enabled = false;
+                }
                 ddlEventSource.Attributes["onchange"] = ddlPersonName.Attributes["onchange"] = ddlProjects.Attributes["onchange"] = "EnableResetButton();";
                 diYear.OnClientChange = "EnableResetButtonForDateIntervalChange";
             }
@@ -302,6 +339,27 @@ namespace PraticeManagement.Controls
             {
                 Update();
             }
+        }
+
+        private void SaveFilterSettings()
+        {
+            ActivityLogFilter filter = GetFilterSettings();
+            SerializationHelper.SerializeCookie(filter, Constants.FilterKeys.ActivityLogFilterCookie);
+        }
+
+        private ActivityLogFilter GetFilterSettings()
+        {
+            var filter = new ActivityLogFilter
+            {
+                EventSourceSelected = ddlEventSource.SelectedValue,
+                FromDateFilterValue = FromDateFilterValue,
+                ToDateFilterValue = ToDateFilterValue,
+                PersonSelected = ddlPersonName.SelectedValue.Trim(),
+                ProjectSelected = ddlProjects.SelectedValue.Trim(),
+                CurrentIndex = gvActivities.PageIndex,
+                FiltersChanged = Convert.ToBoolean(hdnResetFilter.Value)
+            };
+            return filter;
         }
 
         private void FillEventList()
@@ -323,6 +381,7 @@ namespace PraticeManagement.Controls
             var entityId = Page.Request[Constants.QueryStringParameterNames.Id];
             if (!string.IsNullOrEmpty(entityId))
             {
+                entityId = entityId.Trim();
                 var selectedValue = ddlEventSource.SelectedValue;
 
                 if (selectedValue == GetStringByValue(ActivityEventSource.Project))
@@ -383,6 +442,14 @@ namespace PraticeManagement.Controls
                 tblcell.Text = "&nbsp;&nbsp; of " + gvActivities.PageCount + " Pages";
                 tblcell.Attributes.Add("colSpan", "2");
                 e.Row.Cells.AddAt(1, tblcell);
+            }
+        }
+
+        protected void gvActivities_OnDataBound(object sender, EventArgs e)
+        {
+            if (IsActivityLogPage)
+            {
+                SaveFilterSettings();
             }
         }
 
@@ -523,4 +590,3 @@ namespace PraticeManagement.Controls
         }
     }
 }
-
