@@ -149,7 +149,7 @@
         <div style="overflow: auto;">
             <asp:GridView ID="gvBench" runat="server" OnRowDataBound="gvBench_RowDataBound" AutoGenerateColumns="False"
                 EmptyDataText="No data found for such request." EnableViewState="true" CssClass="CompPerfTable"
-                GridLines="None" BackColor="White">
+                GridLines="None" BackColor="White" OnDataBound="gvBench_OnDataBound">
                 <AlternatingRowStyle BackColor="#F9FAFF" />
                 <Columns>
                     <asp:TemplateField>
