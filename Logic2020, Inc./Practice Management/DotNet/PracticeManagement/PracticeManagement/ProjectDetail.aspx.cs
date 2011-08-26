@@ -180,6 +180,8 @@ namespace PraticeManagement
             {
                 cellExpenses.Visible = false;
             }
+            if (ddlProjectGroup.Items.Count > 0)
+            ddlProjectGroup.SortByText();
         }
 
         /// <summary>
@@ -1101,7 +1103,6 @@ namespace PraticeManagement
                 {
                     selectedProjectGroup = new ListItem(project.Group.Name, project.Group.Id.ToString());
                     ddlProjectGroup.Items.Add(selectedProjectGroup);
-                    ddlProjectGroup.SortByText();
                 }
 
                 ddlProjectGroup.SelectedValue = selectedProjectGroup.Value;
