@@ -244,6 +244,9 @@ namespace PraticeManagement
 
         protected void Page_Prerender(object sender, EventArgs e)
         {
+            if (ddlClientGroup.Items.Count > 0)
+                ddlClientGroup.SortByText();
+
             animHide.Animations = GetAnimationsScriptForAnimHide();
             animShow.Animations = GetAnimationsScriptForAnimShow();
 
