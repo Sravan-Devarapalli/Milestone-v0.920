@@ -90,7 +90,7 @@
                 <td>
                     <asp:GridView ID="gvActivities" runat="server" AutoGenerateColumns="False" EmptyDataText="No activity for given parameters."
                         DataSourceID="odsActivities" AllowPaging="True" PageSize="20" CssClass="CompPerfTable WholeWidth"
-                        GridLines="None" BackColor="White" OnRowDataBound="gvActivities_OnRowDataBound">
+                        GridLines="None" BackColor="White" OnRowDataBound="gvActivities_OnRowDataBound" OnDataBound="gvActivities_OnDataBound">
                         <AlternatingRowStyle BackColor="#F9FAFF" />
                         <PagerSettings Mode="NumericFirstLast" />
                         <PagerStyle CssClass="cssPager" />
@@ -103,7 +103,7 @@
                                         Modified / User</div>
                                 </HeaderTemplate>
                                 <ItemTemplate>
-                                    <asp:Label ID="lblCreateDate" runat="server" Text='<%# ((DateTime)Eval("LogDate")).ToShortDateString() + " " + ((DateTime)Eval("LogDate")).ToShortTimeString() %>' />
+                                    <asp:Label ID="lblCreateDate" runat="server" Text='<%# ((DateTime)Eval("LogDate")).ToString("MM/dd/yyyy") + " " + ((DateTime)Eval("LogDate")).ToShortTimeString() %>' />
                                     by
                                     <asp:Label ID="lblUserName" runat="server" Text='<%# GetModifiedByDetails( Eval("Person.Id"), Eval("Person.PersonLastFirstName"), Eval("SystemUser").ToString(), Eval("LogData")) %>' />
                                 </ItemTemplate>
