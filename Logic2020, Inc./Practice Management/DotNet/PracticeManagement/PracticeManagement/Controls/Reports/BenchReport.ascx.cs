@@ -104,18 +104,19 @@ namespace PraticeManagement.Controls.Reports
                 {
                     SelectAllItems(this.cblPractices);
                 }
-
-                AddAttributesToCheckBoxes(this.cblPractices);
-
-                if (hdnFiltersChanged.Value == "false")
-                {
-                    btnResetFilter.Attributes.Add("disabled", "true");
-                }
-                else
-                {
-                    btnResetFilter.Attributes.Remove("disabled");
-                }
             }
+
+            AddAttributesToCheckBoxes(this.cblPractices);
+
+            if (hdnFiltersChanged.Value == "false")
+            {
+                btnResetFilter.Attributes.Add("disabled", "true");
+            }
+            else
+            {
+                btnResetFilter.Attributes.Remove("disabled");
+            }
+
         }
 
         private void SetFilters(object cookie)
@@ -251,8 +252,8 @@ namespace PraticeManagement.Controls.Reports
                 DatabindGrid(true);
             }
         }
-	
-	protected void btnResetFilter_OnClick(object sender, EventArgs e)
+
+        protected void btnResetFilter_OnClick(object sender, EventArgs e)
         {
             mpStartDate.SelectedYear = DateTime.Today.Year;
             mpStartDate.SelectedMonth = DateTime.Today.Month;
