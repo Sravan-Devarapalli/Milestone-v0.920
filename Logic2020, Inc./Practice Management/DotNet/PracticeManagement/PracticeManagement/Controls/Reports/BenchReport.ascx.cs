@@ -103,7 +103,6 @@ namespace PraticeManagement.Controls.Reports
                 else
                 {
                     SelectAllItems(this.cblPractices);
-                    DatabindGrid(true);
                 }
 
                 AddAttributesToCheckBoxes(this.cblPractices);
