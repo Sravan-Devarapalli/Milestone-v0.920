@@ -10,7 +10,7 @@ using DataTransferObjects.ContextObjects;
 namespace DataAccess
 {
     public static class MilestonePersonDAL
-    {
+    { 
         #region Constants
 
         #region Parameters
@@ -1112,10 +1112,163 @@ namespace DataAccess
 
                     ReadMilestonePersonAssociations(reader, result);
 
-                    return  result;
+                    return result;
                 }
             }
 
+        }
+
+        public static void LoadMilestonePersonEntriesWithFinancials(List<MilestonePerson> milestonePersons, int milestoneId)
+        {
+
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (
+                var command =
+                    new SqlCommand(Constants.ProcedureNames.MilestonePerson.MilestonePersonEntriesWithFinancialsByMilestoneId,
+                                   connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneIdParam, milestoneId);
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<MilestonePerson>();
+
+                    LoadMilestonePersonEntries(reader, milestonePersons);
+                    LoadMilestonePersonEntriesFinancials(reader, milestonePersons);
+                }
+            }
+
+        }
+
+        private static void LoadMilestonePersonEntriesFinancials(SqlDataReader reader, List<MilestonePerson> milestonePersons)
+        {
+            if (reader.NextResult() && reader.HasRows)
+            {
+
+                int financialDateIndex = reader.GetOrdinal(Constants.ColumnNames.FinancialDateColumn);
+                int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
+                int revenueNetIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueNetColumn);
+                int cogsIndex = reader.GetOrdinal(Constants.ColumnNames.CogsColumn);
+                int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
+                int hoursIndex = reader.GetOrdinal(Constants.ColumnNames.HoursColumn);
+                int salesCommissionIndex = reader.GetOrdinal(Constants.ColumnNames.SalesCommissionColumn);
+                int practiceManagementCommissionIndex =
+                    reader.GetOrdinal(Constants.ColumnNames.PracticeManagementCommissionColumn);
+                var startDateIndex = reader.GetOrdinal(StartDateColumn);
+                var personIdIndex = reader.GetOrdinal(PersonIdColumn);
+
+                int expenseIndex;
+                int expenseReimbIndex;
+
+                try
+                {
+                    expenseIndex = reader.GetOrdinal(Constants.ColumnNames.Expense);
+                    expenseReimbIndex = reader.GetOrdinal(Constants.ColumnNames.ReimbursedExpense);
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    expenseIndex = -1;
+                    expenseReimbIndex = -1;
+                }
+                while (reader.Read())
+                {
+                    var personId = reader.GetInt32(personIdIndex);
+                    var entryStartDate = reader.GetDateTime(startDateIndex);
+                    var entry = (milestonePersons.Find(mp => mp.Person.Id.Value == personId)).Entries.Find(e => e.StartDate == entryStartDate);
+                    entry.ComputedFinancials
+                     = new ComputedFinancials
+                   {
+                       FinancialDate = reader.GetDateTime(financialDateIndex),
+                       Revenue = reader.GetDecimal(revenueIndex),
+                       RevenueNet = reader.GetDecimal(revenueNetIndex),
+                       Cogs = reader.GetDecimal(cogsIndex),
+                       GrossMargin = reader.GetDecimal(grossMarginIndex),
+                       HoursBilled = reader.GetDecimal(hoursIndex),
+                       SalesCommission =
+                           !reader.IsDBNull(salesCommissionIndex) ? reader.GetDecimal(salesCommissionIndex) : 0M,
+                       PracticeManagementCommission = !reader.IsDBNull(practiceManagementCommissionIndex)
+                                                          ?
+                                                              reader.GetDecimal(practiceManagementCommissionIndex)
+                                                          : 0M,
+                       Expenses = expenseIndex < 0 ? 0 : reader.GetDecimal(expenseIndex),
+                       ReimbursedExpenses = expenseReimbIndex < 0 ? 0 : reader.GetDecimal(expenseReimbIndex)
+                   };
+                }
+            }
+        }
+
+        private static void LoadMilestonePersonEntries(SqlDataReader reader, List<MilestonePerson> milestonePersons)
+        {
+            if (reader.HasRows)
+            {
+                var milestonePersonIdIndex = reader.GetOrdinal(MilestonePersonIdColumn);
+                var startDateIndex = reader.GetOrdinal(StartDateColumn);
+                var endDateIndex = reader.GetOrdinal(EndDateColumn);
+                var personRoleIdIndex = reader.GetOrdinal(PersonRoleIdColumn);
+                var personRoleNameIndex = reader.GetOrdinal(PersonRoleNameColumn);
+                var amountIndex = reader.GetOrdinal(AmountColumn);
+                var hoursPerDayIndex = reader.GetOrdinal(HoursPerDayColumn);
+                var personVacationsOnMilestoneIndex = reader.GetOrdinal(PersonVacationsOnMilestoneColumn);
+                var expectedHoursIndex = reader.GetOrdinal(ExpectedHoursColumn);
+                var personSeniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
+                var personIdIndex = reader.GetOrdinal(PersonIdColumn);
+                var locationIndex = reader.GetOrdinal(LocationColumn);
+                var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+                var lastNameIndex = reader.GetOrdinal(LastNameColumn);
+
+                while (reader.Read())
+                {
+                    var entry =
+                        new MilestonePersonEntry
+                            {
+                                MilestonePersonId = reader.GetInt32(milestonePersonIdIndex),
+                                StartDate = reader.GetDateTime(startDateIndex),
+                                EndDate =
+                                    !reader.IsDBNull(endDateIndex)
+                                        ? (DateTime?)reader.GetDateTime(endDateIndex)
+                                        : null,
+                                HourlyAmount =
+                                    !reader.IsDBNull(amountIndex)
+                                        ? (decimal?)reader.GetDecimal(amountIndex)
+                                        : null,
+                                HoursPerDay = reader.GetDecimal(hoursPerDayIndex),
+                                VacationDays = reader.GetInt32(personVacationsOnMilestoneIndex),
+                                ProjectedWorkload = reader.GetDecimal(expectedHoursIndex),
+                                ThisPerson = new Person
+                                                 {
+                                                     Id = reader.GetInt32(personIdIndex),
+                                                     FirstName = reader.GetString(firstNameIndex),
+                                                     LastName = reader.GetString(lastNameIndex),
+                                                     Seniority = new Seniority
+                                                                     {
+                                                                         Id = reader.GetInt32(personSeniorityIdIndex)
+                                                                     }
+                                                 },
+                                Location = !reader.IsDBNull(locationIndex)
+                                        ? reader.GetString(locationIndex)
+                                        : null
+                            };
+
+                    if (!reader.IsDBNull(personRoleIdIndex))
+                        entry.Role =
+                            new PersonRole
+                                {
+                                    Id = reader.GetInt32(personRoleIdIndex),
+                                    Name = reader.GetString(personRoleNameIndex)
+                                };
+
+                    var mperson = milestonePersons.Find(mp => mp.Person != null && mp.Person.Id == entry.ThisPerson.Id);
+                    if (mperson.Entries == null)
+                    {
+                        mperson.Entries = new List<MilestonePersonEntry>();
+                    }
+                    mperson.Entries.Add(entry);
+                }
+            }
         }
 
         public static void SaveMilestonePersonsWrapper(List<MilestonePerson> milestonePersons, string userName)
