@@ -893,9 +893,10 @@ namespace PraticeManagement.Controls.Milestones
             var entry = new MilestonePersonEntry();
             entry.StartDate = dpPersonStart.DateValue;
             entry.EndDate = dpPersonEnd.DateValue != DateTime.MinValue ? (DateTime?)dpPersonEnd.DateValue : null;
+            Person person = null;
             if (!string.IsNullOrEmpty(ddlPerson.SelectedValue))
             {
-                var person = GetPersonBySelectedValue(ddlPerson.SelectedValue);
+                 person = GetPersonBySelectedValue(ddlPerson.SelectedValue);
 
                 entry.ThisPerson = person;
                 milestonePerson.Person = person;
@@ -961,7 +962,10 @@ namespace PraticeManagement.Controls.Milestones
 
             if (MilestonePersons.Any(mp => mp.Person.Id == entry.ThisPerson.Id))
             {
-                var mperson = MilestonePersons.First(mp => mp.Person.Id == entry.ThisPerson.Id);
+                var index = MilestonePersons.FindIndex(mp => mp.Person.Id == entry.ThisPerson.Id);
+                var mperson = MilestonePersons[index];
+
+                //mperson.Person = person;
                 if (mperson.Id.HasValue)
                 {
                     entry.MilestonePersonId = mperson.Id.Value;
@@ -971,6 +975,8 @@ namespace PraticeManagement.Controls.Milestones
 
                 if (isSaveCommit)
                     SaveData(ref mperson, iSDatBindRows);
+
+                MilestonePersons[index] = mperson;
 
             }
             else
