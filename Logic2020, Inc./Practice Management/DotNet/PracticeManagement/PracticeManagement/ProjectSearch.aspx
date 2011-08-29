@@ -207,8 +207,8 @@
                             <asp:DataList ID="dtlProposedPersons" runat="server">
                                 <ItemTemplate>
                                     <div style="padding: 2px 0px 2px 0px;">
-                                        <asp:LinkButton ID="btnMilestoneNames" runat="server" Text='<%# HighlightFound(Eval("Description")) %>'
-                                            CommandArgument='<%# string.Concat(Eval("Id"), "_", Eval("Id")) %>' OnCommand="btnMilestoneName_Command"></asp:LinkButton>
+                                       <asp:LinkButton ID="btnMilestoneNames" runat="server" Style="height: 10px;" Text='<%# HighlightFound(Eval("Description")) %>'
+                                            CommandArgument='<%# string.Concat(Eval("Id"), "_", Eval("Project.Id")) %>' OnCommand="btnMilestoneName_Command"></asp:LinkButton>
                                     </div>
                                 </ItemTemplate>
                             </asp:DataList>
