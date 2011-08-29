@@ -69,25 +69,8 @@ namespace PraticeManagement.Controls.Milestones
         {
             get
             {
-                if (_milestoneValue == null)
-                {
-                    using (var serviceClient = new MilestoneServiceClient())
-                    {
-                        try
-                        {
-                            _milestoneValue = serviceClient.GetMilestoneById(HostingPage.MilestoneId.Value);
-                        }
-                        catch (CommunicationException)
-                        {
-                            serviceClient.Abort();
-                            throw;
-                        }
-                    }
-                }
-
-                return _milestoneValue;
+                return HostingPage.Milestone;
             }
-            set { _milestoneValue = value; }
         }
 
         public GridView gvMilestonePersonEntriesObject
@@ -486,7 +469,7 @@ namespace PraticeManagement.Controls.Milestones
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-           
+
         }
 
         protected override void OnInit(EventArgs e)
@@ -757,7 +740,7 @@ namespace PraticeManagement.Controls.Milestones
 
             if (txtHoursPerDay != null)
                 txtHoursPerDay.Text = repeaterOldValues[e.Item.ItemIndex][txtHoursPerDayInsert];
-           
+
         }
 
 
@@ -779,8 +762,6 @@ namespace PraticeManagement.Controls.Milestones
 
         private void PopulateControls(Milestone milestone)
         {
-            Milestone = milestone;
-
             // Security
             bool isReadOnly =
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) &&
@@ -1383,17 +1364,35 @@ namespace PraticeManagement.Controls.Milestones
 
         private void SaveData(ref MilestonePerson milestonePerson, bool iSDatBindRows = true)
         {
+            var person = milestonePerson.Person;
+            var milestone = milestonePerson.Milestone;
+            var tempPerson = new Person
+            {
+                Id = person.Id
+            };
+            var tempMilestone = new Milestone
+            {
+                Id = milestone.Id
+            };
+            milestonePerson.Milestone = tempMilestone;
+            milestonePerson.Person = tempPerson;
+            foreach (var entry in milestonePerson.Entries)
+            {
+                entry.ThisPerson = tempPerson;
+            }
             using (var serviceClient = new MilestonePersonServiceClient())
             {
                 try
                 {
                     serviceClient.SaveMilestonePerson(ref milestonePerson, HostingPage.User.Identity.Name);
-
+                    milestonePerson.Person = person;
+                    milestonePerson.Milestone = milestone;
                     if (iSDatBindRows)
                     {
                         foreach (var entry in milestonePerson.Entries)
                         {
                             entry.ComputedFinancials = serviceClient.FinancialsGetByMilestonePersonEntry(milestonePerson.Milestone.Id.Value, milestonePerson.Person.Id.Value, entry.StartDate);
+                            entry.ThisPerson = milestonePerson.Person;
                         }
                     }
 
@@ -1470,8 +1469,6 @@ namespace PraticeManagement.Controls.Milestones
         {
             var result = true;
             var mpersons = new List<MilestonePerson>();
-
-            
 
             if (gvMilestonePersonEntries.EditIndex > -1)
             {
