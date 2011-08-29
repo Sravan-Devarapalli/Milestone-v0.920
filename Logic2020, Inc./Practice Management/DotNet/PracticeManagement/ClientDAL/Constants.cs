@@ -689,6 +689,7 @@
                 public const string MilestonePersonEntryListByMilestonePersonId = "dbo.MilestonePersonEntryListByMilestonePersonId";
                 public const string CheckTimeEntriesForMilestonePerson = "dbo.CheckTimeEntriesForMilestonePerson";
                 public const string MilestonePersonsGetByMilestoneId = "dbo.MilestonePersonsGetByMilestoneId";
+                public const string MilestonePersonEntriesWithFinancialsByMilestoneId = "dbo.MilestonePersonEntriesWithFinancialsByMilestoneId";
             }
 
             public class ProjectExpenses
