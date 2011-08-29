@@ -137,33 +137,7 @@ namespace PracticeManagementService
 
             if (result != null)
             {
-                foreach (var mp in result)
-                {
-                    mp.Entries = MilestonePersonDAL.MilestonePersonEntryListByMilestonePersonId(mp.Id.Value);
-
-                    if (mp.Milestone != null && mp.Milestone.Id.HasValue &&
-                        mp.Person != null && mp.Person.Id.HasValue)
-                    {
-                        // Financials for each entry
-                        foreach (MilestonePersonEntry entry in mp.Entries)
-                        {
-                            entry.ComputedFinancials =
-                                ComputedFinancialsDAL.FinancialsGetByMilestonePersonEntry(
-                                mp.Milestone.Id.Value,
-                                mp.Person.Id.Value,
-                                entry.StartDate);
-
-                            entry.HasTimeEntries = MilestonePersonDAL.CheckTimeEntriesForMilestonePerson(mp.Id.Value, entry.StartDate, entry.EndDate,
-                                                                            true, true);
-                        }
-                    }
-
-                    // Financials for the milestone person assignment
-                    mp.ComputedFinancials =
-                        ComputedFinancialsDAL.FinancialsGetByMilestonePerson(
-                        mp.Milestone.Id.Value,
-                        mp.Person.Id.Value);
-                }
+                MilestonePersonDAL.LoadMilestonePersonEntriesWithFinancials(result, milestoneId);
             }
 
             return result;
