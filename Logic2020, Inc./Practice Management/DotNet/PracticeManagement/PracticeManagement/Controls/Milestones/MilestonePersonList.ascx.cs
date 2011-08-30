@@ -965,7 +965,7 @@ namespace PraticeManagement.Controls.Milestones
                 var index = MilestonePersons.FindIndex(mp => mp.Person.Id == entry.ThisPerson.Id);
                 var mperson = MilestonePersons[index];
 
-                //mperson.Person = person;
+                mperson.Person = person;
                 if (mperson.Id.HasValue)
                 {
                     entry.MilestonePersonId = mperson.Id.Value;
