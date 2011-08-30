@@ -16,6 +16,10 @@ namespace PraticeManagement.Controls.Generic.Filtering
             {
                 return ParseDouble(tbFrom, 0.0);
             }
+            set
+            {
+                tbFrom.Text = value.ToString();
+            }
         }
 
         public double MaxValue
@@ -23,6 +27,10 @@ namespace PraticeManagement.Controls.Generic.Filtering
             get
             {
                 return ParseDouble(tbTo, 24.0);
+            }
+            set
+            {
+                tbTo.Text = value.ToString();
             }
         }
 
