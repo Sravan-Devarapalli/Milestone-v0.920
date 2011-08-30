@@ -27,6 +27,10 @@ namespace PraticeManagement.Controls.Generic.Filtering
                     return null;
                 }
             }
+            set
+            {
+                SelectedValue = value.HasValue ? value.ToString() : null;
+            }
         }
 
         public string FirstItemText
