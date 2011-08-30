@@ -33,7 +33,7 @@
 <asp:HiddenField ID="hfSortingSync" runat="server" Value="ObjectLastName:ASC,MilestoneDate:ASC" />
 <asp:GridView ID="gvTimeEntries" runat="server" DataSourceID="odsTimeEntries" AutoGenerateColumns="False"
     AllowPaging="True" PageSize="25" DataKeyNames="Id" OnRowUpdating="gvTimeEntries_RowUpdating"
-    OnRowEditing="gvTimeEntries_RowEditing" OnRowDataBound="gvTimeEntries_RowDataBound" 
+    OnRowEditing="gvTimeEntries_RowEditing" OnRowDataBound="gvTimeEntries_RowDataBound" OnDataBound="gvTimeEntries_DataBound" 
     CssClass="CompPerfTable WholeWidth" GridLines="None" BackColor="White" ShowFooter="true">
     <AlternatingRowStyle BackColor="#F9FAFF" />
     <RowStyle BackColor="White" />
@@ -285,7 +285,7 @@
             </ItemTemplate>
             <EditItemTemplate>
                 <!-- Notes -->
-                <asp:TextBox ID="tbNotesEdit" runat="server" Columns="20" Rows="4" TextMode="MultiLine"
+                <asp:TextBox ID="tbNotesEdit" runat="server" Columns="20" Rows="4" TextMode="MultiLine" style="resize:none;"
                     Text='<%# Bind("Note") %>'></asp:TextBox>
             </EditItemTemplate>
         </asp:TemplateField>
