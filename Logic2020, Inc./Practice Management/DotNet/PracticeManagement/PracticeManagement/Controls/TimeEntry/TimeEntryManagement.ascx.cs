@@ -11,6 +11,7 @@ using PraticeManagement.Controls.Generic.Sorting.MultisortExtender;
 using PraticeManagement.Utils;
 using System.Linq;
 using PraticeManagement.Configuration;
+using PraticeManagement.FilterObjects;
 
 namespace PraticeManagement.Controls.TimeEntry
 {
@@ -26,6 +27,25 @@ namespace PraticeManagement.Controls.TimeEntry
             UserIsAdmin =
                 Roles.IsUserInRole(
                     DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+            if (!IsPostBack)
+            {
+                var cookie = SerializationHelper.DeserializeCookie(Constants.FilterKeys.GenericTimeEntryFilterCookie) as GenericTimeEntryFilter;
+                if (Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true" && cookie != null)
+                {
+                    hfSortingSync.Value = cookie.SortExpression;
+                    gvTimeEntries.PageIndex = (int)cookie.PageNo;
+                    gvTimeEntries.PageSize = (int)cookie.PageSize;
+                }
+            }
+        }
+
+        private string GetReturnUrl()
+        {
+            string returnUrl = Constants.ApplicationPages.TimeEntryReport;
+
+            returnUrl = returnUrl + Constants.FilterKeys.QueryStringOfApplyFilterFromCookie;
+
+            return returnUrl;
         }
 
         protected bool GetEditingAllowed(TimeEntryRecord timeEntryRecord)
@@ -144,7 +164,7 @@ namespace PraticeManagement.Controls.TimeEntry
                     Constants.ApplicationPages.DetailRedirectWithReturnFormat,
                     Constants.ApplicationPages.PersonDetail,
                     person.Id.Value,
-                    Constants.ApplicationPages.TimeEntryReport);
+                    GetReturnUrl());
             }
             return string.Empty;
         }
@@ -158,7 +178,7 @@ namespace PraticeManagement.Controls.TimeEntry
                                     Constants.ApplicationPages.MilestonePersonDetail,
                                     mpe.ParentMilestone.Id.Value,
                                     mpe.MilestonePersonId,
-                                    Constants.ApplicationPages.TimeEntryReport
+                                    GetReturnUrl()
                                 );
             }
             return string.Empty;
@@ -186,7 +206,7 @@ namespace PraticeManagement.Controls.TimeEntry
                         Constants.ApplicationPages.DetailRedirectWithReturnFormat,
                         Constants.ApplicationPages.ProjectDetail,
                         project.Id.Value,
-                        Constants.ApplicationPages.TimeEntryReport
+                        GetReturnUrl()
                     );
             }
             return string.Empty;
@@ -200,7 +220,7 @@ namespace PraticeManagement.Controls.TimeEntry
                         Constants.ApplicationPages.DetailRedirectWithReturnFormat,
                         Constants.ApplicationPages.ClientDetails,
                         client.Id.Value,
-                        Constants.ApplicationPages.TimeEntryReport
+                        GetReturnUrl()
                     );
             }
             return string.Empty;
@@ -244,6 +264,57 @@ namespace PraticeManagement.Controls.TimeEntry
                     ((Label) e.Row.FindControl(LblTotalForecasted)).Text = _totalForecasted.ToString(Constants.Formatting.DoubleFormat);
                     break;
             }
+        }
+
+        protected void gvTimeEntries_DataBound(object sender, EventArgs e)
+        {
+            SaveFilterSettings();
+        }
+
+        private void SaveFilterSettings()
+        {
+            var filter = GetFilterSettings();
+            SerializationHelper.SerializeCookie(filter, Constants.FilterKeys.GenericTimeEntryFilterCookie);
+        }
+
+        private GenericTimeEntryFilter GetFilterSettings()
+        {
+            var TimeEntry = TimeEntrySelectContext;
+            var persons = tfMain.GetSelectedPersons();
+            var projects = tfMain.GetSelectedProjects();
+            string personIdsSessionKey = "PersonIdsSession";
+            string projectIdsSessionKey = "ProjectIdsSession";
+
+
+            Session.Add(personIdsSessionKey, persons);
+            Session.Add(projectIdsSessionKey, projects);
+            var filter = new GenericTimeEntryFilter
+            {
+                PersonIdsSessionKey = personIdsSessionKey,
+                ProjectIdsSessionKey = projectIdsSessionKey,
+                MilestoneDateFrom = TimeEntry.MilestoneDateFrom,
+                MilestoneDateTo = TimeEntry.MilestoneDateTo,
+                ForecastedHoursFrom = TimeEntry.ForecastedHoursFrom,
+                ForecastedHoursTo = TimeEntry.ForecastedHoursTo,
+                ActualHoursFrom = TimeEntry.ActualHoursFrom,
+                ActualHoursTo = TimeEntry.ActualHoursTo,
+                MilestoneId = TimeEntry.MilestoneId,
+                TimeTypeId = TimeEntry.TimeTypeId,
+                Notes = TimeEntry.Notes,
+                IsChargable = TimeEntry.IsChargable,
+                IsCorrect = TimeEntry.IsCorrect,
+                IsReviewed = TimeEntry.IsReviewed,
+                EntryDateFrom = TimeEntry.EntryDateFrom,
+                EntryDateTo = TimeEntry.EntryDateTo,
+                ModifiedDateFrom = TimeEntry.ModifiedDateFrom,
+                ModifiedDateTo = TimeEntry.ModifiedDateTo,
+                SortExpression = hfSortingSync.Value,
+                RequesterId = TimeEntry.RequesterId,
+                IsProjectChargeable = TimeEntry.IsProjectChargeable,
+                PageNo = TimeEntry.PageNo,
+                PageSize = TimeEntry.PageSize
+            };
+            return filter;
         }
 
         private static void AddApprovedVerification(GridViewRowEventArgs e, TimeEntryRecord item)
