@@ -76,6 +76,8 @@ namespace PraticeManagement
             public const string PersonFilterCookie = "PersonFilter";
             public const string ActivityLogFilterCookie = "ActivityLogFilter";
             public const string BenchReportFilterCookie = "BenchReportFilter";
+            public const string GenericTimeEntryFilterCookie = "GenericTimeEntryFilter";
+            public const string ConsultantUtilTimeLineFilterCookie = "ConsultantUtilTimeLineFilter";
         }
 
         /// <summary>
@@ -130,6 +132,7 @@ namespace PraticeManagement
             public const string ChangePasswordErrorpage = "~/GuestPages/ChangePasswordError.aspx";
             public const string ChangePasswordPage = "~/ChangePassword.aspx";
             public const string Set_userPage = "~/set_user.aspx";
+            public const string UtilizationTimelineWithFilterQueryStringAndDetails = "~/Reports/UtilizationTimeline.aspx?ApplyFilterFromCookie=true#details";
         }
 
         /// <summary>
