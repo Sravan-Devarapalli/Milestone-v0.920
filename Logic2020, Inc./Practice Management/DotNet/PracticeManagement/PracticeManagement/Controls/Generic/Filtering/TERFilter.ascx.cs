@@ -4,19 +4,22 @@ using System.Linq;
 using System.Web.UI.WebControls;
 using PraticeManagement.Controls.TimeEntry;
 using System.Web.Security;
+using PraticeManagement.FilterObjects;
+using PraticeManagement.Utils;
+using System.Web;
 
 namespace PraticeManagement.Controls.Generic.Filtering
 {
     public partial class TERFilter : System.Web.UI.UserControl
     {
-        public IList<int?> PersonIds 
-        { 
-            get 
+        public IList<int?> PersonIds
+        {
+            get
             {
                 return cblPersons.SelectedValues != null
                            ? cblPersons.SelectedValues.Select(i => new int?(i)).ToList()
                            : new List<int?>();
-            } 
+            }
         }
 
         public IList<int?> ProjectIds
@@ -28,7 +31,7 @@ namespace PraticeManagement.Controls.Generic.Filtering
                            : new List<int?>();
             }
         }
-        
+
         public int? TimeTypeId { get { return soTimeTypes.SelectedId; } }
         public int? MilestoneId { get { return soMilestones.SelectedId; } }
 
@@ -66,13 +69,12 @@ namespace PraticeManagement.Controls.Generic.Filtering
                 return null;
             }
         }
-        
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
                 DataHelper.FillTimeEntryProjectsList(cblProjects, Resources.Controls.AllProjects, null);
-                CheckAllCheckboxes(cblProjects);
 
                 if (Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName))
                 {
@@ -82,14 +84,21 @@ namespace PraticeManagement.Controls.Generic.Filtering
                 {
                     DataHelper.FillTimeEntryPersonList(cblPersons, Resources.Controls.AllPersons, null, string.Empty, DataHelper.CurrentPerson.Id);
                 }
-                CheckAllCheckboxes(cblPersons);
 
-                Utils.Generic.InitStartEndDate(diWeek);
+                var cookie = SerializationHelper.DeserializeCookie(Constants.FilterKeys.GenericTimeEntryFilterCookie) as GenericTimeEntryFilter;
+                if (Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true" && cookie != null)
+                {
+                    SetFilters(cookie);
+                }
+                else
+                {
+                    CheckAllCheckboxes(cblProjects);
+                    CheckAllCheckboxes(cblPersons);
+                    Utils.Generic.InitStartEndDate(diWeek);
+                }
             }
-            
-                
         }
-       
+
         private void CheckAllCheckboxes(ScrollingDropDown chbList)
         {
             foreach (ListItem targetItem in chbList.Items)
@@ -98,7 +107,7 @@ namespace PraticeManagement.Controls.Generic.Filtering
         }
 
         protected void wsChoose_WeekChanged(object sender, WeekChangedEventArgs args)
-        {}
+        { }
 
         public void ResetFilters()
         {
@@ -119,6 +128,45 @@ namespace PraticeManagement.Controls.Generic.Filtering
             soMilestones.SelectedValue = string.Empty;
 
             tbNotes.Text = string.Empty;
+
+        }
+
+        public void SetFilters(GenericTimeEntryFilter cookie)
+        {
+            var personIdsSession = HttpContext.Current.Session[cookie.PersonIdsSessionKey] as string;
+            var projectIdsSession = HttpContext.Current.Session[cookie.ProjectIdsSessionKey] as string;
+            cblPersons.SelectedItems = personIdsSession;
+            diWeek.FromDate = cookie.MilestoneDateFrom;
+            diWeek.ToDate = cookie.MilestoneDateTo;
+            riForecasted.MinValue = (double)cookie.ForecastedHoursFrom;
+            riForecasted.MaxValue = (double)cookie.ForecastedHoursTo;
+            riActual.MinValue = (double)cookie.ActualHoursFrom;
+            riActual.MaxValue = (double)cookie.ActualHoursTo;
+            cblProjects.SelectedItems = projectIdsSession;
+            soMilestones.SelectedId = cookie.MilestoneId;
+            soTimeTypes.SelectedId = cookie.TimeTypeId;
+            if (!string.IsNullOrEmpty(cookie.IsReviewed))
+            {
+                ddlIsReviewed.SelectedValue = cookie.IsReviewed;
+            }
+            tbNotes.Text = cookie.Notes;
+            ddlIsChargable.SelectedValue = cookie.IsChargable.ToString();
+            ddlIsCorrect.SelectedValue = cookie.IsCorrect.ToString();
+            diEntered.FromDate = cookie.EntryDateFrom;
+            diEntered.ToDate = cookie.EntryDateTo;
+            diLastModified.FromDate = cookie.ModifiedDateFrom;
+            diLastModified.ToDate = cookie.ModifiedDateTo;
+            ddlIsProjectChargeable.SelectedValue = cookie.IsProjectChargeable.ToString();
+        }
+
+        public string GetSelectedPersons()
+        {
+            return cblPersons.Items[0].Selected ? null : cblPersons.SelectedItems;
+        }
+
+        public string GetSelectedProjects()
+        {
+            return cblProjects.Items[0].Selected ? null : cblProjects.SelectedItems;
         }
 
         protected void btnApply_OnClick(object sender, EventArgs e)
@@ -129,8 +177,7 @@ namespace PraticeManagement.Controls.Generic.Filtering
         protected void btnReset_OnClick(object sender, EventArgs e)
         {
             Utils.Generic.InvokeEventHandler(ResetAllFilters, sender, e);
-            
+
         }
     }
 }
-
