@@ -339,17 +339,17 @@ namespace PraticeManagement.Sandbox
             var currentPerson = DataHelper.CurrentPerson;
             var personRoles = Roles.GetRolesForUser(currentPerson.Alias);
             string statusIdsList = GetStatusIds();
-            //int? personId = null;
-            //if (!personRoles.Any(s => s == "Administrator"))
-            //{
-            //    personId = currentPerson.Id;
-            //    if (enableDisableChevron)
-            //    {
-            //        this.cpe.Enabled = false;
-            //        pnlFilters.Visible = false;
-            //    }
-            //}
-            DataHelper.FillTimeEntryPersonListBetweenStartAndEndDates(this.cblPersons, Resources.Controls.AllPersons, null, statusIdsList, null, diRange.FromDate, diRange.ToDate);
+            int? personId = null;
+            if (!personRoles.Any(s => s == "Administrator" || s == "HR"))
+            {
+                personId = currentPerson.Id;
+                if (enableDisableChevron)
+                {
+                    this.cpe.Enabled = false;
+                    pnlFilters.Visible = false;
+                }
+            }
+            DataHelper.FillTimeEntryPersonListBetweenStartAndEndDates(this.cblPersons, Resources.Controls.AllPersons, null, statusIdsList, personId, diRange.FromDate, diRange.ToDate);
             AddAttributesToCheckBoxes(this.cblPersons);
         }
 
