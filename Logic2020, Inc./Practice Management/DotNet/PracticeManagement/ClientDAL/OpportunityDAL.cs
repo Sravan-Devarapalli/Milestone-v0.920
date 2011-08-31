@@ -1022,7 +1022,7 @@ namespace DataAccess
             }
         }
 
-        public static void UpdateOpportunityPriority(int oldPriorityId, OpportunityPriority opportunityPriority)
+        public static void UpdateOpportunityPriority(int oldPriorityId, OpportunityPriority opportunityPriority, string userName)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.OpportunityPriorityUpdate, connection))
@@ -1034,13 +1034,15 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.PriorityIdParam, opportunityPriority.Id);
                 command.Parameters.AddWithValue(Constants.ParameterNames.DescriptionParam,
                     opportunityPriority.Description != null ? (object)opportunityPriority.Description : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam,
+                                            !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
 
                 connection.Open();
                 command.ExecuteNonQuery();
             }
         }
 
-        public static void DeleteOpportunityPriority(int? updatedPriorityId, int deletedPriorityId)
+        public static void DeleteOpportunityPriority(int? updatedPriorityId, int deletedPriorityId, string userName)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.OpportunityPriorityDelete, connection))
@@ -1051,6 +1053,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.UpdatedPriorityIdParam,
                                                 updatedPriorityId != null ? (object)updatedPriorityId.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.DeletedPriorityIdParam, deletedPriorityId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam,
+                                             !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -1204,6 +1208,24 @@ namespace DataAccess
 
                     result.Add(key, value);
                 }
+            }
+        }
+
+        public static void UpdatePriorityIdForOpportunity(int opportunityId, int priorityId, string userName)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.UpdatePriorityIdForOpportunity, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityIdParam, opportunityId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PriorityIdParam, priorityId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam,
+                                              !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
+
+                connection.Open();
+                command.ExecuteNonQuery();
             }
         }
     }
