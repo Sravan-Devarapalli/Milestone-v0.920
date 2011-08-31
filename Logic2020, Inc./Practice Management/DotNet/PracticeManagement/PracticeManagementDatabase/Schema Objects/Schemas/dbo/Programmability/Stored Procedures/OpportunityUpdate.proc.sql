@@ -98,18 +98,6 @@ BEGIN
 				@NoteText = @NoteText
 		END
 
-		-- Determine if the priority was changed
-		IF @PrevPriorityId <> @PriorityId
-		BEGIN
-			-- Create a history record
-			SET @NoteText = 'Priority changed.  Was: ' + @PrevPriority + ' now: ' + @CurrentPriority
-
-			EXEC dbo.OpportunityTransitionInsert @OpportunityId = @OpportunityId,
-				@OpportunityTransitionStatusId = 2 /* Notes */,
-				@PersonId = @PersonId,
-				@NoteText = @NoteText
-		END
-
 		-- Determine if the pipeline was changed
 		IF ISNULL(@PrevPipeline, '') <> ISNULL(@Pipeline, '')
 		BEGIN
