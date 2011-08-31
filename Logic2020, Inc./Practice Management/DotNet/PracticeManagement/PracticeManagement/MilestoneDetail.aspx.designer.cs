@@ -166,6 +166,15 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.DatePicker dtpPeriodFrom;
         
         /// <summary>
+        /// hdnPeriodFrom control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnPeriodFrom;
+        
+        /// <summary>
         /// reqPeriodFrom control.
         /// </summary>
         /// <remarks>
@@ -200,6 +209,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.DatePicker dtpPeriodTo;
+        
+        /// <summary>
+        /// hdnPeriodTo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnPeriodTo;
         
         /// <summary>
         /// reqPeriodTo control.
@@ -1039,6 +1057,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.ValidationSummary vsumMilestone;
         
         /// <summary>
+        /// vsumPopup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary vsumPopup;
+        
+        /// <summary>
         /// vsumShiftDays control.
         /// </summary>
         /// <remarks>
@@ -1100,6 +1127,231 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.AnimationExtender aeBtnSave;
+        
+        /// <summary>
+        /// custStartandEndDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custStartandEndDate;
+        
+        /// <summary>
+        /// hdnCanShowPopup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnCanShowPopup;
+        
+        /// <summary>
+        /// mpePopup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpePopup;
+        
+        /// <summary>
+        /// pnlPopup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlPopup;
+        
+        /// <summary>
+        /// btnClose control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnClose;
+        
+        /// <summary>
+        /// tblHasTimeentriesTowardsMileStone control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTable tblHasTimeentriesTowardsMileStone;
+        
+        /// <summary>
+        /// tblchangeMilestonePersonsForStartDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTable tblchangeMilestonePersonsForStartDate;
+        
+        /// <summary>
+        /// lblchangeMilestonePersonsPopupMessageForStartDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblchangeMilestonePersonsPopupMessageForStartDate;
+        
+        /// <summary>
+        /// rbtnchangeMileStoneAndPersonsStartDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbtnchangeMileStoneAndPersonsStartDate;
+        
+        /// <summary>
+        /// rbtnchangeMileStoneStartDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbtnchangeMileStoneStartDate;
+        
+        /// <summary>
+        /// tblchangeMilestonePersonsForEndDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTable tblchangeMilestonePersonsForEndDate;
+        
+        /// <summary>
+        /// lblchangeMilestonePersonsForEndDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblchangeMilestonePersonsForEndDate;
+        
+        /// <summary>
+        /// rbtnchangeMileStoneAndPersonsEndDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbtnchangeMileStoneAndPersonsEndDate;
+        
+        /// <summary>
+        /// rbtnchangeMileStoneEndDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbtnchangeMileStoneEndDate;
+        
+        /// <summary>
+        /// tblRemoveMilestonePersonsForStartDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTable tblRemoveMilestonePersonsForStartDate;
+        
+        /// <summary>
+        /// lblRemoveMilestonePersonsForStartDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblRemoveMilestonePersonsForStartDate;
+        
+        /// <summary>
+        /// rbtnRemovePersonsStartDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbtnRemovePersonsStartDate;
+        
+        /// <summary>
+        /// rbtnCancelStartDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbtnCancelStartDate;
+        
+        /// <summary>
+        /// tblRemoveMilestonePersonsForEndDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTable tblRemoveMilestonePersonsForEndDate;
+        
+        /// <summary>
+        /// lblRemoveMilestonePersonsForEndDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblRemoveMilestonePersonsForEndDate;
+        
+        /// <summary>
+        /// rbtnRemovePersonsEndDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbtnRemovePersonsEndDate;
+        
+        /// <summary>
+        /// rbtnCancelEndDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbtnCancelEndDate;
+        
+        /// <summary>
+        /// trShowSaveandCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trShowSaveandCancel;
+        
+        /// <summary>
+        /// btnSavePopup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSavePopup;
+        
+        /// <summary>
+        /// btnCancelSaving control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelSaving;
         
         /// <summary>
         /// lpOpportunityDetails control.
