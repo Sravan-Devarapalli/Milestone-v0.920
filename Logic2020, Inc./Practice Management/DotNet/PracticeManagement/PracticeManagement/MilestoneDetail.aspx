@@ -40,6 +40,31 @@
             return false;
         }
 
+        function ShowConfirmDialogForStartDate(chb) {
+            if (confirm("Are you sure you want to Cancel Changes?")) {
+                var btnCancelSaving = document.getElementById("<%= btnCancelSaving.ClientID %>");
+                btnCancelSaving.click();
+            }
+            else {
+                chb.checked = false;
+                document.getElementById("<%= rbtnRemovePersonsStartDate.ClientID %>").checked = true;
+
+            }
+
+        }
+
+        function ShowConfirmDialogForEndDate(chb) {
+            if (confirm("Are you sure you want to Cancel Changes?")) {
+                var btnCancelSaving = document.getElementById("<%= btnCancelSaving.ClientID %>");
+                btnCancelSaving.click();
+            }
+            else {
+                chb.checked = false;
+                document.getElementById("<%= rbtnRemovePersonsEndDate.ClientID %>").checked = true;
+            }
+
+        }
+
         function SetTooltipsForallDropDowns() {
             var optionList = document.getElementsByTagName('option');
 
@@ -124,6 +149,14 @@
         {
             padding-left: 4px;
         }
+        
+        .ConfirmBoxClassError
+        {
+            min-height: 60px;
+            min-width: 200px;
+            max-width: 600px;
+            max-height: 500px;
+        }
     </style>
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
@@ -189,6 +222,7 @@
                                     </td>
                                     <td>
                                         <uc2:DatePicker ID="dtpPeriodFrom" runat="server" ValidationGroup="Milestone" OnSelectionChanged="dtpPeriod_SelectionChanged" />
+                                        <asp:HiddenField ID="hdnPeriodFrom" runat="server" />
                                     </td>
                                     <td>
                                         <asp:RequiredFieldValidator ID="reqPeriodFrom" runat="server" ControlToValidate="dtpPeriodFrom"
@@ -210,6 +244,7 @@
                                     </td>
                                     <td>
                                         <uc2:DatePicker ID="dtpPeriodTo" runat="server" ValidationGroup="Milestone" OnSelectionChanged="dtpPeriod_SelectionChanged" />
+                                        <asp:HiddenField ID="hdnPeriodTo" runat="server" />
                                     </td>
                                     <td>
                                         <asp:RequiredFieldValidator ID="reqPeriodTo" runat="server" ControlToValidate="dtpPeriodTo"
@@ -347,7 +382,7 @@
                     </asp:TableCell>
                 </asp:TableRow>
             </asp:Table>
-            <asp:MultiView ID="mvMilestoneDetailTab" runat="server"   ActiveViewIndex="0">
+            <asp:MultiView ID="mvMilestoneDetailTab" runat="server" ActiveViewIndex="0">
                 <asp:View ID="vwFinancials" runat="server">
                     <asp:Panel ID="pnlFinancials" runat="server" CssClass="tab-pane">
                         <table style="background-color: #F9FAFF">
@@ -495,7 +530,7 @@
                                             Start Date</div>
                                     </HeaderTemplate>
                                     <ItemTemplate>
-                                        <asp:Label ID="lblStartDate" runat="server" CssClass="spacing" Text='<%# ((DateTime)Eval("Entries[0].StartDate")).ToString("d") %>'></asp:Label>
+                                        <asp:Label ID="lblStartDate" runat="server" CssClass="spacing" Text='<%# ((DateTime)Eval("Entries[0].StartDate")).ToString("MM/dd/yyyy") %>'></asp:Label>
                                     </ItemTemplate>
                                     <FooterStyle BorderStyle="None" />
                                 </asp:TemplateField>
@@ -505,7 +540,7 @@
                                             End Date</div>
                                     </HeaderTemplate>
                                     <ItemTemplate>
-                                        <asp:Label ID="lblEndDate" runat="server" CssClass="spacing" Text='<%# ((DateTime?)Eval("Entries[0].EndDate")).HasValue ? ((DateTime)Eval("Entries[0].EndDate")).ToString("d") : string.Empty %>'></asp:Label>
+                                        <asp:Label ID="lblEndDate" runat="server" CssClass="spacing" Text='<%# ((DateTime?)Eval("Entries[0].EndDate")).HasValue ? ((DateTime)Eval("Entries[0].EndDate")).ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label>
                                     </ItemTemplate>
                                     <FooterStyle BorderStyle="None" />
                                 </asp:TemplateField>
@@ -798,6 +833,7 @@
                             WarningColor="Orange" />
                         <asp:ValidationSummary ID="vsumMilestone" runat="server" EnableClientScript="false"
                             ValidationGroup="Milestone" />
+                        <asp:ValidationSummary ID="vsumPopup" runat="server" EnableClientScript="false" ValidationGroup="MilestonePopup" />
                         <asp:ValidationSummary ID="vsumShiftDays" runat="server" EnableClientScript="false"
                             ValidationGroup="ShiftDays" />
                         <asp:ValidationSummary ID="vsumClone" runat="server" EnableClientScript="false" ValidationGroup="Clone" />
@@ -826,6 +862,113 @@
                     </td>
                 </tr>
             </table>
+            <asp:CustomValidator ID="custStartandEndDate" runat="server" ErrorMessage="" ToolTip=""
+                ValidationGroup="MilestonePopup" Text="*" EnableClientScript="false" OnServerValidate="custStartandEndDate_ServerValidate"></asp:CustomValidator>
+            <asp:HiddenField ID="hdnCanShowPopup" Value="false" runat="server" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpePopup" runat="server" TargetControlID="hdnCanShowPopup"
+                BackgroundCssClass="modalBackground" PopupControlID="pnlPopup" DropShadow="false" />
+            <asp:Panel ID="pnlPopup" runat="server" BackColor="White" BorderColor="Black" CssClass="ConfirmBoxClassError"
+                Style="display: none" BorderWidth="2px">
+                <table width="100%">
+                    <tr>
+                        <th align="center" style="text-align: center; background-color: Gray;" colspan="2" valign="bottom">
+                           <b style="font-size: 14px;padding-top:2px;">Error</b>
+                            <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Cancel Changes"
+                                Style="float: right;" OnClick="btnCancel_OnClick" Text="X"></asp:Button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;" colspan="2">
+                            <table id="tblHasTimeentriesTowardsMileStone" visible="false" runat="server">
+                                <tr>
+                                    <td>
+                                        You are attempting to change the milestone start/end date, but there is already
+                                        time entered for the days you are skipping. You will need to reassign the time entries
+                                        to a new milestone before you are allowed to change this date.
+                                    </td>
+                                </tr>
+                            </table>
+                            <table id="tblchangeMilestonePersonsForStartDate" visible="false" runat="server">
+                                <tr>
+                                    <td style="padding-top: 10px;">
+                                        <asp:Label ID="lblchangeMilestonePersonsPopupMessageForStartDate" runat="server"></asp:Label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" valign="middle">
+                                        <asp:RadioButton ID="rbtnchangeMileStoneAndPersonsStartDate" runat="server" AutoPostBack="false"
+                                            Checked="true" GroupName="changedMileStoneStartDate" /><b style="font-size: 13px;">Change
+                                                Milestone and Resource(s)</b>
+                                        <asp:RadioButton ID="rbtnchangeMileStoneStartDate" runat="server" AutoPostBack="false"
+                                            GroupName="changedMileStoneStartDate" /><b style="font-size: 13px;">Change Milestone
+                                                Only</b>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table id="tblchangeMilestonePersonsForEndDate" visible="false" runat="server">
+                                <tr>
+                                    <td style="padding-top: 10px;">
+                                        <asp:Label ID="lblchangeMilestonePersonsForEndDate" runat="server"></asp:Label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" valign="middle">
+                                        <asp:RadioButton ID="rbtnchangeMileStoneAndPersonsEndDate" runat="server" AutoPostBack="false"
+                                            Checked="true" GroupName="changedMileStoneEndDate" /><b style="font-size: 13px;">Change
+                                                Milestone and Resource(s)</b>
+                                        <asp:RadioButton ID="rbtnchangeMileStoneEndDate" runat="server" AutoPostBack="false"
+                                            GroupName="changedMileStoneEndDate" /><b style="font-size: 13px;">Change Milestone Only</b>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table id="tblRemoveMilestonePersonsForStartDate" visible="false" runat="server">
+                                <tr>
+                                    <td style="padding-top: 10px;">
+                                        <asp:Label ID="lblRemoveMilestonePersonsForStartDate" runat="server"></asp:Label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" valign="middle">
+                                        <asp:RadioButton ID="rbtnRemovePersonsStartDate" runat="server" AutoPostBack="false"
+                                            Checked="true" GroupName="removeStart" /><b style="font-size: 13px;">OK</b>&nbsp;&nbsp;&nbsp;
+                                        <asp:RadioButton ID="rbtnCancelStartDate" runat="server" AutoPostBack="false" GroupName="removeStart"
+                                            onclick="ShowConfirmDialogForStartDate(this);" /><b style="font-size: 13px;">Cancel</b>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table id="tblRemoveMilestonePersonsForEndDate" visible="false" runat="server">
+                                <tr>
+                                    <td style="padding-top: 10px;">
+                                        <asp:Label ID="lblRemoveMilestonePersonsForEndDate" runat="server"></asp:Label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" valign="middle">
+                                        <asp:RadioButton ID="rbtnRemovePersonsEndDate" runat="server" AutoPostBack="false"
+                                            GroupName="removeEnd" Checked="true" /><b style="font-size: 13px;">OK</b>&nbsp;&nbsp;&nbsp;
+                                        <asp:RadioButton ID="rbtnCancelEndDate" runat="server" AutoPostBack="false" GroupName="removeEnd"
+                                            onclick="ShowConfirmDialogForEndDate(this);" /><b style="font-size: 13px;">Cancel</b>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr id="trShowSaveandCancel" runat="server">
+                        <td colspan="2" align="center" style="padding: 6px 6px 15px 6px;">
+                            <table>
+                                <tr>
+                                    <td style="padding-right: 3px;">
+                                        <asp:Button ID="btnSavePopup" runat="server" Text="Save Changes" OnClick="btnSavePopup_OnClick" />
+                                    </td>
+                                    <td style="padding-left: 3px;">
+                                        <asp:Button ID="btnCancelSaving" runat="server" Text="Cancel Changes" OnClick="btnCancel_OnClick" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
             <uc:LoadingProgress ID="lpOpportunityDetails" runat="server" />
         </ContentTemplate>
     </asp:UpdatePanel>
