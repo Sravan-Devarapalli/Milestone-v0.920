@@ -34,7 +34,10 @@ AS
 	       mp.SalesCommission,
 	       mp.MilestoneExpectedHours,
 	       mp.MilestoneActualDeliveryDate,
-	       mp.MilestoneHourlyRevenue
+	       mp.MilestoneHourlyRevenue,
+	       p.HireDate,
+	       p.TerminationDate 
 	  FROM dbo.v_MilestonePerson AS mp
-	 WHERE mp.MilestoneId = @MilestoneIdLocal
+	  INNER JOIN Person AS p ON mp.PersonId = p.PersonId
+	  WHERE mp.MilestoneId = @MilestoneIdLocal
 
