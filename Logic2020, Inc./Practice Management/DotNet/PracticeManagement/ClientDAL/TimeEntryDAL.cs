@@ -1205,9 +1205,34 @@ namespace DataAccess
             }
         }
 
+        public static bool HasTimeEntriesForMilestone(int milestoneId, DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.HasTimeEntriesForMilestoneBetweenOldAndNewDates, connection))
+            {
+                bool result = false;
+                command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneIdParam, milestoneId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            result = reader.GetBoolean(reader.GetOrdinal(Constants.ParameterNames.HasTimeEntries));
+                        }
+                    }
+                    return result;
+                }
+            }
+        }
+
         #endregion
-
-
     }
 }
 
