@@ -58,7 +58,7 @@ namespace PracticeManagementService
 
         public List<Milestone> MilestoneListByProjectForTimeEntryByProjectReport(int projectId)
         {
-           return  MilestoneDAL.MilestoneListByProjectForTimeEntryByProjectReport(projectId);
+            return MilestoneDAL.MilestoneListByProjectForTimeEntryByProjectReport(projectId);
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace PracticeManagementService
         /// <param name="milestone">The <see cref="Milestone"/> to be saved.</param>
         /// <param name="userName">A current user.</param>
         /// <returns>An ID of the saved record.</returns>
-        public int SaveMilestoneDetail(Milestone milestone, string userName)
+        public int SaveMilestoneDetail(Milestone milestone, MilestoneUpdateObject milestoneUpdateObj, string userName)
         {
             if (!milestone.Id.HasValue)
             {
@@ -150,9 +150,9 @@ namespace PracticeManagementService
             }
             else
             {
-                MilestoneDAL.MilestoneUpdate(milestone, userName);
+                MilestoneDAL.MilestoneUpdate(milestone, milestoneUpdateObj, userName);
             }
-            
+
             return milestone.Id.Value;
         }
 
