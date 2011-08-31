@@ -21,6 +21,15 @@ namespace PraticeManagement.Utils
     /// </summary>
     public class TimeEntryHelper
     {
+
+        public static bool HasTimeEntriesForMilestone(int milestoneId, DateTime startDate, DateTime endDate)
+        {
+            using (var serv = new TimeEntryServiceClient())
+            {
+                return serv.HasTimeEntriesForMilestone(milestoneId, startDate, endDate);
+            }
+        }
+
         #region Data - Time Types
 
         /// <summary>
