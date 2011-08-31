@@ -1,10 +1,13 @@
 ﻿CREATE PROCEDURE [dbo].[OpportunityPriorityUpdate]
 @OldPriorityId INT,
 @PriorityId INT,
-@Description NVARCHAR(255)
+@Description NVARCHAR(255),
+@UserLogin          NVARCHAR(255)
 AS
 BEGIN
 	SET NOCOUNT ON
+	-- Start logging session
+		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
 	IF(@OldPriorityId = @PriorityId)
 	BEGIN
@@ -27,10 +30,13 @@ BEGIN
 		   ,[IsInserted] = 0    
 		WHERE id = @OldPriorityId
 		
-		UPDATE v_Opportunity
+		UPDATE Opportunity
 		SET PriorityId =@PriorityId
 		WHERE PriorityId =@OldPriorityId
 		
 	END
+
+	-- End logging session
+		EXEC dbo.SessionLogUnprepare
 END
 GO
