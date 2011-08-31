@@ -39,6 +39,22 @@ namespace PraticeManagement
         private const string LblTotalreimbursement = "lblTotalReimbursed";
         private const string LblTotalreimbursementamount = "lblTotalReimbursementAmount";
 
+        private const string changeMilestonePersonsPopupMessageForStartDate = @"You are trying to set a new milestone start date ({0}) that is earlier than the existing milestone start date ({1}).<br/>
+                                                                    Select ""Change Milestone and Resources""  to update the start dates for all of the Resources attached to this milestone to ({2})
+                                                                    or Select ""Change Milestone Only"" to leave the Resource start dates unchanged." + "<br/>" +
+                                                                   "<b>Note:</b>  If any Resource(s) has a hire date after the new milestone start date their new start date will be their hire date." + "<br/>";
+
+        private const string changeMilestonePersonsPopupMessageForEndDate = @"You are trying to set a new milestone end date ({0}) that is later than the existing milestone end date ({1}).<br/>
+                                                                Select ""Change Milestone and Resources""  to update the end dates for all of the Resources attached to this milestone to ({2}) or
+                                                                Select ""Change Milestone Only"" to leave the Resource end dates unchanged." + "<br/>" +
+                                                                "<b>Note:</b>  If any Resource(s) has a termination date before the new milestone end date their new end date will be their termination date." + "<br/>";
+        private const string RemoveMilestonePersonsPopupMessageForStartDate = @"You are trying to set a start date ({0}) for the milestone that is later than the following Resource(s) termination date:{1} Select OK to remove these Resource(s) from the milestone and update the milestone start date." + "<br/>" +
+                                                                    @"Select Cancel to select another start date or to manually update Resource(s) attached to this milestone." + "<br/>";
+        private const string RemoveMilestonePersonsPopupMessageForEndDate = @"You are trying to set an end date ({0}) for the milestone that is before the following Resource(s) hire date:{1} If you Select OK these Resource(s) will be removed from the milestone and the end date will be updated." + "<br/>" +
+                                                                    @"Select Cancel to select another end date or to manually update Resource(s) attached to this milestone." + "<br/>";
+        
+
+        private const string format = "{0} {1} ({2})";
         #endregion
 
         #region Fields
@@ -240,7 +256,7 @@ namespace PraticeManagement
 
         public MessageLabel lblResultObject
         {
-            get 
+            get
             {
                 return lblResult;
             }
@@ -308,17 +324,20 @@ namespace PraticeManagement
 
         protected void cstCheckEndDateForExpensesExistance_OnServerValidate(object sender, ServerValidateEventArgs args)
         {
-            if (MilestoneId.HasValue && Milestone != null && Milestone.EndDate > dtpPeriodTo.DateValue
-                && Milestone.Project.EndDate == Milestone.EndDate)
+            if (reqPeriodTo.IsValid && compPeriodTo.IsValid)
             {
-                using (var service = new MilestoneServiceClient())
+                if (MilestoneId.HasValue && Milestone != null && Milestone.EndDate > dtpPeriodTo.DateValue
+                    && Milestone.Project.EndDate == Milestone.EndDate)
                 {
-                    args.IsValid = !(service.CheckIfExpensesExistsForMilestonePeriod(MilestoneId.Value, null, dtpPeriodTo.DateValue));
+                    using (var service = new MilestoneServiceClient())
+                    {
+                        args.IsValid = !(service.CheckIfExpensesExistsForMilestonePeriod(MilestoneId.Value, null, dtpPeriodTo.DateValue));
+                    }
                 }
-            }
-            else
-            {
-                args.IsValid = true;
+                else
+                {
+                    args.IsValid = true;
+                }
             }
         }
 
@@ -487,6 +506,18 @@ namespace PraticeManagement
             LoadActiveTabIndex(mvMilestoneDetailTab.ActiveViewIndex);
         }
 
+
+        protected void custStartandEndDate_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = !(hdnCanShowPopup.Value == "true");
+
+            if (!args.IsValid)
+            {
+                mpePopup.Show();
+            }
+
+        }
+
         #endregion
 
         #region Preventing dirty loss
@@ -494,40 +525,51 @@ namespace PraticeManagement
         protected void dtpPeriod_SelectionChanged(object sender, EventArgs e)
         {
             IsDirty = true;
+            SetPopupMessageTextAndAssignHiddenFieldValues();
         }
 
         #endregion
 
-        protected void btnSave_Click(object sender, EventArgs e)
+        private void OnSaveClick(MilestoneUpdateObject milestoneUpdateObj = null)
         {
             var result = true;
             Page.Validate(vsumMilestone.ValidationGroup);
             if (Page.IsValid)
             {
-                if (!MilestoneId.HasValue)
+                Page.Validate(vsumPopup.ValidationGroup);
+                if (Page.IsValid)
                 {
-                    int? id = SaveData();
 
-                    if (id.HasValue)
+                    if (!MilestoneId.HasValue)
                     {
-                        MilestoneId = id;
+                        int? id = SaveData();
+
+                        if (id.HasValue)
+                        {
+                            MilestoneId = id;
+                        }
+                    }
+                    else
+                    {
+                        result = ValidateandSaveData(milestoneUpdateObj);
+                    }
+
+                    if (MilestoneId.HasValue && result)
+                    {
+                        Milestone = GetMilestoneById(MilestoneId);
+                        MilestonePersonEntryListControlObject.GetLatestData();
+                        mvMilestoneDetailTab.Visible = true;
+                        tblMilestoneDetailTabViewSwitch.Visible = true;
+                        LoadPrevNextMilestones();
+                        lblResult.ShowInfoMessage(Messages.MilestoneSavedMessage);
+                        ClearDirty();
                     }
                 }
                 else
                 {
-                    result = ValidateAndSave();
+                    lblResult.ClearMessage();
                 }
 
-                if (MilestoneId.HasValue && result)
-                {
-                    Milestone = GetMilestoneById(MilestoneId);
-                    MilestonePersonEntryListControlObject.GetLatestData();
-                    mvMilestoneDetailTab.Visible = true;
-                    tblMilestoneDetailTabViewSwitch.Visible = true;
-                    LoadPrevNextMilestones();
-                    lblResult.ShowInfoMessage(Messages.MilestoneSavedMessage);
-                    ClearDirty();
-                }
             }
             else
             {
@@ -541,6 +583,90 @@ namespace PraticeManagement
                     Project = Milestone.Project;
                     PopulateControls(Milestone, true);
                 }
+            }
+
+            LoadActiveTabIndex(mvMilestoneDetailTab.ActiveViewIndex);
+        }
+
+        protected void btnSave_Click(object sender, EventArgs e)
+        {
+            if (MilestoneId.HasValue)
+            {
+                DateTime PeriodFrom = Convert.ToDateTime(hdnPeriodFrom.Value);
+                DateTime PeriodTo = Convert.ToDateTime(hdnPeriodTo.Value);
+
+                if ((hdnCanShowPopup.Value == "false" && PeriodFrom != dtpPeriodFrom.DateValue) ||
+                    (hdnCanShowPopup.Value == "false" && PeriodTo != dtpPeriodTo.DateValue))
+                {
+                    var milestoneUpdateObj = new MilestoneUpdateObject();
+                    if (PeriodFrom != dtpPeriodFrom.DateValue)
+                    {
+                        milestoneUpdateObj.IsStartDateChangeReflectedForMilestoneAndPersons = true;
+                    }
+
+                    if (PeriodTo != dtpPeriodTo.DateValue)
+                    {
+
+                        milestoneUpdateObj.IsEndDateChangeReflectedForMilestoneAndPersons = true;
+                    }
+
+                    OnSaveClick(milestoneUpdateObj);
+                }
+                else
+                {
+
+                    OnSaveClick();
+                }
+            }
+            else
+            {
+                OnSaveClick();
+            }
+        }
+
+        protected void btnSavePopup_OnClick(object sender, EventArgs e)
+        {
+            DateTime PeriodFrom = Convert.ToDateTime(hdnPeriodFrom.Value);
+            DateTime PeriodTo = Convert.ToDateTime(hdnPeriodTo.Value);
+
+            var milestoneUpdateObj = new MilestoneUpdateObject();
+
+            if (tblchangeMilestonePersonsForStartDate.Visible)
+            {
+                milestoneUpdateObj.IsStartDateChangeReflectedForMilestoneAndPersons = rbtnchangeMileStoneAndPersonsStartDate.Checked;
+            }
+            else if (PeriodFrom != dtpPeriodFrom.DateValue)
+            {
+                milestoneUpdateObj.IsStartDateChangeReflectedForMilestoneAndPersons = true;
+            }
+
+            if (tblchangeMilestonePersonsForEndDate.Visible)
+            {
+                milestoneUpdateObj.IsEndDateChangeReflectedForMilestoneAndPersons = rbtnchangeMileStoneAndPersonsEndDate.Checked;
+            }
+            else if (PeriodTo != dtpPeriodTo.DateValue)
+            {
+                milestoneUpdateObj.IsEndDateChangeReflectedForMilestoneAndPersons = true;
+            }
+
+            hdnCanShowPopup.Value = "false";
+
+            OnSaveClick(milestoneUpdateObj);
+
+            SetDefaultValuesInPopup();
+        }
+
+        protected void btnCancel_OnClick(object sender, EventArgs e)
+        {
+            mpePopup.Hide();
+            SetDefaultValuesInPopup();
+            if (MilestoneId.HasValue && Milestone != null)
+            {
+                Project = Milestone.Project;
+                PopulateControls(Milestone, true);
+                lblResult.ClearMessage();
+                ClearDirty();
+                hdnCanShowPopup.Value = "false";
             }
 
             LoadActiveTabIndex(mvMilestoneDetailTab.ActiveViewIndex);
@@ -651,7 +777,32 @@ namespace PraticeManagement
 
         private void SaveAndRedirect(object args)
         {
-            if (!SaveDirty || ValidateAndSave())
+            MilestoneUpdateObject milestoneUpdateObj = null;
+
+            if (MilestoneId.HasValue)
+            {
+                DateTime PeriodFrom = Convert.ToDateTime(hdnPeriodFrom.Value);
+                DateTime PeriodTo = Convert.ToDateTime(hdnPeriodTo.Value);
+
+
+                if ((hdnCanShowPopup.Value == "false" && PeriodFrom != dtpPeriodFrom.DateValue) ||
+                    (hdnCanShowPopup.Value == "false" && PeriodTo != dtpPeriodTo.DateValue))
+                {
+                    milestoneUpdateObj = new MilestoneUpdateObject();
+                    if (PeriodFrom != dtpPeriodFrom.DateValue)
+                    {
+                        milestoneUpdateObj.IsStartDateChangeReflectedForMilestoneAndPersons = true;
+                    }
+
+                    if (PeriodTo != dtpPeriodTo.DateValue)
+                    {
+
+                        milestoneUpdateObj.IsEndDateChangeReflectedForMilestoneAndPersons = true;
+                    }
+                }
+            }
+
+            if (!SaveDirty || ValidateandSaveData(milestoneUpdateObj))
             {
                 int mpId;
                 var isInt = int.TryParse(args.ToString(), out mpId);
@@ -710,44 +861,54 @@ namespace PraticeManagement
 
         protected override bool ValidateAndSave()
         {
+            return ValidateandSaveData();
+        }
+
+        private bool ValidateandSaveData(MilestoneUpdateObject milestoneUpdateObj = null)
+        {
             bool result = false;
             Page.Validate(vsumMilestone.ValidationGroup);
             if (Page.IsValid)
             {
-                if (!MilestonePersonEntryListControl.isInsertedRowsAreNotsaved)
+                Page.Validate(vsumPopup.ValidationGroup);
+                if (Page.IsValid)
                 {
-                    result = SaveData() > 0;
-                }
-                else 
-                {
-                     var index = mvMilestoneDetailTab.ActiveViewIndex;
-                     var control = rowSwitcher.Cells[index].Controls[0];
-                   
-                    SelectView(btnResources, 2, true);
-                    result = MilestonePersonEntryListControl.ValidateAll();
-                    if (result)
+
+                    if (!MilestonePersonEntryListControl.isInsertedRowsAreNotsaved)
                     {
-                        result = SaveData() > 0;
-                        if (result)
-                        {
-                            result = MilestonePersonEntryListControl.SaveAll();
-                        }
-
-                        if (result)
-                        {
-                            if (index != 2)
-                            {
-                                SelectView(control, index, true);
-                            }
-                        }
-
+                        result = SaveData(milestoneUpdateObj) > 0;
                     }
                     else
                     {
-                        lblResult.ShowErrorMessage("Error occured while saving resources.");
+                        var index = mvMilestoneDetailTab.ActiveViewIndex;
+                        var control = rowSwitcher.Cells[index].Controls[0];
+
+                        SelectView(btnResources, 2, true);
+                        result = MilestonePersonEntryListControl.ValidateAll();
+                        if (result)
+                        {
+                            result = SaveData(milestoneUpdateObj) > 0;
+                            if (result)
+                            {
+                                result = MilestonePersonEntryListControl.SaveAll();
+                            }
+
+                            if (result)
+                            {
+                                if (index != 2)
+                                {
+                                    SelectView(control, index, true);
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            lblResult.ShowErrorMessage("Error occured while saving resources.");
+                        }
                     }
+
                 }
-                
             }
             return result;
         }
@@ -942,16 +1103,25 @@ namespace PraticeManagement
                 rbtnFixedRevenue.Checked;
         }
 
-        private int SaveData()
+        private int SaveData(MilestoneUpdateObject milestoneUpdateObj = null)
         {
             Milestone milestone = new Milestone();
             PopulateData(milestone);
+
+            if (milestoneUpdateObj == null)
+            {
+                milestoneUpdateObj = new MilestoneUpdateObject()
+                {
+                    IsEndDateChangeReflectedForMilestoneAndPersons = null,
+                    IsStartDateChangeReflectedForMilestoneAndPersons = null
+                };
+            }
 
             using (MilestoneServiceClient serviceClient = new MilestoneServiceClient())
             {
                 try
                 {
-                    return serviceClient.SaveMilestoneDetail(milestone, User.Identity.Name);
+                    return serviceClient.SaveMilestoneDetail(milestone, milestoneUpdateObj, User.Identity.Name);
                 }
                 catch (FaultException<ExceptionDetail>)
                 {
@@ -984,6 +1154,8 @@ namespace PraticeManagement
             txtMilestoneName.Text = milestone.Description;
             dtpPeriodFrom.DateValue = milestone.StartDate;
             dtpPeriodTo.DateValue = milestone.ProjectedDeliveryDate;
+            hdnPeriodFrom.Value = dtpPeriodFrom.TextValue;
+            hdnPeriodTo.Value = dtpPeriodTo.TextValue;
             rbtnFixedRevenue.Checked = !milestone.IsHourlyAmount;
             rbtnHourlyRevenue.Checked = milestone.IsHourlyAmount;
             chbIsChargeable.Checked = milestone.IsChargeable;
@@ -1151,20 +1323,6 @@ namespace PraticeManagement
             return Generic.GetTargetUrlWithReturn(redirrectUrl, Request.Url.AbsoluteUri);
         }
 
-        #region Implementation of IPostBackEventHandler
-
-        /// <summary>
-        /// When implemented by a class, enables a server control to process an event raised when a form is posted to the server.
-        /// </summary>
-        /// <param name="eventArgument">A <see cref="T:System.String"/> that represents an optional event argument 
-        /// to be passed to the event handler. </param>
-        public void RaisePostBackEvent(string eventArgument)
-        {
-            SaveAndRedirect(eventArgument);
-        }
-
-        #endregion
-
         protected void gvPeople_OnDataBound(object sender, EventArgs e)
         {
             gvPeople.FooterStyle.BackColor =
@@ -1221,6 +1379,7 @@ namespace PraticeManagement
                     break;
             }
         }
+
         private static void SetRowValue(Control row, string ctrlName, decimal number)
         {
             SetRowValue(row, ctrlName, ((PracticeManagementCurrency)number).ToString());
@@ -1258,11 +1417,29 @@ namespace PraticeManagement
             ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
         }
 
+        private void SetDefaultValuesInPopup()
+        {
+            rbtnRemovePersonsStartDate.Checked = true;
+            rbtnRemovePersonsEndDate.Checked = true;
+            rbtnCancelStartDate.Checked = false;
+            rbtnCancelEndDate.Checked = false;
+
+            rbtnchangeMileStoneAndPersonsStartDate.Checked = true;
+            rbtnchangeMileStoneAndPersonsEndDate.Checked = true;
+            rbtnchangeMileStoneEndDate.Checked = false;
+            rbtnchangeMileStoneStartDate.Checked = false;
+
+            tblHasTimeentriesTowardsMileStone.Visible = false;
+            tblchangeMilestonePersonsForStartDate.Visible = false;
+            tblchangeMilestonePersonsForEndDate.Visible = false;
+            tblRemoveMilestonePersonsForStartDate.Visible = false;
+            tblRemoveMilestonePersonsForEndDate.Visible = false;
+        }
+
         protected bool GetVisibleValue()
         {
             return MilestoneId.HasValue;
         }
-
 
         protected void btnAddPerson_Click(object sender, EventArgs e)
         {
@@ -1275,7 +1452,124 @@ namespace PraticeManagement
             MilestonePersonEntryListControl.AddEmptyRow();
         }
 
-        
+        private void SetPopupMessageTextAndAssignHiddenFieldValues()
+        {
+            SetDefaultValuesInPopup();
+
+            if (MilestoneId.HasValue && Milestone != null && Milestone.MilestonePersons.Count() > 0)
+            {
+                DateTime PeriodFrom = Convert.ToDateTime(hdnPeriodFrom.Value);
+                DateTime PeriodTo = Convert.ToDateTime(hdnPeriodTo.Value);
+
+
+                if (PeriodFrom.Date == dtpPeriodFrom.DateValue.Date && PeriodTo.Date == dtpPeriodTo.DateValue.Date)
+                {
+                    hdnCanShowPopup.Value = "false";
+                }
+                else
+                {
+                    try
+                    {
+                        bool hasTimeEntries = TimeEntryHelper.HasTimeEntriesForMilestone(MilestoneId.Value, dtpPeriodFrom.DateValue, dtpPeriodTo.DateValue);
+
+                        if (hasTimeEntries == true)
+                        {
+                            tblHasTimeentriesTowardsMileStone.Visible = true;
+                            trShowSaveandCancel.Visible = false;
+
+                            hdnCanShowPopup.Value = "true";
+                        }
+                        else
+                        {
+                            if (PeriodFrom > dtpPeriodFrom.DateValue)
+                            {
+                                if (PeriodFrom < dtpPeriodTo.DateValue)
+                                {
+                                    lblchangeMilestonePersonsPopupMessageForStartDate.Text = string.Format(changeMilestonePersonsPopupMessageForStartDate, dtpPeriodFrom.TextValue, PeriodFrom.ToString("MM/dd/yyyy"), dtpPeriodFrom.TextValue);
+                                    tblchangeMilestonePersonsForStartDate.Visible = true;
+                                    hdnCanShowPopup.Value = "true";
+                                }
+                            }
+
+
+                            if (PeriodTo < dtpPeriodTo.DateValue)
+                            {
+                                if (PeriodTo > dtpPeriodFrom.DateValue)
+                                {
+                                    lblchangeMilestonePersonsForEndDate.Text = string.Format(changeMilestonePersonsPopupMessageForEndDate, dtpPeriodTo.TextValue, PeriodTo.ToString("MM/dd/yyyy"), dtpPeriodTo.TextValue);
+                                    tblchangeMilestonePersonsForEndDate.Visible = true;
+                                    hdnCanShowPopup.Value = "true";
+                                }
+                            }
+
+                            if (PeriodFrom < dtpPeriodFrom.DateValue)
+                            {
+                                List<Person> personlist = new List<Person>();
+
+                                personlist = Milestone.MilestonePersons.Where(mp => mp.Person.TerminationDate.HasValue && mp.Person.TerminationDate.Value < dtpPeriodFrom.DateValue).Select(mp => mp.Person).ToList();
+
+                                if (personlist.Count > 0)
+                                {
+                                    string personDetail = string.Empty;
+                                    foreach (var person in personlist)
+                                    {
+                                        personDetail += "<br/> <b>" + string.Format(format, person.FirstName, person.LastName, person.TerminationDate.Value.ToString("MM/dd/yyyy")) + "</b> <br/>";
+                                    }
+                                    lblRemoveMilestonePersonsForStartDate.Text = string.Format(RemoveMilestonePersonsPopupMessageForStartDate, dtpPeriodFrom.TextValue, personDetail);
+
+                                    tblRemoveMilestonePersonsForStartDate.Visible = true;
+                                    hdnCanShowPopup.Value = "true";
+                                }
+                            }
+
+                            if (PeriodTo > dtpPeriodTo.DateValue)
+                            {
+                                List<Person> personlist = new List<Person>();
+
+                                personlist = Milestone.MilestonePersons.Where(mp => mp.Person.HireDate > dtpPeriodTo.DateValue).Select(mp => mp.Person).ToList();
+
+                                if (personlist.Count > 0)
+                                {
+                                    string personDetail = string.Empty;
+                                    foreach (var person in personlist)
+                                    {
+                                        personDetail += "<br/> <b>" + string.Format(format, person.FirstName, person.LastName, person.HireDate.ToString("MM/dd/yyyy")) + "</b> <br/>";
+                                    }
+                                    lblRemoveMilestonePersonsForEndDate.Text = string.Format(RemoveMilestonePersonsPopupMessageForEndDate, dtpPeriodTo.TextValue, personDetail);
+
+                                    tblRemoveMilestonePersonsForEndDate.Visible = true;
+                                    hdnCanShowPopup.Value = "true";
+                                }
+                            }
+
+                            if (hdnCanShowPopup.Value == "true")
+                            {
+                                trShowSaveandCancel.Visible = true;
+                            }
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
+        }
+
+        #region Implementation of IPostBackEventHandler
+
+        /// <summary>
+        /// When implemented by a class, enables a server control to process an event raised when a form is posted to the server.
+        /// </summary>
+        /// <param name="eventArgument">A <see cref="T:System.String"/> that represents an optional event argument 
+        /// to be passed to the event handler. </param>
+        public void RaisePostBackEvent(string eventArgument)
+        {
+            SaveAndRedirect(eventArgument);
+        }
+
+        #endregion
+
     }
 }
 
