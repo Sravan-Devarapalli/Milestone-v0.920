@@ -148,19 +148,27 @@
     function setPosition(item, ytop, xleft) {
         item.offset({ top: ytop, left: xleft });
     }
+
+    function ddlPriorityList_onchange(ddlPriority) {
+        var urlVal = "OpportunityPriorityHandler.ashx?OpportunityID=" + ddlPriority.attributes["OpportunityID"].value + "&PriorityID=" + ddlPriority.value;
+        $.post(urlVal, function (dat) {
+        });
+    }
 </script>
 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
     <ContentTemplate>
         <div class="buttons-block">
-            <ajaxToolkit:CollapsiblePanelExtender ID="cpeSummary" runat="Server"
-                        TargetControlID="pnlSummary" ImageControlID="btnExpandCollapseSummary"
-                        CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg" CollapseControlID="btnExpandCollapseSummary"
-                        ExpandControlID="btnExpandCollapseSummary" Collapsed="True" TextLabelID="lblSummary" />                        
+            <ajaxToolkit:CollapsiblePanelExtender ID="cpeSummary" runat="Server" TargetControlID="pnlSummary"
+                ImageControlID="btnExpandCollapseSummary" CollapsedImage="~/Images/expand.jpg"
+                ExpandedImage="~/Images/collapse.jpg" CollapseControlID="btnExpandCollapseSummary"
+                ExpandControlID="btnExpandCollapseSummary" Collapsed="True" TextLabelID="lblSummary" />
             <asp:Label ID="lblSummary" runat="server"></asp:Label>&nbsp;
-            <asp:Image ID="btnExpandCollapseSummary" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Summary Details" />
+            <asp:Image ID="btnExpandCollapseSummary" runat="server" ImageUrl="~/Images/collapse.jpg"
+                ToolTip="Expand Summary Details" />
         </div>
-        <asp:Panel CssClass="summary" style="white-space:nowrap;overflow-x:auto;" ID="pnlSummary" runat="server">
-            </asp:Panel>
+        <asp:Panel CssClass="summary" Style="white-space: nowrap; overflow-x: auto;" ID="pnlSummary"
+            runat="server">
+        </asp:Panel>
         <div id="opportunity-list">
             <table cellpadding="0" cellspacing="0" align="center" style="width: 100%; padding-bottom: 10px;
                 margin-bottom: 10px;">
@@ -302,7 +310,10 @@
                         </td>
                         <td align="center">
                             <div class="cell-pad">
-                                <asp:Label ID="lblPriority" runat="server" Text='<%# ((Opportunity) Container.DataItem).Priority.Priority %>' /></div>
+                                <asp:DropDownList ID="ddlPriorityList" onchange="ddlPriorityList_onchange(this);"
+                                    runat="server">
+                                </asp:DropDownList>
+                            </div>
                         </td>
                         <td align="left">
                             <div class="cell-pad">
@@ -371,7 +382,10 @@
                         </td>
                         <td align="center">
                             <div class="cell-pad">
-                                <asp:Label ID="lblPriority" runat="server" Text='<%#  ((Opportunity) Container.DataItem).Priority.Priority %>' /></div>
+                                <asp:DropDownList ID="ddlPriorityList" onchange="ddlPriorityList_onchange(this);"
+                                    runat="server">
+                                </asp:DropDownList>
+                            </div>
                         </td>
                         <td align="left">
                             <div class="cell-pad">
@@ -441,11 +455,12 @@
         </div>
         <asp:HiddenField ID="hdnPreviouslyClickedRowIndex" runat="server" />
         <asp:HiddenField ID="hdnmpePotentialResources" runat="server" />
-        <AjaxControlToolkit:ModalPopupExtender ID="mpePotentialResources" runat="server" BehaviorID="behaviorIdPotentialResources"
-            TargetControlID="hdnmpePotentialResources" EnableViewState="false" BackgroundCssClass="modalBackground"
-            PopupControlID="pnlPotentialResources" CancelControlID="btnCancel" DropShadow="false" />
-        <asp:Panel ID="pnlPotentialResources" runat="server" BorderColor="Black" BackColor="#d4dff8" style="display:none;"
-            Width="372px" BorderWidth="1px">
+        <AjaxControlToolkit:ModalPopupExtender ID="mpePotentialResources" runat="server"
+            BehaviorID="behaviorIdPotentialResources" TargetControlID="hdnmpePotentialResources"
+            EnableViewState="false" BackgroundCssClass="modalBackground" PopupControlID="pnlPotentialResources"
+            CancelControlID="btnCancel" DropShadow="false" />
+        <asp:Panel ID="pnlPotentialResources" runat="server" BorderColor="Black" BackColor="#d4dff8"
+            Style="display: none;" Width="372px" BorderWidth="1px">
             <table width="100%">
                 <tr>
                     <td style="padding-left: 5px; padding-top: 5px; padding-bottom: 5px; padding-right: 2px;">
