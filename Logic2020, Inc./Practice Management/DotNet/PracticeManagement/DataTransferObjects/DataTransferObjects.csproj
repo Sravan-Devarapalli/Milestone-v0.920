@@ -154,6 +154,7 @@
     <Compile Include="IIdNameObject.cs" />
     <Compile Include="MilestonePerson.cs" />
     <Compile Include="MilestonePersonEntry.cs" />
+    <Compile Include="MilestoneUpdateObject.cs" />
     <Compile Include="MonthlyExpense.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="NoteTarget.cs" />
