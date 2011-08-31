@@ -127,7 +127,8 @@ namespace PraticeManagement.Controls.TimeEntry
                 ddlProjectMilestone,
                 HostingPage.MilestonePersonEntries);
 
-            isSystemTimeType = (RowBehind.TimeTypeBehind != null && RowBehind.TimeTypeBehind.IsSystemTimeType);
+            int ptoId = Convert.ToInt32(ddlTimeTypes.Items.FindByText("PTO").Value);//Added this as per #2904 to edit/Add row for PTO time type.
+            isSystemTimeType = (RowBehind.TimeTypeBehind != null && RowBehind.TimeTypeBehind.IsSystemTimeType && RowBehind.TimeTypeBehind.Id != ptoId);
             UpdateControlStatuses();
             imgDropTes.Enabled = !(isSystemTimeType && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName));
 
@@ -138,6 +139,7 @@ namespace PraticeManagement.Controls.TimeEntry
             }
             foreach (var item in systemTimeTypes)
             {
+                if (item.Id != ptoId)//Added this as per #2904 to edit/Add row for PTO time type.
                 ddlTimeTypes.Items.Remove(ddlTimeTypes.Items.FindByValue(item.Id.ToString()));
             }          
 
