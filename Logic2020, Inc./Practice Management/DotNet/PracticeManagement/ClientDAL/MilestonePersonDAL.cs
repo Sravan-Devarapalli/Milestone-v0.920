@@ -693,6 +693,18 @@ namespace DataAccess
                     projectStatusIdIndex = -1;
                 }
 
+                int hireDateIndex, terminationDateIndex;
+                try
+                {
+                    hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
+                    terminationDateIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationDateColumn);
+                }
+                catch
+                {
+                    hireDateIndex = -1;
+                    terminationDateIndex = -1;
+                }
+
                 while (reader.Read())
                 {
                     var milestonePerson = new MilestonePerson { Id = reader.GetInt32(milestonePersonIdIndex) };
@@ -753,6 +765,13 @@ namespace DataAccess
                                                      FirstName = reader.GetString(firstNameIndex),
                                                      LastName = reader.GetString(lastNameIndex)
                                                  };
+                    if (hireDateIndex >= 0 && terminationDateIndex >= 0)
+                    {
+                        milestonePerson.Person.HireDate = reader.GetDateTime(hireDateIndex);
+                        milestonePerson.Person.TerminationDate = !reader.IsDBNull(terminationDateIndex)
+                                                                 ? (DateTime?)reader.GetDateTime(terminationDateIndex)
+                                                                 : null;
+                    }
 
                     // Seniority
                     if (!reader.IsDBNull(personSeniorityIdIndex))
@@ -1116,7 +1135,7 @@ namespace DataAccess
                 }
             }
 
-        }
+        } 
 
         public static void LoadMilestonePersonEntriesWithFinancials(List<MilestonePerson> milestonePersons, int milestoneId)
         {
