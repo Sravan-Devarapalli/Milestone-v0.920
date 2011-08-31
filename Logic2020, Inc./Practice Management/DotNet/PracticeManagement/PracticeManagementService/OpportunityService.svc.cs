@@ -31,6 +31,10 @@ namespace PracticeManagementService
             return OpportunityTransitionDAL.OpportunityTransitionGetByPerson(personId);
         }
 
+        public void UpdatePriorityIdForOpportunity(int opportunityId, int priorityId, string userName)
+        {
+            OpportunityDAL.UpdatePriorityIdForOpportunity(opportunityId, priorityId, userName);
+        }
 
         /// <summary>
         /// 	Inserts Opportunity Transition
@@ -81,15 +85,15 @@ namespace PracticeManagementService
             OpportunityDAL.InsertOpportunityPriority(opportunityPriority);
         }
 
-        public void UpdateOpportunityPriority(int oldPriorityId, OpportunityPriority opportunityPriority)
+        public void UpdateOpportunityPriority(int oldPriorityId, OpportunityPriority opportunityPriority, string userName)
         {
-            OpportunityDAL.UpdateOpportunityPriority(oldPriorityId, opportunityPriority);
+            OpportunityDAL.UpdateOpportunityPriority(oldPriorityId, opportunityPriority, userName);
         }
 
 
-        public void DeleteOpportunityPriority(int? updatedPriorityId, int deletedPriorityId)
+        public void DeleteOpportunityPriority(int? updatedPriorityId, int deletedPriorityId, string userName)
         {
-            OpportunityDAL.DeleteOpportunityPriority(updatedPriorityId, deletedPriorityId);
+            OpportunityDAL.DeleteOpportunityPriority(updatedPriorityId, deletedPriorityId, userName);
         }
 
 
