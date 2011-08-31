@@ -534,9 +534,20 @@ namespace PraticeManagement.Controls.Opportunities
         {
             if (e.Item.ItemType == ListViewItemType.DataItem)
             {
-                var datalist = e.Item.FindControl("dtlProposedPersons") as DataList;
+                  var datalist = e.Item.FindControl("dtlProposedPersons") as DataList;
                 var hdnProposedPersonsIndexes = e.Item.FindControl("hdnProposedPersonsIndexes") as HiddenField;
                 var oppty = (e.Item as ListViewDataItem).DataItem as Opportunity;
+
+                var ddlPriority = e.Item.FindControl("ddlPriorityList") as DropDownList;
+
+                if (ddlPriority != null)
+                {
+                    OpportunityPriority[] priorities = GetOpportunityPriorities();
+                    DataHelper.FillListDefault(ddlPriority, string.Empty, priorities, true, "Id", "Priority");
+                    ddlPriority.SelectedValue = oppty.Priority.Id.ToString();
+                    ddlPriority.Attributes["OpportunityID"] = oppty.Id.Value.ToString();
+                }
+              
                 if (oppty != null && oppty.ProposedPersons != null)
                 {
                     datalist.DataSource = oppty.ProposedPersons.OrderBy(person => person.LastName + person.FirstName);
@@ -558,6 +569,18 @@ namespace PraticeManagement.Controls.Opportunities
                     ltrlOutSideResources.Text = oppty.OutSideResources.Replace(";", "<br/>");
                 }
             }
+        }
+
+        private OpportunityPriority[] GetOpportunityPriorities()
+        {
+            if(ViewState["OpportunityPrioritiesList"] == null)
+            {
+                var priorityList = OpportunityPriorityHelper.GetOpportunityPriorities(true);
+                ViewState["OpportunityPrioritiesList"] = priorityList;
+                return priorityList;
+            }
+
+            return ViewState["OpportunityPrioritiesList"] as OpportunityPriority[];
         }
 
         private string GetPersonsIndexesWithPersonTypeString(List<Person> persons, CheckBoxList cblPotentialResources)
@@ -626,7 +649,7 @@ namespace PraticeManagement.Controls.Opportunities
             }
             else
             {
-                return "<strike>"+ personLastFirstName + "</strike>";
+                return "<strike>" + personLastFirstName + "</strike>";
             }
 
         }
