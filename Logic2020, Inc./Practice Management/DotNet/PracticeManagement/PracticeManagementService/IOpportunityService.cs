@@ -8,7 +8,10 @@ namespace PracticeManagementService
 {
 	[ServiceContract]
 	public interface IOpportunityService
-	{
+    {
+        [OperationContract]
+        void UpdatePriorityIdForOpportunity(int opportunityId, int priorityId, string userName);
+
 		/// <summary>
 		/// Retrives a list of the opportunities for excel export.
 		/// </summary>
@@ -72,10 +75,10 @@ namespace PracticeManagementService
         void InsertOpportunityPriority(OpportunityPriority opportunityPriority);
 
         [OperationContract]
-        void UpdateOpportunityPriority(int oldPriorityId, OpportunityPriority opportunityPriority);
+        void UpdateOpportunityPriority(int oldPriorityId, OpportunityPriority opportunityPriority, string userName);
 
         [OperationContract]
-        void DeleteOpportunityPriority(int? updatedPriorityId, int deletedPriorityId);
+        void DeleteOpportunityPriority(int? updatedPriorityId, int deletedPriorityId, string userName);
 
 		/// <summary>
 		/// Retrives an <see cref="Opportunity"/> be a specified ID.
