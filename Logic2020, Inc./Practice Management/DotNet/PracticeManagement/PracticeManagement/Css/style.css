@@ -2053,3 +2053,11 @@ table.CellPaddingClass td
 {
     padding-left: 10px;
 }
+
+.WordWrap
+{
+    word-wrap: break-word !important; /* Internet Explorer 5.5+ */
+    word-break: break-all;
+    white-space: normal;
+}
+
