@@ -212,7 +212,7 @@ namespace PraticeManagement.Config
             opportunityPriority.Id = Convert.ToInt32(ddl.SelectedValue);
             opportunityPriority.Description = tbox.Text;
 
-            OpportunityPriorityHelper.UpdateOpportunityPriority(oldPriorityId, opportunityPriority);
+            OpportunityPriorityHelper.UpdateOpportunityPriority(oldPriorityId, opportunityPriority,User.Identity.Name);
             gvOpportunityPriorities.EditIndex = -1;
             ViewState.Remove(OPPORTUNITY_PRIORITY_LIST_KEY);
             DatabindOpportunityPriorities();
@@ -224,7 +224,7 @@ namespace PraticeManagement.Config
 
             int deletedPriorityId = Convert.ToInt32(btnOK.Attributes["PriorityId"]);
 
-            OpportunityPriorityHelper.DeleteOpportunityPriority(updatedPriorityId, deletedPriorityId);
+            OpportunityPriorityHelper.DeleteOpportunityPriority(updatedPriorityId, deletedPriorityId,User.Identity.Name);
 
             ViewState.Remove(OPPORTUNITY_PRIORITY_LIST_KEY);
             DatabindOpportunityPriorities();
@@ -251,7 +251,7 @@ namespace PraticeManagement.Config
             }
             else
             {
-                OpportunityPriorityHelper.DeleteOpportunityPriority(null, priorityId);
+                OpportunityPriorityHelper.DeleteOpportunityPriority(null, priorityId, User.Identity.Name);
                 ViewState.Remove(OPPORTUNITY_PRIORITY_LIST_KEY);
                 DatabindOpportunityPriorities();
             }
