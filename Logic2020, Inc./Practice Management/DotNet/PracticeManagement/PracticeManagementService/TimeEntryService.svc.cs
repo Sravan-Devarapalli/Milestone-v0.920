@@ -304,6 +304,11 @@ namespace PracticeManagementService
             return persons;
         }
 
+        public bool HasTimeEntriesForMilestone(int milestoneId, DateTime startDate, DateTime endDate)
+        {
+            return TimeEntryDAL.HasTimeEntriesForMilestone(milestoneId, startDate, endDate);
+        }
+
         #endregion
     }
 }
