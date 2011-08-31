@@ -10,6 +10,45 @@ AS
 BEGIN
 	-- Ensure the temporary table exists
 	EXEC SessionLogPrepare @UserLogin = NULL
+
+	IF EXISTS(SELECT 1 FROM deleted)
+	BEGIN
+	
+		DECLARE @PrevPriorityId INT
+		DECLARE @PriorityId INT
+		DECLARE @NoteText NVARCHAR(2000)
+		DECLARE @CurrentPriority NVARCHAR(255)
+		DECLARE @PrevPriority NVARCHAR(255)
+		DECLARE @OpportunityId INT
+		DECLARE @PersonId INT
+	
+		SELECT @PrevPriority = OP.Priority,
+			   @PrevPriorityId = d.PriorityId
+		FROM deleted AS d
+		INNER JOIN dbo.OpportunityPriorities AS OP ON Op.Id = d.PriorityId
+	
+		SELECT @PriorityId = i.PriorityId ,
+			   @CurrentPriority = OP.Priority,
+			   @OpportunityId = i.OpportunityId
+		FROM inserted AS i
+		INNER JOIN dbo.OpportunityPriorities AS OP ON Op.Id = i.PriorityId
+	
+		SELECT @PersonId = l.PersonId 
+		FROM dbo.SessionLogData AS l 
+		WHERE l.SessionID = @@SPID
+			-- Determine if the priority was changed
+			IF @PrevPriorityId <> @PriorityId
+			BEGIN
+				-- Create a history record
+				SET @NoteText = 'Priority changed.  Was: ' + @PrevPriority + ' now: ' + @CurrentPriority
+
+				INSERT INTO dbo.OpportunityTransition
+	            (OpportunityId, OpportunityTransitionStatusId, PersonId, NoteText, TargetPersonId)
+				SELECT OpportunityId, 2 /* Notes */, @PersonId, @NoteText, NULL
+				FROM inserted 
+
+			END
+	END
 	
 	DECLARE @CurrentPMTime DATETIME 
 	SET @CurrentPMTime = dbo.InsertingTime()
