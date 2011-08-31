@@ -63,13 +63,13 @@ namespace PraticeManagement.Controls.Opportunities
             }
         }
 
-        public static void UpdateOpportunityPriority(int oldPriorityId, OpportunityPriority opportunityPriority)
+        public static void UpdateOpportunityPriority(int oldPriorityId, OpportunityPriority opportunityPriority, string userName)
         {
             using (var serviceClient = new OpportunityServiceClient())
             {
                 try
                 {
-                    serviceClient.UpdateOpportunityPriority(oldPriorityId,opportunityPriority);
+                    serviceClient.UpdateOpportunityPriority(oldPriorityId, opportunityPriority, userName);
 
                 }
                 catch (CommunicationException ex)
@@ -80,13 +80,13 @@ namespace PraticeManagement.Controls.Opportunities
             }
         }
 
-        public static void DeleteOpportunityPriority(int? updatedPriorityId, int deletedPriorityId)
+        public static void DeleteOpportunityPriority(int? updatedPriorityId, int deletedPriorityId, string userName)
         {
             using (var serviceClient = new OpportunityServiceClient())
             {
                 try
                 {
-                    serviceClient.DeleteOpportunityPriority(updatedPriorityId, deletedPriorityId);
+                    serviceClient.DeleteOpportunityPriority(updatedPriorityId, deletedPriorityId, userName);
 
                 }
                 catch (CommunicationException ex)
