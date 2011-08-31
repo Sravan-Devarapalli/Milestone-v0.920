@@ -300,7 +300,7 @@ namespace DataAccess
         /// </summary>
         /// <param name="milestone">The <see cref="Milestine"/> to be updated.</param>
         /// <param name="userName">A current user.</param>
-        public static void MilestoneUpdate(Milestone milestone, string userName)
+        public static void MilestoneUpdate(Milestone milestone, MilestoneUpdateObject milestoneUpdateObj, string userName)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (SqlCommand command = new SqlCommand(MilestoneUpdateProcedure, connection))
@@ -327,6 +327,13 @@ namespace DataAccess
                 command.Parameters.AddWithValue(IsHourlyAmountParam, milestone.IsHourlyAmount);
                 command.Parameters.AddWithValue(UserLoginParam,
                     !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsStartDateChangeReflectedForMilestoneAndPersons,
+                    milestoneUpdateObj.IsStartDateChangeReflectedForMilestoneAndPersons.HasValue ?
+                    (object)milestoneUpdateObj.IsStartDateChangeReflectedForMilestoneAndPersons.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsEndDateChangeReflectedForMilestoneAndPersons,
+                     milestoneUpdateObj.IsEndDateChangeReflectedForMilestoneAndPersons.HasValue ?
+                    (object)milestoneUpdateObj.IsEndDateChangeReflectedForMilestoneAndPersons.Value : DBNull.Value);
 
                 connection.Open();
 
