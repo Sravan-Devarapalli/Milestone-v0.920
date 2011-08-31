@@ -329,6 +329,8 @@
             public const string IsActive = ColumnNames.IsActive;
             public const string IsInserted = "@IsInserted";
             public const string IsChargeable = ColumnNames.IsChargeable;
+            public const string IsStartDateChangeReflectedForMilestoneAndPersons = "@IsStartDateChangeReflectedForMilestoneAndPersons";
+            public const string IsEndDateChangeReflectedForMilestoneAndPersons = "@IsEndDateChangeReflectedForMilestoneAndPersons";
             public const string IsMarginColorInfoEnabled = "@IsMarginColorInfoEnabled";
             public const string IsCorrect = ColumnNames.IsCorrect;
             public const string IsProjectChargeable = ColumnNames.IsProjectChargeable;
@@ -364,6 +366,7 @@
             public const string PersonIds = "PersonIds";
             public const string PersonName = ColumnNames.PersonName;
             public const string ProjectId = ColumnNames.ProjectId;
+            public const string HasTimeEntries = "HasTimeEntries";
             public const string ProjectIdList = ColumnNames.ProjectIdList;
             public const string ProjectIsChargeable = ColumnNames.ProjectIsChargeable;
             public const string ProjectName = ColumnNames.ProjectName;
@@ -576,6 +579,7 @@
 
                 public const string TimeEntryAllPersons = "dbo.TimeEntryAllPersons";
                 public const string TimeEntryAllMilestones = "dbo.TimeEntryAllMilestones";
+                public const string HasTimeEntriesForMilestoneBetweenOldAndNewDates = "dbo.HasTimeEntriesForMilestoneBetweenOldAndNewDates";
 
                 #endregion
 
@@ -722,6 +726,7 @@
                 public const string OpportunityPriorityInsert = "dbo.OpportunityPriorityInsert";
                 public const string OpportunityPriorityUpdate = "dbo.OpportunityPriorityUpdate";
                 public const string OpportunityPriorityDelete = "dbo.OpportunityPriorityDelete";
+                public const string UpdatePriorityIdForOpportunity = "dbo.UpdatePriorityIdForOpportunity";
                 public const string OpportunityPersonDelete = "dbo.OpportunityPersonDelete";
                 public const string OpportunityPrioritiesListAll = "dbo.OpportunityPrioritiesListAll";
                 public const string OpportunityPriorities = "dbo.GetOpportunityPriorities";
