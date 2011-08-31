@@ -89,6 +89,13 @@ namespace PracticeManagementService
 		[OperationContract]
 		int AddTimeEntry(TimeEntryRecord timeEntry, int defaultMpId);
 
+        /// <summary>
+        /// Has time entries
+        /// </summary>
+        /// <param name="milestoneId">milestoneId</param>
+        [OperationContract]
+        bool HasTimeEntriesForMilestone(int milestoneId, DateTime startDate, DateTime endDate);
+
 		/// <summary>
 		/// Updates time entry
 		/// </summary>
