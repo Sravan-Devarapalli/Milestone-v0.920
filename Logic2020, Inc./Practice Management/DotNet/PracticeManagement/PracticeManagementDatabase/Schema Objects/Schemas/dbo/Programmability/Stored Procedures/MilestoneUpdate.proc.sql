@@ -17,20 +17,20 @@ CREATE PROCEDURE dbo.MilestoneUpdate
 	@IsHourlyAmount           BIT,
 	@UserLogin                NVARCHAR(255),
 	@ConsultantsCanAdjust	  BIT,
-	@IsChargeable			  BIT
+	@IsChargeable			  BIT,
+	@IsStartDateChangeReflectedForMilestoneAndPersons BIT,
+	@IsEndDateChangeReflectedForMilestoneAndPersons   BIT
 )
 AS
-	SET NOCOUNT ON
+BEGIN
+	SET NOCOUNT ON;
 
-	DECLARE @StartDateShift INT
-	DECLARE @DurationShift INT
+	DECLARE @IsStartOrEndDateChanged BIT  = 0
 
-	-- Previous values
-	SELECT @StartDateShift = DATEDIFF(dd, m.StartDate, @StartDate),
-	       @DurationShift =
-	           DATEDIFF(dd, @StartDate, @ProjectedDeliveryDate) - DATEDIFF(dd, m.StartDate, m.ProjectedDeliveryDate)
-	  FROM dbo.Milestone AS m
-	 WHERE MilestoneId = @MilestoneId
+	IF NOT EXISTS(SELECT 1 FROM dbo.Milestone as m WHERE m.MilestoneId = @MilestoneId AND m.StartDate = @StartDate AND m.ProjectedDeliveryDate = @ProjectedDeliveryDate)
+	BEGIN
+	SET @IsStartOrEndDateChanged = 1
+	END
 
 	-- Start logging session
 	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
@@ -48,53 +48,71 @@ AS
 	       ConsultantsCanAdjust = @ConsultantsCanAdjust
 	 WHERE MilestoneId = @MilestoneId
 
-	-- Determine if milestone start date was changed
-	IF @StartDateShift <> 0
-	BEGIN
-		-- Move milestone-person entries
-		UPDATE mpe
-		   SET StartDate = DATEADD(dd, @StartDateShift, mpe.StartDate),
-			   EndDate = DATEADD(dd, @StartDateShift, mpe.EndDate)
-		  FROM dbo.MilestonePersonEntry AS mpe
-			   INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpe.MilestonePersonId
-		 WHERE mp.MilestoneId = @MilestoneId
-	END
-/*
-	-- Determine if milestone duration was reduced
-	IF @DurationShift < 0
-	BEGIN
-		
-		-- Remove entries became out the milestone period
-		DELETE mpe
-		  FROM dbo.MilestonePersonEntry AS mpe
-			   INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpe.MilestonePersonId
-			   INNER JOIN dbo.Milestone AS m ON mp.MilestoneId = m.MilestoneId
-		 WHERE m.MilestoneId = @MilestoneId
-		   AND mpe.StartDate >= m.ProjectedDeliveryDate
 
-		-- Move last milestone-person entry for each assignment
-		UPDATE mpe
-		   SET EndDate = m.ProjectedDeliveryDate
-		  FROM dbo.MilestonePersonEntry AS mpe
-			   INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpe.MilestonePersonId
-			   INNER JOIN dbo.Milestone AS m ON mp.MilestoneId = m.MilestoneId
-		 WHERE mp.MilestoneId = @MilestoneId
-		   AND mpe.EndDate > m.ProjectedDeliveryDate
-	END
-*/
-	-- Determine if milestone duration was increased
-	IF @DurationShift > 0
-	BEGIN
-		-- Move last milestone-person entry for each assignment
-		UPDATE mpe
-		   SET EndDate = DATEADD(dd, @DurationShift, mpe.EndDate)
-		  FROM dbo.MilestonePersonEntry AS mpe
-			   INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpe.MilestonePersonId
-		 WHERE mp.MilestoneId = @MilestoneId
-		   AND mpe.EndDate =
-				   (SELECT MAX(EndDate) FROM dbo.MilestonePersonEntry AS e WHERE e.MilestonePersonId = mpe.MilestonePersonId)
-	END
+	 IF(@IsStartOrEndDateChanged = 1)
+	 BEGIN
+	 
+		DECLARE @TempTable TABLE(MilestonePersonId INT)
+		
+		INSERT INTO @TempTable
+		SELECT   mp.MilestonePersonId
+		FROM [dbo].[MilestonePerson] AS mp
+		INNER JOIN dbo.Person AS p ON mp.PersonId = p.PersonId
+		WHERE  (mp.MilestoneId = @MilestoneId) 
+		  AND  (
+			    (p.TerminationDate < @StartDate) 
+			    OR (p.HireDate > @ProjectedDeliveryDate)
+			   )
+	
+		 
+		DELETE MPE FROM dbo.MilestonePersonEntry MPE
+		JOIN @TempTable Temp ON Temp.MilestonePersonId = MPE.MilestonePersonId
+
+		 
+		DELETE MP FROM dbo.MilestonePerson MP
+		JOIN @TempTable Temp ON Temp.MilestonePersonId = MP.MilestonePersonId
+
+
+	    UPDATE mpe
+			   SET StartDate =  CASE WHEN @IsStartDateChangeReflectedForMilestoneAndPersons =1 THEN 
+								( CASE
+									 WHEN ( P.HireDate > @StartDate) THEN  P.HireDate
+									 ELSE @StartDate
+								   END
+								) ELSE StartDate END,
+				  EndDate = CASE WHEN  @IsEndDateChangeReflectedForMilestoneAndPersons = 1 THEN
+								( CASE
+									WHEN ( @ProjectedDeliveryDate > p.TerminationDate ) THEN  p.TerminationDate
+									ELSE (@ProjectedDeliveryDate)
+								  END
+								) 
+								ELSE EndDate END
+			  FROM dbo.MilestonePersonEntry AS mpe
+				   INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpe.MilestonePersonId
+				   INNER JOIN dbo.Person AS p ON p.PersonId = mp.PersonId
+			 WHERE mp.MilestoneId = @MilestoneId AND (@IsStartDateChangeReflectedForMilestoneAndPersons = 1 OR @IsEndDateChangeReflectedForMilestoneAndPersons = 1 )
+
+	    UPDATE mpe
+			   SET EndDate =  CASE WHEN @IsStartDateChangeReflectedForMilestoneAndPersons =1 THEN 
+								( CASE
+									 WHEN ( mpe.StartDate > mpe.EndDate) THEN  mpe.StartDate
+									 ELSE mpe.EndDate
+								   END
+								) ELSE mpe.EndDate END,
+				  StartDate = CASE WHEN @IsEndDateChangeReflectedForMilestoneAndPersons =1 THEN 
+								( CASE
+									 WHEN ( mpe.StartDate > mpe.EndDate) THEN  mpe.EndDate
+									 ELSE mpe.StartDate
+								   END
+								) ELSE mpe.StartDate END
+			  FROM dbo.MilestonePersonEntry AS mpe
+				   INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpe.MilestonePersonId
+				   INNER JOIN dbo.Person AS p ON p.PersonId = mp.PersonId
+			 WHERE mp.MilestoneId = @MilestoneId AND (@IsStartDateChangeReflectedForMilestoneAndPersons = 1 OR @IsEndDateChangeReflectedForMilestoneAndPersons = 1 )
+
+	  END
+
 
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
-
+ END
