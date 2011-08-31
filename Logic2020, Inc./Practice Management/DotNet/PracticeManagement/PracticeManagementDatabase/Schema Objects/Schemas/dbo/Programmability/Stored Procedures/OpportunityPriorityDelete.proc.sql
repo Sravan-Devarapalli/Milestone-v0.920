@@ -1,9 +1,12 @@
 ﻿CREATE PROCEDURE [dbo].[OpportunityPriorityDelete]
 @UpdatedPriorityId INT,
-@DeletedPriorityId INT
+@DeletedPriorityId INT,
+@UserLogin         NVARCHAR(255)
 AS
 BEGIN
 	SET NOCOUNT ON
+	-- Start logging session
+		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
 	IF(@UpdatedPriorityId IS NOT NULL)
 	BEGIN 
@@ -20,6 +23,9 @@ BEGIN
 	SET [Description] =NULL  
 	   ,[IsInserted] = 0    
 	WHERE id = @DeletedPriorityId
+
+	-- End logging session
+		EXEC dbo.SessionLogUnprepare
 END
 
 GO
