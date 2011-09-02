@@ -6,7 +6,7 @@ AS
 BEGIN
 	;With OpportunityTransitionPriorityList AS
 	(SELECT [OpportunityTransitionId]
-			  ,[OpportunityId]
+			  ,ot.[OpportunityId]
 			  ,[OpportunityTransitionStatusId]
 			  ,[TransitionDate]
 			  ,[PersonId]
@@ -20,8 +20,9 @@ BEGIN
 								,LEN(REPLACE(REPLACE(REPLACE([NoteText],'Priority changed.  Was: ',''),'now',''),' ',''))-
 								CHARINDEX(':',REPLACE(REPLACE(REPLACE([NoteText],'Priority changed.  Was: ',''),'now',''),' ',''))
 			  ) next
-		  FROM OpportunityTransition
-		  WHERE [OpportunityTransitionStatusId] = 2
+		  FROM OpportunityTransition ot
+		  JOIN Opportunity O On O.OpportunityId = ot.OpportunityId
+		  WHERE [OpportunityTransitionStatusId] = 2 AND O.OpportunityStatusId = 1 
 		  AND TransitionDate >= dbo.GettingPMTime(GETUTCDATE()) - @DaysPrevious --Get last @days days record.
 	),
 
