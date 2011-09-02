@@ -118,7 +118,7 @@ namespace PraticeManagement.Controls
             if (dateValue.Date >= SettingsHelper.GetCurrentPMTime().Date || IsPersonCalendar)
             {
                 return string.Format(@"updatingCalendarContainer = $get('{0}');
-                return ShowPopup(this,'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}');"
+                return ShowPopup(this,'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}');"
                     , lstCalendar.ClientID
                     , mpeHoliday.BehaviorID + Month
                     , btnSaveDay.ClientID
@@ -133,7 +133,9 @@ namespace PraticeManagement.Controls
                     , btnDayOK.ClientID
                     , PersonId
                     , txtActualHours.ClientID
-                    , lblActualHours.ClientID);
+                    , lblActualHours.ClientID
+                    , rbPTO.ClientID
+                    , rbFloatingHoliday.ClientID);
             }
             else
             {
@@ -183,6 +185,7 @@ namespace PraticeManagement.Controls
             item.ActualHours = string.IsNullOrEmpty(txtActualHours.Text) ? null : (Double?)Convert.ToDouble(txtActualHours.Text);
             item.RecurringHolidayId = string.IsNullOrEmpty(hdnRecurringHolidayId.Value) ? null : (int?)Convert.ToInt32(hdnRecurringHolidayId.Value);
             item.RecurringHolidayDate = item.IsRecurringHoliday && !item.RecurringHolidayId.HasValue ? (DateTime?)(item.DayOff ? item.Date : Convert.ToDateTime(hdnRecurringHolidayDate.Value)) : null;
+            item.IsFloatingHoliday = rbFloatingHoliday.Checked;
             SaveDate(item);
             Display();
         }
