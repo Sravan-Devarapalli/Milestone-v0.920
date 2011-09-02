@@ -105,12 +105,14 @@ namespace PraticeManagement.Controls
             item.Attributes["persontype"] = ((int)OpportunityPersonType.NormalPerson).ToString();
             item.Attributes["personid"] = item.Value;
             item.Attributes["personname"] = item.Text;
+            item.Attributes["itemIndex"] = repeatIndex.ToString();
 
             CheckBox cb = new CheckBox();
             cb.ID = "strikeCheckBox" + repeatIndex.ToString();
             cb.Attributes["checkboxid"] = this.ClientID + "_" + repeatIndex.ToString();
             cb.Attributes["personid"] = item.Value;
             cb.Attributes["personname"] = item.Text;
+            cb.Attributes["itemIndex"] = repeatIndex.ToString();
             cb.Attributes["persontype"] = ((int)OpportunityPersonType.StrikedPerson).ToString();
 
 
