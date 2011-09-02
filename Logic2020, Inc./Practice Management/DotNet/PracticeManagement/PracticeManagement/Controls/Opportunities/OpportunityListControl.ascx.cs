@@ -536,6 +536,7 @@ namespace PraticeManagement.Controls.Opportunities
             {
                   var datalist = e.Item.FindControl("dtlProposedPersons") as DataList;
                 var hdnProposedPersonsIndexes = e.Item.FindControl("hdnProposedPersonsIndexes") as HiddenField;
+
                 var oppty = (e.Item as ListViewDataItem).DataItem as Opportunity;
 
                 var ddlPriority = e.Item.FindControl("ddlPriorityList") as DropDownList;
@@ -620,25 +621,7 @@ namespace PraticeManagement.Controls.Opportunities
                     serviceClient.OpportunityPersonInsert(opportunityId, selectedList, hdnProposedOutSideResources.Value);
                 }
             }
-            hdnCurrentOpportunityId.Value = hdnProposedResourceIndexes.Value = string.Empty;
-        }
-
-        private string GetProposedResources()
-        {
-            //GetProposedResources
-            var clientList = new StringBuilder();
-            var indexStrings = hdnProposedResourceIndexes.Value.Split(',');
-
-            foreach (var indexstring in indexStrings)
-            {
-                int index;
-                if (Int32.TryParse(indexstring, out index))
-                {
-                    clientList.Append(cblPotentialResources.Items[index].Value).Append(',');
-                }
-            }
-
-            return clientList.ToString();
+            hdnCurrentOpportunityId.Value = string.Empty;
         }
 
         protected static string GetFormattedPersonName(string personLastFirstName, int opportunityPersonTypeId)
