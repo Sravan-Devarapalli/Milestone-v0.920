@@ -94,7 +94,7 @@ namespace PraticeManagement.Objects
             get
             {
                 var detailsLinkWithFilters = Utils.Urls.OpportunityDetailsLink(OpportunityTransition.Opportunity.Id.Value);
-                return Utils.Generic.GetTargetUrlWithReturn(detailsLinkWithFilters, Constants.ApplicationPages.ConsTimelineReport);
+                return Utils.Generic.GetTargetUrlWithReturn(detailsLinkWithFilters, Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails);
             }
         }
     }
