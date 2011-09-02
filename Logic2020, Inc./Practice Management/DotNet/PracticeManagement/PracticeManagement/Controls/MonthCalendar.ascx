@@ -8,8 +8,8 @@
                 var popupExtendar = $find(btnOk.attributes['ExtendarId'].value);
                 var actualHoursText = $get(btnOk.attributes['TxtActualHoursID'].value);
                 var errorText = $get(btnOk.attributes['ErrorMessageID'].value);
-                var error;
-
+                var rbFloating = $get(btnOk.attributes['RbFloatingID'].value);
+                
                 if (actualHoursText == null && noteText != '') {
                     var noteTextStr = noteText.value.toString();
                     if (noteTextStr.length > 0) {
@@ -20,19 +20,24 @@
                     }
                 }
                 else {
-                    var hoursTextStr = actualHoursText.value.toString();
-                    if (hoursTextStr.length > 0) {
-                        var hours = parseFloat(hoursTextStr);
-                        if (hours >= 0.0 && hours <= 24.0 && hours == hoursTextStr) {
-                            
-                            SaveDetails(popupExtendar, btnOk);
-                        }
-                        else {
-                            errorText.innerHTML = '* Hours should be real and 0.00-24.00.';
-                        }
+                    if (rbFloating.checked) {
+                        SaveDetails(popupExtendar, btnOk);
                     }
                     else {
-                        errorText.innerHTML = '* Please Enter Hours';
+                        var hoursTextStr = actualHoursText.value.toString();
+                        if (hoursTextStr.length > 0) {
+                            var hours = parseFloat(hoursTextStr);
+                            if (hours >= 0.0 && hours <= 24.0 && hours == hoursTextStr) {
+
+                                SaveDetails(popupExtendar, btnOk);
+                            }
+                            else {
+                                errorText.innerHTML = '* Hours should be real and 0.00-24.00.';
+                            }
+                        }
+                        else {
+                            errorText.innerHTML = '* Please Enter Hours';
+                        }
                     }
                 }
                 errorText.style.display = 'block';
@@ -43,6 +48,16 @@
                 btnSave = $get(btnOk.attributes['SaveDayButtonID'].value);
                 popupExtendar.hide();
                 btnSave.click();
+            }
+
+            function disableActualHours(txtBox, isFloatingHoliday) {
+                var item = txtBox;
+                if (isFloatingHoliday == 'true') {
+                    item.disabled = 'disabled';
+                }
+                else {
+                    item.disabled = '';
+                }
             }
         </script>
         <asp:DataList ID="lstCalendar" runat="server" RepeatColumns="7" RepeatDirection="Horizontal">
@@ -124,20 +139,25 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">
+                    <td colspan="2" style="text-align:left;">
                         <asp:TextBox ID="txtHolidayDescription" runat="server" placeholder="Enter Holiday Description."
                             TextMode="MultiLine" Height="50px" Style="resize: none; width: 300px; overflow: auto; margin-left:4px;"></asp:TextBox>
-                        <asp:Label ID="lblActualHours" runat="server" Text="PTO Hours : "></asp:Label>
-                        <asp:TextBox ID="txtActualHours" runat="server" Width="50px" Style="resize: none;"></asp:TextBox>
+                        <asp:RadioButton ID="rbPTO" runat="server" Text="PTO" GroupName="PTO" onclick=""/>
+                        <p>
+                        <asp:Label ID="lblActualHours" runat="server" Text="Hours : " style="padding-left:20px;"></asp:Label>
+                        <asp:TextBox ID="txtActualHours" runat="server" Width="50px" Style="resize: none;"></asp:TextBox></p>
                     </td>
                 </tr>
-                <td colspan="2" style="text-align: left;">
-                    <asp:CheckBox ID="chkMakeRecurringHoliday" runat="server" Text="Make Recurring" />
-                </td>
+                <tr>
+                    <td colspan="2" style="text-align: left;">
+                        <asp:CheckBox ID="chkMakeRecurringHoliday" runat="server" Text="Make Recurring" />
+                        <asp:RadioButton ID="rbFloatingHoliday" runat="server" Text="Floating Holiday" GroupName="PTO" onclick=""/>
+                    </td>
+                </tr>
                 <tr>
                     <td align="center" style="padding: 10px 0px 10px 0px;">
                         <asp:Button ID="btnDayOK" runat="server" Text="OK" HiddenDayOffID="" HiddenDateID=""
-                            SaveDayButtonID="" TextID="" ErrorMessageID="" ExtendarId="" TxtActualHoursID="" OnClientClick="ClickSaveDay(this); return false;" />
+                            SaveDayButtonID="" TextID="" ErrorMessageID="" ExtendarId="" TxtActualHoursID="" RbFloatingID="" OnClientClick="ClickSaveDay(this, 'true'); return false;" />
                         &nbsp; &nbsp;
                         <asp:Button ID="btnDayCancel" runat="server" Text="Cancel" />
                     </td>
@@ -160,4 +180,3 @@
 		</OnUpdated>
 	</Animations>
 </AjaxControlToolkit:UpdatePanelAnimationExtender>--%>
-
