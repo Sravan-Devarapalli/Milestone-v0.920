@@ -473,6 +473,7 @@
             public const string RecurringHolidayDate = "@RecurringHolidayDate";
             public const string ActualHoursParam = "@ActualHours";
             public const string AttachmentIdParam = "@AttachmentId";
+            public const string IsFloatingHolidayParam = "@IsFloatingHoliday";
 
         }
 
