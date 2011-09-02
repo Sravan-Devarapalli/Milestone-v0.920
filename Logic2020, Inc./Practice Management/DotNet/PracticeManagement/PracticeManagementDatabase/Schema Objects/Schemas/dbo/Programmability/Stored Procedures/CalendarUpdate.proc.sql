@@ -15,7 +15,8 @@ CREATE PROCEDURE [dbo].[CalendarUpdate]
 	@RecurringHolidayId INT,
 	@HolidayDescription	NVARCHAR(255),
 	@RecurringHolidayDate DATETIME,
-	@ActualHours REAL
+	@ActualHours REAL,
+	@IsFloatingHoliday BIT
 )
 AS
 	SET NOCOUNT ON
@@ -134,8 +135,8 @@ AS
 	BEGIN
 		-- A person record does not exist - create it
 		INSERT INTO dbo.PersonCalendar
-		            (Date, PersonId, DayOff, ActualHours)
-		     VALUES (@Date, @PersonId, @DayOff, @ActualHours)
+		            (Date, PersonId, DayOff, ActualHours, IsFloatingHoliday)
+		     VALUES (@Date, @PersonId, @DayOff, @ActualHours, @IsFloatingHoliday)
 	END
 
 	UPDATE ca
@@ -190,11 +191,11 @@ AS
 					,d.[date]
 					,@CurrentPMTime
 					,mp.MilestonePersonId
-					,CASE WHEN PC.ActualHours IS NOT NULL THEN PC.ActualHours ELSE 8 END
+					,CASE WHEN PC.ActualHours IS NOT NULL AND ISNULL(PC.IsFloatingHoliday,0) = 0 THEN PC.ActualHours ELSE 8 END
 					,mpe.HoursPerDay
-					,@PTOTimeTypeId
+					,CASE WHEN PC.IsFloatingHoliday = 1 THEN @HolidayTimeTypeId ELSE @PTOTimeTypeId END
 					,@ModifiedBy
-					,'PTO'
+					,CASE WHEN PC.IsFloatingHoliday = 1 THEN 'Floating Holiday' ELSE 'PTO' END
 					,m.IsChargeable
 					,1
 					,1 --Here it is Auto generated.
@@ -254,11 +255,13 @@ AS
 				,rhd.[Date]
 				,@CurrentPMTime
 				,mp.MilestonePersonId
-				,CASE WHEN @PersonId IS NOT NULL AND c.DayOff <> @DayOff AND @ActualHours IS NOT NULL THEN @ActualHours ELSE 8 END
+				,CASE WHEN @PersonId IS NOT NULL AND c.DayOff <> @DayOff AND @ActualHours IS NOT NULL AND @IsFloatingHoliday = 0 THEN @ActualHours ELSE 8 END
 				,mpe.HoursPerDay
-				,CASE WHEN @PersonId IS NOT NULL AND c.DayOff <> @DayOff THEN @PTOTimeTypeId ELSE @HolidayTimeTypeId END 
+				,CASE WHEN @PersonId IS NOT NULL AND c.DayOff <> @DayOff AND @IsFloatingHoliday = 0 THEN @PTOTimeTypeId ELSE @HolidayTimeTypeId END 
 				,@ModifiedBy
-				,CASE WHEN @PersonId IS NOT NULL AND c.DayOff <> @DayOff THEN 'PTO' ELSE ISNULL(C.HolidayDescription, '') END
+				,CASE WHEN @PersonId IS NOT NULL AND c.DayOff <> @DayOff AND @IsFloatingHoliday = 0 THEN 'PTO'
+						WHEN @IsFloatingHoliday = 1 THEN 'Floating Holiday'
+						ELSE ISNULL(C.HolidayDescription, '') END
 				,m.IsChargeable
 				,1
 				,1 --Here it is Auto generated.
