@@ -14,18 +14,21 @@
 <script src="Scripts/jquery.blockUI.js" type="text/javascript"></script>
 <script type="text/javascript" language="javascript">
     var currenthdnProposedPersonsIndexesId = "";
-    var refreshMessageIdsFromLastRefresh = new Array();
+    var refreshOpportunityIdsFromLastRefresh = new Array();
     function ShowPotentialResourcesModal(image) {
-        var refreshLableParentNode = image.parentNode.parentNode.children[0];
-        refreshLableParentNode.children[refreshLableParentNode.children.length - 1].style.display = "";
+        var oppId = image.attributes['opportunityid'].value;
+
         var savebutton = document.getElementById('btnSaveProposedResources');
         var hdnCurrentOpportunityId = document.getElementById('<%=hdnCurrentOpportunityId.ClientID %>');
         var attachedResourcesIndexes = image.parentNode.children[1].value.split(",");
         currenthdnProposedPersonsIndexesId = image.parentNode.children[1].id;
-        var refreshLableParentNode = image.parentNode.parentNode.children[0];
-        Array.add(refreshMessageIdsFromLastRefresh, refreshLableParentNode.children[refreshLableParentNode.children.length - 1].id);
+
+        var refreshLableParentNode = $(image.parentNode.parentNode);
+        var lblRefreshMessage = refreshLableParentNode.find("span[id$='lblRefreshMessage']")[0];
+        lblRefreshMessage.style.display = 'block';
+        Array.add(refreshOpportunityIdsFromLastRefresh, oppId);
         var trPotentialResources = document.getElementById('<%=cblPotentialResources.ClientID %>').getElementsByTagName('tr');
-        
+
         $find("wmBhOutSideResources").set_Text(image.parentNode.children[2].value);
         $find("wmbhSearchBox").set_Text('');
 
@@ -61,46 +64,41 @@
         var potentialCheckboxes = $('#<%=cblPotentialResources.ClientID %> tr td :input');
         var hdnProposedPersonIdsList = document.getElementById("<%= hdnProposedResourceIdsWithTypes.ClientID%>");
         var PersonIdList = '';
+        var personIndexesList = '';
         if (cblPotentialResources != null) {
             for (var i = 0; i < potentialCheckboxes.length; ++i) {
                 if (potentialCheckboxes[i].checked) {
                     PersonIdList += potentialCheckboxes[i].parentNode.attributes['personid'].value + ':' + potentialCheckboxes[i].parentNode.attributes['persontype'].value + ',';
+                    personIndexesList += potentialCheckboxes[i].parentNode.attributes['itemIndex'].value + ':' + potentialCheckboxes[i].parentNode.attributes['persontype'].value + ',';
                 }
             }
         }
-        hdnProposedPersonIdsList.value = PersonIdList;               
+        hdnProposedPersonIdsList.value = PersonIdList;
+        var hdnProposedPersonsIndexes = document.getElementById(currenthdnProposedPersonsIndexesId);
+        hdnProposedPersonsIndexes.value = personIndexesList;
     }
 
     function saveProposedResources() {
         var buttonSave = document.getElementById('<%=btnSaveProposedResourcesHidden.ClientID %>');
-        var hdnProposedResourceIndexes = document.getElementById('<%=hdnProposedResourceIndexes.ClientID %>');
         var hdnProposedOutSideResources = document.getElementById('<%=hdnProposedOutSideResources.ClientID %>');
         var trPotentialResources = document.getElementById('<%=cblPotentialResources.ClientID %>').getElementsByTagName('tr');
         hdnProposedOutSideResources.value = $find("wmBhOutSideResources").get_Text();
-
-        for (var i = 0; i < trPotentialResources.length; i++) {
-            var checkBox = trPotentialResources[i].children[0].getElementsByTagName('input')[0];
-            if (checkBox.checked) {
-                if (hdnProposedResourceIndexes.value == '') {
-                    hdnProposedResourceIndexes.value = i;
-                }
-                else {
-                    hdnProposedResourceIndexes.value = hdnProposedResourceIndexes.value + "," + i;
-                }
-            }
-        }
         var hdnProposedPersonsIndexes = document.getElementById(currenthdnProposedPersonsIndexesId);
-        hdnProposedPersonsIndexes.value = hdnProposedResourceIndexes.value;
         hdnProposedPersonsIndexes.nextSibling.nextSibling.value = hdnProposedOutSideResources.value;
         GetProposedPersonIdsListWithPersonType();
         buttonSave.click();
     }
     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
     function endRequestHandle(sender, Args) {
-        for (var i = 0; i < refreshMessageIdsFromLastRefresh.length; i++) {
-            var label = document.getElementById(refreshMessageIdsFromLastRefresh[i]);
-            label.style.display = "";
+        var lblRefreshMessageList = $("span[id$='lblRefreshMessage']");
+        for (var j = 0; j < lblRefreshMessageList.length; j++) {
+            for (var i = 0; i < refreshOpportunityIdsFromLastRefresh.length; i++) {
+                if (lblRefreshMessageList[j].attributes['opportunityid'].value == refreshOpportunityIdsFromLastRefresh[i]) {
+                    lblRefreshMessageList[j].style.display = 'block';
+                }
+            }
         }
+
     }
     function filterPotentialResources(searchtextBox) {
         var trPotentialResources = document.getElementById('<%=cblPotentialResources.ClientID %>').getElementsByTagName('tr');
@@ -357,7 +355,8 @@
                                             <div style="white-space: normal;">
                                                 <asp:Literal ID="ltrlOutSideResources" runat="server"></asp:Literal>
                                             </div>
-                                            <asp:Label ID="lblRefreshMessage" runat="server" Text="Please &lt;a href='javascript:location.reload(true)'&gt;refresh&lt;/a&gt; to see new changes."
+                                            <asp:Label ID="lblRefreshMessage" opportunityid='<%# Eval("Id") %>' runat="server"
+                                                Text="Please &lt;a href='javascript:location.reload(true)'&gt;refresh&lt;/a&gt; to see new changes."
                                                 Style="display: none; font-style: italic;"></asp:Label>
                                         </td>
                                         <td style="width: 4%; white-space: normal;" align="right">
@@ -429,7 +428,8 @@
                                             <div style="white-space: normal;">
                                                 <asp:Literal ID="ltrlOutSideResources" runat="server"></asp:Literal>
                                             </div>
-                                            <asp:Label ID="lblRefreshMessage" runat="server" Text="Please &lt;a href='javascript:location.reload(true)'&gt;refresh&lt;/a&gt; to see new changes."
+                                            <asp:Label ID="lblRefreshMessage" opportunityid='<%# Eval("Id") %>' runat="server"
+                                                Text="Please &lt;a href='javascript:location.reload(true)'&gt;refresh&lt;/a&gt; to see new changes."
                                                 Style="display: none; font-style: italic;"></asp:Label>
                                         </td>
                                         <td style="width: 4%; white-space: normal;" align="right">
@@ -524,7 +524,6 @@
             </table>
         </asp:Panel>
         <asp:HiddenField ID="hdnCurrentOpportunityId" runat="server" Value="" />
-        <asp:HiddenField ID="hdnProposedResourceIndexes" runat="server" Value="" />
         <asp:HiddenField ID="hdnProposedResourceIdsWithTypes" runat="server" Value="" />
         <asp:HiddenField ID="hdnProposedOutSideResources" runat="server" Value="" />
         <asp:Button ID="btnSaveProposedResourcesHidden" runat="server" OnClick="btnSaveProposedResources_OnClick"
