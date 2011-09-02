@@ -42,7 +42,8 @@
         chkboxList.parentNode.style.height = ((chkboxes.length * 40) - 20) + "px";
     }
     function ShowPopup(dayLink, peBehaviourId, saveDayButtonID, hiddenDayOffID, hiddenDateID,
-                        txtHolidayDescriptionID, chkMakeRecurringHolidayId, hdnRecurringHolidayIdClientID, hdnRecurringHolidayDateClientID, lblDateID, ErrorMessageID, btnOkID, personId, txtActualHoursID, lblActualHoursClientID) {
+                        txtHolidayDescriptionID, chkMakeRecurringHolidayId, hdnRecurringHolidayIdClientID, hdnRecurringHolidayDateClientID, lblDateID,
+                        ErrorMessageID, btnOkID, personId, txtActualHoursID, lblActualHoursClientID, rbPTOClientID, rbFloatingHolidayClientID) {
         var txtHolidayDescription = $get(txtHolidayDescriptionID);
         var txtActualHours = $get(txtActualHoursID);
         var lblDateDescription = $get(lblDateID);
@@ -55,7 +56,7 @@
         hdnDate.value = dayLink.attributes['Date'].value;
         hdnRecurringHolidayId.value = dayLink.attributes['RecurringHolidayId'].value;
         hdnRecurringHolidayDate.value = dayLink.attributes['RecurringHolidayDate'].value;
-        
+
         if (personId == "") {
             if (hndDayOff.value == 'true'
                 && dayLink.attributes['IsRecurringHoliday'].value == 'True'
@@ -85,6 +86,8 @@
                 var OkButton = $get(btnOkID);
                 var errorMessage = $get(ErrorMessageID);
                 var lblActualHours = $get(lblActualHoursClientID);
+                var rbPTO = $get(rbPTOClientID);
+                var rbFloatingHoliday = $get(rbFloatingHolidayClientID);
                 OkButton.attributes['SaveDayButtonID'].value = saveDayButtonID;
                 OkButton.attributes['ErrorMessageID'].value = ErrorMessageID;
                 OkButton.attributes['TextID'].value = txtHolidayDescriptionID;
@@ -93,6 +96,10 @@
                 errorMessage.style.display = 'none';
                 lblActualHours.style.display = 'none';
                 txtActualHours.style.display = 'none';
+                rbPTO.style.display = 'none';
+                rbPTO.nextSibling.style.display = 'none';
+                rbFloatingHoliday.style.display = 'none';
+                rbFloatingHoliday.nextSibling.style.display = 'none';
                 txtActualHours.value = '';
                 lblDateDescription.innerHTML = date.format('MM/dd/yyyy');
                 txtHolidayDescription.value = dayLink.attributes['HolidayDescription'].value;
@@ -107,11 +114,17 @@
                 var popupExtendar = $find(peBehaviourId);
                 var OkButton = $get(btnOkID);
                 var errorMessage = $get(ErrorMessageID);
+                var rbPTO = $get(rbPTOClientID);
+                var rbFloatingHoliday = $get(rbFloatingHolidayClientID);
                 OkButton.attributes['ErrorMessageID'].value = ErrorMessageID;
                 OkButton.attributes['SaveDayButtonID'].value = saveDayButtonID;
                 OkButton.attributes['TxtActualHoursID'].value = txtActualHoursID;
                 OkButton.attributes['ExtendarId'].value = peBehaviourId;
+                OkButton.attributes['RbFloatingID'].value = rbFloatingHolidayClientID;
+                rbPTO.attributes['onclick'].value = "disableActualHours( " + txtActualHoursID + ", 'false')";
+                rbFloatingHoliday.attributes['onclick'].value = "disableActualHours( " + txtActualHoursID + ", 'true')";
 
+                rbPTO.checked = true;
                 txtActualHours.value = '8.00';
                 lblDateDescription.innerHTML = date.format('MM/dd/yyyy');
                 errorMessage.style.display = 'none';
@@ -244,8 +257,7 @@
                                         <td id="tdRecurringHolidaysDetails" runat="server" rowspan="9" class="setCheckboxesLeft"
                                             style="padding-top: 45px; padding-left: 2%;">
                                             <uc:ScrollingDropDown ID="cblRecurringHolidays" runat="server" SetDirty="false" AllSelectedReturnType="AllItems"
-                                                OnSelectedIndexChanged="cblRecurringHolidays_OnSelectedIndexChanged"
-                                                AutoPostBack="true" />
+                                                OnSelectedIndexChanged="cblRecurringHolidays_OnSelectedIndexChanged" AutoPostBack="true" />
                                         </td>
                                     </tr>
                                     <tr class="HeadRow">
