@@ -99,6 +99,13 @@ namespace DataTransferObjects
             get;
             set;
         }
+
+        [DataMember]
+        public bool IsFloatingHoliday
+        {
+            get;
+            set;
+        }
         
 
         #endregion
