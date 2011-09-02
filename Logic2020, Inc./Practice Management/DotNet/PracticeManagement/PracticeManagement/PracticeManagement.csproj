@@ -753,6 +753,9 @@
     </Compile>
     <Compile Include="FilterObjects\ActivityLogFilter.cs" />
     <Compile Include="FilterObjects\BenchReportFilter.cs" />
+    <Compile Include="FilterObjects\ConsultantUtilTimeLineFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FilterObjects\GenericTimeEntryFilter.cs">
       <SubType>Code</SubType>
     </Compile>
