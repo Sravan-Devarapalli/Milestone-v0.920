@@ -200,11 +200,11 @@ WHERE Alias = @UserLogin
 				,d.[date]
 				,@CurrentPMTime
 				,mp.MilestonePersonId
-				,CASE WHEN PC.ActualHours IS NOT NULL THEN PC.ActualHours ELSE 8 END
+				,CASE WHEN PC.ActualHours IS NOT NULL AND ISNULL(PC.IsFloatingHoliday,0) = 0 THEN PC.ActualHours ELSE 8 END
 				,mpe.HoursPerDay
-				,@PTOTimeTypeId
+				,CASE WHEN PC.IsFloatingHoliday = 1 THEN @HolidayTimeTypeId  ELSE @PTOTimeTypeId END
 				,@ModifiedBy
-				,'PTO'
+				,CASE WHEN PC.IsFloatingHoliday = 1 THEN 'Floating Holiday' ELSE 'PTO' END
 				,m.IsChargeable
 				,1
 				,1 --Here it is Auto generated.
