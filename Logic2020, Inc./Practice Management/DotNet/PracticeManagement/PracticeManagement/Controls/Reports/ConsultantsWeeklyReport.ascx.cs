@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using PraticeManagement.FilterObjects;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -176,8 +177,31 @@ namespace PraticeManagement.Controls.Reports
             {
                 if (!IsPostBack)
                 {
-                    chart.CssClass = "hide";
-                    tblDetails.Attributes.Add("class", "hide");
+                    if (Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true")
+                    {
+                        var cookie = SerializationHelper.DeserializeCookie(Constants.FilterKeys.ConsultantUtilTimeLineFilterCookie) as ConsultantUtilTimeLineFilter;
+                        if (cookie != null)
+                        {
+                            utf.PopulateControls(cookie);
+                            uaeDetails.EnableClientState = true;
+                            this.UpdateReport();
+                            this.hdnIsChartRenderedFirst.Value = "true";
+                            updConsReport.Update();
+
+                            if (cookie.PersonId.HasValue)
+                            {
+                                ShowDetailedReport(cookie.PersonId.Value, cookie.BegPeriod.Date, cookie.EndPeriod.Date, cookie.ChartTitle,
+                                    cookie.ActiveProjects, cookie.ProjectedProjects, cookie.InternalProjects, cookie.ExperimentalProjects);
+
+                                System.Web.UI.ScriptManager.RegisterStartupScript(updConsReport, updConsReport.GetType(), "focusDetailReport", "window.location='#details';", true);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        chart.CssClass = "hide";
+                        tblDetails.Attributes.Add("class", "hide");
+                    }
                 }
             }
         }
@@ -425,6 +449,14 @@ namespace PraticeManagement.Controls.Reports
 
             System.Web.UI.ScriptManager.RegisterClientScriptBlock(updConsReport, updConsReport.GetType(), "focusDetailReport", "window.location='#details';", true);
 
+            SaveFilters(personId, query[3]);
+
+        }
+
+        private void SaveFilters(int? personId, string chartTitle)
+        {
+            var filter = utf.SaveFilters(personId, chartTitle);
+            SerializationHelper.SerializeCookie(filter, Constants.FilterKeys.ConsultantUtilTimeLineFilterCookie);
         }
 
         private void ShowDetailedReport(int personId, DateTime repStartDate, DateTime repEndDate, string chartTitle,
@@ -700,7 +732,7 @@ namespace PraticeManagement.Controls.Reports
                 if (!IsSampleReport)
                 {
                     range.PostBackValue = FormatRangePostbackValue(p, beginPeriod, endPeriod); // For the whole period
-                    range.Url = Constants.ApplicationPages.ConsTimelineReportDetails;
+                    range.Url = Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true" ? Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails : Constants.ApplicationPages.ConsTimelineReportDetails;
                 }
             }
         }
@@ -795,6 +827,8 @@ namespace PraticeManagement.Controls.Reports
             this.UpdateReport();
             this.hdnIsChartRenderedFirst.Value = "true";
             updConsReport.Update();
+
+            SaveFilters(null, null);
         }
 
         protected void btnResetFilter_OnClick(object sender, EventArgs e)
@@ -803,7 +837,7 @@ namespace PraticeManagement.Controls.Reports
             {
                 chart.CssClass = "hide";
             }
-
+            SaveFilters(null, null);
         }
 
         #endregion
