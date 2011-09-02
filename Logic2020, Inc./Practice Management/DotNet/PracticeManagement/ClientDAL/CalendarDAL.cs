@@ -76,6 +76,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.HolidayDescription, string.IsNullOrEmpty(item.HolidayDescription) ? DBNull.Value : (object)item.HolidayDescription);
                 command.Parameters.AddWithValue(Constants.ParameterNames.RecurringHolidayDate, item.RecurringHolidayDate.HasValue ? (object)item.RecurringHolidayDate.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ActualHoursParam, item.ActualHours.HasValue ? (object)item.ActualHours : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsFloatingHolidayParam, item.IsFloatingHoliday);
 
                 connection.Open();
                 command.ExecuteNonQuery();
