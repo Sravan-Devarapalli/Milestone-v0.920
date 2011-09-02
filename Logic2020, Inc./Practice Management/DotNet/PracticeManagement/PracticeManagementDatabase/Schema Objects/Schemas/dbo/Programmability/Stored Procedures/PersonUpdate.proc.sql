@@ -326,11 +326,13 @@ AS
 				,crh.Date AS MilestoneDate
 				,@CurrentPMTime AS ModifiedDate
 				,mp.MilestonePersonId
-				,CASE WHEN PC.PersonId IS NOT NULL AND PC.DayOff = 1 AND PC.ActualHours IS NOT NULL THEN PC.ActualHours ELSE 8 END
+				,CASE WHEN PC.PersonId IS NOT NULL AND PC.DayOff = 1 AND PC.ActualHours IS NOT NULL AND ISNULL(PC.IsFloatingHoliday,0) = 0 THEN PC.ActualHours ELSE 8 END
 				,mpe.HoursPerDay
-				,CASE WHEN PC.PersonId IS NOT NULL AND PC.DayOff = 1 THEN @PTOTimeTypeId ELSE @HolidayTimeTypeId END
+				,CASE WHEN PC.PersonId IS NOT NULL AND PC.DayOff = 1 AND ISNULL(PC.IsFloatingHoliday,0) = 0 THEN @PTOTimeTypeId ELSE @HolidayTimeTypeId END
 				,@PersonUserId
-				,CASE WHEN PC.PersonId IS NOT NULL AND PC.DayOff = 1 THEN 'PTO' ELSE ISNULL(crh.HolidayDescription,'') END
+				,CASE WHEN PC.PersonId IS NOT NULL AND PC.DayOff = 1 AND ISNULL(PC.IsFloatingHoliday,0) = 0 THEN 'PTO'
+						WHEN PC.PersonId IS NOT NULL AND PC.DayOff = 1 AND PC.IsFloatingHoliday = 1 THEN 'Floating Holiday'
+						ELSE ISNULL(crh.HolidayDescription,'') END
 				,m.IsChargeable
 				,1
 				,1 --Here it is Auto generated.
