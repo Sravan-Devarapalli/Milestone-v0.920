@@ -121,6 +121,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.TextBox txtHolidayDescription;
         
         /// <summary>
+        /// rbPTO control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbPTO;
+        
+        /// <summary>
         /// lblActualHours control.
         /// </summary>
         /// <remarks>
@@ -146,6 +155,15 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chkMakeRecurringHoliday;
+        
+        /// <summary>
+        /// rbFloatingHoliday control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbFloatingHoliday;
         
         /// <summary>
         /// btnDayOK control.
