@@ -104,7 +104,7 @@ namespace PraticeManagement.Objects
                     Constants.ApplicationPages.MilestoneDetail,             //  page
                     Entry.ParentMilestone.Id,                               //  milestone id
                     Entry.ParentMilestone.Project.Id,                       //  project id
-                    Constants.ApplicationPages.UtilizationTimelineWithDetails);
+                    Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails);
             }
         }
 
