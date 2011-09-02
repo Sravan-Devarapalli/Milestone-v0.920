@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
 using System.Drawing;
+using PraticeManagement.FilterObjects;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -227,9 +228,14 @@ namespace PraticeManagement.Controls.Reports
                 DataHelper.FillPracticeList(this.cblPractices, Resources.Controls.AllPracticesText);
                 DataHelper.FillTimescaleList(this.cblTimeScales, Resources.Controls.AllTypes);
 
+                var cookie = SerializationHelper.DeserializeCookie(Constants.FilterKeys.ConsultantUtilTimeLineFilterCookie) as ConsultantUtilTimeLineFilter;
                 if (IsSampleReport)
                 {
                     PopulateControls();
+                }
+                else if (Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true" && cookie != null)
+                {
+                    PopulateControls(cookie);
                 }
                 else
                 {
@@ -288,6 +294,42 @@ namespace PraticeManagement.Controls.Reports
                 SelectItems(this.cblTimeScales, resoureDictionary[Constants.ResourceKeys.TimescaleIdListKey]);
             }
 
+        }
+
+        public void PopulateControls(ConsultantUtilTimeLineFilter cookie)
+        {
+            if (cblPractices != null && cblPractices.Items.Count == 0)
+            {
+                DataHelper.FillPracticeList(cblPractices, Resources.Controls.AllPracticesText);
+            }
+
+            if (cblTimeScales != null && cblTimeScales.Items.Count == 0)
+            {
+                DataHelper.FillTimescaleList(cblTimeScales, Resources.Controls.AllTypes);
+            }
+
+            diRange.FromDate = cookie.BegPeriod;
+
+            diRange.ToDate = cookie.EndPeriod;
+            ddlPeriod.SelectedValue = cookie.Period;
+            ddlDetalization.SelectedValue = cookie.DetalizationSelectedValue;
+            ddlAvgUtil.SelectedValue = ddlAvgUtil.Items.FindByValue(cookie.AvgUtil.ToString()).Value;
+            ddlSortBy.SelectedValue = ddlSortBy.Items.FindByValue(cookie.SortId.ToString()).Value;
+
+            chbActivePersons.Checked = cookie.ActivePersons;
+            chbProjectedPersons.Checked = cookie.ProjectedPersons;
+            chbActiveProjects.Checked = cookie.ActiveProjects;
+            chbProjectedProjects.Checked = cookie.ProjectedProjects;
+            chbExperimentalProjects.Checked = cookie.ExperimentalProjects;
+            chbInternalProjects.Checked = cookie.InternalProjects;
+            chkExcludeInternalPractices.Checked = cookie.ExcludeInternalPractices;
+            rbSortbyAsc.Checked = cookie.SortDirection == "Asc" ? true : false;
+            rbSortbyDesc.Checked = cookie.SortDirection == "Desc" ? true : false;
+
+            cblPractices.SelectedItems = cookie.PracticesSelected;
+            cblTimeScales.SelectedItems = cookie.TimescalesSelected;
+
+            hdnFiltersChanged.Value = cookie.FiltersChanged.ToString().ToLower();
         }
 
         private void SelectItems(ScrollingDropDown scrollingDropDown, string commaSeperatedList)
@@ -460,6 +502,34 @@ namespace PraticeManagement.Controls.Reports
             reportFilterDictionary.Add(Constants.ResourceKeys.EndDateKey, EndPeriod.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.PeriodKey, ddlPeriod.SelectedValue);
             DataHelper.SaveResourceKeyValuePairs(SettingsType.Reports, reportFilterDictionary);
+        }
+
+        public ConsultantUtilTimeLineFilter SaveFilters(int? personId, string chartTitle)
+        {
+            var filter = new ConsultantUtilTimeLineFilter
+            {
+                ActivePersons = ActivePersons,
+                ActiveProjects = ActiveProjects,
+                AvgUtil = AvgUtil,
+                BegPeriod = BegPeriod,
+                DetalizationSelectedValue = DetalizationSelectedValue,
+                EndPeriod = EndPeriod,
+                ExcludeInternalPractices = ExcludeInternalPractices,
+                ExperimentalProjects = ExperimentalProjects,
+                InternalProjects = InternalProjects,
+                Period = ddlPeriod.SelectedItem.Value,
+                PracticesSelected = cblPractices.Items[0].Selected ? null : PracticesSelected,
+                ProjectedPersons = ProjectedPersons,
+                ProjectedProjects = ProjectedProjects,
+                SortDirection = rbSortbyAsc.Checked ? "Asc" : "Desc",
+                SortId = SortId,
+                TimescalesSelected = cblTimeScales.Items[0].Selected ? null : TimescalesSelected,
+                PersonId = personId.HasValue ? (int?)personId.Value : null,
+                ChartTitle = chartTitle,
+                FiltersChanged = hdnFiltersChanged.Value == "false" ? false : true
+            };
+
+            return filter;
         }
 
     }
