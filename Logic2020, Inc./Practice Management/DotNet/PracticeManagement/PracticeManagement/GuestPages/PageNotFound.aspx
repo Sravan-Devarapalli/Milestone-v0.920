@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true" CodeBehind="PageNotFound.aspx.cs" Inherits="PraticeManagement.PageNotFound" Title="Page not found" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-	<title>Page not found</title>
+	<title>Page not found | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
 	Error 404: Page Not Found
