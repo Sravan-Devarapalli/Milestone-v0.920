@@ -3,7 +3,7 @@
 
 <%@ Register Src="~/Controls/Reports/ConsultantsReport.ascx" TagPrefix="uc" TagName="ConsultantsReport" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Reports - Utilization Table</title>
+    <title>Utilization Table | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Utilization Table
