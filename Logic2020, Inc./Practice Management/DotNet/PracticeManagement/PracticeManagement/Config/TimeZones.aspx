@@ -2,7 +2,7 @@
     AutoEventWireup="true" CodeBehind="TimeZones.aspx.cs" Inherits="PraticeManagement.Config.TimeZones" %>
 
 <asp:content id="Content1" contentplaceholderid="title" runat="server">
-    <title>Practice Management - Time Zone</title>
+    <title>Time Zone | Practice Management</title>
 </asp:content>
 <asp:content id="Content2" contentplaceholderid="head" runat="server">
 </asp:content>
