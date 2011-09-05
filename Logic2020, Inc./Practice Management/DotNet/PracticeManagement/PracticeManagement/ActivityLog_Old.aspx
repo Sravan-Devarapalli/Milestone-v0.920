@@ -5,7 +5,7 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="act" %>
 <%@ Register Src="~/Controls/Generic/BecomeUser.ascx" TagPrefix="uc" TagName="BecomeUser" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Troubleshooting</title>
+    <title>Troubleshooting | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Troubleshooting
