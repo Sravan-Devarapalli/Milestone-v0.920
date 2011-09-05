@@ -200,6 +200,12 @@
   <wsdl:message name="IPersonService_GetActiveOpportunitiesByOwnerId_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetActiveOpportunitiesByOwnerIdResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_PersonListOpportunityOwner_InputMessage">
+    <wsdl:part name="parameters" element="tns:PersonListOpportunityOwner" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_PersonListOpportunityOwner_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PersonListOpportunityOwnerResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonMilestoneWithFinancials_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonMilestoneWithFinancials" />
   </wsdl:message>
@@ -517,6 +523,10 @@
     <wsdl:operation name="GetActiveOpportunitiesByOwnerId">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerId" message="tns:IPersonService_GetActiveOpportunitiesByOwnerId_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerIdResponse" message="tns:IPersonService_GetActiveOpportunitiesByOwnerId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PersonListOpportunityOwner">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/PersonListOpportunityOwner" message="tns:IPersonService_PersonListOpportunityOwner_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/PersonListOpportunityOwnerResponse" message="tns:IPersonService_PersonListOpportunityOwner_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetPersonMilestoneWithFinancials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials" message="tns:IPersonService_GetPersonMilestoneWithFinancials_InputMessage" />
@@ -931,6 +941,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="PersonListOpportunityOwner">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/PersonListOpportunityOwner" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetPersonMilestoneWithFinancials">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials" style="document" />
       <wsdl:input>
@@ -1222,7 +1241,7 @@
   </wsdl:binding>
   <wsdl:service name="PersonService">
     <wsdl:port name="BasicHttpBinding_IPersonService" binding="tns:BasicHttpBinding_IPersonService">
-      <soap:address location="http://system58.ggk.com/PracticeManagementService/PersonService.svc" />
+      <soap:address location="http://system66.ggk.com/PracticeManagementService/PersonService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
