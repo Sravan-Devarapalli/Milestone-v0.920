@@ -8,8 +8,8 @@
 	@ClientIds			VARCHAR(250) = NULL,
 	@SalespersonIds		VARCHAR(250) = NULL,
 	@OpportunityOwnerIds	VARCHAR(250) = NULL,
-	@OpportunityGroupIds	VARCHAR(250) = NULL,
-	@PersonId			 INT
+	@OpportunityGroupIds	VARCHAR(250) = NULL
+	
 )
 AS
 BEGIN
