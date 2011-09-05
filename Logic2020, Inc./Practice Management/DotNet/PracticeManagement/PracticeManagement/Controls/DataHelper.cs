@@ -101,18 +101,17 @@ namespace PraticeManagement.Controls
         /// <summary>
         /// Gets a list of <see cref="Opportunity"></see> objects by the specified conditions.
         /// </summary>
-        public static Opportunity[] GetFilteredOpportunities()
+        public static Opportunity[] GetFilteredOpportunities(OpportunityFilterSettings filter = null)
         {
-            var opportunities =
-                ServiceCallers.Custom.Opportunity(c => c.OpportunityListAll(OpportunityFilter.Filter));
+            if (filter == null)
+            {
+                filter = SerializationHelper.DeserializeCookie("OpportunityList") as OpportunityFilterSettings ??
+                      new OpportunityFilterSettings();
+            }
 
-            var sortingFilter = Controls.Generic.OpportunityList.Filter;
-            var comp = new OpportunityComparer(sortingFilter);
+            Opportunity[] opportunities = ServiceCallers.Custom.Opportunity(c => c.FilteredOpportunityListAll(filter.ShowActive, filter.ShowExperimental, filter.ShowInactive, filter.ShowLost, filter.ShowWon, filter.ClientIdsList, filter.OpportunityGroupIdsList, filter.OpportunityOwnerIdsList, filter.SalespersonIdsList));
 
-            if (comp.SortOrder != OpportunitySortOrder.None)
-                Array.Sort(opportunities, comp);
-
-            return opportunities;
+            return SortOppotunities(opportunities).AsQueryable().ToArray();
         }
 
         public static Opportunity[] GetFilteredOpportunitiesForDiscussionReview2()
@@ -120,13 +119,8 @@ namespace PraticeManagement.Controls
             var opportunities =
                 ServiceCallers.Custom.Opportunity(c => c.OpportunityListAll(new OpportunityListContext { IsDiscussionReview2 = true }
                     ));
-            var sortingFilter = Controls.Opportunities.OpportunityListControl.Filter;
-            var comp = new OpportunityComparer(sortingFilter);
 
-            if (comp.SortOrder != OpportunitySortOrder.None)
-                Array.Sort(opportunities, comp);
-
-            return opportunities;
+            return SortOppotunities(opportunities).AsQueryable().ToArray();
         }
 
         /// <summary>
@@ -703,7 +697,7 @@ namespace PraticeManagement.Controls
         /// <param name="startDate">mileStone start date</param>
         /// <param name="endDate">mileStone end date</param>
         public static void FillPersonList(ListControl control, string firstItemText, DateTime startDate,
-                                          DateTime endDate, int? statusId = null )
+                                          DateTime endDate, int? statusId = null)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -1031,6 +1025,28 @@ namespace PraticeManagement.Controls
                 try
                 {
                     var persons = serviceClient.PersonListProjectOwner(endDate, includeInactive, person);
+
+                    FillPersonList(control, firstItemText, persons, String.Empty);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        public static void FillOpportunityOwnerList(
+           ListControl control,
+           string firstItemText,
+           bool includeInactive,
+           Person person)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    var persons = serviceClient.PersonListOpportunityOwner(includeInactive, person);
 
                     FillPersonList(control, firstItemText, persons, String.Empty);
                 }
@@ -1930,7 +1946,7 @@ namespace PraticeManagement.Controls
             return null;
         }
 
-        public static bool IsUserHasPermissionOnProject(string user, int projectId , bool isProjectNotMilestone = true)
+        public static bool IsUserHasPermissionOnProject(string user, int projectId, bool isProjectNotMilestone = true)
         {
             using (var serviceClient = new ProjectServiceClient())
             {
@@ -1998,6 +2014,39 @@ namespace PraticeManagement.Controls
                     throw;
                 }
             }
+        }
+
+        public static List<Opportunity> GetLookedOpportunities(string looked, int personId)
+        {
+            using (var serviceClient = new OpportunityServiceClient())
+            {
+                try
+                {
+                    var opportunities =
+                        serviceClient.OpportunitySearchText(
+                            looked,
+                            personId);
+
+                    return SortOppotunities(opportunities);
+                }
+                catch
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        public static List<Opportunity> SortOppotunities(Opportunity[] opportunities)
+        {
+            var sortingFilter = Controls.Generic.OpportunityList.Filter;
+                    var comp = new OpportunityComparer(sortingFilter);
+
+                    if (comp.SortOrder != OpportunitySortOrder.None)
+                        Array.Sort(opportunities, comp);
+
+                    return opportunities.ToList();
+              
         }
     }
 }
