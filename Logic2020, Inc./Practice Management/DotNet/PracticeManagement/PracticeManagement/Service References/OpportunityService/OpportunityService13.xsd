@@ -384,4 +384,41 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="FilteredOpportunityListAll">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="showActive" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showExperimental" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showInactive" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showLost" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showWon" type="xs:boolean" />
+        <xs:element minOccurs="0" name="clientIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="opportunityGroupIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="opportunityOwnerIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="salespersonIdsList" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FilteredOpportunityListAllResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="FilteredOpportunityListAllResult" nillable="true" type="q20:ArrayOfOpportunity" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OpportunitySearchText">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="looked" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="personId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OpportunitySearchTextResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="OpportunitySearchTextResult" nillable="true" type="q21:ArrayOfOpportunity" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>
