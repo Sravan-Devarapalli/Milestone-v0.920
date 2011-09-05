@@ -119,6 +119,7 @@ namespace DataAccess
         private const string PersonListSalespersonProcedure = "dbo.PersonListSalesperson";
         private const string PersonListPracticeManagerProcedure = "dbo.PersonListPracticeManager";
         private const string PersonListProjectOwnerProcedure = "dbo.PersonListProjectOwner";
+        private const string PersonListOpportunityOwnerProcedure = "dbo.PersonListOpportunityOwner";
         private const string PersonWorkDaysNumberProcedure = "dbo.PersonWorkDaysNumber";
         private const string PersonGetCountActiveProcedure = "dbo.PersonGetCountActive";
         private const string PersonGetByAliasProcedure = "dbo.PersonGetByAlias";
@@ -1129,6 +1130,28 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(EndDateParam,
                     endDate.HasValue ? (object)endDate.Value : DBNull.Value);
+                command.Parameters.AddWithValue(IncludeInactiveParam, includeInactive);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId,
+                    person == null ? (object)DBNull.Value : person.Id.Value);
+
+                connection.Open();
+                ReadPersons(command, result);
+
+                return result;
+            }
+        }
+
+
+        public static List<Person> PersonListOpportunityOwner(bool includeInactive, Person person)
+        {
+            var result = new List<Person>();
+
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(PersonListOpportunityOwnerProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
                 command.Parameters.AddWithValue(IncludeInactiveParam, includeInactive);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonId,
                     person == null ? (object)DBNull.Value : person.Id.Value);
