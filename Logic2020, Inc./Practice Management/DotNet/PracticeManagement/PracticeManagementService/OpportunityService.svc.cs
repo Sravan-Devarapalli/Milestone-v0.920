@@ -9,6 +9,7 @@ using DataAccess;
 using DataAccess.Other;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
+using System;
 
 namespace PracticeManagementService
 {
@@ -240,6 +241,37 @@ namespace PracticeManagementService
         public IDictionary<string, int> GetOpportunityStatusChangeCount(int daysPrevious)
         {
             return OpportunityDAL.GetOpportunityStatusChangeCount(daysPrevious);
+        }
+
+        public List<Opportunity> FilteredOpportunityListAll(bool showActive, bool showExperimental, bool showInactive, bool showLost, bool showWon, string clientIdsList, string opportunityGroupIdsList, string opportunityOwnerIdsList, string salespersonIdsList)
+        {
+            try
+            {
+                List<Opportunity> opportunities = OpportunityDAL.FilteredOpportunityListAll(showActive, showExperimental, showInactive, showLost, showWon, clientIdsList, opportunityGroupIdsList, opportunityOwnerIdsList, salespersonIdsList);
+                return opportunities;
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "FilteredOpportunityListAll", "OpportunityService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+        }
+
+        public List<Opportunity> OpportunitySearchText(string looked, int personId)
+        {
+            try
+            {
+                return OpportunityDAL.OpportunitySearchText(looked, personId);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "OpportunitySearchText", "OpportunityService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         #endregion
