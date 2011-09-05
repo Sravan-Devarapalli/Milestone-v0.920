@@ -2,7 +2,7 @@
     AutoEventWireup="true" CodeBehind="Expenses.aspx.cs" Inherits="PraticeManagement.Reporting.Expense" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Expenses</title>
+    <title>Expenses | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
     Expenses
