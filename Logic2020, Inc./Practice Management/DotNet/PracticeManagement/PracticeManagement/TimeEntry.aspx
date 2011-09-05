@@ -16,7 +16,7 @@
     TagPrefix="pcg" %>
 <%@ Register Src="~/Controls/CalendarLegend.ascx" TagName="CalendarLegend" TagPrefix="uc2" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Time Entry</title>
+    <title>Time Entry | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript">
