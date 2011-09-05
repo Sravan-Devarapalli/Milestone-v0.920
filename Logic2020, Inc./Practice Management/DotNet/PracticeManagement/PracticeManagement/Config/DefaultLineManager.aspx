@@ -2,7 +2,7 @@
     AutoEventWireup="true" CodeBehind="DefaultLineManager.aspx.cs" Inherits="PraticeManagement.Config.DefaultLineManager" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Default Line manager</title>
+    <title>Default Line manager | Practice Management</title>
 </asp:Content>
 <%@ Register Src="~/Controls/Configuration/DefaultUser.ascx" TagPrefix="uc" TagName="DefaultManager" %>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
