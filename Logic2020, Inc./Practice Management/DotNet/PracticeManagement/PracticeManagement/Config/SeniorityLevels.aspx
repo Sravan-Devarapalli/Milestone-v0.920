@@ -2,7 +2,7 @@
     AutoEventWireup="true" CodeBehind="SeniorityLevels.aspx.cs" Inherits="PraticeManagement.Config.SeniorityLevels" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Seniority Levels</title>
+    <title>Seniority Levels | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
     Seniority Levels
