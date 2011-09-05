@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true" CodeBehind="TimeEntriesByProject.aspx.cs" Inherits="PraticeManagement.Sandbox.TimeEntriesByProjectReport" %>
 <%@ Register Src="~/Controls/TimeEntry/TimeEntriesByProject.ascx" TagName="TimeEntriesByProject" TagPrefix="uc" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Project Time Entries Grouped by Person</title>
+    <title>Project Time Entries Grouped by Person | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
