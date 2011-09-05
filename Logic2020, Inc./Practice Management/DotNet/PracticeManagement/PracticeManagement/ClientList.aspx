@@ -5,7 +5,7 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons" Assembly="PraticeManagement" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Client List</title>
+    <title>Client List | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Client List
