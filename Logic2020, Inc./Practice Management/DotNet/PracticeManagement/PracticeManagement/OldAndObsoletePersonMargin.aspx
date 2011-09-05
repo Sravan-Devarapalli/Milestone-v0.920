@@ -5,7 +5,7 @@
 <%@ Register src="Controls/WhatIf.ascx" tagname="WhatIf" tagprefix="uc1" %>
 
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-	<title>Practice Management - One-Off Person Margin</title>
+	<title>One-Off Person Margin | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
 	One-Off Person Margin
