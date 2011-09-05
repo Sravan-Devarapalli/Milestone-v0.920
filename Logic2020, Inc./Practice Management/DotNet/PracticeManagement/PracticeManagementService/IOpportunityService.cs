@@ -179,6 +179,12 @@ namespace PracticeManagementService
         ///</summary>
         [OperationContract]
         IDictionary<string, int> GetOpportunityStatusChangeCount(int daysPrevious);
+
+        [OperationContract]
+        List<Opportunity> FilteredOpportunityListAll(bool showActive, bool showExperimental, bool showInactive, bool showLost, bool showWon, string clientIdsList, string opportunityGroupIdsList, string opportunityOwnerIdsList, string salespersonIdsList);
+
+        [OperationContract]
+        List<Opportunity> OpportunitySearchText(string looked, int personId);
     }
 }
 
