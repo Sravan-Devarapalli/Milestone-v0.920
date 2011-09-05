@@ -2,7 +2,7 @@
     AutoEventWireup="true" CodeBehind="ChangePasswordError.aspx.cs" Inherits="PraticeManagement.GuestPages.ChangePasswordError" %>
 
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Change Password Error</title>
+    <title>Change Password Error | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Invalid Request.
