@@ -15,7 +15,7 @@
 <%@ Register Src="~/Controls/Opportunities/ProposedResources.ascx" TagName="ProposedResources"
     TagPrefix="uc" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Opportunities Discussion Review 1</title>
+    <title>Opportunities Discussion Review 1 | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
     <style type="text/css">
