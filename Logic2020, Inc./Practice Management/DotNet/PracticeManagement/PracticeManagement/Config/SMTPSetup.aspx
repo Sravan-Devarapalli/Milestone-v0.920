@@ -3,7 +3,7 @@
 
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - SMTP Setup</title>
+    <title>SMTP Setup | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
     SMTP Setup
