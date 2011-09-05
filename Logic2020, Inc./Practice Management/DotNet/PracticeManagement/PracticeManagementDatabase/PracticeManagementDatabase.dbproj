@@ -3454,6 +3454,15 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\UpdatePriorityIdForOpportunity.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\PersonListOpportunityOwner.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\OpportunitySearchText.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\FilteredOpportunityListAll.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Schema Comparisons\v0.850.dbschema">
