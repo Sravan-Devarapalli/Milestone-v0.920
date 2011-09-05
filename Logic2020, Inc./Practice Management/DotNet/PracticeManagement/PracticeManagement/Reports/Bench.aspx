@@ -3,7 +3,7 @@
 
 <%@ Register Src="~/Controls/Reports/BenchReport.ascx" TagPrefix="uc" TagName="BenchReport" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Reports - Bench Report</title>
+    <title>Bench Report | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Bench Report
