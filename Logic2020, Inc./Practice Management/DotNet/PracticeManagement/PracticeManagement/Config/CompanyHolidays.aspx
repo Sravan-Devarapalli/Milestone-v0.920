@@ -4,7 +4,7 @@
 <%@ Register Src="~/Controls/Calendar.ascx" TagName="PMCalendar" TagPrefix="uc" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Company Holidays</title>
+    <title>Company Holidays | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
     Company Holidays
