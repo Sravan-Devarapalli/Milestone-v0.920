@@ -172,6 +172,18 @@
   <wsdl:message name="IOpportunityService_GetOpportunityStatusChangeCount_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetOpportunityStatusChangeCountResponse" />
   </wsdl:message>
+  <wsdl:message name="IOpportunityService_FilteredOpportunityListAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:FilteredOpportunityListAll" />
+  </wsdl:message>
+  <wsdl:message name="IOpportunityService_FilteredOpportunityListAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FilteredOpportunityListAllResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOpportunityService_OpportunitySearchText_InputMessage">
+    <wsdl:part name="parameters" element="tns:OpportunitySearchText" />
+  </wsdl:message>
+  <wsdl:message name="IOpportunityService_OpportunitySearchText_OutputMessage">
+    <wsdl:part name="parameters" element="tns:OpportunitySearchTextResponse" />
+  </wsdl:message>
   <wsdl:portType name="IOpportunityService">
     <wsdl:operation name="UpdatePriorityIdForOpportunity">
       <wsdl:input wsaw:Action="http://tempuri.org/IOpportunityService/UpdatePriorityIdForOpportunity" message="tns:IOpportunityService_UpdatePriorityIdForOpportunity_InputMessage" />
@@ -280,6 +292,14 @@
     <wsdl:operation name="GetOpportunityStatusChangeCount">
       <wsdl:input wsaw:Action="http://tempuri.org/IOpportunityService/GetOpportunityStatusChangeCount" message="tns:IOpportunityService_GetOpportunityStatusChangeCount_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IOpportunityService/GetOpportunityStatusChangeCountResponse" message="tns:IOpportunityService_GetOpportunityStatusChangeCount_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FilteredOpportunityListAll">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOpportunityService/FilteredOpportunityListAll" message="tns:IOpportunityService_FilteredOpportunityListAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOpportunityService/FilteredOpportunityListAllResponse" message="tns:IOpportunityService_FilteredOpportunityListAll_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OpportunitySearchText">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOpportunityService/OpportunitySearchText" message="tns:IOpportunityService_OpportunitySearchText_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOpportunityService/OpportunitySearchTextResponse" message="tns:IOpportunityService_OpportunitySearchText_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IOpportunityService" type="tns:IOpportunityService">
@@ -520,6 +540,24 @@
     </wsdl:operation>
     <wsdl:operation name="GetOpportunityStatusChangeCount">
       <soap:operation soapAction="http://tempuri.org/IOpportunityService/GetOpportunityStatusChangeCount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FilteredOpportunityListAll">
+      <soap:operation soapAction="http://tempuri.org/IOpportunityService/FilteredOpportunityListAll" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OpportunitySearchText">
+      <soap:operation soapAction="http://tempuri.org/IOpportunityService/OpportunitySearchText" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
