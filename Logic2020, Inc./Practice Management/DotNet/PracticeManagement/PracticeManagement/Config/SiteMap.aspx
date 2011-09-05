@@ -2,7 +2,7 @@
     AutoEventWireup="true" CodeBehind="SiteMap.aspx.cs" Inherits="PraticeManagement.Config.SiteMap" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Site Map</title>
+    <title>Site Map | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
     Site Map
