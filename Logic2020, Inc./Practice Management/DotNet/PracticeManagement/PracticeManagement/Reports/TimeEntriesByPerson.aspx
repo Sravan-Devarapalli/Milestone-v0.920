@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Practice Management - Person Time Entries Grouped By Projects" Language="C#"
+﻿<%@ Page Title="Person Time Entries Grouped By Projects | Practice Management" Language="C#"
     MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true" CodeBehind="TimeEntriesByPerson.aspx.cs"
     Inherits="PraticeManagement.Sandbox.TimeEntriesByPerson" %>
 
@@ -17,7 +17,7 @@
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
-    <title>Practice Management - Person Time Entries Grouped By Projects</title>
+    <title>Person Time Entries Grouped By Projects | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
     <script language="javascript" type="text/javascript" src="../Scripts/jquery-1.4.1.js"></script>
