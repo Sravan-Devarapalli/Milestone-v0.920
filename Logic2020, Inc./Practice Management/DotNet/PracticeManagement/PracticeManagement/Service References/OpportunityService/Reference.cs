@@ -97,6 +97,12 @@ namespace PraticeManagement.OpportunityService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/GetOpportunityStatusChangeCount", ReplyAction="http://tempuri.org/IOpportunityService/GetOpportunityStatusChangeCountResponse")]
         System.Collections.Generic.Dictionary<string, int> GetOpportunityStatusChangeCount(int daysPrevious);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/FilteredOpportunityListAll", ReplyAction="http://tempuri.org/IOpportunityService/FilteredOpportunityListAllResponse")]
+        DataTransferObjects.Opportunity[] FilteredOpportunityListAll(bool showActive, bool showExperimental, bool showInactive, bool showLost, bool showWon, string clientIdsList, string opportunityGroupIdsList, string opportunityOwnerIdsList, string salespersonIdsList);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/OpportunitySearchText", ReplyAction="http://tempuri.org/IOpportunityService/OpportunitySearchTextResponse")]
+        DataTransferObjects.Opportunity[] OpportunitySearchText(string looked, int personId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -229,6 +235,14 @@ namespace PraticeManagement.OpportunityService {
         
         public System.Collections.Generic.Dictionary<string, int> GetOpportunityStatusChangeCount(int daysPrevious) {
             return base.Channel.GetOpportunityStatusChangeCount(daysPrevious);
+        }
+        
+        public DataTransferObjects.Opportunity[] FilteredOpportunityListAll(bool showActive, bool showExperimental, bool showInactive, bool showLost, bool showWon, string clientIdsList, string opportunityGroupIdsList, string opportunityOwnerIdsList, string salespersonIdsList) {
+            return base.Channel.FilteredOpportunityListAll(showActive, showExperimental, showInactive, showLost, showWon, clientIdsList, opportunityGroupIdsList, opportunityOwnerIdsList, salespersonIdsList);
+        }
+        
+        public DataTransferObjects.Opportunity[] OpportunitySearchText(string looked, int personId) {
+            return base.Channel.OpportunitySearchText(looked, personId);
         }
     }
 }
