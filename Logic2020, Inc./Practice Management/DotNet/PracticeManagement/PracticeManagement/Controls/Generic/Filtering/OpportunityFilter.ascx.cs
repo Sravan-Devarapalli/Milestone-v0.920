@@ -5,65 +5,176 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects.ContextObjects;
+using System.Web.Security;
 
 namespace PraticeManagement.Controls.Generic.Filtering
 {
-    public partial class OpportunityFilter : PracticeManagementFilterControl<OpportunityListContext>
+    public partial class OpportunityFilter : System.Web.UI.UserControl
     {
-        protected void chbActiveOnly_CheckedChanged(object sender, EventArgs e)
+        private const string OpportunityList = "OpportunityList";
+
+        private PraticeManagement.OpportunityList HostingPage
         {
-            FireFilterOptionsChanged();
+            get { return ((PraticeManagement.OpportunityList)Page); }
         }
 
-        protected void Filter_SelectedIndexChanged(object sender, EventArgs e)
+        private string SelectedClientIds
         {
-            FireFilterOptionsChanged();
+            get
+            {
+                return cblClient.SelectedItems;
+            }
+            set
+            {
+                cblClient.SelectedItems = value;
+            }
         }
 
-        protected void btnSearch_Click(object sender, EventArgs e)
+        private string SelectedSalespersonIds
         {
-            ResetControlsForSearch();   //  Clean up filters
-            FireFilterOptionsChanged(); //  Fire changes
+            get
+            {
+                return cblSalesperson.SelectedItems;
+            }
+            set
+            {
+                cblSalesperson.SelectedItems = value;
+            }
         }
 
-        private void ResetDropDowns()
+        private string SelectedGroupIds
         {
-            ddlClients.SelectedIndex = 0;
-            ddlSalespersons.SelectedIndex = 0;
+            get
+            {
+                return cblOpportunityGroup.SelectedItems;
+            }
+            set
+            {
+                cblOpportunityGroup.SelectedItems = value;
+            }
         }
 
-        public void ResetControlsForSearch()
+        private string SelectedOpportunityOwnerIds
         {
-            ResetDropDowns();
-            chbActiveOnly.Checked = false;
-
-            UpdateFilter();
+            get
+            {
+                return cblOpportunityOwner.SelectedItems;
+            }
+            set
+            {
+                cblOpportunityOwner.SelectedItems = value;
+            }
         }
 
-        protected override void ResetControls()
+        /// <summary>
+        /// Gets a text to be searched for.
+        /// </summary>
+        public string SearchText
         {
-            ResetDropDowns();
-            chbActiveOnly.Checked = true;
-            txtSearch.Text = string.Empty;
+            get
+            {
+                return txtSearchText.Text;
+            }
         }
 
-        protected override void InitControls()
+
+        protected void Page_Load(object sender, EventArgs e)
         {
-            chbActiveOnly.Checked = Filter.ActiveClientsOnly;
-            txtSearch.Text = Filter.SearchText;
-            ddlClients.SelectedValue = Filter.ClientId.HasValue ? Filter.ClientId.Value.ToString() : string.Empty;
-            ddlSalespersons.SelectedValue = Filter.SalespersonId.HasValue ? Filter.SalespersonId.Value.ToString() : string.Empty;
+            if (!IsPostBack)
+            {
+                var filter = InitFilter();
+
+                //  If current user is administrator, don't apply restrictions
+                var person =
+                    Roles.IsUserInRole(
+                        DataHelper.CurrentPerson.Alias,
+                        DataTransferObjects.Constants.RoleNames.AdministratorRoleName)
+                    ? null : DataHelper.CurrentPerson;
+
+                DataHelper.FillClientsAndGroups(
+                      cblClient, cblOpportunityGroup);
+                DataHelper.FillSalespersonList(
+                                person, cblSalesperson,
+                                Resources.Controls.AllSalespersonsText,
+                                true);
+                DataHelper.FillOpportunityOwnerList(cblOpportunityOwner,
+                                   "All Owners",
+                                   true,
+                                   person);
+
+
+                SetFilterValues(filter);
+                
+
+                // If person is not administrator, return list of values when [All] is selected
+                //      this is needed because we apply restrictions and don't want
+                //      NULL to be returned, because that would mean all and restrictions
+                //      are not going to be applied
+                if (person != null)
+                {
+                    cblSalesperson.AllSelectedReturnType = ScrollingDropDown.AllSelectedType.AllItems;
+                    cblOpportunityOwner.AllSelectedReturnType = ScrollingDropDown.AllSelectedType.AllItems;
+                    cblClient.AllSelectedReturnType = ScrollingDropDown.AllSelectedType.AllItems;
+                    cblOpportunityGroup.AllSelectedReturnType = ScrollingDropDown.AllSelectedType.AllItems;
+                }
+            }
         }
 
-        protected override OpportunityListContext InitFilter()
+        protected void Page_PreRender(object sender, EventArgs e)
         {
-            return new OpportunityListContext
-                        {
-                            ActiveClientsOnly = chbActiveOnly.Checked,
-                            SearchText = txtSearch.Text,
-                            ClientId = GetDropDownValueWithDefault(ddlClients),
-                            SalespersonId = GetDropDownValueWithDefault(ddlSalespersons)
-                        };
+            SaveFilterSettings();
         }
+
+        public OpportunityFilterSettings GetFilterSettings()
+        {
+            var filter =
+                 new OpportunityFilterSettings
+                 {
+                     ClientIdsList = SelectedClientIds,
+                     OpportunityOwnerIdsList = SelectedOpportunityOwnerIds,
+                     SalespersonIdsList = SelectedSalespersonIds,
+                     OpportunityGroupIdsList = SelectedGroupIds,
+                     ShowActive = chbActive.Checked,
+                     ShowExperimental = chbExperimental.Checked,
+                     ShowInactive = chbInActive.Checked,
+                     ShowLost = chbLost.Checked,
+                     ShowWon = chbWon.Checked
+
+                 };
+            return filter;
+        }
+
+        private void SaveFilterSettings()
+        {
+            OpportunityFilterSettings filter = GetFilterSettings();
+            SerializationHelper.SerializeCookie(filter, OpportunityList);
+        }
+
+        private static OpportunityFilterSettings InitFilter()
+        {
+            return SerializationHelper.DeserializeCookie(OpportunityList) as OpportunityFilterSettings ??
+                   new OpportunityFilterSettings();
+        }
+
+        private void SetFilterValues(OpportunityFilterSettings filter)
+        {
+            chbActive.Checked = filter.ShowActive;
+            chbExperimental.Checked = filter.ShowExperimental;
+            chbInActive.Checked = filter.ShowInactive;
+            chbLost.Checked = filter.ShowLost;
+            chbWon.Checked = filter.ShowWon;
+            SelectedClientIds = filter.ClientIdsList;
+            SelectedOpportunityOwnerIds = filter.OpportunityOwnerIdsList;
+            SelectedSalespersonIds = filter.SalespersonIdsList;
+            SelectedGroupIds = filter.OpportunityGroupIdsList;
+        }
+
+        protected void btnUpdateView_Click(object sender, EventArgs e)
+        {
+            var filter = GetFilterSettings();
+            HostingPage.UpDateView(filter);
+        }
+
     }
 }
+
