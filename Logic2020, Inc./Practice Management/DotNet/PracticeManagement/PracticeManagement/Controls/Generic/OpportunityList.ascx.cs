@@ -10,13 +10,14 @@ using DataTransferObjects.ContextObjects;
 using System.Web.UI.HtmlControls;
 using AjaxControlToolkit;
 using PraticeManagement.Controls.Opportunities;
+using System.Collections.Generic;
 
 namespace PraticeManagement.Controls.Generic
 {
     public enum OpportunityListFilterMode
     {
         GenericFilter,
-        ByTargetPerson
+        ByTargetPerson 
     }
 
     public partial class OpportunityList : PracticeManagementFilterControl<OpportunitySortingContext>
@@ -24,6 +25,7 @@ namespace PraticeManagement.Controls.Generic
         private const string ViewStateSortOrder = "SortOrder";
         private const string ViewStateSortDirection = "SortDirection";
         private const string CssArrowClass = "arrow";
+        private const string WordBreak = "<wbr />";
 
         private const string ANIMATION_SHOW_SCRIPT =
                        @"<OnClick>
@@ -78,18 +80,17 @@ namespace PraticeManagement.Controls.Generic
             }
         }
 
-        public Opportunity[] GetOpportunities()
+        public Opportunity[] GetOpportunities(OpportunityFilterSettings filter = null)
         {
             return
                 FilterMode == OpportunityListFilterMode.GenericFilter ?
-                DataHelper.GetFilteredOpportunities()
+                DataHelper.GetFilteredOpportunities(filter)
                 :
                 DataHelper.GetOpportunitiesForTargetPerson(TargetPersonId);
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
         }
 
         private void PopulatePriorityHint()
@@ -102,7 +103,7 @@ namespace PraticeManagement.Controls.Generic
                 lvOp.DataSource = opportunityPriorities;
                 lvOp.DataBind();
             }
-            
+
         }
 
         protected void lvOpportunities_Sorting(object sender, ListViewSortEventArgs e)
@@ -220,9 +221,15 @@ namespace PraticeManagement.Controls.Generic
                                 SortDirection.ToString() == SortDirection.Ascending.ToString() ? "up" : "down");
         }
 
-        public void DatabindOpportunities()
+        public void DatabindOpportunities(OpportunityFilterSettings filter = null)
         {
-            var opportunities = GetOpportunities();
+
+            var opportunities = GetOpportunities(filter);
+            DataBindLookedOpportunities(opportunities);
+        }
+
+        public void DataBindLookedOpportunities(Opportunity[] opportunities)
+        {
             lvOpportunities.DataSource = opportunities;
             lvOpportunities.DataBind();
 
@@ -236,6 +243,8 @@ namespace PraticeManagement.Controls.Generic
                 PraticeManagement.Utils.Generic.RedirectWithReturnTo(detailsLink, Request.Url.AbsoluteUri, Response);
             }
         }
+             
+
 
         protected string GetOpportunityDetailsLink(int opportunityId, int index)
         {
@@ -293,6 +302,29 @@ namespace PraticeManagement.Controls.Generic
             }
 
             return true;
+        }
+
+        protected static string GetWrappedText(String descriptionText)
+        {
+            if (descriptionText == null)
+            {
+                return "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            }
+
+            descriptionText = descriptionText.Trim();
+
+            if (descriptionText.Length > 99)
+            {
+                descriptionText = descriptionText.Substring(0, 99)+"..";
+            }
+
+            for (int i = 0; i < descriptionText.Length; i = i + 15)
+            {
+                descriptionText = descriptionText.Insert(i, WordBreak);
+            }
+
+
+            return descriptionText;
         }
 
     }
