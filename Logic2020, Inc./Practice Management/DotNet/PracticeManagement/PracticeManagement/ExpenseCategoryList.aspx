@@ -2,7 +2,7 @@
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons" Assembly="PraticeManagement" %>
 
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-	<title>Practice Management - Expense Categories</title>
+	<title>Expense Categories | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
 	Expense Categories
