@@ -4,7 +4,7 @@
 <%@ Register Src="~/Controls/Reports/ConsultantsWeeklyReport.ascx" TagPrefix="uc"
     TagName="ConsultantsWeeklyReport" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Reports - Utilization Timeline</title>
+    <title>Utilization Timeline | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Utilization Timeline
