@@ -22,42 +22,6 @@ namespace PraticeManagement.Controls.Generic.Filtering {
         protected global::AjaxControlToolkit.TabContainer TabContainer1;
         
         /// <summary>
-        /// tpMainFilters control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.TabPanel tpMainFilters;
-        
-        /// <summary>
-        /// chbActiveOnly control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chbActiveOnly;
-        
-        /// <summary>
-        /// ddlClients control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlClients;
-        
-        /// <summary>
-        /// ddlSalespersons control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlSalespersons;
-        
-        /// <summary>
         /// tpSearch control.
         /// </summary>
         /// <remarks>
@@ -67,58 +31,193 @@ namespace PraticeManagement.Controls.Generic.Filtering {
         protected global::AjaxControlToolkit.TabPanel tpSearch;
         
         /// <summary>
-        /// pnlSsearch control.
+        /// pnlSearch control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlSsearch;
+        protected global::System.Web.UI.WebControls.Panel pnlSearch;
         
         /// <summary>
-        /// txtSearch control.
+        /// txtSearchText control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSearch;
+        protected global::System.Web.UI.WebControls.TextBox txtSearchText;
         
         /// <summary>
-        /// searchHighlighting control.
+        /// reqSearchText control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.SearchHighlighting.SearchHighlightingExtender searchHighlighting;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqSearchText;
         
         /// <summary>
-        /// btnSearch control.
+        /// btnSearchAll control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSearch;
+        protected global::System.Web.UI.WebControls.Button btnSearchAll;
         
         /// <summary>
-        /// odsClients control.
+        /// valsSearch control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource odsClients;
+        protected global::System.Web.UI.WebControls.ValidationSummary valsSearch;
         
         /// <summary>
-        /// odsSalespersons control.
+        /// tpMainFilters control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource odsSalespersons;
+        protected global::AjaxControlToolkit.TabPanel tpMainFilters;
+        
+        /// <summary>
+        /// btnUpdateFilters control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnUpdateFilters;
+        
+        /// <summary>
+        /// btnResetFilters control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnResetFilters;
+        
+        /// <summary>
+        /// chbActive control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbActive;
+        
+        /// <summary>
+        /// chbWon control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbWon;
+        
+        /// <summary>
+        /// chbExperimental control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbExperimental;
+        
+        /// <summary>
+        /// chbInActive control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbInActive;
+        
+        /// <summary>
+        /// chbLost control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbLost;
+        
+        /// <summary>
+        /// cblClient control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.CascadingMsdd cblClient;
+        
+        /// <summary>
+        /// sdeCblClient control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeCblClient;
+        
+        /// <summary>
+        /// cblSalesperson control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblSalesperson;
+        
+        /// <summary>
+        /// sdeCblSalesperson control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeCblSalesperson;
+        
+        /// <summary>
+        /// cblOpportunityGroup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblOpportunityGroup;
+        
+        /// <summary>
+        /// sdeCblOpportunityGroup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeCblOpportunityGroup;
+        
+        /// <summary>
+        /// cblOpportunityOwner control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblOpportunityOwner;
+        
+        /// <summary>
+        /// sdeCblOpportunityOwner control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeCblOpportunityOwner;
     }
 }
 
