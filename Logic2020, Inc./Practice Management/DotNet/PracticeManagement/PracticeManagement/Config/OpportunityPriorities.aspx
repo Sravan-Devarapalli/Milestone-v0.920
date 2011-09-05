@@ -2,7 +2,7 @@
     AutoEventWireup="true" CodeBehind="OpportunityPriorities.aspx.cs" Inherits="PraticeManagement.Config.OpurtunityPriorities" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Opportunity Priorities</title>
+    <title>Opportunity Priorities | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
     Opurtunity Priorities
