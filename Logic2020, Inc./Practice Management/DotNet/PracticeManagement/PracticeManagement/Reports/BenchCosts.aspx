@@ -5,7 +5,7 @@
     TagName="BenchCosts" %>
 
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Reports - BenchC osts</title>
+    <title>Bench Costs | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Bench Costs
