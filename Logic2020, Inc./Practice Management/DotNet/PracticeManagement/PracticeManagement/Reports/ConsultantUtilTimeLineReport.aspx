@@ -5,6 +5,7 @@
     TagName="ConsultantsWeeklyReport" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head2" runat="server">
+    <title>Consultant Util Time Line Report | Practice Management</title>
     <style type="text/css">
         .tab-invisible
         {
