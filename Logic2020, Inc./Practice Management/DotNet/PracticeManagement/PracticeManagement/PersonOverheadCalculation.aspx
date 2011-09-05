@@ -6,7 +6,7 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Overhead Calculation</title>
+    <title>Overhead Calculation | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Person Overhead Calculations
