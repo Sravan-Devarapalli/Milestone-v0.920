@@ -12,7 +12,7 @@
 <%@ Register Src="~/Controls/PersonListControl.ascx" TagPrefix="uc" TagName="PersonList" %>
 <%@ Register Src="~/Controls/Configuration/Practices.ascx" TagPrefix="uc" TagName="Practices" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - General Configuration</title>
+    <title>General Configuration | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     General Configuration
