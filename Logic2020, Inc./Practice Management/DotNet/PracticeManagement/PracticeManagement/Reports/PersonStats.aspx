@@ -8,7 +8,7 @@
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Reports - Person Stats</title>
+    <title>Person Stats | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     PersonStats
