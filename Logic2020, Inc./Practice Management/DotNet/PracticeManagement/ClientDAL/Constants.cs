@@ -403,6 +403,8 @@
             public const string PracticeManagerIdParam = "@PracticeManagerId";
             public const string DirecterIdParam = "@DirectorId";
             public const string SalespersonIdsParam = "@SalespersonIds";
+            public const string OpportunityOwnerIdsParam = "@OpportunityOwnerIds";
+            public const string OpportunityGroupIdsParam = "@OpportunityGroupIds";
             public const string SalespersonIdParam = "@SalespersonId";
             public const string PracticeIdsParam = "@PracticeIds";
             public const string TimeScaleIdsParam = "@TimeScaleIds";
@@ -474,6 +476,8 @@
             public const string ActualHoursParam = "@ActualHours";
             public const string AttachmentIdParam = "@AttachmentId";
             public const string IsFloatingHolidayParam = "@IsFloatingHoliday";
+public const string ShowLostParam = "@ShowLost";
+            public const string ShowWonParam = "@ShowWon";
 
         }
 
@@ -714,6 +718,7 @@
                 public const string OpportunityTransitionInsert = "dbo.OpportunityTransitionInsert";
                 public const string OpportunityTransitionDelete = "dbo.OpportunityTransitionDelete";
                 public const string OpportunityListAll = "dbo.OpportunityListAll";
+                public const string FilteredOpportunityListAll = "dbo.FilteredOpportunityListAll";
                 public const string OpportunityListAllShort = "dbo.OpportunityListAllShort";
                 public const string OpportunityGetById = "dbo.OpportunityGetById";
                 public const string OpportunityInsert = "dbo.OpportunityInsert";
@@ -736,6 +741,7 @@
                 public const string IsOpportunityPriorityInUse = "dbo.IsOpportunityPriorityInUse";
                 public const string GetOpportunityPriorityTransitionCount = "dbo.GetOpportunityPriorityTransitionCount";
                 public const string GetOpportunityStatusChangeCount = "dbo.GetOpportunityStatusChangeCount";
+                public const string OpportunitySearchText = "dbo.OpportunitySearchText";
 
             }
 
