@@ -7,7 +7,7 @@
     TagPrefix="uc3" %>
 
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Reports</title>
+    <title>Reports | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Reports
