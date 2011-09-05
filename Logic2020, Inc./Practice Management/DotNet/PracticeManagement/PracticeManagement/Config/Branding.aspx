@@ -5,7 +5,7 @@
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="MessageLabel" TagPrefix="uc" %>
 <%@ Register Src="~/Controls/BrandingSettingsControl.ascx" TagName="BrandingLogo" TagPrefix="uc" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Branding/Logo</title>
+    <title>Branding/Logo | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
     Branding/Logo
