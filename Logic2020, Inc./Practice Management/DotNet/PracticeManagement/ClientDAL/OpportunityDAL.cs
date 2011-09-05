@@ -1228,6 +1228,56 @@ namespace DataAccess
                 command.ExecuteNonQuery();
             }
         }
+
+        public static List<Opportunity> FilteredOpportunityListAll(bool showActive, bool showExperimental, bool showInactive, bool showLost, bool showWon, string clientIdsList, string opportunityGroupIdsList, string opportunityOwnerIdsList, string salespersonIdsList)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.FilteredOpportunityListAll, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowActiveParam, showActive);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowExperimentalParam, showExperimental);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowInactiveParam, showInactive);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowLostParam, showLost);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowWonParam, showWon);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdsParam, clientIdsList);
+                command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityGroupIdsParam, opportunityGroupIdsList);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SalespersonIdsParam, salespersonIdsList);
+                command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityOwnerIdsParam, opportunityOwnerIdsList);
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<Opportunity>();
+                    ReadOpportunities(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static List<Opportunity> OpportunitySearchText(string looked, int personId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.OpportunitySearchText, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.LookedParam,
+                    !string.IsNullOrEmpty(looked) ? (object)looked : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<Opportunity>();
+                    ReadOpportunities(reader, result);
+                    return result;
+                }
+            }
+        }
     }
 }
 
