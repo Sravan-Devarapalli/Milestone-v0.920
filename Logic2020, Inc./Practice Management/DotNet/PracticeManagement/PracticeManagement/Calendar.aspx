@@ -6,7 +6,7 @@ MasterPageFile="~/PracticeManagementMain.Master" Title="Company Calendar" %>
 <%@ Register src="Controls/MonthCalendar.ascx" tagname="MonthCalendar" tagprefix="uc1" %>
 <%@ Register src="Controls/CalendarLegend.ascx" tagname="CalendarLegend" tagprefix="uc2" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-	<title>Practice Management - Calendar</title>
+	<title>Calendar | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
 	<asp:UpdatePanel ID="pnlHeader" runat="server">
