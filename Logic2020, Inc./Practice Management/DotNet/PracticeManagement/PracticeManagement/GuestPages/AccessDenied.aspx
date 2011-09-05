@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true" CodeBehind="AccessDenied.aspx.cs" Inherits="PraticeManagement.AccessDenied" Title="Access was denied" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-	<title>Access was denied</title>
+	<title>Access was denied | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
 	Access was denied
