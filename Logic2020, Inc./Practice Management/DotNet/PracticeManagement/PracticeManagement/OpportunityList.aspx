@@ -9,7 +9,7 @@
 <%@ Register src="Controls/Generic/OpportunityList.ascx" tagname="OpportunityList" tagprefix="uc2" %>
 <%@ Register Src="~/Controls/Generic/Filtering/OpportunityFilter.ascx" TagName="OpportunityFilter" TagPrefix="uc" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Opportunity List</title>
+    <title>Opportunity List | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Opportunity List
