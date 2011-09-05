@@ -209,6 +209,7 @@
       <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="EstimatedClientDiscount" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="EstimatedWorkloadByMonth" nillable="true" type="tns:ArrayOfBilledTime" />
+      <xs:element minOccurs="0" name="HasTimeEntries" type="xs:boolean" />
       <xs:element minOccurs="0" name="HourlyAmount" nillable="true" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="HoursPerDay" type="xs:decimal" />
       <xs:element minOccurs="0" name="Location" nillable="true" type="xs:string" />
@@ -271,7 +272,7 @@
   <xs:complexType name="Project">
     <xs:sequence>
       <xs:element minOccurs="0" name="AccessLevel" nillable="true" type="tns:Seniority" />
-      <xs:element minOccurs="0" name="Attachment" nillable="true" type="tns:ProjectAttachment" />
+      <xs:element minOccurs="0" name="Attachments" nillable="true" type="tns:ArrayOfProjectAttachment" />
       <xs:element minOccurs="0" name="BillingInfo" nillable="true" type="tns:BillingInfo" />
       <xs:element minOccurs="0" name="BuyerName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Client" nillable="true" type="tns:Client" />
@@ -280,6 +281,7 @@
       <xs:element minOccurs="0" name="Discount" type="xs:decimal" />
       <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Group" nillable="true" type="tns:ProjectGroup" />
+      <xs:element minOccurs="0" name="HasAttachments" type="xs:boolean" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
       <xs:element minOccurs="0" name="ManagementCommission" nillable="true" type="tns:Commission" />
@@ -308,10 +310,17 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Seniority" nillable="true" type="tns:Seniority" />
+  <xs:complexType name="ArrayOfProjectAttachment">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectAttachment" nillable="true" type="tns:ProjectAttachment" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfProjectAttachment" nillable="true" type="tns:ArrayOfProjectAttachment" />
   <xs:complexType name="ProjectAttachment">
     <xs:sequence>
       <xs:element minOccurs="0" name="AttachmentData" nillable="true" type="xs:base64Binary" />
       <xs:element minOccurs="0" name="AttachmentFileName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AttachmentId" type="xs:int" />
       <xs:element minOccurs="0" name="AttachmentSize" type="xs:int" />
       <xs:element minOccurs="0" name="UploadedDate" nillable="true" type="xs:dateTime" />
     </xs:sequence>
@@ -500,6 +509,7 @@
       <xs:element minOccurs="0" name="PersonId" type="xs:int" />
       <xs:element minOccurs="0" name="PracticeId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="PracticeName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SalesCommissionFractionOfMargin" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="SeniorityId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="SeniorityName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
