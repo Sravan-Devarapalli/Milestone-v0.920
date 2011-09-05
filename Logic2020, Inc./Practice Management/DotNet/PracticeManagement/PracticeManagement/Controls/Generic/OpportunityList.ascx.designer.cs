@@ -13,6 +13,24 @@ namespace PraticeManagement.Controls.Generic {
     public partial class OpportunityList {
         
         /// <summary>
+        /// oppNameToolTipHolder control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel oppNameToolTipHolder;
+        
+        /// <summary>
+        /// lbloppNameTooltipContent control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbloppNameTooltipContent;
+        
+        /// <summary>
         /// lvOpportunities control.
         /// </summary>
         /// <remarks>
