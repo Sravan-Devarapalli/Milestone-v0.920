@@ -15,7 +15,7 @@
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Projects</title>
+    <title>Projects | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Projected Project Profit & Loss
