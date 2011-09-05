@@ -5,7 +5,7 @@
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Clients</title>
+    <title>Clients | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
     Clients
