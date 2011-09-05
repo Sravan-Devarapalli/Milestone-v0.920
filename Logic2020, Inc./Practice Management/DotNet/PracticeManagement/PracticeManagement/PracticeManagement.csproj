@@ -135,6 +135,7 @@
     <Content Include="Images\printer.png" />
     <Content Include="Images\saveToDisk.png" />
     <Content Include="LoggedOut.aspx" />
+    <Content Include="OpportunitySearch.aspx" />
     <Content Include="ProjectCalendar.aspx" />
     <Content Include="Config\BecomeUser.aspx" />
     <Content Include="Config\Branding.aspx" />
@@ -751,6 +752,7 @@
     <Compile Include="Controls\Milestones\MilestonePersonBar.ascx.designer.cs">
       <DependentUpon>MilestonePersonBar.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\OpportunityFilterSettings.cs" />
     <Compile Include="FilterObjects\ActivityLogFilter.cs" />
     <Compile Include="FilterObjects\BenchReportFilter.cs" />
     <Compile Include="FilterObjects\ConsultantUtilTimeLineFilter.cs">
@@ -769,6 +771,13 @@
     </Compile>
     <Compile Include="OpportunityPriorityHandler.ashx.cs">
       <DependentUpon>OpportunityPriorityHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="OpportunitySearch.aspx.cs">
+      <DependentUpon>OpportunitySearch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OpportunitySearch.aspx.designer.cs">
+      <DependentUpon>OpportunitySearch.aspx</DependentUpon>
     </Compile>
     <Compile Include="ProjectCalendar.aspx.cs">
       <DependentUpon>ProjectCalendar.aspx</DependentUpon>
