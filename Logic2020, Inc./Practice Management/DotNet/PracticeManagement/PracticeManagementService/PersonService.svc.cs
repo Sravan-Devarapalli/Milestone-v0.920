@@ -397,6 +397,12 @@ namespace PracticeManagementService
             return PersonDAL.PersonListProjectOwner(endDate, includeInactive, person);
         }
 
+        public List<Person> PersonListOpportunityOwner(bool includeInactive, Person person)
+        {
+            return PersonDAL.PersonListOpportunityOwner(includeInactive, person);
+        }
+        
+
         /// <summary>
         /// List the persons who recieve the Practice Management commissions
         /// </summary>
@@ -989,33 +995,6 @@ namespace PracticeManagementService
         public void RestartCustomMembershipProvider()
         {
             System.Web.HttpRuntime.UnloadAppDomain();
-
-            //// Get the configuration file.
-            //Configuration config = WebConfigurationManager.OpenWebConfiguration("~");
-
-            //var section = (MembershipSection)config.GetSection("system.web/membership");
-            //var defaultProvider = section.DefaultProvider;
-            //var providerSettings = section.Providers[defaultProvider];
-
-            //int count = Convert.ToInt32(providerSettings.Parameters.Get("maxInvalidPasswordAttempts"));
-            //count = count + 1;
-            //providerSettings.Parameters.Set("maxInvalidPasswordAttempts", count.ToString());
-
-
-            //    // Save the configuration file.
-            //    config.Save(ConfigurationSaveMode.Minimal);
-
-
-            //ConfigurationManager.RefreshSection("system.web/membership");
-            //count = count - 1;
-            //providerSettings.Parameters.Set("maxInvalidPasswordAttempts", count.ToString());
-
-
-            //    // Save the configuration file.
-            //    config.Save(ConfigurationSaveMode.Minimal);
-
-
-            //ConfigurationManager.RefreshSection("system.web/membership");
         }
 
         public void SendLockedOutNotificationEmail(string userName, string loginPageUrl)
