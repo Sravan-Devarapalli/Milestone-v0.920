@@ -11,7 +11,7 @@
 <%@ Register Src="Controls/PersonInfo.ascx" TagName="PersonInfo" TagPrefix="uc1" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Compensation Details</title>
+    <title>Compensation Details | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Compensation Details
