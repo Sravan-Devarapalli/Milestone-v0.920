@@ -2,7 +2,7 @@
  CodeBehind="Practices.aspx.cs" Inherits="PraticeManagement.Practices" %>
 <%@ Register Src="~/Controls/Configuration/Practices.ascx" TagPrefix="uc" TagName="Practices" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Practice Areas</title>
+    <title>Practice Areas | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Practice Areas
