@@ -527,6 +527,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Opportunity> GetActiveOpportunitiesByOwnerId(int personId);
+
+        [OperationContract]
+        List<Person> PersonListOpportunityOwner(bool includeInactive, Person person);
     }
 }
 
