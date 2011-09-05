@@ -2,7 +2,7 @@
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
- <title>Practice Management - Revenue Goals</title>
+ <title>Revenue Goals | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 Revenue Goals
