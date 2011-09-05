@@ -2,7 +2,7 @@
     AutoEventWireup="true" CodeBehind="DefaultTimeEntryProject.aspx.cs" Inherits="PraticeManagement.Config.DefaultTimeEntryProject" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Default Time Entry Project</title>
+    <title>Default Time Entry Project | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
     Default Time Entry Project
