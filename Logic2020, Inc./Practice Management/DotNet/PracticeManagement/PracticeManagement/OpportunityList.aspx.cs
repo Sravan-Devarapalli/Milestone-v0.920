@@ -57,35 +57,47 @@ namespace PraticeManagement
             }
         }
 
+
+        /// <summary>
+        /// Gets a text to be searched for.
+        /// </summary>
+        public string SearchText
+        {
+            get
+            {
+                return ofOpportunityList.SearchText;
+            }
+        }
+
         #endregion
 
-        private void DatabindOpportunities()
+        private void DatabindOpportunities(OpportunityFilterSettings filter = null)
         {
-            opportunities.DatabindOpportunities();
+            opportunities.DatabindOpportunities(filter);
         }
 
         protected override void Display()
         {
-            DatabindOpportunities();
+        }
 
-            var summary = GetSummaryDetails();
-            pnlSummary.Controls.Add(summary);
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                var filter = ofOpportunityList.GetFilterSettings();
+                UpDateView(filter);
+            }
         }
 
         protected void ofOpportunityList_OnFilterOptionsChanged(object sender, EventArgs e)
         {
-            DatabindOpportunities();
-
             var summary = GetSummaryDetails();
             pnlSummary.Controls.Add(summary);
         }
 
-        protected void btnResetSort_OnClick(object sender, EventArgs e)
+        internal void UpDateView(OpportunityFilterSettings filter)
         {
-            ofOpportunityList.ResetFilter();
-            opportunities.ResetFilter();
-
-            DatabindOpportunities();
+            DatabindOpportunities(filter);
             var summary = GetSummaryDetails();
             pnlSummary.Controls.Add(summary);
         }
@@ -132,7 +144,7 @@ namespace PraticeManagement
             excelGrid.DataBind();
             excelGrid.Visible = true;
 
-           
+
             var summaryDetails = GetSummaryDetails(true);
             GridViewExportUtil.Export("Opportunities.xls", excelGrid, summaryDetails, "Logic20/20 Opportunities");
         }
@@ -185,6 +197,11 @@ namespace PraticeManagement
             e.Row.Cells.RemoveAt(0); //Removing OpportunityId column in the report.
         }
 
+
+
         #endregion
+
+
     }
 }
+
