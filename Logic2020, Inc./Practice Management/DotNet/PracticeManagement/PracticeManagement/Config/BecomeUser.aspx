@@ -2,7 +2,7 @@
     AutoEventWireup="true" CodeBehind="BecomeUser.aspx.cs" Inherits="PraticeManagement.Config.BecomeUser" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Become User</title>
+    <title>Become User | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
     Become User
