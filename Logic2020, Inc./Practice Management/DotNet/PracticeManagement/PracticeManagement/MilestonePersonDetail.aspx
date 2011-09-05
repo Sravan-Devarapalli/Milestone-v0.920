@@ -19,7 +19,7 @@
     Assembly="PraticeManagement" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Practice Management - Milestone-Person Details</title>
+    <title>Milestone-Person Details | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Milestone-Person Details
