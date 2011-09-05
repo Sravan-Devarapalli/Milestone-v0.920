@@ -355,26 +355,27 @@ namespace PraticeManagement
             // Set logo image.
             imgLogo.ImageUrl = BrandingConfigurationManager.GetLogoImageUrl();
 
-            if (title.Controls.Count > 0)
-            {
-                var lc = title.Controls[0] as LiteralControl;
-                if (lc != null)
-                {
-                    var text = lc.Text;
-                    if (text != null)
-                    {
-                        var titleCloseIndex = text.IndexOf("</title>", StringComparison.OrdinalIgnoreCase);
-                        if (titleCloseIndex > 0)
-                        {
-                            var sb = new StringBuilder(text);
-                            sb.Insert(titleCloseIndex, " - ");
-                            titleCloseIndex += 3;
-                            sb.Insert(titleCloseIndex, BrandingConfigurationManager.GetCompanyTitle());
-                            lc.Text = sb.ToString();
-                        }
-                    }
-                }
-            }
+            //Removed Company name in page title as part of #2864.
+            //if (title.Controls.Count > 0)
+            //{
+            //    var lc = title.Controls[0] as LiteralControl;
+            //    if (lc != null)
+            //    {
+            //        var text = lc.Text;
+            //        if (text != null)
+            //        {
+            //            var titleCloseIndex = text.IndexOf("</title>", StringComparison.OrdinalIgnoreCase);
+            //            if (titleCloseIndex > 0)
+            //            {
+            //                var sb = new StringBuilder(text);
+            //                sb.Insert(titleCloseIndex, " - ");
+            //                titleCloseIndex += 3;
+            //                sb.Insert(titleCloseIndex, BrandingConfigurationManager.GetCompanyTitle());
+            //                lc.Text = sb.ToString();
+            //            }
+            //        }
+            //    }
+            //}
 
             UpdateLastServerVisitInfo();
 
