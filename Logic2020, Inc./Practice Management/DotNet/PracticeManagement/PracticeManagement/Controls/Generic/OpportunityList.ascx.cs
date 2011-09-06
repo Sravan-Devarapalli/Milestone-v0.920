@@ -26,6 +26,7 @@ namespace PraticeManagement.Controls.Generic
         private const string ViewStateSortDirection = "SortDirection";
         private const string CssArrowClass = "arrow";
         private const string WordBreak = "<wbr />";
+        private const string Description = "<b>Description : </b>{0}";
 
         private const string ANIMATION_SHOW_SCRIPT =
                        @"<OnClick>
@@ -308,7 +309,7 @@ namespace PraticeManagement.Controls.Generic
         {
             if (descriptionText == null)
             {
-                return "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                return string.Format(Description,string.Empty);
             }
 
             descriptionText = descriptionText.Trim();
@@ -324,7 +325,7 @@ namespace PraticeManagement.Controls.Generic
             }
 
 
-            return descriptionText;
+            return string.Format(Description,descriptionText); ;
         }
 
     }
