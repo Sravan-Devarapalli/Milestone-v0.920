@@ -155,28 +155,28 @@
 </script>
 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
     <ContentTemplate>
+        <table cellpadding="0" cellspacing="0" align="center" style="width: 100%; padding-bottom: 10px;
+            margin-bottom: 10px;">
+            <tr>
+                <td align="center">
+                    <asp:Label ID="lblOpportunitiesCount" runat="server" Font-Bold="true" Font-Size="Medium"
+                        Text="{0} Opportunities"></asp:Label>
+                </td>
+            </tr>
+        </table>
         <div class="buttons-block">
             <ajaxToolkit:CollapsiblePanelExtender ID="cpeSummary" runat="Server" TargetControlID="pnlSummary"
                 ImageControlID="btnExpandCollapseSummary" CollapsedImage="~/Images/expand.jpg"
                 ExpandedImage="~/Images/collapse.jpg" CollapseControlID="btnExpandCollapseSummary"
                 ExpandControlID="btnExpandCollapseSummary" Collapsed="True" TextLabelID="lblSummary" />
-            <asp:Label ID="lblSummary" runat="server"></asp:Label>&nbsp;
             <asp:Image ID="btnExpandCollapseSummary" runat="server" ImageUrl="~/Images/collapse.jpg"
-                ToolTip="Expand Summary Details" />
+                ToolTip="Expand Summary Details" />&nbsp;
+            <asp:Label ID="lblSummary" runat="server" Text="Summary"></asp:Label>
         </div>
         <asp:Panel CssClass="summary" Style="white-space: nowrap; overflow-x: auto;" ID="pnlSummary"
             runat="server">
         </asp:Panel>
         <div id="opportunity-list">
-            <table cellpadding="0" cellspacing="0" align="center" style="width: 100%; padding-bottom: 10px;
-                margin-bottom: 10px;">
-                <tr>
-                    <td align="center">
-                        <asp:Label ID="lblOpportunitiesCount" runat="server" Font-Bold="true" Font-Size="Medium"
-                            Text="{0} Opportunities"></asp:Label>
-                    </td>
-                </tr>
-            </table>
             <asp:ListView ID="lvOpportunities" runat="server" DataKeyNames="Id" EnableViewState="true"
                 OnSorting="lvOpportunities_Sorting" OnItemDataBound="lvOpportunities_OnItemDataBound">
                 <LayoutTemplate>
