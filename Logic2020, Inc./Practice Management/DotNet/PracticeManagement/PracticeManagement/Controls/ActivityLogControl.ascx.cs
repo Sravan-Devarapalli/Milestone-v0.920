@@ -483,7 +483,7 @@ namespace PraticeManagement.Controls
         protected void odsActivities_Selecting(object sender, ObjectDataSourceSelectingEventArgs e)
         {
             e.InputParameters["startDateFilter"] = diYear.FromDate.HasValue ? diYear.FromDate : SettingsHelper.GetCurrentPMTime().AddYears(-1);
-            e.InputParameters["endDateFilter"] = diYear.ToDate.HasValue ? diYear.ToDate : SettingsHelper.GetCurrentPMTime();
+            e.InputParameters["endDateFilter"] = diYear.ToDate.HasValue ? diYear.ToDate.Value.AddDays(1) : SettingsHelper.GetCurrentPMTime().AddDays(1);
             e.InputParameters["sourceFilter"] = ddlEventSource.SelectedValue;
             e.InputParameters["opportunityId"] = (this.OpportunityId == null ? null : this.OpportunityId.ToString());
             e.InputParameters["milestoneId"] = (this.MilestoneId == null ? null : this.MilestoneId.ToString());
@@ -590,3 +590,4 @@ namespace PraticeManagement.Controls
         }
     }
 }
+
