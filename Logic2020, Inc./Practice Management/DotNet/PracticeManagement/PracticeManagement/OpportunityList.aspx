@@ -27,23 +27,23 @@
             <div class="buttons-block">
                 <table class="WholeWidth">
                     <tr>
-                        <td>
+                        <td Width="80px">
                             <ajaxToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
                                 ImageControlID="btnExpandCollapseFilter" CollapsedImage="Images/expand.jpg" ExpandedImage="Images/collapse.jpg"
                                 CollapseControlID="btnExpandCollapseFilter" ExpandControlID="btnExpandCollapseFilter"
                                 Collapsed="True" TextLabelID="lblFilter" />
-                            <asp:Label ID="lblFilter" runat="server"></asp:Label>&nbsp;
                             <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg"
-                                ToolTip="Expand Filters" />
+                                ToolTip="Expand Filters" />&nbsp;
+                            <asp:Label ID="lblFilter" runat="server" Text="Filters"></asp:Label>
                         </td>
                         <td>
                             <ajaxToolkit:CollapsiblePanelExtender ID="cpeSummary" runat="Server" TargetControlID="pnlSummary"
                                 ImageControlID="btnExpandCollapseSummary" CollapsedImage="Images/expand.jpg"
                                 ExpandedImage="Images/collapse.jpg" CollapseControlID="btnExpandCollapseSummary"
                                 ExpandControlID="btnExpandCollapseSummary" Collapsed="True" TextLabelID="lblSummary" />
-                            <asp:Label ID="lblSummary" runat="server"></asp:Label>&nbsp;
                             <asp:Image ID="btnExpandCollapseSummary" runat="server" ImageUrl="~/Images/collapse.jpg"
-                                ToolTip="Expand Summary Details" />
+                                ToolTip="Expand Summary Details" />&nbsp;
+                            <asp:Label ID="lblSummary" runat="server" Text="Summary"></asp:Label>
                         </td>
                         <td>
                         </td>
