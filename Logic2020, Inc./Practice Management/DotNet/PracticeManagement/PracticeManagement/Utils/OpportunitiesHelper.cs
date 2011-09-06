@@ -32,6 +32,9 @@ namespace PraticeManagement.Utils
         #region Constants
 
         private const string PercentageSummaryFormat = "{0} = {1} ({2}%)";
+        private const string ExportPercentageSummaryFormat = "{0} = {1} {2}";
+        private const string PercentageFormat = "({0}%)";
+        private const string NameFormat = "{0} =";
         private const string ExcelSummaryValuesFormat = "&nbsp; {0}";
         private const string ExcelValueFormat = "&nbsp; {0} = {1}";
         private const string CurrencyDisplayFormat = "$###,###,###,###,###,##0";
@@ -68,7 +71,7 @@ namespace PraticeManagement.Utils
 
         #region Export
 
-        public static Table GetFormatedSummaryDetails(Opportunity[] opportunityList, Dictionary<string, int> priorityTrendList, Dictionary<string, int> statusChangesList,bool isExporting = false)
+        public static Table GetFormatedSummaryDetails(Opportunity[] opportunityList, Dictionary<string, int> priorityTrendList, Dictionary<string, int> statusChangesList, bool isExporting = false)
         {
             IsExporting = isExporting;
             OpportunitiesList = opportunityList;
@@ -93,6 +96,7 @@ namespace PraticeManagement.Utils
 
             col1.VerticalAlign = col2.VerticalAlign = col3.VerticalAlign = col4.VerticalAlign = col5.VerticalAlign = VerticalAlign.Top;
 
+            col1.Style["padding-left"] = "5px";
             col1.Style["padding-right"] = col2.Style["padding-right"] = col3.Style["padding-right"] = col4.Style["padding-right"] = col5.Style["padding-right"] = "10px";
 
             var col1data = ExportSummaryColumn1(opportunityList, totalOpportunities, uniqueClientsCount);
@@ -165,9 +169,17 @@ namespace PraticeManagement.Utils
         private static Table ExportSummaryColumn5(Opportunity[] opportunityList)
         {
             var data1 = AddTotalEstimateRevenueByPractice(opportunityList);
-            var data2 = AddEstiateRevenueForTop3ClientsCell(opportunityList);
+            //if (IsExporting.HasValue && IsExporting.Value)
+            //{
+            //    var data2 = AddEstiateRevenueForTop3ClientsCell(opportunityList);
+            //    return ExportSummaryColumnWithMultipleRows(data1, data2);
+            //}
+            //else
+            //{
+            //    return ExportSummaryColumnWithMultipleRows(data1);
+            //}
+            return ExportSummaryColumnWithMultipleRows(data1);
 
-            return ExportSummaryColumnWithMultipleRows(data1, data2);
         }
 
         private static Table ExportSummaryColumnWithMultipleRows(params Table[] data)
@@ -186,14 +198,17 @@ namespace PraticeManagement.Utils
             return table;
         }
 
-        private static void AddHeaderRow(string headerText, Table table)
+        private static void AddHeaderRow(string headerText, Table table, bool needToOccupyTwoCells = true)
         {
             var headerRow = new TableRow();
             var td = new TableCell();
             td.Text = headerText;
             td.Font.Bold = true;
             td.HorizontalAlign = HorizontalAlign.Left;
-            td.ColumnSpan = 2;
+            if (needToOccupyTwoCells)
+            {
+                td.ColumnSpan = 2;
+            }
 
             headerRow.Controls.Add(td);
 
@@ -204,23 +219,70 @@ namespace PraticeManagement.Utils
         {
             var dataRow = new TableRow();
             var dataCell = new TableCell();
-            dataCell.HorizontalAlign = HorizontalAlign.Left;
-            dataCell.ColumnSpan = 2;
+            dataCell.HorizontalAlign = (IsExporting.HasValue && IsExporting.Value) ? HorizontalAlign.Left : HorizontalAlign.Right;
             dataCell.Font.Bold = false;
 
             if (key2 != null)
             {
                 int count = keyValuePair.ContainsKey(key) ? keyValuePair[key] : 0;
                 count = count + (keyValuePair.ContainsKey(key2) ? keyValuePair[key2] : 0);
-                dataCell.Text = string.Format(ExcelValueFormat, key2 + "/" + key, count);
+                if (IsExporting.HasValue && IsExporting.Value)
+                {
+                    dataCell.Text = string.Format(ExcelValueFormat, key2 + "/" + key, count);
+                }
+                else
+                {
+                    AddNameCell(key2 + "/" + key, dataRow);
+                    dataCell.Text = count.ToString();
+                }
             }
             else
             {
-                dataCell.Text = string.Format(ExcelValueFormat, key, keyValuePair.ContainsKey(key) ? keyValuePair[key] : 0);
+                if (IsExporting.HasValue && IsExporting.Value)
+                {
+                    dataCell.Text = string.Format(ExcelValueFormat, key, keyValuePair.ContainsKey(key) ? keyValuePair[key] : 0);
+                }
+                else
+                {
+                    AddNameCell(key, dataRow);
+                    dataCell.Text = keyValuePair.ContainsKey(key) ? keyValuePair[key].ToString() : "0";
+                }
             }
 
             dataRow.Controls.Add(dataCell);
             table.Controls.Add(dataRow);
+        }
+
+        private static void AddNameCell(string name, TableRow row, bool needEqualToSymbol = true)
+        {
+            var nameCell = new TableCell();
+            nameCell.HorizontalAlign = HorizontalAlign.Right;
+            nameCell.VerticalAlign = VerticalAlign.Top;
+            nameCell.Font.Bold = false;
+            //nameCell.Wrap = true;
+            //nameCell.Style.Add("white-space", "normal !important;");
+            //nameCell.Style.Add("word-wrap", "break-word");
+
+            if (!(IsExporting.HasValue && IsExporting.Value))
+            {
+                string trunckatedName = name;
+                if (trunckatedName.Length > 30)
+                {
+                    string value = string.Empty;
+                    for (int i = 29; i < trunckatedName.Length; i = i + 30)
+                    {
+                        value = trunckatedName.Insert(i, "<br/>");
+                    }
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        name = value;
+                    }
+                }
+            }
+            
+            nameCell.Text = needEqualToSymbol ? string.Format(NameFormat, name) : name;
+
+            row.Controls.Add(nameCell);
         }
 
         private static void AddEmptyDataRow(Table table)
@@ -265,17 +327,28 @@ namespace PraticeManagement.Utils
                         orderby result.Count() descending
                         select new
                         {
-                            clientSummary = string.Format(PercentageSummaryFormat, result.Select(c => c.Client.Name).First(), result.Count(), (result.Count() * 100) / totalOpportunities)
+                            clientName = result.Select(c => c.Client.Name).First(),
+                            OpportunityCount = result.Count(),
+                            clientSummary = string.Format(PercentageFormat, (result.Count() * 100) / totalOpportunities),
+                            clientEstimatedRevenue = result.Sum(c => c.EstimatedRevenue)
                         }
                         ).Take(3);
 
             Table topClientsTable = new Table();
 
             AddHeaderRow("Top 3 Clients", topClientsTable);
-
+            
             foreach (var item in list)
             {
-                AddDataRowWithTwoCells(item.clientSummary, topClientsTable);
+                if (IsExporting.HasValue && IsExporting.Value)
+                {
+                    //AddDataRowWithTwoCells(string.Format(ExportPercentageSummaryFormat, item.clientName, item.OpportunityCount, item.clientSummary) + item.clientEstimatedRevenue.Value.ToString(CurrencyDisplayFormat), topClientsTable);
+                    AddDataRowWithTwoCells(item.clientName, item.OpportunityCount + item.clientSummary, topClientsTable, "<span style=\" font-weight:bold;\">" + item.clientEstimatedRevenue.Value.ToString(CurrencyDisplayFormat) + "</span>", false);
+                }
+                else
+                {
+                    AddDataRowWithTwoCells(item.clientName, item.OpportunityCount + item.clientSummary, topClientsTable, "<span style=\" font-weight:bold;\">" + item.clientEstimatedRevenue.Value.ToString(CurrencyDisplayFormat) + "</span>", true);
+                }
             }
 
             AddEmptyDataRow(topClientsTable);
@@ -291,16 +364,34 @@ namespace PraticeManagement.Utils
                         group o by o.Priority.Priority into result
                         select new
                         {
-                            prioritySummary = string.Format(PercentageSummaryFormat, result.Key, result.Count(), (result.Count() * 100) / totalOpportunities)
+                            priorityName = result.Key,
+                            priorityCount = result.Count(),
+                            priorityPercentage = string.Format(PercentageFormat, (result.Count() * 100) / totalOpportunities)
                         }
                         );
 
             Table prioritySummaryTable = new Table();
-            AddHeaderRow("Summary by Priority", prioritySummaryTable);
+            AddHeaderRow("Summary by Priority", prioritySummaryTable, !(IsExporting.HasValue && IsExporting.Value));
 
             foreach (var item in calc)
             {
-                AddDataRowWithTwoCells(item.prioritySummary, prioritySummaryTable);
+                if (IsExporting.HasValue && IsExporting.Value)
+                {
+                    string value = string.Format(ExcelValueFormat, item.priorityName, item.priorityCount + item.priorityPercentage);
+
+                    TableRow row = new TableRow();
+                    TableCell cell = new TableCell();
+                    cell.HorizontalAlign = HorizontalAlign.Left;
+                    cell.Text = string.Format(ExcelSummaryValuesFormat, value);
+
+                    row.Controls.Add(cell);
+                    prioritySummaryTable.Controls.Add(row);
+                    //AddDataRowWithTwoCells(value, prioritySummaryTable);
+                }
+                else
+                {
+                    AddDataRowWithTwoCells(item.priorityName, item.priorityCount.ToString(), prioritySummaryTable, item.priorityPercentage);
+                }
             }
 
             AddEmptyDataRow(prioritySummaryTable);
@@ -312,7 +403,7 @@ namespace PraticeManagement.Utils
         {
             Table priorityTrendingTable = new Table();
             string headerText = string.Format("Priority Trending (last {0} days)", days);
-            AddHeaderRow(headerText, priorityTrendingTable);
+            AddHeaderRow(headerText, priorityTrendingTable, !(IsExporting.HasValue && IsExporting.Value));
 
             var priorityTrendList = PriorityTrendList;
             AddDataRowByKeyValuePair(priorityTrendList, UpKey, priorityTrendingTable);
@@ -351,7 +442,8 @@ namespace PraticeManagement.Utils
             TableCell headerCell = new TableCell();
             headerCell.Text = "Opportunity Aging";
             headerCell.Font.Bold = true;
-            headerCell.HorizontalAlign = HorizontalAlign.Center;
+            headerCell.HorizontalAlign = HorizontalAlign.Left;
+            headerCell.Style.Add("padding-left", "0px !important");
 
 
 
@@ -362,17 +454,17 @@ namespace PraticeManagement.Utils
             TableCell tblCell1 = new TableCell();
             tblCell1.Text = "00-30 Days =";
             tblCell1.Font.Bold = false;
-            tblCell1.HorizontalAlign = HorizontalAlign.Justify;
+            tblCell1.HorizontalAlign = HorizontalAlign.Right;
 
             TableCell tblCell2 = new TableCell();
             tblCell2.Text = "31-60 Days =";
             tblCell2.Font.Bold = false;
-            tblCell2.HorizontalAlign = HorizontalAlign.Justify;
+            tblCell2.HorizontalAlign = HorizontalAlign.Right;
 
             TableCell tblCell3 = new TableCell();
             tblCell3.Text = "61-120+ Days =";
             tblCell3.Font.Bold = false;
-            tblCell3.HorizontalAlign = HorizontalAlign.Justify;
+            tblCell3.HorizontalAlign = HorizontalAlign.Right;
 
             headerRow.Controls.Add(headerCell);
 
@@ -464,17 +556,17 @@ namespace PraticeManagement.Utils
             TableRow age3 = new TableRow();
 
             TableCell tblCell1 = new TableCell();
-            tblCell1.Text = "00-30 Days =";
+            tblCell1.Text = "&nbsp; 00-30 Days =";
             tblCell1.Font.Bold = false;
             tblCell1.HorizontalAlign = HorizontalAlign.Justify;
 
             TableCell tblCell2 = new TableCell();
-            tblCell2.Text = "31-60 Days =";
+            tblCell2.Text = "&nbsp; 31-60 Days =";
             tblCell2.Font.Bold = false;
             tblCell2.HorizontalAlign = HorizontalAlign.Justify;
 
             TableCell tblCell3 = new TableCell();
-            tblCell3.Text = "61-120+ Days =";
+            tblCell3.Text = "&nbsp; 61-120+ Days =";
             tblCell3.Font.Bold = false;
             tblCell3.HorizontalAlign = HorizontalAlign.Justify;
 
@@ -544,8 +636,7 @@ namespace PraticeManagement.Utils
             }
             return cellText;
         }
-
-
+        
         private static Table AddTotalEstimatedRevenueCell(Opportunity[] opportunityList, decimal totalEstimateRevenue)
         {
             Table table = new Table();
@@ -571,6 +662,40 @@ namespace PraticeManagement.Utils
             table.Controls.Add(dataRow);
         }
 
+        private static void AddDataRowWithTwoCells(string value1, string value2, Table table, string value3 = null, bool keepEqualToSymbolSeperately = false)
+        {
+            TableRow dataRow = new TableRow();
+            AddNameCell(value1, dataRow, !keepEqualToSymbolSeperately);
+
+            if (keepEqualToSymbolSeperately)
+            {
+                TableCell cell1 = new TableCell();
+                cell1.Text = "&nbsp;=&nbsp;";
+                cell1.VerticalAlign = VerticalAlign.Middle;
+                dataRow.Controls.Add(cell1);
+            }
+
+            TableCell cell = new TableCell();
+            cell.HorizontalAlign = HorizontalAlign.Right;
+            cell.VerticalAlign = VerticalAlign.Middle;
+            cell.Text = value2;
+            cell.Font.Bold = false;
+            dataRow.Controls.Add(cell);
+
+            if (!string.IsNullOrEmpty(value3))
+            {
+                TableCell cell2 = new TableCell();
+                cell2.HorizontalAlign = (IsExporting.HasValue && IsExporting.Value) ? HorizontalAlign.Left : HorizontalAlign.Right;
+                cell2.Font.Bold = false;
+                cell2.Text = value3;
+                cell2.VerticalAlign = VerticalAlign.Middle;
+
+                dataRow.Controls.Add(cell2);
+            }
+
+            table.Controls.Add(dataRow);
+        }
+
         private static Table AddEstimateRevenueByPriorityCell(Opportunity[] opportunityList, decimal totalEstimateRevenue)
         {
             Table table = new Table();
@@ -591,7 +716,14 @@ namespace PraticeManagement.Utils
                 var percentage = (item.priorityEstimateRevenue * 100) / totalEstimateRevenue;
                 string value = string.Format(PercentageSummaryFormat, item.priority, item.priorityEstimateRevenue.Value.ToString(CurrencyDisplayFormat), percentage.Value.ToString("0.0"));
 
-                AddDataRowWithTwoCells(value, table);
+                if (IsExporting.HasValue && IsExporting.Value)
+                {
+                    AddDataRowWithTwoCells(value, table);
+                }
+                else
+                {
+                    AddDataRowWithTwoCells(item.priority, item.priorityEstimateRevenue.Value.ToString(CurrencyDisplayFormat), table, string.Format(PercentageFormat, percentage.Value.ToString("0.0")));
+                }
             }
 
             AddEmptyDataRow(table);
@@ -662,6 +794,7 @@ namespace PraticeManagement.Utils
 
             cell2.Text = value;
             cell2.Font.Bold = false;
+            cell2.HorizontalAlign = HorizontalAlign.Right;
             dataRow.Controls.Add(cell2);
             table.Controls.Add(dataRow);
         }
