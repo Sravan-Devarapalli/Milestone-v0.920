@@ -26,8 +26,6 @@ AS
 	SET @FirstRecord = @PageSize * @PageNo
 	SET @LastRecord = @FirstRecord + @PageSize
 
-	print @FirstRecord
-	print @LastRecord
 
 	SELECT -- Listing a specified page
 	       tmp.ActivityID,
