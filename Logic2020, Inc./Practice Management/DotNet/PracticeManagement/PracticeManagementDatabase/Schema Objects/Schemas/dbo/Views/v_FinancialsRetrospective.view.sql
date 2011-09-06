@@ -108,7 +108,7 @@ AS
 	       ) AS RecruitingCommissionRate
 	  FROM dbo.v_MilestoneRevenueRetrospective AS r
 		   -- Linking to persons
-	       LEFT JOIN dbo.v_MilestonePersonSchedule m ON m.MilestoneId = r.MilestoneId AND m.Date = r.Date
+	       JOIN dbo.v_MilestonePersonSchedule m ON m.MilestoneId = r.MilestoneId AND m.Date = r.Date
 	       LEFT JOIN (SELECT s.Date, s.MilestoneId, SUM(HoursPerDay) AS HoursPerDay
 						FROM dbo.v_MilestonePersonSchedule AS s
 					  GROUP BY s.Date, s.MilestoneId) AS s
