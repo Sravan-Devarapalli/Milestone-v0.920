@@ -31,15 +31,6 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.CollapsiblePanelExtender cpe;
         
         /// <summary>
-        /// lblFilter control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblFilter;
-        
-        /// <summary>
         /// btnExpandCollapseFilter control.
         /// </summary>
         /// <remarks>
@@ -47,6 +38,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Image btnExpandCollapseFilter;
+        
+        /// <summary>
+        /// lblFilter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblFilter;
         
         /// <summary>
         /// cpeSummary control.
@@ -58,15 +58,6 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.CollapsiblePanelExtender cpeSummary;
         
         /// <summary>
-        /// lblSummary control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSummary;
-        
-        /// <summary>
         /// btnExpandCollapseSummary control.
         /// </summary>
         /// <remarks>
@@ -74,6 +65,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Image btnExpandCollapseSummary;
+        
+        /// <summary>
+        /// lblSummary control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblSummary;
         
         /// <summary>
         /// lnkAddOpportunity control.
