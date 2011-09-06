@@ -22,6 +22,15 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::System.Web.UI.UpdatePanel UpdatePanel1;
         
         /// <summary>
+        /// lblOpportunitiesCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblOpportunitiesCount;
+        
+        /// <summary>
         /// cpeSummary control.
         /// </summary>
         /// <remarks>
@@ -29,15 +38,6 @@ namespace PraticeManagement.Controls.Opportunities {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.CollapsiblePanelExtender cpeSummary;
-        
-        /// <summary>
-        /// lblSummary control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSummary;
         
         /// <summary>
         /// btnExpandCollapseSummary control.
@@ -49,6 +49,15 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::System.Web.UI.WebControls.Image btnExpandCollapseSummary;
         
         /// <summary>
+        /// lblSummary control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblSummary;
+        
+        /// <summary>
         /// pnlSummary control.
         /// </summary>
         /// <remarks>
@@ -56,15 +65,6 @@ namespace PraticeManagement.Controls.Opportunities {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlSummary;
-        
-        /// <summary>
-        /// lblOpportunitiesCount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblOpportunitiesCount;
         
         /// <summary>
         /// lvOpportunities control.
