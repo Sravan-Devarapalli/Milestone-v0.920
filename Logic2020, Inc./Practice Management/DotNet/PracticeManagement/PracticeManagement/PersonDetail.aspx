@@ -49,6 +49,28 @@
             addListenersToAllCheckBoxes('ctl00_body_rpPermissions_msddPractices');
         }
 
+        function SetTooltipText(descriptionText, hlinkObj) {
+            var hlinkObjct = $('#' + hlinkObj.id);
+            var displayPanel = $('#<%= personOpportunities.ClientID %>_oppNameToolTipHolder'); 
+            iptop = hlinkObjct.offset().top - hlinkObjct[0].offsetHeight;
+            ipleft = hlinkObjct.offset().left + hlinkObjct[0].offsetWidth + 10;
+            iptop = iptop;
+            ipleft = ipleft;
+            setPosition(displayPanel, iptop, ipleft);
+            displayPanel.show();
+            setPosition(displayPanel, iptop, ipleft);
+            displayPanel.show();
+
+            var lbloppNameTooltipContent = document.getElementById('<%= personOpportunities.ClientID %>_lbloppNameTooltipContent');
+            lbloppNameTooltipContent.innerHTML = descriptionText.toString();
+        }
+
+        function HidePanel() {
+
+            var displayPanel = $('#<%= personOpportunities.ClientID %>_oppNameToolTipHolder'); 
+            displayPanel.hide();
+        }
+
         function printform() {
             var printContent = document.getElementById('<%= dvTerminationDateErrors.ClientID %>');
             var windowUrl = 'about:blank';
