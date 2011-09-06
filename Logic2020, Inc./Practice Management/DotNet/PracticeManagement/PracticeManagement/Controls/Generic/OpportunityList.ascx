@@ -23,7 +23,64 @@
     function setPosition(item, ytop, xleft) {
         item.offset({ top: ytop, left: xleft });
     }
+
+    function SetTooltipText(descriptionText, hlinkObj) {
+        var hlinkObjct = $('#' + hlinkObj.id);
+        var displayPanel = $('#<%= oppNameToolTipHolder.ClientID %>');
+        iptop = hlinkObjct.offset().top - hlinkObjct[0].offsetHeight;
+        ipleft = hlinkObjct.offset().left + hlinkObjct[0].offsetWidth + 10;
+        iptop = iptop;
+        ipleft = ipleft;
+        setPosition(displayPanel, iptop, ipleft);
+        displayPanel.show();
+        setPosition(displayPanel, iptop, ipleft);
+        displayPanel.show();
+
+        var lbloppNameTooltipContent = document.getElementById('<%= lbloppNameTooltipContent.ClientID %>');
+        lbloppNameTooltipContent.innerHTML = descriptionText.toString();
+    }
+
+    function HidePanel() {
+
+        var displayPanel = $('#<%= oppNameToolTipHolder.ClientID %>');
+        displayPanel.hide();
+    }
+
 </script>
+<asp:Panel ID="oppNameToolTipHolder" Style="display: none; position: absolute; z-index: 2000;"
+    runat="server" CssClass="ToolTip WordWrap">
+    <table>
+        <tr class="top">
+            <td class="lt">
+                <div class="tail">
+                </div>
+            </td>
+            <td class="tbor">
+            </td>
+            <td class="rt">
+            </td>
+        </tr>
+        <tr class="middle">
+            <td class="lbor">
+            </td>
+            <td class="content WordWrap">
+                <pre>
+<asp:Label ID="lbloppNameTooltipContent" CssClass="WordWrap" runat="server"></asp:Label>
+</pre>
+            </td>
+            <td class="rbor">
+            </td>
+        </tr>
+        <tr class="bottom">
+            <td class="lb">
+            </td>
+            <td class="bbor">
+            </td>
+            <td class="rb">
+            </td>
+        </tr>
+    </table>
+</asp:Panel>
 <div id="opportunity-list">
     <asp:ListView ID="lvOpportunities" runat="server" DataKeyNames="Id" OnSorting="lvOpportunities_Sorting">
         <LayoutTemplate>
@@ -56,7 +113,7 @@
                                         <td>
                                             <asp:ListView ID="lvOpportunityPriorities" runat="server">
                                                 <LayoutTemplate>
-                                                    <div style="max-height: 150px; overflow-y: auto;overflow-x:hidden;">
+                                                    <div style="max-height: 150px; overflow-y: auto; overflow-x: hidden;">
                                                         <table id="itemPlaceHolderContainer" runat="server" style="background-color: White;"
                                                             class="WholeWidth">
                                                             <tr runat="server" id="itemPlaceHolder">
@@ -69,15 +126,17 @@
                                                         <td style="width: 100%; padding-left: 2px;">
                                                             <table class="WholeWidth">
                                                                 <tr>
-                                                                    <td align="center" valign="middle" style="text-align: center;  color:Black;font-size:12px;padding: 0px;">
+                                                                    <td align="center" valign="middle" style="text-align: center; color: Black; font-size: 12px;
+                                                                        padding: 0px;">
                                                                         <asp:Label ID="lblPriority" Width="15px" Font-Bold="true" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>
                                                                     </td>
-                                                                    <td align="center" valign="middle" style="text-align: center; color:Black; padding: 0px;font-size:12px;padding-left: 2px;padding-right: 2px;">
+                                                                    <td align="center" valign="middle" style="text-align: center; color: Black; padding: 0px;
+                                                                        font-size: 12px; padding-left: 2px; padding-right: 2px;">
                                                                         -
                                                                     </td>
                                                                     <td style="padding: 0px;">
-                                                                        <asp:Label ID="lblDescription" runat="server" Width="180px" Style="white-space: normal; color:Black;font-size:12px;"
-                                                                            Text='<%# Eval("Description") %>'></asp:Label>
+                                                                        <asp:Label ID="lblDescription" runat="server" Width="180px" Style="white-space: normal;
+                                                                            color: Black; font-size: 12px;" Text='<%# Eval("Description") %>'></asp:Label>
                                                                     </td>
                                                                 </tr>
                                                             </table>
@@ -182,7 +241,9 @@
                 </td>
                 <td>
                     <div class="cell-pad">
-                        <asp:HyperLink ID="hlName" runat="server" NavigateUrl='<%# GetOpportunityDetailsLink((int) Eval("Id"), Container.DisplayIndex) %>'>
+                        <asp:HyperLink ID="hlName" runat="server" Description='<%# GetWrappedText(((Opportunity) Container.DataItem).Description) %>'
+                            onmouseout="HidePanel();" onmouseover="SetTooltipText(this.attributes['Description'].value,this);"
+                            NavigateUrl='<%# GetOpportunityDetailsLink((int) Eval("Id"), Container.DisplayIndex) %>'>
                             <%# HttpUtility.HtmlEncode((string)Eval("Name")) %>
                         </asp:HyperLink>
                     </div>
@@ -238,7 +299,9 @@
                 </td>
                 <td>
                     <div class="cell-pad">
-                        <asp:HyperLink ID="hlName" runat="server" NavigateUrl='<%# GetOpportunityDetailsLink((int) Eval("Id"), Container.DisplayIndex) %>'>
+                        <asp:HyperLink ID="hlName" Description='<%# GetWrappedText((string)((Opportunity) Container.DataItem).Description) %>'
+                            onmouseout="HidePanel();" onmouseover="SetTooltipText(this.attributes['Description'].value,this);"
+                            runat="server" NavigateUrl='<%# GetOpportunityDetailsLink((int) Eval("Id"), Container.DisplayIndex) %>'>
                             <%# HttpUtility.HtmlEncode((string)Eval("Name")) %>
                         </asp:HyperLink>
                     </div>
