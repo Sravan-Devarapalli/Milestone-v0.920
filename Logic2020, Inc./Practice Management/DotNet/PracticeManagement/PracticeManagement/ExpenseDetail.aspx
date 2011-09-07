@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
     CodeBehind="ExpenseDetail.aspx.cs" Inherits="PraticeManagement.ExpenseDetail"
-    Title="Practice Management - Expense Details" %>
+    Title="Expense Details | Practice Management" %>
 
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
 <%@ Register Src="Controls/MonthPicker.ascx" TagName="MonthPicker" TagPrefix="uc1" %>
