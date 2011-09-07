@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagement.Master" AutoEventWireup="true" CodeBehind="OldAndObsoletePersonMargin.aspx.cs" Inherits="PraticeManagement.PersonMargin" Title="Practice Management - One-Off Person Margin" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagement.Master" AutoEventWireup="true" CodeBehind="OldAndObsoletePersonMargin.aspx.cs" Inherits="PraticeManagement.PersonMargin" Title="One-Off Person Margin | Practice Management" %>
 
 <%@ Register src="Controls/PersonnelCompensation.ascx" tagname="PersonnelCompensation" tagprefix="uc1" %>
 <%@ Register src="Controls/RecruiterInfo.ascx" tagname="RecruiterInfo" tagprefix="uc1" %>
