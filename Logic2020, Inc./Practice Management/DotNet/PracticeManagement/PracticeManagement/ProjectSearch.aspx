@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
     CodeBehind="ProjectSearch.aspx.cs" Inherits="PraticeManagement.ProjectSearch"
-    Title="Practice Management - Project Search Results" %>
+    Title="Project Search Results | Practice Management" %>
 
 <%@ Import Namespace="DataTransferObjects" %>
 <%@ Register TagPrefix="uc" TagName="ProjectNameCellRounded" Src="~/Controls/ProjectNameCellRounded.ascx" %>
