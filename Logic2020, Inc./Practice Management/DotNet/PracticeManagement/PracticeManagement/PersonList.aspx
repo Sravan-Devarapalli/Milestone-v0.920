@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
-    CodeBehind="PersonList.aspx.cs" Inherits="PraticeManagement.PersonList" Title="Practice Management - Person List"
+    CodeBehind="PersonList.aspx.cs" Inherits="PraticeManagement.PersonList" Title="Person List | Practice Management"
     EnableEventValidation="false" %>
 
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
