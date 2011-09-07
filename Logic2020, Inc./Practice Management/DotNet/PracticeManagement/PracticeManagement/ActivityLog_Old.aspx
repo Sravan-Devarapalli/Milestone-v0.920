@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
-    CodeBehind="ActivityLog_Old.aspx.cs" Inherits="PraticeManagement.ActivityLog" Title="Practice Management - User Activity Log" %>
+    CodeBehind="ActivityLog_Old.aspx.cs" Inherits="PraticeManagement.ActivityLog" Title="Troubleshooting | Practice Management" %>
 
 <%@ Register Src="~/Controls/ActivityLogControl.ascx" TagPrefix="uc" TagName="ActivityLogControl" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="act" %>
