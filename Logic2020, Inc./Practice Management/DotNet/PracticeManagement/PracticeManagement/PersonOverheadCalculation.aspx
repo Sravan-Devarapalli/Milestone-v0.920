@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
     CodeBehind="PersonOverheadCalculation.aspx.cs" Inherits="PraticeManagement.PersonOverheadCalculation"
-    Title="Practice Management - Overhead Calculation" %>
+    Title="Overhead Calculation | Practice Management" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons" Assembly="PraticeManagement" %>
 <%@ Import Namespace="DataTransferObjects" %>
 <%@ Import Namespace="System.Collections.Generic" %>
