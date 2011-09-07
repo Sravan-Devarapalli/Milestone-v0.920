@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
     CodeBehind="MilestonePersonDetail.aspx.cs" Inherits="PraticeManagement.MilestonePersonDetail"
-    Title="Practice Management - Milestone-Person Details" %>
+    Title="Milestone-Person Details | Practice Management" %>
 
 <%@ Register Src="Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc2" %>
 <%@ Register Src="Controls/ProjectInfo.ascx" TagName="ProjectInfo" TagPrefix="uc1" %>
