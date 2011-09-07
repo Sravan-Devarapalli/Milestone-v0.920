@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="GeneralConfiguration.aspx.cs"
     Inherits="PraticeManagement.Config.GeneralConfiguration" MasterPageFile="~/PracticeManagementMain.Master"
-    Title="Practice Management - Time Entry Configuration" %>
+    Title="General Configuration | Practice Management" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="act" %>
 <%@ Register Src="~/Controls/TimeEntry/TimeEntryManagement.ascx" TagPrefix="uc" TagName="TeManage" %>
