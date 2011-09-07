@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true" CodeBehind="ExpenseCategoryList.aspx.cs" Inherits="PraticeManagement.ExpenseCategoryList" Title="Practice Management - Expense Categories" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true" CodeBehind="ExpenseCategoryList.aspx.cs" Inherits="PraticeManagement.ExpenseCategoryList" Title="Expense Categories | Practice Management" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons" Assembly="PraticeManagement" %>
 
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
