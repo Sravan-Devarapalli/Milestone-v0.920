@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
     CodeBehind="ChangePassword.aspx.cs" Inherits="PraticeManagement.ChangePassword"
-    Title="Practice Management - Change User Password" %>
+    Title="Change User Password | Practice Management" %>
 
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="MessageLabel" TagPrefix="uc" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
