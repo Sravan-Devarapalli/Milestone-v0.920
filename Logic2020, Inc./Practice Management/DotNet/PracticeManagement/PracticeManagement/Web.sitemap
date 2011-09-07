@@ -2,7 +2,7 @@
 <siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
   <siteMapNode url="" roles="*">
     <siteMapNode url="~/Temp.aspx?from=toolbar" title="Projects" description="Company Performance page" >
-      <siteMapNode url="~/ProjectDetail.aspx" title="Add Project" description="Show url" />
+      <siteMapNode url="~/ProjectDetail.aspx?from=sub_toolbar" title="Add Project" description="Show url" />
       <siteMapNode url="~/ProjectSearch.aspx" title="Search" description="Show url" />
       <siteMapNode url="~/Projects.aspx" title="Summary" description="Show url" />
       <siteMapNode url="~/GroupBy.aspx" title="Group By..."  description="Show url"/>
