@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
-    CodeBehind="ExpenseList.aspx.cs" Inherits="PraticeManagement.ExpenseList" Title="Practice Management - Expenses" %>
+    CodeBehind="ExpenseList.aspx.cs" Inherits="PraticeManagement.ExpenseList" Title="Expenses | Practice Management" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons" Assembly="PraticeManagement" %>
 <%@ Register Src="Controls/MonthPicker.ascx" TagName="MonthPicker" TagPrefix="uc2" %>
 <%@ Register Assembly="AjaxControlToolkit" TagPrefix="ajaxToolkit" Namespace="AjaxControlToolkit" %>
