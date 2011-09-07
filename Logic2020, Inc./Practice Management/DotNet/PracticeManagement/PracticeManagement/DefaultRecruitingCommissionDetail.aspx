@@ -1,6 +1,6 @@
 <%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
     CodeBehind="DefaultRecruitingCommissionDetail.aspx.cs" Inherits="PraticeManagement.DefaultRecruitingCommissionDetail"
-    Title="Practice Management - Default Recruiting Commission Details" %>
+    Title="Default Recruiting Commission Details | Practice Management" %>
 
 <%@ Register TagPrefix="cc" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
