@@ -1,5 +1,5 @@
 <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Projects.aspx.cs" Inherits="PraticeManagement.Projects"
-    Title="Practice Management - Projects" MasterPageFile="~/PracticeManagementMain.Master" %>
+    Title="Projects Summary | Practice Management" MasterPageFile="~/PracticeManagementMain.Master" %>
 
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
