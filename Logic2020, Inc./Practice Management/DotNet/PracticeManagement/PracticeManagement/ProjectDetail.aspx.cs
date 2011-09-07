@@ -1294,6 +1294,17 @@ namespace PraticeManagement
                 );
         }
 
+        public string GetWrappedText(string name)
+        {
+            if (name.Length > 50)
+            {
+                for (int i = 50; i < name.Length; i = i + 50)
+                {
+                    name = name.Insert(i, "<wbr />");
+                }
+            }
+            return name;
+        }
 
         #endregion
 
