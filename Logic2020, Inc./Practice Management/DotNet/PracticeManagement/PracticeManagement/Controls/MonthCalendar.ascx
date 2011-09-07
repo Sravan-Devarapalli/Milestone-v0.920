@@ -128,7 +128,7 @@
             CancelControlID="btnDayCancel" OkControlID="hdnDummyFieldForModalPopup" BackgroundCssClass="modalBackground"
             PopupControlID="pnlHolidayDetails" BehaviorID="bhCompanyHoliday" DropShadow="false" />
         <asp:Panel ID="pnlHolidayDetails" runat="server" BackColor="White" BorderColor="Black"
-            CssClass="ConfirmBoxClass" Style="padding-top: 20px; padding-left: 10px; padding-right: 10px;
+            Style="padding-top: 20px; padding-left: 10px; padding-right: 10px; min-width:250px; max-width:700px; min-height:60px;
             display: none;" BorderWidth="2px">
             <table class="WholeWidth">
                 <tr>
