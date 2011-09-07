@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MarginTest.aspx.cs" Inherits="PraticeManagement.MarginTest"
-    MasterPageFile="~/PracticeManagementMain.Master" Title="Practice Management - One-Off Person Margin" %>
+    MasterPageFile="~/PracticeManagementMain.Master" Title="One-Off Person Margin | Practice Management" %>
 
 <%@ Register Src="Controls/GrossMarginComputing.ascx" TagName="GrossMarginComputing"
     TagPrefix="uc1" %>
