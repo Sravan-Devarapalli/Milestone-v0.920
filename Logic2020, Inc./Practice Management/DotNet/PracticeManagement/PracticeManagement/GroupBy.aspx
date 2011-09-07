@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Practice Management - Projects Summary Group by Director" Language="C#"
+﻿<%@ Page Title="Projects Group by | Practice Management" Language="C#"
     MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true" CodeBehind="GroupBy.aspx.cs"
     Inherits="PraticeManagement.GroupByDirector" %>
 
