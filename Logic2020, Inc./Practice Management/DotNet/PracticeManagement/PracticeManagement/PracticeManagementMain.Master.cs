@@ -79,6 +79,8 @@ namespace PraticeManagement
 
         public event NavigatingEventHandler Navigating;
 
+        public string _PageTitle { get; set; }
+
         #endregion
 
         #region IPostBackEventHandler Members
@@ -199,6 +201,7 @@ namespace PraticeManagement
                 if (!string.IsNullOrEmpty(Page.Header.Title))
                 {
                     string pagetTitle = Page.Header.Title.Replace("Practice Management - ", string.Empty);
+                    pagetTitle = pagetTitle.Replace(" | Practice Management", string.Empty);
                     if (pagetTitle != "Welcome to Practice Management")
                     {
                         lblCurrentPage.Text = pagetTitle;
