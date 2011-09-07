@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
-    CodeBehind="ClientList.aspx.cs" Inherits="PraticeManagement.ClientList" Title="Practice Management - Client List" %>
+    CodeBehind="ClientList.aspx.cs" Inherits="PraticeManagement.ClientList" Title="Client List | Practice Management" %>
 
 <%@ Register Src="Controls/PracticeFilter.ascx" TagName="PracticeFilter" TagPrefix="uc1" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
