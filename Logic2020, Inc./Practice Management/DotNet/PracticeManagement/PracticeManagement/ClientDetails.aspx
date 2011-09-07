@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ClientDetails.aspx.cs"
-    Inherits="PraticeManagement.ClientDetails" Title="Practice Management - Client Details"
+    Inherits="PraticeManagement.ClientDetails" Title="Client Details | Practice Management"
     MasterPageFile="~/PracticeManagementMain.Master" %>
 
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
