@@ -232,14 +232,14 @@
                                                         <ItemTemplate>
                                                             <th>
                                                             </th>
-                                                            <th style="padding-left: 10px" class="<%# PraticeManagement.Utils.Calendar.GetCssClassByCalendarItem((CalendarItem) Container.DataItem) %>">
+                                                            <th  class="<%# PraticeManagement.Utils.Calendar.GetCssClassByCalendarItem((CalendarItem) Container.DataItem) %>">
                                                                 <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd<br/>MMM d}")%>
                                                             </th>
                                                         </ItemTemplate>
                                                     </asp:Repeater>
                                                     <th>
                                                     </th>
-                                                    <th style="padding-left: 10px">
+                                                    <th>
                                                         Totals
                                                     </th>
                                                 </tr>
@@ -257,14 +257,14 @@
                                                 <ItemTemplate>
                                                     <td colspan="<%# GetColspan(((TimeEntryRecord)Container.DataItem).MilestoneDate, Container.ItemIndex) %>">
                                                     </td>
-                                                    <td style="padding-left: 10px">
+                                                    <td>
                                                         <%# DataBinder.Eval(Container.DataItem, "ActualHours", "{0:F2}") %>
                                                     </td>
                                                 </ItemTemplate>
                                             </asp:Repeater>
                                             <td colspan="<%# GetLastColspan() %>">
                                             </td>
-                                            <td style="font-weight: bold; padding-left: 10px">
+                                            <td style="font-weight: bold;">
                                                 <%# ProjectTotals.ToString(PraticeManagement.Constants.Formatting.DoubleFormat) %>
                                             </td>
                                         </tr>
@@ -279,14 +279,14 @@
                                                 <ItemTemplate>
                                                     <td colspan="<%# GetColspan(((KeyValuePair<DateTime, double>)Container.DataItem).Key, Container.ItemIndex) %>">
                                                     </td>
-                                                    <td style="padding-left: 10px">
+                                                    <td>
                                                         <%# DataBinder.Eval(Container.DataItem, "Value", "{0:F2}") %>
                                                     </td>
                                                 </ItemTemplate>
                                             </asp:Repeater>
                                             <td id="tdExtracolumns" runat="server">
                                             </td>
-                                            <td style="font-size: 125%; padding-left: 10px">
+                                            <td style="font-size: 125%;">
                                                 <%# GrandTotal.ToString(PraticeManagement.Constants.Formatting.DoubleFormat) %>
                                             </td>
                                         </tr>
