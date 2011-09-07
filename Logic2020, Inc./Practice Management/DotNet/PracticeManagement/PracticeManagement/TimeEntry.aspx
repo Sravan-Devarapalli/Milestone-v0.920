@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="TimeEntry.aspx.cs" Inherits="PraticeManagement.TimeEntry"
-    MasterPageFile="~/PracticeManagementMain.Master" Title="Practice Management - Time Entry" %>
+    MasterPageFile="~/PracticeManagementMain.Master" Title="Time Entry | Practice Management" %>
 
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ElementDisabler" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
