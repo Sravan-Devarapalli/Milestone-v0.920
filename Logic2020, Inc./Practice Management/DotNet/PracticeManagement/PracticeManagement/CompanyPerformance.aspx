@@ -1,6 +1,6 @@
 <%@ Page Language="C#" MasterPageFile="~/PracticeManagement.Master" AutoEventWireup="true"
     CodeBehind="CompanyPerformance.aspx.cs" Inherits="PraticeManagement.CompanyPerformance"
-    Title="Practice Management - Performance Grid (roll-off)" %>
+    Title="Performance Grid (roll-off) | Practice Management" %>
 
 <%@ Register Src="Controls/PracticeFilter.ascx" TagName="PracticeFilter" TagPrefix="uc1" %>
 <%@ Register Src="Controls/MonthPicker.ascx" TagName="MonthPicker" TagPrefix="uc2" %>
