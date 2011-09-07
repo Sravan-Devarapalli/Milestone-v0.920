@@ -2027,7 +2027,7 @@ table.PaddingClass td
 }
 .ConfirmBoxClass
 {
-    min-width: 250px;
+    min-width: 450px;
     min-height: 60px;
     max-width: 700px;
 }
