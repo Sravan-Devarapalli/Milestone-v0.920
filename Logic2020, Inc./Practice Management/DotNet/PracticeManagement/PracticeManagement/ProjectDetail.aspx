@@ -1,6 +1,6 @@
 <%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="True"
     CodeBehind="ProjectDetail.aspx.cs" Inherits="PraticeManagement.ProjectDetail"
-    Title="Practice Management - Project Details" EnableEventValidation="false" ValidateRequest="False" %>
+    Title="Project Details | Practice Management" EnableEventValidation="false" ValidateRequest="False" %>
 
 <%@ Register Src="Controls/BillingInfo.ascx" TagName="BillingInfo" TagPrefix="uc1" %>
 <%@ Register Src="~/Controls/ActivityLogControl.ascx" TagPrefix="uc" TagName="ActivityLogControl" %>
@@ -142,6 +142,14 @@
         table.ProjectDetail-ProjectInfo-Table td
         {
             padding-left: 4px;
+        }
+        
+        .ProjectAttachmentNameWrap
+        {
+            max-width:300px;
+            display:inline-block;
+            white-space:normal !important;
+            word-wrap: break-word;
         }
     </style>
     <asp:UpdatePanel ID="upnlBody" runat="server">
@@ -313,7 +321,7 @@
                                             ID="mpeAttachSOW" runat="server" TargetControlID="btnAttachSOW" BackgroundCssClass="modalBackground"
                                             PopupControlID="pnlAttachSOW" DropShadow="false" />
                                     </td>
-                                    <td align="left" valign="middle" colspan="5" style="padding-left: 10px; vertical-align: middle;
+                                    <td align="left" valign="middle" colspan="7" style="padding-left: 10px; vertical-align: middle;
                                         white-space: nowrap;">
                                         <asp:GridView ID="gvProjectAttachments" runat="server" AutoGenerateColumns="false"
                                             EmptyDataText="" DataKeyNames="AttachmentId" GridLines="None" ShowHeader="false">
@@ -322,11 +330,11 @@
                                                     <ItemTemplate>
                                                         <% if(Project != null && Project.Id.HasValue)
                                                            { %>
-                                                        <asp:HyperLink ID="hlnkProjectAttachment1" runat="server" Text='<%# Eval("AttachmentFileName") %>' NavigateUrl='<%# GetNavigateUrl((string)Eval("AttachmentFileName"), (int)Eval("AttachmentId")) %>'></asp:HyperLink>
+                                                        <asp:HyperLink ID="hlnkProjectAttachment1" CssClass="ProjectAttachmentNameWrap" runat="server" Text='<%# GetWrappedText( (string)Eval("AttachmentFileName")) %>' NavigateUrl='<%# GetNavigateUrl((string)Eval("AttachmentFileName"), (int)Eval("AttachmentId")) %>'></asp:HyperLink>
                                                         <% }
                                                            else
                                                            { %>
-                                                        <asp:LinkButton ID="lnkProjectAttachment1" runat="server" Visible="<%# IsProjectCreated() %>" CommandName='<%# Eval("AttachmentId") %>' Text='<%# Eval("AttachmentFileName") %>' OnClick="lnkProjectAttachment_OnClick" />
+                                                        <asp:LinkButton ID="lnkProjectAttachment1" runat="server" CssClass="ProjectAttachmentNameWrap" Visible="<%# IsProjectCreated() %>" CommandName='<%# Eval("AttachmentId") %>' Text='<%# GetWrappedText((string)Eval("AttachmentFileName")) %>' OnClick="lnkProjectAttachment_OnClick" />
                                                         <% } %>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
