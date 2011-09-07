@@ -1,6 +1,6 @@
 <%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
     CodeBehind="OpportunityDetail.aspx.cs" Inherits="PraticeManagement.OpportunityDetail"
-    Title="Practice Management - Opportunity Details" %>
+    Title="Opportunity Details | Practice Management" %>
 
 <%@ Import Namespace="DataTransferObjects" %>
 <%@ Register TagPrefix="cc" Namespace="PraticeManagement.Controls.Generic.Buttons"
