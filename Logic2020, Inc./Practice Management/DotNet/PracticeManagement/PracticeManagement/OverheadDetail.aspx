@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
     CodeBehind="OverheadDetail.aspx.cs" Inherits="PraticeManagement.OverheadDetail"
-    Title="Practice Management - Overhead Details" %>
+    Title="Overhead Details | Practice Management" %>
 
 <%@ Register TagPrefix="cc" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
