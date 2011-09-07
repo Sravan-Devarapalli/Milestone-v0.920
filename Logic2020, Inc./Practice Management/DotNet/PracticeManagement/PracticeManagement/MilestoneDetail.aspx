@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
     CodeBehind="MilestoneDetail.aspx.cs" Inherits="PraticeManagement.MilestoneDetail"
-    Title="Practice Management - Milestone Details" %>
+    Title="Milestone Details | Practice Management" %>
 
 <%@ Register Src="~/Controls/ActivityLogControl.ascx" TagPrefix="uc" TagName="ActivityLogControl" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
