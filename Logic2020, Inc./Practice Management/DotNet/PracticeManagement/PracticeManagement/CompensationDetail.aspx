@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
     CodeBehind="CompensationDetail.aspx.cs" Inherits="PraticeManagement.CompensationDetail"
-    Title="Practice Management - Compensation Details" %>
+    Title="Compensation Details | Practice Management" %>
 
 <%@ Register Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic"
     TagPrefix="cc1" %>
