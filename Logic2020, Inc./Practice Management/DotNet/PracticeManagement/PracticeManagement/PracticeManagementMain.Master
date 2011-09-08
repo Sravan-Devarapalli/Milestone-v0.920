@@ -390,7 +390,8 @@
             <div class="powered">
                 Powered by: <a href="#" class="icon"></a>
             </div>
-            <span>&copy; Logic 20/20, Inc. Patent Pending - All Rights Reserved.</span>
+            <span>&copy; Logic 20/20, Inc. Patent Pending - All Rights Reserved. |</span>
+            <a id="emailSupportMailToLink" runat="server">E-mail Support</a>
             <div class="clear0">
             </div>
         </div>
