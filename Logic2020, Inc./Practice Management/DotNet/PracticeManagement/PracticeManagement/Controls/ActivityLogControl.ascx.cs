@@ -334,7 +334,7 @@ namespace PraticeManagement.Controls
 
         protected void Page_Prerender(object sender, EventArgs e)
         {
-            if (Request.Url.AbsolutePath != "/PracticeManagement/DiscussionReview1.aspx")
+            if (!Request.Url.AbsolutePath.Contains("DiscussionReview1.aspx") && !Request.Url.AbsolutePath.Contains("PersonDetail.aspx"))
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTooltipsForallDropDowns", "SetTooltipsForallDropDowns();ModifyInnerTextToWrapText();", true);
             }
