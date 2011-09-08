@@ -28,6 +28,7 @@ namespace PraticeManagement
         public const string Level3MenuItemTemplate = "<a  {1} >{0}</a>";
         public const string AnchorTagpropertiestemplate = " href = '{0}' onclick='return checkDirtyWithRedirect(this.href);'";
         public const string PopupTimebeforeFormsAuthTimeOutSecKey = "PopupTimebeforeFormsAuthTimeOutSec";
+        public const string MailToSubjectFormat = "mailto:{0}?subject={1} Issue";
 
 
         #region Properties
@@ -104,6 +105,8 @@ namespace PraticeManagement
         protected void Page_Load(object sender, EventArgs e)
         {
             SetPageTitle();
+
+            SetMailToEmailSupport();
 
             if (Request.Url.AbsoluteUri.Contains("LoggedOut.aspx") && HttpContext.Current.User.Identity.IsAuthenticated)
             {
@@ -186,7 +189,23 @@ namespace PraticeManagement
                     hlHome.NavigateUrl = mapping.Mapping.FindFirstUrl(
                         Roles.GetRolesForUser(Page.User.Identity.Name));
             }
+        }
 
+        private void SetMailToEmailSupport()
+        {
+            var _emailSupport = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.SMTP, Constants.ResourceKeys.PMSupportEmailAddressKey);
+            var _pageTitle = _PageTitle;
+
+            if (string.IsNullOrEmpty(_pageTitle))
+            {
+                _pageTitle = lblCurrentPage.Text;
+                _pageTitle = _pageTitle.Replace(" / ", " > ");
+                if (string.IsNullOrEmpty(_pageTitle))
+                {
+                    _pageTitle = Page.Title;
+                }
+            }
+            emailSupportMailToLink.HRef = string.Format(MailToSubjectFormat, _emailSupport, _pageTitle);
         }
 
         private void SetPageTitle()
