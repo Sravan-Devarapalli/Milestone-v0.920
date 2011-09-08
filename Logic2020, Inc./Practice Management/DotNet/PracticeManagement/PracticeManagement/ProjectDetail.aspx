@@ -76,6 +76,41 @@
 
         }
 
+        function SetWrapText(str) {
+            for (var i = 30; i < str.length; i = i + 10) {
+                str = str.slice(0, i) + "<wbr/>" + str.slice(i, str.length);
+            }
+            return str;
+        }
+
+    function GetWrappedText(childObj) {
+        if (childObj != null) {
+
+            for (var i = 0; i < childObj.children.length; i++) {
+                if (childObj.children[i] != null) {
+
+                    if (childObj.children[i].innerHTML != null && childObj.children[i].innerHTML != "undefined" && childObj.children[i].innerHTML.length > 70) {
+                        childObj.children[i].innerHTML = SetWrapText(childObj.children[i].innerHTML);
+                    }
+                }
+
+            }
+        }
+    }
+
+    function ModifyInnerTextToWrapText() {
+        var tbl = $("table[id*='gvActivities']");
+        if(tbl != null && tbl.length>0)
+        {
+                var gvActivitiesclientId = tbl[0].id;
+                var lastTds = $('#' + gvActivitiesclientId + ' tr td:nth-child(3)');
+
+                for (var i = 0; i < lastTds.length; i++) {
+                    GetWrappedText(lastTds[i]);
+                }
+        }
+    }
+
     </script>
     <style type="text/css">
         /* --------- Tabs for person and project details pages ------ */
