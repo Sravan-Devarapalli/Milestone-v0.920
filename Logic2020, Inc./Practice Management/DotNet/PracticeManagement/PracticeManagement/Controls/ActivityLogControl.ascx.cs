@@ -214,6 +214,61 @@ namespace PraticeManagement.Controls
 
         #endregion
 
+        private const string GeneralScriptKey = "ActivityLogControlScriptKey";
+
+        private const string GeneralScriptSource =
+            @"
+         <script src=""../Scripts/jquery-1.4.1.js"" type=""text/javascript""></script>
+         <script type=""text/javascript"">
+        function SetWrapText(str) {
+            for (var i = 30; i < str.length; i = i + 10) {
+                str = str.slice(0, i) + ""<wbr />"" + str.slice(i, str.length);
+            }
+            return str;
+        }
+
+    function GetWrappedText(childObj) {
+        if (childObj != null) {
+
+            for (var i = 0; i < childObj.children.length; i++) {
+                if (childObj.children[i] != null) {
+
+                    if (childObj.children[i].innerHTML != null && childObj.children[i].innerHTML != ""undefined"" && childObj.children[i].innerHTML.length > 70) {
+                        childObj.children[i].innerHTML = SetWrapText(childObj.children[i].innerHTML);
+                    }
+                }
+
+            }
+        }
+    }
+
+    function ModifyInnerTextToWrapText() {
+        var tbl = $(""table[id*='gvActivities']"");
+        if(tbl != null && tbl.length>0)
+        {
+                var gvActivitiesclientId = tbl[0].id;
+                var lastTds = $('#' + gvActivitiesclientId + ' tr td:nth-child(3)');
+
+                for (var i = 0; i < lastTds.length; i++) {
+                    GetWrappedText(lastTds[i]);
+                }
+        }
+    }
+         
+        </script>
+        ";
+
+
+
+        protected override void OnInit(EventArgs e)
+        {
+            //  Include general script and ensure that it was included only once
+            if (!Page.ClientScript.IsClientScriptBlockRegistered(GeneralScriptKey))
+                Page.ClientScript.RegisterClientScriptBlock(
+                    Page.GetType(), GeneralScriptKey, GeneralScriptSource, false);
+            base.OnInit(e);
+        }
+
         public DateTime? FromDateFilterValue
         {
             get { return diYear.FromDate; }
@@ -334,7 +389,12 @@ namespace PraticeManagement.Controls
 
         protected void Page_Prerender(object sender, EventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTooltipsForallDropDowns", "SetTooltipsForallDropDowns();", true);
+
+            if (!IsPostBack)
+            {
+                ScriptManager.RegisterStartupScript(updActivityLog, updActivityLog.GetType(), "SetTooltipsForallDropDowns", "SetTooltipsForallDropDowns();ModifyInnerTextToWrapText();", true);
+            }
+
             if (IsFreshRequest)
             {
                 Update();
