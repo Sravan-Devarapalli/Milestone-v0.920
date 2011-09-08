@@ -191,7 +191,14 @@ namespace PraticeManagement
 
         private void SetPageTitle()
         {
-            string pagetitle = GetPageTitle(smdsMain.Provider.RootNode, string.Empty, Request.RawUrl);
+            var url = Request.RawUrl;
+            int returnToIndex = url.IndexOf("returnTo");
+            if (returnToIndex > -1)
+            {
+                url = url.Substring(0, returnToIndex);
+            }
+
+            string pagetitle = GetPageTitle(smdsMain.Provider.RootNode, string.Empty, url);
             if (!string.IsNullOrEmpty(pagetitle))
             {
                 lblCurrentPage.Text = pagetitle;
@@ -214,11 +221,6 @@ namespace PraticeManagement
 
         private string GetPageTitle(SiteMapNode siteMapNode, string pageNavPath, string url)
         {
-            if (Request.Url.AbsolutePath.Contains("MilestonePersonList.aspx"))
-            {
-                return "Milestone-Person List";
-            }
-
             if (url.Contains(siteMapNode.Url) && !string.IsNullOrEmpty(siteMapNode.Url))
             {
                 return pageNavPath + (string.IsNullOrEmpty(pageNavPath) ? siteMapNode.Title : " / " + siteMapNode.Title);
