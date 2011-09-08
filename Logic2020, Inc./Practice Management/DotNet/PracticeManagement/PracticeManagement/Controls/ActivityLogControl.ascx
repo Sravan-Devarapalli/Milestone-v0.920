@@ -13,7 +13,6 @@
         white-space: normal;
     }
 </style>
-<script src="../Scripts/jquery-1.4.1.js" type="text/javascript"></script>
 <script type="text/javascript" language="javascript">
 
     function EnableResetButtonForDateIntervalChange(sender, args) {
@@ -32,11 +31,6 @@
             btnreset.disabled = '';
             hdnResetFilter.value = 'true';
         }
-    }
-
-    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
-    function endRequestHandle(sender, Args) {
-        ModifyInnerTextToWrapText();
     }
 
 </script>
