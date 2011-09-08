@@ -64,6 +64,7 @@ namespace PraticeManagement
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            ((PracticeManagementMain)Master)._PageTitle = "Login";
             if (!IsPostBack)
             {
                 login.Focus();
