@@ -13,6 +13,7 @@
         white-space: normal;
     }
 </style>
+<script src="../Scripts/jquery-1.4.1.js" type="text/javascript"></script>
 <script type="text/javascript" language="javascript">
 
     function EnableResetButtonForDateIntervalChange(sender, args) {
@@ -33,6 +34,11 @@
         }
     }
 
+    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+    function endRequestHandle(sender, Args) {
+        ModifyInnerTextToWrapText();
+    }
+
 </script>
 <uc:LoadingProgress ID="lpActivityLog" runat="server" />
 <asp:UpdatePanel ID="updActivityLog" runat="server" UpdateMode="Conditional">
@@ -41,7 +47,7 @@
             <tr>
                 <td>
                     <div id="divActivitylog" style="padding: 10px;" runat="server">
-                        <table id="tblActivitylog" runat="server" style="white-space: nowrap;" >
+                        <table id="tblActivitylog" runat="server" style="white-space: nowrap;">
                             <tr>
                                 <td id="tdEventSource" runat="server">
                                     <asp:Label ID="lblDisplay" runat="server" Text="Show"></asp:Label>
@@ -53,8 +59,8 @@
                                         FromToDateFieldWidth="65" />
                                 </td>
                                 <td id="spnPersons" runat="server">
-                                    <asp:Label ID="Label1" runat="server"  Text="user "></asp:Label><asp:DropDownList ID="ddlPersonName"
-                                        runat="server" DataSourceID="odsPersons" DataTextField="PersonLastFirstName"
+                                    <asp:Label ID="Label1" runat="server" Text="user "></asp:Label><asp:DropDownList
+                                        ID="ddlPersonName" runat="server" DataSourceID="odsPersons" DataTextField="PersonLastFirstName"
                                         DataValueField="Id" OnDataBound="ddlPersonName_OnDataBound" />
                                 </td>
                                 <td id="spnProjects" runat="server" style="padding-left: 4px;">
@@ -69,7 +75,7 @@
                                                 <asp:Button ID="btnUpdateView" runat="server" Text="Update" ToolTip="Update" OnClick="btnUpdateView_Click" />
                                             </td>
                                             <td style="padding-left: 4px;">
-                                                <asp:Button ID="btnResetFilter" runat="server" Text="Reset" ToolTip="Reset" OnClick="btnResetFilter_Click"
+                                                <asp:Button ID="btnResetFilter" runat="server" Text="Reset " ToolTip="Reset" OnClick="btnResetFilter_Click"
                                                     Visible="false" />
                                             </td>
                                         </tr>
@@ -90,7 +96,8 @@
                 <td>
                     <asp:GridView ID="gvActivities" runat="server" AutoGenerateColumns="False" EmptyDataText="No activity for given parameters."
                         DataSourceID="odsActivities" AllowPaging="True" PageSize="20" CssClass="CompPerfTable WholeWidth"
-                        GridLines="None" BackColor="White" OnRowDataBound="gvActivities_OnRowDataBound" OnDataBound="gvActivities_OnDataBound">
+                        GridLines="None" BackColor="White" OnRowDataBound="gvActivities_OnRowDataBound"
+                        OnDataBound="gvActivities_OnDataBound">
                         <AlternatingRowStyle BackColor="#F9FAFF" />
                         <PagerSettings Mode="NumericFirstLast" />
                         <PagerStyle CssClass="cssPager" />
