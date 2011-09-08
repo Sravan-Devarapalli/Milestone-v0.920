@@ -389,10 +389,9 @@ namespace PraticeManagement.Controls
 
         protected void Page_Prerender(object sender, EventArgs e)
         {
-
-            if (!IsPostBack)
+            if (Request.Url.AbsolutePath != "/PracticeManagement/DiscussionReview1.aspx")
             {
-                ScriptManager.RegisterStartupScript(updActivityLog, updActivityLog.GetType(), "SetTooltipsForallDropDowns", "SetTooltipsForallDropDowns();ModifyInnerTextToWrapText();", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTooltipsForallDropDowns", "SetTooltipsForallDropDowns();ModifyInnerTextToWrapText();", true);
             }
 
             if (IsFreshRequest)
