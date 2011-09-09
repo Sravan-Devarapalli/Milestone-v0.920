@@ -120,9 +120,10 @@
 
             for (var i = 0; i < childObj.children.length; i++) {
                 if (childObj.children[i] != null) {
-
-                    if (childObj.children[i].innerHTML != null && childObj.children[i].innerHTML != "undefined" && childObj.children[i].innerHTML.length > 70) {
-                        childObj.children[i].innerHTML = SetWrapText(childObj.children[i].innerHTML);
+                    if (childObj.children[i].children.length == 0) {
+                        if (childObj.children[i].innerHTML != null && childObj.children[i].innerHTML != "undefined" && childObj.children[i].innerHTML.length > 70) {
+                            childObj.children[i].innerHTML = SetWrapText(childObj.children[i].innerHTML);
+                        } 
                     }
                 }
 
@@ -131,16 +132,17 @@
     }
 
     function ModifyInnerTextToWrapText() {
-        var tbl = $("table[id*='gvActivities']");
-        if(tbl != null && tbl.length>0)
-        {
+     if (navigator.userAgent.indexOf(" Firefox/") > -1) {
+            var tbl = $("table[id*='gvActivities']");
+            if (tbl != null && tbl.length > 0) {
                 var gvActivitiesclientId = tbl[0].id;
                 var lastTds = $('#' + gvActivitiesclientId + ' tr td:nth-child(3)');
 
                 for (var i = 0; i < lastTds.length; i++) {
                     GetWrappedText(lastTds[i]);
                 }
-        }
+            }
+       }
     }
     </script>
     <%--
@@ -187,7 +189,7 @@
         {
             background-color: White;
             float: left;
-            padding: 8px 0px 6px 0px;
+            padding: 8px 0px 15px 0px;
             position: relative;
         }
         
@@ -215,13 +217,13 @@
         .CustomTabStyle .SelectedSwitch a.collapse
         {
             display: block;
-            right: 5px;
+            right: 2px;
             top: 10px;
         }
         
         .CustomTabStyle td span.bg
         {
-            padding: 8px 20px 7px 10px;
+            padding: 8px 10px 7px 10px;
         }
         
         .CustomTabStyle .SelectedSwitch span.bg
@@ -574,64 +576,72 @@
                         <asp:Table ID="tblPersonViewSwitch" runat="server" CssClass="CustomTabStyle">
                             <asp:TableRow ID="rowSwitcher" runat="server">
                                 <asp:TableCell ID="cellCompensation" runat="server">
-                                    <span class="bg" style="padding-bottom: 25px;"><span>
-                                        <asp:LinkButton ID="btnCompensation" runat="server" Text="Compensation" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
+                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                        <asp:LinkButton ID="btnCompensation" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Compensation"
+                                            CausesValidation="false" Style="width: 83px; display: inline-block; vertical-align: top;
+                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellRecruiting" runat="server">
-                                    <span class="bg" style="padding-bottom: 25px;"><span>
-                                        <asp:LinkButton ID="btnViewRecruiting" runat="server" Text="Recruiter" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
+                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                        <asp:LinkButton ID="btnViewRecruiting" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Recruiter"
+                                            CausesValidation="false" Style="width: 58px; display: inline-block; vertical-align: top;
+                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellCommissions" runat="server">
-                                    <span class="bg" style="padding-bottom: 25px;"><span>
-                                        <asp:LinkButton ID="btnCommissions" runat="server" Text="Commissions" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
+                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                        <asp:LinkButton ID="btnCommissions" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Commissions"
+                                            CausesValidation="false" Style="width: 80px; display: inline-block; vertical-align: top;
+                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellRates" runat="server" Visible="false">
-                                    <span class="bg" style="padding-bottom: 25px;"><span>
-                                        <asp:LinkButton ID="btnRates" runat="server" Text="Overhead and Margin" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="3"></asp:LinkButton></span>
+                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                        <asp:LinkButton ID="btnRates" runat="server" Text="Overhead and Margin"
+                                            CausesValidation="false" Style="display: inline-block; vertical-align: top;
+                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="3"></asp:LinkButton></span>
                                     </span></span> </span></asp:TableCell>
                                 <asp:TableCell ID="cellWhatIf" runat="server">
-                                    <span class="bg" style="padding-bottom: 25px;"><span>
-                                        <asp:LinkButton ID="btnWhatIf" runat="server" Text="What-If?" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="4" OnClientClick="if (!confirmSaveDirty()) return false;"></asp:LinkButton></span>
+                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                        <asp:LinkButton ID="btnWhatIf" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; What-If?"
+                                            CausesValidation="false" Style="width: 50px; display: inline-block; vertical-align: top;
+                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="4" OnClientClick="if (!confirmSaveDirty()) return false;"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellProjects" runat="server">
-                                    <span class="bg" style="padding-bottom: 25px;"><span>
-                                        <asp:LinkButton ID="btnProjects" runat="server" Text="Projects" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton></span>
+                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                        <asp:LinkButton ID="btnProjects" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Projects"
+                                            CausesValidation="false" Style="width: 50px; display: inline-block; vertical-align: top;
+                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="TableCell1" runat="server">
-                                    <span class="bg" style="padding-bottom: 25px;"><span>
-                                        <asp:LinkButton ID="btnOppportunities" runat="server" Text="Opportunities" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="9"></asp:LinkButton></span>
+                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                        <asp:LinkButton ID="btnOppportunities" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Opportunities"
+                                            CausesValidation="false" Style="width: 80px; display: inline-block; vertical-align: top;
+                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="9"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellPermissions" runat="server">
-                                    <span class="bg" style="padding-bottom: 25px;"><span>
+                                    <span class="bg" style="padding-bottom: 31px;"><span>
                                         <asp:LinkButton ID="btnPermissions" runat="server" Text="Project/Opportunity Permissions"
                                             Style="width: 120px; display: inline-block; vertical-align: top; text-align: center;"
                                             CausesValidation="false" OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellSecurity" runat="server" CssClass="SelectedSwitch">
-                                    <span class="bg" style="padding-bottom: 25px;"><span>
+                                    <span class="bg" style="padding-bottom: 31px;"><span>
                                         <asp:LinkButton ID="btnSecurity" runat="server" Text="Application Security" CausesValidation="false"
                                             Style="width: 80px; display: inline-block; vertical-align: top; text-align: center;"
                                             OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellActivityLog" runat="server" Visible="false">
-                                    <span class="bg" style="padding-bottom: 25px;"><span>
-                                        <asp:LinkButton ID="btnActivityLog" runat="server" Text="History" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton></span>
+                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                        <asp:LinkButton ID="btnActivityLog" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; History"
+                                            CausesValidation="false" Style="width: 45px; display: inline-block; vertical-align: top;
+                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                             </asp:TableRow>
@@ -888,54 +898,7 @@
                                 </asp:Panel>
                             </asp:View>
                             <asp:View ID="vwRates" runat="server">
-                                <asp:Panel ID="pnlRates" runat="server" CssClass="tab-pane WholeWidth">
-                                    <table>
-                                        <tr>
-                                            <td nowrap="nowrap">
-                                                Raw Hourly Rate
-                                            </td>
-                                            <td>
-                                                <asp:Label ID="lblRawHourlyRate" runat="server"></asp:Label>
-                                            </td>
-                                            <td>
-                                                &nbsp;
-                                            </td>
-                                            <td nowrap="nowrap">
-                                                Loaded Hourly Rate
-                                            </td>
-                                            <td>
-                                                <asp:Label ID="lblLoadedHourlyRate" runat="server"></asp:Label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                &nbsp;
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="5">
-                                                This overhead is generated from data
-                                                <asp:LinkButton ID="btnPersonMargin" runat="server" Text="on this page" OnClick="btnPersonMargin_Click"></asp:LinkButton>.<br />
-                                                <br />
-                                                The following table shows overhead calculations to this person.
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="5">
-                                                <asp:GridView ID="gvOverhead" runat="server" AutoGenerateColumns="False" EmptyDataText="There is nothing to be displayed here."
-                                                    ShowFooter="true">
-                                                    <Columns>
-                                                        <asp:BoundField HeaderText="Overhead type" DataField="Name" FooterText="Person Overhead" />
-                                                        <asp:BoundField HeaderText="Amount per hour" DataField="HourlyValue">
-                                                            <ItemStyle HorizontalAlign="Right" />
-                                                            <FooterStyle HorizontalAlign="Right" />
-                                                        </asp:BoundField>
-                                                    </Columns>
-                                                </asp:GridView>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </asp:Panel>
+                              
                             </asp:View>
                             <asp:View ID="vwWhatIf" runat="server">
                                 <asp:Panel ID="pnlWhatIf" runat="server" CssClass="tab-pane WholeWidth">
