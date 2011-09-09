@@ -31,6 +31,15 @@ namespace PraticeManagement.Controls.TimeEntry {
         protected global::System.Web.UI.UpdatePanel updReport;
         
         /// <summary>
+        /// hdnResetFilter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnResetFilter;
+        
+        /// <summary>
         /// pnlFilters control.
         /// </summary>
         /// <remarks>
@@ -94,15 +103,6 @@ namespace PraticeManagement.Controls.TimeEntry {
         protected global::PraticeManagement.Controls.ScrollingDropDown cblPersons;
         
         /// <summary>
-        /// valSum control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary valSum;
-        
-        /// <summary>
         /// btnUpdate control.
         /// </summary>
         /// <remarks>
@@ -110,6 +110,24 @@ namespace PraticeManagement.Controls.TimeEntry {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnUpdate;
+        
+        /// <summary>
+        /// btnReset control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnReset;
+        
+        /// <summary>
+        /// valSum control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSum;
         
         /// <summary>
         /// odsProjects control.
