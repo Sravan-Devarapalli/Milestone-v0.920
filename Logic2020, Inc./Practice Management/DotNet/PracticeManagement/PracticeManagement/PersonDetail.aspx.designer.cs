@@ -823,51 +823,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.View vwRates;
         
         /// <summary>
-        /// pnlRates control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlRates;
-        
-        /// <summary>
-        /// lblRawHourlyRate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblRawHourlyRate;
-        
-        /// <summary>
-        /// lblLoadedHourlyRate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblLoadedHourlyRate;
-        
-        /// <summary>
-        /// btnPersonMargin control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnPersonMargin;
-        
-        /// <summary>
-        /// gvOverhead control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvOverhead;
-        
-        /// <summary>
         /// vwWhatIf control.
         /// </summary>
         /// <remarks>
