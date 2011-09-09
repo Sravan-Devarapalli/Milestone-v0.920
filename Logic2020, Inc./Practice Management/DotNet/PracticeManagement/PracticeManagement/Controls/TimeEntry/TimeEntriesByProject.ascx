@@ -7,9 +7,57 @@
     TagPrefix="uc3" %>
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajax" %>
+<script type="text/javascript">
+    function SelectAllPersons() {
+
+        var btnReset = document.getElementById('<%=btnReset.ClientID %>');
+        btnReset.disabled = 'disabled';
+        var hdnResetFilter = document.getElementById('<%=hdnResetFilter.ClientID %>');
+        hdnResetFilter.value = "false";
+
+        var cblPersons = document.getElementById('<%=cblPersons.ClientID %>');
+        if (cblPersons != null && cblPersons != "undefined") {
+            var chkBoxes = cblPersons.getElementsByTagName('input');
+            for (var i = 0; i < chkBoxes.length; i++) {
+                chkBoxes[i].checked = true;
+            }
+        }
+
+        return false;
+    }
+
+    function EnableOrDisableResetFilterButton() {
+        var btnReset = document.getElementById('<%=btnReset.ClientID %>');
+        var cblPersons = document.getElementById('<%=cblPersons.ClientID %>');
+        var hdnResetFilter = document.getElementById('<%=hdnResetFilter.ClientID %>');
+        
+
+        var AllSelected = true;
+        if (cblPersons != null) {
+            var chkBoxes = cblPersons.getElementsByTagName('input');
+            for (var i = 0; i < chkBoxes.length; i++) {
+                if (chkBoxes[i].checked != true) {
+                    AllSelected = false;
+                }
+            }
+        }
+
+        if (AllSelected) {
+            btnReset.disabled = 'disabled';
+            hdnResetFilter.value = "false";
+        }
+        else {
+            btnReset.disabled = '';
+            hdnResetFilter.value = "true";
+        }
+    }
+
+
+</script>
 <uc3:LoadingProgress ID="LoadingProgress1" runat="server" />
 <asp:UpdatePanel ID="updReport" runat="server">
     <ContentTemplate>
+        <asp:HiddenField ID="hdnResetFilter" Value="false" runat="server" />
         <asp:Panel ID="pnlFilters" runat="server" CssClass="buttons-block">
             <table class="opportunity-description">
                 <tr>
@@ -20,7 +68,8 @@
                                     Client
                                 </td>
                                 <td>
-                                    <asp:DropDownList ID="ddlClients" runat="server" Width="460" OnSelectedIndexChanged="ddlClients_OnSelectedIndexChanged" AutoPostBack="true">
+                                    <asp:DropDownList ID="ddlClients" runat="server" Width="460" OnSelectedIndexChanged="ddlClients_OnSelectedIndexChanged"
+                                        AutoPostBack="true">
                                     </asp:DropDownList>
                                 </td>
                                 <tr>
@@ -28,9 +77,9 @@
                                         Project
                                     </td>
                                     <td>
-                                        <asp:DropDownList ID="ddlProjects" runat="server" Enabled="false" AutoPostBack="true" Width="460" 
-                                            OnSelectedIndexChanged="ddlProjects_OnSelectedIndexChanged">
-                                            <asp:ListItem Text="-- Select a Project --" Value="" ></asp:ListItem>
+                                        <asp:DropDownList ID="ddlProjects" runat="server" Enabled="false" AutoPostBack="true"
+                                            Width="460" OnSelectedIndexChanged="ddlProjects_OnSelectedIndexChanged">
+                                            <asp:ListItem Text="-- Select a Project --" Value=""></asp:ListItem>
                                         </asp:DropDownList>
                                     </td>
                                 </tr>
@@ -39,8 +88,8 @@
                                         Milestone
                                     </td>
                                     <td>
-                                        <asp:DropDownList ID="ddlMilestones" runat="server" Enabled="false" AutoPostBack="true" Width="460px"
-                                            OnSelectedIndexChanged="ddlMilestones_OnSelectedIndexChanged">
+                                        <asp:DropDownList ID="ddlMilestones" runat="server" Enabled="false" AutoPostBack="true"
+                                            Width="460px" OnSelectedIndexChanged="ddlMilestones_OnSelectedIndexChanged">
                                             <asp:ListItem Text="-- Select a Milestone --" Value="-1"></asp:ListItem>
                                         </asp:DropDownList>
                                     </td>
@@ -78,13 +127,22 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">
-                        <asp:ValidationSummary ID="valSum" runat="server" />
+                    <td colspan="2" align="right">
+                        <table>
+                            <tr>
+                                <td>
+                                    <asp:Button ID="btnUpdate" runat="server" Text="Update View" OnClick="btnUpdate_OnClick" />
+                                </td>
+                                <td>
+                                    <asp:Button ID="btnReset" runat="server" Text="Reset Filter" Enabled="false" />
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" align="center">
-                        <asp:Button ID="btnUpdate" runat="server" Text="Update" OnClick="btnUpdate_OnClick" />
+                    <td colspan="2">
+                        <asp:ValidationSummary ID="valSum" runat="server" />
                     </td>
                 </tr>
             </table>
