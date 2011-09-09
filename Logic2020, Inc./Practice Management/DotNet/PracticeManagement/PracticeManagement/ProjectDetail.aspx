@@ -83,33 +83,35 @@
             return str;
         }
 
-    function GetWrappedText(childObj) {
-        if (childObj != null) {
+        function GetWrappedText(childObj) {
+            if (childObj != null) {
 
-            for (var i = 0; i < childObj.children.length; i++) {
-                if (childObj.children[i] != null) {
-
-                    if (childObj.children[i].innerHTML != null && childObj.children[i].innerHTML != "undefined" && childObj.children[i].innerHTML.length > 70) {
-                        childObj.children[i].innerHTML = SetWrapText(childObj.children[i].innerHTML);
+                for (var i = 0; i < childObj.children.length; i++) {
+                    if (childObj.children[i] != null) {
+                        if (childObj.children[i].children.length == 0) {
+                            if (childObj.children[i].innerHTML != null && childObj.children[i].innerHTML != "undefined" && childObj.children[i].innerHTML.length > 70) {
+                                childObj.children[i].innerHTML = SetWrapText(childObj.children[i].innerHTML);
+                            }
+                        }
                     }
-                }
 
+                }
             }
         }
-    }
 
-    function ModifyInnerTextToWrapText() {
-        var tbl = $("table[id*='gvActivities']");
-        if(tbl != null && tbl.length>0)
-        {
-                var gvActivitiesclientId = tbl[0].id;
-                var lastTds = $('#' + gvActivitiesclientId + ' tr td:nth-child(3)');
+        function ModifyInnerTextToWrapText() {
+            if (navigator.userAgent.indexOf(" Firefox/") > -1) {
+                var tbl = $("table[id*='gvActivities']");
+                if (tbl != null && tbl.length > 0) {
+                    var gvActivitiesclientId = tbl[0].id;
+                    var lastTds = $('#' + gvActivitiesclientId + ' tr td:nth-child(3)');
 
-                for (var i = 0; i < lastTds.length; i++) {
-                    GetWrappedText(lastTds[i]);
+                    for (var i = 0; i < lastTds.length; i++) {
+                        GetWrappedText(lastTds[i]);
+                    }
                 }
+            }
         }
-    }
 
     </script>
     <style type="text/css">
