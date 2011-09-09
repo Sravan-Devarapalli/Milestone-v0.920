@@ -6,6 +6,7 @@ using DataTransferObjects;
 using System.Web.Security;
 using System.Linq;
 using PraticeManagement.Configuration;
+using System.Web.UI;
 
 namespace PraticeManagement.Controls.TimeEntry
 {
@@ -21,6 +22,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            btnReset.Attributes["onclick"] = "return SelectAllPersons();";
             ResetTotalCounters();
             if (!IsPostBack)
             {
@@ -33,6 +35,28 @@ namespace PraticeManagement.Controls.TimeEntry
                         : DataHelper.CurrentPerson;
                 var clients = DataHelper.GetAllClientsSecure(person, true);
                 DataHelper.FillListDefault(ddlClients, "-- Select a Client -- ", clients as object[], false);
+            }
+        }
+
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            AddAttributesToCheckBoxes(this.cblPersons);
+
+            if (hdnResetFilter.Value == "false" || cblPersons.Items.Count == 0)
+            {
+                btnReset.Enabled = false;
+            }
+            else
+            {
+                btnReset.Enabled = true;
+            }
+        }
+
+        private void AddAttributesToCheckBoxes(ScrollingDropDown ddl)
+        {
+            foreach (ListItem item in ddl.Items)
+            {
+                item.Attributes.Add("onclick", "EnableOrDisableResetFilterButton();");
             }
         }
 
@@ -145,6 +169,9 @@ namespace PraticeManagement.Controls.TimeEntry
             if (ddlMilestones.SelectedValue != "-1")
             {
                 UpdateHeaderTitle();
+                dlTimeEntries.Visible = true;
+                lblProjectName.Visible = true;
+                lblGrandTotal.Visible = true;
                 ResetTotalCounters();
                 BindTimeEntries();
             }
@@ -246,12 +273,12 @@ namespace PraticeManagement.Controls.TimeEntry
             diRange.ToDate = null;
             //Clearing Persons Scrolling Dropdown as milestone is changed and then rebinding TimeEntries list control.
             cblPersons.Items.Clear();
+            dlTimeEntries.Visible = false;
+            lblProjectName.Visible = false;
+            lblGrandTotal.Visible = false;
 
             if (ddlMilestones.SelectedValue == "-1")
             {
-                dlTimeEntries.Visible = false;
-                lblProjectName.Visible = false;
-                lblGrandTotal.Visible = false;
                 return;
             }
 
@@ -299,10 +326,10 @@ namespace PraticeManagement.Controls.TimeEntry
                 BindCblPersons(milestonepersonList);
             }
 
-            BindTimeEntries();
-            dlTimeEntries.Visible = true;
+            //BindTimeEntries();
+            // dlTimeEntries.Visible = true;
 
-            UpdateHeaderTitle();
+            //UpdateHeaderTitle();
 
         }
 
@@ -331,7 +358,6 @@ namespace PraticeManagement.Controls.TimeEntry
 
         private void ShowEntireProjectDetails()
         {
-            dlTimeEntries.Visible = true;
             using (var projectservice = new ProjectService.ProjectServiceClient())
             {
                 var selectedProject = projectservice.ProjectGetById(Convert.ToInt32(ddlProjects.SelectedValue));
