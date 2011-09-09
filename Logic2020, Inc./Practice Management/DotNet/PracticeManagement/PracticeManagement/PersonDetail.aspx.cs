@@ -809,12 +809,6 @@ namespace PraticeManagement
         {
             gvCompensationHistory.DataSource = person.PaymentHistory;
             gvCompensationHistory.DataBind();
-
-            // Overhead info
-            if (person.OverheadList != null)
-            {
-                DisplayOverhead(person);
-            }
         }
 
         private void PopulateRecruiterCommissions(Person person)
@@ -879,33 +873,6 @@ namespace PraticeManagement
             }
         }
 
-        /// <summary>
-        /// Displays the person's overhead.
-        /// </summary>
-        /// <param name="person"></param>
-        private void DisplayOverhead(Person person)
-        {
-            PersonOverhead[] overheads = person.OverheadList.ToArray();
-            Array.Sort(overheads);
-
-            PersonOverhead[] filteredOverheads =
-                Array.FindAll(overheads, overhead => overhead.RateType == null ||
-                                                     overhead.RateType.Id !=
-                                                     (int)OverheadRateTypes.BillRateMultiplier);
-            person.OverheadList = new List<PersonOverhead>(filteredOverheads);
-            gvOverhead.DataSource = filteredOverheads;
-            gvOverhead.DataBind();
-
-            if (gvOverhead.FooterRow != null)
-            {
-                gvOverhead.FooterRow.Cells[1].Text = person.TotalOverhead.ToString();
-                gvOverhead.FooterRow.Cells[1].Font.Bold = true;
-            }
-
-            // The person's summary
-            lblRawHourlyRate.Text = person.RawHourlyRate.ToString();
-            lblLoadedHourlyRate.Text = person.LoadedHourlyRate.ToString();
-        }
 
         #endregion
 
