@@ -28,8 +28,8 @@ namespace PraticeManagement.Controls.Reports
                 {
                     BenchReportContext reportContext = new BenchReportContext()
                     {
-                        Start = mpStartDate.MonthBegin,
-                        End = mpEndDate.MonthEnd,
+                        Start = BegPeriod,
+                        End = EndPeriod,
                         ActivePersons = cbActivePersons.Checked,
                         ProjectedPersons = cbProjectedPersons.Checked,
                         ActiveProjects = true,
@@ -89,6 +89,96 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
+        public DateTime BegPeriod
+        {
+            get
+            {
+                DateTime currentMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, Constants.Dates.FirstDay);
+                var periodSelected = int.Parse(ddlPeriod.SelectedValue);
+
+                if (periodSelected > 0)
+                {
+                    DateTime startMonth = new DateTime();
+
+
+                    if (periodSelected < 13)
+                    {
+                        startMonth = currentMonth;
+                    }
+                    else
+                    {
+                        Dictionary<string, DateTime> fPeriod = DataHelper.GetFiscalYearPeriod(currentMonth);
+                        startMonth = fPeriod["StartMonth"];
+                    }
+                    return startMonth;
+
+                }
+                else if (periodSelected < 0)
+                {
+                    DateTime startMonth = new DateTime();
+
+                    if (periodSelected > -13)
+                    {
+                        startMonth = currentMonth.AddMonths(Convert.ToInt32(ddlPeriod.SelectedValue));
+                    }
+                    else
+                    {
+                        Dictionary<string, DateTime> fPeriod = DataHelper.GetFiscalYearPeriod(currentMonth.AddYears(-1));
+                        startMonth = fPeriod["StartMonth"];
+                    }
+                    return startMonth;
+                }
+                else
+                {
+                    return diRange.FromDate.Value;
+                }
+            }
+        }
+
+        public DateTime EndPeriod
+        {
+            get
+            {
+                DateTime currentMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, Constants.Dates.FirstDay);
+                var periodSelected = int.Parse(ddlPeriod.SelectedValue);
+                
+                if (periodSelected > 0)
+                {
+                    DateTime endMonth = new DateTime();
+
+                    if (periodSelected < 13)
+                    {
+                        endMonth = currentMonth.AddMonths(Convert.ToInt32(ddlPeriod.SelectedValue) - 1);
+                    }
+                    else
+                    {
+                        Dictionary<string, DateTime> fPeriod = DataHelper.GetFiscalYearPeriod(currentMonth);
+                        endMonth = fPeriod["EndMonth"];
+                    }
+                    return new DateTime(endMonth.Year, endMonth.Month, DateTime.DaysInMonth(endMonth.Year, endMonth.Month));
+                }
+                else if (periodSelected < 0)
+                {
+                    DateTime endMonth = new DateTime();
+
+                    if (periodSelected > -13)
+                    {
+                        endMonth = currentMonth.AddMonths(Convert.ToInt32(ddlPeriod.SelectedValue));
+                    }
+                    else
+                    {
+                        Dictionary<string, DateTime> fPeriod = DataHelper.GetFiscalYearPeriod(currentMonth.AddYears(-1));
+                        endMonth = fPeriod["EndMonth"];
+                    }
+                    return new DateTime(endMonth.Year, endMonth.Month, DateTime.DaysInMonth(endMonth.Year, endMonth.Month));
+                }
+                else
+                {
+                    return diRange.ToDate.Value;
+                }
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -116,17 +206,41 @@ namespace PraticeManagement.Controls.Reports
             {
                 btnResetFilter.Attributes.Remove("disabled");
             }
+        }
 
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            diRange.FromDate = BegPeriod;
+            diRange.ToDate = EndPeriod;
+            lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
+                    diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat),
+                    diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat)
+                    );
+            if (ddlPeriod.SelectedValue == "0")
+            {
+                lblCustomDateRange.Attributes.Add("class", "");
+                imgCalender.Attributes.Add("class", "");
+            }
+            else
+            {
+                lblCustomDateRange.Attributes.Add("class", "displayNone");
+                imgCalender.Attributes.Add("class", "displayNone");
+            }
+            hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+            hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+            var clFromDate = diRange.FindControl("clFromDate") as AjaxControlToolkit.CalendarExtender;
+            var clToDate = diRange.FindControl("clToDate") as AjaxControlToolkit.CalendarExtender;
+            hdnStartDateCalExtenderBehaviourId.Value = clFromDate.BehaviorID;
+            hdnEndDateCalExtenderBehaviourId.Value = clToDate.BehaviorID;
         }
 
         private void SetFilters(object cookie)
         {
             var filter = cookie as BenchReportFilter;
 
-            mpStartDate.SelectedYear = filter.Start.Year;
-            mpStartDate.SelectedMonth = filter.Start.Month;
-            mpEndDate.SelectedYear = filter.End.Year;
-            mpEndDate.SelectedMonth = filter.End.Month;
+            diRange.FromDate = filter.Start;
+            diRange.ToDate = filter.End;
+            ddlPeriod.SelectedValue = filter.PeriodSelected.ToString();
             cblPractices.SelectedItems = filter.PracticeIds;
             cbActivePersons.Checked = (bool)filter.ActivePersons;
             cbProjectedPersons.Checked = (bool)filter.ProjectedPersons;
@@ -255,10 +369,9 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnResetFilter_OnClick(object sender, EventArgs e)
         {
-            mpStartDate.SelectedYear = DateTime.Today.Year;
-            mpStartDate.SelectedMonth = DateTime.Today.Month;
-            mpEndDate.SelectedYear = DateTime.Today.Year;
-            mpEndDate.SelectedMonth = DateTime.Today.Month;
+            ddlPeriod.SelectedValue = "1";
+            diRange.FromDate = BegPeriod;
+            diRange.ToDate = EndPeriod;
             SelectAllItems(this.cblPractices);
             cbActivePersons.Checked = true;
             cbProjectedPersons.Checked = true;
@@ -433,8 +546,9 @@ namespace PraticeManagement.Controls.Reports
         {
             var filter = new BenchReportFilter
             {
-                Start = mpStartDate.MonthBegin,
-                End = mpEndDate.MonthEnd,
+                Start = BegPeriod,
+                End = EndPeriod,
+                PeriodSelected = Convert.ToInt32(ddlPeriod.SelectedValue),
                 ActivePersons = cbActivePersons.Checked,
                 ProjectedPersons = cbProjectedPersons.Checked,
                 UserName = DataHelper.CurrentPerson.Alias,
@@ -480,12 +594,6 @@ namespace PraticeManagement.Controls.Reports
         protected string GetPersonDetailsUrlWithReturn(object id)
         {
             return Utils.Generic.GetTargetUrlWithReturn(GetPersonDetailsUrl(id), Request.Url.AbsoluteUri + (Request.Url.Query.Length > 0 ? string.Empty : Constants.FilterKeys.QueryStringOfApplyFilterFromCookie));
-        }
-
-        protected void custPeriod_ServerValidate(object sender, ServerValidateEventArgs args)
-        {
-            args.IsValid = ((mpEndDate.SelectedYear - mpStartDate.SelectedYear) * Constants.Dates.LastMonth +
-                            (mpEndDate.SelectedMonth - mpStartDate.SelectedMonth + 1)) > 0;
         }
     }
 }
