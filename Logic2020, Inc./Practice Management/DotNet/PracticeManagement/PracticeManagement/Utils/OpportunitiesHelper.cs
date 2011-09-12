@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.Controls;
+using PraticeManagement.Controls.Opportunities;
 
 namespace PraticeManagement.Utils
 {
@@ -33,7 +34,7 @@ namespace PraticeManagement.Utils
 
         private const string PercentageSummaryFormat = "{0} = {1} ({2}%)";
         private const string ExportPercentageSummaryFormat = "{0} = {1} {2}";
-        private const string PercentageFormat = "({0}%)";
+        private const string PercentageFormat = "&nbsp;({0}%)";
         private const string NameFormat = "{0} =";
         private const string ExcelSummaryValuesFormat = "&nbsp; {0}";
         private const string ExcelValueFormat = "&nbsp; {0} = {1}";
@@ -50,6 +51,7 @@ namespace PraticeManagement.Utils
         private const string WonKey = "Won";
         private const string ExcelDateFormat = "mso-number-format";
         private const string ExcelDateFormatStyle = "mm-dd-yyyy";
+        private const string BoldFormat = "&nbsp;<span style=\" font-weight:bold;\"> {0} </span>";
 
         private const int days = 7;
 
@@ -169,17 +171,9 @@ namespace PraticeManagement.Utils
         private static Table ExportSummaryColumn5(Opportunity[] opportunityList)
         {
             var data1 = AddTotalEstimateRevenueByPractice(opportunityList);
-            //if (IsExporting.HasValue && IsExporting.Value)
-            //{
-            //    var data2 = AddEstiateRevenueForTop3ClientsCell(opportunityList);
-            //    return ExportSummaryColumnWithMultipleRows(data1, data2);
-            //}
-            //else
-            //{
-            //    return ExportSummaryColumnWithMultipleRows(data1);
-            //}
-            return ExportSummaryColumnWithMultipleRows(data1);
-
+            var table = ExportSummaryColumnWithMultipleRows(data1);
+            table.Width = Unit.Percentage(100);
+            return table;
         }
 
         private static Table ExportSummaryColumnWithMultipleRows(params Table[] data)
@@ -233,7 +227,7 @@ namespace PraticeManagement.Utils
                 else
                 {
                     AddNameCell(key2 + "/" + key, dataRow);
-                    dataCell.Text = count.ToString();
+                    dataCell.Text = string.Format(ExcelSummaryValuesFormat,  count);
                 }
             }
             else
@@ -245,7 +239,7 @@ namespace PraticeManagement.Utils
                 else
                 {
                     AddNameCell(key, dataRow);
-                    dataCell.Text = keyValuePair.ContainsKey(key) ? keyValuePair[key].ToString() : "0";
+                    dataCell.Text = string.Format(ExcelSummaryValuesFormat, keyValuePair.ContainsKey(key) ? keyValuePair[key].ToString() : "0");
                 }
             }
 
@@ -342,12 +336,11 @@ namespace PraticeManagement.Utils
             {
                 if (IsExporting.HasValue && IsExporting.Value)
                 {
-                    //AddDataRowWithTwoCells(string.Format(ExportPercentageSummaryFormat, item.clientName, item.OpportunityCount, item.clientSummary) + item.clientEstimatedRevenue.Value.ToString(CurrencyDisplayFormat), topClientsTable);
-                    AddDataRowWithTwoCells(item.clientName, item.OpportunityCount + item.clientSummary, topClientsTable, "<span style=\" font-weight:bold;\">" + item.clientEstimatedRevenue.Value.ToString(CurrencyDisplayFormat) + "</span>", false);
+                    AddDataRowWithTwoCells(item.clientName, item.OpportunityCount + item.clientSummary, topClientsTable, string.Format(BoldFormat, item.clientEstimatedRevenue.Value.ToString(CurrencyDisplayFormat) ), false);
                 }
                 else
                 {
-                    AddDataRowWithTwoCells(item.clientName, item.OpportunityCount + item.clientSummary, topClientsTable, "<span style=\" font-weight:bold;\">" + item.clientEstimatedRevenue.Value.ToString(CurrencyDisplayFormat) + "</span>", true);
+                    AddDataRowWithTwoCells(item.clientName, item.OpportunityCount + " " + item.clientSummary, topClientsTable, string.Format(BoldFormat, item.clientEstimatedRevenue.Value.ToString(CurrencyDisplayFormat) ), true);
                 }
             }
 
@@ -405,9 +398,20 @@ namespace PraticeManagement.Utils
             string headerText = string.Format("Priority Trending (last {0} days)", days);
             AddHeaderRow(headerText, priorityTrendingTable, !(IsExporting.HasValue && IsExporting.Value));
 
+
+            TableRow dataRow = new TableRow();
+            TableCell dataCell = new TableCell();
+            dataCell.HorizontalAlign = HorizontalAlign.Justify;
+
+            Table dataTable = new Table();
+            dataTable.Width = Unit.Percentage(60);
             var priorityTrendList = PriorityTrendList;
-            AddDataRowByKeyValuePair(priorityTrendList, UpKey, priorityTrendingTable);
-            AddDataRowByKeyValuePair(priorityTrendList, DownKey, priorityTrendingTable);
+            AddDataRowByKeyValuePair(priorityTrendList, UpKey, dataTable);
+            AddDataRowByKeyValuePair(priorityTrendList, DownKey, dataTable);
+
+            dataCell.Controls.Add(dataTable);
+            dataRow.Controls.Add(dataCell);
+            priorityTrendingTable.Controls.Add(dataRow);
 
             AddEmptyDataRow(priorityTrendingTable);
 
@@ -420,10 +424,19 @@ namespace PraticeManagement.Utils
             string headerText = string.Format("Opportunity Status Changes (last {0} days)", days);
             AddHeaderRow(headerText, table);
 
+            TableRow dataRow = new TableRow();
+            TableCell dataCell = new TableCell();
+
+            Table dataTable = new Table();
+            dataTable.Width = Unit.Percentage(50);
             var list = StatusChangesList;
-            AddDataRowByKeyValuePair(list, ActiveKey, table);
-            AddDataRowByKeyValuePair(list, InactiveKey, table, LostKey);//Note:- Showing Lost and Inactive count in one cell as per the requirement
-            AddDataRowByKeyValuePair(list, WonKey, table);
+            AddDataRowByKeyValuePair(list, ActiveKey, dataTable);
+            AddDataRowByKeyValuePair(list, InactiveKey, dataTable, LostKey);//Note:- Showing Lost and Inactive count in one cell as per the requirement
+            AddDataRowByKeyValuePair(list, WonKey, dataTable);
+
+            dataCell.Controls.Add(dataTable);
+            dataRow.Controls.Add(dataCell);
+            table.Controls.Add(dataRow);
 
             AddEmptyDataRow(table);
 
@@ -468,8 +481,10 @@ namespace PraticeManagement.Utils
 
             headerRow.Controls.Add(headerCell);
 
+            var priorityList = OpportunityPriorityHelper.GetOpportunityPriorities(true).OrderBy(p => p.SortOrder);
+            var priorities = priorityList.Select(p => p.Priority).ToArray();
             var priorityOrderList = opportunityList.OrderBy(opp => opp.Priority.SortOrder).ToArray();
-            var priorities = priorityOrderList.Select(opp => opp.Priority.Priority).Distinct().ToArray();
+
             foreach (var priorityName in priorities)
             {
                 TableCell headerLabel = new TableCell();
@@ -569,9 +584,10 @@ namespace PraticeManagement.Utils
             tblCell3.Text = "&nbsp; 61-120+ Days =";
             tblCell3.Font.Bold = false;
             tblCell3.HorizontalAlign = HorizontalAlign.Justify;
-
+            
+            var priorityList = OpportunityPriorityHelper.GetOpportunityPriorities(true).OrderBy(p => p.SortOrder);
+            var priorities = priorityList.Select(p => p.Priority).ToArray();
             var priorityOrderList = opportunityList.OrderBy(opp => opp.Priority.SortOrder).ToArray();
-            var priorities = priorityOrderList.Select(opp => opp.Priority.Priority).Distinct().ToArray();
             foreach (var item in priorities)
             {
                 headerLabel.Text = headerLabel.Text + ConstantSpace + (item.Count() < 2 ? "&nbsp;" + item : item);
@@ -734,6 +750,7 @@ namespace PraticeManagement.Utils
         private static Table AddTotalEstimateRevenueByPractice(Opportunity[] opportunityList)
         {
             Table table = new Table();
+            table.Width = Unit.Percentage(100);
             AddHeaderRow("Total Estimated Revenue by Practice", table);
 
             var list = (from o in opportunityList
@@ -748,39 +765,14 @@ namespace PraticeManagement.Utils
 
             foreach (var item in list)
             {
-                AddDataRowWithThreeCells(item.practice.Name, item.practiceEstimateRevenue.Value.ToString(CurrencyDisplayFormat), table);
+                AddDataRowWithThreeCells(item.practice.Name, string.Format(ExcelSummaryValuesFormat, item.practiceEstimateRevenue.Value.ToString(CurrencyDisplayFormat)), table);
             }
 
             AddEmptyDataRow(table);
 
             return table;
         }
-
-        private static Table AddEstiateRevenueForTop3ClientsCell(Opportunity[] opportunityList)
-        {
-            Table table = new Table();
-            AddHeaderRow("Estimated Revenue for Top 3 Clients", table);
-
-            var list = (from o in opportunityList
-                        group o by new { o.Client.Id, o.Client.Name } into result
-                        orderby result.Count() descending
-                        select new
-                        {
-                            client = result.Key,
-                            clientEstimateRevenue = result.Sum(opp => opp.EstimatedRevenue)
-                        }
-                        ).Take(3);
-
-            foreach (var item in list)
-            {
-                AddDataRowWithThreeCells(item.client.Name, item.clientEstimateRevenue.Value.ToString(CurrencyDisplayFormat), table);
-            }
-
-            AddEmptyDataRow(table);
-
-            return table;
-        }
-
+        
         private static void AddDataRowWithThreeCells(string name, string value, Table table)
         {
             var dataRow = new TableRow();
