@@ -211,12 +211,21 @@
         function endRequestHandle(sender, Args) {
             GetProposedPersonIdsListWithPersonType();
             var tabBehaviour = $get('<%= tcOpportunityDetails.ClientID%>').control;
-           var index = tabBehaviour.get_activeTabIndex();
-           if (index == 1) {
-               ModifyInnerTextToWrapText();
-           }
+            var index = tabBehaviour.get_activeTabIndex();
+            if (index == 1) {
+                ModifyInnerTextToWrapText();
+
+                imgCalender = document.getElementById('ctl00_body_tcOpportunityDetails_tpHistory_activityLog_imgCalender');
+                    lblCustomDateRange = document.getElementById('ctl00_body_tcOpportunityDetails_tpHistory_activityLog_lblCustomDateRange');
+                    ddlPeriod = document.getElementById('ctl00_body_tcOpportunityDetails_tpHistory_activityLog_ddlPeriod');
+                    if (imgCalender.fireEvent && ddlPeriod.value != '0') {
+                        imgCalender.style.display = "none";
+                        lblCustomDateRange.style.display = "none";
+                    }
+                
+            }
         }
-               
+
         function SetWrapText(str) {
             for (var i = 30; i < str.length; i = i + 10) {
                 str = str.slice(0, i) + "<wbr/>" + str.slice(i, str.length);
@@ -253,6 +262,77 @@
                 }
             }
         }
+
+        function CheckIfDatesValid() {
+
+            txtStartDate = document.getElementById('ctl00_body_tcOpportunityDetails_tpHistory_activityLog_diRange_tbFrom');
+            txtEndDate = document.getElementById('ctl00_body_tcOpportunityDetails_tpHistory_activityLog_diRange_tbTo');
+            var startDate = new Date(txtStartDate.value);
+            var endDate = new Date(txtEndDate.value);
+            if (txtStartDate.value != '' && txtEndDate.value != ''
+            && startDate <= endDate) {
+                var btnCustDatesClose = document.getElementById('ctl00_body_tcOpportunityDetails_tpHistory_activityLog_btnCustDatesClose');
+                hdnStartDate = document.getElementById('ctl00_body_tcOpportunityDetails_tpHistory_activityLog_hdnStartDate');
+                hdnEndDate = document.getElementById('ctl00_body_tcOpportunityDetails_tpHistory_activityLog_hdnEndDate');
+                lblCustomDateRange = document.getElementById('ctl00_body_tcOpportunityDetails_tpHistory_activityLog_lblCustomDateRange');
+                var startDate = new Date(txtStartDate.value);
+                var endDate = new Date(txtEndDate.value);
+                var startDateStr = startDate.format("MM/dd/yyyy");
+                var endDateStr = endDate.format("MM/dd/yyyy");
+                hdnStartDate.value = startDateStr;
+                hdnEndDate.value = endDateStr;
+                lblCustomDateRange.innerHTML = '(' + startDateStr + '&nbsp;-&nbsp;' + endDateStr + ')';
+                btnCustDatesClose.click();
+
+            }
+            return false;
+        }
+
+        function CheckAndShowCustomDatesPoup(ddlPeriod) {
+            imgCalender = document.getElementById('ctl00_body_tcOpportunityDetails_tpHistory_activityLog_imgCalender');
+            lblCustomDateRange = document.getElementById('ctl00_body_tcOpportunityDetails_tpHistory_activityLog_lblCustomDateRange');
+            if (ddlPeriod.value == '0') {
+                imgCalender.attributes["class"].value = "";
+                lblCustomDateRange.attributes["class"].value = "";
+                if (imgCalender.fireEvent) {
+                    imgCalender.style.display = "";
+                    lblCustomDateRange.style.display = "";
+                    imgCalender.click();
+                }
+                if (document.createEvent) {
+                    var event = document.createEvent('HTMLEvents');
+                    event.initEvent('click', true, true);
+                    imgCalender.dispatchEvent(event);
+                }
+            }
+            else {
+                imgCalender.attributes["class"].value = "displayNone";
+                lblCustomDateRange.attributes["class"].value = "displayNone";
+                if (imgCalender.fireEvent) {
+                    imgCalender.style.display = "none";
+                    lblCustomDateRange.style.display = "none";
+                }
+            }
+        }
+        function ReAssignStartDateEndDates() {
+            hdnStartDate = document.getElementById('ctl00_body_tcOpportunityDetails_tpHistory_activityLog_hdnStartDate');
+            hdnEndDate = document.getElementById('ctl00_body_tcOpportunityDetails_tpHistory_activityLog_hdnEndDate');
+            txtStartDate = document.getElementById('ctl00_body_tcOpportunityDetails_tpHistory_activityLog_diRange_tbFrom');
+            txtEndDate = document.getElementById('ctl00_body_tcOpportunityDetails_tpHistory_activityLog_diRange_tbTo');
+            hdnStartDateCalExtenderBehaviourId = document.getElementById('ctl00_body_tcOpportunityDetails_tpHistory_activityLog_hdnStartDateCalExtenderBehaviourId');
+            hdnEndDateCalExtenderBehaviourId = document.getElementById('ctl00_body_tcOpportunityDetails_tpHistory_activityLog_hdnEndDateCalExtenderBehaviourId');
+
+            var endDateCalExtender = $find(hdnEndDateCalExtenderBehaviourId.value);
+            var startDateCalExtender = $find(hdnStartDateCalExtenderBehaviourId.value);
+            if (startDateCalExtender != null) {
+                startDateCalExtender.set_selectedDate(hdnStartDate.value);
+            }
+            if (endDateCalExtender != null) {
+                endDateCalExtender.set_selectedDate(hdnEndDate.value);
+            }
+            CheckIfDatesValid();
+        }
+
          
      
     </script>
