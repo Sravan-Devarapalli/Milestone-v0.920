@@ -85,7 +85,7 @@
             </HeaderTemplate>
             <ItemStyle HorizontalAlign="Center" Width="11%" />
             <ItemTemplate>
-                <asp:Label ID="lblEstimatedMargin" runat="server" Text='<%# ((PracticeManagementCurrency) (decimal) Eval("GrossMargin")).ToString() %>' CssClass="Margin" />
+                <asp:Label ID="lblEstimatedMargin" runat="server" Text='<%# ((PracticeManagementCurrency) (decimal) Eval("GrossMargin")).ToString() %>' NegativeValue='<%# (decimal) Eval("GrossMargin") < 0 %>' CssClass="Margin" />
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderText="Margin %">
