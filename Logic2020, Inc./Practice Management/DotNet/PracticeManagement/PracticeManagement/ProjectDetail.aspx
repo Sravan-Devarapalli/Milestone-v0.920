@@ -57,7 +57,8 @@
             }
         }
 
-        function CanShowPrompt() {return true;
+        function CanShowPrompt() {
+            return true;
         }
 
         function ConfirmToDeleteProject() {
@@ -111,6 +112,92 @@
                     }
                 }
             }
+        }
+
+        function CheckIfDatesValid() {
+
+            txtStartDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbFrom');
+            txtEndDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbTo');
+            var startDate = new Date(txtStartDate.value);
+            var endDate = new Date(txtEndDate.value);
+            if (txtStartDate.value != '' && txtEndDate.value != ''
+            && startDate <= endDate) {
+                var btnCustDatesClose = document.getElementById('<%= activityLog.ClientID %>_btnCustDatesClose');
+                hdnStartDate = document.getElementById('<%= activityLog.ClientID %>_hdnStartDate');
+                hdnEndDate = document.getElementById('<%= activityLog.ClientID %>_hdnEndDate');
+                lblCustomDateRange = document.getElementById('<%= activityLog.ClientID %>_lblCustomDateRange');
+                var startDate = new Date(txtStartDate.value);
+                var endDate = new Date(txtEndDate.value);
+                var startDateStr = startDate.format("MM/dd/yyyy");
+                var endDateStr = endDate.format("MM/dd/yyyy");
+                hdnStartDate.value = startDateStr;
+                hdnEndDate.value = endDateStr;
+                lblCustomDateRange.innerHTML = '(' + startDateStr + '&nbsp;-&nbsp;' + endDateStr + ')';
+                btnCustDatesClose.click();
+
+            }
+            return false;
+        }
+
+        function CheckAndShowCustomDatesPoup(ddlPeriod) {
+            imgCalender = document.getElementById('<%= activityLog.ClientID %>_imgCalender');
+            lblCustomDateRange = document.getElementById('<%= activityLog.ClientID %>_lblCustomDateRange');
+            if (ddlPeriod.value == '0') {
+                imgCalender.attributes["class"].value = "";
+                lblCustomDateRange.attributes["class"].value = "";
+                if (imgCalender.fireEvent) {
+                    imgCalender.style.display = "";
+                    lblCustomDateRange.style.display = "";
+                    imgCalender.click();
+                }
+                if (document.createEvent) {
+                    var event = document.createEvent('HTMLEvents');
+                    event.initEvent('click', true, true);
+                    imgCalender.dispatchEvent(event);
+                }
+            }
+            else {
+                imgCalender.attributes["class"].value = "displayNone";
+                lblCustomDateRange.attributes["class"].value = "displayNone";
+                if (imgCalender.fireEvent) {
+                    imgCalender.style.display = "none";
+                    lblCustomDateRange.style.display = "none";
+                }
+            }
+        }
+        function ReAssignStartDateEndDates() {
+            hdnStartDate = document.getElementById('<%= activityLog.ClientID %>_hdnStartDate');
+            hdnEndDate = document.getElementById('<%= activityLog.ClientID %>_hdnEndDate');
+            txtStartDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbFrom');
+            txtEndDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbTo');
+            hdnStartDateCalExtenderBehaviourId = document.getElementById('<%= activityLog.ClientID %>_hdnStartDateCalExtenderBehaviourId');
+            hdnEndDateCalExtenderBehaviourId = document.getElementById('<%= activityLog.ClientID %>_hdnEndDateCalExtenderBehaviourId');
+
+            var endDateCalExtender = $find(hdnEndDateCalExtenderBehaviourId.value);
+            var startDateCalExtender = $find(hdnStartDateCalExtenderBehaviourId.value);
+            if (startDateCalExtender != null) {
+                startDateCalExtender.set_selectedDate(hdnStartDate.value);
+            }
+            if (endDateCalExtender != null) {
+                endDateCalExtender.set_selectedDate(hdnEndDate.value);
+            }
+            CheckIfDatesValid();
+        }
+
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+
+        function endRequestHandle(sender, Args) {
+            var activityLog = document.getElementById('<%= activityLog.ClientID%>');
+            if (activityLog != null) {
+                imgCalender = document.getElementById('<%= activityLog.ClientID %>_imgCalender');
+                lblCustomDateRange = document.getElementById('<%= activityLog.ClientID %>_lblCustomDateRange');
+                ddlPeriod = document.getElementById('<%=  activityLog.ClientID %>_ddlPeriod');
+                if (imgCalender.fireEvent && ddlPeriod.value != '0') {
+                    imgCalender.style.display = "none";
+                    lblCustomDateRange.style.display = "none";
+                }
+            }
+
         }
 
     </script>
@@ -183,9 +270,9 @@
         
         .ProjectAttachmentNameWrap
         {
-            max-width:300px;
-            display:inline-block;
-            white-space:normal !important;
+            max-width: 300px;
+            display: inline-block;
+            white-space: normal !important;
             word-wrap: break-word;
         }
     </style>
@@ -354,9 +441,8 @@
                                 <tr>
                                     <td valign="middle">
                                         <asp:Button ID="btnAttachSOW" runat="server" Text="Attach SOW" ToolTip="Attach SOW" />
-                                        <AjaxControlToolkit:ModalPopupExtender
-                                            ID="mpeAttachSOW" runat="server" TargetControlID="btnAttachSOW" BackgroundCssClass="modalBackground"
-                                            PopupControlID="pnlAttachSOW" DropShadow="false" />
+                                        <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachSOW" runat="server" TargetControlID="btnAttachSOW"
+                                            BackgroundCssClass="modalBackground" PopupControlID="pnlAttachSOW" DropShadow="false" />
                                     </td>
                                     <td align="left" valign="middle" colspan="7" style="padding-left: 10px; vertical-align: middle;
                                         white-space: nowrap;">
@@ -365,30 +451,33 @@
                                             <Columns>
                                                 <asp:TemplateField>
                                                     <ItemTemplate>
-                                                        <% if(Project != null && Project.Id.HasValue)
+                                                        <% if (Project != null && Project.Id.HasValue)
                                                            { %>
-                                                        <asp:HyperLink ID="hlnkProjectAttachment1" CssClass="ProjectAttachmentNameWrap" runat="server" Text='<%# GetWrappedText( (string)Eval("AttachmentFileName")) %>' NavigateUrl='<%# GetNavigateUrl((string)Eval("AttachmentFileName"), (int)Eval("AttachmentId")) %>'></asp:HyperLink>
+                                                        <asp:HyperLink ID="hlnkProjectAttachment1" CssClass="ProjectAttachmentNameWrap" runat="server"
+                                                            Text='<%# GetWrappedText( (string)Eval("AttachmentFileName")) %>' NavigateUrl='<%# GetNavigateUrl((string)Eval("AttachmentFileName"), (int)Eval("AttachmentId")) %>'></asp:HyperLink>
                                                         <% }
                                                            else
                                                            { %>
-                                                        <asp:LinkButton ID="lnkProjectAttachment1" runat="server" CssClass="ProjectAttachmentNameWrap" Visible="<%# IsProjectCreated() %>" CommandName='<%# Eval("AttachmentId") %>' Text='<%# GetWrappedText((string)Eval("AttachmentFileName")) %>' OnClick="lnkProjectAttachment_OnClick" />
+                                                        <asp:LinkButton ID="lnkProjectAttachment1" runat="server" CssClass="ProjectAttachmentNameWrap"
+                                                            Visible="<%# IsProjectCreated() %>" CommandName='<%# Eval("AttachmentId") %>'
+                                                            Text='<%# GetWrappedText((string)Eval("AttachmentFileName")) %>' OnClick="lnkProjectAttachment_OnClick" />
                                                         <% } %>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField>
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblAttachmentSize" runat="server" Text='<%# string.Format("({0}Kb)", (int)Eval("AttachmentSize")/1000)  %>' ></asp:Label>
+                                                        <asp:Label ID="lblAttachmentSize" runat="server" Text='<%# string.Format("({0}Kb)", (int)Eval("AttachmentSize")/1000)  %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField>
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblUploadedDate" runat="server" Text='<%# ((DateTime?)Eval("UploadedDate")).HasValue ? string.Format(" - Uploaded: {0}", ((DateTime?)Eval("UploadedDate")).Value.ToString("MM/dd/yyyy")) : string.Empty %>' ></asp:Label>
+                                                        <asp:Label ID="lblUploadedDate" runat="server" Text='<%# ((DateTime?)Eval("UploadedDate")).HasValue ? string.Format(" - Uploaded: {0}", ((DateTime?)Eval("UploadedDate")).Value.ToString("MM/dd/yyyy")) : string.Empty %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField>
                                                     <ItemTemplate>
-                                                        <asp:ImageButton ID="imgbtnDeleteAttachment1" OnClick="imgbtnDeleteAttachment_Click" AttachmentId='<%# Eval("AttachmentId") %>'
-                                                            OnClientClick="if(confirm('Do you really want to delete the project attachment?')){ return true;}return false;"
+                                                        <asp:ImageButton ID="imgbtnDeleteAttachment1" OnClick="imgbtnDeleteAttachment_Click"
+                                                            AttachmentId='<%# Eval("AttachmentId") %>' OnClientClick="if(confirm('Do you really want to delete the project attachment?')){ return true;}return false;"
                                                             Visible="true" runat="server" ImageUrl="~/Images/trash-icon-Large.png" ToolTip="Delete Attachment" />
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
