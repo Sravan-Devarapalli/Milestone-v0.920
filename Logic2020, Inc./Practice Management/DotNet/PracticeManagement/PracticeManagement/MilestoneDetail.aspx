@@ -119,6 +119,91 @@
             return true;
         }
 
+        function CheckIfDatesValid() {
+
+            txtStartDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbFrom');
+            txtEndDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbTo');
+            var startDate = new Date(txtStartDate.value);
+            var endDate = new Date(txtEndDate.value);
+            if (txtStartDate.value != '' && txtEndDate.value != ''
+            && startDate <= endDate) {
+                var btnCustDatesClose = document.getElementById('<%= activityLog.ClientID %>_btnCustDatesClose');
+                hdnStartDate = document.getElementById('<%= activityLog.ClientID %>_hdnStartDate');
+                hdnEndDate = document.getElementById('<%= activityLog.ClientID %>_hdnEndDate');
+                lblCustomDateRange = document.getElementById('<%= activityLog.ClientID %>_lblCustomDateRange');
+                var startDate = new Date(txtStartDate.value);
+                var endDate = new Date(txtEndDate.value);
+                var startDateStr = startDate.format("MM/dd/yyyy");
+                var endDateStr = endDate.format("MM/dd/yyyy");
+                hdnStartDate.value = startDateStr;
+                hdnEndDate.value = endDateStr;
+                lblCustomDateRange.innerHTML = '(' + startDateStr + '&nbsp;-&nbsp;' + endDateStr + ')';
+                btnCustDatesClose.click();
+
+            }
+            return false;
+        }
+
+        function CheckAndShowCustomDatesPoup(ddlPeriod) {
+            imgCalender = document.getElementById('<%= activityLog.ClientID %>_imgCalender');
+            lblCustomDateRange = document.getElementById('<%= activityLog.ClientID %>_lblCustomDateRange');
+            if (ddlPeriod.value == '0') {
+                imgCalender.attributes["class"].value = "";
+                lblCustomDateRange.attributes["class"].value = "";
+                if (imgCalender.fireEvent) {
+                    imgCalender.style.display = "";
+                    lblCustomDateRange.style.display = "";
+                    imgCalender.click();
+                }
+                if (document.createEvent) {
+                    var event = document.createEvent('HTMLEvents');
+                    event.initEvent('click', true, true);
+                    imgCalender.dispatchEvent(event);
+                }
+            }
+            else {
+                imgCalender.attributes["class"].value = "displayNone";
+                lblCustomDateRange.attributes["class"].value = "displayNone";
+                if (imgCalender.fireEvent) {
+                    imgCalender.style.display = "none";
+                    lblCustomDateRange.style.display = "none";
+                }
+            }
+        }
+        function ReAssignStartDateEndDates() {
+            hdnStartDate = document.getElementById('<%= activityLog.ClientID %>_hdnStartDate');
+            hdnEndDate = document.getElementById('<%= activityLog.ClientID %>_hdnEndDate');
+            txtStartDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbFrom');
+            txtEndDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbTo');
+            hdnStartDateCalExtenderBehaviourId = document.getElementById('<%= activityLog.ClientID %>_hdnStartDateCalExtenderBehaviourId');
+            hdnEndDateCalExtenderBehaviourId = document.getElementById('<%= activityLog.ClientID %>_hdnEndDateCalExtenderBehaviourId');
+
+            var endDateCalExtender = $find(hdnEndDateCalExtenderBehaviourId.value);
+            var startDateCalExtender = $find(hdnStartDateCalExtenderBehaviourId.value);
+            if (startDateCalExtender != null) {
+                startDateCalExtender.set_selectedDate(hdnStartDate.value);
+            }
+            if (endDateCalExtender != null) {
+                endDateCalExtender.set_selectedDate(hdnEndDate.value);
+            }
+            CheckIfDatesValid();
+        }
+
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+
+        function endRequestHandle(sender, Args) {
+            var activityLog = document.getElementById('<%= activityLog.ClientID%>');
+            if (activityLog != null) {
+                imgCalender = document.getElementById('<%= activityLog.ClientID %>_imgCalender');
+                lblCustomDateRange = document.getElementById('<%= activityLog.ClientID %>_lblCustomDateRange');
+                ddlPeriod = document.getElementById('<%=  activityLog.ClientID %>_ddlPeriod');
+                if (imgCalender.fireEvent && ddlPeriod.value != '0') {
+                    imgCalender.style.display = "none";
+                    lblCustomDateRange.style.display = "none";
+                }
+            }
+        }
+
     </script>
     <style type="text/css">
         /* --------- Tabs for person and project details pages ------ */
