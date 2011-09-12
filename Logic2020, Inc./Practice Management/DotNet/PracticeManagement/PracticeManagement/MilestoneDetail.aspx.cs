@@ -67,6 +67,7 @@ namespace PraticeManagement
 
         private SeniorityAnalyzer seniorityAnalyzer;
         private MilestonePerson[] _milestonePersons;
+        private SeniorityAnalyzer currentPersonSeniorityAnalyzer;
 
         #endregion
 
@@ -115,6 +116,18 @@ namespace PraticeManagement
             get
             {
                 return seniorityAnalyzer;
+            }
+        }
+
+        public SeniorityAnalyzer MilestoneSeniorityAnalyzer
+        {
+            get
+            {
+                if (currentPersonSeniorityAnalyzer == null)
+                {
+                    currentPersonSeniorityAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
+                }
+                return currentPersonSeniorityAnalyzer;
             }
         }
 
@@ -440,21 +453,9 @@ namespace PraticeManagement
                             if (financials.Key.Month == dtTemp.Month && financials.Key.Year == dtTemp.Year)
                                 row.Cells[currentColumnIndex].Text =
                                     string.Format(Resources.Controls.MilestoneInterestFormat,
-                                                  financials.Value.Revenue,
-                                                  isOtherGreater
-                                                      ? Resources.Controls.HiddenCellText
-                                                      : financials.Value.GrossMargin.ToString(),
+                                                  financials.Value.Revenue,financials.Value.GrossMargin.ToString(isOtherGreater),
                                                   financials.Value.HoursBilled);
                         }
-                    }
-
-                    int marginColumnIndex = currentColumnIndex + 2;
-                    int grossMargin = currentColumnIndex + 4;
-
-                    if (isOtherGreater)
-                    {
-                        row.Cells[marginColumnIndex].Text = Resources.Controls.HiddenCellText;
-                        row.Cells[grossMargin].Text = Resources.Controls.HiddenCellText;
                     }
                 }
 
@@ -838,6 +839,13 @@ namespace PraticeManagement
             }
         }
 
+        protected string GetText(PracticeManagementCurrency value, Person person)
+        {
+            var greaterSeniorityExists = MilestoneSeniorityAnalyzer.IsOtherGreater(person);
+
+            return value.ToString(greaterSeniorityExists);
+        }
+
         protected string GetMpeRedirectUrl(object args)
         {
             var mpePageUrl =
@@ -1053,7 +1061,7 @@ namespace PraticeManagement
                             gvPeople.FooterRow.Cells[i].Text =
                                 string.Format(Resources.Controls.MilestoneSummaryInterestFormat,
                                 financials.Revenue,
-                                oneGreaterExists ? Resources.Controls.HiddenCellText : financials.GrossMargin.ToString(),
+                                financials.GrossMargin.ToString(oneGreaterExists),
                                 financials.HoursBilled,
                                 oneGreaterExists ? Resources.Controls.HiddenCellText : financials.TargetMargin.ToString("##0.00"));
                         }
@@ -1064,9 +1072,7 @@ namespace PraticeManagement
             // Calculate and display totals
             if (Milestone.ComputedFinancials != null)
             {
-                lblTotalCogs.Text =
-                    PersonListSeniorityAnalyzer.GreaterSeniorityExists ?
-                    Resources.Controls.HiddenCellText : Milestone.ComputedFinancials.Cogs.ToString();
+                lblTotalCogs.Text = Milestone.ComputedFinancials.Cogs.ToString(PersonListSeniorityAnalyzer.GreaterSeniorityExists);
                 lblTotalRevenue.Text = Milestone.ComputedFinancials.Revenue.ToString();
                 lblTotalRevenueNet.Text = Milestone.ComputedFinancials.RevenueNet.ToString();
 
@@ -1186,9 +1192,7 @@ namespace PraticeManagement
                 lblPracticeManagerCommission);
 
             //Fill Total Margin Cell
-            SetFooterLabelWithSeniority(
-                milestone.ComputedFinancials == null ? string.Empty : milestone.ComputedFinancials.GrossMargin.ToString(),
-                lblTotalMargin);
+            SetFooterLabelWithSeniority(milestone.ComputedFinancials == null ? null : (PracticeManagementCurrency?)milestone.ComputedFinancials.GrossMargin, lblTotalMargin);
 
             //Fill Target Margin Cell
             SetFooterLabelWithSeniority(
@@ -1203,9 +1207,7 @@ namespace PraticeManagement
 
             if (Milestone.ComputedFinancials != null)
             {
-                lblTotalCogs.Text =
-                    PersonListSeniorityAnalyzer.GreaterSeniorityExists ?
-                    Resources.Controls.HiddenCellText : Milestone.ComputedFinancials.Cogs.ToString();
+                lblTotalCogs.Text = Milestone.ComputedFinancials.Cogs.ToString(PersonListSeniorityAnalyzer.GreaterSeniorityExists);
                 lblTotalRevenue.Text = Milestone.ComputedFinancials.Revenue.ToString();
                 lblTotalRevenueNet.Text = Milestone.ComputedFinancials.RevenueNet.ToString();
 
@@ -1223,8 +1225,8 @@ namespace PraticeManagement
 
             //Fill Final Milestone Margin Cell
             SetFooterLabelWithSeniority(
-                milestone.ComputedFinancials == null ? string.Empty :
-                        milestone.ComputedFinancials.MarginNet.ToString(),
+                milestone.ComputedFinancials == null ? null :
+                        (PracticeManagementCurrency?)milestone.ComputedFinancials.MarginNet,
                 lblFinalMilestoneMargin);
 
             //Fill Expenses Cell
@@ -1288,7 +1290,11 @@ namespace PraticeManagement
             label.Text =
                 PersonListSeniorityAnalyzer != null && PersonListSeniorityAnalyzer.GreaterSeniorityExists ?
                     Resources.Controls.HiddenCellText : labelValue;
+        }
 
+        private void SetFooterLabelWithSeniority(PracticeManagementCurrency? value, Label label)
+        {
+            label.Text = value.HasValue ? value.Value.ToString(PersonListSeniorityAnalyzer != null && PersonListSeniorityAnalyzer.GreaterSeniorityExists) : string.Empty;
         }
 
         private void PopulateProjectControls(Project project)
