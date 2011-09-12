@@ -152,9 +152,67 @@
         $.post(urlVal, function (dat) {
         });
     }
+
+    function SetTooltipText(descriptionText, hlinkObj) {
+        var hlinkObjct = $('#' + hlinkObj.id);
+        var displayPanel = $('#<%= oppNameToolTipHolder.ClientID %>');
+        iptop = hlinkObjct.offset().top - hlinkObjct[0].offsetHeight;
+        ipleft = hlinkObjct.offset().left + hlinkObjct[0].offsetWidth + 10;
+        iptop = iptop;
+        ipleft = ipleft;
+        setPosition(displayPanel, iptop, ipleft);
+        displayPanel.show();
+        setPosition(displayPanel, iptop, ipleft);
+        displayPanel.show();
+
+        var lbloppNameTooltipContent = document.getElementById('<%= lbloppNameTooltipContent.ClientID %>');
+        lbloppNameTooltipContent.innerHTML = descriptionText.toString();
+    }
+
+    function HidePanel() {
+
+        var displayPanel = $('#<%= oppNameToolTipHolder.ClientID %>');
+        displayPanel.hide();
+    }
+
+
 </script>
 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
     <ContentTemplate>
+        <asp:Panel ID="oppNameToolTipHolder" Style="display: none; position: absolute; z-index: 2000;"
+            runat="server" CssClass="ToolTip WordWrap">
+            <table>
+                <tr class="top">
+                    <td class="lt">
+                        <div class="tail">
+                        </div>
+                    </td>
+                    <td class="tbor">
+                    </td>
+                    <td class="rt">
+                    </td>
+                </tr>
+                <tr class="middle">
+                    <td class="lbor">
+                    </td>
+                    <td class="content WordWrap">
+                        <pre>
+<asp:Label ID="lbloppNameTooltipContent" CssClass="WordWrap" runat="server"></asp:Label>
+</pre>
+                    </td>
+                    <td class="rbor">
+                    </td>
+                </tr>
+                <tr class="bottom">
+                    <td class="lb">
+                    </td>
+                    <td class="bbor">
+                    </td>
+                    <td class="rb">
+                    </td>
+                </tr>
+            </table>
+        </asp:Panel>
         <table cellpadding="0" cellspacing="0" align="center" style="width: 100%; padding-bottom: 10px;
             margin-bottom: 10px;">
             <tr>
@@ -328,7 +386,9 @@
                         </td>
                         <td>
                             <div class="cell-pad">
-                                <asp:HyperLink ID="hlName" runat="server" NavigateUrl='<%# GetOpportunityDetailsLink((int) Eval("Id"), Container.DisplayIndex) %>'>
+                                <asp:HyperLink ID="hlName" Description='<%# GetWrappedText((string)((Opportunity) Container.DataItem).Description) %>'
+                                    onmouseout="HidePanel();" onmouseover="SetTooltipText(this.attributes['Description'].value,this);"
+                                    runat="server" NavigateUrl='<%# GetOpportunityDetailsLink((int) Eval("Id"), Container.DisplayIndex) %>'>
                             <%# HttpUtility.HtmlEncode((string)Eval("Name")) %>
                                 </asp:HyperLink>
                             </div>
@@ -401,7 +461,9 @@
                         </td>
                         <td>
                             <div class="cell-pad">
-                                <asp:HyperLink ID="hlName" runat="server" NavigateUrl='<%# GetOpportunityDetailsLink((int) Eval("Id"), Container.DisplayIndex) %>'>
+                                <asp:HyperLink ID="hlName" Description='<%# GetWrappedText((string)((Opportunity) Container.DataItem).Description) %>'
+                                    onmouseout="HidePanel();" onmouseover="SetTooltipText(this.attributes['Description'].value,this);"
+                                    runat="server" NavigateUrl='<%# GetOpportunityDetailsLink((int) Eval("Id"), Container.DisplayIndex) %>'>
                             <%# HttpUtility.HtmlEncode((string)Eval("Name")) %>
                                 </asp:HyperLink>
                             </div>
