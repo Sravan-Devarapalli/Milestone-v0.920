@@ -30,14 +30,8 @@ namespace PraticeManagement.Controls.MilestonePersons
                         : financials.LoadedHourlyPayRate.ToString();
                 lblHoursInPeriod.Text = financials.HoursInPeriod.ToString();
                 lblProjectedRevenueContribution.Text = financials.Revenue.ToString();
-                lblProjectedCogs.Text =
-                    SeniorityAnalyzer.GreaterSeniorityExists
-                        ? Resources.Controls.HiddenCellText
-                        : financials.Cogs.ToString();
-                lblProjectedMarginContribution.Text =
-                    SeniorityAnalyzer.GreaterSeniorityExists
-                        ? Resources.Controls.HiddenCellText
-                        : financials.Margin.ToString();
+                lblProjectedCogs.Text = financials.Cogs.ToString(SeniorityAnalyzer.GreaterSeniorityExists);
+                lblProjectedMarginContribution.Text = financials.Margin.ToString(SeniorityAnalyzer.GreaterSeniorityExists);
             }
             else
             {
