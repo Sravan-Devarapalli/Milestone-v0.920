@@ -216,14 +216,14 @@ namespace PraticeManagement.Controls
 
         public DateTime? FromDateFilterValue
         {
-            get { return diYear.FromDate; }
-            set { diYear.FromDate = value; }
+            get { return diRange.FromDate; }
+            set { diRange.FromDate = value; }
         }
 
         public DateTime? ToDateFilterValue
         {
-            get { return diYear.ToDate; }
-            set { diYear.ToDate = value; }
+            get { return diRange.ToDate; }
+            set { diRange.ToDate = value; }
         }
 
         public bool IsFiltersReadingFromCookie { get; set; }
@@ -249,6 +249,8 @@ namespace PraticeManagement.Controls
                             DisplayDropDownValue = (ActivityEventSource)Enum.Parse(typeof(ActivityEventSource), cookie.EventSourceSelected);
                             FromDateFilterValue = cookie.FromDateFilterValue;
                             ToDateFilterValue = cookie.ToDateFilterValue;
+                            ddlPeriod.SelectedValue = cookie.PeriodSelected.ToString();
+
                             if (!string.IsNullOrEmpty(cookie.ProjectSelected))
                                 ddlProjects.SelectedValue = cookie.ProjectSelected.Trim();
                             if (!string.IsNullOrEmpty(cookie.PersonSelected))
@@ -287,18 +289,15 @@ namespace PraticeManagement.Controls
 
             if (IsActivityLogPage)
             {
-                lblDisplay.Width = Unit.Percentage(20);
-                ddlEventSource.Width = Unit.Percentage(80);
-                Label1.Width = Unit.Percentage(18);
-                ddlPersonName.Width = Unit.Percentage(82);
-                Label2.Width = Unit.Percentage(10);
-                ddlProjects.Width = Unit.Percentage(90);
                 tblActivitylog.Attributes["class"] = "CompPerfTable WholeWidth";
-                tdEventSource.Style.Add("width", "19%");
-                tdYear.Style.Add("width", "27%");
-                spnPersons.Style.Add("width", "19%");
-                spnProjects.Style.Add("width", "20%");
-                tdBtnList.Style.Add("width", "15%");
+                ddlEventSource.Width = Unit.Percentage(87);
+                ddlPersonName.Width = Unit.Percentage(93);
+                ddlProjects.Width = Unit.Percentage(90);
+                tdEventSource.Style.Add("width", "23%");
+                tdYear.Style.Add("width", "12%");
+                spnPersons.Style.Add("width", "23%");
+                spnProjects.Style.Add("width", "24%");
+                tdBtnList.Style.Add("width", "18%");
                 tdBtnList.Align = "right";
                 divActivitylog.Style.Add("background-color", "#d4dff8");
                 btnResetFilter.Visible = true;
@@ -315,25 +314,42 @@ namespace PraticeManagement.Controls
         {
             if (!IsFiltersReadingFromCookie)
             {
-                diYear.FromDate = SettingsHelper.GetCurrentPMTime().AddYears(-1);
-                diYear.ToDate = SettingsHelper.GetCurrentPMTime();
+                SetPeriodSelection(-7);
             }
 
             if (IsActivityLogPage)
             {
                 if (!IsFiltersReadingFromCookie)
                 {
+                    ddlPeriod.SelectedValue = "-7";
                     ddlEventSource.SelectedIndex = ddlPersonName.SelectedIndex = ddlProjects.SelectedIndex = 0;
                     hdnResetFilter.Value = "false";
                     btnResetFilter.Enabled = false;
                 }
+                ddlPeriod.Attributes["onchange"] = "EnableResetButton(); CheckAndShowCustomDatesPoup(this);";
                 ddlEventSource.Attributes["onchange"] = ddlPersonName.Attributes["onchange"] = ddlProjects.Attributes["onchange"] = "EnableResetButton();";
-                diYear.OnClientChange = "EnableResetButtonForDateIntervalChange";
+                diRange.OnClientChange = "EnableResetButtonForDateIntervalChange";
+            }
+            else
+            {
+                ddlPeriod.Attributes["onchange"] = "CheckAndShowCustomDatesPoup(this);";
             }
         }
 
         protected void Page_Prerender(object sender, EventArgs e)
         {
+
+            if (IsActivityLogPage)
+            {
+                ddlPeriod.Attributes["onchange"] = "EnableResetButton(); CheckAndShowCustomDatesPoup(this);";
+                ddlEventSource.Attributes["onchange"] = ddlPersonName.Attributes["onchange"] = ddlProjects.Attributes["onchange"] = "EnableResetButton();";
+                diRange.OnClientChange = "EnableResetButtonForDateIntervalChange";
+            }
+            else
+            {
+                ddlPeriod.Attributes["onchange"] = "CheckAndShowCustomDatesPoup(this);";
+            }
+
             if (!Request.Url.AbsolutePath.Contains("DiscussionReview1.aspx") && !Request.Url.AbsolutePath.Contains("PersonDetail.aspx"))
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTooltipsForallDropDowns", "SetTooltipsForallDropDowns();ModifyInnerTextToWrapText();", true);
@@ -343,6 +359,27 @@ namespace PraticeManagement.Controls
             {
                 Update();
             }
+
+            lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
+                     diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat),
+                     diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat)
+                     );
+            if (ddlPeriod.SelectedValue == "0")
+            {
+                lblCustomDateRange.Attributes.Add("class", "");
+                imgCalender.Attributes.Add("class", "");
+            }
+            else
+            {
+                lblCustomDateRange.Attributes.Add("class", "displayNone");
+                imgCalender.Attributes.Add("class", "displayNone");
+            }
+            hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+            hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+            var clFromDate = diRange.FindControl("clFromDate") as AjaxControlToolkit.CalendarExtender;
+            var clToDate = diRange.FindControl("clToDate") as AjaxControlToolkit.CalendarExtender;
+            hdnStartDateCalExtenderBehaviourId.Value = clFromDate.BehaviorID;
+            hdnEndDateCalExtenderBehaviourId.Value = clToDate.BehaviorID;
         }
 
         private void SaveFilterSettings()
@@ -361,7 +398,8 @@ namespace PraticeManagement.Controls
                 PersonSelected = ddlPersonName.SelectedValue.Trim(),
                 ProjectSelected = ddlProjects.SelectedValue.Trim(),
                 CurrentIndex = gvActivities.PageIndex,
-                FiltersChanged = Convert.ToBoolean(hdnResetFilter.Value)
+                FiltersChanged = Convert.ToBoolean(hdnResetFilter.Value),
+                PeriodSelected = Convert.ToInt32(ddlPeriod.SelectedValue)
             };
             return filter;
         }
@@ -484,10 +522,64 @@ namespace PraticeManagement.Controls
                 entityChanges.TransformArgumentList = _argumentList;
         }
 
+        private void SetPeriodSelection(int periodSelected)
+        {
+            DateTime currentMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, Constants.Dates.FirstDay);
+
+            if (periodSelected < 0)
+            {
+                DateTime startMonth = new DateTime();
+                DateTime endMonth = new DateTime();
+
+                if (periodSelected > -30)
+                {
+                    startMonth = DateTime.Now.Date.AddDays(periodSelected + 1);
+                    endMonth = DateTime.Now.Date;
+                }
+                else
+                {
+                    startMonth = currentMonth.AddMonths((periodSelected / 30) + 1);
+                    endMonth = currentMonth;
+                }
+
+                diRange.FromDate = startMonth;
+                diRange.ToDate = new DateTime(endMonth.Year, endMonth.Month, DateTime.DaysInMonth(endMonth.Year, endMonth.Month));
+            }
+            else
+            {
+                mpeCustomDates.Show();
+            }
+        }
+
         protected void odsActivities_Selecting(object sender, ObjectDataSourceSelectingEventArgs e)
         {
-            e.InputParameters["startDateFilter"] = diYear.FromDate.HasValue ? diYear.FromDate : SettingsHelper.GetCurrentPMTime().AddYears(-1);
-            e.InputParameters["endDateFilter"] = diYear.ToDate.HasValue ? diYear.ToDate.Value.AddDays(1) : SettingsHelper.GetCurrentPMTime().AddDays(1);
+            if (ddlPeriod.SelectedValue == "0")
+            {
+                e.InputParameters["startDateFilter"] = diRange.FromDate.HasValue ? diRange.FromDate : SettingsHelper.GetCurrentPMTime().AddYears(-1);
+                e.InputParameters["endDateFilter"] = diRange.ToDate.HasValue ? diRange.ToDate.Value.AddDays(1) : SettingsHelper.GetCurrentPMTime().AddDays(1);
+            }
+            else
+            {
+                var periodSelected = Convert.ToInt32(ddlPeriod.SelectedValue);
+
+                DateTime currentMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, Constants.Dates.FirstDay);
+                DateTime startMonth = new DateTime();
+                DateTime endMonth = new DateTime();
+
+                if (periodSelected > -30)
+                {
+                    startMonth = DateTime.Now.Date.AddDays(periodSelected + 1);
+                    endMonth = DateTime.Now.Date;
+                }
+                else
+                {
+                    startMonth = currentMonth.AddMonths((periodSelected / 30) + 1);
+                    endMonth = currentMonth;
+                }
+
+                e.InputParameters["startDateFilter"] = startMonth;
+                e.InputParameters["endDateFilter"] = new DateTime(endMonth.Year, endMonth.Month, DateTime.DaysInMonth(endMonth.Year, endMonth.Month));
+            }
             e.InputParameters["sourceFilter"] = ddlEventSource.SelectedValue;
             e.InputParameters["opportunityId"] = (this.OpportunityId == null ? null : this.OpportunityId.ToString());
             e.InputParameters["milestoneId"] = (this.MilestoneId == null ? null : this.MilestoneId.ToString());
