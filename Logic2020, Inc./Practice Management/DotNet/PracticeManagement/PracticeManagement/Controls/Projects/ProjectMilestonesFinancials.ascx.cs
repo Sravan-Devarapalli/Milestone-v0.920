@@ -103,7 +103,10 @@ namespace PraticeManagement.Controls.Projects
             if (label != null)
             {
                 label.Text = Resources.Controls.HiddenCellText;
-                label.CssClass = string.Empty;
+                if (cellIndex == GROSS_MARGIN_CELL_INDEX)
+                {
+                    label.CssClass = Convert.ToBoolean(label.Attributes["NegativeValue"]) ? Resources.Controls.BenchCssClass : Resources.Controls.MarginCssClass;
+                }
             }
         }
 
