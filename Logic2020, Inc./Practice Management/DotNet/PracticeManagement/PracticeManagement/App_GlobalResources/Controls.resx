@@ -353,4 +353,10 @@
   <data name="CssWeekEndDayOn" xml:space="preserve">
     <value>WeekEndDayOn</value>
   </data>
+  <data name="BenchCssClass" xml:space="preserve">
+    <value>Bench</value>
+  </data>
+  <data name="MarginCssClass" xml:space="preserve">
+    <value>Margin</value>
+  </data>
 </root>
