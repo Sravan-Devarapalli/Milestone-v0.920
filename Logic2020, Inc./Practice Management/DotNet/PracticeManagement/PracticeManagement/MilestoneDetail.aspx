@@ -623,7 +623,7 @@
                                             Margin</div>
                                     </HeaderTemplate>
                                     <ItemTemplate>
-                                        <asp:Label ID="lblMarginContribution" runat="server" Text='<%# Eval("Entries[0].ComputedFinancials.GrossMargin") %>'></asp:Label>
+                                        <asp:Label ID="lblMarginContribution" runat="server" Text='<%# GetText( (DataTransferObjects.PracticeManagementCurrency)Eval("Entries[0].ComputedFinancials.GrossMargin"), (DataTransferObjects.Person)Eval("Person") ) %>'></asp:Label>
                                     </ItemTemplate>
                                     <FooterStyle BorderStyle="None" />
                                 </asp:TemplateField>
@@ -646,7 +646,7 @@
                                     </HeaderTemplate>
                                     <ItemStyle Font-Bold="true" HorizontalAlign="Right" />
                                     <ItemTemplate>
-                                        <asp:Label ID="lblTotalMargin" runat="server" Text='<%# Eval("Entries[0].ComputedFinancials.GrossMargin") %>'></asp:Label>
+                                        <asp:Label ID="lblTotalMargin" runat="server" Text='<%# GetText( (DataTransferObjects.PracticeManagementCurrency)Eval("Entries[0].ComputedFinancials.GrossMargin"), (DataTransferObjects.Person)Eval("Person") ) %>'></asp:Label>
                                     </ItemTemplate>
                                     <FooterStyle HorizontalAlign="Right" />
                                 </asp:TemplateField>
