@@ -91,8 +91,8 @@ namespace PraticeManagement
 
         protected void ofOpportunityList_OnFilterOptionsChanged(object sender, EventArgs e)
         {
-            var summary = GetSummaryDetails();
-            pnlSummary.Controls.Add(summary);
+            var filter = ofOpportunityList.GetFilterSettings();
+            UpDateView(filter);
         }
 
         internal void UpDateView(OpportunityFilterSettings filter)
