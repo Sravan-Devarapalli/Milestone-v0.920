@@ -314,9 +314,9 @@ namespace PraticeManagement.Controls.Generic
 
             descriptionText = descriptionText.Trim();
 
-            if (descriptionText.Length > 99)
+            if (descriptionText.Length > 500)
             {
-                descriptionText = descriptionText.Substring(0, 99)+"..";
+                descriptionText = descriptionText.Substring(0, 500) + ".....";
             }
 
             for (int i = 0; i < descriptionText.Length; i = i + 15)
