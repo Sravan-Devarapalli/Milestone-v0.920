@@ -12,9 +12,16 @@
         white-space: -moz-pre-wrap !important; /*Mozilla */
         white-space: normal;
     }
+    .displayNone
+    {
+        display: none;
+    }
+    .CompPerfTable td
+    {
+        padding-left: 5px;
+    }
 </style>
 <script type="text/javascript" language="javascript">
-
     function EnableResetButtonForDateIntervalChange(sender, args) {
         var btnreset = document.getElementById('<%= btnResetFilter.ClientID %>');
         var hdnResetFilter = document.getElementById('<%= hdnResetFilter.ClientID %>');
@@ -33,6 +40,88 @@
         }
     }
 
+    function CheckIfDatesValid() {
+
+        txtStartDate = document.getElementById('<%= diRange.ClientID %>_tbFrom');
+        txtEndDate = document.getElementById('<%= diRange.ClientID %>_tbTo');
+        var startDate = new Date(txtStartDate.value);
+        var endDate = new Date(txtEndDate.value);
+        if (txtStartDate.value != '' && txtEndDate.value != ''
+            && startDate <= endDate) {
+            var btnCustDatesClose = document.getElementById('<%= btnCustDatesClose.ClientID %>');
+            hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
+            hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
+            lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
+            var startDate = new Date(txtStartDate.value);
+            var endDate = new Date(txtEndDate.value);
+            var startDateStr = startDate.format("MM/dd/yyyy");
+            var endDateStr = endDate.format("MM/dd/yyyy");
+            hdnStartDate.value = startDateStr;
+            hdnEndDate.value = endDateStr;
+            lblCustomDateRange.innerHTML = '(' + startDateStr + '&nbsp;-&nbsp;' + endDateStr + ')';
+            btnCustDatesClose.click();
+
+        }
+        return false;
+    }
+
+    function CheckAndShowCustomDatesPoup(ddlPeriod) {
+        imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
+        lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
+        if (ddlPeriod.value == '0') {
+            imgCalender.attributes["class"].value = "";
+            lblCustomDateRange.attributes["class"].value = "";
+            if (imgCalender.fireEvent) {
+                imgCalender.style.display = "";
+                lblCustomDateRange.style.display = "";
+                imgCalender.click();
+            }
+            if (document.createEvent) {
+                var event = document.createEvent('HTMLEvents');
+                event.initEvent('click', true, true);
+                imgCalender.dispatchEvent(event);
+            }
+        }
+        else {
+            imgCalender.attributes["class"].value = "displayNone";
+            lblCustomDateRange.attributes["class"].value = "displayNone";
+            if (imgCalender.fireEvent) {
+                imgCalender.style.display = "none";
+                lblCustomDateRange.style.display = "none";
+            }
+        }
+    }
+    function ReAssignStartDateEndDates() {
+        hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
+        hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
+        txtStartDate = document.getElementById('<%= diRange.ClientID %>_tbFrom');
+        txtEndDate = document.getElementById('<%= diRange.ClientID %>_tbTo');
+        hdnStartDateCalExtenderBehaviourId = document.getElementById('<%= hdnStartDateCalExtenderBehaviourId.ClientID %>');
+        hdnEndDateCalExtenderBehaviourId = document.getElementById('<%= hdnEndDateCalExtenderBehaviourId.ClientID %>');
+
+        var endDateCalExtender = $find(hdnEndDateCalExtenderBehaviourId.value);
+        var startDateCalExtender = $find(hdnStartDateCalExtenderBehaviourId.value);
+        if (startDateCalExtender != null) {
+            startDateCalExtender.set_selectedDate(hdnStartDate.value);
+        }
+        if (endDateCalExtender != null) {
+            endDateCalExtender.set_selectedDate(hdnEndDate.value);
+        }
+        CheckIfDatesValid();
+    }
+
+    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+
+    function endRequestHandle(sender, Args) {
+        imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
+        lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
+        ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
+        if (imgCalender.fireEvent && ddlPeriod.value != '0') {
+            imgCalender.style.display = "none";
+            lblCustomDateRange.style.display = "none";
+        }
+    }
+
 </script>
 <uc:LoadingProgress ID="lpActivityLog" runat="server" />
 <asp:UpdatePanel ID="updActivityLog" runat="server" UpdateMode="Conditional">
@@ -44,21 +133,42 @@
                         <table id="tblActivitylog" runat="server" style="white-space: nowrap;">
                             <tr>
                                 <td id="tdEventSource" runat="server">
-                                    <asp:Label ID="lblDisplay" runat="server" Text="Show"></asp:Label>
-                                    <asp:DropDownList ID="ddlEventSource" runat="server" EnableViewState="true">
+                                    <asp:Label ID="lblDisplay" runat="server" Text="Show "></asp:Label><asp:DropDownList
+                                        ID="ddlEventSource" runat="server" EnableViewState="true">
                                     </asp:DropDownList>
                                 </td>
-                                <td id="tdYear" runat="server" style="padding-left: 4px;">
-                                    <uc:DateInterval ID="diYear" IsFromDateRequired="true" IsToDateRequired="true" runat="server"
-                                        FromToDateFieldWidth="65" />
+                                <td id="tdYear" runat="server">
+                                    <asp:Label ID="Label3" runat="server" Text="  over "></asp:Label><asp:DropDownList
+                                        ID="ddlPeriod" runat="server" EnableViewState="true">
+                                        <asp:ListItem Text="Last Day" Value="-1"></asp:ListItem>
+                                        <asp:ListItem Text="Last Week" Selected="True" Value="-7"></asp:ListItem>
+                                        <asp:ListItem Text="Last Month" Value="-30"></asp:ListItem>
+                                        <asp:ListItem Text="Last 3 months" Value="-90"></asp:ListItem>
+                                        <asp:ListItem Text="Last 6 months" Value="-180"></asp:ListItem>
+                                        <asp:ListItem Text="Last Year" Value="-360"></asp:ListItem>
+                                        <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
+                                    </asp:DropDownList>
+                                    <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
+                                        EnableViewState="true" OkControlID="btnCustDatesClose" CancelControlID="btnCustDatesCancel"
+                                        BackgroundCssClass="modalBackground" PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates"
+                                        DropShadow="false" OnCancelScript="ReAssignStartDateEndDates();" OnOkScript="return false;" />
+                                    <asp:HiddenField ID="hdnStartDate" EnableViewState="true" runat="server" Value="" />
+                                    <asp:HiddenField ID="hdnEndDate" EnableViewState="true" runat="server" Value="" />
+                                    <asp:HiddenField ID="hdnStartDateCalExtenderBehaviourId" EnableViewState="true" runat="server"
+                                        Value="" />
+                                    <asp:HiddenField ID="hdnEndDateCalExtenderBehaviourId" EnableViewState="true" runat="server"
+                                        Value="" />
+                                    <asp:Label ID="lblCustomDateRange" EnableViewState="true" Style="font-weight: bold;"
+                                        runat="server" Text=""></asp:Label>
+                                    <asp:Image ID="imgCalender" EnableViewState="true" runat="server" ImageUrl="~/Images/calendar.gif" />
                                 </td>
                                 <td id="spnPersons" runat="server">
-                                    <asp:Label ID="Label1" runat="server" Text="user "></asp:Label><asp:DropDownList
-                                        ID="ddlPersonName" runat="server" DataSourceID="odsPersons" DataTextField="PersonLastFirstName"
+                                    <asp:Label ID="Label1" runat="server" Text="for "></asp:Label><asp:DropDownList ID="ddlPersonName"
+                                        runat="server" DataSourceID="odsPersons" DataTextField="PersonLastFirstName"
                                         DataValueField="Id" OnDataBound="ddlPersonName_OnDataBound" />
                                 </td>
-                                <td id="spnProjects" runat="server" style="padding-left: 4px;">
-                                    <asp:Label ID="Label2" runat="server" Text="for "></asp:Label><asp:DropDownList ID="ddlProjects"
+                                <td id="spnProjects" runat="server">
+                                    <asp:Label ID="Label2" runat="server" Text="on "></asp:Label><asp:DropDownList ID="ddlProjects"
                                         runat="server" DataSourceID="odsProjects" DataTextField="Name" DataValueField="Id"
                                         OnDataBound="ddlProjects_OnDataBound" />
                                 </td>
@@ -161,6 +271,41 @@
                 </td>
             </tr>
         </table>
+        <asp:Panel ID="pnlCustomDates" runat="server" BackColor="White" BorderColor="Black"
+            CssClass="ConfirmBoxClass" Style="padding-top: 20px; display: none;" BorderWidth="2px">
+            <table class="WholeWidth">
+                <tr>
+                    <td align="center">
+                        <table>
+                            <tr>
+                                <td>
+                                    <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
+                                        EnableViewState="true" FromToDateFieldWidth="70" />
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="padding: 10px 0px 10px 0px;">
+                        <asp:Button ID="btnCustDatesOK" runat="server" Text="OK" Style="float: none !Important;"
+                            ValidationGroup="<%# ClientID %>" OnClientClick="return CheckIfDatesValid();"
+                            CausesValidation="true" />
+                        <asp:Button ID="btnCustDatesClose" runat="server" Style="display: none;" CausesValidation="true" />
+                        &nbsp; &nbsp;
+                        <asp:Button ID="btnCustDatesCancel" CausesValidation="false" runat="server" Text="Cancel"
+                            Style="float: none !Important;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        <asp:ValidationSummary ID="valSum" runat="server" />
+                    </td>
+                </tr>
+            </table>
+        </asp:Panel>
     </ContentTemplate>
     <Triggers>
         <asp:AsyncPostBackTrigger ControlID="btnUpdateView" EventName="Click" />
