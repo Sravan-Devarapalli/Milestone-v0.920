@@ -23,6 +23,7 @@ namespace DataTransferObjects
 		private const string CogsFormat = "<span class=\"Cogs\">{0}</span>";
 		private const decimal SmallFormatLimit = 1000M;
         private const string PercentFormat = "{0}%";
+        private const string HideText = "(Hidden)";
 
 		#endregion
 
@@ -90,6 +91,39 @@ namespace DataTransferObjects
 
 			return result;
 		}
+
+        public string ToString(bool personsWithHigherSeniorityExists)
+        {
+            decimal absValue = Math.Abs(Value);
+            string result = absValue.ToString(CurrencyLargeDisplayFormat);
+
+            if (Value < 0 || (FormatStyle & NumberFormatStyle.Negative) == NumberFormatStyle.Negative)
+            {
+                result = string.Format(CurrencyNegativeFormat, personsWithHigherSeniorityExists ? HideText : result);
+            }
+            if ((FormatStyle & NumberFormatStyle.Cogs) == NumberFormatStyle.Cogs)
+            {
+                result = string.Format(CogsFormat, personsWithHigherSeniorityExists ? HideText : result);
+            }
+            if ((FormatStyle & NumberFormatStyle.Margin) == NumberFormatStyle.Margin)
+            {
+                result = string.Format(Value < 0 ? BenchFormat : MarginFormat, personsWithHigherSeniorityExists ? HideText : result);
+            }
+            if ((FormatStyle & NumberFormatStyle.Revenue) == NumberFormatStyle.Revenue)
+            {
+                result = string.Format(RevenueFormat, personsWithHigherSeniorityExists ? HideText : result);
+            }
+            if ((FormatStyle & NumberFormatStyle.Total) == NumberFormatStyle.Total)
+            {
+                result = string.Format(TotalFormat, personsWithHigherSeniorityExists ? HideText : result);
+            }
+            if ((FormatStyle & NumberFormatStyle.Percent) == NumberFormatStyle.Percent)
+            {
+                result = string.Format(PercentFormat, personsWithHigherSeniorityExists ? HideText : absValue.ToString());
+            }
+
+            return result;
+        }
 
 		/// <summary>
 		/// Returns a hash code for the value.
