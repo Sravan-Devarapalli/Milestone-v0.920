@@ -16,8 +16,8 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
-<asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
-    <title>Person Time Entries Grouped By Projects | Practice Management</title>
+<asp:Content ID="Content3" ContentPlaceHolderID="title" runat="server">
+    <title>Time Entries By Person | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
     <script language="javascript" type="text/javascript" src="../Scripts/jquery-1.4.1.js"></script>
