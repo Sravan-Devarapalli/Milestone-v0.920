@@ -31,6 +31,8 @@ namespace PraticeManagement.Controls.Opportunities
         private const string NoteId = "NoteId";
         private const string OpportunityIdValue = "OpportunityId";
         private const string Watermarker = "watermarker";
+        private const string WordBreak = "<wbr />";
+        private const string Description = "<b>Description : </b>{0}";
 
         private const string ANIMATION_SHOW_SCRIPT =
                      @"<OnClick>
@@ -635,6 +637,30 @@ namespace PraticeManagement.Controls.Opportunities
                 return "<strike>" + personLastFirstName + "</strike>";
             }
 
+        }
+
+        protected static string GetWrappedText(String descriptionText)
+        {
+            if (descriptionText == null)
+            {
+                return string.Format(Description, string.Empty);
+            }
+
+            descriptionText = descriptionText.Trim();
+
+
+            if (descriptionText.Length > 500)
+            {
+                descriptionText = descriptionText.Substring(0, 500) + ".....";
+            }
+
+            for (int i = 0; i < descriptionText.Length; i = i + 15)
+            {
+                descriptionText = descriptionText.Insert(i, WordBreak);
+            }
+
+
+            return string.Format(Description, descriptionText); ;
         }
 
         private Table GetSummaryDetails()
