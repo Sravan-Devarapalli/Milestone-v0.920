@@ -15,5 +15,6 @@ namespace PraticeManagement.FilterObjects
         public BenchReportSortExpression SortExpression { get; set; }
         public SortDirection SortOrder { get; set; }
         public bool FiltersChanged { get; set; }
+        public int PeriodSelected { get; set; }
     }
 }
