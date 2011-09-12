@@ -40,7 +40,7 @@
                             <ajaxToolkit:CollapsiblePanelExtender ID="cpeSummary" runat="Server" TargetControlID="pnlSummary"
                                 ImageControlID="btnExpandCollapseSummary" CollapsedImage="Images/expand.jpg"
                                 ExpandedImage="Images/collapse.jpg" CollapseControlID="btnExpandCollapseSummary"
-                                ExpandControlID="btnExpandCollapseSummary" Collapsed="True" TextLabelID="lblSummary" />
+                                ExpandControlID="btnExpandCollapseSummary" Collapsed="true" TextLabelID="lblSummary" />
                             <asp:Image ID="btnExpandCollapseSummary" runat="server" ImageUrl="~/Images/collapse.jpg"
                                 ToolTip="Expand Summary Details" />&nbsp;
                             <asp:Label ID="lblSummary" runat="server" Text="Summary"></asp:Label>
