@@ -15,5 +15,6 @@ namespace PraticeManagement.FilterObjects
         public string ProjectSelected { get; set; }
         public int CurrentIndex { get; set; }
         public bool FiltersChanged { get; set; }
+        public int PeriodSelected { get; set; }
     }
 }
