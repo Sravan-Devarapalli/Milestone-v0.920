@@ -340,7 +340,7 @@ namespace PraticeManagement.Utils
                 }
                 else
                 {
-                    AddDataRowWithTwoCells(item.clientName, item.OpportunityCount + " " + item.clientSummary, topClientsTable, string.Format(BoldFormat, item.clientEstimatedRevenue.Value.ToString(CurrencyDisplayFormat) ), true);
+                    AddDataRowWithTwoCells(item.clientName, item.OpportunityCount.ToString(), topClientsTable, item.clientSummary, true, string.Format(BoldFormat, item.clientEstimatedRevenue.Value.ToString(CurrencyDisplayFormat)));
                 }
             }
 
@@ -678,7 +678,7 @@ namespace PraticeManagement.Utils
             table.Controls.Add(dataRow);
         }
 
-        private static void AddDataRowWithTwoCells(string value1, string value2, Table table, string value3 = null, bool keepEqualToSymbolSeperately = false)
+        private static void AddDataRowWithTwoCells(string value1, string value2, Table table, string value3 = null, bool keepEqualToSymbolSeperately = false, string value4 = null)
         {
             TableRow dataRow = new TableRow();
             AddNameCell(value1, dataRow, !keepEqualToSymbolSeperately);
@@ -707,6 +707,17 @@ namespace PraticeManagement.Utils
                 cell2.VerticalAlign = VerticalAlign.Middle;
 
                 dataRow.Controls.Add(cell2);
+            }
+
+            if (!string.IsNullOrEmpty(value4))
+            {
+                TableCell cell3 = new TableCell();
+                cell3.HorizontalAlign = (IsExporting.HasValue && IsExporting.Value) ? HorizontalAlign.Left : HorizontalAlign.Right;
+                cell3.Font.Bold = false;
+                cell3.Text = value4;
+                cell3.VerticalAlign = VerticalAlign.Middle;
+
+                dataRow.Controls.Add(cell3);
             }
 
             table.Controls.Add(dataRow);
