@@ -689,12 +689,8 @@ namespace PraticeManagement
                         {
                             // Project.Id != null is for regular projects only
                             bool greaterSeniorityExists = personListAnalyzer != null && personListAnalyzer.GreaterSeniorityExists;
-                            string grossMargin = greaterSeniorityExists ?
-                                Resources.Controls.HiddenCellText
-                                :
-                                interestValue.Value.GrossMargin.Value.ToString(CurrencyDisplayFormat);
 
-                            row.Cells[i].InnerHtml = GetMonthReportTableAsHtml(interestValue.Value.Revenue, grossMargin);
+                            row.Cells[i].InnerHtml = GetMonthReportTableAsHtml(interestValue.Value.Revenue, interestValue.Value.GrossMargin, greaterSeniorityExists);
                             break;
                         }
                     }
@@ -721,6 +717,7 @@ namespace PraticeManagement
             // Project totals
             PracticeManagementCurrency totalRevenue = 0M;
             PracticeManagementCurrency totalMargin = 0M;
+            totalMargin.FormatStyle = NumberFormatStyle.Margin;
 
             // Calculate Total Revenue and Margin for current Project
             if (project.ComputedFinancials != null)
@@ -734,12 +731,8 @@ namespace PraticeManagement
             {
                 // Displaying the project totals
                 bool greaterSeniorityExists = personListAnalyzer != null && personListAnalyzer.GreaterSeniorityExists;
-                string strTotalMargin = greaterSeniorityExists ?
-                                Resources.Controls.HiddenCellText
-                                :
-                                totalMargin.Value.ToString(CurrencyDisplayFormat);
 
-                row.Cells[row.Cells.Count - 1].InnerHtml = GetMonthReportTableAsHtml(totalRevenue, strTotalMargin);
+                row.Cells[row.Cells.Count - 1].InnerHtml = GetMonthReportTableAsHtml(totalRevenue, totalMargin, greaterSeniorityExists);
                 //string.Format(
                 //Resources.Controls.ProjectInterestFormat, totalRevenue, strTotalMargin);
                 row.Cells[row.Cells.Count - 1].Attributes["class"] = "CompPerfTotalSummary";
@@ -1508,8 +1501,7 @@ namespace PraticeManagement
                 {
                     if (IsInMonth(interestValue.Key, monthBegin, monthEnd))
                     {
-                        var grossMargin = OneGreaterSeniorityExists ? Resources.Controls.HiddenCellText : interestValue.Value.GrossMargin.Value.ToString(CurrencyDisplayFormat);
-                        row.Cells[i].InnerHtml = GetMonthReportTableAsHtml(interestValue.Value.Revenue, grossMargin);
+                        row.Cells[i].InnerHtml = GetMonthReportTableAsHtml(interestValue.Value.Revenue, interestValue.Value.GrossMargin, OneGreaterSeniorityExists);
 
                         //string.Format(Resources.Controls.ProjectInterestFormat,
                         //interestValue.Value.Revenue,
@@ -1522,6 +1514,7 @@ namespace PraticeManagement
             // Project totals
             PracticeManagementCurrency totalRevenue = 0M;
             PracticeManagementCurrency totalMargin = 0M;
+            totalMargin.FormatStyle = NumberFormatStyle.Margin;
 
             // Calculate Total Revenue and Margin for current Project
             if (summary.ComputedFinancials != null)
@@ -1529,51 +1522,40 @@ namespace PraticeManagement
                 totalRevenue = summary.ComputedFinancials.Revenue;
                 totalMargin = summary.ComputedFinancials.GrossMargin;
             }
-            var totalGrossMargin = OneGreaterSeniorityExists ? Resources.Controls.HiddenCellText : totalMargin.Value.ToString(CurrencyDisplayFormat);
-            row.Cells[row.Cells.Count - 1].InnerHtml = GetMonthReportTableAsHtml(totalRevenue, totalGrossMargin);
+            row.Cells[row.Cells.Count - 1].InnerHtml = GetMonthReportTableAsHtml(totalRevenue, totalMargin, OneGreaterSeniorityExists);
         }
 
         #region Month table from resources
-        private Table GetMonthReportTable(PracticeManagementCurrency revenue, string margin)
+
+        private Table GetMonthReportTable(PracticeManagementCurrency revenue, PracticeManagementCurrency margin, bool greaterSeniorityExists)
         {
+            //var marginText = greaterSeniorityExists ? Resources.Controls.HiddenCellText : margin.Value.ToString(CurrencyDisplayFormat);
             var reportTable = new Table() { Width = Unit.Percentage(100) };
             var tr = new TableRow() { CssClass = "Revenue" };
             tr.Cells.Add(new TableCell() { HorizontalAlign = HorizontalAlign.Left, Text = "" });
 
             tr.Cells.Add(new TableCell() { HorizontalAlign = HorizontalAlign.Right, Text = string.Format(PracticeManagementCurrency.RevenueFormat, revenue.Value.ToString(CurrencyDisplayFormat)) });
             reportTable.Rows.Add(tr);
-            tr = new TableRow() { CssClass = "Margin" };
+            tr = new TableRow();// { CssClass = "Margin" };
             tr.Cells.Add(new TableCell() { HorizontalAlign = HorizontalAlign.Left, Text = "" });
             tr.Cells.Add(new TableCell()
             {
                 HorizontalAlign = HorizontalAlign.Right,
-                Text = margin.IndexOf("-") == 0 ?
-                       string.Format(PracticeManagementCurrency.BenchFormat, margin) :
-                            string.Format(PracticeManagementCurrency.MarginFormat, margin)
+                Text = margin.ToString(greaterSeniorityExists)//as part of #2786.
             });
             reportTable.Rows.Add(tr);
 
             return reportTable;
         }
 
-        private Table GetMonthReportTable(PracticeManagementCurrency revenue, PracticeManagementCurrency margin)
-        {
-            return GetMonthReportTable(revenue, margin.Value.ToString(CurrencyDisplayFormat));
-        }
-
-        //private string GetMonthReportTableAsHtml(PracticeManagementCurrency revenue, PracticeManagementCurrency margin)
-        //{
-        //    return GetMonthReportTableAsHtml(revenue, margin.Value.ToString(CurrencyDisplayFormat));
-        //}
-
-        private string GetMonthReportTableAsHtml(PracticeManagementCurrency revenue, string margin)
+        private string GetMonthReportTableAsHtml(PracticeManagementCurrency revenue, PracticeManagementCurrency margin, bool greaterSeniorityExists)
         {
             string outterHtml = string.Empty;
 
             var stringWriter = new System.IO.StringWriter();
 
 
-            var table = GetMonthReportTable(revenue, margin);
+            var table = GetMonthReportTable(revenue, margin, greaterSeniorityExists);
 
             var div = new Panel() { CssClass = "cell-pad" };
             div.Controls.Add(table);
