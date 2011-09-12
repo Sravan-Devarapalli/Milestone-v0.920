@@ -212,6 +212,7 @@ namespace PraticeManagement
             phActivityLog.Controls.Clear();
             ActivityLogControl activityLog = LoadControl("~/Controls/ActivityLogControl.ascx") as ActivityLogControl;
             activityLog.ID = "activityLog";
+            activityLog.EnableViewState = true;
             activityLog.IsFreshRequest = true;
             activityLog.OpportunityId = OpportunityId;
             activityLog.DisplayDropDownValue = ActivityEventSource.Opportunity;
