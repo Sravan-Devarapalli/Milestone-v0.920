@@ -1191,12 +1191,11 @@ namespace PraticeManagement.Controls.Milestones
 
                 IsErrorOccuredWhileUpdatingRow = false;
 
-                hdnId.Value = ddl.SelectedValue;
-                milestonePerson.Person = GetPersonBySelectedValue(ddl.SelectedValue);
-
 
                 if (IsSaveCommit)
                 {
+                    hdnId.Value = ddl.SelectedValue;
+                    milestonePerson.Person = GetPersonBySelectedValue(ddl.SelectedValue);
                     gvMilestonePersonEntries.EditIndex = -1;
                     SaveData(ref milestonePerson, ISDatBindRows);
                 }
