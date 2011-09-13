@@ -443,9 +443,6 @@
                     </tr>
                 </table>
             </div>
-            <asp:ShadowedTextButton ID="btnAddPerson" runat="server" OnClick="btnAddPerson_Click"
-                OnClientClick="if(this.attributes['ViewIndex'].value == '2'){ return false;}else
-            {return true;}" Text="Add Person" CssClass="add-btn" />
             <asp:Table ID="tblMilestoneDetailTabViewSwitch" runat="server" CssClass="CustomTabStyle">
                 <asp:TableRow ID="rowSwitcher" runat="server">
                     <asp:TableCell ID="cellFinancials" runat="server" CssClass="SelectedSwitch">
