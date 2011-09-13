@@ -4,6 +4,7 @@
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
+<%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc" TagName="DateInterval" %>
 <script type="text/javascript">
     function EnableResetButton() {
         var button = document.getElementById("<%= btnResetFilter.ClientID%>");
@@ -11,6 +12,85 @@
         if (button != null) {
             button.disabled = false;
             hiddenField.value = "true";
+        }
+    }
+
+    function CheckIfDatesValid() {
+        txtStartDate = document.getElementById('<%= (diRange.FindControl("tbFrom") as TextBox).ClientID %>');
+        txtEndDate = document.getElementById('<%= (diRange.FindControl("tbTo") as TextBox).ClientID %>');
+        var startDate = new Date(txtStartDate.value);
+        var endDate = new Date(txtEndDate.value);
+        if (txtStartDate.value != '' && txtEndDate.value != ''
+            && startDate <= endDate) {
+
+            var btnCustDatesClose = document.getElementById('<%= btnCustDatesClose.ClientID %>');
+            hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
+            hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
+            lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
+            var startDateStr = startDate.format("MM/dd/yyyy");
+            var endDateStr = endDate.format("MM/dd/yyyy");
+            hdnStartDate.value = startDateStr;
+            hdnEndDate.value = endDateStr;
+            lblCustomDateRange.innerHTML = '(' + startDateStr + '&nbsp;-&nbsp;' + endDateStr + ')';
+            btnCustDatesClose.click();
+
+        }
+        return false;
+    }
+
+
+    function CheckAndShowCustomDatesPoup(ddlPeriod) {
+        imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
+        lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
+        if (ddlPeriod.value == '0') {
+            imgCalender.attributes["class"].value = "";
+            lblCustomDateRange.attributes["class"].value = "";
+            if (imgCalender.fireEvent) {
+                imgCalender.style.display = "";
+                lblCustomDateRange.style.display = "";
+                imgCalender.click();
+            }
+            if (document.createEvent) {
+                var event = document.createEvent('HTMLEvents');
+                event.initEvent('click', true, true);
+                imgCalender.dispatchEvent(event);
+            }
+        }
+        else {
+            imgCalender.attributes["class"].value = "displayNone";
+            lblCustomDateRange.attributes["class"].value = "displayNone";
+            if (imgCalender.fireEvent) {
+                imgCalender.style.display = "none";
+                lblCustomDateRange.style.display = "none";
+            }
+        }
+    }
+    function ReAssignStartDateEndDates() {
+        hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
+        hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
+        hdnStartDateCalExtenderBehaviourId = document.getElementById('<%= hdnStartDateCalExtenderBehaviourId.ClientID %>');
+        hdnEndDateCalExtenderBehaviourId = document.getElementById('<%= hdnEndDateCalExtenderBehaviourId.ClientID %>');
+
+        var endDateCalExtender = $find(hdnEndDateCalExtenderBehaviourId.value);
+        var startDateCalExtender = $find(hdnStartDateCalExtenderBehaviourId.value);
+        if (startDateCalExtender != null) {
+            startDateCalExtender.set_selectedDate(hdnStartDate.value);
+        }
+        if (endDateCalExtender != null) {
+            endDateCalExtender.set_selectedDate(hdnEndDate.value);
+        }
+        CheckIfDatesValid();
+    }
+
+    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+
+    function endRequestHandle(sender, Args) {
+        imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
+        lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
+        ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
+        if (imgCalender.fireEvent && ddlPeriod.value != '0') {
+            imgCalender.style.display = "none";
+            lblCustomDateRange.style.display = "none";
         }
     }
 </script>
@@ -26,6 +106,14 @@
     {
         padding-right: 5px;
     }
+    .displayNone
+    {
+        display: none;
+    }
+    .MinWidth
+    {
+        min-width: 150px;
+    }
 </style>
 <div class="filters">
     <div class="filter-section-color">
@@ -40,20 +128,28 @@
                     <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg"
                         ToolTip="Expand Filters and Sort Options" />
                 </td>
-                <td align="left" style="width: 118px;">
-                    <asp:Label ID="lblUtilizationFrom" runat="server" Text="Show Bench Costs"></asp:Label>
-                </td>
-                <td style="width: 30px; padding-right: 4px" align="left">
-                    <asp:Label ID="Label1" runat="server" Text="From "></asp:Label>
-                </td>
-                <td style="width: 110px;" align="left">
-                    <uc:MonthPicker ID="mpStartDate" runat="server" AutoPostBack="false" OnClientChange="EnableResetButton();" />
-                </td>
-                <td style="width: 15px;" align="left">
-                    <asp:Label ID="lblT0" runat="server" Text="to "></asp:Label>
-                </td>
-                <td style="width: 115px;" align="left">
-                    <uc:MonthPicker ID="mpEndDate" runat="server" AutoPostBack="false" OnClientChange="EnableResetButton();" />
+                <td align="left" style="white-space:nowrap; width:118px;">                 
+                        Show Bench Costs for &nbsp;
+                        <asp:DropDownList ID="ddlPeriod" runat="server" onchange="EnableResetButton(); CheckAndShowCustomDatesPoup(this);">
+                            <asp:ListItem Text="Current Month" Value="1" Selected="True"></asp:ListItem>
+                            <asp:ListItem Text="Previous Month" Value="-1"></asp:ListItem>
+                            <asp:ListItem Text="Current FY" Value="13"></asp:ListItem>
+                            <asp:ListItem Text="Previous FY" Value="-13"></asp:ListItem>
+                            <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
+                        </asp:DropDownList>
+                        &nbsp;
+                        <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
+                            CancelControlID="btnCustDatesCancel" OkControlID="btnCustDatesClose" BackgroundCssClass="modalBackground"
+                            PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates" DropShadow="false"
+                            OnCancelScript="ReAssignStartDateEndDates();" OnOkScript="return false;" />
+                        <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
+                        <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
+                        <asp:HiddenField ID="hdnStartDateCalExtenderBehaviourId" runat="server" Value="" />
+                        <asp:HiddenField ID="hdnEndDateCalExtenderBehaviourId" runat="server" Value="" />
+                        &nbsp;
+                        <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
+                        <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
+                        &nbsp;
                 </td>
                 <td style="width: 10px !important;" align="left">
                     <asp:CheckBox ID="chbIncludeOverHeads" runat="server" Style="width: 10px !important;"
@@ -94,6 +190,40 @@
             </tr>
         </table>
     </div>
+    <asp:Panel ID="pnlCustomDates" runat="server" BackColor="White" BorderColor="Black"
+            CssClass="ConfirmBoxClass" Style="padding-top: 20px; display: none;" BorderWidth="2px">
+            <table class="WholeWidth">
+                <tr>
+                    <td align="center">
+                        <table>
+                            <tr>
+                                <td>
+                                    <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
+                                        FromToDateFieldWidth="70" />
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="padding: 10px 0px 10px 0px;">
+                        <asp:Button ID="btnCustDatesOK" runat="server" OnClientClick="return CheckIfDatesValid();"
+                            ValidationGroup="<%# ClientID %>" Text="OK" Style="float: none !Important;" CausesValidation="true" />
+                        <asp:Button ID="btnCustDatesClose" runat="server" Style="display: none;" CausesValidation="true"
+                            OnClientClick="return false;" />
+                        &nbsp; &nbsp;
+                        <asp:Button ID="btnCustDatesCancel" runat="server" Text="Cancel" Style="float: none !Important;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        <asp:ValidationSummary ID="valSum" runat="server" />
+                    </td>
+                </tr>
+            </table>
+        </asp:Panel>
     <asp:Panel ID="pnlFilters" runat="server">
         <AjaxControlToolkit:TabContainer ID="TabContainer1" runat="server" ActiveTabIndex="0"
             CssClass="CustomTabStyle">
@@ -193,18 +323,18 @@
         ShowFooter="true" OnDataBound="gvBench_OnDataBound" GridLines="None" BackColor="White">
         <AlternatingRowStyle BackColor="#F9FAFF" />
         <Columns>
-            <asp:TemplateField ItemStyle-Width="220px">
+            <asp:TemplateField>
                 <HeaderTemplate>
                     <div class="ie-bg">
                         <asp:LinkButton ID="btnSortConsultant" runat="server" OnClick="btnSortConsultant_Click">Consultant Name</asp:LinkButton>
                     </div>
                 </HeaderTemplate>
                 <ItemTemplate>
-                    <asp:HyperLink ID="btnPersonName" CssClass="wrap" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("Name")) %>'
+                    <asp:HyperLink ID="btnPersonName" Width="220px" CssClass="wrap" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("Name")) %>'
                         NavigateUrl='<%# GetPersonDetailsUrlWithReturn(Eval("Client.Id")) %>' />
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField ItemStyle-Width="220px">
+            <asp:TemplateField ItemStyle-Width="220px" ItemStyle-CssClass="MinWidth">
                 <HeaderTemplate>
                     <div class="ie-bg">
                         <asp:LinkButton ID="btnSortPractice" runat="server" OnClick="btnSortPractice_Click">Practice Area</asp:LinkButton>
@@ -214,14 +344,14 @@
                     <asp:Label ID="lblPracticeName" runat="server" CssClass="wrap" Text='<%# Eval("Practice.Name") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField ItemStyle-Width="80px" ItemStyle-HorizontalAlign="Center">
+            <asp:TemplateField ItemStyle-HorizontalAlign="Center">
                 <HeaderTemplate>
                     <div class="ie-bg CompPerfDataTitle">
                         <asp:LinkButton ID="btnSortStatus" runat="server" OnClick="btnSortStatus_Click">Status</asp:LinkButton>
                     </div>
                 </HeaderTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="lblPracticeName" runat="server" Text='<%# Eval("ProjectNumber") %>'></asp:Label>
+                    <asp:Label ID="lblPracticeName" Width="70px" runat="server" Text='<%# Eval("ProjectNumber") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField Visible="false" />
@@ -281,18 +411,18 @@
             GridLines="None" BackColor="White">
             <AlternatingRowStyle BackColor="#F9FAFF" />
             <Columns>
-                <asp:TemplateField ItemStyle-Width="220px">
+                <asp:TemplateField>
                     <HeaderTemplate>
                         <div class="ie-bg">
                             <asp:LinkButton ID="btnSortConsultant" runat="server" OnClick="btnSortInternalConsultant_Click">Consultant Name</asp:LinkButton>
                         </div>
                     </HeaderTemplate>
                     <ItemTemplate>
-                        <asp:HyperLink ID="btnPersonName" CssClass="wrap" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("Name")) %>'
+                        <asp:HyperLink ID="btnPersonName" Width="220px" CssClass="wrap" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("Name")) %>'
                             NavigateUrl='<%# GetPersonDetailsUrlWithReturn(Eval("Client.Id")) %>' />
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField ItemStyle-Width="220px">
+                <asp:TemplateField ItemStyle-Width="220px" ItemStyle-CssClass="MinWidth">
                     <HeaderTemplate>
                         <div class="ie-bg">
                             <asp:LinkButton ID="btnSortPractice" runat="server" OnClick="btnSortInternalPractice_Click">Practice Area</asp:LinkButton>
@@ -302,14 +432,14 @@
                         <asp:Label ID="lblPracticeName" runat="server" CssClass="wrap" Text='<%# Eval("Practice.Name") %>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField ItemStyle-Width="80px" ItemStyle-HorizontalAlign="Center">
+                <asp:TemplateField ItemStyle-HorizontalAlign="Center">
                     <HeaderTemplate>
                         <div class="ie-bg CompPerfDataTitle">
                             <asp:LinkButton ID="btnSortStatus" runat="server" OnClick="btnSortInternalStatus_Click">Status</asp:LinkButton>
                         </div>
                     </HeaderTemplate>
                     <ItemTemplate>
-                        <asp:Label ID="lblPracticeName" runat="server" Text='<%# Eval("ProjectNumber") %>'></asp:Label>
+                        <asp:Label ID="lblPracticeName" Width="70px" runat="server" Text='<%# Eval("ProjectNumber") %>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField Visible="false" />
