@@ -1,6 +1,5 @@
-﻿<%@ Page Title="Person Time Entries Grouped By Projects | Practice Management" Language="C#"
-    MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true" CodeBehind="TimeEntriesByPerson.aspx.cs"
-    Inherits="PraticeManagement.Sandbox.TimeEntriesByPerson" %>
+﻿<%@ Page Title="Time Entry By Person | Practice Management" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
+    AutoEventWireup="true" CodeBehind="TimeEntriesByPerson.aspx.cs" Inherits="PraticeManagement.Sandbox.TimeEntriesByPerson" %>
 
 <%@ Import Namespace="DataTransferObjects" %>
 <%@ Import Namespace="DataTransferObjects.TimeEntry" %>
@@ -17,7 +16,7 @@
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <asp:Content ID="Content3" ContentPlaceHolderID="title" runat="server">
-    <title>Time Entries By Person | Practice Management</title>
+    <title>Time Entry By Person | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
     <script language="javascript" type="text/javascript" src="../Scripts/jquery-1.4.1.js"></script>
@@ -49,6 +48,14 @@
                 button.disabled = false;
                 hiddenField.value = "true";
             }
+        }
+
+        function CheckIsPostBackRequired(sender) {
+            var defaultDate = (new Date(sender.defaultValue)).format('M/d/yyyy');
+            if (sender.value == defaultDate) {
+                return false;
+            }
+            return true;
         }
 
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
@@ -210,7 +217,7 @@
             <asp:Panel ID="pnlList" runat="server">
                 <uc2:CalendarLegend ID="CalendarLegend" runat="server" />
                 <asp:DataList ID="dlPersons" runat="server" DataSourceID="odsPersonTimeEntries" CssClass="WholeWidth"
-                    OnItemDataBound="dlPersons_OnItemDataBound" OnItemCreated = "dlPersons_OnItemCreated ">
+                    OnItemDataBound="dlPersons_OnItemDataBound" OnItemCreated="dlPersons_OnItemCreated ">
                     <ItemTemplate>
                         <div style="padding-bottom: 5px;">
                             <font style="font-size: 20px; font-weight: bold;">
@@ -232,14 +239,14 @@
                                                         <ItemTemplate>
                                                             <th>
                                                             </th>
-                                                            <th style="padding-left: 5px;padding-right: 5px;" class="<%# PraticeManagement.Utils.Calendar.GetCssClassByCalendarItem((CalendarItem) Container.DataItem) %>">
+                                                            <th style="padding-left: 5px; padding-right: 5px;" class="<%# PraticeManagement.Utils.Calendar.GetCssClassByCalendarItem((CalendarItem) Container.DataItem) %>">
                                                                 <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd<br/>MMM d}")%>
                                                             </th>
                                                         </ItemTemplate>
                                                     </asp:Repeater>
                                                     <th>
                                                     </th>
-                                                    <th style="padding-left: 5px;padding-right: 5px;">
+                                                    <th style="padding-left: 5px; padding-right: 5px;">
                                                         Totals
                                                     </th>
                                                 </tr>
@@ -257,14 +264,14 @@
                                                 <ItemTemplate>
                                                     <td colspan="<%# GetColspan(((TimeEntryRecord)Container.DataItem).MilestoneDate, Container.ItemIndex) %>">
                                                     </td>
-                                                    <td style="padding-left: 5px;padding-right: 5px;">
+                                                    <td style="padding-left: 5px; padding-right: 5px;">
                                                         <%# DataBinder.Eval(Container.DataItem, "ActualHours", "{0:F2}") %>
                                                     </td>
                                                 </ItemTemplate>
                                             </asp:Repeater>
                                             <td colspan="<%# GetLastColspan() %>">
                                             </td>
-                                            <td style="font-weight: bold; padding-left: 5px;padding-right: 5px;">
+                                            <td style="font-weight: bold; padding-left: 5px; padding-right: 5px;">
                                                 <%# ProjectTotals.ToString(PraticeManagement.Constants.Formatting.DoubleFormat) %>
                                             </td>
                                         </tr>
@@ -279,14 +286,14 @@
                                                 <ItemTemplate>
                                                     <td colspan="<%# GetColspan(((KeyValuePair<DateTime, double>)Container.DataItem).Key, Container.ItemIndex) %>">
                                                     </td>
-                                                    <td style="padding-left: 5px;padding-right: 5px;">
+                                                    <td style="padding-left: 5px; padding-right: 5px;">
                                                         <%# DataBinder.Eval(Container.DataItem, "Value", "{0:F2}") %>
                                                     </td>
                                                 </ItemTemplate>
                                             </asp:Repeater>
                                             <td id="tdExtracolumns" runat="server">
                                             </td>
-                                            <td style="font-size: 125%; padding-left: 5px;padding-right: 5px;">
+                                            <td style="font-size: 125%; padding-left: 5px; padding-right: 5px;">
                                                 <%# GrandTotal.ToString(PraticeManagement.Constants.Formatting.DoubleFormat) %>
                                             </td>
                                         </tr>
