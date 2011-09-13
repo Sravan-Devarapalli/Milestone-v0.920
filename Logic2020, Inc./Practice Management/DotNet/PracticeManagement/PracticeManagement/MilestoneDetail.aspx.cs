@@ -314,9 +314,6 @@ namespace PraticeManagement
                 hdnEditRowIndex.Value = string.Empty;
             }
 
-            btnAddPerson.Visible = MilestoneId.HasValue;
-            btnAddPerson.Attributes["ViewIndex"] = mvMilestoneDetailTab.ActiveViewIndex.ToString();
-
         }
 
         protected void cstCheckStartDateForExpensesExistance_OnServerValidate(object sender, ServerValidateEventArgs args)
@@ -1446,12 +1443,7 @@ namespace PraticeManagement
         {
             return MilestoneId.HasValue;
         }
-
-        protected void btnAddPerson_Click(object sender, EventArgs e)
-        {
-            SelectView(btnResources, 2, false);
-            LoadActiveTabIndex(2);
-        }
+        
 
         protected void vwResources_OnActivate(object sender, EventArgs e)
         {
