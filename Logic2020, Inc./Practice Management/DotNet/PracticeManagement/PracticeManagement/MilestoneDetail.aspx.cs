@@ -52,7 +52,7 @@ namespace PraticeManagement
                                                                     @"Select Cancel to select another start date or to manually update Resource(s) attached to this milestone." + "<br/>";
         private const string RemoveMilestonePersonsPopupMessageForEndDate = @"You are trying to set an end date ({0}) for the milestone that is before the following Resource(s) hire date:{1} If you Select OK these Resource(s) will be removed from the milestone and the end date will be updated." + "<br/>" +
                                                                     @"Select Cancel to select another end date or to manually update Resource(s) attached to this milestone." + "<br/>";
-        
+
 
         private const string format = "{0} {1} ({2})";
         #endregion
@@ -450,7 +450,7 @@ namespace PraticeManagement
                             if (financials.Key.Month == dtTemp.Month && financials.Key.Year == dtTemp.Year)
                                 row.Cells[currentColumnIndex].Text =
                                     string.Format(Resources.Controls.MilestoneInterestFormat,
-                                                  financials.Value.Revenue,financials.Value.GrossMargin.ToString(isOtherGreater),
+                                                  financials.Value.Revenue, financials.Value.GrossMargin.ToString(isOtherGreater),
                                                   financials.Value.HoursBilled);
                         }
                     }
@@ -1443,7 +1443,7 @@ namespace PraticeManagement
         {
             return MilestoneId.HasValue;
         }
-        
+
 
         protected void vwResources_OnActivate(object sender, EventArgs e)
         {
@@ -1479,6 +1479,10 @@ namespace PraticeManagement
                         }
                         else
                         {
+                            hrBetweenCMSDandCMED.Visible = false;
+                            hrBetweenCMEDandRMSD.Visible = false;
+                            hrBetweenRMSDandRMED.Visible = false;
+
                             if (PeriodFrom > dtpPeriodFrom.DateValue)
                             {
                                 if (PeriodFrom < dtpPeriodTo.DateValue)
@@ -1544,6 +1548,23 @@ namespace PraticeManagement
                             {
                                 trShowSaveandCancel.Visible = true;
                             }
+
+
+                            if (tblchangeMilestonePersonsForStartDate.Visible && (tblchangeMilestonePersonsForEndDate.Visible || tblRemoveMilestonePersonsForStartDate.Visible || tblRemoveMilestonePersonsForEndDate.Visible))
+                            {
+                                hrBetweenCMSDandCMED.Visible = true;
+                            }
+
+                            if (tblchangeMilestonePersonsForEndDate.Visible && (tblRemoveMilestonePersonsForStartDate.Visible ||tblRemoveMilestonePersonsForEndDate.Visible))
+                            {
+                                hrBetweenCMEDandRMSD.Visible = true;
+                            }
+
+                            if (tblRemoveMilestonePersonsForStartDate.Visible && tblRemoveMilestonePersonsForEndDate.Visible)
+                            {
+                                hrBetweenRMSDandRMED.Visible = true;
+                            }
+
                         }
                     }
                     catch
