@@ -1210,6 +1210,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.RadioButton rbtnchangeMileStoneStartDate;
         
         /// <summary>
+        /// hrBetweenCMSDandCMED control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl hrBetweenCMSDandCMED;
+        
+        /// <summary>
         /// tblchangeMilestonePersonsForEndDate control.
         /// </summary>
         /// <remarks>
@@ -1246,6 +1255,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.RadioButton rbtnchangeMileStoneEndDate;
         
         /// <summary>
+        /// hrBetweenCMEDandRMSD control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl hrBetweenCMEDandRMSD;
+        
+        /// <summary>
         /// tblRemoveMilestonePersonsForStartDate control.
         /// </summary>
         /// <remarks>
@@ -1280,6 +1298,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RadioButton rbtnCancelStartDate;
+        
+        /// <summary>
+        /// hrBetweenRMSDandRMED control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl hrBetweenRMSDandRMED;
         
         /// <summary>
         /// tblRemoveMilestonePersonsForEndDate control.
