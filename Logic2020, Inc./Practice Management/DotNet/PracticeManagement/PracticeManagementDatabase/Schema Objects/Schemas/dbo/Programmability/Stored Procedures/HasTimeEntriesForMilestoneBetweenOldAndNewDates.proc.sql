@@ -7,13 +7,21 @@
 AS
 BEGIN
 DECLARE @Result BIT , 
-		@MileStoneStartDate  DATETIME,
+		@MileStoneStartDate  DATETIME, 
 		@MileStoneEndDate  DATETIME,
 		@SwapStartDate  DATETIME,
-		@SwapEndDate  DATETIME
+		@SwapEndDate  DATETIME,
+		@OldStartDate DATETIME,
+		@OldEndDate DATETIME,
+		@NewStartDate DATETIME,
+		@NewEndDate DATETIME
 
+SELECT @NewStartDate = @StartDate, @NewEndDate = @EndDate
+ 
 SELECT @MileStoneStartDate = m.StartDate
-	   ,@MileStoneEndDate =m.ProjectedDeliveryDate
+	   ,@MileStoneEndDate =m.ProjectedDeliveryDate,
+	   @OldStartDate =m.StartDate,
+	   @OldEndDate =m.ProjectedDeliveryDate
 	   FROM Milestone AS m
 	   WHERE m.MilestoneId = @MilestoneId
 
@@ -29,13 +37,13 @@ BEGIN
   SELECT @EndDate = @MileStoneEndDate , @MileStoneEndDate = @SwapEndDate
 END
 
-IF EXISTS(SELECT 1 FROM v_TimeEntries as te	where te.MilestoneId = @MilestoneId AND
-			 MilestoneDate  BETWEEN @StartDate AND @MileStoneStartDate)
+IF EXISTS(SELECT 1 FROM v_TimeEntries as te	where te.MilestoneId = @MilestoneId   AND @OldStartDate < @NewStartDate AND
+			 MilestoneDate  BETWEEN @StartDate AND @MileStoneStartDate - 1 )
 BEGIN 
 	SELECT @Result=1
 END
-ELSE IF EXISTS(SELECT 1 FROM v_TimeEntries as te	where te.MilestoneId = @MilestoneId AND
-			 MilestoneDate  BETWEEN @EndDate AND @MileStoneEndDate)
+ELSE IF EXISTS(SELECT 1 FROM v_TimeEntries as te	where te.MilestoneId = @MilestoneId AND @OldEndDate > @NewEndDate AND
+			 MilestoneDate  BETWEEN @EndDate + 1 AND @MileStoneEndDate)
 BEGIN 
 	SELECT @Result=1
 END
