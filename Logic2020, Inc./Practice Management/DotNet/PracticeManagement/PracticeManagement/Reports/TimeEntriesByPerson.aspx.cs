@@ -39,6 +39,9 @@ namespace PraticeManagement.Sandbox
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            TextBox fromDate = diRange.FindControl("tbFrom") as TextBox;
+            TextBox toDate = diRange.FindControl("tbTo") as TextBox;
+
             if (!IsPostBack)
             {
                 Utils.Generic.InitStartEndDate(diRange);
@@ -60,8 +63,7 @@ namespace PraticeManagement.Sandbox
                 AjaxControlToolkit.CalendarExtender fromDateExt = diRange.FindControl("clFromDate") as AjaxControlToolkit.CalendarExtender;
                 AjaxControlToolkit.CalendarExtender toDateExt = diRange.FindControl("clToDate") as AjaxControlToolkit.CalendarExtender;
 
-                TextBox fromDate = diRange.FindControl("tbFrom") as TextBox;
-                TextBox toDate = diRange.FindControl("tbTo") as TextBox;
+
 
                 fromDate.AutoPostBack = true;
                 toDate.AutoPostBack = true;
@@ -69,19 +71,14 @@ namespace PraticeManagement.Sandbox
                 toDate.CausesValidation = true;
                 fromDateExt.OnClientDateSelectionChanged = "EnableResetButton";
                 toDateExt.OnClientDateSelectionChanged = "EnableResetButton";
-                //fromDate.Attributes.Add("onchange", "EnableResetButton();");
-                //toDate.Attributes.Add("onchange", "EnableResetButton();");
-
             }
-
-            TextBox from= diRange.FindControl("tbFrom") as TextBox;
-            TextBox to = diRange.FindControl("tbTo") as TextBox;
-            from.TextChanged += diRange_SelectionChanged;
-            to.TextChanged += diRange_SelectionChanged;
-                     
+            fromDate.Attributes.Add("onchange", "return CheckIsPostBackRequired(this);");
+            toDate.Attributes.Add("onchange", "return CheckIsPostBackRequired(this);");
+            fromDate.TextChanged += diRange_SelectionChanged;
+            toDate.TextChanged += diRange_SelectionChanged;
         }
 
-              
+
         private void AddAttributesToCheckBoxes(ScrollingDropDown ddlpractices)
         {
             foreach (ListItem item in ddlpractices.Items)
@@ -369,7 +366,7 @@ namespace PraticeManagement.Sandbox
                 if (currentPersonItem != null)
                 {
                     currentPersonItem.Selected = true;
-                    
+
                 }
             }
         }
