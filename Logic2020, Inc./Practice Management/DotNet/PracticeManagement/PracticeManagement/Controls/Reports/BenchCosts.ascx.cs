@@ -30,8 +30,8 @@ namespace PraticeManagement.Controls.Reports
                 {
                     BenchReportContext reportContext = new BenchReportContext()
                     {
-                        Start = mpStartDate.MonthBegin,
-                        End = mpEndDate.MonthEnd,
+                        Start = BegPeriod,
+                        End = EndPeriod,
                         ActiveProjects = chbActiveProjects.Checked,
                         ProjectedProjects = chbProjectedProjects.Checked,
                         ExperimentalProjects = chbExperimentalProjects.Checked,
@@ -48,6 +48,96 @@ namespace PraticeManagement.Controls.Reports
             set
             {
                 ViewState[ReportContextKey] = value;
+            }
+        }
+
+        public DateTime BegPeriod
+        {
+            get
+            {
+                DateTime currentMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, Constants.Dates.FirstDay);
+                var periodSelected = int.Parse(ddlPeriod.SelectedValue);
+
+                if (periodSelected > 0)
+                {
+                    DateTime startMonth = new DateTime();
+
+
+                    if (periodSelected < 13)
+                    {
+                        startMonth = currentMonth;
+                    }
+                    else
+                    {
+                        Dictionary<string, DateTime> fPeriod = DataHelper.GetFiscalYearPeriod(currentMonth);
+                        startMonth = fPeriod["StartMonth"];
+                    }
+                    return startMonth;
+
+                }
+                else if (periodSelected < 0)
+                {
+                    DateTime startMonth = new DateTime();
+
+                    if (periodSelected > -13)
+                    {
+                        startMonth = currentMonth.AddMonths(Convert.ToInt32(ddlPeriod.SelectedValue));
+                    }
+                    else
+                    {
+                        Dictionary<string, DateTime> fPeriod = DataHelper.GetFiscalYearPeriod(currentMonth.AddYears(-1));
+                        startMonth = fPeriod["StartMonth"];
+                    }
+                    return startMonth;
+                }
+                else
+                {
+                    return diRange.FromDate.Value;
+                }
+            }
+        }
+
+        public DateTime EndPeriod
+        {
+            get
+            {
+                DateTime currentMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, Constants.Dates.FirstDay);
+                var periodSelected = int.Parse(ddlPeriod.SelectedValue);
+
+                if (periodSelected > 0)
+                {
+                    DateTime endMonth = new DateTime();
+
+                    if (periodSelected < 13)
+                    {
+                        endMonth = currentMonth.AddMonths(Convert.ToInt32(ddlPeriod.SelectedValue) - 1);
+                    }
+                    else
+                    {
+                        Dictionary<string, DateTime> fPeriod = DataHelper.GetFiscalYearPeriod(currentMonth);
+                        endMonth = fPeriod["EndMonth"];
+                    }
+                    return new DateTime(endMonth.Year, endMonth.Month, DateTime.DaysInMonth(endMonth.Year, endMonth.Month));
+                }
+                else if (periodSelected < 0)
+                {
+                    DateTime endMonth = new DateTime();
+
+                    if (periodSelected > -13)
+                    {
+                        endMonth = currentMonth.AddMonths(Convert.ToInt32(ddlPeriod.SelectedValue));
+                    }
+                    else
+                    {
+                        Dictionary<string, DateTime> fPeriod = DataHelper.GetFiscalYearPeriod(currentMonth.AddYears(-1));
+                        endMonth = fPeriod["EndMonth"];
+                    }
+                    return new DateTime(endMonth.Year, endMonth.Month, DateTime.DaysInMonth(endMonth.Year, endMonth.Month));
+                }
+                else
+                {
+                    return diRange.ToDate.Value;
+                }
             }
         }
 
@@ -292,6 +382,32 @@ namespace PraticeManagement.Controls.Reports
                 btnResetFilter.Attributes.Remove("disabled");
             }
             AddAttributesToCheckBoxes(this.cblPractices);
+        }
+
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            diRange.FromDate = BegPeriod;
+            diRange.ToDate = EndPeriod;
+            lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
+                    diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat),
+                    diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat)
+                    );
+            if (ddlPeriod.SelectedValue == "0")
+            {
+                lblCustomDateRange.Attributes.Add("class", "");
+                imgCalender.Attributes.Add("class", "");
+            }
+            else
+            {
+                lblCustomDateRange.Attributes.Add("class", "displayNone");
+                imgCalender.Attributes.Add("class", "displayNone");
+            }
+            hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+            hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+            var clFromDate = diRange.FindControl("clFromDate") as AjaxControlToolkit.CalendarExtender; 
+            var clToDate = diRange.FindControl("clToDate") as AjaxControlToolkit.CalendarExtender;
+            hdnStartDateCalExtenderBehaviourId.Value = clFromDate.BehaviorID;
+            hdnEndDateCalExtenderBehaviourId.Value = clToDate.BehaviorID;
         }
 
         private void DatabindGrid()
@@ -598,10 +714,9 @@ namespace PraticeManagement.Controls.Reports
         protected void btnResetFilter_Click(object sender, EventArgs e)
         {
             SelectAllItems(cblPractices);
-            mpStartDate.SelectedYear = DateTime.Today.Year;
-            mpStartDate.SelectedMonth = DateTime.Today.Month;
-            mpEndDate.SelectedYear = DateTime.Today.Year;
-            mpEndDate.SelectedMonth = DateTime.Today.Month;
+            ddlPeriod.SelectedValue = "1";
+            diRange.FromDate = BegPeriod;
+            diRange.ToDate = EndPeriod;
             chbActiveProjects.Checked = chbProjectedProjects.Checked = chbProjectedProjects.Checked = true;
             chbExperimentalProjects.Checked = false;
             chbIncludeZeroCostEmps.Checked = false;
