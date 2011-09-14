@@ -16,6 +16,7 @@
 <%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectPersons.ascx" TagName="ProjectPersons" %>
 <%@ Register Src="~/Controls/Generic/Notes.ascx" TagName="Notes" TagPrefix="uc" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
+<%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress" TagPrefix="uc" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Project Details | Practice Management</title>
 </asp:Content>
@@ -276,6 +277,7 @@
             word-wrap: break-word;
         }
     </style>
+    <uc:LoadingProgress ID="loadingProgress" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
             <table width="100%">
@@ -766,4 +768,3 @@
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
-
