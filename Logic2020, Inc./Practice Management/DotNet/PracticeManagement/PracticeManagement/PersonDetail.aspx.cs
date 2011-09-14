@@ -330,9 +330,13 @@ namespace PraticeManagement
 
         public bool ValidateAndSavePersonDetails()
         {
-            for (int i = 0; i < mvPerson.Views.Count; i++)
+            for (int i = 0, j = mvPerson.ActiveViewIndex; i < mvPerson.Views.Count; i++, j++)
             {
-                SelectView(rowSwitcher.Cells[i].Controls[0], i, true);
+                if (j == mvPerson.Views.Count)
+                {
+                    j = 0;
+                }
+                SelectView(rowSwitcher.Cells[j].Controls[0], j, true);
                 Page.Validate(valsPerson.ValidationGroup);
                 if (!Page.IsValid)
                 {
@@ -369,12 +373,12 @@ namespace PraticeManagement
 
             SelectView((Control)sender, viewIndex, false);
 
-            if (viewIndex == 8) //History
+            if (viewIndex == 9) //History
             {
                 activityLog.Update();
             }
 
-            if (viewIndex == 9) //Opportunities
+            if (viewIndex == 6) //Opportunities
             {
                 personOpportunities.DatabindOpportunities();
             }
@@ -1074,6 +1078,19 @@ namespace PraticeManagement
             }
         }
 
+        protected void cvPracticeArea_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (PersonStatusId.HasValue && PersonStatusId == PersonStatusType.Active)
+            {
+                if (string.IsNullOrEmpty(ddlDefaultPractice.SelectedValue))
+                {
+                    args.IsValid = false;
+                    return;
+                }
+            }
+            args.IsValid = true;
+        }
+
         protected void custCompensationCoversMilestone_ServerValidate(object source, ServerValidateEventArgs args)
         {
             // Checks if the person is active
@@ -1157,6 +1174,20 @@ namespace PraticeManagement
                     args.IsValid = false;
                 }
             }
+        }
+        
+        protected void cvRolesActiveStatus_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (PersonStatusId.HasValue && PersonStatusId == PersonStatusType.Active)
+            {
+                // Roles
+                if (!chblRoles.Items.Cast<ListItem>().Any(item => item.Selected))
+                {
+                    args.IsValid = false;
+                    return;
+                }
+            }
+            args.IsValid = true;
         }
 
         protected void custSeniority_ServerValidate(object sender, ServerValidateEventArgs e)
