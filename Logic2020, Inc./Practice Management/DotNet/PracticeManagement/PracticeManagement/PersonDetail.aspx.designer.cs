@@ -184,6 +184,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.DropDownList ddlDefaultPractice;
         
         /// <summary>
+        /// cvPracticeArea control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvPracticeArea;
+        
+        /// <summary>
         /// dtpHireDate control.
         /// </summary>
         /// <remarks>
@@ -544,13 +553,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.LinkButton btnProjects;
         
         /// <summary>
-        /// TableCell1 control.
+        /// cellOpportunities control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TableCell TableCell1;
+        protected global::System.Web.UI.WebControls.TableCell cellOpportunities;
         
         /// <summary>
         /// btnOppportunities control.
@@ -877,6 +886,33 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.Persons.PersonProjects personProjects;
         
         /// <summary>
+        /// vwOpportunities control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.View vwOpportunities;
+        
+        /// <summary>
+        /// pnOpportunities control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnOpportunities;
+        
+        /// <summary>
+        /// personOpportunities control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.OpportunityList personOpportunities;
+        
+        /// <summary>
         /// vwPermissions control.
         /// </summary>
         /// <remarks>
@@ -956,6 +992,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator valRecruterRole;
+        
+        /// <summary>
+        /// cvRolesActiveStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvRolesActiveStatus;
         
         /// <summary>
         /// chblRoles control.
@@ -1046,33 +1091,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.ActivityLogControl activityLog;
-        
-        /// <summary>
-        /// vwOpportunities control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.View vwOpportunities;
-        
-        /// <summary>
-        /// pnOpportunities control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnOpportunities;
-        
-        /// <summary>
-        /// personOpportunities control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.OpportunityList personOpportunities;
         
         /// <summary>
         /// valsPerson control.
