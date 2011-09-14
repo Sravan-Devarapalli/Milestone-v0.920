@@ -39,19 +39,19 @@ namespace PraticeManagement
         private const string LblTotalreimbursement = "lblTotalReimbursed";
         private const string LblTotalreimbursementamount = "lblTotalReimbursementAmount";
 
-        private const string changeMilestonePersonsPopupMessageForStartDate = @"You are trying to set a new milestone start date ({0}) that is earlier than the existing milestone start date ({1}).<br/>
-                                                                    Select ""Change Milestone and Resources""  to update the start dates for all of the Resources attached to this milestone to ({2})
-                                                                    or Select ""Change Milestone Only"" to leave the Resource start dates unchanged." + "<br/>" +
-                                                                   "<b>Note:</b>  If any Resource(s) has a hire date after the new milestone start date their new start date will be their hire date." + "<br/>";
+        private const string changeMilestonePersonsPopupMessageForStartDate = @"<p>You are trying to set a new milestone start date ({0}) that is earlier than the existing milestone start date ({1}).</p><br/>
+                                                                    <p>Select ""Change Milestone and Resources""  to update the start dates for all of the Resources attached to this milestone to ({2})
+                                                                    or Select ""Change Milestone Only"" to leave the Resource start dates unchanged.</p>" + "<br/><p>" +
+                                                                   "<b>Note:</b>  If any Resource(s) has a hire date after the new milestone start date their new start date will be their hire date.</p>" + "<br/>";
 
-        private const string changeMilestonePersonsPopupMessageForEndDate = @"You are trying to set a new milestone end date ({0}) that is later than the existing milestone end date ({1}).<br/>
-                                                                Select ""Change Milestone and Resources""  to update the end dates for all of the Resources attached to this milestone to ({2}) or
-                                                                Select ""Change Milestone Only"" to leave the Resource end dates unchanged." + "<br/>" +
-                                                                "<b>Note:</b>  If any Resource(s) has a termination date before the new milestone end date their new end date will be their termination date." + "<br/>";
-        private const string RemoveMilestonePersonsPopupMessageForStartDate = @"You are trying to set a start date ({0}) for the milestone that is later than the following Resource(s) termination date:{1} Select OK to remove these Resource(s) from the milestone and update the milestone start date." + "<br/>" +
-                                                                    @"Select Cancel to select another start date or to manually update Resource(s) attached to this milestone." + "<br/>";
-        private const string RemoveMilestonePersonsPopupMessageForEndDate = @"You are trying to set an end date ({0}) for the milestone that is before the following Resource(s) hire date:{1} If you Select OK these Resource(s) will be removed from the milestone and the end date will be updated." + "<br/>" +
-                                                                    @"Select Cancel to select another end date or to manually update Resource(s) attached to this milestone." + "<br/>";
+        private const string changeMilestonePersonsPopupMessageForEndDate = @"<p>You are trying to set a new milestone end date ({0}) that is later than the existing milestone end date ({1}).</p><br/>
+                                                                <p>Select ""Change Milestone and Resources""  to update the end dates for all of the Resources attached to this milestone to ({2}) or
+                                                                Select ""Change Milestone Only"" to leave the Resource end dates unchanged.</p>" + "<br/><p>" +
+                                                                "<b>Note:</b>  If any Resource(s) has a termination date before the new milestone end date their new end date will be their termination date.</p>" + "<br/>";
+        private const string RemoveMilestonePersonsPopupMessageForStartDate = @"<p>You are trying to set a start date ({0}) for the milestone that is later than the following Resource(s) termination date:{1} <br/> Select OK to remove these Resource(s) from the milestone and update the milestone start date.</p>" + "<br/><p>" +
+                                                                    @"Select Cancel to select another start date or to manually update Resource(s) attached to this milestone.</p>" + "<br/>";
+        private const string RemoveMilestonePersonsPopupMessageForEndDate = @"<p>You are trying to set an end date ({0}) for the milestone that is before the following Resource(s) hire date:{1} <br/> If you Select OK these Resource(s) will be removed from the milestone and the end date will be updated.</p>" + "<br/><p>" +
+                                                                    @"Select Cancel to select another end date or to manually update Resource(s) attached to this milestone.</p>" + "<br/>";
 
 
         private const string format = "{0} {1} ({2})";
@@ -1555,7 +1555,7 @@ namespace PraticeManagement
                                 hrBetweenCMSDandCMED.Visible = true;
                             }
 
-                            if (tblchangeMilestonePersonsForEndDate.Visible && (tblRemoveMilestonePersonsForStartDate.Visible ||tblRemoveMilestonePersonsForEndDate.Visible))
+                            if (tblchangeMilestonePersonsForEndDate.Visible && (tblRemoveMilestonePersonsForStartDate.Visible || tblRemoveMilestonePersonsForEndDate.Visible))
                             {
                                 hrBetweenCMEDandRMSD.Visible = true;
                             }
