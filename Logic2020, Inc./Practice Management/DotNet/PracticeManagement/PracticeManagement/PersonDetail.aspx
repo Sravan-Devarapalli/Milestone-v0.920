@@ -31,7 +31,7 @@
     Person Details
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
- <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
+    <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
         /*
         This script is needed to initialize select all/none behavior for checkbox lists
@@ -52,7 +52,7 @@
 
         function SetTooltipText(descriptionText, hlinkObj) {
             var hlinkObjct = $('#' + hlinkObj.id);
-            var displayPanel = $('#<%= personOpportunities.ClientID %>_oppNameToolTipHolder'); 
+            var displayPanel = $('#<%= personOpportunities.ClientID %>_oppNameToolTipHolder');
             iptop = hlinkObjct.offset().top - hlinkObjct[0].offsetHeight;
             ipleft = hlinkObjct.offset().left + hlinkObjct[0].offsetWidth + 10;
             iptop = iptop;
@@ -68,7 +68,7 @@
 
         function HidePanel() {
 
-            var displayPanel = $('#<%= personOpportunities.ClientID %>_oppNameToolTipHolder'); 
+            var displayPanel = $('#<%= personOpportunities.ClientID %>_oppNameToolTipHolder');
             displayPanel.hide();
         }
 
@@ -103,7 +103,7 @@
             }
 
         }
-          Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
         function endRequestHandle(sender, Args) {
             ModifyInnerTextToWrapText();
             var activityLog = document.getElementById('<%= activityLog.ClientID%>');
@@ -188,7 +188,7 @@
             CheckIfDatesValid();
         }
 
-               
+
         function SetWrapText(str) {
             for (var i = 30; i < str.length; i = i + 10) {
                 str = str.slice(0, i) + "<wbr/>" + str.slice(i, str.length);
@@ -196,42 +196,41 @@
             return str;
         }
 
-    function GetWrappedText(childObj) {
-        if (childObj != null) {
+        function GetWrappedText(childObj) {
+            if (childObj != null) {
 
-            for (var i = 0; i < childObj.children.length; i++) {
-                if (childObj.children[i] != null) {
-                    if (childObj.children[i].children.length == 0) {
-                        if (childObj.children[i].innerHTML != null && childObj.children[i].innerHTML != "undefined" && childObj.children[i].innerHTML.length > 70) {
-                            childObj.children[i].innerHTML = SetWrapText(childObj.children[i].innerHTML);
-                        } 
+                for (var i = 0; i < childObj.children.length; i++) {
+                    if (childObj.children[i] != null) {
+                        if (childObj.children[i].children.length == 0) {
+                            if (childObj.children[i].innerHTML != null && childObj.children[i].innerHTML != "undefined" && childObj.children[i].innerHTML.length > 70) {
+                                childObj.children[i].innerHTML = SetWrapText(childObj.children[i].innerHTML);
+                            }
+                        }
                     }
-                }
 
+                }
             }
         }
-    }
 
-    function ModifyInnerTextToWrapText() {
-     if (navigator.userAgent.indexOf(" Firefox/") > -1) {
-            var tbl = $("table[id*='gvActivities']");
-            if (tbl != null && tbl.length > 0) {
-                var gvActivitiesclientId = tbl[0].id;
-                var lastTds = $('#' + gvActivitiesclientId + ' tr td:nth-child(3)');
+        function ModifyInnerTextToWrapText() {
+            if (navigator.userAgent.indexOf(" Firefox/") > -1) {
+                var tbl = $("table[id*='gvActivities']");
+                if (tbl != null && tbl.length > 0) {
+                    var gvActivitiesclientId = tbl[0].id;
+                    var lastTds = $('#' + gvActivitiesclientId + ' tr td:nth-child(3)');
 
-                for (var i = 0; i < lastTds.length; i++) {
-                    GetWrappedText(lastTds[i]);
+                    for (var i = 0; i < lastTds.length; i++) {
+                        GetWrappedText(lastTds[i]);
+                    }
                 }
             }
-       }
-    }
+        }
     </script>
     <%--
         The following script is needed to implement dirty checks on Projects tab        
         Use Page.ClientScript.GetPostBackClientHyperlink(...) method to generate
         personProjects control postback url
     --%>
-   
     <script type="text/javascript">
         function checkDirty(target, entityId) {
             if (showDialod()) {
@@ -478,7 +477,10 @@
                                         </asp:DropDownList>
                                     </td>
                                     <td>
-                                        &nbsp;
+                                        <asp:CustomValidator ID="cvPracticeArea" runat="server" ErrorMessage="The Default Practice Area is required for active person."
+                                            ToolTip="The Default Practice Area is required for active person." ValidationGroup="Person"
+                                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                            OnServerValidate="cvPracticeArea_ServerValidate"></asp:CustomValidator>
                                     </td>
                                     <td>
                                         Hire&nbsp;Date
@@ -679,10 +681,9 @@
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellRates" runat="server" Visible="false">
                                     <span class="bg" style="padding-bottom: 31px;"><span>
-                                        <asp:LinkButton ID="btnRates" runat="server" Text="Overhead and Margin"
-                                            CausesValidation="false" Style="display: inline-block; vertical-align: top;
-                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="3"></asp:LinkButton></span>
-                                    </span></span> </span></asp:TableCell>
+                                        <asp:LinkButton ID="btnRates" runat="server" Text="Overhead and Margin" CausesValidation="false"
+                                            Style="display: inline-block; vertical-align: top; text-align: center;" OnCommand="btnView_Command"
+                                            CommandArgument="3"></asp:LinkButton></span> </span></span> </span></asp:TableCell>
                                 <asp:TableCell ID="cellWhatIf" runat="server">
                                     <span class="bg" style="padding-bottom: 31px;"><span>
                                         <asp:LinkButton ID="btnWhatIf" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; What-If?"
@@ -697,37 +698,37 @@
                                             text-align: center;" OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
-                                <asp:TableCell ID="TableCell1" runat="server">
+                                <asp:TableCell ID="cellOpportunities" runat="server">
                                     <span class="bg" style="padding-bottom: 31px;"><span>
                                         <asp:LinkButton ID="btnOppportunities" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Opportunities"
                                             CausesValidation="false" Style="width: 80px; display: inline-block; vertical-align: top;
-                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="9"></asp:LinkButton></span>
+                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellPermissions" runat="server">
                                     <span class="bg" style="padding-bottom: 31px;"><span>
                                         <asp:LinkButton ID="btnPermissions" runat="server" Text="Project/Opportunity Permissions"
                                             Style="width: 120px; display: inline-block; vertical-align: top; text-align: center;"
-                                            CausesValidation="false" OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton></span>
+                                            CausesValidation="false" OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellSecurity" runat="server" CssClass="SelectedSwitch">
                                     <span class="bg" style="padding-bottom: 31px;"><span>
                                         <asp:LinkButton ID="btnSecurity" runat="server" Text="Application Security" CausesValidation="false"
                                             Style="width: 80px; display: inline-block; vertical-align: top; text-align: center;"
-                                            OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellActivityLog" runat="server" Visible="false">
                                     <span class="bg" style="padding-bottom: 31px;"><span>
                                         <asp:LinkButton ID="btnActivityLog" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; History"
                                             CausesValidation="false" Style="width: 45px; display: inline-block; vertical-align: top;
-                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton></span>
+                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="9"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                             </asp:TableRow>
                         </asp:Table>
-                        <asp:MultiView ID="mvPerson" runat="server" ActiveViewIndex="7">
+                        <asp:MultiView ID="mvPerson" runat="server" ActiveViewIndex="8">
                             <asp:View ID="vwCompensation" runat="server">
                                 <asp:Panel ID="pnlCompensation" runat="server" CssClass="tab-pane">
                                     <div class="filters" style="margin-top: 5px; margin-bottom: 10px;">
@@ -979,7 +980,6 @@
                                 </asp:Panel>
                             </asp:View>
                             <asp:View ID="vwRates" runat="server">
-                              
                             </asp:View>
                             <asp:View ID="vwWhatIf" runat="server">
                                 <asp:Panel ID="pnlWhatIf" runat="server" CssClass="tab-pane WholeWidth">
@@ -992,6 +992,12 @@
                             <asp:View ID="vwProjects" runat="server">
                                 <asp:Panel ID="pnlProjects" runat="server" CssClass="tab-pane WholeWidth">
                                     <uc:PersonProjects ID="personProjects" runat="server" />
+                                </asp:Panel>
+                            </asp:View>
+                            <asp:View ID="vwOpportunities" runat="server">
+                                <asp:Panel ID="pnOpportunities" runat="server" CssClass="tab-pane WholeWidth">
+                                    <uc:OpportunityList ID="personOpportunities" runat="server" AllowAutoRedirectToDetails="false"
+                                        FilterMode="ByTargetPerson" />
                                 </asp:Panel>
                             </asp:View>
                             <asp:View ID="vwPermissions" runat="server" OnPreRender="vwPermissions_PreRender">
@@ -1015,6 +1021,10 @@
                                                     ValidationGroup="Person" ErrorMessage="Person with Recruiter role should have recruiting commission."
                                                     OnServerValidate="valRecruterRole_OnServerValidate" SetFocusOnError="true" Text="*"
                                                     ToolTip="Person with Recruiter role should have recruiting commission." ValidateEmptyText="true" />
+                                                <asp:CustomValidator ID="cvRolesActiveStatus" runat="server" Display="Dynamic" EnableClientScript="false"
+                                                    ValidationGroup="Person" ErrorMessage="Any person who is active should have atleast one role checked."
+                                                    OnServerValidate="cvRolesActiveStatus_ServerValidate" SetFocusOnError="true"
+                                                    Text="*" ToolTip="Any person who is active should have atleast one role checked."></asp:CustomValidator>
                                             </td>
                                             <td>
                                                 &nbsp;
@@ -1124,12 +1134,6 @@
                                     <uc:ActivityLog runat="server" ID="activityLog" DisplayDropDownValue="TargetPerson"
                                         DateFilterValue="Year" ShowDisplayDropDown="false" ShowProjectDropDown="false"
                                         ShowPersonDropDown="false" />
-                                </asp:Panel>
-                            </asp:View>
-                            <asp:View ID="vwOpportunities" runat="server">
-                                <asp:Panel ID="pnOpportunities" runat="server" CssClass="tab-pane WholeWidth">
-                                    <uc:OpportunityList ID="personOpportunities" runat="server" AllowAutoRedirectToDetails="false"
-                                        FilterMode="ByTargetPerson" />
                                 </asp:Panel>
                             </asp:View>
                         </asp:MultiView>
