@@ -992,7 +992,7 @@
                     <tr>
                         <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
                             valign="bottom">
-                            <b style="font-size: 14px; padding-top: 2px;">Error</b>
+                            <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
                             <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Cancel Changes"
                                 Style="float: right;" OnClick="btnCancel_OnClick" Text="X"></asp:Button>
                         </th>
@@ -1002,9 +1002,13 @@
                             <table id="tblHasTimeentriesTowardsMileStone" visible="false" runat="server">
                                 <tr>
                                     <td>
-                                        You are attempting to change the milestone start/end date, but there is already
-                                        time entered for the days you are skipping. You will need to reassign the time entries
-                                        to a new milestone before you are allowed to change this date.
+                                        <p>
+                                            You are attempting to change the milestone start/end date, but there is already
+                                            time entered for the days you are skipping.</p>
+                                            <br />
+                                        <p>
+                                            You will need to reassign the time entries to a new milestone before you are allowed
+                                            to change this date.</p>
                                     </td>
                                 </tr>
                             </table>
@@ -1025,7 +1029,8 @@
                                     </td>
                                 </tr>
                             </table>
-                            <hr style="padding-left:10px;padding-right:10px; border-color:Black;" id="hrBetweenCMSDandCMED" runat="server" visible="false" />
+                            <hr style="padding-left: 10px; padding-right: 10px; border-color: Black;" id="hrBetweenCMSDandCMED"
+                                runat="server" visible="false" />
                             <table id="tblchangeMilestonePersonsForEndDate" visible="false" runat="server">
                                 <tr>
                                     <td style="padding-top: 10px;">
@@ -1042,7 +1047,8 @@
                                     </td>
                                 </tr>
                             </table>
-                            <hr style="padding-left:10px;padding-right:10px; border-color:Black;" id="hrBetweenCMEDandRMSD" runat="server"  visible="false" />
+                            <hr style="padding-left: 10px; padding-right: 10px; border-color: Black;" id="hrBetweenCMEDandRMSD"
+                                runat="server" visible="false" />
                             <table id="tblRemoveMilestonePersonsForStartDate" visible="false" runat="server">
                                 <tr>
                                     <td style="padding-top: 10px;">
@@ -1058,7 +1064,8 @@
                                     </td>
                                 </tr>
                             </table>
-                            <hr style="padding-left:10px;padding-right:10px; border-color:Black;" id="hrBetweenRMSDandRMED" runat="server"  visible="false" />
+                            <hr style="padding-left: 10px; padding-right: 10px; border-color: Black;" id="hrBetweenRMSDandRMED"
+                                runat="server" visible="false" />
                             <table id="tblRemoveMilestonePersonsForEndDate" visible="false" runat="server">
                                 <tr>
                                     <td style="padding-top: 10px;">
