@@ -116,9 +116,11 @@
         imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
         lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
         ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
-        if (imgCalender.fireEvent && ddlPeriod.value != '0') {
-            imgCalender.style.display = "none";
-            lblCustomDateRange.style.display = "none";
+        if (imgCalender != null && lblCustomDateRange != null && ddlPeriod != null) {
+            if (imgCalender.fireEvent && ddlPeriod.value != '0') {
+                imgCalender.style.display = "none";
+                lblCustomDateRange.style.display = "none";
+            }
         }
     }
 
