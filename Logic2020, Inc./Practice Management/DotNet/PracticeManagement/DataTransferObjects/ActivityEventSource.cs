@@ -26,6 +26,22 @@ namespace DataTransferObjects
         Opportunity = 8,
         [EnumMember]
         Milestone = 9,
+        [EnumMember]
+        Logon = 10,
+        [EnumMember]
+        LoginSuccessful = 11,
+        [EnumMember]
+        LoginError = 12,
+        [EnumMember]
+        Security = 13,
+        [EnumMember]
+        PasswordResetRequests = 14,
+        [EnumMember]
+        AccountLockouts = 15,
+        [EnumMember]
+        AddedTimeEntries = 16,
+        [EnumMember]
+        ChangedTimeEntries = 17
     }
 }
 
