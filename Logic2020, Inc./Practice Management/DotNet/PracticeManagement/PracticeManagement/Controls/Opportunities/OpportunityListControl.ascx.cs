@@ -665,7 +665,8 @@ namespace PraticeManagement.Controls.Opportunities
 
         private Table GetSummaryDetails()
         {
-            return OpportunitiesHelper.GetFormatedSummaryDetails(OpportunitiesList, PriorityTrendList, StatusChangesList);
+            var opportunities = DataHelper.GetFilteredOpportunitiesForDiscussionReview2(false);
+            return OpportunitiesHelper.GetFormatedSummaryDetails(opportunities, PriorityTrendList, StatusChangesList);
         }
         
     }
