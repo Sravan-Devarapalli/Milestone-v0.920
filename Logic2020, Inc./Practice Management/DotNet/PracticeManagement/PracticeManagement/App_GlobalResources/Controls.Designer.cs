@@ -295,7 +295,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time Entries.
+        ///   Looks up a localized string similar to Time Entry Events.
         /// </summary>
         internal static string EvenSourceTimeEntries {
             get {
@@ -304,7 +304,25 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All events.
+        ///   Looks up a localized string similar to Account Lockouts Only.
+        /// </summary>
+        internal static string EventSourceAccountLockouts {
+            get {
+                return ResourceManager.GetString("EventSourceAccountLockouts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Added Time Entries Only.
+        /// </summary>
+        internal static string EventSourceAddedTimeEntries {
+            get {
+                return ResourceManager.GetString("EventSourceAddedTimeEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Events.
         /// </summary>
         internal static string EventSourceAll {
             get {
@@ -313,11 +331,47 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Errors only.
+        ///   Looks up a localized string similar to Changed Time Entries Only.
+        /// </summary>
+        internal static string EventSourceChangedTimeEntries {
+            get {
+                return ResourceManager.GetString("EventSourceChangedTimeEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Errors.
         /// </summary>
         internal static string EventSourceError {
             get {
                 return ResourceManager.GetString("EventSourceError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login Errors Only.
+        /// </summary>
+        internal static string EventSourceLoginError {
+            get {
+                return ResourceManager.GetString("EventSourceLoginError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successful Logins Only.
+        /// </summary>
+        internal static string EventSourceLoginSuccessful {
+            get {
+                return ResourceManager.GetString("EventSourceLoginSuccessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logon Events.
+        /// </summary>
+        internal static string EventSourceLogon {
+            get {
+                return ResourceManager.GetString("EventSourceLogon", resourceCulture);
             }
         }
         
@@ -336,6 +390,15 @@ namespace Resources {
         internal static string EventSourceOpportunities {
             get {
                 return ResourceManager.GetString("EventSourceOpportunities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password Reset Requests Only.
+        /// </summary>
+        internal static string EventSourcePasswordResetRequests {
+            get {
+                return ResourceManager.GetString("EventSourcePasswordResetRequests", resourceCulture);
             }
         }
         
@@ -363,6 +426,15 @@ namespace Resources {
         internal static string EventSourceProjectAndMilestones {
             get {
                 return ResourceManager.GetString("EventSourceProjectAndMilestones", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Security Events.
+        /// </summary>
+        internal static string EventSourceSecurity {
+            get {
+                return ResourceManager.GetString("EventSourceSecurity", resourceCulture);
             }
         }
         
