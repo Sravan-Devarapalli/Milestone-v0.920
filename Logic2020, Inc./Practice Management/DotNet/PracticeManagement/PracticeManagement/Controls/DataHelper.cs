@@ -114,13 +114,13 @@ namespace PraticeManagement.Controls
             return SortOppotunities(opportunities).AsQueryable().ToArray();
         }
 
-        public static Opportunity[] GetFilteredOpportunitiesForDiscussionReview2()
+        public static Opportunity[] GetFilteredOpportunitiesForDiscussionReview2(bool isSortingNeed = true)
         {
             var opportunities =
                 ServiceCallers.Custom.Opportunity(c => c.OpportunityListAll(new OpportunityListContext { IsDiscussionReview2 = true }
                     ));
 
-            return SortOppotunities(opportunities).AsQueryable().ToArray();
+            return isSortingNeed ? SortOppotunities(opportunities).AsQueryable().ToArray() : opportunities;
         }
 
         /// <summary>
