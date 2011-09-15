@@ -318,7 +318,7 @@ namespace PraticeManagement.Utils
         {
             var list = (from o in opportunityList
                         group o by o.Client.Id into result
-                        orderby result.Count() descending
+                        orderby result.Count() descending, result.Sum(c => c.EstimatedRevenue) descending
                         select new
                         {
                             clientName = result.Select(c => c.Client.Name).First(),
