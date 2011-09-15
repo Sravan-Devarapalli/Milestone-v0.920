@@ -166,10 +166,10 @@
     <value>Default sales commission</value>
   </data>
   <data name="EventSourceAll" xml:space="preserve">
-    <value>All events</value>
+    <value>All Events</value>
   </data>
   <data name="EventSourceError" xml:space="preserve">
-    <value>Errors only</value>
+    <value>All Errors</value>
   </data>
   <data name="EventSourcePerson" xml:space="preserve">
     <value>Persons only</value>
@@ -265,7 +265,7 @@
     <value>Hours and notes are required. Note should be between 3 and 1000 characters length.</value>
   </data>
   <data name="EvenSourceTimeEntries" xml:space="preserve">
-    <value>Time Entries</value>
+    <value>Time Entry Events</value>
   </data>
   <data name="NonMilestoneDateWarning" xml:space="preserve">
     <value>The day you have entered time against is not between the milestone's start and end date.  You can continue and enter the time if appropriate, and this time record will be flagged for further review.</value>
@@ -358,5 +358,29 @@
   </data>
   <data name="MarginCssClass" xml:space="preserve">
     <value>Margin</value>
+  </data>
+  <data name="EventSourceAccountLockouts" xml:space="preserve">
+    <value>Account Lockouts Only</value>
+  </data>
+  <data name="EventSourceAddedTimeEntries" xml:space="preserve">
+    <value>Added Time Entries Only</value>
+  </data>
+  <data name="EventSourceChangedTimeEntries" xml:space="preserve">
+    <value>Changed Time Entries Only</value>
+  </data>
+  <data name="EventSourceLoginError" xml:space="preserve">
+    <value>Login Errors Only</value>
+  </data>
+  <data name="EventSourceLoginSuccessful" xml:space="preserve">
+    <value>Successful Logins Only</value>
+  </data>
+  <data name="EventSourceLogon" xml:space="preserve">
+    <value>Logon Events</value>
+  </data>
+  <data name="EventSourcePasswordResetRequests" xml:space="preserve">
+    <value>Password Reset Requests Only</value>
+  </data>
+  <data name="EventSourceSecurity" xml:space="preserve">
+    <value>Security Events</value>
   </data>
 </root>
