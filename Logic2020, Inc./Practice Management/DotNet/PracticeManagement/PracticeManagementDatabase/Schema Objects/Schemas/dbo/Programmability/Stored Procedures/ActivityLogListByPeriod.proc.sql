@@ -6,7 +6,7 @@
 	@ProjectId	   INT = NULL,
 	@PageSize      INT,
 	@PageNo        INT,
-	@EventSource   NVARCHAR(20),
+	@EventSource   NVARCHAR(50),
 	@OpportunityId INT = NULL,
 	@MilestoneId   INT = NULL
 )
@@ -63,6 +63,8 @@ AS
 				  AND(
 				  ((@EventSource = 'Error' OR @EventSource = 'All' )AND a.LogData.exist('/Error') = 1)								  
 				  OR ((@EventSource = 'TimeEntry' OR @EventSource = 'All' ) AND a.LogData.exist('/TimeEntry') = 1)
+				  OR ((@EventSource = 'AddedTimeEntries' OR @EventSource = 'All' ) AND a.LogData.exist('/TimeEntry') = 1 AND t.ActivityName = 'Added')
+				  OR ((@EventSource = 'ChangedTimeEntries' OR @EventSource = 'All' ) AND a.LogData.exist('/TimeEntry') = 1 AND t.ActivityName = 'Changed')
 				  OR (@EventSource = 'All' AND a.LogData.exist('/') = 1)
 			      OR ((@EventSource = 'Person' OR @EventSource = 'All')
 							 AND (a.LogData.exist('/Person') = 1 
@@ -127,7 +129,45 @@ AS
 															OR a.PersonID = @PersonId
 															OR a.LogData.value('(/Note/NEW_VALUES/@TargetId)[1]', 'int') = @PersonId
 														  )
-					 ))
+					 )
+				  OR ( (@EventSource = 'Logon' OR @EventSource = 'All') AND (a.LogData.exist('/Login') = 1 OR a.LogData.exist('/BecomeUser') = 1) AND a.LogData.value('(/Login/NEW_VALUES/@Result)[1]', 'NVARCHAR(100)') NOT LIKE '%locked out%'
+					 )
+				  OR ( (@EventSource = 'LoginSuccessful' OR @EventSource = 'All') AND (a.LogData.value('(/Login/NEW_VALUES/@Result)[1]', 'NVARCHAR(100)') = 'Success')
+					 )
+				  OR ( (@EventSource = 'LoginError' OR @EventSource = 'All') AND ( (a.LogData.value('(/Login/NEW_VALUES/@Result)[1]', 'NVARCHAR(100)') <> 'Success' 
+																					AND a.LogData.value('(/Login/NEW_VALUES/@Result)[1]', 'NVARCHAR(100)') NOT LIKE '%locked out%')
+																				  OR a.LogData.value('(/Error/NEW_VALUES/@SourcePage)[1]', 'NVARCHAR(225)') = 'PracticeManagement/Login.aspx' )
+					 )
+				  OR ( (@EventSource = 'AccountLockouts' OR @EventSource = 'All') AND (a.LogData.value('(/Login/NEW_VALUES/@Result)[1]', 'NVARCHAR(100)') LIKE '%locked out%')
+					 )
+				  OR ( (@EventSource = 'PasswordResetRequests' OR @EventSource = 'All') AND t.ActivityName = 'changed' AND a.LogData.exist('(/Membership)') = 1  AND 
+				  ( 
+				  
+				  (CASE WHEN  a.LogData.exist('(/Membership)') = 1 
+					THEN
+							(CASE WHEN 
+								CONVERT(XML, a.Data).value('(/Membership/NEW_VALUES/@HashedPassword)[1]', 'NVARCHAR(100)') <> CONVERT(XML, a.Data).value('(/Membership/NEW_VALUES/OLD_VALUES/@HashedPassword)[1]', 'NVARCHAR(100)')
+								THEN 1 ELSE 0 END 
+							)
+					ELSE 0 END) = 1
+				  
+				  )
+				     )
+				  OR ( (@EventSource = 'Security' OR @EventSource = 'All')				 
+						AND ( (a.LogData.value('(/Login/NEW_VALUES/@Result)[1]', 'NVARCHAR(100)') LIKE '%locked out%')
+																					OR (
+																							(CASE WHEN  a.LogData.exist('(/Membership)') = 1 
+																								  THEN
+																										 (CASE WHEN 
+																												CONVERT(XML, a.Data).value('(/Membership/NEW_VALUES/@HashedPassword)[1]', 'NVARCHAR(100)') <> CONVERT(XML, a.Data).value('(/Membership/NEW_VALUES/OLD_VALUES/@HashedPassword)[1]', 'NVARCHAR(100)')
+																												THEN 1 ELSE 0 END 
+																											)
+																								  ELSE 0 END) = 1
+
+																					)
+																				)
+				     )
+					)
 	
 					AND (@ProjectId IS NULL 
 						 OR a.LogData.value('(/Project/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
@@ -150,3 +190,4 @@ AS
 	        ORDER BY a.LogDate DESC) AS tmp
 		 WHERE tmp.rownum BETWEEN @FirstRecord AND @LastRecord - 1
 		ORDER BY tmp.LogDate DESC
+
