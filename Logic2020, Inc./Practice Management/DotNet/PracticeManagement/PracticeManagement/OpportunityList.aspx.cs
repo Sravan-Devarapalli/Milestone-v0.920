@@ -31,7 +31,7 @@ namespace PraticeManagement
         {
             get
             {
-                return DataHelper.GetFilteredOpportunitiesForDiscussionReview2();
+                return DataHelper.GetFilteredOpportunitiesForDiscussionReview2(false);
             }
         }
 
