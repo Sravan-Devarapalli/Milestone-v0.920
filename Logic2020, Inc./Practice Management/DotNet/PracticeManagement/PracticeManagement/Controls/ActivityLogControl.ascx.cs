@@ -83,19 +83,43 @@ namespace PraticeManagement.Controls
                 ActivityEventSource.TargetPerson,
                 Resources.Controls.EventSourceTargetPerson);
             EventSourceTitles.Add(
+                ActivityEventSource.Opportunity,
+                Resources.Controls.EventSourceOpportunities);
+            EventSourceTitles.Add(
                 ActivityEventSource.Project, Resources.Controls.EventSourceProject);
+            EventSourceTitles.Add(
+               ActivityEventSource.Milestone,
+               Resources.Controls.EventSourceMilestones);
             EventSourceTitles.Add(
                 ActivityEventSource.ProjectAndMilestones,
                 Resources.Controls.EventSourceProjectAndMilestones);
             EventSourceTitles.Add(
+               ActivityEventSource.Logon,
+               Resources.Controls.EventSourceLogon);
+            EventSourceTitles.Add(
+               ActivityEventSource.LoginSuccessful,
+               Resources.Controls.EventSourceLoginSuccessful);
+            EventSourceTitles.Add(
+               ActivityEventSource.LoginError,
+               Resources.Controls.EventSourceLoginError);
+            EventSourceTitles.Add(
+               ActivityEventSource.Security,
+               Resources.Controls.EventSourceSecurity);
+            EventSourceTitles.Add(
+               ActivityEventSource.PasswordResetRequests,
+               Resources.Controls.EventSourcePasswordResetRequests);
+            EventSourceTitles.Add(
+               ActivityEventSource.AccountLockouts,
+               Resources.Controls.EventSourceAccountLockouts);
+            EventSourceTitles.Add(
                 ActivityEventSource.TimeEntry,
                 Resources.Controls.EvenSourceTimeEntries);
             EventSourceTitles.Add(
-                ActivityEventSource.Opportunity,
-                Resources.Controls.EventSourceOpportunities);
+               ActivityEventSource.AddedTimeEntries,
+               Resources.Controls.EventSourceAddedTimeEntries);
             EventSourceTitles.Add(
-               ActivityEventSource.Milestone,
-               Resources.Controls.EventSourceMilestones);
+               ActivityEventSource.ChangedTimeEntries,
+               Resources.Controls.EventSourceChangedTimeEntries);
         }
 
         #endregion
