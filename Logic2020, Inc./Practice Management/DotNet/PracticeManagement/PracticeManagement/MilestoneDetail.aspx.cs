@@ -836,11 +836,17 @@ namespace PraticeManagement
             }
         }
 
-        protected string GetText(PracticeManagementCurrency value, Person person)
+        protected string GetText(object value, Person person)
         {
+            PracticeManagementCurrency c = 0;
+            if (value != null)
+            {
+                c = (PracticeManagementCurrency)value;
+            }
+
             var greaterSeniorityExists = MilestoneSeniorityAnalyzer.IsOtherGreater(person);
 
-            return value.ToString(greaterSeniorityExists);
+            return c.ToString(greaterSeniorityExists);
         }
 
         protected string GetMpeRedirectUrl(object args)
