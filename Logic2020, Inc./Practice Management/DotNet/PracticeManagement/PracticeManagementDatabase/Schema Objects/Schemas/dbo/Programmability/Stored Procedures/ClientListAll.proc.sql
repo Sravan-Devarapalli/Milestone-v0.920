@@ -32,8 +32,10 @@ BEGIN
 		-- Populate is with the data from the v_Project 
 		INSERT INTO @OwnerProjectClientList (ClientId) 
 		SELECT proj.ClientId 
-		FROM dbo.v_Project AS proj 
-		WHERE proj.ProjectManagerId = @PersonId 
+		FROM dbo.v_Project AS proj
+		LEFT JOIN dbo.Commission C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1
+		WHERE proj.ProjectManagerId = @PersonId OR C.PersonId = @PersonId -- Adding Salesperson - Project clients into the list.
+
 	END
 
 	IF @ShowAll = 0
