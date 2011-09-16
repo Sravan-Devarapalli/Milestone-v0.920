@@ -137,6 +137,23 @@
                                 <td id="tdEventSource" runat="server">
                                     <asp:Label ID="lblDisplay" runat="server" Text="Show "></asp:Label><asp:DropDownList
                                         ID="ddlEventSource" runat="server" EnableViewState="true">
+                                        <asp:ListItem Text="ALL Events" Value="1"></asp:ListItem>
+                                        <asp:ListItem Text="ALL Errors" Value="4"></asp:ListItem>
+                                        <asp:ListItem Text="Persons only" Value="2"></asp:ListItem>
+                                        <asp:ListItem Text="Target Person" Value="6"></asp:ListItem>
+                                        <asp:ListItem Text="Opportunity" Value="8"></asp:ListItem>
+                                        <asp:ListItem Text="Projects only" Value="3"></asp:ListItem>
+                                        <asp:ListItem Text="Milestone" Value="9"></asp:ListItem>
+                                        <asp:ListItem Text="Projects And Milestones" Value="5"></asp:ListItem>
+                                        <asp:ListItem Text="Logon Events" Value="10"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Successfull Logins Only" Value="11"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Login Errors Only" Value="12"></asp:ListItem>
+                                        <asp:ListItem Text="Security Events" Value="13"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Password Reset Requests Only" Value="14"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Account Lockouts Only" Value="15"></asp:ListItem>
+                                        <asp:ListItem Text="Time Entry Events" Value="7"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Added TimeEntries Only" Value="16"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Changed TimeEntries Only" Value="17"></asp:ListItem>
                                     </asp:DropDownList>
                                 </td>
                                 <td id="tdYear" runat="server">
