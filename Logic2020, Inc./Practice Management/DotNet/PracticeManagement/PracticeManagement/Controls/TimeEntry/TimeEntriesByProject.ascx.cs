@@ -7,6 +7,10 @@ using System.Web.Security;
 using System.Linq;
 using PraticeManagement.Configuration;
 using System.Web.UI;
+using System.Web;
+using System.IO;
+using PraticeManagement.Objects;
+using System.Text;
 
 namespace PraticeManagement.Controls.TimeEntry
 {
@@ -26,6 +30,8 @@ namespace PraticeManagement.Controls.TimeEntry
             ResetTotalCounters();
             if (!IsPostBack)
             {
+                hdnGuid.Value = Guid.NewGuid().ToString();
+
                 //  If current user is administrator, don't apply restrictions
                 Person person =
                     Roles.IsUserInRole(
@@ -79,7 +85,7 @@ namespace PraticeManagement.Controls.TimeEntry
                     break;
 
                 case DataControlRowType.Footer:
-                    e.Row.Cells[HoursCellIndex].Text = _totalPersonHours.ToString(Constants.Formatting.DoubleFormat);
+                    e.Row.Cells[HoursCellIndex].Text = "<div style='text-align: center;'>"+ _totalPersonHours.ToString(Constants.Formatting.DoubleFormat) + "</div>";
                     _grandTotalHours += _totalPersonHours;
                     break;
             }
@@ -168,6 +174,8 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             if (ddlMilestones.SelectedValue != "-1")
             {
+                btnExportToExcel.Enabled = true;
+                btnExportToPDF.Enabled = true;
                 UpdateHeaderTitle();
                 dlTimeEntries.Visible = true;
                 lblProjectName.Visible = true;
@@ -213,6 +221,20 @@ namespace PraticeManagement.Controls.TimeEntry
                 ddlProjects.Items.Add(firstItem);
             }
 
+        }
+
+        protected void dlTimeEntries_OnItemDataBound(object sender, DataListItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var gv = e.Item.FindControl("gvPersonTimeEntries") as GridView;
+                if (gv != null && gv.Rows.Count == 0)
+                {
+                    gv.GridLines = GridLines.None;
+                }
+
+            }
+            
         }
 
         protected void ddlProjects_OnSelectedIndexChanged(object sender, EventArgs e)
@@ -467,6 +489,151 @@ namespace PraticeManagement.Controls.TimeEntry
                 return "This person has not entered any time towards this milestone for the period selected.";
             }
         }
+
+        protected void btnExport_OnClick(object sender, EventArgs e)
+        {
+            string fileName = "TimeEntriesByProject.xls";
+            HttpContext.Current.Response.Clear();
+            HttpContext.Current.Response.AddHeader(
+                "content-disposition", string.Format("attachment; filename={0}", fileName));
+            HttpContext.Current.Response.ContentType = "application/vnd.ms-excel";
+
+
+            using (StringWriter sw = new StringWriter())
+            {
+                using (HtmlTextWriter htw = new HtmlTextWriter(sw))
+                {
+                    HttpContext.Current.Response.Write(AddExcelStyling());
+                    //  render the htmlwriter into the response
+                    HttpContext.Current.Response.Write(hdnSaveReportExcelText.Value);
+                    HttpContext.Current.Response.End();
+                }
+            }
+
+        }
+
+
+        protected void ExportToPDF(object sender, EventArgs e)
+        {
+            string fileName = "TimeEntriesByProject.pdf";
+            var html = hdnSaveReportPDFText.Value;
+            HTMLToPdf(html, fileName);
+        }
+
+
+        public void HTMLToPdf(String HTML, string fileName)
+        {
+
+            HtmlToPdfBuilder builder = new HtmlToPdfBuilder(iTextSharp.text.PageSize.A4_LANDSCAPE);
+
+
+
+            string[] splitArray = { hdnGuid.Value };
+
+            string[] htmlArray = HTML.Split(splitArray, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var html in htmlArray)
+            {
+                HtmlPdfPage page = builder.AddPage();
+
+                page.AppendHtml("<div>{0}</div>", html);
+
+            }
+
+            byte[] timeEntriesByPersonBytes = builder.RenderPdf();
+
+            HttpContext.Current.Response.ContentType = "Application/pdf";
+            HttpContext.Current.Response.AddHeader(
+                "content-disposition", string.Format("attachment; filename={0}", fileName));
+
+
+            int len = timeEntriesByPersonBytes.Length;
+            int bytes;
+            byte[] buffer = new byte[1024];
+
+            Stream outStream = HttpContext.Current.Response.OutputStream;
+            using (MemoryStream stream = new MemoryStream(timeEntriesByPersonBytes))
+            {
+                while (len > 0 && (bytes = stream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    outStream.Write(buffer, 0, bytes);
+                    HttpContext.Current.Response.Flush();
+                    len -= bytes;
+                }
+            }
+
+
+        }
+
+        private string AddExcelStyling()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<html xmlns:o='urn:schemas-microsoft-com:office:office'\n" +
+
+            "xmlns:x='urn:schemas-microsoft-com:office:excel'\n" +
+            "xmlns='http://www.w3.org/TR/REC-html40'>\n" +
+
+            "<head>\n");
+            sb.Append("<style>\n");
+
+            sb.Append("@page");
+            sb.Append("{margin:.5in .20in .5in .20in;\n");
+
+            sb.Append("mso-header-margin:.5in;\n");
+            sb.Append("mso-footer-margin:.5in;\n");
+
+            sb.Append("mso-page-orientation:landscape;}\n");
+            sb.Append("</style>\n");
+
+            sb.Append("<!--[if gte mso 9]><xml>\n");
+            sb.Append("<x:ExcelWorkbook>\n");
+
+            sb.Append("<x:ExcelWorksheets>\n");
+            sb.Append("<x:ExcelWorksheet>\n");
+
+            sb.Append("<x:Name>Projects 3 </x:Name>\n");
+            sb.Append("<x:WorksheetOptions>\n");
+
+            sb.Append("<x:Print>\n");
+            sb.Append("<x:ValidPrinterInfo/>\n");
+
+            sb.Append("<x:PaperSizeIndex>9</x:PaperSizeIndex>\n");
+            sb.Append("<x:HorizontalResolution>600</x:HorizontalResolution\n");
+
+            sb.Append("<x:VerticalResolution>600</x:VerticalResolution\n");
+            sb.Append("</x:Print>\n");
+
+            sb.Append("<x:Selected/>\n");
+            sb.Append("<x:DoNotDisplayGridlines/>\n");
+
+            sb.Append("<x:ProtectContents>False</x:ProtectContents>\n");
+            sb.Append("<x:ProtectObjects>False</x:ProtectObjects>\n");
+
+            sb.Append("<x:ProtectScenarios>False</x:ProtectScenarios>\n");
+            sb.Append("</x:WorksheetOptions>\n");
+
+            sb.Append("</x:ExcelWorksheet>\n");
+            sb.Append("</x:ExcelWorksheets>\n");
+
+            sb.Append("<x:WindowHeight>12780</x:WindowHeight>\n");
+            sb.Append("<x:WindowWidth>19035</x:WindowWidth>\n");
+
+            sb.Append("<x:WindowTopX>0</x:WindowTopX>\n");
+            sb.Append("<x:WindowTopY>15</x:WindowTopY>\n");
+
+            sb.Append("<x:ProtectStructure>False</x:ProtectStructure>\n");
+            sb.Append("<x:ProtectWindows>False</x:ProtectWindows>\n");
+
+            sb.Append("</x:ExcelWorkbook>\n");
+            sb.Append("</xml><![endif]-->\n");
+
+            sb.Append("</head>\n");
+            sb.Append("<body>\n");
+
+            return sb.ToString();
+        }
+
+       
     }
 }
 
