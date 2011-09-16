@@ -130,6 +130,42 @@ namespace PraticeManagement.Controls.TimeEntry {
         protected global::System.Web.UI.WebControls.ValidationSummary valSum;
         
         /// <summary>
+        /// btnExportToExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportToExcel;
+        
+        /// <summary>
+        /// hdnSaveReportExcelText control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnSaveReportExcelText;
+        
+        /// <summary>
+        /// btnExportToPDF control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportToPDF;
+        
+        /// <summary>
+        /// hdnSaveReportPDFText control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnSaveReportPDFText;
+        
+        /// <summary>
         /// odsProjects control.
         /// </summary>
         /// <remarks>
@@ -164,6 +200,15 @@ namespace PraticeManagement.Controls.TimeEntry {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblGrandTotal;
+        
+        /// <summary>
+        /// hdnGuid control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnGuid;
     }
 }
 
