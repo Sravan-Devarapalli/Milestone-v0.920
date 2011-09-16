@@ -769,6 +769,7 @@
     <Compile Include="LoggedOut.aspx.designer.cs">
       <DependentUpon>LoggedOut.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Objects\PdfBuilder.cs" />
     <Compile Include="OpportunityPriorityHandler.ashx.cs">
       <DependentUpon>OpportunityPriorityHandler.ashx</DependentUpon>
     </Compile>
