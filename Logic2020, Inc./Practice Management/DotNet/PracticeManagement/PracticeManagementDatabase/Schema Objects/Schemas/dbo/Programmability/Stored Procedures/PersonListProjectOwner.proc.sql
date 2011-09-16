@@ -50,6 +50,7 @@ AS
 	        'Unknown' AS 'ManagerLastName'	-- just stubs
 	FROM dbo.Project AS proj
 	INNER JOIN dbo.Person AS pers ON proj.ProjectManagerId = pers.PersonId
+	LEFT JOIN dbo.Commission AS C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1
 	WHERE --(@EndDate BETWEEN proj.StartDate AND proj.EndDate) AND 
 			(@IncludeInactive = 1 OR pers.PersonStatusId != 4)
             AND ( @PersonId IS NULL
@@ -57,6 +58,7 @@ AS
                   SELECT    *
                   FROM      @SalespersonPermissions )
 				   OR proj.ProjectManagerId  = @PersonId
+				   OR C.PersonId = @PersonId
                 )
 	order by pers.lastname, pers.firstname
 
