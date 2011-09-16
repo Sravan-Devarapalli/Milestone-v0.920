@@ -10,6 +10,11 @@ using DataTransferObjects.CompositeObjects;
 using System.Linq;
 using System.Web.Security;
 using DataTransferObjects;
+using System.Text;
+using System.IO;
+using System.Web.UI;
+using System.Web;
+using PraticeManagement.Objects;
 
 namespace PraticeManagement.Sandbox
 {
@@ -20,8 +25,14 @@ namespace PraticeManagement.Sandbox
         protected double ProjectTotals;
         protected int ColspanForTotals;
         private int calendarPersonId;
+
+
+
         protected void btnUpdate_OnClick(object sender, EventArgs e)
         {
+            btnExportToExcel.Enabled = true;
+            btnExportToPDF.Enabled = true;
+
             dlPersons.DataBind();
             System.Web.UI.ScriptManager.RegisterClientScriptBlock(updReport, updReport.GetType(), "", "SetDivWidth();", true);
             if (hdnFiltersChanged.Value == "false")
@@ -37,6 +48,148 @@ namespace PraticeManagement.Sandbox
             AddAttributesToCheckBoxes(this.cblPersons);
         }
 
+        protected void btnExport_OnClick(object sender, EventArgs e)
+        {
+            string fileName = "TimeEntriesForPersons.xls";
+            HttpContext.Current.Response.Clear();
+            HttpContext.Current.Response.AddHeader(
+                "content-disposition", string.Format("attachment; filename={0}", fileName));
+            HttpContext.Current.Response.ContentType = "application/vnd.ms-excel";
+
+            using (StringWriter sw = new StringWriter())
+            {
+                using (HtmlTextWriter htw = new HtmlTextWriter(sw))
+                {
+                    HttpContext.Current.Response.Write(AddExcelStyling());
+                    //  render the htmlwriter into the response
+                    HttpContext.Current.Response.Write(hdnSaveReportExcel.Value);//sw.ToString());//
+                    HttpContext.Current.Response.End();
+                }
+            }
+
+        }
+
+
+        protected void ExportToPDF(object sender, EventArgs e)
+        {
+
+            string fileName = "TimeEntriesForPerson.pdf";
+            var html = hdnSaveReportText.Value;
+            HTMLToPdf(html, fileName);
+        }
+
+
+        public void HTMLToPdf(String HTML, string fileName)
+        {
+
+            HtmlToPdfBuilder builder = new HtmlToPdfBuilder(iTextSharp.text.PageSize.A4_LANDSCAPE);
+
+            string[] splitArray = { hdnGuid.Value };
+
+            string[] htmlArray = HTML.Split(splitArray, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var html in htmlArray)
+            {
+                HtmlPdfPage page = builder.AddPage();
+
+                page.AppendHtml("<div>{0}</div>", html);
+
+            }
+
+            byte[] timeEntriesByPersonBytes = builder.RenderPdf();
+
+            HttpContext.Current.Response.ContentType = "Application/pdf";
+            HttpContext.Current.Response.AddHeader(
+                "content-disposition", string.Format("attachment; filename={0}", fileName));
+
+
+            int len = timeEntriesByPersonBytes.Length;
+            int bytes;
+            byte[] buffer = new byte[1024];
+
+            Stream outStream = HttpContext.Current.Response.OutputStream;
+            using (MemoryStream stream = new MemoryStream(timeEntriesByPersonBytes))
+            {
+                while (len > 0 && (bytes = stream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    outStream.Write(buffer, 0, bytes);
+                    HttpContext.Current.Response.Flush();
+                    len -= bytes;
+                }
+            }
+
+
+        }
+
+        private string AddExcelStyling()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<html xmlns:o='urn:schemas-microsoft-com:office:office'\n" +
+
+            "xmlns:x='urn:schemas-microsoft-com:office:excel'\n" +
+            "xmlns='http://www.w3.org/TR/REC-html40'>\n" +
+
+            "<head>\n");
+            sb.Append("<style>\n");
+
+            sb.Append("@page");
+            sb.Append("{margin:.5in .20in .5in .20in;\n");
+
+            sb.Append("mso-header-margin:.5in;\n");
+            sb.Append("mso-footer-margin:.5in;\n");
+
+            sb.Append("mso-page-orientation:landscape;}\n");
+            sb.Append("</style>\n");
+
+            sb.Append("<!--[if gte mso 9]><xml>\n");
+            sb.Append("<x:ExcelWorkbook>\n");
+
+            sb.Append("<x:ExcelWorksheets>\n");
+            sb.Append("<x:ExcelWorksheet>\n");
+
+            sb.Append("<x:Name>Projects 3 </x:Name>\n");
+            sb.Append("<x:WorksheetOptions>\n");
+
+            sb.Append("<x:Print>\n");
+            sb.Append("<x:ValidPrinterInfo/>\n");
+
+            sb.Append("<x:PaperSizeIndex>9</x:PaperSizeIndex>\n");
+            sb.Append("<x:HorizontalResolution>600</x:HorizontalResolution\n");
+
+            sb.Append("<x:VerticalResolution>600</x:VerticalResolution\n");
+            sb.Append("</x:Print>\n");
+
+            sb.Append("<x:Selected/>\n");
+            sb.Append("<x:DoNotDisplayGridlines/>\n");
+
+            sb.Append("<x:ProtectContents>False</x:ProtectContents>\n");
+            sb.Append("<x:ProtectObjects>False</x:ProtectObjects>\n");
+
+            sb.Append("<x:ProtectScenarios>False</x:ProtectScenarios>\n");
+            sb.Append("</x:WorksheetOptions>\n");
+
+            sb.Append("</x:ExcelWorksheet>\n");
+            sb.Append("</x:ExcelWorksheets>\n");
+
+            sb.Append("<x:WindowHeight>12780</x:WindowHeight>\n");
+            sb.Append("<x:WindowWidth>19035</x:WindowWidth>\n");
+
+            sb.Append("<x:WindowTopX>0</x:WindowTopX>\n");
+            sb.Append("<x:WindowTopY>15</x:WindowTopY>\n");
+
+            sb.Append("<x:ProtectStructure>False</x:ProtectStructure>\n");
+            sb.Append("<x:ProtectWindows>False</x:ProtectWindows>\n");
+
+            sb.Append("</x:ExcelWorkbook>\n");
+            sb.Append("</xml><![endif]-->\n");
+
+            sb.Append("</head>\n");
+            sb.Append("<body>\n");
+
+            return sb.ToString(); 
+
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             TextBox fromDate = diRange.FindControl("tbFrom") as TextBox;
@@ -44,6 +197,7 @@ namespace PraticeManagement.Sandbox
 
             if (!IsPostBack)
             {
+                hdnGuid.Value = Guid.NewGuid().ToString();
                 Utils.Generic.InitStartEndDate(diRange);
                 Populatepersons(true);
                 DataHelper.FillPracticeList(this.cblPractices, Resources.Controls.AllPracticesText);
@@ -114,18 +268,12 @@ namespace PraticeManagement.Sandbox
         {
         }
 
-        protected int GetColspan(DateTime date, int index)
-        {
-            if (index == 0)
-                CurrDate = diRange.FromDate.HasValue ? diRange.FromDate.Value : DateTime.Now;
+        //protected int GetColspan()
+        //{
 
-            var days = date.Subtract(CurrDate).Days;
-            var colspan = (index == 0 ? days : days - 1) * 2 + 1;
 
-            CurrDate = date;
-
-            return colspan;
-        }
+        //    return 
+        //}
 
         protected void repTeTable_OnItemCreated(object sender, RepeaterItemEventArgs e)
         {
@@ -137,23 +285,34 @@ namespace PraticeManagement.Sandbox
                     var totalsFooter = e.Item.FindControl("dlTotals") as Repeater;
                     if (totalsFooter != null)
                     {
-                        totalsFooter.DataSource = Generic.GetTotalsByDate(dsource);
+                        var totals = Generic.GetTotalsByDate(dsource).ToList();
+
+                        var modifiedTotals = new List<KeyValuePair<DateTime, double?>>();
+
+                        foreach (var item in totals)
+                        {
+                            modifiedTotals.Add(new KeyValuePair<DateTime, double?>(item.Key, item.Value));
+                        }
+
+                        var startDate = diRange.FromDate.HasValue ? diRange.FromDate.Value.Date : DateTime.Now.Date;
+                        var endDate = diRange.ToDate.HasValue ? diRange.ToDate.Value.Date : DateTime.Now.Date;
+
+                        while (startDate <= endDate)
+                        {
+                            if (!totals.Any(t => t.Key.Date == startDate))
+                            {
+                                modifiedTotals.Add(new KeyValuePair<DateTime, double?>(startDate, null));
+                            }
+
+                            startDate = startDate.AddDays(1);
+                        }
+
+                        var sortedDict = (from entry in modifiedTotals
+                                          orderby entry.Key ascending
+                                          select entry).ToDictionary(pair => pair.Key, pair => pair.Value);
+
+                        totalsFooter.DataSource = sortedDict;
                         totalsFooter.DataBind();
-                    }
-                    var tdextracolumns = e.Item.FindControl("tdExtracolumns") as System.Web.UI.HtmlControls.HtmlTableCell;
-                    if (!dsource.Any())
-                    {
-                        if (tdextracolumns != null)
-                        {
-                            tdextracolumns.ColSpan = ColspanForTotals * 2 + 1;
-                        }
-                    }
-                    else
-                    {
-                        if (tdextracolumns != null)
-                        {
-                            tdextracolumns.ColSpan = GetLastColspan();
-                        }
                     }
                 }
             }
@@ -173,6 +332,23 @@ namespace PraticeManagement.Sandbox
 
         protected void gvTimeEntries_OnRowDataBound(object sender, GridViewRowEventArgs e)
         {
+
+            if (e.Row.RowType == DataControlRowType.DataRow || e.Row.RowType == DataControlRowType.Header || e.Row.RowType == DataControlRowType.Footer)
+            {
+                e.Row.Cells[0].Attributes["valign"] = "middle";
+                e.Row.Cells[1].Attributes["valign"] = "middle";
+                e.Row.Cells[2].Attributes["valign"] = "middle";
+                e.Row.Cells[3].Attributes["valign"] = "middle";
+                
+                if (e.Row.RowType == DataControlRowType.Footer)
+                {
+                    foreach (TableCell cell in e.Row.Cells)
+                    {
+                        cell.BorderStyle = BorderStyle.None;
+                    }
+                }
+            }
+
             if (e.Row.RowType == DataControlRowType.Footer)
             {
                 var dsource = (sender as GridView).DataSource as List<TimeEntryRecord>;
@@ -196,19 +372,14 @@ namespace PraticeManagement.Sandbox
             }
         }
 
-        protected int GetLastColspan()
-        {
-            var endDate = diRange.ToDate.HasValue ? diRange.ToDate.Value : DateTime.Now;
-            return GetColspan(endDate.AddDays(1), int.MaxValue);
-        }
 
         protected void dlTotals_OnItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemIndex == 0)
                 GrandTotal = 0;
 
-            if (e.Item.DataItem is KeyValuePair<DateTime, double>)
-                GrandTotal += ((KeyValuePair<DateTime, double>)e.Item.DataItem).Value;
+            if (e.Item.DataItem is KeyValuePair<DateTime, double?> && ((KeyValuePair<DateTime, double?>)e.Item.DataItem).Value != null)
+                GrandTotal += ((KeyValuePair<DateTime, double?>)e.Item.DataItem).Value.Value;
         }
 
         protected void dlProject_OnItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -216,8 +387,8 @@ namespace PraticeManagement.Sandbox
             if (e.Item.ItemIndex == 0)
                 ProjectTotals = 0;
 
-            if (e.Item.DataItem is TimeEntryRecord)
-                ProjectTotals += ((TimeEntryRecord)e.Item.DataItem).ActualHours;
+            if (e.Item.DataItem is KeyValuePair<DateTime, TimeEntryRecord> && ((KeyValuePair<DateTime, TimeEntryRecord>)(e.Item.DataItem)).Value != null)
+                ProjectTotals += ((KeyValuePair<DateTime, TimeEntryRecord>)(e.Item.DataItem)).Value.ActualHours;
         }
 
         protected void dlTotals_OnInit(object sender, EventArgs e)
@@ -385,6 +556,52 @@ namespace PraticeManagement.Sandbox
                 divTeTable.Visible = false;
             }
         }
+
+        protected Dictionary<DateTime, TimeEntryRecord> GetUpdatedDatasource(object teRecords)
+        {
+            List<TimeEntryRecord> teRecordsList = new List<TimeEntryRecord>();
+            var listOfRecordsWithDates = new Dictionary<DateTime, TimeEntryRecord>();
+
+            if (teRecords != null)
+            {
+                teRecordsList = ((TimeEntryRecord[])teRecords).AsQueryable().ToList();
+            }
+            var startDate = diRange.FromDate.HasValue ? diRange.FromDate.Value.Date : DateTime.Now.Date;
+            var endDate = diRange.ToDate.HasValue ? diRange.ToDate.Value.Date : DateTime.Now.Date;
+
+            while (startDate <= endDate)
+            {
+                var ter = teRecordsList.Any(t => t.MilestoneDate.Date == startDate) ? teRecordsList.First(t => t.MilestoneDate.Date == startDate) : null;
+                listOfRecordsWithDates.Add(startDate, ter);
+                startDate = startDate.AddDays(1);
+            }
+
+            return listOfRecordsWithDates;
+
+        }
+
+        protected void dlProjects_OnItemDataBound(object sender, DataListItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var gv = e.Item.FindControl("gvTimeEntries") as GridView;
+                if (gv != null && gv.Rows.Count == 0)
+                {
+                    gv.GridLines = GridLines.None;
+                }
+
+            }
+
+        }
+
+        public override void VerifyRenderingInServerForm(Control control)
+        {
+
+            /* Verifies that the control is rendered */
+
+        }
+
+
     }
 }
 
