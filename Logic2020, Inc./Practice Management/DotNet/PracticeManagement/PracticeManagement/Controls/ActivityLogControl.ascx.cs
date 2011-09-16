@@ -430,9 +430,9 @@ namespace PraticeManagement.Controls
 
         private void FillEventList()
         {
-            ddlEventSource.DataSource = EventSourceTitles;
-            ddlEventSource.DataTextField = "Value";
-            ddlEventSource.DataValueField = "Key";
+            //ddlEventSource.DataSource = EventSourceTitles;
+            //ddlEventSource.DataTextField = "Value";
+            //ddlEventSource.DataValueField = "Key";
             ddlEventSource.DataBind();
 
             ddlEventSource.SelectedValue = GetStringByValue(DisplayDropDownValue);
