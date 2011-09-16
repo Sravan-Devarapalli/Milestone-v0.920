@@ -28,15 +28,45 @@
             SetDivWidth();
         });
 
+        function saveReportExcel() {
+            var divPersonListSummary = $("div[id$='divPersonListSummary']");
+            var hdnSaveReportExcel = document.getElementById('<%= hdnSaveReportExcel.ClientID %>');
+            var html = "";
+            if (divPersonListSummary != null && divPersonListSummary.length > 0) {
+                for (var i = 0; i < divPersonListSummary.length; i++) {
+                    html += divPersonListSummary[i].innerHTML;
+                }
+            }
+
+            hdnSaveReportExcel.value = html;
+        }
+
+        function saveReport() {
+            var hdnGuid = document.getElementById('<%= hdnGuid.ClientID %>');
+            var divPersonListSummary = $("div[id$='divPersonListSummary']");
+            var hdnSaveReportText = document.getElementById('<%= hdnSaveReportText.ClientID %>');
+            var html = "";
+            if (divPersonListSummary != null && divPersonListSummary.length > 0) {
+                for (var i = 0; i < divPersonListSummary.length; i++) {
+                    html += divPersonListSummary[i].innerHTML + hdnGuid.value;
+                }
+            }
+
+            hdnSaveReportText.value = html;
+        }
 
         function SetDivWidth() {
             var datalist = $get("<%= dlPersons.ClientID %>");
             if (datalist != null) {
                 var tr = datalist.children[0].children;
                 for (var index = 0; index < tr.length; index = index + 1) {
-                    $(tr[index].children[0].children[1].children[1]).css("width", $(window).width() - 100);
-                    $(tr[index].children[0].children[2]).css("width", $(window).width() - 100);
-                    $(tr[index].children[0].children[3]).css("width", $(window).width() - 100);
+                    var trchildOne = $("div[id$='divTeTable']");
+                    var trchildTwo = $("div[id$='divProjects']");
+                    var trchildThree = $("div[id$='divPersonNotEntered']");
+
+                    $(trchildOne[0].children[1]).css("width", $(window).width() - 100);
+                    $(trchildTwo[0]).css("width", $(window).width() - 100);
+                    $(trchildThree[0]).css("width", $(window).width() - 100);
                 }
             }
         }
@@ -74,6 +104,12 @@
         {
             text-align: center;
             padding-right: -1px;
+        }
+        
+        .NotVisible
+        {
+            display: none;
+            visibility: hidden;
         }
     </style>
     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
@@ -127,6 +163,20 @@
                                     </tr>
                                 </table>
                             </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                        </td>
+                        <td align="right">
+                        </td>
+                        <td style="padding-top: 5px;">
+                            <asp:Button ID="btnExportToExcel" runat="server" Text="Export To Excel" Width="100px"
+                                Enabled="false" OnClientClick="saveReportExcel();" OnClick="btnExport_OnClick"
+                                EnableViewState="False" /><asp:HiddenField ID="hdnSaveReportExcel" runat="server" />
+                            <asp:Button ID="btnExportToPDF" runat="server" Text="Export To PDF" OnClientClick="saveReport();"
+                                Enabled="false" Width="100px" OnClick="ExportToPDF" EnableViewState="False" /><asp:HiddenField
+                                    ID="hdnSaveReportText" runat="server" />
                         </td>
                     </tr>
                 </table>
@@ -219,171 +269,212 @@
                 <asp:DataList ID="dlPersons" runat="server" DataSourceID="odsPersonTimeEntries" CssClass="WholeWidth"
                     OnItemDataBound="dlPersons_OnItemDataBound" OnItemCreated="dlPersons_OnItemCreated ">
                     <ItemTemplate>
-                        <div style="padding-bottom: 5px;">
-                            <font style="font-size: 20px; font-weight: bold;">
-                                <%# Eval("Key.PersonName") %></font>
-                        </div>
-                        <div class="PersonGridLeftPadding" runat="server" id="divTeTable">
-                            <font style="font-style: italic; font-size: 16px; font-weight: bold;">Time Entry Summary</font>
-                            <div style="overflow-x: auto; overflow-y: display;">
-                                <asp:Repeater ID="repTeTable" runat="server" DataSource='<%# Eval("Value")%>' OnItemCreated="repTeTable_OnItemCreated">
-                                    <HeaderTemplate>
-                                        <table class="time-entry-person-projects WholeWidth" style="display: inline;">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width: 200px !important; text-align: left">
-                                                        <asp:Label ID="lblPType" runat="server" Text="Project-Time Type" Width="200px"></asp:Label>
-                                                    </th>
-                                                    <asp:Repeater ID="dlProject" runat="server" DataSourceID="odsCalendar" OnItemCreated="dlProject_OnItemCreated"
-                                                        OnInit="dlProject_OnInit">
-                                                        <ItemTemplate>
-                                                            <th>
-                                                            </th>
-                                                            <th style="padding-left: 5px; padding-right: 5px;" class="<%# PraticeManagement.Utils.Calendar.GetCssClassByCalendarItem((CalendarItem) Container.DataItem) %>">
-                                                                <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd<br/>MMM d}")%>
-                                                            </th>
-                                                        </ItemTemplate>
-                                                    </asp:Repeater>
-                                                    <th>
-                                                    </th>
-                                                    <th style="padding-left: 5px; padding-right: 5px;">
-                                                        Totals
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                    </HeaderTemplate>
+                        <div id="divPersonListSummary" runat="server">
+                            <table>
+                                <tr>
+                                    <td colspan="4">
+                                        <div runat="server" id="divPersonName" style="padding-bottom: 5px;">
+                                            <font style="font-size: 20px; font-weight: bold;">
+                                                <%# Eval("Key.PersonName") %></font>
+                                        </div>
+                                        <br class="NotVisible" />
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="PersonGridLeftPadding" runat="server" id="divTeTable">
+                                <table>
+                                    <tr>
+                                        <td colspan="4">
+                                            <font style="font-style: italic; font-size: 16px; font-weight: bold;">Time Entry Summary</font>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div style="overflow-x: auto; overflow-y: display;">
+                                    <asp:Repeater ID="repTeTable" runat="server" DataSource='<%# Eval("Value")%>' OnItemCreated="repTeTable_OnItemCreated">
+                                        <HeaderTemplate>
+                                            <table class="time-entry-person-projects WholeWidth" border="1" rules="rows" style="display: inline;">
+                                                <thead>
+                                                    <tr style="border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;vertical-align:middle; ">
+                                                        <th valign="middle" colspan="2" style="text-align: left; border-bottom: 1px solid gray; border-top: 1px solid gray;
+                                                            width: 20%;">
+                                                            <asp:Label ID="lblPType" runat="server" Font-Bold="true" Text="Project-Time Type"></asp:Label>
+                                                        </th>
+                                                        <asp:Repeater ID="dlProject" runat="server" DataSourceID="odsCalendar" OnItemCreated="dlProject_OnItemCreated"
+                                                            OnInit="dlProject_OnInit">
+                                                            <ItemTemplate>
+                                                                <th valign="middle" style="padding-left: 5px; padding-right: 5px;vertical-align:middle;text-align:center;  border-bottom: 1px solid gray;
+                                                                    font-weight: bold; border-top: 1px solid gray;" class="<%# PraticeManagement.Utils.Calendar.GetCssClassByCalendarItem((CalendarItem) Container.DataItem) %>">
+                                                                    <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd<br/>MMM d}")%>
+                                                                </th>
+                                                            </ItemTemplate>
+                                                        </asp:Repeater>
+                                                        <th valign="middle" style="padding-left: 5px; padding-right: 5px;vertical-align:middle;text-align:center;  border-bottom: 1px solid gray;
+                                                            font-weight: bold; border-top: 1px solid gray;">
+                                                            Totals
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <tr style="border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;"
+                                                class="<%# Container.ItemIndex % 2 == 0 ? "alterrow" : string.Empty %>">
+                                                <td valign="middle" colspan="2" style="text-align: left;vertical-align:middle; border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;
+                                                    width: 20%;">
+                                                    <asp:Label ID="lblPTypeValue" runat="server" Text='<%#  DataBinder.Eval(Container.DataItem, "Key")%>'></asp:Label>
+                                                </td>
+                                                <asp:Repeater ID="dlProject" runat="server" DataSource='<%# GetUpdatedDatasource(DataBinder.Eval(Container.DataItem, "Value")) %>'
+                                                    OnItemDataBound="dlProject_OnItemDataBound">
+                                                    <ItemTemplate>
+                                                        <td valign="middle" style="padding-left: 5px; text-align: center;vertical-align:middle; padding-right: 5px; border-bottom: 1px solid lightgray;
+                                                            border-top: 1px solid lightgray;">
+                                                            <%#  ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")) != null ? string.Format("{0:F2}",((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")).ActualHours) : string.Empty%>
+                                                        </td>
+                                                    </ItemTemplate>
+                                                </asp:Repeater>
+                                                <td valign="middle" style="font-weight: bold; padding-left: 5px; text-align: center;vertical-align:middle; padding-right: 5px;
+                                                    border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;">
+                                                    <%# ProjectTotals.ToString(PraticeManagement.Constants.Formatting.DoubleFormat) %>
+                                                </td>
+                                            </tr>
+                                        </ItemTemplate>
+                                        <FooterTemplate>
+                                            <tr style="font-weight: bold; border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;">
+                                                <td colspan="2" style="text-align: left; border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;
+                                                    width: 20%;">
+                                                    Totals
+                                                </td>
+                                                <asp:Repeater ID="dlTotals" runat="server" OnItemDataBound="dlTotals_OnItemDataBound"
+                                                    OnInit="dlTotals_OnInit">
+                                                    <ItemTemplate>
+                                                        <td style="padding-left: 5px; padding-right: 5px; border-bottom: 1px solid lightgray;
+                                                            text-align: center; border-top: 1px solid lightgray;">
+                                                            <%# ((double?)DataBinder.Eval(Container.DataItem, "Value"))!=null ?string.Format("{0:F2}",((double?)DataBinder.Eval(Container.DataItem, "Value")).Value) : string.Empty %>
+                                                        </td>
+                                                    </ItemTemplate>
+                                                </asp:Repeater>
+                                                <td style="font-size: 15px; padding-left: 5px; padding-right: 5px; border-bottom: 1px solid lightgray;
+                                                    text-align: center; border-top: 1px solid lightgray;">
+                                                    <%# GrandTotal.ToString(PraticeManagement.Constants.Formatting.DoubleFormat) %>
+                                                </td>
+                                            </tr>
+                                            </tbody></table>
+                                        </FooterTemplate>
+                                    </asp:Repeater>
+                                </div>
+                            </div>
+                            <div class="PersonGridLeftPadding" style="overflow-x: auto; padding-top: 10px;" runat="server"
+                                id="divProjects">
+                                <br class="NotVisible" />
+                                <table>
+                                    <tr>
+                                        <td colspan="4">
+                                            <font style="font-style: italic; font-size: 16px; font-weight: bold;">Time Entry Detail</font>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br class="NotVisible" />
+                                <asp:DataList ID="dlProjects" runat="server" DataSource='<%# Eval("Key.GroupedTimeEtnries") %>'
+                                    OnItemDataBound="dlProjects_OnItemDataBound" CssClass="WholeWidth">
                                     <ItemTemplate>
-                                        <tr class="<%# Container.ItemIndex % 2 == 0 ? "alterrow" : string.Empty %>">
-                                            <td style="text-align: left; width: 200px; text-align: left">
-                                                <asp:Label ID="lblPTypeValue" runat="server" Text='<%#  DataBinder.Eval(Container.DataItem, "Key")%>'
-                                                    Width="200px"></asp:Label>
-                                            </td>
-                                            <asp:Repeater ID="dlProject" runat="server" DataSource='<%# DataBinder.Eval(Container.DataItem, "Value") %>'
-                                                OnItemDataBound="dlProject_OnItemDataBound">
-                                                <ItemTemplate>
-                                                    <td colspan="<%# GetColspan(((TimeEntryRecord)Container.DataItem).MilestoneDate, Container.ItemIndex) %>">
-                                                    </td>
-                                                    <td style="padding-left: 5px; padding-right: 5px;">
-                                                        <%# DataBinder.Eval(Container.DataItem, "ActualHours", "{0:F2}") %>
-                                                    </td>
-                                                </ItemTemplate>
-                                            </asp:Repeater>
-                                            <td colspan="<%# GetLastColspan() %>">
-                                            </td>
-                                            <td style="font-weight: bold; padding-left: 5px; padding-right: 5px;">
-                                                <%# ProjectTotals.ToString(PraticeManagement.Constants.Formatting.DoubleFormat) %>
-                                            </td>
-                                        </tr>
+                                        <table>
+                                            <tr>
+                                                <td colspan="4">
+                                                    <div style="padding-top: 3px;">
+                                                        <font style="font-size: 14px; font-weight: bold;">
+                                                            <%# Eval("Key.Name") %>
+                                                        </font>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <br class="NotVisible" />
+                                        <asp:GridView ID="gvTimeEntries" runat="server" AutoGenerateColumns="False" DataSource='<%# Eval("Value") %>'
+                                            EnableModelValidation="True" CssClass="CompPerfTable WholeWidth" GridLines="Both"
+                                            ShowFooter="true" OnRowDataBound="gvTimeEntries_OnRowDataBound" BackColor="White"
+                                            EmptyDataText="This person has not entered any time for the period selected.">
+                                            <AlternatingRowStyle BackColor="#F9FAFF" />
+                                            <Columns>
+                                                <asp:TemplateField>
+                                                    <HeaderTemplate>
+                                                        <div style="text-align: center; font-weight: bold;" class="ie-bg">
+                                                            Date</div>
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <%# ((TimeEntryRecord)Container.DataItem).MilestoneDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
+                                                    </ItemTemplate>
+                                                    <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
+                                                    <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="8%" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <HeaderTemplate>
+                                                        <div style="text-align: center; font-weight: bold;" class="ie-bg">
+                                                            Note</div>
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblNote" runat="server" Text='<%# Bind("Note") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                    <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
+                                                    <ItemStyle HorizontalAlign="Left" VerticalAlign="Top" Width="60%" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField FooterStyle-CssClass="AlignRight">
+                                                    <HeaderTemplate>
+                                                        <div style="text-align: center; font-weight: bold;" class="ie-bg">
+                                                            Time Type</div>
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <%#((TimeEntryRecord)Container.DataItem).TimeType.Name %>
+                                                    </ItemTemplate>
+                                                    <ItemStyle Width="24%" VerticalAlign="Middle" />
+                                                    <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
+                                                    <FooterTemplate>
+                                                        <div  class="ie-bg" style="text-align: right;">
+                                                            <asp:Label  ID="lblGvGridTotalText" runat="server" Text="Total =" Font-Bold="true"></asp:Label></div>
+                                                    </FooterTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField ItemStyle-CssClass="AlignCentre" FooterStyle-CssClass="AlignCentre">
+                                                    <HeaderTemplate>
+                                                        <div style="text-align: center; font-weight: bold;" class="ie-bg">
+                                                            Hours</div>
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <div style="text-align: center;">
+                                                            <%#((TimeEntryRecord)Container.DataItem).ActualHours.ToString(PraticeManagement.Constants.Formatting.DoubleFormat)%>
+                                                        </div>
+                                                    </ItemTemplate>
+                                                    <ItemStyle Width="8%" VerticalAlign="Middle" HorizontalAlign="Center" />
+                                                    <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
+                                                    <FooterTemplate>
+                                                        <div class="ie-bg" style="text-align: center;">
+                                                            <asp:Label ID="lblGvGridTotal" runat="server" Font-Bold="true"></asp:Label></div>
+                                                    </FooterTemplate>
+                                                </asp:TemplateField>
+                                            </Columns>
+                                        </asp:GridView>
                                     </ItemTemplate>
-                                    <FooterTemplate>
-                                        <tr style="font-weight: bold">
-                                            <td style="text-align: left; width: 200px; text-align: left;">
-                                                Totals
-                                            </td>
-                                            <asp:Repeater ID="dlTotals" runat="server" OnItemDataBound="dlTotals_OnItemDataBound"
-                                                OnInit="dlTotals_OnInit">
-                                                <ItemTemplate>
-                                                    <td colspan="<%# GetColspan(((KeyValuePair<DateTime, double>)Container.DataItem).Key, Container.ItemIndex) %>">
-                                                    </td>
-                                                    <td style="padding-left: 5px; padding-right: 5px;">
-                                                        <%# DataBinder.Eval(Container.DataItem, "Value", "{0:F2}") %>
-                                                    </td>
-                                                </ItemTemplate>
-                                            </asp:Repeater>
-                                            <td id="tdExtracolumns" runat="server">
-                                            </td>
-                                            <td style="font-size: 125%; padding-left: 5px; padding-right: 5px;">
-                                                <%# GrandTotal.ToString(PraticeManagement.Constants.Formatting.DoubleFormat) %>
-                                            </td>
-                                        </tr>
-                                        </tbody></table>
-                                    </FooterTemplate>
-                                </asp:Repeater>
+                                </asp:DataList>
+                            </div>
+                            <div id="divPersonNotEntered" runat="server" class="PersonGridLeftPadding">
+                                &nbsp;
+                                <asp:Label ID="lblnoDataMesssage" runat="server" Text="This person has not entered any time for the period selected."
+                                    Visible="false"></asp:Label>
                             </div>
                         </div>
-                        <div class="PersonGridLeftPadding" style="overflow-x: auto; padding-top: 10px;" runat="server"
-                            id="divProjects">
-                            <font style="font-style: italic; font-size: 16px; font-weight: bold;">Time Entry Detail</font>
-                            <asp:DataList ID="dlProjects" runat="server" DataSource='<%# Eval("Key.GroupedTimeEtnries") %>'
-                                CssClass="WholeWidth">
-                                <ItemTemplate>
-                                    <div style="padding-top: 3px;">
-                                        <font style="font-size: 14px; font-weight: bold;">
-                                            <%# Eval("Key.Name") %>
-                                        </font>
-                                    </div>
-                                    <asp:GridView ID="gvTimeEntries" runat="server" AutoGenerateColumns="False" DataSource='<%# Eval("Value") %>'
-                                        EnableModelValidation="True" CssClass="CompPerfTable WholeWidth" GridLines="None"
-                                        ShowFooter="true" OnRowDataBound="gvTimeEntries_OnRowDataBound" BackColor="White"
-                                        EmptyDataText="This person has not entered any time for the period selected.">
-                                        <AlternatingRowStyle BackColor="#F9FAFF" />
-                                        <Columns>
-                                            <asp:TemplateField HeaderText="MilestoneDate" SortExpression="MilestoneDate">
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        Date</div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
-                                                    <%# ((TimeEntryRecord)Container.DataItem).MilestoneDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
-                                                </ItemTemplate>
-                                                <ItemStyle Width="100" />
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Note" SortExpression="Note">
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        Note</div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
-                                                    <asp:Label ID="Label7" runat="server" Text='<%# Bind("Note") %>'></asp:Label>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="ActualHours" SortExpression="ActualHours" FooterStyle-CssClass="AlignRight">
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        Time Type</div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
-                                                    <%#((TimeEntryRecord)Container.DataItem).TimeType.Name %>
-                                                </ItemTemplate>
-                                                <ItemStyle Width="250" />
-                                                <FooterTemplate>
-                                                    <div class="ie-bg" style="padding-top: 10px">
-                                                        <asp:Label ID="lblGvGridTotalText" runat="server" Text="Total =" Font-Bold="true"></asp:Label></div>
-                                                </FooterTemplate>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="ActualHours" SortExpression="ActualHours" ItemStyle-CssClass="AlignCentre"
-                                                FooterStyle-CssClass="AlignCentre">
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        Hours</div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
-                                                    <%#((TimeEntryRecord)Container.DataItem).ActualHours.ToString(PraticeManagement.Constants.Formatting.DoubleFormat)%>
-                                                </ItemTemplate>
-                                                <ItemStyle Width="100" />
-                                                <FooterTemplate>
-                                                    <div class="ie-bg" style="padding-top: 10px">
-                                                        <asp:Label ID="lblGvGridTotal" runat="server" Font-Bold="true"></asp:Label></div>
-                                                </FooterTemplate>
-                                            </asp:TemplateField>
-                                        </Columns>
-                                    </asp:GridView>
-                                </ItemTemplate>
-                            </asp:DataList>
-                        </div>
-                        <div class="PersonGridLeftPadding">
-                            <asp:Label ID="lblnoDataMesssage" runat="server" Text="This person has not entered any time for the period selected."
-                                Visible="false"></asp:Label>
-                        </div>
-                        <div style="padding-top: 10px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px;">
+                        <div id="divhr" runat="server" style="padding-top: 10px; padding-bottom: 5px; padding-left: 5px;
+                            padding-right: 5px;">
+                            &nbsp;
                             <hr width="100%" size="2" color="#888888" align="center" style="margin-left: 5px;
-                                margin-right: 5px;">
+                                margin-right: 5px;" />
                         </div>
                     </ItemTemplate>
                 </asp:DataList>
             </asp:Panel>
+            <asp:HiddenField ID="hdnGuid" runat="server" />
         </ContentTemplate>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="btnExportToExcel" />
+            <asp:PostBackTrigger ControlID="btnExportToPDF" />
+        </Triggers>
     </asp:UpdatePanel>
     <asp:ObjectDataSource ID="odsPersonTimeEntries" runat="server" SelectMethod="GetTimeEntriesForPerson"
         TypeName="PraticeManagement.Utils.TimeEntryHelper" OnSelecting="odsPersonTimeEntries_OnSelecting">
