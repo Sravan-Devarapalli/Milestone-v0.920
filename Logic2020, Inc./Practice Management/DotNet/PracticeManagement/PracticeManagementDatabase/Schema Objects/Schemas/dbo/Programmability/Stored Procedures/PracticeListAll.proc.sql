@@ -35,7 +35,8 @@ AS
 		INSERT INTO @OwnerProjectPracticeList (PracticeId) 
 		SELECT proj.PracticeId 
 		FROM dbo.v_Project AS proj 
-		WHERE proj.ProjectManagerId = @PersonId 
+		LEFT JOIN dbo.Commission AS C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1 --as per #2914
+		WHERE proj.ProjectManagerId = @PersonId OR C.PersonId = @PersonId
 	END
 	
 	SELECT 
