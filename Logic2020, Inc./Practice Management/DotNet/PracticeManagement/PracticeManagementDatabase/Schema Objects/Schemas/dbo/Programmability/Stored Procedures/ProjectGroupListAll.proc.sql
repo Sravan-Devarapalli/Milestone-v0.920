@@ -46,6 +46,10 @@ AS
 					     OR GroupId IN (SELECT * FROM @GroupPermissions)
 						 OR GroupId IN (SELECT pro.GroupId FROM Project AS pro
 										WHERE ProjectManagerId = @PersonId )
+						 OR GroupId IN (SELECT proj.GroupId 
+										FROM Project AS proj
+										JOIN Commission C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1
+										WHERE C.PersonId = @PersonId)
 						 )
 
 	ELSE 
