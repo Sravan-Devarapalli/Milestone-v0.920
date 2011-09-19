@@ -166,15 +166,6 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.Label lblHoursMax;
         
         /// <summary>
-        /// lblMonthlyRevenue control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMonthlyRevenue;
-        
-        /// <summary>
         /// lblMonthlyRevenueWithoutRecruiting control.
         /// </summary>
         /// <remarks>
@@ -184,15 +175,6 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.Label lblMonthlyRevenueWithoutRecruiting;
         
         /// <summary>
-        /// lblMonthlyGogs control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMonthlyGogs;
-        
-        /// <summary>
         /// lblMonthlyCogsWithoutRecruiting control.
         /// </summary>
         /// <remarks>
@@ -200,15 +182,6 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblMonthlyCogsWithoutRecruiting;
-        
-        /// <summary>
-        /// lblMonthlyGrossMargin control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMonthlyGrossMargin;
         
         /// <summary>
         /// lblMonthlyGrossMarginWithoutRecruiting control.
@@ -227,42 +200,6 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlTableRow trTargetMargin;
-        
-        /// <summary>
-        /// tdTargetMargin control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdTargetMargin;
-        
-        /// <summary>
-        /// txtTargetMargin control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtTargetMargin;
-        
-        /// <summary>
-        /// lblTargetMargin control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTargetMargin;
-        
-        /// <summary>
-        /// custTargetMargin control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator custTargetMargin;
         
         /// <summary>
         /// tdTargetMarginWithoutRecruiting control.
