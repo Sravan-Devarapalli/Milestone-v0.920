@@ -24,20 +24,40 @@
             <br />
             <table class="WholeWidth">
                 <tr>
-                    <td style="padding-top:8px;" valign="top" >
+                    <td style="padding-top: 8px;" valign="top">
                         <table>
                             <tr>
-                                <td colspan="2" style="padding-left:16px;">
+                                <td colspan="2">
+                                    <table>
+                                        <tr>
+                                            <td style="padding-left: 16px; padding-bottom:6px;">
+                                                <asp:RadioButton ID="rbSelectPerson" OnCheckedChanged="rbMarginTest_CheckedChanged" Checked="true"
+                                                    runat="server" Text="Select a Person" GroupName="marginTest" AutoPostBack="true" />
+                                                <asp:Label ID="lblOr" runat="server" Text="OR" Style="padding-left: 20px; padding-right:20px; text-align: right;
+                                                    font-weight: bold;"></asp:Label>
+                                            </td>
+                                            <td style="padding-bottom:6px;">
+                                                <asp:RadioButton ID="rbDefineValues" OnCheckedChanged="rbMarginTest_CheckedChanged"
+                                                    runat="server" Text="Define Values" GroupName="marginTest" AutoPostBack="true" />
+                                            </td>
+                                            <td align="right" style="padding-bottom:6px; padding-left:20px;">
+                                                <asp:Button ID="btnReset" runat="server" OnClick="Reset_Clicked"
+                                                    Text="Reset Form" CausesValidation="false" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding-left: 16px;">
                                     <asp:DropDownList ID="ddlPersonName" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlPersonName_SelectedIndexChanged"
                                         Width="355px">
                                     </asp:DropDownList>
                                 </td>
-                                <td align="right">
-                                <asp:Button ID="btnReset" runat="server" OnClientClick="window.location.href=window.location.href;" Text="Reset Form" CausesValidation="false" />
-                                </td>
                             </tr>
                             <tr>
-                                <td colspan="3" style="padding-top: 5px;padding-left:15px;">
+                                <td colspan="3" style="padding-top: 5px; padding-left: 15px;">
                                     <uc1:PersonnelCompensation ID="personnelCompensation" runat="server" AutoPostBack="true"
                                         OnCompensationChanged="compensation_Changed" OnCompensationMethodChanged="compensation_Changed"
                                         OnPeriodChanged="compensation_Changed" />
@@ -49,11 +69,11 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="3" style="padding-left:6px;">
-                                    <asp:Panel ID="pnlRecruiterInfo" runat="server">
+                                <td colspan="3" style="padding-left: 6px;">
+                                    <%--<asp:Panel ID="pnlRecruiterInfo" runat="server">
                                         <uc1:RecruiterInfo ID="recruiterInfo" runat="server" ShowCommissionDetails="False"
                                             OnInfoChanged="compensation_Changed" />
-                                    </asp:Panel>
+                                    </asp:Panel>--%>
                                 </td>
                             </tr>
                             <tr>
@@ -69,7 +89,7 @@
                         </table>
                         <table>
                             <tr>
-                                <td style="padding-left:23px;">
+                                <td style="padding-left: 23px;">
                                     <uc1:WhatIf ID="whatIf" runat="server" DisplayTargetMargin="true" IsMarginTestPage="true" />
                                 </td>
                             </tr>
@@ -87,7 +107,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td valign="top" width="340px;" style="padding-left: 10px; padding-top:10px; background-color:#DBEEF3;">
+                    <td valign="top" width="340px;" style="padding-left: 10px; padding-top: 10px; background-color: #DBEEF3;">
                         <uc1:GrossMarginComputing ID="grossMarginComputing" runat="server" />
                     </td>
                 </tr>
