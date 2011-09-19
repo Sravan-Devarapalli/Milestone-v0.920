@@ -5,47 +5,51 @@
     function ChangeHourlyBillRate(IsIncrement) {
         var txtBillRate = $get("<%= txtBillRateSlider_BoundControl.ClientID %>");
 
-        BillRate = parseFloat(txtBillRate.value);
-        if (IsIncrement && BillRate < 350) {
+        if (txtBillRate != null) {
+            BillRate = parseFloat(txtBillRate.value);
+            if (IsIncrement && BillRate < 350) {
 
-            txtBillRate.value = BillRate + 1;
-        }
-        else if (!IsIncrement && BillRate > 20) {
-            txtBillRate.value = BillRate - 1;
-        }
-        if (txtBillRate.fireEvent) {
-            txtBillRate.fireEvent('onchange');
-        }
-        if (document.createEvent) {
-            var event = document.createEvent('HTMLEvents');
-            event.initEvent('change', true, true);
-            txtBillRate.dispatchEvent(event);
+                txtBillRate.value = BillRate + 1;
+            }
+            else if (!IsIncrement && BillRate > 20) {
+                txtBillRate.value = BillRate - 1;
+            }
+            if (txtBillRate.fireEvent) {
+                txtBillRate.fireEvent('onchange');
+            }
+            if (document.createEvent) {
+                var event = document.createEvent('HTMLEvents');
+                event.initEvent('change', true, true);
+                txtBillRate.dispatchEvent(event);
+            }
         }
     }
     function ChangeHoursPerWeek(IsIncrement) {
         var txtHPW = $get("<%= txtHorsPerWeekSlider_BoundControl.ClientID %>");
 
-        BillRate = parseInt(txtHPW.value);
-        if (IsIncrement && BillRate < 60) {
+        if (txtHPW != null) {
+            BillRate = parseInt(txtHPW.value);
+            if (IsIncrement && BillRate < 60) {
 
-            if (BillRate < 55)
-                txtHPW.value = BillRate + 5;
-            else
-                txtHPW.value = 60;
-        }
-        else if (!IsIncrement) {
-            if (BillRate > 15)
-                txtHPW.value = BillRate - 5;
-            else
-                txtHPW.value = 10;
-        }
-        if (txtHPW.fireEvent) {
-            txtHPW.fireEvent('onchange');
-        }
-        if (document.createEvent) {
-            var event = document.createEvent('HTMLEvents');
-            event.initEvent('change', true, true);
-            txtHPW.dispatchEvent(event);
+                if (BillRate < 55)
+                    txtHPW.value = BillRate + 5;
+                else
+                    txtHPW.value = 60;
+            }
+            else if (!IsIncrement) {
+                if (BillRate > 15)
+                    txtHPW.value = BillRate - 5;
+                else
+                    txtHPW.value = 10;
+            }
+            if (txtHPW.fireEvent) {
+                txtHPW.fireEvent('onchange');
+            }
+            if (document.createEvent) {
+                var event = document.createEvent('HTMLEvents');
+                event.initEvent('change', true, true);
+                txtHPW.dispatchEvent(event);
+            }
         }
     }
 </script>
@@ -182,24 +186,24 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="padding-bottom: 3px;">
+                        <td colspan="6" style="padding-bottom: 3px;">
                             &nbsp;
                         </td>
-                        <td colspan="2" nowrap="nowrap" style="font-size: smaller; font-weight: bold; padding-bottom: 3px;">
+                        <%--<td colspan="2" nowrap="nowrap" style="font-size: smaller; font-weight: bold; padding-bottom: 3px;">
                             With recruiting costs
                         </td>
                         <td colspan="2" nowrap="nowrap" style="font-size: smaller; font-weight: bold; padding-bottom: 3px;">
                             Without recruiting costs
-                        </td>
+                        </td>--%>
                     </tr>
                     <tr>
                         <td colspan="2" style="padding-bottom: 3px;">
                             Monthly Revenue
                         </td>
-                        <td colspan="2" style="padding-right: 75px; padding-bottom: 3px;" align="right">
+                        <%--<td colspan="2" style="padding-right: 75px; padding-bottom: 3px;" align="right">
                             <asp:Label ID="lblMonthlyRevenue" runat="server"></asp:Label>
-                        </td>
-                        <td colspan="2" style="padding-right: 42px; padding-bottom: 3px;" align="right">
+                        </td>--%>
+                        <td colspan="4" style="padding-right: 242px; padding-bottom: 3px;" align="right">
                             <asp:Label ID="lblMonthlyRevenueWithoutRecruiting" runat="server"></asp:Label>
                         </td>
                     </tr>
@@ -207,10 +211,10 @@
                         <td colspan="2" style="padding-bottom: 3px;">
                             Monthly COGS
                         </td>
-                        <td colspan="2" style="padding-right: 75px; padding-bottom: 3px;" align="right">
+                        <%--<td colspan="2" style="padding-right: 75px; padding-bottom: 3px;" align="right">
                             <asp:Label ID="lblMonthlyGogs" runat="server"></asp:Label>
-                        </td>
-                        <td colspan="2" style="padding-right: 42px; padding-bottom: 3px;" align="right">
+                        </td>--%>
+                        <td colspan="4" style="padding-right: 242px; padding-bottom: 3px;" align="right">
                             <asp:Label ID="lblMonthlyCogsWithoutRecruiting" runat="server"></asp:Label>
                         </td>
                     </tr>
@@ -218,10 +222,10 @@
                         <td colspan="2" style="padding-bottom: 3px;">
                             Monthly Gross Margin
                         </td>
-                        <td colspan="2" style="padding-right: 75px; padding-bottom: 3px;" align="right">
+                        <%--<td colspan="2" style="padding-right: 75px; padding-bottom: 3px;" align="right">
                             <asp:Label ID="lblMonthlyGrossMargin" runat="server"></asp:Label>
-                        </td>
-                        <td colspan="2" style="padding-right: 42px; padding-bottom: 3px;" align="right">
+                        </td>--%>
+                        <td colspan="4" style="padding-right: 242px; padding-bottom: 3px;" align="right">
                             <asp:Label ID="lblMonthlyGrossMarginWithoutRecruiting" runat="server"></asp:Label>
                         </td>
                     </tr>
@@ -229,7 +233,7 @@
                         <td colspan="2">
                             Target Margin
                         </td>
-                        <td colspan="2" style="padding-right: 75px;" align="right">
+                        <%--<td colspan="2" style="padding-right: 75px;" align="right">
                             <table>
                                 <tr>
                                     <td id="tdTargetMargin" runat="server">
@@ -243,8 +247,8 @@
                                 ErrorMessage="The Target Margin must be a number and be less then 100." ToolTip="The Target Margin must be a number and be less then 100."
                                 EnableClientScript="false" Display="Dynamic" Text="*" ValidateEmptyText="false"
                                 SetFocusOnError="true" OnServerValidate="custTargetMargin_ServerValidate" ValidationGroup="ComputeRate"></asp:CustomValidator>
-                        </td>
-                        <td colspan="2" style="padding-right: 42px;" align="right">
+                        </td>--%>
+                        <td colspan="4" style="padding-right: 242px;" align="right">
                             <table>
                                 <tr>
                                     <td id="tdTargetMarginWithoutRecruiting" runat="server">
@@ -290,15 +294,13 @@
                         <td colspan="2">
                             Client Discount (optional)
                         </td>
-                        <td colspan="2" style="padding-right: 75px;" align="right">
+                        <td colspan="4" style="padding-right: 242px;" align="right">
                             <asp:TextBox ID="txtClientDiscount" Style="text-align: right;" Width="95px" runat="server"
                                 AutoPostBack="true" OnTextChanged="txtClientDiscount_TextChanged">0%</asp:TextBox>
                             <asp:CustomValidator ID="cvClientDiscount" runat="server" ControlToValidate="txtClientDiscount"
                                 ErrorMessage="The Client Discount must be a number." ToolTip="The Client Discount must be a number."
                                 EnableClientScript="false" Display="Dynamic" Text="*" ValidateEmptyText="false"
                                 SetFocusOnError="true" OnServerValidate="custClientDiscount_ServerValidate" ValidationGroup="ComputeRate"></asp:CustomValidator>
-                        </td>
-                        <td colspan="2">
                         </td>
                     </tr>
                     <tr>
