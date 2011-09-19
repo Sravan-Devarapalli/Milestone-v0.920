@@ -49,7 +49,7 @@ namespace PraticeManagement
             personnelCompensation.StartDate = DateTime.Today;
             DataHelper.FillOneOffList(ddlPersonName, "-- Select a Person --", DateTime.Today);
 
-            recruiterInfo.Person = new Person();
+            //recruiterInfo.Person = new Person();
             personnelCompensation.PaymentsVisible =
                 personnelCompensation.CompensationDateVisible =
                     personnelCompensation.DefaultHoursPerDayVisible =
@@ -58,7 +58,16 @@ namespace PraticeManagement
             // Security            
             bool isAdmin = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
             grossMarginComputing.Visible = isAdmin;
+        }
 
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            ShowDetails();
+        }
+
+        protected void Reset_Clicked(object sender, EventArgs e)
+        {
+            ResetControls();
         }
 
         protected void compensation_Changed(object sender, EventArgs e)
@@ -66,10 +75,29 @@ namespace PraticeManagement
             DoCompute(SelectedPerson);
         }
 
+        protected void rbMarginTest_CheckedChanged(object sender, EventArgs e)
+        {
+            ResetControls();
+        }
+
+        public void ResetControls()
+        {
+            ddlPersonName.SelectedIndex = 0;
+            ClearControls();
+            whatIf.ClearContents();
+            personnelCompensation.Timescale = TimescaleType.Hourly;
+        }
+
+        private void ShowDetails()
+        {
+            ddlPersonName.Visible = rbSelectPerson.Checked;
+            personnelCompensation.Visible = !rbSelectPerson.Checked;
+        }
+
         private void DoCompute(Person selectedPerson)
         {
-            TextBox txtTargetMargin = (TextBox)whatIf.FindControl("txtTargetMargin");
-            txtTargetMargin.Text = string.Empty;
+            //TextBox txtTargetMargin = (TextBox)whatIf.FindControl("txtTargetMargin");
+            //txtTargetMargin.Text = string.Empty;
             Page.Validate();
             if (Page.IsValid)
             {
@@ -92,7 +120,7 @@ namespace PraticeManagement
                 else
                     person.CurrentPay.AmountHourly = person.CurrentPay.Amount / Utils.Calendar.GetWorkingHoursInCurrentYear(whatIf.SelectedHorsPerWeek);
                 // Commisions
-                person.RecruiterCommission = recruiterInfo.RecruiterCommission;
+                //person.RecruiterCommission = recruiterInfo.RecruiterCommission;
 
                 using (PersonServiceClient serviceClient = new PersonServiceClient())
                 {
@@ -119,34 +147,41 @@ namespace PraticeManagement
 
         protected void ddlPersonName_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Person person = SelectedPerson;
-            ClearControls();
-            if (person != null && person.PaymentHistory != null)
+            if (ddlPersonName.SelectedIndex == 0)
             {
-                PopulateControls(person.PaymentHistory[person.PaymentHistory.Count - 1]);
-                if (person.RecruiterCommission != null)
+                ResetControls();
+            }
+            else
+            {
+                Person person = SelectedPerson;
+                ClearControls();
+                if (person != null && person.PaymentHistory != null)
                 {
-                    recruiterInfo.RecruiterCommission = person.RecruiterCommission;
-                }
+                    PopulateControls(person.PaymentHistory[person.PaymentHistory.Count - 1]);
+                    //if (person.RecruiterCommission != null)
+                    //{
+                    //    recruiterInfo.RecruiterCommission = person.RecruiterCommission;
+                    //}
 
-                var personListAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
-                if (personListAnalyzer.IsOtherGreater(person))
-                {
-                    personnelCompensation.Visible = false;
-                    //whatIf.HideCalculatedValues = true;
+                    var personListAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
+                    if (personListAnalyzer.IsOtherGreater(person))
+                    {
+                        personnelCompensation.Visible = false;
+                        //whatIf.HideCalculatedValues = true;
+                    }
+                    else
+                    {
+                        personnelCompensation.Visible = true;
+                        //whatIf.HideCalculatedValues = false;
+                    }
                 }
                 else
                 {
                     personnelCompensation.Visible = true;
-                    //whatIf.HideCalculatedValues = false;
                 }
-            }
-            else
-            {
-                personnelCompensation.Visible = true;
-            }
 
-            DoCompute(person);
+                DoCompute(person);
+            }
         }
 
         private void PopulateControls(Pay pay)
