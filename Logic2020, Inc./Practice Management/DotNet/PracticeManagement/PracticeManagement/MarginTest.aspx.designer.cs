@@ -22,13 +22,31 @@ namespace PraticeManagement {
         protected global::System.Web.UI.UpdatePanel upnlBody;
         
         /// <summary>
-        /// ddlPersonName control.
+        /// rbSelectPerson control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlPersonName;
+        protected global::System.Web.UI.WebControls.RadioButton rbSelectPerson;
+        
+        /// <summary>
+        /// lblOr control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblOr;
+        
+        /// <summary>
+        /// rbDefineValues control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbDefineValues;
         
         /// <summary>
         /// btnReset control.
@@ -40,6 +58,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnReset;
         
         /// <summary>
+        /// ddlPersonName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlPersonName;
+        
+        /// <summary>
         /// personnelCompensation control.
         /// </summary>
         /// <remarks>
@@ -47,24 +74,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.PersonnelCompensation personnelCompensation;
-        
-        /// <summary>
-        /// pnlRecruiterInfo control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlRecruiterInfo;
-        
-        /// <summary>
-        /// recruiterInfo control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.RecruiterInfo recruiterInfo;
         
         /// <summary>
         /// whatIf control.
