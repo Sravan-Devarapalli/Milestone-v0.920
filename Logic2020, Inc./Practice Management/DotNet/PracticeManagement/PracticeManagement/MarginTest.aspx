@@ -7,6 +7,8 @@
     TagPrefix="uc1" %>
 <%@ Register Src="Controls/RecruiterInfo.ascx" TagName="RecruiterInfo" TagPrefix="uc1" %>
 <%@ Register Src="Controls/WhatIf.ascx" TagName="WhatIf" TagPrefix="uc1" %>
+<%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="loadingProgress" TagPrefix="uc" %>
+
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>One-Off Person Margin | Practice Management</title>
 </asp:Content>
@@ -19,6 +21,7 @@
         function getDirty() { return false; };
         //-->
     </script>
+    <uc:loadingProgress ID="lpMarginTest" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
             <br />
