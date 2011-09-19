@@ -256,6 +256,57 @@
         function setPosition(item, ytop, xleft) {
             item.offset({ top: ytop, left: xleft });
         }
+
+        function ChangeHourlyBillRate(IsIncrement) {
+            var txtBillRate = document.getElementById('<%= (whatIf.FindControl("txtBillRateSlider_BoundControl") as TextBox).ClientID %>');
+
+            if (txtBillRate != null) {
+                BillRate = parseFloat(txtBillRate.value);
+                if (IsIncrement && BillRate < 350) {
+
+                    txtBillRate.value = BillRate + 1;
+                }
+                else if (!IsIncrement && BillRate > 20) {
+                    txtBillRate.value = BillRate - 1;
+                }
+                if (txtBillRate.fireEvent) {
+                    txtBillRate.fireEvent('onchange');
+                }
+                if (document.createEvent) {
+                    var event = document.createEvent('HTMLEvents');
+                    event.initEvent('change', true, true);
+                    txtBillRate.dispatchEvent(event);
+                }
+            }
+        }
+        function ChangeHoursPerWeek(IsIncrement) {
+            var txtHPW = document.getElementById('<%= (whatIf.FindControl("txtHorsPerWeekSlider_BoundControl") as TextBox).ClientID %>');
+
+            if (txtHPW != null) {
+                BillRate = parseInt(txtHPW.value);
+                if (IsIncrement && BillRate < 60) {
+
+                    if (BillRate < 55)
+                        txtHPW.value = BillRate + 5;
+                    else
+                        txtHPW.value = 60;
+                }
+                else if (!IsIncrement) {
+                    if (BillRate > 15)
+                        txtHPW.value = BillRate - 5;
+                    else
+                        txtHPW.value = 10;
+                }
+                if (txtHPW.fireEvent) {
+                    txtHPW.fireEvent('onchange');
+                }
+                if (document.createEvent) {
+                    var event = document.createEvent('HTMLEvents');
+                    event.initEvent('change', true, true);
+                    txtHPW.dispatchEvent(event);
+                }
+            }
+        }
     </script>
     <style>
         /* --------- Tabs for person and project details pages ------ */
