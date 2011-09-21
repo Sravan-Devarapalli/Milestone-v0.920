@@ -16,6 +16,7 @@ namespace DataTransferObjects
             public const string ProjectLead = "Project lead";
             public const string DirectorRoleName = "Client Director";
             public const string HRRoleName = "HR";
+            public const string SeniorLeadershipRoleName = "Senior Leadership";
         }
 
         public class Formatting
