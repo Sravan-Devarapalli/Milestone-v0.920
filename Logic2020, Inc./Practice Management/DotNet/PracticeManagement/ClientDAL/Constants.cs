@@ -479,8 +479,10 @@
             public const string ActualHoursParam = "@ActualHours";
             public const string AttachmentIdParam = "@AttachmentId";
             public const string IsFloatingHolidayParam = "@IsFloatingHoliday";
-public const string ShowLostParam = "@ShowLost";
+            public const string ShowLostParam = "@ShowLost";
             public const string ShowWonParam = "@ShowWon";
+            public const string TextParam = "@Text";
+            public const string RichTextParam = "@RichText";
 
         }
 
@@ -536,6 +538,8 @@ public const string ShowLostParam = "@ShowLost";
                 public const string SaveQuickLinksForDashBoardProcedure = "dbo.SaveQuickLinksForDashBoard";
                 public const string GetQuickLinksByDashBoardTypeProcedure = "dbo.GetQuickLinksByDashBoard";
                 public const string DeleteQuickLinkByIdProcedure = "dbo.DeleteQuickLinkById";
+                public const string SaveAnnouncement = "dbo.SaveAnnouncement";
+                public const string GetLatestAnnouncement = "dbo.GetLatestAnnouncement";
 
             }
 
