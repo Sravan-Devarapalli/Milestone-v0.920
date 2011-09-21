@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="Persons.aspx.cs" Inherits="PraticeManagement.Config.Persons" %>
 
+<%@ PreviousPageType VirtualPath="~/DashBoard.aspx" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
@@ -17,7 +18,7 @@
     <script language="javascript" type="text/javascript" src="../Scripts/jquery-1.4.1.js"></script>
     <script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
     <script type="text/javascript">
-        
+
         function changeAlternateitemscolrsForCBL() {
             var cbl = document.getElementById('<%=cblRecruiters.ClientID %>');
             SetAlternateColors(cbl);
@@ -59,7 +60,7 @@
                                     <td valign="middle" style="width: 39%; white-space: nowrap; padding-left: 5px; padding-right: 0px;">
                                         <table class="WholeWidth">
                                             <tr>
-                                                <td style="width: 97%;" >
+                                                <td style="width: 97%;">
                                                     <asp:TextBox runat="server" ID="txtSearch" Width="100%" Style="text-align: left;"
                                                         OnTextChanged="txtSearch_TextChanged" MaxLength="40"></asp:TextBox>
                                                     <ajaxToolkit:TextBoxWatermarkExtender ID="waterMarkTxtSearch" runat="server" TargetControlID="txtSearch"
@@ -67,9 +68,9 @@
                                                     </ajaxToolkit:TextBoxWatermarkExtender>
                                                 </td>
                                                 <td style="width: 3%;">
-                                                    <asp:RequiredFieldValidator ID="reqSearchText"  runat="server"
-                                                        Text="*" ErrorMessage="Please type text to be searched." ToolTip="Please type text to be searched."
-                                                        ControlToValidate="txtSearch" EnableClientScript="true" ValidationGroup="ValSearch" />
+                                                    <asp:RequiredFieldValidator ID="reqSearchText" runat="server" Text="*" ErrorMessage="Please type text to be searched."
+                                                        ToolTip="Please type text to be searched." ControlToValidate="txtSearch" EnableClientScript="true"
+                                                        ValidationGroup="ValSearch" />
                                                 </td>
                                             </tr>
                                         </table>
