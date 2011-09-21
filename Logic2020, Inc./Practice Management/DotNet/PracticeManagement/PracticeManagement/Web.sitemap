@@ -14,7 +14,7 @@
     <siteMapNode url="~/DiscussionReview2.aspx?from=toolbar" title="Opportunities" description="Opportunity List page" >
       <siteMapNode url="~/OpportunityDetail.aspx?from=sub_toolbar"  VirtualPath="~/OpportunityDetail.aspx" QuickLinkTitle="Add Opportunity" title="Add Opportunity" description="Add Opportunity" ShowURL="true" />
       <siteMapNode url="~/OpportunitySearch.aspx" title="Search" VirtualPath="~/OpportunitySearch.aspx" QuickLinkTitle="Opportunity Search" description="Opportunity Search" ShowURL="true" />
-      <siteMapNode url="~/DiscussionReview2.aspx" VirtualPath="~/DiscussionReview2.aspx" QuickLinkTitle="Opportunity Summary" title="Opportunity Summary" description="Opportunity Summary" ShowURL="true" />
+      <siteMapNode url="~/DiscussionReview2.aspx" VirtualPath="~/DiscussionReview2.aspx" QuickLinkTitle="Opportunity Summary" title="Summary" description="Opportunity Summary" ShowURL="true" />
     </siteMapNode>
     <siteMapNode url="Temp.aspx?from=Reports" title="Reports" description="Reports">
       <siteMapNode url="Temp.aspx?from=Reports_Financial" title="Financial">
