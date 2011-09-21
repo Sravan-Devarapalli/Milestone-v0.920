@@ -23,7 +23,7 @@ namespace PracticeManagementService
             return EmailTemplateDAL.GetAllEmailTemplates();
         }
 
-        public  EmailTemplate EmailTemplateGetByName(string emailTemplateName)
+        public EmailTemplate EmailTemplateGetByName(string emailTemplateName)
         {
             return EmailTemplateDAL.EmailTemplateGetByName(emailTemplateName);
         }
@@ -93,7 +93,7 @@ namespace PracticeManagementService
             ConfigurationDAL.SaveCompanyLogoData(title, imagename, imagePath, data);
         }
 
-        #endregion "IConfigurationService Members" 
+        #endregion "IConfigurationService Members"
 
         #region "Email related functions"
 
@@ -170,6 +170,22 @@ namespace PracticeManagementService
         {
             return ConfigurationDAL.GetMarginColorInfoDefaults(goalType);
         }
+
+        public void SaveQuickLinksForDashBoard(string linkNameList, string virtualPathList, DashBoardType dashBoardType)
+        {
+            ConfigurationDAL.SaveQuickLinksForDashBoard(linkNameList, virtualPathList, dashBoardType);
+        }
+
+        public List<QuickLinks> GetQuickLinksByDashBoardType(DashBoardType dashBoardtype)
+        {
+            return ConfigurationDAL.GetQuickLinksByDashBoardType(dashBoardtype);
+        }
+
+        public void DeleteQuickLinkById(int id)
+        {
+            ConfigurationDAL.DeleteQuickLinkById(id);
+        }
+
     }
 }
 
