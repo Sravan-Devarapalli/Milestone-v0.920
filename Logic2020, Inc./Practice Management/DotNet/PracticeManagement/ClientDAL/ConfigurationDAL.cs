@@ -12,8 +12,8 @@ namespace DataAccess
 {
     public static class ConfigurationDAL
     {
-        #region Constants 
-         
+        #region Constants
+
         #region Parameters
 
         private const string TitleParam = "@Title";
@@ -27,6 +27,9 @@ namespace DataAccess
         private const string isDeletePreviousMarginInfoParam = "@isDeletePreviousMarginInfo";
         private const string isNotesRequiredPracticeIdsListParam = "@NotesRequiredPracticeIdsList";
         private const string isNotesExemptedPracticeIdsListParam = "@NotesExemptedPracticeIdsList";
+        private const string linkNameListParam = "@linkNameList";
+        private const string virtualPathListParam = "@virtualPathList";
+        private const string dashBoardTypeParam = "@dashBoardType";
 
         #endregion Parameters
 
@@ -348,7 +351,87 @@ namespace DataAccess
 
                     command.Parameters.AddWithValue(isNotesRequiredPracticeIdsListParam, isNotesRequiredPracticeIdsList);
                     command.Parameters.AddWithValue(isNotesExemptedPracticeIdsListParam, isNotesExemptedPracticeIdsList);
-                    
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static void SaveQuickLinksForDashBoard(string linkNameList, string virtualPathList, DashBoardType dashBoardType)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.SaveQuickLinksForDashBoardProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(linkNameListParam, linkNameList);
+                    command.Parameters.AddWithValue(virtualPathListParam, virtualPathList);
+                    command.Parameters.AddWithValue(dashBoardTypeParam, ((int)dashBoardType));
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static List<QuickLinks> GetQuickLinksByDashBoardType(DashBoardType dashBoardtype)
+        {
+            var quicklinks = new List<QuickLinks>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.GetQuickLinksByDashBoardTypeProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(dashBoardTypeParam, (int)dashBoardtype);
+
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        ReadQuickLinks(reader, quicklinks);
+                    }
+                }
+            }
+            return quicklinks;
+
+        }
+
+        private static void ReadQuickLinks(SqlDataReader reader, List<QuickLinks> quicklinks)
+        {
+            if (reader.HasRows)
+            {
+                int dashBoardTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.DashBoardTypeIdColumn);
+                int idIndex = reader.GetOrdinal(Constants.ColumnNames.Id);
+                int linkNameIndex = reader.GetOrdinal(Constants.ColumnNames.LinkNameColumn);
+                int virtualPathIndex = reader.GetOrdinal(Constants.ColumnNames.VirtualPathColumn);
+
+                while (reader.Read())
+                {
+                    quicklinks.Add( new QuickLinks()
+                                                {
+                                                    DashBoardType = (DashBoardType)reader.GetInt32(dashBoardTypeIdIndex),
+                                                    Id = reader.GetInt32(idIndex),
+                                                    LinkName = reader.GetString(linkNameIndex),
+                                                    VirtualPath = reader.GetString(virtualPathIndex)
+                                                });
+                }
+            }
+        }
+
+        public static void DeleteQuickLinkById(int id)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.DeleteQuickLinkByIdProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Id, id);
+
                     connection.Open();
                     command.ExecuteNonQuery();
                 }
