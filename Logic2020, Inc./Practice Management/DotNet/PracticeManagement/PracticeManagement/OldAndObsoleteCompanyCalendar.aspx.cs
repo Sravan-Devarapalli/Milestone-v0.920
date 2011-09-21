@@ -15,6 +15,7 @@ namespace PraticeManagement
         private CalendarItem[] days;
         private bool userIsPracticeManager;
         private bool userIsDirector;
+        private bool userIsSeniorLeadership;
         private bool userIsSalesperson;
         private bool userIsRecruiter;
         private bool userIsAdministrator;
@@ -81,6 +82,8 @@ namespace PraticeManagement
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName);
             userIsDirector =
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);// #2817: userIsDirector is added as per the requirement.
+            userIsSeniorLeadership =
+               Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);// #2913: userIsSeniorLeadership is added as per the requirement.
             userIsSalesperson =
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName);
             userIsRecruiter =
@@ -104,11 +107,11 @@ namespace PraticeManagement
                 // Security
                 if (!userIsAdministrator)
                 {
-                    btnRetrieveCalendar.Visible = userIsPracticeManager || userIsSalesperson || userIsRecruiter || userIsDirector || userIsHR; // #2817: userIsDirector is added as per the requirement.
+                    btnRetrieveCalendar.Visible = userIsPracticeManager || userIsSalesperson || userIsRecruiter || userIsDirector || userIsSeniorLeadership || userIsHR; // #2817: userIsDirector is added as per the requirement.
 
                     Person current = DataHelper.CurrentPerson;
 
-                    if (userIsPracticeManager || userIsDirector && current != null) // #2817: userIsDirector is added as per the requirement.
+                    if (userIsPracticeManager || userIsDirector || userIsSeniorLeadership && current != null) // #2817: userIsDirector is added as per the requirement.
                     {
                         // Practice manager have to see the list his subordinates
                         DataHelper.FillSubordinatesList(ddlPerson,
@@ -158,7 +161,9 @@ namespace PraticeManagement
             if (days == null)
             {
                 int? practiceManagerId = null;
-                if ((!userIsAdministrator && userIsPracticeManager) || (!userIsAdministrator && userIsDirector))// #2817: userIsDirector is added as per the requirement.
+                if ((!userIsAdministrator && userIsPracticeManager) || 
+                    (!userIsAdministrator && userIsDirector) ||
+                    (!userIsAdministrator && userIsSeniorLeadership))// #2817: userIsDirector is added as per the requirement.
                 {
                     Person current = DataHelper.CurrentPerson;
                     practiceManagerId = current != null ? current.Id : 0;
@@ -185,7 +190,7 @@ namespace PraticeManagement
                 }
             }
 
-            if (days != null && !userIsAdministrator && !userIsPracticeManager && !userIsDirector &&    // #2817: userIsDirector is added as per the requirement.
+            if (days != null && !userIsAdministrator && !userIsPracticeManager && !userIsDirector && !userIsSeniorLeadership &&    // #2817: userIsDirector is added as per the requirement.
                 (userIsConsultant || userIsRecruiter || userIsSalesperson || userIsHR))                 // #2817: userIsHR is added as per the requirement.
             {
                 // Security
