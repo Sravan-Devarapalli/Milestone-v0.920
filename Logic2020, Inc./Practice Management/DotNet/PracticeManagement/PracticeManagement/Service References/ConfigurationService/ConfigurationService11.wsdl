@@ -112,6 +112,24 @@
   <wsdl:message name="IConfigurationService_SavePracticesIsNotesRequiredDetails_OutputMessage">
     <wsdl:part name="parameters" element="tns:SavePracticesIsNotesRequiredDetailsResponse" />
   </wsdl:message>
+  <wsdl:message name="IConfigurationService_SaveQuickLinksForDashBoard_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveQuickLinksForDashBoard" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_SaveQuickLinksForDashBoard_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveQuickLinksForDashBoardResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_GetQuickLinksByDashBoardType_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetQuickLinksByDashBoardType" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_GetQuickLinksByDashBoardType_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetQuickLinksByDashBoardTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_DeleteQuickLinkById_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteQuickLinkById" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_DeleteQuickLinkById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteQuickLinkByIdResponse" />
+  </wsdl:message>
   <wsdl:portType name="IConfigurationService">
     <wsdl:operation name="GetAllEmailTemplates">
       <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetAllEmailTemplates" message="tns:IConfigurationService_GetAllEmailTemplates_InputMessage" />
@@ -180,6 +198,18 @@
     <wsdl:operation name="SavePracticesIsNotesRequiredDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/SavePracticesIsNotesRequiredDetails" message="tns:IConfigurationService_SavePracticesIsNotesRequiredDetails_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/SavePracticesIsNotesRequiredDetailsResponse" message="tns:IConfigurationService_SavePracticesIsNotesRequiredDetails_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveQuickLinksForDashBoard">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/SaveQuickLinksForDashBoard" message="tns:IConfigurationService_SaveQuickLinksForDashBoard_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/SaveQuickLinksForDashBoardResponse" message="tns:IConfigurationService_SaveQuickLinksForDashBoard_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetQuickLinksByDashBoardType">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetQuickLinksByDashBoardType" message="tns:IConfigurationService_GetQuickLinksByDashBoardType_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/GetQuickLinksByDashBoardTypeResponse" message="tns:IConfigurationService_GetQuickLinksByDashBoardType_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteQuickLinkById">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/DeleteQuickLinkById" message="tns:IConfigurationService_DeleteQuickLinkById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/DeleteQuickLinkByIdResponse" message="tns:IConfigurationService_DeleteQuickLinkById_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IConfigurationService" type="tns:IConfigurationService">
@@ -330,6 +360,33 @@
     </wsdl:operation>
     <wsdl:operation name="SavePracticesIsNotesRequiredDetails">
       <soap:operation soapAction="http://tempuri.org/IConfigurationService/SavePracticesIsNotesRequiredDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveQuickLinksForDashBoard">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/SaveQuickLinksForDashBoard" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetQuickLinksByDashBoardType">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/GetQuickLinksByDashBoardType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteQuickLinkById">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/DeleteQuickLinkById" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
