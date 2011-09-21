@@ -189,6 +189,7 @@
     <Compile Include="ProjectStatus.cs" />
     <Compile Include="ProjectStatusType.cs" />
     <Compile Include="Quadruple.cs" />
+    <Compile Include="QuickLinks.cs" />
     <Compile Include="RevenueType.cs" />
     <Compile Include="Seniority.cs" />
     <Compile Include="Settings.cs" />
