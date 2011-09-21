@@ -14,10 +14,10 @@
 <%@ Register Src="~/Controls/Generic/Filtering/OpportunityFilter.ascx" TagName="OpportunityFilter"
     TagPrefix="uc" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Opportunities Discussion Review 2 | Practice Management</title>
+    <title>Opportunity Summary | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
-    Opportunities List
+    Opportunity Summary
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <asp:UpdatePanel ID="pnlBody" runat="server">
