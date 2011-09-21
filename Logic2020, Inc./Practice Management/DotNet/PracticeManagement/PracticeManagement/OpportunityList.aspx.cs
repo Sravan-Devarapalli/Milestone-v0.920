@@ -15,7 +15,7 @@ using System.Collections.Generic;
 
 namespace PraticeManagement
 {
-    public partial class OpportunityList : PracticeManagementPageBase
+    public partial class OpportunityList : PracticeManagementSearchPageBase
     {
         #region Constants
 
@@ -61,7 +61,7 @@ namespace PraticeManagement
         /// <summary>
         /// Gets a text to be searched for.
         /// </summary>
-        public string SearchText
+        public override string SearchText
         {
             get
             {
