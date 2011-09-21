@@ -21,14 +21,14 @@
     <MetadataSource Address="http://localhost/PracticeManagementService/ConfigurationService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="ConfigurationService55.xsd" MetadataType="Schema" ID="f53d5e3c-2337-43dc-aca4-a5c509d51aad" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd3" />
-    <MetadataFile FileName="ConfigurationService57.xsd" MetadataType="Schema" ID="48188c0a-993b-4d8a-96cf-068389e96563" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd1" />
-    <MetadataFile FileName="ConfigurationService11.disco" MetadataType="Disco" ID="34689720-a402-451d-b005-251562d34e61" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?disco" />
-    <MetadataFile FileName="ConfigurationService56.xsd" MetadataType="Schema" ID="135e9e30-3bbf-432f-bbb7-373a1cb6efe7" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd4" />
-    <MetadataFile FileName="ConfigurationService11.wsdl" MetadataType="Wsdl" ID="e6ffd529-0df2-435d-bc63-8c8d7b24360e" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?wsdl" />
-    <MetadataFile FileName="ConfigurationService7.xsd" MetadataType="Schema" ID="7bff4da3-cc45-4622-b1ab-9d68e7e7e16c" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd5" />
-    <MetadataFile FileName="ConfigurationService58.xsd" MetadataType="Schema" ID="2149f3c1-fff8-4289-b717-bd14ed6495ed" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd0" />
-    <MetadataFile FileName="ConfigurationService59.xsd" MetadataType="Schema" ID="d76bde8c-131a-4de9-9382-e0e369f45b61" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd2" />
+    <MetadataFile FileName="ConfigurationService5.xsd" MetadataType="Schema" ID="906afa8b-a5b7-4b30-ab57-2f095ca9173d" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd0" />
+    <MetadataFile FileName="ConfigurationService6.xsd" MetadataType="Schema" ID="ed63a49b-627c-4452-8cd1-a6e4dcb3f5cf" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd4" />
+    <MetadataFile FileName="ConfigurationService1.disco" MetadataType="Disco" ID="7133bcde-23bb-434d-a891-0a5f54650c7b" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/ConfigurationService.svc?disco" />
+    <MetadataFile FileName="ConfigurationService7.xsd" MetadataType="Schema" ID="44a3661c-49c3-4ce3-b875-61802e05080d" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd1" />
+    <MetadataFile FileName="ConfigurationService8.xsd" MetadataType="Schema" ID="62464aed-d277-4ac1-bbe7-a6ee989f87ba" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd2" />
+    <MetadataFile FileName="ConfigurationService1.wsdl" MetadataType="Wsdl" ID="6b93ac24-e7e1-429c-bbfb-812d55f799df" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/ConfigurationService.svc?wsdl" />
+    <MetadataFile FileName="ConfigurationService9.xsd" MetadataType="Schema" ID="142885ba-b398-464c-92bc-04a1ba3e0f84" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd3" />
+    <MetadataFile FileName="ConfigurationService10.xsd" MetadataType="Schema" ID="5bc29876-6cdf-462d-8b73-8ca03499a9e9" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd5" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
