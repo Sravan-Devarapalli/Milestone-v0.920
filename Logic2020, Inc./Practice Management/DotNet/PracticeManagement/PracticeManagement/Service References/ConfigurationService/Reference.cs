@@ -76,6 +76,12 @@ namespace PraticeManagement.ConfigurationService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IConfigurationService/DeleteQuickLinkById", ReplyAction="http://tempuri.org/IConfigurationService/DeleteQuickLinkByIdResponse")]
         void DeleteQuickLinkById(int id);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IConfigurationService/SaveAnnouncement", ReplyAction="http://tempuri.org/IConfigurationService/SaveAnnouncementResponse")]
+        void SaveAnnouncement(string text, string richText);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IConfigurationService/GetLatestAnnouncement", ReplyAction="http://tempuri.org/IConfigurationService/GetLatestAnnouncementResponse")]
+        string GetLatestAnnouncement();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -180,6 +186,14 @@ namespace PraticeManagement.ConfigurationService {
         
         public void DeleteQuickLinkById(int id) {
             base.Channel.DeleteQuickLinkById(id);
+        }
+        
+        public void SaveAnnouncement(string text, string richText) {
+            base.Channel.SaveAnnouncement(text, richText);
+        }
+        
+        public string GetLatestAnnouncement() {
+            return base.Channel.GetLatestAnnouncement();
         }
     }
 }
