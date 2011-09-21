@@ -559,23 +559,23 @@
     <None Include="Service References\ClientService\ClientService6.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ConfigurationService\ConfigurationService11.wsdl" />
-    <None Include="Service References\ConfigurationService\ConfigurationService55.xsd">
+    <None Include="Service References\ConfigurationService\ConfigurationService1.wsdl" />
+    <None Include="Service References\ConfigurationService\ConfigurationService10.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ConfigurationService\ConfigurationService56.xsd">
+    <None Include="Service References\ConfigurationService\ConfigurationService5.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ConfigurationService\ConfigurationService57.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ConfigurationService\ConfigurationService58.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ConfigurationService\ConfigurationService59.xsd">
+    <None Include="Service References\ConfigurationService\ConfigurationService6.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ConfigurationService\ConfigurationService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService9.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\DefaultCommissionService\DefaultCommissionService1.wsdl" />
@@ -881,7 +881,7 @@
     <None Include="Service References\CalendarService\CalendarService1.disco" />
     <Content Include="Service References\ClientService\ClientService.disco" />
     <None Include="Service References\ClientService\ClientService1.disco" />
-    <None Include="Service References\ConfigurationService\ConfigurationService11.disco" />
+    <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
     <Content Include="Service References\MembershipService\MembershipService.disco" />
     <None Include="Service References\TimeEntryService\configuration91.svcinfo" />
     <None Include="Service References\TimeEntryService\configuration.svcinfo" />
