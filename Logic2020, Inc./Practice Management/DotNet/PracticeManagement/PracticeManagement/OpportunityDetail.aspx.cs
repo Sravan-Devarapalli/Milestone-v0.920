@@ -571,7 +571,7 @@ namespace PraticeManagement
                     {
                         serviceClient.OpportunityDelete(OpportunityId.Value, User.Identity.Name);
 
-                        Redirect("OpportunityList.aspx");
+                        Redirect(Constants.ApplicationPages.OpportunitySummary);
                     }
                     catch (Exception ex)
                     {
