@@ -23,7 +23,7 @@ namespace PraticeManagement
         private bool _userIsProjectLead;
         private bool _userIsRecruiter;
         private bool _userIsSalesperson;
-
+        private bool _userIsSeniorLeadership;
 
         #endregion
 
@@ -70,6 +70,7 @@ namespace PraticeManagement
         {
             string dashBoardValue = _userIsAdministrator ? DashBoardType.Admin.ToString() :
                                     _userIsClientDirector ? DashBoardType.ClientDirector.ToString() :
+                                    _userIsSeniorLeadership ? DashBoardType.SeniorLeadership.ToString() :
                                     (_userIsPracticeAreaManger || _userIsProjectLead) ? DashBoardType.Manager.ToString() :
                                     _userIsRecruiter ? DashBoardType.Recruiter.ToString() :
                                     _userIsSalesperson ? DashBoardType.BusinessDevelopment.ToString() :
@@ -127,6 +128,8 @@ namespace PraticeManagement
 
                 Dictionary<string, string> dicQuickLinks = new Dictionary<string, string>();
 
+                dicQuickLinks.Add("Request Time Off", "mailto:{0}?subject=Time Off Request");
+
                 foreach (SiteMapNode childNode in ((System.Web.SiteMapNodeCollection)(smdsMain.Provider.RootNode.ChildNodes)))
                 {
                     if (childNode.HasChildNodes)
@@ -179,7 +182,7 @@ namespace PraticeManagement
                 listOfItems.Add("Person", "Person");
             }
 
-            if (_userIsClientDirector || _userIsSalesperson)//new role
+            if (_userIsClientDirector || _userIsSeniorLeadership || _userIsSalesperson)//new role
             {
                 if (!listOfItems.Any(k => k.Key == "Project"))
                 {
@@ -227,6 +230,8 @@ namespace PraticeManagement
                 roles.Contains(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
             _userIsClientDirector =
             roles.Contains(DataTransferObjects.Constants.RoleNames.DirectorRoleName);
+            _userIsSeniorLeadership =
+                Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName); // #2913: userIsSeniorLeadership is added as per the requirement.
             _userIsProjectLead =
                  roles.Contains(DataTransferObjects.Constants.RoleNames.ProjectLead);
             _userIsSalesperson =
@@ -237,6 +242,20 @@ namespace PraticeManagement
                 roles.Contains(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName);
             _userIsConsultant =
                 roles.Contains(DataTransferObjects.Constants.RoleNames.ConsultantRoleName);
+        }
+
+        protected string GetVirtualPath(string virtualPath)
+        {
+            if (virtualPath == "mailto:{0}?subject=Time Off Request")
+            {
+                var personAlias = DataHelper.CurrentPerson.Manager.Alias;
+                var modified = string.Format(virtualPath, personAlias);
+
+                return modified;
+            }
+
+
+            return virtualPath;
         }
 
         protected void imgEditAnnouncement_OnClick(object sender, EventArgs e)
@@ -303,10 +322,11 @@ namespace PraticeManagement
 
         protected bool IsShowSearchSection()
         {
-            var result = _userIsAdministrator || _userIsClientDirector || _userIsPracticeAreaManger || _userIsProjectLead || _userIsRecruiter || _userIsSalesperson;
+            var result = _userIsAdministrator || _userIsClientDirector || _userIsSeniorLeadership || _userIsPracticeAreaManger || _userIsProjectLead || _userIsRecruiter || _userIsSalesperson;
 
             return result;
         }
 
     }
 }
+
