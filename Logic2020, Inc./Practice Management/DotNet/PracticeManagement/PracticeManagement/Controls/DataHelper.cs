@@ -1823,6 +1823,22 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public static void SaveQuickLinksForDashBoard(string linkNameList, string virtualPathList,DashBoardType dashBoardType)
+        {
+            using (var serviceClient = new ConfigurationServiceClient())
+            {
+                try
+                {
+                    serviceClient.SaveQuickLinksForDashBoard(linkNameList, virtualPathList, dashBoardType);
+                }
+                catch (FaultException<ExceptionDetail> ex)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
         public static Dictionary<string, string> GetResourceKeyValuePairs(SettingsType settingType)
         {
             using (var serviceClient = new ConfigurationServiceClient())
@@ -2047,6 +2063,40 @@ namespace PraticeManagement.Controls
 
                     return opportunities.ToList();
               
+        }
+
+        public static List<QuickLinks> GetQuickLinksByDashBoardType(DashBoardType dashBoardtype)
+        {
+            using (var serviceClient = new ConfigurationServiceClient())
+            {
+                try
+                {
+                    var quickLinks = serviceClient.GetQuickLinksByDashBoardType(dashBoardtype);
+
+                    return quickLinks.AsQueryable().ToList(); ;
+                }
+                catch (FaultException<ExceptionDetail> ex)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        public static void DeleteQuickLinkById(int id)
+        {
+            using (var serviceClient = new ConfigurationServiceClient())
+            {
+                try
+                {
+                    serviceClient.DeleteQuickLinkById(id);
+                }
+                catch (FaultException<ExceptionDetail> ex)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
         }
     }
 }
