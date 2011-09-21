@@ -38,6 +38,15 @@
                     }
                 }
 
+                function mpeAnnouncements_OnCancelScript() {
+                    var text = document.getElementById('<%= pnlHtmlAnnounceMent.ClientID %>');
+                    var editor = document.getElementById('<%= ckeAnnouncementEditor.ClientID %>');
+                    
+                    if (text != null && editor != null) {
+                        editor.text = text.innerHTML;
+                    }
+                }
+
                 function pageLoad() {
                     var ddlSearchType = document.getElementById('<%= ddlSearchType.ClientID %>');
                     ddlSearchType_onchange(ddlSearchType);
@@ -120,21 +129,26 @@
                     <td valign="top" style="width: 65%;">
                         <h1>
                             Practice Management Announcements</h1>
-                        <CKEditor:CKEditorControl ID="CKEditor1" Toolbar="Basic" runat="server"></CKEditor:CKEditorControl>
                         <table class="CompPerfTable WholeWidth">
                             <tr>
                                 <td style="width: 10%; padding-top: 15px;">
                                 </td>
                                 <td style="width: 90%; padding-top: 15px;">
                                     <asp:Panel ID="pnlHtmlAnnounceMent" BorderWidth="1px" Width="100%" Height="100px"
-                                        BorderStyle="Solid" BorderColor="Black" runat="server">
+                                        BorderStyle="Solid" BorderColor="Black" runat="server" style="padding:5px; overflow-y:auto;">
                                     </asp:Panel>
-                                    <asp:Button ID="imgEditAnnouncement" runat="server" OnClick="imgEditAnnouncement_OnClick"
-                                        Text="Edit" />
-                                    <asp:Panel ID="pnlEditAnnounceMent" BorderWidth="1px" Width="100%" BorderStyle="Solid"
-                                        BorderColor="Black" Visible="false" runat="server">
+                                    <asp:Button ID="imgEditAnnouncement" runat="server" Text="Edit" ToolTip="Edit"/>
+                                    <AjaxControlToolkit:ModalPopupExtender ID="mpeAnnouncement" runat="server" CancelControlID="btnCancelAnnouncement"
+                                        PopupControlID="pnlEditAnnounceMent" TargetControlID="imgEditAnnouncement" BackgroundCssClass="modalBackground"
+                                        DropShadow="false" OnCancelScript="mpeAnnouncements_OnCancelScript();">
+                                    </AjaxControlToolkit:ModalPopupExtender>
+                                    <asp:Panel ID="pnlEditAnnounceMent" BorderWidth="1px" Width="500px" BorderStyle="Solid"
+                                        BorderColor="Black" runat="server" Style="display: none;">
+                                        <CKEditor:CKEditorControl ID="ckeAnnouncementEditor" ResizeEnabled="false" Toolbar="Basic"
+                                            runat="server"></CKEditor:CKEditorControl>
                                         <asp:Button ID="btnSaveAnnouncement" runat="server" OnClick="btnSaveAnnouncement_OnClick"
-                                            Text="Save AnnounceMent" />
+                                            Text="Save AnnounceMent" ToolTip="Save AnnounceMent" />
+                                        <asp:Button ID="btnCancelAnnouncement" runat="server" Text="Cancel" ToolTip="Cancel" />
                                     </asp:Panel>
                                 </td>
                             </tr>
