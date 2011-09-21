@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MarginTest.aspx.cs" Inherits="PraticeManagement.MarginTest"
-    MasterPageFile="~/PracticeManagementMain.Master" Title="One-Off Person Margin | Practice Management" %>
+    MasterPageFile="~/PracticeManagementMain.Master" Title="Margin Test | Practice Management" %>
 
 <%@ Register Src="Controls/GrossMarginComputing.ascx" TagName="GrossMarginComputing"
     TagPrefix="uc1" %>
@@ -10,7 +10,7 @@
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="loadingProgress" TagPrefix="uc" %>
 
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>One-Off Person Margin | Practice Management</title>
+    <title>Margin Test | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     One-Off Person Margin
