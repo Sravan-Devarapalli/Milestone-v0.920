@@ -60,6 +60,15 @@ namespace PracticeManagementService
 
         [OperationContract]
         void SavePracticesIsNotesRequiredDetails(string isNotesRequiredPracticeIdsList, string isNotesExemptedPracticeIdsList);
+
+        [OperationContract]
+        void SaveQuickLinksForDashBoard(string linkNameList, string virtualPathList, DashBoardType dashBoardType);
+
+        [OperationContract]
+        List<QuickLinks> GetQuickLinksByDashBoardType(DashBoardType dashBoardtype);
+
+        [OperationContract]
+        void DeleteQuickLinkById(int id);
     }
 }
 
