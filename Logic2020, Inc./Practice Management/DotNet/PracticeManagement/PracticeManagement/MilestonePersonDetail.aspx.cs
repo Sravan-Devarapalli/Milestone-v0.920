@@ -145,7 +145,7 @@ namespace PraticeManagement
             }
         }
 
-      
+
 
         private bool? IsUserisOwnerOfProject
         {
@@ -156,7 +156,7 @@ namespace PraticeManagement
                 {
                     if (ViewState["IsOwnerOfProject"] == null)
                     {
-                        ViewState["IsOwnerOfProject"] = DataHelper.IsUserIsOwnerOfProject(User.Identity.Name, id.Value , false);
+                        ViewState["IsOwnerOfProject"] = DataHelper.IsUserIsOwnerOfProject(User.Identity.Name, id.Value, false);
                     }
                     return (bool)ViewState["IsOwnerOfProject"];
                 }
@@ -320,7 +320,9 @@ namespace PraticeManagement
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) ||
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName) ||
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName) ||
-                Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);// #2817: DirectorRoleName is added as per the requirement.
+                Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName) || // #2817: DirectorRoleName is added as per the requirement.
+                Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName)// #2913: userIsSeniorLeadership is added as per the requirement.
+                ;
             btnDelete.Visible = btnSave.Visible && SelectedMilestonePersonId.HasValue;
 
             if (gvMilestonePersonEntries.FooterRow != null && gvMilestonePersonEntries.FooterRow.Cells[0].Visible)
@@ -432,12 +434,13 @@ namespace PraticeManagement
                             if (!(IsUserisOwnerOfProject.HasValue && IsUserisOwnerOfProject.Value))
                             {
                                 if (!Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName)
-                                    || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName))// #2817: DirectorRoleName is added as per the requirement.
+                                    || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName)// #2817: DirectorRoleName is added as per the requirement.
+                                    || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName))// #2913: userIsSeniorLeadership is added as per the requirement.
                                 {
                                     e.Row.Enabled = false;
                                 }
                             }
-                           
+
 
                         }
 
@@ -495,7 +498,7 @@ namespace PraticeManagement
 
         protected void gvMilestonePersonEntries_RowUpdating(object sender, GridViewUpdateEventArgs e)
         {
-             
+
             Page.Validate(vsumMilestonePersonEntry.ValidationGroup);
             if (Page.IsValid)
             {
@@ -512,10 +515,10 @@ namespace PraticeManagement
                 BindEntriesGrid(MilestonePerson.Entries);
                 e.Cancel = true;
 
-               
+
 
                 MilestonePerson = milestonePerson;
-               
+
 
                 IsDirty = true;
 
@@ -797,7 +800,7 @@ namespace PraticeManagement
                     {
                         MilestonePerson = milestonePerson;
 
-                       
+
 
                         if (!Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName))
                         {
@@ -1045,7 +1048,7 @@ namespace PraticeManagement
 
         private void PopulateControls(Milestone milestone)
         {
-            
+
             Milestone = milestone;
 
             if (milestone.Project != null)
@@ -1062,7 +1065,9 @@ namespace PraticeManagement
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) &&
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName) &&
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName) &&
-                !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);// #2817: DirectorRoleName is added as per the requirement.
+                !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName) && // #2817: DirectorRoleName is added as per the requirement.
+                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName) // #2913: userIsSeniorLeadership is added as per the requirement.
+                ;
 
             gvMilestonePersonEntries.Columns[gvMilestonePersonEntries.Columns.Count - 1].Visible = !isReadOnly;
             btnDelete.Visible = !isReadOnly;
