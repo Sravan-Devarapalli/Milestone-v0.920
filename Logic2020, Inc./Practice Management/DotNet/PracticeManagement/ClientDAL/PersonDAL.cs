@@ -2258,9 +2258,20 @@ namespace DataAccess
                     int managerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerId);
                     int managerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerFirstName);
                     int managerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerLastName);
+                    int managerAliasIndex = -1;
                     int telephoneNumberIndex = reader.GetOrdinal(Constants.ColumnNames.TelephoneNumber);
                     int isDefManagerIndex;
                     int IsWelcomeEmailSentIndex;
+
+                    try
+                    {
+                        managerAliasIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerAlias);
+                    }
+                    catch
+                    {
+                        managerAliasIndex = -1;
+                    }
+
                     try
                     {
                         IsWelcomeEmailSentIndex = reader.GetOrdinal(Constants.ColumnNames.IsWelcomeEmailSent);
@@ -2277,8 +2288,8 @@ namespace DataAccess
                     catch
                     {
                         isDefManagerIndex = -1;
-                    }                    
-                    
+                    }
+
 
                     //  PracticesOwned column is not defined for each set that
                     //  uses given method, so we need to know if that column exists
@@ -2381,8 +2392,12 @@ namespace DataAccess
                                 Id = reader.GetInt32(managerIdIndex),
                                 FirstName = reader.GetString(managerFirstNameIndex),
                                 LastName = reader.GetString(managerLastNameIndex)
-                                // Alias = reader.GetString(managerAliasIndex)
                             };
+
+                            if (managerAliasIndex >= 0)
+                            {
+                                person.Manager.Alias = reader.GetString(managerAliasIndex);
+                            }
                         }
 
                         personList.Add(person);
@@ -2901,7 +2916,7 @@ namespace DataAccess
             }
         }
 
-        public static Dictionary<DateTime, bool> GetIsNoteRequiredDetailsForSelectedDateRange(DateTime start, DateTime end,int personId)
+        public static Dictionary<DateTime, bool> GetIsNoteRequiredDetailsForSelectedDateRange(DateTime start, DateTime end, int personId)
         {
             var result = new Dictionary<DateTime, bool>();
 
@@ -2936,7 +2951,7 @@ namespace DataAccess
 
                 while (reader.Read())
                 {
-                    result.Add(reader.GetDateTime(dateTimeIndex),reader.GetInt32(isNotesRequiredIndex)==1);
+                    result.Add(reader.GetDateTime(dateTimeIndex), reader.GetInt32(isNotesRequiredIndex) == 1);
                 }
             }
         }
@@ -2967,7 +2982,7 @@ namespace DataAccess
             {
                 int personIdIndex = reader.GetOrdinal(PersonIdColumn);
                 int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
-                int lastNameIndex = reader.GetOrdinal(LastNameColumn);                
+                int lastNameIndex = reader.GetOrdinal(LastNameColumn);
 
                 while (reader.Read())
                 {
@@ -2976,8 +2991,8 @@ namespace DataAccess
                     {
                         Id = personId,
                         FirstName = reader.GetString(firstNameIndex),
-                        LastName = reader.GetString(lastNameIndex)                        
-                    };                   
+                        LastName = reader.GetString(lastNameIndex)
+                    };
 
                     result.Add(person);
                 }
