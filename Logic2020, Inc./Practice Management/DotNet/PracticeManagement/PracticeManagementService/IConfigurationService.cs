@@ -69,6 +69,12 @@ namespace PracticeManagementService
 
         [OperationContract]
         void DeleteQuickLinkById(int id);
+
+        [OperationContract]
+        void SaveAnnouncement(string text, string richText);
+            
+        [OperationContract]
+        string GetLatestAnnouncement();
     }
 }
 
