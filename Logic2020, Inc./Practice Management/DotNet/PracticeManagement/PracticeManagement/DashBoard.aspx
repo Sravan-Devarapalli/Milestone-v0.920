@@ -210,7 +210,7 @@
                                                 <table width="100%">
                                                     <tr>
                                                         <td style="width: 90%; padding-left: 3px; height: 20px;">
-                                                            <asp:HyperLink ID="hlnkPage" runat="server" NavigateUrl='<%# (string)Eval("VirtualPath") %>'
+                                                            <asp:HyperLink ID="hlnkPage" runat="server" NavigateUrl='<%# GetVirtualPath((string)Eval("VirtualPath")) %>'
                                                                 Text='<%# HttpUtility.HtmlEncode((string)Eval("LinkName")) %>' ToolTip='<%# HttpUtility.HtmlEncode((string)Eval("LinkName")) %>'></asp:HyperLink>
                                                         </td>
                                                         <td align="right" style="width: 10%; padding-right: 5px; height: 15px;">
@@ -224,7 +224,7 @@
                                                 <table width="100%" style="background-color: #F9FAFF;">
                                                     <tr>
                                                         <td style="width: 90%; padding-left: 3px; height: 20px;">
-                                                            <asp:HyperLink ID="hlnkPage" runat="server" NavigateUrl='<%# (string)Eval("VirtualPath") %>'
+                                                            <asp:HyperLink ID="hlnkPage" runat="server" NavigateUrl='<%# GetVirtualPath((string)Eval("VirtualPath")) %>'
                                                                 Text='<%# HttpUtility.HtmlEncode((string)Eval("LinkName")) %>' ToolTip='<%# HttpUtility.HtmlEncode((string)Eval("LinkName")) %>'></asp:HyperLink>
                                                         </td>
                                                         <td align="right" style="width: 10%; padding-right: 5px; height: 15px;">
