@@ -28,6 +28,7 @@ namespace PraticeManagement.Controls
         private bool userIsHR;
         private bool userIsProjectLead;
         private bool userIsDirector;
+        private bool userIsSeniorLeadership;
 
         #endregion
 
@@ -107,6 +108,9 @@ namespace PraticeManagement.Controls
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName);
             userIsDirector =
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);
+             userIsSeniorLeadership =
+                  Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName); // #2913: userIsSeniorLeadership is added as per the requirement.
+
             userIsSalesperson =
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName);
             userIsRecruiter =
@@ -139,9 +143,9 @@ namespace PraticeManagement.Controls
                     // Security
                     if (!userIsAdministrator)
                     {
-                        btnRetrieveCalendar.Visible = userIsPracticeManager || userIsSalesperson || userIsRecruiter || userIsDirector || userIsHR; // #2817: userIsDirector is added as per the requirement.
+                        btnRetrieveCalendar.Visible = userIsPracticeManager || userIsSalesperson || userIsRecruiter || userIsDirector || userIsSeniorLeadership || userIsHR; // #2817: userIsDirector is added as per the requirement.
 
-                        if (userIsPracticeManager || userIsDirector && current != null)// #2817: userIsDirector is added as per the requirement.
+                        if (userIsPracticeManager || userIsDirector || userIsSeniorLeadership && current != null)// #2817: userIsDirector is added as per the requirement.
                         {
                             // Practice manager have to see the list his subordinates
                             DataHelper.FillSubordinatesList(ddlPerson,
@@ -275,7 +279,10 @@ namespace PraticeManagement.Controls
             if (days == null)
             {
                 int? practiceManagerId = null;
-                if ((!userIsAdministrator && userIsPracticeManager) || (!userIsAdministrator && userIsDirector))// #2817:(!userIsAdministrator && userIsDirector) is added as per the requirement.
+                if ((!userIsAdministrator && userIsPracticeManager) || 
+                    (!userIsAdministrator && userIsDirector)        ||
+                    (!userIsAdministrator && userIsSeniorLeadership)  
+                    )// #2817:(!userIsAdministrator && userIsDirector) is added as per the requirement.
                 {
                     Person current = DataHelper.CurrentPerson;
                     practiceManagerId = current != null ? current.Id : 0;
@@ -302,7 +309,7 @@ namespace PraticeManagement.Controls
                 }
             }
 
-            if (days != null && !userIsAdministrator && !userIsPracticeManager && !userIsDirector &&     // #2817: userIsDirector is added as per the requirement.
+            if (days != null && !userIsAdministrator && !userIsPracticeManager && !userIsDirector && !userIsSeniorLeadership &&     // #2817: userIsDirector is added as per the requirement.
                 (userIsConsultant || userIsRecruiter || userIsSalesperson || userIsHR))                 // #2817: userIsHR is added as per the requirement.
             {
                 // Security
