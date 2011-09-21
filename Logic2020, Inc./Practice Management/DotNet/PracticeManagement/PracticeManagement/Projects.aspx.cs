@@ -24,7 +24,7 @@ using System.Linq;
 using System.Drawing;
 namespace PraticeManagement
 {
-    public partial class Projects : PracticeManagementPageBase
+    public partial class Projects : PracticeManagementSearchPageBase
     {
         #region Constants
         private const string CurrencyDisplayFormat = "$###,###,###,###,###,##0";
@@ -310,7 +310,7 @@ namespace PraticeManagement
         /// <summary>
         /// Gets a text to be searched for.
         /// </summary>
-        public string SearchText
+        public override string SearchText
         {
             get
             {
