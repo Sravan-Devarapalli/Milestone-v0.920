@@ -5,7 +5,7 @@
 <%@ Import Namespace="DataTransferObjects" %>
 <%@ Register TagPrefix="uc" TagName="ProjectNameCellRounded" Src="~/Controls/ProjectNameCellRounded.ascx" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
-<%@ PreviousPageType VirtualPath="~/Projects.aspx" %>
+<%@ PreviousPageType   TypeName="PraticeManagement.Controls.PracticeManagementSearchPageBase"  %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Project Search Results | Practice Management</title>
 </asp:Content>
