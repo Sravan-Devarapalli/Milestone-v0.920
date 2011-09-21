@@ -65,5 +65,25 @@ namespace DataTransferObjects
         [EnumMember]
         Status = 3
     }
+
+    [DataContract]
+    public enum DashBoardType
+    {
+        [EnumMember]
+        Consulant = 1,
+        [EnumMember]
+        Manager = 2,
+        [EnumMember]
+        BusinessDevelopment = 3,
+        [EnumMember]
+        ClientDirector = 4,
+        [EnumMember]
+        SeniorLeadership = 5,
+        [EnumMember]
+        Recruiter = 6,
+        [EnumMember]
+        Admin = 7
+
+    }
 }
 
