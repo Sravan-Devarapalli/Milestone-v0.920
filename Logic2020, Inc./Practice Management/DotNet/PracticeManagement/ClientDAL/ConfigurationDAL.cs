@@ -437,6 +437,39 @@ namespace DataAccess
                 }
             }
         }
+
+        public static void SaveAnnouncement(string text, string richText)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.SaveAnnouncement, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.TextParam, text);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.RichTextParam, richText);
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static string GetLatestAnnouncement()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.GetLatestAnnouncement, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    connection.Open();
+                    return (string)command.ExecuteScalar();
+                }
+            }
+        }
     }
 }
 
