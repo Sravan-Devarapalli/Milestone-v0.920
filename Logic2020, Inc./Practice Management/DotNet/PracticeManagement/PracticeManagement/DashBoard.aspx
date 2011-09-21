@@ -6,7 +6,7 @@
     <title>DashBoard | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
-    fDashBoard
+    DashBoard
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <asp:UpdatePanel ID="upnlDashBoard" runat="server">
@@ -141,16 +141,17 @@
                                 </td>
                                 <td style="width: 90%; padding-top: 15px;">
                                     <asp:Panel ID="pnlHtmlAnnounceMent" BorderWidth="1px" Width="100%" Height="100px"
-                                        BorderStyle="Solid" BorderColor="Black" runat="server" style="padding:5px; overflow-y:auto;">
+                                        CssClass="ApplyStyleForDashBoardLists" BorderStyle="Solid" BorderColor="Black"
+                                        runat="server" Style="padding: 5px; overflow-y: auto;">
                                     </asp:Panel>
-                                    <asp:Button ID="imgEditAnnouncement" runat="server" Text="Edit" ToolTip="Edit"/>
+                                    <asp:Button ID="imgEditAnnouncement" runat="server" Text="Edit" ToolTip="Edit" />
                                     <AjaxControlToolkit:ModalPopupExtender ID="mpeAnnouncement" runat="server" CancelControlID="btnCancelAnnouncement"
                                         PopupControlID="pnlEditAnnounceMent" TargetControlID="imgEditAnnouncement" BackgroundCssClass="modalBackground"
                                         DropShadow="false" OnCancelScript="mpeAnnouncements_OnCancelScript();">
                                     </AjaxControlToolkit:ModalPopupExtender>
                                     <asp:Panel ID="pnlEditAnnounceMent" BorderWidth="1px" Width="500px" BorderStyle="Solid"
                                         BorderColor="Black" runat="server" Style="display: none;">
-                                        <CKEditor:CKEditorControl ID="ckeAnnouncementEditor" ResizeEnabled="false" Toolbar="Basic"
+                                        <CKEditor:CKEditorControl ID="ckeAnnouncementEditor" ResizeEnabled="false" Toolbar="Bold|Italic|Underline|Strike|-|NumberedList|BulletedList|Outdent|Indent|Format|Font|FontSize|TextColor|BGColor|Link|Unlink|-|Smiley|Cut|Copy|Paste|Undo|Redo|SpellChecker|"
                                             runat="server"></CKEditor:CKEditorControl>
                                         <asp:Button ID="btnSaveAnnouncement" runat="server" OnClick="btnSaveAnnouncement_OnClick"
                                             Text="Save AnnounceMent" ToolTip="Save AnnounceMent" />
