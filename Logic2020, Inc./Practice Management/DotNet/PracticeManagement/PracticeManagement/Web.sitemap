@@ -11,12 +11,10 @@
       <siteMapNode url="~/ProjectCalendar.aspx" VirtualPath="~/ProjectCalendar.aspx" QuickLinkTitle="Project Calendar"  title="Project Calendar" description="Project Calendar" ShowURL="true" />
     </siteMapNode>
     
-    <siteMapNode url="~/OpportunityList.aspx?from=toolbar" title="Opportunities" description="Opportunity List page" >
+    <siteMapNode url="~/DiscussionReview2.aspx?from=toolbar" title="Opportunities" description="Opportunity List page" >
       <siteMapNode url="~/OpportunityDetail.aspx?from=sub_toolbar"  VirtualPath="~/OpportunityDetail.aspx" QuickLinkTitle="Add Opportunity" title="Add Opportunity" description="Add Opportunity" ShowURL="true" />
       <siteMapNode url="~/OpportunitySearch.aspx" title="Search" VirtualPath="~/OpportunitySearch.aspx" QuickLinkTitle="Opportunity Search" description="Opportunity Search" ShowURL="true" />
-      <siteMapNode url="~/OpportunityList.aspx" title="Summary" VirtualPath="~/OpportunityList.aspx" QuickLinkTitle="Opportunity Summary" description="Opportunity Summary" ShowURL="true" />
-      <siteMapNode url="~/DiscussionReview1.aspx" VirtualPath="~/DiscussionReview1.aspx" QuickLinkTitle="Discussion Review 1" title="Discussion Review 1" description="Discussion Review 1" ShowURL="true" />
-      <siteMapNode url="~/DiscussionReview2.aspx" VirtualPath="~/DiscussionReview2.aspx" QuickLinkTitle="Discussion Review 2" title="Discussion Review 2" description="Discussion Review 2" ShowURL="true" />
+      <siteMapNode url="~/DiscussionReview2.aspx" VirtualPath="~/DiscussionReview2.aspx" QuickLinkTitle="Opportunity Summary" title="Opportunity Summary" description="Opportunity Summary" ShowURL="true" />
     </siteMapNode>
     <siteMapNode url="Temp.aspx?from=Reports" title="Reports" description="Reports">
       <siteMapNode url="Temp.aspx?from=Reports_Financial" title="Financial">
