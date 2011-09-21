@@ -249,7 +249,9 @@ namespace PraticeManagement.Utils
 
             if (
                  Roles.IsUserInRole(person.Alias, DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName) ||
-                 Roles.IsUserInRole(person.Alias, DataTransferObjects.Constants.RoleNames.DirectorRoleName)
+                 Roles.IsUserInRole(person.Alias, DataTransferObjects.Constants.RoleNames.DirectorRoleName) ||
+                Roles.IsUserInRole(person.Alias, DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName)
+
                )
             {
                 return TimeEntryRole.ManagementUser;
