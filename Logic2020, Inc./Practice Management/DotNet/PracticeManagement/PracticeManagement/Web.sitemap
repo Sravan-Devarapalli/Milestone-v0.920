@@ -1,87 +1,89 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
   <siteMapNode url="" roles="*">
-    <siteMapNode url="~/Temp.aspx?from=toolbar" title="Projects" description="Company Performance page" >
-      <siteMapNode url="~/ProjectDetail.aspx?from=sub_toolbar" title="Add Project" description="Show url" />
-      <siteMapNode url="~/ProjectSearch.aspx" title="Search" description="Show url" />
-      <siteMapNode url="~/Projects.aspx" title="Summary" description="Show url" />
-      <siteMapNode url="~/GroupBy.aspx" title="Group By..."  description="Show url"/>
-      <siteMapNode url="~/RevenueGoals.aspx" title="Revenue Goals" description="Show url" />
-      <siteMapNode url="~/ProjectCalendar.aspx" title="Project Calendar" description="Show url" />
+    
+    <siteMapNode url="~/Temp.aspx?from=toolbar"   title="Projects" description="Company Performance page" >
+      <siteMapNode url="~/ProjectDetail.aspx?from=sub_toolbar"  VirtualPath="~/ProjectDetail.aspx" QuickLinkTitle="Add Project" title="Add Project" description="Add Project" ShowURL="true"  />
+      <siteMapNode url="~/ProjectSearch.aspx" VirtualPath="~/ProjectSearch.aspx" QuickLinkTitle="Project Search" title="Search" description="Project Search" ShowURL="true" />
+      <siteMapNode url="~/Projects.aspx"  VirtualPath="~/Projects.aspx" QuickLinkTitle="Project Summary"  title="Summary" description="Project Summary" ShowURL="true" />
+      <siteMapNode url="~/GroupBy.aspx"  VirtualPath="~/GroupBy.aspx" QuickLinkTitle="Group By..."  title="Group By..."  description="Group By..." ShowURL="true"/>
+      <siteMapNode url="~/RevenueGoals.aspx"  VirtualPath="~/RevenueGoals.aspx" QuickLinkTitle="Revenue Goals"  title="Revenue Goals" description="Revenue Goals" ShowURL="true" />
+      <siteMapNode url="~/ProjectCalendar.aspx" VirtualPath="~/ProjectCalendar.aspx" QuickLinkTitle="Project Calendar"  title="Project Calendar" description="Project Calendar" ShowURL="true" />
     </siteMapNode>
+    
     <siteMapNode url="~/OpportunityList.aspx?from=toolbar" title="Opportunities" description="Opportunity List page" >
-      <siteMapNode url="~/OpportunityDetail.aspx?from=sub_toolbar" title="Add Opportunity" description="Show url" />
-      <siteMapNode url="~/OpportunitySearch.aspx" title="Search" description="Show url" />
-      <siteMapNode url="~/OpportunityList.aspx" title="Summary" description="Show url" />
-      <siteMapNode url="~/DiscussionReview1.aspx" title="Discussion Review 1" description="Show url" />
-      <siteMapNode url="~/DiscussionReview2.aspx" title="Discussion Review 2" description="Show url" />
+      <siteMapNode url="~/OpportunityDetail.aspx?from=sub_toolbar"  VirtualPath="~/OpportunityDetail.aspx" QuickLinkTitle="Add Opportunity" title="Add Opportunity" description="Add Opportunity" ShowURL="true" />
+      <siteMapNode url="~/OpportunitySearch.aspx" title="Search" VirtualPath="~/OpportunitySearch.aspx" QuickLinkTitle="Opportunity Search" description="Opportunity Search" ShowURL="true" />
+      <siteMapNode url="~/OpportunityList.aspx" title="Summary" VirtualPath="~/OpportunityList.aspx" QuickLinkTitle="Opportunity Summary" description="Opportunity Summary" ShowURL="true" />
+      <siteMapNode url="~/DiscussionReview1.aspx" VirtualPath="~/DiscussionReview1.aspx" QuickLinkTitle="Discussion Review 1" title="Discussion Review 1" description="Discussion Review 1" ShowURL="true" />
+      <siteMapNode url="~/DiscussionReview2.aspx" VirtualPath="~/DiscussionReview2.aspx" QuickLinkTitle="Discussion Review 2" title="Discussion Review 2" description="Discussion Review 2" ShowURL="true" />
     </siteMapNode>
     <siteMapNode url="Temp.aspx?from=Reports" title="Reports" description="Reports">
       <siteMapNode url="Temp.aspx?from=Reports_Financial" title="Financial">
-        <siteMapNode url="~/Reports/BenchCosts.aspx" title="Bench Costs" roles="Administrator" description="Show url" />
-        <siteMapNode url="~/Reports/CommissionsAndRates.aspx?from=Financial" title="Commissions and Rates" roles="Administrator" />
-        <siteMapNode url="~/Reports/Expenses.aspx" title="Expenses" description="Expenses"/>
-        <siteMapNode url="~/Reports/PersonStats.aspx?from=Financial" title="Person Stats" roles="Administrator"  />
+        <siteMapNode url="~/Reports/BenchCosts.aspx" VirtualPath="~/Reports/BenchCosts.aspx" QuickLinkTitle="Bench Costs"  title="Bench Costs" roles="Administrator" description="Bench Costs" ShowURL="true" />
+        <siteMapNode url="~/Reports/CommissionsAndRates.aspx?from=Financial"  VirtualPath="~/Reports/CommissionsAndRates.aspx" QuickLinkTitle="Commissions and Rates"  title="Commissions and Rates" roles="Administrator" />
+        <siteMapNode url="~/Reports/Expenses.aspx" title="Expenses"  VirtualPath="~/Reports/Expenses.aspx" QuickLinkTitle="Expenses"  description="Expenses"/>
+        <siteMapNode url="~/Reports/PersonStats.aspx?from=Financial"  VirtualPath="~/Reports/PersonStats.aspx" QuickLinkTitle="Person Stats"  title="Person Stats" roles="Administrator"  />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Resources" title="Resources" >
-        <siteMapNode url="~/Reports/Bench.aspx" title="Bench" description="Show url" />
-        <siteMapNode url="~/Reports/UtilizationTable.aspx" title="Consultants Util. Table" description="Show url" />
-        <siteMapNode url="~/Reports/UtilizationTimeline.aspx" title="Consultants Util. Timeline" description="Show url" />
-        <siteMapNode url="~/Reports/PersonStats.aspx" title="Person Stats" roles="Administrator" description="Show url" />
+        <siteMapNode url="~/Reports/Bench.aspx" title="Bench"  VirtualPath="~/Reports/Bench.aspx" QuickLinkTitle="Bench"  description="Bench" ShowURL="true" />
+        <siteMapNode url="~/Reports/UtilizationTable.aspx" title="Consultants Util. Table"  VirtualPath="~/Reports/UtilizationTable.aspx" QuickLinkTitle="Consultants Util. Table"  description="Consultants Util. Table" ShowURL="true" />
+        <siteMapNode url="~/Reports/UtilizationTimeline.aspx" title="Consultants Util. Timeline"  VirtualPath="~/Reports/UtilizationTimeline.aspx" QuickLinkTitle="Consultants Util. Timeline"  description="Consultants Util. Timeline" ShowURL="true" />
+        <siteMapNode url="~/Reports/PersonStats.aspx" title="Person Stats" roles="Administrator"  VirtualPath="~/Reports/PersonStats.aspx" QuickLinkTitle="Person Stats"  description="Person Stats" ShowURL="true" />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Time Entry" title="Time">
-        <siteMapNode url="~/Reports/TimeEntryReport.aspx" title="Generic Time Entry" roles="Administrator"  description="Show url"/>
-        <siteMapNode url="~/Reports/TimeEntriesByProject.aspx?from=reports" title="Time Entry by Project" roles="Administrator" description="Show url" />
-        <siteMapNode url="~/Reports/TimeEntriesByPerson.aspx?from=reports" title="Time Entry by Person"  description="Show url" />
+        <siteMapNode url="~/Reports/TimeEntryReport.aspx" title="Generic Time Entry"  VirtualPath="~/Reports/TimeEntryReport.aspx" QuickLinkTitle="Generic Time Entry"  roles="Administrator"  description="Generic Time Entry" ShowURL="true"/>
+        <siteMapNode url="~/Reports/TimeEntriesByProject.aspx?from=reports"  VirtualPath="~/Reports/TimeEntriesByProject.aspx" QuickLinkTitle="Time Entry by Project"  title="Time Entry by Project" roles="Administrator" description="Time Entry by Project" ShowURL="true" />
+        <siteMapNode url="~/Reports/TimeEntriesByPerson.aspx?from=reports"  VirtualPath="~/Reports/TimeEntriesByPerson.aspx" QuickLinkTitle="Time Entry by Person"  title="Time Entry by Person"  description="Time Entry by Person" ShowURL="true" />
       </siteMapNode>
     </siteMapNode>
     <siteMapNode url="~/TimeEntry.aspx?from=sub_toolbar" title="Time" description="Time Entry records">
-      <siteMapNode url="~/TimeEntry.aspx" title="Time Entry" description="Show url" />
-      <siteMapNode url="~/Calendar.aspx" title="Calendar" description="Show url"  />
+      <siteMapNode url="~/TimeEntry.aspx" VirtualPath="~/TimeEntry.aspx" QuickLinkTitle="Time Entry"  title="Time Entry" description="Time Entry" ShowURL="true" />
+      <siteMapNode url="~/Calendar.aspx"  VirtualPath="~/Calendar.aspx" QuickLinkTitle="Calendar"  title="Calendar" description="Calendar" ShowURL="true"  />
     </siteMapNode>
-    <siteMapNode url="~/MarginTest.aspx" title="Margin Test" description="Show url" />
+    <siteMapNode url="~/MarginTest.aspx" VirtualPath="~/MarginTest.aspx" QuickLinkTitle="Margin Test"  title="Margin Test" description="Margin Test" ShowURL="true"  />
     <siteMapNode url="Temp.aspx?from=Configuration" title="Configuration" description="System configuration"  >
       <siteMapNode url="Temp.aspx?from=Company_Resources" title="Company Resources" description="Company Resources">
-        <siteMapNode url="~/Config/Branding.aspx" title="Branding/Logo" description="Branding/Logo"  />
-        <siteMapNode url="~/Config/Clients.aspx" title="Clients" description="Client List"  />
-        <siteMapNode url="~/Config/DefaultLineManager.aspx" title="Default Line Manager" description="Default Line Manager"  />
-        <siteMapNode url="~/Config/OpportunityPriorities.aspx" title="Opportunity Priorities" description="Opportunity Priorities"  />
-        <siteMapNode url="~/Config/Persons.aspx" title="Persons" description="Person List"  />
-        <siteMapNode url="~/Config/PracticeAreas.aspx" title="Practice Areas" description="Practice Areas"  />
+        <siteMapNode url="~/Config/Branding.aspx" title="Branding/Logo"  VirtualPath="~/Config/Branding.aspx" QuickLinkTitle="Branding/Logo"  description="Branding/Logo"  />
+        <siteMapNode url="~/Config/Clients.aspx" title="Clients"  VirtualPath="~/Config/Clients.aspx" QuickLinkTitle="Clients" description="Client List"  />
+        <siteMapNode url="~/Config/DefaultLineManager.aspx" title="Default Line Manager"  VirtualPath="~/Config/DefaultLineManager.aspx" QuickLinkTitle="Default Line Manager" description="Default Line Manager"  />
+        <siteMapNode url="~/Config/OpportunityPriorities.aspx" title="Opportunity Priorities"  VirtualPath="~/Config/OpportunityPriorities.aspx" QuickLinkTitle="Opportunity Priorities" description="Opportunity Priorities"  />
+        <siteMapNode url="~/Config/Persons.aspx" title="Persons"  VirtualPath="~/Config/Persons.aspx" QuickLinkTitle="Persons" description="Person List"  />
+        <siteMapNode url="~/Config/PracticeAreas.aspx" title="Practice Areas"  VirtualPath="~/Config/PracticeAreas.aspx" QuickLinkTitle="Practice Areas" description="Practice Areas"  />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Email" title="E-Mail" description="E-Mail Templates page"  >
-        <siteMapNode url="~/Config/SMTPSetup.aspx" title="SMTP Setup" description="SMTP Setup Settings"  />
-        <siteMapNode url="~/EmailTemplates.aspx" title="E-Mail Templates" description="E-Mail Templates"  />
+        <siteMapNode url="~/Config/SMTPSetup.aspx" title="SMTP Setup"  VirtualPath="~/Config/SMTPSetup.aspx" QuickLinkTitle="SMTP Setup" description="SMTP Setup Settings"  />
+        <siteMapNode url="~/EmailTemplates.aspx" title="E-Mail Templates"  VirtualPath="~/EmailTemplates.aspx" QuickLinkTitle="E-Mail Templates" description="E-Mail Templates"  />
       </siteMapNode>
-      <siteMapNode url="Temp.aspx?from=Financials" title="Financials" description="Financials" >
-        <siteMapNode url="~/Config/Commissions.aspx" title="Commissions" description="Commissions"  />
-        <siteMapNode url="~/Config/Expenses.aspx" title="Expenses" description="Expenses"  />
-        <siteMapNode url="~/Config/ExpenseCategories.aspx" title="Expense Categories" description="Expense Categories"  />
-        <siteMapNode url="~/Config/Overheads.aspx" title="Overheads" description="Overhead List"  />
-        <siteMapNode url="~/Config/RevenueGoals.aspx" title="Revenue Goals" description="Revenue Goals"  />
-        <siteMapNode url="~/Config/MarginGoals.aspx" title="Margin Goals" description="Margin Goals"  />
+      <siteMapNode url="Temp.aspx?from=Financials" title="Financials"   description="Financials" >
+        <siteMapNode url="~/Config/Commissions.aspx" title="Commissions"  VirtualPath="~/Config/Commissions.aspx" QuickLinkTitle="Commissions"  description="Commissions"  />
+        <siteMapNode url="~/Config/Expenses.aspx" title="Expenses"  VirtualPath="~/EmailTemplates.aspx" QuickLinkTitle="E-Mail Templates"  description="Expenses"  />
+        <siteMapNode url="~/Config/ExpenseCategories.aspx" title="Expense Categories"  VirtualPath="~/Config/Expenses.aspx" QuickLinkTitle="Expense Categories"  description="Expense Categories"  />
+        <siteMapNode url="~/Config/Overheads.aspx" title="Overheads"  VirtualPath="~/Config/Overheads.aspx" QuickLinkTitle="Overheads"  description="Overhead List"  />
+        <siteMapNode url="~/Config/RevenueGoals.aspx" title="Revenue Goals"  VirtualPath="~/Config/RevenueGoals.aspx" QuickLinkTitle="Revenue Goals"  description="Revenue Goals"  />
+        <siteMapNode url="~/Config/MarginGoals.aspx" title="Margin Goals"  VirtualPath="~/Config/MarginGoals.aspx" QuickLinkTitle="Margin Goals"  description="Margin Goals"  />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=ConfigurationReports" title="Reports" description="Reports" >
-        <siteMapNode url="~/Config/ConsultantUtilTimelineReport.aspx" title="Consultant Util Timeline Report" description="Consultant Util Timeline Report"  />
+        <siteMapNode url="~/Config/ConsultantUtilTimelineReport.aspx" VirtualPath="~/Config/ConsultantUtilTimelineReport.aspx" QuickLinkTitle="Consultant Util Timeline Report"  title="Consultant Util Timeline Report" description="Consultant Util Timeline Report"  />
       </siteMapNode>
-      <siteMapNode url="Temp.aspx?from=Security" title="Security" description="Security Setting" >
-        <siteMapNode url="~/Config/General.aspx" title="General" description="General"  />
-        <siteMapNode url="~/Config/SecurityRoles.aspx" title="Security Roles" description="Security Roles"  />
-        <siteMapNode url="~/Config/SeniorityLevels.aspx" title="Seniority Levels" description="Seniority Levels"  />
+      <siteMapNode url="Temp.aspx?from=Security"  title="Security" description="Security Setting" >
+        <siteMapNode url="~/Config/General.aspx"  VirtualPath="~/Config/General.aspx" QuickLinkTitle="General"  title="General" description="General"  />
+        <siteMapNode url="~/Config/SecurityRoles.aspx"  VirtualPath="~/Config/SecurityRoles.aspx" QuickLinkTitle="Security Roles"  title="Security Roles" description="Security Roles"  />
+        <siteMapNode url="~/Config/SeniorityLevels.aspx"  VirtualPath="~/Config/SeniorityLevels.aspx" QuickLinkTitle="Seniority Levels"  title="Seniority Levels" description="Seniority Levels"  />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Time_Tracking" title="Time" description="Time">
-        <siteMapNode url="~/Config/CompanyHolidays.aspx" title="Company Holidays" description="Company Holidays"  />
-        <siteMapNode url="~/Config/Notes.aspx" title="Notes" description="Notes"  />
-        <siteMapNode url="~/DefaultMilestoneSetting.aspx" title="Default Time Entry Project" description="Default Time Entry Project"  />
-        <siteMapNode url="~/Config/TimeTypes.aspx" title="Time Types" description="TimeTypes"  />
-        <siteMapNode url="~/Config/TimeZones.aspx" title="Time Zone" description="TimeZone" />
+        <siteMapNode url="~/Config/CompanyHolidays.aspx"  VirtualPath="~/Config/CompanyHolidays.aspx" QuickLinkTitle="Company Holidays"  title="Company Holidays" description="Company Holidays"  />
+        <siteMapNode url="~/Config/Notes.aspx"  VirtualPath="~/Config/Notes.aspx" QuickLinkTitle="Notes"  title="Notes" description="Notes"  />
+        <siteMapNode url="~/DefaultMilestoneSetting.aspx"  VirtualPath="~/DefaultMilestoneSetting.aspx" QuickLinkTitle="Default Time Entry Project"  title="Default Time Entry Project" description="Default Time Entry Project"  />
+        <siteMapNode url="~/Config/TimeTypes.aspx"  VirtualPath="~/Config/TimeTypes.aspx" QuickLinkTitle="Time Types"  title="Time Types" description="TimeTypes"  />
+        <siteMapNode url="~/Config/TimeZones.aspx"  VirtualPath="~/Config/TimeZones.aspx" QuickLinkTitle="Time Zone"  title="Time Zone" description="TimeZone" />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Troubleshooting" title="Troubleshooting" description="Troubleshooting">
-        <siteMapNode url="~/ActivityLog.aspx" title="Activity Log" description="Activity Log"  />
-        <siteMapNode url="~/Config/BecomeUser.aspx" title="Become User" description="Become User"  />
-        <siteMapNode url="~/Config/Help.aspx" title="Help" description="Help"  />
-        <siteMapNode url="~/Config/SiteMap.aspx" title="Site Map" description="Site Map"  />
-        <siteMapNode url="~/Config/SupportLink.aspx" title="Support Link" description="Support Link"  />
+        <siteMapNode url="~/ActivityLog.aspx"  VirtualPath="~/ActivityLog.aspx" QuickLinkTitle="Activity Log"  title="Activity Log" description="Activity Log"  />
+        <siteMapNode url="~/Config/BecomeUser.aspx"  VirtualPath="~/Config/BecomeUser.aspx" QuickLinkTitle="Become User"  title="Become User" description="Become User"  />
+        <siteMapNode url="~/Config/Help.aspx"  VirtualPath="~/Config/Help.aspx" QuickLinkTitle="Help"  title="Help" description="Help"  />
+        <siteMapNode url="~/Config/SiteMap.aspx"  VirtualPath="~/Config/SiteMap.aspx" QuickLinkTitle="Site Map"  title="Site Map" description="Site Map"  />
+        <siteMapNode url="~/Config/SupportLink.aspx"  VirtualPath="~/Config/SupportLink.aspx" QuickLinkTitle="Support Link"  title="Support Link" description="Support Link"  />
       </siteMapNode>
     </siteMapNode>
   </siteMapNode>
