@@ -13,11 +13,6 @@ namespace PraticeManagement
 {
     public partial class DashBoard : PracticeManagementSearchPageBase
     {
-        #region Constants
-
-        public const string CacheKeyLatestAnnouncement = "CacheLatestAnnouncement";
-
-        #endregion
 
         #region Fields
 
@@ -27,6 +22,7 @@ namespace PraticeManagement
         private bool _userIsPracticeAreaManger;
         private bool _userIsProjectLead;
         private bool _userIsRecruiter;
+        private bool _userIsHR;
         private bool _userIsSalesperson;
         private bool _userIsSeniorLeadership;
 
@@ -53,6 +49,8 @@ namespace PraticeManagement
 
             if (!IsPostBack)
             {
+
+
                 PopulateDashBoardTypeDropDown();
 
                 //search section
@@ -84,11 +82,11 @@ namespace PraticeManagement
         private void PopulateQuickLinksSection()
         {
             string dashBoardValue = _userIsAdministrator ? DashBoardType.Admin.ToString() :
-                                    _userIsClientDirector ? DashBoardType.ClientDirector.ToString() :
+                                    (_userIsRecruiter || _userIsHR) ? DashBoardType.Recruiter.ToString() :
                                     _userIsSeniorLeadership ? DashBoardType.SeniorLeadership.ToString() :
-                                    (_userIsPracticeAreaManger || _userIsProjectLead) ? DashBoardType.Manager.ToString() :
-                                    _userIsRecruiter ? DashBoardType.Recruiter.ToString() :
+                                    _userIsClientDirector ? DashBoardType.ClientDirector.ToString() :
                                     _userIsSalesperson ? DashBoardType.BusinessDevelopment.ToString() :
+                                    (_userIsPracticeAreaManger || _userIsProjectLead) ? DashBoardType.Manager.ToString() :
                                     _userIsConsultant ? DashBoardType.Consulant.ToString() :
                                     string.Empty;
             DashBoardType dashBoardtype = (DashBoardType)Enum.Parse(typeof(DashBoardType), _userIsAdministrator ? ddlDashBoardType.SelectedValue : dashBoardValue);
@@ -192,12 +190,50 @@ namespace PraticeManagement
 
             if (_userIsAdministrator)
             {
-                listOfItems.Add("Project", "Project");
-                listOfItems.Add("Opportunity", "Opportunity");
-                listOfItems.Add("Person", "Person");
-            }
+                if (ddlDashBoardType.SelectedValue == DashBoardType.Admin.ToString())
+                {
+                    listOfItems.Add("Project", "Project");
+                    listOfItems.Add("Opportunity", "Opportunity");
+                    listOfItems.Add("Person", "Person");
+                }
+                else if (ddlDashBoardType.SelectedValue == DashBoardType.Recruiter.ToString())
+                {
+                    if (!listOfItems.Any(k => k.Key == "Person"))
+                    {
+                        listOfItems.Add("Person", "Person");
+                    }
+                }
+                else if (ddlDashBoardType.SelectedValue == DashBoardType.ClientDirector.ToString() ||
+                    ddlDashBoardType.SelectedValue == DashBoardType.SeniorLeadership.ToString() ||
+                    ddlDashBoardType.SelectedValue == DashBoardType.BusinessDevelopment.ToString())
+                {
+                    if (!listOfItems.Any(k => k.Key == "Project"))
+                    {
+                        listOfItems.Add("Project", "Project");
+                    }
 
-            if (_userIsClientDirector || _userIsSeniorLeadership || _userIsSalesperson)//new role
+                    if (!listOfItems.Any(k => k.Key == "Opportunity"))
+                    {
+                        listOfItems.Add("Opportunity", "Opportunity");
+                    }
+                }
+                else if (ddlDashBoardType.SelectedValue == DashBoardType.Manager.ToString())
+                {
+                    if (!listOfItems.Any(k => k.Key == "Project"))
+                    {
+                        listOfItems.Add("Project", "Project");
+                    }
+                }
+
+            }
+            else if (_userIsRecruiter || _userIsHR)
+            {
+                if (!listOfItems.Any(k => k.Key == "Person"))
+                {
+                    listOfItems.Add("Person", "Person");
+                }
+            }
+            else if (_userIsClientDirector || _userIsSeniorLeadership || _userIsSalesperson)//new role
             {
                 if (!listOfItems.Any(k => k.Key == "Project"))
                 {
@@ -209,20 +245,11 @@ namespace PraticeManagement
                     listOfItems.Add("Opportunity", "Opportunity");
                 }
             }
-
-            if (_userIsPracticeAreaManger || _userIsProjectLead)
+            else if (_userIsPracticeAreaManger || _userIsProjectLead)
             {
                 if (!listOfItems.Any(k => k.Key == "Project"))
                 {
                     listOfItems.Add("Project", "Project");
-                }
-            }
-
-            if (_userIsRecruiter)
-            {
-                if (!listOfItems.Any(k => k.Key == "Person"))
-                {
-                    listOfItems.Add("Person", "Person");
                 }
             }
 
@@ -232,9 +259,15 @@ namespace PraticeManagement
             {
                 ddlSearchType.Items.Add(new ListItem(item.Key, item.Value));
             }
-            ddlSearchType.SelectedValue = "Project";
 
-            pnlSearchSection.Visible = IsShowSearchSection();
+            if (!_userIsAdministrator)
+            {
+                pnlSearchSection.Visible = IsShowSearchSection();
+            }
+            else
+            {
+                pnlSearchSection.Visible = IsShowSearchSectionForAdmin();
+            }
         }
 
         private void InitSecurity()
@@ -253,6 +286,7 @@ namespace PraticeManagement
                 roles.Contains(DataTransferObjects.Constants.RoleNames.SalespersonRoleName);
             _userIsRecruiter =
                 roles.Contains(DataTransferObjects.Constants.RoleNames.RecruiterRoleName);
+            _userIsHR = roles.Contains(DataTransferObjects.Constants.RoleNames.HRRoleName);
             _userIsPracticeAreaManger =
                 roles.Contains(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName);
             _userIsConsultant =
@@ -276,6 +310,8 @@ namespace PraticeManagement
         protected void ddlDashBoardType_OnSelectedIndexChanged(object sender, EventArgs e)
         {
             PopulateQuickLinksSection();
+            PopulateSearchSection();
+            txtSearchText.Text = string.Empty;
         }
 
         protected void imgDeleteQuickLink_OnClick(object sender, EventArgs e)
@@ -355,9 +391,16 @@ namespace PraticeManagement
             }
         }
 
+        protected bool IsShowSearchSectionForAdmin()
+        {
+            var result = ddlDashBoardType.SelectedValue != DashBoardType.Consulant.ToString();
+
+            return result;
+        }
+
         protected bool IsShowSearchSection()
         {
-            var result = _userIsAdministrator || _userIsClientDirector || _userIsSeniorLeadership || _userIsPracticeAreaManger || _userIsProjectLead || _userIsRecruiter || _userIsSalesperson;
+            var result = _userIsAdministrator || _userIsClientDirector || _userIsSeniorLeadership || _userIsPracticeAreaManger || _userIsProjectLead || _userIsRecruiter || _userIsHR || _userIsSalesperson;
 
             return result;
         }
