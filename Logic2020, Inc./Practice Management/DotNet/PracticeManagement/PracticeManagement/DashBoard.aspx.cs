@@ -13,6 +13,11 @@ namespace PraticeManagement
 {
     public partial class DashBoard : PracticeManagementSearchPageBase
     {
+        #region Constants
+
+        public const string CacheKeyLatestAnnouncement = "CacheLatestAnnouncement";
+
+        #endregion
 
         #region Fields
 
@@ -48,8 +53,6 @@ namespace PraticeManagement
 
             if (!IsPostBack)
             {
-               
-
                 PopulateDashBoardTypeDropDown();
 
                 //search section
@@ -62,8 +65,20 @@ namespace PraticeManagement
                 //Quick links
                 PopulateQuickLinksSection();
 
-
+                PopulateAnnouncement();
             }
+
+        }
+
+        private void PopulateAnnouncement(string text = null)
+        {
+            string announcement;
+
+            announcement = text ?? GetLatestAnnouncement();
+
+            pnlHtmlAnnounceMent.GroupingText = announcement;
+
+            ckeAnnouncementEditor.Text = announcement;
         }
 
         private void PopulateQuickLinksSection()
@@ -258,13 +273,6 @@ namespace PraticeManagement
             return virtualPath;
         }
 
-        protected void imgEditAnnouncement_OnClick(object sender, EventArgs e)
-        {
-            imgEditAnnouncement.Visible = pnlHtmlAnnounceMent.Visible = false;
-            pnlEditAnnounceMent.Visible = true;
-
-        }
-
         protected void ddlDashBoardType_OnSelectedIndexChanged(object sender, EventArgs e)
         {
             PopulateQuickLinksSection();
@@ -288,8 +296,35 @@ namespace PraticeManagement
 
         protected void btnSaveAnnouncement_OnClick(object sender, EventArgs e)
         {
-            imgEditAnnouncement.Visible = pnlHtmlAnnounceMent.Visible = true;
-            pnlEditAnnounceMent.Visible = false;
+            string text = string.Empty;
+            string richText = ckeAnnouncementEditor.Text;
+
+            SaveAnnouncement(text, richText);
+        }
+
+        private string GetLatestAnnouncement()
+        {
+            using (var serviceClient = new ConfigurationService.ConfigurationServiceClient())
+            {
+                return serviceClient.GetLatestAnnouncement();
+            }
+        }
+
+        private void SaveAnnouncement(string text, string richText)
+        {
+            using (var serviceClient = new ConfigurationService.ConfigurationServiceClient())
+            {
+                try
+                {
+                    serviceClient.SaveAnnouncement(text, richText);
+
+                    PopulateAnnouncement(richText);
+                }
+                catch (Exception ex)
+                {
+                    serviceClient.Abort();
+                }
+            }
         }
 
         protected void btnSaveQuickLinks_OnClick(object sender, EventArgs e)
