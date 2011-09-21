@@ -29,6 +29,7 @@ namespace PraticeManagement
         private const string gvddlColor = "gvddlColor";
         private bool userIsAdministrator;
         private bool userIsClientDirector;
+        private bool userIsSeniorLeadership;
         #endregion
 
         private ExceptionDetail InnerException { get; set; }
@@ -198,8 +199,10 @@ namespace PraticeManagement
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
             userIsClientDirector =
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);
+            userIsSeniorLeadership =
+                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);// #2913: userIsSeniorLeadership is added as per the requirement.
 
-            if (!userIsAdministrator && !userIsClientDirector)
+            if (!userIsAdministrator && !userIsClientDirector && !userIsSeniorLeadership)
             {
                 tpMarginGoals.Visible = false;
             }
@@ -299,7 +302,7 @@ namespace PraticeManagement
 
             args.IsValid = true;
 
-            if ((userIsAdministrator || userIsClientDirector) && chbMarginThresholds.Checked)
+            if ((userIsAdministrator || userIsClientDirector || userIsSeniorLeadership) && chbMarginThresholds.Checked)
             {
                 if (ClientMarginColorInfoList != null && ClientMarginColorInfoList.Count > 0)
                 {
