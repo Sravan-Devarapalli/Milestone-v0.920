@@ -239,6 +239,9 @@
             public const string RecurringHolidayDateColumn = "RecurringHolidayDate";
             public const string IsSystemTimeTypeColumn = "IsSystemTimeType";
             public const string HasAttachmentsColumn = "HasAttachments";
+            public const string DashBoardTypeIdColumn = "DashBoardTypeId";
+            public const string LinkNameColumn = "LinkName";
+            public const string VirtualPathColumn = "VirtualPath";
 
         }
 
@@ -530,6 +533,9 @@ public const string ShowLostParam = "@ShowLost";
                 public const string SaveMarginInfoDefaultsProcedure = "dbo.SaveMarginInfoDefaults";
                 public const string GetMarginColorInfoDefaultsProcedure = "dbo.GetMarginColorInfoDefaults";
                 public const string SavePracticesIsNotesRequiredDetailsProcedure = "dbo.SavePracticesIsNotesRequiredDetails";
+                public const string SaveQuickLinksForDashBoardProcedure = "dbo.SaveQuickLinksForDashBoard";
+                public const string GetQuickLinksByDashBoardTypeProcedure = "dbo.GetQuickLinksByDashBoard";
+                public const string DeleteQuickLinkByIdProcedure = "dbo.DeleteQuickLinkById";
 
             }
 
