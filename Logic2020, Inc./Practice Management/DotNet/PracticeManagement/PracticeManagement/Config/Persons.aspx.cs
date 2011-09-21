@@ -213,9 +213,14 @@ namespace PraticeManagement.Config
                     ddlView.SelectedIndex = cookie.SelectedPageSizeIndex;
                     Alphabet = cookie.Alphabet;
                     txtSearch.Text = cookie.SearchText;
+                    if (PreviousPage != null)
+                    {
+                        txtSearch.Text = PreviousPage.SearchText;
+                    }
                     gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
                     gvPersons.Sort(cookie.SortBy, cookie.SortOrder);
                     SetFilterValues();
+
                     if (cookie.Alphabet.HasValue)
                     {
                         LinkButton topButton = (LinkButton)trAlphabeticalPaging.FindControl("lnkbtn" + cookie.Alphabet.Value);
@@ -234,6 +239,11 @@ namespace PraticeManagement.Config
                 }
                 else
                 {
+                    if (PreviousPage != null)
+                    {
+                        txtSearch.Text = PreviousPage.SearchText;
+                    }
+
                     CurrentIndex = 0;
                     personsFilter.Active = true;   //Always active on load
                     SelectAllItems(this.cblRecruiters);
@@ -242,7 +252,7 @@ namespace PraticeManagement.Config
                     SetFilterValues();
                 }
 
-
+               
             }
 
 
