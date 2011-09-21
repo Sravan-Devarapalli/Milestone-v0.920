@@ -2061,3 +2061,25 @@ table.CellPaddingClass td
     white-space: normal;
 }
 
+.ApplyStyleForDashBoardLists P
+{
+	margin: 8px 0px 8px 8px;
+}
+
+.ApplyStyleForDashBoardLists ol,.ApplyStyleForDashBoardLists ul
+{
+	/* IE7: reset rtl list margin. (#7334) */
+	*margin-right:0px;
+	/* preserved spaces for list items with text direction other than the list. (#6249,#8049)*/
+    padding:0 40px;
+}
+
+.ApplyStyleForDashBoardLists ol li
+{
+    list-style-type: decimal;
+}
+
+.ApplyStyleForDashBoardLists ul li
+{
+    list-style-type: disc;
+}
