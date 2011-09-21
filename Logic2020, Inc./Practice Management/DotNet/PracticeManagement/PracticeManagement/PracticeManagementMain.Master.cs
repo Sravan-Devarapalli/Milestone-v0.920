@@ -275,16 +275,16 @@ namespace PraticeManagement
             return htmltext;
         }
 
-        private string GetLevel1MenuItemHtml(SiteMapNode item)
+        private string GetLevel1MenuItemHtml(SiteMapNode childNode)
         {
-            if (CheckChildsExists(item, 1))
+            if (CheckChildsExists(childNode, 1))
             {
-                return string.Format(Level1MenuItemTemplate, item.Title, "<dl class='l2'>" + GetLevel2MenuItemHtml(item) + "</dl>", item.Title.Replace(' ', '_'), string.Empty);
+                return string.Format(Level1MenuItemTemplate, childNode.Title, "<dl class='l2'>" + GetLevel2MenuItemHtml(childNode) + "</dl>", childNode.Title.Replace(' ', '_'), string.Empty);
             }
-            else if (item.Description == "Show url")
+            else if (childNode["ShowURL"] != null && childNode["ShowURL"] == "true")
             {
-                return string.Format(Level1MenuItemTemplate, item.Title, string.Empty, item.Title.Replace(' ', '_'),
-                    string.Format(AnchorTagpropertiestemplate, item.Url)
+                return string.Format(Level1MenuItemTemplate, childNode.Title, string.Empty, childNode.Title.Replace(' ', '_'),
+                    string.Format(AnchorTagpropertiestemplate, childNode.Url)
                     );
             }
             else
@@ -304,7 +304,7 @@ namespace PraticeManagement
             {
                 foreach (SiteMapNode childItem in item.ChildNodes)
                 {
-                    if (childItem.ChildNodes.Count > 0 || childItem.Description == "Show url")
+                    if (childItem.ChildNodes.Count > 0 || (childItem["ShowURL"] != null && childItem["ShowURL"] == "true"))
                     {
                         result = true;
                         break;
@@ -332,7 +332,7 @@ namespace PraticeManagement
                 {
                     htmltext += string.Format(Level2MenuItemTemplate, level2Item.Title, GetLevel3MenuItemHtml(level2Item), level2Item.Title.Replace(' ', '_') + level2Item.ParentNode.Title.Replace(' ', '_'), string.Empty);
                 }
-                else if (level2Item.Description == "Show url")
+                else if (level2Item["ShowURL"] != null && level2Item["ShowURL"] == "true")
                 {
 
                     htmltext += string.Format(Level2MenuItemTemplate, level2Item.Title, string.Empty, level2Item.Title.Replace(' ', '_'),
