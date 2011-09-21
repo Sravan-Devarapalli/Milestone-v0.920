@@ -186,6 +186,15 @@ namespace PracticeManagementService
             ConfigurationDAL.DeleteQuickLinkById(id);
         }
 
+        public void SaveAnnouncement(string text, string richText)
+        {
+            ConfigurationDAL.SaveAnnouncement(text, richText);
+        }
+
+        public string GetLatestAnnouncement()
+        {
+            return ConfigurationDAL.GetLatestAnnouncement();
+        }
     }
 }
 
