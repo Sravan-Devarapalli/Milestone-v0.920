@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="OpportunitySearch.aspx.cs" Inherits="PraticeManagement.OpportunitySearch" %>
 
-<%@ PreviousPageType VirtualPath="~/OpportunityList.aspx" %>
+<%@ PreviousPageType TypeName="PraticeManagement.Controls.PracticeManagementSearchPageBase" %>
 <%@ Register Src="Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc1" %>
 <%@ Register Src="Controls/Generic/OpportunityList.ascx" TagName="OpportunityList"
@@ -56,7 +56,8 @@
                     </tbody>
                 </table>
             </div>
-            <uc2:OpportunityList ID="ucOpportunityList" OnFilterOptionsChanged="ucOpportunityList_OnFilterOptionsChanged" runat="server" />
+            <uc2:OpportunityList ID="ucOpportunityList" OnFilterOptionsChanged="ucOpportunityList_OnFilterOptionsChanged"
+                runat="server" />
         </ContentTemplate>
         <Triggers>
             <asp:AsyncPostBackTrigger ControlID="btnSearch" />
