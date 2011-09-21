@@ -365,9 +365,11 @@ namespace PraticeManagement
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName);
                 bool userIsDirector =
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);
+                bool userIsSeniorLeadership =
+               Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);// #2913: userIsSeniorLeadership is added as per the requirement.
 
                 SelectItemInControl(userIsSalesperson, cblSalesperson, personId);
-                SelectItemInControl((userIsPracticeManager || userIsDirector), cblProjectOwner, personId);// #2817: userIsDirector is added as per the requirement.
+                SelectItemInControl((userIsPracticeManager || userIsDirector || userIsSeniorLeadership), cblProjectOwner, personId);// #2817: userIsDirector is added as per the requirement.
 
                 //Label lblViewingRecords = (Label)GetPager().FindControl("currentPage");
                 //lblViewingRecords.Text = lvProjects.Items.Count.ToString();
