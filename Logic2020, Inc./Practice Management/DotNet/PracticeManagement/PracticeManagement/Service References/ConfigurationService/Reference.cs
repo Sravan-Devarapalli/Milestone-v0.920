@@ -67,6 +67,15 @@ namespace PraticeManagement.ConfigurationService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IConfigurationService/SavePracticesIsNotesRequiredDetails", ReplyAction="http://tempuri.org/IConfigurationService/SavePracticesIsNotesRequiredDetailsRespo" +
             "nse")]
         void SavePracticesIsNotesRequiredDetails(string isNotesRequiredPracticeIdsList, string isNotesExemptedPracticeIdsList);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IConfigurationService/SaveQuickLinksForDashBoard", ReplyAction="http://tempuri.org/IConfigurationService/SaveQuickLinksForDashBoardResponse")]
+        void SaveQuickLinksForDashBoard(string linkNameList, string virtualPathList, DataTransferObjects.DashBoardType dashBoardType);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IConfigurationService/GetQuickLinksByDashBoardType", ReplyAction="http://tempuri.org/IConfigurationService/GetQuickLinksByDashBoardTypeResponse")]
+        DataTransferObjects.QuickLinks[] GetQuickLinksByDashBoardType(DataTransferObjects.DashBoardType dashBoardtype);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IConfigurationService/DeleteQuickLinkById", ReplyAction="http://tempuri.org/IConfigurationService/DeleteQuickLinkByIdResponse")]
+        void DeleteQuickLinkById(int id);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -76,7 +85,7 @@ namespace PraticeManagement.ConfigurationService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ConfigurationServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ConfigurationService.IConfigurationService>, PraticeManagement.ConfigurationService.IConfigurationService {
-       
+        
         public ConfigurationServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -159,6 +168,18 @@ namespace PraticeManagement.ConfigurationService {
         
         public void SavePracticesIsNotesRequiredDetails(string isNotesRequiredPracticeIdsList, string isNotesExemptedPracticeIdsList) {
             base.Channel.SavePracticesIsNotesRequiredDetails(isNotesRequiredPracticeIdsList, isNotesExemptedPracticeIdsList);
+        }
+        
+        public void SaveQuickLinksForDashBoard(string linkNameList, string virtualPathList, DataTransferObjects.DashBoardType dashBoardType) {
+            base.Channel.SaveQuickLinksForDashBoard(linkNameList, virtualPathList, dashBoardType);
+        }
+        
+        public DataTransferObjects.QuickLinks[] GetQuickLinksByDashBoardType(DataTransferObjects.DashBoardType dashBoardtype) {
+            return base.Channel.GetQuickLinksByDashBoardType(dashBoardtype);
+        }
+        
+        public void DeleteQuickLinkById(int id) {
+            base.Channel.DeleteQuickLinkById(id);
         }
     }
 }
