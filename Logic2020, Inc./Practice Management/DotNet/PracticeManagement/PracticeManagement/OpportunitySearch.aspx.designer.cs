@@ -81,9 +81,9 @@ namespace PraticeManagement {
         /// <remarks>
         /// Auto-generated property.
         /// </remarks>
-        public new PraticeManagement.OpportunityList PreviousPage {
+        public new PraticeManagement.Controls.PracticeManagementSearchPageBase PreviousPage {
             get {
-                return ((PraticeManagement.OpportunityList)(base.PreviousPage));
+                return ((PraticeManagement.Controls.PracticeManagementSearchPageBase)(base.PreviousPage));
             }
         }
     }
