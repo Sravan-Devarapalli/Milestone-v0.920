@@ -22,15 +22,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.UpdatePanel upnlDashBoard;
         
         /// <summary>
-        /// CKEditor1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::CKEditor.NET.CKEditorControl CKEditor1;
-        
-        /// <summary>
         /// pnlHtmlAnnounceMent control.
         /// </summary>
         /// <remarks>
@@ -49,6 +40,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button imgEditAnnouncement;
         
         /// <summary>
+        /// mpeAnnouncement control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeAnnouncement;
+        
+        /// <summary>
         /// pnlEditAnnounceMent control.
         /// </summary>
         /// <remarks>
@@ -58,6 +58,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Panel pnlEditAnnounceMent;
         
         /// <summary>
+        /// ckeAnnouncementEditor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::CKEditor.NET.CKEditorControl ckeAnnouncementEditor;
+        
+        /// <summary>
         /// btnSaveAnnouncement control.
         /// </summary>
         /// <remarks>
@@ -65,6 +74,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSaveAnnouncement;
+        
+        /// <summary>
+        /// btnCancelAnnouncement control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelAnnouncement;
         
         /// <summary>
         /// pnlDashBoard control.
