@@ -37,20 +37,29 @@
                         changeAlternateitemsForCBL('<%=cblQuickLinks.ClientID %>');
                     }
                 }
+                function pageLoad() {
+                    var ddlSearchType = document.getElementById('<%= ddlSearchType.ClientID %>');
+                    ddlSearchType_onchange(ddlSearchType);
+                    changeAlternateitemsForCBL('<%=cblQuickLinks.ClientID %>');
+                }
+
+                Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+
+                function endRequestHandle(sender, Args) {
+                    var ddlSearchType = document.getElementById('<%= ddlSearchType.ClientID %>');
+                    ddlSearchType_onchange(ddlSearchType);
+                    changeAlternateitemsForCBL('<%=cblQuickLinks.ClientID %>');
+                }
 
                 function mpeAnnouncements_OnCancelScript() {
                     var text = document.getElementById('<%= pnlHtmlAnnounceMent.ClientID %>');
                     var editor = document.getElementById('<%= ckeAnnouncementEditor.ClientID %>');
-                    
+
                     if (text != null && editor != null) {
                         editor.text = text.innerHTML;
                     }
                 }
 
-                function pageLoad() {
-                    var ddlSearchType = document.getElementById('<%= ddlSearchType.ClientID %>');
-                    ddlSearchType_onchange(ddlSearchType);
-                }
 
                 function ddlSearchType_onchange(ddlSearchType) {
                     if (ddlSearchType != null && ddlSearchType != "undefined") {
@@ -119,10 +128,7 @@
                 }
 
 
-                function pageLoad() {
-                    changeAlternateitemsForCBL('<%=cblQuickLinks.ClientID %>');
-                }
-
+            
             </script>
             <table class="CompPerfTable WholeWidth">
                 <tr>
