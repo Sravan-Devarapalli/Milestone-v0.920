@@ -10,6 +10,8 @@
     TagPrefix="uc" %>
 <%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
+<%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
+    Assembly="PraticeManagement" %>
 <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
 <script src="Scripts/jquery.blockUI.js" type="text/javascript"></script>
 <script type="text/javascript" language="javascript">
@@ -221,19 +223,31 @@
                         Text="{0} Opportunities"></asp:Label>
                 </td>
             </tr>
-        </table>
-        <div class="buttons-block">
-            <ajaxToolkit:CollapsiblePanelExtender ID="cpeSummary" runat="Server" TargetControlID="pnlSummary"
-                ImageControlID="btnExpandCollapseSummary" CollapsedImage="~/Images/expand.jpg"
-                ExpandedImage="~/Images/collapse.jpg" CollapseControlID="btnExpandCollapseSummary"
-                ExpandControlID="btnExpandCollapseSummary" Collapsed="True" TextLabelID="lblSummary" />
-            <asp:Image ID="btnExpandCollapseSummary" runat="server" ImageUrl="~/Images/collapse.jpg"
-                ToolTip="Expand Summary Details" />&nbsp;
-            <asp:Label ID="lblSummary" runat="server" Text="Summary"></asp:Label>
+        </table>        
+        <div>
+            <div class="buttons-block">
+                <table class="WholeWidth">
+                    <tr>
+                        <td>
+                            <ajaxToolkit:CollapsiblePanelExtender ID="cpeSummary" runat="Server" TargetControlID="pnlSummary"
+                                ImageControlID="btnExpandCollapseSummary" CollapsedImage="~/Images/expand.jpg"
+                                ExpandedImage="~/Images/collapse.jpg" CollapseControlID="btnExpandCollapseSummary"
+                                ExpandControlID="btnExpandCollapseSummary" Collapsed="True" TextLabelID="lblSummary" />
+                            <asp:Image ID="btnExpandCollapseSummary" runat="server" ImageUrl="~/Images/collapse.jpg"
+                                ToolTip="Expand Summary Details" />&nbsp;
+                            <asp:Label ID="lblSummary" runat="server" Text="Summary"></asp:Label>
+                        </td>
+                        <td>
+                            <asp:ShadowedHyperlink runat="server" Text="Add Opportunity" ID="lnkAddOpportunity"
+                                CssClass="add-btn" NavigateUrl="~/OpportunityDetail.aspx" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <asp:Panel CssClass="summary" Style="white-space: nowrap; overflow-x: auto;" ID="pnlSummary"
+                runat="server">
+            </asp:Panel>
         </div>
-        <asp:Panel CssClass="summary" Style="white-space: nowrap; overflow-x: auto;" ID="pnlSummary"
-            runat="server">
-        </asp:Panel>
         <div id="opportunity-list">
             <asp:ListView ID="lvOpportunities" runat="server" DataKeyNames="Id" EnableViewState="true"
                 OnSorting="lvOpportunities_Sorting" OnItemDataBound="lvOpportunities_OnItemDataBound">
