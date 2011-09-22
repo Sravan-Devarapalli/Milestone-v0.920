@@ -37,6 +37,12 @@
                 changeAlternateitemsForCBL('<%=cblQuickLinks.ClientID %>');
             }
         }
+
+        function HidePanel() {
+            var pnlEditAnnounceMent = document.getElementById('<%= pnlEditAnnounceMent.ClientID %>');
+            pnlEditAnnounceMent.style.display = "none";
+        }
+
         function pageLoad() {
             var ddlSearchType = document.getElementById('<%= ddlSearchType.ClientID %>');
             ddlSearchType_onchange(ddlSearchType);
@@ -152,11 +158,11 @@
                                         <table style="width: 100%; padding: 5px;">
                                             <tr>
                                                 <td align="right" style="width: 50%; padding-top: 5px; padding-right: 5px;">
-                                                    <asp:Button ID="btnSaveAnnouncement" runat="server" OnClick="btnSaveAnnouncement_OnClick"
+                                                    <asp:Button ID="btnSaveAnnouncement" runat="server" OnClientClick="HidePanel();" OnClick="btnSaveAnnouncement_OnClick"
                                                         Text="Save Announcement" ToolTip="Save Announcement" />
                                                 </td>
                                                 <td align="left" style="width: 50%; padding-left: 5px; padding-top: 5px;">
-                                                    <asp:Button ID="btnCancelAnnouncement" runat="server" OnClick="btnCancelAnnouncement_OnClick"
+                                                    <asp:Button ID="btnCancelAnnouncement" runat="server" OnClientClick="HidePanel();" OnClick="btnCancelAnnouncement_OnClick"
                                                         Text="Cancel" ToolTip="Cancel" />
                                                 </td>
                                             </tr>
