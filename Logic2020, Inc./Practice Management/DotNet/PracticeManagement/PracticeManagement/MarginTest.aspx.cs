@@ -55,9 +55,9 @@ namespace PraticeManagement
                     personnelCompensation.DefaultHoursPerDayVisible =
                         personnelCompensation.SeniorityAndPracticeVisible = false;
 
-            // Security            
-            bool isAdmin = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
-            grossMarginComputing.Visible = isAdmin;
+            // Security //Removed as per #2917.     
+            //bool isAdmin = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+            //grossMarginComputing.Visible = isAdmin;
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
