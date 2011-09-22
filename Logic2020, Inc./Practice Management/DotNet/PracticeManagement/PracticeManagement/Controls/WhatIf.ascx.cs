@@ -60,11 +60,11 @@ namespace PraticeManagement.Controls
             set
             {
                 this.tdgrossMarginComputing.Visible = value;
-                if (value)
-                {
-                    bool isAdmin = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
-                    grossMarginComputing.Visible = isAdmin;
-                }
+                //if (value)
+                //{
+                //    bool isAdmin = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+                //    grossMarginComputing.Visible = isAdmin;
+                //}
             }
         }
 
