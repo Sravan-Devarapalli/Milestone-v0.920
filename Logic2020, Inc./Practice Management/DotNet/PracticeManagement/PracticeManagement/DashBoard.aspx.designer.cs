@@ -22,6 +22,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.UpdatePanel upnlDashBoard;
         
         /// <summary>
+        /// btnEditAnnouncement control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnEditAnnouncement;
+        
+        /// <summary>
         /// pnlHtmlAnnounceMent control.
         /// </summary>
         /// <remarks>
@@ -31,22 +40,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Panel pnlHtmlAnnounceMent;
         
         /// <summary>
-        /// imgEditAnnouncement control.
+        /// lblAnnounceMent control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button imgEditAnnouncement;
-        
-        /// <summary>
-        /// mpeAnnouncement control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.ModalPopupExtender mpeAnnouncement;
+        protected global::System.Web.UI.WebControls.Label lblAnnounceMent;
         
         /// <summary>
         /// pnlEditAnnounceMent control.
@@ -148,15 +148,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnSearchAll;
         
         /// <summary>
-        /// Panel1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel Panel1;
-        
-        /// <summary>
         /// pnlQuickLinks control.
         /// </summary>
         /// <remarks>
@@ -254,6 +245,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hdnSelectedQuckLinks;
+        
+        /// <summary>
+        /// lpDashBoard control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.LoadingProgress lpDashBoard;
     }
 }
 
