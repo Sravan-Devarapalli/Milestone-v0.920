@@ -49,23 +49,17 @@ namespace PraticeManagement
 
             if (!IsPostBack)
             {
-
-
                 PopulateDashBoardTypeDropDown();
-
                 //search section
                 PopulateSearchSection();
-
-
                 //All QuickLinks List
                 PopulateAddQuickLinks();
-
                 //Quick links
                 PopulateQuickLinksSection();
-
                 PopulateAnnouncement();
             }
 
+            btnEditAnnouncement.Visible = _userIsAdministrator && ddlDashBoardType.SelectedValue == DashBoardType.Admin.ToString();
         }
 
         private void PopulateAnnouncement(string text = null)
@@ -74,7 +68,7 @@ namespace PraticeManagement
 
             announcement = text ?? GetLatestAnnouncement();
 
-            pnlHtmlAnnounceMent.GroupingText = announcement;
+            lblAnnounceMent.Text = announcement;
 
             ckeAnnouncementEditor.Text = announcement;
         }
@@ -312,6 +306,7 @@ namespace PraticeManagement
             PopulateQuickLinksSection();
             PopulateSearchSection();
             txtSearchText.Text = string.Empty;
+            btnEditAnnouncement.Visible = _userIsAdministrator && ddlDashBoardType.SelectedValue == DashBoardType.Admin.ToString();
         }
 
         protected void imgDeleteQuickLink_OnClick(object sender, EventArgs e)
@@ -336,7 +331,27 @@ namespace PraticeManagement
             string richText = ckeAnnouncementEditor.Text;
 
             SaveAnnouncement(text, richText);
+            btnEditAnnouncement.Visible = true;
+            pnlHtmlAnnounceMent.Style["display"] = "block";
+            pnlEditAnnounceMent.Style["display"] = "none";
         }
+
+        protected void btnCancelAnnouncement_OnClick(object sender, EventArgs e)
+        {
+            btnEditAnnouncement.Visible = true;
+            pnlHtmlAnnounceMent.Style["display"] = "block";
+            pnlEditAnnounceMent.Style["display"] = "none";
+
+            ckeAnnouncementEditor.Text = lblAnnounceMent.Text;
+        }
+
+        protected void btnEditAnnouncement_OnClick(object sender, EventArgs e)
+        {
+            btnEditAnnouncement.Visible = false;
+            pnlEditAnnounceMent.Style["display"] = "block";
+            pnlHtmlAnnounceMent.Style["display"] = "none";
+        }
+
 
         private string GetLatestAnnouncement()
         {
