@@ -6,6 +6,7 @@ using System.Web.Security;
 using PraticeManagement.ActivityLogService;
 using PraticeManagement.Controls;
 using PraticeManagement.PersonService;
+using PraticeManagement.Configuration;
 
 namespace PraticeManagement.Config
 {
@@ -65,7 +66,12 @@ namespace PraticeManagement.Config
             var principal = new GenericPrincipal(identity, roles);
             Thread.CurrentPrincipal = principal;
             FormsAuthentication.SetAuthCookie(userName, true);
-            Response.Redirect(Constants.ApplicationPages.Calendar);
+
+            UrlRoleMappingElementSection mapping = UrlRoleMappingElementSection.Current;
+            if (mapping != null)
+            {
+                Response.Redirect(mapping.Mapping.FindFirstUrl(Roles.GetRolesForUser(userName)));
+            }
         }
 
         protected void logImpersonateLogin(string oldUserName, string newUserName)
