@@ -389,6 +389,12 @@ namespace PraticeManagement
             {
                 throw ex;
             }
+
+            if (DataHelper.CurrentPerson == null)
+            {
+                hlHome.NavigateUrl = "~/Login.aspx";
+
+            }
         }
 
         private void UpdateLastServerVisitInfo()
