@@ -147,6 +147,12 @@ namespace PraticeManagement
                     }
                 }
             }
+
+            if (DataHelper.CurrentPerson == null)
+            {
+                hlHome.NavigateUrl = "~/Login.aspx";
+
+            }
 		}
 
         protected void lbBecomeUserOk_Click(Object sender, EventArgs e)
