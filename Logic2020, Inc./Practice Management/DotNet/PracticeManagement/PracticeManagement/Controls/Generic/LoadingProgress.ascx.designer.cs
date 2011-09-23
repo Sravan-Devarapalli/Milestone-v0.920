@@ -13,6 +13,15 @@ namespace PraticeManagement.Controls.Generic {
     public partial class LoadingProgress {
         
         /// <summary>
+        /// AlwaysVisibleControlExtender1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.AlwaysVisibleControlExtender AlwaysVisibleControlExtender1;
+        
+        /// <summary>
         /// upTimeEntries control.
         /// </summary>
         /// <remarks>
