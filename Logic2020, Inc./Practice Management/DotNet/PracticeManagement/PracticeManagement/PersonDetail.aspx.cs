@@ -328,7 +328,7 @@ namespace PraticeManagement
             return ValidateAndSavePersonDetails();
         }
 
-        public bool ValidateAndSavePersonDetails()
+        private void ValidatePage()
         {
             for (int i = 0, j = mvPerson.ActiveViewIndex; i < mvPerson.Views.Count; i++, j++)
             {
@@ -343,6 +343,11 @@ namespace PraticeManagement
                     break;
                 }
             }
+        }
+
+        public bool ValidateAndSavePersonDetails()
+        {
+            ValidatePage();
             if (Page.IsValid)
             {
                 int? personId = SaveData();
@@ -406,7 +411,7 @@ namespace PraticeManagement
             if (!PersonId.HasValue)
             {
                 // Save a New Record
-                Page.Validate();
+                ValidatePage();
                 if (Page.IsValid)
                 {
                     int? personId = SaveData();
@@ -445,7 +450,7 @@ namespace PraticeManagement
             if (!PersonId.HasValue)
             {
                 // Save a New Record
-                Page.Validate();
+                ValidatePage();
                 if (Page.IsValid)
                 {
                     int? personId = SaveData();
