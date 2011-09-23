@@ -27,7 +27,7 @@ BEGIN
 		SELECT @MilestoneIdLocal = MilestoneId
 		FROM dbo.DefaultMilestoneSetting 
 		SELECT @MileStoneStartDate = CONVERT(DATETIME,CONVERT(NVARCHAR,@MilestoneId)) 
-		SELECT @MileStoneEndDate = DATEADD(MM,1,@StartDate)-1
+		SELECT @MileStoneEndDate = DATEADD(MM,1,@MileStoneStartDate)-1
 		
 		select te.*
 		from v_TimeEntries as te
