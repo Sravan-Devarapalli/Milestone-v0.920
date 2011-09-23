@@ -15,44 +15,66 @@ CREATE PROCEDURE [dbo].[ProjectSearchText]
 AS
 	SET NOCOUNT ON
 
-	declare @PersonRole varchar(50)
-	select @PersonRole = uir.RoleName
-	from v_UsersInRoles as uir
-    where uir.PersonId = @PersonId and uir.RoleName = 'Administrator' 
+	DECLARE @PersonRole NVARCHAR(50)
+	SELECT @PersonRole = uir.RoleName
+	FROM v_UsersInRoles AS uir
+    WHERE uir.PersonId = @PersonId and uir.RoleName = 'Administrator' 
 
-	if @PersonRole = 'Administrator' 
-		set @PersonId = null
+	IF @PersonRole = 'Administrator' 
+		SET @PersonId = null
 
 	DECLARE @SearchText NVARCHAR(257)
 	SET @SearchText = '%' + ISNULL(@Looked, '') + '%'
 
 
 	-- Convert client ids from string to table
-	declare @ClientsList table (Id int)
-	insert into @ClientsList
-	select TargetId FROM dbo.PersonClientPermissions(@PersonId)
+	DECLARE @ClientsList TABLE (Id INT)
+	INSERT INTO @ClientsList
+	SELECT TargetId FROM dbo.PersonClientPermissions(@PersonId)
 
 	-- Convert practice ids from string to table
-	declare @PracticesList table (Id int)
-	insert into @PracticesList
-	select TargetId FROM dbo.PersonPracticePermissions(@PersonId)
+	DECLARE @PracticesList TABLE (Id INT)
+	INSERT INTO @PracticesList
+	SELECT TargetId FROM dbo.PersonPracticePermissions(@PersonId)
 
 	-- Convert project group ids from string to table
-	declare @ProjectGroupsList table (Id int)
-	insert into @ProjectGroupsList
-	select TargetId FROM dbo.PersonProjectGroupPermissions(@PersonId)
+	DECLARE @ProjectGroupsList TABLE (Id INT)
+	INSERT INTO @ProjectGroupsList
+	SELECT TargetId FROM dbo.PersonProjectGroupPermissions(@PersonId)
 
 	-- Convert project group ids from string to table
-	declare @ProjectOwnerList table (Id int)
-	insert into @ProjectOwnerList
-	select TargetId FROM dbo.PersonProjectOwnerPermissions(@PersonId)
+	DECLARE @ProjectOwnerList TABLE (Id INT)
+	INSERT INTO @ProjectOwnerList
+	SELECT TargetId FROM dbo.PersonProjectOwnerPermissions(@PersonId)
 
 	DECLARE @DefaultProjectId INT
 	SELECT @DefaultProjectId = ProjectId
 	FROM dbo.DefaultMilestoneSetting
 
+		-- Table variable to store list of Clients that owner and salesPerson is allowed to see	
+	DECLARE @OwnerProjectClientList TABLE(
+		ClientId INT NULL -- As per #2890
+	)
+
+   -- Table variable to store list of groups that owner and salesPerson is allowed to see	
+	DECLARE @OwnerProjectGroupList TABLE(
+		GroupId INT NULL -- As per #2890
+	)
+
+	-- Populate is with the data from the Project
+	INSERT INTO @OwnerProjectClientList (ClientId) 
+	SELECT proj.ClientId 
+	FROM dbo.Project AS proj
+	LEFT JOIN dbo.Commission C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1
+	WHERE proj.ProjectManagerId = @PersonId OR C.PersonId = @PersonId -- Adding Salesperson - Project clients into the list.
+
+	INSERT INTO @OwnerProjectGroupList (GroupId) 
+	SELECT GroupId FROM  dbo.ProjectGroup
+	WHERE ClientId IN (SELECT opc.ClientId FROM @OwnerProjectClientList AS opc)
+
+
 	-- Search for a project with milestone(s)
-	;with FoundProjects as (
+	;WITH FoundProjects AS (
 	SELECT m.ClientId,
 	       m.ProjectId,
 	       m.MilestoneId,
@@ -68,6 +90,7 @@ AS
 		   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
 					ELSE 0 END AS HasAttachments
 	  FROM dbo.v_Milestone AS m
+	       INNER JOIN dbo.Commission AS c ON m.ProjectId = c.ProjectId 
 	       INNER JOIN dbo.ProjectStatus AS s ON m.ProjectStatusId = s.ProjectStatusId
 	  OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = m.ProjectId) A
 	 WHERE (
@@ -77,9 +100,9 @@ AS
 	        OR m.Description LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
 	        OR m.BuyerName LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
 	       )
-		   AND (@PersonId is NULL OR m.ClientId in (select * from @ClientsList))
-		   AND (@PersonId is NULL OR m.GroupId in (select * from @ProjectGroupsList))
-		   AND (@PersonId is NULL OR m.ProjectManagerId in (select * from @ProjectOwnerList))   
+		   AND (@PersonId is NULL OR m.ClientId IN (select * from @ClientsList) OR  m.ClientId IN (SELECT opc.ClientId FROM @OwnerProjectClientList AS opc))
+		   AND (@PersonId is NULL OR m.GroupId IN (select * from @ProjectGroupsList) OR  m.GroupId IN (SELECT opG.GroupId FROM @OwnerProjectGroupList AS opG))
+		   AND (@PersonId is NULL OR M.ProjectManagerId = @PersonId OR c.PersonId = @PersonId OR m.ProjectManagerId in (select * from @ProjectOwnerList))   
 	UNION ALL
 	SELECT p.ClientId,
 	       p.ProjectId,
@@ -96,6 +119,7 @@ AS
 		   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
 					ELSE 0 END AS HasAttachments
 	  FROM dbo.v_Project AS p
+	    INNER JOIN dbo.Commission AS c ON  p.ProjectId = c.ProjectId 
 	  OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = p.ProjectId) A
 	 WHERE NOT EXISTS (SELECT 1 FROM dbo.Milestone AS m WHERE m.ProjectId = p.ProjectId)
 	   AND (   
@@ -104,13 +128,12 @@ AS
 	        OR p.ClientName LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
 	        OR p.BuyerName LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
 	       )
-	   AND (@PersonId is NULL OR p.ClientId in (select * from @ClientsList))
-	   AND (@PersonId is NULL OR p.GroupId in (select * from @ProjectGroupsList))
-	   AND (@PersonId is NULL OR p.PracticeId in (select * from @PracticesList))	
-	   AND (@PersonId is NULL OR p.ProjectManagerId in (select * from @ProjectOwnerList))   
+	   AND (@PersonId is NULL OR p.ClientId in (SELECT * FROM @ClientsList) OR  p.ClientId IN (SELECT opc.ClientId FROM @OwnerProjectClientList AS opc))
+	   AND (@PersonId is NULL OR p.GroupId in (SELECT * FROM @ProjectGroupsList) OR  P.GroupId IN (SELECT opG.GroupId FROM @OwnerProjectGroupList AS opG))
+	   AND (@PersonId is NULL OR p.PracticeId in (SELECT * FROM @PracticesList))	
+	   AND (@PersonId is NULL OR p.ProjectManagerId = @PersonId  OR c.PersonId = @PersonId OR p.ProjectManagerId in (SELECT * FROM @ProjectOwnerList))   
 	)
-	select distinct *
-	from FoundProjects
+	SELECT DISTINCT *
+	FROM FoundProjects
 	WHERE ProjectId <> @DefaultProjectId
 	ORDER BY ProjectName, Description
-
