@@ -255,7 +255,9 @@ namespace PraticeManagement.Controls
 
         private static string GetStringByValue(ActivityEventSource value)
         {
-            return Enum.GetName(typeof(ActivityEventSource), value);
+            //return Enum.GetName(typeof(ActivityEventSource), value);
+            int val = (int)value;
+            return val.ToString();
         }
 
         protected void Page_Load(object sender, EventArgs e)
