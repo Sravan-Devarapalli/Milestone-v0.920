@@ -7,7 +7,7 @@
       <siteMapNode url="~/ProjectSearch.aspx" VirtualPath="~/ProjectSearch.aspx" QuickLinkTitle="Project Search" title="Search" description="Project Search" ShowURL="true" />
       <siteMapNode url="~/Projects.aspx"  VirtualPath="~/Projects.aspx" QuickLinkTitle="Project Summary"  title="Summary" description="Project Summary" ShowURL="true" />
       <siteMapNode url="~/GroupBy.aspx"  VirtualPath="~/GroupBy.aspx" QuickLinkTitle="Group By..."  title="Group By..."  description="Group By..." ShowURL="true"/>
-      <siteMapNode url="~/RevenueGoals.aspx"  VirtualPath="~/RevenueGoals.aspx" QuickLinkTitle="Revenue Goals"  title="Revenue Goals" description="Revenue Goals" ShowURL="true" />
+      <siteMapNode url="~/RevenueGoals.aspx"  VirtualPath="~/RevenueGoals.aspx" QuickLinkTitle="Revenue Goals View"  title="Revenue Goals" description="Revenue Goals" ShowURL="true" />
       <siteMapNode url="~/ProjectCalendar.aspx" VirtualPath="~/ProjectCalendar.aspx" QuickLinkTitle="Project Calendar"  title="Project Calendar" description="Project Calendar" ShowURL="true" />
     </siteMapNode>
     
@@ -31,8 +31,8 @@
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Time Entry" title="Time">
         <siteMapNode url="~/Reports/TimeEntryReport.aspx" title="Generic Time Entry"  VirtualPath="~/Reports/TimeEntryReport.aspx" QuickLinkTitle="Generic Time Entry"  roles="Administrator"  description="Generic Time Entry" ShowURL="true"/>
-        <siteMapNode url="~/Reports/TimeEntriesByProject.aspx?from=reports"  VirtualPath="~/Reports/TimeEntriesByProject.aspx" QuickLinkTitle="Time Entry by Project"  title="Time Entry by Project" roles="Administrator" description="Time Entry by Project" ShowURL="true" />
-        <siteMapNode url="~/Reports/TimeEntriesByPerson.aspx?from=reports"  VirtualPath="~/Reports/TimeEntriesByPerson.aspx" QuickLinkTitle="Time Entry by Person"  title="Time Entry by Person"  description="Time Entry by Person" ShowURL="true" />
+        <siteMapNode url="~/Reports/TimeEntriesByProject.aspx?from=reports"  VirtualPath="~/Reports/TimeEntriesByProject.aspx?from=reports" QuickLinkTitle="Time Entry by Project"  title="Time Entry by Project" roles="Administrator" description="Time Entry by Project" ShowURL="true" />
+        <siteMapNode url="~/Reports/TimeEntriesByPerson.aspx?from=reports"  VirtualPath="~/Reports/TimeEntriesByPerson.aspx?from=reports" QuickLinkTitle="Time Entry by Person"  title="Time Entry by Person"  description="Time Entry by Person" ShowURL="true" />
       </siteMapNode>
     </siteMapNode>
     <siteMapNode url="~/TimeEntry.aspx?from=sub_toolbar" title="Time" description="Time Entry records">
