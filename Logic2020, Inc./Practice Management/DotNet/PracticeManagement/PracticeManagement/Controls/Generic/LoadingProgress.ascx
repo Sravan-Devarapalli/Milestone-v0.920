@@ -1,9 +1,14 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="LoadingProgress.ascx.cs"
     Inherits="PraticeManagement.Controls.Generic.LoadingProgress" %>
-<%@ Register Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic" TagPrefix="pcg" %>
+<%@ Register Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic"
+    TagPrefix="pcg" %>
+<AjaxControlToolkit:AlwaysVisibleControlExtender ID="AlwaysVisibleControlExtender1"
+    TargetControlID="upTimeEntries$divLoadingProgressControl" HorizontalSide="Center"  VerticalOffset="250"
+    runat="server" />
 <pcg:StyledUpdateProgress ID="upTimeEntries" runat="server">
     <ProgressTemplate>
-        <div class="please-wait-holder ToolTip" style="display: block;">
+        <asp:Panel class="please-wait-holder ToolTip" ID="divLoadingProgressControl" runat="server"
+            Style="display: block;">
             <table>
                 <tr class="top">
                     <td class="lt">
@@ -38,7 +43,7 @@
                     </td>
                 </tr>
             </table>
-        </div>
+        </asp:Panel>
     </ProgressTemplate>
 </pcg:StyledUpdateProgress>
 
