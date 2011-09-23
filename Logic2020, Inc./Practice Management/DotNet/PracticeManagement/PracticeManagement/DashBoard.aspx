@@ -13,6 +13,17 @@
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <script type="text/javascript">
 
+        function ChangeDefaultFocus(e) {
+            if (window.event) {
+                e = window.event;
+            }
+            if (e.keyCode == 13) {
+                var btn = document.getElementById('<%= btnSearchAll.ClientID %>');
+                btn.click();
+            }
+
+        }
+
         function mpeQuicklink_OnCancelScript() {
             var hdnSelectedQuckLinks = document.getElementById('<%= hdnSelectedQuckLinks.ClientID %>');
             var txtSearchBox = document.getElementById('<%= txtSearchBox.ClientID %>');
@@ -199,7 +210,7 @@
                                                     <table style="width: 100%;">
                                                         <tr>
                                                             <td style="width: 70%; white-space: nowrap;" align="left">
-                                                                <asp:TextBox ID="txtSearchText" Width="97%" runat="server"></asp:TextBox>
+                                                                <asp:TextBox ID="txtSearchText"  onkeypress="ChangeDefaultFocus(event);" Width="97%" runat="server"></asp:TextBox>
                                                             </td>
                                                             <td>
                                                                 <asp:RequiredFieldValidator ID="reqSearchText" runat="server" ControlToValidate="txtSearchText"
@@ -217,7 +228,7 @@
                                             </tr>
                                             <tr>
                                                 <td align="right" style="padding-top: 5px;">
-                                                    <asp:Button ID="btnSearchAll" runat="server" Text="Go" ToolTip="Go" ValidationGroup="Search"
+                                                    <asp:Button ID="btnSearchAll" runat="server" Text="Go" ToolTip="Go" ValidationGroup="Search" 
                                                         PostBackUrl="~/ProjectSearch.aspx" EnableViewState="False" />
                                                 </td>
                                             </tr>
