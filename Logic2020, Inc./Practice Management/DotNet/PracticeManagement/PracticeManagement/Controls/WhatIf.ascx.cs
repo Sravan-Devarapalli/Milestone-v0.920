@@ -366,10 +366,10 @@ namespace PraticeManagement.Controls
 
         private void DisplayRate(ComputedFinancialsEx rate)
         {
+            lblMonthlyRevenueWithoutRecruiting.Text = rate.Revenue.ToString();
             if (!HideCalculatedValues)
             {
                 //lblMonthlyRevenue.Text = 
-                lblMonthlyRevenueWithoutRecruiting.Text = rate.Revenue.ToString();
                 //lblMonthlyGogs.Text = rate.Cogs.ToString();
                 //lblMonthlyGrossMargin.Text = rate.GrossMargin.ToString();
                 //txtTargetMargin.Text = lblTargetMargin.Text =
@@ -389,14 +389,12 @@ namespace PraticeManagement.Controls
                 //lblMonthlyGogs.Text =
                 //lblMonthlyGrossMargin.Text =
                 //lblTargetMargin.Text =
-                lblMonthlyRevenueWithoutRecruiting.Text =
                 lblMonthlyGrossMarginWithoutRecruiting.Text =
                 lblMonthlyCogsWithoutRecruiting.Text =
                 lblTargetMarginWithoutRecruiting.Text =
                    Resources.Controls.HiddenCellText;
 
                 //lblMonthlyRevenue.CssClass = 
-                lblMonthlyRevenueWithoutRecruiting.CssClass = "Revenue";
                 //lblMonthlyGogs.CssClass = 
                 lblMonthlyCogsWithoutRecruiting.CssClass = "Cogs";
                 //lblMonthlyGrossMargin.CssClass = 
