@@ -352,9 +352,7 @@ namespace PraticeManagement.Controls
                     hdnResetFilter.Value = "false";
                     btnResetFilter.Enabled = false;
                 }
-                ddlPeriod.Attributes["onchange"] = "EnableResetButton(); CheckAndShowCustomDatesPoup(this);";
-                ddlEventSource.Attributes["onchange"] = ddlPersonName.Attributes["onchange"] = ddlProjects.Attributes["onchange"] = "EnableResetButton();";
-                diRange.OnClientChange = "EnableResetButtonForDateIntervalChange";
+                ActivityLogOnChangeEvents();
             }
             else
             {
@@ -362,14 +360,21 @@ namespace PraticeManagement.Controls
             }
         }
 
+        private void ActivityLogOnChangeEvents()
+        {
+            ddlPeriod.Attributes["onchange"] = "EnableResetButton(); CheckAndShowCustomDatesPoup(this);";
+            ddlEventSource.Attributes["onchange"] = "disableProjectsDropDown(); EnableResetButton();";
+            ddlPersonName.Attributes["onchange"] = ddlProjects.Attributes["onchange"] = "EnableResetButton();";
+            diRange.OnClientChange = "EnableResetButtonForDateIntervalChange";
+        }
+
         protected void Page_Prerender(object sender, EventArgs e)
         {
 
             if (IsActivityLogPage)
             {
-                ddlPeriod.Attributes["onchange"] = "EnableResetButton(); CheckAndShowCustomDatesPoup(this);";
-                ddlEventSource.Attributes["onchange"] = ddlPersonName.Attributes["onchange"] = ddlProjects.Attributes["onchange"] = "EnableResetButton();";
-                diRange.OnClientChange = "EnableResetButtonForDateIntervalChange";
+                ActivityLogOnChangeEvents();
+                EnableProjectsDropDown();
             }
             else
             {
@@ -408,6 +413,12 @@ namespace PraticeManagement.Controls
             hdnEndDateCalExtenderBehaviourId.Value = clToDate.BehaviorID;
         }
 
+        private void EnableProjectsDropDown()
+        {
+            int eventSourceValue = Convert.ToInt32(ddlEventSource.SelectedValue);
+            ddlProjects.Enabled = !((eventSourceValue >= 3 && eventSourceValue <= 5) || (eventSourceValue >= 24 && eventSourceValue <= 30) || (eventSourceValue >= 40 && eventSourceValue <= 43));
+        }
+
         private void SaveFilterSettings()
         {
             ActivityLogFilter filter = GetFilterSettings();
@@ -432,9 +443,6 @@ namespace PraticeManagement.Controls
 
         private void FillEventList()
         {
-            //ddlEventSource.DataSource = EventSourceTitles;
-            //ddlEventSource.DataTextField = "Value";
-            //ddlEventSource.DataValueField = "Key";
             ddlEventSource.DataBind();
 
             ddlEventSource.SelectedValue = GetStringByValue(DisplayDropDownValue);
