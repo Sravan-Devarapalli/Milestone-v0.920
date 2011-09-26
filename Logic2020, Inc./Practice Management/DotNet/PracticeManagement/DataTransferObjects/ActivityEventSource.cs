@@ -8,40 +8,93 @@ namespace DataTransferObjects
 	[DataContract]
 	public enum ActivityEventSource
 	{
+        //Note:- If value changes then change in ActivityLogControl.ascx also.
 		[EnumMember]
-		All = 1,
+        All = 1,
+        [EnumMember]
+        Error = 2,
 		[EnumMember]
-		Person = 2,
-		[EnumMember]
-		Project = 3,
-		[EnumMember]
-		Error = 4,
-		[EnumMember]
-		ProjectAndMilestones = 5,
+        Person = 3,
+        [EnumMember]
+        AddedPersons = 4,
+        [EnumMember]
+        ChangedPersons = 5,
         [EnumMember]
         TargetPerson = 6,
         [EnumMember]
-        TimeEntry = 7,
+        Opportunity = 7,
         [EnumMember]
-        Opportunity = 8,
+        AddedOpportunities = 8,
         [EnumMember]
-        Milestone = 9,
+        ChangedOpportunities = 9,
         [EnumMember]
-        Logon = 10,
+        DeletedOpportunities = 10,
+		[EnumMember]
+        Project = 11,
         [EnumMember]
-        LoginSuccessful = 11,
+        AddedProjects = 12,
         [EnumMember]
-        LoginError = 12,
+        ChangedProjects = 13,
         [EnumMember]
-        Security = 13,
+        DeletedProjects = 14,
         [EnumMember]
-        PasswordResetRequests = 14,
+        Milestone = 15,
         [EnumMember]
-        AccountLockouts = 15,
+        AddedMilestones = 16,
         [EnumMember]
-        AddedTimeEntries = 16,
+        ChangedMilestones = 17,
         [EnumMember]
-        ChangedTimeEntries = 17
+        DeletedMilestones = 18,
+        //[EnumMember]
+        //MilestoneResources = 19,
+        //[EnumMember]
+        //AddedMilestoneResources = 20,
+        //[EnumMember]
+        //ChangedMilestoneResources = 21,
+        //[EnumMember]
+        //DeletedMilestoneResources = 22,
+		[EnumMember]
+        ProjectAndMilestones = 23,
+        [EnumMember]
+        Logon = 24,
+        [EnumMember]
+        LoginSuccessful = 25,
+        [EnumMember]
+        LoginError = 26,
+        [EnumMember]
+        Security = 27,
+        [EnumMember]
+        PasswordResetRequests = 28,
+        [EnumMember]
+        AccountLockouts = 29,
+        [EnumMember]
+        BecomeUsers = 30,
+        [EnumMember]
+        TimeEntry = 31,
+        [EnumMember]
+        AddedTimeEntries = 32,
+        [EnumMember]
+        ChangedTimeEntries = 33,
+        [EnumMember]
+        DeletedTimeEntries = 34,
+        [EnumMember]
+        ProjectAttachment = 35,
+        [EnumMember]
+        AddedProjectAttachments = 36,
+        [EnumMember]
+        DeletedProjectAttachments = 37,
+        [EnumMember]
+        Notes = 38,
+        [EnumMember]
+        ProjectNotes = 39,
+        [EnumMember]
+        MilestoneNotes = 40,
+        [EnumMember]
+        OpportunityNotes = 41,
+        [EnumMember]
+        PersonNotes = 42,
+        [EnumMember]
+        Exports = 43
     }
 }
 
