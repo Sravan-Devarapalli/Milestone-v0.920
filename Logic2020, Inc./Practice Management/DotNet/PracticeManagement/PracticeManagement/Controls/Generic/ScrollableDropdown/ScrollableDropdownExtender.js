@@ -100,11 +100,10 @@ PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownBehavior
         var labelControlPosition = this.getOffset($get(this.get_labelValue()));
 
         if (labelControlPosition != null && scrollingDropdown) {
-            scrollingDropdown.style.left = labelControlPosition.x + 'px';
-            scrollingDropdown.style.top = labelControlPosition.y + labelControlPosition.h + 'px';
-            if (Number(document.documentElement.scrollTop) > 0) {
-                window.scrollTo(0, 0);
-            }
+            scrollingDropdown.style.left = labelControlPosition.x - document.documentElement.scrollLeft + 'px';
+           
+            scrollingDropdown.style.top = labelControlPosition.y + labelControlPosition.h - document.documentElement.scrollTop + 'px';
+
         }
     },
 
