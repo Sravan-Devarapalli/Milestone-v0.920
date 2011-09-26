@@ -124,6 +124,21 @@
         }
     }
 
+    function disableProjectsDropDown() {
+        
+        var eventSource = document.getElementById('<%= ddlEventSource.ClientID %>');
+        projectList = document.getElementById('<%= ddlProjects.ClientID %>');
+        if (eventSource != null && projectList != null && eventSource.value != 'undefind') {
+            if ((eventSource.value >= 3 && eventSource.value <= 5) || (eventSource.value >= 24 && eventSource.value <= 30) || (eventSource.value >= 40 && eventSource.value <= 43)) {
+                projectList.disabled = 'true';
+                projectList[0].selected = 'true';
+            }
+            else {
+                projectList.disabled = '';
+            }
+        }
+    }
+
 </script>
 <uc:LoadingProgress ID="lpActivityLog" runat="server" />
 <asp:UpdatePanel ID="updActivityLog" runat="server" UpdateMode="Conditional">
@@ -134,30 +149,52 @@
                     <div id="divActivitylog" style="padding: 10px;" runat="server">
                         <table id="tblActivitylog" runat="server" style="white-space: nowrap;">
                             <tr>
-                                <td id="tdEventSource" runat="server">
+                                <td id="tdEventSource" runat="server" style="padding-left:0px;padding-right:0px;">
                                     <asp:Label ID="lblDisplay" runat="server" Text="Show "></asp:Label><asp:DropDownList
                                         ID="ddlEventSource" runat="server" EnableViewState="true">
-                                        <asp:ListItem Text="ALL Events" Value="1"></asp:ListItem>
-                                        <asp:ListItem Text="ALL Errors" Value="4"></asp:ListItem>
-                                        <asp:ListItem Text="Persons only" Value="2"></asp:ListItem>
+                                        <asp:ListItem Text="ALL Events" Value="1" Selected="True"></asp:ListItem>
+                                        <asp:ListItem Text="ALL Errors" Value="2"></asp:ListItem>
+                                        <asp:ListItem Text="Person Events" Value="3"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Added Persons Only" Value="4"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Changed Persons Only" Value="5"></asp:ListItem>
                                         <asp:ListItem Text="Target Person" Value="6"></asp:ListItem>
-                                        <asp:ListItem Text="Opportunity" Value="8"></asp:ListItem>
-                                        <asp:ListItem Text="Projects only" Value="3"></asp:ListItem>
-                                        <asp:ListItem Text="Milestone" Value="9"></asp:ListItem>
-                                        <asp:ListItem Text="Projects And Milestones" Value="5"></asp:ListItem>
-                                        <asp:ListItem Text="Logon Events" Value="10"></asp:ListItem>
-                                        <asp:ListItem Text="&nbsp; Successfull Logins Only" Value="11"></asp:ListItem>
-                                        <asp:ListItem Text="&nbsp; Login Errors Only" Value="12"></asp:ListItem>
-                                        <asp:ListItem Text="Security Events" Value="13"></asp:ListItem>
-                                        <asp:ListItem Text="&nbsp; Password Reset Requests Only" Value="14"></asp:ListItem>
-                                        <asp:ListItem Text="&nbsp; Account Lockouts Only" Value="15"></asp:ListItem>
-                                        <asp:ListItem Text="Time Entry Events" Value="7"></asp:ListItem>
-                                        <asp:ListItem Text="&nbsp; Added TimeEntries Only" Value="16"></asp:ListItem>
-                                        <asp:ListItem Text="&nbsp; Changed TimeEntries Only" Value="17"></asp:ListItem>
+                                        <asp:ListItem Text="Opportunity Events" Value="7"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Added Opportunities Only" Value="8"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Changed Opportunities Only" Value="9"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Deleted Opportunities Only" Value="10"></asp:ListItem>
+                                        <asp:ListItem Text="Project Events" Value="11"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Added Projects Only" Value="12"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Changed Projects Only" Value="13"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Deleted Projects Only" Value="14"></asp:ListItem>
+                                        <asp:ListItem Text="Milestone Events" Value="15"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Added Milestones Only" Value="16"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Changed Milestones Only" Value="17"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Deleted Milestones Only" Value="18"></asp:ListItem>
+                                        <asp:ListItem Text="Projects And Milestones Events" Value="23"></asp:ListItem>
+                                        <asp:ListItem Text="Logon Events" Value="24"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Successfull Logins Only" Value="25"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Login Errors Only" Value="26"></asp:ListItem>
+                                        <asp:ListItem Text="Security Events" Value="27"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Password Reset Requests Only" Value="28"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Account Lockouts Only" Value="29"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Become Users Only" Value="30"></asp:ListItem>
+                                        <asp:ListItem Text="Time Entry Events" Value="31"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Added TimeEntries Only" Value="32"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Changed TimeEntries Only" Value="33"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Deleted TimeEntries Only" Value="34"></asp:ListItem>
+                                        <asp:ListItem Text="Project Attachment Events" Value="35"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Added Project Attachments Only" Value="36"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Deleted Project Attachments Only" Value="37"></asp:ListItem>
+                                        <asp:ListItem Text="Notes" Value="38"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Project Notes Only" Value="39"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Milestone Notes Only" Value="40"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Opportunity Notes Only" Value="41"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Person Notes Only" Value="42"></asp:ListItem>
+                                        <asp:ListItem Text="Exports" Value="43"></asp:ListItem>
                                     </asp:DropDownList>
                                 </td>
-                                <td id="tdYear" runat="server">
-                                    <asp:Label ID="Label3" runat="server" Text="  over "></asp:Label><asp:DropDownList
+                                <td id="tdYear" runat="server" style="padding-left:2px;">
+                                    <asp:Label ID="Label3" runat="server" Text="&nbsp;&nbsp;over&nbsp;&nbsp;"></asp:Label><asp:DropDownList
                                         ID="ddlPeriod" runat="server" EnableViewState="true">
                                         <asp:ListItem Text="Last Day" Value="-1"></asp:ListItem>
                                         <asp:ListItem Text="Last Week" Selected="True" Value="-7"></asp:ListItem>
@@ -187,7 +224,7 @@
                                         DataValueField="Id" OnDataBound="ddlPersonName_OnDataBound" />
                                 </td>
                                 <td id="spnProjects" runat="server">
-                                    <asp:Label ID="Label2" runat="server" Text="on "></asp:Label><asp:DropDownList ID="ddlProjects"
+                                    <asp:Label ID="Label2" runat="server" Text="&nbsp;on "></asp:Label><asp:DropDownList ID="ddlProjects"
                                         runat="server" DataSourceID="odsProjects" DataTextField="Name" DataValueField="Id"
                                         OnDataBound="ddlProjects_OnDataBound" />
                                 </td>
@@ -331,4 +368,3 @@
         <asp:AsyncPostBackTrigger ControlID="btnResetFilter" EventName="Click" />
     </Triggers>
 </asp:UpdatePanel>
-
