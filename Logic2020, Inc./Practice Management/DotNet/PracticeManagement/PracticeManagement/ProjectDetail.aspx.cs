@@ -957,14 +957,15 @@ namespace PraticeManagement
 
         private void PopulateSalesPersonDropDown()
         {
-            Project = GetCurrentProject(ProjectId);
+            if (Project == null)
+                Project = GetCurrentProject(ProjectId);
 
             if (Project != null && Project.SalesCommission != null)
             {
                 ListItem selectedSalesPerson = ddlSalesperson.Items.FindByValue(Project.SalesCommission[0].PersonId.Value.ToString());
                 if (selectedSalesPerson == null)
                 {
-                    Person selectedPerson = DataHelper.GetPerson(Project.SalesCommission[0].PersonId.Value);
+                    Person selectedPerson = DataHelper.GetPersonWithoutFinancials(Project.SalesCommission[0].PersonId.Value);
 
                     selectedSalesPerson = new ListItem(selectedPerson.PersonLastFirstName, selectedPerson.Id.Value.ToString());
                     ddlSalesperson.Items.Add(selectedSalesPerson);
