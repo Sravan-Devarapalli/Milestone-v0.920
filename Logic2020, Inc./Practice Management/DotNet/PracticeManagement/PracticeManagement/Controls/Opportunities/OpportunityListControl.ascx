@@ -169,6 +169,23 @@
 
         var lbloppNameTooltipContent = document.getElementById('<%= lbloppNameTooltipContent.ClientID %>');
         lbloppNameTooltipContent.innerHTML = descriptionText.toString();
+
+        if (navigator.userAgent.indexOf(' Chrome/') > -1) {
+            if (descriptionText.toString().length > 50) {
+                lbloppNameTooltipContent.style.width = "330px";
+            }
+            else {
+                lbloppNameTooltipContent.style.width = "100%";
+            }
+        }
+    }
+
+    function pageLoad() {
+        var lbloppNameTooltipContent = document.getElementById('<%= lbloppNameTooltipContent.ClientID %>');
+
+        if (navigator.userAgent.indexOf(' Chrome/') > -1) {
+            lbloppNameTooltipContent.style.width = "330px";
+        }
     }
 
     function HidePanel() {
@@ -182,8 +199,8 @@
 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
     <ContentTemplate>
         <asp:Panel ID="oppNameToolTipHolder" Style="display: none; position: absolute; z-index: 2000;"
-            runat="server" CssClass="ToolTip WordWrap">
-            <table>
+            runat="server" CssClass="ToolTip">
+            <table cellpadding="0" cellspacing="0">
                 <tr class="top">
                     <td class="lt">
                         <div class="tail">
@@ -197,9 +214,9 @@
                 <tr class="middle">
                     <td class="lbor">
                     </td>
-                    <td class="content WordWrap">
+                    <td class="content">
                         <pre>
-<asp:Label ID="lbloppNameTooltipContent" CssClass="WordWrap" runat="server"></asp:Label>
+<asp:Label ID="lbloppNameTooltipContent" CssClass="WordWrap" Width="100%" runat="server"></asp:Label>
 </pre>
                     </td>
                     <td class="rbor">
@@ -223,7 +240,7 @@
                         Text="{0} Opportunities"></asp:Label>
                 </td>
             </tr>
-        </table>        
+        </table>
         <div>
             <div class="buttons-block">
                 <table class="WholeWidth">
