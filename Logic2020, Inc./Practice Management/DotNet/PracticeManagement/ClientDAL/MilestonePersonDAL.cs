@@ -65,6 +65,7 @@ namespace DataAccess
         private const string PersonVacationsOnMilestoneColumn = "VacationDays";
         private const string PersonSeniorityIdColumn = "SeniorityId";
         private const string LocationColumn = "Location";
+        private const string HasTimeEntriesColumn = "HasTimeEntries";
 
         #endregion
 
@@ -1158,6 +1159,7 @@ namespace DataAccess
 
                     LoadMilestonePersonEntries(reader, milestonePersons);
                     LoadMilestonePersonEntriesFinancials(reader, milestonePersons);
+
                 }
             }
 
@@ -1238,6 +1240,7 @@ namespace DataAccess
                 var locationIndex = reader.GetOrdinal(LocationColumn);
                 var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
                 var lastNameIndex = reader.GetOrdinal(LastNameColumn);
+                var hasTimeEntriesIndex = reader.GetOrdinal(HasTimeEntriesColumn);
 
                 while (reader.Read())
                 {
@@ -1269,7 +1272,8 @@ namespace DataAccess
                                                  },
                                 Location = !reader.IsDBNull(locationIndex)
                                         ? reader.GetString(locationIndex)
-                                        : null
+                                        : null,
+                                HasTimeEntries = reader.GetBoolean(hasTimeEntriesIndex)
                             };
 
                     if (!reader.IsDBNull(personRoleIdIndex))
