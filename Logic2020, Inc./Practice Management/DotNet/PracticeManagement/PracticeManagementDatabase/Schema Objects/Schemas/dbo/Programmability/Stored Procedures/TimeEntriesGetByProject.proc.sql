@@ -11,7 +11,33 @@ BEGIN
 	SET NOCOUNT ON;
 	IF EXISTS (SELECT 1 FROM Milestone WHERE MilestoneId = @MilestoneId) OR @MilestoneID IS NULL
 	BEGIN
-	select te.*
+	SELECT DISTINCT  TimeEntryId,
+			EntryDate,
+			ModifiedDate,
+			MilestonePersonId,
+			ActualHours,
+			ForecastedHours,
+			TimeTypeId,
+			TimeTypeName,
+			ModifiedBy,
+			Note,
+			IsReviewed,
+			IsChargeable,
+			MilestoneDate,
+			ModifiedByFirstName,
+			ModifiedByLastName,
+			PersonId,
+			ObjectFirstName,
+			ObjectLastName,
+			MilestoneName,
+			MilestoneId,
+			ProjectId,
+			ProjectName,
+			ProjectNumber,
+			IsCorrect,
+			ClientId,
+			ClientName,
+			IsProjectChargeable
 	from v_TimeEntries as te
 	where te.ProjectId = @ProjectId
 		AND te.MilestoneDate between ISNULL(@StartDate, te.MilestoneDate) and ISNULL(@EndDate, te.MilestoneDate)
