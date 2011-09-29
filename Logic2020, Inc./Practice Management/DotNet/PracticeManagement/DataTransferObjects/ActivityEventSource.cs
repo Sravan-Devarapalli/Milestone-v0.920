@@ -22,79 +22,69 @@ namespace DataTransferObjects
         [EnumMember]
         TargetPerson = 6,
         [EnumMember]
-        Opportunity = 7,
+        Project = 7,
         [EnumMember]
-        AddedOpportunities = 8,
+        AddedProjects = 8,
         [EnumMember]
-        ChangedOpportunities = 9,
+        ChangedProjects = 9,
         [EnumMember]
-        DeletedOpportunities = 10,
-		[EnumMember]
-        Project = 11,
+        DeletedProjects = 10,
         [EnumMember]
-        AddedProjects = 12,
+        AddedSOW = 11,
         [EnumMember]
-        ChangedProjects = 13,
+        DeletedSOW = 12,
         [EnumMember]
-        DeletedProjects = 14,
+        Milestone = 13,
         [EnumMember]
-        Milestone = 15,
+        AddedMilestones = 14,
         [EnumMember]
-        AddedMilestones = 16,
+        ChangedMilestones = 15,
         [EnumMember]
-        ChangedMilestones = 17,
+        DeletedMilestones = 16,
+        [EnumMember]        
+        Opportunity = 17,
         [EnumMember]
-        DeletedMilestones = 18,
-        //[EnumMember]
-        //MilestoneResources = 19,
-        //[EnumMember]
-        //AddedMilestoneResources = 20,
-        //[EnumMember]
-        //ChangedMilestoneResources = 21,
-        //[EnumMember]
-        //DeletedMilestoneResources = 22,
-		[EnumMember]
-        ProjectAndMilestones = 23,
+        AddedOpportunities = 18,
         [EnumMember]
-        Logon = 24,
+        ChangedOpportunities = 19,
         [EnumMember]
-        LoginSuccessful = 25,
+        DeletedOpportunities = 20,
         [EnumMember]
-        LoginError = 26,
+        Exports = 21,
         [EnumMember]
-        Security = 27,
+        ProjectSummaryExport = 22,
         [EnumMember]
-        PasswordResetRequests = 28,
+        OpportunitySummaryExport = 23,
         [EnumMember]
-        AccountLockouts = 29,
+        TimeEntryByProjectExport = 24,
         [EnumMember]
-        BecomeUsers = 30,
+        TimeEntryByPersonExport = 25,
         [EnumMember]
-        TimeEntry = 31,
+        BenchReportExport = 26,
         [EnumMember]
-        AddedTimeEntries = 32,
+        ConsultantUtilTableExport = 27,
         [EnumMember]
-        ChangedTimeEntries = 33,
+        TimeEntry = 28,
         [EnumMember]
-        DeletedTimeEntries = 34,
+        AddedTimeEntries = 29,
         [EnumMember]
-        ProjectAttachment = 35,
+        ChangedTimeEntries = 30,
         [EnumMember]
-        AddedProjectAttachments = 36,
+        DeletedTimeEntries = 31,
         [EnumMember]
-        DeletedProjectAttachments = 37,
+        Logon = 32,
         [EnumMember]
-        Notes = 38,
+        LoginSuccessful = 33,
         [EnumMember]
-        ProjectNotes = 39,
+        LoginError = 34,
         [EnumMember]
-        MilestoneNotes = 40,
+        Security = 35,
         [EnumMember]
-        OpportunityNotes = 41,
+        AccountLockouts = 36,
         [EnumMember]
-        PersonNotes = 42,
+        PasswordResetRequests = 37,
         [EnumMember]
-        Exports = 43
+        BecomeUser = 38,
     }
 }
 
