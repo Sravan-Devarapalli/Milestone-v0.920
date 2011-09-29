@@ -85,15 +85,15 @@ AS
 				  OR ((@EventSource = 'AddedTimeEntries' OR @EventSource = 'All' ) AND a.LogData.exist('/TimeEntry') = 1 AND t.ActivityName = 'Added')
 				  OR ((@EventSource = 'ChangedTimeEntries' OR @EventSource = 'All' ) AND a.LogData.exist('/TimeEntry') = 1 AND t.ActivityName = 'Changed')
 				  OR ((@EventSource = 'DeletedTimeEntries' OR @EventSource = 'All' ) AND a.LogData.exist('/TimeEntry') = 1 AND t.ActivityName = 'Deleted')
-				  OR ((@EventSource = 'ProjectAttachment' OR @EventSource = 'All' ) AND a.LogData.exist('/ProjectAttachment') = 1)
-				  OR ((@EventSource = 'AddedProjectAttachments' OR @EventSource = 'All' ) AND a.LogData.exist('/ProjectAttachment') = 1 AND t.ActivityName = 'Added')
-				  OR ((@EventSource = 'DeletedProjectAttachments' OR @EventSource = 'All' ) AND a.LogData.exist('/ProjectAttachment') = 1 AND t.ActivityName = 'Deleted')
-				  OR ((@EventSource = 'Notes' OR @EventSource = 'All' ) AND a.LogData.exist('/Note') = 1)
-				  OR ((@EventSource = 'ProjectNotes' OR @EventSource = 'All' ) AND a.LogData.exist('/Note') = 1 AND a.LogData.value('(/Note/NEW_VALUES/@NoteTargetId)[1]', 'int') = 2 )
-				  OR ((@EventSource = 'MilestoneNotes' OR @EventSource = 'All' ) AND a.LogData.exist('/Note') = 1 AND a.LogData.value('(/Note/NEW_VALUES/@NoteTargetId)[1]', 'int') = 1 )
-				  OR ((@EventSource = 'OpportunityNotes' OR @EventSource = 'All' ) AND a.LogData.exist('/Note') = 1 AND a.LogData.value('(/Note/NEW_VALUES/@NoteTargetId)[1]', 'int') = 4 )
-				  OR ((@EventSource = 'PersonNotes' OR @EventSource = 'All' ) AND a.LogData.exist('/Note') = 1 AND a.LogData.value('(/Note/NEW_VALUES/@NoteTargetId)[1]', 'int') = 3 )
+				  OR ((@EventSource = 'AddedSOW' OR @EventSource = 'All' ) AND a.LogData.exist('/ProjectAttachment') = 1 AND t.ActivityName = 'Added')
+				  OR ((@EventSource = 'DeletedSOW' OR @EventSource = 'All' ) AND a.LogData.exist('/ProjectAttachment') = 1 AND t.ActivityName = 'Deleted')
 				  OR ((@EventSource = 'Exports' OR @EventSource = 'All' ) AND a.LogData.exist('/Export') = 1 )
+				  OR ((@EventSource = 'ProjectSummaryExport' OR @EventSource = 'All' ) AND a.LogData.exist('/Export') = 1 AND a.LogData.value('(/Export/NEW_VALUES/@From)[1]', 'NVARCHAR(50)') = 'Projects')
+				  OR ((@EventSource = 'OpportunitySummaryExport' OR @EventSource = 'All' ) AND a.LogData.exist('/Export') = 1 AND a.LogData.value('(/Export/NEW_VALUES/@From)[1]', 'NVARCHAR(50)') = 'Opportunity')
+				  OR ((@EventSource = 'TimeEntryByProjectExport' OR @EventSource = 'All' ) AND a.LogData.exist('/Export') = 1 AND a.LogData.value('(/Export/NEW_VALUES/@From)[1]', 'NVARCHAR(50)') = 'Time Entry By Project')
+				  OR ((@EventSource = 'TimeEntryByPersonExport' OR @EventSource = 'All' ) AND a.LogData.exist('/Export') = 1 AND a.LogData.value('(/Export/NEW_VALUES/@From)[1]', 'NVARCHAR(50)') = 'Time Entry By Person')
+				  OR ((@EventSource = 'BenchReportExport' OR @EventSource = 'All' ) AND a.LogData.exist('/Export') = 1 AND a.LogData.value('(/Export/NEW_VALUES/@From)[1]', 'NVARCHAR(50)') = 'Bench Report')
+				  OR ((@EventSource = 'ConsultantUtilTableExport' OR @EventSource = 'All' ) AND a.LogData.exist('/Export') = 1 AND a.LogData.value('(/Export/NEW_VALUES/@From)[1]', 'NVARCHAR(50)') = 'Consultants Util. Table')
 				  OR (@EventSource = 'All' AND a.LogData.exist('/') = 1)
 			      OR ((@EventSource = 'Person' OR @EventSource = 'All')
 							 AND (a.LogData.exist('/Person') = 1 
@@ -114,6 +114,7 @@ AS
 				  OR (
 						((@EventSource = 'Project'  OR @EventSource = 'All') 
 							AND (a.LogData.exist('/Project') = 1 
+								OR a.LogData.exist('/ProjectAttachment') = 1
 								 )
 						)
 						AND 
@@ -138,12 +139,7 @@ AS
 					  AND(@MilestoneId IS NULL 
 					     OR a.LogData.value('(/Milestone/NEW_VALUES/@MilestoneId)[1]', 'int') = @MilestoneId 
 						 ))
-																		  
-				  OR ((@EventSource = 'ProjectAndMilestones' OR @EventSource = 'All') AND (a.LogData.exist('/Project') = 1 
-																	OR a.LogData.exist('/Milestone') = 1
-																	OR a.LogData.exist('/MilestonePerson') = 1
-																 ) 
-					 )
+					
 				  OR ((@EventSource = 'TargetPerson' OR @EventSource = 'All')	 AND ( @PersonId IS NULL 
 															OR a.LogData.value('(/*/*/@PersonId)[1]', 'int') = @PersonId
 															OR a.LogData.value('(/*/*/*/@PersonId)[1]', 'int') = @PersonId
@@ -166,17 +162,17 @@ AS
 				  OR ( (@EventSource = 'PasswordResetRequests' OR @EventSource = 'All') AND t.ActivityName = 'changed' AND a.LogData.exist('(/Membership)') = 1  AND 
 				  ( 
 				  
-				  (CASE WHEN  a.LogData.exist('(/Membership)') = 1 
-					THEN
-							(CASE WHEN 
-								CONVERT(XML, a.Data).value('(/Membership/NEW_VALUES/@HashedPassword)[1]', 'NVARCHAR(100)') <> CONVERT(XML, a.Data).value('(/Membership/NEW_VALUES/OLD_VALUES/@HashedPassword)[1]', 'NVARCHAR(100)')
-								THEN 1 ELSE 0 END 
-							)
-					ELSE 0 END) = 1
+					  (CASE WHEN  a.LogData.exist('(/Membership)') = 1 
+						THEN
+								(CASE WHEN 
+									CONVERT(XML, a.Data).value('(/Membership/NEW_VALUES/@HashedPassword)[1]', 'NVARCHAR(100)') <> CONVERT(XML, a.Data).value('(/Membership/NEW_VALUES/OLD_VALUES/@HashedPassword)[1]', 'NVARCHAR(100)')
+									THEN 1 ELSE 0 END 
+								)
+						ELSE 0 END) = 1
 				  
-				  )
+					  )
 				     )
-				  OR ( (@EventSource = 'BecomeUsers' OR @EventSource = 'All') AND a.LogData.exist('/BecomeUser') = 1
+				  OR ( (@EventSource = 'BecomeUser' OR @EventSource = 'All') AND a.LogData.exist('/BecomeUser') = 1
 					 )
 				  OR ( (@EventSource = 'Security' OR @EventSource = 'All')				 
 						AND ( (a.LogData.value('(/Login/NEW_VALUES/@Result)[1]', 'NVARCHAR(100)') LIKE '%locked out%')
@@ -202,6 +198,7 @@ AS
 						 OR a.LogData.value('(/Note/NEW_VALUES/@TargetId)[1]', 'int') = @ProjectId
 						 OR a.LogData.value('(/Note/NEW_VALUES/@ParentTargetId)[1]', 'int') = @ProjectId
 						 OR a.LogData.value('(/TimeEntry/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
+						 OR a.LogData.value('(/ProjectAttachment/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
 							)
 					AND (@PersonId IS NULL 
 						OR a.PersonId = @PersonId
