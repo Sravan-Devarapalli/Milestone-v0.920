@@ -3,22 +3,49 @@
 AS
 BEGIN
 	
-	SELECT mp.MilestonePersonId,
-		   mp.SeniorityId,
+	SELECT 
+	CASE COUNT(te.TimeEntryId)
+	           WHEN 0
+	           THEN  CONVERT(BIT,0)
+	           ELSE
+	               CONVERT(BIT,1)
+	       END AS HasTimeEntries,
+	       mp.MilestonePersonId,
+		   p.SeniorityId,
            mp.PersonId,
-	       mp.StartDate,
-	       mp.EndDate,
-	       mp.PersonRoleId,
-	       mp.Amount,
-	       mp.HoursPerDay,
-	       mp.RoleName,
-		   mp.VacationDays,	
-	       mp.ExpectedHours,
-		   mp.Location,
-		   mp.LastName,
-		   mp.FirstName
-	  FROM dbo.v_MilestonePerson AS mp
-	 WHERE mp.MilestoneId = @MilestoneId
+	       mpe.StartDate,
+	       mpe.EndDate,
+	       mpe.PersonRoleId,
+	       mpe.Amount,
+	       mpe.HoursPerDay,
+	       r.Name AS RoleName,
+		   ISNULL((SELECT COUNT(*)
+				FROM dbo.v_PersonCalendar AS pcal
+				WHERE pcal.DayOff = 1 AND pcal.CompanyDayOff = 0 
+					AND pcal.Date BETWEEN mpe.StartDate AND ISNULL(mpe.EndDate, m.[ProjectedDeliveryDate])
+					AND pcal.PersonId = mp.PersonId ),0) as VacationDays,	
+	       ISNULL((SELECT COUNT(*) * mpe.HoursPerDay
+	                 FROM dbo.PersonCalendarAuto AS cal
+	                WHERE cal.Date BETWEEN mpe.StartDate AND ISNULL(mpe.EndDate, m.[ProjectedDeliveryDate])
+	                  AND cal.PersonId = mp.PersonId
+	                  AND cal.DayOff = 0), 0) AS ExpectedHours,
+		   mpe.Location,
+		   p.LastName,
+		   p.FirstName
+		  
+	  FROM dbo.MilestonePerson AS mp
+	       INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId
+	       INNER JOIN dbo.Milestone AS m ON mp.MilestoneId = m.MilestoneId
+	       INNER JOIN dbo.Person AS p ON mp.PersonId = p.PersonId
+	       LEFT JOIN dbo.PersonRole AS r ON mpe.PersonRoleId = r.PersonRoleId
+	       LEFT JOIN dbo.TimeEntries as te on te.MilestonePersonId = mp.MilestonePersonId
+		  AND (te.MilestoneDate BETWEEN mpe.StartDate AND  mpe.EndDate)
+	  WHERE mp.MilestoneId = @MilestoneId
+	  GROUP BY mp.MilestonePersonId, p.SeniorityId,mp.PersonId,mpe.StartDate,mpe.EndDate,mpe.PersonRoleId,mpe.Amount,
+	       mpe.HoursPerDay,r.Name,mpe.Location,
+		   p.LastName,
+		   p.FirstName,m.ProjectedDeliveryDate
+	 
 
 
 	 ;WITH FinancialsRetro AS 
