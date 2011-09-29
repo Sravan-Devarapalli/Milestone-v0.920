@@ -50,7 +50,6 @@ namespace PraticeManagement.Controls
 
         static ActivityLogControl()
         {
-            InitDropDownTitles();
         }
 
         /// <summary>
@@ -70,58 +69,7 @@ namespace PraticeManagement.Controls
             _argumentList = new XsltArgumentList();
             _argumentList.AddParam("currentUrl", string.Empty, _currentUrl);
         }
-
-        private static void InitDropDownTitles()
-        {
-            EventSourceTitles.Add(
-                ActivityEventSource.All, Resources.Controls.EventSourceAll);
-            EventSourceTitles.Add(
-                ActivityEventSource.Error, Resources.Controls.EventSourceError);
-            EventSourceTitles.Add(
-                ActivityEventSource.Person, Resources.Controls.EventSourcePerson);
-            EventSourceTitles.Add(
-                ActivityEventSource.TargetPerson,
-                Resources.Controls.EventSourceTargetPerson);
-            EventSourceTitles.Add(
-                ActivityEventSource.Opportunity,
-                Resources.Controls.EventSourceOpportunities);
-            EventSourceTitles.Add(
-                ActivityEventSource.Project, Resources.Controls.EventSourceProject);
-            EventSourceTitles.Add(
-               ActivityEventSource.Milestone,
-               Resources.Controls.EventSourceMilestones);
-            EventSourceTitles.Add(
-                ActivityEventSource.ProjectAndMilestones,
-                Resources.Controls.EventSourceProjectAndMilestones);
-            EventSourceTitles.Add(
-               ActivityEventSource.Logon,
-               Resources.Controls.EventSourceLogon);
-            EventSourceTitles.Add(
-               ActivityEventSource.LoginSuccessful,
-               Resources.Controls.EventSourceLoginSuccessful);
-            EventSourceTitles.Add(
-               ActivityEventSource.LoginError,
-               Resources.Controls.EventSourceLoginError);
-            EventSourceTitles.Add(
-               ActivityEventSource.Security,
-               Resources.Controls.EventSourceSecurity);
-            EventSourceTitles.Add(
-               ActivityEventSource.PasswordResetRequests,
-               Resources.Controls.EventSourcePasswordResetRequests);
-            EventSourceTitles.Add(
-               ActivityEventSource.AccountLockouts,
-               Resources.Controls.EventSourceAccountLockouts);
-            EventSourceTitles.Add(
-                ActivityEventSource.TimeEntry,
-                Resources.Controls.EvenSourceTimeEntries);
-            EventSourceTitles.Add(
-               ActivityEventSource.AddedTimeEntries,
-               Resources.Controls.EventSourceAddedTimeEntries);
-            EventSourceTitles.Add(
-               ActivityEventSource.ChangedTimeEntries,
-               Resources.Controls.EventSourceChangedTimeEntries);
-        }
-
+        
         #endregion
 
         #region Properties
@@ -416,7 +364,7 @@ namespace PraticeManagement.Controls
         private void EnableProjectsDropDown()
         {
             int eventSourceValue = Convert.ToInt32(ddlEventSource.SelectedValue);
-            ddlProjects.Enabled = !((eventSourceValue >= 3 && eventSourceValue <= 5) || (eventSourceValue >= 24 && eventSourceValue <= 30) || (eventSourceValue >= 40 && eventSourceValue <= 43));
+            ddlProjects.Enabled = !((eventSourceValue >= 3 && eventSourceValue <= 5) || (eventSourceValue >= 32 && eventSourceValue <= 38) || (eventSourceValue >= 21 && eventSourceValue <= 27));
         }
 
         private void SaveFilterSettings()
