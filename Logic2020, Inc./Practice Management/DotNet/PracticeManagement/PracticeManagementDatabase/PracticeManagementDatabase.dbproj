@@ -2960,7 +2960,7 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\dbo.TimeEntryHoursByManyPersonsProject.proc.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\dbo.TimeEntriesGetByManyPersons.proc.sql">
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\TimeEntriesGetByManyPersons.proc.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\TimeEntriesGetCount.proc.sql">
@@ -3309,6 +3309,8 @@
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\ConvertStringListIntoTableWithTwoColoumns.function.sql">
       <SubType>Code</SubType>
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\ClientMarginColorInfoInsert.proc.sql">
       <SubType>Code</SubType>
@@ -3429,6 +3431,8 @@
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\CompanyRecurringHolidaysByPeriod.function.sql">
       <SubType>Code</SubType>
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetHolidayTimeTypeId.function.sql">
       <SubType>Code</SubType>
@@ -3551,4 +3555,3 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
-
