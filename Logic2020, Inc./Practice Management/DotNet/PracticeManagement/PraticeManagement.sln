@@ -37,9 +37,11 @@ Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "PMWebAzureService", "PMWebA
 EndProject
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "DEVAzureService", "DEVAzureService\DEVAzureService.ccproj", "{E4D89D48-041A-4E7B-90FE-960ECB08210A}"
 EndProject
+Project("{C8D11400-126E-41CD-887F-60BD40844F9E}") = "SkillsDatabase", "EmployeeManagementSystemDatabase\SkillsDatabase.dbproj", "{C058D500-0548-4BF8-AC66-7B49315483EE}"
+EndProject
 Global
 	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 16
+		SccNumberOfProjects = 17
 		SccProjectName0 = SurroundSCMScci
 		SccLocalPath0 = ..
 		SccProvider0 = MSSCCI:Surround\u0020SCM
@@ -89,6 +91,9 @@ Global
 		SccProjectUniqueName15 = DEVAzureService\\DEVAzureService.ccproj
 		SccLocalPath15 = ..
 		SccProjectFilePathRelativizedFromConnection15 = SourceRepo\\DEVAzureService\\
+		SccProjectUniqueName16 = EmployeeManagementSystemDatabase\\SkillsDatabase.dbproj
+		SccLocalPath16 = ..
+		SccProjectFilePathRelativizedFromConnection16 = SourceRepo\\EmployeeManagementSystemDatabase\\
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -397,6 +402,34 @@ Global
 		{E4D89D48-041A-4E7B-90FE-960ECB08210A}.Staging|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E4D89D48-041A-4E7B-90FE-960ECB08210A}.Staging|Mixed Platforms.Build.0 = Release|Any CPU
 		{E4D89D48-041A-4E7B-90FE-960ECB08210A}.Staging|x86.ActiveCfg = Release|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Debug|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.GGK|Any CPU.ActiveCfg = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.GGK|Any CPU.Build.0 = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.GGK|Any CPU.Deploy.0 = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.GGK|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.GGK|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.GGK|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.GGK|x86.ActiveCfg = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Release|x86.ActiveCfg = Release|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Staging|Any CPU.ActiveCfg = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Staging|Any CPU.Build.0 = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Staging|Any CPU.Deploy.0 = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Staging|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Staging|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Staging|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{C058D500-0548-4BF8-AC66-7B49315483EE}.Staging|x86.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
