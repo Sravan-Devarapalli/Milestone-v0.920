@@ -154,10 +154,6 @@
                                         ID="ddlEventSource" runat="server" EnableViewState="true">
                                         <asp:ListItem Text="ALL Events" Value="1" Selected="True"></asp:ListItem>
                                         <asp:ListItem Text="ALL Errors" Value="2"></asp:ListItem>
-                                        <asp:ListItem Text="ALL Person Events" Value="3"></asp:ListItem>
-                                        <asp:ListItem Text="&nbsp; Added Persons" Value="4"></asp:ListItem>
-                                        <asp:ListItem Text="&nbsp; Changed Persons" Value="5"></asp:ListItem>
-                                        <asp:ListItem Text="Target Person" Value="6"></asp:ListItem>
                                         <asp:ListItem Text="ALL Project Events" Value="7"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Added Projects" Value="8"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Changed Projects" Value="9"></asp:ListItem>
@@ -183,6 +179,10 @@
                                         <asp:ListItem Text="&nbsp; Added TimeEntry" Value="29"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Changed TimeEntry" Value="30"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Deleted TimeEntry" Value="31"></asp:ListItem>
+                                        <asp:ListItem Text="ALL Person Events" Value="3"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Added Persons" Value="4"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Changed Persons" Value="5"></asp:ListItem>
+                                        <asp:ListItem Text="Target Person" Value="6"></asp:ListItem>
                                         <asp:ListItem Text="ALL Logon Events" Value="32"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Successfull Logins" Value="33"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Rejected Logins" Value="34"></asp:ListItem>
