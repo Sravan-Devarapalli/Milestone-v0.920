@@ -22,6 +22,8 @@ namespace PraticeManagement.Controls.TimeEntry
         private double _totalPersonHours;
         private double _grandTotalHours;
 
+        private const string TEByProjectExport = "Time Entry By Project";
+
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
@@ -492,6 +494,8 @@ namespace PraticeManagement.Controls.TimeEntry
 
         protected void btnExport_OnClick(object sender, EventArgs e)
         {
+            DataHelper.InsertExportActivityLogMessage(TEByProjectExport);
+
             string fileName = "TimeEntriesByProject.xls";
             HttpContext.Current.Response.Clear();
             HttpContext.Current.Response.AddHeader(
@@ -515,6 +519,8 @@ namespace PraticeManagement.Controls.TimeEntry
 
         protected void ExportToPDF(object sender, EventArgs e)
         {
+            DataHelper.InsertExportActivityLogMessage(TEByProjectExport);
+
             string fileName = "TimeEntriesByProject.pdf";
             var html = hdnSaveReportPDFText.Value;
             HTMLToPdf(html, fileName);
