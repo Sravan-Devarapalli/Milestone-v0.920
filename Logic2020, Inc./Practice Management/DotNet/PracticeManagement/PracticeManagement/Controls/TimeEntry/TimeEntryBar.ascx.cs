@@ -68,6 +68,7 @@ namespace PraticeManagement.Controls.TimeEntry
                     ddlProjectMilestone.SelectedValue =
                         RowBehind.MilestoneBehind.MilestonePersonId.ToString();
 
+                    ddlProjectMilestone.Attributes.Add("PreviousSelected", ddlProjectMilestone.SelectedIndex.ToString());
                     ddlProjectMilestone.Enabled = !isSystemTimeType;
                 }
             }
@@ -123,9 +124,13 @@ namespace PraticeManagement.Controls.TimeEntry
 
         public void UpdateTimeEntries()
         {
-            TimeEntryHelper.FillProjectMilestones(
+            //TimeEntryHelper.FillProjectMilestones(
+            //    ddlProjectMilestone,
+            //    HostingPage.MilestonePersonEntries);
+
+            AddAttributesToProjectMilestoneDropDown(
                 ddlProjectMilestone,
-                HostingPage.MilestonePersonEntries);
+                HostingPage.MilestonePersonEntries);//as per #2926.
 
             int ptoId = Convert.ToInt32(ddlTimeTypes.Items.FindByText("PTO").Value);//Added this as per #2904 to edit/Add row for PTO time type.
             isSystemTimeType = (RowBehind.TimeTypeBehind != null && RowBehind.TimeTypeBehind.IsSystemTimeType && RowBehind.TimeTypeBehind.Id != ptoId);
@@ -135,16 +140,42 @@ namespace PraticeManagement.Controls.TimeEntry
             var systemTimeTypes = SettingsHelper.GetSystemTimeTypes();
             if (isSystemTimeType)
             {
-                systemTimeTypes = systemTimeTypes.Where( tt => tt.Id != RowBehind.TimeTypeBehind.Id).ToList();
+                systemTimeTypes = systemTimeTypes.Where(tt => tt.Id != RowBehind.TimeTypeBehind.Id).ToList();
             }
             foreach (var item in systemTimeTypes)
             {
                 if (item.Id != ptoId)//Added this as per #2904 to edit/Add row for PTO time type.
-                ddlTimeTypes.Items.Remove(ddlTimeTypes.Items.FindByValue(item.Id.ToString()));
-            }          
+                    ddlTimeTypes.Items.Remove(ddlTimeTypes.Items.FindByValue(item.Id.ToString()));
+            }
 
             tes.DataSource = RowBehind;
             tes.DataBind();
+        }
+
+        private void AddAttributesToProjectMilestoneDropDown(DropDownList ddlProjectMilestones, IEnumerable<MilestonePersonEntry> milestonePersonEntries)
+        {
+
+            var timeEntriesEntered = RowBehind.Cells.Where(cell => cell.TimeEntry != null && cell.TimeEntry.ActualHours > 0);
+            List<ListItem> listitems = new List<ListItem>();
+
+            //according to Bug# 2821 we need to add a new item to promt user to select a project-Milestone.
+            ddlProjectMilestones.Items.Add(new ListItem("1. Select Project - Milestone", "-1"));
+            foreach (MilestonePersonEntry mpe in milestonePersonEntries)
+            {
+                ListItem item = new ListItem(mpe.ParentMilestone.ToString(Milestone.MilestoneFormat.ProjectMilestone), mpe.MilestonePersonId.ToString());
+                if (!listitems.Contains(item))
+                {
+                    listitems.Add(item);
+                    item.Attributes.Add("title", item.Text);
+
+                    if (timeEntriesEntered.Any(c => c.TimeEntry.MilestoneDate <= mpe.StartDate || c.TimeEntry.MilestoneDate > mpe.EndDate))
+                    {
+                        item.Attributes.Add("ShowPopUp", "1");
+                    }
+
+                    ddlProjectMilestones.Items.Add(item);
+                }
+            }
         }
 
         protected void repEntries_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -163,7 +194,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 if (cell.TimeEntry != null)
                 {
                     ste.CanelControlStyle();
-                } 
+                }
             }
         }
 
@@ -211,7 +242,7 @@ namespace PraticeManagement.Controls.TimeEntry
             {
                 disabled = ste.Disabled = true;
             }
-            if (!disabled && ste.TimeEntryBehind == null && entries.Any() 
+            if (!disabled && ste.TimeEntryBehind == null && entries.Any()
                 && entries.First().ParentMilestone.Project.Status != null)
             {
                 var projectStatusId = entries.First().ParentMilestone.Project.Status.Id;
@@ -260,6 +291,7 @@ namespace PraticeManagement.Controls.TimeEntry
         protected void ddlProjectMilestone_OnSelectedIndexChanged(object sender, EventArgs e)
         {
             MilestoneTimeTypeChanged(sender, true);
+            ddlProjectMilestone.Attributes.Add("PreviousSelected", ddlProjectMilestone.SelectedIndex.ToString());
         }
 
         private void MilestoneTimeTypeChanged(object sender, bool isMilestoneDropDown)
@@ -277,7 +309,6 @@ namespace PraticeManagement.Controls.TimeEntry
                                     && control.DateBehind <= weekEndDate);
             selMpId = Convert.ToInt32(ddlProjectMilestone.SelectedValue);
             selMpe = Array.FindAll(HostingPage.MilestonePersonEntries, mpe => mpe.MilestonePersonId == selMpId);
-
 
             if (tesFiltered.Any())
             {
