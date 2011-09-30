@@ -20,13 +20,21 @@ namespace PraticeManagement.Sandbox
 {
     public partial class TimeEntriesByPerson : PracticeManagementPageBase
     {
+        #region Fields
+
         protected DateTime CurrDate;
         protected double GrandTotal;
         protected double ProjectTotals;
         protected int ColspanForTotals;
         private int calendarPersonId;
 
+        #endregion
 
+        #region Constants
+
+        private const string TEByPersonExport = "Time Entry By Person";
+
+        #endregion
 
         protected void btnUpdate_OnClick(object sender, EventArgs e)
         {
@@ -50,6 +58,8 @@ namespace PraticeManagement.Sandbox
 
         protected void btnExport_OnClick(object sender, EventArgs e)
         {
+            DataHelper.InsertExportActivityLogMessage(TEByPersonExport);
+
             string fileName = "TimeEntriesForPersons.xls";
             HttpContext.Current.Response.Clear();
             HttpContext.Current.Response.AddHeader(
@@ -69,15 +79,14 @@ namespace PraticeManagement.Sandbox
 
         }
 
-
         protected void ExportToPDF(object sender, EventArgs e)
         {
+            DataHelper.InsertExportActivityLogMessage(TEByPersonExport);
 
             string fileName = "TimeEntriesForPerson.pdf";
             var html = hdnSaveReportText.Value;
             HTMLToPdf(html, fileName);
         }
-
 
         public void HTMLToPdf(String HTML, string fileName)
         {
@@ -267,14 +276,7 @@ namespace PraticeManagement.Sandbox
         protected void pcPersons_PersonChanged(object sender, PersonChangedEventArguments args)
         {
         }
-
-        //protected int GetColspan()
-        //{
-
-
-        //    return 
-        //}
-
+        
         protected void repTeTable_OnItemCreated(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Footer)
