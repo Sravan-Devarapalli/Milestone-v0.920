@@ -19,7 +19,7 @@ namespace PraticeManagement.Controls.TimeEntry {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlProjectMilestone;
+        protected global::PraticeManagement.Controls.CustomDropDown ddlProjectMilestone;
         
         /// <summary>
         /// scoe1 control.
