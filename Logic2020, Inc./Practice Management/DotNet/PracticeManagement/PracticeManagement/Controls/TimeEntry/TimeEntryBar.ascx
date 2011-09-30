@@ -6,10 +6,34 @@
     Assembly="PraticeManagement" %>
 <%@ Register TagPrefix="ext1" Namespace="PraticeManagement.Controls.Generic.TotalCalculator"
     Assembly="PraticeManagement" %>
+<%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
+<script language="javascript" type="text/javascript">
+    function checkNewMilestone(ProjectMilestoneList) {
+        var list = ProjectMilestoneList;
+        for (var i = 0; i < ProjectMilestoneList.length; i++) {
+            list = ProjectMilestoneList[i];
+            if (list.selected) {
+                if (list.attributes['ShowPopUp'] != undefined) {
+                    alert('There is a time entry for a date on which the selected project-milestone is not active.Please reassign the time entry to other project-milestone or delete the time entry before changing.');
+                    var previousValue = ProjectMilestoneList.attributes['PreviousSelected'];
+                    if (previousValue != null) {
+                        i = previousValue.value;
+                        var selectItem = ProjectMilestoneList[i];
+                        selectItem.selected = true;
+                        list.selected = false;
+                    }
+                    return false;
+                }
+                setDirty()
+                return true;
+            }
+        }
+    }
+</script>
 <table class="WholeWidth">
     <tr class="time-entry-bar">
         <td class="time-entry-bar-project-milestones">
-            <asp:DropDownList ID="ddlProjectMilestone" runat="server" AutoPostBack="true" onchange="setDirty();"
+            <uc:CustomDropDown ID="ddlProjectMilestone" runat="server" AutoPostBack="true" onchange="if(!checkNewMilestone(this)){ return false;}"
                 CssClass="time-entry-bar-project-milestones-select-Normal" OnSelectedIndexChanged="ddlProjectMilestone_OnSelectedIndexChanged" />
             <ext:SelectCutOffExtender ID="scoe1" runat="server" NormalCssClass="time-entry-bar-project-milestones-select-Normal"
                 ExtendedCssClass="time-entry-bar-project-milestones-select-Extended" TargetControlID="ddlProjectMilestone" />
