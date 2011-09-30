@@ -31,7 +31,7 @@ AS
 	SELECT COUNT(*) AS NUM
 	  FROM dbo.UserActivityLog AS a
 	       INNER JOIN dbo.UserActivityType AS t ON a.ActivityTypeID = t.ActivityTypeID
-    WHERE a.LogDate BETWEEN @StartDate AND @EndDate
+    WHERE CONVERT(DATE,a.LogDate) BETWEEN CONVERT(DATE,@StartDate) AND Convert(DATE,@EndDate)
 				  AND(
 				  ((@EventSource = 'Error' OR @EventSource = 'All' )AND a.LogData.exist('/Error') = 1)
 				  OR ((@EventSource = 'AddedPersons' OR @EventSource = 'All' ) AND a.LogData.exist('/Person') = 1 AND t.ActivityName = 'Added')
