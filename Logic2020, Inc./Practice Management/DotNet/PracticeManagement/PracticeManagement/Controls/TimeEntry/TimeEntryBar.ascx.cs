@@ -168,7 +168,7 @@ namespace PraticeManagement.Controls.TimeEntry
                     listitems.Add(item);
                     item.Attributes.Add("title", item.Text);
 
-                    if (timeEntriesEntered.Any(c => c.TimeEntry.MilestoneDate <= mpe.StartDate || c.TimeEntry.MilestoneDate > mpe.EndDate))
+                    if (timeEntriesEntered.Any(c => c.TimeEntry.MilestoneDate.Date < mpe.StartDate.Date || (mpe.EndDate.HasValue && c.TimeEntry.MilestoneDate.Date > mpe.EndDate.Value.Date)))
                     {
                         item.Attributes.Add("ShowPopUp", "1");
                     }
