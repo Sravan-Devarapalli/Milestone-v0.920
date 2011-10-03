@@ -132,6 +132,30 @@
     <Folder Include="VSDBCMD\Deployment" />
     <Folder Include="VSDBCMD\Deployment\Extensions" />
     <Folder Include="VSDBCMD\Deployment\Extensions\SqlServer" />
+    <Folder Include="Schema Objects\Schemas\Skills" />
+    <Folder Include="Schema Objects\Schemas\Skills\Programmability" />
+    <Folder Include="Schema Objects\Schemas\Skills\Programmability\Defaults" />
+    <Folder Include="Schema Objects\Schemas\Skills\Programmability\Functions" />
+    <Folder Include="Schema Objects\Schemas\Skills\Programmability\Rules" />
+    <Folder Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures" />
+    <Folder Include="Schema Objects\Schemas\Skills\Programmability\Types" />
+    <Folder Include="Schema Objects\Schemas\Skills\Programmability\Types\User Defined Data Types" />
+    <Folder Include="Schema Objects\Schemas\Skills\Programmability\Types\User Defined Table Types" />
+    <Folder Include="Schema Objects\Schemas\Skills\Programmability\Types\User Defined Types CLR" />
+    <Folder Include="Schema Objects\Schemas\Skills\Programmability\Types\XML Schema Collections" />
+    <Folder Include="Schema Objects\Schemas\Skills\Service Broker" />
+    <Folder Include="Schema Objects\Schemas\Skills\Service Broker\Queues" />
+    <Folder Include="Schema Objects\Schemas\Skills\Synonyms" />
+    <Folder Include="Schema Objects\Schemas\Skills\Tables" />
+    <Folder Include="Schema Objects\Schemas\Skills\Tables\Constraints" />
+    <Folder Include="Schema Objects\Schemas\Skills\Tables\Indexes" />
+    <Folder Include="Schema Objects\Schemas\Skills\Tables\Keys" />
+    <Folder Include="Schema Objects\Schemas\Skills\Tables\Statistics" />
+    <Folder Include="Schema Objects\Schemas\Skills\Tables\Triggers" />
+    <Folder Include="Schema Objects\Schemas\Skills\Views" />
+    <Folder Include="Schema Objects\Schemas\Skills\Views\Indexes" />
+    <Folder Include="Schema Objects\Schemas\Skills\Views\Statistics" />
+    <Folder Include="Schema Objects\Schemas\Skills\Views\Triggers" />
   </ItemGroup>
   <ItemGroup>
     <PropertiesFile Include="Properties\Database.sqlsettings">
@@ -3489,6 +3513,195 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\Announcements.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\CKPersonEmployer_DisplayOrder.chkconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\CKPersonEmployer_EndDate.chkconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\CKPersonEmployer_StartDate.chkconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\CKPersonIndustry_DisplayOrder.chkconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\CKPersonIndustry_YearsExperience.chkconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\CKPersonQualification_DisplayOrder.chkconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\CKPersonSkill_DisplayOrder.chkconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\CKPersonSkill_LastUsed.chkconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\CKPersonSkill_YearsExperience.chkconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\CKPersonTraining_DisplayOrder.chkconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\CKPersonTraining_EndDate.chkconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\CKPersonTraining_StartDate.chkconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\CKQualificationType_DisplayOrder.chkconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\DFPersonContactInfo_ModificationDate.defconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\DFPersonDocument_ModificationDate.defconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\DFPersonEmployer_ModificationDate.defconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\DFPersonIndustry_ModificationDate.defconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\DFPersonQualification_ModificationDate.defconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\DFPersonSkill_ModificationDate.defconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\DFPersonTraining_ModificationDate.defconst.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_Person_ManagerId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_Person_TitleId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonContact_InfoPersonId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonContactInfo_ContactInfoType.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonDocument_DocumentTypeId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonDocument_PersonId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonEmployer_EmployerId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonEmployer_PersonId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonIndustry_IndustryId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonIndustry_PersonId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonPractice_PersonId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonPractice_PracticeId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonQualification_PersonId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonQualification_QualificationTypeId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonSkill_PersonId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonSkill_SkillId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonSkill_SkillLevelId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonTraining_PersonId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonTraining_TrainingTypeId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_Skill_SkillCategoryId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_SkillCategory_SkillTypeId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\ContactInfoType.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\DocumentType.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Employer.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Industry.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Person.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\PersonContactInfo.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\PersonDocument.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\PersonEmployer.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\PersonIndustry.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\PersonPractice.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\PersonQualification.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\PersonSkill.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\PersonTraining.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Practice.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\QualificationType.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Skill.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\SkillCategory.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\SkillLevel.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\SkillType.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Title.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\TrainingType.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills.schema.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>
