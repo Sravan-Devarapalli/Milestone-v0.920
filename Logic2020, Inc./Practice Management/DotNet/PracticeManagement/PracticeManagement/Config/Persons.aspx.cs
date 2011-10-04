@@ -26,7 +26,7 @@ namespace PraticeManagement.Config
         private const string ViewStateSortColumnId = "SortColumnId";
         private const string ViewStateSortExpression = "SortExpression";
         private const string ViewStateSortDirection = "SortDirection";
-        private const string ViewingRecords = "Viewing {0} of {1} Records";
+        private const string ViewingRecords = "Viewing {0} - {1} of {2} Persons";
 
         #endregion
 
@@ -427,6 +427,8 @@ namespace PraticeManagement.Config
 
         protected void DdlView_SelectedIndexChanged(object sender, EventArgs e)
         {
+            gvPersons.PageIndex = 0;
+            CurrentIndex = 0;
             gvPersons.PageSize = GetPageSize(((DropDownList)sender).SelectedValue);
             gvPersons.DataBind();
             SaveFilterSettings();
@@ -539,7 +541,8 @@ namespace PraticeManagement.Config
         {
             int currentRecords = gvPersons.Rows.Count;
             int totalRecords = GetTotalRecords("-1");
-            lblRecords.Text = String.Format(ViewingRecords, currentRecords, totalRecords);
+            int startIndex = currentRecords == 0 ? 0 : (gvPersons.PageIndex == 0 ? 1 : (gvPersons.PageIndex * Convert.ToInt32(ddlView.SelectedValue)) + 1);
+            lblRecords.Text = String.Format(ViewingRecords, startIndex, currentRecords == 0 ? 0 : (startIndex + currentRecords - 1), totalRecords);
 
             if (ddlView.SelectedValue == "-1")
             {
