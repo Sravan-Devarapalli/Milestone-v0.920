@@ -404,7 +404,9 @@ namespace PraticeManagement
 
                 //as part of 2800
                 var ticket = ((System.Web.Security.FormsIdentity)(HttpContext.Current.User.Identity)).Ticket;
-                ticket = Generic.SetCustomFormsAuthenticationTicket(HttpContext.Current.User.Identity.Name, ticket.IsPersistent, this.Page);
+
+                ticket = Generic.SetCustomFormsAuthenticationTicket(HttpContext.Current.User.Identity.Name, ticket.IsPersistent, this.Page, "", ticket.UserData);
+
                 var formsAuthTicketExpiry = ticket.Expiration.ToString();
                 Response.Cookies.Set(new HttpCookie("FormsAuthTicketExpiry", formsAuthTicketExpiry));
                 hdnFormsAuthTicketExpiry.Value = formsAuthTicketExpiry;
