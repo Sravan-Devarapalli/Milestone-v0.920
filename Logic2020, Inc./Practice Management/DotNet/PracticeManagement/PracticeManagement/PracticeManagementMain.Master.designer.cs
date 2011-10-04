@@ -139,6 +139,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.LoginStatus loginStatus;
         
         /// <summary>
+        /// loginUserImpersonation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LoginUserImpersonation loginUserImpersonation;
+        
+        /// <summary>
         /// hlnkChangePassword control.
         /// </summary>
         /// <remarks>
