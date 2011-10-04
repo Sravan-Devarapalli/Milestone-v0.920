@@ -597,7 +597,7 @@
             <asp:Panel class="this value set OnPageLoad" runat="server" ID="horisontalScrollDiv"
                 CssClass="xScrollProjects">
                 <asp:ListView ID="lvProjects" runat="server" DataKeyNames="Id" OnItemDataBound="lvProjects_ItemDataBound"
-                    OnDataBinding="lvProjects_DataBinding" OnSorted="lvProjects_Sorted" OnDataBound="lvProjects_OnDataBound"
+                    OnSorted="lvProjects_Sorted" OnDataBound="lvProjects_OnDataBound"
                     OnSorting="lvProjects_Sorting" OnPagePropertiesChanging="lvProjects_PagePropertiesChanging">
                     <LayoutTemplate>
                         <table id="lvProjects_table" runat="server" class="CompPerfTable WholeWidth">
@@ -729,11 +729,7 @@
                     <tr>
                         <td style="padding-left: 40%;">
                             <div style="font-weight: bold; width: 100%; padding-top: 5px; color: Black;">
-                                Viewing&nbsp;
-                                <asp:Label ID="lblCurrentPageCount" runat="server" Text='<%# GetCurrentPageCount() %>'></asp:Label>
-                                &nbsp;of&nbsp;
-                                <asp:Label ID="lblTotalCount" runat="server" Text='<%# GetTotalCount() %>'></asp:Label>&nbsp;
-                                Projects
+                                <asp:Label ID="lblPageCount" runat="server"></asp:Label>
                             </div>
                         </td>
                         <td align="right">
