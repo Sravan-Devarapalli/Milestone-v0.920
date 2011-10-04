@@ -43,8 +43,9 @@
                             &nbsp;
                         </p>
                         <p>
-                            Choose an active person from the drop-down, then click the "Become" button to open
-                            PM in a new window as the selected person.</p>
+                            Choose an active person from the drop-down, and then click the "Become" button to
+                            login as the selected person and then Click the “Return to [Username]” link at the
+                            top to go back for using PM as you.</p>
                     </div>
                 </td>
             </tr>
