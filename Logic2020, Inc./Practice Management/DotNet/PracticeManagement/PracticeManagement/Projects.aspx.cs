@@ -109,6 +109,8 @@ namespace PraticeManagement
         protected const string PagerNextCommand = "Next";
         protected const string PagerPrevCommand = "Prev";
 
+        private const string PageViewCountFormat = "Viewing {0} - {1} of {2} Projects";
+
         #endregion
 
         #region Fields
@@ -1439,54 +1441,7 @@ namespace PraticeManagement
         }
 
         #endregion
-
-        protected void lvProjects_DataBinding(object sender, EventArgs e)
-        {
-            //horisontalScrollDiv.CssClass = chbPrintVersion.Checked ? string.Empty : "xScroll cp";
-
-            var periodStart = diRange.FromDate.Value;
-            var monthsInPeriod = GetPeriodLength();
-            var row = lvProjects.FindControl("lvHeader") as System.Web.UI.HtmlControls.HtmlTableRow;
-            Page.Validate(valsPerformance.ValidationGroup);
-            if (!IsPostBack || Page.IsValid)
-                AddMonthColumn(row, periodStart, monthsInPeriod, NumberOfFixedColumns);
-
-            string totalHeaderText = string.Format(TotalHeaderFormat, ddlCalculateRange.SelectedItem.Text);// chbPeriodOnly.Checked ? SelectedText : EntireProjectPeriod);
-            var div = new Panel() { CssClass = CompPerfHeaderDivCssClass };
-            div.Controls.Add(new Label() { Text = totalHeaderText });
-
-            var stringWriter = new System.IO.StringWriter();
-            using (HtmlTextWriter wr = new HtmlTextWriter(stringWriter))
-            {
-                div.RenderControl(wr);
-                var s = stringWriter.ToString();
-                row.Cells[row.Cells.Count - 1].InnerHtml = s;
-            }
-
-            for (int i = NumberOfFixedColumns; i < row.Cells.Count - 1; i++)
-            {
-                PopulateMiniReportCell(row, i);
-            }
-
-            // fill summary
-            row = lvProjects.FindControl("lvSummary") as System.Web.UI.HtmlControls.HtmlTableRow;
-            while (row.Cells.Count > 1)
-            {
-                row.Cells.RemoveAt(1);
-            }
-
-            for (int i = 0; i < monthsInPeriod + 1; i++)   // + 1 means a cell for total column
-            {
-                var td = new HtmlTableCell() { };
-                td.Attributes["class"] = "CompPerfMonthSummary";
-                row.Cells.Insert(row.Cells.Count, td);
-            }
-            var summary = CalculateSummaryTotals(ProjectList, periodStart, PeriodEnd);
-
-            FillSummaryTotalRow(monthsInPeriod, summary, row);
-
-        }
-
+        
         private void FillSummaryTotalRow(int periodLength, Project summary, System.Web.UI.HtmlControls.HtmlTableRow row)
         {
             DateTime monthBegin = GetMonthBegin();
@@ -1933,20 +1888,64 @@ namespace PraticeManagement
 
         protected void lvProjects_OnDataBound(object sender, EventArgs e)
         {
+            SetHeaderMonths();
             var pager = GetPager();
             if (pager != null)
             {
                 pager.Visible = (pager.PageSize < pager.TotalRowCount);
-                lblTotalCount.Text = GetTotalCount().ToString();
-                lblCurrentPageCount.Text = (pager.StartRowIndex + 1).ToString() + "&nbsp;-&nbsp;" + (pager.StartRowIndex + GetCurrentPageCount()).ToString();
+                lblPageCount.Text = string.Format(PageViewCountFormat, (pager.StartRowIndex + 1), (pager.StartRowIndex + GetCurrentPageCount()), GetTotalCount());
             }
             else
             {
-                lblTotalCount.Text = GetCurrentPageCount().ToString();
-
-                lblCurrentPageCount.Text = "0&nbsp;-&nbsp;0";
+                lblPageCount.Text = string.Format(PageViewCountFormat, 0, 0, 0);
             }
+        }
 
+        private void SetHeaderMonths()
+        {
+            var row = lvProjects.FindControl("lvHeader") as System.Web.UI.HtmlControls.HtmlTableRow;
+            if (row != null)
+            {
+                var periodStart = diRange.FromDate.Value;
+                var monthsInPeriod = GetPeriodLength();
+                Page.Validate(valsPerformance.ValidationGroup);
+                if (!IsPostBack || Page.IsValid)
+                    AddMonthColumn(row, periodStart, monthsInPeriod, NumberOfFixedColumns);
+
+                string totalHeaderText = string.Format(TotalHeaderFormat, ddlCalculateRange.SelectedItem.Text);
+                var div = new Panel() { CssClass = CompPerfHeaderDivCssClass };
+                div.Controls.Add(new Label() { Text = totalHeaderText });
+
+                var stringWriter = new System.IO.StringWriter();
+                using (HtmlTextWriter wr = new HtmlTextWriter(stringWriter))
+                {
+                    div.RenderControl(wr);
+                    var s = stringWriter.ToString();
+                    row.Cells[row.Cells.Count - 1].InnerHtml = s;
+                }
+
+                for (int i = NumberOfFixedColumns; i < row.Cells.Count - 1; i++)
+                {
+                    PopulateMiniReportCell(row, i);
+                }
+
+                // fill summary
+                row = lvProjects.FindControl("lvSummary") as System.Web.UI.HtmlControls.HtmlTableRow;
+                while (row.Cells.Count > 1)
+                {
+                    row.Cells.RemoveAt(1);
+                }
+
+                for (int i = 0; i < monthsInPeriod + 1; i++)   // + 1 means a cell for total column
+                {
+                    var td = new HtmlTableCell() { };
+                    td.Attributes["class"] = "CompPerfMonthSummary";
+                    row.Cells.Insert(row.Cells.Count, td);
+                }
+                var summary = CalculateSummaryTotals(ProjectList, periodStart, PeriodEnd);
+
+                FillSummaryTotalRow(monthsInPeriod, summary, row);
+            }
         }
 
         protected void Pager_PagerCommand(object sender, DataPagerCommandEventArgs e)
