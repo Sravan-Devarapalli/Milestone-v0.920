@@ -7,6 +7,8 @@ using PraticeManagement.ActivityLogService;
 using PraticeManagement.Controls;
 using PraticeManagement.PersonService;
 using PraticeManagement.Configuration;
+using System.Web;
+using System.Web.UI;
 
 namespace PraticeManagement.Config
 {
@@ -61,11 +63,8 @@ namespace PraticeManagement.Config
             var oldUserName = DataHelper.CurrentPerson.PersonLastFirstName;
             var userName = ddlBecomeUserList.SelectedValue;
             logImpersonateLogin(oldUserName, ddlBecomeUserList.Items[ddlBecomeUserList.SelectedIndex].Text);
-            var identity = new GenericIdentity(userName);
-            var roles = Roles.GetRolesForUser(userName);
-            var principal = new GenericPrincipal(identity, roles);
-            Thread.CurrentPrincipal = principal;
-            FormsAuthentication.SetAuthCookie(userName, true);
+
+            UserImpersonation.ImpersonateUser(userName, Request.Url.ToString(), oldUserName);
 
             UrlRoleMappingElementSection mapping = UrlRoleMappingElementSection.Current;
             if (mapping != null)
@@ -98,3 +97,4 @@ namespace PraticeManagement.Config
         }
     }
 }
+
