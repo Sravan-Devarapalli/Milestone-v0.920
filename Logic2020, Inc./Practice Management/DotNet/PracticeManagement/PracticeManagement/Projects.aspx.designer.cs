@@ -481,22 +481,13 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.Generic.LoadingProgress LoadingProgress1;
         
         /// <summary>
-        /// lblCurrentPageCount control.
+        /// lblPageCount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblCurrentPageCount;
-        
-        /// <summary>
-        /// lblTotalCount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTotalCount;
+        protected global::System.Web.UI.WebControls.Label lblPageCount;
         
         /// <summary>
         /// btnExportToExcel control.
