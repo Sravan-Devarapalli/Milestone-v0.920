@@ -124,7 +124,7 @@
                 <tr>
                     <td valign="top" style="width: 45%; padding-top: 12px; padding-left: 5px; padding-right: 5px;
                         padding-bottom: 5px;">
-                        <asp:GridView ID="gvClients" AllowPaging="true" runat="server" AutoGenerateColumns="False"
+                        <asp:GridView ID="gvClients" AllowPaging="true" runat="server" AutoGenerateColumns="False" OnPreRender="gvClients_PreRender"
                             EmptyDataText="There is nothind to be displayed here." DataKeyNames="Id" CssClass="CompPerfTable"
                             GridLines="None">
                             <AlternatingRowStyle BackColor="#F9FAFF" />
@@ -210,6 +210,11 @@
                         <td align="right" style="width: 17%; white-space: nowrap; padding-right: 10px;">
                             <asp:LinkButton ID="lnkbtnNext1" runat="server" Text="NEXT ->" Font-Underline="false"
                                 OnClick="Next_Clicked"></asp:LinkButton>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="text-align:center">
+                            <asp:Label ID="lblPageNumbering" runat="server" ForeColor="Black" Font-Bold="true"></asp:Label>
                         </td>
                     </tr>
                 </table>
