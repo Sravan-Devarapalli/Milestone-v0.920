@@ -1,6 +1,7 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="PracticeManagementMain.master.cs"
     Inherits="PraticeManagement.PracticeManagementMain" %>
 
+<%@ Register TagPrefix="uc" Assembly="FormsAuthenticationUserImpersonation" Namespace="System.Web.UI.WebControls" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Menu" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -294,6 +295,9 @@
                         OnLoggingOut="loginStatus_LoggingOut" />
                 </div>
                 <div class="changePassword">
+                <b style="font-size:15px;">
+                    <uc:LoginUserImpersonation ID="loginUserImpersonation" runat="server">
+                    </uc:LoginUserImpersonation></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <asp:HyperLink ID="hlnkChangePassword" runat="server" NavigateUrl="~/ChangePassword.aspx"
                         Visible="false" Text="Change Password" ToolTip="Change Password"></asp:HyperLink>
                 </div>
