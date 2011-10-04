@@ -256,6 +256,15 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.LinkButton lnkbtnNext1;
         
         /// <summary>
+        /// lblPageNumbering control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPageNumbering;
+        
+        /// <summary>
         /// hdnAlphabet control.
         /// </summary>
         /// <remarks>
