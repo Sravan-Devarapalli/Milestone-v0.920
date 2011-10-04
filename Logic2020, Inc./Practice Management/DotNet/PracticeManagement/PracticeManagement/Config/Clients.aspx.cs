@@ -12,6 +12,8 @@ namespace PraticeManagement.Config
 {
     public partial class Clients : PracticeManagementPageBase
     {
+        private const string ViewingRecords = "Viewing {0} - {1} of {2} Clients";
+
         private string previousAlphabetLnkButtonId
         {
             get
@@ -454,6 +456,13 @@ namespace PraticeManagement.Config
             EnableOrDisablePrevNextButtons();
         }
 
+        protected void gvClients_PreRender(object sender, EventArgs e)
+        {
+            int currentRecords = gvClients.Rows.Count;
+            int totalRecords = ClientsList.Count();
+            int startIndex = currentRecords == 0 ? 0 : (gvClients.PageIndex == 0 ? 1 : (gvClients.PageIndex * Convert.ToInt32(ddlView.SelectedValue)) + 1);
+            lblPageNumbering.Text = String.Format(ViewingRecords, startIndex, currentRecords == 0 ? 0 : (startIndex + currentRecords - 1), totalRecords);
+        }
     }
 }
 
