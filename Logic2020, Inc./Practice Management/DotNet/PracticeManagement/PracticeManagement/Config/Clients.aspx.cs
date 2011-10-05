@@ -62,7 +62,7 @@ namespace PraticeManagement.Config
             }
         }
 
-        private Client[] FilteredClientsList{get;set;}
+        private Client[] FilteredClientList{get;set;}
 
         private bool IsShowActive
         {
@@ -118,7 +118,7 @@ namespace PraticeManagement.Config
             ViewState.Remove(CLIENTS_LIST_KEY);
 
             LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
-            Client[] FilteredClientList = previousLinkButton != null && previousLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(previousLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
+            FilteredClientList = previousLinkButton != null && previousLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(previousLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
 
             if (!string.IsNullOrEmpty(txtSearch.Text))
             {
@@ -229,9 +229,9 @@ namespace PraticeManagement.Config
             previousAlphabetLnkButtonId = lnkbtnAll.ID;
 
             LinkButton preLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
-            FilteredClientsList = preLinkButton != null && preLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(preLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
-            FilteredClientsList = FilteredClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().Contains(txtSearch.Text.ToUpperInvariant())).ToArray();
-            DataBindClients(FilteredClientsList);
+            FilteredClientList = preLinkButton != null && preLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(preLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
+            FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.ToUpperInvariant().Contains(txtSearch.Text.ToUpperInvariant())).ToArray();
+            DataBindClients(FilteredClientList);
 
             SetEmptyDataText();
         }
@@ -332,14 +332,14 @@ namespace PraticeManagement.Config
             hdnAlphabet.Value = topButton.Text != "All" ? topButton.Text : null;
             previousAlphabetLnkButtonId = topButton.ID;
 
-            FilteredClientsList = alpha.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(alpha.Text.ToUpperInvariant())).ToArray() : ClientsList;
+            FilteredClientList = alpha.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(alpha.Text.ToUpperInvariant())).ToArray() : ClientsList;
 
             if (!string.IsNullOrEmpty(txtSearch.Text))
             {
-                FilteredClientsList = FilteredClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().Contains(txtSearch.Text.ToUpperInvariant())).ToArray();
+                FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.ToUpperInvariant().Contains(txtSearch.Text.ToUpperInvariant())).ToArray();
             }
 
-            DataBindClients(FilteredClientsList);
+            DataBindClients(FilteredClientList);
 
             SetEmptyDataText();
         }
@@ -348,7 +348,7 @@ namespace PraticeManagement.Config
         {
             gvClients.PageIndex = gvClients.PageIndex - 1;
             LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
-            Client[] FilteredClientList = previousLinkButton != null && previousLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(previousLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
+            FilteredClientList = previousLinkButton != null && previousLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(previousLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
             if (!string.IsNullOrEmpty(txtSearch.Text))
             {
                 FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.ToUpperInvariant().Contains(txtSearch.Text.ToUpperInvariant())).ToArray();
@@ -378,7 +378,7 @@ namespace PraticeManagement.Config
         {
             gvClients.PageIndex = gvClients.PageIndex + 1;
             LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
-            Client[] FilteredClientList = previousLinkButton != null && previousLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(previousLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
+            FilteredClientList = previousLinkButton != null && previousLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(previousLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
             if (!string.IsNullOrEmpty(txtSearch.Text))
             {
                 FilteredClientList = FilteredClientList.AsQueryable().Where(c => c.Name.ToUpperInvariant().Contains(txtSearch.Text.ToUpperInvariant())).ToArray();
@@ -393,7 +393,7 @@ namespace PraticeManagement.Config
         {
             LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousAlphabetLnkButtonId);
 
-            Client[] FilteredClientList = previousLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(previousLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
+            FilteredClientList = previousLinkButton.Text != "All" ? ClientsList.AsQueryable().Where(c => c.Name.ToUpperInvariant().StartsWith(previousLinkButton.Text.ToUpperInvariant())).ToArray() : ClientsList;
 
             if (!string.IsNullOrEmpty(txtSearch.Text))
             {
@@ -462,7 +462,7 @@ namespace PraticeManagement.Config
         {
             //Page View Count.
             int currentRecords = gvClients.Rows.Count;
-            int totalRecords = FilteredClientsList == null ? ClientsList.Count() : FilteredClientsList.Count();
+            int totalRecords = FilteredClientList == null ? ClientsList.Count() : FilteredClientList.Count();
             int startIndex = currentRecords == 0 ? 0 : (gvClients.PageIndex == 0 ? 1 : (gvClients.PageIndex * Convert.ToInt32(ddlView.SelectedValue)) + 1);
             lblPageNumbering.Text = String.Format(ViewingRecords, startIndex, currentRecords == 0 ? 0 : (startIndex + currentRecords - 1), totalRecords);
         }
