@@ -15,6 +15,7 @@ namespace PraticeManagement.Utils
            = new Dictionary<string, string>()
                 {
                     {"Active", "AciveOpportunity"},
+                    {"ActiveWithProjectAttached","AciveOptyWithProjectAttached"},
                     {"Won", "WonOpportunity"},
                     {"Lost", "LostOpportunity"},
                     {"Experimental", "ExperimentalOpportunity"},
@@ -26,7 +27,31 @@ namespace PraticeManagement.Utils
             return _opportunityStatuses[statusName];
         }
 
-
+        public static string GetIndicatorClass(Opportunity opty)
+        {
+            if (opty.Status.Name == "Active" && opty.ProjectId.HasValue)
+            {
+                return GetIndicatorClassByStatus("ActiveWithProjectAttached");
+            }
+            else
+            {
+                return GetIndicatorClassByStatus(opty.Status.Name);
+            }
+        }
+        public static string GetToolTip(Opportunity opty)
+        {
+            if (opty.Status.Name == "Active")
+            {
+                if (opty.ProjectId.HasValue)
+                    return "Active Linked to Project";
+                else
+                    return "Active not Linked to Project";
+            }
+            else
+            {
+                return opty.Status.Name;
+            }
+        }
 
         #region Summary
 
@@ -227,7 +252,7 @@ namespace PraticeManagement.Utils
                 else
                 {
                     AddNameCell(key2 + "/" + key, dataRow);
-                    dataCell.Text = string.Format(ExcelSummaryValuesFormat,  count);
+                    dataCell.Text = string.Format(ExcelSummaryValuesFormat, count);
                 }
             }
             else
@@ -273,7 +298,7 @@ namespace PraticeManagement.Utils
                     }
                 }
             }
-            
+
             nameCell.Text = needEqualToSymbol ? string.Format(NameFormat, name) : name;
 
             row.Controls.Add(nameCell);
@@ -331,12 +356,12 @@ namespace PraticeManagement.Utils
             Table topClientsTable = new Table();
 
             AddHeaderRow("Top 3 Clients", topClientsTable);
-            
+
             foreach (var item in list)
             {
                 if (IsExporting.HasValue && IsExporting.Value)
                 {
-                    AddDataRowWithTwoCells(item.clientName, item.OpportunityCount + item.clientSummary, topClientsTable, string.Format(BoldFormat, item.clientEstimatedRevenue.Value.ToString(CurrencyDisplayFormat) ), false);
+                    AddDataRowWithTwoCells(item.clientName, item.OpportunityCount + item.clientSummary, topClientsTable, string.Format(BoldFormat, item.clientEstimatedRevenue.Value.ToString(CurrencyDisplayFormat)), false);
                 }
                 else
                 {
@@ -584,7 +609,7 @@ namespace PraticeManagement.Utils
             tblCell3.Text = "&nbsp; 61-120+ Days =";
             tblCell3.Font.Bold = false;
             tblCell3.HorizontalAlign = HorizontalAlign.Justify;
-            
+
             var priorityList = OpportunityPriorityHelper.GetOpportunityPriorities(true).OrderBy(p => p.SortOrder);
             var priorities = priorityList.Select(p => p.Priority).ToArray();
             var priorityOrderList = opportunityList.OrderBy(opp => opp.Priority.SortOrder).ToArray();
@@ -652,7 +677,7 @@ namespace PraticeManagement.Utils
             }
             return cellText;
         }
-        
+
         private static Table AddTotalEstimatedRevenueCell(Opportunity[] opportunityList, decimal totalEstimateRevenue)
         {
             Table table = new Table();
@@ -783,7 +808,7 @@ namespace PraticeManagement.Utils
 
             return table;
         }
-        
+
         private static void AddDataRowWithThreeCells(string name, string value, Table table)
         {
             var dataRow = new TableRow();
