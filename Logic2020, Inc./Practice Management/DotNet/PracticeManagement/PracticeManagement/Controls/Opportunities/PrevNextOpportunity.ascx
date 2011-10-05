@@ -26,8 +26,8 @@
                     </td>
                     <td style="padding-right: 5px; padding-left: 5px">
                         <uc:ProjectNameCellRounded ID="status" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
-                            ButtonCssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClassByStatus((string) Eval("Status.Name")) %>'
-                            ButtonProjectNameToolTip='<%# Eval("Status.Name") %>' />
+                            ButtonCssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((DataTransferObjects.Opportunity) Container.DataItem) %>'
+                            ButtonProjectNameToolTip='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((DataTransferObjects.Opportunity) Container.DataItem) %>' />
                     </td>
                     <td>
                         <asp:Label ID="client" runat="server" Text='<%# Eval("Client.Name") %>' Style="white-space: nowrap" />
