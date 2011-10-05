@@ -29,6 +29,7 @@ AS
 		   proj.ProjectId,
 		   proj.ProjectNumber,
 		   proj.Name ProjectName,
+		   c.Name ClientName,
 		   tt.Name TimeTypeName,
 		   te.Note ,
 		   te.MilestoneDate,
@@ -39,6 +40,7 @@ AS
 	join dbo.MilestonePersonEntry mpe on mpe.MilestonePersonId = mp.MilestonePersonId
 	join dbo.Milestone m on m.MilestoneId = mp.MilestoneId
 	join dbo.Project proj on proj.ProjectId = m.ProjectId
+	join dbo.Client c on proj.ClientId = c.ClientId
 	left join dbo.TimeEntries te on te.MilestonePersonId = mp.MilestonePersonId
 									and te.MilestoneDate between ISNULL(@StartDate, te.MilestoneDate) and ISNULL(@EndDate, te.MilestoneDate)
 	left join dbo.TimeType tt on tt.TimeTypeId = te.TimeTypeId
