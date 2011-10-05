@@ -35,12 +35,11 @@ namespace PraticeManagement.Controls.TimeEntry
                 hdnGuid.Value = Guid.NewGuid().ToString();
 
                 //  If current user is administrator, don't apply restrictions
-                Person person =
-                    Roles.IsUserInRole(
-                        DataHelper.CurrentPerson.Alias,
-                        DataTransferObjects.Constants.RoleNames.AdministratorRoleName)
-                        ? null
-                        : DataHelper.CurrentPerson;
+                bool isUserAdministrator = Roles.IsUserInRole(DataHelper.CurrentPerson.Alias, DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+                //  adding SeniorLeadership role as per #2930.
+                bool isUserSeniorLeadership = Roles.IsUserInRole(DataHelper.CurrentPerson.Alias, DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);
+
+                Person person = (isUserAdministrator || isUserSeniorLeadership) ? null : DataHelper.CurrentPerson;
                 var clients = DataHelper.GetAllClientsSecure(person, true);
                 DataHelper.FillListDefault(ddlClients, "-- Select a Client -- ", clients as object[], false);
             }
@@ -87,7 +86,7 @@ namespace PraticeManagement.Controls.TimeEntry
                     break;
 
                 case DataControlRowType.Footer:
-                    e.Row.Cells[HoursCellIndex].Text = "<div style='text-align: center;'>"+ _totalPersonHours.ToString(Constants.Formatting.DoubleFormat) + "</div>";
+                    e.Row.Cells[HoursCellIndex].Text = "<div style='text-align: center;'>" + _totalPersonHours.ToString(Constants.Formatting.DoubleFormat) + "</div>";
                     _grandTotalHours += _totalPersonHours;
                     break;
             }
@@ -207,8 +206,8 @@ namespace PraticeManagement.Controls.TimeEntry
                 ddlProjects.Enabled = true;
 
                 int? clientId = Convert.ToInt32(ddlClients.SelectedItem.Value);
-                var projects = DataHelper.GetTimeEntryProjectsByClientId(clientId);
-
+                var projects = DataHelper.GetTimeEntryProjectsByClientId(clientId, chbActiveInternalProject.Checked);
+                
                 ListItem[] items = projects.Select(
                                                      project => new ListItem(
                                                                              project.Name + " - " + project.ProjectNumber,
@@ -236,7 +235,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 }
 
             }
-            
+
         }
 
         protected void ddlProjects_OnSelectedIndexChanged(object sender, EventArgs e)
@@ -639,7 +638,7 @@ namespace PraticeManagement.Controls.TimeEntry
             return sb.ToString();
         }
 
-       
+
     }
 }
 
