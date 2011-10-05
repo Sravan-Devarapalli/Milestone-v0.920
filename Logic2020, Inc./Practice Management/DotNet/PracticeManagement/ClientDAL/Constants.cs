@@ -483,6 +483,7 @@
             public const string ShowWonParam = "@ShowWon";
             public const string TextParam = "@Text";
             public const string RichTextParam = "@RichText";
+            public const string ShowAll = "@ShowAll";
 
         }
 
