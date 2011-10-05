@@ -297,7 +297,7 @@
                                                     <tr style="border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;vertical-align:middle; ">
                                                         <th valign="middle" colspan="2" style="text-align: left; border-bottom: 1px solid gray; border-top: 1px solid gray;
                                                             width: 20%;">
-                                                            <asp:Label ID="lblPType" runat="server" Font-Bold="true" Text="Project-Time Type"></asp:Label>
+                                                            <asp:Label ID="lblPType" runat="server" Font-Bold="true" Text="Client-Project-Time Type"></asp:Label>
                                                         </th>
                                                         <asp:Repeater ID="dlProject" runat="server" DataSourceID="odsCalendar" OnItemCreated="dlProject_OnItemCreated"
                                                             OnInit="dlProject_OnInit">
@@ -382,7 +382,7 @@
                                                 <td colspan="4">
                                                     <div style="padding-top: 3px;">
                                                         <font style="font-size: 14px; font-weight: bold;">
-                                                            <%# Eval("Key.Name") %>
+                                                            <%# Eval("Key.Client.Name") + " - " + Eval("Key.Name")%>
                                                         </font>
                                                     </div>
                                                 </td>
