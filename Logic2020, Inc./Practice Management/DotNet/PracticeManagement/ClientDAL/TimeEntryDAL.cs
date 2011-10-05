@@ -560,8 +560,10 @@ namespace DataAccess
                        {
                            //Calendar = CalendarDAL.ReadSingleCalendarItem(reader, dateIndex, dayOffIndex, companyDayOffIndex, readOnlyIndex),
                            Id = reader.GetInt32(reader.GetOrdinal(Constants.ColumnNames.Id)),
-                           Name = reader.GetString(reader.GetOrdinal(Constants.ColumnNames.Name))
+                           Name = reader.GetString(reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn))
+                           + " - " + reader.GetString(reader.GetOrdinal(Constants.ColumnNames.Name))
                            + " - " + reader.GetString(reader.GetOrdinal(Constants.ColumnNames.TimeTypeName))
+
                        };
         }
 
@@ -571,7 +573,11 @@ namespace DataAccess
 
             if (reader.HasRows)
                 while (reader.Read())
-                    result.AddTimeEntry(ReadProject(reader), ReadTimeEntryShort(reader));
+                {
+                    var project = ReadProject(reader);
+                    project.Client = new Client { Name = reader.GetString(reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn)) };
+                    result.AddTimeEntry(project, ReadTimeEntryShort(reader));
+                }
 
             return result;
         }
