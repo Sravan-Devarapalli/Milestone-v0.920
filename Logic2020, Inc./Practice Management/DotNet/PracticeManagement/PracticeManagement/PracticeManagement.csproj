@@ -788,23 +788,7 @@
     <None Include="Service References\TimeEntryService\PraticeManagement.TimeEntryService.TimeEntriesGroupedByTimeEntryHours.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService10.wsdl" />
     <None Include="Service References\TimeEntryService\TimeEntryService10.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService100.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService101.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService102.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService103.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService104.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\TimeEntryService\TimeEntryService11.xsd">
@@ -843,6 +827,31 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\TimeEntryService\TimeEntryService3.wsdl" />
+    <None Include="Service References\TimeEntryService\TimeEntryService36.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService37.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService38.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService39.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService40.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService41.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService42.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService43.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService5.wsdl" />
     <None Include="Service References\TimeEntryService\TimeEntryService8.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -895,15 +904,6 @@
     </None>
     <None Include="Service References\TimeEntryService\TimeEntryService2.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService3.disco" />
-    <None Include="Service References\TimeEntryService\TimeEntryService97.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService98.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService99.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\TimescaleService\TimescaleService1.disco" />
     <None Include="Service References\ProjectGroupService\ProjectGroupService15.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService12.disco" />
@@ -911,8 +911,8 @@
     <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
-    <None Include="Service References\TimeEntryService\TimeEntryService10.disco" />
     <None Include="Service References\OpportunityService\OpportunityService1.disco" />
+    <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
     <Content Include="Third Party Tools\CKEditor.NET.dll" />
     <Content Include="Third Party Tools\FormsAuthenticationUserImpersonation.dll" />
     <Content Include="Third Party Tools\PdfGenerator\itextsharp.dll" />
