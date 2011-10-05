@@ -26,13 +26,14 @@ AS
 			CONVERT(INT,RANK() OVER(ORDER BY te.projectId,te.TimeTypeId)) as [Id],
  			te.ProjectName as [Name],
  			te.TimeTypeName, 
- 			SUM(te.ActualHours) as ActualHours
+ 			SUM(te.ActualHours) as ActualHours,
+			te.ClientName
 	from v_TimeEntries as te
 	join dbo.Person AS p on te.PersonId = p.PersonId
 	where te.MilestoneDate between @StartDate and @EndDate
 			and te.PersonId in (select Id from @PersonList)
 			and (dbo.GetCurrentPayType(te.PersonId) IN (select Id from @TimescaleIdList)  OR dbo.GetCurrentPayType(te.PersonId) IS NULL)
 			and p.DefaultPractice in (SELECT id FROM @PracticeIdsList)
-	group by te.MilestoneDate, te.ProjectId, te.ProjectName,te.PersonId, te.TimeTypeId,te.TimeTypeName
+	group by te.MilestoneDate, te.ProjectId, te.ProjectName,te.ClientName,te.PersonId, te.TimeTypeId,te.TimeTypeName
 	order by te.ProjectId
 RETURN 0
