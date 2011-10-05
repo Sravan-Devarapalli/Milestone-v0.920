@@ -536,7 +536,7 @@ namespace PraticeManagement.Controls.Opportunities
         {
             if (e.Item.ItemType == ListViewItemType.DataItem)
             {
-                  var datalist = e.Item.FindControl("dtlProposedPersons") as DataList;
+                var datalist = e.Item.FindControl("dtlProposedPersons") as DataList;
                 var hdnProposedPersonsIndexes = e.Item.FindControl("hdnProposedPersonsIndexes") as HiddenField;
 
                 var oppty = (e.Item as ListViewDataItem).DataItem as Opportunity;
@@ -550,7 +550,7 @@ namespace PraticeManagement.Controls.Opportunities
                     ddlPriority.SelectedValue = oppty.Priority.Id.ToString();
                     ddlPriority.Attributes["OpportunityID"] = oppty.Id.Value.ToString();
                 }
-              
+
                 if (oppty != null && oppty.ProposedPersons != null)
                 {
                     datalist.DataSource = oppty.ProposedPersons.OrderBy(person => person.LastName + person.FirstName);
@@ -576,7 +576,7 @@ namespace PraticeManagement.Controls.Opportunities
 
         private OpportunityPriority[] GetOpportunityPriorities()
         {
-            if(ViewState["OpportunityPrioritiesList"] == null)
+            if (ViewState["OpportunityPrioritiesList"] == null)
             {
                 var priorityList = OpportunityPriorityHelper.GetOpportunityPriorities(true);
                 ViewState["OpportunityPrioritiesList"] = priorityList;
@@ -668,7 +668,6 @@ namespace PraticeManagement.Controls.Opportunities
             var opportunities = DataHelper.GetFilteredOpportunitiesForDiscussionReview2(false);
             return OpportunitiesHelper.GetFormatedSummaryDetails(opportunities, PriorityTrendList, StatusChangesList);
         }
-        
     }
 }
 
