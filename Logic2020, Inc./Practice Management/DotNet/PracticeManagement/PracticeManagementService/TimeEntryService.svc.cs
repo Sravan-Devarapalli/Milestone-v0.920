@@ -273,9 +273,9 @@ namespace PracticeManagementService
         /// Gets all projects that have TE records assigned to  particular clientId
         /// </summary>
         /// <returns>Projects list</returns>
-        public Project[] GetTimeEntryProjectsByClientId(int? clientId)
+        public Project[] GetTimeEntryProjectsByClientId(int? clientId, bool showActiveAndInternalProjectsOnly = false)
         {
-            Project[] projects = TimeEntryDAL.GetTimeEntryProjectsByClientId(clientId);
+            Project[] projects = TimeEntryDAL.GetTimeEntryProjectsByClientId(clientId, showActiveAndInternalProjectsOnly);
             Array.Sort(projects, ProjectNameComp);
             return projects;
         }
