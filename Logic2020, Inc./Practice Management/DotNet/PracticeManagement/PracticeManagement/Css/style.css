@@ -1131,6 +1131,16 @@ TD .spacing
     display: block;
     height: 10px;
     width: 10px;
+    background-position: 0px -80px;
+    background-repeat: no-repeat;
+    background-image: url(../images/project-indicator.png);
+}
+
+.AciveOptyWithProjectAttached
+{
+    display: block;
+    height: 10px;
+    width: 10px;
     background-position: 0px 0px;
     background-repeat: no-repeat;
     background-image: url(../images/project-indicator.png);
@@ -2081,3 +2091,4 @@ table.CellPaddingClass td
 {
     list-style-type: disc;
 }
+
