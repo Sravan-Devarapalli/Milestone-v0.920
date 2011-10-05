@@ -1680,13 +1680,13 @@ namespace PraticeManagement.Controls
                 client => client.ListProjectsByClientWithSort(clientId, /*CurrentPerson.Alias*/null, sortBy));
         }
 
-        public static Project[] GetTimeEntryProjectsByClientId(int? clientId)
+        public static Project[] GetTimeEntryProjectsByClientId(int? clientId, bool showActiveAndInternalProjectsOnly = false)
         {
             using (var serviceClient = new TimeEntryServiceClient())
             {
                 try
                 {
-                    Project[] projects = serviceClient.GetTimeEntryProjectsByClientId(clientId);
+                    Project[] projects = serviceClient.GetTimeEntryProjectsByClientId(clientId,showActiveAndInternalProjectsOnly);
 
                     return projects;
                 }
