@@ -97,6 +97,18 @@
         display: none;
         visibility: hidden;
     }
+    
+    .CheckBoxFloatLeft INPUT
+    {
+        float: left;
+        width: 20px;
+        margin-right: 6px;
+    }
+    .CheckBoxFloatLeft LABEL
+    {
+        line-height: 20px;
+        vertical-align: middle;
+    }
 </style>
 <uc3:LoadingProgress ID="LoadingProgress1" runat="server" />
 <asp:UpdatePanel ID="updReport" runat="server">
@@ -125,6 +137,16 @@
                                             Width="460" OnSelectedIndexChanged="ddlProjects_OnSelectedIndexChanged">
                                             <asp:ListItem Text="-- Select a Project --" Value=""></asp:ListItem>
                                         </asp:DropDownList>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                    <td>
+                                        <asp:CheckBox ID="chbActiveInternalProject" runat="server" Checked="true" CssClass="CheckBoxFloatLeft"
+                                            Text="Active and Internal Projects Only" AutoPostBack="true" OnCheckedChanged="ddlClients_OnSelectedIndexChanged">
+                                        </asp:CheckBox>
                                     </td>
                                 </tr>
                                 <tr>
