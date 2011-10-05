@@ -231,7 +231,7 @@ namespace PraticeManagement.TimeEntryService {
         DataTransferObjects.Project[] GetAllTimeEntryProjects();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetTimeEntryProjectsByClientId", ReplyAction="http://tempuri.org/ITimeEntryService/GetTimeEntryProjectsByClientIdResponse")]
-        DataTransferObjects.Project[] GetTimeEntryProjectsByClientId(System.Nullable<int> clientId);
+        DataTransferObjects.Project[] GetTimeEntryProjectsByClientId(System.Nullable<int> clientId, bool showActiveAndInternalProjectsOnly);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryMilestones", ReplyAction="http://tempuri.org/ITimeEntryService/GetAllTimeEntryMilestonesResponse")]
         DataTransferObjects.Milestone[] GetAllTimeEntryMilestones();
@@ -247,7 +247,7 @@ namespace PraticeManagement.TimeEntryService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class TimeEntryServiceClient : System.ServiceModel.ClientBase<PraticeManagement.TimeEntryService.ITimeEntryService>, PraticeManagement.TimeEntryService.ITimeEntryService {
-      
+        
         public TimeEntryServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -368,8 +368,8 @@ namespace PraticeManagement.TimeEntryService {
             return base.Channel.GetAllTimeEntryProjects();
         }
         
-        public DataTransferObjects.Project[] GetTimeEntryProjectsByClientId(System.Nullable<int> clientId) {
-            return base.Channel.GetTimeEntryProjectsByClientId(clientId);
+        public DataTransferObjects.Project[] GetTimeEntryProjectsByClientId(System.Nullable<int> clientId, bool showActiveAndInternalProjectsOnly) {
+            return base.Channel.GetTimeEntryProjectsByClientId(clientId, showActiveAndInternalProjectsOnly);
         }
         
         public DataTransferObjects.Milestone[] GetAllTimeEntryMilestones() {
