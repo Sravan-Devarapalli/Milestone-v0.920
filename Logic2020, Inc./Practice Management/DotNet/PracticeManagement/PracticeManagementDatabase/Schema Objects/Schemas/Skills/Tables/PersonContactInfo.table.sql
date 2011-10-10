@@ -1,12 +1,10 @@
 ﻿CREATE TABLE [Skills].[PersonContactInfo](
 	[ContactInfoTypeId] [int] NOT NULL,
-	[PersonId] [bigint] NOT NULL,
+	[PersonId] [int] NOT NULL,
 	[Info] [nvarchar](max) NULL,
-	[ModificationDate] [datetime] NOT NULL,
-	[TenantId]		[int] NOT NULL,
+	[ModifiedDate] [datetime] NOT NULL,
  CONSTRAINT [PK_PersonContactInfo] PRIMARY KEY CLUSTERED 
 (
-	[TenantId] ASC,
 	[ContactInfoTypeId] ASC,
 	[PersonId] ASC
 )
