@@ -123,8 +123,8 @@
                         <asp:GridView ID="gvMilestonePersonEntries" runat="server" AutoGenerateColumns="False"
                             OnRowDataBound="gvMilestonePersonEntries_RowDataBound" OnRowCancelingEdit="gvMilestonePersonEntries_RowCancelingEdit"
                             OnRowEditing="gvMilestonePersonEntries_RowEditing" OnRowDeleting="gvMilestonePersonEntries_RowDeleting"
-                            OnRowUpdating="gvMilestonePersonEntries_RowUpdating" CellPadding="0" CssClass="CompPerfTable WholeWidth" FooterStyle-Height="25px"
-                            GridLines="None" BackColor="White">
+                            OnRowUpdating="gvMilestonePersonEntries_RowUpdating" CellPadding="0" CssClass="CompPerfTable WholeWidth"
+                            FooterStyle-Height="25px" GridLines="None" BackColor="White">
                             <AlternatingRowStyle BackColor="#F9FAFF" Height="25px" />
                             <RowStyle BackColor="White" Height="25px" />
                             <Columns>
@@ -186,7 +186,7 @@
                                         <asp:DropDownList ID="ddlRole" runat="server" Width="95" onchange="setDirty();">
                                         </asp:DropDownList>
                                     </FooterTemplate>
-                                </asp:TemplateField>                                
+                                </asp:TemplateField>
                                 <asp:TemplateField>
                                     <HeaderTemplate>
                                         <div class="ie-bg no-wrap">
@@ -216,7 +216,7 @@
                                         <asp:Label ID="lblAmount" runat="server" Text='<%# Eval("HourlyAmount") != null ? Eval("HourlyAmount") : string.Empty %>'></asp:Label>
                                     </ItemTemplate>
                                     <EditItemTemplate>
-                                        <asp:TextBox ID="txtAmount" runat="server"  onchange="setDirty();" Width="60" Text='<%# Eval("HourlyAmount") != null ? Eval("HourlyAmount.Value") : string.Empty %>'></asp:TextBox>
+                                        <asp:TextBox ID="txtAmount" runat="server" onchange="setDirty();" Width="60" Text='<%# Eval("HourlyAmount") != null ? Eval("HourlyAmount.Value") : string.Empty %>'></asp:TextBox>
                                     </EditItemTemplate>
                                     <FooterTemplate>
                                         <asp:TextBox ID="txtAmount" runat="server" Width="60" onchange="setDirty();"></asp:TextBox>
@@ -234,7 +234,7 @@
                                 </asp:TemplateField>
                                 <asp:TemplateField>
                                     <HeaderTemplate>
-                                        <div class="ie-bg no-wrap" style="padding-left:5px; padding-right:5px">
+                                        <div class="ie-bg no-wrap" style="padding-left: 5px; padding-right: 5px">
                                             Total Hours in Milestone</div>
                                     </HeaderTemplate>
                                     <ItemStyle Width="120px" HorizontalAlign="Center" />
@@ -242,7 +242,7 @@
                                     <ItemTemplate>
                                         <asp:Label ID="lblHoursInPeriodDay" runat="server" Text='<%# Eval("ProjectedWorkloadWithVacation")  %>'></asp:Label>
                                         <asp:Label ID="lblVacationIncludedAsterix" runat="server" Text="*" ForeColor="Red"
-                                            Visible="false"  />
+                                            Visible="false" />
                                     </ItemTemplate>
                                     <EditItemTemplate>
                                         <asp:TextBox ID="txtHoursInPeriod" runat="server" Width="95" Text='<%# Eval("ProjectedWorkloadWithVacation") %>'
@@ -254,7 +254,7 @@
                                 </asp:TemplateField>
                                 <asp:TemplateField>
                                     <HeaderTemplate>
-                                        <div class="ie-bg no-wrap" style="padding-left:5px; padding-right:5px">
+                                        <div class="ie-bg no-wrap" style="padding-left: 5px; padding-right: 5px">
                                             Billable Hours in Milestone</div>
                                     </HeaderTemplate>
                                     <ItemStyle Width="100px" HorizontalAlign="Center" />
@@ -263,7 +263,7 @@
                                         <asp:Label ID="lblBillableHours" runat="server" Text='<%# Eval("BillableHours") != null ? Eval("BillableHours") : 0 %>'></asp:Label>
                                     </ItemTemplate>
                                 </asp:TemplateField>
-                                <asp:TemplateField HeaderStyle-Width="100px" >
+                                <asp:TemplateField HeaderStyle-Width="100px">
                                     <ItemTemplate>
                                         &nbsp;</ItemTemplate>
                                     <EditItemTemplate>
@@ -307,13 +307,13 @@
                                             Type="Currency" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
                                         <asp:RangeValidator ID="rangHoursPerDay" runat="server" ControlToValidate="txtHoursPerDay"
                                             ErrorMessage=" The Hours Per Day must be greater than 0 and less or equals to 24."
-                                            ToolTip=" The Hours Per Day must be greater than 0 and less or equals to 24." Text="*"
-                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" MinimumValue="0.01"
-                                            MaximumValue="24" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
-                                        <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmount" ValidateEmptyText="true"
-                                            ErrorMessage="The Amount is required." ToolTip="The Amount is required." Text="*"
-                                            SetFocusOnError="true" EnableClientScript="false" Display="Dynamic" ValidationGroup="MilestonePersonEntry"
-                                            OnServerValidate="reqHourlyRevenue_ServerValidate"></asp:CustomValidator>
+                                            ToolTip=" The Hours Per Day must be greater than 0 and less or equals to 24."
+                                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                            MinimumValue="0.01" MaximumValue="24" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
+                                        <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmount"
+                                            ValidateEmptyText="true" ErrorMessage="The Amount is required." ToolTip="The Amount is required."
+                                            Text="*" SetFocusOnError="true" EnableClientScript="false" Display="Dynamic"
+                                            ValidationGroup="MilestonePersonEntry" OnServerValidate="reqHourlyRevenue_ServerValidate"></asp:CustomValidator>
                                         <asp:CompareValidator ID="compHourlyRevenue" runat="server" ControlToValidate="txtAmount"
                                             ErrorMessage="A number with 2 decimal digits is allowed for the Revenue." ToolTip="A number with 2 decimal digits is allowed for the Revenue."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
@@ -335,10 +335,14 @@
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             Operator="DataTypeCheck" Type="Currency" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
                                         <asp:RangeValidator ID="rangHoursInPeriod" runat="server" ControlToValidate="txtHoursInPeriod"
-                                            ErrorMessage="The Hours In Period must be more then 0 and less or equals to 15,000."
-                                            ToolTip="The Hours In Period must be more then 0 and less or equals to 15,000."
+                                            ErrorMessage="The Total Hours must be greater than 0."
+                                            ToolTip="The Total Hours must be greater than 0."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                            MinimumValue="0" MaximumValue="15000" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
+                                            MinimumValue="0.01" MaximumValue="15000" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
+                                        <asp:CustomValidator ID="cvHoursInPeriod" runat="server" ErrorMessage="Total hours should be a larger value so that Hoursperday will be greater than Zero after rounding."
+                                            ToolTip="Total hours should be a larger value so that Hoursperday will be greater than Zero after rounding."
+                                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                            OnServerValidate="cvHoursInPeriod_ServerValidate" ValidationGroup="MilestonePersonEntry"></asp:CustomValidator>
                                     </EditItemTemplate>
                                     <FooterTemplate>
                                         <asp:RequiredFieldValidator ID="reqPersonStart" runat="server" ControlToValidate="dpPersonStart"
@@ -380,13 +384,14 @@
                                             EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
                                             Type="Currency" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
                                         <asp:RangeValidator ID="rangHoursPerDay" runat="server" ControlToValidate="txtHoursPerDay"
-                                            ErrorMessage=" The Hours Per Day must be greater than 0 and less or equals to 24." ToolTip=" The Hours Per Day must be greater than 0 and less or equals to 24."
+                                            ErrorMessage=" The Hours Per Day must be greater than 0 and less or equals to 24."
+                                            ToolTip=" The Hours Per Day must be greater than 0 and less or equals to 24."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             MinimumValue="0.01" MaximumValue="24" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
-                                        <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmount"  ValidateEmptyText="true"
-                                            ErrorMessage="The Amount is required." ToolTip="The Amount is required." Text="*"
-                                            SetFocusOnError="true" EnableClientScript="false" Display="Dynamic" OnServerValidate="reqHourlyRevenue_ServerValidate"
-                                            ValidationGroup="MilestonePersonEntry"></asp:CustomValidator>
+                                        <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmount"
+                                            ValidateEmptyText="true" ErrorMessage="The Amount is required." ToolTip="The Amount is required."
+                                            Text="*" SetFocusOnError="true" EnableClientScript="false" Display="Dynamic"
+                                            OnServerValidate="reqHourlyRevenue_ServerValidate" ValidationGroup="MilestonePersonEntry"></asp:CustomValidator>
                                         <asp:CompareValidator ID="compHourlyRevenue" runat="server" ControlToValidate="txtAmount"
                                             ErrorMessage="A number with 2 decimal digits is allowed for the Revenue." ToolTip="A number with 2 decimal digits is allowed for the Revenue."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
@@ -408,10 +413,14 @@
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             Operator="DataTypeCheck" Type="Currency" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
                                         <asp:RangeValidator ID="rangHoursInPeriod" runat="server" ControlToValidate="txtHoursInPeriod"
-                                            ErrorMessage="The Hours In Period must be more then 0 and less or equals to 15,000."
-                                            ToolTip="The Hours In Period must be more then 0 and less or equals to 15,000."
+                                            ErrorMessage="The Total Hours must be greater than 0."
+                                            ToolTip="The Total Hours must be greater than 0."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                            MinimumValue="0" MaximumValue="15000" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
+                                            MinimumValue="0.01" MaximumValue="15000" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
+                                        <asp:CustomValidator ID="cvHoursInPeriod" runat="server" ErrorMessage="Total hours should be a larger value so that Hoursperday will be greater than Zero after rounding."
+                                            ToolTip="Total hours should be a larger value so that Hoursperday will be greater than Zero after rounding."
+                                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                            OnServerValidate="cvHoursInPeriod_ServerValidate" ValidationGroup="MilestonePersonEntry"></asp:CustomValidator>
                                     </FooterTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField ShowHeader="False" ItemStyle-Wrap="false">
@@ -580,10 +589,10 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="4" style="padding-bottom:3px">
+                    <td colspan="4" style="padding-bottom: 3px">
                         <asp:Label ID="lblVacationIncludedText" runat="server" Text="*" ForeColor="Red" Visible="false"
                             EnableViewState="false" />
-                            <uc:Label ID="lblResultMessage" runat="server" ErrorColor="Red" InfoColor="Green"/>
+                        <uc:Label ID="lblResultMessage" runat="server" ErrorColor="Red" InfoColor="Green" />
                     </td>
                 </tr>
                 <tr>
