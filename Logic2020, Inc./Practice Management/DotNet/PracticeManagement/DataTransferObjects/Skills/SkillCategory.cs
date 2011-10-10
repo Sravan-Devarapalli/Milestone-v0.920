@@ -11,7 +11,7 @@ namespace DataTransferObjects.Skills
     public class SkillCategory : LookupBase
     {
         [DataMember]
-        public LookupBase SkillType { get; set; }
+        public SkillType SkillType { get; set; }
     }
 }
 
