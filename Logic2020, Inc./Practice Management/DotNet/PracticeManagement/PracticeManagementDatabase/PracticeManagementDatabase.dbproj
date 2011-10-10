@@ -3575,12 +3575,6 @@
     <Build Include="Schema Objects\Schemas\Skills\Tables\Constraints\DFPersonTraining_ModificationDate.defconst.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_Person_ManagerId.fkey.sql">
-      <SubType>Code</SubType>
-    </Build>
-    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_Person_TitleId.fkey.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonContact_InfoPersonId.fkey.sql">
       <SubType>Code</SubType>
     </Build>
@@ -3603,12 +3597,6 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonIndustry_PersonId.fkey.sql">
-      <SubType>Code</SubType>
-    </Build>
-    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonPractice_PersonId.fkey.sql">
-      <SubType>Code</SubType>
-    </Build>
-    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonPractice_PracticeId.fkey.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonQualification_PersonId.fkey.sql">
@@ -3650,9 +3638,6 @@
     <Build Include="Schema Objects\Schemas\Skills\Tables\Industry.table.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\Skills\Tables\Person.table.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\Skills\Tables\PersonContactInfo.table.sql">
       <SubType>Code</SubType>
     </Build>
@@ -3665,9 +3650,6 @@
     <Build Include="Schema Objects\Schemas\Skills\Tables\PersonIndustry.table.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\Skills\Tables\PersonPractice.table.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\Skills\Tables\PersonQualification.table.sql">
       <SubType>Code</SubType>
     </Build>
@@ -3675,9 +3657,6 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\Skills\Tables\PersonTraining.table.sql">
-      <SubType>Code</SubType>
-    </Build>
-    <Build Include="Schema Objects\Schemas\Skills\Tables\Practice.table.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\Skills\Tables\QualificationType.table.sql">
@@ -3695,13 +3674,19 @@
     <Build Include="Schema Objects\Schemas\Skills\Tables\SkillType.table.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\Skills\Tables\Title.table.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\Skills\Tables\TrainingType.table.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\Skills.schema.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetSkillCategoriesAll.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetSkillsAll.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetSkillLevelsAll.proc.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>
