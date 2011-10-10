@@ -10,12 +10,7 @@ namespace DataTransferObjects.Skills
     [Serializable]
     public class PersonDocument
     {
-        [DataMember]
-        public int? ClientId
-        {
-            get;
-            set;
-        }
+       
 
         [DataMember]
         public DocumentType Type
