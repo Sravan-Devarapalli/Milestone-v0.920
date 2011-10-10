@@ -312,6 +312,28 @@ namespace PraticeManagement
             }
         }
 
+        protected void cvHoursInPeriod_ServerValidate(object source, ServerValidateEventArgs e)
+        {
+            var txtHoursInPeriod = ((Control)source).Parent.FindControl("txtHoursInPeriod") as TextBox;
+            var value = txtHoursInPeriod.Text.Trim();
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                decimal Totalhours;
+                if (decimal.TryParse(value, out Totalhours) && Totalhours > 0M)
+                {
+                    var dpPersonStart = ((Control)source).Parent.FindControl("dpPersonStart") as DatePicker;
+                    var dpPersonEnd = ((Control)source).Parent.FindControl("dpPersonEnd") as DatePicker;
+                    int days = GetPersonWorkDaysNumber(dpPersonStart.DateValue, dpPersonEnd.DateValue);
+
+                    // calculate hours per day according to HoursInPerod 
+                    var hoursPerDay = (days != 0) ? decimal.Round(Totalhours / (days), 2) : 0;
+
+                    e.IsValid = hoursPerDay > 0M;
+                }
+            }
+        }
+
         #endregion
 
         protected void Page_PreRender(object sender, EventArgs e)
