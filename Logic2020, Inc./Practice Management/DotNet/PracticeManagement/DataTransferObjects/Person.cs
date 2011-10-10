@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using DataTransferObjects.Skills;
 
 namespace DataTransferObjects
 {
@@ -82,6 +83,13 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public string MiddleName
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Person status 
         /// </summary>
@@ -157,6 +165,20 @@ namespace DataTransferObjects
         {
             get { return _terminationDate; }
             set { _terminationDate = value; }
+        }
+
+        [DataMember]
+        public string ImageUrl
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public DateTime? ModifiedDate
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -298,6 +320,54 @@ namespace DataTransferObjects
         /// </summary>
         [DataMember]
         public Person Manager { get; set; }
+
+        [DataMember]
+        public List<PersonIndustry> Industries
+        {
+            get;
+            set;
+        }
+        [DataMember]
+        public List<PersonDocument> Documents
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public List<PersonContactInfo> ContactInfoList
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public List<PersonQualification> Qualifications
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public List<PersonSkill> Skills
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public List<PersonTraining> Trainings
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public List<PersonEmployer> Employers
+        {
+            get;
+            set;
+        }
 
         [DataMember]
         public DateTime? LastLogin { get; set; }
