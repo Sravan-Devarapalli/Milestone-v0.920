@@ -1,13 +1,11 @@
 ﻿CREATE TABLE [Skills].[PersonIndustry](
 	[IndustryId] [int] NOT NULL,
-	[PersonId] [bigint] NOT NULL,
+	[PersonId] [int] NOT NULL,
 	[YearsExperience] [int] NOT NULL,
 	[DisplayOrder] [tinyint] NULL,
-	[ModificationDate] [datetime] NOT NULL,
-	[TenantId]		[int] NOT NULL,
+	[ModifiedDate] [datetime] NOT NULL,
  CONSTRAINT [PK_PersonIndustry] PRIMARY KEY CLUSTERED 
 (
-	[TenantId] ASC,
 	[IndustryId] ASC,
 	[PersonId] ASC
 )
