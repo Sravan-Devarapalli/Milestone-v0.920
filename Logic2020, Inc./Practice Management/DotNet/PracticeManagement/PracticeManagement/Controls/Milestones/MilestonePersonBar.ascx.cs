@@ -180,6 +180,28 @@ namespace PraticeManagement.Controls.Milestones
             }
         }
 
+        protected void cvHoursInPeriod_ServerValidate(object source, ServerValidateEventArgs e)
+        {
+            var txtHoursInPeriod = txtHoursInPeriodInsert;
+            var value = txtHoursInPeriod.Text.Trim();
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                decimal Totalhours;
+                if (decimal.TryParse(value, out Totalhours) && Totalhours > 0M)
+                {
+                    var dpPersonStart = ((Control)source).Parent.FindControl("dpPersonStart") as DatePicker;
+                    var dpPersonEnd = ((Control)source).Parent.FindControl("dpPersonEnd") as DatePicker;
+                    int days = GetPersonWorkDaysNumber(dpPersonStartInsert.DateValue, dpPersonEndInsert.DateValue, ddlPerson);
+
+                    // calculate hours per day according to HoursInPerod 
+                    var hoursPerDay = (days != 0) ? decimal.Round(Totalhours / (days), 2) : 0;
+
+                    e.IsValid = hoursPerDay > 0M;
+                }
+            }
+        }
+
         #endregion
 
         private int GetPersonWorkDaysNumber(DateTime startDate, DateTime endDate, DropDownList ddlPersonName)
