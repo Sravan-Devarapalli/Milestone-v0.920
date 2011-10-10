@@ -10,12 +10,7 @@ namespace DataTransferObjects.Skills
     [Serializable]
     public class PersonTraining
     {
-        [DataMember]
-        public int? ClientId
-        {
-            get;
-            set;
-        }
+       
         public Person Person
         {
             set;
