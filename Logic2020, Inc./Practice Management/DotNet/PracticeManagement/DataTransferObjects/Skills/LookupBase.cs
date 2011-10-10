@@ -18,8 +18,6 @@ namespace DataTransferObjects.Skills
         [DataMember]
         public int? DisplayOrder { get; set; }
 
-        [DataMember]
-        public int? ClientId { get; set; }
     }
 }
 
