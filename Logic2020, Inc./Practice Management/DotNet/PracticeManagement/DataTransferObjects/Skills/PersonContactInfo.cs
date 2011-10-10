@@ -44,13 +44,7 @@ namespace DataTransferObjects.Skills
             set;
             get;
         }
-
-        [DataMember]
-        public int? ClientId
-        {
-            get;
-            set;
-        }
+        
     }
 }
 
