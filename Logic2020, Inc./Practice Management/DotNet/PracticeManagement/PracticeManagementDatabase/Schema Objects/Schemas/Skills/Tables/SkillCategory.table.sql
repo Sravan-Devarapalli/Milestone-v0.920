@@ -3,10 +3,10 @@
 	[SkillTypeId] [int] NOT NULL,
 	[Description] [nvarchar](max) NULL,
 	[DisplayOrder] [tinyint] NULL,
-	[TenantId]		[int] NOT NULL,
+	[IsActive]		[bit] NOT NULL CONSTRAINT DF_SkillCategory_IsActive DEFAULT(1),
+	[IsDeleted]		[bit] NOT NULL CONSTRAINT DF_SkillCategory_IsDeleted DEFAULT(0),
  CONSTRAINT [PK_SkillCategory] PRIMARY KEY CLUSTERED 
 (
-	[TenantId] ASC,
 	[SkillCategoryId] ASC
 )
 )
