@@ -273,9 +273,13 @@
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                 Operator="DataTypeCheck" Type="Currency" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
                             <asp:RangeValidator ID="rangHoursInPeriod" runat="server" ControlToValidate="txtHoursInPeriod"
-                                ErrorMessage="" ToolTip="The Hours In Period must be more then 0 and less or equals to 15,000."
+                                ErrorMessage="" ToolTip="The Total Hours must be greater than 0."
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                MinimumValue="0" MaximumValue="15000" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
+                                MinimumValue="0.01" MaximumValue="15000" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
+                            <asp:CustomValidator ID="cvHoursInPeriod" runat="server"
+                                ToolTip="Total hours should be a larger value so that Hoursperday will be greater than Zero after rounding." Text="*" EnableClientScript="false"
+                                SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvHoursInPeriod_ServerValidate"
+                                ValidationGroup="MilestonePersonEntry"></asp:CustomValidator>
                         </td>
                     </tr>
                 </table>
