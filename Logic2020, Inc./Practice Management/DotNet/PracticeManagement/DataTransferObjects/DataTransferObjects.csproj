@@ -147,7 +147,6 @@
     <Compile Include="Skills\Employer.cs" />
     <Compile Include="Skills\Industry.cs" />
     <Compile Include="Skills\LookupBase.cs" />
-    <Compile Include="Skills\Person.cs" />
     <Compile Include="Skills\PersonContactInfo.cs" />
     <Compile Include="Skills\PersonDocument.cs" />
     <Compile Include="Skills\PersonEmployer.cs" />
@@ -156,13 +155,11 @@
     <Compile Include="Skills\PersonQualification.cs" />
     <Compile Include="Skills\PersonSkill.cs" />
     <Compile Include="Skills\PersonTraining.cs" />
-    <Compile Include="Skills\Practice.cs" />
     <Compile Include="Skills\QualificationType.cs" />
     <Compile Include="Skills\Skill.cs" />
     <Compile Include="Skills\SkillCategory.cs" />
     <Compile Include="Skills\SkillLevel.cs" />
     <Compile Include="Skills\SkillType.cs" />
-    <Compile Include="Skills\Title.cs" />
     <Compile Include="Skills\TrainingType.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="ErrorCode.cs" />
