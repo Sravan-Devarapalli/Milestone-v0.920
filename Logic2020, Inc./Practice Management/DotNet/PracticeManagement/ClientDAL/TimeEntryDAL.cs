@@ -1110,9 +1110,9 @@ namespace DataAccess
 
         #region Filtering
 
-        public static Project[] GetTimeEntryProjectsByClientId(int? clientId, bool showActiveAndInternalProjectsOnly = false)
+        public static Project[] GetTimeEntryProjectsByClientId(int? clientId, int? personId = null, bool showActiveAndInternalProjectsOnly = false)
         {
-            var allMilestones = GetTimeEntryMilestonesByClientId(clientId, showActiveAndInternalProjectsOnly);
+            var allMilestones = GetTimeEntryMilestonesByClientId(clientId, personId, showActiveAndInternalProjectsOnly);
             var result = new List<Project>(allMilestones.Length);
 
             foreach (var m in allMilestones)
@@ -1149,13 +1149,15 @@ namespace DataAccess
         /// Gets all milestones that have TE records assigned to  particular clientId
         /// </summary>
         /// <returns>Milestones list</returns>
-        public static Milestone[] GetTimeEntryMilestonesByClientId(int? clientId, bool showActiveAndInternalProjectsOnly = false)
+        public static Milestone[] GetTimeEntryMilestonesByClientId(int? clientId, int? personId = null, bool showActiveAndInternalProjectsOnly = false)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.TimeEntryAllMilestones, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.TimeEntryAllMilestonesByClientId, connection))
             {
                 if (clientId != null)
                     command.Parameters.AddWithValue(Constants.ParameterNames.ClientId, clientId);
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId.HasValue ? (object)personId.Value : DBNull.Value);
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.ShowAll, !showActiveAndInternalProjectsOnly);
 
