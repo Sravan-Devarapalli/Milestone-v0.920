@@ -595,6 +595,7 @@
 
                 public const string TimeEntryAllPersons = "dbo.TimeEntryAllPersons";
                 public const string TimeEntryAllMilestones = "dbo.TimeEntryAllMilestones";
+                public const string TimeEntryAllMilestonesByClientId = "dbo.TimeEntryAllMilestonesByClientId";
                 public const string HasTimeEntriesForMilestoneBetweenOldAndNewDates = "dbo.HasTimeEntriesForMilestoneBetweenOldAndNewDates";
 
                 #endregion
