@@ -2,8 +2,8 @@
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://system58.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd1" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
   <xs:import schemaLocation="http://system58.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
-  <xs:import schemaLocation="http://system58.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
-  <xs:import schemaLocation="http://system58.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CompositeObjects" />
+  <xs:import schemaLocation="http://system58.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
+  <xs:import schemaLocation="http://system58.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CompositeObjects" />
   <xs:element name="GetAllTimeTypes">
     <xs:complexType>
       <xs:sequence />
@@ -371,6 +371,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="clientId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="personId" nillable="true" type="xs:int" />
         <xs:element minOccurs="0" name="showActiveAndInternalProjectsOnly" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
