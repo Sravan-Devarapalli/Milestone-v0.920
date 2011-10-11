@@ -231,7 +231,7 @@ namespace PraticeManagement.TimeEntryService {
         DataTransferObjects.Project[] GetAllTimeEntryProjects();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetTimeEntryProjectsByClientId", ReplyAction="http://tempuri.org/ITimeEntryService/GetTimeEntryProjectsByClientIdResponse")]
-        DataTransferObjects.Project[] GetTimeEntryProjectsByClientId(System.Nullable<int> clientId, bool showActiveAndInternalProjectsOnly);
+        DataTransferObjects.Project[] GetTimeEntryProjectsByClientId(System.Nullable<int> clientId, System.Nullable<int> personId, bool showActiveAndInternalProjectsOnly);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryMilestones", ReplyAction="http://tempuri.org/ITimeEntryService/GetAllTimeEntryMilestonesResponse")]
         DataTransferObjects.Milestone[] GetAllTimeEntryMilestones();
@@ -368,8 +368,8 @@ namespace PraticeManagement.TimeEntryService {
             return base.Channel.GetAllTimeEntryProjects();
         }
         
-        public DataTransferObjects.Project[] GetTimeEntryProjectsByClientId(System.Nullable<int> clientId, bool showActiveAndInternalProjectsOnly) {
-            return base.Channel.GetTimeEntryProjectsByClientId(clientId, showActiveAndInternalProjectsOnly);
+        public DataTransferObjects.Project[] GetTimeEntryProjectsByClientId(System.Nullable<int> clientId, System.Nullable<int> personId, bool showActiveAndInternalProjectsOnly) {
+            return base.Channel.GetTimeEntryProjectsByClientId(clientId, personId, showActiveAndInternalProjectsOnly);
         }
         
         public DataTransferObjects.Milestone[] GetAllTimeEntryMilestones() {
