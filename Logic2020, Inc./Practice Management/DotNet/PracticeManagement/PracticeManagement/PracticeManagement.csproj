@@ -488,6 +488,12 @@
     <None Include="Properties\DataSources\DataTransferObjects.ProjectsGroupedByPerson.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.ProjectsGroupedByPractice.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.QuickLinks.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Skills.Skill.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Skills.Skill1.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Skills.SkillCategory.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Skills.SkillCategory1.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Skills.SkillLevel.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Skills.SkillLevel1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.TimeEntry.TimeEntrySums.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Timezone.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.UserPasswordsHistory1.datasource" />
@@ -722,6 +728,16 @@
     <None Include="Service References\PersonRoleService\PersonRoleService5.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\PersonSkillService\PersonSkillService.wsdl" />
+    <None Include="Service References\PersonSkillService\PersonSkillService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PersonSkillService\PersonSkillService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PersonSkillService\PersonSkillService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\PersonStatusService\PersonStatusService1.wsdl" />
     <None Include="Service References\PersonStatusService\PersonStatusService3.xsd">
       <SubType>Designer</SubType>
@@ -916,6 +932,14 @@
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <None Include="Service References\OpportunityService\OpportunityService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
+    <None Include="Service References\PersonSkillService\PersonSkillService.disco" />
+    <None Include="Service References\PersonSkillService\configuration91.svcinfo" />
+    <None Include="Service References\PersonSkillService\configuration.svcinfo" />
+    <None Include="Service References\PersonSkillService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <Content Include="SkillsEntry.aspx" />
     <Content Include="Third Party Tools\CKEditor.NET.dll" />
     <Content Include="Third Party Tools\FormsAuthenticationUserImpersonation.dll" />
     <Content Include="Third Party Tools\PdfGenerator\itextsharp.dll" />
@@ -1696,10 +1720,22 @@
     <Compile Include="SecuritySetting.aspx.designer.cs">
       <DependentUpon>SecuritySetting.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Service References\PersonSkillService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Service References\TimeEntryService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="SkillsEntry.aspx.cs">
+      <DependentUpon>SkillsEntry.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SkillsEntry.aspx.designer.cs">
+      <DependentUpon>SkillsEntry.aspx</DependentUpon>
     </Compile>
     <Compile Include="TimeEntrySetting.aspx.cs">
       <DependentUpon>TimeEntrySetting.aspx</DependentUpon>
@@ -3075,6 +3111,7 @@
     <WCFMetadataStorage Include="Service References\OverheadService\" />
     <WCFMetadataStorage Include="Service References\PersonRoleService\" />
     <WCFMetadataStorage Include="Service References\PersonService\" />
+    <WCFMetadataStorage Include="Service References\PersonSkillService\" />
     <WCFMetadataStorage Include="Service References\PersonStatusService\" />
     <WCFMetadataStorage Include="Service References\PracticeService\" />
     <WCFMetadataStorage Include="Service References\ProjectGroupService\" />
