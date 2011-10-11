@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[GetSkillsAll]
+﻿CREATE PROCEDURE [skills].[GetSkillsAll]
 AS
 	SELECT S.SkillId,
 			S.Description SkillName,
