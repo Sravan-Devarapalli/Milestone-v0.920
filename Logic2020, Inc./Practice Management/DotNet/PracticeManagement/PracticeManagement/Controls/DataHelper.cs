@@ -1634,13 +1634,13 @@ namespace PraticeManagement.Controls
         }
 
 
-        public static IEnumerable<Client> GetAllClientsSecure(Person person, bool inactives)
+        public static IEnumerable<Client> GetAllClientsSecure(Person person, bool inactives, bool applyNewRule = false)
         {
             using (var serviceClient = new ClientServiceClient())
             {
                 try
                 {
-                    Client[] clients = serviceClient.ClientListAllSecure(person, inactives);
+                    Client[] clients = serviceClient.ClientListAllSecureByNewRule(person, inactives, applyNewRule);
                     Array.Sort(clients, (c1, c2) => c1.Name.CompareTo(c2.Name));
                     return clients;
                 }
