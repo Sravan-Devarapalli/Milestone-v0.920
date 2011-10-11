@@ -138,6 +138,8 @@
     <Compile Include="Readers\ProjectExpenseReader.cs" />
     <Compile Include="RecruiterCommissionDAL.cs" />
     <Compile Include="SeniorityDAL.cs" />
+    <Compile Include="Skills\Constants.cs" />
+    <Compile Include="Skills\PersonSkillDAL.cs" />
     <Compile Include="TimeEntryDAL.cs" />
     <Compile Include="TimescaleDAL.cs" />
     <Compile Include="Utils.cs" />
