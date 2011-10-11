@@ -6,6 +6,10 @@ using DataTransferObjects;
 using PraticeManagement.ConfigurationService;
 using System.ServiceModel;
 using DataTransferObjects.TimeEntry;
+using DataTransferObjects.Skills;
+using Microsoft.WindowsAzure.ServiceRuntime;
+using System.Configuration;
+
 namespace PraticeManagement.Utils
 {
     public class SettingsHelper
@@ -14,6 +18,9 @@ namespace PraticeManagement.Utils
         const string CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY = "CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY";
         const string PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY = "PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY";
         const string TimeType_System = "Time_Type_System";
+        const string SkillCategory = "SkillCategory";
+        const string Skill = "Skill";
+        const string SkillLevel = "SkillLevel";
 
         public static Dictionary<string, string> GetResourceKeyValuePairs(SettingsType settingType)
         {
@@ -43,7 +50,7 @@ namespace PraticeManagement.Utils
                 mainDictionary[settingType] = GetResourceKeyValuePairs(settingType);
             }
 
-            if (mainDictionary[settingType].Any(kvp=>kvp.Key==key))
+            if (mainDictionary[settingType].Any(kvp => kvp.Key == key))
             {
                 return mainDictionary[settingType][key] as string;
             }
@@ -225,8 +232,47 @@ namespace PraticeManagement.Utils
                     HttpContext.Current.Cache[TimeType_System] = serviceClient.GetAllTimeTypes().Where(tt => tt.IsSystemTimeType).ToList();
                 }
             }
-            
+
             return HttpContext.Current.Cache[TimeType_System] as List<TimeTypeRecord>;
         }
+
+        public static List<Skill> GetSkillsByCategory(int skillCategoryId)
+        {
+            if (HttpContext.Current.Cache[Skill] == null)
+            {
+                using (var serviceClient = new PersonSkillService.PersonSkillServiceClient())
+                {
+                    HttpContext.Current.Cache[Skill] = serviceClient.SkillsAll().ToList();
+                }
+            }
+            var skills = HttpContext.Current.Cache[Skill] as List<Skill>;
+            return skills.FindAll(s => s.Category != null && s.Category.Id == skillCategoryId);
+        }
+
+        public static List<SkillCategory> GetSkillCategoriesByType(int skillTypeId)
+        {
+            if (HttpContext.Current.Cache[SkillCategory] == null)
+            {
+                using (var serviceClient = new PersonSkillService.PersonSkillServiceClient())
+                {
+                    HttpContext.Current.Cache[SkillCategory] = serviceClient.SkillCategoriesAll().ToList();
+                }
+            }
+            var skillCats = HttpContext.Current.Cache[SkillCategory] as List<SkillCategory>;
+            return skillCats.FindAll(s => s.SkillType != null && s.SkillType.Id == skillTypeId);
+        }
+
+        public static List<SkillLevel> GetSkillLevels()
+        {
+            if (HttpContext.Current.Cache[SkillLevel] == null)
+            {
+                using (var serviceClient = new PersonSkillService.PersonSkillServiceClient())
+                {
+                    HttpContext.Current.Cache[SkillLevel] = serviceClient.SkillLevelsAll().ToList();
+                }
+            }
+            return HttpContext.Current.Cache[SkillLevel] as List<SkillLevel>;
+        }
+
     }
 }
