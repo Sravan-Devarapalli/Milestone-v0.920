@@ -222,7 +222,7 @@ namespace PracticeManagementService
         /// </summary>
         /// <returns>Projects list</returns>
         [OperationContract]
-        Project[] GetTimeEntryProjectsByClientId(int? clientId, bool showActiveAndInternalProjectsOnly = false);
+        Project[] GetTimeEntryProjectsByClientId(int? clientId, int? personId, bool showActiveAndInternalProjectsOnly);
 
 		/// <summary>
 		/// Gets all milestones that have TE records assigned to them
