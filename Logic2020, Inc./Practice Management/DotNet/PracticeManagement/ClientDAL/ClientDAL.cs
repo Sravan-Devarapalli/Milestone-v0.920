@@ -44,6 +44,7 @@ namespace DataAccess
         private const string StartRangeParam = "@StartRange";
         private const string EndRangeParam = "@EndRange";
         private const string isDeletePreviousMarginInfoParam = "@isDeletePreviousMarginInfo";
+        private const string ApplyNewRuleParam = "@ApplyNewRule";
 
         #endregion
 
@@ -340,7 +341,7 @@ namespace DataAccess
         /// 	of
         /// 	<see cref = "Client" />
         /// 	s in the system</returns>
-        public static List<Client> ClientListAllSecure(Person person, bool inactives)
+        public static List<Client> ClientListAllSecure(Person person, bool inactives, bool applyNewRule = false)
         {
             var clientList = new List<Client>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -355,6 +356,11 @@ namespace DataAccess
 
                     if (person != null)
                         command.Parameters.AddWithValue(PersonIdParam, person.Id);
+                    else
+                        command.Parameters.AddWithValue(PersonIdParam, DBNull.Value);
+                    
+                    if (applyNewRule == true)
+                        command.Parameters.AddWithValue(ApplyNewRuleParam, 1);
 
                     connection.Open();
                     ReadClients(command, clientList, true, person);
