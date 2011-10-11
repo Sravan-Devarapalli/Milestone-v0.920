@@ -49,6 +49,7 @@
       <Setting name="DefaultRecruiterCommissionServiceClient" />
       <Setting name="DefaultCommissionServiceClient" />
       <Setting name="MembershipServiceClient" />
+      <Setting name="PersonSkillServiceClient" />
       <Setting name="RoleServiceClient" />
       <Setting name="AuthServiceClient" />
       <Setting name="EnableSSL" />
