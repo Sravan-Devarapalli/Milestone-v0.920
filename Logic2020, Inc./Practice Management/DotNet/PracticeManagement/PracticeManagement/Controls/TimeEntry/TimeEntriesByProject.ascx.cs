@@ -206,7 +206,13 @@ namespace PraticeManagement.Controls.TimeEntry
                 ddlProjects.Enabled = true;
 
                 int? clientId = Convert.ToInt32(ddlClients.SelectedItem.Value);
-                var projects = DataHelper.GetTimeEntryProjectsByClientId(clientId, chbActiveInternalProject.Checked);
+                //  If current user is administrator, don't apply restrictions
+                bool isUserAdministrator = Roles.IsUserInRole(DataHelper.CurrentPerson.Alias, DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+                //  adding SeniorLeadership role as per #2930.
+                bool isUserSeniorLeadership = Roles.IsUserInRole(DataHelper.CurrentPerson.Alias, DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);
+
+                int? personId = (isUserAdministrator || isUserSeniorLeadership) ? null : DataHelper.CurrentPerson.Id;
+                var projects = DataHelper.GetTimeEntryProjectsByClientId(clientId, personId, chbActiveInternalProject.Checked);
                 
                 ListItem[] items = projects.Select(
                                                      project => new ListItem(
