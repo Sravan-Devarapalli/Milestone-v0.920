@@ -870,6 +870,9 @@
     <None Include="Service References\TimeEntryService\TimeEntryService43.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService44.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\TimeEntryService\TimeEntryService5.wsdl" />
     <None Include="Service References\TimeEntryService\TimeEntryService8.xsd">
       <SubType>Designer</SubType>
