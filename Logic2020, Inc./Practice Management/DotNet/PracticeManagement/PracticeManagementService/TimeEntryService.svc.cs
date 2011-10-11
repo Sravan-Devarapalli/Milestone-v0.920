@@ -20,7 +20,17 @@ namespace PracticeManagementService
         /// <returns>Collection of new time types</returns>
         public IEnumerable<TimeTypeRecord> GetAllTimeTypes()
         {
-            return TimeEntryDAL.GetAllTimeTypes();
+            try
+            {
+                return TimeEntryDAL.GetAllTimeTypes();
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetAllTimeTypes", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -29,7 +39,17 @@ namespace PracticeManagementService
         /// <param name="timeType">Time type to remove</param>
         public void RemoveTimeType(TimeTypeRecord timeType)
         {
-            TimeEntryDAL.RemoveTimeType(timeType);
+            try
+            {
+                TimeEntryDAL.RemoveTimeType(timeType);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "RemoveTimeType", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -38,7 +58,17 @@ namespace PracticeManagementService
         /// <param name="timeType">Time type to update</param>
         public void UpdateTimeType(TimeTypeRecord timeType)
         {
-            TimeEntryDAL.UpdateTimeType(timeType);
+            try
+            {
+                TimeEntryDAL.UpdateTimeType(timeType);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "UpdateTimeType", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -48,7 +78,17 @@ namespace PracticeManagementService
         /// <returns>Id of added time type</returns>
         public int AddTimeType(TimeTypeRecord timeType)
         {
-            return TimeEntryDAL.AddTimeType(timeType);
+            try
+            {
+                return TimeEntryDAL.AddTimeType(timeType);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "AddTimeType", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         #endregion
@@ -57,12 +97,32 @@ namespace PracticeManagementService
 
         public void SetTimeZone(Timezone timezone)
         {
-            TimeEntryDAL.SetTimeZone(timezone);
+            try
+            {
+                TimeEntryDAL.SetTimeZone(timezone);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "SetTimeZone", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         public List<Timezone> TimeZonesAll()
         {
-            return TimeEntryDAL.TimeZonesAll();
+            try
+            {
+                return TimeEntryDAL.TimeZonesAll();
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "TimeZonesAll", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         #endregion
@@ -71,7 +131,17 @@ namespace PracticeManagementService
 
         public void RemoveTimeEntryById(int id)
         {
-            RemoveTimeEntry(new TimeEntryRecord { Id = id });
+            try
+            {
+                RemoveTimeEntry(new TimeEntryRecord { Id = id });
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "RemoveTimeEntryById", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -80,7 +150,17 @@ namespace PracticeManagementService
         /// <param name="timeEntry">Time entry to remove</param>
         public void RemoveTimeEntry(TimeEntryRecord timeEntry)
         {
-            TimeEntryDAL.RemoveTimeEntry(timeEntry);
+            try
+            {
+                TimeEntryDAL.RemoveTimeEntry(timeEntry);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "RemoveTimeEntry", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -90,7 +170,17 @@ namespace PracticeManagementService
         /// <param name="defaultMpId">default milestone id</param>
         public int AddTimeEntry(TimeEntryRecord timeEntry, int defaultMpId)
         {
-            return TimeEntryDAL.AddTimeEntry(timeEntry, defaultMpId);
+            try
+            {
+                return TimeEntryDAL.AddTimeEntry(timeEntry, defaultMpId);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "AddTimeEntry", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -99,7 +189,17 @@ namespace PracticeManagementService
         /// <param name="timeEntry">Time entry to add</param>
         public void UpdateTimeEntry(TimeEntryRecord timeEntry, int defaultMilestoneId)
         {
-            TimeEntryDAL.UpdateTimeEntry(timeEntry, defaultMilestoneId);
+            try
+            {
+                TimeEntryDAL.UpdateTimeEntry(timeEntry, defaultMilestoneId);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "UpdateTimeEntry", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -119,24 +219,34 @@ namespace PracticeManagementService
             bool isCorrect,
             int modifiedById)
         {
-            var te = new TimeEntryRecord
-                         {
-                             Id = id,
-                             MilestoneDate = DateTime.Parse(milestoneDate),
-                             EntryDate = DateTime.Parse(entryDate),
-                             ParentMilestonePersonEntry = new MilestonePersonEntry(milestonePersonId),
-                             TimeType = new TimeTypeRecord(timeTypeId),
-                             ActualHours = actualHours,
-                             ForecastedHours = forecastedHours,
-                             Note = note,
-                             IsReviewed = (ReviewStatus) Enum.Parse(typeof (ReviewStatus), isReviewed),
-                             IsChargeable = isChargeable,
-                             IsCorrect = isCorrect,
-                             ModifiedDate = DateTime.Now,
-                             ModifiedBy = new Person(modifiedById)
-                         };
+            try
+            {
+                var te = new TimeEntryRecord
+                             {
+                                 Id = id,
+                                 MilestoneDate = DateTime.Parse(milestoneDate),
+                                 EntryDate = DateTime.Parse(entryDate),
+                                 ParentMilestonePersonEntry = new MilestonePersonEntry(milestonePersonId),
+                                 TimeType = new TimeTypeRecord(timeTypeId),
+                                 ActualHours = actualHours,
+                                 ForecastedHours = forecastedHours,
+                                 Note = note,
+                                 IsReviewed = (ReviewStatus) Enum.Parse(typeof (ReviewStatus), isReviewed),
+                                 IsChargeable = isChargeable,
+                                 IsCorrect = isCorrect,
+                                 ModifiedDate = DateTime.Now,
+                                 ModifiedBy = new Person(modifiedById)
+                             };
 
-            UpdateTimeEntry(te, 0);
+                UpdateTimeEntry(te, 0);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ConstructAndUpdateTimeEntry", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -144,22 +254,62 @@ namespace PracticeManagementService
         /// </summary>
         public TimeEntryRecord[] GetTimeEntriesForPerson(Person person, DateTime startDate, DateTime endDate)
         {
-            return TimeEntryDAL.GetTimeEntriesForPerson(person, startDate, endDate);
+            try
+            {
+                return TimeEntryDAL.GetTimeEntriesForPerson(person, startDate, endDate);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntriesForPerson", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         public GroupedTimeEntries<Person> GetTimeEntriesProject(TimeEntryProjectReportContext reportContext)
         {
-            return TimeEntryDAL.GetTimeEntriesByProject(reportContext);
+            try
+            {
+                return TimeEntryDAL.GetTimeEntriesByProject(reportContext);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntriesProject", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         public GroupedTimeEntries<TimeEntryHours> GetTimeEntriesProjectCumulative(TimeEntryPersonReportContext reportContext)
         {
-            return TimeEntryDAL.GetTimeEntriesByProjectCumulative(reportContext);
+            try
+            {
+                return TimeEntryDAL.GetTimeEntriesByProjectCumulative(reportContext);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntriesProjectCumulative", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         public GroupedTimeEntries<Project> GetTimeEntriesPerson(TimeEntryPersonReportContext reportContext)
         {
-            return TimeEntryDAL.GetTimeEntriesByPerson(reportContext);
+            try
+            {
+                return TimeEntryDAL.GetTimeEntriesByPerson(reportContext);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntriesPerson", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -168,9 +318,19 @@ namespace PracticeManagementService
         public MilestonePersonEntry[] GetCurrentMilestones(
             Person person, DateTime startDate, DateTime endDate, int defaultMilestoneId)
         {
-            MilestonePersonEntry[] milestones = 
-                TimeEntryDAL.GetCurrentMilestones(person, startDate, endDate, defaultMilestoneId);
-            return milestones;
+            try
+            {
+                MilestonePersonEntry[] milestones = 
+                    TimeEntryDAL.GetCurrentMilestones(person, startDate, endDate, defaultMilestoneId);
+                return milestones;
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetCurrentMilestones", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -178,19 +338,49 @@ namespace PracticeManagementService
         /// </summary>
         public MilestonePersonEntry[] GetTimeEntryMilestones(Person person, DateTime startDate, DateTime endDate)
         {
-            return TimeEntryDAL.GetTimeEntryMilestones(person, startDate, endDate);
+            try
+            {
+                return TimeEntryDAL.GetTimeEntryMilestones(person, startDate, endDate);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntryMilestones", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         // ReSharper disable InconsistentNaming
         public TimeEntryRecord[] GetAllTimeEntries(TimeEntrySelectContext selectContext, int startRow, int maxRows)
         // ReSharper restore InconsistentNaming
         {
-            return TimeEntryDAL.GetAllTimeEntries(selectContext);
+            try
+            {
+                return TimeEntryDAL.GetAllTimeEntries(selectContext);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetAllTimeEntries", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         public int GetTimeEntriesCount(TimeEntrySelectContext selectContext)
         {
-            return TimeEntryDAL.GetTimeEntriesCount(selectContext);
+            try
+            {
+                return TimeEntryDAL.GetTimeEntriesCount(selectContext);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntriesCount", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
         /// <summary>
         /// Toggle IsCorrect property
@@ -198,7 +388,17 @@ namespace PracticeManagementService
         /// <param name="timeEntry">Time entry to add</param>
         public void ToggleIsCorrect(TimeEntryRecord timeEntry)
         {
-            TimeEntryDAL.ToggleIsCorrect(timeEntry);
+            try
+            {
+                TimeEntryDAL.ToggleIsCorrect(timeEntry);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ToggleIsCorrect", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -207,7 +407,17 @@ namespace PracticeManagementService
         /// <param name="timeEntry">Time entry to add</param>
         public void ToggleIsReviewed(TimeEntryRecord timeEntry)
         {
-            TimeEntryDAL.ToggleIsReviewed(timeEntry);
+            try
+            {
+                TimeEntryDAL.ToggleIsReviewed(timeEntry);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ToggleIsReviewed", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -216,17 +426,47 @@ namespace PracticeManagementService
         /// <param name="timeEntry">Time entry to add</param>
         public void ToggleIsChargeable(TimeEntryRecord timeEntry)
         {
-            TimeEntryDAL.ToggleIsChargeable(timeEntry);
+            try
+            {
+                TimeEntryDAL.ToggleIsChargeable(timeEntry);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ToggleIsChargeable", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         public TimeEntrySums GetTimeEntrySums(TimeEntrySelectContext selectContext)
         {
-            return TimeEntryDAL.GetTimeEntrySums(selectContext);
+            try
+            {
+                return TimeEntryDAL.GetTimeEntrySums(selectContext);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntrySums", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         public void RemoveTimeEntries(int milestonePersonId, int timeTypeId, DateTime startDate, DateTime endDate)
         {
-            TimeEntryDAL.RemoveTimeEntries(milestonePersonId, timeTypeId, startDate, endDate);
+            try
+            {
+                TimeEntryDAL.RemoveTimeEntries(milestonePersonId, timeTypeId, startDate, endDate);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "RemoveTimeEntries", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         #endregion
@@ -264,23 +504,41 @@ namespace PracticeManagementService
         /// <returns>Projects list</returns>
         public Project[] GetAllTimeEntryProjects()
         {
-            Project[] projects = TimeEntryDAL.GetAllTimeEntryProjects();
-            Array.Sort(projects, ProjectNameComp);
-            return projects;
+            try
+            {
+                Project[] projects = TimeEntryDAL.GetAllTimeEntryProjects();
+                Array.Sort(projects, ProjectNameComp);
+                return projects;
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetAllTimeEntryProjects", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         /// <summary>
         /// Gets all projects that have TE records assigned to  particular clientId
         /// </summary>
         /// <returns>Projects list</returns>
-        public Project[] GetTimeEntryProjectsByClientId(int? clientId, bool showActiveAndInternalProjectsOnly = false)
+        public Project[] GetTimeEntryProjectsByClientId(int? clientId, int? personId, bool showActiveAndInternalProjectsOnly)
         {
-            Project[] projects = TimeEntryDAL.GetTimeEntryProjectsByClientId(clientId, showActiveAndInternalProjectsOnly);
-            Array.Sort(projects, ProjectNameComp);
-            return projects;
+            try
+            {
+                Project[] projects = TimeEntryDAL.GetTimeEntryProjectsByClientId(clientId, personId, showActiveAndInternalProjectsOnly);
+                Array.Sort(projects, ProjectNameComp);
+                return projects;
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntryProjectsByClientId", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
-
-
 
         /// <summary>
         /// Gets all milestones that have TE records assigned to them
@@ -288,9 +546,19 @@ namespace PracticeManagementService
         /// <returns>Milestones list</returns>
         public Milestone[] GetAllTimeEntryMilestones()
         {
-            Milestone[] milestones = TimeEntryDAL.GetAllTimeEntryMilestones();
-            Array.Sort(milestones, MilestoneNameComp);
-            return milestones;
+            try
+            {
+                Milestone[] milestones = TimeEntryDAL.GetAllTimeEntryMilestones();
+                Array.Sort(milestones, MilestoneNameComp);
+                return milestones;
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetAllTimeEntryMilestones", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         /// <summary>
@@ -299,14 +567,34 @@ namespace PracticeManagementService
         /// <returns>List of persons</returns>
         public Person[] GetAllTimeEntryPersons(DateTime entryDateFrom, DateTime entryDateTo)
         {
-            Person[] persons = TimeEntryDAL.GetAllTimeEntryPersons(entryDateFrom, entryDateTo);
-            Array.Sort(persons, PersonNameComp);
-            return persons;
+            try
+            {
+                Person[] persons = TimeEntryDAL.GetAllTimeEntryPersons(entryDateFrom, entryDateTo);
+                Array.Sort(persons, PersonNameComp);
+                return persons;
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetAllTimeEntryPersons", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         public bool HasTimeEntriesForMilestone(int milestoneId, DateTime startDate, DateTime endDate)
         {
-            return TimeEntryDAL.HasTimeEntriesForMilestone(milestoneId, startDate, endDate);
+            try
+            {
+                return TimeEntryDAL.HasTimeEntriesForMilestone(milestoneId, startDate, endDate);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "HasTimeEntriesForMilestone", "TimeEntryService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
         #endregion
