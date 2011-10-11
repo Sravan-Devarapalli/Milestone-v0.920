@@ -563,6 +563,9 @@
     <None Include="Service References\ClientService\ClientService6.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\ClientService\ClientService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ConfigurationService\ConfigurationService1.wsdl" />
     <None Include="Service References\ConfigurationService\ConfigurationService10.xsd">
       <SubType>Designer</SubType>
@@ -893,8 +896,8 @@
     <None Include="Service References\RoleService\RoleService1.disco" />
     <None Include="Service References\CalendarService\CalendarService1.disco" />
     <Content Include="Service References\ClientService\ClientService.disco" />
-    <None Include="Service References\ClientService\ClientService1.disco" />
     <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
+    <None Include="Service References\ClientService\ClientService1.disco" />
     <Content Include="Service References\MembershipService\MembershipService.disco" />
     <None Include="Service References\TimeEntryService\configuration91.svcinfo" />
     <None Include="Service References\TimeEntryService\configuration.svcinfo" />
