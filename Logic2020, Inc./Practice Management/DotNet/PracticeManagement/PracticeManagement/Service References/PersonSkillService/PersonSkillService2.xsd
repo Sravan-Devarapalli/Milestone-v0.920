@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfSkillCategory">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="SkillCategory" nillable="true" type="tns:SkillCategory" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSkillCategory" nillable="true" type="tns:ArrayOfSkillCategory" />
+  <xs:complexType name="SkillCategory">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:LookupBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="SkillType" nillable="true" type="tns:SkillType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SkillCategory" nillable="true" type="tns:SkillCategory" />
+  <xs:complexType name="LookupBase">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DisplayOrder" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LookupBase" nillable="true" type="tns:LookupBase" />
+  <xs:complexType name="SkillType">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:LookupBase">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SkillType" nillable="true" type="tns:SkillType" />
+  <xs:complexType name="ArrayOfSkill">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Skill" nillable="true" type="tns:Skill" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSkill" nillable="true" type="tns:ArrayOfSkill" />
+  <xs:complexType name="Skill">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:LookupBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Category" nillable="true" type="tns:SkillCategory" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Skill" nillable="true" type="tns:Skill" />
+  <xs:complexType name="ArrayOfSkillLevel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="SkillLevel" nillable="true" type="tns:SkillLevel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSkillLevel" nillable="true" type="tns:ArrayOfSkillLevel" />
+  <xs:complexType name="SkillLevel">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:LookupBase">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SkillLevel" nillable="true" type="tns:SkillLevel" />
+</xs:schema>
