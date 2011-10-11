@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://server2.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
+  <xs:element name="SkillCategoriesAll">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SkillCategoriesAllResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="SkillCategoriesAllResult" nillable="true" type="q1:ArrayOfSkillCategory" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SkillsAll">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SkillsAllResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="SkillsAllResult" nillable="true" type="q2:ArrayOfSkill" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SkillLevelsAll">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SkillLevelsAllResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="SkillLevelsAllResult" nillable="true" type="q3:ArrayOfSkillLevel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
