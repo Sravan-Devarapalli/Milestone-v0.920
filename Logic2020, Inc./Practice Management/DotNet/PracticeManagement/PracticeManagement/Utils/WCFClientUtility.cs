@@ -297,6 +297,20 @@ namespace PraticeManagement.ConfigurationService
     }
 }
 
+namespace PraticeManagement.PersonSkillService
+{
+    public partial class PersonSkillServiceClient
+    {
+        public PersonSkillServiceClient()
+        {
+            if (WCFClientUtility.IsWebAzureRole())
+            {
+                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("PersonSkillServiceClient");
+            }
+        }
+    }
+}
+
 namespace PraticeManagement.DefaultRecruiterCommissionService
 {
     public partial class DefaultRecruiterCommissionServiceClient
