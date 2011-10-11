@@ -36,6 +36,9 @@ namespace PraticeManagement.ClientService {
         [System.ServiceModel.OperationContractAttribute(Action="http://www.logic2020.com/IClientService/ClientListAllSecure", ReplyAction="http://www.logic2020.com/IClientService/ClientListAllSecureResponse")]
         DataTransferObjects.Client[] ClientListAllSecure(DataTransferObjects.Person person, bool inactives);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://www.logic2020.com/IClientService/ClientListAllSecureByNewRule", ReplyAction="http://www.logic2020.com/IClientService/ClientListAllSecureByNewRuleResponse")]
+        DataTransferObjects.Client[] ClientListAllSecureByNewRule(DataTransferObjects.Person person, bool inactives, bool applyNewRule);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://www.logic2020.com/IClientService/ClientListAllWithInactive", ReplyAction="http://www.logic2020.com/IClientService/ClientListAllWithInactiveResponse")]
         DataTransferObjects.Client[] ClientListAllWithInactive();
         
@@ -56,7 +59,7 @@ namespace PraticeManagement.ClientService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ClientServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ClientService.IClientService>, PraticeManagement.ClientService.IClientService {
-      
+        
         public ClientServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -99,6 +102,10 @@ namespace PraticeManagement.ClientService {
         
         public DataTransferObjects.Client[] ClientListAllSecure(DataTransferObjects.Person person, bool inactives) {
             return base.Channel.ClientListAllSecure(person, inactives);
+        }
+        
+        public DataTransferObjects.Client[] ClientListAllSecureByNewRule(DataTransferObjects.Person person, bool inactives, bool applyNewRule) {
+            return base.Channel.ClientListAllSecureByNewRule(person, inactives, applyNewRule);
         }
         
         public DataTransferObjects.Client[] ClientListAllWithInactive() {
