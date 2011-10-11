@@ -22,6 +22,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -111,6 +112,7 @@
     <Content Include="MilestoneService.svc" />
     <Content Include="OverheadService.svc" />
     <Content Include="PersonService.svc" />
+    <Content Include="PersonSkillService.svc" />
     <Content Include="PracticeService.svc" />
     <Content Include="ProjectService.svc" />
     <Content Include="ProjectStatusService.svc" />
@@ -144,6 +146,7 @@
       <DependentUpon>ConfigurationService.svc</DependentUpon>
     </Compile>
     <Compile Include="CustomMembershipProvider.cs" />
+    <Compile Include="IPersonSkillService.cs" />
     <Compile Include="Mail\FileDeliveryProvider.cs" />
     <Compile Include="IConfigurationService.cs" />
     <Compile Include="IEMailDeliveryProvider.cs" />
@@ -151,6 +154,9 @@
     <Compile Include="ITimeEntryService.cs" />
     <Compile Include="Mail\EmailMessageDeliveryProvider.cs" />
     <Compile Include="PasswordGeneratorUtility.cs" />
+    <Compile Include="PersonSkillService.svc.cs">
+      <DependentUpon>PersonSkillService.svc</DependentUpon>
+    </Compile>
     <Compile Include="ProjectGroupService.svc.cs">
       <DependentUpon>ProjectGroupService.svc</DependentUpon>
     </Compile>
