@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[GetSkillLevelsAll]
+﻿CREATE PROCEDURE [skills].[GetSkillLevelsAll]
 	 
 AS
 	SELECT S.[Description] SkillLevelName,
