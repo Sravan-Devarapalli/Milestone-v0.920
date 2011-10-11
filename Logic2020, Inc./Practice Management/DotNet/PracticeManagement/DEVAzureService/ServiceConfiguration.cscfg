@@ -29,6 +29,7 @@
       <Setting name="RoleServiceClient" value="http://65.52.28.41:8080/RoleService.svc" />
       <Setting name="AuthServiceClient" value="http://65.52.28.41:8080/AuthService.svc" />
       <Setting name="AttachmentServiceURL" value="http://65.52.28.41:8080/AttachmentService.asmx" />
+      <Setting name="PersonSkillServiceClient" value="http://65.52.28.41:8080/PersonSkillService.svc" />
       <Setting name="HasHttpsEndPoint" value="false" />
       <Setting name="EnableSSL" value="true" />
       <Setting name="senioritySeparationRangeValue" value="19" />
@@ -37,3 +38,4 @@
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>
+
