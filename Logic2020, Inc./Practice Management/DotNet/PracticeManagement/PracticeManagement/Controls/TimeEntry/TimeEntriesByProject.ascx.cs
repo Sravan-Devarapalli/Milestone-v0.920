@@ -40,7 +40,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 bool isUserSeniorLeadership = Roles.IsUserInRole(DataHelper.CurrentPerson.Alias, DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);
 
                 Person person = (isUserAdministrator || isUserSeniorLeadership) ? null : DataHelper.CurrentPerson;
-                var clients = DataHelper.GetAllClientsSecure(person, true);
+                var clients = DataHelper.GetAllClientsSecure(person, true, true);
                 DataHelper.FillListDefault(ddlClients, "-- Select a Client -- ", clients as object[], false);
             }
         }
