@@ -109,9 +109,40 @@ namespace PracticeManagementService
         /// <returns>A <see cref="List{T}"/> of <see cref="Client"/>s in the system</returns>
         public List<Client> ClientListAllSecure(Person person, bool inactives)
         {
-            return ClientDAL.ClientListAllSecure(person, inactives);
+            try
+            {
+                return ClientDAL.ClientListAllSecure(person, inactives);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ClientListAllSecure", "ClientService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
-
+        
+        /// <summary>
+        /// List all active and inactive clients in the system
+        /// </summary>
+        /// <param name="person">Person to restrict results to</param>
+        /// <param name="inactives">Include inactive items</param>
+        /// <param name="applyNewRule">Permissions as per the New rules.</param>
+        /// <returns>A <see cref="List{T}"/> of <see cref="Client"/>s in the system</returns>
+        public List<Client> ClientListAllSecureByNewRule(Person person, bool inactives, bool applyNewRule)
+        {
+            try
+            {
+                return ClientDAL.ClientListAllSecure(person, inactives, applyNewRule);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ClientListAllSecureByNewRule", "ClientService.svc", string.Empty,
+                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+        }
 
         /// <summary>
         /// Retrives the list clients available for the specific project.
