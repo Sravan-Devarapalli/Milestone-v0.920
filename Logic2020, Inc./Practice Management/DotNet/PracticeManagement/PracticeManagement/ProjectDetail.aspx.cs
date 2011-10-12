@@ -129,6 +129,12 @@ namespace PraticeManagement
 
         #region Methods
 
+        protected void cvProjectManager_OnServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            args.IsValid = cblProjectManagers.SelectedValues != null ? cblProjectManagers.SelectedValues.Count > 0 : false;
+        }
+
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -223,18 +229,18 @@ namespace PraticeManagement
 
             chbReceivesSalesCommission.Enabled = userIsAdministrator;
             ddlSalesperson.Enabled = (userIsAdministrator || userIsDirector) && !string.IsNullOrEmpty(ddlClientName.SelectedValue);
-            ddlProjectManager.Enabled = ddlDirector.Enabled = (userIsAdministrator || userIsDirector || userIsSeniorLeadership || userIsSalesPerson) && !string.IsNullOrEmpty(ddlClientName.SelectedValue);
-            ddlProjectManager.Enabled = (userIsAdministrator || userIsDirector || userIsSeniorLeadership || userIsSalesPerson);
+            cblProjectManagers.Enabled = ddlDirector.Enabled = (userIsAdministrator || userIsDirector || userIsSeniorLeadership || userIsSalesPerson) && !string.IsNullOrEmpty(ddlClientName.SelectedValue);
+            cblProjectManagers.Enabled = (userIsAdministrator || userIsDirector || userIsSeniorLeadership || userIsSalesPerson);
 
-            if (userIsPracticeManager && !ddlProjectManager.Enabled && !ProjectId.HasValue)
+            if (userIsPracticeManager && !cblProjectManagers.Enabled && !ProjectId.HasValue)
             {
                 try
                 {
-                    ddlProjectManager.SelectedValue = DataHelper.CurrentPerson.Id.ToString();
+                    cblProjectManagers.SelectedValue = DataHelper.CurrentPerson.Id.ToString();
                 }
                 catch
                 {
-                    ddlProjectManager.SelectedValue = string.Empty;
+                    cblProjectManagers.SelectedValue = string.Empty;
                 }
             }
 
@@ -819,7 +825,7 @@ namespace PraticeManagement
             DataHelper.FillSalespersonListOnlyActive(ddlSalesperson, "-- Select Sales person --");
             DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty);
             DataHelper.FillDirectorsList(ddlDirector, "-- Select Client Director --");
-            DataHelper.FillOwnersList(ddlProjectManager, "-- Select Owner --");
+            DataHelper.FillProjectManagersList(cblProjectManagers, "All Project Managers");
 
             int? id = ProjectId;
             if (id.HasValue)
@@ -979,22 +985,29 @@ namespace PraticeManagement
 
         private void PopulateProjectManagerDropDown(Project project)
         {
-            if (project.ProjectManager.Id != null)
+            if (project.ProjectManagers != null && project.ProjectManagers.Count > 0)
             {
-                var managerId = project.ProjectManager.Id.Value.ToString();
-                ListItem selectedManager = ddlProjectManager.Items.FindByValue(managerId);
-                if (selectedManager == null)
+                var selectedStr = string.Empty;
+
+                foreach (var projManager in project.ProjectManagers)
                 {
-                    selectedManager = new ListItem(project.ProjectManager.PersonLastFirstName, managerId);
-                    ddlProjectManager.Items.Add(selectedManager);
-                    ddlProjectManager.SortByText();
+                    var managerId = projManager.Id.Value.ToString();
+                    ListItem selectedManager = cblProjectManagers.Items.FindByValue(managerId);
+                    if (selectedManager == null)
+                    {
+                        selectedManager = new ListItem(projManager.PersonLastFirstName, managerId);
+                        cblProjectManagers.Items.Add(selectedManager);
+                    }
+
+                    selectedStr += selectedManager.Value + ",";
                 }
 
-                ddlProjectManager.SelectedValue = selectedManager.Value;
+                cblProjectManagers.SelectedItems = selectedStr;
+
             }
             else
             {
-                ddlProjectManager.SelectedValue = string.Empty;
+                cblProjectManagers.SelectedItems = string.Empty;
             }
         }
 
@@ -1118,7 +1131,7 @@ namespace PraticeManagement
             project.Client = new Client { Id = int.Parse(ddlClientName.SelectedValue) };
             project.Practice = new Practice { Id = int.Parse(ddlPractice.SelectedValue) };
             project.Status = new ProjectStatus { Id = int.Parse(ddlProjectStatus.SelectedValue) };
-            project.ProjectManager = new Person { Id = int.Parse(ddlProjectManager.SelectedValue) };
+            project.ProjectManagerIdsList = cblProjectManagers.SelectedItems;
             project.IsChargeable = chbIsChargeable.Checked;
             PopulateProjectGroup(project);
             PopulateSalesCommission(project);
