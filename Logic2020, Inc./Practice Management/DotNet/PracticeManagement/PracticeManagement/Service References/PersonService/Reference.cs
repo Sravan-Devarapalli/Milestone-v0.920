@@ -218,7 +218,7 @@ namespace PraticeManagement.PersonService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonListProjectOwner", ReplyAction="http://tempuri.org/IPersonService/PersonListProjectOwnerResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        DataTransferObjects.Person[] PersonListProjectOwner(System.Nullable<System.DateTime> endDate, bool includeInactive, DataTransferObjects.Person person);
+        DataTransferObjects.Person[] PersonListProjectOwner(bool includeInactive, DataTransferObjects.Person person);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonListPracticeManager", ReplyAction="http://tempuri.org/IPersonService/PersonListPracticeManagerResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
@@ -495,8 +495,8 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetPracticeManagerList(projectId, endDate, includeInactive);
         }
         
-        public DataTransferObjects.Person[] PersonListProjectOwner(System.Nullable<System.DateTime> endDate, bool includeInactive, DataTransferObjects.Person person) {
-            return base.Channel.PersonListProjectOwner(endDate, includeInactive, person);
+        public DataTransferObjects.Person[] PersonListProjectOwner(bool includeInactive, DataTransferObjects.Person person) {
+            return base.Channel.PersonListProjectOwner(includeInactive, person);
         }
         
         public DataTransferObjects.Person[] PersonListPracticeManager(DataTransferObjects.Person person, System.Nullable<int> projectId, System.Nullable<System.DateTime> endDate, bool includeInactive) {
