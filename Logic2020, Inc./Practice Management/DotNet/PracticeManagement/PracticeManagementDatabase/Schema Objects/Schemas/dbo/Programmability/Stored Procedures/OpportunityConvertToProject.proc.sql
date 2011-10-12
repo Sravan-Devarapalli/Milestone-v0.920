@@ -20,7 +20,7 @@ AS
 	DECLARE @OpportunityStatusId INT
 	DECLARE @BuyerName NVARCHAR(100)
 	DECLARE @IsChargeable BIT
-	DECLARE @ProjectManagerId INT
+	DECLARE @ProjectManagerId NVARCHAR(255)
 	
 	SELECT TOP 1
 		   @ClientId = o.ClientId,
@@ -35,7 +35,7 @@ AS
 	       @BuyerName = o.BuyerName,
 	       @GroupId = pg.GroupId,
 	       @IsChargeable = 1,
-	       @ProjectManagerId = ISNULL(o.OwnerId, pr.PracticeManagerId)
+	        @ProjectManagerId = CONVERT(NVARCHAR(255),ISNULL(o.OwnerId, pr.PracticeManagerId))
 	  FROM dbo.v_Opportunity AS o
 	  inner join dbo.ProjectGroup as pg on pg.ClientId = o.ClientId
 	  inner join dbo.Practice as pr on pr.PracticeId = o.PracticeId
@@ -58,7 +58,7 @@ AS
 		@UserLogin = @UserLogin,
 		@GroupId = @GroupId,
 		@IsChargeable = @IsChargeable,
-		@ProjectManagerId = @ProjectManagerId,
+		@ProjectManagerIdsList = @ProjectManagerId,
 	    @ProjectId = @ProjectId OUTPUT,
 		@OpportunityId = @OpportunityId
 
