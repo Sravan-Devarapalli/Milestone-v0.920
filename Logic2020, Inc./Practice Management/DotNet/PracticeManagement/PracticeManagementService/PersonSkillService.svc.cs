@@ -7,7 +7,7 @@ using System.Text;
 using DataTransferObjects.Skills;
 using DataAccess.Skills;
 using System.ServiceModel.Activation;
-
+using DataTransferObjects;
 namespace PracticeManagementService
 {
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
@@ -26,6 +26,19 @@ namespace PracticeManagementService
         public List<SkillLevel> SkillLevelsAll()
         {
             return PersonSkillDAL.GetSkillLevelsAll();
+        }
+
+        public Person GetPersonWithSkills(int personId)
+        {
+            var person = new Person()
+            {
+                Id = personId
+            };
+
+            person.Skills = PersonSkillDAL.GetPersonSkillsByPersonId(personId);
+            person.Industries = PersonSkillDAL.GetPersonIndustriesByPersonId(personId);
+
+            return person;
         }
     }
 }
