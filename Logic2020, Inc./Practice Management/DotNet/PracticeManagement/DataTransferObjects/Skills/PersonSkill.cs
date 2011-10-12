@@ -41,7 +41,7 @@ namespace DataTransferObjects.Skills
         }
 
         [DataMember]
-        public DateTime LastUsed
+        public int LastUsed
         {
             get;
             set;
