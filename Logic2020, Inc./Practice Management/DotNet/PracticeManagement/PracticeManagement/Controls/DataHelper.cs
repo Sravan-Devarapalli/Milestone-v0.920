@@ -1002,7 +1002,7 @@ namespace PraticeManagement.Controls
             DateTime? endDate,
             bool includeInactive)
         {
-            FillProjectOwnerList(control, firstItemText, endDate, includeInactive, null);
+            FillProjectOwnerList(control, firstItemText, includeInactive, null);
         }
 
         /// <summary>
@@ -1016,7 +1016,6 @@ namespace PraticeManagement.Controls
         public static void FillProjectOwnerList(
             ListControl control,
             string firstItemText,
-            DateTime? endDate,
             bool includeInactive,
             Person person)
         {
@@ -1024,7 +1023,7 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
-                    var persons = serviceClient.PersonListProjectOwner(endDate, includeInactive, person);
+                    var persons = serviceClient.PersonListProjectOwner(includeInactive, person);
 
                     FillPersonList(control, firstItemText, persons, String.Empty);
                 }
@@ -1056,6 +1055,25 @@ namespace PraticeManagement.Controls
                     throw;
                 }
             }
+        }
+
+        public static void FillProjectManagersList(ListControl control, string firstItemText)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    Person[] persons = serviceClient.OwnerListAllShort((int)DataTransferObjects.PersonStatusType.Active);
+
+                    FillListDefault(control, firstItemText, persons, false, "Id", "PersonLastFirstName");
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+
         }
 
         /// <summary>
