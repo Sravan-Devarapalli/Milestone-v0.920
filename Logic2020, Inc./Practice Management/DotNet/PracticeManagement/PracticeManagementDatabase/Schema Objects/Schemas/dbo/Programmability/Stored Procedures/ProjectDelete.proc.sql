@@ -100,6 +100,13 @@ BEGIN
 				EXEC dbo.SessionLogUnprepare
 			END
 			
+			IF EXISTS (SELECT ProjectId FROM ProjectManagers WHERE ProjectId = @ProjectID)
+			BEGIN
+				DELETE 
+				FROM	ProjectManagers
+				WHERE ProjectId = @ProjectID
+			END
+
 			IF EXISTS (SELECT ProjectId FROM Project WHERE ProjectId = @ProjectID)
 			BEGIN
 				DELETE Project
