@@ -184,22 +184,31 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.DropDownList ddlDirector;
         
         /// <summary>
-        /// ddlProjectManager control.
+        /// cblProjectManagers control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlProjectManager;
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblProjectManagers;
         
         /// <summary>
-        /// reqProjectManager control.
+        /// sdeProjectManagers control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqProjectManager;
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeProjectManagers;
+        
+        /// <summary>
+        /// cvProjectManager control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvProjectManager;
         
         /// <summary>
         /// lblProjectNumber control.
