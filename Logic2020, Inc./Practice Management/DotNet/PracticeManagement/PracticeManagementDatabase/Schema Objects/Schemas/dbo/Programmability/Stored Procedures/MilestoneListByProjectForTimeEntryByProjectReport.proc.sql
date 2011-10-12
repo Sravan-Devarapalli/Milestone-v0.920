@@ -71,7 +71,7 @@ BEGIN
 		SELECT  
 	       m.MilestoneId,
 	       m.Description  
-	 FROM dbo.v_Milestone AS m
+	 FROM dbo.Milestone AS m
 	 WHERE m.ProjectId = @ProjectId
 	 ORDER BY m.StartDate, m.ProjectedDeliveryDate
 	END
