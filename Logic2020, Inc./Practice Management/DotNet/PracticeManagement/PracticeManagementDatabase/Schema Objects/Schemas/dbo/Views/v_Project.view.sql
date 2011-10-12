@@ -29,9 +29,7 @@ AS
 		   p.OpportunityId,
 		   p.GroupId,
 		   p.IsChargeable AS 'ProjectIsChargeable',
-		   m.PersonId AS 'ProjectManagerId',
-		   m.FirstName AS 'ProjectManagerFirstName',
-		   m.LastName AS 'ProjectManagerLastName',
+		   dbo.GetProjectManagerList(p.ProjectId) AS ProjectManagersIdFirstNameLastName,
 		   p.DirectorId,
 		   d.LastName as 'DirectorLastName',
 		   d.FirstName as 'DirectorFirstName'
@@ -39,7 +37,6 @@ AS
 		   INNER JOIN dbo.Practice AS r ON p.PracticeId = r.PracticeId
 		   INNER JOIN dbo.Client AS c ON p.ClientId = c.ClientId
 		   INNER JOIN dbo.ProjectStatus AS s ON p.ProjectStatusId = s.ProjectStatusId
-		   INNER JOIN dbo.Person AS m ON p.ProjectManagerId = m.PersonId
 		   LEFT JOIN Person as d on d.PersonId = p.DirectorId
 
 
