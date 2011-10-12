@@ -361,7 +361,7 @@
                                         Salesperson
                                     </td>
                                     <td>
-                                        Project Owner
+                                        Project Manager
                                     </td>
                                 </tr>
                                 <tr>
