@@ -11,11 +11,10 @@ namespace PraticeManagement.Objects
     {
         #region Constants
 
-        private const string ProjectOwnerFormat = "{0}, {1}";
         private const string NotEndDate = "No End Date Specified.";
         private const string DetailsLabelFormat = "{0} - {1}";
         private const string AppendPersonFormat = "{0} {2}, {1}";
-        private const string ToolTipView = " {1}{0}{2}{0}<b>Start:</b>{3:d}{0}<b>End:</b>{4:d}{0}<b>Owner:</b>{5}{0}<b>Resources:</b>{6}";
+        private const string ToolTipView = " {1}{0}{2}{0}<b>Start:</b>{3:d}{0}<b>End:</b>{4:d}{0}<b>Project Manager(s):</b>{5}{0}<b>Resources:</b>{6}";
 
         #endregion
 
@@ -161,9 +160,21 @@ namespace PraticeManagement.Objects
                 HttpUtility.HtmlEncode(project.Name),
                 project.StartDate.HasValue ? project.StartDate.Value.ToString("MM/dd/yyyy") : string.Empty,
                 project.EndDate.HasValue ? project.EndDate.Value.ToString("MM/dd/yyyy") : string.Empty,
-                HttpUtility.HtmlEncode(string.Format(ProjectOwnerFormat, project.ProjectManager.LastName, project.ProjectManager.FirstName)),
+                GetProjectManagers(project.ProjectManagers),
                 persons
                 );
+        }
+
+
+        private static string GetProjectManagers(List<Person> list)
+        {
+            string names = string.Empty;
+            foreach (var person in list)
+            {
+                names +=  "<br />" + person.Name ;
+            }
+
+            return names;
         }
 
         #endregion
@@ -171,3 +182,4 @@ namespace PraticeManagement.Objects
 
     }
 }
+
