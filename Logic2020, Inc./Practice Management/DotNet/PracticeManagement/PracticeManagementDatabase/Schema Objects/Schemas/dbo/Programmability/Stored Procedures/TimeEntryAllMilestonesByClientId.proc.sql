@@ -17,11 +17,12 @@ BEGIN
                 INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId
                 INNER JOIN dbo.Milestone AS m ON m.MilestoneId = mp.MilestoneId
                 INNER JOIN dbo.Project AS proj ON proj.ProjectId = m.ProjectId
+				INNER JOIN dbo.ProjectManagers AS projManagers ON proj.ProjectId = projManagers.ProjectId
 				LEFT JOIN dbo.Commission AS C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1 --1 is SalesCommission
         WHERE   (proj.ClientId =  @ClientId  OR @ClientId IS NULL)
 				AND (
 						@PersonId IS NULL
-						OR proj.ProjectManagerId = @PersonId
+						OR projManagers.ProjectManagerId = @PersonId
 						OR proj.DirectorId = @PersonId
 						OR C.PersonId = @PersonId
 					)
@@ -34,12 +35,13 @@ BEGIN
 				P.ProjectNumber,
 				P.ClientId
         FROM dbo.Project P
+		INNER JOIN dbo.ProjectManagers AS projManagers ON P.ProjectId = projManagers.ProjectId
         JOIN Milestone M ON M.ProjectId = P.ProjectId
 		LEFT JOIN dbo.Commission AS C ON C.ProjectId = P.ProjectId AND C.CommissionType = 1 --1 is SalesCommission
         WHERE (@ClientId IS NULL OR P.ClientId = @ClientId)
 				AND (
 						@PersonId IS NULL
-						OR P.ProjectManagerId = @PersonId
+						OR projManagers.ProjectManagerId = @PersonId
 						OR P.DirectorId = @PersonId
 						OR C.PersonId = @PersonId
 					)
