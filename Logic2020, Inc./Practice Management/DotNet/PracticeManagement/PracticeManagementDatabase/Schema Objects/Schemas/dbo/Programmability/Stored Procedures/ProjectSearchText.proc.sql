@@ -65,8 +65,9 @@ AS
 	INSERT INTO @OwnerProjectClientList (ClientId) 
 	SELECT proj.ClientId 
 	FROM dbo.Project AS proj
+	INNER JOIN ProjectManagers AS projManagers ON projManagers.ProjectId = proj.ProjectId
 	LEFT JOIN dbo.Commission C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1
-	WHERE proj.ProjectManagerId = @PersonId OR C.PersonId = @PersonId -- Adding Salesperson - Project clients into the list.
+	WHERE projManagers.ProjectManagerId = @PersonId OR C.PersonId = @PersonId -- Adding Salesperson - Project clients into the list.
 
 	INSERT INTO @OwnerProjectGroupList (GroupId) 
 	SELECT GroupId FROM  dbo.ProjectGroup
@@ -90,6 +91,7 @@ AS
 		   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
 					ELSE 0 END AS HasAttachments
 	  FROM dbo.v_Milestone AS m
+	       INNER JOIN ProjectManagers AS projManagers ON projManagers.ProjectId = m.ProjectId
 	       INNER JOIN dbo.Commission AS c ON m.ProjectId = c.ProjectId 
 	       INNER JOIN dbo.ProjectStatus AS s ON m.ProjectStatusId = s.ProjectStatusId
 	  OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = m.ProjectId) A
@@ -102,7 +104,7 @@ AS
 	       )
 		   AND (@PersonId is NULL OR m.ClientId IN (select * from @ClientsList) OR  m.ClientId IN (SELECT opc.ClientId FROM @OwnerProjectClientList AS opc))
 		   AND (@PersonId is NULL OR m.GroupId IN (select * from @ProjectGroupsList) OR  m.GroupId IN (SELECT opG.GroupId FROM @OwnerProjectGroupList AS opG))
-		   AND (@PersonId is NULL OR M.ProjectManagerId = @PersonId OR c.PersonId = @PersonId OR m.ProjectManagerId in (select * from @ProjectOwnerList))   
+		   AND (@PersonId is NULL OR projManagers.ProjectManagerId = @PersonId OR c.PersonId = @PersonId OR projManagers.ProjectManagerId in (select * from @ProjectOwnerList))   
 	UNION ALL
 	SELECT p.ClientId,
 	       p.ProjectId,
@@ -119,6 +121,7 @@ AS
 		   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
 					ELSE 0 END AS HasAttachments
 	  FROM dbo.v_Project AS p
+	  INNER JOIN ProjectManagers AS projManagers ON projManagers.ProjectId = p.ProjectId
 	    INNER JOIN dbo.Commission AS c ON  p.ProjectId = c.ProjectId 
 	  OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = p.ProjectId) A
 	 WHERE NOT EXISTS (SELECT 1 FROM dbo.Milestone AS m WHERE m.ProjectId = p.ProjectId)
@@ -131,7 +134,7 @@ AS
 	   AND (@PersonId is NULL OR p.ClientId in (SELECT * FROM @ClientsList) OR  p.ClientId IN (SELECT opc.ClientId FROM @OwnerProjectClientList AS opc))
 	   AND (@PersonId is NULL OR p.GroupId in (SELECT * FROM @ProjectGroupsList) OR  P.GroupId IN (SELECT opG.GroupId FROM @OwnerProjectGroupList AS opG))
 	   AND (@PersonId is NULL OR p.PracticeId in (SELECT * FROM @PracticesList))	
-	   AND (@PersonId is NULL OR p.ProjectManagerId = @PersonId  OR c.PersonId = @PersonId OR p.ProjectManagerId in (SELECT * FROM @ProjectOwnerList))   
+	   AND (@PersonId is NULL OR projManagers.ProjectManagerId = @PersonId  OR c.PersonId = @PersonId OR projManagers.ProjectManagerId in (SELECT * FROM @ProjectOwnerList))   
 	)
 	SELECT DISTINCT *
 	FROM FoundProjects
