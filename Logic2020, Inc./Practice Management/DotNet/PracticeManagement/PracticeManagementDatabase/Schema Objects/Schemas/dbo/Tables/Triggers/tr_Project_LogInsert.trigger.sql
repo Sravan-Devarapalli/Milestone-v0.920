@@ -31,8 +31,6 @@ BEGIN
 				,i.BuyerName AS 'BuyerName'
 				,i.GroupId
 				,PG.Name AS 'ProjectGroup'
-				,i.ProjectManagerId
-				,PM.LastName + ', ' + PM.FirstName AS 'Owner'
 				,i.DirectorId
 				,D.LastName + ', ' + D.FirstName AS 'ProjectDirector'
 				,CASE WHEN i.IsChargeable = 1 THEN 'Yes'
@@ -42,7 +40,6 @@ BEGIN
 		JOIN Practice AS prac ON prac.PracticeId = i.PracticeId
 		JOIN ProjectStatus AS ps ON ps.ProjectStatusId = i.ProjectStatusId
 		JOIN ProjectGroup AS PG ON PG.GroupId = i.GroupId
-		JOIN Person AS PM ON PM.PersonId = i.ProjectManagerId
 		JOIN Person AS D ON D.PersonId = i.DirectorId
 	)
 	
