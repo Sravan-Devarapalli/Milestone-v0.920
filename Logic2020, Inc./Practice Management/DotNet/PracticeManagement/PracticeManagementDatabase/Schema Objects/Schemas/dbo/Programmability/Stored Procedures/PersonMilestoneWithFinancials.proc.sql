@@ -5,10 +5,11 @@
 AS
 BEGIN
 
-	DECLARE @DefaultProjectId INT
+	DECLARE @DefaultProjectId INT,
+			@PersonIdLocal INT
 	SELECT @DefaultProjectId = ProjectId
 	FROM dbo.DefaultMilestoneSetting
-
+	SELECT @PersonIdLocal = @PersonId
 	SELECT  p.ProjectId,
 			p.Name AS 'ProjectName',
 			p.ProjectStatusId,
@@ -33,7 +34,7 @@ BEGIN
 			OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = p.ProjectId) A
 			INNER JOIN v_FinancialsForMilestones AS f ON m.MilestoneId = f.MilestoneId
 														 AND mp.PersonId = f.PersonId
-	WHERE   f.PersonId = @PersonId AND P.ProjectId <> @DefaultProjectId
+	WHERE   f.PersonId = @PersonIdLocal AND P.ProjectId <> @DefaultProjectId
 	ORDER BY mpe.StartDate
 END
 
