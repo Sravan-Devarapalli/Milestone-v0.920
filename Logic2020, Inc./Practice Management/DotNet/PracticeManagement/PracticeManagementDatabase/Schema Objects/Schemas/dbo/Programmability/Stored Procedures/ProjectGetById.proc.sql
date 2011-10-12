@@ -1,17 +1,4 @@
-﻿-- =============================================
--- Author:		Anatoliy Lokshin
--- Create date: 5-21-2008
--- Updated by:	Anton Kramarenko
--- Update date: 02-20-2009
--- Updated by:	Anton Kolesnikov
--- Update date: 07-16-2009
--- Description:	Retrives a Project record
--- =============================================
--- Arguments:
---     @ProjectId - an ID of the project to be retrieved
---     @SalespersonId - determines an ID of the salesperson to filter the list for
---     @PracticeManagerId - determines an ID of the practice manager to filter the list for
--- =============================================
+﻿
 CREATE PROCEDURE [dbo].[ProjectGetById]
 (
 	@ProjectId	         INT,
@@ -42,9 +29,7 @@ AS
 	       p.GroupId,
 	       p.ProjectIsChargeable,
 	       p.ClientIsChargeable,
-		   p.ProjectManagerId,
-		   p.ProjectManagerFirstName,
-		   p.ProjectManagerLastName,
+		   p.ProjectManagersIdFirstNameLastName,
 		   p.DirectorId,
 		   p.DirectorLastName,
 		   p.DirectorFirstName,
