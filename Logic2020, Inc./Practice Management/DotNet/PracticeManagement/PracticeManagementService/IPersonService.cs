@@ -289,7 +289,7 @@ namespace PracticeManagementService
         /// The list of <see cref="Person"/> objects applicable to be a practice manager for the project.
         /// </returns>
         [OperationContract]
-        List<Person> PersonListProjectOwner(DateTime? endDate, bool includeInactive, Person person);
+        List<Person> PersonListProjectOwner(bool includeInactive, Person person);
 
         /// <summary>
         /// List the persons who recieve the Practice Management commissions
