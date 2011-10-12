@@ -24,8 +24,6 @@ AS
 		   p.EmployeeNumber,
 		   p.SeniorityId,
 		   p.SeniorityName,
-		   y.StartDate,
-		   ISNULL(y.EndDate, dbo.GetFutureDate()) AS EndDate,
 	       p.ManagerId,
 	       p.ManagerAlias,
 	       p.ManagerFirstName,
@@ -37,7 +35,7 @@ AS
            INNER JOIN dbo.v_Pay AS y ON p.PersonId = y.PersonId
            LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
 	 WHERE p.PersonStatusId in (1,2,3) AND ISNULL(pr.IsCompanyInternal, 0) = 0
-           AND @DateToday BETWEEN y.StartDate AND ISNULL(y.EndDate, dbo.GetFutureDate())
+           AND @DateToday BETWEEN y.StartDate AND (ISNULL(y.EndDate, dbo.GetFutureDate()) - 1)
            AND ((@MaxSeniorityLevel IS NULL) OR (@MaxSeniorityLevel < p.SeniorityValue))
      ORDER BY p.LastName
 
