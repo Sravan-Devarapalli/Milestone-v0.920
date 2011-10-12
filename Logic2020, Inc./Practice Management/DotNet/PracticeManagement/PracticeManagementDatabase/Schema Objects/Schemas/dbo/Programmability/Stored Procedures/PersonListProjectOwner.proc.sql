@@ -1,19 +1,17 @@
 ﻿CREATE PROCEDURE dbo.PersonListProjectOwner
 (
-	@EndDate           DATETIME,
 	@IncludeInactive   BIT,
 	@PersonId INT = NULL
 )
 AS
 	SET NOCOUNT ON
 
-	-- Table variable to store list of salespersons user is allowed to see	
-    DECLARE @SalespersonPermissions TABLE ( PersonId INT NULL )
+	-- Table variable to store list of ProjectManagers user is allowed to see	
+    DECLARE @ProjectManagersPermissions TABLE ( PersonId INT NULL )
 	-- Populate is with the data from the permissions table
-	--		TargetType = 3 means that we are looking for the salespersons in the permissions table
-    INSERT  INTO @SalespersonPermissions
-            ( PersonId
-	      )
+	--		TargetType = 4 means that we are looking for the ProjectManagers in the permissions table
+    INSERT  INTO @ProjectManagersPermissions
+            (PersonId)
             SELECT  prm.TargetId
             FROM    v_permissions AS prm
             WHERE   prm.PersonId = @PersonId
@@ -23,8 +21,8 @@ AS
 	--		so set @PersonId to NULL which will extract all records from the table
     DECLARE @NullsNumber INT
     SELECT  @NullsNumber = COUNT(*)
-    FROM    @SalespersonPermissions AS sp
-    WHERE   sp.PersonId IS NULL 
+    FROM    @ProjectManagersPermissions AS pmp
+    WHERE   pmp.PersonId IS NULL 
 
     IF @NullsNumber > 0 
         SET @PersonId = NULL
@@ -49,15 +47,15 @@ AS
 	        'Unknown' AS 'ManagerFirstName',	-- just stubs 
 	        'Unknown' AS 'ManagerLastName'	-- just stubs
 	FROM dbo.Project AS proj
-	INNER JOIN dbo.Person AS pers ON proj.ProjectManagerId = pers.PersonId
+	INNER JOIN dbo.ProjectManagers AS projManagers ON projManagers.ProjectId = proj.ProjectId
+	INNER JOIN dbo.Person AS pers ON projManagers.ProjectManagerId = pers.PersonId
 	LEFT JOIN dbo.Commission AS C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1
-	WHERE --(@EndDate BETWEEN proj.StartDate AND proj.EndDate) AND 
-			(@IncludeInactive = 1 OR pers.PersonStatusId != 4)
+	WHERE (@IncludeInactive = 1 OR pers.PersonStatusId != 4)
             AND ( @PersonId IS NULL
                   OR pers.PersonId IN (
                   SELECT    *
-                  FROM      @SalespersonPermissions )
-				   OR proj.ProjectManagerId  = @PersonId
+                  FROM      @ProjectManagersPermissions )
+				   OR projManagers.ProjectManagerId  = @PersonId
 				   OR C.PersonId = @PersonId
                 )
 	order by pers.lastname, pers.firstname
