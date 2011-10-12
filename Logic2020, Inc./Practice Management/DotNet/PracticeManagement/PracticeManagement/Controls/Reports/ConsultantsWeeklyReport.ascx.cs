@@ -626,7 +626,7 @@ namespace PraticeManagement.Controls.Reports
                 //  Url to person details page, return to report
                 label.Url =
                     Urls.GetPersonDetailsUrl(
-                        p, Constants.ApplicationPages.ConsTimelineReport);
+                    p, Request.Url.AbsoluteUri.Contains("#details") ? Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails : Constants.ApplicationPages.UtilizationTimelineWithFilterQueryString);
             }
             //  Tooltip
             label.ToolTip =
