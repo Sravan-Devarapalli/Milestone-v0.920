@@ -1,6 +1,8 @@
 ﻿using System;
 using DataTransferObjects.TimeEntry;
 using DataTransferObjects.Utils;
+using DataTransferObjects;
+using System.Collections.Generic;
 
 namespace DataAccess
 {
@@ -22,6 +24,38 @@ namespace DataAccess
                 res[i] = Convert.ToInt32(values[i]);
 
             return res;
+        }
+
+        public static List<Person> stringToProjectManagersList(string csv)
+        {
+            List<Person> pmanagers = new List<Person>();
+            string[] idFirstnameLastNamesList = csv.Split(DataTransferObjects.Utils.Generic.LastNameSeperator,StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var idFirstnameLastName in idFirstnameLastNamesList)
+            {
+                string[] pm = idFirstnameLastName.Split(DataTransferObjects.Utils.Generic.Seperators, StringSplitOptions.RemoveEmptyEntries);
+                
+                if(pm.Length == 3)
+                {
+                    int id = Convert.ToInt32(pm[0]);
+                    string firstName = pm[1];
+                    string lastName = pm[2];
+
+                    pmanagers.Add(new Person() 
+                    {
+                        Id= id,
+                        FirstName = firstName,
+                        LastName = lastName
+                    });
+                }
+            }
+
+            if (pmanagers.Count > 0)
+                return pmanagers;
+            else
+            {
+                return null;
+            }
         }
 
         #region Utils
