@@ -771,7 +771,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.TermsParam, project.Terms);
                 command.Parameters.AddWithValue(Constants.ParameterNames.NameParam, project.Name);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsChargeable, project.IsChargeable);
-                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectManagerId, project.ProjectManager.Id.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectManagerIdsList, project.ProjectManagerIdsList);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdParam,
                     project.Practice != null ? (object)project.Practice.Id : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectStatusIdParam,
@@ -824,7 +824,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.DiscountParam, project.Discount);
                 command.Parameters.AddWithValue(Constants.ParameterNames.TermsParam, project.Terms);
                 command.Parameters.AddWithValue(Constants.ParameterNames.NameParam, project.Name);
-                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectManagerId, project.ProjectManager.Id.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectManagerIdsList, project.ProjectManagerIdsList);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdParam,
                     project.Practice != null ? (object)project.Practice.Id : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, project.Id.Value);
@@ -932,9 +932,7 @@ namespace DataAccess
                     int opportunityId = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
                     int projectIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIsChargeable);
                     int clientIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIsChargeable);
-                    int pmIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerId);
-                    int pmFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerFirstName);
-                    int pmLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerLastName);
+                    int pmIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagersIdFirstNameLastName);
                     int salesPersonNameIndex = -1;
                     int practiceOwnerNameIndex = -1;
                     int projectGroupIdIndex = -1;
@@ -1010,12 +1008,7 @@ namespace DataAccess
                                                                  Id = reader.GetInt32(practiceIdIndex),
                                                                  Name = reader.GetString(practiceNameIndex)
                                                              },
-                                              ProjectManager = new Person
-                                                                   {
-                                                                       Id = reader.GetInt32(pmIdIndex),
-                                                                       FirstName = reader.GetString(pmFirstNameIndex),
-                                                                       LastName = reader.GetString(pmLastNameIndex)
-                                                                   }
+                                              ProjectManagers = Utils.stringToProjectManagersList(reader.GetString(pmIndex))
                                           };
                         if (hasAttachmentsIndex >= 0)
                         {
@@ -1146,9 +1139,8 @@ namespace DataAccess
                     int opportunityId = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
                     int projectIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIsChargeable);
                     int clientIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIsChargeable);
-                    int pmIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerId);
-                    int pmFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerFirstName);
-                    int pmLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerLastName);
+                    int pmIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagersIdFirstNameLastName);
+                    
                     int mileStoneIdIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneId);
                     int mileStoneNameIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneName);
 
@@ -1156,20 +1148,19 @@ namespace DataAccess
                     int practiceOwnerNameIndex = -1;
                     int projectGroupIdIndex = -1;
                     int projectGroupNameIndex = -1;
-                    int groupInUseIndex = -1;
+       
                     int hasAttachments = -1;
                     try
                     {
                         projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
                         projectGroupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
-                        //groupInUseIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupInUseColumn);
-
+                      
                     }
                     catch
                     {
                         projectGroupIdIndex = -1;
                         projectGroupNameIndex = -1;
-                        groupInUseIndex = -1;
+                       
                     }
                     try
                     {
@@ -1227,12 +1218,8 @@ namespace DataAccess
                                    Id = reader.GetInt32(practiceIdIndex),
                                    Name = reader.GetString(practiceNameIndex)
                                },
-                               ProjectManager = new Person
-                               {
-                                   Id = reader.GetInt32(pmIdIndex),
-                                   FirstName = reader.GetString(pmFirstNameIndex),
-                                   LastName = reader.GetString(pmLastNameIndex)
-                               }
+
+                               ProjectManagers = Utils.stringToProjectManagersList(reader.GetString(pmIndex))
                            };
 
                             if (projectGroupIdIndex >= 0)
@@ -1243,7 +1230,6 @@ namespace DataAccess
                                     {
                                         Id = (int)reader[projectGroupIdIndex],
                                         Name = (string)reader[projectGroupNameIndex],
-                                        //InUse = (int)reader[groupInUseIndex] == 1
                                     };
 
                                     project.Group = group;
@@ -2132,9 +2118,8 @@ namespace DataAccess
                     int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusIdColumn);
                     int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
                     int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
-                    int pmIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerId);
-                    int pmFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerFirstName);
-                    int pmLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerLastName);
+                    int pmIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagersIdFirstNameLastName);
+                  
                     int hasAttachmentIndex = -1;
 
                     try
@@ -2166,12 +2151,7 @@ namespace DataAccess
                                 EndDate =
                                     !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
                                 ProjectNumber = reader.GetString(projectNumberIndex),
-                                ProjectManager = new Person
-                                {
-                                    Id = reader.GetInt32(pmIdIndex),
-                                    FirstName = reader.GetString(pmFirstNameIndex),
-                                    LastName = reader.GetString(pmLastNameIndex)
-                                }
+                                ProjectManagers = Utils.stringToProjectManagersList(reader.GetString(pmIndex))
                             };
 
                             project.Client = new Client
