@@ -16,12 +16,16 @@ CREATE PROCEDURE dbo.ProjectInsert
 	@UserLogin          NVARCHAR(255),
 	@GroupId			INT,
 	@IsChargeable		BIT,
-	@ProjectManagerId	INT,
+	@ProjectManagerIdsList	NVARCHAR(MAX),
 	@DirectorId			INT = NULL,
 	@OpportunityId		INT = NULL
 )
 AS
-	SET NOCOUNT ON
+BEGIN
+
+	SET NOCOUNT ON;
+
+	BEGIN TRAN  T1;
 
 	-- Generating Project Number
 	DECLARE @ProjectNumber NVARCHAR(12)
@@ -33,12 +37,18 @@ AS
 	-- Inserting Project
 	INSERT INTO dbo.Project
 	            (ClientId, Discount, Terms, Name, PracticeId,
-	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, IsChargeable, ProjectManagerId, DirectorId, OpportunityId)
+	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, IsChargeable,  DirectorId, OpportunityId)
 	     VALUES (@ClientId, @Discount, @Terms, @Name, @PracticeId,
-	             @ProjectStatusId, @ProjectNumber, @BuyerName, @GroupId, @IsChargeable, @ProjectManagerId, @DirectorId, @OpportunityId)
+	             @ProjectStatusId, @ProjectNumber, @BuyerName, @GroupId, @IsChargeable, @DirectorId, @OpportunityId)
 
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
 
 	SET @ProjectId = SCOPE_IDENTITY()
 
+	INSERT INTO ProjectManagers(ProjectId,ProjectManagerId)
+	SELECT  @ProjectId,ResultId
+	FROM    dbo.ConvertStringListIntoTable(@ProjectManagerIdsList)
+     
+	COMMIT TRAN T1;
+END
