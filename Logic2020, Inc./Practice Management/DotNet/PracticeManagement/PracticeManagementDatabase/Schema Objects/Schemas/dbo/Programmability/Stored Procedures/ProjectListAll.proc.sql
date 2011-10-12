@@ -1,25 +1,4 @@
-﻿-- =============================================
--- Updated by:	Anatoliy Lokshin
--- Update date:	7-17-2008
--- Updated by:	Anton Kramarenko
--- Update date: 02-20-2009
--- Updated by:	Anton Kolesnikov
--- Update date: 07-16-2009
--- Updated by:	Anton Kolesnikov
--- Update date: 08-06-2009
--- Description:	Lists the projects those fall into the specified conditions.
--- =============================================
--- Arguments:
---     @ClientId - determines an ID of the Client to select the projects associated with
---     @ShowProjected - determines do include the projected projects into the result
---     @ShowCompleted - determines do include the completed projects into the result
---     @ShowActive - determines do include active projects into the result
---     @ShowExperimental - determines do include experimental projects into the result
---     @SalespersonId - determines an ID of the salesperson to filter the list for
---     @PracticeManagerId - determines an ID of the practice manager to filter the list for
---     @PracticeId - determines an ID of the practice to filter the list for
---     @ProjectGroupId - determines an ID of the project group to filter the list for
--- =============================================
+﻿
 CREATE PROCEDURE [dbo].[ProjectListAll]
 (
 	@ClientId              INT = NULL, 
@@ -54,9 +33,7 @@ AS
            p.GroupId,
 	       p.ClientIsChargeable,
 	       p.ProjectIsChargeable,
-		   p.ProjectManagerId,
-		   p.ProjectManagerFirstName,
-		   p.ProjectManagerLastName,
+		   p.ProjectManagersIdFirstNameLastName,
 		   p.DirectorId,
 		   p.DirectorLastName,
 		   p.DirectorFirstName,
