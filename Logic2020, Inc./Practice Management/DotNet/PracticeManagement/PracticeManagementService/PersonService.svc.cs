@@ -392,9 +392,9 @@ namespace PracticeManagementService
         /// <returns>
         /// The list of <see cref="Person"/> objects applicable to be a practice manager for the project.
         /// </returns>
-        public List<Person> PersonListProjectOwner(DateTime? endDate, bool includeInactive, Person person)
+        public List<Person> PersonListProjectOwner(bool includeInactive, Person person)
         {
-            return PersonDAL.PersonListProjectOwner(endDate, includeInactive, person);
+            return PersonDAL.PersonListProjectOwner(includeInactive, person);
         }
 
         public List<Person> PersonListOpportunityOwner(bool includeInactive, Person person)
