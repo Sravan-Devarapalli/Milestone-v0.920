@@ -120,6 +120,7 @@
             public const string ProjectIdList = "ProjectIds";
             public const string ProjectIsChargeable = "ProjectIsChargeable";
             public const string ProjectManagerId = "ProjectManagerId";
+            public const string ProjectManagersIdFirstNameLastName = "ProjectManagersIdFirstNameLastName";
             public const string ProjectManagerFirstName = "ProjectManagerFirstName";
             public const string ProjectManagerLastName = "ProjectManagerLastName";
             public const string ProjectName = "ProjectName";
@@ -374,7 +375,7 @@
             public const string ProjectIsChargeable = ColumnNames.ProjectIsChargeable;
             public const string ProjectName = ColumnNames.ProjectName;
             public const string ProjectNumber = ColumnNames.ProjectNumberColumn;
-            public const string ProjectManagerId = ColumnNames.ProjectManagerId;
+            public const string ProjectManagerIdsList = "@ProjectManagerIdsList";
             public const string ProjectStatusId = ColumnNames.ProjectStatusId;
             public const string RequesterId = "RequesterId";
             public const string SortExpression = ColumnNames.SortExpression;
