@@ -13,7 +13,6 @@
     [OpportunityId]    INT             NULL,
     [GroupId]          INT             NULL,
     [IsChargeable]     BIT             NOT NULL,
-    [ProjectManagerId] INT             NOT NULL,
 	[DirectorId]	   INT			   NULL,
     FOREIGN KEY ([GroupId]) REFERENCES [dbo].[ProjectGroup] ([GroupId]) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
