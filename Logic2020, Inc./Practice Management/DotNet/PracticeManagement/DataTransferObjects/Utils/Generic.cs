@@ -12,7 +12,12 @@ namespace DataTransferObjects.Utils
     {
         public const char StringListSeparator = ',';
         public const char PersonNameSeparator = ';';
+        private const string IdSeperator = "48429914-f383-4399-96c0-db719db82765" ;
+        private const string FirstNameSeperator = "bc4ad2a9-2105-48b9-85e8-448408ba2a7a";
+        public static string[] LastNameSeperator = { "8585ebd9-f14a-4729-9322-b0d834913e2e" };
 
+        public static string[] Seperators = { IdSeperator, FirstNameSeperator };  
+           
         public static int GetIntConfiguration(string key)
         {
             return Convert.ToInt32(ConfigurationManager.AppSettings[key]);
