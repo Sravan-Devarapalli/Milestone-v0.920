@@ -133,6 +133,7 @@ namespace PraticeManagement
             public const string ChangePasswordPage = "~/ChangePassword.aspx";
             public const string Set_userPage = "~/set_user.aspx";
             public const string UtilizationTimelineWithFilterQueryStringAndDetails = "~/Reports/UtilizationTimeline.aspx?ApplyFilterFromCookie=true#details";
+            public const string UtilizationTimelineWithFilterQueryString = "~/Reports/UtilizationTimeline.aspx?ApplyFilterFromCookie=true";
             public const string OpportunitySummary = "~/DiscussionReview2.aspx";
         }
 
