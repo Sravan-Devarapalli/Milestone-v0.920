@@ -121,7 +121,12 @@ AS
 			AND ( @ClientIds IS NULL OR p.ClientId IN (select Id from @ClientsList) )
 			AND ( @ProjectGroupIds IS NULL OR p.GroupId IN (SELECT Id from @ProjectGroupsList) )
 			AND ( @PracticeIds IS NULL OR p.PracticeId IN (SELECT Id FROM @PracticesList) OR p.PracticeId IS NULL )
-			AND ( @ProjectOwnerIds IS NULL OR p.ProjectManagerId IN (SELECT Id FROM @ProjectOwnersList) )
+			AND ( @ProjectOwnerIds IS NULL 
+				  OR EXISTS (SELECT 1 FROM dbo.ProjectManagers AS projManagers
+							JOIN @ProjectOwnersList POL ON POL.Id = projManagers.ProjectManagerId
+								WHERE projManagers.ProjectId = p.ProjectId
+							)
+				)
 			AND (    @SalespersonIds IS NULL 
 				  OR c.PersonId IN (SELECT Id FROM @SalespersonsList)
 				  OR c.PersonId is null
