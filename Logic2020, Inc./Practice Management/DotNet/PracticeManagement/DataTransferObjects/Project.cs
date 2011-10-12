@@ -263,11 +263,16 @@ namespace DataTransferObjects
             set;
         }
 
-        /// <summary>
-        /// Gets or sets a project manager for the project.
-        /// </summary>
+    
         [DataMember]
-        public Person ProjectManager
+        public string ProjectManagerIdsList
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public List<Person> ProjectManagers
         {
             get;
             set;
