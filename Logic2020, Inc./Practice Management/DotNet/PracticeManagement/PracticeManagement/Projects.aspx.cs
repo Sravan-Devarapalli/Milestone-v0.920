@@ -111,6 +111,8 @@ namespace PraticeManagement
 
         private const string PageViewCountFormat = "Viewing {0} - {1} of {2} Projects";
 
+        private const string singleCellBreak = "<br style='mso-data-placement: same-cell;' />";
+
         #endregion
 
         #region Fields
@@ -1109,8 +1111,7 @@ namespace PraticeManagement
                     true);
 
                 PraticeManagement.Controls.DataHelper.FillProjectOwnerList(cblProjectOwner,
-                    "All Owners",
-                    null,
+                    "All Project Managers",
                     true,
                     person);
 
@@ -1441,7 +1442,7 @@ namespace PraticeManagement
         }
 
         #endregion
-        
+
         private void FillSummaryTotalRow(int periodLength, Project summary, System.Web.UI.HtmlControls.HtmlTableRow row)
         {
             DateTime monthBegin = GetMonthBegin();
@@ -1542,7 +1543,7 @@ namespace PraticeManagement
                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
                                     Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
                                     PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
-                                    Owner = (pro.ProjectManager != null && pro.ProjectManager.Name != null) ? pro.ProjectManager.Name : string.Empty,
+                                    ProjectManagers = string.Empty,
                                     Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
                                     Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty
                                 }).ToList();//Note: If you add any extra property to this anonymous type object then change insertPosition of month cells in RowDataBound.
@@ -1558,6 +1559,17 @@ namespace PraticeManagement
             string dateRangeTitle = string.Format(ExportDateRangeFormat, diRange.FromDate.Value.ToShortDateString(), diRange.ToDate.Value.ToShortDateString());
 
             GridViewExportUtil.Export("Projects.xls", projectsGrid, dateRangeTitle);
+        }
+
+        private string GetProjectManagers(List<Person> list)
+        {
+            string names = string.Empty;
+            foreach (var person in list)
+            {
+                names += person.Name + singleCellBreak;
+            }
+
+            return names;
         }
 
         protected void exportProjects_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -1581,9 +1593,11 @@ namespace PraticeManagement
                         //Insert Month columns and Total Column in Header row.
                         InsertMonthColumnsInHeader(row, insertPosition, monthsInPeriod, periodStart);
                         InsertTotalColumnInHeader(row, insertPosition + monthsInPeriod);
+                        row.Cells[monthsInPeriod + insertPosition + 1].Text = "Project Manager(s)";
                         break;
                     case ExportAllId:
                         InsertTotalColumnInHeader(row, insertPosition);
+                        row.Cells[insertPosition + 1].Text="Project Manager(s)";
                         break;
                 }
             }
@@ -1593,10 +1607,11 @@ namespace PraticeManagement
                 switch (id)
                 {
                     case ExportId:
-                        project = ExportProjectList.Where(proj => proj.Id == Convert.ToInt32(e.Row.Cells[0].Text)).First();
-
+                        var projectId = Convert.ToInt32(e.Row.Cells[0].Text);
+                        project = ExportProjectList.Where(proj => proj.Id == projectId).First();
                         //Insert Month cells in Excel.
                         InsertMonthFinancialsInExport(row, project, insertPosition, monthsInPeriod, periodStart);
+                        row.Cells[monthsInPeriod + insertPosition + 1].Text = GetProjectManagers(project.ProjectManagers);
                         break;
 
                     case ExportAllId:
@@ -1608,6 +1623,7 @@ namespace PraticeManagement
 
                         //Insert Total cells in Excel.
                         FillTotalCellInExcelReport(row, project, insertPosition, greaterSeniorityExists);
+                        row.Cells[insertPosition + 1].Text = GetProjectManagers(project.ProjectManagers);
                         break;
                 }
 
@@ -1733,7 +1749,7 @@ namespace PraticeManagement
             using (HtmlTextWriter wr = new HtmlTextWriter(stringWriter))
             {
                 marginLabel.RenderControl(wr);
-                outterHtml = outterHtml + "<br style='mso-data-placement: same-cell;' />" + stringWriter.ToString();
+                outterHtml = outterHtml + singleCellBreak + stringWriter.ToString();
             }
 
             TableCell monthCell = new TableCell();
@@ -1762,7 +1778,7 @@ namespace PraticeManagement
                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
                                     Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
                                     PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
-                                    Owner = (pro.ProjectManager != null && pro.ProjectManager.Name != null) ? pro.ProjectManager.Name : string.Empty,
+                                    ProjectManagers = string.Empty,
                                     Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
                                     Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty
                                 }).ToList();//Note:- Change insertPosition Of Total cell in RowDataBound if any modifications in projectsData.
