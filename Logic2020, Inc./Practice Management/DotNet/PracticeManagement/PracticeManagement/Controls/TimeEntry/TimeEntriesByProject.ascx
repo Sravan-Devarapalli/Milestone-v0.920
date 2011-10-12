@@ -42,7 +42,11 @@
             }
         }
 
-        hdnSaveReportExcelText.value = html + "<b  style='text-align: right;font-size:25px;'> " + lblGrandTotal.innerHTML + "</b>";
+        if (lblGrandTotal != null && lblGrandTotal != "undefined") {
+            hdnSaveReportExcelText.value = html + "<b  style='text-align: right;font-size:25px;'> " + lblGrandTotal.innerHTML + "</b>";
+        } else {
+            hdnSaveReportExcelText.value = html;
+        }
     }
 
     function saveReportForPDF() {
@@ -59,8 +63,12 @@
                 html += "<b style='font-size:18px;'>" + lblProjectName.innerHTML + "</b>" + "<br /><br />" + divPersonListSummary[i].innerHTML + hdnGuid.value;
             }
         }
+        if (lblGrandTotal != null && lblGrandTotal != "undefined") {
+            hdnSaveReportPDFText.value = html + "<b  style='text-align: right;font-size:25px;'> " + lblGrandTotal.innerHTML + "</b>";
+        } else {
+            hdnSaveReportPDFText.value = html;
+        }
 
-        hdnSaveReportPDFText.value = html + "<b  style='text-align: right;font-size:25px;'> " + lblGrandTotal.innerHTML + "</b>";
     }
 
     function EnableOrDisableResetFilterButton() {
