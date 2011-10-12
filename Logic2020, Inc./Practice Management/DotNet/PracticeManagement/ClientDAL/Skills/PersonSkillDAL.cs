@@ -62,6 +62,102 @@ namespace DataAccess.Skills
             return skillLevels;
         }
 
+        public static List<PersonSkill> GetPersonSkillsByPersonId(int personId)
+        {
+            var personSkills = new List<PersonSkill>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.GetPersonSkillsByPersonId, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                    connection.Open();
+                    var reader = command.ExecuteReader();
+                    ReadPersonSkillsShort(reader, personSkills);
+                }
+            }
+            return personSkills;
+        }
+
+        public static List<PersonIndustry> GetPersonIndustriesByPersonId(int personId)
+        {
+            var personIndustries = new List<PersonIndustry>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.GetPersonIndustriesByPersonId, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                    connection.Open();
+                    var reader = command.ExecuteReader();
+                    ReadPersonIndustriesShort(reader, personIndustries);
+                }
+            }
+            return personIndustries;
+        }
+
+        private static void ReadPersonIndustriesShort(SqlDataReader reader, List<PersonIndustry> personIndustries)
+        {
+
+            var industryIdColumn = reader.GetOrdinal(Constants.ColumnNames.IndustryId);
+            var yearsExperienceColumn = reader.GetOrdinal(Constants.ColumnNames.YearsExperience);
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    var personIndustry = new PersonIndustry
+                    {
+                        Industry = new Industry
+                        {
+                            Id = reader.GetInt32(industryIdColumn)
+                        },
+                        YearsExperience = reader.GetInt32(yearsExperienceColumn)
+                    };
+                    personIndustries.Add(personIndustry);
+                }
+            }
+        }
+
+        private static void ReadPersonSkillsShort(SqlDataReader reader, List<PersonSkill> personSkills)
+        {
+            var skillIdColumn = reader.GetOrdinal(Constants.ColumnNames.SkillId);
+            var skillLevelIdColumn = reader.GetOrdinal(Constants.ColumnNames.SkillLevelId);
+            var yearsExperienceColumn = reader.GetOrdinal(Constants.ColumnNames.YearsExperience);
+            var lastUsedColumn = reader.GetOrdinal(Constants.ColumnNames.LastUsed);
+            var skillCategoryIdColumn = reader.GetOrdinal(Constants.ColumnNames.SkillCategoryId);
+            var skillTypeIdColumn = reader.GetOrdinal(Constants.ColumnNames.SkillTypeId);
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    var personSkill = new PersonSkill
+                    {
+                        Skill = new Skill
+                        {
+                            Id = reader.GetInt32(skillIdColumn),
+                            Category = new SkillCategory
+                            {
+                                Id = reader.GetInt32(skillCategoryIdColumn),
+                                SkillType = new SkillType
+                                {
+                                    Id = reader.GetInt32(skillTypeIdColumn)
+                                }
+                            }
+                        },
+                        SkillLevel = new SkillLevel
+                        {
+                            Id = reader.GetInt32(skillLevelIdColumn)
+                        },
+                        YearsExperience = reader.GetInt32(yearsExperienceColumn),
+                        LastUsed = reader.GetInt32(lastUsedColumn)
+                    };
+                    personSkills.Add(personSkill);
+                }
+            }
+        }
+
         private static void ReadSkillLevels(SqlDataReader reader, List<SkillLevel> skillLevels)
         {
             var skillLevelIdColumn = reader.GetOrdinal(Constants.ColumnNames.SkillLevelId);
@@ -131,8 +227,6 @@ namespace DataAccess.Skills
                 }
             }
         }
-
-
     }
 }
 
