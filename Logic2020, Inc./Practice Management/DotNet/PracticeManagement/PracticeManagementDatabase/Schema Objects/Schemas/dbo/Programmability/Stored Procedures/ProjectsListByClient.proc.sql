@@ -1,12 +1,4 @@
-﻿-- =============================================
--- Author:		Anatoliy Lokshin
--- Create date: 5-21-2008
--- Updated by:	Anton Kramarenko
--- Update date: 02-20-2009
--- Updated by:	Anton Kolesnikov
--- Update date: 07-16-2009
--- Description:	List projects by the specified Client
--- =============================================
+﻿
 CREATE PROCEDURE dbo.ProjectsListByClient
 (
 	@ClientId INT,
@@ -35,9 +27,7 @@ AS
 			   p.GroupId,
 			   p.ClientIsChargeable,
 			   p.ProjectIsChargeable,
-			   p.ProjectManagerId,
-			   p.ProjectManagerFirstName,
-			   p.ProjectManagerLastName,
+			   p.ProjectManagersIdFirstNameLastName,
 			   p.DirectorId,
 			   p.DirectorFirstName,
 			   p.DirectorLastName
@@ -77,9 +67,7 @@ AS
 			   p.GroupId,
 			   p.ClientIsChargeable,
 			   p.ProjectIsChargeable,
-			   p.ProjectManagerId,
-			   p.ProjectManagerFirstName,
-			   p.ProjectManagerLastName,
+			   p.ProjectManagersIdFirstNameLastName,
 			   p.DirectorId,
 			   p.DirectorFirstName,
 			   p.DirectorLastName
