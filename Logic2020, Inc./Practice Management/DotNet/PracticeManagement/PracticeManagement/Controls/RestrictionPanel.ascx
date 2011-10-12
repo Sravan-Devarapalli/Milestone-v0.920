@@ -18,7 +18,7 @@
         <td><strong>Clients</strong></td>
         <td><strong>Groups</strong></td>
         <td><strong>Salespersons</strong></td>
-        <td><strong>Project owners</strong></td>
+        <td><strong>Project Managers</strong></td>
         <td><strong>Practice Areas</strong></td>
         </tr>
         <tr>
