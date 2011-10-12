@@ -1,5 +1,6 @@
 ﻿using System;
 using DataTransferObjects;
+using System.Collections.Generic;
 
 namespace PraticeManagement.Objects
 {
@@ -91,8 +92,20 @@ namespace PraticeManagement.Objects
                     Entry.EndDate.HasValue
                         ? Entry.EndDate.Value.ToString("MM/dd/yyyy")
                         : NotEndDate,
-                    Entry.ParentMilestone.Project.ProjectManager.Name);
+                    GetProjectManagers(Entry.ParentMilestone.Project.ProjectManagers));
             }
+        }
+
+
+        private string GetProjectManagers(List<Person> list)
+        {
+            string names = string.Empty;
+            foreach (var person in list)
+            {
+                names += person.Name + "; ";
+            }
+
+            return names;
         }
 
         public override string NavigateUrl
