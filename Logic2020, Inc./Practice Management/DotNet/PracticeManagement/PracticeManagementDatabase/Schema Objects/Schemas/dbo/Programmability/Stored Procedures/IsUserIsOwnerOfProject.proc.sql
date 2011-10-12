@@ -6,8 +6,8 @@
 )
 AS
 	DECLARE @PersonId INT
-	DECLARE @OwnerId INT,
-			@IsSalesPerson INT--as per #2914.
+	DECLARE @ProjectManagerIdsList TABLE(ProjectManagerId INT)
+	DECLARE	@IsSalesPerson INT--as per #2914.
 	
 	SELECT @PersonId = PersonId
 	FROM Person
@@ -15,9 +15,11 @@ AS
 	
 	IF(@IsProjectId = 1)
 	BEGIN
-		SELECT @OwnerId = proj.ProjectManagerId  
-		FROM v_Project AS proj
-		WHERE proj.ProjectId = @Id
+		INSERT INTO @ProjectManagerIdsList
+		SELECT pm.ProjectManagerId  
+		FROM ProjectManagers AS pm 
+		WHERE pm.ProjectId = @Id
+
 		IF EXISTS (SELECT 1 FROM dbo.Commission WHERE PersonId = @PersonId AND ProjectId = @Id AND CommissionType = 1)
 			SET @IsSalesPerson = 1
 			ELSE 
@@ -25,8 +27,10 @@ AS
 	END
 	ELSE
 	BEGIN
-		SELECT @OwnerId = milestone.ProjectManagerId 
-		FROM v_Milestone AS milestone
+		INSERT INTO @ProjectManagerIdsList
+		SELECT pm.ProjectManagerId  
+		FROM Milestone AS milestone
+		INNER JOIN ProjectManagers AS pm ON pm.ProjectId = milestone.ProjectId
 		WHERE milestone.MilestoneId = @Id
 
 		IF EXISTS (SELECT 1 FROM Milestone M 
@@ -38,7 +42,7 @@ AS
 		
 	END
 
-	IF(@PersonId = @OwnerId OR @IsSalesPerson =1 )
+	IF (@IsSalesPerson =1 OR EXISTS ( SELECT 1 FROM @ProjectManagerIdsList WHERE ProjectManagerId = @PersonId ))
 	BEGIN
 		SELECT 'True'
 	END
