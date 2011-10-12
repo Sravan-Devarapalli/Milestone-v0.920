@@ -490,8 +490,8 @@
                                             </td>
                                             <td>
                                                 <uc:ScrollingDropDown ID="cblProjectOwner" runat="server" SetDirty="false" Width="240"
-                                                    Height="240px" onclick="scrollingDropdown_onclick('cblProjectOwner','Owner')"
-                                                    DropDownListType="Owner" CellPadding="3" />
+                                                    Height="240px" onclick="scrollingDropdown_onclick('cblProjectOwner','Project Manager')"
+                                                    DropDownListType="Project Manager" CellPadding="3" />
                                                 <ext:ScrollableDropdownExtender ID="sdeCblProjectOwner" runat="server" TargetControlID="cblProjectOwner"
                                                     UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px">
                                                 </ext:ScrollableDropdownExtender>
