@@ -24,9 +24,7 @@ DECLARE @DefaultProjectId INT
 			p.ProjectStatusId,
 			p.ProjectStatusName,
 			p.ProjectNumber,
-			p.ProjectManagerId,
-		    p.ProjectManagerFirstName,
-		    p.ProjectManagerLastName,	
+			p.ProjectManagersIdFirstNameLastName,
 			CASE WHEN A.ProjectId IS NOT NULL THEN 1 
 					ELSE 0 END AS HasAttachments
 	FROM	dbo.v_Project AS p
