@@ -1118,7 +1118,7 @@ namespace DataAccess
         /// <returns>
         /// The list of <see cref="Person"/> objects applicable to be a practice manager for the project.
         /// </returns>
-        public static List<Person> PersonListProjectOwner(DateTime? endDate, bool includeInactive, Person person)
+        public static List<Person> PersonListProjectOwner(bool includeInactive, Person person)
         {
             var result = new List<Person>();
 
@@ -1128,8 +1128,6 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-                command.Parameters.AddWithValue(EndDateParam,
-                    endDate.HasValue ? (object)endDate.Value : DBNull.Value);
                 command.Parameters.AddWithValue(IncludeInactiveParam, includeInactive);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonId,
                     person == null ? (object)DBNull.Value : person.Id.Value);
