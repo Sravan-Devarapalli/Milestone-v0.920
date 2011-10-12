@@ -1,14 +1,4 @@
-﻿-- =============================================
--- Author:		Anatoliy Lokshin
--- Create date: 5-21-2008
--- Updated by:	Anton Kramarenko
--- Update date: 02-20-2009
--- Updated by:	Anton Kolesnikov
--- Update date: 07-16-2009
--- Description:	Inserts a Project record
--- Updated by:	Ravi Narsini
--- Update date:	10-26-2010 : Changes: Added default milestone logic (#2600)
--- =============================================
+﻿
 CREATE PROCEDURE dbo.ProjectUpdate
 (
 	@ProjectId          INT,
@@ -23,10 +13,14 @@ CREATE PROCEDURE dbo.ProjectUpdate
 	@GroupId			INT,
 	@IsChargeable		BIT,
 	@DirectorId			INT,
-	@ProjectManagerId	INT
+	@ProjectManagerIdsList	NVARCHAR(MAX)
 )
 AS
-	SET NOCOUNT ON
+BEGIN
+
+	SET NOCOUNT ON;
+
+	BEGIN TRAN  T1;
 
 	-- Start logging session
 	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
@@ -41,11 +35,25 @@ AS
 	       BuyerName		= @BuyerName,
 	       GroupId			= @GroupId,
 	       IsChargeable		= @IsChargeable,
-	       ProjectManagerId = @ProjectManagerId,
 		   DirectorId		= @DirectorId
 	 WHERE ProjectId = @ProjectId
+
+	        DELETE pm
+			FROM ProjectManagers pm
+			LEFT JOIN [dbo].ConvertStringListIntoTable(@ProjectManagerIdsList) AS p 
+			ON pm.ProjectId = @ProjectId AND pm.ProjectManagerId = p.ResultId 
+			WHERE p.ResultId IS NULL and pm.ProjectId = @ProjectId
+
+			INSERT INTO ProjectManagers(ProjectId,ProjectManagerId)
+			SELECT @ProjectId ,p.ResultId
+			FROM [dbo].ConvertStringListIntoTable(@ProjectManagerIdsList) AS p 
+			LEFT JOIN ProjectManagers pm
+			ON p.ResultId = pm.ProjectManagerId AND pm.ProjectId=@ProjectId
+			WHERE pm.ProjectManagerId IS NULL
 
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
 
+	COMMIT TRAN T1;	
 
+END
