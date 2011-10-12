@@ -43,8 +43,9 @@ BEGIN
 		INSERT INTO @OwnerProjectSalesPersonList (PersonId) 
 		SELECT DISTINCT vppc.PersonId
 		FROM v_PersonProjectCommission AS vppc 
-		INNER JOIN  dbo.v_Project AS proj  ON proj.ProjectId = vppc.ProjectId
-		WHERE proj.ProjectManagerId = @PersonId or (vppc.PersonId = @PersonId AND vppc.CommissionType = 1)
+		INNER JOIN  dbo.Project AS proj  ON proj.ProjectId = vppc.ProjectId
+		INNER JOIN  dbo.ProjectManagers AS projManagers  ON proj.ProjectId = projManagers.ProjectId
+		WHERE projManagers.ProjectManagerId = @PersonId or (vppc.PersonId = @PersonId AND vppc.CommissionType = 1)
 	END
 
         ;WITH    Salespersons
