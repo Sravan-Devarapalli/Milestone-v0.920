@@ -31,12 +31,13 @@ AS
 	END
 	ELSE
 	BEGIN
-		-- Populate is with the data from the v_Project 
+		-- Populate is with the data from the Project 
 		INSERT INTO @OwnerProjectPracticeList (PracticeId) 
-		SELECT proj.PracticeId 
-		FROM dbo.v_Project AS proj 
+		SELECT proj.PracticeId
+		FROM dbo.Project AS proj 
+		INNER JOIN dbo.ProjectManagers AS projManagers ON projManagers.ProjectId = proj.ProjectId
 		LEFT JOIN dbo.Commission AS C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1 --as per #2914
-		WHERE proj.ProjectManagerId = @PersonId OR C.PersonId = @PersonId
+		WHERE projManagers.ProjectManagerId = @PersonId OR C.PersonId = @PersonId
 	END
 	
 	SELECT 
