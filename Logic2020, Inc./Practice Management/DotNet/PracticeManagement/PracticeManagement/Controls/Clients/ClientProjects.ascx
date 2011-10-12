@@ -1,11 +1,11 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ClientProjects.ascx.cs"
     Inherits="PraticeManagement.Controls.Clients.ClientProjects" %>
-<asp:GridView ID="gvProjects" runat="server" AutoGenerateColumns="False" EmptyDataText="No projects."
+<asp:GridView ID="gvProjects" runat="server" AutoGenerateColumns="False" EmptyDataText="No projects." OnRowDataBound="gvProjects_OnRowDataBound"
     CssClass="CompPerfTable WholeWidth" GridLines="None" BackColor="White" AllowSorting="true"
     DataSourceID="odsProjects">
     <AlternatingRowStyle BackColor="#F9FAFF" />
     <Columns>
-        <asp:TemplateField HeaderText= "<div class='ie-bg' > Project Name </div>" SortExpression="Name">
+        <asp:TemplateField HeaderText="<div class='ie-bg' > Project Name </div>" SortExpression="Name">
             <ItemTemplate>
                 <asp:LinkButton ID="btnProjectName" runat="server" CausesValidation="false" Text='<%# HttpUtility.HtmlEncode((string)Eval("Name")) %>'
                     CommandArgument='<%# Eval("Id") %>' OnCommand="btnProjectName_Command" Enabled='<%# !CheckIfDefaultProject(Eval("Id")) %>'></asp:LinkButton>
@@ -16,9 +16,24 @@
                 <asp:Label ID="lblGroup" runat="server" Text='<%# Eval("Group.Name") != null ? Eval("Group.Name").ToString() : string.Empty %>' />
             </ItemTemplate>
         </asp:TemplateField>
-        <asp:TemplateField HeaderText="<div class='ie-bg' >Manager</div>" SortExpression="ProjectManagerLastName">
+        <asp:TemplateField HeaderText="<div class='ie-bg' >Project Manager(s)</div>" >
             <ItemTemplate>
-                <%# Eval("ProjectManager.PersonLastFirstName")%>
+                <AjaxControlToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlProjectManagers"
+                    ImageControlID="btnExpandCollapseFilter" CollapsedImage="~/Images/expand.jpg"
+                    ExpandedImage="~/Images/collapse.jpg" CollapseControlID="btnExpandCollapseFilter"
+                    ExpandControlID="btnExpandCollapseFilter" Collapsed="True"  />
+                
+                <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg"
+                    ToolTip="" />
+                <asp:Panel ID="pnlProjectManagers" runat="server"  >
+                    <asp:Repeater ID="repProjectManagers" runat="server" DataSource='<%# Eval("ProjectManagers")%>' >
+                        <ItemTemplate>
+                            <div>
+                                <%# Eval("PersonLastFirstName")%>
+                            </div>
+                        </ItemTemplate>
+                    </asp:Repeater>
+                </asp:Panel>
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderText="<div class='ie-bg' >Start Date</div>" SortExpression="StartDate">
