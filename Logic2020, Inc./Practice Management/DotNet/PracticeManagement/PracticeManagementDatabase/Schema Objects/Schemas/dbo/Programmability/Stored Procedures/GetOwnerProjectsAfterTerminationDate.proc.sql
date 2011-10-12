@@ -10,6 +10,7 @@ BEGIN
 	SELECT proj.ProjectId,
 		   proj.Name ProjectName
 	FROM dbo.Project AS proj 
-	WHERE proj.ProjectManagerId =@PersonId AND proj.ProjectStatusId =3 
+	INNER JOIN dbo.ProjectManagers AS pm ON pm.ProjectId = proj.ProjectId
+	WHERE pm.ProjectManagerId =@PersonId AND proj.ProjectStatusId =3 
 	
 END
