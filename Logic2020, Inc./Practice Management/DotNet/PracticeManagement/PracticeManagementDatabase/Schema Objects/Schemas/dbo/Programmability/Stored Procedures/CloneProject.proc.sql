@@ -36,7 +36,6 @@ AS
                   OpportunityId,
                   GroupId,
                   IsChargeable,
-                  ProjectManagerId,
 				  DirectorId
                 )
                 SELECT  ClientId,
@@ -51,13 +50,17 @@ AS
                         BuyerName,
                         OpportunityId,
                         GroupId,
-                        IsChargeable,
-                        ProjectManagerId,
+                        IsChargeable,                     
 						DirectorId
                 FROM    dbo.Project AS p
                 WHERE   p.ProjectId = @projectId
                 
         SET @ClonedProjectId = SCOPE_IDENTITY()
+
+		INSERT INTO ProjectManagers(ProjectId,ProjectManagerId)
+		SELECT  @ClonedProjectId,pm.ProjectManagerId
+		FROM    dbo.ProjectManagers AS pm
+        WHERE   pm.ProjectId = @projectId
           
         IF @CloneNotes = 1
         BEGIN
