@@ -59,7 +59,7 @@ AS
 	SELECT @DefaultProjectId = ProjectId
 	FROM dbo.DefaultMilestoneSetting
 
-
+	
 	SELECT  p.ClientId,
 			p.ProjectId,
 			p.Discount,
@@ -80,9 +80,7 @@ AS
 			PG.Name GroupName,
 	       p.ClientIsChargeable,
 	       p.ProjectIsChargeable,
-		   p.ProjectManagerId,
-		   p.ProjectManagerFirstName,
-		   p.ProjectManagerLastName,
+		   p.ProjectManagersIdFirstNameLastName,
 		   c.PersonId as 'SalespersonId',
 		   person.LastName+' , ' +person.FirstName AS 'SalespersonName' ,
 		   c.CommissionType,
@@ -95,17 +93,23 @@ AS
 		   M.Description MilestoneName
 	FROM	dbo.v_Project AS p
 	JOIN dbo.Practice pr ON pr.PracticeId = p.PracticeId
+	
 	LEFT JOIN dbo.Milestone M ON M.ProjectId = P.ProjectId
 	LEFT JOIN dbo.v_PersonProjectCommission AS c on c.ProjectId = p.ProjectId
 	LEFT JOIN dbo.ProjectGroup PG	ON PG.GroupId = p.GroupId
-	LEFT JOIN v_Person AS person ON person.PersonId = c.PersonId
+	LEFT JOIN Person AS person ON person.PersonId = c.PersonId
 	OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = p.ProjectId) A
 	WHERE	    (c.CommissionType is NULL OR c.CommissionType = 1)
 		    AND (dbo.IsDateRangeWithingTimeInterval(p.StartDate, p.EndDate, @StartDate, @EndDate) = 1 OR (p.StartDate IS NULL AND p.EndDate IS NULL))
 			AND ( @ClientIds IS NULL OR p.ClientId IN (select * from @ClientsList) )
 			AND ( @ProjectGroupIds IS NULL OR p.GroupId IN (SELECT * from @ProjectGroupsList) )
 			AND ( @PracticeIds IS NULL OR p.PracticeId IN (SELECT * FROM @PracticesList) OR p.PracticeId IS NULL )
-			AND ( @ProjectOwnerIds IS NULL OR p.ProjectManagerId IN (SELECT * FROM @ProjectOwnersList) )
+			AND ( @ProjectOwnerIds IS NULL 
+					OR EXISTS (SELECT 1 FROM dbo.ProjectManagers AS projManagers
+								JOIN @ProjectOwnersList POL ON POL.Id = projManagers.ProjectManagerId
+									WHERE projManagers.ProjectId = p.ProjectId
+							  )
+			    )
 			AND (    @SalespersonIds IS NULL 
 				  OR c.PersonId IN (SELECT * FROM @SalespersonsList)
 				  OR c.PersonId is null
