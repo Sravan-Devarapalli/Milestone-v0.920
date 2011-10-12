@@ -16,7 +16,10 @@
 <%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectPersons.ascx" TagName="ProjectPersons" %>
 <%@ Register Src="~/Controls/Generic/Notes.ascx" TagName="Notes" TagPrefix="uc" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
-<%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress" TagPrefix="uc" %>
+<%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
+    TagPrefix="uc" %>
+<%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
+<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Project Details | Practice Management</title>
 </asp:Content>
@@ -25,6 +28,7 @@
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
+    <script src="Scripts/ScrollinDropDown.js" type="text/javascript"></script>
     <script type="text/javascript">
         function checkDirty(target, entityId) {
             if (showDialod()) {
@@ -382,15 +386,21 @@
                                         </asp:DropDownList>
                                     </td>
                                     <td colspan="2">
-                                        Owner
+                                        Project Manager(s)
                                     </td>
-                                    <td colspan="3">
-                                        <asp:DropDownList ID="ddlProjectManager" runat="server" CssClass="WholeWidth" onchange="setDirty();" />
+                                    <td class="floatRight" colspan="3">
+                                        <cc2:ScrollingDropDown ID="cblProjectManagers" runat="server" SetDirty="true" Width="240" 
+                                            AllSelectedReturnType="AllItems" Height="240px" onclick="scrollingDropdown_onclick('cblProjectManagers','Project Manager');"
+                                            DropDownListType="Project Manager" CellPadding="3" />
+                                        <ext:ScrollableDropdownExtender ID="sdeProjectManagers" runat="server" TargetControlID="cblProjectManagers"
+                                            UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px">
+                                        </ext:ScrollableDropdownExtender>
                                     </td>
                                     <td>
-                                        <asp:RequiredFieldValidator ID="reqProjectManager" runat="server" ControlToValidate="ddlProjectManager"
-                                            EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Owner is required."
-                                            SetFocusOnError="true" Text="*" ToolTip="The Owner is required."></asp:RequiredFieldValidator>
+                                        <asp:CustomValidator ID="cvProjectManager" runat="server" EnableClientScript="false"
+                                            ValidationGroup="Project" ErrorMessage="The Project Manager(s) is required."
+                                            ValidateEmptyText="true" OnServerValidate="cvProjectManager_OnServerValidate"
+                                            SetFocusOnError="true" Text="*" ToolTip="The Project Manager(s) is required."></asp:CustomValidator>
                                     </td>
                                 </tr>
                                 <tr>
@@ -768,3 +778,4 @@
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
+
