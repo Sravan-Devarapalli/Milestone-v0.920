@@ -528,6 +528,11 @@ namespace PraticeManagement.Controls.TimeEntry
 
             string fileName = "TimeEntriesByProject.pdf";
             var html = hdnSaveReportPDFText.Value;
+            if (html == string.Empty)
+            {
+                html = "  &nbsp; ";
+            }
+
             HTMLToPdf(html, fileName);
         }
 
