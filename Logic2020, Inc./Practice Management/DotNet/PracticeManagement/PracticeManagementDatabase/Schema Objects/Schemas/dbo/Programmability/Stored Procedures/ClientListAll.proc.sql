@@ -20,13 +20,13 @@ BEGIN
 					, c.IsChargeable
 		FROM Client C
 		JOIN Project P ON P.ClientId = C.ClientId
+		INNER JOIN dbo.ProjectManagers AS projmanager ON projmanager.ProjectId = P.ProjectId
 		LEFT JOIN Commission Cm ON Cm.ProjectId = p.ProjectId AND Cm.CommissionType = 1
-		LEFT JOIN Person SP ON SP.PersonId = Cm.PersonId
 		WHERE ((@ShowAll = 0 AND C.Inactive = 0) OR @ShowAll <> 0)
 		AND	(@PersonId IS null
 			OR p.DirectorId = @PersonId 
-			OR SP.PersonId = @PersonId
-			OR p.ProjectManagerId = @PersonId
+			OR Cm.PersonId = @PersonId
+			OR projmanager.ProjectManagerId = @PersonId
 			)
 		ORDER BY C.Name
 
@@ -58,12 +58,12 @@ BEGIN
 		END
 		ELSE
 		BEGIN
-			-- Populate is with the data from the v_Project 
 			INSERT INTO @OwnerProjectClientList (ClientId) 
 			SELECT proj.ClientId 
-			FROM dbo.v_Project AS proj
+			FROM dbo.Project AS proj
+			INNER JOIN dbo.ProjectManagers AS projmanager ON projmanager.ProjectId = proj.ProjectId
 			LEFT JOIN dbo.Commission C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1
-			WHERE proj.ProjectManagerId = @PersonId OR C.PersonId = @PersonId -- Adding Salesperson - Project clients into the list.
+			WHERE projmanager.ProjectManagerId = @PersonId OR C.PersonId = @PersonId -- Adding Salesperson - Project clients into the list.
 
 		END
 
