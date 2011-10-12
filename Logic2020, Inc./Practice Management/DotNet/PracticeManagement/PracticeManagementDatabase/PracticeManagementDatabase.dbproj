@@ -199,9 +199,6 @@
     <Build Include="Schema Objects\Schemas\dbo\Tables\Constraints\DF_OpportunityTransition_TransitionDate.defconst.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Tables\Constraints\DF_Project_ProjectManager.defconst.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\Constraints\DF_Project_IsChargeable.defconst.sql">
       <SubType>Code</SubType>
     </Build>
@@ -314,9 +311,6 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_Project_Practice1.fkey.sql">
-      <SubType>Code</SubType>
-    </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_Project_ProjectManager.fkey.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_Project_Client.fkey.sql">
@@ -3690,6 +3684,12 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\TimeEntryAllMilestonesByClientId.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\ProjectManagers.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetProjectManagerList.function.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>
