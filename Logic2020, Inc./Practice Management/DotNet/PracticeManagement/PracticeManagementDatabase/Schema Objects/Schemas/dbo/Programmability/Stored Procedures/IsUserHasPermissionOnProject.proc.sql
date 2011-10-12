@@ -9,7 +9,7 @@ AS
 	DECLARE @SalespersonId INT
 	DECLARE @PracticeId INT
 	DECLARE @ClientId INT
-	DECLARE @ProjectManagerId INT
+	DECLARE @ProjectManagerIdsList TABLE(ProjectManagerId INT)
 	DECLARE @ProjectGroup INT
 	
 	SELECT @PersonId = PersonId
@@ -24,13 +24,18 @@ AS
 
 	
 	SELECT @SalespersonId = c.PersonId
-			,@ProjectManagerId = proj.ProjectManagerId
 			,@PracticeId = proj.PracticeId
 			,@ClientId = proj.ClientId
 			,@ProjectGroup = proj.GroupId
 	FROM Project proj
 	LEFT JOIN dbo.Commission c ON c.ProjectId = proj.ProjectId AND c.CommissionType = 1
 	WHERE proj.ProjectId = @Id
+
+
+	INSERT INTO @ProjectManagerIdsList
+	SELECT pm.ProjectManagerId  
+	FROM ProjectManagers AS pm 
+	WHERE pm.ProjectId = @Id
 	
 	
 	IF EXISTS (SELECT 1
@@ -48,7 +53,7 @@ AS
 					AND ((permit.TargetType = 1 AND permit.TargetId = @ClientId) 
 							OR (permit.TargetType = 2 AND permit.TargetId = @ProjectGroup)
 							--OR (permit.TargetType = 3 AND permit.TargetId = @SalespersonId)
-							OR (permit.TargetType = 4 AND permit.TargetId = @ProjectManagerId)
+							OR (permit.TargetType = 4 AND permit.TargetId IN (SELECT ProjectManagerId FROM @ProjectManagerIdsList))
 							OR (permit.TargetType = 5 AND permit.TargetId = @PracticeId)
 							OR (permit.TargetType IS NOT NULL AND permit.TargetId IS NULL)
 						)
