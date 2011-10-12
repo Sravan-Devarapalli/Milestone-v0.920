@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using DataTransferObjects.Skills;
+using DataTransferObjects;
 
 namespace PracticeManagementService
 {
@@ -25,8 +26,8 @@ namespace PracticeManagementService
         [OperationContract]
         List<SkillLevel> SkillLevelsAll();
 
-        //[OperationContract]
-        //List<PersonSkill> PersonSkillsGetBySkillCategory(int SkillCategoryId);
+        [OperationContract]
+        Person GetPersonWithSkills(int personId);
 
     }
 }
