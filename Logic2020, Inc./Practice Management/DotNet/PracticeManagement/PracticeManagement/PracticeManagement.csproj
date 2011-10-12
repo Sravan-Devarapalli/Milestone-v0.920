@@ -728,6 +728,9 @@
     <None Include="Service References\PersonRoleService\PersonRoleService5.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\PersonService\DataTransferObjects.Skills1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\PersonSkillService\PersonSkillService.wsdl" />
     <None Include="Service References\PersonSkillService\PersonSkillService.xsd">
       <SubType>Designer</SubType>
