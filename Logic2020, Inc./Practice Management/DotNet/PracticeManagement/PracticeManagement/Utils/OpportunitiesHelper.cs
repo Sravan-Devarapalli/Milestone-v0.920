@@ -14,7 +14,7 @@ namespace PraticeManagement.Utils
         private static readonly IDictionary<string, string> _opportunityStatuses
            = new Dictionary<string, string>()
                 {
-                    {"Active", "AciveOpportunity"},
+                    {"Active", string.Empty/*"AciveOpportunity"*/},
                     {"ActiveWithProjectAttached","AciveOptyWithProjectAttached"},
                     {"Won", "WonOpportunity"},
                     {"Lost", "LostOpportunity"},
@@ -43,7 +43,7 @@ namespace PraticeManagement.Utils
             if (opty.Status.Name == "Active")
             {
                 if (opty.ProjectId.HasValue)
-                    return "Active Linked to Project";
+                    return "Linked";
                 else
                     return "Active not Linked to Project";
             }
