@@ -9,107 +9,167 @@
         {
         }
     </style>
+    <script type="text/javascript">
+        function LoadPanel(container) {
+            debugger;
+            var name = panel.activeTabIndex;
+        }
+
+        function ddlLevelChanged(ddlLevel) {
+            setDirty();
+        }
+    </script>
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
     <div style="text-align: center; font-size: large;">
         Skills Entry for
         <asp:Label runat="server" ID="lblUserName"></asp:Label>
     </div>
-    <AjaxControlToolkit:TabContainer runat="server" ID="tcSkillsEntry" ActiveTabIndex="0">
-        <AjaxControlToolkit:TabPanel runat="server" ID="tpBussinessSkills" HeaderText="Bussiness Skills">
-            <ContentTemplate>
-                <asp:UpdatePanel ID="upBussinessSkills" runat="server">
+    <asp:UpdatePanel ID="upSkills" runat="server">
+        <ContentTemplate>
+            <AjaxControlToolkit:TabContainer runat="server" ID="tcSkillsEntry" ActiveTabIndex="0"
+                AutoPostBack="true" OnActiveTabChanged="tcSkillsEntry_ActiveTabChanged">
+                <AjaxControlToolkit:TabPanel runat="server" onClick="checkDirtyBase();" ID="tpBussinessSkills" HeaderText="Bussiness Skills">
                     <ContentTemplate>
                         <div style="background-color: #d4dff8; padding: 5px;">
                             <div style="padding: 5px;">
                                 <asp:Label runat="server" ID="lblCategory" Text="Category"></asp:Label>
-                                <asp:DropDownList runat="server" ID="ddlCategory" DataSourceID="odsSkillCategories"
-                                    DataTextField="Description" DataValueField="Id">
+                                <asp:DropDownList runat="server" ID="ddlBusinessCategory" OnSelectedIndexChanged="ddlCategory_SelectedIndexChanged"
+                                    DataTextField="Description" DataValueField="Id" AutoPostBack="true">
                                 </asp:DropDownList>
                             </div>
                             <div style="background-color: White; overflow: auto;">
-                                <table class="WholeWidth">
-                                    <tr>
-                                        <td>
-                                            &nbsp;
-                                        </td>
-                                        <td style="width: 14%;">
-                                            Level
-                                        </td>
-                                        <td style="width: 12%;">
-                                            Experience
-                                        </td>
-                                        <td style="width: 12%;">
-                                            Last Used
-                                        </td>
-                                        <td style="width: 12%;">
-                                            &nbsp;
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="width: 50%; padding: 5px;">
-                                            Skills Text
-                                        </td>
-                                        <td>
-                                            <asp:DropDownList runat="server" ID="ddlLevel" DataTextField="Description" DataValueField="Id"
-                                                DataSourceID="odsSkillLevel">
-                                            </asp:DropDownList>
-                                        </td>
-                                        <td>
-                                            <asp:DropDownList runat="server" ID="ddlExperience" DataSourceID="odsExperience"
-                                                DataTextField="Name" DataValueField="Id">
-                                            </asp:DropDownList>
-                                        </td>
-                                        <td>
-                                            <asp:DropDownList runat="server" ID="ddlLastUsed" DataSourceID="odsLastUsed" DataTextField="Name" DataValueField="Id" >
-                                                 
-                                            </asp:DropDownList>
-                                        </td>
-                                        <td>
-                                            <asp:LinkButton runat="server" ID="lnkbtnClear" Text="clear"></asp:LinkButton>
-                                        </td>
-                                    </tr>
-                                </table>
+                                <asp:GridView ID="gvBusinessSkills" runat="server" AutoGenerateColumns="false" OnRowDataBound="gvSkills_RowDataBound"
+                                    CssClass="WholeWidth">
+                                    <Columns>
+                                        <asp:TemplateField>
+                                            <HeaderTemplate>
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <asp:HiddenField ID="hdnId" runat="server" Value='<%# Eval("Id") %>' />
+                                                <asp:HiddenField ID="hdnChanged" runat="server" Value="0" />
+                                                <asp:Label ID="lblSkillsDescription" runat="server" Text='<%# Eval("Description") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField>
+                                            <HeaderTemplate>
+                                                Level
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <asp:DropDownList runat="server" ID="ddlLevel" DataTextField="Description" DataValueField="Id"
+                                                    DataSourceID="odsSkillLevel" SkillId='<%# Eval("Id") %>' onchange="ddlLevelChanged(this);">
+                                                </asp:DropDownList>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField>
+                                            <HeaderTemplate>
+                                                Experience
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <asp:DropDownList runat="server" ID="ddlExperience" DataSourceID="odsExperience"
+                                                    DataTextField="Name" DataValueField="Id" SkillId='<%# Eval("Id") %>' onchange="setDirty();">
+                                                </asp:DropDownList>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField>
+                                            <HeaderTemplate>
+                                                Last Used
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <asp:DropDownList runat="server" ID="ddlLastUsed" DataSourceID="odsLastUsed" DataTextField="Name"
+                                                    DataValueField="Id" SkillId='<%# Eval("Id") %>' onchange="setDirty();">
+                                                </asp:DropDownList>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField>
+                                            <ItemTemplate>
+                                                <asp:LinkButton runat="server" ID="lnkbtnClear" Text="clear"  SkillId='<%# Eval("Id") %>' onchange="setDirty();"></asp:LinkButton>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                    </Columns>
+                                </asp:GridView>
                             </div>
                         </div>
                     </ContentTemplate>
-                </asp:UpdatePanel>
-            </ContentTemplate>
-        </AjaxControlToolkit:TabPanel>
-        <AjaxControlToolkit:TabPanel runat="server" ID="tpTechnicalSkills" HeaderText="Technical Skills">
-            <ContentTemplate>
-                <asp:UpdatePanel ID="upTechnicalSkills" runat="server">
+                </AjaxControlToolkit:TabPanel>
+                <AjaxControlToolkit:TabPanel runat="server" ID="tpTechnicalSkills" onClick="checkDirtyBase();" HeaderText="Technical Skills">
+                    <ContentTemplate>
+                        <div style="background-color: #d4dff8; padding: 5px;">
+                            <div style="padding: 5px;">
+                                <asp:Label runat="server" ID="Label1" Text="Category"></asp:Label>
+                                <asp:DropDownList runat="server" ID="ddlTechnicalCategory" OnSelectedIndexChanged="ddlCategory_SelectedIndexChanged"
+                                    DataTextField="Description" DataValueField="Id" AutoPostBack="true">
+                                </asp:DropDownList>
+                            </div>
+                            <div style="background-color: White; overflow: auto;">
+                                <asp:GridView ID="gvTechnicalSkills" runat="server" AutoGenerateColumns="false" OnRowDataBound="gvSkills_RowDataBound"
+                                    CssClass="WholeWidth">
+                                    <Columns>
+                                        <asp:TemplateField>
+                                            <HeaderTemplate>
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblSkillsDescription" runat="server" Text='<%# Eval("Description") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField>
+                                            <HeaderTemplate>
+                                                Level
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <asp:DropDownList runat="server" ID="ddlLevel" DataTextField="Description" DataValueField="Id"
+                                                    DataSourceID="odsSkillLevel">
+                                                </asp:DropDownList>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField>
+                                            <HeaderTemplate>
+                                                Experience
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <asp:DropDownList runat="server" ID="ddlExperience" DataSourceID="odsExperience"
+                                                    DataTextField="Name" DataValueField="Id">
+                                                </asp:DropDownList>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField>
+                                            <HeaderTemplate>
+                                                Last Used
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <asp:DropDownList runat="server" ID="ddlLastUsed" DataSourceID="odsLastUsed" DataTextField="Name"
+                                                    DataValueField="Id">
+                                                </asp:DropDownList>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField>
+                                            <ItemTemplate>
+                                                <asp:LinkButton runat="server" ID="lnkbtnClear" Text="clear"></asp:LinkButton>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                    </Columns>
+                                </asp:GridView>
+                            </div>
+                        </div>
+                    </ContentTemplate>
+                </AjaxControlToolkit:TabPanel>
+                <AjaxControlToolkit:TabPanel runat="server" ID="tpIndustrySkills" onClick="checkDirtyBase();" HeaderText="Industry Skills">
                     <ContentTemplate>
                     </ContentTemplate>
-                </asp:UpdatePanel>
-            </ContentTemplate>
-        </AjaxControlToolkit:TabPanel>
-        <AjaxControlToolkit:TabPanel runat="server" ID="tpIndustrySkills" HeaderText="Industry Skills">
-            <ContentTemplate>
-                <asp:UpdatePanel ID="upIndustrySkills" runat="server">
-                    <ContentTemplate>
-                    </ContentTemplate>
-                </asp:UpdatePanel>
-            </ContentTemplate>
-        </AjaxControlToolkit:TabPanel>
-    </AjaxControlToolkit:TabContainer>
+                </AjaxControlToolkit:TabPanel>
+            </AjaxControlToolkit:TabContainer>
+        </ContentTemplate>
+    </asp:UpdatePanel>
     <br />
     <div style="float: right;">
-        <asp:Button ID="btnSave" runat="server" Text="Save" />
-        <asp:Button ID="btnCancel" runat="server" Text="Cancel" />
+        <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" />
+        <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btnCancel_Click" />
     </div>
-    <asp:ObjectDataSource ID="odsSkillCategories" runat="server" TypeName="PraticeManagement.Utils.SettingsHelper"
-        SelectMethod="GetSkillCategoriesByType" OnSelecting="odsSkillCategories_OnSelecting">
-        <SelectParameters>
-            <asp:Parameter Name="skillTypeId" Type="Int32" />
-        </SelectParameters>
-    </asp:ObjectDataSource>
-    <asp:ObjectDataSource ID="odsSkillLevel" runat="server" TypeName="PraticeManagement.Utils.SettingsHelper"
+    <asp:ObjectDataSource ID="odsSkillLevel" runat="server" TypeName="PraticeManagement.SkillsEntry"
         SelectMethod="GetSkillLevels"></asp:ObjectDataSource>
     <asp:ObjectDataSource ID="odsExperience" runat="server" TypeName="PraticeManagement.SkillsEntry"
         SelectMethod="GetExperiences"></asp:ObjectDataSource>
-
-        <asp:ObjectDataSource ID="odsLastUsed" runat="server" TypeName="PraticeManagement.SkillsEntry"
+    <asp:ObjectDataSource ID="odsLastUsed" runat="server" TypeName="PraticeManagement.SkillsEntry"
         SelectMethod="GetLastUsedYears"></asp:ObjectDataSource>
 </asp:Content>
 
