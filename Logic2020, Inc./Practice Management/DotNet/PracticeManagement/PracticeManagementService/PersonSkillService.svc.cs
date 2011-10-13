@@ -8,6 +8,8 @@ using DataTransferObjects.Skills;
 using DataAccess.Skills;
 using System.ServiceModel.Activation;
 using DataTransferObjects;
+
+
 namespace PracticeManagementService
 {
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
@@ -39,6 +41,33 @@ namespace PracticeManagementService
             person.Industries = PersonSkillDAL.GetPersonIndustriesByPersonId(personId);
 
             return person;
+        }
+
+        public void SavePersonSkills(int personId, string skillsXml)
+        {
+            //XmlDocument doc = new XmlDocument();
+            //XmlElement root = doc.CreateElement("Skills");
+
+            //foreach (var skill in skills)
+            //{
+            //    XmlElement skillTag = doc.CreateElement("Skill");
+
+            //    skillTag.SetAttribute("Id", skill.Skill == null ? "" : skill.Skill.Id.ToString());
+            //    skillTag.SetAttribute("Level", skill.SkillLevel == null ? "" : skill.SkillLevel.Id.ToString());
+            //    skillTag.SetAttribute("Experience", skill.YearsExperience.HasValue ? skill.YearsExperience.Value.ToString() : "");
+            //    skillTag.SetAttribute("LastUsed", skill.LastUsed == null ? "" : skill.LastUsed.ToShortDateString());
+
+            //    root.AppendChild(skillTag);
+            //}
+
+            //doc.AppendChild(root);
+
+            PersonSkillDAL.SavePersonSkills(personId, skillsXml);
+        }
+
+        public void SavePersonIndustrySkills(int personId, string industrySkillsXml)
+        {
+            PersonSkillDAL.SavePersonIndustrySkills(personId, industrySkillsXml);
         }
     }
 }
