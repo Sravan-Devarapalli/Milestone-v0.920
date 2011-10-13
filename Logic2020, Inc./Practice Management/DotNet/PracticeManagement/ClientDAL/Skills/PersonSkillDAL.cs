@@ -7,6 +7,7 @@ using System.Data;
 using DataTransferObjects.Skills;
 using DataAccess.Other;
 
+
 namespace DataAccess.Skills
 {
     public static class PersonSkillDAL
@@ -158,6 +159,44 @@ namespace DataAccess.Skills
             }
         }
 
+        public static void SavePersonSkills(int personId, string skillsXml)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.SavePersonSkills, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Skills, skillsXml);
+
+                    connection.Open();
+
+                    //command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static void SavePersonIndustrySkills(int personId, string industrySkillsXml)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.SavePersonIndustrySkills, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Skills, industrySkillsXml);
+
+                    connection.Open();
+
+                    //command.ExecuteNonQuery();
+                }
+            } 
+        }
+
         private static void ReadSkillLevels(SqlDataReader reader, List<SkillLevel> skillLevels)
         {
             var skillLevelIdColumn = reader.GetOrdinal(Constants.ColumnNames.SkillLevelId);
@@ -192,7 +231,7 @@ namespace DataAccess.Skills
                     {
                         Id = reader.GetInt32(skillCategoryIdColumn),
                         Description = reader.GetString(skillCategoryNameColumn),
-                        DisplayOrder = reader.IsDBNull(displayOrderColumn) ? null : (int?) reader.GetInt32(displayOrderColumn),
+                        DisplayOrder = reader.IsDBNull(displayOrderColumn) ? null : (int?)reader.GetInt32(displayOrderColumn),
                         SkillType = new SkillType
                         {
                             Id = reader.GetInt32(SkillTypeId)
@@ -214,15 +253,15 @@ namespace DataAccess.Skills
                 while (reader.Read())
                 {
                     var skill = new Skill
+                    {
+                        Id = reader.GetInt32(skillIdColumn),
+                        Description = reader.GetString(skillNameColumn),
+                        DisplayOrder = reader.IsDBNull(displayOrderColumn) ? null : (int?)reader.GetInt32(displayOrderColumn),
+                        Category = new SkillCategory
                         {
-                            Id = reader.GetInt32(skillIdColumn),
-                            Description = reader.GetString(skillNameColumn),
-                            DisplayOrder = reader.GetInt32(displayOrderColumn),
-                            Category = new SkillCategory
-                            {
-                                Id = reader.GetInt32(skillCategoryIdColumn)
-                            }
-                        };
+                            Id = reader.GetInt32(skillCategoryIdColumn)
+                        }
+                    };
                     skills.Add(skill);
                 }
             }
