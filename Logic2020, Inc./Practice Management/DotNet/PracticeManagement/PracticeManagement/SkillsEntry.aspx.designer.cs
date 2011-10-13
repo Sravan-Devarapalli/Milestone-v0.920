@@ -22,6 +22,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Label lblUserName;
         
         /// <summary>
+        /// upSkills control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upSkills;
+        
+        /// <summary>
         /// tcSkillsEntry control.
         /// </summary>
         /// <remarks>
@@ -40,15 +49,6 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.TabPanel tpBussinessSkills;
         
         /// <summary>
-        /// upBussinessSkills control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upBussinessSkills;
-        
-        /// <summary>
         /// lblCategory control.
         /// </summary>
         /// <remarks>
@@ -58,49 +58,22 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Label lblCategory;
         
         /// <summary>
-        /// ddlCategory control.
+        /// ddlBusinessCategory control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlCategory;
+        protected global::System.Web.UI.WebControls.DropDownList ddlBusinessCategory;
         
         /// <summary>
-        /// ddlLevel control.
+        /// gvBusinessSkills control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlLevel;
-        
-        /// <summary>
-        /// ddlExperience control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlExperience;
-        
-        /// <summary>
-        /// ddlLastUsed control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlLastUsed;
-        
-        /// <summary>
-        /// lnkbtnClear control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkbtnClear;
+        protected global::System.Web.UI.WebControls.GridView gvBusinessSkills;
         
         /// <summary>
         /// tpTechnicalSkills control.
@@ -112,13 +85,31 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.TabPanel tpTechnicalSkills;
         
         /// <summary>
-        /// upTechnicalSkills control.
+        /// Label1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upTechnicalSkills;
+        protected global::System.Web.UI.WebControls.Label Label1;
+        
+        /// <summary>
+        /// ddlTechnicalCategory control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlTechnicalCategory;
+        
+        /// <summary>
+        /// gvTechnicalSkills control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvTechnicalSkills;
         
         /// <summary>
         /// tpIndustrySkills control.
@@ -128,15 +119,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.TabPanel tpIndustrySkills;
-        
-        /// <summary>
-        /// upIndustrySkills control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upIndustrySkills;
         
         /// <summary>
         /// btnSave control.
@@ -155,15 +137,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancel;
-        
-        /// <summary>
-        /// odsSkillCategories control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource odsSkillCategories;
         
         /// <summary>
         /// odsSkillLevel control.
