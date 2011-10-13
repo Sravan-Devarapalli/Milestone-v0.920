@@ -9,11 +9,7 @@ AS
 		   f.Date, 
 		   f.PersonMilestoneDailyAmount,
 		   f.PersonDiscountDailyAmount,
-		   ISNULL((SELECT SUM(c.FractionOfMargin) 
-							  FROM dbo.Commission AS  c 
-							  WHERE c.ProjectId = f.ProjectId 
-									AND c.CommissionType = 1
-								),0) ProjectSalesCommisionFraction,
+		   ISNULL(c.FractionOfMargin,0) ProjectSalesCommisionFraction,
 		   (ISNULL(f.PayRate, 0) + ISNULL(f.OverheadRate, 0)+ISNULL(f.BonusRate,0)+ISNULL(f.VacationRate,0) 
 			+ ISNULL(f.RecruitingCommissionRate,0)) SLHR,
 		   f.PayRate,
@@ -24,6 +20,12 @@ AS
 		   f.PracticeManagerId,
 		   f.Discount
 	FROM v_FinancialsRetrospective f
+	LEFT JOIN (
+					SELECT ProjectId,SUM(FractionOfMargin) FractionOfMargin
+					FROM dbo.Commission 
+					WHERE CommissionType = 1
+					GROUP BY ProjectId
+		) C ON C.ProjectId = f.ProjectId
 	),
 	MilestoneFinancials AS
 	(
