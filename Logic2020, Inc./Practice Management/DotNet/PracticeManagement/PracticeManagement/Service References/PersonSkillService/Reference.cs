@@ -23,6 +23,15 @@ namespace PraticeManagement.PersonSkillService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonSkillService/SkillLevelsAll", ReplyAction="http://tempuri.org/IPersonSkillService/SkillLevelsAllResponse")]
         DataTransferObjects.Skills.SkillLevel[] SkillLevelsAll();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonSkillService/GetPersonWithSkills", ReplyAction="http://tempuri.org/IPersonSkillService/GetPersonWithSkillsResponse")]
+        DataTransferObjects.Person GetPersonWithSkills(int personId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonSkillService/SavePersonSkills", ReplyAction="http://tempuri.org/IPersonSkillService/SavePersonSkillsResponse")]
+        void SavePersonSkills(int personId, string skillsXml);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonSkillService/SavePersonIndustrySkills", ReplyAction="http://tempuri.org/IPersonSkillService/SavePersonIndustrySkillsResponse")]
+        void SavePersonIndustrySkills(int personId, string industrySkillsXml);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -33,7 +42,6 @@ namespace PraticeManagement.PersonSkillService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonSkillServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonSkillService.IPersonSkillService>, PraticeManagement.PersonSkillService.IPersonSkillService {
         
-       
         public PersonSkillServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -60,6 +68,18 @@ namespace PraticeManagement.PersonSkillService {
         
         public DataTransferObjects.Skills.SkillLevel[] SkillLevelsAll() {
             return base.Channel.SkillLevelsAll();
+        }
+        
+        public DataTransferObjects.Person GetPersonWithSkills(int personId) {
+            return base.Channel.GetPersonWithSkills(personId);
+        }
+        
+        public void SavePersonSkills(int personId, string skillsXml) {
+            base.Channel.SavePersonSkills(personId, skillsXml);
+        }
+        
+        public void SavePersonIndustrySkills(int personId, string industrySkillsXml) {
+            base.Channel.SavePersonIndustrySkills(personId, industrySkillsXml);
         }
     }
 }
