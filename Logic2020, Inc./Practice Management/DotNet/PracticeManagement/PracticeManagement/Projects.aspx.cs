@@ -1487,6 +1487,7 @@ namespace PraticeManagement
 
         private Table GetMonthReportTable(PracticeManagementCurrency revenue, PracticeManagementCurrency margin, bool greaterSeniorityExists)
         {
+            margin.FormatStyle = NumberFormatStyle.Margin;
             //var marginText = greaterSeniorityExists ? Resources.Controls.HiddenCellText : margin.Value.ToString(CurrencyDisplayFormat);
             var reportTable = new Table() { Width = Unit.Percentage(100) };
             var tr = new TableRow() { CssClass = "Revenue" };
@@ -1597,7 +1598,7 @@ namespace PraticeManagement
                         break;
                     case ExportAllId:
                         InsertTotalColumnInHeader(row, insertPosition);
-                        row.Cells[insertPosition + 1].Text="Project Manager(s)";
+                        row.Cells[insertPosition + 1].Text = "Project Manager(s)";
                         break;
                 }
             }
@@ -1612,6 +1613,8 @@ namespace PraticeManagement
                         //Insert Month cells in Excel.
                         InsertMonthFinancialsInExport(row, project, insertPosition, monthsInPeriod, periodStart);
                         row.Cells[monthsInPeriod + insertPosition + 1].Text = GetProjectManagers(project.ProjectManagers);
+                        row.Cells[monthsInPeriod + insertPosition + 1].VerticalAlign = VerticalAlign.Top;
+
                         break;
 
                     case ExportAllId:
@@ -1624,6 +1627,8 @@ namespace PraticeManagement
                         //Insert Total cells in Excel.
                         FillTotalCellInExcelReport(row, project, insertPosition, greaterSeniorityExists);
                         row.Cells[insertPosition + 1].Text = GetProjectManagers(project.ProjectManagers);
+                        row.Cells[insertPosition + 1].VerticalAlign = VerticalAlign.Top;
+
                         break;
                 }
 
