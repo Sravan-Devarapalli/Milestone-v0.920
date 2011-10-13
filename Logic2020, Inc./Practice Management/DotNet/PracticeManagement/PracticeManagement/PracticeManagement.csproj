@@ -731,14 +731,20 @@
     <None Include="Service References\PersonService\DataTransferObjects.Skills1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\PersonSkillService\PersonSkillService.wsdl" />
-    <None Include="Service References\PersonSkillService\PersonSkillService.xsd">
+    <None Include="Service References\PersonSkillService\PersonSkillService11.wsdl" />
+    <None Include="Service References\PersonSkillService\PersonSkillService35.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\PersonSkillService\PersonSkillService1.xsd">
+    <None Include="Service References\PersonSkillService\PersonSkillService36.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\PersonSkillService\PersonSkillService2.xsd">
+    <None Include="Service References\PersonSkillService\PersonSkillService37.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PersonSkillService\PersonSkillService38.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PersonSkillService\PersonSkillService39.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\PersonStatusService\PersonStatusService1.wsdl" />
@@ -938,13 +944,13 @@
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <None Include="Service References\OpportunityService\OpportunityService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
-    <None Include="Service References\PersonSkillService\PersonSkillService.disco" />
     <None Include="Service References\PersonSkillService\configuration91.svcinfo" />
     <None Include="Service References\PersonSkillService\configuration.svcinfo" />
     <None Include="Service References\PersonSkillService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <None Include="Service References\PersonSkillService\PersonSkillService11.disco" />
     <Content Include="SkillsEntry.aspx" />
     <Content Include="Third Party Tools\CKEditor.NET.dll" />
     <Content Include="Third Party Tools\FormsAuthenticationUserImpersonation.dll" />
