@@ -17,7 +17,7 @@ namespace DataAccess.Skills
             public const string SkillLevelId = "SkillLevelId";
             public const string SkillId = "SkillId";
             public const string SkillCategoryName = "SkillCategoryName";
-            public const string SkillLevelName = "SkillLevelName";            
+            public const string SkillLevelName = "SkillLevelName";
             public const string SkillName = "SkillName";
             public const string YearsExperience = "YearsExperience";
             public const string LastUsed = "LastUsed";
@@ -31,6 +31,8 @@ namespace DataAccess.Skills
         public class ParameterNames
         {
             public const string PersonId = "@PersonId";
+            public const string Skills = "@Skills";
+
         }
 
         public class ProcedureNames
@@ -40,6 +42,8 @@ namespace DataAccess.Skills
             public const string GetSkillsAll = "Skills.GetSkillsAll";
             public const string GetPersonSkillsByPersonId = "Skills.GetPersonSkillsByPersonId";
             public const string GetPersonIndustriesByPersonId = "Skills.GetPersonIndustriesByPersonId";
+            public const string SavePersonSkills = "Skills.SavePersonSkills";
+            public const string SavePersonIndustrySkills = "Skills.SavePersonIndustrySkills";
         }
 
         #endregion
