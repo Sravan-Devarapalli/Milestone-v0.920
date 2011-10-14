@@ -121,6 +121,15 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.TabPanel tpIndustrySkills;
         
         /// <summary>
+        /// gvIndustrySkills control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvIndustrySkills;
+        
+        /// <summary>
         /// btnSave control.
         /// </summary>
         /// <remarks>
