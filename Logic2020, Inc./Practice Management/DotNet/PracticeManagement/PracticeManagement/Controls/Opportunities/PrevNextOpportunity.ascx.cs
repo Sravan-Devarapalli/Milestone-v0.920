@@ -40,6 +40,19 @@ namespace PraticeManagement.Controls.Opportunities
             return Utils.Generic.GetTargetUrlWithReturn(detailsLink, Request.Url.AbsoluteUri);
         }
 
+        public string GetProjectDetailUrl(Opportunity opty)
+        {
+            if (opty.Project != null)
+            {
+                return Utils.Generic.GetTargetUrlWithReturn(string.Format(Constants.ApplicationPages.DetailRedirectFormat,
+                                 Constants.ApplicationPages.ProjectDetail,
+                                 opty.Project.Id.ToString())
+                                 , Request.Url.AbsoluteUri
+                                 );
+            }
+            return string.Empty;
+        }
+
         //protected void ProjectSelected(object source, ObjectDataSourceStatusEventArgs e)
         //{
         //    var res = e.ReturnValue as Opportunity[];
