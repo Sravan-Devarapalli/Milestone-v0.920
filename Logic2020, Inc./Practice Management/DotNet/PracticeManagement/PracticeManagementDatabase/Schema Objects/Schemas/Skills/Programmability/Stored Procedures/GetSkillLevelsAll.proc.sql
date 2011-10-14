@@ -5,5 +5,6 @@ AS
 		   S.[SkillLevelId],
 		   S.DisplayOrder
 	FROM Skills.SkillLevel S
-	WHERE IsActive = 1
+	WHERE S.IsActive = 1
+		AND S.IsDeleted = 0
 	 
