@@ -488,6 +488,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.ProjectsGroupedByPerson.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.ProjectsGroupedByPractice.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.QuickLinks.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Skills.Industry.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Skills.Skill.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Skills.Skill1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Skills.SkillCategory.datasource" />
