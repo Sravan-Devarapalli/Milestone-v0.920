@@ -48,11 +48,11 @@ AS
             sen.[Name] AS 'Seniority',
             pay.VacationDays AS 'Vacation Days',
 			manager.FirstName + ' ' + manager.LastName AS 'Manager Name',
-            rcd.RecruiterName,
-            rcd.cc1 AS 'Recruiting comission 1 $',
-            rcd.cd1 AS 'Recruiting comission 1 days',
-            rcd.cc2 AS 'Recruiting comission 2 $',
-            rcd.cd2 AS 'Recruiting comission 2 days'
+            rcd.RecruiterName--,
+            --rcd.cc1 AS 'Recruiting comission 1 $',
+            --rcd.cd1 AS 'Recruiting comission 1 days',
+            --rcd.cc2 AS 'Recruiting comission 2 $',
+            --rcd.cd2 AS 'Recruiting comission 2 days'
     FROM    dbo.Person AS pers
             LEFT OUTER JOIN dbo.v_Pay AS pay ON pers.PersonId = pay.PersonId
             INNER JOIN #LastPay AS lp ON lp.Person = pay.PersonId AND (lp.EndDate = pay.EndDate OR pay.EndDate IS NULL)
