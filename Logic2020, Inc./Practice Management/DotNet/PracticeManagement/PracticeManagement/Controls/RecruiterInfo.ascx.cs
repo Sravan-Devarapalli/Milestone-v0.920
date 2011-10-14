@@ -193,7 +193,7 @@ namespace PraticeManagement.Controls
 
         private void UpdateCommissionForRecruiter()
         {
-            if (RecruiterId.HasValue)
+            if (RecruiterId.HasValue && ShowCommissionDetails)
             {
                 using (DefaultRecruiterCommissionServiceClient serviceClient =
                     new DefaultRecruiterCommissionServiceClient())
@@ -214,6 +214,10 @@ namespace PraticeManagement.Controls
                         throw;
                     }
                 }
+            }
+            else
+            {
+                PopulateControls(null as DefaultRecruiterCommission);
             }
             UpdateInfoState();
             OnInfoChanged();
