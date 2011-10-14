@@ -22,6 +22,7 @@ namespace DataAccess.Skills
             public const string YearsExperience = "YearsExperience";
             public const string LastUsed = "LastUsed";
             public const string IndustryId = "IndustryId";
+            public const string IndustryName = "IndustryName";
         }
 
         public class FunctionNames
@@ -40,6 +41,7 @@ namespace DataAccess.Skills
             public const string GetSkillCategoriesAll = "Skills.GetSkillCategoriesAll";
             public const string GetSkillLevelsAll = "Skills.GetSkillLevelsAll";
             public const string GetSkillsAll = "Skills.GetSkillsAll";
+            public const string GetIndustrySkillsAll = "Skills.GetIndustrySkillsAll";
             public const string GetPersonSkillsByPersonId = "Skills.GetPersonSkillsByPersonId";
             public const string GetPersonIndustriesByPersonId = "Skills.GetPersonIndustriesByPersonId";
             public const string SavePersonSkills = "Skills.SavePersonSkills";
