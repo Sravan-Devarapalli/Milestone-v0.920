@@ -324,6 +324,19 @@ namespace PraticeManagement.Controls.Opportunities
             return Utils.Generic.GetTargetUrlWithReturn(Urls.OpportunityDetailsLink(opportunityId), Request.Url.AbsoluteUri);
         }
 
+        public string GetProjectDetailUrl(Opportunity opty)
+        {
+            if (opty.Project != null)
+            {
+                return Utils.Generic.GetTargetUrlWithReturn(string.Format(Constants.ApplicationPages.DetailRedirectFormat,
+                                 Constants.ApplicationPages.ProjectDetail,
+                                 opty.Project.Id.ToString())
+                                 , Request.Url.AbsoluteUri
+                                 );
+            }
+            return string.Empty;
+        }
+
         protected string GetPersonDetailsLink(int personId, int index)
         {
             return Urls.GetPersonDetailsUrl(
@@ -662,6 +675,8 @@ namespace PraticeManagement.Controls.Opportunities
 
             return string.Format(Description, descriptionText); ;
         }
+
+       
 
         private Table GetSummaryDetails()
         {
