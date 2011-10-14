@@ -233,14 +233,16 @@
                         <table style="padding-left: 5px;" class="PaddingClass WholeWidth">
                             <tr style="height: 30px;">
                                 <td style="width: 12%;">
-                                    Number
+                                    Opportunity Number
                                 </td>
-                                <td style="width: 38%">
+                                <td style="width: 43%">
                                     <asp:Label ID="lblOpportunityNumber" runat="server" />
                                     &nbsp;(last updated:
                                     <asp:Label ID="lblLastUpdate" runat="server" />)
+                                    &nbsp;&nbsp;
+                                    <asp:HyperLink ID="hpProject" runat="server"></asp:HyperLink>
                                 </td>
-                                <td colspan="2" style="white-space: nowrap; width: 50%;">
+                                <td colspan="2" style="white-space: nowrap; width: 45%;">
                                     <table cellpadding="4px;">
                                         <tr>
                                             <td style="padding-right: 4px;">
