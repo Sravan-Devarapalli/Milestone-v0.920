@@ -63,6 +63,23 @@ namespace DataAccess.Skills
             return skillLevels;
         }
 
+        public static List<Industry> GetIndustrySkillsAll()
+        {
+            var industrySkills = new List<Industry>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.GetIndustrySkillsAll, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    connection.Open();
+                    var reader = command.ExecuteReader();
+                    ReadIndustrySkills(reader, industrySkills);
+                }
+            }
+            return industrySkills;
+        }
+
         public static List<PersonSkill> GetPersonSkillsByPersonId(int personId)
         {
             var personSkills = new List<PersonSkill>();
@@ -159,44 +176,6 @@ namespace DataAccess.Skills
             }
         }
 
-        public static void SavePersonSkills(int personId, string skillsXml)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            {
-                using (var command = new SqlCommand(Constants.ProcedureNames.SavePersonSkills, connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.CommandTimeout = connection.ConnectionTimeout;
-
-                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.Skills, skillsXml);
-
-                    connection.Open();
-
-                    //command.ExecuteNonQuery();
-                }
-            }
-        }
-
-        public static void SavePersonIndustrySkills(int personId, string industrySkillsXml)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            {
-                using (var command = new SqlCommand(Constants.ProcedureNames.SavePersonIndustrySkills, connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.CommandTimeout = connection.ConnectionTimeout;
-
-                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.Skills, industrySkillsXml);
-
-                    connection.Open();
-
-                    //command.ExecuteNonQuery();
-                }
-            } 
-        }
-
         private static void ReadSkillLevels(SqlDataReader reader, List<SkillLevel> skillLevels)
         {
             var skillLevelIdColumn = reader.GetOrdinal(Constants.ColumnNames.SkillLevelId);
@@ -263,6 +242,64 @@ namespace DataAccess.Skills
                         }
                     };
                     skills.Add(skill);
+                }
+            }
+        }
+
+        private static void ReadIndustrySkills(SqlDataReader reader, List<Industry> industrySkills)
+        {
+            var industryIdColumn = reader.GetOrdinal(Constants.ColumnNames.IndustryId);
+            var industryNameColumn = reader.GetOrdinal(Constants.ColumnNames.IndustryName);
+            var displayOrderColumn = reader.GetOrdinal(Constants.ColumnNames.DisplayOrder);
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    var industry = new Industry
+                    {
+                        Id = reader.GetInt32(industryIdColumn),
+                        Description = reader.GetString(industryNameColumn),
+                        DisplayOrder = reader.IsDBNull(displayOrderColumn) ? null : (int?)reader.GetInt32(displayOrderColumn)
+                    };
+                    industrySkills.Add(industry);
+                }
+            }
+        }
+
+        public static void SavePersonSkills(int personId, string skillsXml)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.SavePersonSkills, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Skills, skillsXml);
+
+                    connection.Open();
+
+                    //command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static void SavePersonIndustrySkills(int personId, string industrySkillsXml)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.SavePersonIndustrySkills, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Skills, industrySkillsXml);
+
+                    connection.Open();
+
+                    //command.ExecuteNonQuery();
                 }
             }
         }
