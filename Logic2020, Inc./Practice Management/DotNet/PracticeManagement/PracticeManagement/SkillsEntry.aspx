@@ -11,7 +11,6 @@
     </style>
     <script type="text/javascript">
         function LoadPanel(container) {
-            debugger;
             var name = panel.activeTabIndex;
         }
 
