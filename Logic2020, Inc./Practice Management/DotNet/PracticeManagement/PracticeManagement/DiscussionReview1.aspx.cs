@@ -825,8 +825,8 @@ namespace PraticeManagement
                 ucProposedResources.Enabled = canEdit;
 
             btnConvertToProject.Enabled =
-                btnAttachToProject.Enabled = canEdit && !opportunity.ProjectId.HasValue;
-            hdnHasProjectIdOrPermission.Value = canEdit && !opportunity.ProjectId.HasValue ? "false" : "true";
+                btnAttachToProject.Enabled = canEdit && (opportunity.Project == null);
+            hdnHasProjectIdOrPermission.Value = canEdit && (opportunity.Project == null) ? "false" : "true";
 
             ddlClientGroup.Visible = canEdit;
 
@@ -907,7 +907,7 @@ namespace PraticeManagement
 
         private void PopulateProjectsDropDown()
         {
-            ListItem selectedProject = ddlProjects.Items.FindByValue(Opportunity.ProjectId.ToString());
+            ListItem selectedProject = ddlProjects.Items.FindByValue(Opportunity.Project.Id.ToString());
             if (selectedProject != null)
             {
                 ddlProjects.SelectedValue = selectedProject.Value;
@@ -1038,7 +1038,11 @@ namespace PraticeManagement
                  || ddlProjects.SelectedValue == "-1")
                )
             {
-                opportunity.ProjectId = int.Parse(ddlProjects.SelectedValue);
+                opportunity.Project = new Project
+                {
+                    Id =
+                        int.Parse(ddlProjects.SelectedValue)
+                };
             }
 
             var selectedValue = ddlOpportunityOwner.SelectedValue;
