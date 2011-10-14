@@ -346,8 +346,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam,
                                                 !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam,
-                                                opportunity.ProjectId.HasValue
-                                                    ? (object)opportunity.ProjectId.Value
+                                                opportunity.Project != null && opportunity.Project.Id.HasValue
+                                                    ? (object)opportunity.Project.Id.Value
                                                     : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityIndexParam,
                                                 opportunity.OpportunityIndex.HasValue
@@ -464,8 +464,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam,
                                                 !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam,
-                                                opportunity.ProjectId.HasValue
-                                                    ? (object)opportunity.ProjectId.Value
+                                                opportunity.Project != null && opportunity.Project.Id.HasValue
+                                                    ? (object)opportunity.Project.Id.Value
                                                     : DBNull.Value);
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.EstimatedRevenueParam,
@@ -579,6 +579,7 @@ namespace DataAccess
                 var proposedIndex = reader.GetOrdinal(Constants.ColumnNames.ProposedColumn);
                 var sendOutIndex = reader.GetOrdinal(Constants.ColumnNames.SendOutColumn);
                 var projectId = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+                var projectNumber = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
                 var opportunityIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIndexColumn);
                 var revenueTypeIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueTypeColumn);
                 var ownerIdIndex = reader.GetOrdinal(Constants.ColumnNames.OwnerIdColumn);
@@ -688,8 +689,14 @@ namespace DataAccess
                                     }
                                 },
                             LastUpdate = reader.GetDateTime(lastUpdateIndex),
-                            ProjectId =
-                                !reader.IsDBNull(projectId) ? (int?)reader.GetInt32(projectId) : null,
+                            Project =
+                                !reader.IsDBNull(projectId) ? 
+                                new Project 
+                                { 
+                                    Id = (int?)reader.GetInt32(projectId), 
+                                    ProjectNumber = reader.GetString(projectNumber)
+                                } 
+                                    : null,
                             OpportunityIndex =
                                 !reader.IsDBNull(opportunityIndex) ? (int?)reader.GetInt32(opportunityIndex) : null,
                             OpportunityRevenueType = (RevenueType)reader.GetInt32(revenueTypeIndex),
