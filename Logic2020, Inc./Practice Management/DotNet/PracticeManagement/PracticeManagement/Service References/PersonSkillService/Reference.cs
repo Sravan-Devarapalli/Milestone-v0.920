@@ -24,6 +24,9 @@ namespace PraticeManagement.PersonSkillService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonSkillService/SkillLevelsAll", ReplyAction="http://tempuri.org/IPersonSkillService/SkillLevelsAllResponse")]
         DataTransferObjects.Skills.SkillLevel[] SkillLevelsAll();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonSkillService/GetIndustrySkillsAll", ReplyAction="http://tempuri.org/IPersonSkillService/GetIndustrySkillsAllResponse")]
+        DataTransferObjects.Skills.Industry[] GetIndustrySkillsAll();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonSkillService/GetPersonWithSkills", ReplyAction="http://tempuri.org/IPersonSkillService/GetPersonWithSkillsResponse")]
         DataTransferObjects.Person GetPersonWithSkills(int personId);
         
@@ -68,6 +71,10 @@ namespace PraticeManagement.PersonSkillService {
         
         public DataTransferObjects.Skills.SkillLevel[] SkillLevelsAll() {
             return base.Channel.SkillLevelsAll();
+        }
+        
+        public DataTransferObjects.Skills.Industry[] GetIndustrySkillsAll() {
+            return base.Channel.GetIndustrySkillsAll();
         }
         
         public DataTransferObjects.Person GetPersonWithSkills(int personId) {
