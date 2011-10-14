@@ -328,6 +328,19 @@ namespace PraticeManagement.Controls.Generic
             return string.Format(Description,descriptionText); ;
         }
 
+        public string GetProjectDetailUrl(Opportunity opty)
+        {
+            if (opty.Project != null)
+            {
+                return Utils.Generic.GetTargetUrlWithReturn(string.Format(Constants.ApplicationPages.DetailRedirectFormat,
+                                 Constants.ApplicationPages.ProjectDetail,
+                                 opty.Project.Id.ToString())
+                                 , Request.Url.AbsoluteUri
+                                 );
+            }
+            return string.Empty;
+        }
+
     }
 }
 
