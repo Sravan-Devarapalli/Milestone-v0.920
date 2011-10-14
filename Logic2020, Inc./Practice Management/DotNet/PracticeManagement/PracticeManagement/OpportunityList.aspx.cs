@@ -126,7 +126,7 @@ namespace PraticeManagement
                                          Owner = opp.Owner != null ? opp.Owner.PersonLastFirstName : string.Empty,
                                          CreateDate = opp.CreateDate.ToShortDateString(),
                                          LastUpdate = opp.LastUpdate.ToShortDateString(),
-                                         ProjectId = opp.ProjectId != null ? opp.ProjectId.ToString() : string.Empty,
+                                         ProjectId = opp.Project != null && opp.Project.Id.HasValue ? opp.Project.Id.ToString() : string.Empty,
                                          OpportunityIndex = opp.OpportunityIndex != null ? opp.OpportunityIndex.ToString() : string.Empty,
                                          ProjectedEndDate = opp.ProjectedEndDate != null ? opp.ProjectedEndDate.ToString() : string.Empty,
                                          Description = opp.Description != null ? opp.Description.ToString() : string.Empty,
