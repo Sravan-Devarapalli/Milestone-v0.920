@@ -892,7 +892,7 @@
                             <asp:View ID="vwRecruiter" runat="server">
                                 <asp:Panel ID="pnlRecruiter" runat="server" CssClass="tab-pane WholeWidth">
                                     <uc1:RecruiterInfo ID="recruiterInfo" NeedFirstItemForRecruiterDropDown="true" runat="server"
-                                        OnInfoChanged="recruiterInfo_InfoChanged" />
+                                        OnInfoChanged="recruiterInfo_InfoChanged" ShowCommissionDetails="false" />
                                 </asp:Panel>
                             </asp:View>
                             <asp:View ID="vwCommission" runat="server">
