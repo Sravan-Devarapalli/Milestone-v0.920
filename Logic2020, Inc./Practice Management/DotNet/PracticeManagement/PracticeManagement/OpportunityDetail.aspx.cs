@@ -757,8 +757,8 @@ namespace PraticeManagement
                 ucProposedResources.Enabled = canEdit;
 
             btnConvertToProject.Enabled =
-               btnAttachToProject.Enabled = canEdit && !opportunity.ProjectId.HasValue;
-            hdnHasProjectIdOrPermission.Value = canEdit && !opportunity.ProjectId.HasValue ? "false" : "true";
+               btnAttachToProject.Enabled = canEdit && (opportunity.Project == null);
+            hdnHasProjectIdOrPermission.Value = canEdit && (opportunity.Project == null) ? "false" : "true";
 
             ddlClientGroup.Visible = canEdit;
 
@@ -798,6 +798,20 @@ namespace PraticeManagement
             txtEstRevenue.Text = opportunity.EstimatedRevenue != null ? opportunity.EstimatedRevenue.Value.ToString("###,###,###,###,##0") : string.Empty;
             txtOpportunityName.Text = opportunity.Name;
             lblOpportunityNumber.Text = opportunity.OpportunityNumber;
+            if (opportunity.Project != null)
+            {
+                hpProject.Text = string.Format("Linked to Project {0}", opportunity.Project.ProjectNumber);
+                hpProject.NavigateUrl =
+                      Utils.Generic.GetTargetUrlWithReturn(string.Format(Constants.ApplicationPages.DetailRedirectFormat,
+                                 Constants.ApplicationPages.ProjectDetail,
+                                 opportunity.Project.Id.ToString())
+                                 , Request.Url.AbsoluteUri
+                                 );
+            }
+            else
+            {
+                hpProject.Visible = false;
+            }
 
             dpStartDate.DateValue = opportunity.ProjectedStartDate.HasValue ? opportunity.ProjectedStartDate.Value : DateTime.MinValue;
             dpEndDate.DateValue = opportunity.ProjectedEndDate.HasValue ? opportunity.ProjectedEndDate.Value : DateTime.MinValue;
@@ -835,7 +849,11 @@ namespace PraticeManagement
 
         private void PopulateProjectsDropDown()
         {
-            ListItem selectedProject = ddlProjects.Items.FindByValue(Opportunity.ProjectId.ToString());
+            ListItem selectedProject = null;
+            if (Opportunity.Project != null && Opportunity.Project.Id.HasValue)
+            {
+                selectedProject = ddlProjects.Items.FindByValue(Opportunity.Project.Id.ToString());
+            }
             if (selectedProject != null)
             {
                 ddlProjects.SelectedValue = selectedProject.Value;
@@ -969,7 +987,7 @@ namespace PraticeManagement
                  || ddlProjects.SelectedValue == "-1")
                )
             {
-                opportunity.ProjectId = int.Parse(ddlProjects.SelectedValue);
+                opportunity.Project = new Project { Id = int.Parse(ddlProjects.SelectedValue) };
             }
 
             var selectedValue = ddlOpportunityOwner.SelectedValue;
