@@ -29,7 +29,7 @@ namespace PraticeManagement.Utils
 
         public static string GetIndicatorClass(Opportunity opty)
         {
-            if (opty.Status.Name == "Active" && opty.ProjectId.HasValue)
+            if (opty.Status.Name == "Active" && opty.Project != null)
             {
                 return GetIndicatorClassByStatus("ActiveWithProjectAttached");
             }
@@ -42,8 +42,8 @@ namespace PraticeManagement.Utils
         {
             if (opty.Status.Name == "Active")
             {
-                if (opty.ProjectId.HasValue)
-                    return "Linked";
+                if (opty.Project != null)
+                    return string.Format("Linked to {0}", opty.Project.ProjectNumber);
                 else
                     return "Active not Linked to Project";
             }
@@ -52,6 +52,8 @@ namespace PraticeManagement.Utils
                 return opty.Status.Name;
             }
         }
+
+        
 
         #region Summary
 
