@@ -35,7 +35,7 @@ namespace DataTransferObjects
         /// Gets or sets an ProjectId of the related Project.
         /// </summary>
         [DataMember]
-        public int? ProjectId
+        public Project Project
         {
             get;
             set;
