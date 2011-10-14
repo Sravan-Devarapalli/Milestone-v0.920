@@ -15,5 +15,6 @@ BEGIN
 	JOIN Skills.SkillType st ON st.SkillTypeId = sc.SkillTypeId
 	WHERE PS.PersonId = @PersonId 
 			AND s.IsActive = 1
+			AND s.IsDeleted = 0
 
 END
