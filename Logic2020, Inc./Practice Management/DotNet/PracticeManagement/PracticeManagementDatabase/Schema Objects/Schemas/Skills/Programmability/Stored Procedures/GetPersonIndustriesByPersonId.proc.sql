@@ -9,5 +9,6 @@ BEGIN
 	JOIN Skills.Industry I ON I.IndustryId = PInd.IndustryId
 	WHERE PInd.PersonId = @PersonId
 		AND I.IsActive = 1
+		AND I.IsDeleted = 0
 
 END
