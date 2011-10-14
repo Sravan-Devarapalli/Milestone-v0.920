@@ -29,6 +29,7 @@ AS
 	       o.OpportunityStatusName,
 	       o.PracticeName,
 	       o.ProjectId,
+		   proj.ProjectNumber,
 	       o.OpportunityIndex,
 	       o.RevenueType,
 		   o.OwnerId,		   
@@ -45,4 +46,5 @@ AS
 	 LEFT JOIN dbo.Person p ON o.OwnerId = p.PersonId
 	 LEFT JOIN dbo.PersonStatus ps ON ps.PersonStatusId = o.SalespersonStatusId 	
 	 LEFT JOIN dbo.PersonStatus os ON os.PersonStatusId = o.OwnerStatusId
+	 LEFT JOIN dbo.Project proj ON proj.ProjectId = o.ProjectId
 	 WHERE o.OpportunityId = @OpportunityId
