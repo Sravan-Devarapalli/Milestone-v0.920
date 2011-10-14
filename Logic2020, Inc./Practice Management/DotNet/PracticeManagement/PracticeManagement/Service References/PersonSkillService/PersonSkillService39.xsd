@@ -63,6 +63,20 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="SkillLevel" nillable="true" type="tns:SkillLevel" />
+  <xs:complexType name="ArrayOfIndustry">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Industry" nillable="true" type="tns:Industry" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfIndustry" nillable="true" type="tns:ArrayOfIndustry" />
+  <xs:complexType name="Industry">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:LookupBase">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Industry" nillable="true" type="tns:Industry" />
   <xs:complexType name="ArrayOfPersonContactInfo">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="PersonContactInfo" nillable="true" type="tns:PersonContactInfo" />
