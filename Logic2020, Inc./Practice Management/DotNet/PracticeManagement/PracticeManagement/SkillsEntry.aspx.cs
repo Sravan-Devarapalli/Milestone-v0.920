@@ -9,6 +9,7 @@ using PraticeManagement.Utils;
 using System.ComponentModel;
 using DataTransferObjects;
 using DataTransferObjects.Skills;
+using System.Xml;
 
 
 namespace PraticeManagement
@@ -81,8 +82,13 @@ namespace PraticeManagement
 
         protected void ddlCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int c = tcSkillsEntry.ActiveTabIndex;
-            BindSkills(c);
+            int activeTabIndex = tcSkillsEntry.ActiveTabIndex;
+            if (IsDirty)
+            {
+                SaveSkills(activeTabIndex);
+            }
+
+            BindSkills(activeTabIndex);
         }
 
         protected void gvSkills_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -96,13 +102,16 @@ namespace PraticeManagement
 
                 if (Person.Skills.Count > 0)
                 {
-                    var skill = Person.Skills.Where(s => s.Skill.Id == Convert.ToInt32(hdnId.Value)).First();
-
-                    if (skill != null)
+                    if (Person.Skills.Where(s => s.Skill.Id == Convert.ToInt32(hdnId.Value)).Count() > 0)
                     {
-                        ddlLevel.SelectedValue = skill.SkillLevel.Id.ToString();
-                        ddlExperience.SelectedValue = skill.YearsExperience.Value.ToString();
-                        ddlLastUsed.SelectedValue = skill.LastUsed.ToString();
+                        var skill = Person.Skills.Where(s => s.Skill.Id == Convert.ToInt32(hdnId.Value)).First();
+
+                        if (skill != null)
+                        {
+                            ddlLevel.SelectedValue = skill.SkillLevel.Id.ToString();
+                            ddlExperience.SelectedValue = skill.YearsExperience.Value.ToString();
+                            ddlLastUsed.SelectedValue = skill.LastUsed.ToString();
+                        }
                     }
                 }
             }
@@ -111,7 +120,12 @@ namespace PraticeManagement
         protected void btnSave_Click(object sender, EventArgs e)
         {
             int c = tcSkillsEntry.ActiveTabIndex;
-            switch (c)
+            SaveSkills(c);
+        }
+
+        private void SaveSkills(int activeTabIndex)
+        {
+            switch (activeTabIndex)
             {
                 case 0:
                     SaveBusinessSkills();
@@ -127,30 +141,32 @@ namespace PraticeManagement
 
         private void RenderSkills(int activeTabIndex)
         {
-            var categories = Utils.SettingsHelper.GetSkillCategoriesByType(activeTabIndex + 1);
-
-            switch (activeTabIndex)
+            if (activeTabIndex == 0 || activeTabIndex == 1)
             {
-                case 0:
-                    if (ddlBusinessCategory.DataSource == null && ddlBusinessCategory.Items.Count == 0)
-                    {
-                        ddlBusinessCategory.DataSource = categories;
-                        ddlBusinessCategory.DataBind();
-                        ddlBusinessCategory.SelectedIndex = 0;
-                    }
-                    break;
+                var categories = Utils.SettingsHelper.GetSkillCategoriesByType(activeTabIndex + 1);
 
-                case 1:
-                    if (ddlTechnicalCategory.DataSource == null && ddlTechnicalCategory.Items.Count == 0)
-                    {
-                        ddlTechnicalCategory.DataSource = categories;
-                        ddlTechnicalCategory.DataBind();
-                        ddlTechnicalCategory.SelectedIndex = 0;
-                    }
-                    break;
+                switch (activeTabIndex)
+                {
+                    case 0:
+                        if (ddlBusinessCategory.DataSource == null && ddlBusinessCategory.Items.Count == 0)
+                        {
+                            ddlBusinessCategory.DataSource = categories;
+                            ddlBusinessCategory.DataBind();
+                            ddlBusinessCategory.SelectedIndex = 0;
+                        }
+                        ddlBusinessCategory.Attributes.Add("PreviousSelected", ddlBusinessCategory.SelectedIndex.ToString());
+                        break;
 
-                case 2:
-                    break;
+                    case 1:
+                        if (ddlTechnicalCategory.DataSource == null && ddlTechnicalCategory.Items.Count == 0)
+                        {
+                            ddlTechnicalCategory.DataSource = categories;
+                            ddlTechnicalCategory.DataBind();
+                            ddlTechnicalCategory.SelectedIndex = 0;
+                        }
+                        ddlTechnicalCategory.Attributes.Add("PreviousSelected", ddlTechnicalCategory.SelectedIndex.ToString());
+                        break;
+                }
             }
 
             BindSkills(activeTabIndex);
@@ -168,15 +184,104 @@ namespace PraticeManagement
                     gvTechnicalSkills.DataSource = Utils.SettingsHelper.GetSkillsByCategory(SelectedTechnicalCategory);
                     gvTechnicalSkills.DataBind();
                     break;
+                case 2:
+                    gvIndustrySkills.DataSource = Utils.SettingsHelper.GetIndustrySkillsAll();
+                    gvIndustrySkills.DataBind();
+                    break;
             }
         }
 
         private void SaveBusinessSkills()
         {
             var rows = gvBusinessSkills.Rows;
+            var newSkills = new List<PersonSkill>();
+            var previousSkills = new List<PersonSkill>();
+            previousSkills.AddRange(Person.Skills);
 
+            XmlDocument doc = new XmlDocument();
+            XmlElement root = doc.CreateElement("Skills");
+            
             foreach (GridViewRow row in rows)
             {
+                var hdnChanged = row.FindControl("hdnChanged") as HiddenField;
+                if (hdnChanged != null && hdnChanged.Value == "1")
+                {
+                    var ddlLevel = row.FindControl("ddlLevel") as DropDownList;
+                    var ddlExperience = row.FindControl("ddlExperience") as DropDownList;
+                    var ddlLastUsed = row.FindControl("ddlLastUsed") as DropDownList;
+                    var hdnId = row.FindControl("hdnId") as HiddenField;
+                    int skillId = Convert.ToInt32(hdnId.Value);
+
+                    if (ddlLevel.SelectedIndex == 0 && ddlExperience.SelectedIndex == 0 && ddlLastUsed.SelectedIndex == 0)
+                    {
+                        //delete records.
+                        if (previousSkills.Count > 0 && previousSkills.Where(s => s.Skill.Id == skillId).Count() != 0)
+                        {
+                            int index = previousSkills.FindIndex(s => s.Skill.Id == skillId);
+                            previousSkills.RemoveAt(index);
+                        }
+                    }
+                    else
+                    {
+                        int levelSelected = Convert.ToInt32(ddlLevel.SelectedValue);
+                        int experienceSelected = Convert.ToInt32(ddlExperience.SelectedValue);
+                        int lastUsedSelected = Convert.ToInt32(ddlLastUsed.SelectedValue);
+
+
+                        //insert or update.
+                        if (previousSkills.Count == 0 || previousSkills.Where(s => s.Skill.Id == skillId).Count() == 0)
+                        {
+                            //insert.
+                            PersonSkill personSkill = new PersonSkill
+                            {
+                                Skill = new Skill { Id = skillId },
+                                SkillLevel = new SkillLevel { Id = levelSelected },
+                                YearsExperience = experienceSelected,
+                                LastUsed = lastUsedSelected
+                            };
+
+                            newSkills.Add(personSkill);
+                        }
+                        else
+                        {
+                            //update.
+                            var skill = previousSkills.Where(s => s.Skill.Id == skillId).First();
+                            skill.SkillLevel.Id = levelSelected;
+                            skill.YearsExperience = experienceSelected;
+                            skill.LastUsed = lastUsedSelected;
+                        }
+                    }
+
+                    XmlElement skillTag = doc.CreateElement("Skill");
+
+                    skillTag.SetAttribute("Id", hdnId.Value);
+                    skillTag.SetAttribute("Level", ddlLevel.SelectedValue);
+                    skillTag.SetAttribute("Experience", ddlExperience.SelectedValue);
+                    skillTag.SetAttribute("LastUsed", ddlLastUsed.SelectedValue);
+
+                    root.AppendChild(skillTag);
+
+                }
+            }
+            previousSkills.AddRange(newSkills);
+
+            doc.AppendChild(root);
+            string skillsXml = doc.InnerXml;
+
+            using (var serviceClient = new PersonSkillService.PersonSkillServiceClient())
+            {
+                try
+                {
+                    serviceClient.SavePersonSkills(Person.Id.Value, skillsXml);
+                    Person.Skills.Clear();
+                    Person.Skills.AddRange(previousSkills);
+
+                    ClearDirty();
+                }
+                catch
+                {
+                    serviceClient.Abort();
+                }
             }
         }
 
@@ -218,7 +323,7 @@ namespace PraticeManagement
             var years = new List<NameValuePair>();
             var currentYear = SettingsHelper.GetCurrentPMTime().Year;
             var emptyItem = new NameValuePair();
-            emptyItem.Id = null;
+            emptyItem.Id = 0;
             years.Add(emptyItem);
             for (var index = 1990; index <= currentYear; index++)
             {
