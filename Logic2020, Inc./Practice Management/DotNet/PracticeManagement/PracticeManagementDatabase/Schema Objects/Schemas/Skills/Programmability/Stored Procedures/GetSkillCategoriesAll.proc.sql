@@ -5,4 +5,5 @@ AS
 		   S.SkillCategoryId,
 		   S.DisplayOrder
 	FROM Skills.SkillCategory S
-	WHERE IsActive = 1
+	WHERE S.IsActive = 1
+		AND S.IsDeleted = 0
