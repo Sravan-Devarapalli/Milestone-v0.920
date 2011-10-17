@@ -1,7 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProjectNameCellRounded.ascx.cs" Inherits="PraticeManagement.Controls.ProjectNameCellRounded" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="AjaxControlToolkit" %>
 
-<asp:HyperLink ID="btnProjectName" runat="server" Target="_blank"/>
+<asp:HyperLink ID="btnProjectName" runat="server" />
     <asp:Panel ID="toolTipHolder" runat="server" CssClass="ToolTip">
         <table>
             <tr class="top">
