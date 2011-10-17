@@ -8,10 +8,8 @@ WITH Ordered AS (
 			rcomm2.Amount AS cc2, rcomm2.HoursToCollect / 24 AS cd2
 			FROM dbo.Person AS p 
 			INNER JOIN dbo.RecruiterCommission rcomm1 ON p.PersonId = rcomm1.RecruitId
-			INNER JOIN dbo.RecruiterCommission rcomm2 ON p.PersonId = rcomm2.RecruitId
-			INNER JOIN dbo.Person AS rec ON rcomm2.RecruiterId = rec.PersonId
-			WHERE (rcomm1.HoursToCollect != rcomm2.HoursToCollect OR 
-					rcomm1.Amount != rcomm2.Amount
-					OR rcomm1.Amount IS NULL OR rcomm2.Amount IS NULL)
+			LEFT JOIN dbo.RecruiterCommission rcomm2 ON p.PersonId = rcomm2.RecruitId  AND rcomm1.HoursToCollect != rcomm2.HoursToCollect
+			INNER JOIN dbo.Person AS rec ON rcomm1.RecruiterId = rec.PersonId
+			
 )
 SELECT * FROM Ordered WHERE rownum % 2 = 1
