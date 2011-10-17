@@ -18,7 +18,7 @@
             <ItemStyle/>            
             <ItemTemplate>
                 <div class="cell-pad">
-                    <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25" 
+                    <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25" Target="_blank"
                     ButtonProjectNameToolTip='<%# GetProjectNameCellToolTip((int)Eval("ProjectStatusId"),(int)Eval("HasAttachments"),(string)Eval("ProjectStatus")) %>' 
                     ButtonCssClass='<%# GetProjectNameCellCssClass((int)Eval("ProjectStatusId") , (int)Eval("HasAttachments") )%>' />
                 </div>
