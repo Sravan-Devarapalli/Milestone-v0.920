@@ -19,8 +19,22 @@ namespace PraticeManagement.Controls
             set
             {
                 btnProjectName.ID = value;
+                
             }
         }
+        public string Target 
+        {
+            set 
+            {
+                btnProjectName.Target = value;
+            }
+            get
+            {
+                return btnProjectName.Target;
+            }
+        }
+
+         
 
         /// <summary>
         /// Main Button CssClass Name
