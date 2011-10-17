@@ -219,7 +219,7 @@
             <tr>
                 <td>
                     <div class="cell-pad">
-                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
+                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25" Target="_blank"
                             ButtonProjectNameToolTip='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((Opportunity) Container.DataItem) %>' ButtonCssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((Opportunity) Container.DataItem)%>' 
                             ButtonProjectNameHref = "<%# GetProjectDetailUrl((Opportunity) Container.DataItem) %>"/>
                     </div>
@@ -278,7 +278,7 @@
             <tr style="background: #F9FAFF;">
                 <td>
                     <div class="cell-pad">
-                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
+                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25" Target="_blank"
                             ButtonProjectNameToolTip='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((Opportunity) Container.DataItem) %>' ButtonCssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((Opportunity) Container.DataItem)%>' 
                             ButtonProjectNameHref = "<%# GetProjectDetailUrl((Opportunity) Container.DataItem) %>"/>
                     </div>
