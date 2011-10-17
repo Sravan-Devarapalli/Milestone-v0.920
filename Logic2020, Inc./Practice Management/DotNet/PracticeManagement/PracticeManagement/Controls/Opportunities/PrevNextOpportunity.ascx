@@ -25,7 +25,7 @@
                             </asp:HyperLink></asp:Panel>
                     </td>
                     <td style="padding-right: 5px; padding-left: 5px">
-                        <uc:ProjectNameCellRounded ID="status" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
+                        <uc:ProjectNameCellRounded ID="status" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25" Target="_blank"
                             ButtonCssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((DataTransferObjects.Opportunity) Container.DataItem) %>'
                             ButtonProjectNameToolTip='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((DataTransferObjects.Opportunity) Container.DataItem) %>' 
                             ButtonProjectNameHref = "<%# GetProjectDetailUrl((DataTransferObjects.Opportunity) Container.DataItem) %>"
