@@ -16,7 +16,7 @@ namespace DataTransferObjects.Skills
         public Person Person { get; set; }
 
         [DataMember]
-        public LookupBase Industry { get; set; }
+        public Industry Industry { get; set; }
 
         [DataMember]
         public int YearsExperience { get; set; }
