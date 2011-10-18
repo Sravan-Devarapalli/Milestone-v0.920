@@ -266,7 +266,7 @@ namespace DataAccess.Skills
             }
         }
 
-        public static void SavePersonSkills(int personId, string skillsXml)
+        public static void SavePersonSkills(int personId, string skillsXml, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -277,15 +277,16 @@ namespace DataAccess.Skills
 
                     command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
                     command.Parameters.AddWithValue(Constants.ParameterNames.Skills, skillsXml);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLogin, userLogin);
 
                     connection.Open();
 
-                    //command.ExecuteNonQuery();
+                    command.ExecuteNonQuery();
                 }
             }
         }
 
-        public static void SavePersonIndustrySkills(int personId, string industrySkillsXml)
+        public static void SavePersonIndustrySkills(int personId, string industrySkillsXml, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -295,11 +296,12 @@ namespace DataAccess.Skills
                     command.CommandTimeout = connection.ConnectionTimeout;
 
                     command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.Skills, industrySkillsXml);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IndustrySkills, industrySkillsXml);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLogin, userLogin);
 
                     connection.Open();
 
-                    //command.ExecuteNonQuery();
+                    command.ExecuteNonQuery();
                 }
             }
         }
