@@ -47,10 +47,18 @@
   </xsl:template>
 
   <xsl:template match="NEW_VALUES" mode="update">
+    
     <xsl:for-each select="./attribute::*">
       <xsl:variable name="value" select="." />
       <xsl:variable name="attrName" select="name()" />
 
+      <xsl:if test="$attrName = 'SkillsDescription' or $attrName = 'IndustryDescription' or $attrName = 'Person'">
+        <xsl:call-template name="FriendlyName">
+          <xsl:with-param name="attrName" select="name()" />
+        </xsl:call-template>:
+        <xsl:call-template name="DisplayValue"></xsl:call-template>
+        <br/>
+      </xsl:if>
 
       <xsl:choose>
         <xsl:when test="$attrName = 'ProjectId' or $attrName = 'ObjectPersonId' or $attrName = 'TimeEntryId' or $attrName = 'ClientId' or $attrName = 'PersonId' 
