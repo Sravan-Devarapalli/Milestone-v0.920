@@ -34,10 +34,10 @@ namespace PracticeManagementService
         Person GetPersonWithSkills(int personId);
 
         [OperationContract]
-        void SavePersonSkills(int personId, string skillsXml);
+        void SavePersonSkills(int personId, string skillsXml, string userLogin);
 
         [OperationContract]
-        void SavePersonIndustrySkills(int personId, string industrySkillsXml);
+        void SavePersonIndustrySkills(int personId, string industrySkillsXml, string userLogin);
     }
 }
 
