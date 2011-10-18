@@ -3700,9 +3700,13 @@
     </Build>
     <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\SavePersonIndustrySkills.proc.sql">
       <SubType>Code</SubType>
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\SavePersonSkills.proc.sql">
       <SubType>Code</SubType>
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetIndustrySkillsAll.proc.sql">
       <SubType>Code</SubType>
@@ -3771,3 +3775,4 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
+
