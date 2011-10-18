@@ -14,11 +14,21 @@ using System.Xml;
 
 namespace PraticeManagement
 {
-    public partial class SkillsEntry : PracticeManagementPageBase
+    public partial class SkillsEntry : PracticeManagementPageBase,IPostBackEventHandler
     {
         #region Constants
 
         private const string SessionPersonWithSkills = "PersonWithSkills";
+        private const string ViewStatePreviousActiveTabIndex = "PreviousActiveTabIndex";
+        private const string ViewStatePreviousCategoryIndex = "PreviousCategoryIndex";
+        private const string ValidationPopUpMessage = "Please select a value for ‘Level’, ‘Experience’, ‘Last Used’, for these skills ";
+
+        #endregion
+
+        #region fields
+
+        public bool IsFirst = true;
+        private bool IsPreviousTabValid = true;
 
         #endregion
 
@@ -59,6 +69,38 @@ namespace PraticeManagement
             }
         }
 
+        public int PreviousActiveTabIndex
+        {
+            get
+            {
+                if (ViewState[ViewStatePreviousActiveTabIndex] == null)
+                {
+                    ViewState[ViewStatePreviousActiveTabIndex] = 0;
+                }
+                return (int)ViewState[ViewStatePreviousActiveTabIndex];
+            }
+            set
+            {
+                ViewState[ViewStatePreviousActiveTabIndex] = value;
+            }
+        }
+
+        public int PreviousCategoryIndex
+        {
+            get
+            {
+                if (ViewState[ViewStatePreviousCategoryIndex] == null)
+                {
+                    ViewState[ViewStatePreviousCategoryIndex] = 0;
+                }
+                return (int)ViewState[ViewStatePreviousCategoryIndex];
+            }
+            set
+            {
+                ViewState[ViewStatePreviousCategoryIndex] = value;
+            }
+        }
+
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
@@ -68,6 +110,7 @@ namespace PraticeManagement
                 lblUserName.Text = DataHelper.CurrentPerson.PersonLastFirstName;
                 RenderSkills(tcSkillsEntry.ActiveTabIndex);
             }
+            hdnValidationMessage.Value = ValidationPopUpMessage;
         }
 
         protected override void Display()
@@ -77,7 +120,27 @@ namespace PraticeManagement
 
         protected void tcSkillsEntry_ActiveTabChanged(object sender, EventArgs e)
         {
-            RenderSkills(tcSkillsEntry.ActiveTabIndex);
+            if (IsFirst)
+            {
+                if (IsDirty)
+                {
+                    if (!ValidateAndSave(PreviousActiveTabIndex))
+                    {
+                        tcSkillsEntry.ActiveTabIndex = PreviousActiveTabIndex;
+                        IsFirst = false;
+                        IsPreviousTabValid = false;
+                        return;
+                    }
+                }
+
+                RenderSkills(tcSkillsEntry.ActiveTabIndex);
+                IsFirst = false;
+            }
+
+            if (!IsFirst && !IsPreviousTabValid)
+            {
+                tcSkillsEntry.ActiveTabIndex = PreviousActiveTabIndex;
+            }
         }
 
         protected void ddlCategory_SelectedIndexChanged(object sender, EventArgs e)
@@ -85,7 +148,12 @@ namespace PraticeManagement
             int activeTabIndex = tcSkillsEntry.ActiveTabIndex;
             if (IsDirty)
             {
-                SaveSkills(activeTabIndex);
+                if (!ValidateAndSave(activeTabIndex))
+                {
+                    var ddlCategory = sender as DropDownList;
+                    ddlCategory.SelectedIndex = PreviousCategoryIndex;
+                    return;
+                }
             }
 
             BindSkills(activeTabIndex);
@@ -117,26 +185,99 @@ namespace PraticeManagement
             }
         }
 
-        protected void btnSave_Click(object sender, EventArgs e)
+        protected void gvIndustrySkills_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            int c = tcSkillsEntry.ActiveTabIndex;
-            SaveSkills(c);
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                var ddlExperience = e.Row.FindControl("ddlExperience") as DropDownList;
+                var hdnId = e.Row.FindControl("hdnId") as HiddenField;
+                if (Person.Industries.Count > 0)
+                {
+                    if (Person.Industries.Where(i => i.Industry.Id == Convert.ToInt32(hdnId.Value)).Count() > 0)
+                    {
+                        var industry = Person.Industries.Where(i => i.Industry.Id == Convert.ToInt32(hdnId.Value)).First();
+
+                        if (industry != null)
+                        {
+                            ddlExperience.SelectedValue = industry.YearsExperience.ToString();
+                        }
+                    }
+                }
+            }
         }
 
-        private void SaveSkills(int activeTabIndex)
+        protected void cvSkills_ServerValidate(object sender, ServerValidateEventArgs e)
         {
+            var validator = sender as CustomValidator;
+            var row = validator.Parent.Parent as GridViewRow;            
+            
+            var hdnChanged = row.FindControl("hdnChanged") as HiddenField;
+            if (hdnChanged != null && hdnChanged.Value == "1")
+            {
+                var ddlLevel = row.FindControl("ddlLevel") as DropDownList;
+                var ddlExperience = row.FindControl("ddlExperience") as DropDownList;
+                var ddlLastUsed = row.FindControl("ddlLastUsed") as DropDownList;
+                var hdnDescription = row.FindControl("hdnDescription") as HiddenField;
+
+                if (!(ddlLevel.SelectedIndex == 0 && ddlExperience.SelectedIndex == 0 && ddlLastUsed.SelectedIndex == 0))
+                {
+                    if (ddlLevel.SelectedIndex == 0 || ddlExperience.SelectedIndex == 0 || ddlLastUsed.SelectedIndex == 0)
+                    {
+                        hdnValidationMessage.Value = (ValidationPopUpMessage == hdnValidationMessage.Value) 
+                                                    ? hdnValidationMessage.Value + "\n\r \t" + hdnDescription.Value
+                                                    : hdnValidationMessage.Value + ",\n\r \t" + hdnDescription.Value;
+                        e.IsValid = false;
+                    }
+                }
+            }
+        }
+
+        protected void btnSave_Click(object sender, EventArgs e)
+        {
+            int activeTabIndex = tcSkillsEntry.ActiveTabIndex;
+            ValidateAndSave(activeTabIndex);
+        }
+
+        protected new void btnCancel_Click(object sender, EventArgs e)
+        {
+            BindSkills(tcSkillsEntry.ActiveTabIndex);
+        }
+
+        private bool ValidateAndSave(int activeTabIndex)
+        {
+            bool result = false;
             switch (activeTabIndex)
             {
                 case 0:
-                    SaveBusinessSkills();
+                    Page.Validate(valSummaryBusiness.ValidationGroup);
+                    if (Page.IsValid)
+                    {
+                        result = Page.IsValid;
+                        SaveBusinessSkills();
+                    }
                     break;
                 case 1:
-                    SaveTechnicalSkills();
+                    Page.Validate(valSummaryTechnical.ValidationGroup);
+                    if (Page.IsValid)
+                    {
+                        result = Page.IsValid;
+                        SaveTechnicalSkills();
+                    }
                     break;
                 case 2:
                     SaveIndustrySkills();
+                    result = true;
                     break;
             }
+            EnableSaveAndCancelButtons(!result);
+            hdnIsValid.Value = result.ToString().ToLower();
+            return result;
+        }
+
+        private void EnableSaveAndCancelButtons(bool enable)
+        {
+            btnSave.Enabled = enable;
+            btnCancel.Enabled = enable;
         }
 
         private void RenderSkills(int activeTabIndex)
@@ -179,28 +320,38 @@ namespace PraticeManagement
                 case 0:
                     gvBusinessSkills.DataSource = Utils.SettingsHelper.GetSkillsByCategory(SelectedBusinessCategory);
                     gvBusinessSkills.DataBind();
+                    PreviousCategoryIndex = ddlBusinessCategory.SelectedIndex;
                     break;
                 case 1:
                     gvTechnicalSkills.DataSource = Utils.SettingsHelper.GetSkillsByCategory(SelectedTechnicalCategory);
                     gvTechnicalSkills.DataBind();
+                    PreviousCategoryIndex = ddlTechnicalCategory.SelectedIndex;
                     break;
                 case 2:
                     gvIndustrySkills.DataSource = Utils.SettingsHelper.GetIndustrySkillsAll();
                     gvIndustrySkills.DataBind();
                     break;
             }
+            PreviousActiveTabIndex = activeTabIndex;
+        }
+
+        private void SaveTechnicalSkills()
+        {
+            var rows = gvTechnicalSkills.Rows;
+            SaveBusinessORTechnicalSkills(rows);
         }
 
         private void SaveBusinessSkills()
         {
             var rows = gvBusinessSkills.Rows;
-            var newSkills = new List<PersonSkill>();
-            var previousSkills = new List<PersonSkill>();
-            previousSkills.AddRange(Person.Skills);
+            SaveBusinessORTechnicalSkills(rows);
+        }
 
+        private void SaveBusinessORTechnicalSkills(GridViewRowCollection rows)
+        {
             XmlDocument doc = new XmlDocument();
             XmlElement root = doc.CreateElement("Skills");
-            
+
             foreach (GridViewRow row in rows)
             {
                 var hdnChanged = row.FindControl("hdnChanged") as HiddenField;
@@ -211,46 +362,6 @@ namespace PraticeManagement
                     var ddlLastUsed = row.FindControl("ddlLastUsed") as DropDownList;
                     var hdnId = row.FindControl("hdnId") as HiddenField;
                     int skillId = Convert.ToInt32(hdnId.Value);
-
-                    if (ddlLevel.SelectedIndex == 0 && ddlExperience.SelectedIndex == 0 && ddlLastUsed.SelectedIndex == 0)
-                    {
-                        //delete records.
-                        if (previousSkills.Count > 0 && previousSkills.Where(s => s.Skill.Id == skillId).Count() != 0)
-                        {
-                            int index = previousSkills.FindIndex(s => s.Skill.Id == skillId);
-                            previousSkills.RemoveAt(index);
-                        }
-                    }
-                    else
-                    {
-                        int levelSelected = Convert.ToInt32(ddlLevel.SelectedValue);
-                        int experienceSelected = Convert.ToInt32(ddlExperience.SelectedValue);
-                        int lastUsedSelected = Convert.ToInt32(ddlLastUsed.SelectedValue);
-
-
-                        //insert or update.
-                        if (previousSkills.Count == 0 || previousSkills.Where(s => s.Skill.Id == skillId).Count() == 0)
-                        {
-                            //insert.
-                            PersonSkill personSkill = new PersonSkill
-                            {
-                                Skill = new Skill { Id = skillId },
-                                SkillLevel = new SkillLevel { Id = levelSelected },
-                                YearsExperience = experienceSelected,
-                                LastUsed = lastUsedSelected
-                            };
-
-                            newSkills.Add(personSkill);
-                        }
-                        else
-                        {
-                            //update.
-                            var skill = previousSkills.Where(s => s.Skill.Id == skillId).First();
-                            skill.SkillLevel.Id = levelSelected;
-                            skill.YearsExperience = experienceSelected;
-                            skill.LastUsed = lastUsedSelected;
-                        }
-                    }
 
                     XmlElement skillTag = doc.CreateElement("Skill");
 
@@ -263,7 +374,6 @@ namespace PraticeManagement
 
                 }
             }
-            previousSkills.AddRange(newSkills);
 
             doc.AppendChild(root);
             string skillsXml = doc.InnerXml;
@@ -272,10 +382,10 @@ namespace PraticeManagement
             {
                 try
                 {
-                    serviceClient.SavePersonSkills(Person.Id.Value, skillsXml);
-                    Person.Skills.Clear();
-                    Person.Skills.AddRange(previousSkills);
+                    serviceClient.SavePersonSkills(Person.Id.Value, skillsXml, User.Identity.Name);
+                    Session[SessionPersonWithSkills] = null;
 
+                    EnableSaveAndCancelButtons(false);
                     ClearDirty();
                 }
                 catch
@@ -285,12 +395,50 @@ namespace PraticeManagement
             }
         }
 
-        private void SaveTechnicalSkills()
-        {
-        }
-
         private void SaveIndustrySkills()
         {
+            var rows = gvIndustrySkills.Rows;
+
+            XmlDocument doc = new XmlDocument();
+            XmlElement root = doc.CreateElement("Skills");
+
+            foreach (GridViewRow row in rows)
+            {
+                var hdnChanged = row.FindControl("hdnChanged") as HiddenField;
+                if (hdnChanged != null && hdnChanged.Value == "1")
+                {
+                    var ddlExperience = row.FindControl("ddlExperience") as DropDownList;
+                    var hdnId = row.FindControl("hdnId") as HiddenField;
+                    int industryId = Convert.ToInt32(hdnId.Value);
+
+                    XmlElement skillTag = doc.CreateElement("IndustrySkill");
+
+                    skillTag.SetAttribute("Id", hdnId.Value);
+                    skillTag.SetAttribute("Experience", ddlExperience.SelectedValue);
+
+                    root.AppendChild(skillTag);
+
+                }
+            }
+
+            doc.AppendChild(root);
+            string skillsXml = doc.InnerXml;
+
+            using (var serviceClient = new PersonSkillService.PersonSkillServiceClient())
+            {
+                try
+                {
+                    serviceClient.SavePersonIndustrySkills(Person.Id.Value, skillsXml, User.Identity.Name);
+                    Session[SessionPersonWithSkills] = null;
+
+                    EnableSaveAndCancelButtons(false);
+                    ClearDirty();
+                }
+                catch
+                {
+                    serviceClient.Abort();
+                }
+            }
         }
         
         #region ObjectDataSource Select Methods
@@ -345,5 +493,17 @@ namespace PraticeManagement
         }
 
         #endregion
+
+        public void RaisePostBackEvent(string eventArgument)
+        {
+            if (IsDirty)
+            {
+                if (SaveDirty && !ValidateAndSave(PreviousActiveTabIndex))
+                {
+                    return;
+                }
+            }
+            Redirect(eventArgument == string.Empty ? Constants.ApplicationPages.OpportunityList : eventArgument);
+        }
     }
 }
