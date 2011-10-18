@@ -33,7 +33,8 @@ namespace DataAccess.Skills
         {
             public const string PersonId = "@PersonId";
             public const string Skills = "@Skills";
-
+            public const string IndustrySkills = "@IndustrySkills";
+            public const string UserLogin = "@UserLogin";
         }
 
         public class ProcedureNames
