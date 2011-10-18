@@ -31,10 +31,10 @@ namespace PraticeManagement.PersonSkillService {
         DataTransferObjects.Person GetPersonWithSkills(int personId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonSkillService/SavePersonSkills", ReplyAction="http://tempuri.org/IPersonSkillService/SavePersonSkillsResponse")]
-        void SavePersonSkills(int personId, string skillsXml);
+        void SavePersonSkills(int personId, string skillsXml, string userLogin);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonSkillService/SavePersonIndustrySkills", ReplyAction="http://tempuri.org/IPersonSkillService/SavePersonIndustrySkillsResponse")]
-        void SavePersonIndustrySkills(int personId, string industrySkillsXml);
+        void SavePersonIndustrySkills(int personId, string industrySkillsXml, string userLogin);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -81,12 +81,12 @@ namespace PraticeManagement.PersonSkillService {
             return base.Channel.GetPersonWithSkills(personId);
         }
         
-        public void SavePersonSkills(int personId, string skillsXml) {
-            base.Channel.SavePersonSkills(personId, skillsXml);
+        public void SavePersonSkills(int personId, string skillsXml, string userLogin) {
+            base.Channel.SavePersonSkills(personId, skillsXml, userLogin);
         }
         
-        public void SavePersonIndustrySkills(int personId, string industrySkillsXml) {
-            base.Channel.SavePersonIndustrySkills(personId, industrySkillsXml);
+        public void SavePersonIndustrySkills(int personId, string industrySkillsXml, string userLogin) {
+            base.Channel.SavePersonIndustrySkills(personId, industrySkillsXml, userLogin);
         }
     }
 }
