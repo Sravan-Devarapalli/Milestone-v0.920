@@ -22,6 +22,7 @@ namespace PraticeManagement
         private const string ViewStatePreviousActiveTabIndex = "PreviousActiveTabIndex";
         private const string ViewStatePreviousCategoryIndex = "PreviousCategoryIndex";
         private const string ValidationPopUpMessage = "Please select a value for ‘Level’, ‘Experience’, ‘Last Used’, for below skills ";
+        private const string SuccessMessage = "Skills Saved Successfully.";
 
         //Ids
         private const string ddlLevelId = "ddlLevel";
@@ -133,9 +134,17 @@ namespace PraticeManagement
                 Session[SessionPersonWithSkills] = null;
                 lblUserName.Text = DataHelper.CurrentPerson.PersonLastFirstName;
                 RenderSkills(tcSkillsEntry.ActiveTabIndex);
+
+                if (ddlTechnicalCategory.DataSource == null && ddlTechnicalCategory.Items.Count == 0)
+                {
+                    ddlTechnicalCategory.DataSource = Utils.SettingsHelper.GetSkillCategoriesByType(2);//Load TechnicalSkills Categories also.
+                    ddlTechnicalCategory.DataBind();
+                    ddlTechnicalCategory.SelectedIndex = 0;
+                }
             }
-            hdnValidationMessage.Value = ValidationPopUpMessage;
+            lblValidationMessage.Text = "";
             hdnIsValid.Value = false.ToString();
+            lblMessage.Text = "";
         }
 
         protected override void Display()
@@ -248,9 +257,8 @@ namespace PraticeManagement
                 {
                     if (ddlLevel.SelectedIndex == 0 || ddlExperience.SelectedIndex == 0 || ddlLastUsed.SelectedIndex == 0)
                     {
-                        hdnValidationMessage.Value = (ValidationPopUpMessage == hdnValidationMessage.Value)
-                                                    ? hdnValidationMessage.Value + "\n\r \t" + hdnDescription.Value
-                                                    : hdnValidationMessage.Value + ",\n\r \t" + hdnDescription.Value;
+                        lblValidationMessage.Text = (lblValidationMessage.Text == "" ) ? hdnDescription.Value
+                                                                                    :lblValidationMessage.Text + ",<br />" + hdnDescription.Value;
                         e.IsValid = false;
                         var cvLevel = row.FindControl(cvLevelId) as CustomValidator;
                         var cvExperience = row.FindControl(cvExperienceId) as CustomValidator;
@@ -271,7 +279,11 @@ namespace PraticeManagement
         protected void btnSave_Click(object sender, EventArgs e)
         {
             int activeTabIndex = tcSkillsEntry.ActiveTabIndex;
-            ValidateAndSave(activeTabIndex);
+            if (ValidateAndSave(activeTabIndex))
+            {
+                lblMessage.Text = SuccessMessage;
+                lblMessage.Focus();
+            }
         }
 
         protected new void btnCancel_Click(object sender, EventArgs e)
@@ -293,7 +305,7 @@ namespace PraticeManagement
                     }
                     break;
                 case 1:
-                    Page.Validate(valSummaryTechnical.ValidationGroup);
+                    Page.Validate(valSummaryTechnical1.ValidationGroup);
                     if (Page.IsValid)
                     {
                         result = Page.IsValid;
