@@ -31,7 +31,12 @@ BEGIN
 			AND t.c.value('@Experience', 'INT') = 0
 			AND t.c.value('@LastUsed', 'INT') = 0
 
-
+					
+		IF NOT EXISTS (SELECT 1 FROM dbo.SessionLogData WHERE SessionID = @@SPID AND UserLogin = @UserLogin)
+		BEGIN
+			-- Start logging session
+			EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
+		END
 
 		--Update the level/experience/LastUsed of existing skill of the person.
 		UPDATE PS
@@ -51,7 +56,12 @@ BEGIN
 					OR PS.LastUsed <> t.c.value('@LastUsed', 'INT')
 				)
 
-
+			
+		IF NOT EXISTS (SELECT 1 FROM dbo.SessionLogData WHERE SessionID = @@SPID AND UserLogin = @UserLogin)
+		BEGIN
+			-- Start logging session
+			EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
+		END
 
 		--Insert New skill for the person.
 		INSERT INTO Skills.PersonSkill(PersonId, SkillId, SkillLevelId, YearsExperience, LastUsed, ModifiedDate)
