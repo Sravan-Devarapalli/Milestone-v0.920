@@ -159,7 +159,7 @@
   <xs:complexType name="PersonIndustry">
     <xs:sequence>
       <xs:element minOccurs="0" name="DisplayOrder" type="xs:int" />
-      <xs:element minOccurs="0" name="Industry" nillable="true" type="tns:LookupBase" />
+      <xs:element minOccurs="0" name="Industry" nillable="true" type="tns:Industry" />
       <xs:element minOccurs="0" name="ModificationDate" nillable="true" type="xs:dateTime" />
       <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Person" nillable="true" type="q4:Person" />
       <xs:element minOccurs="0" name="YearsExperience" type="xs:int" />
