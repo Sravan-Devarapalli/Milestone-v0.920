@@ -53,9 +53,11 @@
         function CheckAndShowPopUp() {
             var hdnIsValid = document.getElementById('<%= hdnIsValid.ClientID %>');
             var hdnValidationMessage = document.getElementById('<%= hdnValidationMessage.ClientID %>');
+            var popup2 = $find('mpeValidationsBehaviourId');
             if (hdnIsValid != null && hdnValidationMessage != null) {
-                if (hdnIsValid.value == "false")
-                    alert(hdnValidationMessage.value);
+                if (hdnIsValid.value == "false") {
+                    popup2.show();
+                }
             }
         }
 
@@ -92,7 +94,7 @@
         <ContentTemplate>
             <AjaxControlToolkit:TabContainer runat="server" ID="tcSkillsEntry" ActiveTabIndex="0"
                 AutoPostBack="true" OnActiveTabChanged="tcSkillsEntry_ActiveTabChanged">
-                <AjaxControlToolkit:TabPanel runat="server" ID="tpBusinessSkills" HeaderText="Business Skills">
+                <AjaxControlToolkit:TabPanel runat="server" ID="tpBusinessSkills" HeaderText="Business">
                     <ContentTemplate>
                         <div class="SkillsBody">
                             <div style="padding: 10px;">
@@ -163,7 +165,8 @@
                                         <asp:TemplateField>
                                             <ItemStyle Width="8%" />
                                             <ItemTemplate>
-                                                <asp:LinkButton runat="server" ID="lnkbtnClear" Text="clear" OnClientClick="ClearAllFields(this); ddlChanged(this); return false;">
+                                                <asp:LinkButton runat="server" ID="lnkbtnClear" Text="clear" ToolTip="Clear Level, Experience, Last Used in this row."
+                                                    OnClientClick="ClearAllFields(this); ddlChanged(this); return false;">
                                                 </asp:LinkButton>
                                             </ItemTemplate>
                                         </asp:TemplateField>
@@ -173,7 +176,7 @@
                         </div>
                     </ContentTemplate>
                 </AjaxControlToolkit:TabPanel>
-                <AjaxControlToolkit:TabPanel runat="server" ID="tpTechnicalSkills" HeaderText="Technical Skills">
+                <AjaxControlToolkit:TabPanel runat="server" ID="tpTechnicalSkills" HeaderText="Technical">
                     <ContentTemplate>
                         <div class="SkillsBody">
                             <div style="padding: 10px;">
@@ -244,7 +247,8 @@
                                         <asp:TemplateField>
                                             <ItemStyle Width="8%" />
                                             <ItemTemplate>
-                                                <asp:LinkButton runat="server" ID="lnkbtnClear" Text="clear" OnClientClick="ClearAllFields(this); ddlChanged(this); return false;">
+                                                <asp:LinkButton runat="server" ID="lnkbtnClear" Text="clear" ToolTip="Clear Level, Experience, Last Used in this row."
+                                                    OnClientClick="ClearAllFields(this); ddlChanged(this); return false;">
                                                 </asp:LinkButton>
                                             </ItemTemplate>
                                         </asp:TemplateField>
@@ -254,7 +258,7 @@
                         </div>
                     </ContentTemplate>
                 </AjaxControlToolkit:TabPanel>
-                <AjaxControlToolkit:TabPanel runat="server" ID="tpIndustrySkills" HeaderText="Industry Skills">
+                <AjaxControlToolkit:TabPanel runat="server" ID="tpIndustrySkills" HeaderText="Industries">
                     <ContentTemplate>
                         <div class="SkillsBody">
                             <div style="padding: 10px;">
@@ -292,17 +296,44 @@
                 </AjaxControlToolkit:TabPanel>
             </AjaxControlToolkit:TabContainer>
             <br />
+            <asp:Label ID="lblMessage" runat="server" ForeColor="Green" Text=""></asp:Label>
             <div class="WholeWidth">
                 <div style="width: 98%; text-align: right;">
-                    <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" Enabled="false" />
-                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btnCancel_Click"
+                    <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save Changes" OnClick="btnSave_Click"
                         Enabled="false" />
+                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" ToolTip="Cancel Changes"
+                        OnClick="btnCancel_Click" Enabled="false" />
                 </div>
             </div>
-            <asp:ValidationSummary ID="valSummaryBusiness" runat="server" ValidationGroup="BusinessGroup" />
-            <asp:ValidationSummary ID="valSummaryTechnical" runat="server" ValidationGroup="TechnicalGroup" />
+            <asp:ValidationSummary ID="valSummaryBusiness" runat="server" ShowMessageBox="false"
+                ValidationGroup="BusinessGroup" />
+            <asp:ValidationSummary ID="valSummaryTechnical1" runat="server" ShowMessageBox="false"
+                ValidationGroup="TechnicalGroup" />
             <asp:HiddenField ID="hdnIsValid" runat="server" Value="true" />
             <asp:HiddenField ID="hdnValidationMessage" runat="server" Value="" />
+            <asp:Panel ID="pnlValidations" runat="server">
+                <div style="border: 1px solid black;">
+                    <div style="text-align: center; font-weight: bold; padding: 3px; background-color: Gray;">
+                        Alert!
+                    </div>
+                    <div style="vertical-align: top; max-height: 500px; overflow-y: auto; padding: 10px;
+                        background-color: White;">
+                        <b>Please select a value for ‘Level’, ‘Experience’, ‘Last Used’, for below skills:
+                        </b>
+                        <br />
+                        <br />
+                        <div style="padding-left: 20px;">
+                            <asp:Label ID="lblValidationMessage" runat="server"></asp:Label></div>
+                    </div>
+                    <div style="text-align: center; background-color: White; padding-bottom: 10px; padding-top: 5px;">
+                        <asp:Button ID="btnOk" runat="server" Text="OK" OnClientClick="return false;" />
+                        <asp:Button ID="btnCancelValidations" runat="server" Style="display: none;" OnClientClick="return false;" /></div>
+                </div>
+            </asp:Panel>
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeValidations" runat="server" TargetControlID="hdnIsValid"
+                BackgroundCssClass="modalBackground" BehaviorID="mpeValidationsBehaviourId" DropShadow="false"
+                PopupControlID="pnlValidations" OkControlID="btnOk" CancelControlID="btnCancelValidations">
+            </AjaxControlToolkit:ModalPopupExtender>
         </ContentTemplate>
     </asp:UpdatePanel>
     <asp:ObjectDataSource ID="odsSkillLevel" runat="server" TypeName="PraticeManagement.SkillsEntry"
