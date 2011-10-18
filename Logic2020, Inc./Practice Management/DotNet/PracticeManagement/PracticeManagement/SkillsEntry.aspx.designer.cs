@@ -22,6 +22,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Label lblUserName;
         
         /// <summary>
+        /// loadingProgress control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.LoadingProgress loadingProgress;
+        
+        /// <summary>
         /// upSkills control.
         /// </summary>
         /// <remarks>
@@ -40,13 +49,13 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.TabContainer tcSkillsEntry;
         
         /// <summary>
-        /// tpBussinessSkills control.
+        /// tpBusinessSkills control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.TabPanel tpBussinessSkills;
+        protected global::AjaxControlToolkit.TabPanel tpBusinessSkills;
         
         /// <summary>
         /// lblCategory control.
@@ -146,6 +155,42 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancel;
+        
+        /// <summary>
+        /// valSummaryBusiness control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSummaryBusiness;
+        
+        /// <summary>
+        /// valSummaryTechnical control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSummaryTechnical;
+        
+        /// <summary>
+        /// hdnIsValid control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnIsValid;
+        
+        /// <summary>
+        /// hdnValidationMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnValidationMessage;
         
         /// <summary>
         /// odsSkillLevel control.
