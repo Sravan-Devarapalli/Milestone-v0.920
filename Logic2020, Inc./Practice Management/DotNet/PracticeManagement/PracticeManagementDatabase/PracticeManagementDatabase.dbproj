@@ -3711,6 +3711,18 @@
     <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetIndustrySkillsAll.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Triggers\tr_PersonSkill_LogInsert.trigger.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Triggers\tr_PersonIndustry_LogInsert.trigger.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Triggers\tr_PersonIndustry_LogUpdateDelete.trigger.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Triggers\tr_PersonSkill_LogUpdateDelete.trigger.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Schema Comparisons\v0.850.dbschema">
