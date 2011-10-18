@@ -48,31 +48,14 @@ namespace PracticeManagementService
             return person;
         }
 
-        public void SavePersonSkills(int personId, string skillsXml)
+        public void SavePersonSkills(int personId, string skillsXml, string userLogin)
         {
-            //XmlDocument doc = new XmlDocument();
-            //XmlElement root = doc.CreateElement("Skills");
-
-            //foreach (var skill in skills)
-            //{
-            //    XmlElement skillTag = doc.CreateElement("Skill");
-
-            //    skillTag.SetAttribute("Id", skill.Skill == null ? "" : skill.Skill.Id.ToString());
-            //    skillTag.SetAttribute("Level", skill.SkillLevel == null ? "" : skill.SkillLevel.Id.ToString());
-            //    skillTag.SetAttribute("Experience", skill.YearsExperience.HasValue ? skill.YearsExperience.Value.ToString() : "");
-            //    skillTag.SetAttribute("LastUsed", skill.LastUsed == null ? "" : skill.LastUsed.ToShortDateString());
-
-            //    root.AppendChild(skillTag);
-            //}
-
-            //doc.AppendChild(root);
-
-            PersonSkillDAL.SavePersonSkills(personId, skillsXml);
+            PersonSkillDAL.SavePersonSkills(personId, skillsXml, userLogin);
         }
 
-        public void SavePersonIndustrySkills(int personId, string industrySkillsXml)
+        public void SavePersonIndustrySkills(int personId, string industrySkillsXml, string userLogin)
         {
-            PersonSkillDAL.SavePersonIndustrySkills(personId, industrySkillsXml);
+            PersonSkillDAL.SavePersonIndustrySkills(personId, industrySkillsXml, userLogin);
         }
     }
 }
