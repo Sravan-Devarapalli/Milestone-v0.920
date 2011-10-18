@@ -107,8 +107,9 @@ namespace PraticeManagement
         {
             if (!IsPostBack)
             {
+                Session[SessionPersonWithSkills] = null;
                 lblUserName.Text = DataHelper.CurrentPerson.PersonLastFirstName;
-                RenderSkills(tcSkillsEntry.ActiveTabIndex);
+                RenderSkills(tcSkillsEntry.ActiveTabIndex); 
             }
             hdnValidationMessage.Value = ValidationPopUpMessage;
         }
