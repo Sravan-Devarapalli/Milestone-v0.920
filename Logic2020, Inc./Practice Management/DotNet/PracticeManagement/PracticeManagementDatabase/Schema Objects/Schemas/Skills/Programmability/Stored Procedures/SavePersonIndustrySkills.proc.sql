@@ -27,6 +27,14 @@ BEGIN
 		WHERE PIndustry.PersonId = @PersonId
 			AND t.c.value('@Experience', 'INT') = 0
 
+					
+		IF NOT EXISTS (SELECT 1 FROM dbo.SessionLogData WHERE SessionID = @@SPID AND UserLogin = @UserLogin)
+		BEGIN
+			-- Start logging session
+			EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
+		END
+
+
 		--Update the level/experience/LastUsed of existing skill of the person.
 		UPDATE PIndustry
 		SET YearsExperience = t.c.value('@Experience', 'INT'),
@@ -37,6 +45,14 @@ BEGIN
 		WHERE PIndustry.PersonId = @PersonId
 			AND t.c.value('@Experience', 'INT') <> 0
 			AND PIndustry.YearsExperience <> t.c.value('@Experience', 'INT')
+
+					
+		IF NOT EXISTS (SELECT 1 FROM dbo.SessionLogData WHERE SessionID = @@SPID AND UserLogin = @UserLogin)
+		BEGIN
+			-- Start logging session
+			EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
+		END
+
 
 		--Insert New skill for the person.
 		INSERT INTO Skills.PersonIndustry(PersonId, IndustryId, YearsExperience, ModifiedDate)
