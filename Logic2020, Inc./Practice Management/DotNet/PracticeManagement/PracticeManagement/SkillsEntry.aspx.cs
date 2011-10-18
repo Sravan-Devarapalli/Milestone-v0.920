@@ -14,14 +14,37 @@ using System.Xml;
 
 namespace PraticeManagement
 {
-    public partial class SkillsEntry : PracticeManagementPageBase,IPostBackEventHandler
+    public partial class SkillsEntry : PracticeManagementPageBase, IPostBackEventHandler
     {
         #region Constants
 
         private const string SessionPersonWithSkills = "PersonWithSkills";
         private const string ViewStatePreviousActiveTabIndex = "PreviousActiveTabIndex";
         private const string ViewStatePreviousCategoryIndex = "PreviousCategoryIndex";
-        private const string ValidationPopUpMessage = "Please select a value for ‘Level’, ‘Experience’, ‘Last Used’, for these skills ";
+        private const string ValidationPopUpMessage = "Please select a value for ‘Level’, ‘Experience’, ‘Last Used’, for below skills ";
+
+        //Ids
+        private const string ddlLevelId = "ddlLevel";
+        private const string ddlExperienceId = "ddlExperience";
+        private const string ddlLastUsedId = "ddlLastUsed";
+        private const string hdnChangedId = "hdnChanged";
+        private const string hdnIdId = "hdnId";
+        private const string hdnDescriptionId = "hdnDescription";
+
+        //Validator Ids
+        private const string cvSkillsId = "cvSkills";
+        private const string cvLastUsedId = "cvLastUsed";
+        private const string cvExperienceId = "cvExperience";
+        private const string cvLevelId = "cvLevel";
+
+        //Xml
+        private const string Root = "Skills";
+        private const string SkillTag = "Skill";
+        private const string IndustrySkillTag = "IndustrySkill";
+        private const string IdAttribute = "Id";
+        private const string LevelAttribute = "Level";
+        private const string ExperienceAttribute = "Experience";
+        private const string LastUsedAttribute = "LastUsed";
 
         #endregion
 
@@ -40,10 +63,10 @@ namespace PraticeManagement
             {
                 if (Session[SessionPersonWithSkills] == null)
                 {
-                    using(var serviceClient = new PersonSkillService.PersonSkillServiceClient())
+                    using (var serviceClient = new PersonSkillService.PersonSkillServiceClient())
                     {
                         Session[SessionPersonWithSkills] = serviceClient.GetPersonWithSkills(DataHelper.CurrentPerson.Id.Value);
-                    } 
+                    }
                 }
                 return (Person)Session[SessionPersonWithSkills];
             }
@@ -109,9 +132,10 @@ namespace PraticeManagement
             {
                 Session[SessionPersonWithSkills] = null;
                 lblUserName.Text = DataHelper.CurrentPerson.PersonLastFirstName;
-                RenderSkills(tcSkillsEntry.ActiveTabIndex); 
+                RenderSkills(tcSkillsEntry.ActiveTabIndex);
             }
             hdnValidationMessage.Value = ValidationPopUpMessage;
+            hdnIsValid.Value = false.ToString();
         }
 
         protected override void Display()
@@ -164,10 +188,10 @@ namespace PraticeManagement
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                var ddlLevel = e.Row.FindControl("ddlLevel") as DropDownList;
-                var ddlExperience = e.Row.FindControl("ddlExperience") as DropDownList;
-                var ddlLastUsed = e.Row.FindControl("ddlLastUsed") as DropDownList;
-                var hdnId = e.Row.FindControl("hdnId") as HiddenField;
+                var ddlLevel = e.Row.FindControl(ddlLevelId) as DropDownList;
+                var ddlExperience = e.Row.FindControl(ddlExperienceId) as DropDownList;
+                var ddlLastUsed = e.Row.FindControl(ddlLastUsedId) as DropDownList;
+                var hdnId = e.Row.FindControl(hdnIdId) as HiddenField;
 
                 if (Person.Skills.Count > 0)
                 {
@@ -190,8 +214,8 @@ namespace PraticeManagement
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                var ddlExperience = e.Row.FindControl("ddlExperience") as DropDownList;
-                var hdnId = e.Row.FindControl("hdnId") as HiddenField;
+                var ddlExperience = e.Row.FindControl(ddlExperienceId) as DropDownList;
+                var hdnId = e.Row.FindControl(hdnIdId) as HiddenField;
                 if (Person.Industries.Count > 0)
                 {
                     if (Person.Industries.Where(i => i.Industry.Id == Convert.ToInt32(hdnId.Value)).Count() > 0)
@@ -210,24 +234,35 @@ namespace PraticeManagement
         protected void cvSkills_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             var validator = sender as CustomValidator;
-            var row = validator.Parent.Parent as GridViewRow;            
-            
-            var hdnChanged = row.FindControl("hdnChanged") as HiddenField;
+            var row = validator.Parent.Parent as GridViewRow;
+
+            var hdnChanged = row.FindControl(hdnChangedId) as HiddenField;
             if (hdnChanged != null && hdnChanged.Value == "1")
             {
-                var ddlLevel = row.FindControl("ddlLevel") as DropDownList;
-                var ddlExperience = row.FindControl("ddlExperience") as DropDownList;
-                var ddlLastUsed = row.FindControl("ddlLastUsed") as DropDownList;
-                var hdnDescription = row.FindControl("hdnDescription") as HiddenField;
+                var ddlLevel = row.FindControl(ddlLevelId) as DropDownList;
+                var ddlExperience = row.FindControl(ddlExperienceId) as DropDownList;
+                var ddlLastUsed = row.FindControl(ddlLastUsedId) as DropDownList;
+                var hdnDescription = row.FindControl(hdnDescriptionId) as HiddenField;
 
                 if (!(ddlLevel.SelectedIndex == 0 && ddlExperience.SelectedIndex == 0 && ddlLastUsed.SelectedIndex == 0))
                 {
                     if (ddlLevel.SelectedIndex == 0 || ddlExperience.SelectedIndex == 0 || ddlLastUsed.SelectedIndex == 0)
                     {
-                        hdnValidationMessage.Value = (ValidationPopUpMessage == hdnValidationMessage.Value) 
+                        hdnValidationMessage.Value = (ValidationPopUpMessage == hdnValidationMessage.Value)
                                                     ? hdnValidationMessage.Value + "\n\r \t" + hdnDescription.Value
                                                     : hdnValidationMessage.Value + ",\n\r \t" + hdnDescription.Value;
                         e.IsValid = false;
+                        var cvLevel = row.FindControl(cvLevelId) as CustomValidator;
+                        var cvExperience = row.FindControl(cvExperienceId) as CustomValidator;
+                        var cvLastUsed = row.FindControl(cvLastUsedId) as CustomValidator;
+
+                        cvLevel.Validate();
+                        cvExperience.Validate();
+                        cvLastUsed.Validate();
+
+                        cvLevel.IsValid = !(ddlLevel.SelectedIndex == 0);
+                        cvExperience.IsValid = !(ddlExperience.SelectedIndex == 0);
+                        cvLastUsed.IsValid = !(ddlLastUsed.SelectedIndex == 0);
                     }
                 }
             }
@@ -296,7 +331,6 @@ namespace PraticeManagement
                             ddlBusinessCategory.DataBind();
                             ddlBusinessCategory.SelectedIndex = 0;
                         }
-                        ddlBusinessCategory.Attributes.Add("PreviousSelected", ddlBusinessCategory.SelectedIndex.ToString());
                         break;
 
                     case 1:
@@ -306,7 +340,6 @@ namespace PraticeManagement
                             ddlTechnicalCategory.DataBind();
                             ddlTechnicalCategory.SelectedIndex = 0;
                         }
-                        ddlTechnicalCategory.Attributes.Add("PreviousSelected", ddlTechnicalCategory.SelectedIndex.ToString());
                         break;
                 }
             }
@@ -351,47 +384,69 @@ namespace PraticeManagement
         private void SaveBusinessORTechnicalSkills(GridViewRowCollection rows)
         {
             XmlDocument doc = new XmlDocument();
-            XmlElement root = doc.CreateElement("Skills");
+            XmlElement root = doc.CreateElement(Root);
 
             foreach (GridViewRow row in rows)
             {
-                var hdnChanged = row.FindControl("hdnChanged") as HiddenField;
+                var hdnChanged = row.FindControl(hdnChangedId) as HiddenField;
                 if (hdnChanged != null && hdnChanged.Value == "1")
                 {
-                    var ddlLevel = row.FindControl("ddlLevel") as DropDownList;
-                    var ddlExperience = row.FindControl("ddlExperience") as DropDownList;
-                    var ddlLastUsed = row.FindControl("ddlLastUsed") as DropDownList;
-                    var hdnId = row.FindControl("hdnId") as HiddenField;
+                    var ddlLevel = row.FindControl(ddlLevelId) as DropDownList;
+                    var ddlExperience = row.FindControl(ddlExperienceId) as DropDownList;
+                    var ddlLastUsed = row.FindControl(ddlLastUsedId) as DropDownList;
+                    var hdnId = row.FindControl(hdnIdId) as HiddenField;
                     int skillId = Convert.ToInt32(hdnId.Value);
+                    bool isModified = true;
 
-                    XmlElement skillTag = doc.CreateElement("Skill");
+                    if(Person.Skills.Count > 0 && Person.Skills.Where(skill => skill.Skill != null && skill.Skill.Id == Convert.ToInt32(hdnId.Value)).Count() > 0)
+                    {
+                        if (!(ddlLevel.SelectedIndex == 0 && ddlExperience.SelectedIndex == 0 && ddlLastUsed.SelectedIndex == 0))
+                        {
+                            var personSkill = Person.Skills.Where(skill => skill.Skill.Id == Convert.ToInt32(hdnId.Value)).First();
+                            if (personSkill.SkillLevel.Id == Convert.ToInt32(ddlLevel.SelectedValue) 
+                                    && personSkill.YearsExperience.Value == Convert.ToInt32(ddlExperience.SelectedValue)
+                                    && personSkill.LastUsed == Convert.ToInt32(ddlLastUsed.SelectedValue)
+                                )
+                            {
+                                isModified = false;
+                            }
+                        }
+                    }
 
-                    skillTag.SetAttribute("Id", hdnId.Value);
-                    skillTag.SetAttribute("Level", ddlLevel.SelectedValue);
-                    skillTag.SetAttribute("Experience", ddlExperience.SelectedValue);
-                    skillTag.SetAttribute("LastUsed", ddlLastUsed.SelectedValue);
+                    if (isModified)
+                    {
+                        XmlElement skillTag = doc.CreateElement(SkillTag);
 
-                    root.AppendChild(skillTag);
+                        skillTag.SetAttribute(IdAttribute, hdnId.Value);
+                        skillTag.SetAttribute(LevelAttribute, ddlLevel.SelectedValue);
+                        skillTag.SetAttribute(ExperienceAttribute, ddlExperience.SelectedValue);
+                        skillTag.SetAttribute(LastUsedAttribute, ddlLastUsed.SelectedValue);
+
+                        root.AppendChild(skillTag);
+                    }
 
                 }
             }
 
             doc.AppendChild(root);
-            string skillsXml = doc.InnerXml;
 
-            using (var serviceClient = new PersonSkillService.PersonSkillServiceClient())
+            if (root.HasChildNodes)
             {
-                try
+                string skillsXml = doc.InnerXml;
+                using (var serviceClient = new PersonSkillService.PersonSkillServiceClient())
                 {
-                    serviceClient.SavePersonSkills(Person.Id.Value, skillsXml, User.Identity.Name);
-                    Session[SessionPersonWithSkills] = null;
+                    try
+                    {
+                        serviceClient.SavePersonSkills(Person.Id.Value, skillsXml, User.Identity.Name);
+                        Session[SessionPersonWithSkills] = null;
 
-                    EnableSaveAndCancelButtons(false);
-                    ClearDirty();
-                }
-                catch
-                {
-                    serviceClient.Abort();
+                        EnableSaveAndCancelButtons(false);
+                        ClearDirty();
+                    }
+                    catch
+                    {
+                        serviceClient.Abort();
+                    }
                 }
             }
         }
@@ -401,47 +456,65 @@ namespace PraticeManagement
             var rows = gvIndustrySkills.Rows;
 
             XmlDocument doc = new XmlDocument();
-            XmlElement root = doc.CreateElement("Skills");
+            XmlElement root = doc.CreateElement(Root);
 
             foreach (GridViewRow row in rows)
             {
-                var hdnChanged = row.FindControl("hdnChanged") as HiddenField;
+                var hdnChanged = row.FindControl(hdnChangedId) as HiddenField;
                 if (hdnChanged != null && hdnChanged.Value == "1")
                 {
-                    var ddlExperience = row.FindControl("ddlExperience") as DropDownList;
-                    var hdnId = row.FindControl("hdnId") as HiddenField;
+                    var ddlExperience = row.FindControl(ddlExperienceId) as DropDownList;
+                    var hdnId = row.FindControl(hdnIdId) as HiddenField;
                     int industryId = Convert.ToInt32(hdnId.Value);
+                    bool isModified = true;
 
-                    XmlElement skillTag = doc.CreateElement("IndustrySkill");
+                    if (Person.Industries.Count > 0 && Person.Industries.Where(industry => industry.Industry != null && industry.Industry.Id == Convert.ToInt32(hdnId.Value)).Count() > 0)
+                    {
+                        if (ddlExperience.SelectedIndex != 0)
+                        {
+                            var personIndustry = Person.Industries.Where(industry => industry.Industry.Id == Convert.ToInt32(hdnId.Value)).First();
+                            if (personIndustry.YearsExperience == Convert.ToInt32(ddlExperience.SelectedValue))
+                            {
+                                isModified = false;
+                            }
+                        }
+                    }
 
-                    skillTag.SetAttribute("Id", hdnId.Value);
-                    skillTag.SetAttribute("Experience", ddlExperience.SelectedValue);
+                    if (isModified)
+                    {
+                        XmlElement industryTag = doc.CreateElement(IndustrySkillTag);
 
-                    root.AppendChild(skillTag);
+                        industryTag.SetAttribute(IdAttribute, hdnId.Value);
+                        industryTag.SetAttribute(ExperienceAttribute, ddlExperience.SelectedValue);
 
+                        root.AppendChild(industryTag);
+                    }
                 }
             }
 
             doc.AppendChild(root);
-            string skillsXml = doc.InnerXml;
 
-            using (var serviceClient = new PersonSkillService.PersonSkillServiceClient())
+            if (root.HasChildNodes)
             {
-                try
+                string skillsXml = doc.InnerXml;
+                using (var serviceClient = new PersonSkillService.PersonSkillServiceClient())
                 {
-                    serviceClient.SavePersonIndustrySkills(Person.Id.Value, skillsXml, User.Identity.Name);
-                    Session[SessionPersonWithSkills] = null;
+                    try
+                    {
+                        serviceClient.SavePersonIndustrySkills(Person.Id.Value, skillsXml, User.Identity.Name);
+                        Session[SessionPersonWithSkills] = null;
 
-                    EnableSaveAndCancelButtons(false);
-                    ClearDirty();
-                }
-                catch
-                {
-                    serviceClient.Abort();
+                        EnableSaveAndCancelButtons(false);
+                        ClearDirty();
+                    }
+                    catch
+                    {
+                        serviceClient.Abort();
+                    }
                 }
             }
         }
-        
+
         #region ObjectDataSource Select Methods
 
         [DataObjectMethod(DataObjectMethodType.Select)]
