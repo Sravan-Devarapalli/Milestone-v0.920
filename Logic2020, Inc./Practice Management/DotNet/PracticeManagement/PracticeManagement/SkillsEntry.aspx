@@ -38,8 +38,8 @@
     <script type="text/javascript" language="javascript">
 
         $(document).ready(
-        function (){
-        setTimeout("CheckAndShowPopUp();",200);
+        function () {
+            setTimeout("CheckAndShowPopUp();", 200);
         }
         );
 
@@ -50,7 +50,7 @@
         }
 
 
-        function CheckAndShowPopUp(){
+        function CheckAndShowPopUp() {
             var hdnIsValid = document.getElementById('<%= hdnIsValid.ClientID %>');
             var hdnValidationMessage = document.getElementById('<%= hdnValidationMessage.ClientID %>');
             if (hdnIsValid != null && hdnValidationMessage != null) {
@@ -103,7 +103,7 @@
                             </div>
                             <div class="SkillsDataBody">
                                 <asp:GridView ID="gvBusinessSkills" runat="server" AutoGenerateColumns="false" OnRowDataBound="gvSkills_RowDataBound"
-                                    CssClass="WholeWidth TabPadding" AlternatingRowStyle-BackColor="#f9faff">
+                                    CssClass="WholeWidth TabPadding" AlternatingRowStyle-BackColor="#f9faff" HeaderStyle-BackColor="#f9faff">
                                     <Columns>
                                         <asp:TemplateField>
                                             <HeaderTemplate>
@@ -126,6 +126,8 @@
                                                 <asp:DropDownList runat="server" ID="ddlLevel" DataTextField="Description" DataValueField="Id"
                                                     DataSourceID="odsSkillLevel" onchange="ddlChanged(this);">
                                                 </asp:DropDownList>
+                                                <asp:CustomValidator ID="cvLevel" runat="server" Text="*" ToolTip="Level is required."
+                                                    SetFocusOnError="true"></asp:CustomValidator>
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField>
@@ -138,6 +140,8 @@
                                                 <asp:DropDownList runat="server" ID="ddlExperience" DataSourceID="odsExperience"
                                                     DataTextField="Name" DataValueField="Id" onchange="ddlChanged(this);">
                                                 </asp:DropDownList>
+                                                <asp:CustomValidator ID="cvExperience" runat="server" Text="*" ToolTip="Experience is required."
+                                                    SetFocusOnError="true"></asp:CustomValidator>
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField>
@@ -150,9 +154,10 @@
                                                 <asp:DropDownList runat="server" ID="ddlLastUsed" DataSourceID="odsLastUsed" DataTextField="Name"
                                                     DataValueField="Id" onchange="ddlChanged(this);">
                                                 </asp:DropDownList>
+                                                <asp:CustomValidator ID="cvLastUsed" runat="server" Text="*" ToolTip="Last Used is required."
+                                                    SetFocusOnError="true"></asp:CustomValidator>
                                                 <asp:CustomValidator ID="cvSkills" runat="server" OnServerValidate="cvSkills_ServerValidate"
-                                                    Text="*" ToolTip="Skill must have Level, Experience and Last Used." SetFocusOnError="true"
-                                                    ValidationGroup="BusinessGroup"></asp:CustomValidator>
+                                                    SetFocusOnError="true" ValidationGroup="BusinessGroup"></asp:CustomValidator>
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField>
@@ -179,7 +184,7 @@
                             </div>
                             <div class="SkillsDataBody">
                                 <asp:GridView ID="gvTechnicalSkills" runat="server" AutoGenerateColumns="false" OnRowDataBound="gvSkills_RowDataBound"
-                                    CssClass="WholeWidth TabPadding" AlternatingRowStyle-BackColor="#f9faff">
+                                    CssClass="WholeWidth TabPadding" AlternatingRowStyle-BackColor="#f9faff" HeaderStyle-BackColor="#f9faff">
                                     <Columns>
                                         <asp:TemplateField>
                                             <HeaderTemplate>
@@ -202,6 +207,8 @@
                                                 <asp:DropDownList runat="server" ID="ddlLevel" DataTextField="Description" DataValueField="Id"
                                                     DataSourceID="odsSkillLevel" onchange="ddlChanged(this);">
                                                 </asp:DropDownList>
+                                                <asp:CustomValidator ID="cvLevel" runat="server" Text="*" ToolTip="Level is required."
+                                                    SetFocusOnError="true"></asp:CustomValidator>
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField>
@@ -214,6 +221,8 @@
                                                 <asp:DropDownList runat="server" ID="ddlExperience" DataSourceID="odsExperience"
                                                     DataTextField="Name" DataValueField="Id" onchange="ddlChanged(this);">
                                                 </asp:DropDownList>
+                                                <asp:CustomValidator ID="cvExperience" runat="server" Text="*" ToolTip="Experience is required."
+                                                    SetFocusOnError="true"></asp:CustomValidator>
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField>
@@ -226,9 +235,10 @@
                                                 <asp:DropDownList runat="server" ID="ddlLastUsed" DataSourceID="odsLastUsed" DataTextField="Name"
                                                     DataValueField="Id" onchange="ddlChanged(this);">
                                                 </asp:DropDownList>
+                                                <asp:CustomValidator ID="cvLastUsed" runat="server" Text="*" ToolTip="Last Used is required."
+                                                    SetFocusOnError="true"></asp:CustomValidator>
                                                 <asp:CustomValidator ID="cvSkills" runat="server" OnServerValidate="cvSkills_ServerValidate"
-                                                    Text="*" ToolTip="Skill must have Level, Experience and Last Used." SetFocusOnError="true"
-                                                    ValidationGroup="TechnicalGroup"></asp:CustomValidator>
+                                                    SetFocusOnError="true" ValidationGroup="TechnicalGroup"></asp:CustomValidator>
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField>
@@ -252,7 +262,7 @@
                             </div>
                             <div class="SkillsDataBody">
                                 <asp:GridView ID="gvIndustrySkills" runat="server" AutoGenerateColumns="false" OnRowDataBound="gvIndustrySkills_RowDataBound"
-                                    CssClass="WholeWidth TabPadding" AlternatingRowStyle-BackColor="#f9faff">
+                                    CssClass="WholeWidth TabPadding" AlternatingRowStyle-BackColor="#f9faff" HeaderStyle-BackColor="#f9faff">
                                     <Columns>
                                         <asp:TemplateField>
                                             <ItemStyle Width="55%" />
