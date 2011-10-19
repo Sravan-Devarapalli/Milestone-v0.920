@@ -35,6 +35,9 @@ namespace PraticeManagement.PersonSkillService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonSkillService/SavePersonIndustrySkills", ReplyAction="http://tempuri.org/IPersonSkillService/SavePersonIndustrySkillsResponse")]
         void SavePersonIndustrySkills(int personId, string industrySkillsXml, string userLogin);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonSkillService/PersonsSearchBySkillsText", ReplyAction="http://tempuri.org/IPersonSkillService/PersonsSearchBySkillsTextResponse")]
+        DataTransferObjects.Person[] PersonsSearchBySkillsText(string skillsSearchText);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -45,6 +48,7 @@ namespace PraticeManagement.PersonSkillService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonSkillServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonSkillService.IPersonSkillService>, PraticeManagement.PersonSkillService.IPersonSkillService {
         
+       
         public PersonSkillServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -87,6 +91,10 @@ namespace PraticeManagement.PersonSkillService {
         
         public void SavePersonIndustrySkills(int personId, string industrySkillsXml, string userLogin) {
             base.Channel.SavePersonIndustrySkills(personId, industrySkillsXml, userLogin);
+        }
+        
+        public DataTransferObjects.Person[] PersonsSearchBySkillsText(string skillsSearchText) {
+            return base.Channel.PersonsSearchBySkillsText(skillsSearchText);
         }
     }
 }
