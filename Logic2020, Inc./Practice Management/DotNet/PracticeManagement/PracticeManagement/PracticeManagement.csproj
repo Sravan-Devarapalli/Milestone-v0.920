@@ -732,20 +732,20 @@
     <None Include="Service References\PersonService\DataTransferObjects.Skills1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\PersonSkillService\PersonSkillService11.wsdl" />
-    <None Include="Service References\PersonSkillService\PersonSkillService35.xsd">
+    <None Include="Service References\PersonSkillService\PersonSkillService10.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\PersonSkillService\PersonSkillService36.xsd">
+    <None Include="Service References\PersonSkillService\PersonSkillService11.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\PersonSkillService\PersonSkillService37.xsd">
+    <None Include="Service References\PersonSkillService\PersonSkillService12.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\PersonSkillService\PersonSkillService38.xsd">
+    <None Include="Service References\PersonSkillService\PersonSkillService13.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\PersonSkillService\PersonSkillService39.xsd">
+    <None Include="Service References\PersonSkillService\PersonSkillService2.wsdl" />
+    <None Include="Service References\PersonSkillService\PersonSkillService9.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\PersonStatusService\PersonStatusService1.wsdl" />
@@ -953,9 +953,10 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Service References\PersonSkillService\PersonSkillService11.disco" />
     <None Include="Service References\ProjectService\ProjectService1.disco" />
+    <None Include="Service References\PersonSkillService\PersonSkillService2.disco" />
     <Content Include="SkillsEntry.aspx" />
+    <Content Include="SkillsSearch.aspx" />
     <Content Include="Third Party Tools\CKEditor.NET.dll" />
     <Content Include="Third Party Tools\FormsAuthenticationUserImpersonation.dll" />
     <Content Include="Third Party Tools\PdfGenerator\itextsharp.dll" />
@@ -1752,6 +1753,13 @@
     </Compile>
     <Compile Include="SkillsEntry.aspx.designer.cs">
       <DependentUpon>SkillsEntry.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SkillsSearch.aspx.cs">
+      <DependentUpon>SkillsSearch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SkillsSearch.aspx.designer.cs">
+      <DependentUpon>SkillsSearch.aspx</DependentUpon>
     </Compile>
     <Compile Include="TimeEntrySetting.aspx.cs">
       <DependentUpon>TimeEntrySetting.aspx</DependentUpon>
