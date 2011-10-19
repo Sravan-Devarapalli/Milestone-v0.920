@@ -1,9 +1,9 @@
 ﻿CREATE TRIGGER [Skills].[tr_PersonIndustry_LogUpdateDelete]
-    ON [Skills].[PersonIndustry]
-    FOR DELETE, UPDATE 
-    AS 
-    BEGIN
-    	SET NOCOUNT ON
+ON [Skills].[PersonIndustry]
+FOR DELETE, UPDATE 
+AS 
+BEGIN
+    SET NOCOUNT ON
 
 	
 	-- Ensure the temporary table exists
@@ -16,7 +16,7 @@
 	(
 		SELECT i.*,
 				Ind.Description 'IndustryDescription',
-				P.LastName + ', ' + P.FirstName Person
+				P.LastName + ', ' + P.FirstName [Person]
 		  FROM inserted AS i
 			   INNER JOIN Skills.Industry AS Ind ON Ind.IndustryId = i.IndustryId
 			   INNER JOIN dbo.Person P ON P.PersonId = i.PersonId
@@ -26,7 +26,7 @@
 	(
 		SELECT d.*,
 				Ind.Description 'IndustryDescription',
-				P.LastName + ', ' + P.FirstName Person
+				P.LastName + ', ' + P.FirstName [Person]
 		  FROM deleted AS d
 			   INNER JOIN Skills.Industry AS Ind ON Ind.IndustryId = d.IndustryId
 			   INNER JOIN dbo.Person P ON P.PersonId = d.PersonId
@@ -67,7 +67,7 @@
 					    FROM NEW_VALUES
 					         FULL JOIN OLD_VALUES ON NEW_VALUES.IndustryId = OLD_VALUES.IndustryId AND NEW_VALUES.PersonId = OLD_VALUES.PersonId
 			           WHERE (NEW_VALUES.IndustryId = ISNULL(i.IndustryId, d.IndustryId) AND NEW_VALUES.PersonId = ISNULL(i.PersonId, d.PersonId))
-							OR (OLD_VALUES.IndustryId = ISNULL(d.IndustryId, i.IndustryId) AND NEW_VALUES.PersonId = ISNULL(d.PersonId, i.PersonId))
+							OR (OLD_VALUES.IndustryId = ISNULL(d.IndustryId, i.IndustryId) AND OLD_VALUES.PersonId = ISNULL(d.PersonId, i.PersonId))
 					  FOR XML AUTO, ROOT('PersonIndustry'))),
 			LogData = (SELECT   NEW_VALUES.IndustryId,
 								NEW_VALUES.IndustryDescription,
@@ -80,9 +80,9 @@
 								OLD_VALUES.Person,
 								OLD_VALUES.YearsExperience
 					    FROM NEW_VALUES
-					         FULL JOIN OLD_VALUES ON NEW_VALUES.IndustryId = OLD_VALUES.IndustryId
+					         FULL JOIN OLD_VALUES ON NEW_VALUES.IndustryId = OLD_VALUES.IndustryId AND NEW_VALUES.PersonId = OLD_VALUES.PersonId
 			           WHERE (NEW_VALUES.IndustryId = ISNULL(i.IndustryId, d.IndustryId) AND NEW_VALUES.PersonId = ISNULL(i.PersonId, d.PersonId))
-							OR (OLD_VALUES.IndustryId = ISNULL(d.IndustryId, i.IndustryId) AND NEW_VALUES.PersonId = ISNULL(d.PersonId, i.PersonId))
+							OR (OLD_VALUES.IndustryId = ISNULL(d.IndustryId, i.IndustryId) AND OLD_VALUES.PersonId = ISNULL(d.PersonId, i.PersonId))
 					  FOR XML AUTO, ROOT('PersonIndustry'), TYPE),
 			@CurrentPMTime
 
@@ -95,5 +95,5 @@
 	-- End logging session
 	--EXEC dbo.SessionLogUnprepare
 
-    END
+END
 
