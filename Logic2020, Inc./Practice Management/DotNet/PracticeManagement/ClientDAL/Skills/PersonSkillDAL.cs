@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Data;
 using DataTransferObjects.Skills;
 using DataAccess.Other;
+using DataTransferObjects;
 
 
 namespace DataAccess.Skills
@@ -114,6 +115,47 @@ namespace DataAccess.Skills
                 }
             }
             return personIndustries;
+        }
+
+        public static List<Person> PersonsSearchBySkillsText(string skillsSearchText)
+        {
+            var persons = new List<Person>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.PersonsSearchBySkillsText, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.SkillsSearchText, skillsSearchText ?? string.Empty);
+                    connection.Open();
+                    var reader = command.ExecuteReader();
+                    ReadPersonsShort(reader, persons);
+                }
+            }
+            return persons;
+
+        }
+
+        private static void ReadPersonsShort(SqlDataReader reader, List<Person> persons)
+        {
+            var personIdColumn = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+            var LastNameColumn = reader.GetOrdinal(Constants.ColumnNames.LastName);
+            var firstNameColumn = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    var person = new Person
+                    {
+
+                        Id = reader.GetInt32(personIdColumn),
+                        LastName = reader.GetString(LastNameColumn),
+                        FirstName = reader.GetString(firstNameColumn)
+
+                    };
+                    persons.Add(person);
+                }
+            }
         }
 
         private static void ReadPersonIndustriesShort(SqlDataReader reader, List<PersonIndustry> personIndustries)
