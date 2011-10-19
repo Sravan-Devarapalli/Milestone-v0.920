@@ -12,7 +12,8 @@
 	@ProjectGroupIds	VARCHAR(250) = NULL,
 	@StartDate			DATETIME,
 	@EndDate			DATETIME,
-	@ExcludeInternalPractices BIT = 0
+	@ExcludeInternalPractices BIT = 0,
+	@UserLogin			NVARCHAR(255)
 AS 
 	SET NOCOUNT ON ;
 
@@ -58,7 +59,30 @@ AS
 	DECLARE @DefaultProjectId INT
 	SELECT @DefaultProjectId = ProjectId
 	FROM dbo.DefaultMilestoneSetting
-
+	
+	DECLARE @UserHasHighRoleThanProjectLead INT = NULL
+	DECLARE @PersonId INT
+	
+	SELECT @PersonId = P.PersonId
+	FROM Person P
+	WHERE P.Alias = @UserLogin
+	
+	--Adding this as part of #2941.
+	IF EXISTS ( SELECT 1
+				FROM aspnet_Users U
+				JOIN aspnet_UsersInRoles UR ON UR.UserId = U.UserId
+				JOIN aspnet_Roles R ON R.RoleId = UR.RoleId
+				WHERE U.UserName = @UserLogin AND R.LoweredRoleName = 'project lead')
+	BEGIN
+		SET @UserHasHighRoleThanProjectLead = 0
+		
+		SELECT @UserHasHighRoleThanProjectLead = COUNT(*)
+		FROM aspnet_Users U
+		JOIN aspnet_UsersInRoles UR ON UR.UserId = U.UserId
+		JOIN aspnet_Roles R ON R.RoleId = UR.RoleId
+		WHERE U.UserName = @UserLogin
+			AND R.LoweredRoleName IN ('administrator','client director','practice area manager','senior leadership')		
+	END
 	
 	SELECT  p.ClientId,
 			p.ProjectId,
@@ -123,6 +147,18 @@ AS
 			)
 			AND  (ISNULL(pr.IsCompanyInternal, 0) = 0 AND @ExcludeInternalPractices  = 1 OR @ExcludeInternalPractices = 0)
 			AND P.ProjectId <> @DefaultProjectId
+			AND (@UserHasHighRoleThanProjectLead IS NULL
+					OR @UserHasHighRoleThanProjectLead > 0
+					OR (@UserHasHighRoleThanProjectLead = 0
+						AND EXISTS (SELECT 1 FROM dbo.ProjectManagers projManagers2
+									LEFT JOIN Commission Css ON Css.ProjectId = projManagers2.ProjectId AND Css.CommissionType = 1
+									WHERE projManagers2.ProjectId = p.ProjectId
+											AND (projManagers2.ProjectManagerId = @PersonId
+												OR Css.PersonId = @PersonId
+												)
+									)
+						)
+				)
 	ORDER BY CASE p.ProjectStatusId
 			   WHEN 2 THEN p.StartDate
 			   ELSE p.EndDate
