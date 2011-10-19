@@ -3723,6 +3723,11 @@
     <Build Include="Schema Objects\Schemas\Skills\Tables\Triggers\tr_PersonSkill_LogUpdateDelete.trigger.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\PersonsSearchBySkillsText.proc.sql">
+      <SubType>Code</SubType>
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Schema Comparisons\v0.850.dbschema">
@@ -3787,4 +3792,3 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
-
