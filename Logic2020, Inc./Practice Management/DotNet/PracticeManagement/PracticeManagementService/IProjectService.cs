@@ -156,7 +156,8 @@ namespace PracticeManagementService
             string practiceIdsList,
             string projectGroupIdsList,
             ProjectCalculateRangeType includeCurentYearFinancials,
-            bool excludeInternalPractices);
+            bool excludeInternalPractices,
+            string userLogin);
 
         [OperationContract]
         List<Project> GetProjectListWithFinancials(
