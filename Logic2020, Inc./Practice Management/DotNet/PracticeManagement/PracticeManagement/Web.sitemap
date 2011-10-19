@@ -3,7 +3,7 @@
   <siteMapNode url="" roles="*">
     
     <siteMapNode url="~/Temp.aspx?from=toolbar"   title="Projects" description="Company Performance page" >
-      <siteMapNode url="~/ProjectDetail.aspx?from=sub_toolbar"  VirtualPath="~/ProjectDetail.aspx" QuickLinkTitle="Add Project" title="Add Project" description="Add Project" ShowURL="true"  />
+      <siteMapNode url="~/ProjectDetail.aspx?from=sub_toolbar"  VirtualPath="~/ProjectDetail.aspx" QuickLinkTitle="Add Project" title="Add Project" roles="Administrator, Salesperson, Practice Area Manager, Client Director, Senior Leadership" description="Add Project" ShowURL="true"  />
       <siteMapNode url="~/ProjectSearch.aspx" VirtualPath="~/ProjectSearch.aspx" QuickLinkTitle="Project Search" title="Search" description="Project Search" ShowURL="true" />
       <siteMapNode url="~/Projects.aspx"  VirtualPath="~/Projects.aspx" QuickLinkTitle="Project Summary"  title="Summary" description="Project Summary" ShowURL="true" />
       <siteMapNode url="~/GroupBy.aspx"  VirtualPath="~/GroupBy.aspx" QuickLinkTitle="Group By..."  title="Group By..."  description="Group By..." ShowURL="true"/>
