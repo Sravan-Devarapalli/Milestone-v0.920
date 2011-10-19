@@ -82,7 +82,9 @@ namespace DataTransferObjects
         [EnumMember]
         Recruiter = 6,
         [EnumMember]
-        Admin = 7
+        Admin = 7,
+        [EnumMember]
+        ProjectLead = 8
 
     }
 }
