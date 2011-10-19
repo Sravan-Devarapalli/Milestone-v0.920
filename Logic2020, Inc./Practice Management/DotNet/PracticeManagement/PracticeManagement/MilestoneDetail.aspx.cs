@@ -1281,7 +1281,8 @@ namespace PraticeManagement
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName) &&
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName) &&
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName) &&// #2817: DirectorRoleName is added as per the requirement.
-                !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);// #2913: userIsSeniorLeadership is added as per the requirement.
+                !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName) &&// #2913: userIsSeniorLeadership is added as per the requirement.
+                !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead);// #2941: userIsProjectLead is added as per the requirement.
 
             txtMilestoneName.ReadOnly = dtpPeriodFrom.ReadOnly =
                 dtpPeriodTo.ReadOnly = txtFixedRevenue.ReadOnly = isReadOnly;
