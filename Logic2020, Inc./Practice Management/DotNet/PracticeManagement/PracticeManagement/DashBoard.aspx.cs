@@ -81,7 +81,8 @@ namespace PraticeManagement
                                     _userIsSeniorLeadership ? DashBoardType.SeniorLeadership.ToString() :
                                     _userIsClientDirector ? DashBoardType.ClientDirector.ToString() :
                                     _userIsSalesperson ? DashBoardType.BusinessDevelopment.ToString() :
-                                    (_userIsPracticeAreaManger || _userIsProjectLead) ? DashBoardType.Manager.ToString() :
+                                    (_userIsPracticeAreaManger) ? DashBoardType.Manager.ToString() :
+                                    _userIsProjectLead ? DashBoardType.ProjectLead.ToString() :
                                     _userIsConsultant ? DashBoardType.Consulant.ToString() :
                                     string.Empty;
             DashBoardType dashBoardtype = (DashBoardType)Enum.Parse(typeof(DashBoardType), _userIsAdministrator ? ddlDashBoardType.SelectedValue : dashBoardValue);
@@ -212,7 +213,7 @@ namespace PraticeManagement
                         listOfItems.Add("Opportunity", "Opportunity");
                     }
                 }
-                else if (ddlDashBoardType.SelectedValue == DashBoardType.Manager.ToString())
+                else if (ddlDashBoardType.SelectedValue == DashBoardType.Manager.ToString() || ddlDashBoardType.SelectedValue == DashBoardType.ProjectLead.ToString())
                 {
                     if (!listOfItems.Any(k => k.Key == "Project"))
                     {
