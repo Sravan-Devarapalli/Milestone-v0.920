@@ -311,7 +311,8 @@ namespace PracticeManagementService
             string practiceIdsList,
             string projectGroupIdsList,
             ProjectCalculateRangeType includeCurentYearFinancials,
-            bool excludeInternalPractices)
+            bool excludeInternalPractices,
+            string userLogin)
         {
 
             try
@@ -332,7 +333,8 @@ namespace PracticeManagementService
                    practiceIdsList,
                    projectGroupIdsList,
                    includeCurentYearFinancials,
-                   excludeInternalPractices);
+                   excludeInternalPractices,
+                   userLogin);
 
                 return result;
             }
