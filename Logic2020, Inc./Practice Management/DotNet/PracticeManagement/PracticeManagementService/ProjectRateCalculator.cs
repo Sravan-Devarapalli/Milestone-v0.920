@@ -135,7 +135,8 @@ namespace PracticeManagementService
             string practiceIdsList,
             string projectGroupIdsList,
             ProjectCalculateRangeType includeCurentYearFinancials,
-            bool excludeInternalPractices)
+            bool excludeInternalPractices,
+            string userLogin)
         {
             List<Project> result =
                 ProjectDAL.ProjectListAllMultiParameters(
@@ -152,7 +153,8 @@ namespace PracticeManagementService
                 practiceManagerIdsList,
                 practiceIdsList,
                 projectGroupIdsList,
-                excludeInternalPractices);
+                excludeInternalPractices,
+                userLogin);
 
             return CalculateRates(result, periodStart, periodEnd, includeCurentYearFinancials);
         }
