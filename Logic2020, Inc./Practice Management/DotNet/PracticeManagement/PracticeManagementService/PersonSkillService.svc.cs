@@ -57,6 +57,11 @@ namespace PracticeManagementService
         {
             PersonSkillDAL.SavePersonIndustrySkills(personId, industrySkillsXml, userLogin);
         }
+
+        public List<Person> PersonsSearchBySkillsText(string skillsSearchText)
+        {
+            return PersonSkillDAL.PersonsSearchBySkillsText(skillsSearchText);
+        }
     }
 }
 
