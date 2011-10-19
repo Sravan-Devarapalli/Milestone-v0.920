@@ -328,6 +328,22 @@ namespace PraticeManagement
                         continue;
                     }
                 }
+                if (level2Item.Title == "Add Project")
+                {
+                    bool userIsProjectLead =
+                        Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead);
+
+                    if (userIsProjectLead)
+                    {                        
+                        var userRoles = Roles.GetRolesForUser(Page.User.Identity.Name);
+                        var dontSkip = userRoles.Any(r => level2Item.Roles.Contains(r));
+
+                        if (!dontSkip)
+                        {
+                            continue;
+                        }
+                    }
+                }
                 if (CheckChildsExists(level2Item, 2))
                 {
                     htmltext += string.Format(Level2MenuItemTemplate, level2Item.Title, GetLevel3MenuItemHtml(level2Item), level2Item.Title.Replace(' ', '_') + level2Item.ParentNode.Title.Replace(' ', '_'), string.Empty);
