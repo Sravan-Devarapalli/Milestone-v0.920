@@ -135,6 +135,7 @@ namespace PraticeManagement
             public const string UtilizationTimelineWithFilterQueryStringAndDetails = "~/Reports/UtilizationTimeline.aspx?ApplyFilterFromCookie=true#details";
             public const string UtilizationTimelineWithFilterQueryString = "~/Reports/UtilizationTimeline.aspx?ApplyFilterFromCookie=true";
             public const string OpportunitySummary = "~/DiscussionReview2.aspx";
+            public const string AccessDeniedPage = "~/GuestPages/AccessDenied.aspx";
         }
 
         /// <summary>
