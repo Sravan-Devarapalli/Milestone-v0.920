@@ -144,8 +144,13 @@ namespace PraticeManagement
                     if (IsUserHasPermissionOnProject.HasValue && !IsUserHasPermissionOnProject.Value
                         && IsUserisOwnerOfProject.HasValue && !IsUserisOwnerOfProject.Value)
                     {
-                        Response.Redirect(@"~\GuestPages\AccessDenied.aspx");
+                        Response.Redirect(Constants.ApplicationPages.AccessDeniedPage);
                     }
+                }
+
+                if (!ProjectId.HasValue && Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead))
+                {
+                    Response.Redirect(Constants.ApplicationPages.AccessDeniedPage);
                 }
 
                 txtProjectName.Focus();
@@ -215,8 +220,10 @@ namespace PraticeManagement
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName); // #2817: userIsDirector is added as per the requirement.
             bool userIsSeniorLeadership =
                Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);// #2913: userIsSeniorLeadership is added as per the requirement.
+            bool userIsProjectLead =
+                Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead);//added Project Lead as per #2941.
 
-            bool isReadOnly = !userIsAdministrator && !userIsSalesPerson && !userIsPracticeManager && !userIsDirector && !userIsSeniorLeadership;// #2817: userIsDirector is added as per the requirement.
+            bool isReadOnly = !userIsAdministrator && !userIsSalesPerson && !userIsPracticeManager && !userIsDirector && !userIsSeniorLeadership && !userIsProjectLead;// #2817: userIsDirector is added as per the requirement.
 
             txtProjectName.ReadOnly = txtClientDiscount.ReadOnly = isReadOnly;
             txtSalesCommission.ReadOnly = !userIsAdministrator;
@@ -232,7 +239,7 @@ namespace PraticeManagement
             cblProjectManagers.Enabled = ddlDirector.Enabled = (userIsAdministrator || userIsDirector || userIsSeniorLeadership || userIsSalesPerson) && !string.IsNullOrEmpty(ddlClientName.SelectedValue);
             cblProjectManagers.Enabled = (userIsAdministrator || userIsDirector || userIsSeniorLeadership || userIsSalesPerson);
 
-            if (userIsPracticeManager && !cblProjectManagers.Enabled && !ProjectId.HasValue)
+            if ((userIsPracticeManager || userIsProjectLead) && !cblProjectManagers.Enabled && !ProjectId.HasValue)
             {
                 try
                 {
@@ -274,6 +281,12 @@ namespace PraticeManagement
                 chbReceivesSalesCommission.Enabled && !string.IsNullOrEmpty(ddlSalesperson.SelectedValue);
 
             NeedToShowDeleteButton();
+
+            if (userIsProjectLead)
+            {
+                lbOpportunity.Enabled = false;//as per #2941.
+                cellProjectTools.Visible = false;
+            }
         }
 
         private void NeedToShowDeleteButton()
