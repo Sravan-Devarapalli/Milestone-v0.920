@@ -678,6 +678,7 @@ namespace PraticeManagement.Controls.Milestones
                     if (!(IsUserisOwnerOfProject.HasValue && IsUserisOwnerOfProject.Value))
                     {
                         if (!Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName)
+                            || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead)//added Project Lead as per #2941.
                             || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName)// #2817: DirectorRoleName is added as per the requirement.
                              || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName))// #2913: userIsSeniorLeadership is added as per the requirement.
                         {
@@ -793,6 +794,7 @@ namespace PraticeManagement.Controls.Milestones
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) &&
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName) &&
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName) &&
+                !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead) &&//added Project Lead as per #2941.
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName) &&// #2817: DirectorRoleName is added as per the requirement.
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName); // #2913: userIsSeniorLeadership is added as per the requirement.
 
