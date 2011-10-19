@@ -21,13 +21,13 @@
     <MetadataSource Address="http://localhost/PracticeManagementService/PersonSkillService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="PersonSkillService35.xsd" MetadataType="Schema" ID="35f797a5-f431-43a2-b7e8-65a6a8a8662f" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd4" />
-    <MetadataFile FileName="PersonSkillService36.xsd" MetadataType="Schema" ID="9f147f30-9116-431e-82bb-d116376abafc" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd1" />
-    <MetadataFile FileName="PersonSkillService37.xsd" MetadataType="Schema" ID="9d60a9fb-2f7d-4afd-b1ff-da1fc6023b79" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd0" />
-    <MetadataFile FileName="PersonSkillService38.xsd" MetadataType="Schema" ID="0d71ae2b-c9f8-4be5-ac1b-2c971e2e1663" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd3" />
-    <MetadataFile FileName="PersonSkillService39.xsd" MetadataType="Schema" ID="cfb1e728-5a22-4105-bc2c-c11d586a912a" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd2" />
-    <MetadataFile FileName="PersonSkillService11.wsdl" MetadataType="Wsdl" ID="6fc86e03-c2b2-4522-9fae-fe49c04d2d85" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/PersonSkillService.svc?wsdl" />
-    <MetadataFile FileName="PersonSkillService11.disco" MetadataType="Disco" ID="f2c8d8f7-6910-4673-900f-0e063bd321e6" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/PersonSkillService.svc?disco" />
+    <MetadataFile FileName="PersonSkillService2.wsdl" MetadataType="Wsdl" ID="e9baf855-a07b-4d09-973b-c7bbd16d581c" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/PersonSkillService.svc?wsdl" />
+    <MetadataFile FileName="PersonSkillService9.xsd" MetadataType="Schema" ID="9cf09d79-7495-4659-ab5d-4c8fe8342f6d" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd4" />
+    <MetadataFile FileName="PersonSkillService10.xsd" MetadataType="Schema" ID="482b54f4-bbdf-49d4-9409-b942e98d659a" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd0" />
+    <MetadataFile FileName="PersonSkillService11.xsd" MetadataType="Schema" ID="f56011d1-1179-49e1-ab11-e2a95b90853b" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd2" />
+    <MetadataFile FileName="PersonSkillService12.xsd" MetadataType="Schema" ID="0d66deec-c68c-4d96-95f1-a2f02371bfcd" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd1" />
+    <MetadataFile FileName="PersonSkillService13.xsd" MetadataType="Schema" ID="5ad17302-ba3a-4a5c-96b3-3aa60e81a1f0" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd3" />
+    <MetadataFile FileName="PersonSkillService2.disco" MetadataType="Disco" ID="9809c515-60f6-418f-b939-02118709b154" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/PersonSkillService.svc?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
