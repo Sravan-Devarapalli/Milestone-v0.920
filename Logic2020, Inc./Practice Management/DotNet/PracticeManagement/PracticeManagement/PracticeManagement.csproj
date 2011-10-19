@@ -788,6 +788,9 @@
     <None Include="Service References\ProjectService\ProjectService18.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\ProjectService\ProjectService20.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ProjectStatusService\ProjectStatusService1.wsdl" />
     <None Include="Service References\ProjectStatusService\ProjectStatusService3.xsd">
       <SubType>Designer</SubType>
@@ -940,7 +943,6 @@
     <None Include="Service References\ProjectGroupService\ProjectGroupService15.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService12.disco" />
     <None Include="Service References\OverheadService\OverheadService1.disco" />
-    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <None Include="Service References\OpportunityService\OpportunityService1.disco" />
@@ -952,6 +954,7 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Service References\PersonSkillService\PersonSkillService11.disco" />
+    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <Content Include="SkillsEntry.aspx" />
     <Content Include="Third Party Tools\CKEditor.NET.dll" />
     <Content Include="Third Party Tools\FormsAuthenticationUserImpersonation.dll" />
