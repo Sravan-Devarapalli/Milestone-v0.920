@@ -85,6 +85,7 @@
       </siteMapNode>
       <siteMapNode title="Skills"  url="Temp.aspx?from=Skills">
         <siteMapNode url="~/SkillsEntry.aspx" VirtualPath="~/SkillsEntry.aspx" QuickLinkTitle="Skills Entry" title="Skills Entry" description="Skills Entry" ShowURL="true"/>
+        <siteMapNode url="~/SkillsSearch.aspx" VirtualPath="~/SkillsSearch.aspx" QuickLinkTitle="Skills Search" title="Skills Search" description="Skills Search" ShowURL="true"/>
       </siteMapNode>
     </siteMapNode>
   </siteMapNode>
