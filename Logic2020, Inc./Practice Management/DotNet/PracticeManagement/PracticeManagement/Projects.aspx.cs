@@ -268,7 +268,8 @@ namespace PraticeManagement
                                  filterSet.PracticeIdsList,
                                  filterSet.ProjectGroupIdsList,
                                  ProjectCalculateRangeType.TotalProjectValue,
-                                 filterSet.ExcludeInternalPractices);
+                                 filterSet.ExcludeInternalPractices,
+                                 DataHelper.CurrentPerson.Alias);
                         }
                         catch
                         {
@@ -375,6 +376,12 @@ namespace PraticeManagement
                 SelectItemInControl(userIsSalesperson, cblSalesperson, personId);
                 SelectItemInControl((userIsPracticeManager || userIsDirector || userIsSeniorLeadership), cblProjectOwner, personId);// #2817: userIsDirector is added as per the requirement.
 
+                bool userIsProjectLead =
+                    Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead);
+                if(userIsProjectLead && !(userIsSalesperson || userIsPracticeManager || userIsDirector || userIsSeniorLeadership ))
+                {
+                    lnkAddProject.Visible = false;//as per #2941 .
+                }
                 //Label lblViewingRecords = (Label)GetPager().FindControl("currentPage");
                 //lblViewingRecords.Text = lvProjects.Items.Count.ToString();
             }
