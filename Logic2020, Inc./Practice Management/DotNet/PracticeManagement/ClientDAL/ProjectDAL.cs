@@ -292,7 +292,8 @@ namespace DataAccess
             string practiceManagerIdsList,
             string practiceIdsList,
             string projectGroupIdsList,
-            bool excludeInternalPractices)
+            bool excludeInternalPractices,
+            string userLogin)
         {
             var projectList = new List<Project>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -316,6 +317,7 @@ namespace DataAccess
                     command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, periodStart);
                     command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, periodEnd);
                     command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeInternalPractices, excludeInternalPractices);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
 
                     connection.Open();
 
