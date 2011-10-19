@@ -93,7 +93,8 @@ namespace PraticeManagement.ProjectService {
                     string practiceIdsList, 
                     string projectGroupIdsList, 
                     DataTransferObjects.ProjectCalculateRangeType includeCurentYearFinancials, 
-                    bool excludeInternalPractices);
+                    bool excludeInternalPractices, 
+                    string userLogin);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectListWithFinancials", ReplyAction="http://tempuri.org/IProjectService/GetProjectListWithFinancialsResponse")]
         DataTransferObjects.Project[] GetProjectListWithFinancials(string clientIds, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, System.DateTime periodStart, System.DateTime periodEnd, string salespersonIdsList, string projectOwnerIdsList, string practiceIdsList, string projectGroupIdsList, bool excludeInternalPractices);
@@ -164,7 +165,7 @@ namespace PraticeManagement.ProjectService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
-       
+        
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -269,8 +270,9 @@ namespace PraticeManagement.ProjectService {
                     string practiceIdsList, 
                     string projectGroupIdsList, 
                     DataTransferObjects.ProjectCalculateRangeType includeCurentYearFinancials, 
-                    bool excludeInternalPractices) {
-            return base.Channel.ProjectListAllMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, periodStart, periodEnd, userName, salespersonIdsList, projectOwnerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices);
+                    bool excludeInternalPractices, 
+                    string userLogin) {
+            return base.Channel.ProjectListAllMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, periodStart, periodEnd, userName, salespersonIdsList, projectOwnerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin);
         }
         
         public DataTransferObjects.Project[] GetProjectListWithFinancials(string clientIds, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, System.DateTime periodStart, System.DateTime periodEnd, string salespersonIdsList, string projectOwnerIdsList, string practiceIdsList, string projectGroupIdsList, bool excludeInternalPractices) {
