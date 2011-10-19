@@ -209,7 +209,8 @@ namespace PraticeManagement.Controls
                                         filterSet.PracticeIdsList,
                                         filterSet.ProjectGroupIdsList,
                                         filterSet.CalculateRangeSelected,
-                                        filterSet.ExcludeInternalPractices);
+                                        filterSet.ExcludeInternalPractices,
+                                        DataHelper.CurrentPerson.Alias);
                                 }
                                 else
                                 {
