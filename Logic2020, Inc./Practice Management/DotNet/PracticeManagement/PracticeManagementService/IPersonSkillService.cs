@@ -38,6 +38,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         void SavePersonIndustrySkills(int personId, string industrySkillsXml, string userLogin);
+
+        [OperationContract]
+        List<Person> PersonsSearchBySkillsText(string skillsSearchText);
     }
 }
 
