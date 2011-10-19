@@ -49,6 +49,9 @@ namespace PraticeManagement
                 persons.Add(person);
             }
 
+            dlPerson.DataSource = persons;
+            dlPerson.DataBind();
+
             if (persons.Any())
             {
                 lblSearchcriteria.Text = string.Format("Employees with at least one of the following skills: {0}",
