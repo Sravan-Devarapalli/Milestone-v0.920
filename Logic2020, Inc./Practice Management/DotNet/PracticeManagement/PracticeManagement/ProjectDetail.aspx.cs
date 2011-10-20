@@ -282,7 +282,7 @@ namespace PraticeManagement
 
             NeedToShowDeleteButton();
 
-            if (userIsProjectLead)
+            if (userIsProjectLead && !(userIsAdministrator || userIsSalesPerson || userIsPracticeManager || userIsDirector || userIsSeniorLeadership))
             {
                 lbOpportunity.Enabled = false;//as per #2941.
                 cellProjectTools.Visible = false;
