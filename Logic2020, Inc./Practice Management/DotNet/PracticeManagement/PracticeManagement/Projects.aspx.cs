@@ -90,7 +90,7 @@ namespace PraticeManagement
         private const string STR_SortDirection = "SortDirection";
         private const string STR_SortColumnId = "SortColumnId";
         private const string ToolTipView = "{0:d} - {1:d}<br/><b>Buyer Name:&nbsp;</b>{2}<br/><b>Salesperson:&nbsp;</b>{3}<br/><b>Project Manager(s):&nbsp;</b>{4}<br/><b>Resources:&nbsp;</b>{5}<br/>";
-        private const string AppendPersonFormat = "{0}{1} , {2}";
+        private const string AppendPersonFormat = "{0}{1}, {2}";
         private const string CompPerfDataCssClass = "CompPerfData";
         private const string CompPerfHeaderDivCssClass = "ie-bg no-wrap";
         private const string HintDivCssClass = "hint";
