@@ -296,11 +296,16 @@
                         </td>
                         <td colspan="4" style="padding-right: 242px;" align="right">
                             <asp:TextBox ID="txtClientDiscount" Style="text-align: right;" Width="95px" runat="server"
-                                AutoPostBack="true" OnTextChanged="txtClientDiscount_TextChanged">0%</asp:TextBox>
-                            <asp:CustomValidator ID="cvClientDiscount" runat="server" ControlToValidate="txtClientDiscount"
+                                AutoPostBack="true" OnTextChanged="txtClientDiscount_TextChanged">0</asp:TextBox>%
+                            <%--<asp:CustomValidator ID="cvClientDiscount" runat="server" ControlToValidate="txtClientDiscount"
                                 ErrorMessage="The Client Discount must be a number." ToolTip="The Client Discount must be a number."
                                 EnableClientScript="false" Display="Dynamic" Text="*" ValidateEmptyText="false"
-                                SetFocusOnError="true" OnServerValidate="custClientDiscount_ServerValidate" ValidationGroup="ComputeRate"></asp:CustomValidator>
+                                SetFocusOnError="true" OnServerValidate="custClientDiscount_ServerValidate" ValidationGroup="ComputeRate"></asp:CustomValidator>--%>
+                            <asp:CompareValidator ID="compClientDiscount" runat="server" ControlToValidate="txtClientDiscount"
+                                ErrorMessage="A number with 2 decimal digits is allowed for the Client Discount."
+                                ToolTip="A number with 2 decimal digits is allowed for the Client Discount."
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="ComputeRate"
+                                Operator="DataTypeCheck" Type="Currency"></asp:CompareValidator>
                         </td>
                     </tr>
                     <tr>
