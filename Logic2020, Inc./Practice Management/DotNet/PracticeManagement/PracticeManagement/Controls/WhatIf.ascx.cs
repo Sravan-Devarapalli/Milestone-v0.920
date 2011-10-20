@@ -23,6 +23,7 @@ namespace PraticeManagement.Controls
         private const string BillRateDefaultValue = "120";
         //private const string SalesCommissionLineText = "Sales Commission (SCPH)";
         private const string MLFText = "Minimum Load Factor (MLF)";
+        private const string ClientDiscountDefaultValue = "0";
         private const string LoggedInPersonSalesCommissionKey = "LoggedInPersonSalesCommission";
         private Regex validatePercentage =
             new Regex("(\\d+\\.?\\d*)%?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -38,7 +39,7 @@ namespace PraticeManagement.Controls
                 ViewState[PersonKey] = value;
                 if (value != null)
                 {
-                    txtClientDiscount.Text = "0%";
+                    txtClientDiscount.Text = ClientDiscountDefaultValue;
                     DisplayCalculatedRate();
                 }
             }
@@ -120,8 +121,9 @@ namespace PraticeManagement.Controls
                 decimal clientDiscount = 0.0M; // Default Sales Commission
                 if (!string.IsNullOrEmpty(txtClientDiscount.Text))
                 {
-                    Match m = validatePercentage.Match(txtClientDiscount.Text);
-                    decimal.TryParse(m.Groups[1].Captures[0].Value, out clientDiscount);
+                    //Match m = validatePercentage.Match(txtClientDiscount.Text);
+                    //decimal.TryParse(m.Groups[1].Captures[0].Value, out clientDiscount);
+                    decimal.TryParse(txtClientDiscount.Text, out clientDiscount);
                     clientDiscount = (clientDiscount / 100);
                 }
                 return clientDiscount;
@@ -187,23 +189,23 @@ namespace PraticeManagement.Controls
             }
         }
 
-        protected void custClientDiscount_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(cvClientDiscount.Text))
-            {
-                e.IsValid = validatePercentage.IsMatch(e.Value);
-                if (e.IsValid)
-                {
-                    Match m = validatePercentage.Match(e.Value);
-                    decimal value;
-                    e.IsValid = decimal.TryParse(m.Groups[1].Captures[0].Value, out value);
-                }
-            }
-            else
-            {
-                e.IsValid = true;
-            }
-        }
+        //protected void custClientDiscount_ServerValidate(object sender, ServerValidateEventArgs e)
+        //{
+        //    if (!string.IsNullOrEmpty(cvClientDiscount.Text))
+        //    {
+        //        e.IsValid = validatePercentage.IsMatch(e.Value);
+        //        if (e.IsValid)
+        //        {
+        //            Match m = validatePercentage.Match(e.Value);
+        //            decimal value;
+        //            e.IsValid = decimal.TryParse(m.Groups[1].Captures[0].Value, out value);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        e.IsValid = true;
+        //    }
+        //}
 
         protected void txtBillRateSlider_TextChanged(object sender, EventArgs e)
         {
@@ -433,7 +435,7 @@ namespace PraticeManagement.Controls
             lblMonthlyGrossMarginWithoutRecruiting.CssClass = string.Empty;
 
             Person = null;
-            txtClientDiscount.Text = "0%";
+            txtClientDiscount.Text = ClientDiscountDefaultValue;
             gvOverheadWhatIf.Visible = false;
             gvOverheadWhatIf.DataBind();
         }
