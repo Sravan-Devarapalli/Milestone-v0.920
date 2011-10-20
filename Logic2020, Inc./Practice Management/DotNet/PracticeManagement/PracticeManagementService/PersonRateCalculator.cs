@@ -357,7 +357,7 @@ namespace PracticeManagementService
             financials.CogsWithoutRecruiting = loadedHourlyRateWithoutRecruiting * proposedHoursPerWeek * WeeksPerMonth;
 
             financials.GrossMargin = financials.RevenueNet - financials.Cogs;
-            financials.MarginWithoutRecruiting = financials.Revenue - financials.CogsWithoutRecruiting;
+            financials.MarginWithoutRecruiting = financials.RevenueNet - financials.CogsWithoutRecruiting;
 
             //if (MLFOverhead != null && MLFOverhead.HourlyValue > 0)
             //{
