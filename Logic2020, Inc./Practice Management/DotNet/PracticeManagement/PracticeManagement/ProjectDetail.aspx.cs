@@ -139,7 +139,14 @@ namespace PraticeManagement
         {
             if (!IsPostBack)
             {
-                if (ProjectId.HasValue && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName))
+                bool userIsAdministrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+                bool userIsSalesPerson = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName);
+                bool userIsPracticeManager = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName);
+                bool userIsDirector = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);// #2817: DirectorRoleName is added as per the requirement.
+                bool userIsSeniorLeadership = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);// #2913: userIsSeniorLeadership is added as per the requirement.
+                bool userIsProjectLead = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead);
+
+                if (ProjectId.HasValue && !userIsAdministrator)
                 {
                     if (IsUserHasPermissionOnProject.HasValue && !IsUserHasPermissionOnProject.Value
                         && IsUserisOwnerOfProject.HasValue && !IsUserisOwnerOfProject.Value)
@@ -148,7 +155,9 @@ namespace PraticeManagement
                     }
                 }
 
-                if (!ProjectId.HasValue && Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead))
+                if (!ProjectId.HasValue &&
+                    userIsProjectLead && !(userIsAdministrator || userIsSalesPerson || userIsPracticeManager || userIsDirector || userIsSeniorLeadership)
+                    )
                 {
                     Response.Redirect(Constants.ApplicationPages.AccessDeniedPage);
                 }
@@ -282,7 +291,10 @@ namespace PraticeManagement
 
             NeedToShowDeleteButton();
 
-            if (userIsProjectLead && !(userIsAdministrator || userIsSalesPerson || userIsPracticeManager || userIsDirector || userIsSeniorLeadership))
+            bool userIsHR = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.HRRoleName);
+            bool userIsRecruiter = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.RecruiterRoleName);
+
+            if (userIsProjectLead && !(userIsAdministrator || userIsSalesPerson || userIsPracticeManager || userIsDirector || userIsSeniorLeadership || userIsHR || userIsRecruiter))
             {
                 lbOpportunity.Enabled = false;//as per #2941.
                 cellProjectTools.Visible = false;
