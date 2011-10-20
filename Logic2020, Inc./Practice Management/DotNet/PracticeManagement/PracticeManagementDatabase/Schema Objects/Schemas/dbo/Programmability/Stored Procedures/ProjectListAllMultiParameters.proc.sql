@@ -106,7 +106,7 @@ AS
 	       p.ProjectIsChargeable,
 		   p.ProjectManagersIdFirstNameLastName,
 		   c.PersonId as 'SalespersonId',
-		   person.LastName+' , ' +person.FirstName AS 'SalespersonName' ,
+		   person.LastName+', ' +person.FirstName AS 'SalespersonName' ,
 		   c.CommissionType,
 		   p.DirectorId,
 		   p.DirectorLastName,
