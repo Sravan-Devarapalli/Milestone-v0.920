@@ -238,13 +238,13 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.TextBox txtClientDiscount;
         
         /// <summary>
-        /// cvClientDiscount control.
+        /// compClientDiscount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvClientDiscount;
+        protected global::System.Web.UI.WebControls.CompareValidator compClientDiscount;
         
         /// <summary>
         /// gvOverheadWhatIf control.
