@@ -193,10 +193,11 @@ namespace PracticeManagementService
             switch (calculatePeriodType)
             {
                 case ProjectCalculateRangeType.ProjectValueInRange:
-                    ComputedFinancialsDAL.LoadTotalFinancialsPeriodForProjects(
-                        result,
-                        periodStart,
-                        periodEnd);
+                    CalculateTotalFinancials(result); //Reducing DB call(Alternative:- Calculating total value by Summing the result values only).
+                    //ComputedFinancialsDAL.LoadTotalFinancialsPeriodForProjects(
+                    //    result,
+                    //    periodStart,
+                    //    periodEnd);
                     break;
                 case ProjectCalculateRangeType.TotalProjectValue:
                     ComputedFinancialsDAL.LoadTotalFinancialsPeriodForProjects(
@@ -219,6 +220,30 @@ namespace PracticeManagementService
             return result;
         }
 
+        private static void CalculateTotalFinancials(List<Project> result)
+        {
+            foreach (var project in result)
+            {
+                var financials = new ComputedFinancials
+                {
+                    FinancialDate = project.StartDate,
+                };
+                foreach (var monthlyFinancial in project.ProjectedFinancialsByMonth.Values)
+                {
+                    financials.Revenue += monthlyFinancial.Revenue;
+                    financials.RevenueNet += monthlyFinancial.RevenueNet;
+                    financials.Cogs += monthlyFinancial.Cogs;
+                    financials.GrossMargin += monthlyFinancial.GrossMargin;
+                    financials.HoursBilled += monthlyFinancial.HoursBilled;
+                    financials.SalesCommission += monthlyFinancial.SalesCommission;
+                    financials.PracticeManagementCommission += monthlyFinancial.PracticeManagementCommission;
+                    financials.Expenses += monthlyFinancial.Expenses;
+                    financials.ReimbursedExpenses += monthlyFinancial.ReimbursedExpenses;
+                }
+
+                project.ComputedFinancials = financials;
+            }
+        }
 
         public static List<Project> GetBenchListWithoutBenchTotalAndAdminCosts(BenchReportContext context)
         {
