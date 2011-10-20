@@ -168,6 +168,17 @@
             </td>
         </tr>
         <tr>
+            <td style="no-wrap" nowrap="nowrap">
+                CD%
+            </td>
+            <td>
+                &nbsp;=&nbsp;
+            </td>
+            <td style="no-wrap" nowrap="nowrap">
+                Client Discount Percentage
+            </td>
+        </tr>
+        <tr>
             <th colspan="3" align="left" style="padding: 5px 0px 5px 0px">
                 Defined Calculations
             </th>
@@ -213,7 +224,7 @@
                 &nbsp;=&nbsp;
             </td>
             <td style="no-wrap" nowrap="nowrap">
-                MGR - FCOGS
+                (MGR - [CD%]) - FCOGS
             </td>
         </tr>
         <tr>
