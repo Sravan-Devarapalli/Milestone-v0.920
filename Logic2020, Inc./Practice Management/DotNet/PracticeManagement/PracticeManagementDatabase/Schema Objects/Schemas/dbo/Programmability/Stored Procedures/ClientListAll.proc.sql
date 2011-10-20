@@ -6,6 +6,36 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	/*
+		Showing client of the Projects, Where the Logged in User is Project Manager OR Sales Person of 
+		the Project(applicable only for Project Lead role Person) as part of #2941.
+	*/
+
+	DECLARE @UserHasHighRoleThanProjectLead INT = NULL
+	--Adding Project Lead as per #2941.
+	IF @PersonId IS NOT NULL AND EXISTS ( SELECT 1
+				FROM aspnet_Users U
+				JOIN aspnet_UsersInRoles UR ON UR.UserId = U.UserId
+				JOIN aspnet_Roles R ON R.RoleId = UR.RoleId
+				JOIN Person P ON P.Alias = U.UserName
+				WHERE P.PersonId = @PersonId AND R.LoweredRoleName = 'project lead')
+	BEGIN
+		SET @UserHasHighRoleThanProjectLead = 0
+		
+		SELECT @UserHasHighRoleThanProjectLead = COUNT(*)
+		FROM aspnet_Users U
+		JOIN aspnet_UsersInRoles UR ON UR.UserId = U.UserId
+		JOIN aspnet_Roles R ON R.RoleId = UR.RoleId
+		JOIN Person P ON P.Alias = U.UserName
+		WHERE P.PersonId = @PersonId
+			AND R.LoweredRoleName IN ('administrator','client director','practice area manager','senior leadership')		
+	END
+
+	IF @UserHasHighRoleThanProjectLead = 0--Adding Project Lead as per #2941.
+	BEGIN
+		SET @ApplyNewRule = 1
+	END
+
 	IF @ApplyNewRule = 1	
 	BEGIN
 
@@ -24,7 +54,7 @@ BEGIN
 		LEFT JOIN Commission Cm ON Cm.ProjectId = p.ProjectId AND Cm.CommissionType = 1
 		WHERE ((@ShowAll = 0 AND C.Inactive = 0) OR @ShowAll <> 0)
 		AND	(@PersonId IS null
-			OR p.DirectorId = @PersonId 
+			OR ( ISNULL(@UserHasHighRoleThanProjectLead,1) <> 0 AND p.DirectorId = @PersonId )--if Only Project Lead Role then we are not considering Director. as per #2941.
 			OR Cm.PersonId = @PersonId
 			OR projmanager.ProjectManagerId = @PersonId
 			)
