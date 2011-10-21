@@ -10,6 +10,7 @@ using System.ComponentModel;
 using DataTransferObjects;
 using DataTransferObjects.Skills;
 using System.Xml;
+using AjaxControlToolkit;
 
 
 namespace PraticeManagement
@@ -23,6 +24,31 @@ namespace PraticeManagement
         private const string ViewStatePreviousCategoryIndex = "PreviousCategoryIndex";
         private const string ValidationPopUpMessage = "Please select a value for ‘Level’, ‘Experience’, ‘Last Used’, for below skills ";
         private const string SuccessMessage = "Skills Saved Successfully.";
+
+        //scripts
+        private const string ANIMATION_SHOW_SCRIPT =
+                     @"<OnClick>
+                        	<Sequence>
+                        		<Parallel Duration=""0"" AnimationTarget=""{0}"">
+                        			<Discrete Property=""style"" propertyKey=""border"" ValuesScript=""['thin solid navy']""/>
+                        		</Parallel>
+                        		<Parallel Duration="".4"" Fps=""20"" AnimationTarget=""{0}"">
+                        			<Resize  Width=""350"" Height=""{1}"" Unit=""px"" />
+                        		</Parallel>
+                        	</Sequence>
+                        </OnClick>";
+
+        private const string ANIMATION_HIDE_SCRIPT =
+                        @"<OnClick>
+                        	<Sequence>
+                        		<Parallel Duration="".4"" Fps=""20"" AnimationTarget=""{0}"">
+                        			<Resize Width=""0"" Height=""0"" Unit=""px"" />
+                        		</Parallel>
+                        		<Parallel Duration=""0"" AnimationTarget=""{0}"">
+                        			<Discrete Property=""style"" propertyKey=""border"" ValuesScript=""['none']""/>
+                        		</Parallel>
+                        	</Sequence>
+                        </OnClick>";
 
         //Ids
         private const string ddlLevelId = "ddlLevel";
@@ -219,6 +245,35 @@ namespace PraticeManagement
             }
         }
 
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            GridView gvSkills = null;
+            if (tcSkillsEntry.ActiveTabIndex == 0)
+            {
+                gvSkills = gvBusinessSkills;
+            }
+            else if (tcSkillsEntry.ActiveTabIndex == 1)
+            {
+                gvSkills = gvTechnicalSkills;
+            }
+            if (gvSkills != null)
+            {
+                var animHide = gvSkills.HeaderRow.FindControl("animHide") as AnimationExtender;
+                var animShow = gvSkills.HeaderRow.FindControl("animShow") as AnimationExtender;
+                var pnlLevel = gvSkills.HeaderRow.FindControl("pnlLevel") as Panel;
+                var btnClosePriority = gvSkills.HeaderRow.FindControl("btnCloseLevel") as Button;
+                var dtlSkillLevels = gvSkills.HeaderRow.FindControl("dtlSkillLevels") as DataList;
+                var img = gvSkills.HeaderRow.FindControl("imgLevelyHint") as Image;
+                animShow.Animations = string.Format(ANIMATION_SHOW_SCRIPT, pnlLevel.ID, 190);
+                animHide.Animations = string.Format(ANIMATION_HIDE_SCRIPT, pnlLevel.ID);
+                img.Attributes["onclick"]
+                       = string.Format("setHintPosition('{0}', '{1}');", img.ClientID, pnlLevel.ClientID);
+                dtlSkillLevels.DataSource = SettingsHelper.GetSkillLevels();
+                dtlSkillLevels.DataBind();
+            }
+
+        }
+
         protected void gvIndustrySkills_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -257,8 +312,8 @@ namespace PraticeManagement
                 {
                     if (ddlLevel.SelectedIndex == 0 || ddlExperience.SelectedIndex == 0 || ddlLastUsed.SelectedIndex == 0)
                     {
-                        lblValidationMessage.Text = (lblValidationMessage.Text == "" ) ? hdnDescription.Value
-                                                                                    :lblValidationMessage.Text + ",<br />" + hdnDescription.Value;
+                        lblValidationMessage.Text = (lblValidationMessage.Text == "") ? hdnDescription.Value
+                                                                                    : lblValidationMessage.Text + ",<br />" + hdnDescription.Value;
                         e.IsValid = false;
                         var cvLevel = row.FindControl(cvLevelId) as CustomValidator;
                         var cvExperience = row.FindControl(cvExperienceId) as CustomValidator;
@@ -410,12 +465,12 @@ namespace PraticeManagement
                     int skillId = Convert.ToInt32(hdnId.Value);
                     bool isModified = true;
 
-                    if(Person.Skills.Count > 0 && Person.Skills.Where(skill => skill.Skill != null && skill.Skill.Id == Convert.ToInt32(hdnId.Value)).Count() > 0)
+                    if (Person.Skills.Count > 0 && Person.Skills.Where(skill => skill.Skill != null && skill.Skill.Id == Convert.ToInt32(hdnId.Value)).Count() > 0)
                     {
                         if (!(ddlLevel.SelectedIndex == 0 && ddlExperience.SelectedIndex == 0 && ddlLastUsed.SelectedIndex == 0))
                         {
                             var personSkill = Person.Skills.Where(skill => skill.Skill.Id == Convert.ToInt32(hdnId.Value)).First();
-                            if (personSkill.SkillLevel.Id == Convert.ToInt32(ddlLevel.SelectedValue) 
+                            if (personSkill.SkillLevel.Id == Convert.ToInt32(ddlLevel.SelectedValue)
                                     && personSkill.YearsExperience.Value == Convert.ToInt32(ddlExperience.SelectedValue)
                                     && personSkill.LastUsed == Convert.ToInt32(ddlLastUsed.SelectedValue)
                                 )
