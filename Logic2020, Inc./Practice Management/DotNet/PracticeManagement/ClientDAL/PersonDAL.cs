@@ -84,6 +84,7 @@ namespace DataAccess
         private const string TerminatedParam = "@Terminated";
         private const string InactiveParam = "@Inactive";
         private const string AlphabetParam = "@Alphabet";
+        private const string CounselorIdParam = "@CounselorId";
 
         #endregion
 
@@ -137,6 +138,7 @@ namespace DataAccess
         private const string GetTemporaryCredentialsByUserNameProcedure = "dbo.GetTemporaryCredentialsByUserName";
         private const string SetNewPasswordForUserProcedure = "dbo.aspnet_Membership_SetPassword";
         private const string DeleteTemporaryCredentialsByUserNameProcedure = "dbo.DeleteTemporaryCredentialsByUserName";
+        private const string GetCareerCounselorHierarchiPersonsProcedure = "dbo.GetCareerCounselorHierarchiPersons";
 
         private const string PermissionsGetAllowedPracticeManagersProcedure =
             "dbo.PermissionsGetAllowedPracticeManagers";
@@ -1566,6 +1568,29 @@ namespace DataAccess
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 command.Parameters.AddWithValue(PracticeManagerIdParam, practiceManagerId);
+
+                connection.Open();
+
+                var result = new List<Person>();
+                ReadPersons(command, result);
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves all Heirarchi persons for a specified manager(Career Counselor).
+        /// </summary>
+        /// <param name="practiceManagerId">An ID of the manager(Counselor) to the data be retrieved for.</param>
+        /// <returns>The list of the <see cref="Person"/> objects.</returns>
+        public static List<Person> GetCareerCounselorHierarchiPersons(int managerId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(GetCareerCounselorHierarchiPersonsProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(CounselorIdParam, managerId);
 
                 connection.Open();
 
