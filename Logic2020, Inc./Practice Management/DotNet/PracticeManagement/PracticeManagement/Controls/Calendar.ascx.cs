@@ -147,10 +147,10 @@ namespace PraticeManagement.Controls
 
                         if (userIsPracticeManager || userIsDirector || userIsSeniorLeadership && current != null)// #2817: userIsDirector is added as per the requirement.
                         {
-                            // Practice manager have to see the list his subordinates
-                            DataHelper.FillSubordinatesList(ddlPerson,
-                                current.PersonLastFirstName,
-                                current.Id.Value);
+                            DataHelper.FillCounselorHierarchiPersonsList(ddlPerson,//Adding Career Counselor Hierarchi Persons List as per #2952.
+                                    current.PersonLastFirstName,
+                                    current.Id.Value);
+
                         }
                         else if (!userIsRecruiter && !userIsSalesperson && !userIsHR)// #2817: userIsHR is added as per the requirement.
                         {
