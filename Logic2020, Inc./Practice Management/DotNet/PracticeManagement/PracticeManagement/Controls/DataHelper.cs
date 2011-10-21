@@ -807,6 +807,30 @@ namespace PraticeManagement.Controls
                     throw;
                 }
             }
+        }        
+        
+        /// <summary>
+        /// Fills the list control with the list of Line Manger persons.
+        /// </summary>
+        /// <param name="control">The control to be filled.</param>
+        /// <param name="firstItemText">The text to be displayed by default.</param>
+        /// <param name="practiceManagerId">An ID of the practice manager to retrieve the list for.</param>
+        public static void FillCounselorHierarchiPersonsList(ListControl control, string firstItemText, int managerId)//Adding Career Counselor Hierarchi Persons List as per #2952.
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    Person[] persons = serviceClient.GetCareerCounselorHierarchiPersons(managerId);//Here managerId is counselorId.
+
+                    FillPersonList(control, firstItemText, persons, managerId.ToString());
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
         }
 
         /// <summary>
