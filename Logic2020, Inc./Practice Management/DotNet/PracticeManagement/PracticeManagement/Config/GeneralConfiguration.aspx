@@ -45,7 +45,7 @@
         </act:TabPanel>
         <act:TabPanel runat="server" ID="tpnlDefaultManager" Visible="false">
             <HeaderTemplate>
-                <span class="bg"><a href="#"><span>Default Line Manager</span></a> </span>
+                <span class="bg"><a href="#"><span>Default Career Counselor</span></a> </span>
             </HeaderTemplate>
             <ContentTemplate>
                 <asp:UpdatePanel ID="updDefaultManager" runat="server">
