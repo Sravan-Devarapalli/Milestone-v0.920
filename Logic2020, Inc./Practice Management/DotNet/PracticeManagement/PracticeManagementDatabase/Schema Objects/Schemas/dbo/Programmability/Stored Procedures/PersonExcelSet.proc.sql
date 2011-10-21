@@ -47,7 +47,7 @@ AS
             END AS 'Hourly Bonus, hours',
             sen.[Name] AS 'Seniority',
             pay.VacationDays AS 'Vacation Days',
-			manager.FirstName + ' ' + manager.LastName AS 'Manager Name',
+			manager.FirstName + ' ' + manager.LastName AS 'Career Counselor Name',
             rcd.RecruiterName--,
             --rcd.cc1 AS 'Recruiting comission 1 $',
             --rcd.cd1 AS 'Recruiting comission 1 days',
