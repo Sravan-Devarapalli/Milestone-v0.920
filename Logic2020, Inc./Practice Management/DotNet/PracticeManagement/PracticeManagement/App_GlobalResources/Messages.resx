@@ -198,7 +198,7 @@
     <value>Time entry date for this project-milestone should be between {0} and {1}</value>
   </data>
   <data name="ManagerSet" xml:space="preserve">
-    <value>Default line manager is set.</value>
+    <value>Default Career Counselor is set.</value>
   </data>
   <data name="NotAllowedToRecordTE" xml:space="preserve">
     <value>Only active persons are allowed to allowed to record time entries. Please contact your administrator for more details.</value>
