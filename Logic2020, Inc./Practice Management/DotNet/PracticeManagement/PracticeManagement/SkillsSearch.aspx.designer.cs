@@ -49,6 +49,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rqSearch;
         
         /// <summary>
+        /// valSumSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSumSearch;
+        
+        /// <summary>
         /// btnSearch control.
         /// </summary>
         /// <remarks>
@@ -74,15 +83,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnEmployeeOK;
-        
-        /// <summary>
-        /// valSumSearch control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary valSumSearch;
         
         /// <summary>
         /// pnlSearchResults control.
