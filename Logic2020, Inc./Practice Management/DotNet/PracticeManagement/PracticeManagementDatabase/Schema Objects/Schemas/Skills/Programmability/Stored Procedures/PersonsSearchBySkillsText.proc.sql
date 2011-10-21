@@ -6,11 +6,12 @@ BEGIN
 
 	DECLARE @SkillsXML XML,@Query NVARCHAR(MAX)
 
-	SELECT @SkillsSearchText = REPLACE(REPLACE(REPLACE(REPLACE(@SkillsSearchText,'_','[_]'),'%','[%]'),'''',''''''),',','</Skill><Skill>')
-
+	SELECT @SkillsSearchText = REPLACE(REPLACE(REPLACE(REPLACE(@SkillsSearchText,'&','&amp;'),'_','[_]'),'%','[%]'),'''','''''')
+	SELECT @SkillsSearchText = REPLACE(REPLACE(@SkillsSearchText,'<','&lt;'),'>','&gt;');
+	SELECT @SkillsSearchText = REPLACE(@SkillsSearchText,',','</Skill><Skill>')
+	
 	SELECT @SkillsXML = '<Skills><Skill>'+@SkillsSearchText+'</Skill></Skills>'
 
-	 
 
 	DECLARE @SearchTerms TABLE
 	(
