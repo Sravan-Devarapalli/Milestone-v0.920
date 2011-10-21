@@ -18,6 +18,7 @@ namespace DataAccess.Skills
             public const string SkillId = "SkillId";
             public const string SkillCategoryName = "SkillCategoryName";
             public const string SkillLevelName = "SkillLevelName";
+            public const string SkillLevelDefinition = "SkillLevelDefinition";            
             public const string SkillName = "SkillName";
             public const string YearsExperience = "YearsExperience";
             public const string LastUsed = "LastUsed";
