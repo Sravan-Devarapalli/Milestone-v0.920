@@ -309,7 +309,7 @@
                             <HeaderTemplate>
                                 <div class="ie-bg">
                                     <asp:LinkButton ID="LinkButton8" CommandName="Sort" CommandArgument="ManagerLastName"
-                                        runat="server">Line Manager</asp:LinkButton>
+                                        runat="server">Career Counselor</asp:LinkButton>
                                 </div>
                             </HeaderTemplate>
                             <ItemStyle Width="14%" />
