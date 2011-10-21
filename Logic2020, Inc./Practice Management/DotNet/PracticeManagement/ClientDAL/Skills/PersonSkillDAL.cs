@@ -222,6 +222,7 @@ namespace DataAccess.Skills
         {
             var skillLevelIdColumn = reader.GetOrdinal(Constants.ColumnNames.SkillLevelId);
             var skillLevelNameColumn = reader.GetOrdinal(Constants.ColumnNames.SkillLevelName);
+            var skillLevelDefinitionColumn = reader.GetOrdinal(Constants.ColumnNames.SkillLevelDefinition);
             var displayOrderColumn = reader.GetOrdinal(Constants.ColumnNames.DisplayOrder);
             if (reader.HasRows)
             {
@@ -231,7 +232,9 @@ namespace DataAccess.Skills
                     {
                         Id = reader.GetInt32(skillLevelIdColumn),
                         Description = reader.GetString(skillLevelNameColumn),
-                        DisplayOrder = reader.IsDBNull(displayOrderColumn) ? null : (int?)reader.GetInt32(displayOrderColumn)
+                        DisplayOrder = reader.IsDBNull(displayOrderColumn) ? null : (int?)reader.GetInt32(displayOrderColumn),
+                        Definition = reader.GetString(skillLevelDefinitionColumn)
+
                     };
                     skillLevels.Add(skillLevel);
                 }
