@@ -120,11 +120,13 @@
             </tr>
             <tr>
                 <td align="left" style="padding-left: 5%">
-                    <asp:DataList ID="dlPerson" runat="server">
-                        <ItemTemplate>
-                            <%# ((DataTransferObjects.Person)Container.DataItem).Name%>
-                        </ItemTemplate>
-                    </asp:DataList>
+                    <div style="max-height: 400px; overflow: auto;">
+                        <asp:DataList ID="dlPerson" runat="server" ItemStyle-Height="20px">
+                            <ItemTemplate>
+                                <%# ((DataTransferObjects.Person)Container.DataItem).Name%>
+                            </ItemTemplate>
+                        </asp:DataList>
+                    </div>
                 </td>
             </tr>
         </table>
