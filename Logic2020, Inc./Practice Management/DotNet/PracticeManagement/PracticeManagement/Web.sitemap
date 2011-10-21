@@ -44,7 +44,7 @@
       <siteMapNode url="Temp.aspx?from=Company_Resources" title="Company Resources" description="Company Resources">
         <siteMapNode url="~/Config/Branding.aspx" title="Branding/Logo"  VirtualPath="~/Config/Branding.aspx" QuickLinkTitle="Branding/Logo"  description="Branding/Logo"  />
         <siteMapNode url="~/Config/Clients.aspx" title="Clients"  VirtualPath="~/Config/Clients.aspx" QuickLinkTitle="Clients" description="Client List"  />
-        <siteMapNode url="~/Config/DefaultLineManager.aspx" title="Default Line Manager"  VirtualPath="~/Config/DefaultLineManager.aspx" QuickLinkTitle="Default Line Manager" description="Default Line Manager"  />
+        <siteMapNode url="~/Config/DefaultLineManager.aspx" title="Default Career Counselor"  VirtualPath="~/Config/DefaultLineManager.aspx" QuickLinkTitle="Default Career Counselor" description="Default Career Counselor"  />
         <siteMapNode url="~/Config/OpportunityPriorities.aspx" title="Opportunity Priorities"  VirtualPath="~/Config/OpportunityPriorities.aspx" QuickLinkTitle="Opportunity Priorities" description="Opportunity Priorities"  />
         <siteMapNode url="~/Config/Persons.aspx" title="Persons"  VirtualPath="~/Config/Persons.aspx" QuickLinkTitle="Persons" description="Person List"  />
         <siteMapNode url="~/Config/PracticeAreas.aspx" title="Practice Areas"  VirtualPath="~/Config/PracticeAreas.aspx" QuickLinkTitle="Practice Areas" description="Practice Areas"  />
