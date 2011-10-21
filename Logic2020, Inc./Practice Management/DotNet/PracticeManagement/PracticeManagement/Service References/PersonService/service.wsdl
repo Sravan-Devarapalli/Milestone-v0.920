@@ -12,6 +12,18 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
     </xsd:schema>
   </wsdl:types>
+  <wsdl:message name="IPersonService_PersonListOpportunityOwner_InputMessage">
+    <wsdl:part name="parameters" element="tns:PersonListOpportunityOwner" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_PersonListOpportunityOwner_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PersonListOpportunityOwnerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonDetail_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonDetail" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonDetail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonDetailResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonByAlias_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonByAlias" />
   </wsdl:message>
@@ -201,12 +213,6 @@
   <wsdl:message name="IPersonService_GetActiveOpportunitiesByOwnerId_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetActiveOpportunitiesByOwnerIdResponse" />
   </wsdl:message>
-  <wsdl:message name="IPersonService_PersonListOpportunityOwner_InputMessage">
-    <wsdl:part name="parameters" element="tns:PersonListOpportunityOwner" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_PersonListOpportunityOwner_OutputMessage">
-    <wsdl:part name="parameters" element="tns:PersonListOpportunityOwnerResponse" />
-  </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonMilestoneWithFinancials_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonMilestoneWithFinancials" />
   </wsdl:message>
@@ -387,19 +393,27 @@
   <wsdl:message name="IPersonService_GetSubordinates_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetSubordinatesResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_GetCareerCounselorHierarchiPersons_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCareerCounselorHierarchiPersons" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetCareerCounselorHierarchiPersons_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCareerCounselorHierarchiPersonsResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_GetOneOffList_InputMessage">
     <wsdl:part name="parameters" element="tns:GetOneOffList" />
   </wsdl:message>
   <wsdl:message name="IPersonService_GetOneOffList_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetOneOffListResponse" />
   </wsdl:message>
-  <wsdl:message name="IPersonService_GetPersonDetail_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonDetail" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_GetPersonDetail_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonDetailResponse" />
-  </wsdl:message>
   <wsdl:portType name="IPersonService">
+    <wsdl:operation name="PersonListOpportunityOwner">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/PersonListOpportunityOwner" message="tns:IPersonService_PersonListOpportunityOwner_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/PersonListOpportunityOwnerResponse" message="tns:IPersonService_PersonListOpportunityOwner_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonDetail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonDetail" message="tns:IPersonService_GetPersonDetail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonDetailResponse" message="tns:IPersonService_GetPersonDetail_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetPersonByAlias">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonByAlias" message="tns:IPersonService_GetPersonByAlias_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonByAliasResponse" message="tns:IPersonService_GetPersonByAlias_OutputMessage" />
@@ -525,10 +539,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerId" message="tns:IPersonService_GetActiveOpportunitiesByOwnerId_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerIdResponse" message="tns:IPersonService_GetActiveOpportunitiesByOwnerId_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="PersonListOpportunityOwner">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/PersonListOpportunityOwner" message="tns:IPersonService_PersonListOpportunityOwner_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/PersonListOpportunityOwnerResponse" message="tns:IPersonService_PersonListOpportunityOwner_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="GetPersonMilestoneWithFinancials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials" message="tns:IPersonService_GetPersonMilestoneWithFinancials_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancialsResponse" message="tns:IPersonService_GetPersonMilestoneWithFinancials_OutputMessage" />
@@ -649,17 +659,35 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetSubordinates" message="tns:IPersonService_GetSubordinates_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetSubordinatesResponse" message="tns:IPersonService_GetSubordinates_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetCareerCounselorHierarchiPersons">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetCareerCounselorHierarchiPersons" message="tns:IPersonService_GetCareerCounselorHierarchiPersons_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetCareerCounselorHierarchiPersonsResponse" message="tns:IPersonService_GetCareerCounselorHierarchiPersons_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetOneOffList">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetOneOffList" message="tns:IPersonService_GetOneOffList_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetOneOffListResponse" message="tns:IPersonService_GetOneOffList_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetPersonDetail">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonDetail" message="tns:IPersonService_GetPersonDetail_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonDetailResponse" message="tns:IPersonService_GetPersonDetail_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IPersonService" type="tns:IPersonService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="PersonListOpportunityOwner">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/PersonListOpportunityOwner" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonDetail">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonDetail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetPersonByAlias">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonByAlias" style="document" />
       <wsdl:input>
@@ -942,15 +970,6 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="PersonListOpportunityOwner">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/PersonListOpportunityOwner" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="GetPersonMilestoneWithFinancials">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials" style="document" />
       <wsdl:input>
@@ -1221,8 +1240,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetOneOffList">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/GetOneOffList" style="document" />
+    <wsdl:operation name="GetCareerCounselorHierarchiPersons">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetCareerCounselorHierarchiPersons" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1230,8 +1249,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetPersonDetail">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonDetail" style="document" />
+    <wsdl:operation name="GetOneOffList">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetOneOffList" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1242,7 +1261,7 @@
   </wsdl:binding>
   <wsdl:service name="PersonService">
     <wsdl:port name="BasicHttpBinding_IPersonService" binding="tns:BasicHttpBinding_IPersonService">
-      <soap:address location="http://system66.ggk.com/PracticeManagementService/PersonService.svc" />
+      <soap:address location="http://system58.ggk.com/PracticeManagementService/PersonService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
