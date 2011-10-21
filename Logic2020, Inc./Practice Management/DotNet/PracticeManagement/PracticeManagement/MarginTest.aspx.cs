@@ -8,6 +8,8 @@ using PraticeManagement.Controls;
 using PraticeManagement.PersonService;
 using System.Web.Security;
 using PraticeManagement.Security;
+using System.Linq;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement
 {
@@ -157,11 +159,14 @@ namespace PraticeManagement
                 ClearControls();
                 if (person != null && person.PaymentHistory != null)
                 {
-                    PopulateControls(person.PaymentHistory[person.PaymentHistory.Count - 1]);
-                    //if (person.RecruiterCommission != null)
-                    //{
-                    //    recruiterInfo.RecruiterCommission = person.RecruiterCommission;
-                    //}
+
+                    var today = (SettingsHelper.GetCurrentPMTime()).Date;
+
+                    var compensation =
+                        person.PaymentHistory.FirstOrDefault(c => today >= c.StartDate && (!c.EndDate.HasValue || today < c.EndDate))
+                        ?? person.PaymentHistory.First(c => today < c.StartDate);
+                    PopulateControls(compensation);
+                    
 
                     var personListAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
                     if (personListAnalyzer.IsOtherGreater(person))
