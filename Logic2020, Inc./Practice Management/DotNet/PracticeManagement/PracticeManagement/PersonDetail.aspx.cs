@@ -227,7 +227,7 @@ namespace PraticeManagement
 
         protected void defaultManager_OnCustomError(object sender, PraticeManagement.Events.ErrorEventArgs errorEventArgs)
         {
-            mlError.ShowErrorMessage("Line manager of this person is not active. Please select another line manager.");
+            mlError.ShowErrorMessage("Career Counselor of this person is not active. Please select another career counselor.");
         }
 
         protected void recruiterInfo_InfoChanged(object sender, EventArgs e)
