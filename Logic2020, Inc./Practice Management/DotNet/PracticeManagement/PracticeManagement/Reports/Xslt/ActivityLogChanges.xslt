@@ -52,7 +52,7 @@
       <xsl:variable name="value" select="." />
       <xsl:variable name="attrName" select="name()" />
 
-      <xsl:if test="$attrName = 'SkillsDescription' or $attrName = 'IndustryDescription' or $attrName = 'Person'">
+      <xsl:if test="$attrName = 'SkillsDescription' or $attrName = 'IndustryDescription' or $attrName = 'Person' or $attrName = 'SkillCategory' or $attrName = 'SkillType'">
         <xsl:call-template name="FriendlyName">
           <xsl:with-param name="attrName" select="name()" />
         </xsl:call-template>:
@@ -412,6 +412,13 @@
       <xsl:when test="$attrName = 'InnerExcSrc'">Inner Exception source</xsl:when>
       <xsl:when test="$attrName = 'SourcePage'">Source Page Path</xsl:when>
       <xsl:when test="$attrName = 'SourceQuery'">Source Page Query</xsl:when>
+      <xsl:when test="$attrName = 'SkillCategory'">Category</xsl:when>
+      <xsl:when test="$attrName = 'SkillsDescription'">Skill</xsl:when>
+      <xsl:when test="$attrName = 'SkillType'">Type</xsl:when>
+      <xsl:when test="$attrName = 'SkillLevel'">Level</xsl:when>
+      <xsl:when test="$attrName = 'IndustryDescription'">Industry</xsl:when>
+      <xsl:when test="$attrName = 'IsDefaultManager'">Is Career Counselor</xsl:when>
+      <xsl:when test="$attrName = 'ManagerName'">Career Counselor name</xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$attrName"/>
       </xsl:otherwise>
