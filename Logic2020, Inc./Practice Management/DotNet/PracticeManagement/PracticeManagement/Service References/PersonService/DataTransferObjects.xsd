@@ -911,7 +911,7 @@
       <xs:element minOccurs="0" name="Pipeline" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Practice" nillable="true" type="tns:Practice" />
       <xs:element minOccurs="0" name="Priority" nillable="true" type="tns:OpportunityPriority" />
-      <xs:element minOccurs="0" name="ProjectId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Project" nillable="true" type="tns:Project" />
       <xs:element minOccurs="0" name="ProjectedEndDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="ProjectedStartDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Proposed" nillable="true" type="xs:string" />
