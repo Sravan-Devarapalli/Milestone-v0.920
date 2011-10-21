@@ -264,7 +264,7 @@ namespace PraticeManagement
                 var btnClosePriority = gvSkills.HeaderRow.FindControl("btnCloseLevel") as Button;
                 var dtlSkillLevels = gvSkills.HeaderRow.FindControl("dtlSkillLevels") as DataList;
                 var img = gvSkills.HeaderRow.FindControl("imgLevelyHint") as Image;
-                animShow.Animations = string.Format(ANIMATION_SHOW_SCRIPT, pnlLevel.ID, 190);
+                animShow.Animations = string.Format(ANIMATION_SHOW_SCRIPT, pnlLevel.ID, 160);
                 animHide.Animations = string.Format(ANIMATION_HIDE_SCRIPT, pnlLevel.ID);
                 img.Attributes["onclick"]
                        = string.Format("setHintPosition('{0}', '{1}');", img.ClientID, pnlLevel.ClientID);
