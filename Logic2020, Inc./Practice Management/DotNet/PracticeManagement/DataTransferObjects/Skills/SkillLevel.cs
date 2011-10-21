@@ -10,6 +10,12 @@ namespace DataTransferObjects.Skills
     [Serializable]
     public class SkillLevel : LookupBase
     {
+        [DataMember]
+        public string Definition
+        {
+            set;
+            get;
+        }
     }
 }
 
