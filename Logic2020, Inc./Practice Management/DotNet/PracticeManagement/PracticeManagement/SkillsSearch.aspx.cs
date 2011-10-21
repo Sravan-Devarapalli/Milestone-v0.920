@@ -44,7 +44,7 @@ namespace PraticeManagement
                 persons = service.PersonsSearchBySkillsText(txtSearch.Text);
             }
 
-            dlPerson.DataSource = persons;
+            dlPerson.DataSource = persons.OrderBy(p => p.Name);
             dlPerson.DataBind();
 
             if (persons.Any())
