@@ -429,6 +429,16 @@ namespace PracticeManagementService
         }
 
         /// <summary>
+        /// Retrieves all Heirarchi persons for a specified manager(Career Counselor).
+        /// </summary>
+        /// <param name="practiceManagerId">An ID of the manager(Counselor) to teh data be retrieved for.</param>
+        /// <returns>The list of the <see cref="Person"/> objects.</returns>
+        public List<Person> GetCareerCounselorHierarchiPersons(int managerId)
+        {
+            return PersonDAL.GetCareerCounselorHierarchiPersons(managerId);//Here managerId is counselorId.
+        }
+
+        /// <summary>
         /// Retrieves a One Off Person List
         /// </summary>
         /// <param name="today">A date today</param>
