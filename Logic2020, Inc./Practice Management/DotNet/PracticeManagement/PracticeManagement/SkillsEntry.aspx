@@ -149,14 +149,12 @@
                                                             </th>
                                                         </tr>
                                                         <tr>
-                                                            <td style="background-color: White;">
+                                                            <td style="background-color: White; font-weight: normal; font-size: small;">
                                                                 <asp:DataList ID="dtlSkillLevels" runat="server" Width="100%">
                                                                     <ItemTemplate>
-                                                                        
-                                                                            <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Description%>
-                                                                        </td>
-                                                                        <td style="font-weight: normal;">
-                                                                            <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Definition%>
+                                                                        <b>
+                                                                            <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Description%>:</b>
+                                                                        <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Definition%>
                                                                     </ItemTemplate>
                                                                 </asp:DataList>
                                                             </td>
@@ -261,14 +259,12 @@
                                                             </th>
                                                         </tr>
                                                         <tr>
-                                                            <td style="background-color: White;">
+                                                            <td style="background-color: White; font-weight: normal; font-size: small;">
                                                                 <asp:DataList ID="dtlSkillLevels" runat="server" Width="100%">
                                                                     <ItemTemplate>
-                                                                        
-                                                                            <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Description%>
-                                                                        </td>
-                                                                        <td style="font-weight: normal;">
-                                                                            <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Definition%>
+                                                                        <b>
+                                                                            <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Description%>:</b>
+                                                                        <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Definition%>
                                                                     </ItemTemplate>
                                                                 </asp:DataList>
                                                             </td>
