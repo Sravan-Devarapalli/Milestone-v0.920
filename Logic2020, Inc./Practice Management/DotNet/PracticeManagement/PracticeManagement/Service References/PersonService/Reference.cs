@@ -15,6 +15,14 @@ namespace PraticeManagement.PersonService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="PersonService.IPersonService")]
     public interface IPersonService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonListOpportunityOwner", ReplyAction="http://tempuri.org/IPersonService/PersonListOpportunityOwnerResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
+        DataTransferObjects.Person[] PersonListOpportunityOwner(bool includeInactive, DataTransferObjects.Person person);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonDetail", ReplyAction="http://tempuri.org/IPersonService/GetPersonDetailResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
+        DataTransferObjects.Person GetPersonDetail(int personId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonByAlias", ReplyAction="http://tempuri.org/IPersonService/GetPersonByAliasResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         DataTransferObjects.Person GetPersonByAlias(string alias);
@@ -123,10 +131,6 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerId", ReplyAction="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerIdResponse")]
         DataTransferObjects.Opportunity[] GetActiveOpportunitiesByOwnerId(int personId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonListOpportunityOwner", ReplyAction="http://tempuri.org/IPersonService/PersonListOpportunityOwnerResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        DataTransferObjects.Person[] PersonListOpportunityOwner(bool includeInactive, DataTransferObjects.Person person);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials", ReplyAction="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancialsResponse")]
         System.Data.DataSet GetPersonMilestoneWithFinancials(int personId);
         
@@ -227,12 +231,11 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetSubordinates", ReplyAction="http://tempuri.org/IPersonService/GetSubordinatesResponse")]
         DataTransferObjects.Person[] GetSubordinates(int practiceManagerId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetCareerCounselorHierarchiPersons", ReplyAction="http://tempuri.org/IPersonService/GetCareerCounselorHierarchiPersonsResponse")]
+        DataTransferObjects.Person[] GetCareerCounselorHierarchiPersons(int managerId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetOneOffList", ReplyAction="http://tempuri.org/IPersonService/GetOneOffListResponse")]
         DataTransferObjects.Person[] GetOneOffList(System.DateTime today, string userName);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonDetail", ReplyAction="http://tempuri.org/IPersonService/GetPersonDetailResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        DataTransferObjects.Person GetPersonDetail(int personId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -242,7 +245,7 @@ namespace PraticeManagement.PersonService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
-       
+        
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -257,6 +260,14 @@ namespace PraticeManagement.PersonService {
         
         public PersonServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public DataTransferObjects.Person[] PersonListOpportunityOwner(bool includeInactive, DataTransferObjects.Person person) {
+            return base.Channel.PersonListOpportunityOwner(includeInactive, person);
+        }
+        
+        public DataTransferObjects.Person GetPersonDetail(int personId) {
+            return base.Channel.GetPersonDetail(personId);
         }
         
         public DataTransferObjects.Person GetPersonByAlias(string alias) {
@@ -383,10 +394,6 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetActiveOpportunitiesByOwnerId(personId);
         }
         
-        public DataTransferObjects.Person[] PersonListOpportunityOwner(bool includeInactive, DataTransferObjects.Person person) {
-            return base.Channel.PersonListOpportunityOwner(includeInactive, person);
-        }
-        
         public System.Data.DataSet GetPersonMilestoneWithFinancials(int personId) {
             return base.Channel.GetPersonMilestoneWithFinancials(personId);
         }
@@ -507,12 +514,12 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetSubordinates(practiceManagerId);
         }
         
-        public DataTransferObjects.Person[] GetOneOffList(System.DateTime today, string userName) {
-            return base.Channel.GetOneOffList(today, userName);
+        public DataTransferObjects.Person[] GetCareerCounselorHierarchiPersons(int managerId) {
+            return base.Channel.GetCareerCounselorHierarchiPersons(managerId);
         }
         
-        public DataTransferObjects.Person GetPersonDetail(int personId) {
-            return base.Channel.GetPersonDetail(personId);
+        public DataTransferObjects.Person[] GetOneOffList(System.DateTime today, string userName) {
+            return base.Channel.GetOneOffList(today, userName);
         }
     }
 }
