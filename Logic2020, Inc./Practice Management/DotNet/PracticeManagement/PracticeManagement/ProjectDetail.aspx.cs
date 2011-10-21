@@ -20,6 +20,7 @@ using PraticeManagement.ProjectService;
 using PraticeManagement.Utils;
 using BillingInfo = DataTransferObjects.BillingInfo;
 using ProjectAttachment = DataTransferObjects.ProjectAttachment;
+using System.Linq;
 
 namespace PraticeManagement
 {
@@ -233,6 +234,12 @@ namespace PraticeManagement
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead);//added Project Lead as per #2941.
 
             bool isReadOnly = !userIsAdministrator && !userIsSalesPerson && !userIsPracticeManager && !userIsDirector && !userIsSeniorLeadership && !userIsProjectLead;// #2817: userIsDirector is added as per the requirement.
+            bool userIsProjectManagerOfTheProject = false;
+
+            if (Project != null && ProjectId.HasValue && Project.ProjectManagers.Count > 0)
+            {
+                userIsProjectManagerOfTheProject = Project.ProjectManagers.Any(p => p.Id == DataHelper.CurrentPerson.Id);
+            }
 
             txtProjectName.ReadOnly = txtClientDiscount.ReadOnly = isReadOnly;
             txtSalesCommission.ReadOnly = !userIsAdministrator;
@@ -246,7 +253,8 @@ namespace PraticeManagement
             chbReceivesSalesCommission.Enabled = userIsAdministrator;
             ddlSalesperson.Enabled = (userIsAdministrator || userIsDirector) && !string.IsNullOrEmpty(ddlClientName.SelectedValue);
             cblProjectManagers.Enabled = ddlDirector.Enabled = (userIsAdministrator || userIsDirector || userIsSeniorLeadership || userIsSalesPerson) && !string.IsNullOrEmpty(ddlClientName.SelectedValue);
-            cblProjectManagers.Enabled = (userIsAdministrator || userIsDirector || userIsSeniorLeadership || userIsSalesPerson);
+            cblProjectManagers.Enabled = (userIsAdministrator || userIsDirector || userIsSeniorLeadership || userIsSalesPerson || userIsProjectManagerOfTheProject);
+
 
             if ((userIsPracticeManager || userIsProjectLead) && !cblProjectManagers.Enabled && !ProjectId.HasValue)
             {
