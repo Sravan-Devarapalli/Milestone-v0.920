@@ -502,7 +502,7 @@
                                             EnableClientScript="false" Text="*" ValidationExpression="^[a-zA-Z'\-]{2,35}$" />
                                     </td>
                                     <td>
-                                        Line Manager
+                                        Career Counselor
                                     </td>
                                     <td class="info-field" style="padding-right: 2px">
                                         <asp:UpdatePanel ID="pnlLineManager" runat="server">
@@ -603,7 +603,7 @@
                                         <asp:CustomValidator ID="custTerminateDateTE" runat="server" ErrorMessage="" ToolTip=""
                                             Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
                                             OnServerValidate="custTerminationDateTE_ServerValidate"></asp:CustomValidator>
-                                        <asp:CustomValidator ID="custIsDefautManager" runat="server" ErrorMessage="Unable to set Termination Date for this person because this person is set as default line manager. Please select another default line manager and refresh this page to enter termination date for this person."
+                                        <asp:CustomValidator ID="custIsDefautManager" runat="server" ErrorMessage="Unable to set Termination Date for this person because this person is set as default career counselor. Please select another default career counselor and refresh this page to enter termination date for this person."
                                             Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
                                             OnServerValidate="custIsDefautManager_ServerValidate"></asp:CustomValidator>
                                     </td>
