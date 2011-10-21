@@ -1,8 +1,4 @@
-﻿
-
-
-	
-CREATE PROCEDURE dbo.PersonOneOffList
+﻿CREATE PROCEDURE dbo.PersonOneOffList
 (
 	@DateToday   DATETIME,
 	@MaxSeniorityLevel	INT
@@ -32,10 +28,14 @@ AS
 	       p.PracticeOwnedName, 
 	       p.TelephoneNumber
 	  FROM dbo.v_Person AS p
-           INNER JOIN dbo.v_Pay AS y ON p.PersonId = y.PersonId
-           LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
+      LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
 	 WHERE p.PersonStatusId in (1,2,3) AND ISNULL(pr.IsCompanyInternal, 0) = 0
-           AND @DateToday BETWEEN y.StartDate AND (ISNULL(y.EndDate, dbo.GetFutureDate()) - 1)
            AND ((@MaxSeniorityLevel IS NULL) OR (@MaxSeniorityLevel < p.SeniorityValue))
+		   AND EXISTS (SELECT 1 FROM dbo.v_Pay y
+						WHERE p.PersonId = y.PersonId 
+						AND  (@DateToday <= y.StartDate
+						 OR @DateToday BETWEEN y.StartDate AND (ISNULL(y.EndDate, dbo.GetFutureDate()) - 1)
+						 )
+					  )
      ORDER BY p.LastName
 
