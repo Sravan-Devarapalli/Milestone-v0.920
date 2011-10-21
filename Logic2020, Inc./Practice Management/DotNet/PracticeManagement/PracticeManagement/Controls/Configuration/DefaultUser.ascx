@@ -16,11 +16,11 @@
             <tr>
                 <td style="text-align:right;">
                     <asp:Button ID="btnSetDefault" runat="server" OnClick="btnSetDefault_Click" Visible="false" CssClass="marginLineManager"
-                        Text="Save Line Manager" />
+                        Text="Save Default Career Counselor" />
                 </td>
             </tr>
         </table>
-        <%--<asp:LinkButton ID="btnSetDefault" runat="server" OnClick="btnSetDefault_Click" Visible="false">Set as def. line manager</asp:LinkButton>--%>
+        <%--<asp:LinkButton ID="btnSetDefault" runat="server" OnClick="btnSetDefault_Click" Visible="false">Set as def. Career Counselor</asp:LinkButton>--%>
         <asp:ObjectDataSource ID="odsPersons" runat="server" SelectMethod="PersonListShortByRoleAndStatus"
             TypeName="PraticeManagement.PersonService.PersonServiceClient" OnSelecting="odsPersons_OnSelecting"
             OnSelected="odsPersons_OnSelected" CacheDuration="5" EnableCaching="true">
