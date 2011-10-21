@@ -35,18 +35,13 @@ namespace PraticeManagement
                 var companyTitle = HttpUtility.HtmlDecode(BrandingConfigurationManager.GetCompanyTitle());
                 lblSearchResultsTitle.Text = string.Format("{0} Employee Skills Search Results", companyTitle);
             }
-            
-            List<Person> persons = new List<Person>();
 
-            for (int i = 1; i <= 10; i++)
+
+            Person[] persons;
+
+            using (var service = new PersonSkillService.PersonSkillServiceClient())
             {
-                var person = new Person()
-                {
-                    Id = i,
-                    LastName = "Last Name" + i.ToString(),
-                    FirstName = "First Name" + i.ToString()
-                };
-                persons.Add(person);
+                persons = service.PersonsSearchBySkillsText(txtSearch.Text);
             }
 
             dlPerson.DataSource = persons;
