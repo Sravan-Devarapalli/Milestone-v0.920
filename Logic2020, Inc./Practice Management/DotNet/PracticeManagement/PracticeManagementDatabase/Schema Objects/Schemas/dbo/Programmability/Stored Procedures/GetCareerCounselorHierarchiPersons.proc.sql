@@ -9,11 +9,12 @@ AS
 	(
 		SELECT P.PersonId, P.ManagerId
 		FROM Person P
-		WHERE P.ManagerId = @CounselorId
+		WHERE P.ManagerId = @CounselorId AND P.PersonStatusId = 1
 		UNION ALL
 		SELECT P.PersonId, P.ManagerId
 		FROM Person P
-		JOIN CounselorHierarchi CC ON CC.PersonId = P.ManagerId
+		JOIN CounselorHierarchi CC ON CC.PersonId = P.ManagerId AND CC.PersonId <> P.PersonId
+		WHERE P.PersonStatusId = 1
 	)
 
 	SELECT DISTINCT p.PersonId,
