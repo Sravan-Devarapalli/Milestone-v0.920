@@ -33,6 +33,11 @@
             height: 400px;
             overflow: auto;
         }
+        .PopupHeight
+        {
+            max-height: 150px;
+            overflow-y: auto;
+        }
     </style>
     <script type="text/javascript" src="~/Scripts/jquery-1.4.1-vsdoc.js"></script>
     <script type="text/javascript" language="javascript">
@@ -150,7 +155,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td style="background-color: White; font-weight: normal; font-size: small;">
-                                                                <asp:DataList ID="dtlSkillLevels" runat="server" Width="100%">
+                                                                <asp:DataList ID="dtlSkillLevels" runat="server" Width="100%" CssClass="PopupHeight">
                                                                     <ItemTemplate>
                                                                         <b>
                                                                             <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Description%>:</b>
