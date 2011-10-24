@@ -4,10 +4,10 @@
 <%@ Register Src="~/Controls/Reports/ConsultantsWeeklyReport.ascx" TagPrefix="uc"
     TagName="ConsultantsWeeklyReport" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Utilization Timeline | Practice Management</title>
+    <title>Consulting Utilization | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
-    Utilization Timeline
+    Consulting Utilization
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
 <script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
