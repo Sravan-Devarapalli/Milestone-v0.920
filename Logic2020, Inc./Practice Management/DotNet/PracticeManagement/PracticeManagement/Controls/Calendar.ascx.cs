@@ -128,7 +128,7 @@ namespace PraticeManagement.Controls
             {
                 if (!CompanyHolidays)
                 {
-                    if (userIsAdministrator || userIsRecruiter || userIsSalesperson || userIsHR)// #2817: userIsHR is added as per the requirement.
+                    if (userIsAdministrator || userIsSeniorLeadership || userIsHR)// #2817: userIsHR is added as per the requirement.
                     {
                         //DataHelper.FillPersonList(ddlPerson, Resources.Controls.CompanyCalendarTitle);
                         DataHelper.FillPersonList(ddlPerson, null, (int)PersonStatusType.Active);
@@ -143,7 +143,7 @@ namespace PraticeManagement.Controls
                     // Security
                     if (!userIsAdministrator)
                     {
-                        if (userIsPracticeManager || userIsDirector || userIsSeniorLeadership || userIsProjectLead || userIsConsultant && current != null)// #2817: userIsDirector is added as per the requirement.
+                        if (userIsPracticeManager || userIsDirector || userIsRecruiter || userIsSalesperson || userIsProjectLead || userIsConsultant && current != null)// #2817: userIsDirector is added as per the requirement.
                         {
                             DataHelper.FillCounselorHierarchiPersonsList(ddlPerson,//Adding Career Counselor Hierarchi Persons List as per #2952.
                                     current.PersonLastFirstName,
