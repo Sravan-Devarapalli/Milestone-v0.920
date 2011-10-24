@@ -11,7 +11,7 @@ using DataTransferObjects;
 using DataTransferObjects.Skills;
 using System.Xml;
 using AjaxControlToolkit;
-
+using System.Web.Security;
 
 namespace PraticeManagement
 {
@@ -84,22 +84,47 @@ namespace PraticeManagement
 
         #region Properties
 
+        public int? PersonId
+        {
+            get
+            {
+                int personId;
+                if (!string.IsNullOrEmpty(Page.Request.QueryString["id"]) && int.TryParse(Page.Request.QueryString["id"], out personId))
+                {
+                    return personId;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
         public Person Person
         {
             get
             {
-                if (Session[SessionPersonWithSkills] == null)
+                int personId;
+                if (PersonId.HasValue)
+                {
+                    personId = PersonId.Value;
+                }
+                else
+                {
+                    personId = DataHelper.CurrentPerson.Id.Value;
+                }
+                if (ViewState[SessionPersonWithSkills] == null)
                 {
                     using (var serviceClient = new PersonSkillService.PersonSkillServiceClient())
                     {
-                        Session[SessionPersonWithSkills] = serviceClient.GetPersonWithSkills(DataHelper.CurrentPerson.Id.Value);
+                        ViewState[SessionPersonWithSkills] = serviceClient.GetPersonWithSkills(personId);
                     }
                 }
-                return (Person)Session[SessionPersonWithSkills];
+                return (Person)ViewState[SessionPersonWithSkills];
             }
             set
             {
-                Session[SessionPersonWithSkills] = value;
+                ViewState[SessionPersonWithSkills] = value;
             }
         }
 
@@ -157,8 +182,12 @@ namespace PraticeManagement
         {
             if (!IsPostBack)
             {
-                Session[SessionPersonWithSkills] = null;
-                lblUserName.Text = DataHelper.CurrentPerson.PersonLastFirstName;
+                if (PersonId.HasValue && PersonId != DataHelper.CurrentPerson.Id && !(Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName)))
+                {
+                    Response.Redirect(Constants.ApplicationPages.AccessDeniedPage);
+                }
+
+                lblUserName.Text = Person.PersonLastFirstName;
                 RenderSkills(tcSkillsEntry.ActiveTabIndex);
 
                 if (ddlTechnicalCategory.DataSource == null && ddlTechnicalCategory.Items.Count == 0)
@@ -264,7 +293,7 @@ namespace PraticeManagement
                 var btnClosePriority = gvSkills.HeaderRow.FindControl("btnCloseLevel") as Button;
                 var dtlSkillLevels = gvSkills.HeaderRow.FindControl("dtlSkillLevels") as DataList;
                 var img = gvSkills.HeaderRow.FindControl("imgLevelyHint") as Image;
-                animShow.Animations = string.Format(ANIMATION_SHOW_SCRIPT, pnlLevel.ID, 160);
+                animShow.Animations = string.Format(ANIMATION_SHOW_SCRIPT, pnlLevel.ID, 180);
                 animHide.Animations = string.Format(ANIMATION_HIDE_SCRIPT, pnlLevel.ID);
                 img.Attributes["onclick"]
                        = string.Format("setHintPosition('{0}', '{1}');", img.ClientID, pnlLevel.ClientID);
@@ -505,7 +534,7 @@ namespace PraticeManagement
                     try
                     {
                         serviceClient.SavePersonSkills(Person.Id.Value, skillsXml, User.Identity.Name);
-                        Session[SessionPersonWithSkills] = null;
+                        Person = null;
 
                         EnableSaveAndCancelButtons(false);
                         ClearDirty();
@@ -569,7 +598,7 @@ namespace PraticeManagement
                     try
                     {
                         serviceClient.SavePersonIndustrySkills(Person.Id.Value, skillsXml, User.Identity.Name);
-                        Session[SessionPersonWithSkills] = null;
+                        Person = null;
 
                         EnableSaveAndCancelButtons(false);
                         ClearDirty();
@@ -648,3 +677,4 @@ namespace PraticeManagement
         }
     }
 }
+
