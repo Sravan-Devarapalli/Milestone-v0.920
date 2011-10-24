@@ -39,5 +39,5 @@ AS
 	       p.PracticeOwnedName, 
 	       p.TelephoneNumber
 	FROM CounselorHierarchi CC
-	JOIN dbo.v_Person AS P ON P.PersonId = CC.PersonId
+	JOIN dbo.v_Person AS P ON P.PersonId = CC.PersonId AND P.PersonId <> @CounselorId
 	ORDER BY P.LastName, P.FirstName
