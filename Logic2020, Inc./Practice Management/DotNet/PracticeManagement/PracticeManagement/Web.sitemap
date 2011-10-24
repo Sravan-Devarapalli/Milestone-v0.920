@@ -25,8 +25,7 @@
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Resources" title="Resources" >
         <siteMapNode url="~/Reports/Bench.aspx" title="Bench"  VirtualPath="~/Reports/Bench.aspx" QuickLinkTitle="Bench"  description="Bench" ShowURL="true" />
-        <siteMapNode url="~/Reports/UtilizationTable.aspx" title="Consultants Util. Table"  VirtualPath="~/Reports/UtilizationTable.aspx" QuickLinkTitle="Consultants Util. Table"  description="Consultants Util. Table" ShowURL="true" />
-        <siteMapNode url="~/Reports/UtilizationTimeline.aspx" title="Consultants Util. Timeline"  VirtualPath="~/Reports/UtilizationTimeline.aspx" QuickLinkTitle="Consultants Util. Timeline"  description="Consultants Util. Timeline" ShowURL="true" />
+        <siteMapNode url="~/Reports/UtilizationTimeline.aspx" title="Consulting Utilization"  VirtualPath="~/Reports/UtilizationTimeline.aspx" QuickLinkTitle="Consulting Utilization"  description="Consulting Utilization" ShowURL="true" />
         <siteMapNode url="~/Reports/PersonStats.aspx" title="Person Stats" roles="Administrator"  VirtualPath="~/Reports/PersonStats.aspx" QuickLinkTitle="Person Stats"  description="Person Stats" ShowURL="true" />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Time Entry" title="Time">
@@ -62,7 +61,7 @@
         <siteMapNode url="~/Config/MarginGoals.aspx" title="Margin Goals"  VirtualPath="~/Config/MarginGoals.aspx" QuickLinkTitle="Margin Goals"  description="Margin Goals"  />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=ConfigurationReports" title="Reports" description="Reports" >
-        <siteMapNode url="~/Config/ConsultantUtilTimelineReport.aspx" VirtualPath="~/Config/ConsultantUtilTimelineReport.aspx" QuickLinkTitle="Consultant Util Timeline Report"  title="Consultant Util Timeline Report" description="Consultant Util Timeline Report"  />
+        <siteMapNode url="~/Config/ConsultantUtilTimelineReport.aspx" VirtualPath="~/Config/ConsultantUtilTimelineReport.aspx" QuickLinkTitle="Consulting Utilization Report"  title="Consulting Utilization Report" description="Consulting Utilization Report"  />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Security"  title="Security" description="Security Setting" >
         <siteMapNode url="~/Config/General.aspx"  VirtualPath="~/Config/General.aspx" QuickLinkTitle="General"  title="General" description="General"  />
