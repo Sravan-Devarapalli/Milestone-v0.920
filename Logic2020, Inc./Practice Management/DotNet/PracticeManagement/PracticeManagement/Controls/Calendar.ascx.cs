@@ -128,7 +128,7 @@ namespace PraticeManagement.Controls
             {
                 if (!CompanyHolidays)
                 {
-                    if (userIsAdministrator || userIsRecruiter || userIsConsultant || userIsSalesperson || userIsProjectLead || userIsHR)// #2817: userIsHR is added as per the requirement.
+                    if (userIsAdministrator || userIsRecruiter || userIsSalesperson || userIsHR)// #2817: userIsHR is added as per the requirement.
                     {
                         //DataHelper.FillPersonList(ddlPerson, Resources.Controls.CompanyCalendarTitle);
                         DataHelper.FillPersonList(ddlPerson, null, (int)PersonStatusType.Active);
@@ -143,20 +143,22 @@ namespace PraticeManagement.Controls
                     // Security
                     if (!userIsAdministrator)
                     {
-                        btnRetrieveCalendar.Visible = userIsPracticeManager || userIsSalesperson || userIsRecruiter || userIsDirector || userIsSeniorLeadership || userIsHR; // #2817: userIsDirector is added as per the requirement.
-
-                        if (userIsPracticeManager || userIsDirector || userIsSeniorLeadership && current != null)// #2817: userIsDirector is added as per the requirement.
+                        if (userIsPracticeManager || userIsDirector || userIsSeniorLeadership || userIsProjectLead || userIsConsultant && current != null)// #2817: userIsDirector is added as per the requirement.
                         {
                             DataHelper.FillCounselorHierarchiPersonsList(ddlPerson,//Adding Career Counselor Hierarchi Persons List as per #2952.
                                     current.PersonLastFirstName,
                                     current.Id.Value);
 
                         }
-                        else if (!userIsRecruiter && !userIsSalesperson && !userIsHR)// #2817: userIsHR is added as per the requirement.
-                        {
-                            // Non-administrator users can view and edit the own schedule only.
-                            ddlPerson.Enabled = false;
-                        }
+                        //Removing ddlPerson.Enabled = false; feature as per #2952.
+                        //else if (!userIsRecruiter && !userIsSalesperson && !userIsHR)// #2817: userIsHR is added as per the requirement.
+                        //{
+                        //    // Non-administrator users can view and edit the own schedule only.
+                        //    ddlPerson.Enabled = false;
+                        //}
+
+                        //Adding Person drop down items count as per #2952.
+                        btnRetrieveCalendar.Visible = userIsPracticeManager || userIsSalesperson || userIsRecruiter || userIsDirector || userIsSeniorLeadership || userIsHR || ddlPerson.Items.Count > 1; // #2817: userIsDirector is added as per the requirement.
                     }
 
                     ddlPerson.SelectedIndex =
