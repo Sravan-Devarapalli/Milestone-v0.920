@@ -4,7 +4,7 @@
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc3" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Consultant Util Time Line Report | Practice Management</title>
+    <title>Consulting Utilization Report | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Reports
@@ -20,7 +20,7 @@
     <uc3:LoadingProgress ID="progress" runat="server" />
     <br />
     <asp:HyperLink ID="hlnkConsultantUtilTimeLineReport" Target="_blank" runat="server"
-        NavigateUrl="~/Reports/ConsultantUtilTimeLineReport.aspx?refresh=10" Text="Consultant Util Timeline report"></asp:HyperLink>
+        NavigateUrl="~/Reports/ConsultantUtilTimeLineReport.aspx?refresh=10" Text="Consulting Utilization report"></asp:HyperLink>
     <br />
     <asp:Label ID="lblSaveMessage" runat="server" EnableViewState="false" />
 </asp:Content>
