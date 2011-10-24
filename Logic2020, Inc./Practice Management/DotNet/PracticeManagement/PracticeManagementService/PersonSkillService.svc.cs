@@ -8,6 +8,7 @@ using DataTransferObjects.Skills;
 using DataAccess.Skills;
 using System.ServiceModel.Activation;
 using DataTransferObjects;
+using DataAccess;
 
 
 namespace PracticeManagementService
@@ -37,9 +38,13 @@ namespace PracticeManagementService
 
         public Person GetPersonWithSkills(int personId)
         {
+
+            var p = PersonDAL.GetById(personId);
             var person = new Person()
             {
-                Id = personId
+                Id = personId,
+                LastName = p.LastName,
+                FirstName = p.FirstName
             };
 
             person.Skills = PersonSkillDAL.GetPersonSkillsByPersonId(personId);
