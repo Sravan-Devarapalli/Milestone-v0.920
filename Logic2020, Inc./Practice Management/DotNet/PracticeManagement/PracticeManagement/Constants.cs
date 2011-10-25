@@ -78,6 +78,7 @@ namespace PraticeManagement
             public const string BenchReportFilterCookie = "BenchReportFilter";
             public const string GenericTimeEntryFilterCookie = "GenericTimeEntryFilter";
             public const string ConsultantUtilTimeLineFilterCookie = "ConsultantUtilTimeLineFilter";
+            public const string ConsultingCapacityFilterCookie = "ConsultingCapacityFilter";
         }
 
         /// <summary>
@@ -136,6 +137,7 @@ namespace PraticeManagement
             public const string UtilizationTimelineWithFilterQueryString = "~/Reports/UtilizationTimeline.aspx?ApplyFilterFromCookie=true";
             public const string OpportunitySummary = "~/DiscussionReview2.aspx";
             public const string AccessDeniedPage = "~/GuestPages/AccessDenied.aspx";
+            public const string ConsultingCapacityWithFilterQueryString = "~/Reports/ConsultingCapacity.aspx?ApplyFilterFromCookie=true";
         }
 
         /// <summary>
