@@ -35,11 +35,34 @@ namespace PraticeManagement.Controls.Reports
 
         public bool ExcludeInternalPractices { get { return chkExcludeInternalPractices.Checked; } }
 
-        public string SortDirection { get { return this.rbSortbyAsc.Checked ? "Desc" : "Asc"; } }
+        public string SortDirection { get { return  this.rbSortbyAsc.Checked ? "Desc" : "Asc"; } }
 
         public int SortId { get { return Convert.ToInt32(ddlSortBy.SelectedItem.Value); } }
 
         public int AvgUtil { get { return ParseInt(ddlAvgUtil.SelectedValue, int.MaxValue); } }
+
+        public bool IsCapacityMode
+        {
+            set
+            {
+                if (value)
+                {
+                    lblUtilizationFrom.Text = "Show Capacity for";
+                    lblUtilization.Text = "  where C% is ";
+                    ddlAvgUtil.Items.Clear();
+                    foreach (ListItem item in ddlAvgCapacity.Items)
+                    {
+                        ddlAvgUtil.Items.Add(item);
+                    }
+
+                    ddlSortBy.Items.RemoveAt(0);
+                    ddlSortBy.Items.Insert(0, new ListItem { Value = "0", Text = "Average Capacity By Period" });
+                    rbSortbyAsc.Checked = true;
+                    rbSortbyDesc.Checked = false;
+                    hdnIsCapacityMode.Value = "1";
+                }
+            }
+        }
 
         public int Granularity 
         {
@@ -225,19 +248,20 @@ namespace PraticeManagement.Controls.Reports
         {
             if (!IsPostBack)
             {
-                DataHelper.FillPracticeList(this.cblPractices, Resources.Controls.AllPracticesText);
-                DataHelper.FillTimescaleList(this.cblTimeScales, Resources.Controls.AllTypes);
+                if (this.cblPractices != null && this.cblPractices.Items.Count == 0)
+                {
+                    DataHelper.FillPracticeList(this.cblPractices, Resources.Controls.AllPracticesText);
+                }
+                if (this.cblTimeScales != null && this.cblTimeScales.Items.Count == 0)
+                {
+                    DataHelper.FillTimescaleList(this.cblTimeScales, Resources.Controls.AllTypes);
+                }
 
-                var cookie = SerializationHelper.DeserializeCookie(Constants.FilterKeys.ConsultantUtilTimeLineFilterCookie) as ConsultantUtilTimeLineFilter;
                 if (IsSampleReport)
                 {
                     PopulateControls();
                 }
-                else if (Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true" && cookie != null)
-                {
-                    PopulateControls(cookie);
-                }
-                else
+                else if (!(Request.QueryString.AllKeys.Contains(Constants.FilterKeys.ApplyFilterFromCookieKey) && Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true"))
                 {
                     SelectAllItems(this.cblPractices);
                     SelectAllItems(this.cblTimeScales);
@@ -438,6 +462,20 @@ namespace PraticeManagement.Controls.Reports
 
             hdnFiltersChanged.Value = "false";
             btnResetFilter.Attributes.Add("disabled", "true");
+        }
+
+        public void ResetSortDirectionForCapacityMode()
+        {
+            if (ddlSortBy.SelectedIndex == 0)
+            {
+                rbSortbyAsc.Checked = true;
+                rbSortbyDesc.Checked = false;
+            }
+            else
+            {
+                rbSortbyAsc.Checked = false;
+                rbSortbyDesc.Checked = true;
+            }
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
