@@ -419,6 +419,7 @@
     <Content Include="Images\People_icon.png" />
     <Content Include="Images\right_icon.png" />
     <Content Include="Images\trash-icon-Large.png" />
+    <Content Include="Reports\ConsultingCapacity.aspx" />
     <Content Include="Reports\Expenses.aspx" />
     <Content Include="RevenueGoals.aspx" />
     <Content Include="Controls\BudgetEntries.ascx" />
@@ -1318,6 +1319,13 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ConsultingCapacity.aspx.cs">
+      <DependentUpon>ConsultingCapacity.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ConsultingCapacity.aspx.designer.cs">
+      <DependentUpon>ConsultingCapacity.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\Expenses.aspx.cs">
       <DependentUpon>Expenses.aspx</DependentUpon>
