@@ -26,15 +26,21 @@ namespace PraticeManagement.Controls.Reports
         private const int DEFAULT_STEP = 7;
         private const string NAME_FORMAT = "{0}, {1} ({2})";
         private const string NAME_FORMAT_WITH_DATES = "{0}, {1} ({2}): {3}-{4}";
-        private const string TITLE_FORMAT = "Consulting Utilization Report \n{0} to {1}\nFor {2} Persons; For {3} Projects\n{4}\n\n*Utilization reflects person vacation time during this period.";
+        private const string TITLE_FORMAT = "Consulting {0} Report \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.";
+        private const string TITLE_FORMAT_WITHOUT_REPORT = "Consulting {0} \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.";
         private const string POSTBACK_FORMAT = "{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}";
         private const char DELIMITER = '+';
         private const string TOOLTIP_FORMAT = "{0}-{1} {2}";
         private const string FULL_MONTH_NAME_FORMAT = "MMMM, yyyy";
         private const string VACATION_TOOLTIP_FORMAT = "On vacation";
         private const string UTILIZATION_TOOLTIP_FORMAT = "U% = {0}";
+        private const string CAPACITY_TOOLTIP_FORMAT = "C% = {0}";
         private const string AVERAGE_UTIL_FORMAT = "~{0}%";
         private const string VACATION_AVERAGE_UTIL_FORMAT = "~{0}%*";
+        private const string Utilization = "Utilization";
+        private const string Capacity = "Capacity";
+        private const string NEGATIVE_AVERAGE_UTIL_FORMAT = "~({0})%";
+        private const string VACATION_NEGATIVE_AVERAGE_UTIL_FORMAT = "~({0})%*";
         #endregion
 
         #region Fields
@@ -155,6 +161,12 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
+        public bool IsCapacityMode
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -177,24 +189,19 @@ namespace PraticeManagement.Controls.Reports
             {
                 if (!IsPostBack)
                 {
+                    if (IsCapacityMode)
+                    {
+                        utf.IsCapacityMode = IsCapacityMode;
+                        updPersonDetails.Visible = false;
+                        chart.Click -= Chart_Click;
+                    }
+
                     if (Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true")
                     {
-                        var cookie = SerializationHelper.DeserializeCookie(Constants.FilterKeys.ConsultantUtilTimeLineFilterCookie) as ConsultantUtilTimeLineFilter;
+                        var cookie = SerializationHelper.DeserializeCookie(IsCapacityMode ? Constants.FilterKeys.ConsultingCapacityFilterCookie : Constants.FilterKeys.ConsultantUtilTimeLineFilterCookie) as ConsultantUtilTimeLineFilter;
                         if (cookie != null)
                         {
-                            utf.PopulateControls(cookie);
-                            uaeDetails.EnableClientState = true;
-                            this.UpdateReport();
-                            this.hdnIsChartRenderedFirst.Value = "true";
-                            updConsReport.Update();
-
-                            if (cookie.PersonId.HasValue)
-                            {
-                                ShowDetailedReport(cookie.PersonId.Value, cookie.BegPeriod.Date, cookie.EndPeriod.Date, cookie.ChartTitle,
-                                    cookie.ActiveProjects, cookie.ProjectedProjects, cookie.InternalProjects, cookie.ExperimentalProjects);
-
-                                System.Web.UI.ScriptManager.RegisterStartupScript(updConsReport, updConsReport.GetType(), "focusDetailReport", "window.location='#details';", true);
-                            }
+                            PopulateControlsFromCookie(cookie);
                         }
                     }
                     else
@@ -203,6 +210,23 @@ namespace PraticeManagement.Controls.Reports
                         tblDetails.Attributes.Add("class", "hide");
                     }
                 }
+            }
+        }
+
+        private void PopulateControlsFromCookie(ConsultantUtilTimeLineFilter cookie)
+        {
+            utf.PopulateControls(cookie);
+            uaeDetails.EnableClientState = true;
+            this.UpdateReport();
+            this.hdnIsChartRenderedFirst.Value = "true";
+            updConsReport.Update();
+
+            if (cookie.PersonId.HasValue)
+            {
+                ShowDetailedReport(cookie.PersonId.Value, cookie.BegPeriod.Date, cookie.EndPeriod.Date, cookie.ChartTitle,
+                    cookie.ActiveProjects, cookie.ProjectedProjects, cookie.InternalProjects, cookie.ExperimentalProjects);
+
+                System.Web.UI.ScriptManager.RegisterStartupScript(updConsReport, updConsReport.GetType(), "focusDetailReport", "window.location='#details';", true);
             }
         }
 
@@ -216,7 +240,7 @@ namespace PraticeManagement.Controls.Reports
                     utf.ActivePersons, utf.ProjectedPersons,
                     utf.ActiveProjects, utf.ProjectedProjects,
                     utf.ExperimentalProjects,
-                    utf.InternalProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, SortDirection, utf.ExcludeInternalPractices);
+                    utf.InternalProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Asc" : "Desc") : SortDirection, utf.ExcludeInternalPractices);
 
             foreach (var quadruple in report)
                 AddPerson(quadruple);
@@ -243,7 +267,16 @@ namespace PraticeManagement.Controls.Reports
         private void InitLegends()
         {
             foreach (var legend in chart.Legends)
-                Coloring.ColorLegend(legend);
+            {
+                if(IsCapacityMode)
+                {
+                    Coloring.CapacityColorLegends(legend);
+                }
+                else
+                {
+                    Coloring.ColorLegend(legend);
+                }
+            }
         }
 
         /// <summary>
@@ -424,7 +457,8 @@ namespace PraticeManagement.Controls.Reports
 
             chart.Titles.Add(
                 string.Format(
-                    TITLE_FORMAT,
+                    IsCapacityMode ? TITLE_FORMAT_WITHOUT_REPORT :TITLE_FORMAT,
+                    IsCapacityMode ? Capacity : Utilization,
                     BegPeriod.ToString("MM/dd/yyyy"),
                     EndPeriod.ToString("MM/dd/yyyy"),
                     personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText()));
@@ -456,7 +490,7 @@ namespace PraticeManagement.Controls.Reports
         private void SaveFilters(int? personId, string chartTitle)
         {
             var filter = utf.SaveFilters(personId, chartTitle);
-            SerializationHelper.SerializeCookie(filter, Constants.FilterKeys.ConsultantUtilTimeLineFilterCookie);
+            SerializationHelper.SerializeCookie(filter, IsCapacityMode ? Constants.FilterKeys.ConsultingCapacityFilterCookie : Constants.FilterKeys.ConsultantUtilTimeLineFilterCookie);
         }
 
         private void ShowDetailedReport(int personId, DateTime repStartDate, DateTime repEndDate, string chartTitle,
@@ -580,12 +614,12 @@ namespace PraticeManagement.Controls.Reports
                 AddPersonRange(
                     quadruple.First, //  Person
                      w, //  Range index
-                    quadruple.Second[w], csv); //  U% for the period
+                     IsCapacityMode ? 100 - quadruple.Second[w] : quadruple.Second[w], csv); //  U% or C% for the period
 
             }
 
             //  Add axis label
-            AddLabel(quadruple.First, quadruple.Third, quadruple.Fourth);
+            AddLabel(quadruple.First, IsCapacityMode ? 100 - quadruple.Third : quadruple.Third, quadruple.Fourth);
 
             //  Increase persons counter
             _personsCount++;
@@ -625,8 +659,8 @@ namespace PraticeManagement.Controls.Reports
             {
                 //  Url to person details page, return to report
                 label.Url =
-                    Urls.GetPersonDetailsUrl(
-                    p, Request.Url.AbsoluteUri.Contains("#details") ? Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails : Constants.ApplicationPages.UtilizationTimelineWithFilterQueryString);
+                    Urls.GetPersonDetailsUrl(p,
+                     IsCapacityMode ? Constants.ApplicationPages.ConsultingCapacityWithFilterQueryString : (Request.Url.AbsoluteUri.Contains("#details") ? Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails : Constants.ApplicationPages.UtilizationTimelineWithFilterQueryString));
             }
             //  Tooltip
             label.ToolTip =
@@ -710,7 +744,7 @@ namespace PraticeManagement.Controls.Reports
             }
 
 
-            range.Color = Coloring.GetColorByUtilization(load, load < 0, isHired, isTerminated);
+            range.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, load > 100, isHired, isTerminated) : Coloring.GetColorByUtilization(load, load < 0, isHired, isTerminated);
 
             if (isTerminated)
             {
@@ -728,8 +762,8 @@ namespace PraticeManagement.Controls.Reports
             }
             else
             {
-                range.ToolTip = FormatRangeTooltip(load, pointStartDate, pointEndDate.AddDays(-1));
-                if (!IsSampleReport)
+                range.ToolTip = FormatRangeTooltip(load, pointStartDate, pointEndDate.AddDays(-1), IsCapacityMode);
+                if (!IsSampleReport && !IsCapacityMode)
                 {
                     range.PostBackValue = FormatRangePostbackValue(p, beginPeriod, endPeriod); // For the whole period
                     range.Url = Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true" ? Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails : Constants.ApplicationPages.ConsTimelineReportDetails;
@@ -768,13 +802,13 @@ namespace PraticeManagement.Controls.Reports
             {
                 return
                     string.Format(
-                        VACATION_AVERAGE_UTIL_FORMAT,
+                    avg < 0 ? VACATION_NEGATIVE_AVERAGE_UTIL_FORMAT : VACATION_AVERAGE_UTIL_FORMAT,
                         avg);
             }
 
             return
                 string.Format(
-                    AVERAGE_UTIL_FORMAT,
+                avg < 0 ? NEGATIVE_AVERAGE_UTIL_FORMAT : AVERAGE_UTIL_FORMAT,
                     avg);
         }
 
@@ -808,15 +842,15 @@ namespace PraticeManagement.Controls.Reports
                 );
         }
 
-        private static string FormatRangeTooltip(int load, DateTime pointStartDate, DateTime pointEndDate)
+        private static string FormatRangeTooltip(int load, DateTime pointStartDate, DateTime pointEndDate, bool IsCapacityMode = false)
         {
             return string.Format(TOOLTIP_FORMAT,
                                  pointStartDate.ToString("MMM, d"),
                                  pointEndDate.ToString("MMM, d"),
-                                 load < 0
+                                 (IsCapacityMode ? load > 100 : load < 0)
                                      ? VACATION_TOOLTIP_FORMAT
                                      : string.Format(
-                                         UTILIZATION_TOOLTIP_FORMAT,
+                                     IsCapacityMode ? CAPACITY_TOOLTIP_FORMAT : UTILIZATION_TOOLTIP_FORMAT,
                                          load));
         }
 
@@ -837,10 +871,13 @@ namespace PraticeManagement.Controls.Reports
             {
                 chart.CssClass = "hide";
             }
+            if (IsCapacityMode)
+            {
+                utf.ResetSortDirectionForCapacityMode();
+            }
             SaveFilters(null, null);
         }
 
         #endregion
     }
 }
-
