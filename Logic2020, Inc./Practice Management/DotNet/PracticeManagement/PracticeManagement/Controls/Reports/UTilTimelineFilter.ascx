@@ -30,8 +30,9 @@
         var rbAsc = document.getElementById("<%= rbSortbyAsc.ClientID%>");
         var rbDesc = document.getElementById("<%= rbSortbyDesc.ClientID%>");
         if (sortby.selectedIndex == 0) {
-            rbAsc.checked = false;
-            rbDesc.checked = true;
+            var hdnIsCapacityMode = document.getElementById("<%= hdnIsCapacityMode.ClientID %>");
+            rbAsc.checked = (hdnIsCapacityMode.value == 1);
+            rbDesc.checked = !(hdnIsCapacityMode.value == 1);
         }
         else if (sortby.selectedIndex == 1) {
             rbAsc.checked = true;
@@ -371,6 +372,12 @@
                         <asp:ListItem Value="90">&lt; 90</asp:ListItem>
                         <asp:ListItem Value="50">&lt; 50</asp:ListItem>
                     </asp:DropDownList>
+                    <asp:DropDownList ID="ddlAvgCapacity" runat="server" AutoPostBack="false" onchange="EnableResetButton();" Visible="false">
+                        <asp:ListItem Value="2147483647">100 - (n)</asp:ListItem>
+                        <asp:ListItem Value="100">&gt; 0</asp:ListItem>
+                        <asp:ListItem Value="90">&gt; 10</asp:ListItem>
+                        <asp:ListItem Value="50">&gt; 50</asp:ListItem>
+                    </asp:DropDownList>
                     &nbsp;
                 </td>
                 <td align="right">
@@ -564,4 +571,5 @@
     <asp:Label ID="lblMessage" runat="server"></asp:Label>
 </div>
 <asp:HiddenField ID="hdnIsSampleReport" runat="server" />
+<asp:HiddenField ID="hdnIsCapacityMode" runat="server" Value="0" />
 
