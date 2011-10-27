@@ -14,6 +14,7 @@ namespace DataAccess.Skills
             public const string DisplayOrder = "DisplayOrder";
             public const string SkillCategoryId = "SkillCategoryId";
             public const string SkillTypeId = "SkillTypeId";
+            public const string SkillTypeDescription = "SkillTypeDescription";
             public const string SkillLevelId = "SkillLevelId";
             public const string SkillId = "SkillId";
             public const string SkillCategoryName = "SkillCategoryName";
@@ -46,6 +47,7 @@ namespace DataAccess.Skills
         {
             public const string GetSkillCategoriesAll = "Skills.GetSkillCategoriesAll";
             public const string GetSkillLevelsAll = "Skills.GetSkillLevelsAll";
+            public const string GetSkillTypesAll = "Skills.GetSkillTypesAll";
             public const string GetSkillsAll = "Skills.GetSkillsAll";
             public const string GetIndustrySkillsAll = "Skills.GetIndustrySkillsAll";
             public const string GetPersonSkillsByPersonId = "Skills.GetPersonSkillsByPersonId";
