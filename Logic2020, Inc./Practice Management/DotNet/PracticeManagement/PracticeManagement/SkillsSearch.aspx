@@ -131,7 +131,7 @@
                         <div style="max-height: 300px; overflow: auto;">
                             <asp:DataList ID="dlPerson" runat="server" ItemStyle-Height="20px">
                                 <ItemTemplate>
-                                    <%# ((DataTransferObjects.Person)Container.DataItem).Name%>
+                                    <asp:hyperlink NavigateUrl='<%# GetSkillProfileUrl(((DataTransferObjects.Person)Container.DataItem).Id.ToString()) %>' Text="<%# ((DataTransferObjects.Person)Container.DataItem).Name%>" runat="server" Target="_blank"></asp:hyperlink>
                                 </ItemTemplate>
                             </asp:DataList>
                         </div>
