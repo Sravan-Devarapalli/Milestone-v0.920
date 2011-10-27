@@ -30,7 +30,10 @@ namespace PracticeManagementService
         {
             return PersonSkillDAL.GetSkillLevelsAll();
         }
-
+        public List<SkillType> SkillTypesAll()
+        {
+            return PersonSkillDAL.GetSkillTypesAll();
+        }
         public List<Industry> GetIndustrySkillsAll()
         {
             return PersonSkillDAL.GetIndustrySkillsAll();
