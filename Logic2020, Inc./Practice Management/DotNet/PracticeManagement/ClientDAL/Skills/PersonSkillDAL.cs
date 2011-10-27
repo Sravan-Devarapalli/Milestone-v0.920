@@ -64,6 +64,23 @@ namespace DataAccess.Skills
             return skillLevels;
         }
 
+        public static List<SkillType> GetSkillTypesAll()
+        {
+            var skillTypes = new List<SkillType>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.GetSkillTypesAll, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    connection.Open();
+                    var reader = command.ExecuteReader();
+                    ReadSkillTypes(reader, skillTypes);
+                }
+            }
+            return skillTypes;
+        }
+
         public static List<Industry> GetIndustrySkillsAll()
         {
             var industrySkills = new List<Industry>();
@@ -232,11 +249,30 @@ namespace DataAccess.Skills
                     {
                         Id = reader.GetInt32(skillLevelIdColumn),
                         Description = reader.GetString(skillLevelNameColumn),
-                        DisplayOrder = reader.IsDBNull(displayOrderColumn) ? null : (int?)reader.GetInt32(displayOrderColumn),
+                        DisplayOrder = reader.IsDBNull(displayOrderColumn) ? null : (int?)Convert.ToInt32(reader[displayOrderColumn]),
                         Definition = reader.GetString(skillLevelDefinitionColumn)
 
                     };
                     skillLevels.Add(skillLevel);
+                }
+            }
+        }
+        private static void ReadSkillTypes(SqlDataReader reader, List<SkillType> skillTypes)
+        {
+            var skillTypeIdColumnIndex = reader.GetOrdinal(Constants.ColumnNames.SkillTypeId);
+            var skillTypeDescriptionColumnIndex = reader.GetOrdinal(Constants.ColumnNames.SkillTypeDescription);
+            var displayOrderColumnIndex = reader.GetOrdinal(Constants.ColumnNames.DisplayOrder);
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    var skillType = new SkillType
+                    {
+                        Id = reader.GetInt32(skillTypeIdColumnIndex),
+                        Description = reader.GetString(skillTypeDescriptionColumnIndex),
+                        DisplayOrder = reader.IsDBNull(displayOrderColumnIndex) ? null : (int?)Convert.ToInt32(reader[displayOrderColumnIndex]),
+                    };
+                    skillTypes.Add(skillType);
                 }
             }
         }
