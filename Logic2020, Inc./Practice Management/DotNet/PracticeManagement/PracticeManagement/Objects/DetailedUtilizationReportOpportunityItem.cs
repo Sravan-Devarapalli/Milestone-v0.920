@@ -11,8 +11,9 @@ namespace PraticeManagement.Objects
         private const string OpportunityLabelFormat = "{0} - {1} - {2} - {3} ({4}) - {5:d}";
 
         public OpportunityTransition OpportunityTransition { get; set; }
+        public bool IsCapacityMode { get; set; }
 
-        public DetailedUtilizationReportOpportunityItem(DateTime reportStartDate, DateTime reportEndDate, OpportunityTransition opportunityTransition) : 
+        public DetailedUtilizationReportOpportunityItem(DateTime reportStartDate, DateTime reportEndDate, OpportunityTransition opportunityTransition, bool isCapacityMode) : 
                 base(reportStartDate, reportEndDate)
         {
             OpportunityTransition = opportunityTransition;
@@ -94,7 +95,7 @@ namespace PraticeManagement.Objects
             get
             {
                 var detailsLinkWithFilters = Utils.Urls.OpportunityDetailsLink(OpportunityTransition.Opportunity.Id.Value);
-                return Utils.Generic.GetTargetUrlWithReturn(detailsLinkWithFilters, Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails);
+                return Utils.Generic.GetTargetUrlWithReturn(detailsLinkWithFilters, IsCapacityMode ? Constants.ApplicationPages.ConsultingCapacityWithFilterQueryStringAndDetails : Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails);
             }
         }
     }
