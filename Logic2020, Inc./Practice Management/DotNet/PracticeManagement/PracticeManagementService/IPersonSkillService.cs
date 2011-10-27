@@ -28,6 +28,9 @@ namespace PracticeManagementService
         List<SkillLevel> SkillLevelsAll();
 
         [OperationContract]
+        List<SkillType> SkillTypesAll();
+
+        [OperationContract]
         List<Industry> GetIndustrySkillsAll();
 
         [OperationContract]
