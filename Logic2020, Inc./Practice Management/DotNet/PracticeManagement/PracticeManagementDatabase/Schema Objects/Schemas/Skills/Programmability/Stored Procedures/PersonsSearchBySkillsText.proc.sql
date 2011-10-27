@@ -34,6 +34,9 @@ BEGIN
 	FROM @SearchTerms
 	WHERE Term <> ''
 
+	IF(@Query IS NULL)
+	SELECT @Query = 'WHERE 1=2'
+
 	SELECT @Query ='
 	SELECT DISTINCT P.PersonId,
 			P.LastName,
