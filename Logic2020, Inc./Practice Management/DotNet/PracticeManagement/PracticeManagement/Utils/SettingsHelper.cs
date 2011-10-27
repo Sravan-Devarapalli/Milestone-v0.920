@@ -21,6 +21,7 @@ namespace PraticeManagement.Utils
         const string SkillCategory = "SkillCategory";
         const string Skill = "Skill";
         const string SkillLevel = "SkillLevel";
+        const string SkillType = "SkillType";
         const string SkillsIndustry = "SkillIndustry";
 
         public static Dictionary<string, string> GetResourceKeyValuePairs(SettingsType settingType)
@@ -286,6 +287,17 @@ namespace PraticeManagement.Utils
             }
             return HttpContext.Current.Cache[SkillLevel] as List<SkillLevel>;
         }
-
+        public static List<SkillType> GetSkillTypes()
+        {
+            if (HttpContext.Current.Cache[SkillType] == null)
+            {
+                using (var serviceClient = new PersonSkillService.PersonSkillServiceClient())
+                {
+                    HttpContext.Current.Cache[SkillType] = serviceClient.SkillTypesAll().AsQueryable().ToList();
+                }
+            }
+            return HttpContext.Current.Cache[SkillType] as List<SkillType>;
+        }
     }
 }
+
