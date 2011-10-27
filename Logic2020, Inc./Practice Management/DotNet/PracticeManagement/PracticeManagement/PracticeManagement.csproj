@@ -496,6 +496,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.Skills.SkillCategory1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Skills.SkillLevel.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Skills.SkillLevel1.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Skills.SkillType.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.TimeEntry.TimeEntrySums.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Timezone.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.UserPasswordsHistory1.datasource" />
@@ -742,10 +743,10 @@
     <None Include="Service References\PersonSkillService\PersonSkillService12.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\PersonSkillService\PersonSkillService13.xsd">
+    <None Include="Service References\PersonSkillService\PersonSkillService2.wsdl" />
+    <None Include="Service References\PersonSkillService\PersonSkillService8.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\PersonSkillService\PersonSkillService2.wsdl" />
     <None Include="Service References\PersonSkillService\PersonSkillService9.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -957,6 +958,7 @@
     <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\PersonSkillService\PersonSkillService2.disco" />
     <Content Include="SkillsEntry.aspx" />
+    <Content Include="SkillsProfile.aspx" />
     <Content Include="SkillsSearch.aspx" />
     <Content Include="Third Party Tools\CKEditor.NET.dll" />
     <Content Include="Third Party Tools\FormsAuthenticationUserImpersonation.dll" />
@@ -1761,6 +1763,13 @@
     </Compile>
     <Compile Include="SkillsEntry.aspx.designer.cs">
       <DependentUpon>SkillsEntry.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SkillsProfile.aspx.cs">
+      <DependentUpon>SkillsProfile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SkillsProfile.aspx.designer.cs">
+      <DependentUpon>SkillsProfile.aspx</DependentUpon>
     </Compile>
     <Compile Include="SkillsSearch.aspx.cs">
       <DependentUpon>SkillsSearch.aspx</DependentUpon>
