@@ -17,16 +17,18 @@ namespace PraticeManagement.Objects
         #region Properties
 
         public MilestonePersonEntry Entry { get; set; }
+        public bool IsCapacityMode { get; set; }
 
         #endregion
 
         #region Constructors
 
         public DetailedUtilizationReportMilestoneItem
-            (DateTime reportStartDate, DateTime reportEndDate, MilestonePersonEntry entry) :
+            (DateTime reportStartDate, DateTime reportEndDate, MilestonePersonEntry entry, bool isCapacityMode) :
             base(reportStartDate, reportEndDate)
         {
             Entry = entry;
+            IsCapacityMode = isCapacityMode;
         }
 
         #endregion
@@ -117,7 +119,7 @@ namespace PraticeManagement.Objects
                     Constants.ApplicationPages.MilestoneDetail,             //  page
                     Entry.ParentMilestone.Id,                               //  milestone id
                     Entry.ParentMilestone.Project.Id,                       //  project id
-                    Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails);
+                    IsCapacityMode ? Constants.ApplicationPages.ConsultingCapacityWithFilterQueryStringAndDetails : Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails);
             }
         }
 
