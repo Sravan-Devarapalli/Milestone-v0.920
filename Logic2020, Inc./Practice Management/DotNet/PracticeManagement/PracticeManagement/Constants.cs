@@ -138,6 +138,8 @@ namespace PraticeManagement
             public const string OpportunitySummary = "~/DiscussionReview2.aspx";
             public const string AccessDeniedPage = "~/GuestPages/AccessDenied.aspx";
             public const string ConsultingCapacityWithFilterQueryString = "~/Reports/ConsultingCapacity.aspx?ApplyFilterFromCookie=true";
+            public const string ConsultingCapacityWithFilterQueryStringAndDetails = "~/Reports/ConsultingCapacity.aspx?ApplyFilterFromCookie=true#details";
+            public const string ConsultingCapacityWithDetails = "~/Reports/ConsultingCapacity.aspx#details";
         }
 
         /// <summary>
