@@ -65,7 +65,7 @@ namespace PraticeManagement
                 return skillTypes;
             }
         }
-        
+
         public List<Industry> Industries
         {
             get
@@ -77,7 +77,7 @@ namespace PraticeManagement
                 return industries;
             }
         }
-        
+
         public int? PersonId
         {
             get
@@ -103,9 +103,13 @@ namespace PraticeManagement
                 {
                     personId = PersonId.Value;
                 }
-                else
+                else if (DataHelper.CurrentPerson != null)
                 {
                     personId = DataHelper.CurrentPerson.Id.Value;
+                }
+                else
+                {
+                    return null;
                 }
                 if (ViewState[SessionPersonWithSkills] == null)
                 {
@@ -138,7 +142,7 @@ namespace PraticeManagement
             }
 
         }
-        
+
         protected void repIndustries_OnLoad(object sender, EventArgs e)
         {
             if (repIndustries.Items.Count == 0)
@@ -153,7 +157,7 @@ namespace PraticeManagement
                 lblInduatriesMsg.Visible = false;
             }
         }
-        
+
         protected void repTypes_OnItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
@@ -228,12 +232,16 @@ namespace PraticeManagement
 
             if (!IsPostBack)
             {
+                if (!PersonId.HasValue && DataHelper.CurrentPerson == null)
+                {
+                    Response.Redirect(Constants.ApplicationPages.AccessDeniedPage);
+                }
                 lblPersonName.Text = Person.PersonLastFirstName;
                 repIndustries.DataSource = Person.Industries;
                 repIndustries.DataBind();
                 repTypes.DataSource = SkillTypes;
                 repTypes.DataBind();
-                if (PersonId.HasValue && PersonId != DataHelper.CurrentPerson.Id && !(Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName)))
+                if (PersonId.HasValue && (DataHelper.CurrentPerson == null || ( PersonId != DataHelper.CurrentPerson.Id && !(Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName)))))
                 {
                     btnUpdate.Visible = false;
                 }
