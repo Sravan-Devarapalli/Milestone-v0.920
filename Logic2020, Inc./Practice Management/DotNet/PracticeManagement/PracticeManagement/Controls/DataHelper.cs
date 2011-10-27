@@ -320,7 +320,7 @@ namespace PraticeManagement.Controls
             return consultantsList;
         }
 
-        public static List<DetailedUtilizationReportBaseItem> GetMilestonePersons(int personId, DateTime startDate, DateTime endDate, bool incActive, bool incProjected, bool incInternal, bool incExperimental)
+        public static List<DetailedUtilizationReportBaseItem> GetMilestonePersons(int personId, DateTime startDate, DateTime endDate, bool incActive, bool incProjected, bool incInternal, bool incExperimental, bool isCapacityMode = false)
         {
             var result = new List<DetailedUtilizationReportBaseItem>();
 
@@ -346,10 +346,10 @@ namespace PraticeManagement.Controls
                 client => client.GetOpportunityTransitionsByPerson(personId));
 
             foreach (var entry in personEntries)
-                result.Add(new DetailedUtilizationReportMilestoneItem(startDate, endDate, entry));
+                result.Add(new DetailedUtilizationReportMilestoneItem(startDate, endDate, entry, isCapacityMode));
 
             foreach (var transition in opportTransition)
-                result.Add(new DetailedUtilizationReportOpportunityItem(startDate, endDate, transition));
+                result.Add(new DetailedUtilizationReportOpportunityItem(startDate, endDate, transition, isCapacityMode));
 
             return result;
         }
