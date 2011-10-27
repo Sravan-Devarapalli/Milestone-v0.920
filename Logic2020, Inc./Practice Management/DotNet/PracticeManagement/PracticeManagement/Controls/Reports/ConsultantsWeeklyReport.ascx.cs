@@ -192,8 +192,6 @@ namespace PraticeManagement.Controls.Reports
                     if (IsCapacityMode)
                     {
                         utf.IsCapacityMode = IsCapacityMode;
-                        updPersonDetails.Visible = false;
-                        chart.Click -= Chart_Click;
                     }
 
                     if (Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true")
@@ -511,7 +509,8 @@ namespace PraticeManagement.Controls.Reports
                     activeProjects,
                     projectedProjects,
                     internalProjects,
-                    experimentalProjects);
+                    experimentalProjects,
+                    IsCapacityMode);
 
             var utilizationDaily = DataHelper.ConsultantUtilizationDailyByPerson(repStartDate, ParseInt(repEndDate.Subtract(repStartDate).Days.ToString(), DAYS_FORWARD),
                 utf.ActiveProjects, utf.ProjectedProjects, utf.InternalProjects, utf.ExperimentalProjects, personId);
@@ -660,7 +659,9 @@ namespace PraticeManagement.Controls.Reports
                 //  Url to person details page, return to report
                 label.Url =
                     Urls.GetPersonDetailsUrl(p,
-                     IsCapacityMode ? Constants.ApplicationPages.ConsultingCapacityWithFilterQueryString : (Request.Url.AbsoluteUri.Contains("#details") ? Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails : Constants.ApplicationPages.UtilizationTimelineWithFilterQueryString));
+                    IsCapacityMode ? (Request.Url.AbsoluteUri.Contains("#details") ? Constants.ApplicationPages.ConsultingCapacityWithFilterQueryStringAndDetails : Constants.ApplicationPages.ConsultingCapacityWithFilterQueryString)
+                     : (Request.Url.AbsoluteUri.Contains("#details") ? Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails : Constants.ApplicationPages.UtilizationTimelineWithFilterQueryString)
+                     );
             }
             //  Tooltip
             label.ToolTip =
@@ -763,10 +764,11 @@ namespace PraticeManagement.Controls.Reports
             else
             {
                 range.ToolTip = FormatRangeTooltip(load, pointStartDate, pointEndDate.AddDays(-1), IsCapacityMode);
-                if (!IsSampleReport && !IsCapacityMode)
+                if (!IsSampleReport)
                 {
                     range.PostBackValue = FormatRangePostbackValue(p, beginPeriod, endPeriod); // For the whole period
-                    range.Url = Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true" ? Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails : Constants.ApplicationPages.ConsTimelineReportDetails;
+                    range.Url = IsCapacityMode ? (Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true" ? Constants.ApplicationPages.ConsultingCapacityWithFilterQueryStringAndDetails : Constants.ApplicationPages.ConsultingCapacityWithDetails)
+                                    : (Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true" ? Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails : Constants.ApplicationPages.ConsTimelineReportDetails);
                 }
             }
         }
