@@ -59,9 +59,15 @@ namespace PraticeManagement
             }
         }
 
+        protected String GetSkillProfileUrl(string personId)
+        {
+            return "~/SkillsProfile.aspx?Id=" + personId; 
+        }
+
         protected void btnEmployeeOK_OnClick(object sender, EventArgs e)
         {
-
+            String personId = ddlEmployees.SelectedValue; 
+            Response.Redirect("~/SkillsProfile.aspx?Id=" + personId);
         }
     }
 }
