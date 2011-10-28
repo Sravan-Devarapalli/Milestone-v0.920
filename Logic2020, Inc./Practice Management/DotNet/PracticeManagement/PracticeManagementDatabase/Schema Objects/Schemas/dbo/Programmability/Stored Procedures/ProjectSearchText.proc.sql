@@ -164,10 +164,10 @@ AS
 		   AND (@PersonId is NULL OR p.PracticeId in (SELECT * FROM @PracticesList))	
 		   AND (@PersonId is NULL OR projManagers.ProjectManagerId = @PersonId  OR c.PersonId = @PersonId OR projManagers.ProjectManagerId in (SELECT * FROM @ProjectOwnerList))   
 		)
-		SELECT DISTINCT *
+		SELECT DISTINCT FP.*
 		FROM FoundProjects FP
 		LEFT JOIN ProjectManagers PM ON PM.ProjectId = FP.ProjectId
-		LEFT JOIN Commission C ON C.ProjectId = FP.ProjectId
+		LEFT JOIN Commission C ON C.ProjectId = FP.ProjectId AND C.CommissionType = 1
 		WHERE FP.ProjectId <> @DefaultProjectId
 			AND ( @UserHasHighRoleThanProjectLead IS NULL 
 					OR @UserHasHighRoleThanProjectLead <> 0
