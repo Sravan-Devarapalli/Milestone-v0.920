@@ -38,7 +38,7 @@ AS
 				GroupId
 				, ClientId
 				, Name
-				, ISNULL((SELECT TOP 1 1 FROM Project WHERE GroupId = ProjectGroup.GroupId), 0) InUse
+				, ISNULL((SELECT TOP 1 1 FROM Project pro join Opportunity opp on pro.ClientId=opp.ClientId  where pro.GroupId = ProjectGroup.GroupId or opp.GroupId = ProjectGroup.GroupId), 0) InUse
 				,Active
 			FROM ProjectGroup
 			WHERE ((ClientId = @ClientId))
@@ -59,7 +59,7 @@ AS
 				, cl.[Name] AS 'ClientName'
 				, pg.GroupId
 				, pg.[Name]
-				, ISNULL((SELECT TOP 1 1 FROM Project WHERE GroupId = pg.GroupId), 0) InUse
+				, ISNULL((SELECT TOP 1 1 FROM Project pro join Opportunity opp on pro.ClientId=opp.ClientId  where pro.GroupId = pg.GroupId or opp.GroupId = pg.GroupId), 0) InUse
 				,pg.Active
 			FROM ProjectGroup AS pg
 			INNER JOIN dbo.Client AS cl ON pg.ClientId = cl.ClientId
