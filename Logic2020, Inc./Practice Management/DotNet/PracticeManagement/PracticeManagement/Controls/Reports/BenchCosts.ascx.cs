@@ -722,6 +722,7 @@ namespace PraticeManagement.Controls.Reports
             chbIncludeZeroCostEmps.Checked = false;
             chbIncludeOverHeads.Checked = true;
             chbSeperateInternalExternal.Checked = true;
+            chbCompletedProjects.Checked = true;
             ReportContext = null;
             BenchList = null;
 
