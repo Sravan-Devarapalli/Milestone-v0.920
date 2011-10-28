@@ -145,27 +145,29 @@
                                             <HeaderTemplate>
                                                 Level
                                                 <asp:Image ID="imgLevelyHint" runat="server" ImageUrl="~/Images/hint.png" />
-                                                <asp:Panel ID="pnlLevel" Style="display: none;" CssClass="MiniReport" runat="server">
-                                                    <table style="width: 350px !important;">
-                                                        <tr>
-                                                            <th align="right" style="padding-top: 0px; padding-bottom: 0px;">
-                                                                <asp:Button ID="btnCloseLevel" OnClientClick="return false;" runat="server" CssClass="mini-report-close"
-                                                                    Text="x" />
-                                                            </th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style="background-color: White; font-weight: normal; font-size: small;">
-                                                                <asp:DataList ID="dtlSkillLevels" runat="server" Width="100%" CssClass="PopupHeight">
-                                                                    <ItemTemplate>
-                                                                        <b>
-                                                                            <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Description%>:</b>
-                                                                        <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Definition%>
-                                                                    </ItemTemplate>
-                                                                </asp:DataList>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </asp:Panel>
+                                                <div style="max-height: 160px; overflow-y: auto;">
+                                                    <asp:Panel ID="pnlLevel" Style="display: none;" CssClass="MiniReport" runat="server">
+                                                        <table style="width: 350px !important;">
+                                                            <tr>
+                                                                <th align="right" style="padding-top: 0px; padding-bottom: 0px;">
+                                                                    <asp:Button ID="btnCloseLevel" OnClientClick="return false;" runat="server" CssClass="mini-report-close"
+                                                                        Text="x" />
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="background-color: White; font-weight: normal; font-size: small;">
+                                                                    <asp:DataList ID="dtlSkillLevels" runat="server" Width="100%" CssClass="PopupHeight">
+                                                                        <ItemTemplate>
+                                                                            <b>
+                                                                                <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Description%>:</b>
+                                                                            <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Definition%>
+                                                                        </ItemTemplate>
+                                                                    </asp:DataList>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </asp:Panel>
+                                                </div>
                                                 <AjaxControlToolkit:AnimationExtender ID="animHide" TargetControlID="btnCloseLevel"
                                                     runat="server">
                                                 </AjaxControlToolkit:AnimationExtender>
@@ -255,27 +257,29 @@
                                             <HeaderTemplate>
                                                 Level
                                                 <asp:Image ID="imgLevelyHint" runat="server" ImageUrl="~/Images/hint.png" />
-                                                <asp:Panel ID="pnlLevel" Style="display: none;" CssClass="MiniReport" runat="server">
-                                                    <table style="width: 350px !important;">
-                                                        <tr>
-                                                            <th align="right" style="padding-top: 0px; padding-bottom: 0px;">
-                                                                <asp:Button ID="btnCloseLevel" OnClientClick="return false;" runat="server" CssClass="mini-report-close"
-                                                                    Text="x" />
-                                                            </th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style="background-color: White; font-weight: normal; font-size: small;">
-                                                                <asp:DataList ID="dtlSkillLevels" runat="server" Width="100%">
-                                                                    <ItemTemplate>
-                                                                        <b>
-                                                                            <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Description%>:</b>
-                                                                        <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Definition%>
-                                                                    </ItemTemplate>
-                                                                </asp:DataList>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </asp:Panel>
+                                                <div style="max-height: 160px; overflow-y: auto;">
+                                                    <asp:Panel ID="pnlLevel" Style="display: none;" CssClass="MiniReport" runat="server">
+                                                        <table style="width: 350px !important;">
+                                                            <tr>
+                                                                <th align="right" style="padding-top: 0px; padding-bottom: 0px;">
+                                                                    <asp:Button ID="btnCloseLevel" OnClientClick="return false;" runat="server" CssClass="mini-report-close"
+                                                                        Text="x" />
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="background-color: White; font-weight: normal; font-size: small;">
+                                                                    <asp:DataList ID="dtlSkillLevels" runat="server" Width="100%">
+                                                                        <ItemTemplate>
+                                                                            <b>
+                                                                                <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Description%>:</b>
+                                                                            <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Definition%>
+                                                                        </ItemTemplate>
+                                                                    </asp:DataList>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </asp:Panel>
+                                                </div>
                                                 <AjaxControlToolkit:AnimationExtender ID="animHide" TargetControlID="btnCloseLevel"
                                                     runat="server">
                                                 </AjaxControlToolkit:AnimationExtender>
