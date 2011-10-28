@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
+﻿<%@ Page Title="Skills Profile | Practice Management" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="SkillsProfile.aspx.cs" Inherits="PraticeManagement.SkillsProfile" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
