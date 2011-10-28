@@ -74,11 +74,11 @@
                                         <strong>Projects</strong>
                                     </td>
                                     <td>
-                                        <cc2:ScrollingDropDown ID="cblProjects" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
-                                            BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False" Width="350px" Height="280px"
+                                        <cc2:ScrollingDropDown ID="cblProjects" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"  onclick="scrollingDropdown_onclick('cblProjects','Project')"
+                                            BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False" Width="350px" Height="280px" DropDownListType="Project"
                                             BorderWidth="0">
                                         </cc2:ScrollingDropDown>
-                                        <ext:ScrollableDropdownExtender ID="sdeProjects" runat="server" TargetControlID="cblProjects" Width="250px" UseAdvanceFeature="false"
+                                        <ext:ScrollableDropdownExtender ID="sdeProjects" runat="server" TargetControlID="cblProjects" Width="250px" UseAdvanceFeature="true"
                                             DisplayText="Please Choose Projects" EditImageUrl="~/Images/Dropdown_Arrow.png">
                                         </ext:ScrollableDropdownExtender>
                                     </td>
