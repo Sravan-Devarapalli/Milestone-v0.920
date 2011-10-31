@@ -21,6 +21,7 @@ namespace DataAccess
         private const string PayGetHistoryByPersonProcedure = "dbo.PayGetHistoryByPerson";
         private const string PayGetByPersonStartDateProcedure = "dbo.PayGetByPersonStartDate";
         private const string PaySaveProcedure = "dbo.PaySave";
+        private const string PayDeleteProcedure = "dbo.PayDelete";
 
         #endregion
 
@@ -216,6 +217,34 @@ namespace DataAccess
                 }
             }
         }
+
+        public static void DeletePay(int personId, DateTime startDate)
+        {
+            var connection = new SqlConnection(DataSourceHelper.DataConnection);
+
+            using (SqlCommand command = new SqlCommand(PayDeleteProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(PersonIdParam, personId);
+                command.Parameters.AddWithValue(StartDateParam, startDate);
+                
+                try
+                {
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    command.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    throw new DataAccessException(ex);
+                }
+            }
+        }
+
 
         private static void ReadPay(DbDataReader reader, List<Pay> result)
         {
