@@ -103,6 +103,15 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.DropDownList ddlView;
         
         /// <summary>
+        /// lnkAddStrawman control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedHyperlink lnkAddStrawman;
+        
+        /// <summary>
         /// lnkAddPerson control.
         /// </summary>
         /// <remarks>
