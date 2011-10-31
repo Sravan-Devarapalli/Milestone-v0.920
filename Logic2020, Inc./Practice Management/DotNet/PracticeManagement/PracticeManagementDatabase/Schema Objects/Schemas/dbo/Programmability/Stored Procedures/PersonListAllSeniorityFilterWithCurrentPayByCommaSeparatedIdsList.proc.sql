@@ -80,6 +80,7 @@ BEGIN
 					   p.PracticeOwnedId,
 					   p.PracticeOwnedName,
 					   p.TelephoneNumber,
+					   p.IsStrawMan,
 					   TS.PayPersonId,
 					   TS.StartDate,
 					   TS.EndDate,
