@@ -579,6 +579,12 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public bool IsStrawmanMode { get; set; }
+
+        #endregion
+
+        #region Events
+
         public event EventHandler CompensationMethodChanged;
         public event EventHandler PeriodChanged;
         public event EventHandler CompensationChanged;
@@ -593,14 +599,23 @@ namespace PraticeManagement.Controls
                 ddlPaymentTerms.DataSource = terms != null ? terms.Terms : null;
                 ddlPaymentTerms.DataBind();
 
-                DataHelper.FillSenioritiesList(ddlSeniority, "-- Select Seniority --");
-                DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select Practice Area --");
+                if (!IsStrawmanMode)
+                {
+                    DataHelper.FillSenioritiesList(ddlSeniority, "-- Select Seniority --");
+                    DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select Practice Area --");
+                }
 
             }
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (IsStrawmanMode)
+            {
+                trCompensationDate.Visible = false;
+                trSeniorityAndPractice.Visible = false;
+                trSalesCommisiion.Visible = false;
+            }
             UpdateCompensationState();
         }
 
