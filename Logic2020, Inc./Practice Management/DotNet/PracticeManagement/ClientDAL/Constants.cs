@@ -243,6 +243,7 @@
             public const string DashBoardTypeIdColumn = "DashBoardTypeId";
             public const string LinkNameColumn = "LinkName";
             public const string VirtualPathColumn = "VirtualPath";
+            public const string IsStrawmanColumn = "IsStrawman";
 
         }
 
