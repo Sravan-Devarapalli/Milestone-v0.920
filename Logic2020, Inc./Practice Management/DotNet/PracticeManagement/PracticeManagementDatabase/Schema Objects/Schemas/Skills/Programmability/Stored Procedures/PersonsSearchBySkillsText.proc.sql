@@ -24,7 +24,7 @@ BEGIN
 
 
 
-	SELECT @Query= ISNULL(@Query+' OR','WHERE ')+'
+	SELECT @Query= ISNULL(@Query+' OR','WHERE (')+'
 	S.[Description]  LIKE ''%'+ RTRIM(LTRIM(Term))+ '%'''
 	FROM @SearchTerms
 	WHERE Term <> ''
@@ -35,7 +35,7 @@ BEGIN
 	WHERE Term <> ''
 
 	IF(@Query IS NULL)
-	SELECT @Query = 'WHERE 1=2'
+	SELECT @Query = 'WHERE (1=2'
 
 	SELECT @Query ='
 	SELECT DISTINCT P.PersonId,
@@ -46,7 +46,7 @@ BEGIN
 	LEFT JOIN [skills].Skill S ON PS.SkillId = S.SkillId 
 	LEFT JOIN [skills].PersonIndustry [PI] ON [PI].PersonId = P.PersonId
 	LEFT JOIN [skills].Industry I ON I.IndustryId = [PI].IndustryId
-	'+@Query 
+	'+@Query +') AND P.PersonStatusId IN (1,3)'
 	 
 
 	EXEC SP_EXECUTESQL @Query
