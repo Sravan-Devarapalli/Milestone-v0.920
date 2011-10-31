@@ -450,6 +450,9 @@ namespace PracticeManagementService
         [OperationContract]
         void SavePay(Pay pay, string user);
 
+        [OperationContract]
+        void DeletePay(int personId, DateTime startDate);
+
         /// <summary>
         /// Selects a list of the seniorities.
         /// </summary>
@@ -538,6 +541,12 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Person> PersonListOpportunityOwner(bool includeInactive, Person person);
+
+        [OperationContract]
+        int? SaveStrawman(Person person, Pay currentPay, string userLogin);
+
+        [OperationContract]
+        Person GetStrawmanDetailsById(int personId);
     }
 }
 
