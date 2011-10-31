@@ -960,6 +960,7 @@
     <Content Include="SkillsEntry.aspx" />
     <Content Include="SkillsProfile.aspx" />
     <Content Include="SkillsSearch.aspx" />
+    <Content Include="StrawManDetails.aspx" />
     <Content Include="Third Party Tools\CKEditor.NET.dll" />
     <Content Include="Third Party Tools\FormsAuthenticationUserImpersonation.dll" />
     <Content Include="Third Party Tools\PdfGenerator\itextsharp.dll" />
@@ -1777,6 +1778,13 @@
     </Compile>
     <Compile Include="SkillsSearch.aspx.designer.cs">
       <DependentUpon>SkillsSearch.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="StrawManDetails.aspx.cs">
+      <DependentUpon>StrawManDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StrawManDetails.aspx.designer.cs">
+      <DependentUpon>StrawManDetails.aspx</DependentUpon>
     </Compile>
     <Compile Include="TimeEntrySetting.aspx.cs">
       <DependentUpon>TimeEntrySetting.aspx</DependentUpon>
