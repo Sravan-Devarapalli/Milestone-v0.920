@@ -57,7 +57,7 @@
                                         <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg"
                                             ToolTip="Expand Filters" />
                                     </td>
-                                    <td valign="middle" style="width: 39%; white-space: nowrap; padding-left: 5px; padding-right: 0px;">
+                                    <td valign="middle" style="width: 36%; white-space: nowrap; padding-left: 5px; padding-right: 0px;">
                                         <table class="WholeWidth">
                                             <tr>
                                                 <td style="width: 97%;">
@@ -75,21 +75,21 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td style="width: 1%; padding-left: 0px;">
+                                    <td style="width: 0.5%; padding-left: 0px;">
                                     </td>
                                     <td style="width: 11%;">
                                         <asp:Button ID="btnSearchAll" ValidationGroup="ValSearch" Width="100%" runat="server"
                                             Text="Search All" OnClick="btnSearchAll_OnClick" />
                                     </td>
-                                    <td style="width: 1%;">
+                                    <td style="width: 0.5%; padding-left: 0px;">
                                     </td>
                                     <td style="width: 11%;">
                                         <asp:Button ID="btnClearResults" Width="100%" Enabled="false" runat="server" Text="Clear Results"
                                             OnClick="ResetFilter_Clicked" />
                                     </td>
-                                    <td style="width: 9%;">
+                                    <td style="width: 0.5%; padding-left: 0px;">
                                     </td>
-                                    <td style="width: 12%; text-align: right">
+                                    <td style="width: 9%; text-align: right">
                                         <asp:DropDownList ID="ddlView" runat="server" OnSelectedIndexChanged="DdlView_SelectedIndexChanged"
                                             AutoPostBack="true">
                                             <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
@@ -98,7 +98,15 @@
                                             <asp:ListItem Text="View All" Value="-1"></asp:ListItem>
                                         </asp:DropDownList>
                                     </td>
-                                    <td align="right" style="width: 12%; text-align: right">
+                                    <td style="width: 0.5%; padding-left: 0px;">
+                                    </td>
+                                    <td style="width: 14%; text-align: left">
+                                        <asp:ShadowedHyperlink runat="server" Text="Add Strawman" ID="lnkAddStrawman" CssClass="add-btn"
+                                            NavigateUrl="~/StrawManDetails.aspx?returnTo=Config/Persons.aspx?ApplyFilterFromCookie=true" />
+                                    </td>
+                                    <td style="width: 0.5%; padding-left: 0px;">
+                                    </td>
+                                    <td align="right" style="width: 14%; text-align: right">
                                         <asp:ShadowedHyperlink runat="server" Text="Add Person" ID="lnkAddPerson" CssClass="add-btn"
                                             NavigateUrl="~/PersonDetail.aspx?returnTo=Config/Persons.aspx?ApplyFilterFromCookie=true" />
                                     </td>
@@ -216,7 +224,7 @@
                             <ItemStyle Width="21%" />
                             <ItemTemplate>
                                 <asp:HyperLink ID="btnPersonName" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("LastName") + ", " + Eval("FirstName")) %>'
-                                    NavigateUrl='<%# GetPersonDetailsUrlWithReturn(Eval("Id")) %>' />
+                                    NavigateUrl='<%# GetPersonDetailsUrlWithReturn((DataTransferObjects.Person) Container.DataItem) %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField>
@@ -228,7 +236,7 @@
                             <HeaderStyle HorizontalAlign="Center" Wrap="false" />
                             <ItemStyle Width="7%" HorizontalAlign="Center" />
                             <ItemTemplate>
-                                <asp:Label ID="lblStartDate" runat="server" Text='<%# FormatDate((DateTime?)Eval("HireDate")) %>' />
+                                <asp:Label ID="lblStartDate" runat="server" Text='<%# GetHireDate((DataTransferObjects.Person) Container.DataItem) %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField>
