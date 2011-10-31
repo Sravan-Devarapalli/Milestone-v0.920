@@ -401,7 +401,7 @@ namespace PracticeManagementService
         {
             return PersonDAL.PersonListOpportunityOwner(includeInactive, person);
         }
-        
+
 
         /// <summary>
         /// List the persons who recieve the Practice Management commissions
@@ -887,6 +887,11 @@ namespace PracticeManagementService
             PayDAL.SavePayDatail(pay, null, null, user);
         }
 
+        public void DeletePay(int personId, DateTime startDate)
+        {
+            PayDAL.DeletePay(personId, startDate);
+        }
+
         /// <summary>
         /// Selects a list of the seniorities.
         /// </summary>
@@ -1015,6 +1020,24 @@ namespace PracticeManagementService
         public Dictionary<DateTime, bool> GetIsNoteRequiredDetailsForSelectedDateRange(DateTime start, DateTime end, int personId)
         {
             return PersonDAL.GetIsNoteRequiredDetailsForSelectedDateRange(start, end, personId);
+        }
+
+        public int? SaveStrawman(Person person, Pay currentPay, string userLogin)
+        {
+            PersonDAL.SaveStrawMan(person, currentPay, userLogin);
+            if (person.Id.HasValue)
+            {
+
+            }
+
+            return person.Id;
+        }
+
+        public Person GetStrawmanDetailsById(int personId)
+        {
+            var person = PersonDAL.GetPersonFirstLastNameById(personId);
+            person.PaymentHistory = PayDAL.GetHistoryByPerson(personId);
+            return person;
         }
 
         #endregion
