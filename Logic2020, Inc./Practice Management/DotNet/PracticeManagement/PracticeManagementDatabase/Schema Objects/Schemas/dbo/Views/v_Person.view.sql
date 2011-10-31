@@ -27,6 +27,7 @@ AS
 	       p.ManagerId,
 		   p.IsDefaultManager,
 		   p.IsWelcomeEmailSent,
+		   p.IsStrawman,
 	       manager.Alias AS 'ManagerAlias',
 	       manager.FirstName AS 'ManagerFirstName',
 	       manager.LastName AS 'ManagerLastName',
