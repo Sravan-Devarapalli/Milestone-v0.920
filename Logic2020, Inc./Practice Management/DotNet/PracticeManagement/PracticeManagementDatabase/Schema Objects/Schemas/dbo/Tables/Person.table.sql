@@ -14,11 +14,12 @@
     [ManagerId]        INT            NULL,
     [PracticeOwnedId]  INT            NULL,
     [IsDefaultManager] BIT            NOT NULL,
-    [TelephoneNumber]  NCHAR (20)     NULL ,
+    [TelephoneNumber]  NCHAR (20)     NULL,
 	IsWelcomeEmailSent BIT			  NOT NULL CONSTRAINT DF_Person_IsWelcomeEmailSent DEFAULT(0) ,
 	MiddleName		   NVARCHAR (40)  NULL,
 	ImageUrl		   NVARCHAR (MAX) NULL,
-	ModifiedDate	   DATETIME		  NULL
+	ModifiedDate	   DATETIME		  NULL,
+	IsStrawman		   BIT			  NULL
 );
 
 
