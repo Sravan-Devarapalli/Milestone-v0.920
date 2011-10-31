@@ -90,6 +90,7 @@ namespace PraticeManagement
             public const string LoginPage = "~/Login.aspx";
             public const string PersonList = "~/PersonList.aspx";
             public const string PersonDetail = "~/PersonDetail.aspx";
+            public const string StrawManDetail = "~/StrawManDetails.aspx";
             public const string PersonMargin = "~/PersonMargin.aspx";
             public const string ProjectDetail = "~/ProjectDetail.aspx";
             public const string ClientList = "~/Config/Clients.aspx";
@@ -140,6 +141,7 @@ namespace PraticeManagement
             public const string ConsultingCapacityWithFilterQueryString = "~/Reports/ConsultingCapacity.aspx?ApplyFilterFromCookie=true";
             public const string ConsultingCapacityWithFilterQueryStringAndDetails = "~/Reports/ConsultingCapacity.aspx?ApplyFilterFromCookie=true#details";
             public const string ConsultingCapacityWithDetails = "~/Reports/ConsultingCapacity.aspx#details";
+            public const string StrawmanDetails = "~/StrawManDetails.aspx";
         }
 
         /// <summary>
