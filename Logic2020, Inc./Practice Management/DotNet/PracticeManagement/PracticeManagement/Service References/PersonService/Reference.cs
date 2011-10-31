@@ -15,9 +15,20 @@ namespace PraticeManagement.PersonService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="PersonService.IPersonService")]
     public interface IPersonService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerId", ReplyAction="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerIdResponse")]
+        DataTransferObjects.Opportunity[] GetActiveOpportunitiesByOwnerId(int personId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonListOpportunityOwner", ReplyAction="http://tempuri.org/IPersonService/PersonListOpportunityOwnerResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         DataTransferObjects.Person[] PersonListOpportunityOwner(bool includeInactive, DataTransferObjects.Person person);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SaveStrawman", ReplyAction="http://tempuri.org/IPersonService/SaveStrawmanResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
+        System.Nullable<int> SaveStrawman(DataTransferObjects.Person person, DataTransferObjects.Pay currentPay, string userLogin);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetStrawmanDetailsById", ReplyAction="http://tempuri.org/IPersonService/GetStrawmanDetailsByIdResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
+        DataTransferObjects.Person GetStrawmanDetailsById(int personId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonDetail", ReplyAction="http://tempuri.org/IPersonService/GetPersonDetailResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
@@ -67,6 +78,9 @@ namespace PraticeManagement.PersonService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SavePay", ReplyAction="http://tempuri.org/IPersonService/SavePayResponse")]
         void SavePay(DataTransferObjects.Pay pay, string user);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/DeletePay", ReplyAction="http://tempuri.org/IPersonService/DeletePayResponse")]
+        void DeletePay(int personId, System.DateTime startDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/ListSeniorities", ReplyAction="http://tempuri.org/IPersonService/ListSenioritiesResponse")]
         DataTransferObjects.Seniority[] ListSeniorities();
@@ -127,9 +141,6 @@ namespace PraticeManagement.PersonService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetOwnerProjectsAfterTerminationDate", ReplyAction="http://tempuri.org/IPersonService/GetOwnerProjectsAfterTerminationDateResponse")]
         DataTransferObjects.Project[] GetOwnerProjectsAfterTerminationDate(int personId, System.DateTime terminationDate);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerId", ReplyAction="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerIdResponse")]
-        DataTransferObjects.Opportunity[] GetActiveOpportunitiesByOwnerId(int personId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials", ReplyAction="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancialsResponse")]
         System.Data.DataSet GetPersonMilestoneWithFinancials(int personId);
@@ -246,6 +257,7 @@ namespace PraticeManagement.PersonService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
         
+        
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -262,8 +274,20 @@ namespace PraticeManagement.PersonService {
                 base(binding, remoteAddress) {
         }
         
+        public DataTransferObjects.Opportunity[] GetActiveOpportunitiesByOwnerId(int personId) {
+            return base.Channel.GetActiveOpportunitiesByOwnerId(personId);
+        }
+        
         public DataTransferObjects.Person[] PersonListOpportunityOwner(bool includeInactive, DataTransferObjects.Person person) {
             return base.Channel.PersonListOpportunityOwner(includeInactive, person);
+        }
+        
+        public System.Nullable<int> SaveStrawman(DataTransferObjects.Person person, DataTransferObjects.Pay currentPay, string userLogin) {
+            return base.Channel.SaveStrawman(person, currentPay, userLogin);
+        }
+        
+        public DataTransferObjects.Person GetStrawmanDetailsById(int personId) {
+            return base.Channel.GetStrawmanDetailsById(personId);
         }
         
         public DataTransferObjects.Person GetPersonDetail(int personId) {
@@ -316,6 +340,10 @@ namespace PraticeManagement.PersonService {
         
         public void SavePay(DataTransferObjects.Pay pay, string user) {
             base.Channel.SavePay(pay, user);
+        }
+        
+        public void DeletePay(int personId, System.DateTime startDate) {
+            base.Channel.DeletePay(personId, startDate);
         }
         
         public DataTransferObjects.Seniority[] ListSeniorities() {
@@ -388,10 +416,6 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.Project[] GetOwnerProjectsAfterTerminationDate(int personId, System.DateTime terminationDate) {
             return base.Channel.GetOwnerProjectsAfterTerminationDate(personId, terminationDate);
-        }
-        
-        public DataTransferObjects.Opportunity[] GetActiveOpportunitiesByOwnerId(int personId) {
-            return base.Channel.GetActiveOpportunitiesByOwnerId(personId);
         }
         
         public System.Data.DataSet GetPersonMilestoneWithFinancials(int personId) {
