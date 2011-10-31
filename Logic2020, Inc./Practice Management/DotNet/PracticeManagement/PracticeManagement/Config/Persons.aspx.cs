@@ -252,7 +252,7 @@ namespace PraticeManagement.Config
                     SetFilterValues();
                 }
 
-               
+
             }
 
 
@@ -839,10 +839,35 @@ namespace PraticeManagement.Config
             gvPersons.DataBind();
         }
 
-        protected string GetPersonDetailsUrlWithReturn(object id)
+        protected string GetPersonDetailsUrlWithReturn(object obj)
         {
-            return PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(GetPersonDetailsUrl(id),
-                Request.Url.AbsoluteUri + (Request.Url.Query.Length > 0 ? string.Empty : Constants.FilterKeys.QueryStringOfApplyFilterFromCookie));
+            int personId;
+            if (obj is Person)
+            {
+                var person = obj as Person;
+                if (person.IsStrawMan)
+                {
+                    var StrawmanDetailPage = string.Format(Constants.ApplicationPages.DetailRedirectFormat,
+                                        Constants.ApplicationPages.StrawManDetail,
+                                        person.Id);
+                    return PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(StrawmanDetailPage,
+                       Request.Url.AbsoluteUri + (Request.Url.Query.Length > 0 ? string.Empty : Constants.FilterKeys.QueryStringOfApplyFilterFromCookie));
+
+
+                }
+                personId = person.Id.Value;
+
+            }
+            else if (obj == null)
+            {
+                return string.Empty;
+            }
+            else
+            {
+                personId = (int)obj;
+            }
+            return PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(GetPersonDetailsUrl(personId),
+                       Request.Url.AbsoluteUri + (Request.Url.Query.Length > 0 ? string.Empty : Constants.FilterKeys.QueryStringOfApplyFilterFromCookie));
         }
 
         private string GetSortDirection()
@@ -955,6 +980,18 @@ namespace PraticeManagement.Config
             else
             {
                 return string.Empty;
+            }
+        }
+
+        public string GetHireDate(Person person)
+        {
+            if (person.IsStrawMan)
+            {
+                return string.Empty;
+            }
+            else
+            {
+                return FormatDate(person.HireDate);
             }
         }
 
