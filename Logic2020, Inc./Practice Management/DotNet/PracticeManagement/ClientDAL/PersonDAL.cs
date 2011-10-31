@@ -86,6 +86,16 @@ namespace DataAccess
         private const string AlphabetParam = "@Alphabet";
         private const string CounselorIdParam = "@CounselorId";
 
+        //StrawMan Puppose.
+        private const string AmountParam = "@Amount";
+        private const string TimescaleParam = "@Timescale";
+        private const string TimesPaidPerMonthParam = "@TimesPaidPerMonth";
+        private const string TermsParam = "@Terms";
+        private const string VacationDaysParam = "@VacationDays";
+        private const string BonusAmountParam = "@BonusAmount";
+        private const string BonusHoursToCollectParam = "@BonusHoursToCollect";
+        private const string DefaultHoursPerDayParam = "@DefaultHoursPerDay";
+
         #endregion
 
         #region Stored Procedures
@@ -152,6 +162,9 @@ namespace DataAccess
         private const string PersonListAllSeniorityFilterWithPayProcedure = "dbo.PersonListAllSeniorityFilterWithCurrentPay";
         private const string PersonListAllSeniorityFilterWithPayByCommaSeparatedIdsListProcedure = "dbo.PersonListAllSeniorityFilterWithCurrentPayByCommaSeparatedIdsList";
         private const string GetPasswordHistoryByUserNameProcedure = "dbo.GetPasswordHistoryByUserName";
+
+        private const string SaveStrawManProcedure = "dbo.SaveStrawMan";
+        private const string PersonFirstLastNameByIdProcedure = "dbo.PersonFirstLastNameById";
 
         #endregion
 
@@ -2448,6 +2461,7 @@ namespace DataAccess
                     int telephoneNumberIndex = reader.GetOrdinal(Constants.ColumnNames.TelephoneNumber);
                     int terminationDateIndex = reader.GetOrdinal(TerminationDateColumn);
                     int lastLoginDateIndex = reader.GetOrdinal(LastLoginDateColumn);
+                    int isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
                     //Pay Related columns
                     int personIdIndex = reader.GetOrdinal(PersonIdColumn);
                     int startDateIndex = reader.GetOrdinal(StartDateColumn);
@@ -2487,6 +2501,7 @@ namespace DataAccess
                             Alias = !reader.IsDBNull(aliasIndex) ? reader.GetString(aliasIndex) : string.Empty,
                             PtoDays = reader.GetInt32(ptoDaysPerAnnumIndex),
                             HireDate = (DateTime)reader[HireDateColumn],
+                            IsStrawMan = !reader.IsDBNull(isStrawManIndex) ? (bool)reader.GetBoolean(isStrawManIndex) : false,
                             TelephoneNumber = !reader.IsDBNull(telephoneNumberIndex) ? reader.GetString(telephoneNumberIndex) : string.Empty,
                             TerminationDate = !reader.IsDBNull(terminationDateIndex) ? (DateTime?)reader[terminationDateIndex] : null,
                             LastLogin = !reader.IsDBNull(lastLoginDateIndex) ? (DateTime?)reader[lastLoginDateIndex] : null,
@@ -3018,6 +3033,94 @@ namespace DataAccess
                     };
 
                     result.Add(person);
+                }
+            }
+        }
+
+        public static void SaveStrawMan(Person person, Pay currentPay, string userLogin)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(SaveStrawManProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(FirstNameParam, person.FirstName);
+                    command.Parameters.AddWithValue(LastNameParam, person.LastName);
+                    command.Parameters.AddWithValue(UserLoginParam, userLogin);
+
+                    //var personIdParameter = new SqlParameter(PersonIdParam, SqlDbType.Int) { Direction = ParameterDirection.InputOutput, Value = person.Id.HasValue ? (object)person.Id.Value : DBNull.Value };
+                    var personIdParameter = new SqlParameter();
+                    personIdParameter.ParameterName = PersonIdParam;
+                    personIdParameter.SqlDbType = SqlDbType.Int;
+                    personIdParameter.Value = person.Id.HasValue ? (object)person.Id.Value : DBNull.Value;
+                    personIdParameter.Direction = ParameterDirection.InputOutput;
+
+                    command.Parameters.Add(personIdParameter);
+
+                    command.Parameters.AddWithValue(AmountParam, currentPay.Amount.Value);
+                    command.Parameters.AddWithValue(TimescaleParam, currentPay.Timescale);
+                    command.Parameters.AddWithValue(TimesPaidPerMonthParam, currentPay.TimesPaidPerMonth.HasValue ? (object)currentPay.TimesPaidPerMonth.Value : DBNull.Value);
+                    command.Parameters.AddWithValue(TermsParam, currentPay.Terms.HasValue ? (object)currentPay.Terms.Value : DBNull.Value);
+                    command.Parameters.AddWithValue(VacationDaysParam, currentPay.VacationDays.HasValue ? (object)currentPay.VacationDays.Value : DBNull.Value);
+                    command.Parameters.AddWithValue(BonusAmountParam, currentPay.BonusAmount.Value);
+                    command.Parameters.AddWithValue(BonusHoursToCollectParam, currentPay.BonusHoursToCollect.HasValue ? (object)currentPay.BonusHoursToCollect.Value : DBNull.Value);
+                    command.Parameters.AddWithValue(DefaultHoursPerDayParam, currentPay.DefaultHoursPerDay);
+                    command.Parameters.AddWithValue(StartDateParam, currentPay.StartDate == DateTime.MinValue ? DBNull.Value : (object)currentPay.StartDate);
+
+                    connection.Open();
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                    person.Id = (int)personIdParameter.Value;
+                }
+            }
+        }
+
+        public static Person GetPersonFirstLastNameById(int personId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(PersonFirstLastNameByIdProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(PersonIdParam, personId);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var person = new Person();
+                    ReadFirstLastName(reader, person);
+                    return person;
+                }
+            }
+        }
+
+        private static void ReadFirstLastName(DbDataReader reader, Person person)
+        {
+            if (reader.HasRows)
+            {
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
+
+                while (reader.Read())
+                {
+                    person.FirstName = reader.GetString(firstNameIndex);
+                    person.LastName = reader.GetString(lastNameIndex);
+                    person.IsStrawMan = reader.IsDBNull(isStrawManIndex) ? false : reader.GetBoolean(isStrawManIndex);
+
+                    if (!string.IsNullOrEmpty(person.FirstName) && !string.IsNullOrEmpty(person.LastName))
+                    {
+                        break;
+                    }
                 }
             }
         }
