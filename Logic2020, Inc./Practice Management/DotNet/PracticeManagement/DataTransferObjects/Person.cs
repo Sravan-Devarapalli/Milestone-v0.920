@@ -378,6 +378,10 @@ namespace DataTransferObjects
             get;
             set;
         }
+
+        [DataMember]
+        public bool IsStrawMan { get; set; }
+
         #endregion
 
         #region Properties - calculated
