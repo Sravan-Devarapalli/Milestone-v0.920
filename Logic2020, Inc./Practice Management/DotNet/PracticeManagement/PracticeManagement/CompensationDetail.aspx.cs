@@ -23,6 +23,7 @@ namespace PraticeManagement
         private const string EndDateIncorrect = "The End Date is incorrect. There are several other compensation records for the specified period. Please edit them first.";
         private const string PeriodIncorrect = "The period is incorrect. There records falls into the period specified in an existing record.";
         private const string HireDateInCorrect = "Person cannot have the compensation for the days before his hire date.";
+        private const string IsStawman = "Isstrawman";
 
         #endregion
 
@@ -45,6 +46,14 @@ namespace PraticeManagement
             }
         }
 
+        protected bool? SelectedStawman
+        {
+            get
+            {
+                return GetArgumentInt32(IsStawman) != null ? (bool?)(GetArgumentInt32(IsStawman) == 1) : null;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -52,6 +61,21 @@ namespace PraticeManagement
         protected void Page_Load(object sender, EventArgs e)
         {
             mlConfirmation.ClearMessage();
+
+            if (SelectedStawman.HasValue && SelectedStawman.Value)
+            {
+                personnelCompensation.IsStrawmanMode = SelectedStawman.Value;
+            }
+        }
+
+        protected void Page_Prerender(object sender, EventArgs e)
+        {
+            if (SelectedStawman.HasValue && SelectedStawman.Value)
+            {
+                personnelCompensation.ShowDates();
+                personnelCompensation.StartDateReadOnly = true;
+                personnelCompensation.EndDateReadOnly = true;
+            }
         }
 
         protected override void Display()
@@ -260,9 +284,17 @@ namespace PraticeManagement
             {
                 try
                 {
-                    serviceClient.SavePay(pay, HttpContext.Current.User.Identity.Name);
-                    personnelCompensation.StartDate = personnelCompensation.StartDate;
-                    personnelCompensation.EndDate = personnelCompensation.EndDate;
+                    if (SelectedStawman.HasValue && SelectedStawman.Value)
+                    {
+                        var person = new Person { Id = pay.PersonId, FirstName = personInfo.FirstName, LastName = personInfo.LastName };
+                        serviceClient.SaveStrawman(person, pay, HttpContext.Current.User.Identity.Name);
+                    }
+                    else
+                    {
+                        serviceClient.SavePay(pay, HttpContext.Current.User.Identity.Name);
+                        personnelCompensation.StartDate = personnelCompensation.StartDate;
+                        personnelCompensation.EndDate = personnelCompensation.EndDate;
+                    }
                     return true;
                 }
                 catch (FaultException<ExceptionDetail> ex)
