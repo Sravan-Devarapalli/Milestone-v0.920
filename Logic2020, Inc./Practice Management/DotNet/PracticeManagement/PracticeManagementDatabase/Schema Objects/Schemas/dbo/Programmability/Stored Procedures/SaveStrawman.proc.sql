@@ -86,8 +86,30 @@ BEGIN
 			INSERT INTO Pay(Person,StartDate, EndDate, Amount, Timescale, TimesPaidPerMonth, Terms, VacationDays, BonusAmount, BonusHoursToCollect, DefaultHoursPerDay)
 			SELECT @PersonId, @StartDate , CONVERT(DATE, dbo.GetFutureDate()), @Amount, @Timescale, @TimesPaidPerMonth, @Terms, @VacationDays, @BonusAmount, @BonusHoursToCollect, @DefaultHoursPerDay
 		END
-		ELSE 
+		ELSE IF EXISTS (SELECT 1 FROM Pay pa 
+							JOIN  dbo.Person P ON P.PersonId = Pa.Person AND P.IsStrawman = 1
+							 WHERE pa.Person = @PersonId AND  pa.StartDate = @StartDate
+						 )
 		BEGIN
+			--IF Saving Second time in a day. then update previous saved on the same day. 
+			--OR Updating existing compensation on that startdate.
+			UPDATE pa
+			Set pa.Amount = @Amount,
+				pa.Timescale = @Timescale,
+				Pa.TimesPaidPerMonth = @TimesPaidPerMonth,
+				Pa.Terms = @Terms,
+				pa.VacationDays = @VacationDays,
+				pa.BonusAmount = @BonusAmount,
+				Pa.BonusHoursToCollect = @BonusHoursToCollect,
+				Pa.DefaultHoursPerDay = @DefaultHoursPerDay
+			FROM  Pay Pa
+			JOIN  dbo.Person P ON P.PersonId = Pa.Person
+			WHERE Pa.Person = @PersonId AND P.IsStrawman = 1 AND
+			pa.StartDate = @StartDate
+		END
+		ELSE --To update existing compensation enddate to this startdate and create new compensation from startdate to futuredate.
+		BEGIN
+			
 			DECLARE @FutureDate  DATETIME
 			SELECT @FutureDate = CONVERT(DATE, dbo.GetFutureDate())
 			IF EXISTS (SELECT 1 FROM dbo.Pay Pa
@@ -105,28 +127,6 @@ BEGIN
 						Pa.DefaultHoursPerDay <> @DefaultHoursPerDay)					 
 					 )
 			BEGIN
-				IF EXISTS (SELECT 1 FROM Pay pa 
-							JOIN  dbo.Person P ON P.PersonId = Pa.Person AND P.IsStrawman = 1
-							 WHERE pa.Person = @PersonId AND  pa.StartDate = @StartDate
-						 )
-				BEGIN
-					--IF Saving Second time in a day. then update previous saved on the same day.
-					UPDATE pa
-					Set pa.Amount = @Amount,
-						pa.Timescale = @Timescale,
-						Pa.TimesPaidPerMonth = @TimesPaidPerMonth,
-						Pa.Terms = @Terms,
-						pa.VacationDays = @VacationDays,
-						pa.BonusAmount = @BonusAmount,
-						Pa.BonusHoursToCollect = @BonusHoursToCollect,
-						Pa.DefaultHoursPerDay = @DefaultHoursPerDay
-					FROM  Pay Pa
-					JOIN  dbo.Person P ON P.PersonId = Pa.Person
-					WHERE Pa.Person = @PersonId AND P.IsStrawman = 1 AND
-					(CASE WHEN pa.StartDate = '1900-01-01' THEN P.HireDate ELSE pa.StartDate END) = @StartDate
-				END
-				ELSE
-				BEGIN
 
 					--End the Previous compensation upto @Startdate.
 					UPDATE Pay
@@ -136,9 +136,9 @@ BEGIN
 					--Insert new compensation with startdate today.
 					INSERT INTO Pay(Person,StartDate, EndDate, Amount, Timescale, TimesPaidPerMonth, Terms, VacationDays, BonusAmount, BonusHoursToCollect, DefaultHoursPerDay)
 					SELECT @PersonId, @StartDate, CONVERT(DATE, dbo.GetFutureDate()), @Amount, @Timescale, @TimesPaidPerMonth, @Terms, @VacationDays, @BonusAmount, @BonusHoursToCollect, @DefaultHoursPerDay
-				END
 			END
-		END		
+		END
+				
 	END
 
 	SELECT @PersonId
