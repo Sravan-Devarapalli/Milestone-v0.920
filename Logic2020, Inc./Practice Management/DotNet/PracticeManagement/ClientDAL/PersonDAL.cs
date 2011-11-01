@@ -164,6 +164,7 @@ namespace DataAccess
         private const string GetPasswordHistoryByUserNameProcedure = "dbo.GetPasswordHistoryByUserName";
 
         private const string SaveStrawManProcedure = "dbo.SaveStrawMan";
+        private const string GetStrawManListAllProcedure = "dbo.GetStrawManListAll";
         private const string PersonFirstLastNameByIdProcedure = "dbo.PersonFirstLastNameById";
 
         #endregion
@@ -3079,6 +3080,43 @@ namespace DataAccess
                         throw ex;
                     }
                     person.Id = (int)personIdParameter.Value;
+                }
+            }
+        }
+
+        public static List<Person> GetStrawManListAll()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(GetStrawManListAllProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<Person>();
+                    ReadStrawmanShort(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadStrawmanShort(SqlDataReader reader, List<Person> result)
+        {
+            int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+            int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+            int personIdIndex = reader.GetOrdinal(PersonIdColumn);
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    var person = new Person
+                    {
+                        Id = reader.GetInt32(personIdIndex),
+                        LastName = reader.GetString(lastNameIndex),
+                        FirstName = reader.GetString(firstNameIndex)
+                    };
+                    result.Add(person);
                 }
             }
         }
