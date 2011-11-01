@@ -8,6 +8,7 @@ using System.Web.Security;
 using System.Web.UI.WebControls;
 using PraticeManagement.PersonService;
 using PraticeManagement.Utils;
+using System.Linq;
 
 namespace PraticeManagement
 {
@@ -23,7 +24,7 @@ namespace PraticeManagement
                     string userName = ConfigurationManager.AppSettings["AdminsEmail"];
                     var persons = serviceClient.GetPersonListWithCurrentPay(null, true, Int16.MaxValue, 0,
                         string.Empty, null, userName, null, null, false, false, false, null);
-                    foreach (var person in persons)
+                    foreach (var person in persons.ToList().FindAll(p => !p.IsStrawMan))
                     {
                         var userRoles = string.Empty;
 
@@ -68,7 +69,7 @@ namespace PraticeManagement
             var principal = new GenericPrincipal(identity, roles);
             Thread.CurrentPrincipal = principal;
             //FormsAuthentication.SetAuthCookie(userName, true);
-            Generic.SetCustomFormsAuthenticationTicket(userName, true,this.Page);
+            Generic.SetCustomFormsAuthenticationTicket(userName, true, this.Page);
             var message = string.Format(
                             "User was set to {0} [{1}]",
                             userName,
