@@ -1040,6 +1040,11 @@ namespace PracticeManagementService
             return person;
         }
 
+        public List<Person> GetStrawManListAll()
+        {
+            return PersonDAL.GetStrawManListAll();
+        }
+
         #endregion
     }
 }
