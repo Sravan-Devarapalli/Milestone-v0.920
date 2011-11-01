@@ -9,6 +9,7 @@ using DataTransferObjects;
 using PraticeManagement.PersonService;
 using System.ServiceModel;
 using PraticeManagement.Utils;
+using PraticeManagement.TimescaleService;
 
 namespace PraticeManagement
 {
@@ -19,7 +20,7 @@ namespace PraticeManagement
         private const string ViewStatePersonId = "PersonIdViewState";
         private const string DuplicatePersonName = "There is another Person with the same First Name and Last Name.";
         private const string SuccessMessage = "Saved Successfully.";
-
+        private const int NameCharactersLength = 50;
         #endregion
 
         #region Properties
@@ -85,6 +86,20 @@ namespace PraticeManagement
             }
         }
 
+        protected void cvNameLength_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            var item = sender as CustomValidator;
+            if (item.ID == "cvLengthFirstName")
+            {
+                e.IsValid = tbFirstName.Text.Length <= NameCharactersLength;
+            }
+            else if (item.ID == "cvLengthLastName")
+            {
+                e.IsValid = tbLastName.Text.Length <= NameCharactersLength;
+            }
+
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             lblSave.ClearMessage();
@@ -104,6 +119,27 @@ namespace PraticeManagement
                     //}
 
                     PopulateControls(person);
+                }
+                else
+                {
+                    SetDefaultTerms();
+                }
+            }
+        }
+
+        private void SetDefaultTerms()
+        {
+            using (TimescaleServiceClient serviceClient = new TimescaleServiceClient())
+            {
+                try
+                {
+                    Timescale timescale = serviceClient.GetById(personnelCompensation.Timescale);
+                    personnelCompensation.Terms = timescale != null ? timescale.DefaultTerms : null;
+                }
+                catch (FaultException<ExceptionDetail>)
+                {
+                    serviceClient.Abort();
+                    throw;
                 }
             }
         }
@@ -164,6 +200,20 @@ namespace PraticeManagement
             else
             {
                 lblSave.ShowInfoMessage(SuccessMessage);
+            }
+        }
+
+
+        protected void btnStartDate_Command(object sender, CommandEventArgs e)
+        {
+            if (!SaveDirty || ValidateAndSave())
+            {
+                Redirect(
+                    string.Format(Constants.ApplicationPages.RedirectStartDateAndStrawmanFormat,
+                                  Constants.ApplicationPages.CompensationDetail,
+                                  PersonId,
+                                  HttpUtility.UrlEncode((string)e.CommandArgument),
+                                  1));
             }
         }
 
@@ -236,3 +286,4 @@ namespace PraticeManagement
         }
     }
 }
+
