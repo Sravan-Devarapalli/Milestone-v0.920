@@ -78,13 +78,13 @@
                                     <td style="width: 0.5%; padding-left: 0px;">
                                     </td>
                                     <td style="width: 11%;">
-                                        <asp:Button ID="btnSearchAll" ValidationGroup="ValSearch" Width="100%" runat="server"
+                                        <asp:Button ID="btnSearchAll" ValidationGroup="ValSearch" runat="server"
                                             Text="Search All" OnClick="btnSearchAll_OnClick" />
                                     </td>
                                     <td style="width: 0.5%; padding-left: 0px;">
                                     </td>
                                     <td style="width: 11%;">
-                                        <asp:Button ID="btnClearResults" Width="100%" Enabled="false" runat="server" Text="Clear Results"
+                                        <asp:Button ID="btnClearResults" Enabled="false" runat="server" Text="Clear Results"
                                             OnClick="ResetFilter_Clicked" />
                                     </td>
                                     <td style="width: 0.5%; padding-left: 0px;">
@@ -100,13 +100,13 @@
                                     </td>
                                     <td style="width: 0.5%; padding-left: 0px;">
                                     </td>
-                                    <td style="width: 14%; text-align: left">
+                                    <td style="width: 15%; text-align: left">
                                         <asp:ShadowedHyperlink runat="server" Text="Add Strawman" ID="lnkAddStrawman" CssClass="add-btn"
                                             NavigateUrl="~/StrawManDetails.aspx?returnTo=Config/Persons.aspx?ApplyFilterFromCookie=true" />
                                     </td>
                                     <td style="width: 0.5%; padding-left: 0px;">
                                     </td>
-                                    <td align="right" style="width: 14%; text-align: right">
+                                    <td align="right" style="width: 13%; text-align: right">
                                         <asp:ShadowedHyperlink runat="server" Text="Add Person" ID="lnkAddPerson" CssClass="add-btn"
                                             NavigateUrl="~/PersonDetail.aspx?returnTo=Config/Persons.aspx?ApplyFilterFromCookie=true" />
                                     </td>
