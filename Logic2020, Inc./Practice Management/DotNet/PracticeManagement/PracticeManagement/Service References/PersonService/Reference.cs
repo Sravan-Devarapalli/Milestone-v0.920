@@ -30,6 +30,9 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         DataTransferObjects.Person GetStrawmanDetailsById(int personId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetStrawManListAll", ReplyAction="http://tempuri.org/IPersonService/GetStrawManListAllResponse")]
+        DataTransferObjects.Person[] GetStrawManListAll();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonDetail", ReplyAction="http://tempuri.org/IPersonService/GetPersonDetailResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         DataTransferObjects.Person GetPersonDetail(int personId);
@@ -256,8 +259,7 @@ namespace PraticeManagement.PersonService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
-        
-        
+               
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -288,6 +290,10 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.Person GetStrawmanDetailsById(int personId) {
             return base.Channel.GetStrawmanDetailsById(personId);
+        }
+        
+        public DataTransferObjects.Person[] GetStrawManListAll() {
+            return base.Channel.GetStrawManListAll();
         }
         
         public DataTransferObjects.Person GetPersonDetail(int personId) {
