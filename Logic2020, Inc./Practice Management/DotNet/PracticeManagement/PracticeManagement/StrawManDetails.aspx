@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
+﻿<%@ Page Title="Strawman Details | Practice Management" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="StrawManDetails.aspx.cs" Inherits="PraticeManagement.StrawManDetails" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
@@ -7,10 +7,13 @@
     Assembly="PraticeManagement" %>
 <%@ Register Src="Controls/PersonnelCompensation.ascx" TagName="PersonnelCompensation"
     TagPrefix="uc1" %>
+<%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress" TagPrefix="uc" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
     <title>Strawman Details | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
+    <uc:LoadingProgress ID="lpStrawMan" runat="server" />
     <asp:UpdatePanel ID="upStrawMan" runat="server">
         <ContentTemplate>
             <table class="WholeWidth">
@@ -21,6 +24,9 @@
                         <asp:RequiredFieldValidator ID="rqfvFirstName" runat="server" Text="*" ErrorMessage="First Name is required."
                             ControlToValidate="tbFirstName" ToolTip="First Name is required." SetFocusOnError="true"
                             ValidationGroup="StrawmanGroup"></asp:RequiredFieldValidator>
+                        <asp:CustomValidator ID="cvLengthFirstName" runat="server" Text="*" ErrorMessage="Person First Name characters length must be lessthan or equal to 50."
+                            ToolTip="Person First Name character length must be lessthan or equal to 50." ValidationGroup="StrawmanGroup"
+                            SetFocusOnError="true" OnServerValidate="cvNameLength_ServerValidate"></asp:CustomValidator>
                     </td>
                 </tr>
                 <tr>
@@ -33,6 +39,9 @@
                         <asp:CustomValidator ID="cvDupliacteName" runat="server" Text="*" ErrorMessage="There is another Person with the same First Name and Last Name."
                             ToolTip="There is another Person with the same First Name and Last Name." ValidationGroup="StrawmanGroup"
                             SetFocusOnError="true" OnServerValidate="cvDupliacteName_ServerValidate"></asp:CustomValidator>
+                        <asp:CustomValidator ID="cvLengthLastName" runat="server" Text="*" ErrorMessage="Person Last Name characters length must be lessthan or equal to 50."
+                            ToolTip="Person Last Name character length must be lessthan or equal to 50." ValidationGroup="StrawmanGroup"
+                            SetFocusOnError="true" OnServerValidate="cvNameLength_ServerValidate"></asp:CustomValidator>
                     </td>
                 </tr>
                 <tr>
@@ -56,7 +65,8 @@
                                 <Columns>
                                     <asp:TemplateField HeaderText="Start">
                                         <ItemTemplate>
-                                            <asp:LinkButton ID="btnStartDate" runat="server" Text='<%# ((DateTime?)Eval("StartDate")).HasValue ? ((DateTime?)Eval("StartDate")).Value.ToString("MM/dd/yyyy") : string.Empty %>'></asp:LinkButton>
+                                            <asp:LinkButton ID="btnStartDate" runat="server" Text='<%# ((DateTime?)Eval("StartDate")).HasValue ? ((DateTime?)Eval("StartDate")).Value.ToString("MM/dd/yyyy") : string.Empty %>'
+                                                CommandArgument='<%# Eval("StartDate") %>' OnCommand="btnStartDate_Command" OnClientClick="if (!confirmSaveDirty()) return false;"></asp:LinkButton>
                                         </ItemTemplate>
                                         <HeaderTemplate>
                                             <div class="ie-bg">
@@ -140,6 +150,7 @@
                 <tr>
                     <td style="text-align: right;">
                         <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save" OnClick="btnSave_Click" />
+                        <asp:CancelAndReturnButton ID="btnCancelAndRetrun" runat="server" />
                     </td>
                 </tr>
             </table>
