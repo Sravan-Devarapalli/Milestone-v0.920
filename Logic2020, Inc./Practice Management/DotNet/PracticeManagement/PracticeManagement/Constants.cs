@@ -123,6 +123,7 @@ namespace PraticeManagement
             public const string RedirectMilestonePersonIdFormat = "{0}?id={1}&milestonePersonId={2}";
             public const string RedirectMilestonePersonIdFormatWithReturn = "{0}?id={1}&milestonePersonId={2}&returnTo={3}";
             public const string RedirectStartDateFormat = "{0}?id={1}&startDate={2}";
+            public const string RedirectStartDateAndStrawmanFormat = "{0}?id={1}&startDate={2}&Isstrawman={3}";
             public const string MilestonePrevNextRedirectFormat = "{0}?id={1}&projectId={2}"; // &returnTo={3}";
             public const string MilestoneWithReturnFormat = "{0}?id={1}&projectId={2}&returnTo={3}";
             public const string TimeEntryReport = "~/Reports/TimeEntryReport.aspx";
