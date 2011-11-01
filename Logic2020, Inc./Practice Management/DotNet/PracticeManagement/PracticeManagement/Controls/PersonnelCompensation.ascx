@@ -39,6 +39,7 @@
         </td>
         <td class="PaddinLeftNone" style="padding-left: 6px !important;">
             <uc2:DatePicker ID="dpEndDate" runat="server" AutoPostBack="true" OnSelectionChanged="Period_SelectionChanged" />
+            <asp:Label ID="lblEndDate" runat="server" Visible="false"></asp:Label>
         </td>
         <td colspan="2">
             <asp:CompareValidator ID="compDateRange" runat="server" ControlToValidate="dpEndDate"
