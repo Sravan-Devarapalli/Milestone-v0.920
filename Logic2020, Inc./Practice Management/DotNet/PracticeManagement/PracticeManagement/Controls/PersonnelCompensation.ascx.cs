@@ -43,6 +43,20 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public bool EndDateReadOnly
+        {
+            get
+            {
+                return !dpEndDate.Visible;
+            }
+            set
+            {
+                lblEndDate.Text = dpEndDate.DateValue.ToShortDateString();
+                dpEndDate.Visible = !value;
+                lblEndDate.Visible = value;
+            }
+        }
+
         /// <summary>
         /// Gets or sets a selected end date.
         /// </summary>
@@ -721,6 +735,11 @@ namespace PraticeManagement.Controls
                 }
             }
             e.IsValid = true;
+        }
+
+        public void ShowDates()
+        {
+            trCompensationDate.Visible = true;
         }
     }
 }
