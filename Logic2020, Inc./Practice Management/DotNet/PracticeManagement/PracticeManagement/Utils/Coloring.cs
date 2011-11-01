@@ -53,11 +53,14 @@ namespace PraticeManagement.Utils
         /// <param name="utilization">Capacity value in percents</param>
         /// <param name="isVac">Is that vacation period</param>
         /// <returns>Color based on config settings</returns>
-        public static Color GetColorByCapacity(int capacity, bool isVac, bool isHired = true, bool isTerminated = false)
+        public static Color GetColorByCapacity(int capacity, bool isVac, bool isHired, bool isTerminated, bool isWeekEnd)
         {
             //  Get settings from web.config
             ConsReportColoringElementSection coloring =
                 ConsReportColoringElementSection.ColorSettings;
+
+            if (isWeekEnd)
+                return Color.FromArgb(255, 255, 255);
 
             if (!isHired || isTerminated)
                 return coloring.HiredColor;
