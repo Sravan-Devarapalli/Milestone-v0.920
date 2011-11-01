@@ -8,6 +8,22 @@ namespace PraticeManagement.Controls
 	{
 		private Person personValue;
 
+        public string FirstName
+        {
+            get
+            {
+                return lblPersonFirstName.Text;
+            }
+        }
+
+        public string LastName
+        {
+            get
+            {
+                return lblPersonLastName.Text;
+            }
+        }
+
 		[Localizable(false)]
 		[Browsable(false)]
 		[Bindable(true)]
