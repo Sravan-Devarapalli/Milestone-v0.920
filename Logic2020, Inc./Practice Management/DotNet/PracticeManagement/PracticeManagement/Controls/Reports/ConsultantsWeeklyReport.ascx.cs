@@ -719,6 +719,13 @@ namespace PraticeManagement.Controls.Reports
             var period = (endPeriod.Subtract(beginPeriod).Days + 1);
             var pointStartDate = beginPeriod.AddDays(w * Granularity);
             var pointEndDate = beginPeriod.AddDays(((w + 1) * Granularity));
+            bool isWeekEnd = false;
+
+            if (Granularity == 1 && IsCapacityMode)
+            {
+                load = (pointStartDate.DayOfWeek == DayOfWeek.Saturday || pointStartDate.DayOfWeek == DayOfWeek.Sunday) ? load - 100 : load;
+                isWeekEnd = (pointStartDate.DayOfWeek == DayOfWeek.Saturday || pointStartDate.DayOfWeek == DayOfWeek.Sunday);
+            }
 
             if (Granularity == 30)
             {
@@ -745,7 +752,7 @@ namespace PraticeManagement.Controls.Reports
             }
 
 
-            range.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, load > 100, isHired, isTerminated) : Coloring.GetColorByUtilization(load, load < 0, isHired, isTerminated);
+            range.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, load > 100, isHired, isTerminated, isWeekEnd) : Coloring.GetColorByUtilization(load, load < 0, isHired, isTerminated);
 
             if (isTerminated)
             {
@@ -883,3 +890,4 @@ namespace PraticeManagement.Controls.Reports
         #endregion
     }
 }
+
