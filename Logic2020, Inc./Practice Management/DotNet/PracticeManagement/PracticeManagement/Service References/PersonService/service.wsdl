@@ -36,6 +36,12 @@
   <wsdl:message name="IPersonService_GetStrawmanDetailsById_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetStrawmanDetailsByIdResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_GetStrawManListAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetStrawManListAll" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetStrawManListAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetStrawManListAllResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonDetail_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonDetail" />
   </wsdl:message>
@@ -440,6 +446,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetStrawmanDetailsById" message="tns:IPersonService_GetStrawmanDetailsById_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetStrawmanDetailsByIdResponse" message="tns:IPersonService_GetStrawmanDetailsById_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetStrawManListAll">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetStrawManListAll" message="tns:IPersonService_GetStrawManListAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetStrawManListAllResponse" message="tns:IPersonService_GetStrawManListAll_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetPersonDetail">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonDetail" message="tns:IPersonService_GetPersonDetail_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonDetailResponse" message="tns:IPersonService_GetPersonDetail_OutputMessage" />
@@ -729,6 +739,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetStrawmanDetailsById">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetStrawmanDetailsById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStrawManListAll">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetStrawManListAll" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1318,7 +1337,7 @@
   </wsdl:binding>
   <wsdl:service name="PersonService">
     <wsdl:port name="BasicHttpBinding_IPersonService" binding="tns:BasicHttpBinding_IPersonService">
-      <soap:address location="http://system58.ggk.com/PracticeManagementService/PersonService.svc" />
+      <soap:address location="http://server2.ggk.com/PracticeManagementService/PersonService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
