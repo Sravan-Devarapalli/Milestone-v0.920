@@ -188,8 +188,8 @@ namespace PracticeManagementService
         [OperationContract]
         List<Person> PersonListAllShort(int? practice, int? statusId, DateTime startDate, DateTime endDate);
 
-         [OperationContract]
-         List<Person> OwnerListAllShort(int? statusId);
+        [OperationContract]
+        List<Person> OwnerListAllShort(int? statusId);
 
         /// <summary>
         /// Retrieves a short info on persons.
@@ -531,7 +531,7 @@ namespace PracticeManagementService
         void SendLockedOutNotificationEmail(string userName, string loginPageUrl);
 
         [OperationContract]
-        Dictionary<DateTime, bool> GetIsNoteRequiredDetailsForSelectedDateRange(DateTime start, DateTime end,int personId);
+        Dictionary<DateTime, bool> GetIsNoteRequiredDetailsForSelectedDateRange(DateTime start, DateTime end, int personId);
 
         [OperationContract]
         List<Project> GetOwnerProjectsAfterTerminationDate(int personId, DateTime terminationDate);
@@ -547,6 +547,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         Person GetStrawmanDetailsById(int personId);
+
+        [OperationContract]
+        List<Person> GetStrawManListAll();
     }
 }
 
