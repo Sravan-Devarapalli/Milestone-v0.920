@@ -164,6 +164,8 @@ namespace DataAccess
         private const string GetPasswordHistoryByUserNameProcedure = "dbo.GetPasswordHistoryByUserName";
 
         private const string SaveStrawManProcedure = "dbo.SaveStrawMan";
+        private const string SaveStrawManFromExistingProcedure = "dbo.SaveStrawManFromExisting";
+
         private const string GetStrawManListAllProcedure = "dbo.GetStrawManListAll";
         private const string PersonFirstLastNameByIdProcedure = "dbo.PersonFirstLastNameById";
 
@@ -3037,7 +3039,39 @@ namespace DataAccess
                 }
             }
         }
+        public static void SaveStrawManFromExisting(int existingPersonId, string newFirstName, string newLastName, out int newPersonid)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(SaveStrawManFromExistingProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
 
+                   
+                    command.Parameters.AddWithValue(FirstNameParam, newFirstName);
+                    command.Parameters.AddWithValue(LastNameParam, newLastName);
+                   
+                    var personIdParameter = new SqlParameter();
+                    personIdParameter.ParameterName = PersonIdParam;
+                    personIdParameter.SqlDbType = SqlDbType.Int;
+                    personIdParameter.Value = existingPersonId;
+                    personIdParameter.Direction = ParameterDirection.InputOutput;
+                    command.Parameters.Add(personIdParameter);
+
+                    connection.Open();
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                    newPersonid = (int)personIdParameter.Value;
+                }
+            }
+        }
         public static void SaveStrawMan(Person person, Pay currentPay, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
