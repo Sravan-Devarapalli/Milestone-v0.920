@@ -550,6 +550,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Person> GetStrawManListAll();
+
+        [OperationContract]
+        int SaveStrawManFromExisting(int existingPersonId, string newFirstName, string newLastName);
     }
 }
 
