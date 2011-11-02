@@ -373,13 +373,6 @@ namespace DataTransferObjects
         public DateTime? LastLogin { get; set; }
 
         [DataMember]
-        public int OpportunityPersonTypeId
-        {
-            get;
-            set;
-        }
-
-        [DataMember]
         public bool IsStrawMan { get; set; }
 
         #endregion
