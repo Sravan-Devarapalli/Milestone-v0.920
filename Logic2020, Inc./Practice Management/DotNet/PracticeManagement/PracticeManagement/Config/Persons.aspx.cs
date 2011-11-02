@@ -18,6 +18,7 @@ namespace PraticeManagement.Config
 {
     public partial class Persons : PracticeManagementPageBase
     {
+
         #region Fields
 
         private const string AllRecruiters = "All Recruiters";
@@ -27,10 +28,33 @@ namespace PraticeManagement.Config
         private const string ViewStateSortExpression = "SortExpression";
         private const string ViewStateSortDirection = "SortDirection";
         private const string ViewingRecords = "Viewing {0} - {1} of {2} Persons";
+        private const string DuplicatePersonName = "There is another Person with the same First Name and Last Name.";
+        private const int NameCharactersLength = 50;
 
         #endregion
 
         #region Properties
+
+        private int? SaveData(int existingPersonId, string newFirstName, string newLastName)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    return serviceClient.SaveStrawManFromExisting(existingPersonId, newFirstName, newLastName);
+                }
+                catch (Exception exMessage)
+                {
+                    ExMessage = exMessage.Message;
+                    serviceClient.Abort();
+                    Page.Validate("StrawmanGroup");
+                    mpePopup.Show();
+                }
+            }
+            return null;
+        }
+
+        public string ExMessage { get; set; }
 
         private int? CurrentIndex
         {
@@ -169,7 +193,7 @@ namespace PraticeManagement.Config
             AddAlphabetButtons();
             if (!IsPostBack)
             {
-
+                DataHelper.FillStrawManList(ddlStrawmanName, "-- Select a StrawMan --");
                 bool userIsAdministrator =
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
                 bool userIsHR =
@@ -580,6 +604,139 @@ namespace PraticeManagement.Config
             }
         }
 
+        protected void StbAddStrawman_OnClick(object sender, EventArgs e)
+        {
+            rbNewStrawman.Checked = true;
+            ddlStrawmanName.SelectedIndex = -1;
+            mpePopup.Show();
+        }
+        protected void btnCancel_OnClick(object sender, EventArgs e)
+        {
+            mpePopup.Hide();
+            rbNewStrawman.Checked = true;
+            ddlStrawmanName.SelectedIndex = -1;
+        }
+        protected void btnOK_OnClick(object sender, EventArgs e)
+        {
+            Page.Validate("StrawmanGroup");
+            ExMessage = "";
+            String id = "";
+            if (Page.IsValid)
+            {
+                if (rbCopyStrawman.Checked)
+                {
+                    int? newId = SaveData(Convert.ToInt32(ddlStrawmanName.SelectedValue), tbFirstName.Text, tbLastName.Text);
+                    id = newId != null ? "id=" + newId + "&" : "";
+                }
+            }
+            else
+            {
+                if (rbCopyStrawman.Checked)
+                {
+                    ddlStrawmanName.Visible = true;
+                    tbFirstName.Visible = true;
+                    tbLastName.Visible = true;
+                    lblastName.Visible = true;
+                    lbfirstName.Visible = true;
+                    lblStrawmanName.Visible = true;
+                }
+                mpePopup.Show();
+
+            }
+            if (string.IsNullOrEmpty(ExMessage) && Page.IsValid)
+            {
+                Response.Redirect("~/StrawManDetails.aspx?" + id + "returnTo=Config/Persons.aspx?ApplyFilterFromCookie=true");
+            }
+
+        }
+
+        protected void rbStrawman_OnCheckedChanged(object sender, EventArgs e)
+        {
+            mpePopup.Show();
+            if (rbCopyStrawman.Checked)
+            {
+                ddlStrawmanName.Visible = true;
+                tbFirstName.Visible = true;
+                tbFirstName.Enabled = false;
+                tbLastName.Visible = true;
+                tbLastName.Enabled = false;
+                lblastName.Visible = true;
+                lbfirstName.Visible = true;
+                lblStrawmanName.Visible = true;
+                cvddlStrawmanName.Enabled = cvDupliacteName.Enabled = cvFirstName.Enabled = cvLastName.Enabled = true;
+            }
+            else
+            {
+                cvddlStrawmanName.Enabled = cvDupliacteName.Enabled = cvFirstName.Enabled = cvLastName.Enabled = false;
+                ddlStrawmanName.Visible = false;
+                tbFirstName.Visible = false;
+                tbFirstName.Enabled = false;
+                tbLastName.Visible = false;
+                tbLastName.Enabled = false;
+                lblastName.Visible = false;
+                lbfirstName.Visible = false;
+                lblStrawmanName.Visible = false;
+            }
+        }
+
+        protected void ddlStrawmanName_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            mpePopup.Show();
+            if (ddlStrawmanName.SelectedValue == "-1")
+            {
+                tbFirstName.Enabled = false;
+                tbLastName.Enabled = false;
+            }
+            else
+            {
+                tbFirstName.Enabled = true;
+                tbLastName.Enabled = true;
+            }
+        }
+
+        protected void cvddlStrawmanName_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            if (rbCopyStrawman.Checked)
+            {
+                e.IsValid = ddlStrawmanName.SelectedValue == "-1" ? false : true;
+            }
+        }
+
+        protected void cvDupliacteName_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ExMessage) && ExMessage == DuplicatePersonName)
+            {
+                e.IsValid = false;
+            }
+        }
+        protected void cvFirstName_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            if (rbCopyStrawman.Checked && !(ddlStrawmanName.SelectedValue == "-1"))
+            {
+                e.IsValid = string.IsNullOrEmpty(tbFirstName.Text) ? false : true;
+            }
+        }
+        protected void cvLastName_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            if (rbCopyStrawman.Checked && !(ddlStrawmanName.SelectedValue == "-1"))
+            {
+                e.IsValid = string.IsNullOrEmpty(tbLastName.Text) ? false : true;
+            }
+        }
+
+        protected void cvNameLength_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            var item = sender as CustomValidator;
+            if (item.ID == "cvLengthFirstName")
+            {
+                e.IsValid = tbFirstName.Text.Length <= NameCharactersLength;
+            }
+            else if (item.ID == "cvLengthLastName")
+            {
+                e.IsValid = tbLastName.Text.Length <= NameCharactersLength;
+            }
+
+        }
         #endregion
 
         #region StaticMethods
@@ -780,6 +937,7 @@ namespace PraticeManagement.Config
 
         protected override void Display()
         {
+
         }
 
         private void AddAlphabetButtons()
