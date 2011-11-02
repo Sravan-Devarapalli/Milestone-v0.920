@@ -7,68 +7,11 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/System" />
       <xsd:import />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/System" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IPersonService_GetActiveOpportunitiesByOwnerId_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetActiveOpportunitiesByOwnerId" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_GetActiveOpportunitiesByOwnerId_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetActiveOpportunitiesByOwnerIdResponse" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_PersonListOpportunityOwner_InputMessage">
-    <wsdl:part name="parameters" element="tns:PersonListOpportunityOwner" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_PersonListOpportunityOwner_OutputMessage">
-    <wsdl:part name="parameters" element="tns:PersonListOpportunityOwnerResponse" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_SaveStrawman_InputMessage">
-    <wsdl:part name="parameters" element="tns:SaveStrawman" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_SaveStrawman_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaveStrawmanResponse" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_GetStrawmanDetailsById_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetStrawmanDetailsById" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_GetStrawmanDetailsById_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetStrawmanDetailsByIdResponse" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_GetStrawManListAll_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetStrawManListAll" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_GetStrawManListAll_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetStrawManListAllResponse" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_GetPersonDetail_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonDetail" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_GetPersonDetail_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonDetailResponse" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_GetPersonByAlias_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonByAlias" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_GetPersonByAlias_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonByAliasResponse" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_SavePersonDetail_InputMessage">
-    <wsdl:part name="parameters" element="tns:SavePersonDetail" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_SavePersonDetail_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SavePersonDetailResponse" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_SavePersonDetail_DataAccessFaultFault_FaultMessage">
-    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" name="detail" element="q1:DataAccessFault" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_PersonInactivate_InputMessage">
-    <wsdl:part name="parameters" element="tns:PersonInactivate" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_PersonInactivate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:PersonInactivateResponse" />
-  </wsdl:message>
   <wsdl:message name="IPersonService_PersonReactivate_InputMessage">
     <wsdl:part name="parameters" element="tns:PersonReactivate" />
   </wsdl:message>
@@ -236,6 +179,42 @@
   </wsdl:message>
   <wsdl:message name="IPersonService_GetOwnerProjectsAfterTerminationDate_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetOwnerProjectsAfterTerminationDateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetActiveOpportunitiesByOwnerId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetActiveOpportunitiesByOwnerId" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetActiveOpportunitiesByOwnerId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetActiveOpportunitiesByOwnerIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_PersonListOpportunityOwner_InputMessage">
+    <wsdl:part name="parameters" element="tns:PersonListOpportunityOwner" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_PersonListOpportunityOwner_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PersonListOpportunityOwnerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_SaveStrawman_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveStrawman" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_SaveStrawman_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveStrawmanResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetStrawmanDetailsById_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetStrawmanDetailsById" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetStrawmanDetailsById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetStrawmanDetailsByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetStrawManListAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetStrawManListAll" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetStrawManListAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetStrawManListAllResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_SaveStrawManFromExisting_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveStrawManFromExisting" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_SaveStrawManFromExisting_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveStrawManFromExistingResponse" />
   </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonMilestoneWithFinancials_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonMilestoneWithFinancials" />
@@ -429,44 +408,34 @@
   <wsdl:message name="IPersonService_GetOneOffList_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetOneOffListResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonDetail_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonDetail" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonDetail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonDetailResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonByAlias_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonByAlias" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonByAlias_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonByAliasResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_SavePersonDetail_InputMessage">
+    <wsdl:part name="parameters" element="tns:SavePersonDetail" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_SavePersonDetail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SavePersonDetailResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_SavePersonDetail_DataAccessFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" name="detail" element="q1:DataAccessFault" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_PersonInactivate_InputMessage">
+    <wsdl:part name="parameters" element="tns:PersonInactivate" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_PersonInactivate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PersonInactivateResponse" />
+  </wsdl:message>
   <wsdl:portType name="IPersonService">
-    <wsdl:operation name="GetActiveOpportunitiesByOwnerId">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerId" message="tns:IPersonService_GetActiveOpportunitiesByOwnerId_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerIdResponse" message="tns:IPersonService_GetActiveOpportunitiesByOwnerId_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="PersonListOpportunityOwner">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/PersonListOpportunityOwner" message="tns:IPersonService_PersonListOpportunityOwner_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/PersonListOpportunityOwnerResponse" message="tns:IPersonService_PersonListOpportunityOwner_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SaveStrawman">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SaveStrawman" message="tns:IPersonService_SaveStrawman_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SaveStrawmanResponse" message="tns:IPersonService_SaveStrawman_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetStrawmanDetailsById">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetStrawmanDetailsById" message="tns:IPersonService_GetStrawmanDetailsById_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetStrawmanDetailsByIdResponse" message="tns:IPersonService_GetStrawmanDetailsById_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetStrawManListAll">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetStrawManListAll" message="tns:IPersonService_GetStrawManListAll_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetStrawManListAllResponse" message="tns:IPersonService_GetStrawManListAll_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetPersonDetail">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonDetail" message="tns:IPersonService_GetPersonDetail_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonDetailResponse" message="tns:IPersonService_GetPersonDetail_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetPersonByAlias">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonByAlias" message="tns:IPersonService_GetPersonByAlias_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonByAliasResponse" message="tns:IPersonService_GetPersonByAlias_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SavePersonDetail">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SavePersonDetail" message="tns:IPersonService_SavePersonDetail_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SavePersonDetailResponse" message="tns:IPersonService_SavePersonDetail_OutputMessage" />
-      <wsdl:fault wsaw:Action="http://tempuri.org/IPersonService/SavePersonDetailDataAccessFaultFault" name="DataAccessFaultFault" message="tns:IPersonService_SavePersonDetail_DataAccessFaultFault_FaultMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="PersonInactivate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/PersonInactivate" message="tns:IPersonService_PersonInactivate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/PersonInactivateResponse" message="tns:IPersonService_PersonInactivate_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="PersonReactivate">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/PersonReactivate" message="tns:IPersonService_PersonReactivate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/PersonReactivateResponse" message="tns:IPersonService_PersonReactivate_OutputMessage" />
@@ -578,6 +547,30 @@
     <wsdl:operation name="GetOwnerProjectsAfterTerminationDate">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetOwnerProjectsAfterTerminationDate" message="tns:IPersonService_GetOwnerProjectsAfterTerminationDate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetOwnerProjectsAfterTerminationDateResponse" message="tns:IPersonService_GetOwnerProjectsAfterTerminationDate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetActiveOpportunitiesByOwnerId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerId" message="tns:IPersonService_GetActiveOpportunitiesByOwnerId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerIdResponse" message="tns:IPersonService_GetActiveOpportunitiesByOwnerId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PersonListOpportunityOwner">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/PersonListOpportunityOwner" message="tns:IPersonService_PersonListOpportunityOwner_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/PersonListOpportunityOwnerResponse" message="tns:IPersonService_PersonListOpportunityOwner_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveStrawman">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SaveStrawman" message="tns:IPersonService_SaveStrawman_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SaveStrawmanResponse" message="tns:IPersonService_SaveStrawman_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStrawmanDetailsById">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetStrawmanDetailsById" message="tns:IPersonService_GetStrawmanDetailsById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetStrawmanDetailsByIdResponse" message="tns:IPersonService_GetStrawmanDetailsById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStrawManListAll">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetStrawManListAll" message="tns:IPersonService_GetStrawManListAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetStrawManListAllResponse" message="tns:IPersonService_GetStrawManListAll_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveStrawManFromExisting">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SaveStrawManFromExisting" message="tns:IPersonService_SaveStrawManFromExisting_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SaveStrawManFromExistingResponse" message="tns:IPersonService_SaveStrawManFromExisting_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetPersonMilestoneWithFinancials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials" message="tns:IPersonService_GetPersonMilestoneWithFinancials_InputMessage" />
@@ -707,93 +700,26 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetOneOffList" message="tns:IPersonService_GetOneOffList_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetOneOffListResponse" message="tns:IPersonService_GetOneOffList_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetPersonDetail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonDetail" message="tns:IPersonService_GetPersonDetail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonDetailResponse" message="tns:IPersonService_GetPersonDetail_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonByAlias">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonByAlias" message="tns:IPersonService_GetPersonByAlias_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonByAliasResponse" message="tns:IPersonService_GetPersonByAlias_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SavePersonDetail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SavePersonDetail" message="tns:IPersonService_SavePersonDetail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SavePersonDetailResponse" message="tns:IPersonService_SavePersonDetail_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IPersonService/SavePersonDetailDataAccessFaultFault" name="DataAccessFaultFault" message="tns:IPersonService_SavePersonDetail_DataAccessFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PersonInactivate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/PersonInactivate" message="tns:IPersonService_PersonInactivate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/PersonInactivateResponse" message="tns:IPersonService_PersonInactivate_OutputMessage" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IPersonService" type="tns:IPersonService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="GetActiveOpportunitiesByOwnerId">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerId" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="PersonListOpportunityOwner">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/PersonListOpportunityOwner" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SaveStrawman">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/SaveStrawman" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetStrawmanDetailsById">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/GetStrawmanDetailsById" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetStrawManListAll">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/GetStrawManListAll" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetPersonDetail">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonDetail" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetPersonByAlias">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonByAlias" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SavePersonDetail">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/SavePersonDetail" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-      <wsdl:fault name="DataAccessFaultFault">
-        <soap:fault use="literal" name="DataAccessFaultFault" namespace="" />
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="PersonInactivate">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/PersonInactivate" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="PersonReactivate">
       <soap:operation soapAction="http://tempuri.org/IPersonService/PersonReactivate" style="document" />
       <wsdl:input>
@@ -1039,6 +965,60 @@
     </wsdl:operation>
     <wsdl:operation name="GetOwnerProjectsAfterTerminationDate">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetOwnerProjectsAfterTerminationDate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetActiveOpportunitiesByOwnerId">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PersonListOpportunityOwner">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/PersonListOpportunityOwner" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveStrawman">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/SaveStrawman" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStrawmanDetailsById">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetStrawmanDetailsById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStrawManListAll">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetStrawManListAll" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveStrawManFromExisting">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/SaveStrawManFromExisting" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1334,10 +1314,49 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetPersonDetail">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonDetail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonByAlias">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonByAlias" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SavePersonDetail">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/SavePersonDetail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="DataAccessFaultFault">
+        <soap:fault use="literal" name="DataAccessFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="PersonInactivate">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/PersonInactivate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="PersonService">
     <wsdl:port name="BasicHttpBinding_IPersonService" binding="tns:BasicHttpBinding_IPersonService">
-      <soap:address location="http://server2.ggk.com/PracticeManagementService/PersonService.svc" />
+      <soap:address location="http://system44.ggk.com/PracticeManagementService/PersonService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
