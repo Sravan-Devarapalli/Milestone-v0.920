@@ -363,6 +363,7 @@
     <Content Include="Images\copy.png" />
     <Content Include="Images\printer.png" />
     <Content Include="Images\saveToDisk.png" />
+    <Content Include="Images\Strawman.png" />
     <Content Include="Images\Team_Icon.jpg" />
     <Content Include="LoggedOut.aspx" />
     <Content Include="OpportunitySearch.aspx" />
