@@ -108,6 +108,8 @@
             public const string ObjectLastName = "ObjectLastName";
             public const string PersonId = "PersonId";
             public const string OpportunityPersonTypeId = "OpportunityPersonTypeId";
+            public const string OpportunityPersonRelationTypeId = "RelationTypeId";
+            public const string OpportunityPersonQuantity = "Quantity";
             public const string PersonName = "PersonName";
             public const string PersonRoleId = "PersonRoleId";
             public const string PersonRoleName = "RoleName";
@@ -390,6 +392,7 @@
             public const string PersonIdParam = "@PersonId";
             public const string PersonIdListParam = "@PersonIdList";
             public const string OutSideResourcesParam = "@OutSideResources";
+            public const string RelationTypeIdParam = "@RelationTypeId";
             public const string StartDateParam = "@StartDate";
             public const string EndDateParam = "@EndDate";
             public const string YearParam = "@Year";
