@@ -21,13 +21,13 @@ namespace PraticeManagement
         {
             get
             {
-                if (selectedPersonValue == null && !string.IsNullOrEmpty(ddlPersonName.SelectedValue))
+                if (selectedPersonValue == null && !string.IsNullOrEmpty(Selectedman))
                 {
                     using (PersonServiceClient serviceCLient = new PersonServiceClient())
                     {
                         try
                         {
-                            selectedPersonValue = serviceCLient.GetPersonDetail(int.Parse(ddlPersonName.SelectedValue));
+                            selectedPersonValue = serviceCLient.GetPersonDetail(int.Parse(Selectedman));
                         }
                         catch (CommunicationException)
                         {
@@ -45,11 +45,21 @@ namespace PraticeManagement
             }
         }
 
+        private string Selectedman 
+        {
+            get
+            {
+                var selectedValue = rbSelectPerson.Checked ? ddlPersonName.SelectedValue : ddlStrawmanName.SelectedValue;
+                return selectedValue;
+            }
+        }
+
         protected override void Display()
         {
             // TODO: Remove the dummy code.
             personnelCompensation.StartDate = DateTime.Today;
             DataHelper.FillOneOffList(ddlPersonName, "-- Select a Person --", DateTime.Today);
+            DataHelper.FillStrawManList(ddlStrawmanName, "-- Select a StrawMan --");
 
             //recruiterInfo.Person = new Person();
             personnelCompensation.PaymentsVisible =
@@ -85,6 +95,7 @@ namespace PraticeManagement
         public void ResetControls()
         {
             ddlPersonName.SelectedIndex = 0;
+            ddlStrawmanName.SelectedIndex = 0;
             ClearControls();
             whatIf.ClearContents();
             personnelCompensation.Timescale = TimescaleType.Hourly;
@@ -93,7 +104,8 @@ namespace PraticeManagement
         private void ShowDetails()
         {
             ddlPersonName.Visible = rbSelectPerson.Checked;
-            personnelCompensation.Visible = !rbSelectPerson.Checked;
+            ddlStrawmanName.Visible = rbSelectStrawman.Checked;
+            personnelCompensation.Visible = !(rbSelectPerson.Checked || rbSelectStrawman.Checked);
         }
 
         private void DoCompute(Person selectedPerson)
@@ -137,9 +149,9 @@ namespace PraticeManagement
                         throw;
                     }
 
-                    if (!string.IsNullOrEmpty(ddlPersonName.SelectedValue) && ddlPersonName.SelectedValue != "-1")
+                    if (!string.IsNullOrEmpty(Selectedman) && Selectedman != "-1")
                     {
-                        person.Id = int.Parse(ddlPersonName.SelectedValue);
+                        person.Id = int.Parse(Selectedman);
                     }
                     whatIf.Person = person;
                 }
@@ -147,9 +159,11 @@ namespace PraticeManagement
             Page.Validate();
         }
 
-        protected void ddlPersonName_SelectedIndexChanged(object sender, EventArgs e)
+       protected void ddlPersonName_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddlPersonName.SelectedIndex == 0)
+            var ddl = sender as DropDownList;
+
+            if (ddl.SelectedIndex == 0)
             {
                 ResetControls();
             }
