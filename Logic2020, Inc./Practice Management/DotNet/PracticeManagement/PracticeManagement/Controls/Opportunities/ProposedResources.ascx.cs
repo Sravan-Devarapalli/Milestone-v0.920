@@ -74,14 +74,11 @@ namespace PraticeManagement.Controls.Opportunities
         {
             get
             {
-                int personCount =0;
-
-                if (OpportunityPersons != null)
+                if (OpportunityPersons != null &&
+                    OpportunityPersons.Any(op => op.PersonType == (int)OpportunityPersonType.NormalPerson))
                 {
-                    personCount = OpportunityPersons.Where(op => op.OpportunityPersonTypeId == (int)OpportunityPersonType.NormalPerson).Count();
-                }
-                if (personCount > 0)
                     return true;
+                }
                 else
                     return false;
             }
@@ -156,18 +153,18 @@ namespace PraticeManagement.Controls.Opportunities
             }
         }
 
-        private Person[] OpportunityPersons
+        private OpportunityPerson[] OpportunityPersons
         {
             get
             {
                 if (ViewState[OpportunityPersons_Key] != null)
                 {
-                    return ViewState[OpportunityPersons_Key] as Person[];
+                    return ViewState[OpportunityPersons_Key] as OpportunityPerson[];
                 }
 
                 using (var serviceClient = new OpportunityServiceClient())
                 {
-                    Person[] opPersons = serviceClient.GetOpportunityPersons(OpportunityId.Value);
+                    var opPersons = serviceClient.GetOpportunityPersons(OpportunityId.Value);
                     ViewState[OpportunityPersons_Key] = opPersons;
                     return opPersons;
                 }
@@ -223,13 +220,11 @@ namespace PraticeManagement.Controls.Opportunities
 
                 if (OpportunityId.HasValue)
                 {
-                    foreach (var person in OpportunityPersons)
+                    foreach (var operson in OpportunityPersons)
                     {
-                        if (person.Id.Value.ToString() == item.Value)
+                        if (operson.Person.Id.Value.ToString() == item.Value)
                         {
-
-                            item.Attributes["selectedchecktype"] = person.OpportunityPersonTypeId.ToString();
-                            
+                            item.Attributes["selectedchecktype"] = ((int)operson.PersonType).ToString();
                             item.Enabled = false;
                             break;
                         }
@@ -249,9 +244,9 @@ namespace PraticeManagement.Controls.Opportunities
             {
                 item.Attributes["personid"] = item.Value;
                 item.Attributes["personname"] = item.Text;
-                Person person = OpportunityPersons.Where(op => op.Id.Value.ToString() == item.Value).AsQueryable().ToArray()[0];
-                item.Attributes["persontype"] = person.OpportunityPersonTypeId.ToString();
-                if (person.OpportunityPersonTypeId == (int)OpportunityPersonType.StrikedPerson)
+                OpportunityPerson OptyPerson = OpportunityPersons.Where(op => op.Person.Id.Value.ToString() == item.Value).AsQueryable().ToArray()[0];
+                item.Attributes["persontype"] = ((int)OptyPerson.PersonType).ToString();
+                if (OptyPerson.PersonType == (int)OpportunityPersonType.StrikedPerson)
                 {
                     item.Text = "<strike>" + item.Text + "</ strike>";
                 }
@@ -340,7 +335,7 @@ namespace PraticeManagement.Controls.Opportunities
                 }
             }
 
-           
+
         }
 
         public void FillPotentialResources()
