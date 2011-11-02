@@ -39,7 +39,7 @@ namespace DataTransferObjects
         }
 
         [DataMember]
-        public int? Quantity
+        public int Quantity
         {
             get;
             set;
