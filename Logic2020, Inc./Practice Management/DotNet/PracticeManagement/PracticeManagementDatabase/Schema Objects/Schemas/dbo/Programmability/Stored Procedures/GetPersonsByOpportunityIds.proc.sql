@@ -22,7 +22,9 @@ BEGIN
 				,p.FirstName
 				,p.LastName,
 				op.OpportunityId,
-				op.OpportunityPersonTypeId
+				op.OpportunityPersonTypeId,
+				op.RelationTypeId,
+				op.Quantity
 		FROM dbo.OpportunityPersons op
 		JOIN dbo.Person p ON p.PersonId = op.PersonId
 		WHERE op.OpportunityId IN (SELECT OpportunityId FROM @OpportunityIdTable)
