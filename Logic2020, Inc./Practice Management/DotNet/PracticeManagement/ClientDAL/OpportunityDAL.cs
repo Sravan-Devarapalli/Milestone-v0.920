@@ -820,6 +820,8 @@ namespace DataAccess
                 int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
                 int OpportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
                 int opportunityPersonTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonTypeId);
+                int opportunityPersonRelationTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonRelationTypeId);
+                int opportunityPersonQuantityIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonQuantity);
                 Opportunity CurrentOpportunity = null;
 
                 while (reader.Read())
@@ -841,7 +843,9 @@ namespace DataAccess
                                        FirstName = reader.GetString(firstNameIndex),
                                        LastName = reader.GetString(lastNameIndex)
                                    },
-                        PersonType = reader.GetInt32(opportunityPersonTypeIdIndex)
+                        PersonType = reader.GetInt32(opportunityPersonTypeIdIndex),
+                        RelationType = reader.GetInt32(opportunityPersonRelationTypeIdIndex),
+                        Quantity = !reader.IsDBNull(opportunityPersonQuantityIndex)?  reader.GetInt32(opportunityPersonQuantityIndex):0
                     }
                     ;
 
@@ -941,7 +945,7 @@ namespace DataAccess
             return res;
         }
 
-        public static void OpportunityPersonInsert(int opportunityId, string personIdList, string outSideResources)
+        public static void OpportunityPersonInsert(int opportunityId, string personIdList, int relationTypeId, string outSideResources)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.OpportunityPersonInsert, connection))
@@ -952,6 +956,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityIdParam, opportunityId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdListParam, personIdList);
                 command.Parameters.AddWithValue(Constants.ParameterNames.OutSideResourcesParam, outSideResources);
+                command.Parameters.AddWithValue(Constants.ParameterNames.RelationTypeIdParam, relationTypeId);
+                
 
                 try
                 {
