@@ -83,7 +83,7 @@ namespace PraticeManagement.OpportunityService {
         int ConvertOpportunityToProject(int opportunityId, string userName, bool hasPersons);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/OpportunityPersonInsert", ReplyAction="http://tempuri.org/IOpportunityService/OpportunityPersonInsertResponse")]
-        void OpportunityPersonInsert(int opportunityId, string personIdList, string outSideResources);
+        void OpportunityPersonInsert(int opportunityId, string personIdList, int relationTypeId, string outSideResources);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/OpportunityPersonDelete", ReplyAction="http://tempuri.org/IOpportunityService/OpportunityPersonDeleteResponse")]
         void OpportunityPersonDelete(int opportunityId, string personIdList);
@@ -113,7 +113,6 @@ namespace PraticeManagement.OpportunityService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class OpportunityServiceClient : System.ServiceModel.ClientBase<PraticeManagement.OpportunityService.IOpportunityService>, PraticeManagement.OpportunityService.IOpportunityService {
         
-       
         public OpportunityServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -218,8 +217,8 @@ namespace PraticeManagement.OpportunityService {
             return base.Channel.ConvertOpportunityToProject(opportunityId, userName, hasPersons);
         }
         
-        public void OpportunityPersonInsert(int opportunityId, string personIdList, string outSideResources) {
-            base.Channel.OpportunityPersonInsert(opportunityId, personIdList, outSideResources);
+        public void OpportunityPersonInsert(int opportunityId, string personIdList, int relationTypeId, string outSideResources) {
+            base.Channel.OpportunityPersonInsert(opportunityId, personIdList, relationTypeId, outSideResources);
         }
         
         public void OpportunityPersonDelete(int opportunityId, string personIdList) {
