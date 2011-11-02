@@ -3171,6 +3171,8 @@
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\OpportunityPersonInsert.proc.sql">
       <SubType>Code</SubType>
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\OpportunityPersons.table.sql">
       <SubType>Code</SubType>
