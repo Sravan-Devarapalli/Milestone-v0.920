@@ -561,13 +561,13 @@
                                                 Style="display: none; font-style: italic;"></asp:Label>
                                         </td>
                                         <td style="width: 4%; white-space: normal;" align="right">
-                                            <asp:Image ID="imgPeople_icon" runat="server" ImageUrl="~/Images/People_icon.png"
+                                            <asp:Image ID="imgPeople_icon" runat="server" ImageUrl="~/Images/People_icon.png" ToolTip="Show Proposed Resources"
                                                 onclick="ShowPotentialResourcesModal(this);" Style="cursor: pointer;" opportunityid='<%# Eval("Id") %>' />
                                             <asp:HiddenField ID="hdnProposedPersonsIndexes" runat="server" />
                                             <asp:HiddenField ID="hdnOutSideResources" runat="server" />
                                         </td>
-                                        <td style="width: 4%; white-space: normal;" align="right">
-                                            <asp:Image ID="imgTeamStructure" runat="server" ImageUrl="~/Images/Team_Icon.jpg"
+                                        <td style="padding-left:4px;width: 4%; white-space: normal;" align="right">
+                                            <asp:Image ID="imgTeamStructure" runat="server" ImageUrl="~/Images/Team_Icon.jpg" ToolTip="Show Team Structure"
                                                 onclick="ShowTeamStructureModal(this);" Style="cursor: pointer;" opportunityid='<%# Eval("Id") %>' />
                                             <asp:HiddenField ID="hdnTeamStructure" runat="server" />
                                         </td>
@@ -652,13 +652,13 @@
                                                 Style="display: none; font-style: italic;"></asp:Label>
                                         </td>
                                         <td style="width: 4%; white-space: normal;" align="right">
-                                            <asp:Image ID="imgPeople_icon" runat="server" ImageUrl="~/Images/People_icon.png"
+                                            <asp:Image ID="imgPeople_icon" runat="server" ImageUrl="~/Images/People_icon.png" ToolTip="Show Proposed Resources"
                                                 onclick="ShowPotentialResourcesModal(this);" Style="cursor: pointer;" opportunityid='<%# Eval("Id") %>' />
                                             <asp:HiddenField ID="hdnProposedPersonsIndexes" runat="server" />
                                             <asp:HiddenField ID="hdnOutSideResources" runat="server" />
                                         </td>
-                                        <td style="width: 4%; white-space: normal;" align="right">
-                                            <asp:Image ID="imgTeamStructure" runat="server" ImageUrl="~/Images/Team_Icon.jpg"
+                                        <td style="padding-left:4px;width: 4%; white-space: normal;" align="right">
+                                            <asp:Image ID="imgTeamStructure" runat="server" ImageUrl="~/Images/Team_Icon.jpg" ToolTip="Show Team Structure"
                                                 onclick="ShowTeamStructureModal(this);" Style="cursor: pointer;" opportunityid='<%# Eval("Id") %>' />
                                             <asp:HiddenField ID="hdnTeamStructure" runat="server" />
                                         </td>
