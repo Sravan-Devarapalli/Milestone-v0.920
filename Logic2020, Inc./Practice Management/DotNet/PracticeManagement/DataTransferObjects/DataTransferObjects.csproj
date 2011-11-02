@@ -142,6 +142,7 @@
     <Compile Include="Email.cs" />
     <Compile Include="EmailData.cs" />
     <Compile Include="EmailTemplate.cs" />
+    <Compile Include="OpurtunityPerson.cs" />
     <Compile Include="Skills\ContactInfoType.cs" />
     <Compile Include="Skills\DocumentType.cs" />
     <Compile Include="Skills\Employer.cs" />
