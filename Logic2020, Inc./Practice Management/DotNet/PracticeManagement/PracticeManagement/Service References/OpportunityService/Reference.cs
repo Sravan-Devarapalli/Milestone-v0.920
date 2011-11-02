@@ -77,7 +77,7 @@ namespace PraticeManagement.OpportunityService {
         System.Nullable<int> GetOpportunityId(string opportunityNumber);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/GetOpportunityPersons", ReplyAction="http://tempuri.org/IOpportunityService/GetOpportunityPersonsResponse")]
-        DataTransferObjects.Person[] GetOpportunityPersons(int opportunityId);
+        DataTransferObjects.OpportunityPerson[] GetOpportunityPersons(int opportunityId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/ConvertOpportunityToProject", ReplyAction="http://tempuri.org/IOpportunityService/ConvertOpportunityToProjectResponse")]
         int ConvertOpportunityToProject(int opportunityId, string userName, bool hasPersons);
@@ -113,6 +113,7 @@ namespace PraticeManagement.OpportunityService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class OpportunityServiceClient : System.ServiceModel.ClientBase<PraticeManagement.OpportunityService.IOpportunityService>, PraticeManagement.OpportunityService.IOpportunityService {
         
+       
         public OpportunityServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -209,7 +210,7 @@ namespace PraticeManagement.OpportunityService {
             return base.Channel.GetOpportunityId(opportunityNumber);
         }
         
-        public DataTransferObjects.Person[] GetOpportunityPersons(int opportunityId) {
+        public DataTransferObjects.OpportunityPerson[] GetOpportunityPersons(int opportunityId) {
             return base.Channel.GetOpportunityPersons(opportunityId);
         }
         
