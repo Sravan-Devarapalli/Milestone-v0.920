@@ -21,14 +21,15 @@
     <MetadataSource Address="http://localhost/PracticeManagementService/OpportunityService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="OpportunityService1.disco" MetadataType="Disco" ID="cfced6e3-3658-493c-ae45-2a3610625848" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?disco" />
-    <MetadataFile FileName="OpportunityService10.xsd" MetadataType="Schema" ID="b3cccdc0-9eb1-4b2c-8b01-d752c7be1a25" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd4" />
-    <MetadataFile FileName="OpportunityService11.xsd" MetadataType="Schema" ID="c8c75197-d7bb-4855-b846-3f19e376ceef" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd5" />
-    <MetadataFile FileName="OpportunityService12.xsd" MetadataType="Schema" ID="ed2e9eb8-45f2-4e04-9160-98282c2bfa91" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd2" />
-    <MetadataFile FileName="OpportunityService1.wsdl" MetadataType="Wsdl" ID="eeaf5846-4126-4e24-89b5-3c94ae65f01f" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?wsdl" />
-    <MetadataFile FileName="OpportunityService13.xsd" MetadataType="Schema" ID="d4e98022-abc6-4899-81e7-c655c5ce1457" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd0" />
-    <MetadataFile FileName="OpportunityService14.xsd" MetadataType="Schema" ID="112c512a-13a9-4657-996e-5051368efcdf" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd1" />
-    <MetadataFile FileName="OpportunityService16.xsd" MetadataType="Schema" ID="b18741e5-e518-415b-bea4-d886055fca6c" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd3" />
+    <MetadataFile FileName="OpportunityService10.xsd" MetadataType="Schema" ID="414f1706-ce6b-44ba-be05-fb758ba765f9" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd5" />
+    <MetadataFile FileName="OpportunityService11.xsd" MetadataType="Schema" ID="5cf2fc65-52d2-47ef-a266-ab7da6d7df25" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd6" />
+    <MetadataFile FileName="OpportunityService12.xsd" MetadataType="Schema" ID="c1d919a0-2173-4b63-adbd-4d07a3cb2a90" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd1" />
+    <MetadataFile FileName="OpportunityService13.xsd" MetadataType="Schema" ID="d945e60b-e789-4dbd-9834-121771d2d779" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd3" />
+    <MetadataFile FileName="OpportunityService14.xsd" MetadataType="Schema" ID="223cc88c-2d23-402b-8f71-e7a7ab48709e" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd0" />
+    <MetadataFile FileName="OpportunityService16.xsd" MetadataType="Schema" ID="6472194b-b19e-48e3-b74b-16bb69ee7ca1" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd4" />
+    <MetadataFile FileName="OpportunityService1.disco" MetadataType="Disco" ID="15ab7152-3f33-4220-aefb-49a8256a5ba3" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OpportunityService.svc?disco" />
+    <MetadataFile FileName="OpportunityService21.xsd" MetadataType="Schema" ID="42d2dfe4-4dea-4cab-bbda-b3c09c82c402" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OpportunityService.svc?xsd=xsd2" />
+    <MetadataFile FileName="OpportunityService1.wsdl" MetadataType="Wsdl" ID="85c6adef-193b-41d2-bb57-eabd6a0d9fa3" SourceId="1" SourceUrl="http://server2.ggk.com/PracticeManagementService/OpportunityService.svc?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
