@@ -132,7 +132,7 @@ namespace PracticeManagementService
         ///<param name="opportunityId">An ID of the opportunity</param>
         ///<returns>A list of proposed persons of an opportunity</returns>
         [OperationContract]
-        List<Person> GetOpportunityPersons(int opportunityId);
+        List<OpportunityPerson> GetOpportunityPersons(int opportunityId);
 
         ///<summary>
         /// Creates a project from an opportunity. 
