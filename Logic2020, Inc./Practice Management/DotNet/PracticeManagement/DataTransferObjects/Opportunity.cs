@@ -279,7 +279,7 @@ namespace DataTransferObjects
         }
 
         [DataMember]
-        public List<Person> ProposedPersons
+        public List<OpportunityPerson> ProposedPersons
         {
             set;
             get;
