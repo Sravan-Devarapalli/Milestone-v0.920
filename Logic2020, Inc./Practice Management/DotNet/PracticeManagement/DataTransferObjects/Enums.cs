@@ -43,7 +43,16 @@ namespace DataTransferObjects
         [EnumMember]
         NormalPerson = 1,
         [EnumMember]
-        StrikedPerson = 2,
+        StrikedPerson = 2
+    }
+
+    [DataContract]
+    public enum OpportunityPersonRelationType
+    {
+        [EnumMember]
+        ProposedResource = 1,
+        [EnumMember]
+        TeamStructure = 2
     }
 
     [DataContract]
@@ -87,5 +96,6 @@ namespace DataTransferObjects
         ProjectLead = 8
 
     }
+
 }
 
