@@ -6,5 +6,5 @@
     cause the file to be unrecognizable by the program.
 -->
 <GenericObjectDataSource DisplayName="OpportunityPerson" Version="1.0" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
-   <TypeInfo>DataTransferObjects.OpportunityPerson, DataTransferObjects, Version=0.900.4323.21224, Culture=neutral, PublicKeyToken=c90764f89000b31d</TypeInfo>
+   <TypeInfo>DataTransferObjects.OpportunityPerson, DataTransferObjects, Version=0.900.4323.26675, Culture=neutral, PublicKeyToken=c90764f89000b31d</TypeInfo>
 </GenericObjectDataSource>
