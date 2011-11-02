@@ -224,10 +224,13 @@ namespace PraticeManagement
             if (Page.IsValid)
             {
                 PersonId = SaveData();
-                PopulateControls(GetPerson(PersonId.Value));
-                result = PersonId.HasValue;
-
-                ClearDirty();
+                if (!((Label)lblSave.FindControl("lblMessage")).Visible)
+                {
+                    PopulateControls(GetPerson(PersonId.Value));
+                    result = PersonId.HasValue;
+                    ClearDirty();
+                }
+                
             }
 
             return result;
