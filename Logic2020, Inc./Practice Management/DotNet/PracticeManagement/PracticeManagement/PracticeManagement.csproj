@@ -363,6 +363,7 @@
     <Content Include="Images\copy.png" />
     <Content Include="Images\printer.png" />
     <Content Include="Images\saveToDisk.png" />
+    <Content Include="Images\Team_Icon.jpg" />
     <Content Include="LoggedOut.aspx" />
     <Content Include="OpportunitySearch.aspx" />
     <Content Include="ProjectCalendar.aspx" />
@@ -484,6 +485,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.DefaultMilestone.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.EmailData.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Financials.MilestonePersonComputedFinancials.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.OpportunityPerson.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.OpportunityPriority.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.OverHeadHistory.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.ProjectsGroupedByPerson.datasource" />
@@ -706,6 +708,21 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\OpportunityService\OpportunityService16.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService17.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService18.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService19.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService20.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService21.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\OverheadService\OverheadService1.wsdl" />
@@ -947,7 +964,6 @@
     <None Include="Service References\OverheadService\OverheadService1.disco" />
     <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
-    <None Include="Service References\OpportunityService\OpportunityService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
     <None Include="Service References\PersonSkillService\configuration91.svcinfo" />
     <None Include="Service References\PersonSkillService\configuration.svcinfo" />
@@ -957,6 +973,7 @@
     </None>
     <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\PersonSkillService\PersonSkillService2.disco" />
+    <None Include="Service References\OpportunityService\OpportunityService1.disco" />
     <Content Include="SkillsEntry.aspx" />
     <Content Include="SkillsProfile.aspx" />
     <Content Include="SkillsSearch.aspx" />
