@@ -190,7 +190,7 @@ namespace PracticeManagementService
         ///</summary>
         ///<param name="opportunityId">An ID of the opportunity</param>
         ///<returns>A list of proposed persons of an opportunity</returns>
-        public List<Person> GetOpportunityPersons(int opportunityId)
+        public List<OpportunityPerson> GetOpportunityPersons(int opportunityId)
         {
             return OpportunityDAL.GetOpportunityPersons(opportunityId);
         }
