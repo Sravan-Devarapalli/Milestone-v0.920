@@ -21,27 +21,11 @@ BEGIN
 
 	IF(@RelationTypeId = 1) --Proposed Resources
 	BEGIN
-		IF(@PersonIdList IS NOT NULL)
+		IF(ISNULL(@PersonIdList,'')<>'')
 		BEGIN
-			
-	
 			INSERT INTO @OpportunityPersonIdsWithTypeTable(PersonId,PersonType)
 			SELECT ResultId ,ResultType
 			FROM [dbo].[ConvertStringListIntoTableWithTwoColoumns] (@PersonIdListLocal)
-
-			DELETE op
-			FROM dbo.OpportunityPersons  op
-			LEFT JOIN @OpportunityPersonIdsWithTypeTable AS p 
-			ON op.OpportunityId = @OpportunityId AND op.PersonId = p.PersonId AND op.OpportunityPersonTypeId=p.PersonType 
-			AND op.RelationTypeId = @RelationTypeId
-			WHERE p.PersonId IS NULL and OP.OpportunityId = @OpportunityId
-
-			INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId,RelationTypeId)
-			SELECT @OpportunityId ,p.PersonId,p.PersonType,@RelationTypeId
-			FROM @OpportunityPersonIdsWithTypeTable AS p 
-			LEFT JOIN dbo.OpportunityPersons op
-			ON p.PersonId = op.PersonId AND op.OpportunityId=@OpportunityId AND op.OpportunityPersonTypeId=p.PersonType
-			WHERE op.PersonId IS NULL 
 		END
 	
 		UPDATE dbo.Opportunity
@@ -69,17 +53,21 @@ BEGIN
 			(PersonId ,
 			PersonType ,
 			Quantity )
-			SELECT C.value('personid[1]','int') X,
-					C.value('persontypeid[1]','int') Y,
-					C.value('qty[1]','int') Z
+			SELECT C.value('personid[1]','int') personid,
+					C.value('persontypeid[1]','int') persontypeid,
+					C.value('qty[1]','int') qty
 			FROM @PersonIdListLocalXML.nodes('/root/item') as T(C)
+		END
 
+	END
+	IF @PersonIdList IS NOT NULL
+	BEGIN
 			DELETE op
 			FROM dbo.OpportunityPersons  op
 			LEFT JOIN @OpportunityPersonIdsWithTypeTable AS p 
 			ON op.OpportunityId = @OpportunityId AND op.PersonId = p.PersonId AND op.OpportunityPersonTypeId=p.PersonType 
-			AND op.RelationTypeId = @RelationTypeId
 			WHERE p.PersonId IS NULL and OP.OpportunityId = @OpportunityId
+			AND op.RelationTypeId = @RelationTypeId
 
 			INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId,RelationTypeId,Quantity)
 			SELECT @OpportunityId ,p.PersonId,p.PersonType,@RelationTypeId,p.Quantity
@@ -87,7 +75,5 @@ BEGIN
 			LEFT JOIN dbo.OpportunityPersons op
 			ON p.PersonId = op.PersonId AND op.OpportunityId=@OpportunityId AND op.OpportunityPersonTypeId=p.PersonType
 			WHERE op.PersonId IS NULL 
-		END
-
-	END
+   END
 END
