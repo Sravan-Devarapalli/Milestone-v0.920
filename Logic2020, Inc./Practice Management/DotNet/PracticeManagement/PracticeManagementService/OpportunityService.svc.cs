@@ -213,9 +213,9 @@ namespace PracticeManagementService
         ///</summary>
         ///<param name="opportunityId">An ID of the opportunity</param>
         ///<param name="personId">An Id of the person</param>
-        public void OpportunityPersonInsert(int opportunityId, string personIdList, string outSideResources)
+        public void OpportunityPersonInsert(int opportunityId, string personIdList, int relationTypeId, string outSideResources)
         {
-            OpportunityDAL.OpportunityPersonInsert(opportunityId, personIdList, outSideResources);
+            OpportunityDAL.OpportunityPersonInsert(opportunityId, personIdList,relationTypeId, outSideResources);
         }
 
         ///<summary>
