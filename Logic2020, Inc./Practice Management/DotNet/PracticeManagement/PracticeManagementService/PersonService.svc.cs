@@ -1032,6 +1032,13 @@ namespace PracticeManagementService
 
             return person.Id;
         }
+        public int SaveStrawManFromExisting(int existingPersonId, string newFirstName, string newLastName)
+        {
+            int newPersonId = 0;
+            PersonDAL.SaveStrawManFromExisting(existingPersonId, newFirstName, newLastName, out newPersonId);
+            return newPersonId;
+        }
+
 
         public Person GetStrawmanDetailsById(int personId)
         {
