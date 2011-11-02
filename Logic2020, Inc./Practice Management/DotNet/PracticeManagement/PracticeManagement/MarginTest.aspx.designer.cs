@@ -49,6 +49,24 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Label lblOr;
         
         /// <summary>
+        /// rbSelectStrawman control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbSelectStrawman;
+        
+        /// <summary>
+        /// lblOr1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblOr1;
+        
+        /// <summary>
         /// rbDefineValues control.
         /// </summary>
         /// <remarks>
@@ -74,6 +92,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlPersonName;
+        
+        /// <summary>
+        /// ddlStrawmanName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlStrawmanName;
         
         /// <summary>
         /// personnelCompensation control.
