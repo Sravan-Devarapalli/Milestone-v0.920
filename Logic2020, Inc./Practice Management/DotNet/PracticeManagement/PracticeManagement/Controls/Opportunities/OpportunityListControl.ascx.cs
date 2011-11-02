@@ -597,6 +597,7 @@ namespace PraticeManagement.Controls.Opportunities
                     dtlProposedPersons.DataSource = oppty.ProposedPersons.FindAll(op=>op.RelationType==(int) OpportunityPersonRelationType.ProposedResource).OrderBy(op => op.Person.LastName + op.Person.FirstName);
                     dtlTeamStructure.DataSource = oppty.ProposedPersons.FindAll(op => op.RelationType == (int)OpportunityPersonRelationType.TeamStructure).OrderBy(op => op.Person.LastName + op.Person.FirstName);
                     dtlProposedPersons.DataBind();
+                    dtlTeamStructure.DataBind();
                 }
                 if (oppty.ProposedPersons != null)
                 {
