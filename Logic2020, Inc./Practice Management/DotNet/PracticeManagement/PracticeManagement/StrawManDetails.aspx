@@ -36,9 +36,9 @@
                         <asp:RequiredFieldValidator ID="rqfvLastName" runat="server" Text="*" ErrorMessage="Last Name is required."
                             ControlToValidate="tbLastName" ToolTip="Last Name is required." SetFocusOnError="true"
                             ValidationGroup="StrawmanGroup"></asp:RequiredFieldValidator>
-                        <asp:CustomValidator ID="cvDupliacteName" runat="server" Text="*" ErrorMessage="There is another Person with the same First Name and Last Name."
+                        <%--<asp:CustomValidator ID="cvDupliacteName" runat="server" Text="*" ErrorMessage="There is another Person with the same First Name and Last Name."
                             ToolTip="There is another Person with the same First Name and Last Name." ValidationGroup="StrawmanGroup"
-                            SetFocusOnError="true" OnServerValidate="cvDupliacteName_ServerValidate"></asp:CustomValidator>
+                            SetFocusOnError="true" OnServerValidate="cvDupliacteName_ServerValidate"></asp:CustomValidator>--%>
                         <asp:CustomValidator ID="cvLengthLastName" runat="server" Text="*" ErrorMessage="Person Last Name characters length must be lessthan or equal to 50."
                             ToolTip="Person Last Name character length must be lessthan or equal to 50." ValidationGroup="StrawmanGroup"
                             SetFocusOnError="true" OnServerValidate="cvNameLength_ServerValidate"></asp:CustomValidator>
@@ -51,12 +51,13 @@
                 </tr>
                 <tr>
                     <td>
-                        <asp:Panel ID="pnlCompensation" runat="server" CssClass="tab-pane">
+                        <asp:Panel ID="pnlCompensation" runat="server" CssClass="bg-light-frame">
                             <div class="filters" style="margin-top: 5px; margin-bottom: 10px;">
                                 <uc1:PersonnelCompensation ID="personnelCompensation" runat="server" IsStrawmanMode="true" />
                             </div>
-                            <div style="padding-top: 10px; font-weight: bold;">
-                                Compensation History :
+                            <div style="padding-top: 10px; font-weight: bold; height:50px">
+                                Compensation History :<br />
+                                 <span style="color:Gray;font-family:Arial;">Click on Start Date column to edit an item<br /></span>
                             </div>
                             <asp:GridView ID="gvCompensationHistory" runat="server" AutoGenerateColumns="False"
                                 EmptyDataText="No compensation history for this person." CssClass="CompPerfTable WholeWidth"
@@ -148,8 +149,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;">
-                        <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save" OnClick="btnSave_Click" />
+                    <td style="text-align: center;">
+                        <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save" OnClick="btnSave_Click" ValidationGroup="StrawmanGroup"/>
                         <asp:CancelAndReturnButton ID="btnCancelAndRetrun" runat="server" />
                     </td>
                 </tr>
