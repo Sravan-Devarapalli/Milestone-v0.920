@@ -39,6 +39,12 @@
                                                 <asp:Label ID="lblOr" runat="server" Text="OR" Style="padding-left: 20px; padding-right:20px; text-align: right;
                                                     font-weight: bold;"></asp:Label>
                                             </td>
+                                            <td style="padding-left: 16px; padding-bottom:6px;">
+                                                <asp:RadioButton ID="rbSelectStrawman" OnCheckedChanged="rbMarginTest_CheckedChanged" Checked="false"
+                                                    runat="server" Text="Select a Strawman" GroupName="marginTest" AutoPostBack="true" />
+                                                <asp:Label ID="lblOr1" runat="server" Text="OR" Style="padding-left: 20px; padding-right:20px; text-align: right;
+                                                    font-weight: bold;"></asp:Label>
+                                            </td>
                                             <td style="padding-bottom:6px;">
                                                 <asp:RadioButton ID="rbDefineValues" OnCheckedChanged="rbMarginTest_CheckedChanged"
                                                     runat="server" Text="Define Values" GroupName="marginTest" AutoPostBack="true" />
@@ -56,6 +62,9 @@
                                 <td colspan="3" style="padding-left: 16px;">
                                     <asp:DropDownList ID="ddlPersonName" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlPersonName_SelectedIndexChanged"
                                         Width="355px">
+                                    </asp:DropDownList>
+                                    <asp:DropDownList ID="ddlStrawmanName" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlPersonName_SelectedIndexChanged"
+                                        Width="355px" Visible="false">
                                     </asp:DropDownList>
                                 </td>
                             </tr>
