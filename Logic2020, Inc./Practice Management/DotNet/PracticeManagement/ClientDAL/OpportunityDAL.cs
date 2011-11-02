@@ -690,12 +690,12 @@ namespace DataAccess
                                 },
                             LastUpdate = reader.GetDateTime(lastUpdateIndex),
                             Project =
-                                !reader.IsDBNull(projectId) ? 
-                                new Project 
-                                { 
-                                    Id = (int?)reader.GetInt32(projectId), 
+                                !reader.IsDBNull(projectId) ?
+                                new Project
+                                {
+                                    Id = (int?)reader.GetInt32(projectId),
                                     ProjectNumber = reader.GetString(projectNumber)
-                                } 
+                                }
                                     : null,
                             OpportunityIndex =
                                 !reader.IsDBNull(opportunityIndex) ? (int?)reader.GetInt32(opportunityIndex) : null,
@@ -819,7 +819,7 @@ namespace DataAccess
                 int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
                 int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
                 int OpportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
-                 int opportunityPersonTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonTypeId);
+                int opportunityPersonTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonTypeId);
                 Opportunity CurrentOpportunity = null;
 
                 while (reader.Read())
@@ -829,26 +829,29 @@ namespace DataAccess
                     if (CurrentOpportunity == null || CurrentOpportunity.Id.Value != opportunityId)
                     {
                         CurrentOpportunity = opportunities.Find(opty => opty.Id.HasValue && opty.Id.Value == opportunityId);
-                        CurrentOpportunity.ProposedPersons = new List<Person>();
+                        CurrentOpportunity.ProposedPersons = new List<OpportunityPerson>();
                     }
 
                     var personId = reader.GetInt32(personIdIndex);
-
-                    var person = new Person
+                    var opportunityPerson = new OpportunityPerson
                     {
-                        Id = personId,
-                        FirstName = reader.GetString(firstNameIndex),
-                        LastName = reader.GetString(lastNameIndex),
-                        OpportunityPersonTypeId = reader.GetInt32(opportunityPersonTypeIdIndex) 
-                    };
+                        Person = new Person
+                                   {
+                                       Id = personId,
+                                       FirstName = reader.GetString(firstNameIndex),
+                                       LastName = reader.GetString(lastNameIndex)
+                                   },
+                        PersonType = reader.GetInt32(opportunityPersonTypeIdIndex)
+                    }
+                    ;
 
-                    CurrentOpportunity.ProposedPersons.Add(person);
+                    CurrentOpportunity.ProposedPersons.Add(opportunityPerson);
                 }
             }
 
         }
 
-        public static List<Person> GetOpportunityPersons(int opportunityId)
+        public static List<OpportunityPerson> GetOpportunityPersons(int opportunityId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -863,7 +866,7 @@ namespace DataAccess
 
                     using (var reader = command.ExecuteReader())
                     {
-                        var result = new List<Person>();
+                        var result = new List<OpportunityPerson>();
                         ReadPersons(reader, result);
                         return result;
                     }
@@ -871,7 +874,7 @@ namespace DataAccess
             }
         }
 
-        private static void ReadPersons(DbDataReader reader, List<Person> result)
+        private static void ReadPersons(DbDataReader reader, List<OpportunityPerson> result)
         {
             if (reader.HasRows)
             {
@@ -882,15 +885,18 @@ namespace DataAccess
                 while (reader.Read())
                 {
                     var personId = reader.GetInt32(personIdIndex);
-                    var person = new Person
+                    var opportunityPerson = new OpportunityPerson
                     {
-                        Id = personId,
-                        FirstName = reader.GetString(firstNameIndex),
-                        LastName = reader.GetString(lastNameIndex),
-                        OpportunityPersonTypeId = reader.GetInt32(opportunityPersonTypeIdIndex)
+                        Person = new Person
+                      {
+                          Id = personId,
+                          FirstName = reader.GetString(firstNameIndex),
+                          LastName = reader.GetString(lastNameIndex)
+                      },
+                        PersonType = reader.GetInt32(opportunityPersonTypeIdIndex)
                     };
 
-                    result.Add(person);
+                    result.Add(opportunityPerson);
                 }
             }
         }
@@ -1056,7 +1062,7 @@ namespace DataAccess
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
-               
+
                 command.Parameters.AddWithValue(Constants.ParameterNames.UpdatedPriorityIdParam,
                                                 updatedPriorityId != null ? (object)updatedPriorityId.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.DeletedPriorityIdParam, deletedPriorityId);
@@ -1141,8 +1147,8 @@ namespace DataAccess
                 }
             }
         }
-	
-	public static IDictionary<string, int> GetOpportunityPriorityTransitionCount(int daysPrevious)
+
+        public static IDictionary<string, int> GetOpportunityPriorityTransitionCount(int daysPrevious)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -1243,7 +1249,7 @@ namespace DataAccess
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
-                
+
                 command.Parameters.AddWithValue(Constants.ParameterNames.ShowActiveParam, showActive);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ShowExperimentalParam, showExperimental);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ShowInactiveParam, showInactive);
