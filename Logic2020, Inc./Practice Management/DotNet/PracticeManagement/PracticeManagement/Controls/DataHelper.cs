@@ -858,6 +858,25 @@ namespace PraticeManagement.Controls
                 }
             }
         }
+        public static void FillStrawManList(ListControl control, string firstItemText)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    var persons = serviceClient.GetStrawManListAll();
+
+                    Array.Sort(persons);
+
+                    FillPersonList(control, firstItemText, persons, "-1");
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
 
         /// <summary>
         /// Fills the list control with the list of active recruiters.
