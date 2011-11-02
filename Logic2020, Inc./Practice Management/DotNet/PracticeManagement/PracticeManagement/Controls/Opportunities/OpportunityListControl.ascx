@@ -567,7 +567,7 @@
                                             <asp:HiddenField ID="hdnOutSideResources" runat="server" />
                                         </td>
                                         <td style="padding-left:4px;width: 4%; white-space: normal;" align="right">
-                                            <asp:Image ID="imgTeamStructure" runat="server" ImageUrl="~/Images/Team_Icon.jpg" ToolTip="Show Team Structure"
+                                            <asp:Image ID="imgTeamStructure" runat="server" ImageUrl="~/Images/Strawman.png" ToolTip="Show straw men"
                                                 onclick="ShowTeamStructureModal(this);" Style="cursor: pointer;" opportunityid='<%# Eval("Id") %>' />
                                             <asp:HiddenField ID="hdnTeamStructure" runat="server" />
                                         </td>
@@ -658,7 +658,7 @@
                                             <asp:HiddenField ID="hdnOutSideResources" runat="server" />
                                         </td>
                                         <td style="padding-left:4px;width: 4%; white-space: normal;" align="right">
-                                            <asp:Image ID="imgTeamStructure" runat="server" ImageUrl="~/Images/Team_Icon.jpg" ToolTip="Show Team Structure"
+                                            <asp:Image ID="imgTeamStructure" runat="server" ImageUrl="~/Images/Strawman.png" ToolTip="Show straw men"
                                                 onclick="ShowTeamStructureModal(this);" Style="cursor: pointer;" opportunityid='<%# Eval("Id") %>' />
                                             <asp:HiddenField ID="hdnTeamStructure" runat="server" />
                                         </td>
