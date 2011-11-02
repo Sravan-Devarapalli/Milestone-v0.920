@@ -225,6 +225,10 @@
         for (var i = 0; i < ddlQtys.length; i++) {
             ddlQtys[i].selectedIndex = 0;
         }
+        var checkboxes = $('#tblTeamStructure tr td :input[type = "checkbox"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = false;
+        }
     }
 
     function clearOutSideResources() {
