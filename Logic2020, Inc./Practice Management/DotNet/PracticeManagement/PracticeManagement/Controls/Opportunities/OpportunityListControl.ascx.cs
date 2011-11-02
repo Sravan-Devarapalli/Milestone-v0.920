@@ -57,6 +57,7 @@ namespace PraticeManagement.Controls.Opportunities
                         		</Parallel>
                         	</Sequence>
                         </OnClick>";
+        private List<NameValuePair> quantities;
 
         #region Properties
 
@@ -116,6 +117,28 @@ namespace PraticeManagement.Controls.Opportunities
             }
         }
 
+
+        protected List<NameValuePair> Quantities
+        {
+            get
+            {
+                if (quantities == null)
+                {
+                    quantities = new List<NameValuePair>();
+
+                    for (var index = 0; index <= 10; index++)
+                    {
+                        var item = new NameValuePair();
+                        item.Id = index;
+                        if (index > 0)
+                            item.Name = index.ToString();
+                        quantities.Add(item);
+                    }
+                }
+                return quantities;
+            }
+
+        }
 
         private Opportunity[] OpportunitiesList
         {
@@ -301,6 +324,9 @@ namespace PraticeManagement.Controls.Opportunities
                 var potentialPersons = ServiceCallers.Custom.Person(c => c.GetPersonListByStatusList("1,3", null));
                 cblPotentialResources.DataSource = potentialPersons.OrderBy(c => c.LastName);
                 cblPotentialResources.DataBind();
+                var Strawmen = ServiceCallers.Custom.Person(c => c.GetStrawManListAll());
+                rpTeamStructure.DataSource = Strawmen;
+                rpTeamStructure.DataBind();
             }
             var opportunities = GetOpportunities();
             lvOpportunities.DataSource = opportunities;
@@ -549,8 +575,10 @@ namespace PraticeManagement.Controls.Opportunities
         {
             if (e.Item.ItemType == ListViewItemType.DataItem)
             {
-                var datalist = e.Item.FindControl("dtlProposedPersons") as DataList;
+                var dtlProposedPersons = e.Item.FindControl("dtlProposedPersons") as DataList;
+                var dtlTeamStructure = e.Item.FindControl("dtlTeamStructure") as DataList;
                 var hdnProposedPersonsIndexes = e.Item.FindControl("hdnProposedPersonsIndexes") as HiddenField;
+                var hdnTeamStructure = e.Item.FindControl("hdnTeamStructure") as HiddenField;
 
                 var oppty = (e.Item as ListViewDataItem).DataItem as Opportunity;
 
@@ -566,12 +594,14 @@ namespace PraticeManagement.Controls.Opportunities
 
                 if (oppty != null && oppty.ProposedPersons != null)
                 {
-                    datalist.DataSource = oppty.ProposedPersons.OrderBy(person => person.LastName + person.FirstName);
-                    datalist.DataBind();
+                    dtlProposedPersons.DataSource = oppty.ProposedPersons.FindAll(op=>op.RelationType==(int) OpportunityPersonRelationType.ProposedResource).OrderBy(op => op.Person.LastName + op.Person.FirstName);
+                    dtlTeamStructure.DataSource = oppty.ProposedPersons.FindAll(op => op.RelationType == (int)OpportunityPersonRelationType.TeamStructure).OrderBy(op => op.Person.LastName + op.Person.FirstName);
+                    dtlProposedPersons.DataBind();
                 }
                 if (oppty.ProposedPersons != null)
                 {
                     hdnProposedPersonsIndexes.Value = GetPersonsIndexesWithPersonTypeString(oppty.ProposedPersons, cblPotentialResources);
+                    hdnTeamStructure.Value = GetTeamStructure(oppty.ProposedPersons);
                 }
                 if (!string.IsNullOrEmpty(oppty.OutSideResources))
                 {
@@ -599,26 +629,44 @@ namespace PraticeManagement.Controls.Opportunities
             return ViewState["OpportunityPrioritiesList"] as OpportunityPriority[];
         }
 
-        private string GetPersonsIndexesWithPersonTypeString(List<Person> persons, CheckBoxList cblPotentialResources)
+        private string GetPersonsIndexesWithPersonTypeString(List<OpportunityPerson> optypersons, CheckBoxList cblPotentialResources)
         {
             StringBuilder sb = new StringBuilder();
 
-            foreach (var person in persons)
+            foreach (var optyperson in optypersons.FindAll(op => op.RelationType == (int)OpportunityPersonRelationType.ProposedResource))
             {
 
-                if (person.Id.HasValue)
+                if (optyperson.Person != null && optyperson.Person.Id.HasValue)
                 {
-                    var item = cblPotentialResources.Items.FindByValue(person.Id.Value.ToString());
+                    var item = cblPotentialResources.Items.FindByValue(optyperson.Person.Id.Value.ToString());
                     if (item != null)
                     {
                         sb.Append(cblPotentialResources.Items.IndexOf(
-                                         cblPotentialResources.Items.FindByValue(person.Id.Value.ToString())
+                                         cblPotentialResources.Items.FindByValue(optyperson.Person.Id.Value.ToString())
                                                                      ).ToString()
                                    );
                         sb.Append(':');
-                        sb.Append(person.OpportunityPersonTypeId.ToString());
+                        sb.Append(((int)optyperson.PersonType).ToString());
                         sb.Append(',');
                     }
+                }
+            }
+            return sb.ToString();
+        }
+
+        private string GetTeamStructure(List<OpportunityPerson> optypersons)
+        {
+            var sb = new StringBuilder();
+
+            foreach (var optyperson in optypersons.FindAll(op => op.RelationType == (int)OpportunityPersonRelationType.TeamStructure))
+            {
+                if (optyperson.Person != null && optyperson.Person.Id.HasValue)
+                {
+                    sb.Append(
+                        string.Format("{0}:{1}|{2},",
+                        optyperson.Person.Id.Value.ToString(),
+                        optyperson.PersonType.ToString(),
+                        optyperson.Quantity));
                 }
             }
             return sb.ToString();
@@ -633,7 +681,22 @@ namespace PraticeManagement.Controls.Opportunities
 
                 using (var serviceClient = new OpportunityServiceClient())
                 {
-                    serviceClient.OpportunityPersonInsert(opportunityId, selectedList, hdnProposedOutSideResources.Value);
+                    serviceClient.OpportunityPersonInsert(opportunityId, selectedList, (int)OpportunityPersonRelationType.ProposedResource, hdnProposedOutSideResources.Value);
+                }
+            }
+            hdnCurrentOpportunityId.Value = string.Empty;
+        }
+
+        protected void btnSaveTeamStructureHidden_OnClick(object sender, EventArgs e)
+        {
+            int opportunityId;
+            if (Int32.TryParse(hdnCurrentOpportunityId.Value, out opportunityId))
+            {
+                var selectedList = hdnTeamStructure.Value;
+
+                using (var serviceClient = new OpportunityServiceClient())
+                {
+                    serviceClient.OpportunityPersonInsert(opportunityId, selectedList, (int)OpportunityPersonRelationType.TeamStructure, string.Empty);
                 }
             }
             hdnCurrentOpportunityId.Value = string.Empty;
@@ -676,13 +739,21 @@ namespace PraticeManagement.Controls.Opportunities
             return string.Format(Description, descriptionText); ;
         }
 
-       
-
         private Table GetSummaryDetails()
         {
             var opportunities = DataHelper.GetFilteredOpportunitiesForDiscussionReview2(false);
             return OpportunitiesHelper.GetFormatedSummaryDetails(opportunities, PriorityTrendList, StatusChangesList);
         }
+
+        protected void rpTeamStructure_OnItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            var ddlQty = e.Item.FindControl("ddlQuantity") as DropDownList;
+            ddlQty.DataSource = Quantities;
+            ddlQty.DataBind();
+
+        }
+
+
     }
 }
 
