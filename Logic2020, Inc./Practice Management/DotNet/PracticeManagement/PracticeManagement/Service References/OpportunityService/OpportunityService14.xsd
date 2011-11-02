@@ -321,6 +321,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="opportunityId" type="xs:int" />
         <xs:element minOccurs="0" name="personIdList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="relationTypeId" type="xs:int" />
         <xs:element minOccurs="0" name="outSideResources" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
