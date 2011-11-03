@@ -27,6 +27,7 @@
             public const string GrossHourlyBillRate = "GrossHourlyBillRate";
             public const string LoadedHourlyPayRate = "LoadedHourlyPayRate";
             public const string Id = "Id";
+            public const string EntryId = "EntryId";
             public const string Date = "Date";
             public const string DayOff = "DayOff";
             public const string CompanyDayOff = "CompanyDayOff";
@@ -391,6 +392,7 @@
             public const string MilestoneIdParam = "@MilestoneId";
             public const string PersonIdParam = "@PersonId";
             public const string PersonIdListParam = "@PersonIdList";
+            public const string StrawManListParam = "@StrawManList";
             public const string OutSideResourcesParam = "@OutSideResources";
             public const string RelationTypeIdParam = "@RelationTypeId";
             public const string StartDateParam = "@StartDate";
@@ -705,7 +707,9 @@
                 public const string MilestonePersonsByMilestoneForTEByProject = "dbo.MilestonePersonsByMilestoneForTEByProject";
                 public const string MilestonePersonGetByMilestonePerson = "dbo.MilestonePersonGetByMilestonePerson";
                 public const string MilestonePersonInsert = "dbo.MilestonePersonInsert";
+                public const string IsPersonAlreadyAddedtoMilestone = "dbo.IsPersonAlreadyAddedtoMilestone";
                 public const string MilestonePersonDelete = "dbo.MilestonePersonDelete";
+                public const string DeleteMilestonePersonEntry = "dbo.DeleteMilestonePersonEntry";
                 public const string MilestonePersonEntryInsert = "dbo.MilestonePersonEntryInsert";
                 public const string MilestonePersonDeleteEntries = "dbo.MilestonePersonDeleteEntries";
                 public const string MilestonePersonListByProjectMonth = "dbo.MilestonePersonListByProjectMonth";
@@ -716,6 +720,9 @@
                 public const string CheckTimeEntriesForMilestonePerson = "dbo.CheckTimeEntriesForMilestonePerson";
                 public const string MilestonePersonsGetByMilestoneId = "dbo.MilestonePersonsGetByMilestoneId";
                 public const string MilestonePersonEntriesWithFinancialsByMilestoneId = "dbo.MilestonePersonEntriesWithFinancialsByMilestoneId";
+                public const string MilestonePersonEntryWithFinancials = "dbo.MilestonePersonEntryWithFinancials";
+                public const string UpdateMilestonePersonEntry = "dbo.UpdateMilestonePersonEntry";
+                public const string MilestoneResourceUpdateProcedure = "dbo.MilestoneResourceUpdate";
             }
 
             public class ProjectExpenses
