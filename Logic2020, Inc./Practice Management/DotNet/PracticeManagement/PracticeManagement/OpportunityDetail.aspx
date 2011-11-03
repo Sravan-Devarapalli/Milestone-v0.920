@@ -613,8 +613,8 @@
                                                     Width="100%" Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"
                                                     Text="*" ToolTip="The Priority is required." ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
                                                 <asp:CustomValidator ID="cvPriority" runat="server" ControlToValidate="ddlPriority"
-                                                    ToolTip="For an opportunity to be saved successfully with B, A, or PO status, it will be required to have a Team Structure added."
-                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                                    ToolTip="You must add a Team Make-Up to this opportunity before it can be saved
+                                    with a PO, A, or B priority." Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                                     OnServerValidate="cvPriority_ServerValidate" ValidationGroup="Opportunity" />
                                             </td>
                                         </tr>
@@ -761,6 +761,38 @@
                         </ajax:AnimationExtender>
                         <ajax:AnimationExtender ID="animShow" TargetControlID="imgPriorityHint" runat="server">
                         </ajax:AnimationExtender>
+                        <asp:HiddenField ID="hdnCanShowPopup" Value="false" runat="server" />
+                        <AjaxControlToolkit:ModalPopupExtender ID="mpePopup" runat="server" TargetControlID="hdnCanShowPopup"
+                            CancelControlID="btnClose" BehaviorID="mpePriorityPopup" BackgroundCssClass="modalBackground"
+                            PopupControlID="pnlPopup" DropShadow="false" />
+                        <asp:Panel ID="pnlPopup" runat="server" BackColor="White" BorderColor="Black" CssClass="ConfirmBoxClassError"
+                            Style="display: none" BorderWidth="2px">
+                            <table width="100%">
+                                <tr>
+                                    <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
+                                        valign="bottom">
+                                        <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
+                                        <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Cancel"
+                                            Style="float: right;" Text="X"></asp:Button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px;" colspan="2">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <p>
+                                                        You must add a Team Make-Up to this opportunity before it can be saved with a PO,
+                                                        A, or B priority.
+                                                    </p>
+                                                    <br />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </asp:Panel>
                     </ContentTemplate>
                     <Triggers>
                         <asp:AsyncPostBackTrigger ControlID="btnAttach" />
@@ -990,7 +1022,7 @@
                                                         <tr>
                                                             <td align="right">
                                                                 <asp:Button ID="btnAddProposedResources" OnClientClick="saveProposedResources();"
-                                                                    OnClick="btnAddProposedResources_Click" runat="server" Text="Add" ToolTip="Add" />
+                                                                    OnClick="btnAddProposedResources_Click" runat="server" Text="Add/Update" ToolTip="Add/Update" />
                                                                 &nbsp;
                                                                 <asp:Button ID="btnCancelProposedResources" runat="server" Text="Cancel" ToolTip="Cancel" />
                                                             </td>
@@ -1083,8 +1115,8 @@
                                                     <table width="356px;">
                                                         <tr>
                                                             <td align="right">
-                                                                <asp:Button ID="btnSaveTeamStructure" runat="server" Text="Add" ToolTip="Add" OnClientClick="javascript:saveTeamStructure();"
-                                                                    OnClick="btnSaveTeamStructure_OnClick" />
+                                                                <asp:Button ID="btnSaveTeamStructure" runat="server" Text="Add/Update" ToolTip="Add/Update"
+                                                                    OnClientClick="javascript:saveTeamStructure();" OnClick="btnSaveTeamStructure_OnClick" />
                                                                 &nbsp;
                                                                 <asp:Button ID="btnTeamCancel" runat="server" Text="Cancel" ToolTip="Cancel" />
                                                             </td>
