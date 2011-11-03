@@ -1465,7 +1465,7 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\OpportunityUpdate.proc.sql">
       <SubType>Code</SubType>
       <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>Off</QuotedIdentifier>
+      <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\MilestonePersonListByProjectMonth.proc.sql">
       <SubType>Code</SubType>
@@ -3754,7 +3754,7 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\SaveStrawManFromExisting.proc.sql">
       <SubType>Code</SubType>
     </Build>
- <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\IsOpportunityHaveTeamStructure.proc.sql">
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\IsOpportunityHaveTeamStructure.proc.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>
