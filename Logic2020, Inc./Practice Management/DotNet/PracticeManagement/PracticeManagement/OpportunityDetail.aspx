@@ -124,6 +124,11 @@
             });
         }
 
+        function clearStrawman(image) {
+            ddlQuantity = image.parentNode.parentNode.getElementsByTagName('SELECT')[0];
+            ddlQuantity.selectedIndex = 0;
+        }
+
         function ClearProposedResources() {
             var chkboxList = document.getElementById('<%=cblPotentialResources.ClientID %>');
             var chkboxes = $('#<%=cblPotentialResources.ClientID %> tr td :input');
@@ -164,14 +169,14 @@
 
 
 
-        function clearOutSideResources() {
-            $find("wmBhOutSideResources").set_Text('');
-        }
+        //        function clearOutSideResources() {
+        //            $find("wmBhOutSideResources").set_Text('');
+        //        }
 
         function ShowPotentialResourcesModal(image) {
             var trPotentialResources = document.getElementById('<%=cblPotentialResources.ClientID %>').getElementsByTagName('tr');
             var attachedResourcesIndexes = document.getElementById('<%=hdnProposedPersonsIndexes.ClientID %>').value.split(",");
-            $find("wmBhOutSideResources").set_Text(document.getElementById('<%=hdnProposedOutSideResources.ClientID %>').value);
+            //            $find("wmBhOutSideResources").set_Text(document.getElementById('hdnProposedOutSideResources.ClientID %>').value);
             $find("wmbhSearchBox").set_Text('');
 
             for (var i = 0; i < trPotentialResources.length; i++) {
@@ -206,9 +211,9 @@
             for (var i = 0; i < trTeamStructure.length; i++) {
                 var hdnPersonId = trTeamStructure[i].children[0].getElementsByTagName('input')[0];
                 var ddlQuantity = trTeamStructure[i].children[1].getElementsByTagName('SELECT')[0];
-                var chkEnabled = trTeamStructure[i].children[2].getElementsByTagName('input')[0];
+                //                var chkEnabled = trTeamStructure[i].children[2].getElementsByTagName('input')[0];
                 ddlQuantity.selectedIndex = 0;
-                chkEnabled.checked = false;
+                //                chkEnabled.checked = false;
                 for (var j = 0; j < attachedTeam.length; j++) {
                     var personString = attachedTeam[j];
                     var personId = personString.substring(0, personString.indexOf(":", 0));
@@ -216,9 +221,9 @@
                         var personType = personString.substring(personString.indexOf(":", 0) + 1, personString.indexOf("|", 0));
                         var Quantity = personString.substring(personString.indexOf("|", 0) + 1, personString.length);
                         ddlQuantity.value = Quantity;
-                        if (personType != "1") {
-                            chkEnabled.checked = true;
-                        }
+                        //                        if (personType != "1") {
+                        //                            chkEnabled.checked = true;
+                        //                        }
                         break;
                     }
                 }
@@ -250,28 +255,28 @@
         }
 
         function UpdateTeamStructureForHiddenfields() {
-            
+
             var hdnTeamStructureWithIndexes = document.getElementById("<%= hdnTeamStructureWithIndexes.ClientID%>");
             var hdnTeamStructure = document.getElementById("<%= hdnTeamStructure.ClientID%>");
 
             var trTeamStructure = document.getElementById('tblTeamStructure').getElementsByTagName('tr');
-            var PersonIdList = ''; 
+            var PersonIdList = '';
             var personIndexesList = '';
             var personType;
             for (var i = 0; i < trTeamStructure.length; i++) {
 
                 var hdnPersonId = trTeamStructure[i].children[0].getElementsByTagName('input')[0];
                 var ddlQuantity = trTeamStructure[i].children[1].getElementsByTagName('SELECT')[0];
-                var chkEnabled = trTeamStructure[i].children[2].getElementsByTagName('input')[0];
-                var hdnIndex = trTeamStructure[i].children[2].getElementsByTagName('input')[1];
-                if (ddlQuantity.selectedIndex > 0 || chkEnabled.checked) {
-                    personType = '';
-                    if (!chkEnabled.checked) {
-                        personType = '1';
-                    }
-                    else {
-                        personType = '2';
-                    }
+                //                var chkEnabled = trTeamStructure[i].children[2].getElementsByTagName('input')[0];
+                var hdnIndex = trTeamStructure[i].children[2].getElementsByTagName('input')[0];
+                if (ddlQuantity.selectedIndex > 0) {
+                    personType = '1';
+                    //                    if (!chkEnabled.checked) {
+                    //                        personType = '1';
+                    //                    }
+                    //                    else {
+                    //                        personType = '2';
+                    //                    }
                     PersonIdList = PersonIdList + hdnPersonId.value + ':' + personType + '|' + ddlQuantity.value + ',';
                     personIndexesList += hdnIndex.value + ':' + personType + '|' + ddlQuantity.value + ',';
                 }
@@ -283,8 +288,8 @@
 
         function saveProposedResources() {
             setDirty(); EnableSaveButton();
-            var hdnProposedOutSideResources = document.getElementById('<%=hdnProposedOutSideResources.ClientID %>');
-            hdnProposedOutSideResources.value = $find("wmBhOutSideResources").get_Text();
+            //            var hdnProposedOutSideResources = document.getElementById('=hdnProposedOutSideResources.ClientID %>');
+            //            hdnProposedOutSideResources.value = $find("wmBhOutSideResources").get_Text();
             GetProposedPersonIdsListWithPersonType();
         }
 
@@ -607,10 +612,10 @@
                                                 <asp:RequiredFieldValidator ID="reqPriority" runat="server" ControlToValidate="ddlPriority"
                                                     Width="100%" Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"
                                                     Text="*" ToolTip="The Priority is required." ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
-                                                    <asp:CustomValidator ID="cvPriority" runat="server" ControlToValidate="ddlPriority"
-                                                    ToolTip="For an opportunity to be saved successfully with B, A, or PO status, it will be required to have a Team Structure added." Text="*" EnableClientScript="false"
-                                                    SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvPriority_ServerValidate"
-                                                    ValidationGroup="Opportunity" />
+                                                <asp:CustomValidator ID="cvPriority" runat="server" ControlToValidate="ddlPriority"
+                                                    ToolTip="For an opportunity to be saved successfully with B, A, or PO status, it will be required to have a Team Structure added."
+                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                                    OnServerValidate="cvPriority_ServerValidate" ValidationGroup="Opportunity" />
                                             </td>
                                         </tr>
                                     </table>
@@ -840,7 +845,7 @@
                                 <ContentTemplate>
                                     <table style="width: 100%;">
                                         <tr>
-                                            <td align="center">
+                                            <td align="center" style="padding-bottom: 5px;">
                                                 <b style="font-size: 16px;">Team Make-Up</b>
                                             </td>
                                         </tr>
@@ -853,11 +858,20 @@
                                                 <table style="width: 100%;" width="100%">
                                                     <tr style="padding-top: 2px;">
                                                         <td align="right" style="width: 5%; padding-right: 15px;">
-                                                            <asp:Image ID="imgProposed" ToolTip="Add Proposed Resources" onclick="ShowPotentialResourcesModal(this);"
-                                                                ImageUrl="~/Images/People_Icon_Large.png" runat="server" />
+                                                            <asp:Image ID="imgProposed" ToolTip="Select Team Resources" Style="cursor: pointer;"
+                                                                onclick="ShowPotentialResourcesModal(this);" ImageUrl="~/Images/People_Icon_Large.png"
+                                                                runat="server" />
                                                         </td>
                                                         <td style="width: 90%;">
                                                             <table style="width: 100%">
+                                                                <tr>
+                                                                    <td align="center">
+                                                                        <b>Team Resources</b>
+                                                                    </td>
+                                                                    <td align="center">
+                                                                        <b>Team Structure</b>
+                                                                    </td>
+                                                                </tr>
                                                                 <tr>
                                                                     <td style="width: 50%; padding-right: 2px;">
                                                                         <div align="left" style="height: 175px; width: 100%; overflow-y: auto; border: 1px solid black;
@@ -885,14 +899,14 @@
                                                                         <div align="left" style="height: 175px; width: 100%; overflow-y: auto; line-height: 19px;
                                                                             border: 1px solid black; background: white; padding-left: 3px; padding-top: 3px;
                                                                             padding-bottom: 3px;">
-                                                                            <asp:DataList ID="dtlTeamStructure" runat="server" Style="white-space: normal;">
+                                                                            <asp:DataList ID="dtlTeamStructure" runat="server" Style="white-space: normal; width: 100%;">
                                                                                 <ItemTemplate>
-                                                                                     <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>
-                                                                                     (<%# Eval("Quantity") %>)
+                                                                                    <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>
+                                                                                    (<%# Eval("Quantity") %>)
                                                                                 </ItemTemplate>
                                                                                 <AlternatingItemTemplate>
-                                                                                     <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>
-                                                                                     (<%# Eval("Quantity") %>)
+                                                                                    <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>
+                                                                                    (<%# Eval("Quantity") %>)
                                                                                 </AlternatingItemTemplate>
                                                                                 <AlternatingItemStyle BackColor="#f9faff" />
                                                                             </asp:DataList>
@@ -902,7 +916,8 @@
                                                             </table>
                                                         </td>
                                                         <td align="left" style="width: 5%; padding-left: 15px;">
-                                                            <asp:Image ID="imgStrawMan" ToolTip="Add Straw Man" ImageUrl="~/Images/StrawMan_Large.png" onclick="ShowTeamStructureModal(this);"
+                                                            <asp:Image ID="imgStrawMan" ToolTip="Select Team Structure" Style="cursor: pointer;"
+                                                                ImageUrl="~/Images/StrawMan_Large.png" onclick="ShowTeamStructureModal(this);"
                                                                 runat="server" />
                                                         </td>
                                                     </tr>
@@ -914,7 +929,7 @@
                                     </table>
                                     <asp:HiddenField ID="hdnProposedResourceIdsWithTypes" runat="server" />
                                     <asp:HiddenField ID="hdnProposedPersonsIndexes" runat="server" />
-                                    <asp:HiddenField ID="hdnProposedOutSideResources" runat="server" />
+                                    <%--<asp:HiddenField ID="hdnProposedOutSideResources" runat="server" />--%>
                                     <asp:HiddenField ID="hdnmpePotentialResources" runat="server" />
                                     <AjaxControlToolkit:ModalPopupExtender ID="mpePotentialResources" runat="server"
                                         BehaviorID="behaviorIdPotentialResources" TargetControlID="hdnmpePotentialResources"
@@ -926,7 +941,7 @@
                                             <tr>
                                                 <td style="padding-left: 5px; padding-top: 5px; padding-bottom: 5px; padding-right: 2px;">
                                                     <center>
-                                                        <b>Potential Resources</b>
+                                                        <b>Team Resources</b>
                                                     </center>
                                                     <asp:TextBox ID="txtSearchBox" runat="server" Width="353px" Height="16px" Style="padding-bottom: 4px;
                                                         margin-bottom: 4px;" MaxLength="4000" onkeyup="filterPotentialResources(this);"></asp:TextBox>
@@ -955,7 +970,7 @@
                                                     <div style="text-align: right; width: 356px; padding: 8px 0px 8px 0px">
                                                         <input type="button" value="Clear All" onclick="javascript:ClearProposedResources();" />
                                                     </div>
-                                                    <table style="width: 100%">
+                                                    <%-- <table style="width: 100%">
                                                         <tr>
                                                             <td style="width: 93% !important;">
                                                                 <asp:TextBox ID="txtOutSideResources" runat="server" Width="100%" Height="16px" Style="padding-bottom: 4px;
@@ -969,7 +984,7 @@
                                                                     style="cursor: pointer; padding-bottom: 5px;" />
                                                             </td>
                                                         </tr>
-                                                    </table>
+                                                    </table>--%>
                                                     <br />
                                                     <table width="356px;">
                                                         <tr>
@@ -995,7 +1010,7 @@
                                             <tr>
                                                 <td style="padding-left: 5px; padding-top: 5px; padding-bottom: 5px; padding-right: 2px;">
                                                     <center>
-                                                        <b>Team structure</b>
+                                                        <b>Team Structure</b>
                                                     </center>
                                                     <asp:TextBox ID="txtTeamSearchBox" runat="server" Width="353px" Height="16px" Style="padding-bottom: 4px;
                                                         margin-bottom: 4px;" MaxLength="4000" onkeyup="filterTeamStructure(this);"></asp:TextBox>
@@ -1021,24 +1036,8 @@
                                                                 <ItemTemplate>
                                                                     <tr>
                                                                         <td style="padding-top: 4px; width: 275px;">
-                                                                            <asp:Label ID="lblStrawman" FirstName='<%# Eval("FirstName") %>' LastName='<%# Eval("LastName") %>' runat="server" Text='<%# Eval("Name") %>'>
-                                                                            </asp:Label>
-                                                                            <asp:HiddenField ID="hdnPersonId"  runat="server" Value='<%# Eval("Id") %>' />
-                                                                        </td>
-                                                                        <td style="padding-top: 4px; padding-right: 5px; width: 40px;">
-                                                                            <asp:DropDownList ID="ddlQuantity" runat="server" DataTextField="Name" DataValueField="Id">
-                                                                            </asp:DropDownList>
-                                                                        </td>
-                                                                        <td>
-                                                                            <asp:CheckBox ID="chkEnabled" runat="server" />
-                                                                            <asp:HiddenField ID="hdnIndex" runat="server"  />
-                                                                        </td>
-                                                                    </tr>
-                                                                </ItemTemplate>
-                                                                <AlternatingItemTemplate>
-                                                                    <tr style="background-color: #f9faff;">
-                                                                        <td style="padding-top: 4px; width: 275px;">
-                                                                            <asp:Label ID="lblStrawman"  FirstName='<%# Eval("FirstName") %>' LastName='<%# Eval("LastName") %>' runat="server" Text='<%# Eval("Name") %>'>
+                                                                            <asp:Label ID="lblStrawman" FirstName='<%# Eval("FirstName") %>' LastName='<%# Eval("LastName") %>'
+                                                                                runat="server" Text='<%# Eval("Name") %>'>
                                                                             </asp:Label>
                                                                             <asp:HiddenField ID="hdnPersonId" runat="server" Value='<%# Eval("Id") %>' />
                                                                         </td>
@@ -1047,8 +1046,30 @@
                                                                             </asp:DropDownList>
                                                                         </td>
                                                                         <td>
-                                                                            <asp:CheckBox ID="chkEnabled" runat="server" />
-                                                                            <asp:HiddenField ID="hdnIndex" runat="server"  />
+                                                                            <%--<asp:CheckBox ID="chkEnabled" runat="server" />--%>
+                                                                            <asp:Image ID="imgTeamCross" Style="cursor: pointer;" onclick="clearStrawman(this);"
+                                                                                runat="server" ImageUrl="~/Images/cross_icon.png" />
+                                                                            <asp:HiddenField ID="hdnIndex" runat="server" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </ItemTemplate>
+                                                                <AlternatingItemTemplate>
+                                                                    <tr style="background-color: #f9faff;">
+                                                                        <td style="padding-top: 4px; width: 275px;">
+                                                                            <asp:Label ID="lblStrawman" FirstName='<%# Eval("FirstName") %>' LastName='<%# Eval("LastName") %>'
+                                                                                runat="server" Text='<%# Eval("Name") %>'>
+                                                                            </asp:Label>
+                                                                            <asp:HiddenField ID="hdnPersonId" runat="server" Value='<%# Eval("Id") %>' />
+                                                                        </td>
+                                                                        <td style="padding-top: 4px; padding-right: 5px; width: 40px;">
+                                                                            <asp:DropDownList ID="ddlQuantity" runat="server" DataTextField="Name" DataValueField="Id">
+                                                                            </asp:DropDownList>
+                                                                        </td>
+                                                                        <td>
+                                                                            <%--<asp:CheckBox ID="chkEnabled" runat="server" />--%>
+                                                                            <asp:Image ID="imgTeamCross" Style="cursor: pointer;" onclick="clearStrawman(this);"
+                                                                                runat="server" ImageUrl="~/Images/cross_icon.png" />
+                                                                            <asp:HiddenField ID="hdnIndex" runat="server" />
                                                                         </td>
                                                                     </tr>
                                                                 </AlternatingItemTemplate>
