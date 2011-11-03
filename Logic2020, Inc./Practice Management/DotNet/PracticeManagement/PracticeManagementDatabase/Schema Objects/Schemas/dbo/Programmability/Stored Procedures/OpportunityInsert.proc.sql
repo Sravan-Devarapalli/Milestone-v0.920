@@ -17,14 +17,18 @@
 	@OpportunityId         INT OUTPUT,
 	@OpportunityIndex      INT,
 	@ProjectId             INT,
-	@OwnerId	       INT = NULL,
-	@GroupId	       INT,
-	@EstimatedRevenue  DECIMAL(18,2) ,
-	@PersonIdList          NVARCHAR(MAX)
+	@OwnerId	           INT = NULL,
+	@GroupId	           INT,
+	@EstimatedRevenue      DECIMAL(18,2) ,
+	@PersonIdList          NVARCHAR(MAX) = NULL,
+	@OutSideResources      NVARCHAR(MAX),
+	@StrawManList          NVARCHAR(MAX) = NULL
 )
 AS
 BEGIN
-	SET NOCOUNT ON
+	    SET NOCOUNT ON;
+		SET ANSI_NULLS ON;
+		SET  QUOTED_IDENTIFIER ON;
 		
 		-- Start logging session
 		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
@@ -55,10 +59,10 @@ BEGIN
 		INSERT INTO dbo.Opportunity
 					(Name, ClientId, SalespersonId, OpportunityStatusId, PriorityId,
 					 ProjectedStartDate, ProjectedEndDate, OpportunityNumber, Description, PracticeId, BuyerName,
-					 Pipeline, Proposed, SendOut, OpportunityIndex,  ProjectId, OwnerId, GroupId ,EstimatedRevenue)
+					 Pipeline, Proposed, SendOut, OpportunityIndex,  ProjectId, OwnerId, GroupId ,EstimatedRevenue,OutSideResources)
 			 VALUES (@Name, @ClientId, @SalespersonId, @OpportunityStatusId, @PriorityId,
 					 @ProjectedStartDate, @ProjectedEndDate, @OpportunityNumber, @Description, @PracticeId, @BuyerName,
-					 @Pipeline, @Proposed, @SendOut, @OpportunityIndex, @ProjectId, @OwnerId, @GroupId ,@EstimatedRevenue)
+					 @Pipeline, @Proposed, @SendOut, @OpportunityIndex, @ProjectId, @OwnerId, @GroupId ,@EstimatedRevenue,@OutSideResources)
 
 		SET @OpportunityId = SCOPE_IDENTITY()
 
@@ -80,14 +84,54 @@ BEGIN
 
 		IF(@PersonIdList IS NOT NULL)
 		BEGIN
-			INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId)
-			SELECT @OpportunityId ,P.ResultId,P.ResultType
+			INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId,RelationTypeId)
+			SELECT @OpportunityId ,P.ResultId,P.ResultType,1-- Relation type 1 means PropesedResource
 			FROM dbo.[ConvertStringListIntoTableWithTwoColoumns] (@PersonIdList) AS p 
 			LEFT JOIN OpportunityPersons op
 			ON p.ResultId = op.PersonId AND op.OpportunityId=@OpportunityId
 			WHERE op.PersonId IS NULL 
 		END
-		
+
+		IF(@StrawManList IS NOT NULL  AND ISNULL(@StrawManList,'')<>'')
+		BEGIN
+
+			DECLARE @OpportunityPersonIdsWithTypeTable TABLE
+			(
+			PersonId INT,
+			PersonType INT,
+			Quantity INT
+			)
+
+			DECLARE @PersonIdListLocalXML XML
+			IF(SUBSTRING(@StrawManList,LEN(@StrawManList),1)=',')
+			SET @StrawManList = SUBSTRING(@StrawManList,1,LEN(@StrawManList)-1)
+			SET @StrawManList = '<root><item><personid>'+@StrawManList+'</qty></item></root>'
+
+			SET @StrawManList = REPLACE(@StrawManList,':','</personid><persontypeid>')
+			SET @StrawManList = REPLACE(@StrawManList,'|','</persontypeid><qty>')
+			SET @StrawManList = REPLACE(@StrawManList,',','</qty></item><item><personid>')
+			
+			SELECT @StrawManList
+			SELECT @PersonIdListLocalXML  = CONVERT(XML,@StrawManList)
+
+			INSERT INTO @OpportunityPersonIdsWithTypeTable
+			(PersonId ,
+			PersonType ,
+			Quantity )
+			SELECT C.value('personid[1]','int') personid,
+					C.value('persontypeid[1]','int') persontypeid,
+					C.value('qty[1]','int') qty
+			FROM @PersonIdListLocalXML.nodes('/root/item') as T(C)
+
+			INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId,RelationTypeId,Quantity)
+			SELECT @OpportunityId ,p.PersonId,p.PersonType,2,p.Quantity
+			FROM @OpportunityPersonIdsWithTypeTable AS p 
+			LEFT JOIN dbo.OpportunityPersons op
+			ON p.PersonId = op.PersonId AND op.OpportunityId=@OpportunityId AND op.OpportunityPersonTypeId=p.PersonType
+			WHERE op.PersonId IS NULL 
+
+		END
+
 		-- End logging session
 		EXEC dbo.SessionLogUnprepare
 	
