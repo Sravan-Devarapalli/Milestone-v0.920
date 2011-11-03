@@ -676,7 +676,7 @@ namespace PraticeManagement.Controls
             txtBonusHourly.Enabled = txtBonusDuration.Enabled =
                 compBonusHourly.Enabled = reqBonusDuration.Enabled = compBonusDuration.Enabled =
                 rbtnBonusHourly.Checked && !(rbtn1099Ctc.Checked || rbtnPercentRevenue.Checked);
-            txtBonusAnnual.Enabled = compBonusAnnual.Enabled = rbtnBonusAnnual.Checked && !rbtn1099Ctc.Checked;
+            txtBonusAnnual.Enabled = compBonusAnnual.Enabled = rbtnBonusAnnual.Checked && !rbtn1099Ctc.Checked && !rbtnPercentRevenue.Checked;
 
             rbtnBonusHourly.Enabled = rbtnBonusAnnual.Enabled = !(rbtn1099Ctc.Checked || rbtnPercentRevenue.Checked);
 
