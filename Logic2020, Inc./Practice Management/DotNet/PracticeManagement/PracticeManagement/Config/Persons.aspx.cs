@@ -659,6 +659,7 @@ namespace PraticeManagement.Config
             {
                 ddlStrawmanName.Enabled = false;
                 cvddlStrawmanName.Enabled = false;
+                ddlStrawmanName.SelectedValue = "-1";
                 ddlStrawmanName_OnSelectedIndexChanged();
            
             }
