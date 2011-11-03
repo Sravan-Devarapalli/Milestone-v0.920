@@ -697,15 +697,6 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.TextBoxWatermarkExtender wmTeamSearchTeam;
         
         /// <summary>
-        /// imgTeamCross control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Image imgTeamCross;
-        
-        /// <summary>
         /// rpTeamStructure control.
         /// </summary>
         /// <remarks>
