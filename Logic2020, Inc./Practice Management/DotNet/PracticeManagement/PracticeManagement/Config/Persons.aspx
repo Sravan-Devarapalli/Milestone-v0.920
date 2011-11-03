@@ -92,14 +92,14 @@
                                         <asp:Button ID="btnClearResults" Enabled="false" runat="server" Text="Clear Results"
                                             OnClick="ResetFilter_Clicked" />
                                     </td>
-                                    <td style="width: 18%; padding-left: 0px;">
+                                    <td style="width: 14%; padding-left: 0px;">
                                     </td>
-                                    <td style="width: 12%;">
+                                    <td style="width: 14%;">
                                         <asp:ShadowedTextButton runat="server" Text="Add Strawman" ID="StbAddStrawman" CssClass="add-btn"
                                             OnClick="StbAddStrawman_OnClick" />
                                         <%--    NavigateUrl="~/StrawManDetails.aspx?returnTo=Config/Persons.aspx?ApplyFilterFromCookie=true" --%>
                                     </td>
-                                    <td style="width: 10%; text-align: right">
+                                    <td style="width: 12%; text-align: right">
                                         <asp:ShadowedHyperlink runat="server" Text="Add Person" ID="lnkAddPerson" CssClass="add-btn"
                                             NavigateUrl="~/PersonDetail.aspx?returnTo=Config/Persons.aspx?ApplyFilterFromCookie=true" />
                                     </td>
@@ -433,31 +433,31 @@
                     </tr>
                     <tr>
                         <td style="padding-right: 10px !important;" align="right">
-                            <asp:Label ID="lbfirstName" runat="server" Text="Role"></asp:Label>
+                            <asp:Label ID="lbfirstName" runat="server" Text="Skill"></asp:Label>
                         </td>
                         <td>
                             <asp:TextBox ID="tbFirstName" runat="server" MaxLength="50"  Enabled="false"
                                 Width="180px"></asp:TextBox>
                             <asp:CustomValidator ID="cvFirstName" runat="server" Text="*" Enabled="false" ValidateEmptyText="true"
-                                ErrorMessage="First Name is required." OnServerValidate="cvFirstName_ServerValidate"
-                                ControlToValidate="tbFirstName" ToolTip="First Name is required." SetFocusOnError="true"
+                                ErrorMessage="Skill is required." OnServerValidate="cvFirstName_ServerValidate"
+                                ControlToValidate="tbFirstName" ToolTip="Skill is required." SetFocusOnError="true"
                                 ValidationGroup="StrawmanGroup"></asp:CustomValidator>
                         </td>
                     </tr>
                     <tr>
                         <td style="padding-right: 10px !important;" align="right">
-                            <asp:Label ID="lblastName" runat="server" Text="Skill" ></asp:Label>
+                            <asp:Label ID="lblastName" runat="server" Text="Role" ></asp:Label>
                         </td>
                         <td>
                             <asp:TextBox ID="tbLastName" MaxLength="50" runat="server" Enabled="false" 
                                 Width="180px"></asp:TextBox>
                             <asp:CustomValidator ID="cvLastName" runat="server" Enabled="false" ValidateEmptyText="true"
-                                Text="*" ErrorMessage="Last Name is required." OnServerValidate="cvLastName_ServerValidate"
-                                ControlToValidate="tbLastName" ToolTip="Last Name is required." SetFocusOnError="true"
+                                Text="*" ErrorMessage="Role is required." OnServerValidate="cvLastName_ServerValidate"
+                                ControlToValidate="tbLastName" ToolTip="Role is required." SetFocusOnError="true"
                                 ValidationGroup="StrawmanGroup"></asp:CustomValidator>
                             <asp:CustomValidator ID="cvDupliacteName" runat="server" Enabled="false" Text="*"
-                                ErrorMessage="There is another Person with the same First Name and Last Name."
-                                ToolTip="There is another Person with the same First Name and Last Name." ValidationGroup="StrawmanGroup"
+                                ErrorMessage="There is another strawman with the same skill and role."
+                                ToolTip="There is another strawman with the same skill and role." ValidationGroup="StrawmanGroup"
                                 SetFocusOnError="true" OnServerValidate="cvDupliacteName_ServerValidate"></asp:CustomValidator>
                         </td>
                     </tr>
