@@ -279,8 +279,8 @@
                 Display="Dynamic" EnableClientScript="False" ErrorMessage="The Vacation Days must be an integer number."
                 Operator="DataTypeCheck" ToolTip="The Vacation Days must be an integer number."
                 Type="Integer">*</asp:CompareValidator>
-            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtVacationDays"
-                ErrorMessage="RequiredFieldValidator" ToolTip="Vacation days is required">Vacation days is required</asp:RequiredFieldValidator>
+            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtVacationDays" Text="*"
+               EnableClientScript="false" Display="Dynamic" ErrorMessage="Vacation days is required" ToolTip="Vacation days is required"></asp:RequiredFieldValidator>
         </td>
     </tr>
     <tr id="trPayments" runat="server">
