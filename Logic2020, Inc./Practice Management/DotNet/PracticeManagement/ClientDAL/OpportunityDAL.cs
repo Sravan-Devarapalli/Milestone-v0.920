@@ -375,9 +375,6 @@ namespace DataAccess
                     Constants.ParameterNames.StrawManListParam,
                     opportunity.StrawManList == null ? (object)DBNull.Value : opportunity.StrawManList);
 
-                command.Parameters.AddWithValue(Constants.ParameterNames.OutSideResourcesParam, opportunity.OutSideResources);
-
-
                 var idParam = new SqlParameter(Constants.ParameterNames.OpportunityIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
                 command.Parameters.Add(idParam);
 
@@ -499,7 +496,6 @@ namespace DataAccess
                     Constants.ParameterNames.StrawManListParam,
                     opportunity.StrawManList == null ? (object)DBNull.Value : opportunity.StrawManList);
 
-                command.Parameters.AddWithValue(Constants.ParameterNames.OutSideResourcesParam, opportunity.OutSideResources);
 
                 try
                 {
@@ -746,13 +742,13 @@ namespace DataAccess
                         }
                     }
 
-                    if (OutSideResourcesIndex > -1)
-                    {
-                        if (!reader.IsDBNull(OutSideResourcesIndex))
-                        {
-                            opportunity.OutSideResources = reader.GetString(OutSideResourcesIndex);
-                        }
-                    }
+                    //if (OutSideResourcesIndex > -1)
+                    //{
+                    //    if (!reader.IsDBNull(OutSideResourcesIndex))
+                    //    {
+                    //        opportunity.OutSideResources = reader.GetString(OutSideResourcesIndex);
+                    //    }
+                    //}
                     if (prioritySortOrderIndex > -1)
                     {
                         if (!reader.IsDBNull(prioritySortOrderIndex))
