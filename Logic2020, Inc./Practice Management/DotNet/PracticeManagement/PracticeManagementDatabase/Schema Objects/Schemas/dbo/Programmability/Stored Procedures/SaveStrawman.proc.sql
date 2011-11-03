@@ -23,7 +23,7 @@ BEGIN
 		SELECT @Today = CONVERT(TIME,@Today)
 
 		SET @StartDate = ISNULL(CONVERT(DATE, @StartDate), '1900-01-01')
-		
+		SET @BonusHoursToCollect = ISNULL(@BonusHoursToCollect, dbo.GetHoursPerYear())
 			
 		IF @PersonId IS NULL
 		BEGIN
