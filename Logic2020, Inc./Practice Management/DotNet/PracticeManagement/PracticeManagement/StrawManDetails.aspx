@@ -18,7 +18,7 @@
         <ContentTemplate>
             <table class="WholeWidth">
                 <tr>
-                    <td width="12%" align="center">
+                    <td width="1%" style="padding-left:4px;">
                         Skill
                     </td>
                     <td width="10%">
@@ -33,10 +33,10 @@
                     <td></td>
                 </tr>
                 <tr>
-                    <td align="center">
+                    <td style="padding-left:4px;padding-top:5px;" >
                         Role
                     </td>
-                    <td>
+                    <td style="padding-top:5px;" >
                         <asp:TextBox ID="tbLastName" runat="server" onchange="setDirty();"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rqfvLastName" runat="server" Text="*" ErrorMessage="Role is required."
                             ControlToValidate="tbLastName" ToolTip="Role is required." SetFocusOnError="true"
