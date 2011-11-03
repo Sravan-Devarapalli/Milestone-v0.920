@@ -31,7 +31,6 @@ BEGIN
 		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 			SET NOCOUNT ON;
 			SET ANSI_NULLS ON;
-			SET  QUOTED_IDENTIFIER ON;
 		
 		DECLARE @PrevOpportunityStatusId INT
 		DECLARE @PrevPriority NVARCHAR(255)
