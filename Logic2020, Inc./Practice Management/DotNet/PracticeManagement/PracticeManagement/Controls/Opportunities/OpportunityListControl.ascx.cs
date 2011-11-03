@@ -130,8 +130,7 @@ namespace PraticeManagement.Controls.Opportunities
                     {
                         var item = new NameValuePair();
                         item.Id = index;
-                        if (index > 0)
-                            item.Name = index.ToString();
+                        item.Name = index.ToString();
                         quantities.Add(item);
                     }
                 }
@@ -618,17 +617,17 @@ namespace PraticeManagement.Controls.Opportunities
                     hdnProposedPersonsIndexes.Value = GetPersonsIndexesWithPersonTypeString(oppty.ProposedPersons, cblPotentialResources);
                     hdnTeamStructure.Value = GetTeamStructure(oppty.ProposedPersons);
                 }
-                if (!string.IsNullOrEmpty(oppty.OutSideResources))
-                {
-                    var hdnOutSideResources = e.Item.FindControl("hdnOutSideResources") as HiddenField;
-                    var ltrlOutSideResources = e.Item.FindControl("ltrlOutSideResources") as Literal;
-                    hdnOutSideResources.Value = oppty.OutSideResources;
-                    if (!string.IsNullOrEmpty(oppty.OutSideResources) && oppty.OutSideResources[oppty.OutSideResources.Length - 1] == ';')
-                    {
-                        oppty.OutSideResources = oppty.OutSideResources.Substring(0, oppty.OutSideResources.Length - 1);
-                    }
-                    ltrlOutSideResources.Text = oppty.OutSideResources.Replace(";", "<br/>");
-                }
+                //if (!string.IsNullOrEmpty(oppty.OutSideResources))
+                //{
+                //var hdnOutSideResources = e.Item.FindControl("hdnOutSideResources") as HiddenField;
+                //var ltrlOutSideResources = e.Item.FindControl("ltrlOutSideResources") as Literal;
+                //hdnOutSideResources.Value = oppty.OutSideResources;
+                //if (!string.IsNullOrEmpty(oppty.OutSideResources) && oppty.OutSideResources[oppty.OutSideResources.Length - 1] == ';')
+                //{
+                //    oppty.OutSideResources = oppty.OutSideResources.Substring(0, oppty.OutSideResources.Length - 1);
+                //}
+                //ltrlOutSideResources.Text = oppty.OutSideResources.Replace(";", "<br/>");
+                //}
             }
         }
 
@@ -701,7 +700,7 @@ namespace PraticeManagement.Controls.Opportunities
 
                 using (var serviceClient = new OpportunityServiceClient())
                 {
-                    serviceClient.OpportunityPersonInsert(opportunityId, selectedList, (int)OpportunityPersonRelationType.ProposedResource, hdnProposedOutSideResources.Value);
+                    serviceClient.OpportunityPersonInsert(opportunityId, selectedList, (int)OpportunityPersonRelationType.ProposedResource, string.Empty);
                 }
             }
 
