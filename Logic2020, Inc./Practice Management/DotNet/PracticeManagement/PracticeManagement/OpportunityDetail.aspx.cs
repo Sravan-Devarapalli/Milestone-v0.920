@@ -523,20 +523,19 @@ namespace PraticeManagement
                     Page.Validate(vsumWonConvert.ValidationGroup);
                     if (Page.IsValid)
                     {
-                        //ucProposedResources.FillProposedResources();
-                        //upProposedResources.Update();
-                        //if (HasProposedPersonsOfTypeNormal)
-                        //{
-                        //    Page.Validate(vsumHasPersons.ValidationGroup);
-                        //    if (Page.IsValid)
-                        //    {
-                        //      ConvertToProject();
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    ConvertToProject();
-                        //}
+
+                        if (ProposedPersons.Where(p  => p.PersonType == 1).Count() > 0)
+                        {
+                            Page.Validate(vsumHasPersons.ValidationGroup);
+                            if (Page.IsValid)
+                            {
+                                ConvertToProject();
+                            }
+                        }
+                        else
+                        {
+                            ConvertToProject();
+                        }
                     }
                 }
             }
@@ -563,40 +562,40 @@ namespace PraticeManagement
             return result;
         }
 
-        //private void ConvertToProject()
-        //{
-        //    using (var serviceClient = new OpportunityServiceClient())
-        //    {
-        //        try
-        //        {
-        //            var projectId = serviceClient.ConvertOpportunityToProject(OpportunityId.Value,
-        //                                                                      User.Identity.Name, HasProposedPersonsOfTypeNormal);
-        //            if (!string.IsNullOrEmpty(Request.QueryString["id"]))
-        //            {
-        //                Response.Redirect(
-        //                        Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri));
-        //            }
-        //            else
-        //            {
-        //                if (Request.Url.AbsoluteUri.Contains('?'))
-        //                {
-        //                    Response.Redirect(
-        //                        Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri + "&id=" + OpportunityId.Value));
-        //                }
-        //                else
-        //                {
-        //                    Response.Redirect(
-        //                       Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri + "?id=" + OpportunityId.Value));
-        //                }
-        //            }
-        //        }
-        //        catch (CommunicationException)
-        //        {
-        //            serviceClient.Abort();
-        //            throw;
-        //        }
-        //    }
-        //}
+        private void ConvertToProject()
+        {
+            using (var serviceClient = new OpportunityServiceClient())
+            {
+                try
+                {
+                    var projectId = serviceClient.ConvertOpportunityToProject(OpportunityId.Value,
+                                                                              User.Identity.Name, ProposedPersons.Where(p => p.PersonType == 1).Count() > 0);
+                    if (!string.IsNullOrEmpty(Request.QueryString["id"]))
+                    {
+                        Response.Redirect(
+                                Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri));
+                    }
+                    else
+                    {
+                        if (Request.Url.AbsoluteUri.Contains('?'))
+                        {
+                            Response.Redirect(
+                                Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri + "&id=" + OpportunityId.Value));
+                        }
+                        else
+                        {
+                            Response.Redirect(
+                               Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri + "?id=" + OpportunityId.Value));
+                        }
+                    }
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
 
         protected void ddlClient_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1236,6 +1235,7 @@ namespace PraticeManagement
             {
                 if (ProposedPersons.Count() < 1 && StrawMans.Count() < 1)
                 {
+                    mpePopup.Show();
                     e.IsValid = false;
                 }
             }
