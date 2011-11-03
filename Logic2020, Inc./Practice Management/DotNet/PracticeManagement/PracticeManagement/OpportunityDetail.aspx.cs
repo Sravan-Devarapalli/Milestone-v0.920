@@ -144,7 +144,7 @@ namespace PraticeManagement
                 return (new List<OpportunityPerson>()).AsQueryable().ToArray();
             }
 
-            set 
+            set
             {
                 ViewState[OpportunityPersons_Key] = value;
             }
@@ -180,8 +180,7 @@ namespace PraticeManagement
                     {
                         var item = new NameValuePair();
                         item.Id = index;
-                        if (index > 0)
-                            item.Name = index.ToString();
+                        item.Name = index.ToString();
                         quantities.Add(item);
                     }
                 }
@@ -228,7 +227,7 @@ namespace PraticeManagement
                 rpTeamStructure.DataBind();
 
                 FillProposedResourcesAndStrawMans();
-                
+
 
                 PopulatePriorityHint();
 
@@ -291,7 +290,7 @@ namespace PraticeManagement
 
                 dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity });
                 dtlTeamStructure.DataBind();
-             
+
             }
         }
 
@@ -467,7 +466,7 @@ namespace PraticeManagement
             if (IsPostBack)
                 FillControls();
 
-           // PopulateProposedResources();
+            // PopulateProposedResources();
         }
 
         //private void PopulateProposedResources()
@@ -717,7 +716,7 @@ namespace PraticeManagement
         }
 
 
-       
+
 
         protected override bool ValidateAndSave()
         {
@@ -895,14 +894,14 @@ namespace PraticeManagement
                 ddlPriority.Items.IndexOf(
                 ddlPriority.Items.FindByValue(opportunity.Priority == null ? "0" : opportunity.Priority.Id.ToString()));
 
-            if (!string.IsNullOrEmpty(opportunity.OutSideResources))
-            {
-                if (opportunity.OutSideResources[opportunity.OutSideResources.Length - 1] == ';')
-                {
-                    opportunity.OutSideResources = opportunity.OutSideResources.Substring(0, opportunity.OutSideResources.Length - 1);
-                }
-                ltrlOutSideResources.Text = opportunity.OutSideResources.Replace(";", "<br/>");
-            }
+            //if (!string.IsNullOrEmpty(opportunity.OutSideResources))
+            //{
+            //    if (opportunity.OutSideResources[opportunity.OutSideResources.Length - 1] == ';')
+            //    {
+            //        opportunity.OutSideResources = opportunity.OutSideResources.Substring(0, opportunity.OutSideResources.Length - 1);
+            //    }
+            //    ltrlOutSideResources.Text = opportunity.OutSideResources.Replace(";", "<br/>");
+            //}
 
 
             PopulateSalesPersonDropDown();
@@ -917,8 +916,8 @@ namespace PraticeManagement
             btnSave.Attributes.Add("disabled", "true");
 
             hdnProposedPersonsIndexes.Value = GetPersonsIndexesWithPersonTypeString(ProposedPersons.AsQueryable().ToList());
-            hdnProposedOutSideResources.Value = opportunity.OutSideResources;
-            hdnTeamStructure.Value =  GetTeamStructure(StrawMans.AsQueryable().ToList());
+            //hdnProposedOutSideResources.Value = opportunity.OutSideResources;
+            hdnTeamStructure.Value = GetTeamStructure(StrawMans.AsQueryable().ToList());
         }
 
         private void PopulateProjectsDropDown()
@@ -1071,7 +1070,7 @@ namespace PraticeManagement
 
             opportunity.ProposedPersonIdList = hdnProposedResourceIdsWithTypes.Value;
             opportunity.StrawManList = hdnTeamStructure.Value;
-            opportunity.OutSideResources = txtOutSideResources.Text;
+            //opportunity.OutSideResources = txtOutSideResources.Text;
         }
 
         protected static string GetWrappedText(String NoteText)
@@ -1110,7 +1109,7 @@ namespace PraticeManagement
 
             for (int i = 0; i < strawMansSelectedWithIndexes.Length; i++)
             {
-                string[] splitArray = { ":" ,"|"};
+                string[] splitArray = { ":", "|" };
                 string[] list = strawMansSelectedWithIndexes[i].Split(splitArray, StringSplitOptions.None);
                 var idsList = strawMansSelectedWithIds[i].Split(splitArray, StringSplitOptions.None);
                 if (list.Length == 3)
@@ -1139,7 +1138,7 @@ namespace PraticeManagement
 
             StrawMans = opportunityPersons.AsQueryable().ToArray();
 
-            dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity=p.Quantity });
+            dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity });
             dtlTeamStructure.DataBind();
         }
 
@@ -1173,7 +1172,7 @@ namespace PraticeManagement
             dtlProposedPersons.DataSource = opportunityPersons.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType });
             dtlProposedPersons.DataBind();
 
-            ltrlOutSideResources.Text = txtOutSideResources.Text.Replace(";", "<br/>");
+            //ltrlOutSideResources.Text = txtOutSideResources.Text.Replace(";", "<br/>");
 
         }
 
@@ -1241,7 +1240,7 @@ namespace PraticeManagement
                 }
             }
         }
-        
+
 
         #endregion
 
