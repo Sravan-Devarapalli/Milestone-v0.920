@@ -371,6 +371,12 @@ namespace DataAccess
                    Constants.ParameterNames.PersonIdListParam,
                    opportunity.ProposedPersonIdList == null ? (object)DBNull.Value : opportunity.ProposedPersonIdList);
 
+                command.Parameters.AddWithValue(
+                    Constants.ParameterNames.StrawManListParam,
+                    opportunity.StrawManList == null ? (object)DBNull.Value : opportunity.StrawManList);
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.OutSideResourcesParam, opportunity.OutSideResources);
+
 
                 var idParam = new SqlParameter(Constants.ParameterNames.OpportunityIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
                 command.Parameters.Add(idParam);
@@ -489,6 +495,11 @@ namespace DataAccess
                 command.Parameters.AddWithValue(
                     Constants.ParameterNames.PersonIdListParam,
                     opportunity.ProposedPersonIdList == null ? (object)DBNull.Value : opportunity.ProposedPersonIdList);
+                command.Parameters.AddWithValue(
+                    Constants.ParameterNames.StrawManListParam,
+                    opportunity.StrawManList == null ? (object)DBNull.Value : opportunity.StrawManList);
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.OutSideResourcesParam, opportunity.OutSideResources);
 
                 try
                 {
@@ -811,6 +822,41 @@ namespace DataAccess
             }
         }
 
+
+        private static void ReadAndAttachPersonsToOpportunity(SqlDataReader reader, List<OpportunityPerson> opportunityPersons)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int opportunityPersonTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonTypeId);
+                int opportunityPersonRelationTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonRelationTypeId);
+                int opportunityPersonQuantityIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonQuantity);
+                
+
+                while (reader.Read())
+                {
+                    var opportunityPerson = new OpportunityPerson
+                    {
+                        Person = new Person
+                        {
+                            Id = reader.GetInt32(personIdIndex),
+                            FirstName = reader.GetString(firstNameIndex),
+                            LastName = reader.GetString(lastNameIndex)
+                        },
+                        PersonType = reader.GetInt32(opportunityPersonTypeIdIndex),
+                        RelationType = reader.GetInt32(opportunityPersonRelationTypeIdIndex),
+                        Quantity = !reader.IsDBNull(opportunityPersonQuantityIndex) ? reader.GetInt32(opportunityPersonQuantityIndex) : 0
+                    }
+                    ;
+
+                    opportunityPersons.Add(opportunityPerson);
+                }
+            }
+
+        }
+
         private static void ReadAndAttachPersonsToOpportunities(SqlDataReader reader, List<Opportunity> opportunities)
         {
             if (reader.HasRows)
@@ -871,7 +917,7 @@ namespace DataAccess
                     using (var reader = command.ExecuteReader())
                     {
                         var result = new List<OpportunityPerson>();
-                        ReadPersons(reader, result);
+                        ReadAndAttachPersonsToOpportunity(reader, result);
                         return result;
                     }
                 }
