@@ -45,6 +45,9 @@ namespace PraticeManagement
         private const string EstRevenueFormat = "Est. Revenue - {0}";
         private const string WordBreak = "<wbr />";
         private const string NEWLY_ADDED_NOTES_LIST = "NEWLY_ADDED_NOTES_LIST";
+        private const string OpportunityPersons_Key = "OpportunityPersons_Key_1";
+        private const string StrawMan_Key = "STRAWMAN_KEY_1";
+        private List<NameValuePair> quantities;
 
         private const string ANIMATION_SHOW_SCRIPT =
                         @"<OnClick>
@@ -129,50 +132,71 @@ namespace PraticeManagement
             }
         }
 
-        private bool HasProposedPersonsOfTypeNormal
+        private OpportunityPerson[] ProposedPersons
         {
             get
             {
-                return ucProposedResources.HasProposedPersonsOfTypeNormal;
+                if (ViewState[OpportunityPersons_Key] != null)
+                {
+                    return ViewState[OpportunityPersons_Key] as OpportunityPerson[];
+                }
+
+                return (new List<OpportunityPerson>()).AsQueryable().ToArray();
+            }
+
+            set 
+            {
+                ViewState[OpportunityPersons_Key] = value;
             }
         }
 
-        private Note[] NotesList
+        private OpportunityPerson[] StrawMans
         {
             get
             {
-                if (ViewState[NOTE_LIST_KEY] != null)
+                if (ViewState[StrawMan_Key] != null)
                 {
-                    return ViewState[NOTE_LIST_KEY] as Note[];
+                    return ViewState[StrawMan_Key] as OpportunityPerson[];
                 }
 
-                if (OpportunityId.HasValue)
-                {
-
-                    Note[] notes = ServiceCallers.Custom.Milestone(c => c.NoteListByTargetId(Convert.ToInt32(OpportunityId), 4));
-                    ViewState[NOTE_LIST_KEY] = notes;
-                    return notes;
-                }
-
-                return null;
+                return (new List<OpportunityPerson>()).AsQueryable().ToArray();
             }
-        }
 
-        private List<Note> NewlyAddedNotes
-        {
-            get
-            {
-                if (ViewState[NEWLY_ADDED_NOTES_LIST] != null)
-                {
-                    return ViewState[NEWLY_ADDED_NOTES_LIST] as List<Note>;
-                }
-                return null;
-            }
             set
             {
-                ViewState[NEWLY_ADDED_NOTES_LIST] = value;
+                ViewState[StrawMan_Key] = value;
             }
         }
+
+        protected List<NameValuePair> Quantities
+        {
+            get
+            {
+                if (quantities == null)
+                {
+                    quantities = new List<NameValuePair>();
+
+                    for (var index = 0; index <= 10; index++)
+                    {
+                        var item = new NameValuePair();
+                        item.Id = index;
+                        if (index > 0)
+                            item.Name = index.ToString();
+                        quantities.Add(item);
+                    }
+                }
+                return quantities;
+            }
+
+        }
+
+        //private bool HasProposedPersonsOfTypeNormal
+        //{
+        //    get
+        //    {
+        //        return ucProposedResources.HasProposedPersonsOfTypeNormal;
+        //    }
+        //}
 
         #endregion
 
@@ -197,6 +221,15 @@ namespace PraticeManagement
                 DataHelper.FillOpportunityPrioritiesList(ddlPriority, string.Empty);
                 DataHelper.FillOwnersList(ddlOpportunityOwner, "-- Select Owner --");
 
+                FillPotentialResources();
+
+                var Strawmen = ServiceCallers.Custom.Person(c => c.GetStrawManListAll());
+                rpTeamStructure.DataSource = Strawmen;
+                rpTeamStructure.DataBind();
+
+                FillProposedResourcesAndStrawMans();
+                
+
                 PopulatePriorityHint();
 
                 if (OpportunityId.HasValue)
@@ -208,15 +241,13 @@ namespace PraticeManagement
                 }
                 else
                 {
-                    ucProposedResources.FillPotentialResources();
-                    upProposedResources.Update();
+                    //ucProposedResources.FillPotentialResources();
+                    //upProposedResources.Update();
                 }
 
                 tpHistory.Visible = OpportunityId.HasValue;
             }
 
-            if (NotesList == null || !NotesList.Any())
-                BindNotesData();
 
             mlConfirmation.ClearMessage();
 
@@ -234,6 +265,48 @@ namespace PraticeManagement
 
             animHide.Animations = GetAnimationsScriptForAnimHide();
             animShow.Animations = GetAnimationsScriptForAnimShow();
+        }
+
+        public void FillPotentialResources()
+        {
+            var potentialPersons = ServiceCallers.Custom.Person(c => c.GetPersonListByStatusList("1,3", null));
+            cblPotentialResources.DataSource = potentialPersons.OrderBy(c => c.LastName);
+            cblPotentialResources.DataBind();
+        }
+
+        public void FillProposedResourcesAndStrawMans()
+        {
+            if (OpportunityId.HasValue)
+            {
+
+                using (var serviceClient = new OpportunityServiceClient())
+                {
+                    OpportunityPerson[] opPersons = serviceClient.GetOpportunityPersons(OpportunityId.Value);
+                    ProposedPersons = opPersons.Where(op => op.RelationType == 1).AsQueryable().ToArray();
+                    StrawMans = opPersons.Where(op => op.RelationType == 2).AsQueryable().ToArray();
+                }
+
+                dtlProposedPersons.DataSource = ProposedPersons.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType });
+                dtlProposedPersons.DataBind();
+
+                dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity });
+                dtlTeamStructure.DataBind();
+             
+            }
+        }
+
+
+        protected static string GetFormattedPersonName(string personLastFirstName, int opportunityPersonTypeId)
+        {
+            if (opportunityPersonTypeId == (int)OpportunityPersonType.NormalPerson)
+            {
+                return personLastFirstName;
+            }
+            else
+            {
+                return "<strike>" + personLastFirstName + "</strike>";
+            }
+
         }
 
 
@@ -287,8 +360,73 @@ namespace PraticeManagement
 
             NeedToShowDeleteButton();
 
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "MultipleSelectionCheckBoxes_OnClickKeyName", string.Format("MultipleSelectionCheckBoxes_OnClick('{0}');", cblPotentialResources.ClientID), true);
             ScriptManager.RegisterStartupScript(this, this.GetType(), "EnableOrDisableConvertOrAttachToProj", "EnableOrDisableConvertOrAttachToProj();", true);
         }
+
+        protected void cblPotentialResources_OnDataBound(object senser, EventArgs e)
+        {
+            //foreach (ListItem item in cblPotentialResources.Items)
+            //{
+            //    item.Selected = false;
+
+            //    if (OpportunityId.HasValue)
+            //    {
+            //        foreach (var opPerson in OpportunityPersons)
+            //        {
+            //            if (opPerson.Person.Id.Value.ToString() == item.Value)
+            //            {
+            //                item.Attributes["selectedchecktype"] = opPerson.PersonType.ToString();
+            //                break;
+            //            }
+            //        }
+            //    }
+            //}
+        }
+
+        private string GetPersonsIndexesWithPersonTypeString(List<OpportunityPerson> persons)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var person in persons)
+            {
+
+                if (person.Person.Id.HasValue)
+                {
+                    var item = cblPotentialResources.Items.FindByValue(person.Person.Id.Value.ToString());
+                    if (item != null)
+                    {
+                        sb.Append(cblPotentialResources.Items.IndexOf(
+                                         cblPotentialResources.Items.FindByValue(person.Person.Id.Value.ToString())
+                                                                     ).ToString()
+                                   );
+                        sb.Append(':');
+                        sb.Append(person.PersonType.ToString());
+                        sb.Append(',');
+                    }
+                }
+            }
+            return sb.ToString();
+        }
+
+        private string GetTeamStructure(List<OpportunityPerson> optypersons)
+        {
+            var sb = new StringBuilder();
+
+            foreach (var optyperson in optypersons.FindAll(op => op.RelationType == (int)OpportunityPersonRelationType.TeamStructure))
+            {
+                if (optyperson.Person != null && optyperson.Person.Id.HasValue)
+                {
+                    sb.Append(
+                        string.Format("{0}:{1}|{2},",
+                        optyperson.Person.Id.Value.ToString(),
+                        optyperson.PersonType.ToString(),
+                        optyperson.Quantity));
+                }
+            }
+            return sb.ToString();
+        }
+
 
         private void NeedToShowDeleteButton()
         {
@@ -324,89 +462,21 @@ namespace PraticeManagement
 
         public void LoadOpportunityDetails()
         {
-            ucProposedResources.OpportunityId = OpportunityId;
+            //ucProposedResources.OpportunityId = OpportunityId;
 
             if (IsPostBack)
                 FillControls();
 
-            BindNotesData();
-            PopulateProposedResources();
+           // PopulateProposedResources();
         }
 
-        private void PopulateProposedResources()
-        {
-            ucProposedResources.FillProposedResources();
-            ucProposedResources.FillPotentialResources();
-            upProposedResources.Update();
-        }
+        //private void PopulateProposedResources()
+        //{
+        //    ucProposedResources.FillProposedResources();
+        //    ucProposedResources.FillPotentialResources();
+        //    upProposedResources.Update();
+        //}
 
-        private void BindNotesData()
-        {
-            var notes = NotesList;
-            lvNotes.DataSource = notes;
-            lvNotes.DataBind();
-            upNotes.Update();
-        }
-
-        protected void btnAddNote_Click(object sender, EventArgs e)
-        {
-            Page.Validate(tbNote.ValidationGroup);
-
-            if (Page.IsValid)
-            {
-                var note = new Note
-                {
-                    Author = new Person
-                    {
-                        Id = DataHelper.CurrentPerson.Id,
-                        LastName = DataHelper.CurrentPerson.LastName
-                    },
-                    CreateDate = DateTime.Now,
-                    NoteText = tbNote.Text,
-                    Target = (NoteTarget)4
-                };
-
-                if (!OpportunityId.HasValue)
-                {
-                    if (NewlyAddedNotes != null)
-                    {
-                        NewlyAddedNotes.Add(note);
-                    }
-                    else
-                    {
-                        NewlyAddedNotes = new List<Note>();
-                        NewlyAddedNotes.Add(note);
-                    }
-
-                    if (NotesList != null)
-                    {
-                        List<Note> notesList = NotesList.ToList();
-                        notesList.Add(note);
-                        ViewState[NOTE_LIST_KEY] = notesList.AsQueryable().ToArray();
-                    }
-                    else
-                    {
-                        List<Note> notesList = new List<Note>();
-                        notesList.Add(note);
-                        ViewState[NOTE_LIST_KEY] = notesList.AsQueryable().ToArray();
-                    }
-
-                    ScriptManager.RegisterClientScriptBlock(upNotes, upNotes.GetType(), "", "EnableSaveButton();setDirty();", true);
-                }
-                else
-                {
-                    note.TargetId = OpportunityId.Value;
-                    ServiceCallers.Custom.Milestone(client => client.NoteInsert(note));
-                    ViewState.Remove(NOTE_LIST_KEY);
-                }
-
-                lvNotes.DataSource = NotesList;
-                lvNotes.DataBind();
-
-                tbNote.Text = string.Empty;
-            }
-
-        }
 
         /// <summary>
         /// 	Creates a project from the opportunity.
@@ -441,7 +511,7 @@ namespace PraticeManagement
 
 
                     opportunity = Opportunity;
-                    ucProposedResources.OpportunityId = Opportunity.Id;
+                    //ucProposedResources.OpportunityId = Opportunity.Id;
                 }
 
                 if (CanUserEditOpportunity(opportunity))
@@ -454,20 +524,20 @@ namespace PraticeManagement
                     Page.Validate(vsumWonConvert.ValidationGroup);
                     if (Page.IsValid)
                     {
-                        ucProposedResources.FillProposedResources();
-                        upProposedResources.Update();
-                        if (HasProposedPersonsOfTypeNormal)
-                        {
-                            Page.Validate(vsumHasPersons.ValidationGroup);
-                            if (Page.IsValid)
-                            {
-                                ConvertToProject();
-                            }
-                        }
-                        else
-                        {
-                            ConvertToProject();
-                        }
+                        //ucProposedResources.FillProposedResources();
+                        //upProposedResources.Update();
+                        //if (HasProposedPersonsOfTypeNormal)
+                        //{
+                        //    Page.Validate(vsumHasPersons.ValidationGroup);
+                        //    if (Page.IsValid)
+                        //    {
+                        //      ConvertToProject();
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    ConvertToProject();
+                        //}
                     }
                 }
             }
@@ -494,40 +564,40 @@ namespace PraticeManagement
             return result;
         }
 
-        private void ConvertToProject()
-        {
-            using (var serviceClient = new OpportunityServiceClient())
-            {
-                try
-                {
-                    var projectId = serviceClient.ConvertOpportunityToProject(OpportunityId.Value,
-                                                                              User.Identity.Name, HasProposedPersonsOfTypeNormal);
-                    if (!string.IsNullOrEmpty(Request.QueryString["id"]))
-                    {
-                        Response.Redirect(
-                                Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri));
-                    }
-                    else
-                    {
-                        if (Request.Url.AbsoluteUri.Contains('?'))
-                        {
-                            Response.Redirect(
-                                Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri + "&id=" + OpportunityId.Value));
-                        }
-                        else
-                        {
-                            Response.Redirect(
-                               Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri + "?id=" + OpportunityId.Value));
-                        }
-                    }
-                }
-                catch (CommunicationException)
-                {
-                    serviceClient.Abort();
-                    throw;
-                }
-            }
-        }
+        //private void ConvertToProject()
+        //{
+        //    using (var serviceClient = new OpportunityServiceClient())
+        //    {
+        //        try
+        //        {
+        //            var projectId = serviceClient.ConvertOpportunityToProject(OpportunityId.Value,
+        //                                                                      User.Identity.Name, HasProposedPersonsOfTypeNormal);
+        //            if (!string.IsNullOrEmpty(Request.QueryString["id"]))
+        //            {
+        //                Response.Redirect(
+        //                        Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri));
+        //            }
+        //            else
+        //            {
+        //                if (Request.Url.AbsoluteUri.Contains('?'))
+        //                {
+        //                    Response.Redirect(
+        //                        Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri + "&id=" + OpportunityId.Value));
+        //                }
+        //                else
+        //                {
+        //                    Response.Redirect(
+        //                       Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri + "?id=" + OpportunityId.Value));
+        //                }
+        //            }
+        //        }
+        //        catch (CommunicationException)
+        //        {
+        //            serviceClient.Abort();
+        //            throw;
+        //        }
+        //    }
+        //}
 
         protected void ddlClient_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -614,7 +684,6 @@ namespace PraticeManagement
                     ResetControls();
                 }
                 ClearDirty();
-                tbNote.Text = "";
             }
             btnSave.Enabled = false;
         }
@@ -633,10 +702,9 @@ namespace PraticeManagement
             ddlStatus.SelectedIndex = 0;
             dpStartDate.TextValue = string.Empty;
             dpEndDate.TextValue = string.Empty;
-            ucProposedResources.ResetProposedResources();
-            ucProposedResources.FillPotentialResources();
-            upProposedResources.Update();
-            BindNotesData();
+            //ucProposedResources.ResetProposedResources();
+            //ucProposedResources.FillPotentialResources();
+            //upProposedResources.Update();
         }
 
         protected void btnAttachToProject_Click(object sender, EventArgs e)
@@ -648,6 +716,8 @@ namespace PraticeManagement
             }
         }
 
+
+       
 
         protected override bool ValidateAndSave()
         {
@@ -668,16 +738,6 @@ namespace PraticeManagement
                         if (id.HasValue)
                         {
                             OpportunityId = id;
-
-                            if (NewlyAddedNotes != null)
-                            {
-                                foreach (Note note in NewlyAddedNotes)
-                                {
-                                    note.TargetId = id.Value;
-
-                                    ServiceCallers.Custom.Milestone(client => client.NoteInsert(note));
-                                }
-                            }
                         }
 
                         retValue = true;
@@ -754,7 +814,7 @@ namespace PraticeManagement
                 ddlPractice.Enabled =
                 btnSave.Enabled =
                 ddlOpportunityOwner.Enabled =
-                ucProposedResources.Enabled = canEdit;
+                 canEdit;//ucProposedResources.Enabled =
 
             btnConvertToProject.Enabled =
                btnAttachToProject.Enabled = canEdit && (opportunity.Project == null);
@@ -835,6 +895,16 @@ namespace PraticeManagement
                 ddlPriority.Items.IndexOf(
                 ddlPriority.Items.FindByValue(opportunity.Priority == null ? "0" : opportunity.Priority.Id.ToString()));
 
+            if (!string.IsNullOrEmpty(opportunity.OutSideResources))
+            {
+                if (opportunity.OutSideResources[opportunity.OutSideResources.Length - 1] == ';')
+                {
+                    opportunity.OutSideResources = opportunity.OutSideResources.Substring(0, opportunity.OutSideResources.Length - 1);
+                }
+                ltrlOutSideResources.Text = opportunity.OutSideResources.Replace(";", "<br/>");
+            }
+
+
             PopulateSalesPersonDropDown();
 
             PopulatePracticeDropDown();
@@ -845,6 +915,10 @@ namespace PraticeManagement
             PopulateProjectsDropDown();
             hdnValueChanged.Value = "false";
             btnSave.Attributes.Add("disabled", "true");
+
+            hdnProposedPersonsIndexes.Value = GetPersonsIndexesWithPersonTypeString(ProposedPersons.AsQueryable().ToList());
+            hdnProposedOutSideResources.Value = opportunity.OutSideResources;
+            hdnTeamStructure.Value =  GetTeamStructure(StrawMans.AsQueryable().ToList());
         }
 
         private void PopulateProjectsDropDown()
@@ -995,7 +1069,9 @@ namespace PraticeManagement
                 null :
                 new Person(Convert.ToInt32(selectedValue));
 
-            opportunity.ProposedPersonIdList = ucProposedResources.GetProposedPersonsIdsList();
+            opportunity.ProposedPersonIdList = hdnProposedResourceIdsWithTypes.Value;
+            opportunity.StrawManList = hdnTeamStructure.Value;
+            opportunity.OutSideResources = txtOutSideResources.Text;
         }
 
         protected static string GetWrappedText(String NoteText)
@@ -1009,6 +1085,96 @@ namespace PraticeManagement
             }
 
             return NoteText;
+        }
+
+        protected void rpTeamStructure_OnItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var hdnIndex = e.Item.FindControl("hdnIndex") as HiddenField;
+                hdnIndex.Value = e.Item.ItemIndex.ToString();
+
+                var ddlQty = e.Item.FindControl("ddlQuantity") as DropDownList;
+                ddlQty.DataSource = Quantities;
+                ddlQty.DataBind();
+            }
+        }
+
+        protected void btnSaveTeamStructure_OnClick(object sender, EventArgs e)
+        {
+
+            string[] strawMansSelectedWithIndexes = hdnTeamStructureWithIndexes.Value.Split(',');
+            string[] strawMansSelectedWithIds = hdnTeamStructureWithIndexes.Value.Split(',');
+
+            List<OpportunityPerson> opportunityPersons = new List<OpportunityPerson>();
+
+            for (int i = 0; i < strawMansSelectedWithIndexes.Length; i++)
+            {
+                string[] splitArray = { ":" ,"|"};
+                string[] list = strawMansSelectedWithIndexes[i].Split(splitArray, StringSplitOptions.None);
+                var idsList = strawMansSelectedWithIds[i].Split(splitArray, StringSplitOptions.None);
+                if (list.Length == 3)
+                {
+                    var repItem = rpTeamStructure.Items[Convert.ToInt32(list[0])] as RepeaterItem;
+
+                    var hdnPersonId = repItem.FindControl("hdnPersonId") as HiddenField;
+
+                    var lblStrawman = repItem.FindControl("lblStrawman") as Label;
+
+                    var firstname = lblStrawman.Attributes["FirstName"];
+                    var lastName = lblStrawman.Attributes["LastName"];
+
+                    var id = Convert.ToInt32(hdnPersonId.Value);
+
+                    var operson = new OpportunityPerson()
+                    {
+                        Person = new Person() { Id = id, FirstName = firstname, LastName = lastName },
+                        PersonType = Convert.ToInt32(list[1]),
+                        Quantity = Convert.ToInt32(list[2]),
+                        RelationType = 2
+                    };
+                    opportunityPersons.Add(operson);
+                }
+            }
+
+            StrawMans = opportunityPersons.AsQueryable().ToArray();
+
+            dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity=p.Quantity });
+            dtlTeamStructure.DataBind();
+        }
+
+        protected void btnAddProposedResources_Click(object sender, EventArgs e)
+        {
+            string[] ProposedPersonsSelected = hdnProposedPersonsIndexes.Value.Split(',');
+
+            List<OpportunityPerson> opportunityPersons = new List<OpportunityPerson>();
+
+            for (int i = 0; i < ProposedPersonsSelected.Length; i++)
+            {
+                string[] list = ProposedPersonsSelected[i].Split(':');
+                if (list.Length == 2)
+                {
+                    var name = cblPotentialResources.Items[Convert.ToInt32(list[0])].Text;
+                    var firstname = name.Split(',')[1].Trim();
+                    var lastName = name.Split(',')[0].Trim();
+                    var id = Convert.ToInt32(cblPotentialResources.Items[Convert.ToInt32(list[0])].Value);
+
+                    var operson = new OpportunityPerson()
+                    {
+                        Person = new Person() { Id = id, FirstName = firstname, LastName = lastName },
+                        PersonType = Convert.ToInt32(list[1])
+                    };
+                    opportunityPersons.Add(operson);
+                }
+            }
+
+            ProposedPersons = opportunityPersons.AsQueryable().ToArray();
+
+            dtlProposedPersons.DataSource = opportunityPersons.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType });
+            dtlProposedPersons.DataBind();
+
+            ltrlOutSideResources.Text = txtOutSideResources.Text.Replace(";", "<br/>");
+
         }
 
         #region Validations
@@ -1031,12 +1197,6 @@ namespace PraticeManagement
         {
             args.IsValid =
                 ddlStatus.SelectedValue != WonProjectId.ToString();
-        }
-
-        protected void cvLen_OnServerValidate(object source, ServerValidateEventArgs args)
-        {
-            var length = tbNote.Text.Length;
-            args.IsValid = length > 0 && length <= 2000;
         }
 
         protected void custEstRevenue_ServerValidate(object sender, ServerValidateEventArgs e)
@@ -1067,6 +1227,21 @@ namespace PraticeManagement
                 e.IsValid = false;
             }
         }
+
+
+        protected void cvPriority_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = true;
+            var selectedText = ddlPriority.SelectedItem.Text.ToUpperInvariant();
+            if (selectedText == "PO" || selectedText == "A" || selectedText == "B")
+            {
+                if (ProposedPersons.Count() < 1 && StrawMans.Count() < 1)
+                {
+                    e.IsValid = false;
+                }
+            }
+        }
+        
 
         #endregion
 
