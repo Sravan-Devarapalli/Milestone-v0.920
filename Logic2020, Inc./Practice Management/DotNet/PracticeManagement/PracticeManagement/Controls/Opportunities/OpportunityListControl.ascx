@@ -844,7 +844,7 @@
                                     QTY
                                 </td>
                                 <td style="padding-left: 2px;">
-                                    <asp:Image ID="imgTeamCross" runat="server" ImageUrl="~/Images/cross_icon.png" />
+                                    
                                 </td>
                             </tr>
                         </table>
