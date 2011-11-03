@@ -21,15 +21,18 @@ CREATE PROCEDURE [dbo].[OpportunityUpdate]
 	@OwnerId			   INT = NULL,
 	@GroupId			   INT,
 	@EstimatedRevenue	   DECIMAL(18,2),
-	@PersonIdList          NVARCHAR(MAX)
+	@PersonIdList          NVARCHAR(MAX) = NULL,
+	@OutSideResources      NVARCHAR(MAX),
+	@StrawManList          NVARCHAR(MAX) = NULL
 )
 AS
 BEGIN
-	SET NOCOUNT ON	
 		
 		-- Start logging session
 		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
-		
+			SET NOCOUNT ON;
+			SET ANSI_NULLS ON;
+			SET  QUOTED_IDENTIFIER ON;
 		
 		DECLARE @PrevOpportunityStatusId INT
 		DECLARE @PrevPriority NVARCHAR(255)
@@ -73,6 +76,7 @@ BEGIN
 			   GroupId = @GroupId,
 			   EstimatedRevenue = @EstimatedRevenue
 			   ,LastUpdated = GETDATE()
+			   ,OutSideResources = @OutSideResources
 		 WHERE OpportunityId = @OpportunityId
 
 		-- Logging changes
@@ -142,14 +146,70 @@ BEGIN
 			ON op.OpportunityId = @OpportunityId AND op.PersonId = p.ResultId AND op.OpportunityPersonTypeId = p.ResultType
 			WHERE p.ResultId IS NULL and OP.OpportunityId = @OpportunityId
 
-			INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId)
-			SELECT @OpportunityId ,p.ResultId,p.ResultType
+			INSERT INTO dbo.OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId,RelationTypeId)
+			SELECT @OpportunityId ,p.ResultId,p.ResultType,1 -- Relation type 1 means PropesedResource
 			FROM [dbo].[ConvertStringListIntoTableWithTwoColoumns] (@PersonIdList) AS p 
 			LEFT JOIN OpportunityPersons op
 			ON p.ResultId = op.PersonId AND op.OpportunityId=@OpportunityId
 			WHERE op.PersonId IS NULL 
 		END
-		
+
+		IF(@StrawManList IS NOT NULL  AND ISNULL(@StrawManList,'')<>'')
+		BEGIN
+
+			DECLARE @OpportunityPersonIdsWithTypeTable TABLE
+			(
+			PersonId INT,
+			PersonType INT,
+			Quantity INT
+			)
+
+			DECLARE @PersonIdListLocalXML XML
+			IF(SUBSTRING(@StrawManList,LEN(@StrawManList),1)=',')
+			SET @StrawManList = SUBSTRING(@StrawManList,1,LEN(@StrawManList)-1)
+			SET @StrawManList = '<root><item><personid>'+@StrawManList+'</qty></item></root>'
+
+			SET @StrawManList = REPLACE(@StrawManList,':','</personid><persontypeid>')
+			SET @StrawManList = REPLACE(@StrawManList,'|','</persontypeid><qty>')
+			SET @StrawManList = REPLACE(@StrawManList,',','</qty></item><item><personid>')
+			
+			SELECT @StrawManList
+			SELECT @PersonIdListLocalXML  = CONVERT(XML,@StrawManList)
+
+			INSERT INTO @OpportunityPersonIdsWithTypeTable
+			(PersonId ,
+			PersonType ,
+			Quantity )
+			SELECT C.value('personid[1]','int') personid,
+					C.value('persontypeid[1]','int') persontypeid,
+					C.value('qty[1]','int') qty
+			FROM @PersonIdListLocalXML.nodes('/root/item') as T(C)
+
+			DELETE op
+			FROM dbo.OpportunityPersons  op
+			LEFT JOIN @OpportunityPersonIdsWithTypeTable AS p 
+			ON op.OpportunityId = @OpportunityId AND op.PersonId = p.PersonId AND op.OpportunityPersonTypeId=p.PersonType 
+			WHERE p.PersonId IS NULL and OP.OpportunityId = @OpportunityId
+			AND op.RelationTypeId = 2
+
+			INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId,RelationTypeId,Quantity)
+			SELECT @OpportunityId ,p.PersonId,p.PersonType,2,p.Quantity
+			FROM @OpportunityPersonIdsWithTypeTable AS p 
+			LEFT JOIN dbo.OpportunityPersons op
+			ON p.PersonId = op.PersonId AND op.OpportunityId=@OpportunityId AND op.OpportunityPersonTypeId=p.PersonType
+			WHERE op.PersonId IS NULL 
+		END 
+		ELSE
+		BEGIN
+
+			DELETE op
+			FROM dbo.OpportunityPersons  op
+			LEFT JOIN @OpportunityPersonIdsWithTypeTable AS p 
+			ON op.OpportunityId = @OpportunityId AND op.PersonId = p.PersonId AND op.OpportunityPersonTypeId=p.PersonType 
+			WHERE p.PersonId IS NULL and OP.OpportunityId = @OpportunityId
+			AND op.RelationTypeId = 2
+		 
+		END
 		
 		-- End logging session
 		EXEC dbo.SessionLogUnprepare
