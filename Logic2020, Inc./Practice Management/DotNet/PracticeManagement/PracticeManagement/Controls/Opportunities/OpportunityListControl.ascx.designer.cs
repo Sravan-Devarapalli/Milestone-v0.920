@@ -193,24 +193,6 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::PraticeManagement.Controls.MultipleSelectionCheckBoxList cblPotentialResources;
         
         /// <summary>
-        /// txtOutSideResources control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtOutSideResources;
-        
-        /// <summary>
-        /// wmOutSideResources control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.TextBoxWatermarkExtender wmOutSideResources;
-        
-        /// <summary>
         /// btnCancel control.
         /// </summary>
         /// <remarks>
@@ -236,15 +218,6 @@ namespace PraticeManagement.Controls.Opportunities {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hdnProposedResourceIdsWithTypes;
-        
-        /// <summary>
-        /// hdnProposedOutSideResources control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnProposedOutSideResources;
         
         /// <summary>
         /// btnSaveProposedResourcesHidden control.
