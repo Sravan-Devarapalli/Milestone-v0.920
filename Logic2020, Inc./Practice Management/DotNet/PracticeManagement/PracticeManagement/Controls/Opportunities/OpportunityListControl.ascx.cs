@@ -580,6 +580,12 @@ namespace PraticeManagement.Controls.Opportunities
                 var hdnProposedPersonsIndexes = e.Item.FindControl("hdnProposedPersonsIndexes") as HiddenField;
                 var hdnTeamStructure = e.Item.FindControl("hdnTeamStructure") as HiddenField;
 
+                var imgTeamStructure = e.Item.FindControl("imgTeamStructure") as Image;
+                var imgPeople_icon = e.Item.FindControl("imgPeople_icon") as Image;
+
+                imgPeople_icon.Attributes["RowIndex"] = imgTeamStructure.Attributes["RowIndex"] = (e.Item as ListViewDataItem).DataItemIndex.ToString();
+
+
                 var oppty = (e.Item as ListViewDataItem).DataItem as Opportunity;
 
                 var ddlPriority = e.Item.FindControl("ddlPriorityList") as DropDownList;
@@ -590,11 +596,19 @@ namespace PraticeManagement.Controls.Opportunities
                     DataHelper.FillListDefault(ddlPriority, string.Empty, priorities, true, "Id", "Priority");
                     ddlPriority.SelectedValue = oppty.Priority.Id.ToString();
                     ddlPriority.Attributes["OpportunityID"] = oppty.Id.Value.ToString();
+                    ddlPriority.Attributes["OpportunityName"] = oppty.Name;
+                    ddlPriority.Attributes["isTeamstructueAvalilable"] = "false";
+                    ddlPriority.Attributes["selectedPriorityId"] = oppty.Priority.Id.ToString();
                 }
 
                 if (oppty != null && oppty.ProposedPersons != null)
                 {
-                    dtlProposedPersons.DataSource = oppty.ProposedPersons.FindAll(op=>op.RelationType==(int) OpportunityPersonRelationType.ProposedResource).OrderBy(op => op.Person.LastName + op.Person.FirstName);
+                    if (oppty.ProposedPersons.Count > 0)
+                    {
+                        ddlPriority.Attributes["isTeamstructueAvalilable"] = "true";
+                    }
+
+                    dtlProposedPersons.DataSource = oppty.ProposedPersons.FindAll(op => op.RelationType == (int)OpportunityPersonRelationType.ProposedResource).OrderBy(op => op.Person.LastName + op.Person.FirstName);
                     dtlTeamStructure.DataSource = oppty.ProposedPersons.FindAll(op => op.RelationType == (int)OpportunityPersonRelationType.TeamStructure).OrderBy(op => op.Person.LastName + op.Person.FirstName);
                     dtlProposedPersons.DataBind();
                     dtlTeamStructure.DataBind();
@@ -673,6 +687,11 @@ namespace PraticeManagement.Controls.Opportunities
             return sb.ToString();
         }
 
+        protected void btnRedirectToOpportunityDetail_OnClick(object sender, EventArgs e)
+        {
+            Response.Redirect(Constants.ApplicationPages.OpportunityDetail + "?id=" + hdnRedirectOpportunityId.Value);
+        }
+
         protected void btnSaveProposedResources_OnClick(object sender, EventArgs e)
         {
             int opportunityId;
@@ -685,8 +704,25 @@ namespace PraticeManagement.Controls.Opportunities
                     serviceClient.OpportunityPersonInsert(opportunityId, selectedList, (int)OpportunityPersonRelationType.ProposedResource, hdnProposedOutSideResources.Value);
                 }
             }
+
+            UpdateAttributeForddlPriority(opportunityId);
+
             hdnCurrentOpportunityId.Value = string.Empty;
         }
+
+        private void UpdateAttributeForddlPriority(int opportunityId)
+        {
+            if (!string.IsNullOrEmpty(hdnClickedRowIndex.Value))
+            {
+                var rowIndex = Convert.ToInt32(hdnClickedRowIndex.Value);
+                var result = ServiceCallers.Custom.Opportunity(op => op.IsOpportunityHaveTeamStructure(opportunityId));
+
+                var ddl = lvOpportunities.Items[rowIndex].FindControl("ddlPriorityList") as DropDownList;
+                ddl.Attributes["isTeamstructueAvalilable"] = result.ToString();
+
+            }
+        }
+
 
         protected void btnSaveTeamStructureHidden_OnClick(object sender, EventArgs e)
         {
@@ -700,6 +736,9 @@ namespace PraticeManagement.Controls.Opportunities
                     serviceClient.OpportunityPersonInsert(opportunityId, selectedList, (int)OpportunityPersonRelationType.TeamStructure, string.Empty);
                 }
             }
+
+            UpdateAttributeForddlPriority(opportunityId);
+
             hdnCurrentOpportunityId.Value = string.Empty;
         }
 
