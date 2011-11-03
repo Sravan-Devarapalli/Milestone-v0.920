@@ -40,8 +40,8 @@ AS
 		   p.LastName as 'OwnerLastName',
 		   p.FirstName as 'OwnerFirstName',
 		   os.Name AS 'OwnerStatus',
-		   o.EstimatedRevenue,
-		   o.OutSideResources
+		   o.EstimatedRevenue
+		   --,o.OutSideResources
 		   
 	 FROM dbo.v_Opportunity AS o
 	 LEFT JOIN dbo.Person p ON o.OwnerId = p.PersonId
