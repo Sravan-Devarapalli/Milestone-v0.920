@@ -670,12 +670,17 @@ namespace PraticeManagement.Config
             {
                 tbFirstName.Enabled = false;
                 tbLastName.Enabled = false;
+                tbFirstName.Text = "";
+                tbLastName.Text = "";
                 cvDupliacteName.Enabled = cvFirstName.Enabled = cvLastName.Enabled = false;
             }
             else
             {
+               String[] names =  ddlStrawmanName.SelectedItem.Text.Split(',');
                 tbFirstName.Enabled = true;
                 tbLastName.Enabled = true;
+                tbFirstName.Text = names[1].TrimStart();
+                tbLastName.Text = names[0];
                 cvDupliacteName.Enabled = cvFirstName.Enabled = cvLastName.Enabled = true;
             }
         }
