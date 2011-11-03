@@ -361,9 +361,11 @@
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="DashBoard.aspx" />
     <Content Include="Images\copy.png" />
+    <Content Include="Images\People_Icon_Large.png" />
     <Content Include="Images\printer.png" />
     <Content Include="Images\saveToDisk.png" />
     <Content Include="Images\Strawman.png" />
+    <Content Include="Images\StrawMan_Large.png" />
     <Content Include="Images\Team_Icon.jpg" />
     <Content Include="LoggedOut.aspx" />
     <Content Include="OpportunitySearch.aspx" />
@@ -3240,3 +3242,4 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
+
