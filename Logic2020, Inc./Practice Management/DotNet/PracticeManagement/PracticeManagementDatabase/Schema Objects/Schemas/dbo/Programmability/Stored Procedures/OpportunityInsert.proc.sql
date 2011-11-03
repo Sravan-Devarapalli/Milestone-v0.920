@@ -21,7 +21,6 @@
 	@GroupId	           INT,
 	@EstimatedRevenue      DECIMAL(18,2) ,
 	@PersonIdList          NVARCHAR(MAX) = NULL,
-	@OutSideResources      NVARCHAR(MAX),
 	@StrawManList          NVARCHAR(MAX) = NULL
 )
 AS
@@ -59,10 +58,10 @@ BEGIN
 		INSERT INTO dbo.Opportunity
 					(Name, ClientId, SalespersonId, OpportunityStatusId, PriorityId,
 					 ProjectedStartDate, ProjectedEndDate, OpportunityNumber, Description, PracticeId, BuyerName,
-					 Pipeline, Proposed, SendOut, OpportunityIndex,  ProjectId, OwnerId, GroupId ,EstimatedRevenue,OutSideResources)
+					 Pipeline, Proposed, SendOut, OpportunityIndex,  ProjectId, OwnerId, GroupId ,EstimatedRevenue)
 			 VALUES (@Name, @ClientId, @SalespersonId, @OpportunityStatusId, @PriorityId,
 					 @ProjectedStartDate, @ProjectedEndDate, @OpportunityNumber, @Description, @PracticeId, @BuyerName,
-					 @Pipeline, @Proposed, @SendOut, @OpportunityIndex, @ProjectId, @OwnerId, @GroupId ,@EstimatedRevenue,@OutSideResources)
+					 @Pipeline, @Proposed, @SendOut, @OpportunityIndex, @ProjectId, @OwnerId, @GroupId ,@EstimatedRevenue)
 
 		SET @OpportunityId = SCOPE_IDENTITY()
 
