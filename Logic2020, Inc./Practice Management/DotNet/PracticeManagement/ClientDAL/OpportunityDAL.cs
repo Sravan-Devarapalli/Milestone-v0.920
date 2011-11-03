@@ -1343,6 +1343,24 @@ namespace DataAccess
                 }
             }
         }
+
+        public static bool IsOpportunityHaveTeamStructure(int opportunityId)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Opportunitites.IsOpportunityHaveTeamStructure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityIdParam, opportunityId);
+
+                    connection.Open();
+                    return (int)command.ExecuteScalar() > 0;
+                }
+            }
+            
+        }
     }
 }
 
