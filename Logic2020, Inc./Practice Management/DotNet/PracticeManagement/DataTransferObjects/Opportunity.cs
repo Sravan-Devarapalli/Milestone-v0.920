@@ -279,6 +279,14 @@ namespace DataTransferObjects
         }
 
         [DataMember]
+        public string StrawManList
+        {
+            get;
+            set;
+        }
+
+
+        [DataMember]
         public List<OpportunityPerson> ProposedPersons
         {
             set;
