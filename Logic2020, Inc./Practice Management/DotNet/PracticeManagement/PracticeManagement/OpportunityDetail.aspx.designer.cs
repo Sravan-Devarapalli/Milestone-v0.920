@@ -562,15 +562,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.HiddenField hdnProposedPersonsIndexes;
         
         /// <summary>
-        /// hdnProposedOutSideResources control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnProposedOutSideResources;
-        
-        /// <summary>
         /// hdnmpePotentialResources control.
         /// </summary>
         /// <remarks>
@@ -641,24 +632,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.MultipleSelectionCheckBoxList cblPotentialResources;
-        
-        /// <summary>
-        /// txtOutSideResources control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtOutSideResources;
-        
-        /// <summary>
-        /// wmOutSideResources control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.TextBoxWatermarkExtender wmOutSideResources;
         
         /// <summary>
         /// btnAddProposedResources control.
