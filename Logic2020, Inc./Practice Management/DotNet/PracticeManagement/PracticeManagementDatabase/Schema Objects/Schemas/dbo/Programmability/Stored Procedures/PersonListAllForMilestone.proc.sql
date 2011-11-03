@@ -20,7 +20,9 @@ AS
 		   p.IsDefaultManager,
 		   p.HireDate
 	  FROM dbo.Person AS p
-	 WHERE (   (p.PersonStatusId = 1 OR p.PersonStatusId = 3)
+	 WHERE 
+	ISNULL( p.IsStrawman,0) = 0
+	AND (   (p.PersonStatusId = 1 OR p.PersonStatusId = 3)
 	        OR EXISTS (SELECT 1
 	                     FROM dbo.MilestonePerson AS mp
 	                    WHERE mp.MilestonePersonId = @MilestonePersonId AND mp.PersonId = p.PersonId))
