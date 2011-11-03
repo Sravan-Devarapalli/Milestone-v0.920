@@ -28,10 +28,10 @@ BEGIN
 			FROM [dbo].[ConvertStringListIntoTableWithTwoColoumns] (@PersonIdListLocal)
 		END
 	
-		UPDATE dbo.Opportunity
-		SET OutSideResources = @OutSideResources,
-			LastUpdated = GETDATE()
-		WHERE OpportunityId = @OpportunityId
+		--UPDATE dbo.Opportunity
+		--SET OutSideResources = @OutSideResources,
+		--	LastUpdated = GETDATE()
+		--WHERE OpportunityId = @OpportunityId
 	END
 	ELSE
 	BEGIN
