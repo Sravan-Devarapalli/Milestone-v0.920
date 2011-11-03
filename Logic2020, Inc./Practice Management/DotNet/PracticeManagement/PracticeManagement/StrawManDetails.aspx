@@ -7,8 +7,8 @@
     Assembly="PraticeManagement" %>
 <%@ Register Src="Controls/PersonnelCompensation.ascx" TagName="PersonnelCompensation"
     TagPrefix="uc1" %>
-<%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress" TagPrefix="uc" %>
-
+<%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
+    TagPrefix="uc" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
     <title>Strawman Details | Practice Management</title>
 </asp:Content>
@@ -18,46 +18,51 @@
         <ContentTemplate>
             <table class="WholeWidth">
                 <tr>
-                    <td>
-                        First Name
+                    <td width="12%" align="center">
+                        Skill
+                    </td>
+                    <td width="10%">
                         <asp:TextBox ID="tbFirstName" runat="server" onchange="setDirty();"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="rqfvFirstName" runat="server" Text="*" ErrorMessage="First Name is required."
-                            ControlToValidate="tbFirstName" ToolTip="First Name is required." SetFocusOnError="true"
+                        <asp:RequiredFieldValidator ID="rqfvFirstName" runat="server" Text="*" ErrorMessage="Skill is required."
+                            ControlToValidate="tbFirstName" ToolTip="Skill is required." SetFocusOnError="true"
                             ValidationGroup="StrawmanGroup"></asp:RequiredFieldValidator>
-                        <asp:CustomValidator ID="cvLengthFirstName" runat="server" Text="*" ErrorMessage="Person First Name characters length must be lessthan or equal to 50."
-                            ToolTip="Person First Name character length must be lessthan or equal to 50." ValidationGroup="StrawmanGroup"
+                        <asp:CustomValidator ID="cvLengthFirstName" runat="server" Text="*" ErrorMessage="Skill characters length must be lessthan or equal to 50."
+                            ToolTip="Skill characters length must be lessthan or equal to 50." ValidationGroup="StrawmanGroup"
                             SetFocusOnError="true" OnServerValidate="cvNameLength_ServerValidate"></asp:CustomValidator>
                     </td>
+                    <td></td>
                 </tr>
                 <tr>
+                    <td align="center">
+                        Role
+                    </td>
                     <td>
-                        Last Name
                         <asp:TextBox ID="tbLastName" runat="server" onchange="setDirty();"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="rqfvLastName" runat="server" Text="*" ErrorMessage="Last Name is required."
-                            ControlToValidate="tbLastName" ToolTip="Last Name is required." SetFocusOnError="true"
+                        <asp:RequiredFieldValidator ID="rqfvLastName" runat="server" Text="*" ErrorMessage="Role is required."
+                            ControlToValidate="tbLastName" ToolTip="Role is required." SetFocusOnError="true"
                             ValidationGroup="StrawmanGroup"></asp:RequiredFieldValidator>
-                        <%--<asp:CustomValidator ID="cvDupliacteName" runat="server" Text="*" ErrorMessage="There is another Person with the same First Name and Last Name."
-                            ToolTip="There is another Person with the same First Name and Last Name." ValidationGroup="StrawmanGroup"
-                            SetFocusOnError="true" OnServerValidate="cvDupliacteName_ServerValidate"></asp:CustomValidator>--%>
-                        <asp:CustomValidator ID="cvLengthLastName" runat="server" Text="*" ErrorMessage="Person Last Name characters length must be lessthan or equal to 50."
-                            ToolTip="Person Last Name character length must be lessthan or equal to 50." ValidationGroup="StrawmanGroup"
+                        <asp:CustomValidator ID="cvLengthLastName" runat="server" Text="*" ErrorMessage="Role character length must be lessthan or equal to 50."
+                            ToolTip="Role character length must be lessthan or equal to 50." ValidationGroup="StrawmanGroup"
                             SetFocusOnError="true" OnServerValidate="cvNameLength_ServerValidate"></asp:CustomValidator>
                     </td>
+                    <td></td>
                 </tr>
                 <tr>
-                    <td style="padding-top: 10px; font-weight: bold;">
+                    <td colspan="3" style="padding-top: 10px; font-weight: bold;">
                         Current Compensation :
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td colspan="3">
                         <asp:Panel ID="pnlCompensation" runat="server" CssClass="bg-light-frame">
                             <div class="filters" style="margin-top: 5px; margin-bottom: 10px;">
                                 <uc1:PersonnelCompensation ID="personnelCompensation" runat="server" IsStrawmanMode="true" />
                             </div>
-                            <div style="padding-top: 10px; font-weight: bold; height:50px">
+                            <div style="padding-top: 10px; font-weight: bold; height: 50px">
                                 Compensation History :<br />
-                                 <span style="color:Gray;font-family:Arial;">Click on Start Date column to edit an item<br /></span>
+                                <span style="color: Gray; font-family: Arial;">Click on Start Date column to edit an
+                                    item<br />
+                                </span>
                             </div>
                             <asp:GridView ID="gvCompensationHistory" runat="server" AutoGenerateColumns="False"
                                 EmptyDataText="No compensation history for this person." CssClass="CompPerfTable WholeWidth"
@@ -129,7 +134,7 @@
                                         <ItemTemplate>
                                             <asp:ImageButton ID="imgCompensationDelete" ToolTip="Delete" runat="server" OnClick="imgCompensationDelete_OnClick"
                                                 ImageUrl="~/Images/cross_icon.png" />
-                                            <ajaxToolkit:ConfirmButtonExtender ConfirmText="Are you sure you want to delete this compensation record?"
+                                            <ajaxToolkit:ConfirmButtonExtender ID="ConfirmButtonExtender1" ConfirmText="Are you sure you want to delete this compensation record?"
                                                 runat="server" TargetControlID="imgCompensationDelete">
                                             </ajaxToolkit:ConfirmButtonExtender>
                                         </ItemTemplate>
@@ -142,15 +147,16 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding-top: 15px;">
+                    <td colspan="3" style="padding-top: 15px;">
                         <asp:ValidationSummary ID="valSummary" runat="server" ValidationGroup="StrawmanGroup" />
                         <uc:MessageLabel ID="lblSave" runat="server" ErrorColor="Red" InfoColor="DarkGreen"
                             WarningColor="Orange" EnableViewState="false" />
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align: center;">
-                        <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save" OnClick="btnSave_Click" ValidationGroup="StrawmanGroup"/>
+                    <td colspan="3" style="text-align: center;">
+                        <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save" OnClick="btnSave_Click"
+                            ValidationGroup="StrawmanGroup" />
                         <asp:CancelAndReturnButton ID="btnCancelAndRetrun" runat="server" />
                     </td>
                 </tr>
