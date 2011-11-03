@@ -42,8 +42,8 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>.\sql\debug\</OutputPath>
     <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
-    <TargetConnectionString>Data Source=server3;User ID=sa;Pooling=False</TargetConnectionString>
-    <TargetDatabase>ObfuscatedPracticeManagement_system58</TargetDatabase>
+    <TargetConnectionString>Data Source=localhost;Integrated Security=True;Pooling=False</TargetConnectionString>
+    <TargetDatabase>ObfuscatedPracticeManagement</TargetDatabase>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <SuppressWarnings>
     </SuppressWarnings>
@@ -3754,6 +3754,9 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\SaveStrawManFromExisting.proc.sql">
       <SubType>Code</SubType>
     </Build>
+ <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\IsOpportunityHaveTeamStructure.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Schema Comparisons\v0.850.dbschema">
@@ -3818,3 +3821,4 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
+
