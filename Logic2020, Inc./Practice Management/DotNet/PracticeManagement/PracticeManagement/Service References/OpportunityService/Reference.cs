@@ -24,6 +24,9 @@ namespace PraticeManagement.OpportunityService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/IsOpportunityPriorityInUse", ReplyAction="http://tempuri.org/IOpportunityService/IsOpportunityPriorityInUseResponse")]
         bool IsOpportunityPriorityInUse(int priorityId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/IsOpportunityHaveTeamStructure", ReplyAction="http://tempuri.org/IOpportunityService/IsOpportunityHaveTeamStructureResponse")]
+        bool IsOpportunityHaveTeamStructure(int opportunityId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/GetOpportunityTransitions", ReplyAction="http://tempuri.org/IOpportunityService/GetOpportunityTransitionsResponse")]
         DataTransferObjects.OpportunityTransition[] GetOpportunityTransitions(int opportunityId, DataTransferObjects.OpportunityTransitionStatusType statusType);
         
@@ -112,7 +115,7 @@ namespace PraticeManagement.OpportunityService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class OpportunityServiceClient : System.ServiceModel.ClientBase<PraticeManagement.OpportunityService.IOpportunityService>, PraticeManagement.OpportunityService.IOpportunityService {
-        
+       
         public OpportunityServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -139,6 +142,10 @@ namespace PraticeManagement.OpportunityService {
         
         public bool IsOpportunityPriorityInUse(int priorityId) {
             return base.Channel.IsOpportunityPriorityInUse(priorityId);
+        }
+        
+        public bool IsOpportunityHaveTeamStructure(int opportunityId) {
+            return base.Channel.IsOpportunityHaveTeamStructure(opportunityId);
         }
         
         public DataTransferObjects.OpportunityTransition[] GetOpportunityTransitions(int opportunityId, DataTransferObjects.OpportunityTransitionStatusType statusType) {
