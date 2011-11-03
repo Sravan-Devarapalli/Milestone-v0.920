@@ -612,13 +612,18 @@ namespace PraticeManagement.Config
         }
         protected void btnCancel_OnClick(object sender, EventArgs e)
         {
-            mpePopup.Hide();
             rbNewStrawman.Checked = true;
             ddlStrawmanName.SelectedIndex = -1;
+            ddlStrawmanName_OnSelectedIndexChanged();
+            mpePopup.Hide();
+
         }
         protected void btnOK_OnClick(object sender, EventArgs e)
         {
-            Page.Validate("StrawmanGroup");
+            if (rbCopyStrawman.Checked)
+            {
+                Page.Validate("StrawmanGroup");
+            }
             ExMessage = "";
             String id = "";
             if (Page.IsValid)
@@ -631,17 +636,7 @@ namespace PraticeManagement.Config
             }
             else
             {
-                if (rbCopyStrawman.Checked)
-                {
-                    ddlStrawmanName.Visible = true;
-                    tbFirstName.Visible = true;
-                    tbLastName.Visible = true;
-                    lblastName.Visible = true;
-                    lbfirstName.Visible = true;
-                    lblStrawmanName.Visible = true;
-                }
                 mpePopup.Show();
-
             }
             if (string.IsNullOrEmpty(ExMessage) && Page.IsValid)
             {
@@ -655,43 +650,38 @@ namespace PraticeManagement.Config
             mpePopup.Show();
             if (rbCopyStrawman.Checked)
             {
-                ddlStrawmanName.Visible = true;
-                tbFirstName.Visible = true;
-                tbFirstName.Enabled = false;
-                tbLastName.Visible = true;
-                tbLastName.Enabled = false;
-                lblastName.Visible = true;
-                lbfirstName.Visible = true;
-                lblStrawmanName.Visible = true;
-                cvddlStrawmanName.Enabled = cvDupliacteName.Enabled = cvFirstName.Enabled = cvLastName.Enabled = true;
+                ddlStrawmanName.Enabled = true;
+                cvddlStrawmanName.Enabled =true;
+                ddlStrawmanName_OnSelectedIndexChanged();
+                
             }
             else
             {
-                cvddlStrawmanName.Enabled = cvDupliacteName.Enabled = cvFirstName.Enabled = cvLastName.Enabled = false;
-                ddlStrawmanName.Visible = false;
-                tbFirstName.Visible = false;
-                tbFirstName.Enabled = false;
-                tbLastName.Visible = false;
-                tbLastName.Enabled = false;
-                lblastName.Visible = false;
-                lbfirstName.Visible = false;
-                lblStrawmanName.Visible = false;
+                ddlStrawmanName.Enabled = false;
+                cvddlStrawmanName.Enabled = false;
+                ddlStrawmanName_OnSelectedIndexChanged();
+           
             }
         }
-
-        protected void ddlStrawmanName_OnSelectedIndexChanged(object sender, EventArgs e)
+        private void ddlStrawmanName_OnSelectedIndexChanged()
         {
             mpePopup.Show();
             if (ddlStrawmanName.SelectedValue == "-1")
             {
                 tbFirstName.Enabled = false;
                 tbLastName.Enabled = false;
+                cvDupliacteName.Enabled = cvFirstName.Enabled = cvLastName.Enabled = false;
             }
             else
             {
                 tbFirstName.Enabled = true;
                 tbLastName.Enabled = true;
+                cvDupliacteName.Enabled = cvFirstName.Enabled = cvLastName.Enabled = true;
             }
+        }
+        protected void ddlStrawmanName_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            ddlStrawmanName_OnSelectedIndexChanged();
         }
 
         protected void cvddlStrawmanName_ServerValidate(object sender, ServerValidateEventArgs e)
