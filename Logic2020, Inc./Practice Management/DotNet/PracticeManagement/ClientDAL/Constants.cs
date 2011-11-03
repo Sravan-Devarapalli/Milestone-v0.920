@@ -763,6 +763,7 @@
                 public const string GetPersonsByOpportunityIds = "dbo.GetPersonsByOpportunityIds";
                 public const string OpportunityDelete = "dbo.OpportunityDelete";
                 public const string IsOpportunityPriorityInUse = "dbo.IsOpportunityPriorityInUse";
+                public const string IsOpportunityHaveTeamStructure = "dbo.IsOpportunityHaveTeamStructure";
                 public const string GetOpportunityPriorityTransitionCount = "dbo.GetOpportunityPriorityTransitionCount";
                 public const string GetOpportunityStatusChangeCount = "dbo.GetOpportunityStatusChangeCount";
                 public const string OpportunitySearchText = "dbo.OpportunitySearchText";
