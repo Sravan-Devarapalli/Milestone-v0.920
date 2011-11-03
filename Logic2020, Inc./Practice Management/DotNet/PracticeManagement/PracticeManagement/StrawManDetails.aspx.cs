@@ -52,11 +52,13 @@ namespace PraticeManagement
                 pay.Timescale = personnelCompensation.Timescale;
                 pay.Amount = personnelCompensation.Amount.Value;
                 pay.BonusAmount = personnelCompensation.BonusAmount;
+                pay.IsYearBonus = personnelCompensation.IsYearBonus;
                 pay.BonusHoursToCollect = personnelCompensation.BonusHoursToCollect;
                 pay.DefaultHoursPerDay = personnelCompensation.DefaultHoursPerDay;
                 pay.VacationDays = personnelCompensation.VacationDays;
                 pay.TimesPaidPerMonth = personnelCompensation.TimesPaidPerMonth;
                 pay.Terms = personnelCompensation.Terms;
+                
 
                 return pay;
             }
@@ -65,12 +67,14 @@ namespace PraticeManagement
                 var pay = value;
                 personnelCompensation.Timescale = pay.Timescale;
                 personnelCompensation.Amount = pay.Amount;
+                personnelCompensation.IsYearBonus = pay.IsYearBonus;
                 personnelCompensation.BonusAmount = pay.BonusAmount;
                 personnelCompensation.BonusHoursToCollect = pay.BonusHoursToCollect;
                 personnelCompensation.DefaultHoursPerDay = pay.DefaultHoursPerDay;
                 personnelCompensation.VacationDays = pay.VacationDays;
                 personnelCompensation.TimesPaidPerMonth = pay.TimesPaidPerMonth;
                 personnelCompensation.Terms = pay.Terms;
+                
             }
         }
 
