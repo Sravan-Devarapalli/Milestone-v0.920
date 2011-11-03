@@ -220,7 +220,7 @@ BEGIN
 				OR (ISNULL(i.ProjectId,0) <> ISNULL(d.ProjectId,0))
 				OR (ISNULL(i.OpportunityIndex,0) <> ISNULL(d.OpportunityIndex,0))
 				OR (ISNULL(i.EstimatedRevenue,0) <> ISNULL(d.EstimatedRevenue,0))
-				OR (ISNULL(i.OutSideResources,'') <> ISNULL(d.OutSideResources,''))
+				--OR (ISNULL(i.OutSideResources,'') <> ISNULL(d.OutSideResources,''))
 				OR (ISNULL(i.Pipeline,'') <> ISNULL(d.Pipeline,''))
 				OR (ISNULL(i.Proposed,'') <> ISNULL(d.Proposed,''))
 				OR (ISNULL(i.SendOut,'') <> ISNULL(d.SendOut,''))
