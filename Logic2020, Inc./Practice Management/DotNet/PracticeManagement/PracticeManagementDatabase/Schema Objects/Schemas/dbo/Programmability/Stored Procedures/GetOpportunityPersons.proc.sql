@@ -8,10 +8,14 @@ BEGIN
 	BEGIN
 		SELECT   op.PersonId
 				,p.FirstName
-				,p.LastName
-				,op.OpportunityPersonTypeId
+				,p.LastName,
+				op.OpportunityPersonTypeId,
+				op.RelationTypeId,
+				op.Quantity
 		FROM dbo.OpportunityPersons op
 		JOIN dbo.Person p ON p.PersonId = op.PersonId
 		WHERE op.OpportunityId = @OpportunityId
+				AND p.PersonStatusId IN(1,3)
+				
 	END
 END
