@@ -13,7 +13,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
     <style type="text/css">
-        td
+        .strawman td
         {
             height: 30px;
             padding-left: 10px !important;
@@ -57,7 +57,7 @@
                         <td colspan="3">
                             <table class="WholeWidth">
                                 <tr>
-                                    <td style="width: 4%;">
+                                    <td style="width: 3%;">
                                         <ajaxToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
                                             ImageControlID="btnExpandCollapseFilter" CollapsedImage="../Images/expand.jpg"
                                             ExpandedImage="../Images/collapse.jpg" CollapseControlID="btnExpandCollapseFilter"
@@ -70,8 +70,8 @@
                                         <table class="WholeWidth">
                                             <tr>
                                                 <td style="width: 97%;">
-                                                    <asp:TextBox runat="server" ID="txtSearch" Width="100%" Style="text-align: left;"
-                                                        OnTextChanged="txtSearch_TextChanged" MaxLength="40"></asp:TextBox>
+                                                    <asp:TextBox runat="server" ID="txtSearch" Width="100%" Style="text-align: left;
+                                                        margin-right: 0px !important;" OnTextChanged="txtSearch_TextChanged" MaxLength="40"></asp:TextBox>
                                                     <ajaxToolkit:TextBoxWatermarkExtender ID="waterMarkTxtSearch" runat="server" TargetControlID="txtSearch"
                                                         WatermarkCssClass="watermarkedtext" WatermarkText="To search for a person, click here to begin typing and hit enter...">
                                                     </ajaxToolkit:TextBoxWatermarkExtender>
@@ -84,39 +84,22 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td style="width: 0.5%; padding-left: 0px;">
-                                    </td>
-                                    <td style="width: 11%;">
+                                    <td style="width: 8%;">
                                         <asp:Button ID="btnSearchAll" ValidationGroup="ValSearch" runat="server" Text="Search All"
                                             OnClick="btnSearchAll_OnClick" />
                                     </td>
-                                    <td style="width: 0.5%; padding-left: 0px;">
-                                    </td>
-                                    <td style="width: 11%;">
+                                    <td style="width: 8%;">
                                         <asp:Button ID="btnClearResults" Enabled="false" runat="server" Text="Clear Results"
                                             OnClick="ResetFilter_Clicked" />
                                     </td>
-                                    <td style="width: 0.5%; padding-left: 0px;">
+                                    <td style="width: 18%; padding-left: 0px;">
                                     </td>
-                                    <td style="width: 9%; text-align: right">
-                                        <asp:DropDownList ID="ddlView" runat="server" OnSelectedIndexChanged="DdlView_SelectedIndexChanged"
-                                            AutoPostBack="true">
-                                            <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
-                                            <asp:ListItem Text="View 50" Value="50"></asp:ListItem>
-                                            <asp:ListItem Text="View 100" Value="100"></asp:ListItem>
-                                            <asp:ListItem Text="View All" Value="-1"></asp:ListItem>
-                                        </asp:DropDownList>
-                                    </td>
-                                    <td style="width: 0.5%; padding-left: 0px;">
-                                    </td>
-                                    <td style="width: 15%; text-align: left">
+                                    <td style="width: 12%;">
                                         <asp:ShadowedTextButton runat="server" Text="Add Strawman" ID="StbAddStrawman" CssClass="add-btn"
                                             OnClick="StbAddStrawman_OnClick" />
                                         <%--    NavigateUrl="~/StrawManDetails.aspx?returnTo=Config/Persons.aspx?ApplyFilterFromCookie=true" --%>
                                     </td>
-                                    <td style="width: 0.5%; padding-left: 0px;">
-                                    </td>
-                                    <td align="right" style="width: 13%; text-align: right">
+                                    <td style="width: 10%; text-align: right">
                                         <asp:ShadowedHyperlink runat="server" Text="Add Person" ID="lnkAddPerson" CssClass="add-btn"
                                             NavigateUrl="~/PersonDetail.aspx?returnTo=Config/Persons.aspx?ApplyFilterFromCookie=true" />
                                     </td>
@@ -124,9 +107,18 @@
                             </table>
                         </td>
                     </tr>
-                    <tr>
-                        <td colspan="3" style="width: 100%; padding-left: 3%; white-space: nowrap;">
+                    <tr valign="bottom" style="height: 35px;">
+                        <td colspan="2" style="width: 90%; padding-left: 3%; padding-top: 10px; white-space: nowrap;">
                             <asp:ValidationSummary ID="valsumSearch" runat="server" ValidationGroup="ValSearch" />
+                        </td>
+                        <td style="width: 10%; text-align: center;">
+                            <asp:DropDownList ID="ddlView" runat="server" OnSelectedIndexChanged="DdlView_SelectedIndexChanged"
+                                AutoPostBack="true">
+                                <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
+                                <asp:ListItem Text="View 50" Value="50"></asp:ListItem>
+                                <asp:ListItem Text="View 100" Value="100"></asp:ListItem>
+                                <asp:ListItem Text="View All" Value="-1"></asp:ListItem>
+                            </asp:DropDownList>
                         </td>
                     </tr>
                     <tr>
@@ -403,32 +395,34 @@
             <AjaxControlToolkit:ModalPopupExtender ID="mpePopup" runat="server" TargetControlID="StbAddStrawman"
                 BackgroundCssClass="modalBackground" PopupControlID="pnlPopup" DropShadow="false" />
             <asp:Panel ID="pnlPopup" runat="server" BackColor="White" BorderColor="Black" CssClass="ConfirmBoxClassError"
-                Style="display: none;" BorderWidth="2px" Height="250px" Width="450px">
-                <table width="100%">
+                Style="display: none;" BorderWidth="2px" Height="250px" Width="380px">
+                <table width="100%" class="strawman">
                     <tr>
-                        <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
+                        <th align="center" style="text-align: center; background-color: Gray;" colspan="3"
                             valign="bottom">
-                            <%--  <b style="font-size: 14px; padding-top: 2px;">Attention!</b>--%>
+                            <b style="font-size: 14px; padding-top: 2px;">ADD Strawman</b>
                             <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Cancel Changes"
                                 Style="float: right;" OnClick="btnCancel_OnClick" Text="X"></asp:Button>
                         </th>
                     </tr>
                     <tr>
-                        <td style="padding-left: 5px !important;" width="40%">
+                        <td colspan="3">
                             <asp:RadioButton runat="server" ID="rbNewStrawman" Checked="true" OnCheckedChanged='rbStrawman_OnCheckedChanged'
-                                AutoPostBack="true" Text="New Strawman" GroupName="rgpStrawman" />
-                        </td>
-                        <td>
-                            <asp:RadioButton runat="server" ID="rbCopyStrawman" OnCheckedChanged='rbStrawman_OnCheckedChanged'
-                                AutoPostBack="true" Text="Copy Strawman" GroupName="rgpStrawman" />
+                               AutoPostBack="true" Text="New Strawman" GroupName="rgpStrawman" />
                         </td>
                     </tr>
                     <tr>
-                        <td align="left">
-                            <asp:Label ID="lblStrawmanName" runat="server" Text="Existing Strawman" Visible="false"></asp:Label>
+                        <td colspan="3">
+                            <asp:RadioButton runat="server" ID="rbCopyStrawman" OnCheckedChanged='rbStrawman_OnCheckedChanged'
+                               AutoPostBack="true" Text="Copy Existing Strawman" GroupName="rgpStrawman" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-right: 10px !important;" align="right">
+                            <asp:Label ID="lblStrawmanName" runat="server" Text="Existing Strawman"></asp:Label>
                         </td>
                         <td>
-                            <asp:DropDownList ID="ddlStrawmanName" runat="server" Visible="false" OnSelectedIndexChanged='ddlStrawmanName_OnSelectedIndexChanged'
+                            <asp:DropDownList ID="ddlStrawmanName" runat="server" Enabled="false" OnSelectedIndexChanged='ddlStrawmanName_OnSelectedIndexChanged'
                                 AutoPostBack="true" Width="180px">
                             </asp:DropDownList>
                             <asp:CustomValidator ID="cvddlStrawmanName" runat="server" Enabled="false" Text="*"
@@ -438,11 +432,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td align="left">
-                            <asp:Label ID="lbfirstName" runat="server" Text="First Name" Visible="false"></asp:Label>
+                        <td style="padding-right: 10px !important;" align="right">
+                            <asp:Label ID="lbfirstName" runat="server" Text="Role"></asp:Label>
                         </td>
                         <td>
-                            <asp:TextBox ID="tbFirstName" runat="server" MaxLength="50" Visible="false" Enabled="false"
+                            <asp:TextBox ID="tbFirstName" runat="server" MaxLength="50"  Enabled="false"
                                 Width="180px"></asp:TextBox>
                             <asp:CustomValidator ID="cvFirstName" runat="server" Text="*" Enabled="false" ValidateEmptyText="true"
                                 ErrorMessage="First Name is required." OnServerValidate="cvFirstName_ServerValidate"
@@ -451,11 +445,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td align="left">
-                            <asp:Label ID="lblastName" runat="server" Text="Last Name" Visible="false"></asp:Label>
+                        <td style="padding-right: 10px !important;" align="right">
+                            <asp:Label ID="lblastName" runat="server" Text="Skill" ></asp:Label>
                         </td>
                         <td>
-                            <asp:TextBox ID="tbLastName" MaxLength="50" runat="server" Enabled="false" Visible="false"
+                            <asp:TextBox ID="tbLastName" MaxLength="50" runat="server" Enabled="false" 
                                 Width="180px"></asp:TextBox>
                             <asp:CustomValidator ID="cvLastName" runat="server" Enabled="false" ValidateEmptyText="true"
                                 Text="*" ErrorMessage="Last Name is required." OnServerValidate="cvLastName_ServerValidate"
@@ -468,8 +462,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" align="center" style="padding-bottom: 30px">
-                            <asp:Button ID="btnOk" runat="server" ValidationGroup="StrawmanGroup" Text="OK" OnClick="btnOK_OnClick" />
+                        <td colspan="3" align="right" style="padding-top: 10px; padding-right: 40px;">
+                            <asp:Button ID="btnOk" runat="server" Text="OK" ValidationGroup="StrawmanGroup" OnClick="btnOK_OnClick" Width="60px" />
+                            <asp:Button ID="btncancel" runat="server" Text="Cancel" OnClick="btnCancel_OnClick"
+                                Width="60px" />
                         </td>
                     </tr>
                     <tr>
