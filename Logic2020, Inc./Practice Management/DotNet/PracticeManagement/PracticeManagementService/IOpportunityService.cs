@@ -22,6 +22,9 @@ namespace PracticeManagementService
         [OperationContract]
         bool IsOpportunityPriorityInUse(int priorityId);
 
+        [OperationContract]
+        bool IsOpportunityHaveTeamStructure(int opportunityId);
+
 	    /// <summary>
 	    /// List Opportunity Transitions
 	    /// </summary>
