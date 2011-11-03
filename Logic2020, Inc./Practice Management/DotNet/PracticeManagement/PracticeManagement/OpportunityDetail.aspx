@@ -13,10 +13,9 @@
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc" %>
-<%@ Register Src="~/Controls/Opportunities/ProposedResources.ascx" TagName="ProposedResources"
-    TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Opportunities/PrevNextOpportunity.ascx" TagPrefix="uc"
     TagName="PrevNextOpportunity" %>
+<%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Opportunity Details | Practice Management</title>
 </asp:Content>
@@ -125,6 +124,196 @@
             });
         }
 
+        function ClearProposedResources() {
+            var chkboxList = document.getElementById('<%=cblPotentialResources.ClientID %>');
+            var chkboxes = $('#<%=cblPotentialResources.ClientID %> tr td :input');
+            for (var i = 0; i < chkboxes.length; i++) {
+                chkboxes[i].checked = false;
+                chkboxes[i].disabled = false;
+            }
+        }
+
+        function filterTeamStructure(searchtextBox) {
+            var trTeamMembers = document.getElementById('tblTeamStructure').getElementsByTagName('tr');
+            var searchText = searchtextBox.value.toLowerCase();
+            for (var i = 0; i < trTeamMembers.length; i++) {
+                var label = trTeamMembers[i].children[0].getElementsByTagName('span')[0];
+                var labelText = label.innerHTML.toLowerCase();
+
+                if (labelText.length >= searchText.length && labelText.substr(0, searchText.length) == searchText) {
+
+                    trTeamMembers[i].style.display = "";
+                }
+                else {
+
+                    trTeamMembers[i].style.display = "none";
+                }
+            }
+            changeAlternateitemsForProposedResources('tblTeamStructure');
+        }
+
+        function ClearTeamStructure() {
+
+            var ddlQtys = $('#tblTeamStructure tr td :input[type = "select-one"]');
+            for (var i = 0; i < ddlQtys.length; i++) {
+                ddlQtys[i].selectedIndex = 0;
+            }
+        }
+
+
+
+
+
+        function clearOutSideResources() {
+            $find("wmBhOutSideResources").set_Text('');
+        }
+
+        function ShowPotentialResourcesModal(image) {
+            var trPotentialResources = document.getElementById('<%=cblPotentialResources.ClientID %>').getElementsByTagName('tr');
+            var attachedResourcesIndexes = document.getElementById('<%=hdnProposedPersonsIndexes.ClientID %>').value.split(",");
+            $find("wmBhOutSideResources").set_Text(document.getElementById('<%=hdnProposedOutSideResources.ClientID %>').value);
+            $find("wmbhSearchBox").set_Text('');
+
+            for (var i = 0; i < trPotentialResources.length; i++) {
+                var checkBox = trPotentialResources[i].children[0].getElementsByTagName('input')[0];
+                var strikeCheckBox = trPotentialResources[i].children[1].getElementsByTagName('input')[0];
+                checkBox.checked = checkBox.disabled = strikeCheckBox.checked = strikeCheckBox.disabled = false;
+                trPotentialResources[i].style.display = "";
+                for (var j = 0; j < attachedResourcesIndexes.length; j++) {
+                    var indexString = attachedResourcesIndexes[j];
+                    var index = indexString.substring(0, indexString.indexOf(":", 0));
+                    var checkBoxType = indexString.substring(indexString.indexOf(":", 0) + 1, indexString.length);
+                    if (i == index && index != '') {
+                        if (checkBoxType == 1) {
+                            checkBox.checked = true;
+                            strikeCheckBox.disabled = true;
+                        }
+                        else {
+                            strikeCheckBox.checked = true;
+                            checkBox.disabled = true;
+                        }
+                        break;
+                    }
+                }
+            }
+            $find("behaviorIdPotentialResources").show();
+            return false;
+        }
+
+        function ShowTeamStructureModal(image) {
+            var attachedTeam = document.getElementById('<%=hdnTeamStructure.ClientID %>').value.split(",");
+            var trTeamStructure = document.getElementById('tblTeamStructure').getElementsByTagName('tr');
+            for (var i = 0; i < trTeamStructure.length; i++) {
+                var hdnPersonId = trTeamStructure[i].children[0].getElementsByTagName('input')[0];
+                var ddlQuantity = trTeamStructure[i].children[1].getElementsByTagName('SELECT')[0];
+                var chkEnabled = trTeamStructure[i].children[2].getElementsByTagName('input')[0];
+                ddlQuantity.selectedIndex = 0;
+                chkEnabled.checked = false;
+                for (var j = 0; j < attachedTeam.length; j++) {
+                    var personString = attachedTeam[j];
+                    var personId = personString.substring(0, personString.indexOf(":", 0));
+                    if (personId == hdnPersonId.value) {
+                        var personType = personString.substring(personString.indexOf(":", 0) + 1, personString.indexOf("|", 0));
+                        var Quantity = personString.substring(personString.indexOf("|", 0) + 1, personString.length);
+                        ddlQuantity.value = Quantity;
+                        if (personType != "1") {
+                            chkEnabled.checked = true;
+                        }
+                        break;
+                    }
+                }
+
+            }
+            $find("behaviorIdTeamStructure").show();
+            return false;
+        }
+
+        function GetProposedPersonIdsListWithPersonType() {
+            var cblPotentialResources = document.getElementById("<%= cblPotentialResources.ClientID%>");
+            var potentialCheckboxes = $('#<%=cblPotentialResources.ClientID %> tr td :input');
+            var hdnProposedPersonIdsList = document.getElementById("<%= hdnProposedResourceIdsWithTypes.ClientID%>");
+            var hdnProposedPersonsIndexes = document.getElementById('<%=hdnProposedPersonsIndexes.ClientID %>');
+
+            var PersonIdList = '';
+            var personIndexesList = '';
+            if (cblPotentialResources != null) {
+                for (var i = 0; i < potentialCheckboxes.length; ++i) {
+                    if (potentialCheckboxes[i].checked) {
+                        PersonIdList += potentialCheckboxes[i].parentNode.attributes['personid'].value + ':' + potentialCheckboxes[i].parentNode.attributes['persontype'].value + ',';
+                        personIndexesList += potentialCheckboxes[i].parentNode.attributes['itemIndex'].value + ':' + potentialCheckboxes[i].parentNode.attributes['persontype'].value + ',';
+                    }
+                }
+            }
+            hdnProposedPersonIdsList.value = PersonIdList;
+
+            hdnProposedPersonsIndexes.value = personIndexesList;
+        }
+
+        function UpdateTeamStructureForHiddenfields() {
+            
+            var hdnTeamStructureWithIndexes = document.getElementById("<%= hdnTeamStructureWithIndexes.ClientID%>");
+            var hdnTeamStructure = document.getElementById("<%= hdnTeamStructure.ClientID%>");
+
+            var trTeamStructure = document.getElementById('tblTeamStructure').getElementsByTagName('tr');
+            var PersonIdList = ''; 
+            var personIndexesList = '';
+            var personType;
+            for (var i = 0; i < trTeamStructure.length; i++) {
+
+                var hdnPersonId = trTeamStructure[i].children[0].getElementsByTagName('input')[0];
+                var ddlQuantity = trTeamStructure[i].children[1].getElementsByTagName('SELECT')[0];
+                var chkEnabled = trTeamStructure[i].children[2].getElementsByTagName('input')[0];
+                var hdnIndex = trTeamStructure[i].children[2].getElementsByTagName('input')[1];
+                if (ddlQuantity.selectedIndex > 0 || chkEnabled.checked) {
+                    personType = '';
+                    if (!chkEnabled.checked) {
+                        personType = '1';
+                    }
+                    else {
+                        personType = '2';
+                    }
+                    PersonIdList = PersonIdList + hdnPersonId.value + ':' + personType + '|' + ddlQuantity.value + ',';
+                    personIndexesList += hdnIndex.value + ':' + personType + '|' + ddlQuantity.value + ',';
+                }
+            }
+
+            hdnTeamStructure.value = PersonIdList;
+            hdnTeamStructureWithIndexes.value = personIndexesList;
+        }
+
+        function saveProposedResources() {
+            setDirty(); EnableSaveButton();
+            var hdnProposedOutSideResources = document.getElementById('<%=hdnProposedOutSideResources.ClientID %>');
+            hdnProposedOutSideResources.value = $find("wmBhOutSideResources").get_Text();
+            GetProposedPersonIdsListWithPersonType();
+        }
+
+        function saveTeamStructure() {
+            setDirty();
+            EnableSaveButton();
+            UpdateTeamStructureForHiddenfields();
+        }
+
+
+        function filterPotentialResources(searchtextBox) {
+            var trPotentialResources = document.getElementById('<%=cblPotentialResources.ClientID %>').getElementsByTagName('tr');
+            var searchText = searchtextBox.value.toLowerCase();
+            for (var i = 0; i < trPotentialResources.length; i++) {
+                var checkBox = trPotentialResources[i].children[0].getElementsByTagName('input')[0];
+                var checkboxText = checkBox.parentNode.children[1].innerHTML.toLowerCase();
+
+                if (checkboxText.length >= searchText.length && checkboxText.substr(0, searchText.length) == searchText) {
+
+                    trPotentialResources[i].style.display = "";
+                }
+                else {
+
+                    trPotentialResources[i].style.display = "none";
+                }
+            }
+            changeAlternateitemsForProposedResources('<%=cblPotentialResources.ClientID %>');
+        }
+
         function setHintPosition(image, displayPanel) {
             var iptop = image.offset().top;
             var ipleft = image.offset().left;
@@ -179,7 +368,7 @@
             }
 
         }
-               
+
         function SetWrapText(str) {
             for (var i = 30; i < str.length; i = i + 10) {
                 str = str.slice(0, i) + "<wbr/>" + str.slice(i, str.length);
@@ -216,6 +405,8 @@
                 }
             }
         }
+
+
          
     </script>
     <table class="CompPerfTable WholeWidth">
@@ -238,8 +429,7 @@
                                 <td style="width: 43%">
                                     <asp:Label ID="lblOpportunityNumber" runat="server" />
                                     &nbsp;(last updated:
-                                    <asp:Label ID="lblLastUpdate" runat="server" />)
-                                    &nbsp;&nbsp;
+                                    <asp:Label ID="lblLastUpdate" runat="server" />) &nbsp;&nbsp;
                                     <asp:HyperLink ID="hpProject" runat="server"></asp:HyperLink>
                                 </td>
                                 <td colspan="2" style="white-space: nowrap; width: 45%;">
@@ -417,6 +607,10 @@
                                                 <asp:RequiredFieldValidator ID="reqPriority" runat="server" ControlToValidate="ddlPriority"
                                                     Width="100%" Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"
                                                     Text="*" ToolTip="The Priority is required." ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
+                                                    <asp:CustomValidator ID="cvPriority" runat="server" ControlToValidate="ddlPriority"
+                                                    ToolTip="For an opportunity to be saved successfully with B, A, or PO status, it will be required to have a Team Structure added." Text="*" EnableClientScript="false"
+                                                    SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvPriority_ServerValidate"
+                                                    ValidationGroup="Opportunity" />
                                             </td>
                                         </tr>
                                     </table>
@@ -614,161 +808,6 @@
                                         <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
                                     </Triggers>
                                 </asp:UpdatePanel>
-                                <asp:UpdatePanel ID="upNotes" UpdateMode="Conditional" runat="server">
-                                    <ContentTemplate>
-                                        <table class="WholeWidth">
-                                            <tr>
-                                                <td style="padding: 2px 0px 2px 4px;">
-                                                    <b>Recent Notes</b>
-                                                    <br />
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="height: 110px; width: 100%; padding-left: 4px; vertical-align: top;">
-                                                    <asp:ListView ID="lvNotes" runat="server" EnableModelValidation="True">
-                                                        <LayoutTemplate>
-                                                            <table id="Table1" runat="server" style="table-layout: fixed;" class="WholeWidth">
-                                                                <tr>
-                                                                    <td colspan="3">
-                                                                        <table class="WholeWidth">
-                                                                            <tr>
-                                                                                <th style="width: 10%; padding-left: 2px;">
-                                                                                    <div class="ie-bg">
-                                                                                        Created</div>
-                                                                                </th>
-                                                                                <th style="width: 15%; padding-left: 2px;">
-                                                                                    <div class="ie-bg">
-                                                                                        By</div>
-                                                                                </th>
-                                                                                <th style="width: 75%; padding-left: 2px;">
-                                                                                    <div class="ie-bg">
-                                                                                        Note</div>
-                                                                                </th>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td colspan="3">
-                                                                        <div style="background: white; height: 100px; overflow-y: auto;">
-                                                                            <table id="itemPlaceHolderContainer" runat="server" style="background-color: White;"
-                                                                                class="WholeWidth">
-                                                                                <tr runat="server" id="itemPlaceHolder">
-                                                                                </tr>
-                                                                            </table>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </LayoutTemplate>
-                                                        <ItemTemplate>
-                                                            <tr>
-                                                                <td style="width: 10%; padding-left: 6px;">
-                                                                    <asp:Label ID="lblDate" Width="100%" runat="server" Text='<%# Eval("CreateDate", "{0:MM/dd/yyyy}") %>'></asp:Label>
-                                                                </td>
-                                                                <td style="width: 15%; padding-left: 12px;" class="WordWrap">
-                                                                    <asp:Label ID="lblPerson" runat="server" CssClass="WordWrap" Width="100%" Text='<%# Eval("Author.LastName") %>'></asp:Label>
-                                                                </td>
-                                                                <td style="width: 75%; padding-left: 12px;" class="WordWrap">
-                                                                    <asp:Label ID="lblNote" runat="server" Width="100%" Text='<%# GetWrappedText((string) Eval("NoteText")) %>'
-                                                                        CssClass="WordWrap"></asp:Label>
-                                                                </td>
-                                                            </tr>
-                                                        </ItemTemplate>
-                                                        <AlternatingItemTemplate>
-                                                            <tr style="background-color: #F9FAFF;">
-                                                                <td style="width: 10%; padding-left: 6px;">
-                                                                    <asp:Label ID="lblDate" Width="100%" runat="server" Text='<%# Eval("CreateDate", "{0:MM/dd/yyyy}") %>'></asp:Label>
-                                                                </td>
-                                                                <td style="width: 15%; padding-left: 12px;" class="WordWrap">
-                                                                    <asp:Label ID="lblPerson" Width="100%" CssClass="WordWrap" runat="server" Text='<%# Eval("Author.LastName") %>'></asp:Label>
-                                                                </td>
-                                                                <td style="width: 75%; padding-left: 12px;" class="WordWrap">
-                                                                    <asp:Label ID="lblNote" Width="100%" runat="server" Text='<%# GetWrappedText((string) Eval("NoteText")) %>'
-                                                                        CssClass="WordWrap"></asp:Label>
-                                                                </td>
-                                                            </tr>
-                                                        </AlternatingItemTemplate>
-                                                        <EmptyDataTemplate>
-                                                            <table style="table-layout: fixed;" class="WholeWidth">
-                                                                <tr>
-                                                                    <td colspan="3">
-                                                                        <table class="WholeWidth">
-                                                                            <tr>
-                                                                                <th style="width: 10%; padding-left: 2px; white-space: nowrap;">
-                                                                                    <div class="ie-bg">
-                                                                                        Created</div>
-                                                                                </th>
-                                                                                <th style="width: 15%; padding-left: 2px; white-space: nowrap;">
-                                                                                    <div class="ie-bg">
-                                                                                        By</div>
-                                                                                </th>
-                                                                                <th style="width: 75%; padding-left: 2px; white-space: nowrap;">
-                                                                                    <div class="ie-bg">
-                                                                                        Note</div>
-                                                                                </th>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td colspan="3">
-                                                                        <div style="background: white; height: 100px; overflow-y: auto;">
-                                                                            <table id="itemPlaceHolderContainer" runat="server" style="background-color: White;"
-                                                                                class="WholeWidth">
-                                                                                <tr>
-                                                                                    <td colspan="3">
-                                                                                        &nbsp;
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </table>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </EmptyDataTemplate>
-                                                    </asp:ListView>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding: 2px 0px 0px 4px;">
-                                                    <table width="100%">
-                                                        <tr>
-                                                            <td style="width: 82%; padding: 2px 2px 0px 0px;">
-                                                                <asp:TextBox ID="tbNote" runat="server" CssClass="noteWidthHeight" MaxLength="2000"
-                                                                    Style="overflow-y: auto; resize: none; font-family: Arial, Helvetica, sans-serif;
-                                                                    font-size: 12px;" Font-Size="12px" Rows="3" TextMode="MultiLine" ValidationGroup="Notes"
-                                                                    Height="45px" />
-                                                                <ajax:TextBoxWatermarkExtender ID="twNote" runat="server" TargetControlID="tbNote"
-                                                                    WatermarkText="To add a note, click here and begin typing. When done, click the &quot;Add Note&quot; button to save your entry."
-                                                                    WatermarkCssClass="noteWidthHeight watermark-Text" Enabled="True" />
-                                                            </td>
-                                                            <td style="text-align: center; padding-left: 2px; width: 18%">
-                                                                <asp:Button ID="btnAddNote" OnClick="btnAddNote_Click" runat="server" Text="Add Note" />
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <asp:RequiredFieldValidator ID="rvNotes" runat="server" ValidationGroup="Notes" ControlToValidate="tbNote"
-                                                                    ErrorMessage="Note text is empty." Display="Dynamic" />
-                                                                <asp:CustomValidator ID="cvLen" runat="server" ErrorMessage="Maximum length of the Note is 2000 characters."
-                                                                    ClientValidationFunction="javascript:len=args.Value.length;args.IsValid=(len>0 && len<=2000);"
-                                                                    OnServerValidate="cvLen_OnServerValidate" EnableClientScript="true" ControlToValidate="tbNote"
-                                                                    ValidationGroup="Notes" Display="Dynamic" />
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </ContentTemplate>
-                                    <Triggers>
-                                        <asp:AsyncPostBackTrigger ControlID="btnSave" />
-                                        <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
-                                        <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
-                                        <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
-                                    </Triggers>
-                                </asp:UpdatePanel>
                             </div>
                         </ContentTemplate>
                     </ajax:TabPanel>
@@ -797,52 +836,245 @@
                 <table class="WholeWidth" style="background: #e2ebff;">
                     <tr>
                         <td align="center" style="padding-left: 8px; padding-right: 8px;">
-                            <asp:UpdatePanel ID="upProposedResources" UpdateMode="Conditional" runat="server">
+                            <asp:UpdatePanel ID="upTeamMakeUp" UpdateMode="Conditional" runat="server">
                                 <ContentTemplate>
-                                    <table width="98%">
+                                    <table style="width: 100%;">
                                         <tr>
-                                            <td style="width: 100%; border-bottom: 1px solid black;">
-                                                <div style="text-align: center; padding: 4px 0px 4px 0px;">
-                                                    Select from the list of Potential Resources below and click "Add" to note them as
-                                                    Proposed for this Opportunity.<asp:Image ID="hintDate" runat="server" ImageUrl="~/Images/hint.png"
-                                                        ToolTip="Choosing a Start and End Date for the Opportunity, even loosely, will result in a much more accurate idea of which Potential Resources are available for this Opportunity." />
-                                                </div>
+                                            <td align="center">
+                                                <b style="font-size: 16px;">Team Make-Up</b>
                                             </td>
                                         </tr>
-                                        <tr style="padding-top: 2px;">
-                                            <td style="width: 100%;">
-                                                <table width="100%">
-                                                    <tr>
-                                                        <td align="center" style="width: 44%;">
-                                                            <div class="cbfloatRight" style="width: 100%; padding-left: 3px;">
-                                                                <table width="100%">
-                                                                    <tr>
-                                                                        <td style="width: 100%; text-align: center;">
-                                                                            <asp:Label ID="lblPotentialResources" runat="server" Text="Potential Resources" Style="font-weight: bold;
-                                                                                padding-bottom: 2px;"></asp:Label>
-                                                                        </td>
-                                                                        <td style="width: 10px; padding-right: 6px;">
-                                                                            <asp:Image ID="imgCheck" runat="server" ImageUrl="~/Images/right_icon.png" />
-                                                                        </td>
-                                                                        <td style="width: 10px; padding-right: 22px;">
-                                                                            <asp:Image ID="imgCross" runat="server" ImageUrl="~/Images/cross_icon.png" />
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </div>
+                                    </table>
+                                    <table style="width: 100%;" width="100%">
+                                        <tr>
+                                            <td style="width: 15%;">
+                                            </td>
+                                            <td style="width: 70%;">
+                                                <table style="width: 100%;" width="100%">
+                                                    <tr style="padding-top: 2px;">
+                                                        <td align="right" style="width: 5%; padding-right: 15px;">
+                                                            <asp:Image ID="imgProposed" ToolTip="Add Proposed Resources" onclick="ShowPotentialResourcesModal(this);"
+                                                                ImageUrl="~/Images/People_Icon_Large.png" runat="server" />
                                                         </td>
-                                                        <td align="center" style="width: 12%;">
+                                                        <td style="width: 90%;">
+                                                            <table style="width: 100%">
+                                                                <tr>
+                                                                    <td style="width: 50%; padding-right: 2px;">
+                                                                        <div align="left" style="height: 175px; width: 100%; overflow-y: auto; border: 1px solid black;
+                                                                            background: white; padding-left: 3px; line-height: 19px; padding-top: 3px; padding-bottom: 3px;">
+                                                                            <asp:DataList ID="dtlProposedPersons" runat="server" Style="white-space: normal;
+                                                                                width: 100%;">
+                                                                                <ItemTemplate>
+                                                                                    <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>
+                                                                                </ItemTemplate>
+                                                                                <AlternatingItemTemplate>
+                                                                                    <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>
+                                                                                </AlternatingItemTemplate>
+                                                                                <AlternatingItemStyle BackColor="#f9faff" />
+                                                                            </asp:DataList>
+                                                                            <table>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <asp:Literal ID="ltrlOutSideResources" runat="server"></asp:Literal>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td style="width: 50%; padding-left: 2px;">
+                                                                        <div align="left" style="height: 175px; width: 100%; overflow-y: auto; line-height: 19px;
+                                                                            border: 1px solid black; background: white; padding-left: 3px; padding-top: 3px;
+                                                                            padding-bottom: 3px;">
+                                                                            <asp:DataList ID="dtlTeamStructure" runat="server" Style="white-space: normal;">
+                                                                                <ItemTemplate>
+                                                                                     <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>
+                                                                                     (<%# Eval("Quantity") %>)
+                                                                                </ItemTemplate>
+                                                                                <AlternatingItemTemplate>
+                                                                                     <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>
+                                                                                     (<%# Eval("Quantity") %>)
+                                                                                </AlternatingItemTemplate>
+                                                                                <AlternatingItemStyle BackColor="#f9faff" />
+                                                                            </asp:DataList>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
                                                         </td>
-                                                        <td align="center" style="width: 44%; text-align: center;">
-                                                            <asp:Label ID="lblProposedResources" runat="server" Text="Proposed Resources" Style="font-weight: bold;
-                                                                padding-bottom: 2px;"></asp:Label>
+                                                        <td align="left" style="width: 5%; padding-left: 15px;">
+                                                            <asp:Image ID="imgStrawMan" ToolTip="Add Straw Man" ImageUrl="~/Images/StrawMan_Large.png" onclick="ShowTeamStructureModal(this);"
+                                                                runat="server" />
                                                         </td>
                                                     </tr>
                                                 </table>
                                             </td>
+                                            <td style="width: 15%;">
+                                            </td>
                                         </tr>
-                                        <uc:ProposedResources ID="ucProposedResources" runat="server" />
                                     </table>
+                                    <asp:HiddenField ID="hdnProposedResourceIdsWithTypes" runat="server" />
+                                    <asp:HiddenField ID="hdnProposedPersonsIndexes" runat="server" />
+                                    <asp:HiddenField ID="hdnProposedOutSideResources" runat="server" />
+                                    <asp:HiddenField ID="hdnmpePotentialResources" runat="server" />
+                                    <AjaxControlToolkit:ModalPopupExtender ID="mpePotentialResources" runat="server"
+                                        BehaviorID="behaviorIdPotentialResources" TargetControlID="hdnmpePotentialResources"
+                                        EnableViewState="false" BackgroundCssClass="modalBackground" PopupControlID="pnlPotentialResources"
+                                        CancelControlID="btnCancelProposedResources" DropShadow="false" />
+                                    <asp:Panel ID="pnlPotentialResources" runat="server" BorderColor="Black" BackColor="#d4dff8"
+                                        Style="display: none;" Width="372px" BorderWidth="1px">
+                                        <table width="100%">
+                                            <tr>
+                                                <td style="padding-left: 5px; padding-top: 5px; padding-bottom: 5px; padding-right: 2px;">
+                                                    <center>
+                                                        <b>Potential Resources</b>
+                                                    </center>
+                                                    <asp:TextBox ID="txtSearchBox" runat="server" Width="353px" Height="16px" Style="padding-bottom: 4px;
+                                                        margin-bottom: 4px;" MaxLength="4000" onkeyup="filterPotentialResources(this);"></asp:TextBox>
+                                                    <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmSearch" runat="server" TargetControlID="txtSearchBox"
+                                                        WatermarkText="Begin typing here to filter the list of resources below." EnableViewState="false"
+                                                        WatermarkCssClass="watermarkedtext" BehaviorID="wmbhSearchBox" />
+                                                    <table>
+                                                        <tr>
+                                                            <td style="width: 304px;">
+                                                            </td>
+                                                            <td style="padding-right: 2px;">
+                                                                <asp:Image ID="imgCheck" runat="server" ImageUrl="~/Images/right_icon.png" />
+                                                            </td>
+                                                            <td style="padding-left: 2px;">
+                                                                <asp:Image ID="imgCross" runat="server" ImageUrl="~/Images/cross_icon.png" />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <div class="cbfloatRight" style="height: 250px; width: 350px; overflow-y: scroll;
+                                                        border: 1px solid black; background: white; padding-left: 3px; text-align: left !important;">
+                                                        <uc:MultipleSelectionCheckBoxList ID="cblPotentialResources" runat="server" Width="100%"
+                                                            BackColor="White" AutoPostBack="false" DataTextField="Name" DataValueField="id"
+                                                            OnDataBound="cblPotentialResources_OnDataBound" CellPadding="3">
+                                                        </uc:MultipleSelectionCheckBoxList>
+                                                    </div>
+                                                    <div style="text-align: right; width: 356px; padding: 8px 0px 8px 0px">
+                                                        <input type="button" value="Clear All" onclick="javascript:ClearProposedResources();" />
+                                                    </div>
+                                                    <table style="width: 100%">
+                                                        <tr>
+                                                            <td style="width: 93% !important;">
+                                                                <asp:TextBox ID="txtOutSideResources" runat="server" Width="100%" Height="16px" Style="padding-bottom: 4px;
+                                                                    margin-bottom: 4px;" MaxLength="4000"></asp:TextBox>
+                                                                <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmOutSideResources" runat="server"
+                                                                    TargetControlID="txtOutSideResources" WatermarkText="Enter Other Names(s) (optional) separated by semi-colons."
+                                                                    EnableViewState="false" WatermarkCssClass="watermarkedtext" BehaviorID="wmBhOutSideResources" />
+                                                            </td>
+                                                            <td align="right">
+                                                                <img id="imgtrash" src="Images/trash-icon-Large.png" onclick="clearOutSideResources();"
+                                                                    style="cursor: pointer; padding-bottom: 5px;" />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <br />
+                                                    <table width="356px;">
+                                                        <tr>
+                                                            <td align="right">
+                                                                <asp:Button ID="btnAddProposedResources" OnClientClick="saveProposedResources();"
+                                                                    OnClick="btnAddProposedResources_Click" runat="server" Text="Add" ToolTip="Add" />
+                                                                &nbsp;
+                                                                <asp:Button ID="btnCancelProposedResources" runat="server" Text="Cancel" ToolTip="Cancel" />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </asp:Panel>
+                                    <asp:HiddenField ID="hdnmpeTeamStructure" runat="server" Value="" />
+                                    <AjaxControlToolkit:ModalPopupExtender ID="mpeTeamStructure" runat="server" BehaviorID="behaviorIdTeamStructure"
+                                        TargetControlID="hdnmpeTeamStructure" EnableViewState="false" BackgroundCssClass="modalBackground"
+                                        PopupControlID="pnlTeamStructure" CancelControlID="btnTeamCancel" DropShadow="false" />
+                                    <asp:Panel ID="pnlTeamStructure" runat="server" BorderColor="Black" BackColor="#d4dff8"
+                                        Width="372px" BorderWidth="1px" Style="display: none;">
+                                        <table width="100%">
+                                            <tr>
+                                                <td style="padding-left: 5px; padding-top: 5px; padding-bottom: 5px; padding-right: 2px;">
+                                                    <center>
+                                                        <b>Team structure</b>
+                                                    </center>
+                                                    <asp:TextBox ID="txtTeamSearchBox" runat="server" Width="353px" Height="16px" Style="padding-bottom: 4px;
+                                                        margin-bottom: 4px;" MaxLength="4000" onkeyup="filterTeamStructure(this);"></asp:TextBox>
+                                                    <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmTeamSearchTeam" runat="server"
+                                                        TargetControlID="txtTeamSearchBox" WatermarkText="Begin typing here to filter the list of resources below."
+                                                        EnableViewState="false" WatermarkCssClass="watermarkedtext" BehaviorID="wmbhSearchBox" />
+                                                    <table>
+                                                        <tr>
+                                                            <td style="width: 275px;">
+                                                            </td>
+                                                            <td style="text-align: left; width: 45px;">
+                                                                QTY
+                                                            </td>
+                                                            <td style="padding-left: 2px;">
+                                                                <asp:Image ID="imgTeamCross" runat="server" ImageUrl="~/Images/cross_icon.png" />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <div class="cbfloatRight" style="height: 250px; width: 350px; overflow-y: scroll;
+                                                        border: 1px solid black; background: white; padding-left: 3px; text-align: left !important;">
+                                                        <table width="100%" id="tblTeamStructure">
+                                                            <asp:Repeater ID="rpTeamStructure" runat="server" OnItemDataBound="rpTeamStructure_OnItemDataBound">
+                                                                <ItemTemplate>
+                                                                    <tr>
+                                                                        <td style="padding-top: 4px; width: 275px;">
+                                                                            <asp:Label ID="lblStrawman" FirstName='<%# Eval("FirstName") %>' LastName='<%# Eval("LastName") %>' runat="server" Text='<%# Eval("Name") %>'>
+                                                                            </asp:Label>
+                                                                            <asp:HiddenField ID="hdnPersonId"  runat="server" Value='<%# Eval("Id") %>' />
+                                                                        </td>
+                                                                        <td style="padding-top: 4px; padding-right: 5px; width: 40px;">
+                                                                            <asp:DropDownList ID="ddlQuantity" runat="server" DataTextField="Name" DataValueField="Id">
+                                                                            </asp:DropDownList>
+                                                                        </td>
+                                                                        <td>
+                                                                            <asp:CheckBox ID="chkEnabled" runat="server" />
+                                                                            <asp:HiddenField ID="hdnIndex" runat="server"  />
+                                                                        </td>
+                                                                    </tr>
+                                                                </ItemTemplate>
+                                                                <AlternatingItemTemplate>
+                                                                    <tr style="background-color: #f9faff;">
+                                                                        <td style="padding-top: 4px; width: 275px;">
+                                                                            <asp:Label ID="lblStrawman"  FirstName='<%# Eval("FirstName") %>' LastName='<%# Eval("LastName") %>' runat="server" Text='<%# Eval("Name") %>'>
+                                                                            </asp:Label>
+                                                                            <asp:HiddenField ID="hdnPersonId" runat="server" Value='<%# Eval("Id") %>' />
+                                                                        </td>
+                                                                        <td style="padding-top: 4px; padding-right: 5px; width: 40px;">
+                                                                            <asp:DropDownList ID="ddlQuantity" runat="server" DataTextField="Name" DataValueField="Id">
+                                                                            </asp:DropDownList>
+                                                                        </td>
+                                                                        <td>
+                                                                            <asp:CheckBox ID="chkEnabled" runat="server" />
+                                                                            <asp:HiddenField ID="hdnIndex" runat="server"  />
+                                                                        </td>
+                                                                    </tr>
+                                                                </AlternatingItemTemplate>
+                                                            </asp:Repeater>
+                                                        </table>
+                                                    </div>
+                                                    <div style="text-align: right; width: 356px; padding: 8px 0px 8px 0px">
+                                                        <input type="button" value="Clear All" onclick="javascript:ClearTeamStructure();" />
+                                                    </div>
+                                                    <br />
+                                                    <table width="356px;">
+                                                        <tr>
+                                                            <td align="right">
+                                                                <asp:Button ID="btnSaveTeamStructure" runat="server" Text="Add" ToolTip="Add" OnClientClick="javascript:saveTeamStructure();"
+                                                                    OnClick="btnSaveTeamStructure_OnClick" />
+                                                                &nbsp;
+                                                                <asp:Button ID="btnTeamCancel" runat="server" Text="Cancel" ToolTip="Cancel" />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </asp:Panel>
+                                    <asp:HiddenField ID="hdnTeamStructure" runat="server" Value="" />
+                                    <asp:HiddenField ID="hdnTeamStructureWithIndexes" runat="server" Value="" />
                                 </ContentTemplate>
                                 <Triggers>
                                     <asp:AsyncPostBackTrigger ControlID="btnAttach" />
