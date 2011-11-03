@@ -22,7 +22,6 @@ CREATE PROCEDURE [dbo].[OpportunityUpdate]
 	@GroupId			   INT,
 	@EstimatedRevenue	   DECIMAL(18,2),
 	@PersonIdList          NVARCHAR(MAX) = NULL,
-	@OutSideResources      NVARCHAR(MAX),
 	@StrawManList          NVARCHAR(MAX) = NULL
 )
 AS
@@ -76,7 +75,6 @@ BEGIN
 			   GroupId = @GroupId,
 			   EstimatedRevenue = @EstimatedRevenue
 			   ,LastUpdated = GETDATE()
-			   ,OutSideResources = @OutSideResources
 		 WHERE OpportunityId = @OpportunityId
 
 		-- Logging changes
