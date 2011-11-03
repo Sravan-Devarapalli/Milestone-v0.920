@@ -103,6 +103,11 @@ namespace PracticeManagementService
             return OpportunityDAL.IsOpportunityPriorityInUse(priorityId);
         }
 
+        public bool IsOpportunityHaveTeamStructure(int opportunityId)
+        {
+            return OpportunityDAL.IsOpportunityHaveTeamStructure(opportunityId);
+        }
+
         /// <summary>
         /// 	Retrives an <see cref = "Opportunity" /> be a specified ID.
         /// </summary>
