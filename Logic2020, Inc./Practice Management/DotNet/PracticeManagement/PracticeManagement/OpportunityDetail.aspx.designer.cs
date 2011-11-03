@@ -256,6 +256,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqPriority;
         
         /// <summary>
+        /// cvPriority control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvPriority;
+        
+        /// <summary>
         /// ddlClientGroup control.
         /// </summary>
         /// <remarks>
@@ -454,69 +463,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.TextBox txtDescription;
         
         /// <summary>
-        /// upNotes control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upNotes;
-        
-        /// <summary>
-        /// lvNotes control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView lvNotes;
-        
-        /// <summary>
-        /// tbNote control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox tbNote;
-        
-        /// <summary>
-        /// twNote control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.TextBoxWatermarkExtender twNote;
-        
-        /// <summary>
-        /// btnAddNote control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAddNote;
-        
-        /// <summary>
-        /// rvNotes control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rvNotes;
-        
-        /// <summary>
-        /// cvLen control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvLen;
-        
-        /// <summary>
         /// tpHistory control.
         /// </summary>
         /// <remarks>
@@ -544,31 +490,130 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.ActivityLogControl activityLog;
         
         /// <summary>
-        /// upProposedResources control.
+        /// upTeamMakeUp control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upProposedResources;
+        protected global::System.Web.UI.UpdatePanel upTeamMakeUp;
         
         /// <summary>
-        /// hintDate control.
+        /// imgProposed control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Image hintDate;
+        protected global::System.Web.UI.WebControls.Image imgProposed;
         
         /// <summary>
-        /// lblPotentialResources control.
+        /// dtlProposedPersons control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPotentialResources;
+        protected global::System.Web.UI.WebControls.DataList dtlProposedPersons;
+        
+        /// <summary>
+        /// ltrlOutSideResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlOutSideResources;
+        
+        /// <summary>
+        /// dtlTeamStructure control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DataList dtlTeamStructure;
+        
+        /// <summary>
+        /// imgStrawMan control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgStrawMan;
+        
+        /// <summary>
+        /// hdnProposedResourceIdsWithTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnProposedResourceIdsWithTypes;
+        
+        /// <summary>
+        /// hdnProposedPersonsIndexes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnProposedPersonsIndexes;
+        
+        /// <summary>
+        /// hdnProposedOutSideResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnProposedOutSideResources;
+        
+        /// <summary>
+        /// hdnmpePotentialResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnmpePotentialResources;
+        
+        /// <summary>
+        /// mpePotentialResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpePotentialResources;
+        
+        /// <summary>
+        /// pnlPotentialResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlPotentialResources;
+        
+        /// <summary>
+        /// txtSearchBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSearchBox;
+        
+        /// <summary>
+        /// wmSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TextBoxWatermarkExtender wmSearch;
         
         /// <summary>
         /// imgCheck control.
@@ -589,22 +634,148 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Image imgCross;
         
         /// <summary>
-        /// lblProposedResources control.
+        /// cblPotentialResources control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblProposedResources;
+        protected global::PraticeManagement.Controls.MultipleSelectionCheckBoxList cblPotentialResources;
         
         /// <summary>
-        /// ucProposedResources control.
+        /// txtOutSideResources control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Opportunities.ProposedResources ucProposedResources;
+        protected global::System.Web.UI.WebControls.TextBox txtOutSideResources;
+        
+        /// <summary>
+        /// wmOutSideResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TextBoxWatermarkExtender wmOutSideResources;
+        
+        /// <summary>
+        /// btnAddProposedResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAddProposedResources;
+        
+        /// <summary>
+        /// btnCancelProposedResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelProposedResources;
+        
+        /// <summary>
+        /// hdnmpeTeamStructure control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnmpeTeamStructure;
+        
+        /// <summary>
+        /// mpeTeamStructure control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeTeamStructure;
+        
+        /// <summary>
+        /// pnlTeamStructure control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlTeamStructure;
+        
+        /// <summary>
+        /// txtTeamSearchBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtTeamSearchBox;
+        
+        /// <summary>
+        /// wmTeamSearchTeam control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TextBoxWatermarkExtender wmTeamSearchTeam;
+        
+        /// <summary>
+        /// imgTeamCross control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgTeamCross;
+        
+        /// <summary>
+        /// rpTeamStructure control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rpTeamStructure;
+        
+        /// <summary>
+        /// btnSaveTeamStructure control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSaveTeamStructure;
+        
+        /// <summary>
+        /// btnTeamCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnTeamCancel;
+        
+        /// <summary>
+        /// hdnTeamStructure control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnTeamStructure;
+        
+        /// <summary>
+        /// hdnTeamStructureWithIndexes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnTeamStructureWithIndexes;
         
         /// <summary>
         /// UpdatePanel1 control.
