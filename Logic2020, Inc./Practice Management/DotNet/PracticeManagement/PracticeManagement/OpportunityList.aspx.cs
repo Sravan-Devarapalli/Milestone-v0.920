@@ -134,8 +134,8 @@ namespace PraticeManagement
                                          SendOut = opp.SendOut != null ? opp.SendOut.ToString() : string.Empty,
                                          DaysOld = opp.DaysOld.ToString(),
                                          LastChange = opp.LastChange.ToString(),
-                                         ProposedPersonIdList = opp.ProposedPersonIdList != null ? opp.ProposedPersonIdList.ToString() : string.Empty,
-                                         OutSideResources = opp.OutSideResources != null ? opp.OutSideResources.ToString() : string.Empty,
+                                         ProposedPersonIdList = opp.ProposedPersonIdList != null ? opp.ProposedPersonIdList.ToString() : string.Empty
+                                         //OutSideResources = opp.OutSideResources != null ? opp.OutSideResources.ToString() : string.Empty,
                                      }).ToList(); //Note If you add new property, then change the header in RowDataBound.
 
             excelGrid.DataSource = opportunitiesData;
