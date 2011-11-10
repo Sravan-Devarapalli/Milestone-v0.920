@@ -16,9 +16,11 @@ AS
 
 	IF EXISTS(SELECT 1 FROM dbo.MilestonePerson WHERE MilestoneId = @MilestoneId AND PersonId = @PersonId)
 	BEGIN
-		DECLARE @ErrorMessage NVARCHAR(2048)
-		SELECT  @ErrorMessage = [dbo].[GetErrorMessage](70016)
-		RAISERROR (@ErrorMessage, 16, 1)
+		
+		SELECT TOP(1) @MilestonePersonId = MilestonePersonId 
+		FROM dbo.MilestonePerson 
+		WHERE MilestoneId = @MilestoneId AND PersonId = @PersonId
+
 	END
 	ELSE
 	BEGIN
