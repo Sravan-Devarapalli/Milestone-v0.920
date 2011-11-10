@@ -1,26 +1,24 @@
-﻿-- =============================================
--- Author:		Nikita Goncharenko
--- Create date: 2010-08-04
--- Description:	
--- =============================================
-CREATE PROCEDURE dbo.CalculateMilestonePersonFinancials 
-	-- Add the parameters for the stored procedure here
+﻿CREATE PROCEDURE dbo.CalculateMilestonePersonFinancials 
+(
 	@MilestonePersonId int
+)
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 	
-	declare @milestoneId int
-	declare @projectDiscount decimal(18, 2)
-	declare @personId int
-	declare @grossHourlyBillRate  decimal(18, 2)
-	declare @loadedHourlyPayRate  decimal(18, 2)
+	DECLARE @milestoneId INT
+	DECLARE @projectDiscount DECIMAL(18, 2)
+	DECLARE @personId INT
+	DECLARE @grossHourlyBillRate  DECIMAL(18, 2)
+	DECLARE @loadedHourlyPayRate  DECIMAL(18, 2)
 
-	select top 1 @milestoneId = mp.MilestoneId, @projectDiscount = mp.Discount, @personId = mp.PersonId
-	from v_MilestonePerson as mp
-	where mp.MilestonePersonId = @MilestonePersonId
+	SELECT TOP 1 @milestoneId = mp.MilestoneId, @projectDiscount = p.Discount, @personId = mp.PersonId
+	FROM dbo.MilestonePerson AS mp
+	INNER JOIN dbo.Milestone AS m ON mp.MilestoneId = m.MilestoneId
+	INNER JOIN dbo.Project AS p ON m.ProjectId = p.ProjectId
+	WHERE mp.MilestonePersonId = @MilestonePersonId
 
 	;WITH FinancialsRetro AS 
 	(
@@ -39,45 +37,46 @@ BEGIN
 		   f.PracticeManagementCommissionSub,
 		   f.PracticeManagementCommissionOwn ,
 		   f.PracticeManagerId,
-		   f.Discount
+		   f.Discount,
+		   f.EntryId
 	FROM v_FinancialsRetrospective f
 	WHERE f.MilestoneId = @MilestoneId AND f.PersonId = @PersonId     
 	) ,
 	MilestonePersonBasicFinancials AS (
-	SELECT f.EntryStartDate,
+	SELECT f.MilestoneId ,
+		   f.PersonId,
 		   ISNULL(SUM(f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount),0) AS RevenueNet,
 		   ISNULL(SUM((CASE WHEN f.SLHR >=  f.PayRate +f.MLFOverheadRate 
 					 THEN f.SLHR ELSE f.PayRate + f.MLFOverheadRate END)*ISNULL(f.PersonHoursPerDay, 0)),0) Cogs,
 		   ISNULL(SUM(f.PersonHoursPerDay), 0) AS BilledHours       
 	  FROM FinancialsRetro AS f
-	  LEFT JOIN dbo.v_MilestonePersonVacations AS vac ON f.MilestoneId = vac.MilestoneId AND f.PersonId = vac.PersonId AND vac.StartDate = f.EntryStartDate
 	 WHERE f.MilestoneId = @MilestoneId AND f.PersonId = @PersonId
-	GROUP BY f.EntryStartDate
+	GROUP BY  f.MilestoneId , f.PersonId
 	)
-	select
+	SELECT
 		@grossHourlyBillRate = 
 			SUM(
-				case 
-				when BilledHours > 0 
-					then RevenueNet / BilledHours
-					else 0
-				end
+				CASE 
+				WHEN BilledHours > 0 
+					THEN RevenueNet / BilledHours
+					ELSE 0
+				END
 			),
 		@loadedHourlyPayRate = 
 			SUM(
-				case 
-				when BilledHours > 0 
-					then Cogs / BilledHours
-					else 0
-				end
+				CASE 
+				WHEN BilledHours > 0 
+					THEN Cogs / BilledHours
+					ELSE 0
+				END
 			)
-	from MilestonePersonBasicFinancials
+	FROM MilestonePersonBasicFinancials
 	
     -- Insert statements for procedure here
 	SELECT 
 		dbo.GetMilestonePersonHoursInPeriod(@MilestonePersonId) as HoursInPeriod, 
-		@projectDiscount as ProjectDiscount,
-		@grossHourlyBillRate as GrossHourlyBillRate,
+		@projectDiscount AS ProjectDiscount,
+		@grossHourlyBillRate AS GrossHourlyBillRate,
 		@loadedHourlyPayRate LoadedHourlyPayRate
 END
 
