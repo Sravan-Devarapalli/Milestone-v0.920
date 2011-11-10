@@ -663,6 +663,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MilestonePersonService\MilestonePersonService1.wsdl" />
+    <None Include="Service References\MilestonePersonService\MilestonePersonService19.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\MilestonePersonService\MilestonePersonService3.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -682,6 +685,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MilestoneService\MilestoneService1.wsdl" />
+    <None Include="Service References\MilestoneService\MilestoneService12.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\MilestoneService\MilestoneService4.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -3242,4 +3248,3 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
-
