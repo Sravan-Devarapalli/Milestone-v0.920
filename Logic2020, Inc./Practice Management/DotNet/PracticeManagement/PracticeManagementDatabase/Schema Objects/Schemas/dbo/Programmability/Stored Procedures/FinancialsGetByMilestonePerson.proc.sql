@@ -67,10 +67,7 @@ AS
 							  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END)  * ISNULL(f.PersonHoursPerDay, 0)) *
 	           (f.PracticeManagementCommissionSub + CASE f.PracticeManagerId WHEN f.PersonId THEN f.PracticeManagementCommissionOwn ELSE 0 END)) / 100 AS PracticeManagementCommission,
 	           0.0 AS 'actualhours',
-	           0.0 AS 'forecastedhours',
-           ISNULL(SUM(vac.VacationHours), 0) AS 'VacationHours'
-		   
+	           0.0 AS 'forecastedhours'
 	  FROM FinancialsRetro AS f
-	  LEFT JOIN dbo.v_MilestonePersonVacations AS vac ON f.MilestoneId = vac.MilestoneId AND f.PersonId = vac.PersonId
 	  GROUP BY f.ProjectId
 
