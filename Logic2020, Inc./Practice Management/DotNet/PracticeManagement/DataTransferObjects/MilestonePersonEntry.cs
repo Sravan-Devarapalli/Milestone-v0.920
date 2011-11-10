@@ -96,6 +96,16 @@ namespace DataTransferObjects
             set;
         }
 
+
+        
+        [DataMember]
+        public int Id
+        {
+            get;
+            set;
+        }
+
+
         /// <summary>
         /// Gets or sets an VacationDays of the person on Milestone
         /// </summary>
@@ -253,6 +263,26 @@ namespace DataTransferObjects
         {
             return ToString(MilestonePersonEntryFormat.Default);
         }
+
+        #endregion
+
+        #region "Members used in Milestone Detail Resources tab." 
+
+        public bool IsEditMode { get; set; }
+
+        public bool IsShowPlusButton { get; set; }
+
+        public int ShowingPlusButtonEntryId { get; set; }
+
+        public int ExtendedResourcesRowCount { get; set; }
+
+        public bool IsNewEntry { get; set; }
+
+        public bool IsRepeaterEntry { get; set; }
+
+        public Dictionary<string, string> EditedEntryValues { get; set; }
+
+        public MilestonePersonEntry PreviouslySavedEntry { get; set; }
 
         #endregion
     }
