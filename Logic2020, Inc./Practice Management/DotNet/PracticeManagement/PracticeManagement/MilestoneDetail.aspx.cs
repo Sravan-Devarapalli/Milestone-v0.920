@@ -73,6 +73,26 @@ namespace PraticeManagement
 
         #region Properties
 
+        public bool IsSaveAllClicked
+        {
+            get;
+            set;
+        }
+
+        private Milestone MilestoneObject
+        {
+            get;
+            set;
+        }
+
+        private MilestoneUpdateObject MilestoneUpdateObject
+        {
+            get;
+            set;
+        }
+
+        public bool ValidateNewEntry { get; set; }
+
         private bool? IsUserHasPermissionOnProject
         {
             get
@@ -110,6 +130,22 @@ namespace PraticeManagement
             }
         }
 
+
+        public DatePicker dtpPeriodToObject
+        {
+            get
+            {
+                return dtpPeriodTo;
+            }
+        }
+
+        public DatePicker dtpPeriodFromObject
+        {
+            get
+            {
+                return dtpPeriodFrom;
+            }
+        }
 
         public SeniorityAnalyzer PersonListSeniorityAnalyzer
         {
@@ -279,6 +315,8 @@ namespace PraticeManagement
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            IsSaveAllClicked = false;
+            ValidateNewEntry = false;
             lblResult.ClearMessage();
             LoadPrevNextMilestones();
         }
@@ -306,12 +344,12 @@ namespace PraticeManagement
         {
             ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTooltipsForallDropDowns", "SetTooltipsForallDropDowns();", true);
 
-            if (!string.IsNullOrEmpty(hdnEditRowIndex.Value))
+            if (!string.IsNullOrEmpty(hdnEditEntryIdIndex.Value))
             {
                 SelectView(btnResources, 2, false);
                 LoadActiveTabIndex(2);
-                MilestonePersonEntryListControl.OnEditClick(Convert.ToInt32(hdnEditRowIndex.Value));
-                hdnEditRowIndex.Value = string.Empty;
+                MilestonePersonEntryListControl.EditResourceByEntryId(Convert.ToInt32(hdnEditEntryIdIndex.Value));
+                hdnEditEntryIdIndex.Value = string.Empty;
             }
 
         }
@@ -456,7 +494,7 @@ namespace PraticeManagement
                     }
                 }
 
-                if (milestonePerson.StartDate >= Milestone.EndDate)
+                if (milestonePerson.StartDate > Milestone.EndDate)
                 {
                     row.BackColor = Color.FromArgb(0xff, 0xe6, 0xe0);
                     lblError.ShowErrorMessage(Messages.PersonsStartGreaterMilestoneStart);
@@ -483,7 +521,7 @@ namespace PraticeManagement
                     }
 
 
-                    imgEdit.Attributes.Add("RowIndex", row.RowIndex.ToString());
+                    imgEdit.Attributes.Add("mpEntryId", milestonePerson.Entries[0].Id.ToString());
                 }
 
 
@@ -529,7 +567,7 @@ namespace PraticeManagement
 
         #endregion
 
-        private void OnSaveClick(MilestoneUpdateObject milestoneUpdateObj = null)
+        private bool OnSaveClick(MilestoneUpdateObject milestoneUpdateObj = null)
         {
             var result = true;
             Page.Validate(vsumMilestone.ValidationGroup);
@@ -585,6 +623,8 @@ namespace PraticeManagement
             }
 
             LoadActiveTabIndex(mvMilestoneDetailTab.ActiveViewIndex);
+
+            return result && Page.IsValid;
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
@@ -650,9 +690,13 @@ namespace PraticeManagement
 
             hdnCanShowPopup.Value = "false";
 
-            OnSaveClick(milestoneUpdateObj);
-
-            SetDefaultValuesInPopup();
+            var result = OnSaveClick(milestoneUpdateObj);
+            hdnCanShowPopup.Value = result ? "false" : "true";
+           
+            if (result)
+            {
+                SetDefaultValuesInPopup();
+            }
         }
 
         protected void btnCancel_OnClick(object sender, EventArgs e)
@@ -889,6 +933,11 @@ namespace PraticeManagement
                     if (!MilestonePersonEntryListControl.isInsertedRowsAreNotsaved)
                     {
                         result = SaveData(milestoneUpdateObj) > 0;
+
+                        if (result)
+                        {
+                            ServiceCallers.Custom.MilestonePerson(mp=>mp.MilestoneResourceUpdate(MilestoneObject,MilestoneUpdateObject,Context.User.Identity.Name));
+                        }
                     }
                     else
                     {
@@ -896,17 +945,26 @@ namespace PraticeManagement
                         var control = rowSwitcher.Cells[index].Controls[0];
 
                         SelectView(btnResources, 2, true);
+
+                        IsSaveAllClicked = true;
+                        ValidateNewEntry = true;
                         result = MilestonePersonEntryListControl.ValidateAll();
+
+
                         if (result)
                         {
                             result = SaveData(milestoneUpdateObj) > 0;
                             if (result)
                             {
+
                                 result = MilestonePersonEntryListControl.SaveAll();
                             }
 
+
                             if (result)
                             {
+                                ServiceCallers.Custom.MilestonePerson(mp => mp.MilestoneResourceUpdate(MilestoneObject, MilestoneUpdateObject, Context.User.Identity.Name));
+
                                 if (index != 2)
                                 {
                                     SelectView(control, index, true);
@@ -918,10 +976,15 @@ namespace PraticeManagement
                         {
                             lblResult.ShowErrorMessage("Error occured while saving resources.");
                         }
+
+                        ValidateNewEntry = false;
+                        IsSaveAllClicked = false;
                     }
 
                 }
             }
+
+
             return result;
         }
 
@@ -1127,11 +1190,20 @@ namespace PraticeManagement
                 };
             }
 
+            Milestone m = new Milestone() 
+            {
+                Id= milestone.Id,
+                StartDate = milestone.StartDate,
+                ProjectedDeliveryDate = milestone.ProjectedDeliveryDate
+            };
+            MilestoneObject = m;
+            MilestoneUpdateObject = milestoneUpdateObj;
+
             using (MilestoneServiceClient serviceClient = new MilestoneServiceClient())
             {
                 try
                 {
-                    return serviceClient.SaveMilestoneDetail(milestone, milestoneUpdateObj, User.Identity.Name);
+                    return serviceClient.SaveMilestoneDetail(milestone, User.Identity.Name);
                 }
                 catch (FaultException<ExceptionDetail>)
                 {
@@ -1446,6 +1518,7 @@ namespace PraticeManagement
             tblchangeMilestonePersonsForEndDate.Visible = false;
             tblRemoveMilestonePersonsForStartDate.Visible = false;
             tblRemoveMilestonePersonsForEndDate.Visible = false;
+            hdnCanShowPopup.Value = "false";
         }
 
         protected bool GetVisibleValue()
