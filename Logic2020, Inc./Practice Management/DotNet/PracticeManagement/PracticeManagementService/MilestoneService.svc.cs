@@ -142,7 +142,7 @@ namespace PracticeManagementService
         /// <param name="milestone">The <see cref="Milestone"/> to be saved.</param>
         /// <param name="userName">A current user.</param>
         /// <returns>An ID of the saved record.</returns>
-        public int SaveMilestoneDetail(Milestone milestone, MilestoneUpdateObject milestoneUpdateObj, string userName)
+        public int SaveMilestoneDetail(Milestone milestone, string userName)
         {
             if (!milestone.Id.HasValue)
             {
@@ -150,11 +150,12 @@ namespace PracticeManagementService
             }
             else
             {
-                MilestoneDAL.MilestoneUpdate(milestone, milestoneUpdateObj, userName);
+                MilestoneDAL.MilestoneUpdate(milestone, userName);
             }
 
             return milestone.Id.Value;
         }
+
 
         /// <summary>
         /// Deletes a <see cref="Milestone"/> from the database.
