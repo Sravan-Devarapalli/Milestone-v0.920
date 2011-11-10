@@ -17,6 +17,7 @@ namespace DataAccess
 
         private const string ProjectIdParam = "@ProjectId";
         private const string MilestoneIdParam = "@MilestoneId";
+        private const string ProjectedDeliveryDateParam = "@ProjectedDeliveryDate";
         private const string PersonIdParam = "@PersonId";
         private const string StartDateParam = "@StartDate";
         private const string EndDateParam = "@EndDate";
@@ -159,40 +160,6 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// 	Retrives the list of the <see cref = "MilestonePerson" /> objects representing the participation
-        /// 	of the specific <see cref = "Person" />.
-        /// </summary>
-        /// <param name = "projectId">An ID of the <see cref = "Project" /> to the data be retrived for.</param>
-        /// <param name = "personId">An ID of the <see cref = "Person" /> to teh data be retrieved for.</param>
-        /// <returns>The list of the <see cref = "MilestonePerson" /> objects.</returns>
-        public static List<MilestonePerson> MilestonePersonListByProjectPerson(
-            int projectId,
-            int personId)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (
-                var command = new SqlCommand(
-                    Constants.ProcedureNames.MilestonePerson.MilestonePersonListByProjectPerson, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(ProjectIdParam, projectId);
-                command.Parameters.AddWithValue(PersonIdParam, personId);
-
-                connection.Open();
-                using (var reader = command.ExecuteReader())
-                {
-                    var result = new List<MilestonePerson>();
-
-                    ReadMilestonePersons(reader, result);
-
-                    return result;
-                }
-            }
-        }
-
-        /// <summary>
         /// 	Retrives the list of the <see cref = "Person" />s for the specified <see cref = "Milestone" />.
         /// </summary>
         /// <param name = "milestoneId">An ID of the milestone to the data be retrieved for.</param>
@@ -274,75 +241,7 @@ namespace DataAccess
             }
         }
 
-        /// <summary>
-        /// 	Retrives persons-milestones list with their details for the specified project laying out by months.
-        /// </summary>
-        /// <param name = "projectId">An ID of teh project to the data be retrieved for.</param>
-        /// <param name = "startDate">A start of the interesting period.</param>
-        /// <param name = "endDate">An end of the interesting period.</param>
-        /// <returns>The list of the <see cref = "MilestonePerson" /> objects.</returns>
-        public static List<MilestonePerson> MilestonePersonListByProjectMonthlyLayout(
-            int projectId,
-            DateTime startDate,
-            DateTime endDate)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (
-                var command = new SqlCommand(
-                    Constants.ProcedureNames.MilestonePerson.MilestonePersonListByProjectMonth, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(ProjectIdParam, projectId);
-                command.Parameters.AddWithValue(StartDateParam, startDate);
-                command.Parameters.AddWithValue(EndDateParam, endDate);
-
-                connection.Open();
-                using (var reader = command.ExecuteReader())
-                {
-                    var result = new List<MilestonePerson>();
-
-                    ReadMilestonePersons(reader, result);
-
-                    return result;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 	Retrives the milestone-person link details for the specified <see cref = "Milestone" /> and
-        /// 	<see cref = "Person" />
-        /// </summary>
-        /// <param name = "milestoneId">An ID of the <see cref = "Milestone" /> to the data be retrieved for.</param>
-        /// <param name = "personId">An ID of the <see cref = "Person" /> to the data be retrieved for.</param>
-        /// <returns>The <see cref = "MilestonePerson" /> object if found and null otherwise.</returns>
-        public static MilestonePerson GetByMilestonePerson(int milestoneId, int personId)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (
-                var command =
-                    new SqlCommand(Constants.ProcedureNames.MilestonePerson.MilestonePersonGetByMilestonePerson,
-                                   connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(MilestoneIdParam, milestoneId);
-                command.Parameters.AddWithValue(PersonIdParam, personId);
-
-                connection.Open();
-                using (var reader = command.ExecuteReader(CommandBehavior.SingleRow))
-                {
-                    var result = new List<MilestonePerson>();
-
-                    ReadMilestonePersons(reader, result);
-
-                    return result.Count > 0 ? result[0] : null;
-                }
-            }
-        }
-
+              
         /// <summary>
         /// 	Retrives the milestone-person link details.
         /// </summary>
@@ -508,12 +407,51 @@ namespace DataAccess
             }
         }
 
+
+        public static bool IsPersonAlreadyAddedtoMilestone(int mileStoneId, int personId, SqlConnection connection = null, SqlTransaction activeTransaction = null)
+        {
+            if (connection == null)
+            {
+                connection = new SqlConnection(DataSourceHelper.DataConnection);
+            }
+
+            using (var command = new SqlCommand(Constants.ProcedureNames.MilestonePerson.IsPersonAlreadyAddedtoMilestone, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(MilestoneIdParam, mileStoneId);
+                command.Parameters.AddWithValue(PersonIdParam, personId);
+
+                try
+                {
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    if (activeTransaction != null)
+                    {
+                        command.Transaction = activeTransaction;
+                    }
+
+                    return (int)command.ExecuteScalar() > 0;
+                    
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        
+
         /// <summary>
         /// 	Inserts person-milestone details for the specified milestone and person.
         /// </summary>
         /// <param name = "entry">The data to be inserted.</param>
         /// <param name = "userName">A current user.</param>
-        public static void MilestonePersonEntryInsert(MilestonePersonEntry entry, string userName, SqlConnection connection = null, SqlTransaction activeTransaction = null)
+        public static int MilestonePersonEntryInsert(MilestonePersonEntry entry, string userName, SqlConnection connection = null, SqlTransaction activeTransaction = null)
         {
             if (connection == null)
             {
@@ -544,6 +482,9 @@ namespace DataAccess
                 command.Parameters.AddWithValue(UserLoginParam,
                                                 !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
 
+                var milestonePersonEntryId = new SqlParameter(Constants.ParameterNames.IdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
+                command.Parameters.Add(milestonePersonEntryId);
+
                 if (connection.State != ConnectionState.Open)
                 {
                     connection.Open();
@@ -555,6 +496,8 @@ namespace DataAccess
                 }
 
                 command.ExecuteNonQuery();
+
+                return (int)milestonePersonEntryId.Value;
             }
         }
 
@@ -684,6 +627,16 @@ namespace DataAccess
                 var milestoneHourlyRevenueIndex = reader.GetOrdinal(MilestoneHourlyRevenueColumn);
                 var personSeniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
 
+                int milestonePersonEntryIdIndex;
+                try
+                {
+                    milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.EntryId);
+                }
+                catch
+                {
+                    milestonePersonEntryIdIndex = -1;
+                }
+
                 int projectStatusIdIndex;
                 try
                 {
@@ -731,6 +684,11 @@ namespace DataAccess
                                             LastName = reader.GetString(lastNameIndex)
                                         }
                                     };
+
+                    if (milestonePersonEntryIdIndex > -1)
+                    {
+                        entry.Id = reader.GetInt32(milestonePersonEntryIdIndex);
+                    }
 
                     if (!reader.IsDBNull(personRoleIdIndex))
                     {
@@ -1041,6 +999,7 @@ namespace DataAccess
         {
             if (reader.HasRows)
             {
+                var milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.EntryId);
                 var milestonePersonIdIndex = reader.GetOrdinal(MilestonePersonIdColumn);
                 var startDateIndex = reader.GetOrdinal(StartDateColumn);
                 var endDateIndex = reader.GetOrdinal(EndDateColumn);
@@ -1061,6 +1020,7 @@ namespace DataAccess
                     var entry =
                         new MilestonePersonEntry
                             {
+                                Id = reader.GetInt32(milestonePersonEntryIdIndex),
                                 MilestonePersonId = reader.GetInt32(milestonePersonIdIndex),
                                 StartDate = reader.GetDateTime(startDateIndex),
                                 EndDate =
@@ -1129,7 +1089,33 @@ namespace DataAccess
                 }
             }
 
-        } 
+        }
+
+
+        public static MilestonePersonEntry LoadMilestonePersonEntryWithFinancials(int mpeId)
+        {
+
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command =
+                        new SqlCommand(Constants.ProcedureNames.MilestonePerson.MilestonePersonEntryWithFinancials,connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IdParam, mpeId);
+
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        
+                        var entry = LoadMilestonePersonEntry(reader);
+                        LoadMilestonePersonEntryFinancials(reader, entry);
+                        return entry;
+                    }
+                }
+            }
+        }
 
         public static void LoadMilestonePersonEntriesWithFinancials(List<MilestonePerson> milestonePersons, int milestoneId)
         {
@@ -1162,63 +1148,31 @@ namespace DataAccess
         {
             if (reader.NextResult() && reader.HasRows)
             {
-
-                int financialDateIndex = reader.GetOrdinal(Constants.ColumnNames.FinancialDateColumn);
                 int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
-                int revenueNetIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueNetColumn);
-                int cogsIndex = reader.GetOrdinal(Constants.ColumnNames.CogsColumn);
                 int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
-                int hoursIndex = reader.GetOrdinal(Constants.ColumnNames.HoursColumn);
-                int salesCommissionIndex = reader.GetOrdinal(Constants.ColumnNames.SalesCommissionColumn);
-                int practiceManagementCommissionIndex =
-                    reader.GetOrdinal(Constants.ColumnNames.PracticeManagementCommissionColumn);
-                var startDateIndex = reader.GetOrdinal(StartDateColumn);
+                var milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.EntryId);
                 var personIdIndex = reader.GetOrdinal(PersonIdColumn);
-
-                int expenseIndex;
-                int expenseReimbIndex;
-
-                try
-                {
-                    expenseIndex = reader.GetOrdinal(Constants.ColumnNames.Expense);
-                    expenseReimbIndex = reader.GetOrdinal(Constants.ColumnNames.ReimbursedExpense);
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    expenseIndex = -1;
-                    expenseReimbIndex = -1;
-                }
+               
                 while (reader.Read())
                 {
                     var personId = reader.GetInt32(personIdIndex);
-                    var entryStartDate = reader.GetDateTime(startDateIndex);
-                    var entry = (milestonePersons.Find(mp => mp.Person.Id.Value == personId)).Entries.Find(e => e.StartDate == entryStartDate);
+                    var entryId = reader.GetInt32(milestonePersonEntryIdIndex);
+                    var entry = (milestonePersons.Find(mp => mp.Person.Id.Value == personId)).Entries.Find(e => e.Id == entryId);
                     entry.ComputedFinancials
                      = new ComputedFinancials
                    {
-                       FinancialDate = reader.GetDateTime(financialDateIndex),
                        Revenue = reader.GetDecimal(revenueIndex),
-                       RevenueNet = reader.GetDecimal(revenueNetIndex),
-                       Cogs = reader.GetDecimal(cogsIndex),
                        GrossMargin = reader.GetDecimal(grossMarginIndex),
-                       HoursBilled = reader.GetDecimal(hoursIndex),
-                       SalesCommission =
-                           !reader.IsDBNull(salesCommissionIndex) ? reader.GetDecimal(salesCommissionIndex) : 0M,
-                       PracticeManagementCommission = !reader.IsDBNull(practiceManagementCommissionIndex)
-                                                          ?
-                                                              reader.GetDecimal(practiceManagementCommissionIndex)
-                                                          : 0M,
-                       Expenses = expenseIndex < 0 ? 0 : reader.GetDecimal(expenseIndex),
-                       ReimbursedExpenses = expenseReimbIndex < 0 ? 0 : reader.GetDecimal(expenseReimbIndex)
                    };
                 }
             }
         }
 
-        private static void LoadMilestonePersonEntries(SqlDataReader reader, List<MilestonePerson> milestonePersons)
+        private static MilestonePersonEntry LoadMilestonePersonEntry(SqlDataReader reader)
         {
             if (reader.HasRows)
             {
+                var milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.Id);
                 var milestonePersonIdIndex = reader.GetOrdinal(MilestonePersonIdColumn);
                 var startDateIndex = reader.GetOrdinal(StartDateColumn);
                 var endDateIndex = reader.GetOrdinal(EndDateColumn);
@@ -1230,7 +1184,96 @@ namespace DataAccess
                 var expectedHoursIndex = reader.GetOrdinal(ExpectedHoursColumn);
                 var personSeniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
                 var personIdIndex = reader.GetOrdinal(PersonIdColumn);
-                var locationIndex = reader.GetOrdinal(LocationColumn);
+                var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+                var lastNameIndex = reader.GetOrdinal(LastNameColumn);
+                var hasTimeEntriesIndex = reader.GetOrdinal(HasTimeEntriesColumn);
+
+                while (reader.Read())
+                {
+                    var entry =
+                        new MilestonePersonEntry
+                        {
+                            Id = reader.GetInt32(milestonePersonEntryIdIndex),
+                            MilestonePersonId = reader.GetInt32(milestonePersonIdIndex),
+                            StartDate = reader.GetDateTime(startDateIndex),
+                            EndDate =
+                                !reader.IsDBNull(endDateIndex)
+                                    ? (DateTime?)reader.GetDateTime(endDateIndex)
+                                    : null,
+                            HourlyAmount =
+                                !reader.IsDBNull(amountIndex)
+                                    ? (decimal?)reader.GetDecimal(amountIndex)
+                                    : null,
+                            HoursPerDay = reader.GetDecimal(hoursPerDayIndex),
+                            VacationDays = reader.GetInt32(personVacationsOnMilestoneIndex),
+                            ProjectedWorkload = reader.GetDecimal(expectedHoursIndex),
+                            ThisPerson = new Person
+                            {
+                                Id = reader.GetInt32(personIdIndex),
+                                FirstName = reader.GetString(firstNameIndex),
+                                LastName = reader.GetString(lastNameIndex),
+                                Seniority = new Seniority
+                                {
+                                    Id = reader.GetInt32(personSeniorityIdIndex)
+                                }
+                            },
+                            HasTimeEntries = reader.GetBoolean(hasTimeEntriesIndex)
+                        };
+
+                    if (!reader.IsDBNull(personRoleIdIndex))
+                        entry.Role =
+                            new PersonRole
+                            {
+                                Id = reader.GetInt32(personRoleIdIndex),
+                                Name = reader.GetString(personRoleNameIndex)
+                            };
+
+
+
+                    return entry;
+                    
+                }
+            }
+
+            return null;
+        }
+
+        private static void LoadMilestonePersonEntryFinancials(SqlDataReader reader, MilestonePersonEntry mpe)
+        {
+            if (reader.NextResult() && reader.HasRows)
+            {
+                int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
+                int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
+
+                while (reader.Read())
+                {
+                    mpe.ComputedFinancials
+                     = new ComputedFinancials
+                     {
+                         Revenue = reader.GetDecimal(revenueIndex),
+                         GrossMargin = reader.GetDecimal(grossMarginIndex),
+                     };
+                }
+            }
+        }
+
+
+        private static void LoadMilestonePersonEntries(SqlDataReader reader, List<MilestonePerson> milestonePersons)
+        {
+            if (reader.HasRows)
+            {
+                var milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.Id);
+                var milestonePersonIdIndex = reader.GetOrdinal(MilestonePersonIdColumn);
+                var startDateIndex = reader.GetOrdinal(StartDateColumn);
+                var endDateIndex = reader.GetOrdinal(EndDateColumn);
+                var personRoleIdIndex = reader.GetOrdinal(PersonRoleIdColumn);
+                var personRoleNameIndex = reader.GetOrdinal(PersonRoleNameColumn);
+                var amountIndex = reader.GetOrdinal(AmountColumn);
+                var hoursPerDayIndex = reader.GetOrdinal(HoursPerDayColumn);
+                var personVacationsOnMilestoneIndex = reader.GetOrdinal(PersonVacationsOnMilestoneColumn);
+                var expectedHoursIndex = reader.GetOrdinal(ExpectedHoursColumn);
+                var personSeniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
+                var personIdIndex = reader.GetOrdinal(PersonIdColumn);
                 var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
                 var lastNameIndex = reader.GetOrdinal(LastNameColumn);
                 var hasTimeEntriesIndex = reader.GetOrdinal(HasTimeEntriesColumn);
@@ -1240,6 +1283,7 @@ namespace DataAccess
                     var entry =
                         new MilestonePersonEntry
                             {
+                                Id = reader.GetInt32(milestonePersonEntryIdIndex),
                                 MilestonePersonId = reader.GetInt32(milestonePersonIdIndex),
                                 StartDate = reader.GetDateTime(startDateIndex),
                                 EndDate =
@@ -1263,9 +1307,6 @@ namespace DataAccess
                                                                          Id = reader.GetInt32(personSeniorityIdIndex)
                                                                      }
                                                  },
-                                Location = !reader.IsDBNull(locationIndex)
-                                        ? reader.GetString(locationIndex)
-                                        : null,
                                 HasTimeEntries = reader.GetBoolean(hasTimeEntriesIndex)
                             };
 
@@ -1300,6 +1341,127 @@ namespace DataAccess
                 }
 
                 transaction.Commit();
+            }
+        }
+
+        public static void DeleteMilestonePersonEntry(int milestonePersonEntryId, string userName)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.MilestonePerson.DeleteMilestonePersonEntry, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Id,milestonePersonEntryId);
+                    command.Parameters.AddWithValue(UserLoginParam,
+                                                !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static int MilestonePersonAndEntryInsert(MilestonePerson milestonePerson, string userName)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                connection.Open();
+                var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted);
+
+                if (!milestonePerson.Id.HasValue)
+                {
+                    MilestonePersonInsert(milestonePerson, connection, transaction);
+                }
+
+                int mpid = 0;
+                foreach (var entry in milestonePerson.Entries)
+                {
+                    entry.MilestonePersonId = milestonePerson.Id.Value;
+                    mpid = MilestonePersonEntryInsert(entry, userName, connection, transaction);
+                }
+
+                transaction.Commit();
+
+                return mpid;
+            }
+        }
+
+        public static int UpdateMilestonePersonEntry(MilestonePersonEntry entry, string userName)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.MilestonePerson.UpdateMilestonePersonEntry, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Id, entry.Id);
+                    command.Parameters.AddWithValue(PersonIdParam,
+                                               entry.ThisPerson.Id.HasValue
+                                                   ? (object)entry.ThisPerson.Id.Value
+                                                   : DBNull.Value);
+
+
+                    var milestonePersonId = new SqlParameter();
+                    milestonePersonId.ParameterName = MilestonePersonIdParam;
+                    milestonePersonId.SqlDbType = SqlDbType.Int;
+                    milestonePersonId.Value = entry.MilestonePersonId;
+                    milestonePersonId.Direction = ParameterDirection.InputOutput;
+                    command.Parameters.Add(milestonePersonId);
+
+                    command.Parameters.AddWithValue(StartDateParam, entry.StartDate);
+                    command.Parameters.AddWithValue(EndDateParam,
+                                                    entry.EndDate.HasValue ? (object)entry.EndDate.Value : DBNull.Value);
+                    command.Parameters.AddWithValue(HoursPerDayParam, entry.HoursPerDay);
+                    command.Parameters.AddWithValue(PersonRoleIdParam,
+                                                    entry.Role != null ? (object)entry.Role.Id : DBNull.Value);
+                    command.Parameters.AddWithValue(AmountParam,
+                                                    entry.HourlyAmount.HasValue
+                                                        ? (object)entry.HourlyAmount.Value.Value
+                                                        : DBNull.Value);
+                    command.Parameters.AddWithValue(UserLoginParam,
+                                                    !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
+
+                    connection.Open();
+
+
+                    command.ExecuteNonQuery();
+
+                    return  Convert.ToInt32(milestonePersonId.Value);
+                }
+            }
+        }
+
+        public static void MilestoneResourceUpdate(Milestone milestone, MilestoneUpdateObject milestoneUpdateObj, string userName)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.MilestonePerson.MilestoneResourceUpdateProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(MilestoneIdParam, milestone.Id.Value);
+
+                command.Parameters.AddWithValue(StartDateParam, milestone.StartDate);
+                command.Parameters.AddWithValue(ProjectedDeliveryDateParam, milestone.ProjectedDeliveryDate);
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsStartDateChangeReflectedForMilestoneAndPersons,
+                    milestoneUpdateObj.IsStartDateChangeReflectedForMilestoneAndPersons.HasValue ?
+                    (object)milestoneUpdateObj.IsStartDateChangeReflectedForMilestoneAndPersons.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsEndDateChangeReflectedForMilestoneAndPersons,
+                     milestoneUpdateObj.IsEndDateChangeReflectedForMilestoneAndPersons.HasValue ?
+                    (object)milestoneUpdateObj.IsEndDateChangeReflectedForMilestoneAndPersons.Value : DBNull.Value);
+
+                connection.Open();
+
+                SqlTransaction trn = connection.BeginTransaction(IsolationLevel.ReadCommitted);
+                command.Transaction = trn;
+
+                command.ExecuteNonQuery();
+
+                trn.Commit();
             }
         }
     }
