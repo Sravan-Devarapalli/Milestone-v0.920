@@ -705,15 +705,12 @@
                 public const string MilestonePersonListByProjectShort = "dbo.MilestonePersonListByProjectShort";
                 public const string MilestonePersonListByMilestone = "dbo.MilestonePersonListByMilestone";
                 public const string MilestonePersonsByMilestoneForTEByProject = "dbo.MilestonePersonsByMilestoneForTEByProject";
-                public const string MilestonePersonGetByMilestonePerson = "dbo.MilestonePersonGetByMilestonePerson";
                 public const string MilestonePersonInsert = "dbo.MilestonePersonInsert";
                 public const string IsPersonAlreadyAddedtoMilestone = "dbo.IsPersonAlreadyAddedtoMilestone";
                 public const string MilestonePersonDelete = "dbo.MilestonePersonDelete";
                 public const string DeleteMilestonePersonEntry = "dbo.DeleteMilestonePersonEntry";
                 public const string MilestonePersonEntryInsert = "dbo.MilestonePersonEntryInsert";
                 public const string MilestonePersonDeleteEntries = "dbo.MilestonePersonDeleteEntries";
-                public const string MilestonePersonListByProjectMonth = "dbo.MilestonePersonListByProjectMonth";
-                public const string MilestonePersonListByProjectPerson = "dbo.MilestonePersonListByProjectPerson";
                 public const string MilestonePersonListByPerson = "dbo.MilestonePersonListByPerson";
                 public const string MilestonePersonGetByMilestonePersonId = "dbo.MilestonePersonGetByMilestonePersonId";
                 public const string MilestonePersonEntryListByMilestonePersonId = "dbo.MilestonePersonEntryListByMilestonePersonId";
