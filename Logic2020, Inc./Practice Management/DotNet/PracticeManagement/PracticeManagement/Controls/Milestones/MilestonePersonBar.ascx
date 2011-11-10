@@ -2,7 +2,7 @@
     Inherits="PraticeManagement.Controls.Milestones.MilestonePersonBar" %>
 <%@ Register Src="~/Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc2" %>
 <tr id="trBar" style="height: 25px; white-space: nowrap;" runat="server">
-    <td align="center" style="width: 3%; height: 20px;">
+    <td align="center" style="width: 2%; height: 20px;">
         <asp:ImageButton ID="imgCopy" ToolTip="Copy" runat="server" OnClick="imgCopy_OnClick"
             ImageUrl="~/Images/copy.png" />
     </td>
@@ -12,7 +12,9 @@
         <asp:ImageButton ID="btnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="btnCancel_OnClick"
             ToolTip="Cancel" />
     </td>
-    <td style="width: 22%; height: 20px;">
+    <td align="center" style="width: 2%; height: 20px;">
+    </td>
+    <td style="width: 21%; height: 20px;">
         <table width="100%">
             <tr>
                 <td style="width: 85%;">
@@ -29,10 +31,10 @@
                         ErrorMessage="" ToolTip="The person you are trying to add is not set as being active during the entire length of their participation in the milestone.  Please adjust the person's hire and compensation records, or change the dates that they are attached to this milestone."
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custPersonInsert_ServerValidate"></asp:CustomValidator>
-                    <asp:CustomValidator ID="custDuplicatedPerson" runat="server" ControlToValidate="ddlPerson"
-                        ErrorMessage="" ToolTip="The specified person is already assigned on this milestone."
+                    <asp:CustomValidator ID="cvMaxRows" runat="server" ControlToValidate="ddlPerson"
+                        ErrorMessage="" ToolTip="Milestone person with same role cannot have more than 5 entries."
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                        ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custDuplicatedPersonInsert_ServerValidate"></asp:CustomValidator>
+                        ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="cvMaxRows_ServerValidate"></asp:CustomValidator>
                 </td>
             </tr>
         </table>
@@ -61,7 +63,7 @@
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custPersonStartInsert_ServerValidate"></asp:CustomValidator>
                     <asp:CustomValidator ID="custPeriodOvberlapping" runat="server" ControlToValidate="dpPersonStartInsert"
-                        ErrorMessage="" ToolTip="The specified period overlaps with another for this person on the milestone."
+                        ErrorMessage="" ToolTip="The specified period overlaps with another for this person with same role on the milestone."
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         ValidateEmptyText="false" ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custPeriodOvberlappingInsert_ServerValidate"></asp:CustomValidator>
                     <asp:CustomValidator ID="custPeriodVacationOverlapping" runat="server" ControlToValidate="dpPersonStartInsert"
@@ -114,6 +116,10 @@
                         ErrorMessage="" ToolTip=" The Hours Per Day must be greater than 0 and less or equals to 24."
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         MinimumValue="0.01" MaximumValue="24" Type="Double" ValidationGroup="<%# GetValidationGroup() %>"></asp:RangeValidator>
+                    <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtHoursPerDayInsert" runat="server"
+                        TargetControlID="txtHoursPerDayInsert" FilterMode="ValidChars" FilterType="Custom,Numbers"
+                        ValidChars=".">
+                    </AjaxControlToolkit:FilteredTextBoxExtender>
                 </td>
             </tr>
         </table>
@@ -134,6 +140,9 @@
                         ErrorMessage="" ToolTip="A number with 2 decimal digits is allowed for the Revenue."
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         Operator="DataTypeCheck" Type="Currency" ValidationGroup="<%# GetValidationGroup() %>"></asp:CompareValidator>
+                    <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtAmount" runat="server" TargetControlID="txtAmountInsert"
+                        FilterMode="ValidChars" FilterType="Custom,Numbers" ValidChars=".">
+                    </AjaxControlToolkit:FilteredTextBoxExtender>
                 </td>
             </tr>
         </table>
@@ -152,13 +161,16 @@
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         Operator="DataTypeCheck" Type="Currency" ValidationGroup="<%# GetValidationGroup() %>"></asp:CompareValidator>
                     <asp:RangeValidator ID="rangHoursInPeriod" runat="server" ControlToValidate="txtHoursInPeriodInsert"
-                        ErrorMessage="" ToolTip="The Total Hours must be greater than 0."
+                        ErrorMessage="" ToolTip="The Total Hours must be greater than 0." Text="*" EnableClientScript="false"
+                        SetFocusOnError="true" Display="Dynamic" MinimumValue="0.01" MaximumValue="15000"
+                        Type="Double" ValidationGroup="<%# GetValidationGroup() %>"></asp:RangeValidator>
+                    <asp:CustomValidator ID="cvHoursInPeriod" runat="server" ToolTip="Total hours should be a larger value so that Hoursperday will be greater than Zero after rounding."
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                        MinimumValue="0.01" MaximumValue="15000" Type="Double" ValidationGroup="<%# GetValidationGroup() %>"></asp:RangeValidator>
-                    <asp:CustomValidator ID="cvHoursInPeriod" runat="server"
-                        ToolTip="Total hours should be a larger value so that Hoursperday will be greater than Zero after rounding." Text="*" EnableClientScript="false"
-                        SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvHoursInPeriod_ServerValidate"
-                        ValidationGroup="<%# GetValidationGroup() %>"></asp:CustomValidator>
+                        OnServerValidate="cvHoursInPeriod_ServerValidate" ValidationGroup="<%# GetValidationGroup() %>"></asp:CustomValidator>
+                    <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtHoursInPeriodInsert" runat="server"
+                        TargetControlID="txtHoursInPeriodInsert" FilterMode="ValidChars" FilterType="Custom,Numbers"
+                        ValidChars=".">
+                    </AjaxControlToolkit:FilteredTextBoxExtender>
                 </td>
             </tr>
         </table>
