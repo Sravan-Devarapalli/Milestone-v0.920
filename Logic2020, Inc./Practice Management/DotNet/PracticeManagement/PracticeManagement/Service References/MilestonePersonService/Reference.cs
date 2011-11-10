@@ -70,9 +70,27 @@ namespace PraticeManagement.MilestonePersonService {
             "dResponse")]
         DataTransferObjects.MilestonePerson[] GetMilestonePersonsDetailsByMileStoneId(int milestoneId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestonePersonService/FinancialsGetByMilestonePersonEntry", ReplyAction="http://tempuri.org/IMilestonePersonService/FinancialsGetByMilestonePersonEntryRes" +
-            "ponse")]
-        DataTransferObjects.ComputedFinancials FinancialsGetByMilestonePersonEntry(int milestoneId, int personId, System.DateTime startDate);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestonePersonService/DeleteMilestonePersonEntry", ReplyAction="http://tempuri.org/IMilestonePersonService/DeleteMilestonePersonEntryResponse")]
+        void DeleteMilestonePersonEntry(int milestonePersonEntryId, string userName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestonePersonService/UpdateMilestonePersonEntry", ReplyAction="http://tempuri.org/IMilestonePersonService/UpdateMilestonePersonEntryResponse")]
+        int UpdateMilestonePersonEntry(DataTransferObjects.MilestonePersonEntry entry, string userName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestonePersonService/MilestonePersonEntryInsert", ReplyAction="http://tempuri.org/IMilestonePersonService/MilestonePersonEntryInsertResponse")]
+        int MilestonePersonEntryInsert(DataTransferObjects.MilestonePersonEntry entry, string userName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestonePersonService/MilestonePersonAndEntryInsert", ReplyAction="http://tempuri.org/IMilestonePersonService/MilestonePersonAndEntryInsertResponse")]
+        int MilestonePersonAndEntryInsert(DataTransferObjects.MilestonePerson milestonePerson, string userName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonEntry", ReplyAction="http://tempuri.org/IMilestonePersonService/GetMilestonePersonEntryResponse")]
+        DataTransferObjects.MilestonePersonEntry GetMilestonePersonEntry(int mpeid);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestonePersonService/IsPersonAlreadyAddedtoMilestone", ReplyAction="http://tempuri.org/IMilestonePersonService/IsPersonAlreadyAddedtoMilestoneRespons" +
+            "e")]
+        bool IsPersonAlreadyAddedtoMilestone(int mileStoneId, int personId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestonePersonService/MilestoneResourceUpdate", ReplyAction="http://tempuri.org/IMilestonePersonService/MilestoneResourceUpdateResponse")]
+        void MilestoneResourceUpdate(DataTransferObjects.Milestone milestone, DataTransferObjects.MilestoneUpdateObject milestoneUpdateObj, string userName);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -82,7 +100,7 @@ namespace PraticeManagement.MilestonePersonService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class MilestonePersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.MilestonePersonService.IMilestonePersonService>, PraticeManagement.MilestonePersonService.IMilestonePersonService {
-       
+        
         public MilestonePersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -155,8 +173,32 @@ namespace PraticeManagement.MilestonePersonService {
             return base.Channel.GetMilestonePersonsDetailsByMileStoneId(milestoneId);
         }
         
-        public DataTransferObjects.ComputedFinancials FinancialsGetByMilestonePersonEntry(int milestoneId, int personId, System.DateTime startDate) {
-            return base.Channel.FinancialsGetByMilestonePersonEntry(milestoneId, personId, startDate);
+        public void DeleteMilestonePersonEntry(int milestonePersonEntryId, string userName) {
+            base.Channel.DeleteMilestonePersonEntry(milestonePersonEntryId, userName);
+        }
+        
+        public int UpdateMilestonePersonEntry(DataTransferObjects.MilestonePersonEntry entry, string userName) {
+            return base.Channel.UpdateMilestonePersonEntry(entry, userName);
+        }
+        
+        public int MilestonePersonEntryInsert(DataTransferObjects.MilestonePersonEntry entry, string userName) {
+            return base.Channel.MilestonePersonEntryInsert(entry, userName);
+        }
+        
+        public int MilestonePersonAndEntryInsert(DataTransferObjects.MilestonePerson milestonePerson, string userName) {
+            return base.Channel.MilestonePersonAndEntryInsert(milestonePerson, userName);
+        }
+        
+        public DataTransferObjects.MilestonePersonEntry GetMilestonePersonEntry(int mpeid) {
+            return base.Channel.GetMilestonePersonEntry(mpeid);
+        }
+        
+        public bool IsPersonAlreadyAddedtoMilestone(int mileStoneId, int personId) {
+            return base.Channel.IsPersonAlreadyAddedtoMilestone(mileStoneId, personId);
+        }
+        
+        public void MilestoneResourceUpdate(DataTransferObjects.Milestone milestone, DataTransferObjects.MilestoneUpdateObject milestoneUpdateObj, string userName) {
+            base.Channel.MilestoneResourceUpdate(milestone, milestoneUpdateObj, userName);
         }
     }
 }
