@@ -28,11 +28,13 @@ AS
 		   f.PracticeManagementCommissionOwn ,
 		   f.PracticeManagerId,
 		   f.PersonId,
-		   f.Discount
+		   f.Discount,
+		   f.EntryId
 	FROM v_FinancialsRetrospective f
 	WHERE f.MilestoneId = @MilestoneIdLocal
 	)
 	SELECT f.ProjectId,
+		   f.EntryId,
 		   f.PersonId,
 		   MPE.StartDate,
 		   MPE.EndDate,
@@ -64,8 +66,7 @@ AS
 							  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END)  * ISNULL(f.PersonHoursPerDay, 0)) *
 	           (f.PracticeManagementCommissionSub + CASE f.PracticeManagerId WHEN f.PersonId THEN f.PracticeManagementCommissionOwn ELSE 0 END)) / 100 AS PracticeManagementCommission
 	  FROM FinancialsRetro AS f
-	  JOIN MilestonePerson MP ON MP.MilestoneId = f.MilestoneId AND MP.PersonId = f.PersonId
-	  JOIN MilestonePersonEntry MPE ON MP.MilestonePersonId = MPE.MilestonePersonId AND f.Date BETWEEN MPE.StartDate AND MPE.EndDate
+	  JOIN MilestonePersonEntry MPE ON f.EntryId = MPE.Id AND f.Date BETWEEN MPE.StartDate AND MPE.EndDate
 	 WHERE f.MilestoneId = @MilestoneIdLocal AND f.PersonId IS NOT NULL--AND f.PersonId = @PersonId AND f.EntryStartDate = @EntryStartDate
-	GROUP BY f.ProjectId, f.PersonId, MPE.StartDate, MPE.EndDate, YEAR(f.Date), MONTH(f.Date)
+	GROUP BY f.ProjectId,f.EntryId, f.PersonId, MPE.StartDate, MPE.EndDate, YEAR(f.Date), MONTH(f.Date)
 
