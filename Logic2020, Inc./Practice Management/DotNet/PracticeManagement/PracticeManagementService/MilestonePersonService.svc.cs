@@ -115,10 +115,7 @@ namespace PracticeManagementService
                     foreach (MilestonePersonEntry entry in result.Entries)
                     {
                         entry.ComputedFinancials =
-                            ComputedFinancialsDAL.FinancialsGetByMilestonePersonEntry(
-                            result.Milestone.Id.Value,
-                            result.Person.Id.Value,
-                            entry.StartDate);
+                            ComputedFinancialsDAL.FinancialsGetByMilestonePersonEntry(entry.Id);
                     }
                 }
 
@@ -129,6 +126,11 @@ namespace PracticeManagementService
                     result.Person.Id.Value);
             }
             return result;
+        }
+
+        public MilestonePersonEntry GetMilestonePersonEntry(int mpeid)
+        {
+            return MilestonePersonDAL.LoadMilestonePersonEntryWithFinancials(mpeid);
         }
 
         public List<MilestonePerson> GetMilestonePersonsDetailsByMileStoneId(int milestoneId)
@@ -180,12 +182,35 @@ namespace PracticeManagementService
             MilestonePersonDAL.MilestonePersonDelete(milestonePerson);
         }
 
-
-        public ComputedFinancials FinancialsGetByMilestonePersonEntry(int milestoneId, int personId, DateTime startDate)
+        public void DeleteMilestonePersonEntry(int milestonePersonEntryId, string userName)
         {
-            return ComputedFinancialsDAL.FinancialsGetByMilestonePersonEntry(milestoneId, personId, startDate);
+            MilestonePersonDAL.DeleteMilestonePersonEntry(milestonePersonEntryId, userName);
         }
 
+        public int UpdateMilestonePersonEntry(MilestonePersonEntry entry, string userName)
+        {
+            return MilestonePersonDAL.UpdateMilestonePersonEntry(entry, userName);
+        }
+
+        public int MilestonePersonEntryInsert(MilestonePersonEntry entry, string userName)
+        {
+            return MilestonePersonDAL.MilestonePersonEntryInsert(entry, userName);
+        }
+
+        public int MilestonePersonAndEntryInsert(MilestonePerson milestonePerson, string userName)
+        {
+            return MilestonePersonDAL.MilestonePersonAndEntryInsert(milestonePerson, userName);
+        }
+
+        public bool IsPersonAlreadyAddedtoMilestone(int mileStoneId, int personId)
+        {
+            return MilestonePersonDAL.IsPersonAlreadyAddedtoMilestone(mileStoneId, personId);
+        }
+
+        public void MilestoneResourceUpdate(Milestone milestone, MilestoneUpdateObject milestoneUpdateObj, string userName)
+        {
+            MilestonePersonDAL.MilestoneResourceUpdate(milestone, milestoneUpdateObj, userName);
+        }
 
         #endregion
     }
