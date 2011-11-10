@@ -1,18 +1,11 @@
-﻿-- =============================================
--- Author:		Anatoliy Lokshin
--- Create date: 9-11-2008
--- Updated by:	Anatoliy Lokshin
--- Update date:	9-22-2008
--- Description:	Selects summary financils for the specified milestone-person association.
--- =============================================
-CREATE PROCEDURE dbo.FinancialsGetByMilestonePersonEntry
+﻿CREATE PROCEDURE dbo.FinancialsGetByMilestonePersonEntry
 (
-	@MilestoneId      INT,
-	@PersonId         INT,
-	@EntryStartDate   DATETIME
+	@Id      INT
 )
 AS
-	SET NOCOUNT ON
+BEGIN
+
+	SET NOCOUNT ON;
 
 	;WITH FinancialsRetro AS 
 	(
@@ -35,9 +28,10 @@ AS
 		   f.PracticeManagementCommissionSub,
 		   f.PracticeManagementCommissionOwn ,
 		   f.PracticeManagerId,
-		   f.Discount
+		   f.Discount,
+		   f.EntryId
 	FROM v_FinancialsRetrospective f
-	WHERE f.MilestoneId = @MilestoneId AND f.PersonId = @PersonId    AND f.EntryStartDate = @EntryStartDate     
+	WHERE f.EntryId = @Id  
 	)
 
 	SELECT f.ProjectId,
@@ -68,10 +62,8 @@ AS
 							  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END) * ISNULL(f.PersonHoursPerDay, 0)) *
 	           (f.PracticeManagementCommissionSub + CASE f.PracticeManagerId WHEN f.PersonId THEN f.PracticeManagementCommissionOwn ELSE 0 END)) / 100 AS PracticeManagementCommission,
 	           0.0 AS 'actualhours',
-	           0.0 AS 'forecastedhours',
-           ISNULL(SUM(vac.VacationHours), 0) AS 'VacationHours'
-		   
+	           0.0 AS 'forecastedhours'
 	  FROM FinancialsRetro AS f
-	  LEFT JOIN dbo.v_MilestonePersonVacations AS vac ON f.MilestoneId = vac.MilestoneId AND f.PersonId = vac.PersonId
 	  GROUP BY f.ProjectId
 
+END
