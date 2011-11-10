@@ -1,6 +1,7 @@
 ﻿CREATE VIEW dbo.v_MilestonePerson
 AS
-	SELECT mp.MilestonePersonId,
+	SELECT mpe.Id AS EntryId,
+		   mp.MilestonePersonId,
 	       mp.MilestoneId,
 	       mp.PersonId,
 	       mpe.StartDate,
