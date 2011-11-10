@@ -139,6 +139,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblRight;
         
         /// <summary>
+        /// hdnPersonId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnPersonId;
+        
+        /// <summary>
         /// ddlPersonName control.
         /// </summary>
         /// <remarks>
@@ -146,6 +155,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlPersonName;
+        
+        /// <summary>
+        /// cvMaxRows control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvMaxRows;
         
         /// <summary>
         /// lblTimeEntry control.
@@ -346,13 +364,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.TableRow cellMoveMilestone;
         
         /// <summary>
-        /// btnMoveMilestone control.
+        /// lblMoveMilestone control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnMoveMilestone;
+        protected global::System.Web.UI.WebControls.Label lblMoveMilestone;
         
         /// <summary>
         /// lblMoveMilestoneDate control.
@@ -443,6 +461,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblDeleteActive;
+        
+        /// <summary>
+        /// lpMilestonePersonDetail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.LoadingProgress lpMilestonePersonDetail;
     }
 }
 
