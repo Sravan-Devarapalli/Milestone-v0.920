@@ -53,7 +53,7 @@ namespace PracticeManagementService
         /// <param name="userName">A current user.</param>
         /// <returns>An ID of the saved record.</returns>
         [OperationContract]
-        int SaveMilestoneDetail(Milestone milestone, MilestoneUpdateObject milestoneUpdateObj, string userName);
+        int SaveMilestoneDetail(Milestone milestone, string userName);
 
         /// <summary>
         /// Deletes a <see cref="Milestone"/> from the database.
