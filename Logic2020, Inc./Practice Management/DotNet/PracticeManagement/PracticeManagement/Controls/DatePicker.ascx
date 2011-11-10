@@ -5,6 +5,7 @@
 	<tr>
 		<td>
 			<asp:TextBox ID="txtDate" runat="server" OnTextChanged="txtDate_TextChanged" onchange="setDirty();"></asp:TextBox>
+            <ajaxToolkit:FilteredTextBoxExtender ID="fte" runat="server" FilterMode="ValidChars" FilterType="Custom, Numbers"   TargetControlID="txtDate" ValidChars="/" ></ajaxToolkit:FilteredTextBoxExtender>
 		</td>
         <td style="white-space:nowrap;">&nbsp;</td>
 		<td valign="middle">
@@ -16,5 +17,5 @@
 		</td>
 	</tr>
 </table>
-<ajaxToolkit:CalendarExtender ID="txtDate_CalendarExtender" runat="server" TargetControlID="txtDate" PopupButtonID="lnkCalendar"></ajaxToolkit:CalendarExtender>
+<ajaxToolkit:CalendarExtender ID="txtDate_CalendarExtender"  runat="server" TargetControlID="txtDate" PopupButtonID="lnkCalendar"></ajaxToolkit:CalendarExtender>
 
