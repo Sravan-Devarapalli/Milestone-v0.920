@@ -54,7 +54,7 @@ begin transaction
 	                    mpe.PersonRoleId,
 	                    mpe.Amount,
 	                    mpe.HoursPerDay,
-	                    ROW_NUMBER() OVER(PARTITION BY mp.PersonId ORDER BY mpe.StartDate DESC) AS RowNum
+	                    ROW_NUMBER() OVER(PARTITION BY mp.PersonId,ISNULL(mpe.PersonRoleId,0) ORDER BY mpe.StartDate DESC) AS RowNum
 	               FROM dbo.MilestonePersonEntry AS mpe
 	                    INNER JOIN dbo.MilestonePerson AS mp
 	                        ON mp.MilestonePersonId = mpe.MilestonePersonId AND mp.MilestoneId = @MilestoneId
