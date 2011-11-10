@@ -28,6 +28,7 @@
     <MetadataFile FileName="MilestonePersonService6.xsd" MetadataType="Schema" ID="adc868d0-83bd-4b87-84d8-b763b41c88ee" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd3" />
     <MetadataFile FileName="MilestonePersonService7.xsd" MetadataType="Schema" ID="60a2a595-820c-4d33-bac7-6f72a97078c7" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd4" />
     <MetadataFile FileName="MilestonePersonService8.xsd" MetadataType="Schema" ID="0133234a-d9bd-463f-a46f-1dc7b128eba7" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd5" />
+    <MetadataFile FileName="MilestonePersonService19.xsd" MetadataType="Schema" ID="54efb63d-7a58-462b-a06a-e993ccc6b8c5" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd6" />
     <MetadataFile FileName="MilestonePersonService1.disco" MetadataType="Disco" ID="4356fcfb-7557-4762-8019-c4577c94bfb7" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/MilestonePersonService.svc?disco" />
   </Metadata>
   <Extensions>
