@@ -1,4 +1,5 @@
 ﻿CREATE TABLE [dbo].[MilestonePersonEntry] (
+    [Id]                INT IDENTITY(1,1) NOT NULL,
     [MilestonePersonId] INT             NOT NULL,
     [StartDate]         DATETIME        NOT NULL,
     [EndDate]           DATETIME        NULL,
@@ -8,4 +9,5 @@
     [HoursPerDay]       DECIMAL (4, 2)  NOT NULL
 );
 
+ 
 
