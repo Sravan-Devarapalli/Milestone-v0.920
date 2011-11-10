@@ -19,7 +19,8 @@ AS
 	       mp.ExpectedHours,
 		   mp.Location,
 		   mp.LastName,
-		   mp.FirstName
+		   mp.FirstName,
+		   mp.EntryId
 	  FROM dbo.v_MilestonePerson AS mp
 	 WHERE mp.MilestonePersonId = @MilestonePersonId
 
