@@ -85,13 +85,13 @@ namespace PraticeManagement.Controls.Milestones {
         protected global::System.Web.UI.WebControls.CustomValidator custPeriod;
         
         /// <summary>
-        /// custDuplicatedPerson control.
+        /// cvMaxRows control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator custDuplicatedPerson;
+        protected global::System.Web.UI.WebControls.CustomValidator cvMaxRows;
         
         /// <summary>
         /// ddlRole control.
@@ -229,6 +229,15 @@ namespace PraticeManagement.Controls.Milestones {
         protected global::System.Web.UI.WebControls.RangeValidator rangHoursPerDay;
         
         /// <summary>
+        /// ftetxtHoursPerDayInsert control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender ftetxtHoursPerDayInsert;
+        
+        /// <summary>
         /// tdAmountInsert control.
         /// </summary>
         /// <remarks>
@@ -274,6 +283,15 @@ namespace PraticeManagement.Controls.Milestones {
         protected global::System.Web.UI.WebControls.CompareValidator compHourlyRevenue;
         
         /// <summary>
+        /// ftetxtAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender ftetxtAmount;
+        
+        /// <summary>
         /// txtHoursInPeriodInsert control.
         /// </summary>
         /// <remarks>
@@ -308,6 +326,15 @@ namespace PraticeManagement.Controls.Milestones {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator cvHoursInPeriod;
+        
+        /// <summary>
+        /// ftetxtHoursInPeriodInsert control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender ftetxtHoursInPeriodInsert;
     }
 }
 
