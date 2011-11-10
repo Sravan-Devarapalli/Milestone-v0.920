@@ -113,9 +113,9 @@
         }
 
         function ChangeActiveViewIndex(cntrl) {
-            var rowindex = cntrl.attributes["RowIndex"].value;
-            var hdnEditRowIndex = document.getElementById("<%= hdnEditRowIndex.ClientID %>");
-            hdnEditRowIndex.value = rowindex;
+            var mpEntryId = cntrl.attributes["mpEntryId"].value;
+            var hdnEditEntryIdIndex = document.getElementById("<%= hdnEditEntryIdIndex.ClientID %>");
+            hdnEditEntryIdIndex.value = mpEntryId;
             return true;
         }
 
@@ -321,7 +321,7 @@
                 </tr>
             </table>
             <asp:HiddenField ID="hidDirty" runat="server" />
-            <asp:HiddenField ID="hdnEditRowIndex" runat="server" Value="" />
+            <asp:HiddenField ID="hdnEditEntryIdIndex" runat="server" Value="" />
             <div style="background-color: #E2EBFF; padding: 5px; margin-bottom: 10px; margin-top: 10px;">
                 <table>
                     <tr>
@@ -961,9 +961,9 @@
                 <tr>
                     <td align="center" colspan="2">
                         <asp:HiddenField ID="hdnMilestoneId" runat="server" />
-                        <asp:Button ID="btnDelete" runat="server" Text="Delete Milestone" ToolTip="Delete the milestone"
+                        <asp:Button ID="btnDelete" runat="server" Text="Delete Milestone" ToolTip="Delete Milestone"
                             CausesValidation="False" OnClick="btnDelete_Click" OnClientClick="if (!confirm('Do you really want to delete the milestone?')) return false;" />&nbsp;
-                        <asp:Button ID="btnSave" runat="server" Text="Save All" OnClick="btnSave_Click" CausesValidation="true"
+                        <asp:Button ID="btnSave" runat="server" Text="Save All"  ToolTip="Save All" OnClick="btnSave_Click" CausesValidation="true"
                             ValidationGroup="Milestone" />&nbsp;
                         <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" />
                         <script type="text/javascript">
@@ -1088,10 +1088,10 @@
                             <table>
                                 <tr>
                                     <td style="padding-right: 3px;">
-                                        <asp:Button ID="btnSavePopup" runat="server" Text="Save Changes" OnClick="btnSavePopup_OnClick" />
+                                        <asp:Button ID="btnSavePopup" runat="server" Text="Save Changes" ToolTip="Save Changes" OnClick="btnSavePopup_OnClick" />
                                     </td>
                                     <td style="padding-left: 3px;">
-                                        <asp:Button ID="btnCancelSaving" runat="server" Text="Cancel Changes" OnClick="btnCancel_OnClick" />
+                                        <asp:Button ID="btnCancelSaving" runat="server" Text="Cancel Changes" ToolTip="Cancel Changes" OnClick="btnCancel_OnClick" />
                                     </td>
                                 </tr>
                             </table>
