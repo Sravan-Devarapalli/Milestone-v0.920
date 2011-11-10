@@ -1902,45 +1902,71 @@ namespace PraticeManagement.Controls.Milestones
                                 mPEntry.Role = milestonePersonentry.Role;
                                 mPEntry.ThisPerson = milestonePersonentry.ThisPerson;
 
-                                if (!mPEntry.IsNewEntry)
+                                if (HostingPage.IsSaveAllClicked)
                                 {
-                                    if (!(mPEntry.Id == milestonePersonentry.Id))
+                                    if (!mPEntry.IsNewEntry)
                                     {
-                                        if (mPEntry.IsEditMode)
+                                        if (!(mPEntry.Id == milestonePersonentry.Id))
                                         {
-                                            var index = MilestonePersonsEntries.FindIndex(mp => mp.IsNewEntry == false && mp.Id == mPEntry.Id);
-                                            UpdateMilestonePersonEntry(mPEntry, gvMilestonePersonEntries.Rows[index], true);
-                                            mPEntry.Role = milestonePersonentry.Role;
-                                            mPEntry.ThisPerson = milestonePersonentry.ThisPerson;
-                                            mPEntry.IsEditMode = false;
+                                            if (mPEntry.IsEditMode)
+                                            {
+                                                var index = MilestonePersonsEntries.FindIndex(mp => mp.IsNewEntry == false && mp.Id == mPEntry.Id);
+                                                UpdateMilestonePersonEntry(mPEntry, gvMilestonePersonEntries.Rows[index], true);
+                                                mPEntry.Role = milestonePersonentry.Role;
+                                                mPEntry.ThisPerson = milestonePersonentry.ThisPerson;
+                                                mPEntry.IsEditMode = false;
 
+                                            }
                                         }
-                                    }
-                                    mpId = ServiceCallers.Custom.MilestonePerson(mp => mp.UpdateMilestonePersonEntry(mPEntry, Context.User.Identity.Name));
 
+                                        mpId = ServiceCallers.Custom.MilestonePerson(mp => mp.UpdateMilestonePersonEntry(mPEntry, Context.User.Identity.Name));
 
-                                    if (!HostingPage.IsSaveAllClicked)
-                                    {
-                                        MilestonePersonEntry mpentry = ServiceCallers.Custom.MilestonePerson(mp => mp.GetMilestonePersonEntry(mPEntry.Id));
-                                        var index = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == mpentry.Id);
-                                        MilestonePersonsEntries[index] = mpentry;
+                                        var indexVal = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == mPEntry.Id);
+                                        MilestonePersonsEntries[indexVal] = mPEntry;
+
                                     }
                                     else
                                     {
-                                        var index = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == mPEntry.Id);
-                                        MilestonePersonsEntries[index] = mPEntry;
+                                        var index = MilestonePersonsEntries.FindIndex(mp => mp == mPEntry);
+                                        var ddlPersonName = gvMilestonePersonEntries.Rows[index].FindControl("ddlPersonName") as DropDownList;
+                                        var ddlRoleName = gvMilestonePersonEntries.Rows[index].FindControl("ddlRole") as DropDownList;
+                                        ddlPersonName.SelectedValue = mPEntry.ThisPerson.Id.ToString();
+                                        ddlRoleName.SelectedValue = mPEntry.Role != null ? mPEntry.Role.Id.ToString() : string.Empty;
                                     }
-
                                 }
                                 else
                                 {
-                                    var index = MilestonePersonsEntries.FindIndex(mp => mp == mPEntry);
-                                    var ddlPersonName = gvMilestonePersonEntries.Rows[index].FindControl("ddlPersonName") as DropDownList;
-                                    var ddlRoleName = gvMilestonePersonEntries.Rows[index].FindControl("ddlRole") as DropDownList;
-                                    ddlPersonName.SelectedValue = mPEntry.ThisPerson.Id.ToString();
-                                    ddlRoleName.SelectedValue = mPEntry.Role != null ? mPEntry.Role.Id.ToString() : string.Empty;
-                                }
+                                    if (!mPEntry.IsNewEntry)
+                                    {
+                                        mpId = ServiceCallers.Custom.MilestonePerson(mp => mp.UpdateMilestonePersonEntry(mPEntry, Context.User.Identity.Name));
 
+                                        if (mPEntry.Id == milestonePersonentry.Id)
+                                        {
+                                            MilestonePersonEntry latestMpentry = ServiceCallers.Custom.MilestonePerson(mp => mp.GetMilestonePersonEntry(mPEntry.Id));
+                                            var index = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == latestMpentry.Id);
+                                            MilestonePersonsEntries[index] = latestMpentry;
+
+                                        }
+                                        else
+                                        {
+                                            var index = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == mPEntry.Id);
+                                            MilestonePersonsEntries[index] = mPEntry;
+                                            if (mPEntry.IsEditMode)
+                                            {
+                                                MilestonePersonsEntries[index].EditedEntryValues["ddlPersonName"] = mPEntry.ThisPerson.Id.ToString();
+                                                MilestonePersonsEntries[index].EditedEntryValues["ddlRole"] = mPEntry.Role != null ? mPEntry.Role.Id.ToString() : string.Empty;
+                                            }
+                                        }
+                                        
+                                    }
+                                    else
+                                    {
+                                        var index = MilestonePersonsEntries.FindIndex(mp => mp == mPEntry);
+
+                                        MilestonePersonsEntries[index].EditedEntryValues["ddlPersonName"] = mPEntry.ThisPerson.Id.ToString();
+                                        MilestonePersonsEntries[index].EditedEntryValues["ddlRole"] = mPEntry.Role != null ? mPEntry.Role.Id.ToString() : string.Empty;
+                                    }
+                                }
 
 
                             }
