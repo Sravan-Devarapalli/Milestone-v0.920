@@ -305,58 +305,6 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// Retrives the list of the computed financials for the milestone-person association.
-        /// </summary>
-        /// <param name="milestoneId">An ID of the milestone to retrive the data for.</param>
-        /// <param name="personId">An ID of the person to retrive the data for.</param>
-        /// <param name="entryStartDate">An entry's start date.</param>
-        /// <returns>The <see cref="ComputedFinancials"/> object.</returns>
-        public static ComputedFinancials FinancialsGetByMilestonePersonEntry(
-            int milestoneId,
-            int personId,
-            DateTime entryStartDate,
-            SqlConnection connection = null,
-            SqlTransaction activeTransaction = null)
-        {
-            if (connection == null)
-            {
-                connection = new SqlConnection(DataSourceHelper.DataConnection);
-            }
-            
-            using (var command = new SqlCommand(
-                Constants.ProcedureNames.ComputedFinancials.FinancialsGetByMilestonePersonEntry, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneIdParam, milestoneId);
-                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
-                command.Parameters.AddWithValue(Constants.ParameterNames.EntryStartDateParam, entryStartDate);
-
-                if (connection.State != ConnectionState.Open)
-                {
-                    connection.Open();
-                }
-                if (activeTransaction != null)
-                {
-                    command.Transaction = activeTransaction;
-                }
-
-                using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.SingleRow))
-                {
-                    var result =
-                        new Dictionary<DateTime, ComputedFinancials>(1);
-                    ReadFinancials(reader, result);
-                    foreach (var pair in result)
-                    {
-                        return pair.Value;
-                    }
-                    return null;
-                }
-            }
-        }
-
-        /// <summary>
         /// Retrives the list of the computed financials for the milestone.
         /// </summary>
         /// <param name="milestoneId">An ID of the milestone to retrive the data for.</param>
@@ -490,9 +438,9 @@ namespace DataAccess
             {
                 var fin = persFin;
                 var foundPersons = milestonePersons.FindAll(milestonePerson => milestonePerson.Person.Id.Value == fin.Key.Person.Id.Value
-                                                                                && milestonePerson.Entries[0].StartDate == fin.Key.Entries[0].StartDate
-                                                                                && milestonePerson.Entries[0].EndDate.HasValue && fin.Key.Entries[0].EndDate.HasValue 
-                                                                                && milestonePerson.Entries[0].EndDate.Value ==  fin.Key.Entries[0].EndDate.Value);
+                                                                                && milestonePerson.Entries[0].Id == fin.Key.Entries[0].Id
+                                                                               
+                                                                                );
                 foreach (var found in foundPersons)
                 {
                     if (found.Person.ProjectedFinancialsByMonth == null)
@@ -508,10 +456,9 @@ namespace DataAccess
             foreach (var persFin in ReadFinancialsByOneForPerson(reader))
             {
                 var fin = persFin;
-                milestonePersons.Find(milestonePerson => milestonePerson.Person.Id.Value == fin.Key.Person.Id.Value 
-                                                        && milestonePerson.Entries[0].StartDate == fin.Key.Entries[0].StartDate
-                                                        && milestonePerson.Entries[0].EndDate.HasValue && fin.Key.Entries[0].EndDate.HasValue
-                                                        && milestonePerson.Entries[0].EndDate.Value == fin.Key.Entries[0].EndDate.Value
+                milestonePersons.Find(milestonePerson => milestonePerson.Person.Id.Value == fin.Key.Person.Id.Value
+                                                            && milestonePerson.Entries[0].Id == fin.Key.Entries[0].Id
+                                                        
                                         ).Entries[0].ComputedFinancials = fin.Value;
             }
         }
@@ -634,6 +581,7 @@ namespace DataAccess
         {
             if (reader.HasRows)
             {
+                var milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.EntryId);
                 int financialDateIndex = reader.GetOrdinal(Constants.ColumnNames.FinancialDateColumn);
                 int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
                 int revenueNetIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueNetColumn);
@@ -670,7 +618,9 @@ namespace DataAccess
                                                 Person = new Person() { Id = reader.GetInt32(personIdIndex) },
                                                 Entries = new List<MilestonePersonEntry>(1)
                                                                                 { 
-                                                                                    new MilestonePersonEntry{  StartDate = reader.GetDateTime(startDateIndex),
+                                                                                    new MilestonePersonEntry{ 
+                                                                                                               Id = reader.GetInt32(milestonePersonEntryIdIndex),
+                                                                                                               StartDate = reader.GetDateTime(startDateIndex),
                                                                                                                EndDate =  reader.GetDateTime(endDateIndex)
                                                                                                             }
                                                                                 }
@@ -795,7 +745,49 @@ namespace DataAccess
             }
         }
 
+        public static ComputedFinancials FinancialsGetByMilestonePersonEntry(int mpeId,SqlConnection connection = null,
+            SqlTransaction activeTransaction = null)
+        {
+            if (connection == null)
+            {
+                connection = new SqlConnection(DataSourceHelper.DataConnection);
+            }
+
+            using (var command = new SqlCommand(
+                Constants.ProcedureNames.ComputedFinancials.FinancialsGetByMilestonePersonEntry, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.IdParam, mpeId);
+               
+
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+                if (activeTransaction != null)
+                {
+                    command.Transaction = activeTransaction;
+                }
+
+                using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.SingleRow))
+                {
+                    var result =
+                        new Dictionary<DateTime, ComputedFinancials>(1);
+                    ReadFinancials(reader, result);
+                    foreach (var pair in result)
+                    {
+                        return pair.Value;
+                    }
+                    return null;
+                }
+            }
+        }
+
         #endregion
+
+      
     }
 }
 
