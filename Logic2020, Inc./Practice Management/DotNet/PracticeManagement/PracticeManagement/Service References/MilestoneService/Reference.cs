@@ -33,7 +33,7 @@ namespace PraticeManagement.MilestoneService {
         DataTransferObjects.Milestone GetMilestoneDetail(int milestoneId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestoneService/SaveMilestoneDetail", ReplyAction="http://tempuri.org/IMilestoneService/SaveMilestoneDetailResponse")]
-        int SaveMilestoneDetail(DataTransferObjects.Milestone milestone, DataTransferObjects.MilestoneUpdateObject milestoneUpdateObj, string userName);
+        int SaveMilestoneDetail(DataTransferObjects.Milestone milestone, string userName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestoneService/DeleteMilestone", ReplyAction="http://tempuri.org/IMilestoneService/DeleteMilestoneResponse")]
         void DeleteMilestone(DataTransferObjects.Milestone milestone, string userName);
@@ -95,7 +95,7 @@ namespace PraticeManagement.MilestoneService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class MilestoneServiceClient : System.ServiceModel.ClientBase<PraticeManagement.MilestoneService.IMilestoneService>, PraticeManagement.MilestoneService.IMilestoneService {
-     
+      
         public MilestoneServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -132,8 +132,8 @@ namespace PraticeManagement.MilestoneService {
             return base.Channel.GetMilestoneDetail(milestoneId);
         }
         
-        public int SaveMilestoneDetail(DataTransferObjects.Milestone milestone, DataTransferObjects.MilestoneUpdateObject milestoneUpdateObj, string userName) {
-            return base.Channel.SaveMilestoneDetail(milestone, milestoneUpdateObj, userName);
+        public int SaveMilestoneDetail(DataTransferObjects.Milestone milestone, string userName) {
+            return base.Channel.SaveMilestoneDetail(milestone, userName);
         }
         
         public void DeleteMilestone(DataTransferObjects.Milestone milestone, string userName) {
