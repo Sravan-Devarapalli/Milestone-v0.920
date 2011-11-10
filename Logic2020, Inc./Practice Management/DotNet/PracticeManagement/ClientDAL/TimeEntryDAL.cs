@@ -829,7 +829,7 @@ namespace DataAccess
                     Milestone milestone = ReadMilestone(reader);
                     milestone.Project = project;
 
-                    MilestonePersonEntry entry = ReadMilestonePerson(reader);
+                    MilestonePersonEntry entry = ReadMilestonePersonEntryShort(reader);
                     entry.ParentMilestone = milestone;
 
                     TimeEntryRecord te = ReadTimeEntry(reader);
@@ -1005,6 +1005,14 @@ namespace DataAccess
             };
 
             return timeEntry;
+        }
+
+        private static MilestonePersonEntry ReadMilestonePersonEntryShort(DbDataReader reader)
+        {
+            var entry = new MilestonePersonEntry();
+            int milestonePersonIdIndex = reader.GetOrdinal(Constants.ParameterNames.MilestonePersonId);
+            entry.MilestonePersonId = reader.GetInt32(milestonePersonIdIndex);
+            return entry;
         }
 
         private static MilestonePersonEntry ReadMilestonePerson(DbDataReader reader)
