@@ -121,13 +121,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.HiddenField hidDirty;
         
         /// <summary>
-        /// hdnEditRowIndex control.
+        /// hdnEditEntryIdIndex control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnEditRowIndex;
+        protected global::System.Web.UI.WebControls.HiddenField hdnEditEntryIdIndex;
         
         /// <summary>
         /// txtMilestoneName control.
