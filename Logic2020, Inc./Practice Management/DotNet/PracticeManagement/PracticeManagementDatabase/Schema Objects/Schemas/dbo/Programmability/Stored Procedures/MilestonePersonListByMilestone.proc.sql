@@ -36,7 +36,8 @@ AS
 	       mp.MilestoneActualDeliveryDate,
 	       mp.MilestoneHourlyRevenue,
 	       p.HireDate,
-	       p.TerminationDate 
+	       p.TerminationDate,
+		   mp.EntryId
 	  FROM dbo.v_MilestonePerson AS mp
 	  INNER JOIN Person AS p ON mp.PersonId = p.PersonId
 	  WHERE mp.MilestoneId = @MilestoneIdLocal
