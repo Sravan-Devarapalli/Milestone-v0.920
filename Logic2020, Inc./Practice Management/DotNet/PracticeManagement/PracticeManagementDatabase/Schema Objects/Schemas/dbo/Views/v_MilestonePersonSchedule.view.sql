@@ -1,4 +1,4 @@
-﻿CREATE VIEW dbo.v_MilestonePersonSchedule WITH SCHEMABINDING
+﻿CREATE VIEW dbo.v_MilestonePersonSchedule WITH SCHEMABINDING--Entry Level
 AS
 	SELECT m.[MilestoneId],
 	       mp.PersonId,
@@ -9,7 +9,8 @@ AS
 	       END AS HoursPerDay,
 	       cal.Date,
 	       m.ProjectId,
-	       mpe.StartDate AS EntryStartDate,
+	       mpe.Id EntryId,
+		   mpe.StartDate AS EntryStartDate,
 	       mpe.Amount,
 	       mpe.PersonRoleId,
 	       m.IsHourlyAmount,
