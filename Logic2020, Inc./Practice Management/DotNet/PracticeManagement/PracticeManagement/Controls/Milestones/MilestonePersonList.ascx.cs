@@ -1886,8 +1886,8 @@ namespace PraticeManagement.Controls.Milestones
 
                             //Find Similar Entries Indexes
                             var entryList = MilestonePersonsEntries.Where(mpe =>
-                                                                                 ((mpe.IsNewEntry == false) || HostingPage.ValidateNewEntry)
-                                                                                && entry.IsShowPlusButton && mpe.ShowingPlusButtonEntryId == entry.Id
+                                //((mpe.IsNewEntry == false) || HostingPage.ValidateNewEntry) &&
+                                                                                entry.IsShowPlusButton && mpe.ShowingPlusButtonEntryId == entry.Id
                                                                                  && mpe.Id != entry.Id)
                                                                                  .ToList();
 
