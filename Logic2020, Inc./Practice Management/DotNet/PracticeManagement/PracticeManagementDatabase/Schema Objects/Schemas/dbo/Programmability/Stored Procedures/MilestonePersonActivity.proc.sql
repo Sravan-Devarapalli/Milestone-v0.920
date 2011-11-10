@@ -16,7 +16,6 @@ AS
                 tes.ObjectFirstName,
                 tes.ProjectName,
                 tes.MilestoneName,
-                tes.HoursPerDay,
                 tes.ActualHours,
                 tes.MilestoneDate
         FROM    dbo.v_TimeEntries AS tes
