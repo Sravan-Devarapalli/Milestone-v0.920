@@ -566,43 +566,6 @@ namespace PracticeManagementService
             return result;
         }
 
-        private static void CalculateRateByEntry(MilestonePerson milestonePerson)
-        {
-            foreach (MilestonePersonEntry entry in milestonePerson.Entries)
-            {
-                entry.ComputedFinancials =
-                    ComputedFinancialsDAL.FinancialsGetByMilestonePersonEntry(
-                    milestonePerson.Milestone.Id.Value,
-                    milestonePerson.Person.Id.Value,
-                    entry.StartDate);
-            }
-        }
-
-        /// <summary>
-        /// Calculates an expected expense of each <see cref="Person"/> assigned to the <see cref="Milestone"/>.
-        /// </summary>
-        /// <param name="persons">The list of the person-milstone pairs.</param>
-        /// <returns>The total expense.</returns>
-        [Obsolete]
-        public static void CalculateExpense(IEnumerable<MilestonePerson> persons)
-        {
-            foreach (MilestonePerson milestonePerson in persons)
-            {
-                foreach (MilestonePersonEntry entry in milestonePerson.Entries)
-                {
-                    if (milestonePerson.Person != null && milestonePerson.Person.Id.HasValue)
-                    {
-                        CalculateRateByEntry(milestonePerson);
-                    }
-
-                    entry.EstimatedClientDiscount =
-                        entry.ComputedFinancials != null ?
-                            (entry.ComputedFinancials.Revenue *
-                            (milestonePerson.Milestone != null && milestonePerson.Milestone.Project != null ?
-                            milestonePerson.Milestone.Project.Discount : 0M) / 100) : new PracticeManagementCurrency();
-                }
-            }
-        }
 
         /// <summary>
         /// Performs the calculation of person rate participating on the specific milestone.
@@ -640,12 +603,7 @@ namespace PracticeManagementService
                         foreach (MilestonePersonEntry entry in result.Entries)
                         {
                             entry.ComputedFinancials =
-                                ComputedFinancialsDAL.FinancialsGetByMilestonePersonEntry(
-                                result.Milestone.Id.Value,
-                                result.Person.Id.Value,
-                                entry.StartDate,
-                                connection,
-                                transaction);
+                                ComputedFinancialsDAL.FinancialsGetByMilestonePersonEntry(entry.Id,connection,transaction);
                         }
                     }
                 }
