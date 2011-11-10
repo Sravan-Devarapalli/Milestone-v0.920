@@ -107,7 +107,26 @@ namespace PracticeManagementService
         List<MilestonePerson> GetMilestonePersonsDetailsByMileStoneId(int milestoneId);
 
         [OperationContract]
-        ComputedFinancials FinancialsGetByMilestonePersonEntry(int milestoneId, int personId, DateTime startDate);
+        void DeleteMilestonePersonEntry(int milestonePersonEntryId, string userName);
+
+        [OperationContract]
+        int UpdateMilestonePersonEntry(MilestonePersonEntry entry, string userName);
+
+        [OperationContract]
+        int MilestonePersonEntryInsert(MilestonePersonEntry entry, string userName);
+
+        [OperationContract]
+        int MilestonePersonAndEntryInsert(MilestonePerson milestonePerson, string userName);
+
+        [OperationContract]
+        MilestonePersonEntry GetMilestonePersonEntry(int mpeid);
+
+        [OperationContract]
+        bool IsPersonAlreadyAddedtoMilestone(int mileStoneId, int personId);
+
+        [OperationContract]
+        void MilestoneResourceUpdate(Milestone milestone, MilestoneUpdateObject milestoneUpdateObj, string userName);
+
     }
 }
 
