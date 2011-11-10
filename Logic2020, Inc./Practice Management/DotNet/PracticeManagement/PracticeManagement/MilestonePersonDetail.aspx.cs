@@ -14,6 +14,7 @@ using PraticeManagement.Security;
 using PraticeManagement.Utils;
 using Resources;
 using System.Web.UI.HtmlControls;
+using System.Linq;
 
 
 
@@ -104,6 +105,9 @@ namespace PraticeManagement
             }
         }
 
+
+        private MilestonePerson mPerson;
+
         private MilestonePerson MilestonePerson
         {
             get
@@ -121,8 +125,11 @@ namespace PraticeManagement
             }
             set
             {
-                value.Entries.Sort();
-                ViewState[MILESTONE_PERSON_KEY] = value;
+                mPerson = value;
+
+                mPerson.Entries = mPerson.Entries.OrderBy(ent => ent.StartDate).ThenBy(ent => ent.Role != null ? ent.Role.Id : 0).ToList();
+
+                ViewState[MILESTONE_PERSON_KEY] = mPerson;
             }
         }
 
@@ -144,8 +151,6 @@ namespace PraticeManagement
                 return null;
             }
         }
-
-
 
         private bool? IsUserisOwnerOfProject
         {
@@ -171,6 +176,22 @@ namespace PraticeManagement
 
         #region Validation
 
+        protected void cvMaxRows_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            var rowsCount = 0;
+            var countList = MilestonePerson.Entries.GroupBy(p => p.Role != null ? p.Role.Id : 0).Select(p =>  p.Count()).ToList();
+
+            if (countList != null && countList.Count > 0)
+            {
+                rowsCount = countList.Max();
+            }
+
+            if (rowsCount > 5)
+            {
+                e.IsValid = false;
+            }
+        }
+
         protected void custPersonStart_ServerValidate(object source, ServerValidateEventArgs args)
         {
             var dpPersonStart = ((Control)source).Parent.FindControl("dpPersonStart") as DatePicker;
@@ -195,7 +216,7 @@ namespace PraticeManagement
             }
 
             pnlChangeMilestone.Visible = !isGreaterThanMilestone;
-            btnMoveMilestone.Enabled = SelectedMilestonePersonId.HasValue;
+            lblMoveMilestone.Enabled = SelectedMilestonePersonId.HasValue;
             args.IsValid = isGreaterThanMilestone;
         }
 
@@ -240,14 +261,13 @@ namespace PraticeManagement
 
         protected void custDuplicatedPerson_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            if (!String.IsNullOrEmpty(ExMessage))
+            if (ddlPersonName.SelectedValue != hdnPersonId.Value)
             {
-                args.IsValid = !(ExMessage == DuplPersonName);
+                var result = ServiceCallers.Custom.MilestonePerson(mp => mp.IsPersonAlreadyAddedtoMilestone(Milestone.Id.Value, Convert.ToInt32(ddlPersonName.SelectedValue)));
+
+                args.IsValid = !result;
             }
-            else
-            {
-                args.IsValid = true;
-            }
+
         }
 
         protected void reqHourlyRevenue_ServerValidate(object sender, ServerValidateEventArgs e)
@@ -257,27 +277,39 @@ namespace PraticeManagement
 
         protected void custPeriodOvberlapping_ServerValidate(object sender, ServerValidateEventArgs e)
         {
+
             var dpPersonStart = ((Control)sender).Parent.FindControl("dpPersonStart") as DatePicker;
             var dpPersonEnd = ((Control)sender).Parent.FindControl("dpPersonEnd") as DatePicker;
+
+            CustomValidator custPerson = sender as CustomValidator;
+            GridViewRow gvRow = custPerson.NamingContainer as GridViewRow;
+            var ddlRole = gvRow.FindControl("ddlRole") as DropDownList;
+            var oldRoleId = ddlRole.Attributes["RoleId"];
+            var personId = hdnPersonId.Value;
 
             DateTime startDate = dpPersonStart.DateValue;
             DateTime endDate =
                 dpPersonEnd.DateValue != DateTime.MinValue ? dpPersonEnd.DateValue : Milestone.ProjectedDeliveryDate;
 
-            // Validate overlapping with other entries.
-            for (int i = 0; i < MilestonePerson.Entries.Count; i++)
+            var entries = MilestonePerson.Entries;
+
+            //Validate overlapping with other entries.
+            for (int i = 0; i < entries.Count; i++)
             {
-                if (i != gvMilestonePersonEntries.EditIndex)
+                var roleId = entries[i].Role != null ? entries[i].Role.Id.ToString() : string.Empty;
+
+                if (i != gvMilestonePersonEntries.EditIndex && roleId == ddlRole.SelectedValue && entries[i].ThisPerson.Id.ToString() == personId)
                 {
-                    DateTime entryStartDate = MilestonePerson.Entries[i].StartDate;
+                    DateTime entryStartDate = entries[i].StartDate;
                     DateTime entryEndDate =
-                        MilestonePerson.Entries[i].EndDate.HasValue
+                        entries[i].EndDate.HasValue
                             ?
-                                MilestonePerson.Entries[i].EndDate.Value
+                                entries[i].EndDate.Value
                             : Milestone.ProjectedDeliveryDate;
 
                     if ((startDate >= entryStartDate && startDate <= entryEndDate) ||
-                        (endDate >= entryStartDate && endDate <= entryEndDate))
+                        (endDate >= entryStartDate && endDate <= entryEndDate) ||
+                        (endDate >= entryEndDate && startDate <= entryEndDate))
                     {
                         e.IsValid = false;
                         break;
@@ -436,11 +468,10 @@ namespace PraticeManagement
                         DataHelper.FillPersonRoleList(ddlRole, string.Empty);
                         if (e.Row.RowType == DataControlRowType.DataRow)
                         {
-                            ddlRole.SelectedIndex =
-                                ddlRole.Items.IndexOf(
-                                                         ddlRole.Items.FindByValue(entry.Role != null
-                                                                                       ? entry.Role.Id.ToString()
-                                                                                       : string.Empty));
+                            var roleId = entry.Role != null ? entry.Role.Id.ToString() : string.Empty;
+
+                            ddlRole.SelectedValue = roleId;
+                            ddlRole.Attributes["RoleId"] = roleId;
                         }
                     }
 
@@ -501,20 +532,21 @@ namespace PraticeManagement
 
         protected void gvMilestonePersonEntries_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            MilestonePerson milestonePerson = MilestonePerson;
-            MilestonePersonEntry entry = milestonePerson.Entries[e.RowIndex];
+            var milestonePersonEntriesList = MilestonePerson.Entries;
+            // milestonePersonEntriesList.Sort();
+            MilestonePersonEntry entry = milestonePersonEntriesList[e.RowIndex];
             lblResultMessage.ClearMessage();
             if (CheckTimeEntriesExist(entry.MilestonePersonId, entry.StartDate, entry.EndDate, true, true))
             {
                 lblResultMessage.ShowErrorMessage(milestoneHasTimeEntries);
                 return;
             }
-            milestonePerson.Entries.RemoveAt(e.RowIndex);
+            milestonePersonEntriesList.RemoveAt(e.RowIndex);
 
             BindEntriesGrid(MilestonePerson.Entries);
             e.Cancel = true;
 
-            MilestonePerson = milestonePerson;
+            MilestonePerson = MilestonePerson;
             IsDirty = true;
 
             RefreshPersonRate();
@@ -526,22 +558,34 @@ namespace PraticeManagement
             Page.Validate(vsumMilestonePersonEntry.ValidationGroup);
             if (Page.IsValid)
             {
-                MilestonePerson milestonePerson = MilestonePerson;
+                var milestonePersonEntriesList = MilestonePerson.Entries;
+                // milestonePersonEntriesList.Sort();
+                MilestonePersonEntry entry = milestonePersonEntriesList[e.RowIndex];
 
-                MilestonePersonEntry entry = milestonePerson.Entries[e.RowIndex];
+                var milestonePersonentry = new MilestonePersonEntry()
+                {
+                    Id = entry.Id,
+                    StartDate = entry.StartDate,
+                    EndDate = entry.EndDate,
+                    MilestonePersonId = entry.MilestonePersonId,
+                    ProjectedWorkload = entry.ProjectedWorkload,
+                    VacationDays = entry.VacationDays,
+                    HoursPerDay = entry.HoursPerDay
+                };
 
-                if (!UpdateMilestonePersonEntry(entry, gvMilestonePersonEntries.Rows[e.RowIndex], true))
+
+                if (!UpdateMilestonePersonEntry(milestonePersonentry, gvMilestonePersonEntries.Rows[e.RowIndex], true))
                 {
                     return;
                 }
 
+                milestonePersonEntriesList[e.RowIndex] = milestonePersonentry;
                 gvMilestonePersonEntries.EditIndex = -1;
                 BindEntriesGrid(MilestonePerson.Entries);
                 e.Cancel = true;
 
 
-
-                MilestonePerson = milestonePerson;
+                MilestonePerson = MilestonePerson;
 
 
                 IsDirty = true;
@@ -563,9 +607,9 @@ namespace PraticeManagement
                 UpdateMilestonePersonEntry(entry, gvMilestonePersonEntries.FooterRow, false);
                 milestonePerson.Entries.Add(entry);
 
+                MilestonePerson = milestonePerson;
                 BindEntriesGrid(MilestonePerson.Entries);
 
-                MilestonePerson = milestonePerson;
                 IsDirty = true;
 
                 _seniorityAnalyzer.IsOtherGreater(SelectedPerson);
@@ -675,10 +719,10 @@ namespace PraticeManagement
             entry.StartDate = dpStartDate.DateValue;
             entry.EndDate = dpEndDate.DateValue != DateTime.MinValue ? (DateTime?)dpEndDate.DateValue : null;
 
-            if (!string.IsNullOrEmpty(ddlPersonName.SelectedValue))
+            if (!string.IsNullOrEmpty(hdnPersonId.Value))
                 entry.ThisPerson = new Person
                                        {
-                                           Id = int.Parse(ddlPersonName.SelectedValue)
+                                           Id = int.Parse(hdnPersonId.Value)
                                        };
 
             // Role
@@ -782,22 +826,25 @@ namespace PraticeManagement
                                                      new GridViewUpdateEventArgs(gvMilestonePersonEntries.EditIndex));
             }
 
-            Page.Validate(vsumMilestonePerson.ValidationGroup);
-
-            if (Page.IsValid && !errorOccured)
+            if (gvMilestonePersonEntries.EditIndex == -1)
             {
-                //  If used asked to save dirty page and there's newly added row...
-                if (SaveDirty && gvMilestonePersonEntries.FooterRow.Cells[0].Visible)
-                {
-                    // ...add it to the grid.
-                    newEntryValid = AddAndBindRow();
-                }
+                Page.Validate(vsumMilestonePerson.ValidationGroup);
 
-                // If new row was added successfully or there was no row, save the grid.
-                if (newEntryValid)
+                if (Page.IsValid && !errorOccured)
                 {
-                    SaveData();
-                    result = Page.IsValid;
+                    //  If used asked to save dirty page and there's newly added row...
+                    if (SaveDirty && gvMilestonePersonEntries.FooterRow.Cells[0].Visible)
+                    {
+                        // ...add it to the grid.
+                        newEntryValid = AddAndBindRow();
+                    }
+
+                    // If new row was added successfully or there was no row, save the grid.
+                    if (newEntryValid)
+                    {
+                        SaveData();
+                        result = Page.IsValid;
+                    }
                 }
             }
 
@@ -1033,14 +1080,14 @@ namespace PraticeManagement
         {
             PopulateControls(milestonePerson.Milestone);
 
-            ddlPersonName.SelectedIndex =
-                ddlPersonName.Items.IndexOf(ddlPersonName.Items.FindByValue(
-                                                                               milestonePerson.Person != null &&
-                                                                               milestonePerson.Person.Id.HasValue
+            var selectedPersonId = milestonePerson.Person != null && milestonePerson.Person.Id.HasValue
                                                                                    ?
                                                                                        milestonePerson.Person.Id.Value.
                                                                                            ToString()
-                                                                                   : string.Empty));
+                                                                                   : string.Empty; ;
+
+            ddlPersonName.SelectedValue = selectedPersonId;
+            hdnPersonId.Value = selectedPersonId;
 
             BindEntriesGrid(milestonePerson.Entries);
         }
@@ -1053,10 +1100,10 @@ namespace PraticeManagement
             {
                 tmp.Add(new MilestonePersonEntry() { MilestonePersonId = -1 });
             }
-            else
-            {
-                tmp.Sort();
-            }
+            //else
+            //{
+            //    tmp.Sort();
+            //}
             gvMilestonePersonEntries.DataSource = tmp;
 
             gvMilestonePersonEntries.Columns[AMOUNT_COLUMN_INDEX].Visible = Milestone.IsHourlyAmount;
@@ -1113,10 +1160,8 @@ namespace PraticeManagement
                 }
                 catch (Exception ex)
                 {
-
                     serviceClient.Abort();
-                    ExMessage = ex.Message;
-                    Page.Validate(vsumMilestonePerson.ValidationGroup);
+                    Page.Validate();
                 }
 
             }
