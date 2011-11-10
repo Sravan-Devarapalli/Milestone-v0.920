@@ -26,6 +26,7 @@
     <MetadataFile FileName="MilestoneService6.xsd" MetadataType="Schema" ID="28cff336-6071-46c1-8b97-01cf07d5022f" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/MilestoneService.svc?xsd=xsd2" />
     <MetadataFile FileName="MilestoneService1.wsdl" MetadataType="Wsdl" ID="4d192be0-cf68-48a4-babd-ba2ebfbb7dd0" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/MilestoneService.svc?wsdl" />
     <MetadataFile FileName="MilestoneService7.xsd" MetadataType="Schema" ID="59c1144a-515c-4503-9b39-005f64852da1" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/MilestoneService.svc?xsd=xsd0" />
+    <MetadataFile FileName="MilestoneService12.xsd" MetadataType="Schema" ID="d176b4a2-1ddf-4542-99e6-e8f3a1ac372d" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/MilestoneService.svc?xsd=xsd4" />
     <MetadataFile FileName="MilestoneService2.disco" MetadataType="Disco" ID="fbd48b5c-fb3b-4f58-8cca-e85c4c672db1" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/MilestoneService.svc?disco" />
   </Metadata>
   <Extensions>
