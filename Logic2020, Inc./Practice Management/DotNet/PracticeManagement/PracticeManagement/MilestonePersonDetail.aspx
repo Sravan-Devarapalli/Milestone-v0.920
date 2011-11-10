@@ -2,6 +2,8 @@
     CodeBehind="MilestonePersonDetail.aspx.cs" Inherits="PraticeManagement.MilestonePersonDetail"
     Title="Milestone-Person Details | Practice Management" %>
 
+<%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
+    TagPrefix="uc" %>
 <%@ Register Src="Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc2" %>
 <%@ Register Src="Controls/ProjectInfo.ascx" TagName="ProjectInfo" TagPrefix="uc1" %>
 <%@ Register Src="~/Controls/MilestonePersons/MilestonePersonActivity.ascx" TagName="MPActivity"
@@ -99,7 +101,12 @@
                         Select a Person&nbsp;
                     </td>
                     <td>
+                        <asp:HiddenField ID="hdnPersonId" runat="server" />
                         <asp:DropDownList ID="ddlPersonName" runat="server" onchange="setDirty();" Width="580px" />
+                        <asp:CustomValidator ID="cvMaxRows" runat="server" ControlToValidate="ddlPersonName"
+                            ToolTip="Milestone person with same role cannot have more than 5 entries." ErrorMessage="Milestone person with same role cannot have more than 5 entries."
+                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                            ValidationGroup="MilestonePerson" OnServerValidate="cvMaxRows_ServerValidate"></asp:CustomValidator>
                         <br />
                         <asp:Label ID="lblTimeEntry" runat="server" ForeColor="Gray" Visible="false" Text="* The person has already entered time for this milestone and cannot be reassigned." />
                     </td>
@@ -335,8 +342,7 @@
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             Operator="DataTypeCheck" Type="Currency" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
                                         <asp:RangeValidator ID="rangHoursInPeriod" runat="server" ControlToValidate="txtHoursInPeriod"
-                                            ErrorMessage="The Total Hours must be greater than 0."
-                                            ToolTip="The Total Hours must be greater than 0."
+                                            ErrorMessage="The Total Hours must be greater than 0." ToolTip="The Total Hours must be greater than 0."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             MinimumValue="0.01" MaximumValue="15000" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
                                         <asp:CustomValidator ID="cvHoursInPeriod" runat="server" ErrorMessage="Total hours should be a larger value so that Hoursperday will be greater than Zero after rounding."
@@ -413,8 +419,7 @@
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             Operator="DataTypeCheck" Type="Currency" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
                                         <asp:RangeValidator ID="rangHoursInPeriod" runat="server" ControlToValidate="txtHoursInPeriod"
-                                            ErrorMessage="The Total Hours must be greater than 0."
-                                            ToolTip="The Total Hours must be greater than 0."
+                                            ErrorMessage="The Total Hours must be greater than 0." ToolTip="The Total Hours must be greater than 0."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             MinimumValue="0.01" MaximumValue="15000" Type="Double" ValidationGroup="MilestonePersonEntry"></asp:RangeValidator>
                                         <asp:CustomValidator ID="cvHoursInPeriod" runat="server" ErrorMessage="Total hours should be a larger value so that Hoursperday will be greater than Zero after rounding."
@@ -566,7 +571,7 @@
                                 <asp:TableRow ID="cellMoveMilestone">
                                     <asp:TableCell> * </asp:TableCell>
                                     <asp:TableCell>
-                                        <asp:LinkButton ID="btnMoveMilestone" runat="server" OnClick="btnMoveMilestone_Click">Extend the parent milestone's end date</asp:LinkButton>&nbsp;to&nbsp;
+                                        <asp:Label ID="lblMoveMilestone" runat="server">Extend the parent milestone's end date</asp:Label>&nbsp;to&nbsp;
                                         <asp:Label ID="lblMoveMilestoneDate" runat="server" />
                                     </asp:TableCell>
                                 </asp:TableRow>
@@ -579,13 +584,7 @@
                                     <asp:TableCell>Check the following: person involved has a termination date before the new end of the milestone or there is no compensation record.</asp:TableCell>
                                 </asp:TableRow>
                             </asp:Table>
-                            <%--<ul>
-                                <li><asp:LinkButton ID="btnMoveMilestone" runat="server" 
-                                        onclick="btnMoveMilestone_Click">Extend the parent milestone's end date</asp:LinkButton>&nbsp;to&nbsp;<asp:Label
-                                        ID="lblMoveMilestoneDate" runat="server" Text=""></asp:Label> 
-                                </li>
-                                <li>Change person end date</li>
-                            </ul>--%></asp:Panel>
+                        </asp:Panel>
                     </td>
                 </tr>
                 <tr>
@@ -611,6 +610,7 @@
                     </td>
                 </tr>
             </table>
+            <uc:LoadingProgress ID="lpMilestonePersonDetail" runat="server" />
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>
