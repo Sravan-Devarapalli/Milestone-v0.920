@@ -339,8 +339,7 @@ namespace PraticeManagement
 
             if (!IsPostBack)
             {
-                // Version information
-                SetCurrentAssemblyVersion();
+               
             }
             else
             {
@@ -350,11 +349,7 @@ namespace PraticeManagement
             //custPeriodLengthLimit.ErrorMessage = custPeriodLengthLimit.ToolTip = string.Format(custPeriodLengthLimit.ErrorMessage, MaxPeriodLength);
         }
 
-        private void SetCurrentAssemblyVersion()
-        {
-            string version = Generic.SystemVersion;
-            lblCurrentVersion.Text = version;
-        }
+       
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
