@@ -8,6 +8,7 @@ using PraticeManagement.Controls;
 using System.Web.Security;
 using DataTransferObjects;
 using System.Threading;
+using PraticeManagement.Utils;
 
 
 namespace PraticeManagement
@@ -58,11 +59,18 @@ namespace PraticeManagement
                 //Quick links
                 PopulateQuickLinksSection();
                 PopulateAnnouncement();
+
+                // Version information
+                SetCurrentAssemblyVersion();
             }
 
             btnEditAnnouncement.Visible = _userIsAdministrator && ddlDashBoardType.SelectedValue == DashBoardType.Admin.ToString();
         }
-
+        private void SetCurrentAssemblyVersion()
+        {
+            string version = Generic.SystemVersion;
+            lblCurrentVersion.Text = version;
+        }
         private void PopulateAnnouncement(string text = null)
         {
             string announcement;
