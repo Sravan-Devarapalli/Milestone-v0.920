@@ -285,10 +285,10 @@ namespace PraticeManagement
                     StrawMans = opPersons.Where(op => op.RelationType == 2).AsQueryable().ToArray();
                 }
 
-                dtlProposedPersons.DataSource = ProposedPersons.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType });
+                dtlProposedPersons.DataSource = ProposedPersons.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType }).OrderBy(p=> p.Name);
                 dtlProposedPersons.DataBind();
 
-                dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity });
+                dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity }).OrderBy(p=>p.Name);
                 dtlTeamStructure.DataBind();
 
             }
