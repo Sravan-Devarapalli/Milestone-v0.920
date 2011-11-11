@@ -248,10 +248,10 @@ namespace PraticeManagement.Config
                     if (cookie.Alphabet.HasValue)
                     {
                         LinkButton topButton = (LinkButton)trAlphabeticalPaging.FindControl("lnkbtn" + cookie.Alphabet.Value);
-                        LinkButton bottomButton = (LinkButton)trAlphabeticalPaging1.FindControl("lnkbtn1" + cookie.Alphabet.Value);
-                        topButton.Font.Bold = bottomButton.Font.Bold = true;
+                        //LinkButton bottomButton = (LinkButton)trAlphabeticalPaging1.FindControl("lnkbtn1" + cookie.Alphabet.Value);
+                        //topButton.Font.Bold = bottomButton.Font.Bold = true;
 
-                        lnkbtnAll.Font.Bold = lnkbtnAll1.Font.Bold = false;
+                        //lnkbtnAll.Font.Bold = lnkbtnAll1.Font.Bold = false;
                         hdnAlphabet.Value = topButton.Text != "All" ? topButton.Text : null;
                         previousLetter = topButton.ID;
                     }
@@ -346,10 +346,10 @@ namespace PraticeManagement.Config
             {
                 LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLetter);
                 LinkButton prevtopButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLinkButton.Attributes["Top"]);
-                LinkButton prevbottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(previousLinkButton.Attributes["Bottom"]);
+                //LinkButton prevbottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(previousLinkButton.Attributes["Bottom"]);
 
                 prevtopButton.Font.Bold = false;
-                prevbottomButton.Font.Bold = false;
+                //prevbottomButton.Font.Bold = false;
             }
 
         }
@@ -367,19 +367,19 @@ namespace PraticeManagement.Config
             {
                 LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLetter);
                 LinkButton prevtopButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLinkButton.Attributes["Top"]);
-                LinkButton prevbottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(previousLinkButton.Attributes["Bottom"]);
+                //LinkButton prevbottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(previousLinkButton.Attributes["Bottom"]);
 
                 prevtopButton.Font.Bold = false;
-                prevbottomButton.Font.Bold = false;
+               // prevbottomButton.Font.Bold = false;
             }
 
             LinkButton alpha = (LinkButton)sender;
 
             LinkButton topButton = (LinkButton)trAlphabeticalPaging.FindControl(alpha.Attributes["Top"]);
-            LinkButton bottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(alpha.Attributes["Bottom"]);
+            //LinkButton bottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(alpha.Attributes["Bottom"]);
 
             topButton.Font.Bold = true;
-            bottomButton.Font.Bold = true;
+            //bottomButton.Font.Bold = true;
             hdnAlphabet.Value = topButton.Text != "All" ? topButton.Text : null;
             previousLetter = topButton.ID;
 
@@ -568,40 +568,40 @@ namespace PraticeManagement.Config
             int startIndex = currentRecords == 0 ? 0 : (gvPersons.PageIndex == 0 ? 1 : (gvPersons.PageIndex * Convert.ToInt32(ddlView.SelectedValue)) + 1);
             lblRecords.Text = String.Format(ViewingRecords, startIndex, currentRecords == 0 ? 0 : (startIndex + currentRecords - 1), totalRecords);
 
-            if (ddlView.SelectedValue == "-1")
-            {
-                lnkbtnPrevious.Enabled = lnkbtnPrevious1.Enabled = lnkbtnNext.Enabled = lnkbtnNext1.Enabled = false;
-            }
-            else
-            {
-                lnkbtnPrevious.Enabled = lnkbtnPrevious1.Enabled = !(CurrentIndex == 0);
-                lnkbtnNext.Enabled = lnkbtnNext1.Enabled = !((gvPersons.Rows.Count == 0) || (currentRecords == totalRecords) || (currentRecords < Convert.ToInt32(ddlView.SelectedValue)));
-            }
+            //if (ddlView.SelectedValue == "-1")
+            //{
+            //    lnkbtnPrevious.Enabled = lnkbtnPrevious1.Enabled = lnkbtnNext.Enabled = lnkbtnNext1.Enabled = false;
+            //}
+            //else
+            //{
+            //    lnkbtnPrevious.Enabled = lnkbtnPrevious1.Enabled = !(CurrentIndex == 0);
+            //    lnkbtnNext.Enabled = lnkbtnNext1.Enabled = !((gvPersons.Rows.Count == 0) || (currentRecords == totalRecords) || (currentRecords < Convert.ToInt32(ddlView.SelectedValue)));
+            //}
 
-            if (!lnkbtnPrevious.Enabled)
-            {
-                Color color = ColorTranslator.FromHtml("#8F8F8F");
-                lnkbtnPrevious.ForeColor = color;
-                lnkbtnPrevious1.ForeColor = color;
-            }
-            else
-            {
-                Color color = ColorTranslator.FromHtml("#0898E6");
-                lnkbtnPrevious.ForeColor = color;
-                lnkbtnPrevious1.ForeColor = color;
-            }
-            if (!lnkbtnNext.Enabled)
-            {
-                Color color = ColorTranslator.FromHtml("#8F8F8F");
-                lnkbtnNext.ForeColor = color;
-                lnkbtnNext1.ForeColor = color;
-            }
-            else
-            {
-                Color color = ColorTranslator.FromHtml("#0898E6");
-                lnkbtnNext.ForeColor = color;
-                lnkbtnNext1.ForeColor = color;
-            }
+            //if (!lnkbtnPrevious.Enabled)
+            //{
+            //    Color color = ColorTranslator.FromHtml("#8F8F8F");
+            //    lnkbtnPrevious.ForeColor = color;
+            //    lnkbtnPrevious1.ForeColor = color;
+            //}
+            //else
+            //{
+            //    Color color = ColorTranslator.FromHtml("#0898E6");
+            //    lnkbtnPrevious.ForeColor = color;
+            //    lnkbtnPrevious1.ForeColor = color;
+            //}
+            //if (!lnkbtnNext.Enabled)
+            //{
+            //    Color color = ColorTranslator.FromHtml("#8F8F8F");
+            //    lnkbtnNext.ForeColor = color;
+            //    lnkbtnNext1.ForeColor = color;
+            //}
+            //else
+            //{
+            //    Color color = ColorTranslator.FromHtml("#0898E6");
+            //    lnkbtnNext.ForeColor = color;
+            //    lnkbtnNext1.ForeColor = color;
+            //}
         }
 
         protected void StbAddStrawman_OnClick(object sender, EventArgs e)
@@ -981,7 +981,7 @@ namespace PraticeManagement.Config
 
                 tc1.Controls.Add(Alphabet1);
 
-                trAlphabeticalPaging1.Controls.Add(tc1);
+                //trAlphabeticalPaging1.Controls.Add(tc1);
             }
         }
 
@@ -1084,14 +1084,14 @@ namespace PraticeManagement.Config
                 LinkButton previousLinkButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLetter);
 
                 LinkButton prevtopButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLinkButton.Attributes["Top"]);
-                LinkButton prevbottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(previousLinkButton.Attributes["Bottom"]);
+                //LinkButton prevbottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(previousLinkButton.Attributes["Bottom"]);
 
                 prevtopButton.Font.Bold = false;
-                prevbottomButton.Font.Bold = false;
+                //prevbottomButton.Font.Bold = false;
             }
 
             lnkbtnAll.Font.Bold = true;
-            lnkbtnAll1.Font.Bold = true;
+            //lnkbtnAll1.Font.Bold = true;
             previousLetter = lnkbtnAll.ID;
             hdnAlphabet.Value = null;
         }
