@@ -323,7 +323,7 @@ namespace PraticeManagement.Controls.Opportunities
                 var potentialPersons = ServiceCallers.Custom.Person(c => c.GetPersonListByStatusList("1,3", null));
                 cblPotentialResources.DataSource = potentialPersons.OrderBy(c => c.LastName);
                 cblPotentialResources.DataBind();
-                var Strawmen = ServiceCallers.Custom.Person(c => c.GetStrawManListAll());
+                var Strawmen = ServiceCallers.Custom.Person(c => c.GetStrawManListAll()).OrderBy(p=>p.PersonLastFirstName);
                 rpTeamStructure.DataSource = Strawmen;
                 rpTeamStructure.DataBind();
             }
