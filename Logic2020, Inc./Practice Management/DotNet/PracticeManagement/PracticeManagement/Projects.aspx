@@ -789,9 +789,5 @@
         </ContentTemplate>
     </cc1:StyledUpdatePanel>
 </asp:Content>
-<asp:Content ID="cntFooter" runat="server" ContentPlaceHolderID="footer">
-    <div class="version">
-        Version.
-        <asp:Label ID="lblCurrentVersion" runat="server"></asp:Label></div>
-</asp:Content>
+
 
