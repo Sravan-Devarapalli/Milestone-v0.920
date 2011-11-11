@@ -355,4 +355,8 @@
     </asp:UpdatePanel>
     <uc:LoadingProgress ID="lpDashBoard" runat="server" />
 </asp:Content>
-
+<asp:Content ID="cntFooter" runat="server" ContentPlaceHolderID="footer">
+    <div class="version">
+        Version.
+        <asp:Label ID="lblCurrentVersion" runat="server"></asp:Label></div>
+</asp:Content>
