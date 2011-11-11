@@ -18,21 +18,6 @@
         <ContentTemplate>
             <table class="WholeWidth">
                 <tr>
-                    <td width="1%" style="padding-left:4px;">
-                        Skill
-                    </td>
-                    <td width="10%">
-                        <asp:TextBox ID="tbFirstName" runat="server" onchange="setDirty();"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="rqfvFirstName" runat="server" Text="*" ErrorMessage="Skill is required."
-                            ControlToValidate="tbFirstName" ToolTip="Skill is required." SetFocusOnError="true"
-                            ValidationGroup="StrawmanGroup"></asp:RequiredFieldValidator>
-                        <asp:CustomValidator ID="cvLengthFirstName" runat="server" Text="*" ErrorMessage="Skill characters length must be lessthan or equal to 50."
-                            ToolTip="Skill characters length must be lessthan or equal to 50." ValidationGroup="StrawmanGroup"
-                            SetFocusOnError="true" OnServerValidate="cvNameLength_ServerValidate"></asp:CustomValidator>
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
                     <td style="padding-left:4px;padding-top:5px;" >
                         Role
                     </td>
@@ -43,6 +28,21 @@
                             ValidationGroup="StrawmanGroup"></asp:RequiredFieldValidator>
                         <asp:CustomValidator ID="cvLengthLastName" runat="server" Text="*" ErrorMessage="Role character length must be lessthan or equal to 50."
                             ToolTip="Role character length must be lessthan or equal to 50." ValidationGroup="StrawmanGroup"
+                            SetFocusOnError="true" OnServerValidate="cvNameLength_ServerValidate"></asp:CustomValidator>
+                    </td>
+                    <td></td>
+                </tr>
+                 <tr>
+                    <td width="1%" style="padding-left:4px;">
+                        Skill
+                    </td>
+                    <td width="10%">
+                        <asp:TextBox ID="tbFirstName" runat="server" onchange="setDirty();"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rqfvFirstName" runat="server" Text="*" ErrorMessage="Skill is required."
+                            ControlToValidate="tbFirstName" ToolTip="Skill is required." SetFocusOnError="true"
+                            ValidationGroup="StrawmanGroup"></asp:RequiredFieldValidator>
+                        <asp:CustomValidator ID="cvLengthFirstName" runat="server" Text="*" ErrorMessage="Skill characters length must be lessthan or equal to 50."
+                            ToolTip="Skill characters length must be lessthan or equal to 50." ValidationGroup="StrawmanGroup"
                             SetFocusOnError="true" OnServerValidate="cvNameLength_ServerValidate"></asp:CustomValidator>
                     </td>
                     <td></td>
