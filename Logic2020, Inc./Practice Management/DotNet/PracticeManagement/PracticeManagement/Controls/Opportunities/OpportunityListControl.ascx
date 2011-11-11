@@ -59,10 +59,6 @@
         return false;
     }
 
-    function clearStrawman(image) {
-        ddlQuantity = image.parentNode.parentNode.getElementsByTagName('SELECT')[0];
-        ddlQuantity.selectedIndex = 0;
-    }
 
     function ShowPotentialResourcesModal(image) {
         var oppId = image.attributes['opportunityid'].value;
@@ -843,9 +839,6 @@
                                 <td style="text-align: left; width: 45px;">
                                     QTY
                                 </td>
-                                <td style="padding-left: 2px;">
-                                    
-                                </td>
                             </tr>
                         </table>
                         <div class="cbfloatRight" style="height: 250px; width: 350px; overflow-y: scroll;
@@ -863,10 +856,6 @@
                                                 <asp:DropDownList ID="ddlQuantity" runat="server" DataTextField="Name" DataValueField="Id">
                                                 </asp:DropDownList>
                                             </td>
-                                            <td>
-                                                <asp:Image ID="imgTeamCross" runat="server" onclick="clearStrawman(this);" Style="cursor: pointer;" ImageUrl="~/Images/cross_icon.png" />
-                                                <%--<asp:CheckBox ID="chkEnabled" runat="server" />--%>
-                                            </td>
                                         </tr>
                                     </ItemTemplate>
                                     <AlternatingItemTemplate>
@@ -879,10 +868,6 @@
                                             <td style="padding-top: 4px; padding-right: 5px; width: 40px;">
                                                 <asp:DropDownList ID="ddlQuantity" runat="server" DataTextField="Name" DataValueField="Id">
                                                 </asp:DropDownList>
-                                            </td>
-                                            <td>
-                                                <asp:Image ID="imgTeamCross"  Style="cursor: pointer;" onclick="clearStrawman(this);" runat="server" ImageUrl="~/Images/cross_icon.png" />
-                                                <%--<asp:CheckBox ID="chkEnabled" runat="server" />--%>
                                             </td>
                                         </tr>
                                     </AlternatingItemTemplate>
