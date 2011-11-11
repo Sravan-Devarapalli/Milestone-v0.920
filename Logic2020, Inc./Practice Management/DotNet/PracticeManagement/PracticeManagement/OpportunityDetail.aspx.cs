@@ -222,7 +222,7 @@ namespace PraticeManagement
 
                 FillPotentialResources();
 
-                var Strawmen = ServiceCallers.Custom.Person(c => c.GetStrawManListAll());
+                var Strawmen = ServiceCallers.Custom.Person(c => c.GetStrawManListAll()).OrderBy(p => p.PersonLastFirstName);
                 rpTeamStructure.DataSource = Strawmen;
                 rpTeamStructure.DataBind();
 
@@ -524,7 +524,7 @@ namespace PraticeManagement
                     if (Page.IsValid)
                     {
 
-                        if (ProposedPersons.Where(p  => p.PersonType == 1).Count() > 0)
+                        if ((StrawMans.Any(s => s.PersonType == 1)) || ProposedPersons.Any(p => p.PersonType == 1))
                         {
                             Page.Validate(vsumHasPersons.ValidationGroup);
                             if (Page.IsValid)
@@ -569,7 +569,7 @@ namespace PraticeManagement
                 try
                 {
                     var projectId = serviceClient.ConvertOpportunityToProject(OpportunityId.Value,
-                                                                              User.Identity.Name, ProposedPersons.Where(p => p.PersonType == 1).Count() > 0);
+                                                                              User.Identity.Name, (StrawMans.Any(s => s.PersonType == 1) || ProposedPersons.Any(p => p.PersonType == 1)));
                     if (!string.IsNullOrEmpty(Request.QueryString["id"]))
                     {
                         Response.Redirect(
