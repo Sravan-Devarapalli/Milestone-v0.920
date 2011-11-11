@@ -124,10 +124,7 @@
             });
         }
 
-        function clearStrawman(image) {
-            ddlQuantity = image.parentNode.parentNode.getElementsByTagName('SELECT')[0];
-            ddlQuantity.selectedIndex = 0;
-        }
+       
 
         function ClearProposedResources() {
             var chkboxList = document.getElementById('<%=cblPotentialResources.ClientID %>');
@@ -268,7 +265,7 @@
                 var hdnPersonId = trTeamStructure[i].children[0].getElementsByTagName('input')[0];
                 var ddlQuantity = trTeamStructure[i].children[1].getElementsByTagName('SELECT')[0];
                 //                var chkEnabled = trTeamStructure[i].children[2].getElementsByTagName('input')[0];
-                var hdnIndex = trTeamStructure[i].children[2].getElementsByTagName('input')[0];
+                var hdnIndex = trTeamStructure[i].children[1].getElementsByTagName('input')[0];
                 if (ddlQuantity.selectedIndex > 0) {
                     personType = '1';
                     //                    if (!chkEnabled.checked) {
@@ -1056,9 +1053,6 @@
                                                             <td style="text-align: left; width: 45px;">
                                                                 QTY
                                                             </td>
-                                                            <td style="padding-left: 2px;">
-                                                                <%--<asp:Image ID="imgTeamCross" runat="server" ImageUrl="~/Images/cross_icon.png" />--%>
-                                                            </td>
                                                         </tr>
                                                     </table>
                                                     <div class="cbfloatRight" style="height: 250px; width: 350px; overflow-y: scroll;
@@ -1076,11 +1070,6 @@
                                                                         <td style="padding-top: 4px; padding-right: 5px; width: 40px;">
                                                                             <asp:DropDownList ID="ddlQuantity" runat="server" DataTextField="Name" DataValueField="Id">
                                                                             </asp:DropDownList>
-                                                                        </td>
-                                                                        <td>
-                                                                            <%--<asp:CheckBox ID="chkEnabled" runat="server" />--%>
-                                                                            <asp:Image ID="imgTeamCross" Style="cursor: pointer;" onclick="clearStrawman(this);"
-                                                                                runat="server" ImageUrl="~/Images/cross_icon.png" />
                                                                             <asp:HiddenField ID="hdnIndex" runat="server" />
                                                                         </td>
                                                                     </tr>
@@ -1096,11 +1085,6 @@
                                                                         <td style="padding-top: 4px; padding-right: 5px; width: 40px;">
                                                                             <asp:DropDownList ID="ddlQuantity" runat="server" DataTextField="Name" DataValueField="Id">
                                                                             </asp:DropDownList>
-                                                                        </td>
-                                                                        <td>
-                                                                            <%--<asp:CheckBox ID="chkEnabled" runat="server" />--%>
-                                                                            <asp:Image ID="imgTeamCross" Style="cursor: pointer;" onclick="clearStrawman(this);"
-                                                                                runat="server" ImageUrl="~/Images/cross_icon.png" />
                                                                             <asp:HiddenField ID="hdnIndex" runat="server" />
                                                                         </td>
                                                                     </tr>
