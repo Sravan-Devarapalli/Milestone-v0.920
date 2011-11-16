@@ -158,7 +158,7 @@ AS
 		DELETE TE 
 		FROM MilestonePerson mp 
 		JOIN Pay pay ON pay.Person = mp.PersonId  AND pay.Timescale = 2
-		JOIN Person p ON p.PersonId = pay.Person
+		JOIN Person p ON p.PersonId = pay.Person AND p.IsStrawman = 0
 		JOIN @Dates rhd ON rhd.[date] BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
 																															ELSE pay.EndDate - 1
 																															END)
@@ -208,6 +208,7 @@ AS
 																																END)
 			JOIN Milestone m ON m.MilestoneId = MP.MilestoneId
 			JOIN MilestonePersonEntry mpe ON mpe.MilestonePersonId = MP.MilestonePersonId
+			WHERE P.IsStrawman = 0
 		END
 	END
 	ELSE
@@ -219,7 +220,7 @@ AS
 		LEFT JOIN MilestonePerson mp ON mp.MilestoneId = @DefaultMilestoneId AND P.PersonId = mp.PersonId
 		JOIN Pay pay ON pay.Person = p.PersonId
 		JOIN @Dates as rhd ON rhd.[date] BETWEEN pay.StartDate AND ISNULL(pay.EndDate, dbo.GetFutureDate())- 1
-		WHERE pay.Timescale = 2 
+		WHERE pay.Timescale = 2 AND P.IsStrawman = 0
 				AND ISNULL(P.TerminationDate, dbo.GetFutureDate()) >= @Today 
 				AND  mp.MilestonePersonId IS NULL
 				AND (P.PersonId = @PersonId OR @PersonId IS NULL)	
@@ -232,10 +233,12 @@ AS
 		JOIN Pay p ON p.Person = mp.PersonId
 		JOIN @Dates rhd ON rhd.[date] BETWEEN p.StartDate AND p.EndDate
 		JOIN Milestone m ON m.MilestoneId = mp.MilestoneId
+		JOIN Person per ON per.PersonId = p.Person
 		WHERE mp.MilestoneId = @DefaultMilestoneId 
 				AND p.Timescale = 2 
 				AND mpe.MilestonePersonId IS NULL
 				AND (mp.PersonId = @PersonId OR @PersonId IS NULL)
+				AND per.IsStrawman = 0
 				
 		INSERT  INTO [dbo].[TimeEntries]
 						( [EntryDate] ,
@@ -277,7 +280,7 @@ AS
 		ON te.MilestonePersonId = mpe.MilestonePersonId AND te.MilestoneDate = rhd.Date
 		AND (@PersonId IS NULL AND te.TimeTypeId = @HolidayTimeTypeId OR @PersonId IS NOT NULL AND te.TimeTypeId = @PTOTimeTypeId)
 		JOIN Calendar c ON c.Date = rhd.date AND DATEPART(DW, c.date) NOT IN (1,7)
-		WHERE  mp.MilestoneId = @DefaultMilestoneId 
+		WHERE  mp.MilestoneId = @DefaultMilestoneId AND P.IsStrawman = 0
 				AND (te.MilestoneDate IS NULL) 
 				AND (mp.PersonId = @PersonId OR @PersonId IS NULL)
 
@@ -299,4 +302,7 @@ AS
 		SET  @ERROR_STATE		= ERROR_STATE()
 		RAISERROR ('%s', @ERROR_SEVERITY, @ERROR_STATE, @ERROR_MESSAGE)
 	END CATCH
+
+
+GO
 
