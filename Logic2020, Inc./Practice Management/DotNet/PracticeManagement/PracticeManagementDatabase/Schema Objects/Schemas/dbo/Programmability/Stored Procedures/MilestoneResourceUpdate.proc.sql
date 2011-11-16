@@ -31,13 +31,13 @@ BEGIN
 		JOIN @TempTable Temp ON Temp.MilestonePersonId = MP.MilestonePersonId
 
 		DECLARE @TempMPE TABLE
-		(MilestonePersonId INT,--StartDate DATETIME,EndDate DATETIME,
-		PersonRoleId INT,Amount DECIMAL(18,2),HoursPerDay DECIMAL(4,2))
+		(MilestonePersonId INT,PersonRoleId INT,Amount DECIMAL(18,2),HoursPerDay DECIMAL(4,2))
 		
 		INSERT INTO @TempMPE(MilestonePersonId,PersonRoleId ,Amount ,HoursPerDay )
 		SELECT MPE.MilestonePersonId,MPE.PersonRoleId,MAX(MPE.Amount),MAX(MPE.HoursPerDay)
 		FROM dbo.MilestonePersonEntry MPE
 		INNER JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = MPE.MilestonePersonId 
+		INNER JOIN dbo.Person AS p ON p.PersonId = MP.PersonId AND p.IsStrawman = 0
 		WHERE MP.MilestoneId = @MilestoneId 
 			AND ( MPE.StartDate > @ProjectedDeliveryDate OR MPE.EndDate < @StartDate )
 		GROUP BY MPE.MilestonePersonId,MPE.PersonRoleId
@@ -45,6 +45,7 @@ BEGIN
 		
 		DELETE  MPE FROM dbo.MilestonePersonEntry MPE
 		JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = MPE.MilestonePersonId 
+		INNER JOIN dbo.Person AS p ON p.PersonId = MP.PersonId AND p.IsStrawman = 0
 		WHERE MP.MilestoneId = @MilestoneId 
 			AND ( MPE.StartDate > @ProjectedDeliveryDate OR MPE.EndDate < @StartDate )
 			
@@ -59,6 +60,31 @@ BEGIN
 		LEFT JOIN dbo.MilestonePersonEntry MPE ON MPE.MilestonePersonId = MP.MilestonePersonId
 		WHERE MPE.MilestonePersonId IS NULL AND MP.MilestoneId = @MilestoneId
 
+
+		-- Update For Straw Man
+		   UPDATE mpentry
+			   SET StartDate = CASE
+									 WHEN ( P.HireDate > @StartDate) THEN  P.HireDate
+									 ELSE @StartDate
+								   END
+								
+			  FROM MilestonePersonEntry as mpentry
+			  INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpentry.MilestonePersonId
+			  INNER JOIN dbo.Person AS p ON p.PersonId = mp.PersonId AND p.IsStrawman = 1
+			  WHERE  mp.MilestoneId = @MilestoneId  AND @IsStartDateChangeReflectedForMilestoneAndPersons = 1 
+
+		UPDATE mpentry
+				SET EndDate =  CASE
+									WHEN ( @ProjectedDeliveryDate > p.TerminationDate ) THEN  p.TerminationDate
+									ELSE (@ProjectedDeliveryDate)
+								  END
+			    FROM MilestonePersonEntry as mpentry
+				INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpentry.MilestonePersonId
+			    INNER JOIN dbo.Person AS p ON p.PersonId = mp.PersonId AND p.IsStrawman = 1
+			    WHERE  mp.MilestoneId = @MilestoneId   AND  @IsEndDateChangeReflectedForMilestoneAndPersons = 1 
+
+
+		-- Update For Persons
 
 	    UPDATE mpentry
 			   SET StartDate = CASE
@@ -76,7 +102,7 @@ BEGIN
 						 FROM dbo.MilestonePersonEntry AS mpe
 						 INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpe.MilestonePersonId
 						 ) AS q ON mpentry.Id = q.Id
-			  INNER JOIN dbo.Person AS p ON p.PersonId = q.PersonId
+			  INNER JOIN dbo.Person AS p ON p.PersonId = q.PersonId AND p.IsStrawman = 0
 
 			  WHERE 1 = q.RANKnO AND q.MilestoneId = @MilestoneId  AND @IsStartDateChangeReflectedForMilestoneAndPersons = 1 
 
@@ -95,9 +121,10 @@ BEGIN
 					 FROM dbo.MilestonePersonEntry AS mpe
 					 INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpe.MilestonePersonId
 					 ) AS q ON mpentry.Id = q.Id
-				INNER JOIN dbo.Person AS p ON p.PersonId = q.PersonId
+				INNER JOIN dbo.Person AS p ON p.PersonId = q.PersonId AND p.IsStrawman = 0
 				WHERE  1 = q.RANKnO AND q.MilestoneId = @MilestoneId AND  @IsEndDateChangeReflectedForMilestoneAndPersons = 1 
 
+		--Ensure that now wrong data is present
 	    UPDATE mpe
 			   SET EndDate =  CASE WHEN @IsStartDateChangeReflectedForMilestoneAndPersons =1 THEN 
 								( CASE
