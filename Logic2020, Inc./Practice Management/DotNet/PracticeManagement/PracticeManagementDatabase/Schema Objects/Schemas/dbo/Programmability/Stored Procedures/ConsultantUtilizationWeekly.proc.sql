@@ -20,9 +20,9 @@ AS
         SET NOCOUNT ON ;
         IF (@IsSampleReport = 1)
         BEGIN
-		SELECT @PracticeIds = COALESCE(@PracticeIds+',' ,'') + Convert(varchar,PracticeId)
+		SELECT @PracticeIds = COALESCE(@PracticeIds+',' ,'') + Convert(VARCHAR,PracticeId)
 		FROM Practice
-		order by Name
+		ORDER BY Name
 		SET @PracticeIds = ','+@PracticeIds+','
         END
         
@@ -69,12 +69,12 @@ AS
                 SELECT  p.PersonId
                 FROM    dbo.Person AS p
                 LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
-                WHERE
-                        ( @ActivePersons = 1 AND p.PersonStatusId = 1 OR
+                WHERE   (p.IsStrawman = 0) 
+                        AND ( @ActivePersons = 1 AND p.PersonStatusId = 1 OR
                               @ProjectedPersons = 1 AND p.PersonStatusId = 3)
 						AND (					
 								p.DefaultPractice IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@PracticeIds))
-							 AND (ISNULL(pr.IsCompanyInternal, 0) = 0 AND @ExcludeInternalPractices  = 1 OR @ExcludeInternalPractices = 0)				
+							 AND (pr.IsCompanyInternal = 0 AND @ExcludeInternalPractices  = 1 OR @ExcludeInternalPractices = 0)				
 							)
 						AND (dbo.GetCurrentPayType(p.PersonId) IN ( SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@TimescaleIds))) '
 			
