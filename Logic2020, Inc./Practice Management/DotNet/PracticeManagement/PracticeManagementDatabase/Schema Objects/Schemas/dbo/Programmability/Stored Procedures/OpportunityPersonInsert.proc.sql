@@ -34,8 +34,8 @@ BEGIN
 			ON op.OpportunityId = @OpportunityId AND op.PersonId = p.PersonId AND op.OpportunityPersonTypeId=p.PersonType
 			WHERE p.PersonId IS NULL and OP.OpportunityId = @OpportunityId AND op.RelationTypeId = @RelationTypeId
 
-			INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId)
-			SELECT @OpportunityId ,p.PersonId,p.PersonType
+			INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId,RelationTypeId)
+			SELECT @OpportunityId ,p.PersonId,p.PersonType,@RelationTypeId 
 			FROM @OpportunityPersonIdsWithTypeTable AS p 
 			LEFT JOIN dbo.OpportunityPersons op
 			ON p.PersonId = op.PersonId AND op.OpportunityId=@OpportunityId AND op.OpportunityPersonTypeId=p.PersonType
