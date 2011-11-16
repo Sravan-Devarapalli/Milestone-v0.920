@@ -35,7 +35,8 @@ AS
 		   p.PracticesOwned,
 		   p.TelephoneNumber,
 		   p.IsDefaultManager,
-		   p.IsWelcomeEmailSent
+		   p.IsWelcomeEmailSent,
+		   p.IsStrawman AS IsStrawman
 	  FROM dbo.v_Person AS p
 	 WHERE p.PersonId = @PersonId
 
