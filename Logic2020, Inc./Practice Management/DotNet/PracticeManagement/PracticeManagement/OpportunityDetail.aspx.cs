@@ -223,8 +223,12 @@ namespace PraticeManagement
                 FillPotentialResources();
 
                 var Strawmen = ServiceCallers.Custom.Person(c => c.GetStrawManListAll()).OrderBy(p => p.PersonLastFirstName);
-                rpTeamStructure.DataSource = Strawmen;
-                rpTeamStructure.DataBind();
+
+                ddlStrawmen.DataSource = Strawmen;
+                ddlStrawmen.DataBind();
+                ddlStrawmen.Items.Insert(0, new ListItem { Text = "-Select Strawman-", Value = "0" });
+                ddlQuantity.DataSource = Quantities;
+                ddlQuantity.DataBind();
 
                 FillProposedResourcesAndStrawMans();
 
@@ -285,10 +289,10 @@ namespace PraticeManagement
                     StrawMans = opPersons.Where(op => op.RelationType == 2).AsQueryable().ToArray();
                 }
 
-                dtlProposedPersons.DataSource = ProposedPersons.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType }).OrderBy(p=> p.Name);
+                dtlProposedPersons.DataSource = ProposedPersons.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType }).OrderBy(p => p.Name);
                 dtlProposedPersons.DataBind();
 
-                dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity }).OrderBy(p=>p.Name);
+                dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity,NeedBy = p.NeedBy }).OrderBy(p => p.Name);
                 dtlTeamStructure.DataBind();
 
             }
@@ -417,15 +421,15 @@ namespace PraticeManagement
                 if (optyperson.Person != null && optyperson.Person.Id.HasValue)
                 {
                     sb.Append(
-                        string.Format("{0}:{1}|{2},",
+                        string.Format("{0}:{1}|{2}?{3},",
                         optyperson.Person.Id.Value.ToString(),
                         optyperson.PersonType.ToString(),
-                        optyperson.Quantity));
+                        optyperson.Quantity,
+                        optyperson.NeedBy.Value.ToString("MM/dd/yyyy")));
                 }
             }
             return sb.ToString();
         }
-
 
         private void NeedToShowDeleteButton()
         {
@@ -1101,35 +1105,30 @@ namespace PraticeManagement
         protected void btnSaveTeamStructure_OnClick(object sender, EventArgs e)
         {
 
-            string[] strawMansSelectedWithIndexes = hdnTeamStructureWithIndexes.Value.Split(',');
-            string[] strawMansSelectedWithIds = hdnTeamStructureWithIndexes.Value.Split(',');
+            string[] strawMansSelectedWithIds = hdnTeamStructure.Value.Split(',');
 
             List<OpportunityPerson> opportunityPersons = new List<OpportunityPerson>();
 
-            for (int i = 0; i < strawMansSelectedWithIndexes.Length; i++)
+            for (int i = 0; i < strawMansSelectedWithIds.Length; i++)
             {
-                string[] splitArray = { ":", "|" };
-                string[] list = strawMansSelectedWithIndexes[i].Split(splitArray, StringSplitOptions.None);
-                var idsList = strawMansSelectedWithIds[i].Split(splitArray, StringSplitOptions.None);
-                if (list.Length == 3)
+                string[] splitArray = { ":", "|", "?" }; // personId:personType|Quantity?NeedBy
+                string[] list = strawMansSelectedWithIds[i].Split(splitArray, StringSplitOptions.None);
+                if (list.Length == 4)
                 {
-                    var repItem = rpTeamStructure.Items[Convert.ToInt32(list[0])] as RepeaterItem;
 
-                    var hdnPersonId = repItem.FindControl("hdnPersonId") as HiddenField;
+                    var personName = ddlStrawmen.Items.FindByValue(list[0]).Text;
+                    var firstname = personName.Split(',')[1];
+                    var lastName = personName.Split(',')[0];
 
-                    var lblStrawman = repItem.FindControl("lblStrawman") as Label;
-
-                    var firstname = lblStrawman.Attributes["FirstName"];
-                    var lastName = lblStrawman.Attributes["LastName"];
-
-                    var id = Convert.ToInt32(hdnPersonId.Value);
+                    var id = Convert.ToInt32(list[0]);
 
                     var operson = new OpportunityPerson()
                     {
                         Person = new Person() { Id = id, FirstName = firstname, LastName = lastName },
                         PersonType = Convert.ToInt32(list[1]),
                         Quantity = Convert.ToInt32(list[2]),
-                        RelationType = 2
+                        RelationType = 2,
+                        NeedBy = DateTime.Parse(list[3])
                     };
                     opportunityPersons.Add(operson);
                 }
@@ -1137,7 +1136,7 @@ namespace PraticeManagement
 
             StrawMans = opportunityPersons.AsQueryable().ToArray();
 
-            dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity });
+            dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity, NeedBy = p.NeedBy });
             dtlTeamStructure.DataBind();
         }
 
