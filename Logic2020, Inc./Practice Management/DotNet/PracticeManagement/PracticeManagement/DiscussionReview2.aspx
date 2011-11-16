@@ -20,6 +20,20 @@
     Opportunity Summary
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
+    <link href="Css/datepicker.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .ConfirmBoxClassError
+        {
+            min-height: 60px;
+            min-width: 200px;
+            max-width: 600px;
+            max-height: 500px;
+        }
+        .strawman tr td
+        {
+            padding: 4px 0px 4px 0px;
+        }
+    </style>
     <asp:UpdatePanel ID="pnlBody" runat="server">
         <ContentTemplate>
             <uc2:OpportunityList ID="opportunities" runat="server" FilterMode="GenericFilter"
