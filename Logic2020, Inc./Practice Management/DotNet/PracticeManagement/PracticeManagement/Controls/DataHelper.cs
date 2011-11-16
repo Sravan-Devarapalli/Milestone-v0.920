@@ -1159,7 +1159,9 @@ namespace PraticeManagement.Controls
 
             if (!string.IsNullOrEmpty(firstItemText))
             {
-                control.Items.Add(new ListItem(firstItemText, firstItemValue));
+                var listitem = new ListItem() { Text = firstItemText, Value = firstItemValue };
+                listitem.Attributes[Constants.Variables.IsStrawMan] = "false";
+                control.Items.Add(listitem);
             }
 
             if (persons.Length > 0)
@@ -1169,6 +1171,9 @@ namespace PraticeManagement.Controls
                     var personitem = new ListItem(
                                           person.PersonLastFirstName,
                                           person.Id.Value.ToString());
+
+
+                    personitem.Attributes[Constants.Variables.IsStrawMan] = person.IsStrawMan.ToString().ToLowerInvariant();
 
                     control.Items.Add(personitem);
                 }
@@ -1741,13 +1746,13 @@ namespace PraticeManagement.Controls
                 client => client.ListProjectsByClientWithSort(clientId, /*CurrentPerson.Alias*/null, sortBy));
         }
 
-        public static Project[] GetTimeEntryProjectsByClientId(int? clientId,int? personId = null, bool showActiveAndInternalProjectsOnly = false)
+        public static Project[] GetTimeEntryProjectsByClientId(int? clientId, int? personId = null, bool showActiveAndInternalProjectsOnly = false)
         {
             using (var serviceClient = new TimeEntryServiceClient())
             {
                 try
                 {
-                    Project[] projects = serviceClient.GetTimeEntryProjectsByClientId(clientId, personId,showActiveAndInternalProjectsOnly);
+                    Project[] projects = serviceClient.GetTimeEntryProjectsByClientId(clientId, personId, showActiveAndInternalProjectsOnly);
 
                     return projects;
                 }
@@ -1884,7 +1889,7 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public static void SaveQuickLinksForDashBoard(string linkNameList, string virtualPathList,DashBoardType dashBoardType)
+        public static void SaveQuickLinksForDashBoard(string linkNameList, string virtualPathList, DashBoardType dashBoardType)
         {
             using (var serviceClient = new ConfigurationServiceClient())
             {
@@ -2117,13 +2122,13 @@ namespace PraticeManagement.Controls
         public static List<Opportunity> SortOppotunities(Opportunity[] opportunities)
         {
             var sortingFilter = Controls.Generic.OpportunityList.Filter;
-                    var comp = new OpportunityComparer(sortingFilter);
+            var comp = new OpportunityComparer(sortingFilter);
 
-                    if (comp.SortOrder != OpportunitySortOrder.None)
-                        Array.Sort(opportunities, comp);
+            if (comp.SortOrder != OpportunitySortOrder.None)
+                Array.Sort(opportunities, comp);
 
-                    return opportunities.ToList();
-              
+            return opportunities.ToList();
+
         }
 
         public static List<QuickLinks> GetQuickLinksByDashBoardType(DashBoardType dashBoardtype)
