@@ -1,9 +1,11 @@
 ﻿
 CREATE PROCEDURE dbo.MilestonePersonListByProject
 (
-	@ProjectId   INT
+	@ProjectId   INT,
+	@IncludeStrawman BIT = 1
 )
 AS
+BEGIN
 	SET NOCOUNT ON
 	
 	SELECT mp.MilestonePersonId,
@@ -39,5 +41,7 @@ AS
 	       mp.ProjectIsChargeable,
 	       mp.MilestoneIsChargeable
 	  FROM dbo.v_MilestonePerson AS mp
-	 WHERE mp.ProjectId = @ProjectId
+	  INNER JOIN dbo.Person AS P ON (P.PersonId = MP.PersonId AND (@IncludeStrawman = 1  OR P.IsStrawman = 0))
+	 WHERE mp.ProjectId = @ProjectId 
 
+END
