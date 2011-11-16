@@ -29,7 +29,7 @@ BEGIN
 			ELSE 		
 				SET @wUtil = CEILING(
 					100*ISNULL(dbo.GetNumberProjectedHours(@PersonId, @StartDate, @EndRange, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects), 0) / 
-						dbo.GetNumberAvaliableHours(@PersonId, @StartDate, @EndRange, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects))
+						@av)
 		END 
  
    return @wUtil
