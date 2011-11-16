@@ -275,6 +275,11 @@ namespace PraticeManagement
             public const string CheckDirtyWithPostback = "if (showDialod()) {{{0}; return false; }} if(checkhdnchbActive())return true; return false;";
             public const string GoBack = "history.back();return false;";
         }
+
+        public static class Variables
+        {
+            public const string IsStrawMan = "IsStrawMan";
+        }
     }
 }
 
