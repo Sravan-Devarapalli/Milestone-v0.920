@@ -120,7 +120,7 @@ BEGIN
 						) TS
 				 LEFT JOIN dbo.aspnet_Users U ON (U.UserName = P.Alias)
 				 LEFT JOIN dbo.aspnet_Membership M ON (U.UserId = M.UserId)
-				 WHERE   ISNULL(p.IsStrawman,0) = 0 AND
+				 WHERE   p.IsStrawman = 0 AND
 				 (   (p.PersonStatusId = 1 AND @ShowAll = 0) 
 							OR (p.PersonStatusId = 2 AND @Terminated = 1)
 							OR (p.PersonStatusId = 3 AND @Projected = 1)
