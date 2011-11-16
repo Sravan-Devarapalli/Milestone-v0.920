@@ -13,9 +13,6 @@ AS
 BEGIN
 	SET NOCOUNT ON
 
-	IF NOT EXISTS (SELECT 1 FROM inserted WHERE ISNULL(IsStrawman, 0) = 1)
-	BEGIN
-
 	-- Deleting redundand records
 	DELETE pc
 	  FROM dbo.PersonCalendarAuto AS pc
@@ -38,7 +35,6 @@ BEGIN
 	                           AND d.HireDate = p.HireDate
 	                           AND ISNULL(d.TerminationDate, '1900-01-01') = ISNULL(p.TerminationDate, '1900-01-01'))
 
-	END
 
 END
 
