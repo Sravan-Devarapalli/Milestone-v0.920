@@ -359,6 +359,7 @@
     <Content Include="ckeditor\themes\default\theme.js" />
     <Content Include="Controls\Calendar.ascx" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
+    <Content Include="Css\datepicker.css" />
     <Content Include="DashBoard.aspx" />
     <Content Include="Images\copy.png" />
     <Content Include="Images\People_Icon_Large.png" />
@@ -469,6 +470,8 @@
     <Content Include="Reports\Xslt\RecentNoteItem.xslt" />
     <Content Include="Sandbox\ScrollingDropdownTest.aspx" />
     <Content Include="Scripts\corpNav.js" />
+    <Content Include="Scripts\date.js" />
+    <Content Include="Scripts\datepicker.js" />
     <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.1.js" />
     <Content Include="Scripts\jquery.blockUI.js" />
