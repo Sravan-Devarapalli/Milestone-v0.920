@@ -323,9 +323,12 @@ namespace PraticeManagement.Controls.Opportunities
                 var potentialPersons = ServiceCallers.Custom.Person(c => c.GetPersonListByStatusList("1,3", null));
                 cblPotentialResources.DataSource = potentialPersons.OrderBy(c => c.LastName);
                 cblPotentialResources.DataBind();
-                var Strawmen = ServiceCallers.Custom.Person(c => c.GetStrawManListAll()).OrderBy(p=>p.PersonLastFirstName);
-                rpTeamStructure.DataSource = Strawmen;
-                rpTeamStructure.DataBind();
+                var Strawmen = ServiceCallers.Custom.Person(c => c.GetStrawManListAll()).OrderBy(p => p.PersonLastFirstName);
+                ddlStrawmen.DataSource = Strawmen;
+                ddlStrawmen.DataBind();
+                ddlStrawmen.Items.Insert(0, new ListItem { Text = "-Select Strawman-", Value = "0" });
+                ddlQuantity.DataSource = Quantities;
+                ddlQuantity.DataBind();
             }
             var opportunities = GetOpportunities();
             lvOpportunities.DataSource = opportunities;
@@ -578,6 +581,7 @@ namespace PraticeManagement.Controls.Opportunities
                 var dtlTeamStructure = e.Item.FindControl("dtlTeamStructure") as DataList;
                 var hdnProposedPersonsIndexes = e.Item.FindControl("hdnProposedPersonsIndexes") as HiddenField;
                 var hdnTeamStructure = e.Item.FindControl("hdnTeamStructure") as HiddenField;
+                var hdnStartDate = e.Item.FindControl("hdnStartDate") as HiddenField;
 
                 var imgTeamStructure = e.Item.FindControl("imgTeamStructure") as Image;
                 var imgPeople_icon = e.Item.FindControl("imgPeople_icon") as Image;
@@ -588,7 +592,10 @@ namespace PraticeManagement.Controls.Opportunities
                 var oppty = (e.Item as ListViewDataItem).DataItem as Opportunity;
 
                 var ddlPriority = e.Item.FindControl("ddlPriorityList") as DropDownList;
-
+                if (oppty.ProjectedStartDate.HasValue)
+                {
+                    hdnStartDate.Value = oppty.ProjectedStartDate.Value.ToString("MM/dd/yyyy");
+                }
                 if (ddlPriority != null)
                 {
                     OpportunityPriority[] priorities = GetOpportunityPriorities();
@@ -608,7 +615,7 @@ namespace PraticeManagement.Controls.Opportunities
                     }
 
                     dtlProposedPersons.DataSource = oppty.ProposedPersons.FindAll(op => op.RelationType == (int)OpportunityPersonRelationType.ProposedResource).OrderBy(op => op.Person.LastName + op.Person.FirstName);
-                    dtlTeamStructure.DataSource = oppty.ProposedPersons.FindAll(op => op.RelationType == (int)OpportunityPersonRelationType.TeamStructure).OrderBy(op => op.Person.LastName + op.Person.FirstName);
+                    dtlTeamStructure.DataSource = oppty.ProposedPersons.FindAll(op => op.RelationType == (int)OpportunityPersonRelationType.TeamStructure && op.NeedBy.HasValue).OrderBy(op => op.Person.LastName + op.Person.FirstName);
                     dtlProposedPersons.DataBind();
                     dtlTeamStructure.DataBind();
                 }
@@ -617,17 +624,6 @@ namespace PraticeManagement.Controls.Opportunities
                     hdnProposedPersonsIndexes.Value = GetPersonsIndexesWithPersonTypeString(oppty.ProposedPersons, cblPotentialResources);
                     hdnTeamStructure.Value = GetTeamStructure(oppty.ProposedPersons);
                 }
-                //if (!string.IsNullOrEmpty(oppty.OutSideResources))
-                //{
-                //var hdnOutSideResources = e.Item.FindControl("hdnOutSideResources") as HiddenField;
-                //var ltrlOutSideResources = e.Item.FindControl("ltrlOutSideResources") as Literal;
-                //hdnOutSideResources.Value = oppty.OutSideResources;
-                //if (!string.IsNullOrEmpty(oppty.OutSideResources) && oppty.OutSideResources[oppty.OutSideResources.Length - 1] == ';')
-                //{
-                //    oppty.OutSideResources = oppty.OutSideResources.Substring(0, oppty.OutSideResources.Length - 1);
-                //}
-                //ltrlOutSideResources.Text = oppty.OutSideResources.Replace(";", "<br/>");
-                //}
             }
         }
 
@@ -674,13 +670,14 @@ namespace PraticeManagement.Controls.Opportunities
 
             foreach (var optyperson in optypersons.FindAll(op => op.RelationType == (int)OpportunityPersonRelationType.TeamStructure))
             {
-                if (optyperson.Person != null && optyperson.Person.Id.HasValue)
+                if (optyperson.Person != null && optyperson.Person.Id.HasValue && optyperson.NeedBy.HasValue)
                 {
                     sb.Append(
-                        string.Format("{0}:{1}|{2},",
+                        string.Format("{0}:{1}|{2}?{3},",
                         optyperson.Person.Id.Value.ToString(),
                         optyperson.PersonType.ToString(),
-                        optyperson.Quantity));
+                        optyperson.Quantity,
+                        optyperson.NeedBy.Value));
                 }
             }
             return sb.ToString();
@@ -784,13 +781,7 @@ namespace PraticeManagement.Controls.Opportunities
             return OpportunitiesHelper.GetFormatedSummaryDetails(opportunities, PriorityTrendList, StatusChangesList);
         }
 
-        protected void rpTeamStructure_OnItemDataBound(object sender, RepeaterItemEventArgs e)
-        {
-            var ddlQty = e.Item.FindControl("ddlQuantity") as DropDownList;
-            ddlQty.DataSource = Quantities;
-            ddlQty.DataBind();
 
-        }
 
 
     }
