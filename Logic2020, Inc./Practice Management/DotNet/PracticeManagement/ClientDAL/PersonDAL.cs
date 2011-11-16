@@ -2301,6 +2301,16 @@ namespace DataAccess
                     int telephoneNumberIndex = reader.GetOrdinal(Constants.ColumnNames.TelephoneNumber);
                     int isDefManagerIndex;
                     int IsWelcomeEmailSentIndex;
+                    int isStrawManIndex;
+
+                    try
+                    {
+                        isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
+                    }
+                    catch
+                    {
+                        isStrawManIndex = -1;
+                    }
 
                     try
                     {
@@ -2403,6 +2413,11 @@ namespace DataAccess
                                     Id = reader.GetInt32(seniorityIdIndex),
                                     Name = reader.GetString(seniorityNameIndex)
                                 };
+                        }
+
+                        if (isStrawManIndex > -1)
+                        {
+                            person.IsStrawMan = reader.GetBoolean(isStrawManIndex);
                         }
 
                         if (practicesOwnedIndex >= 0 && !reader.IsDBNull(practicesOwnedIndex))
@@ -2599,6 +2614,15 @@ namespace DataAccess
                 int isDefManagerIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefaultManager);
                 int hireDateIndex;
                 int terminationDateIndex;
+                int isStrawManIndex;
+                try
+                {
+                    isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
+                }
+                catch
+                {
+                    isStrawManIndex = -1;
+                }
                 try
                 {
                     hireDateIndex = reader.GetOrdinal(HireDateColumn);
@@ -2629,6 +2653,10 @@ namespace DataAccess
                     if (terminationDateIndex > -1)
                     {
                         person.TerminationDate = !reader.IsDBNull(terminationDateIndex) ? (DateTime?)reader[terminationDateIndex] : null;
+                    }
+                    if (isStrawManIndex > -1)
+                    {
+                        person.IsStrawMan = reader.GetBoolean(isStrawManIndex);//== 0 ? false : true
                     }
                     var isDefaultManager = reader.GetBoolean(isDefManagerIndex);
                     if (isDefaultManager)
@@ -3196,6 +3224,8 @@ namespace DataAccess
                 }
             }
         }
+
+
     }
 }
 
