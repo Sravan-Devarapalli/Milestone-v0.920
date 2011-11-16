@@ -7,11 +7,12 @@ BEGIN
 	IF EXISTS (SELECT 1 FROM Milestone WHERE MilestoneId = @MilestoneId)
 	BEGIN
 		SELECT 
-			mp.MilestonePersonId,
+		   mp.MilestonePersonId,
 	       mp.PersonId,
-	       mp.FirstName,
-	       mp.LastName 
-		FROM dbo.v_MilestonePerson AS mp
+	       p.FirstName,
+	       p.LastName 
+		FROM dbo.MilestonePerson AS mp
+		INNER JOIN dbo.Person AS p ON mp.PersonId = p.PersonId AND p.IsStrawman = 0
 		WHERE mp.MilestoneId = @MilestoneId
 	END
 	ELSE
@@ -29,9 +30,10 @@ BEGIN
 		SELECT 
 			mp.MilestonePersonId,
 			mp.PersonId,
-	       mp.FirstName,
-	       mp.LastName 
-		FROM v_MilestonePerson mp
+	        mp.FirstName,
+	        mp.LastName 
+		FROM dbo.v_MilestonePerson AS mp
+		INNER JOIN dbo.Person AS p ON mp.PersonId = p.PersonId AND p.IsStrawman = 0
 		WHERE mp.MilestoneId = @MilestoneIdLocal
 			AND (@StartDate BETWEEN StartDate AND EndDate
 				OR @EndDate BETWEEN StartDate AND EndDate)
