@@ -829,7 +829,7 @@ namespace DataAccess
                 int opportunityPersonTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonTypeId);
                 int opportunityPersonRelationTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonRelationTypeId);
                 int opportunityPersonQuantityIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonQuantity);
-                
+                int needByIndex = reader.GetOrdinal(Constants.ColumnNames.NeedBy);
 
                 while (reader.Read())
                 {
@@ -843,7 +843,8 @@ namespace DataAccess
                         },
                         PersonType = reader.GetInt32(opportunityPersonTypeIdIndex),
                         RelationType = reader.GetInt32(opportunityPersonRelationTypeIdIndex),
-                        Quantity = !reader.IsDBNull(opportunityPersonQuantityIndex) ? reader.GetInt32(opportunityPersonQuantityIndex) : 0
+                        Quantity = !reader.IsDBNull(opportunityPersonQuantityIndex) ? reader.GetInt32(opportunityPersonQuantityIndex) : 0,
+                        NeedBy = !reader.IsDBNull(needByIndex) ? reader.GetDateTime(needByIndex) : (DateTime?)null
                     }
                     ;
 
@@ -864,6 +865,7 @@ namespace DataAccess
                 int opportunityPersonTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonTypeId);
                 int opportunityPersonRelationTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonRelationTypeId);
                 int opportunityPersonQuantityIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonQuantity);
+                int needByIndex = reader.GetOrdinal(Constants.ColumnNames.NeedBy);
                 Opportunity CurrentOpportunity = null;
 
                 while (reader.Read())
@@ -887,7 +889,9 @@ namespace DataAccess
                                    },
                         PersonType = reader.GetInt32(opportunityPersonTypeIdIndex),
                         RelationType = reader.GetInt32(opportunityPersonRelationTypeIdIndex),
-                        Quantity = !reader.IsDBNull(opportunityPersonQuantityIndex)?  reader.GetInt32(opportunityPersonQuantityIndex):0
+                        Quantity = !reader.IsDBNull(opportunityPersonQuantityIndex)?  reader.GetInt32(opportunityPersonQuantityIndex):0,
+                        NeedBy = !reader.IsDBNull(needByIndex)? reader.GetDateTime(needByIndex):(DateTime?)null
+
                     }
                     ;
 
@@ -920,32 +924,6 @@ namespace DataAccess
             }
         }
 
-        private static void ReadPersons(DbDataReader reader, List<OpportunityPerson> result)
-        {
-            if (reader.HasRows)
-            {
-                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
-                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
-                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
-                int opportunityPersonTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonTypeId);
-                while (reader.Read())
-                {
-                    var personId = reader.GetInt32(personIdIndex);
-                    var opportunityPerson = new OpportunityPerson
-                    {
-                        Person = new Person
-                      {
-                          Id = personId,
-                          FirstName = reader.GetString(firstNameIndex),
-                          LastName = reader.GetString(lastNameIndex)
-                      },
-                        PersonType = reader.GetInt32(opportunityPersonTypeIdIndex)
-                    };
-
-                    result.Add(opportunityPerson);
-                }
-            }
-        }
 
         public static int ConvertOpportunityToProject(int opportunityId, string userName, bool hasPersons)
         {
