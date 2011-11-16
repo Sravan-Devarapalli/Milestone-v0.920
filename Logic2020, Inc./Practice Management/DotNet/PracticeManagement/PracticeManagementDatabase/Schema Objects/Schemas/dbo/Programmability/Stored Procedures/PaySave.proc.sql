@@ -358,6 +358,7 @@ AS
 	JOIN MilestonePerson mp ON mp.MilestoneId = @DefaultMilestoneId AND mp.PersonId = p.Person
 	JOIN Milestone m ON mp.MilestoneId = m.MilestoneId
 	JOIN MilestonePersonEntry mpe ON mpe.MilestonePersonId = mp.MilestonePersonId
+	JOIN Person per ON per.PersonId = p.Person
 	LEFT JOIN PersonCalendar PC ON PC.Date = C.Date AND PC.PersonId = p.Person AND PC.DayOff = 1
 	LEFT JOIN TimeEntries te ON te.MilestonePersonId = mpe.MilestonePersonId AND te.MilestoneDate = C.Date AND te.TimeTypeId  IN (@HolidayTimeTypeId , @PTOTimeTypeId)
 	WHERE (C.Date BETWEEN ISNULL(@PreviousRecordStartDate,@StartDate) AND ISNULL(@NextRecordEndDate,@EndDate)-1)
@@ -367,6 +368,7 @@ AS
 	AND (te.TimeEntryId IS NULL)
 	AND C.Date >= @Today
 	AND (C.Date <= @TerminationDate OR @TerminationDate IS NULL)
+	AND per.IsStrawman = 0
 
 	COMMIT TRAN Tran_PaySave
 	END TRY
@@ -383,4 +385,7 @@ AS
 		RAISERROR ('%s', @ERROR_SEVERITY, @ERROR_STATE, @ERROR_MESSAGE)
 
 	END CATCH
+
+
+GO
 
