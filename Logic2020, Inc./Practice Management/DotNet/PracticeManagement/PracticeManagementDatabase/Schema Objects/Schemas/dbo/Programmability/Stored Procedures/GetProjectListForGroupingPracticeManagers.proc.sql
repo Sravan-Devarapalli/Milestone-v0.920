@@ -159,11 +159,7 @@ AS
 			m.ProjectId,
 			m.IsHourlyAmount,
 			mpe.MilestonePersonId,
-			CASE
-			WHEN cal.Date BETWEEN mpe.StartDate AND ISNULL(mpe.EndDate, m.[ProjectedDeliveryDate])
-			THEN mpe.HoursPerDay
-			ELSE 0
-			END AS HoursPerDay,
+			mpe.HoursPerDay AS HoursPerDay,
 			cal.Date,
 			mpe.StartDate AS EntryStartDate,
 			mpe.Amount
