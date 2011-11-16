@@ -111,6 +111,7 @@
             public const string OpportunityPersonTypeId = "OpportunityPersonTypeId";
             public const string OpportunityPersonRelationTypeId = "RelationTypeId";
             public const string OpportunityPersonQuantity = "Quantity";
+            public const string NeedBy = "NeedBy";
             public const string PersonName = "PersonName";
             public const string PersonRoleId = "PersonRoleId";
             public const string PersonRoleName = "RoleName";
