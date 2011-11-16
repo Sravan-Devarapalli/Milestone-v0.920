@@ -44,6 +44,13 @@ namespace DataTransferObjects
             get;
             set;
         }
+
+        [DataMember]
+        public DateTime? NeedBy
+        {
+            get;
+            set;
+        }
     }
 }
 
