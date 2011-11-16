@@ -715,31 +715,40 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Panel pnlTeamStructure;
         
         /// <summary>
-        /// txtTeamSearchBox control.
+        /// ddlStrawmen control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtTeamSearchBox;
+        protected global::System.Web.UI.WebControls.DropDownList ddlStrawmen;
         
         /// <summary>
-        /// wmTeamSearchTeam control.
+        /// ddlQuantity control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.TextBoxWatermarkExtender wmTeamSearchTeam;
+        protected global::System.Web.UI.WebControls.DropDownList ddlQuantity;
         
         /// <summary>
-        /// rpTeamStructure control.
+        /// txtNeedBy control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rpTeamStructure;
+        protected global::System.Web.UI.WebControls.TextBox txtNeedBy;
+        
+        /// <summary>
+        /// imgAddStrawman control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton imgAddStrawman;
         
         /// <summary>
         /// btnSaveTeamStructure control.
@@ -767,15 +776,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hdnTeamStructure;
-        
-        /// <summary>
-        /// hdnTeamStructureWithIndexes control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnTeamStructureWithIndexes;
         
         /// <summary>
         /// UpdatePanel1 control.
