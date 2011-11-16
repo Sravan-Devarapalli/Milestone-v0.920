@@ -103,10 +103,10 @@ BEGIN
 			ELSE 		
 				SET @wUtil = CEILING(
 					100*ISNULL(dbo.GetNumberProjectedHours(@PersonId, @start, @end, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects), 0) / 
-						dbo.GetNumberAvaliableHours(@PersonId, @start, @end, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects))
+						@av)
 		END 
 				
-		SET @rep = @rep + convert(VARCHAR, ISNULL(@wUtil, 0)) + ','
+		SET @rep = @rep + CONVERT(VARCHAR, ISNULL(@wUtil, 0)) + ','
 		
 		SET @w = @w + 1
     END
