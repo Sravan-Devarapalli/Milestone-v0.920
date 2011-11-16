@@ -8,6 +8,7 @@
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ElementDisabler" %>
 <%@ Register TagPrefix="cc" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
+<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
 <table class="WholeWidth">
     <tr>
@@ -77,8 +78,9 @@
                 <table width="100%" id="tblPersonName" runat="server" visible="false">
                     <tr>
                         <td style="width: 85%;">
-                            <asp:DropDownList ID="ddlPersonName" Width="98%" runat="server" />
+                            <cc2:CustomDropDown ID="ddlPersonName" Width="98%" runat="server" />
                             <asp:HiddenField ID="hdnPersonId" runat="server" Value='<%# Eval("ThisPerson.Id") %>' />
+                            <asp:HiddenField ID="hdnPersonIsStrawMan" runat="server" Value='<%# Eval("ThisPerson.IsStrawMan") %>' />
                         </td>
                         <td style="width: 15%;">
                             <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPersonName"
