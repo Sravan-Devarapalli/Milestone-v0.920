@@ -1,6 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="MilestonePersonBar.ascx.cs"
     Inherits="PraticeManagement.Controls.Milestones.MilestonePersonBar" %>
 <%@ Register Src="~/Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc2" %>
+<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <tr id="trBar" style="height: 25px; white-space: nowrap;" runat="server">
     <td align="center" style="width: 2%; height: 20px;">
         <asp:ImageButton ID="imgCopy" ToolTip="Copy" runat="server" OnClick="imgCopy_OnClick"
@@ -18,7 +19,7 @@
         <table width="100%">
             <tr>
                 <td style="width: 85%;">
-                    <asp:DropDownList ID="ddlPerson" Width="98%" runat="server" />
+                    <cc2:CustomDropDown ID="ddlPerson" Width="98%" runat="server" />
                 </td>
                 <td style="width: 15%;">
                     <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPerson"
