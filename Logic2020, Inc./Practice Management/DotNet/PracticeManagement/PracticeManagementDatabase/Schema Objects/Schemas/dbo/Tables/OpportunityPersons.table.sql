@@ -6,6 +6,7 @@
 	OpportunityPersonTypeId INT NOT NULL,
 	RelationTypeId	INT NOT NULL,
 	Quantity		INT NULL,
+	NeedBy			DATETIME NULL,
 	CONSTRAINT PK_OpportunityPersons_Id PRIMARY KEY CLUSTERED(Id),
     CONSTRAINT FK_OpportunityPersons_OpportunityId FOREIGN KEY(OpportunityId) REFERENCES  dbo.Opportunity(OpportunityId),
 	CONSTRAINT FK_OpportunityPersons_OpportunityPersonTypeId FOREIGN KEY(OpportunityPersonTypeId) REFERENCES  dbo.OpportunityPersonType([Id]),
