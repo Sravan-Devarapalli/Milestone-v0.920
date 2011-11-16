@@ -141,7 +141,7 @@ BEGIN
 			FROM OpportunityPersons op
 			LEFT JOIN [dbo].[ConvertStringListIntoTableWithTwoColoumns] (@PersonIdList) AS p 
 			ON op.OpportunityId = @OpportunityId AND op.PersonId = p.ResultId AND op.OpportunityPersonTypeId = p.ResultType
-			WHERE p.ResultId IS NULL and OP.OpportunityId = @OpportunityId
+			WHERE p.ResultId IS NULL and OP.OpportunityId = @OpportunityId AND op.RelationTypeId = 1
 
 			INSERT INTO dbo.OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId,RelationTypeId)
 			SELECT @OpportunityId ,p.ResultId,p.ResultType,1 -- Relation type 1 means PropesedResource
@@ -151,6 +151,9 @@ BEGIN
 			WHERE op.PersonId IS NULL 
 		END
 
+		DELETE FROM dbo.OpportunityPersons  
+		WHERE OpportunityId = @OpportunityId AND RelationTypeId = 2 -- strawmans
+
 		IF(@StrawManList IS NOT NULL  AND ISNULL(@StrawManList,'')<>'')
 		BEGIN
 
@@ -158,55 +161,40 @@ BEGIN
 			(
 			PersonId INT,
 			PersonType INT,
-			Quantity INT
+			Quantity INT,
+			NeedBy DATETIME
 			)
 
 			DECLARE @PersonIdListLocalXML XML
+			-- Strawmans' info is separated  by ","s.
+			-- Each Strawman info is in the format PersonId:PersonType|Quantity?NeedBy
 			IF(SUBSTRING(@StrawManList,LEN(@StrawManList),1)=',')
 			SET @StrawManList = SUBSTRING(@StrawManList,1,LEN(@StrawManList)-1)
-			SET @StrawManList = '<root><item><personid>'+@StrawManList+'</qty></item></root>'
+			SET @StrawManList = '<root><item><personid>'+@StrawManList+'</needby></item></root>'
 
 			SET @StrawManList = REPLACE(@StrawManList,':','</personid><persontypeid>')
 			SET @StrawManList = REPLACE(@StrawManList,'|','</persontypeid><qty>')
-			SET @StrawManList = REPLACE(@StrawManList,',','</qty></item><item><personid>')
+			SET @StrawManList = REPLACE(@StrawManList,'?','</qty><needby>')
+			SET @StrawManList = REPLACE(@StrawManList,',','</needby></item><item><personid>')
 			
-			SELECT @StrawManList
 			SELECT @PersonIdListLocalXML  = CONVERT(XML,@StrawManList)
 
 			INSERT INTO @OpportunityPersonIdsWithTypeTable
 			(PersonId ,
 			PersonType ,
-			Quantity )
+			Quantity,
+			NeedBy)
 			SELECT C.value('personid[1]','int') personid,
 					C.value('persontypeid[1]','int') persontypeid,
-					C.value('qty[1]','int') qty
+					C.value('qty[1]','int') qty,
+					C.value('needby[1]','DATETIME') needby
 			FROM @PersonIdListLocalXML.nodes('/root/item') as T(C)
 
-			DELETE op
-			FROM dbo.OpportunityPersons  op
-			LEFT JOIN @OpportunityPersonIdsWithTypeTable AS p 
-			ON op.OpportunityId = @OpportunityId AND op.PersonId = p.PersonId AND op.OpportunityPersonTypeId=p.PersonType 
-			WHERE p.PersonId IS NULL and OP.OpportunityId = @OpportunityId
-			AND op.RelationTypeId = 2
-
-			INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId,RelationTypeId,Quantity)
-			SELECT @OpportunityId ,p.PersonId,p.PersonType,2,p.Quantity
+			INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId,RelationTypeId,Quantity,NeedBy)
+			SELECT @OpportunityId ,p.PersonId,p.PersonType,2,p.Quantity,p.NeedBy
 			FROM @OpportunityPersonIdsWithTypeTable AS p 
-			LEFT JOIN dbo.OpportunityPersons op
-			ON p.PersonId = op.PersonId AND op.OpportunityId=@OpportunityId AND op.OpportunityPersonTypeId=p.PersonType
-			WHERE op.PersonId IS NULL 
 		END 
-		ELSE
-		BEGIN
-
-			DELETE op
-			FROM dbo.OpportunityPersons  op
-			LEFT JOIN @OpportunityPersonIdsWithTypeTable AS p 
-			ON op.OpportunityId = @OpportunityId AND op.PersonId = p.PersonId AND op.OpportunityPersonTypeId=p.PersonType 
-			WHERE p.PersonId IS NULL and OP.OpportunityId = @OpportunityId
-			AND op.RelationTypeId = 2
 		 
-		END
 		
 		-- End logging session
 		EXEC dbo.SessionLogUnprepare
