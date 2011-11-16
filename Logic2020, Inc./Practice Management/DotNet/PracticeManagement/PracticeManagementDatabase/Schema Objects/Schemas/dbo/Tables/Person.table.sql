@@ -19,7 +19,7 @@
 	MiddleName		   NVARCHAR (40)  NULL,
 	ImageUrl		   NVARCHAR (MAX) NULL,
 	ModifiedDate	   DATETIME		  NULL,
-	IsStrawman		   BIT			  NULL
+	IsStrawman		   BIT			  NOT NULL
 );
 
 
