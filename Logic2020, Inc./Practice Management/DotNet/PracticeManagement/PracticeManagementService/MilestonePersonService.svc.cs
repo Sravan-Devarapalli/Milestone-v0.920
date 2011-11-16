@@ -30,7 +30,7 @@ namespace PracticeManagementService
         /// <returns>The list of the <see cref="MilestonePerson"/> objects.</returns>
         public List<MilestonePerson> GetMilestonePersonListByProject(int projectId)
         {
-            List<MilestonePerson> result = GetMilestonePersonListByProjectWithoutPay(projectId);
+            List<MilestonePerson> result = MilestonePersonDAL.MilestonePersonListByProject(projectId,false);
             foreach (MilestonePerson milestonePerson in result)
                 milestonePerson.Person.CurrentPay = PayDAL.GetCurrentByPerson(milestonePerson.Person.Id.Value);
 
