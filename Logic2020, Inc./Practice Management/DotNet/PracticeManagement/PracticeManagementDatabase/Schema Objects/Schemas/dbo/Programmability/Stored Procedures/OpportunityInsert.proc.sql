@@ -98,36 +98,38 @@ BEGIN
 			(
 			PersonId INT,
 			PersonType INT,
-			Quantity INT
+			Quantity INT,
+			NeedBy DATETIME
 			)
 
 			DECLARE @PersonIdListLocalXML XML
+			-- Strawmans' info is separated  by ","s.
+			-- Each Strawman info is in the format PersonId:PersonType|Quantity?NeedBy
 			IF(SUBSTRING(@StrawManList,LEN(@StrawManList),1)=',')
 			SET @StrawManList = SUBSTRING(@StrawManList,1,LEN(@StrawManList)-1)
-			SET @StrawManList = '<root><item><personid>'+@StrawManList+'</qty></item></root>'
+			SET @StrawManList = '<root><item><personid>'+@StrawManList+'</needby></item></root>'
 
 			SET @StrawManList = REPLACE(@StrawManList,':','</personid><persontypeid>')
 			SET @StrawManList = REPLACE(@StrawManList,'|','</persontypeid><qty>')
-			SET @StrawManList = REPLACE(@StrawManList,',','</qty></item><item><personid>')
+			SET @StrawManList = REPLACE(@StrawManList,'?','</qty><needby>')
+			SET @StrawManList = REPLACE(@StrawManList,',','</needby></item><item><personid>')
 			
-			SELECT @StrawManList
 			SELECT @PersonIdListLocalXML  = CONVERT(XML,@StrawManList)
 
 			INSERT INTO @OpportunityPersonIdsWithTypeTable
 			(PersonId ,
 			PersonType ,
-			Quantity )
+			Quantity,
+			NeedBy)
 			SELECT C.value('personid[1]','int') personid,
 					C.value('persontypeid[1]','int') persontypeid,
-					C.value('qty[1]','int') qty
+					C.value('qty[1]','int') qty,
+					C.value('needby[1]','DATETIME') needby
 			FROM @PersonIdListLocalXML.nodes('/root/item') as T(C)
 
-			INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId,RelationTypeId,Quantity)
-			SELECT @OpportunityId ,p.PersonId,p.PersonType,2,p.Quantity
+			INSERT INTO OpportunityPersons(OpportunityId,PersonId,OpportunityPersonTypeId,RelationTypeId,Quantity,NeedBy)
+			SELECT @OpportunityId ,p.PersonId,p.PersonType,2,p.Quantity,p.NeedBy
 			FROM @OpportunityPersonIdsWithTypeTable AS p 
-			LEFT JOIN dbo.OpportunityPersons op
-			ON p.PersonId = op.PersonId AND op.OpportunityId=@OpportunityId AND op.OpportunityPersonTypeId=p.PersonType
-			WHERE op.PersonId IS NULL 
 
 		END
 
