@@ -51,7 +51,7 @@ namespace PraticeManagement.Controls.Milestones
         protected void custPersonStartInsert_ServerValidate(object sender, ServerValidateEventArgs args)
         {
             var result = dpPersonStartInsert.DateValue.Date >= (HostingPage.IsSaveAllClicked ? HostingPage.dtpPeriodFromObject.DateValue : HostingPage.Milestone.StartDate.Date);
-            
+
             if (HostingPage.IsSaveAllClicked && HostingPage.dtpPeriodFromObject.DateValue.Date > HostingPage.Milestone.StartDate.Date)
             {
                 result = true;
@@ -75,78 +75,91 @@ namespace PraticeManagement.Controls.Milestones
             {
                 isGreaterThanMilestone = true;
             }
-           
+
             args.IsValid = isGreaterThanMilestone;
         }
 
 
         protected void cvMaxRows_ServerValidate(object sender, ServerValidateEventArgs e)
         {
-            if (HostingPage.IsSaveAllClicked)
+            if (ddlPerson.SelectedItem.Attributes[Constants.Variables.IsStrawMan].ToLowerInvariant() == "true")
             {
-                string ddlPersonSelectedValue = ddlPerson.SelectedValue, ddlRoleSelectedValue = ddlRole.SelectedValue;
-                var count = 0;
-
-                for (int i = 0; i < HostingControl.MilestonePersonsEntries.Count(); i++)
-                {
-                    var entry = HostingControl.MilestonePersonsEntries[i];
-                    if (entry.IsShowPlusButton)
-                    {
-                        string personId = "", roleId = "";
-                        if (entry.IsEditMode)
-                        {
-                            personId = (HostingControl.gvMilestonePersonEntriesObject.Rows[i].FindControl("ddlPersonName") as DropDownList).SelectedValue;
-                            roleId = (HostingControl.gvMilestonePersonEntriesObject.Rows[i].FindControl("ddlRole") as DropDownList).SelectedValue;
-
-                        }
-                        else
-                        {
-                            personId = entry.ThisPerson.Id.ToString();
-                            roleId = entry.Role != null ? entry.Role.Id.ToString() : string.Empty;
-                        }
-
-                        if (personId == ddlPersonSelectedValue && roleId == ddlRoleSelectedValue)
-                        {
-                            count = count + entry.ExtendedResourcesRowCount;
-                        }
-
-                    }
-                }
-
-                var newEntriesCount = HostingControl.repeaterOldValues.Where(entry => entry["ddlPerson"].ToLowerInvariant() == ddlPersonSelectedValue.ToLowerInvariant() && entry["ddlRole"].ToLowerInvariant() == ddlRoleSelectedValue.ToLowerInvariant()).Count();
-
-                count = count + newEntriesCount;
-
-                if (count > 5)
-                {
-                    e.IsValid = false;
-                }
-
+                e.IsValid = true;
             }
             else
             {
-                var personId = ddlPerson.SelectedValue;
-                var roleId = ddlRole.SelectedValue;
-                List<MilestonePersonEntry> entries = HostingControl.MilestonePersonsEntries;
-                var rowsCount = entries.Where(mpe => mpe.IsNewEntry == false && mpe.ThisPerson.Id.Value.ToString() == personId && (mpe.Role != null ? mpe.Role.Id.ToString() : string.Empty) == roleId).Count();
-                if (rowsCount > 4)
+
+                if (HostingPage.IsSaveAllClicked)
                 {
-                    e.IsValid = false;
+                    string ddlPersonSelectedValue = ddlPerson.SelectedValue, ddlRoleSelectedValue = ddlRole.SelectedValue;
+                    var count = 0;
+
+                    for (int i = 0; i < HostingControl.MilestonePersonsEntries.Count(); i++)
+                    {
+                        var entry = HostingControl.MilestonePersonsEntries[i];
+                        if (entry.IsShowPlusButton)
+                        {
+                            string personId = "", roleId = "";
+                            if (entry.IsEditMode)
+                            {
+                                personId = (HostingControl.gvMilestonePersonEntriesObject.Rows[i].FindControl("ddlPersonName") as DropDownList).SelectedValue;
+                                roleId = (HostingControl.gvMilestonePersonEntriesObject.Rows[i].FindControl("ddlRole") as DropDownList).SelectedValue;
+
+                            }
+                            else
+                            {
+                                personId = entry.ThisPerson.Id.ToString();
+                                roleId = entry.Role != null ? entry.Role.Id.ToString() : string.Empty;
+                            }
+
+                            if (personId == ddlPersonSelectedValue && roleId == ddlRoleSelectedValue)
+                            {
+                                count = count + entry.ExtendedResourcesRowCount;
+                            }
+
+                        }
+                    }
+
+                    var newEntriesCount = HostingControl.repeaterOldValues.Where(entry => entry["ddlPerson"].ToLowerInvariant() == ddlPersonSelectedValue.ToLowerInvariant() && entry["ddlRole"].ToLowerInvariant() == ddlRoleSelectedValue.ToLowerInvariant()).Count();
+
+                    count = count + newEntriesCount;
+
+                    if (count > 5)
+                    {
+                        e.IsValid = false;
+                    }
+
+                }
+                else
+                {
+                    var personId = ddlPerson.SelectedValue;
+                    var roleId = ddlRole.SelectedValue;
+                    List<MilestonePersonEntry> entries = HostingControl.MilestonePersonsEntries;
+                    var rowsCount = entries.Where(mpe => mpe.IsNewEntry == false && mpe.ThisPerson.Id.Value.ToString() == personId && (mpe.Role != null ? mpe.Role.Id.ToString() : string.Empty) == roleId).Count();
+                    if (rowsCount > 4)
+                    {
+                        e.IsValid = false;
+                    }
                 }
             }
- 
         }
 
         protected void custPeriodOvberlappingInsert_ServerValidate(object sender, ServerValidateEventArgs e)
         {
-
-            if (HostingPage.IsSaveAllClicked)
+            if (ddlPerson.SelectedItem.Attributes[Constants.Variables.IsStrawMan].ToLowerInvariant() == "true")
             {
-                ValidateOvelappingWhenSaveAllClicked(sender, e);
+                e.IsValid = true;
             }
             else
             {
-                ValidateOvelappingWhenSaveClicked(sender, e);
+                if (HostingPage.IsSaveAllClicked)
+                {
+                    ValidateOvelappingWhenSaveAllClicked(sender, e);
+                }
+                else
+                {
+                    ValidateOvelappingWhenSaveClicked(sender, e);
+                }
             }
         }
 
@@ -163,7 +176,7 @@ namespace PraticeManagement.Controls.Milestones
             // Validate overlapping with other entries.
             for (int i = 0; i < entries.Count; i++)
             {
-                var roleId =  entries[i].Role != null ? entries[i].Role.Id.ToString() : string.Empty;
+                var roleId = entries[i].Role != null ? entries[i].Role.Id.ToString() : string.Empty;
                 var personId = entries[i].ThisPerson.Id.ToString();
                 if (personId == ddlPerson.SelectedValue && roleId == ddlRole.SelectedValue && entries[i].IsNewEntry == false)
                 {
@@ -210,7 +223,12 @@ namespace PraticeManagement.Controls.Milestones
                 var entry = entries[i];
                 string roleId = "", personId = "";
 
-                if (entry.IsShowPlusButton)
+                if (entry.IsRepeaterEntry)
+                {
+                    roleId = entries[i].Role != null ? entries[i].Role.Id.ToString() : string.Empty;
+                    personId = entries[i].ThisPerson.Id.ToString();
+                }
+                else if (entry.IsShowPlusButton)
                 {
                     roleId = entries[i].IsEditMode ? entries[i].EditedEntryValues["ddlRole"] : entries[i].Role != null ? entries[i].Role.Id.ToString() : string.Empty;
                     personId = entries[i].IsEditMode ? entries[i].EditedEntryValues["ddlPersonName"] : entries[i].ThisPerson.Id.ToString();
@@ -223,7 +241,7 @@ namespace PraticeManagement.Controls.Milestones
                     roleId = entries[index].IsEditMode ? entries[index].EditedEntryValues["ddlRole"] : (entries[index].Role != null ? entries[index].Role.Id.ToString() : string.Empty);
                 }
 
-                 
+
                 if (personId == ddlPerson.SelectedValue && roleId == ddlRole.SelectedValue && ((entries[i].IsNewEntry == false) || HostingPage.ValidateNewEntry))
                 {
 
@@ -431,12 +449,12 @@ namespace PraticeManagement.Controls.Milestones
 
         internal bool ValidateAll(RepeaterItem mpBar, bool isSaveCommit)
         {
-            return InsertPerson(mpBar, isSaveCommit,false);
+            return InsertPerson(mpBar, isSaveCommit, false);
         }
 
         internal bool SaveAll(RepeaterItem mpBar, bool isSaveCommit, bool iSDatBindRows)
         {
-            return InsertPerson(mpBar, isSaveCommit, iSDatBindRows,false);
+            return InsertPerson(mpBar, isSaveCommit, iSDatBindRows, false);
         }
 
     }
