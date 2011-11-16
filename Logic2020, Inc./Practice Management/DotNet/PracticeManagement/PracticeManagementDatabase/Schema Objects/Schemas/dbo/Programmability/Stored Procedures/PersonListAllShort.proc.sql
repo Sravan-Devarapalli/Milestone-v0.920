@@ -21,7 +21,7 @@ AS
 		   p.IsDefaultManager
 	  FROM dbo.Person AS p
 	 WHERE 
-	 ISNULL(p.IsStrawman,0) = 0
+	 p.IsStrawman = 0
 	 AND  (@PracticeId IS NULL OR p.DefaultPractice = @PracticeId)
 	   AND (@PersonStatusId IS NULL OR p.PersonStatusId = @PersonStatusId)
 	   AND (   @StartDate IS NULL
