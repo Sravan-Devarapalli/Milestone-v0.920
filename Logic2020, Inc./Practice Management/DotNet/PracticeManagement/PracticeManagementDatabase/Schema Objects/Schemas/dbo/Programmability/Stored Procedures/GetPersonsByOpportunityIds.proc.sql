@@ -24,7 +24,8 @@ BEGIN
 				op.OpportunityId,
 				op.OpportunityPersonTypeId,
 				op.RelationTypeId,
-				op.Quantity
+				op.Quantity,
+				op.NeedBy
 		FROM dbo.OpportunityPersons op
 		JOIN dbo.Person p ON p.PersonId = op.PersonId
 		WHERE op.OpportunityId IN (SELECT OpportunityId FROM @OpportunityIdTable)
