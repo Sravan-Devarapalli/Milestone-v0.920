@@ -2,6 +2,7 @@
     CodeBehind="MilestonePersonDetail.aspx.cs" Inherits="PraticeManagement.MilestonePersonDetail"
     Title="Milestone-Person Details | Practice Management" %>
 
+<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc" %>
 <%@ Register Src="Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc2" %>
@@ -102,7 +103,8 @@
                     </td>
                     <td>
                         <asp:HiddenField ID="hdnPersonId" runat="server" />
-                        <asp:DropDownList ID="ddlPersonName" runat="server" onchange="setDirty();" Width="580px" />
+                        <asp:HiddenField ID="hdnPersonIsStrawMan" runat="server" />
+                        <cc2:CustomDropDown ID="ddlPersonName" runat="server" onchange="setDirty();" Width="580px" />
                         <asp:CustomValidator ID="cvMaxRows" runat="server" ControlToValidate="ddlPersonName"
                             ToolTip="Milestone person with same role cannot have more than 5 entries." ErrorMessage="Milestone person with same role cannot have more than 5 entries."
                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
