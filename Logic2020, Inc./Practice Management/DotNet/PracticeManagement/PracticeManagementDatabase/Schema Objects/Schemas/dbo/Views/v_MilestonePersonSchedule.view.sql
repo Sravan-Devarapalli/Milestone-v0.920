@@ -2,11 +2,7 @@
 AS
 	SELECT m.[MilestoneId],
 	       mp.PersonId,
-	       CASE
-	           WHEN cal.Date BETWEEN mpe.StartDate AND ISNULL(mpe.EndDate, m.[ProjectedDeliveryDate])
-	           THEN mpe.HoursPerDay
-	           ELSE 0
-	       END AS HoursPerDay,
+	       mpe.HoursPerDay AS HoursPerDay,
 	       cal.Date,
 	       m.ProjectId,
 	       mpe.Id EntryId,
