@@ -15,14 +15,14 @@ AS
 	SET NOCOUNT ON
 
 	SELECT p.PersonId,
-	       p.FirstName,
-	       p.LastName,
+		   p.FirstName,
+		   p.LastName,
 		   p.IsDefaultManager,
-		   p.HireDate
+		   p.HireDate,
+		  p.IsStrawman AS IsStrawman
 	  FROM dbo.Person AS p
 	 WHERE 
-	ISNULL( p.IsStrawman,0) = 0
-	AND (   (p.PersonStatusId = 1 OR p.PersonStatusId = 3)
+	 ( (p.PersonStatusId = 1 OR p.PersonStatusId = 3)
 	        OR EXISTS (SELECT 1
 	                     FROM dbo.MilestonePerson AS mp
 	                    WHERE mp.MilestonePersonId = @MilestonePersonId AND mp.PersonId = p.PersonId))
