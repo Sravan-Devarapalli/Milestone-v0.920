@@ -37,6 +37,6 @@ AS
 						 OR @DateToday BETWEEN y.StartDate AND (ISNULL(y.EndDate, dbo.GetFutureDate()) - 1)
 						 )
 					  )
-		  AND ISNULL(p.IsStrawman,0) = 0
+		  AND p.IsStrawman = 0
      ORDER BY p.LastName
 
