@@ -10,12 +10,13 @@ using DataTransferObjects.ContextObjects;
 namespace DataAccess
 {
     public static class MilestonePersonDAL
-    { 
+    {
         #region Constants
 
         #region Parameters
 
         private const string ProjectIdParam = "@ProjectId";
+        private const string IncludeStrawmanParam = "@IncludeStrawman";
         private const string MilestoneIdParam = "@MilestoneId";
         private const string ProjectedDeliveryDateParam = "@ProjectedDeliveryDate";
         private const string PersonIdParam = "@PersonId";
@@ -135,7 +136,7 @@ namespace DataAccess
         /// </summary>
         /// <param name = "projectId">An ID of the project to the data be retrieved for.</param>
         /// <returns>The list of the <see cref = "MilestonePerson" /> objects.</returns>
-        public static List<MilestonePerson> MilestonePersonListByProject(int projectId)
+        public static List<MilestonePerson> MilestonePersonListByProject(int projectId, bool includeStrawman = true)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (
@@ -146,6 +147,7 @@ namespace DataAccess
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 command.Parameters.AddWithValue(ProjectIdParam, projectId);
+                command.Parameters.AddWithValue(IncludeStrawmanParam, includeStrawman);
 
                 connection.Open();
                 using (var reader = command.ExecuteReader())
@@ -241,7 +243,7 @@ namespace DataAccess
             }
         }
 
-              
+
         /// <summary>
         /// 	Retrives the milestone-person link details.
         /// </summary>
@@ -435,7 +437,7 @@ namespace DataAccess
                     }
 
                     return (int)command.ExecuteScalar() > 0;
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -444,7 +446,7 @@ namespace DataAccess
             }
         }
 
-        
+
 
         /// <summary>
         /// 	Inserts person-milestone details for the specified milestone and person.
@@ -844,10 +846,11 @@ namespace DataAccess
                                                  Id = reader.GetInt32(personIdIndex),
                                                  FirstName = reader.GetString(firstNameIndex),
                                                  LastName = reader.GetString(lastNameIndex),
-                                                 Seniority = new Seniority
+                                                 Seniority = !reader.IsDBNull(seniorityIdIndex) ?
+                                                 new Seniority
                                                  {
                                                      Id = reader.GetInt32(seniorityIdIndex)
-                                                 }
+                                                 } : null
                                              }
                             };
 
@@ -1039,10 +1042,10 @@ namespace DataAccess
                                                      Id = reader.GetInt32(personIdIndex),
                                                      FirstName = reader.GetString(firstNameIndex),
                                                      LastName = reader.GetString(lastNameIndex),
-                                                     Seniority = new Seniority
+                                                     Seniority = !reader.IsDBNull(personSeniorityIdIndex) ? new Seniority
                                                                      {
                                                                          Id = reader.GetInt32(personSeniorityIdIndex)
-                                                                     }
+                                                                     } : null
                                                  },
                                 Location = !reader.IsDBNull(locationIndex)
                                         ? reader.GetString(locationIndex)
@@ -1098,7 +1101,7 @@ namespace DataAccess
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
                 using (var command =
-                        new SqlCommand(Constants.ProcedureNames.MilestonePerson.MilestonePersonEntryWithFinancials,connection))
+                        new SqlCommand(Constants.ProcedureNames.MilestonePerson.MilestonePersonEntryWithFinancials, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -1108,7 +1111,7 @@ namespace DataAccess
                     connection.Open();
                     using (var reader = command.ExecuteReader())
                     {
-                        
+
                         var entry = LoadMilestonePersonEntry(reader);
                         LoadMilestonePersonEntryFinancials(reader, entry);
                         return entry;
@@ -1152,7 +1155,7 @@ namespace DataAccess
                 int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
                 var milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.EntryId);
                 var personIdIndex = reader.GetOrdinal(PersonIdColumn);
-               
+
                 while (reader.Read())
                 {
                     var personId = reader.GetInt32(personIdIndex);
@@ -1187,6 +1190,7 @@ namespace DataAccess
                 var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
                 var lastNameIndex = reader.GetOrdinal(LastNameColumn);
                 var hasTimeEntriesIndex = reader.GetOrdinal(HasTimeEntriesColumn);
+                var isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
 
                 while (reader.Read())
                 {
@@ -1212,10 +1216,11 @@ namespace DataAccess
                                 Id = reader.GetInt32(personIdIndex),
                                 FirstName = reader.GetString(firstNameIndex),
                                 LastName = reader.GetString(lastNameIndex),
-                                Seniority = new Seniority
+                                IsStrawMan = reader.GetBoolean(isStrawManIndex),
+                                Seniority = !reader.IsDBNull(personSeniorityIdIndex) ? new Seniority
                                 {
                                     Id = reader.GetInt32(personSeniorityIdIndex)
-                                }
+                                } : null
                             },
                             HasTimeEntries = reader.GetBoolean(hasTimeEntriesIndex)
                         };
@@ -1231,7 +1236,7 @@ namespace DataAccess
 
 
                     return entry;
-                    
+
                 }
             }
 
@@ -1277,7 +1282,7 @@ namespace DataAccess
                 var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
                 var lastNameIndex = reader.GetOrdinal(LastNameColumn);
                 var hasTimeEntriesIndex = reader.GetOrdinal(HasTimeEntriesColumn);
-
+                var isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
                 while (reader.Read())
                 {
                     var entry =
@@ -1302,13 +1307,17 @@ namespace DataAccess
                                                      Id = reader.GetInt32(personIdIndex),
                                                      FirstName = reader.GetString(firstNameIndex),
                                                      LastName = reader.GetString(lastNameIndex),
-                                                     Seniority = new Seniority
+                                                     IsStrawMan = reader.GetBoolean(isStrawManIndex),
+                                                     Seniority = !reader.IsDBNull(personSeniorityIdIndex)
+                                                                 ? new Seniority
                                                                      {
                                                                          Id = reader.GetInt32(personSeniorityIdIndex)
-                                                                     }
+                                                                     } : null
                                                  },
                                 HasTimeEntries = reader.GetBoolean(hasTimeEntriesIndex)
                             };
+
+
 
                     if (!reader.IsDBNull(personRoleIdIndex))
                         entry.Role =
@@ -1353,7 +1362,7 @@ namespace DataAccess
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
 
-                    command.Parameters.AddWithValue(Constants.ParameterNames.Id,milestonePersonEntryId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Id, milestonePersonEntryId);
                     command.Parameters.AddWithValue(UserLoginParam,
                                                 !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
 
@@ -1429,7 +1438,7 @@ namespace DataAccess
 
                     command.ExecuteNonQuery();
 
-                    return  Convert.ToInt32(milestonePersonId.Value);
+                    return Convert.ToInt32(milestonePersonId.Value);
                 }
             }
         }
