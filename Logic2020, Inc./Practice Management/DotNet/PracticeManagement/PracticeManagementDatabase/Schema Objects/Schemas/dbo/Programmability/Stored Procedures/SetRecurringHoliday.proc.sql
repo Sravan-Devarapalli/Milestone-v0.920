@@ -113,7 +113,7 @@ WHERE Alias = @UserLogin
 		LEFT JOIN MilestonePerson mp ON mp.MilestoneId = @DefaultMilestoneId AND P.PersonId = mp.PersonId
 		JOIN Pay pay ON pay.Person = p.PersonId
 		JOIN @RecurringHolidaysDates as rhd ON rhd.Date BETWEEN pay.StartDate AND ISNULL(pay.EndDate, dbo.GetFutureDate())- 1
-		WHERE pay.Timescale = 2 
+		WHERE pay.Timescale = 2 AND P.IsStrawman = 0
 				AND ISNULL(P.TerminationDate, dbo.GetFutureDate()) >= @Today 
 				AND  mp.MilestonePersonId IS NULL	
 				
@@ -125,7 +125,9 @@ WHERE Alias = @UserLogin
 		JOIN Pay p ON p.Person = mp.PersonId
 		JOIN @RecurringHolidaysDates rhd ON rhd.Date BETWEEN p.StartDate AND p.EndDate
 		JOIN Milestone m ON m.MilestoneId = mp.MilestoneId
+		JOIN Person per ON per.PersonId = p.Person
 		WHERE mp.MilestoneId = @DefaultMilestoneId AND p.Timescale = 2 AND mpe.MilestonePersonId IS NULL
+			AND per.IsStrawman = 0
 		
 		INSERT  INTO [dbo].[TimeEntries]
 		                ( [EntryDate] ,
@@ -162,7 +164,7 @@ WHERE Alias = @UserLogin
 																															ELSE pay.EndDate - 1
 																															END)
 		LEFT JOIN TimeEntries te ON te.MilestonePersonId = mpe.MilestonePersonId AND te.MilestoneDate = rhd.Date
-		WHERE  mp.MilestoneId = @DefaultMilestoneId AND te.MilestoneDate IS NULL
+		WHERE  mp.MilestoneId = @DefaultMilestoneId AND te.MilestoneDate IS NULL AND P.IsStrawman = 0
 
 
 		UPDATE TE
@@ -217,6 +219,7 @@ WHERE Alias = @UserLogin
 																															END)
 		JOIN Milestone m ON m.MilestoneId = MP.MilestoneId
 		JOIN MilestonePersonEntry mpe ON mpe.MilestonePersonId = MP.MilestonePersonId
+		WHERE P.IsStrawman = 0
 	END
 	
 		COMMIT TRANSACTION Tran_SetRecurringHoliday	
@@ -236,3 +239,6 @@ WHERE Alias = @UserLogin
 	END CATCH
 
 END
+
+GO
+
