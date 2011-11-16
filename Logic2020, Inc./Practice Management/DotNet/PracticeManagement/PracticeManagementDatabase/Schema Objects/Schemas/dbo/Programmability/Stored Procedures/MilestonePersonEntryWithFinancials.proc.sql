@@ -33,8 +33,8 @@ SELECT
 	                  AND cal.DayOff = 0), 0) AS ExpectedHours,
 		   p.LastName,
 		   p.FirstName,
-		   mpe.Id
-		  
+		   mpe.Id,
+		   p.IsStrawman AS IsStrawman
 	  FROM dbo.MilestonePerson AS mp
 	       INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId
 	       INNER JOIN dbo.Milestone AS m ON mp.MilestoneId = m.MilestoneId
@@ -46,9 +46,7 @@ SELECT
 	  GROUP BY mp.MilestonePersonId, p.SeniorityId,mp.PersonId,mpe.StartDate,mpe.EndDate,mpe.PersonRoleId,mpe.Amount,
 	       mpe.HoursPerDay,r.Name,mpe.Location,
 		   p.LastName,
-		   p.FirstName,m.ProjectedDeliveryDate,mpe.Id
-	 
-
+		   p.FirstName,m.ProjectedDeliveryDate,mpe.Id,p.IsStrawman
 
 	 ;WITH FinancialsRetro AS 
 	(
@@ -76,3 +74,4 @@ SELECT
 	  GROUP BY   f.EntryId
 
 END
+
