@@ -92,36 +92,49 @@ BEGIN
 		@MilestoneId = @MilestoneId OUTPUT
 	
 	-- Add persons to milestone
-		DECLARE @OpportunityPersons TABLE(OpportunityId INT, PersonId INT, RowNumber INT)
+		DECLARE @OpportunityPersons TABLE(OpportunityId INT, PersonId INT, RowNumber INT ,NeedBy DateTime,Quantity INT)
 		DECLARE @PersonsCount INT = (SELECT COUNT(PersonId) FROM dbo.OpportunityPersons WHERE OpportunityId = @OpportunityId AND OpportunityPersonTypeId = 1)
 		DECLARE @tempPersonId INT
+		DECLARE @tempPersonQuantity INT
+		DECLARE @tempPersonStartDate date 
 		DECLARE @Index INT = 1
+		DECLARE @Index1 INT = 1
 		
-		INSERT INTO @OpportunityPersons(RowNumber, OpportunityId, PersonId)
-		SELECT	ROW_NUMBER() OVER(ORDER BY personId) AS RowNumber
+		INSERT INTO @OpportunityPersons(RowNumber, OpportunityId, PersonId, NeedBy ,Quantity)
+		SELECT	ROW_NUMBER() OVER(ORDER BY personId,needby) AS RowNumber
 				, OpportunityId
 				, PersonId
+				, NeedBy
+				,Quantity
 		FROM dbo.OpportunityPersons
 		WHERE OpportunityId = @OpportunityId AND OpportunityPersonTypeId = 1
 				
 		WHILE @Index <= @PersonsCount
 		BEGIN
-			SELECT @tempPersonId = PersonId FROM @OpportunityPersons WHERE RowNumber = @Index
-			
+			SELECT @tempPersonId = PersonId ,
+					@tempPersonStartDate = ISNULL(NeedBy, @ProjectedStartDate),
+					@tempPersonQuantity = ISNULL(Quantity,1)
+			FROM @OpportunityPersons WHERE RowNumber = @Index
+
 			EXEC dbo.MilestonePersonInsert  @MilestoneId = @MilestoneId,
 				@PersonId = @tempPersonId,
 				@MilestonePersonId = @MilestonePersonId OUTPUT
+			SET @Index1 = 1;
+			WHILE @Index1 <= @tempPersonQuantity
+			BEGIN
 			
 			EXEC dbo.MilestonePersonEntryInsert @PersonId = @tempPersonId,
 				@MilestonePersonId = @MilestonePersonId, 
-				@StartDate= @ProjectedStartDate, 
+				@StartDate= @tempPersonStartDate, 
 				@EndDate = @ProjectedEndDate, 
 				@HoursPerDay = 8,
 				@PersonRoleId = NULL,
 				@Amount = NULL,
 				@Location = NULL,
 				@UserLogin = @UserLogin
-			
+				
+			SET @Index1 = @Index1 + 1;
+			END
 			SET @Index = @Index + 1;
 		END 
 	END
