@@ -23,7 +23,7 @@
     var currenthdnTeamStructurePersonsId = "";
     var refreshOpportunityIdsFromLastRefresh = new Array();
     var CurrentOptyStartDate = "";
-
+    var CurrentOptyEndDate = "";
     function AddStrawmanRow() {
 
         var tblTeamStructure = document.getElementById('tblTeamStructure');
@@ -51,6 +51,7 @@
         cell2.align = "center";
         var ddlQuantity = document.createElement("select");
         ddlQuantityOriginal = tblTeamStructure.rows[0].cells[1].children[0];
+        ddlQuantity.setAttribute("onchange", "this.style.backgroundColor = '';");
         ddlQuantity.style.width = ddlQuantityOriginal.style.width;
         for (var i = 0; i < ddlQuantityOriginal.children.length; i++) {
             var option = document.createElement("option");
@@ -81,6 +82,8 @@
     }
 
     function ShowTeamStructureModal(image) {
+        clearErrorMessages();
+
         var oppId = image.attributes['opportunityid'].value;
 
         var hdnCurrentOpportunityId = document.getElementById('<%=hdnCurrentOpportunityId.ClientID %>');
@@ -89,6 +92,7 @@
 
         var attachedTeam = image.parentNode.children[1].value.split(",");
         CurrentOptyStartDate = image.parentNode.children[2].value;
+        CurrentOptyEndDate = image.parentNode.children[3].value;
         currenthdnTeamStructurePersonsId = image.parentNode.children[1].id;
         var refreshLableParentNode = $(image.parentNode.parentNode);
         var lblRefreshMessage = refreshLableParentNode.find("span[id$='lblRefreshMessage']")[0];
@@ -101,6 +105,10 @@
                 var ddlPerson = tblTeamStructure.rows[i].cells[0].children[0];
                 var ddlQuantity = tblTeamStructure.rows[i].cells[1].children[0];
                 var txtNeedBy = tblTeamStructure.rows[i].cells[2].children[0];
+
+                txtNeedBy.style.backgroundColor = "";
+                ddlQuantity.style.backgroundColor = "";
+
                 ddlPerson.value = 0;
                 ddlQuantity.value = 0;
                 if (CurrentOptyStartDate != '')
@@ -248,11 +256,150 @@
         buttonSave.click();
     }
     function saveTeamStructure() {
-        var buttonSave = document.getElementById('<%=btnSaveTeamStructureHidden.ClientID %>');
-        var trTeamStructure = document.getElementById('tblTeamStructure').getElementsByTagName('tr');
-        UpdateTeamStructureForHiddenfields();
-        buttonSave.click();
+
+        clearErrorMessages();
+
+        var tblTeamStructure = document.getElementById('tblTeamStructure');
+        for (var i = 0; i < tblTeamStructure.rows.length - 1; i++) {
+            var ddlQuantity = tblTeamStructure.rows[i].cells[1].children[0];
+            var txtNeedBy = tblTeamStructure.rows[i].cells[2].children[0];
+            txtNeedBy.style.backgroundColor = "";
+            ddlQuantity.style.backgroundColor = "";
+        }
+
+        if (validateAll()) {
+            var buttonSave = document.getElementById('<%=btnSaveTeamStructureHidden.ClientID %>');
+            var trTeamStructure = document.getElementById('tblTeamStructure').getElementsByTagName('tr');
+            UpdateTeamStructureForHiddenfields();
+            buttonSave.click();
+            return true;
+        }
+        else {
+            return false;
+        }
     }
+
+    function validateAll() {
+        var result1 = true;
+        var result2 = true;
+
+        // Validate NeedByDate
+        result1 = validateNeedByDates();
+
+        if (!result1) {
+
+            showNeedbyErrorMessage();
+        }
+
+        // Validate Quantity
+        result2 = validateQuantity();
+
+        if (!result2) {
+            showQuantityErrorMessage();
+
+        }
+
+
+        return result1 && result2;
+    }
+
+    function validateNeedByDates() {
+        var result = true;
+        var OpportunityStartDate = CurrentOptyStartDate;
+        var OpportunityEndDate = CurrentOptyEndDate;
+
+        var tblTeamStructure = document.getElementById('tblTeamStructure');
+
+        for (var i = 0; i < tblTeamStructure.rows.length - 1; i++) {
+
+            var ddlQuantity = tblTeamStructure.rows[i].cells[1].children[0];
+            var txtNeedBy = tblTeamStructure.rows[i].cells[2].children[0];
+
+            if (ddlQuantity.value != 0 && OpportunityStartDate != '') {
+                var dateval = new Date(txtNeedBy.value);
+
+                if (!(dateval >= new Date(OpportunityStartDate) && ((OpportunityEndDate == '') || (dateval <= new Date(OpportunityEndDate))))) {
+                    txtNeedBy.style.backgroundColor = "Red";
+                    result = false;
+                }
+                else {
+                    txtNeedBy.style.backgroundColor = "";
+                }
+
+            }
+            else {
+                txtNeedBy.style.backgroundColor = "";
+            }
+        }
+        return result;
+    }
+
+    function validateQuantity() {
+        var result = true;
+
+        var tblTeamStructure = document.getElementById('tblTeamStructure');
+
+        for (var i = 0; i < tblTeamStructure.rows.length - 1; i++) {
+
+            var ddlPerson = tblTeamStructure.rows[i].cells[0].children[0];
+            var ddlQuantity = tblTeamStructure.rows[i].cells[1].children[0];
+            var txtNeedBy = tblTeamStructure.rows[i].cells[2].children[0];
+
+            if (ddlPerson.value != 0 && ddlQuantity.value != 0 && txtNeedBy.value != '') {
+                var quantityCount = parseInt(ddlQuantity.value);
+
+                var ddlQuantityObjectList = new Array();
+
+
+                for (var j = 0; j < tblTeamStructure.rows.length - 1; j++) {
+                    if (i != j) {
+                        var ddlPersonObject = tblTeamStructure.rows[j].cells[0].children[0];
+                        var ddlQuantityObject = tblTeamStructure.rows[j].cells[1].children[0];
+                        var txtNeedByObject = tblTeamStructure.rows[j].cells[2].children[0];
+
+                        if (ddlPerson.value == ddlPersonObject.value && txtNeedBy.value == txtNeedByObject.value) {
+                            quantityCount += parseInt(ddlQuantityObject.value);
+                            Array.add(ddlQuantityObjectList, ddlQuantityObject);
+                        }
+
+                    }
+
+                    if (quantityCount > 10) {
+
+                        for (var k = 0; k < ddlQuantityObjectList.length; k++) {
+
+                            ddlQuantityObjectList[k].style.backgroundColor = "red";
+                        }
+
+                        result = false;
+                    }
+
+                }
+
+            }
+
+        }
+
+        return result;
+    }
+
+    function showQuantityErrorMessage() {
+        document.getElementById('divQuantityError').style.display = "block";
+    }
+
+    function showNeedbyErrorMessage() {
+        var errormsg = "Need by Date must be greater than or equals to Opportunity start date (" + CurrentOptyStartDate + ") and less than or equals to Opportunity end date (" + CurrentOptyEndDate + ") .";
+
+        var divNeedBy = document.getElementById('divNeedbyError');
+        divNeedBy.innerHTML = errormsg;
+        divNeedBy.style.display = "";
+    }
+
+    function clearErrorMessages() {
+        document.getElementById('divNeedbyError').style.display = "none";
+        document.getElementById('divQuantityError').style.display = "none";
+    }
+
 
     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
 
@@ -315,6 +462,7 @@
     }
 
     function ClearTeamStructure() {
+        clearErrorMessages();
 
         var tblTeamStructure = document.getElementById('tblTeamStructure');
         for (var i = 0; i < tblTeamStructure.rows.length - 1; i++) {
@@ -322,8 +470,12 @@
             var ddlPerson = tblTeamStructure.rows[i].cells[0].children[0];
             var ddlQuantity = tblTeamStructure.rows[i].cells[1].children[0];
             var txtNeedBy = tblTeamStructure.rows[i].cells[2].children[0];
+
+            txtNeedBy.style.backgroundColor = "";
+            ddlQuantity.style.backgroundColor = "";
             ddlPerson.value = 0;
             ddlQuantity.value = 0;
+
             if (CurrentOptyStartDate != '')
                 txtNeedBy.value = new Date(CurrentOptyStartDate).format('MM/dd/yyyy');
             else
@@ -710,6 +862,7 @@
                                                 opportunityid='<%# Eval("Id") %>' />
                                             <asp:HiddenField ID="hdnTeamStructure" runat="server" />
                                             <asp:HiddenField ID="hdnStartDate" runat="server" />
+                                            <asp:HiddenField ID="hdnEndDate" runat="server" />
                                         </td>
                                     </tr>
                                 </table>
@@ -804,6 +957,7 @@
                                                 opportunityid='<%# Eval("Id") %>' />
                                             <asp:HiddenField ID="hdnTeamStructure" runat="server" />
                                             <asp:HiddenField ID="hdnStartDate" runat="server" />
+                                            <asp:HiddenField ID="hdnEndDate" runat="server" />
                                         </td>
                                     </tr>
                                 </table>
@@ -919,8 +1073,8 @@
                                         </asp:DropDownList>
                                     </td>
                                     <td style="width: 70px;" align="center">
-                                        <asp:DropDownList ID="ddlQuantity" runat="server" DataTextField="Name" DataValueField="Id"
-                                            Style="width: 50px;">
+                                        <asp:DropDownList ID="ddlQuantity" runat="server" onchange="this.style.backgroundColor = '';"
+                                            DataTextField="Name" DataValueField="Id" Style="width: 50px;">
                                         </asp:DropDownList>
                                     </td>
                                     <td align="center">
@@ -947,6 +1101,13 @@
                                 </td>
                             </tr>
                         </table>
+                        <div id="divNeedbyError" style="text-align: left; display: none; color: Red; width: 404px;
+                            padding: 8px 0px 10px 0px">
+                        </div>
+                        <div id="divQuantityError" style="text-align: left; display: none; color: Red; width: 404px;
+                            padding: 8px 0px 10px 0px">
+                            Quantity for a Straw Man must be less than or equals to 10 for same Need By date.
+                        </div>
                     </td>
                 </tr>
             </table>
