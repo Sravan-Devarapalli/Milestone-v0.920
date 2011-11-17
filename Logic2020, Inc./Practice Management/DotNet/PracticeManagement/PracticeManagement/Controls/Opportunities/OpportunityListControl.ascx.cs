@@ -612,6 +612,7 @@ namespace PraticeManagement.Controls.Opportunities
                     ddlPriority.Attributes["OpportunityName"] = oppty.Name;
                     ddlPriority.Attributes["isTeamstructueAvalilable"] = "false";
                     ddlPriority.Attributes["selectedPriorityId"] = oppty.Priority.Id.ToString();
+                    ddlPriority.Attributes["isEndDateAvailable"] = oppty.ProjectedEndDate.HasValue ? "1" : "0";
                 }
 
                 if (oppty != null && oppty.ProposedPersons != null)
