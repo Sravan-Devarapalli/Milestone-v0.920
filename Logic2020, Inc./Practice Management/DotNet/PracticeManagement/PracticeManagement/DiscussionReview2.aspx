@@ -34,6 +34,7 @@
             padding: 4px 0px 4px 0px;
         }
     </style>
+    <uc1:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="pnlBody" runat="server">
         <ContentTemplate>
             <uc2:OpportunityList ID="opportunities" runat="server" FilterMode="GenericFilter"
