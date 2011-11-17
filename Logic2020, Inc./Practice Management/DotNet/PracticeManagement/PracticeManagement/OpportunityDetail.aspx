@@ -385,7 +385,7 @@
             setDirty(); EnableSaveButton();
             GetProposedPersonIdsListWithPersonType();
         }
-       
+
         function validateNeedByDates() {
             var result = true;
             var OpportunityStartDate = document.getElementById('<%= (dpStartDate.FindControl("txtDate") as TextBox).ClientID %>').value;
@@ -639,6 +639,17 @@
             }
         }
 
+        function SetEndDateRequired(ddlPriority) {
+            var value = ddlPriority.value;
+            var lbEndDate = document.getElementById('<%= lbEndDate.ClientID %>');
+
+            if (value == '1' || value == '2') {
+                lbEndDate.style.fontWeight = 'bold';
+            }
+            else {
+                lbEndDate.style.fontWeight = '';
+            }
+        }
 
          
     </script>
@@ -686,7 +697,7 @@
                                                 <asp:CustomValidator ID="cvOpportunityStrawmanStartDateCheck" runat="server" OnServerValidate="cvOpportunityStrawmanStartDateCheck_ServerValidate"
                                                     ErrorMessage="Some exsisting Strawman Need By date is less than New Opportunity StartDate."
                                                     ToolTip="Some exsisting Strawman Need By date is less than New Opportunity StartDate."
-                                                    EnableClientScript="false"  Display="Dynamic" Text="*" />
+                                                    EnableClientScript="false" Display="Dynamic" Text="*" />
                                             </td>
                                             <td style="padding-left: 4px; padding-right: 8px;">
                                                 <asp:Label ID="lbEndDate" runat="server" Text="End Date"></asp:Label>
@@ -712,6 +723,10 @@
                                                     ErrorMessage="Some exsisting Strawman Need By date is Greater than New Opportunity EndDate."
                                                     ToolTip="Some exsisting Strawman Need By date is Greater than New Opportunity EndDate."
                                                     EnableClientScript="false" Display="Dynamic" Text="*" />
+                                                <asp:CustomValidator ID="cvEndDateRequired" runat="server" OnServerValidate="cvEndDateRequired_ServerValidate"
+                                                    ErrorMessage="End date is required before opportunity can be saved with A, or B priority."
+                                                    ToolTip="End date is required before opportunity can be saved with A, or B priority."
+                                                    ValidationGroup="Opportunity" Display="Dynamic" Text="*" EnableClientScript="false"></asp:CustomValidator>
                                             </td>
                                         </tr>
                                     </table>
@@ -841,7 +856,7 @@
                                         <tr>
                                             <td style="width: 97%">
                                                 <asp:DropDownList ID="ddlPriority" runat="server" Width="100%" CssClass="WholeWidth"
-                                                    onchange="EnableSaveButton();setDirty();">
+                                                    onchange="EnableSaveButton();setDirty();SetEndDateRequired(this);">
                                                 </asp:DropDownList>
                                             </td>
                                             <td style="width: 3%">
