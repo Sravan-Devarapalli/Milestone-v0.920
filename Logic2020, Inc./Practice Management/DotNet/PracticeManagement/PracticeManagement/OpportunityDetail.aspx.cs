@@ -292,7 +292,7 @@ namespace PraticeManagement
                 dtlProposedPersons.DataSource = ProposedPersons.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType }).OrderBy(p => p.Name);
                 dtlProposedPersons.DataBind();
 
-                dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity, NeedBy = p.NeedBy }).OrderBy(p => p.Name).ThenBy(p => p.NeedBy);
+                dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity, NeedBy = p.NeedBy }).OrderBy(p => p.NeedBy).ThenBy(p => p.Name);
                 dtlTeamStructure.DataBind();
 
             }
@@ -365,6 +365,8 @@ namespace PraticeManagement
 
             ScriptManager.RegisterStartupScript(this, this.GetType(), "MultipleSelectionCheckBoxes_OnClickKeyName", string.Format("MultipleSelectionCheckBoxes_OnClick('{0}');", cblPotentialResources.ClientID), true);
             ScriptManager.RegisterStartupScript(this, this.GetType(), "EnableOrDisableConvertOrAttachToProj", "EnableOrDisableConvertOrAttachToProj();", true);
+
+            lbEndDate.Font.Bold = (ddlPriority.SelectedValue == "1" || ddlPriority.SelectedValue == "2");
         }
 
         protected void cblPotentialResources_OnDataBound(object senser, EventArgs e)
@@ -725,9 +727,9 @@ namespace PraticeManagement
         protected void cvOpportunityStrawmanStartDateCheck_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             e.IsValid = true;
-            Page.Validate(vsumOpportunity.ValidationGroup);
-            if (Page.IsValid)
-            {
+            //Page.Validate(vsumOpportunity.ValidationGroup);
+            //if (Page.IsValid)
+            //{
                 bool check = true;
                 DateTime? ProjectedStartDate = dpStartDate.DateValue != DateTime.MinValue ? (DateTime?)dpStartDate.DateValue : null;
                 String StrawManList = hdnTeamStructure.Value;
@@ -745,15 +747,15 @@ namespace PraticeManagement
                     }
                 }
                 e.IsValid = check;
-           }
+           //}
 
         }
         protected void cvOpportunityStrawmanEndDateCheck_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             e.IsValid = true;
-            Page.Validate(vsumOpportunity.ValidationGroup);
-            if (Page.IsValid)
-            {
+            //Page.Validate(vsumOpportunity.ValidationGroup);
+            //if (Page.IsValid)
+            //{
                 bool check = true;
                 DateTime? ProjectedEndDate = dpEndDate.DateValue != DateTime.MinValue ? (DateTime?)dpEndDate.DateValue : null;
                 String StrawManList = hdnTeamStructure.Value;
@@ -771,7 +773,7 @@ namespace PraticeManagement
                     }
                 }
                 e.IsValid = check;
-            }
+            //}
         
         }
 
@@ -1190,7 +1192,7 @@ namespace PraticeManagement
 
             StrawMans = opportunityPersons.AsQueryable().ToArray();
 
-            dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity, NeedBy = p.NeedBy }).OrderBy(p => p.Name).ThenBy(p => p.NeedBy);
+            dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity, NeedBy = p.NeedBy }).OrderBy(p => p.NeedBy).ThenBy(p => p.Name);
             dtlTeamStructure.DataBind();
         }
 
@@ -1291,6 +1293,16 @@ namespace PraticeManagement
                     mpePopup.Show();
                     e.IsValid = false;
                 }
+            }
+        }
+
+        protected void cvEndDateRequired_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = true;
+            var selectedText = ddlPriority.SelectedItem.Text.ToUpperInvariant();
+            if (selectedText == "A" || selectedText == "B")
+            {
+                e.IsValid = !string.IsNullOrEmpty(dpEndDate.TextValue);
             }
         }
 
