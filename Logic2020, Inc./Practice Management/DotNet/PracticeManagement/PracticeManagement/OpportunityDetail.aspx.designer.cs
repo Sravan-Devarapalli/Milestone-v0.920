@@ -166,6 +166,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator cvOpportunityStrawmanEndDateCheck;
         
         /// <summary>
+        /// cvEndDateRequired control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvEndDateRequired;
+        
+        /// <summary>
         /// txtOpportunityName control.
         /// </summary>
         /// <remarks>
