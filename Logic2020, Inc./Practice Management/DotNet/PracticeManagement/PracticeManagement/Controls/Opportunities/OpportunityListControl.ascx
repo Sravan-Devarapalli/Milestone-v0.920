@@ -24,27 +24,6 @@
     var refreshOpportunityIdsFromLastRefresh = new Array();
     var CurrentOptyStartDate = "";
 
-    function removeTableRow(image) {
-        var tblTeamStructure = document.getElementById('tblTeamStructure');
-        var rowIndex = image.attributes["rowIndex"];
-        if (rowIndex != null && rowIndex.value != 0) {
-            tblTeamStructure.deleteRow(rowIndex.value);
-        }
-        else {
-            if (tblTeamStructure.rows.length > 2) {
-                tblTeamStructure.deleteRow(0);
-            }
-        }
-        for (var i = 0; i < tblTeamStructure.rows.length - 1; i++) {
-            var img = tblTeamStructure.rows[i].cells[tblTeamStructure.rows[i].cells.length - 1].children[0];
-            if (img.attributes["rowIndex"] == null) {
-                img.setAttribute('rowIndex', i);
-            }
-            else {
-                img.attributes["rowIndex"].value = i;
-            }
-        }
-    }
     function AddStrawmanRow() {
 
         var tblTeamStructure = document.getElementById('tblTeamStructure');
@@ -69,6 +48,7 @@
         cell1.appendChild(ddlStrawMan);
 
         var cell2 = row.insertCell(1);
+        cell2.align = "center";
         var ddlQuantity = document.createElement("select");
         ddlQuantityOriginal = tblTeamStructure.rows[0].cells[1].children[0];
         ddlQuantity.style.width = ddlQuantityOriginal.style.width;
@@ -95,17 +75,6 @@
         cell3.appendChild(txtNeedBy);
         if (CurrentOptyStartDate != '')
             txtNeedBy.value = new Date(CurrentOptyStartDate).format('MM/dd/yyyy');
-
-        //        lblVal
-
-        var cell4 = row.insertCell(3);
-        var imgcross = document.createElement("img");
-        imgcross.src = "Images/cross_icon.png";
-        imgcross.setAttribute('onclick', 'removeTableRow(this);');
-        imgcross.setAttribute('rowIndex', rowCount - 1);
-
-        imgcross.style.cssText = "float:right;";
-        cell4.appendChild(imgcross);
 
         setcalendar();
         return false;
@@ -284,7 +253,9 @@
         UpdateTeamStructureForHiddenfields();
         buttonSave.click();
     }
+
     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+
     function endRequestHandle(sender, Args) {
         var lblRefreshMessageList = $("span[id$='lblRefreshMessage']");
         for (var j = 0; j < lblRefreshMessageList.length; j++) {
@@ -923,18 +894,17 @@
                             <b>Team Structure</b>
                         </center>
                         <br />
-                        <div class="cbfloatRight" style="width: 400px; padding-left: 3px;">
+                        <div class="cbfloatRight" style="width: 400px;">
                             <table width="100%">
                                 <tr>
-                                    <td style="width: 220px;">
+                                    <td style="width: 220px;" align="center">
+                                        <b>Role / Skill</b>
                                     </td>
-                                    <td style="text-align: left; width: 65px;">
+                                    <td style="text-align: center; width: 70px;">
                                         <b>QTY</b>
                                     </td>
-                                    <td style="text-align: left; width: 95px;">
-                                        <b>Needed By</b>
-                                    </td>
-                                    <td>
+                                    <td align="center">
+                                        <b>Needed By</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     </td>
                                 </tr>
                             </table>
@@ -943,25 +913,22 @@
                             border: 1px solid black; background: white; padding-left: 3px; text-align: left !important;">
                             <table width="100%" id="tblTeamStructure" class="strawman">
                                 <tr>
-                                    <td>
+                                    <td style="width: 220px;">
                                         <asp:DropDownList ID="ddlStrawmen" runat="server" DataTextField="Name" DataValueField="Id"
-                                            Width="200px">
+                                            Width="220px">
                                         </asp:DropDownList>
                                     </td>
-                                    <td>
+                                    <td style="width: 70px;" align="center">
                                         <asp:DropDownList ID="ddlQuantity" runat="server" DataTextField="Name" DataValueField="Id"
                                             Style="width: 50px;">
                                         </asp:DropDownList>
                                     </td>
-                                    <td>
+                                    <td align="center">
                                         <asp:TextBox ID="txtNeedBy" runat="server" Style="width: 80px; float: left;" CssClass="date-pick"></asp:TextBox>
-                                    </td>
-                                    <td>
-                                        <img src="Images/cross_icon.png" style="float: right;" onclick="removeTableRow(this);" />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" align="left">
+                                    <td colspan="3" align="left">
                                         <asp:ImageButton ID="imgAddStrawman" runat="server" ImageUrl="~/Images/add_16.png"
                                             AlternateText="Add Strawman" Style="float: left;" OnClientClick=" return AddStrawmanRow();" />
                                     </td>
