@@ -683,9 +683,13 @@
                                                     ValidationGroup="Opportunity" Type="Date" Operator="DataTypeCheck" Text="*" Display="Dynamic"
                                                     ErrorMessage="The Projected Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
                                                     ToolTip="The Projected Start Date has an incorrect format. It must be 'MM/dd/yyyy'."></asp:CompareValidator>
+                                                <asp:CustomValidator ID="cvOpportunityStrawmanStartDateCheck" runat="server" OnServerValidate="cvOpportunityStrawmanStartDateCheck_ServerValidate"
+                                                    ErrorMessage="Some exsisting Strawman Need By date is less than New Opportunity StartDate."
+                                                    ToolTip="Some exsisting Strawman Need By date is less than New Opportunity StartDate."
+                                                    EnableClientScript="false"  Display="Dynamic" Text="*" />
                                             </td>
                                             <td style="padding-left: 4px; padding-right: 8px;">
-                                                End Date
+                                                <asp:Label ID="lbEndDate" runat="server" Text="End Date"></asp:Label>
                                             </td>
                                             <td class="DatePickerPadding">
                                                 <uc1:DatePicker ID="dpEndDate" ValidationGroup="Opportunity" AutoPostBack="false"
@@ -700,10 +704,14 @@
                                                     ErrorMessage="The Projected End Date has an incorrect format. It must be 'MM/dd/yyyy'."
                                                     ToolTip="The Projected End Date has an incorrect format. It must be 'MM/dd/yyyy'."></asp:CompareValidator>
                                                 <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpEndDate"
-                                                    ControlToCompare="dpStartDate" ErrorMessage="The Projected End must be greater or equal to the Projected Start."
-                                                    ToolTip="The Projected End must be greate or equals to the Projected Start."
+                                                    ControlToCompare="dpStartDate" ErrorMessage="Opportunity End Date must greater or Equal to Opportunity Start Date."
+                                                    ToolTip="Opportunity End Date must greater or Equal to Opportunity Start Date."
                                                     Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                                     Operator="GreaterThanEqual" Type="Date" ValidationGroup="Opportunity"></asp:CompareValidator>
+                                                <asp:CustomValidator ID="cvOpportunityStrawmanEndDateCheck" runat="server" OnServerValidate="cvOpportunityStrawmanEndDateCheck_ServerValidate"
+                                                    ErrorMessage="Some exsisting Strawman Need By date is Greater than New Opportunity EndDate."
+                                                    ToolTip="Some exsisting Strawman Need By date is Greater than New Opportunity EndDate."
+                                                    EnableClientScript="false" Display="Dynamic" Text="*" />
                                             </td>
                                         </tr>
                                     </table>
@@ -1161,12 +1169,20 @@
                                                                             padding-bottom: 3px;">
                                                                             <asp:DataList ID="dtlTeamStructure" runat="server" Style="white-space: normal; width: 100%;">
                                                                                 <ItemTemplate>
-                                                                                    <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>
-                                                                                    (<%# Eval("Quantity") %>) By (<%# ((DateTime)Eval("NeedBy")).ToString("MM/dd/yyyy")%>)
+                                                                                    <div style="width: 100%;">
+                                                                                        <span style="float: left; padding-left: 10px;">
+                                                                                            <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>(<%# Eval("Quantity") %>)
+                                                                                        </span><span style="float: right; padding-right: 10px;">
+                                                                                            <%# ((DateTime)Eval("NeedBy")).ToString("MM/dd/yyyy")%></span>
+                                                                                    </div>
                                                                                 </ItemTemplate>
                                                                                 <AlternatingItemTemplate>
-                                                                                    <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>
-                                                                                    (<%# Eval("Quantity") %>) By (<%# ((DateTime)Eval("NeedBy")).ToString("MM/dd/yyyy")%>)
+                                                                                    <div style="width: 100%;">
+                                                                                        <span style="float: left; padding-left: 10px;">
+                                                                                            <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>(<%# Eval("Quantity") %>)
+                                                                                        </span><span style="float: right; padding-right: 10px;">
+                                                                                            <%# ((DateTime)Eval("NeedBy")).ToString("MM/dd/yyyy")%></span>
+                                                                                    </div>
                                                                                 </AlternatingItemTemplate>
                                                                                 <AlternatingItemStyle BackColor="#f9faff" />
                                                                             </asp:DataList>
