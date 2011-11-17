@@ -292,7 +292,7 @@ namespace PraticeManagement
                 dtlProposedPersons.DataSource = ProposedPersons.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType }).OrderBy(p => p.Name);
                 dtlProposedPersons.DataBind();
 
-                dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity,NeedBy = p.NeedBy }).OrderBy(p => p.Name);
+                dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity, NeedBy = p.NeedBy }).OrderBy(p => p.Name).ThenBy(p => p.NeedBy);
                 dtlTeamStructure.DataBind();
 
             }
@@ -535,6 +535,10 @@ namespace PraticeManagement
                             {
                                 ConvertToProject();
                             }
+                            else
+                            {
+                                lbEndDate.Font.Bold = true;
+                            }
                         }
                         else
                         {
@@ -718,8 +722,58 @@ namespace PraticeManagement
             }
         }
 
+        protected void cvOpportunityStrawmanStartDateCheck_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = true;
+            Page.Validate(vsumOpportunity.ValidationGroup);
+            if (Page.IsValid)
+            {
+                bool check = true;
+                DateTime? ProjectedStartDate = dpStartDate.DateValue != DateTime.MinValue ? (DateTime?)dpStartDate.DateValue : null;
+                String StrawManList = hdnTeamStructure.Value;
+                string[] strawMansSelectedWithIds = hdnTeamStructure.Value.Split(',');
+                for (int i = 0; i < strawMansSelectedWithIds.Length; i++)
+                {
+                    string[] splitArray = { "?" }; // personId:personType|Quantity?NeedBy
+                    string[] list = strawMansSelectedWithIds[i].Split(splitArray, StringSplitOptions.None);
+                    if (list.Length == 2)
+                    {
+                        var NeedBy = DateTime.Parse(list[1]);
+                        check = (ProjectedStartDate != null ? NeedBy >= ProjectedStartDate : true);
+                        if (!check)
+                            break;
+                    }
+                }
+                e.IsValid = check;
+           }
 
-
+        }
+        protected void cvOpportunityStrawmanEndDateCheck_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = true;
+            Page.Validate(vsumOpportunity.ValidationGroup);
+            if (Page.IsValid)
+            {
+                bool check = true;
+                DateTime? ProjectedEndDate = dpEndDate.DateValue != DateTime.MinValue ? (DateTime?)dpEndDate.DateValue : null;
+                String StrawManList = hdnTeamStructure.Value;
+                string[] strawMansSelectedWithIds = hdnTeamStructure.Value.Split(',');
+                for (int i = 0; i < strawMansSelectedWithIds.Length; i++)
+                {
+                    string[] splitArray = { "?" }; // personId:personType|Quantity?NeedBy
+                    string[] list = strawMansSelectedWithIds[i].Split(splitArray, StringSplitOptions.None);
+                    if (list.Length == 2)
+                    {
+                        var NeedBy = DateTime.Parse(list[1]);
+                        check = (ProjectedEndDate != null ? NeedBy <= ProjectedEndDate : true);
+                        if (!check)
+                            break;
+                    }
+                }
+                e.IsValid = check;
+            }
+        
+        }
 
         protected override bool ValidateAndSave()
         {
@@ -1136,7 +1190,7 @@ namespace PraticeManagement
 
             StrawMans = opportunityPersons.AsQueryable().ToArray();
 
-            dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity, NeedBy = p.NeedBy });
+            dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity, NeedBy = p.NeedBy }).OrderBy(p => p.Name).ThenBy(p => p.NeedBy);
             dtlTeamStructure.DataBind();
         }
 
