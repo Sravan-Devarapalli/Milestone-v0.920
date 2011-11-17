@@ -509,7 +509,8 @@
         var selectedText = "";
 
         var showPopup = false;
-
+        var endDateRequiredPopup = false;
+        
         for (var i = 0; i < optionList.length; ++i) {
             if (optionList[i].value == ddlPriority.value) {
                 selectedText = optionList[i].innerHTML.toLowerCase();
@@ -524,9 +525,14 @@
 
         }
 
+        if (selectedText == "a" || selectedText == "b") {
+            if (ddlPriority.attributes["isEndDateAvailable"].value == "0") {
+                endDateRequiredPopup = true;
+            }
+        }
 
 
-        if (showPopup == true) {
+        if (showPopup == true || endDateRequiredPopup == true ) {
             var hdnRedirectOpportunityId = document.getElementById('<%= hdnRedirectOpportunityId.ClientID %>');
             var oppId = ddlPriority.attributes["OpportunityID"].value;
             hdnRedirectOpportunityId.value = oppId;
@@ -534,7 +540,22 @@
             var lblOpportunityName = document.getElementById('<%= lblOpportunityName.ClientID %>');
             var lblOpportunityName1 = document.getElementById('<%= lblOpportunityName1.ClientID %>');
             lblOpportunityName1.innerHTML = lblOpportunityName.innerHTML = ddlPriority.attributes["OpportunityName"].value
+
+
+            var trEndDateRequired = document.getElementById('endDateRequired');
+            if (trEndDateRequired != null) {
+                trEndDateRequired.style.display = (endDateRequiredPopup == false) ? 'none' : '';
+            }
+
+            var trTeamMakeupRequired = document.getElementById('teamMakeUpRequired');
+            if (trTeamMakeupRequired != null) {
+                trTeamMakeupRequired.style.display = (showPopup == false) ? 'none' : '';
+            }
+
+
             $find('mpePriorityPopup').show();
+
+
         }
         else {
             var urlVal = "OpportunityPriorityHandler.ashx?OpportunityID=" + ddlPriority.attributes["OpportunityID"].value + "&PriorityID=" + ddlPriority.value;
@@ -1136,10 +1157,14 @@
                         <table>
                             <tr>
                                 <td>
-                                    <p>
+                                    <p id="teamMakeUpRequired">
                                         You must add a Team Make-Up to
                                         <asp:Label ID="lblOpportunityName" runat="server" Font-Bold="true"></asp:Label>
                                         opportunity before it can be saved with a PO, A, or B priority.
+                                    </p>
+                                    <p id="endDateRequired">
+                                    <br />
+                                        End date is required before opportunity can be saved with A, or B priority.
                                     </p>
                                     <br />
                                     <p>
