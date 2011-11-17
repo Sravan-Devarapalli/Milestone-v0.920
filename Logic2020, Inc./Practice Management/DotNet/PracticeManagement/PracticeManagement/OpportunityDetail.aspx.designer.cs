@@ -103,6 +103,24 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CompareValidator cmpStartDateDataTypeCheck;
         
         /// <summary>
+        /// cvOpportunityStrawmanStartDateCheck control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvOpportunityStrawmanStartDateCheck;
+        
+        /// <summary>
+        /// lbEndDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbEndDate;
+        
+        /// <summary>
         /// dpEndDate control.
         /// </summary>
         /// <remarks>
@@ -137,6 +155,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CompareValidator compEndDate;
+        
+        /// <summary>
+        /// cvOpportunityStrawmanEndDateCheck control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvOpportunityStrawmanEndDateCheck;
         
         /// <summary>
         /// txtOpportunityName control.
