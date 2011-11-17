@@ -471,9 +471,9 @@ Date.fullYearStart = '20';
         }
         var dm = new RegExp(matcher);
         var result = s.match(dm);
-        for (var i = 0; i < order.length; i++) {
-            var res = result[i + 1];
-            switch (order[i]) {
+        for (var i = order.length; i > 0 ; i--) {
+            var res = result[i];
+            switch (order[i-1]) {
                 case 'd':
                     d.setDate(res);
                     break;
@@ -503,3 +503,4 @@ Date.fullYearStart = '20';
     };
 
 })();
+
