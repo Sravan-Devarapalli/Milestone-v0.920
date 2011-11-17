@@ -229,8 +229,7 @@
 
 				    if (!alreadyExists && s.createButton) {
 				        // create it!
-				        controller.button = $('<a href="#" class="dp-choose-date" title="' + $.dpText.TEXT_CHOOSE_DATE + '"><img src="Images/calendar.gif" style="width: 16px; height: 16px" border="0" id="cal" alt=""/> </a>')
-								.bind(
+				        $(controller.ele).bind(
 									'click',
 									function () {
 									    $this.dpDisplay(this);
@@ -238,7 +237,6 @@
 									    return false;
 									}
 								);
-				        $this.after(controller.button);
 				    }
 
 				    if (!alreadyExists && $this.is(':text')) {
@@ -754,7 +752,7 @@
 		                'class': 'dp-popup'
 		            };
 		            cssRules = {
-		                'top': eleOffset.top + c.verticalOffset,
+		                'top': eleOffset.top + c.verticalOffset + this.ele.offsetHeight,
 		                'left': eleOffset.left + c.horizontalOffset
 		            };
 
