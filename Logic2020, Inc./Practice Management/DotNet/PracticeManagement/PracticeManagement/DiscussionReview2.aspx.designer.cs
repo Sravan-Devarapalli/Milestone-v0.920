@@ -13,6 +13,15 @@ namespace PraticeManagement {
     public partial class DiscussionReview2 {
         
         /// <summary>
+        /// LoadingProgress1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.LoadingProgress LoadingProgress1;
+        
+        /// <summary>
         /// pnlBody control.
         /// </summary>
         /// <remarks>
