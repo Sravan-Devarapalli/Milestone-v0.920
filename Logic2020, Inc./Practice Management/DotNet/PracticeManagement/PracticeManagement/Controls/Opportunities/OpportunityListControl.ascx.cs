@@ -582,6 +582,7 @@ namespace PraticeManagement.Controls.Opportunities
                 var hdnProposedPersonsIndexes = e.Item.FindControl("hdnProposedPersonsIndexes") as HiddenField;
                 var hdnTeamStructure = e.Item.FindControl("hdnTeamStructure") as HiddenField;
                 var hdnStartDate = e.Item.FindControl("hdnStartDate") as HiddenField;
+                var hdnEndDate = e.Item.FindControl("hdnEndDate") as HiddenField;
 
                 var imgTeamStructure = e.Item.FindControl("imgTeamStructure") as Image;
                 var imgPeople_icon = e.Item.FindControl("imgPeople_icon") as Image;
@@ -596,6 +597,12 @@ namespace PraticeManagement.Controls.Opportunities
                 {
                     hdnStartDate.Value = oppty.ProjectedStartDate.Value.ToString("MM/dd/yyyy");
                 }
+
+                if (oppty.ProjectedEndDate.HasValue)
+                {
+                    hdnEndDate.Value = oppty.ProjectedEndDate.Value.ToString("MM/dd/yyyy");
+                }
+
                 if (ddlPriority != null)
                 {
                     OpportunityPriority[] priorities = GetOpportunityPriorities();
