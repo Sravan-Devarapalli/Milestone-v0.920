@@ -640,15 +640,22 @@
         }
 
         function SetEndDateRequired(ddlPriority) {
-            var value = ddlPriority.value;
             var lbEndDate = document.getElementById('<%= lbEndDate.ClientID %>');
 
-            if (value == '1' || value == '2') {
-                lbEndDate.style.fontWeight = 'bold';
+            var optionList = ddlPriority.getElementsByTagName('option');
+            var selectedText = "";
+
+            for (var i = 0; i < optionList.length; ++i) {
+                if (optionList[i].value == ddlPriority.value) {
+                    selectedText = optionList[i].innerHTML.toLowerCase();
+                    break;
+                }
             }
-            else {
-                lbEndDate.style.fontWeight = '';
+
+            if (lbEndDate != null) {
+                lbEndDate.style.fontWeight = (selectedText == 'a' || selectedText == 'b') ? 'bold' : '';
             }
+
         }
 
          
@@ -697,7 +704,7 @@
                                                 <asp:CustomValidator ID="cvOpportunityStrawmanStartDateCheck" runat="server" OnServerValidate="cvOpportunityStrawmanStartDateCheck_ServerValidate"
                                                     ErrorMessage="Some exsisting Strawman Need By date is less than New Opportunity StartDate."
                                                     ToolTip="Some exsisting Strawman Need By date is less than New Opportunity StartDate."
-                                                    EnableClientScript="false" Display="Dynamic" Text="*" />
+                                                    EnableClientScript="false" Display="Dynamic" Text="*" ValidationGroup="Opportunity"/>
                                             </td>
                                             <td style="padding-left: 4px; padding-right: 8px;">
                                                 <asp:Label ID="lbEndDate" runat="server" Text="End Date"></asp:Label>
@@ -722,7 +729,7 @@
                                                 <asp:CustomValidator ID="cvOpportunityStrawmanEndDateCheck" runat="server" OnServerValidate="cvOpportunityStrawmanEndDateCheck_ServerValidate"
                                                     ErrorMessage="Some exsisting Strawman Need By date is Greater than New Opportunity EndDate."
                                                     ToolTip="Some exsisting Strawman Need By date is Greater than New Opportunity EndDate."
-                                                    EnableClientScript="false" Display="Dynamic" Text="*" />
+                                                    EnableClientScript="false" Display="Dynamic" Text="*" ValidationGroup="Opportunity" />
                                                 <asp:CustomValidator ID="cvEndDateRequired" runat="server" OnServerValidate="cvEndDateRequired_ServerValidate"
                                                     ErrorMessage="End date is required before opportunity can be saved with A, or B priority."
                                                     ToolTip="End date is required before opportunity can be saved with A, or B priority."
@@ -867,6 +874,11 @@
                                                     ToolTip="You must add a Team Make-Up to this opportunity before it can be saved
                                     with a PO, A, or B priority." Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                                     OnServerValidate="cvPriority_ServerValidate" ValidationGroup="Opportunity" />
+                                                <asp:CustomValidator ID="cvLinkedToProject" runat="server" ControlToValidate="ddlPriority"
+                                                    ErrorMessage="To save an Opportunity as “PO” priority, the Opportunity must first be linked to a Project."
+                                                    ToolTip="To save an Opportunity as “PO” priority, the Opportunity must first be linked to a Project."
+                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                                    OnServerValidate="cvLinkedToProject_ServerValidate" ValidationGroup="Opportunity" />
                                             </td>
                                         </tr>
                                     </table>
