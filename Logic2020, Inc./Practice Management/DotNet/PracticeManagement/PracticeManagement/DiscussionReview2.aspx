@@ -7,8 +7,6 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic"
     TagPrefix="cc1" %>
-<%@ Register Src="Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
-    TagPrefix="uc1" %>
 <%@ Register Src="~/Controls/Opportunities/OpportunityListControl.ascx" TagName="OpportunityList"
     TagPrefix="uc2" %>
 <%@ Register Src="~/Controls/Generic/Filtering/OpportunityFilter.ascx" TagName="OpportunityFilter"
@@ -34,12 +32,8 @@
             padding: 4px 0px 4px 0px;
         }
     </style>
-    <uc1:LoadingProgress ID="LoadingProgress1" runat="server" />
-    <asp:UpdatePanel ID="pnlBody" runat="server">
-        <ContentTemplate>
-            <uc2:OpportunityList ID="opportunities" runat="server" FilterMode="GenericFilter"
-                AllowAutoRedirectToDetails="true" OnFilterOptionsChanged="ofOpportunityList_OnFilterOptionsChanged" />
-        </ContentTemplate>
-    </asp:UpdatePanel>
+   
+    <uc2:OpportunityList ID="opportunities" runat="server" FilterMode="GenericFilter"
+        AllowAutoRedirectToDetails="true" OnFilterOptionsChanged="ofOpportunityList_OnFilterOptionsChanged" />
 </asp:Content>
 
