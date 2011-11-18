@@ -1197,7 +1197,7 @@
                                                                             <asp:DataList ID="dtlTeamStructure" runat="server" Style="white-space: normal; width: 100%;">
                                                                                 <ItemTemplate>
                                                                                     <div style="width: 100%;">
-                                                                                        <span style="float: left; padding-left: 10px;">
+                                                                                        <span style="float: left;">
                                                                                             <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>(<%# Eval("Quantity") %>)
                                                                                         </span><span style="float: right; padding-right: 10px;">
                                                                                             <%# ((DateTime)Eval("NeedBy")).ToString("MM/dd/yyyy")%></span>
@@ -1205,7 +1205,7 @@
                                                                                 </ItemTemplate>
                                                                                 <AlternatingItemTemplate>
                                                                                     <div style="width: 100%;">
-                                                                                        <span style="float: left; padding-left: 10px;">
+                                                                                        <span style="float: left;">
                                                                                             <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>(<%# Eval("Quantity") %>)
                                                                                         </span><span style="float: right; padding-right: 10px;">
                                                                                             <%# ((DateTime)Eval("NeedBy")).ToString("MM/dd/yyyy")%></span>
