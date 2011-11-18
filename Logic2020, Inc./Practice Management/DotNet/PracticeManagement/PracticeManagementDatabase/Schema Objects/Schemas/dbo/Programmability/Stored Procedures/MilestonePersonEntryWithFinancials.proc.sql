@@ -5,7 +5,17 @@
 AS
 BEGIN
 
-SELECT 
+	DECLARE @IdLocal INT = @Id
+
+    -- Added @MileStoneId to improve performance of FinancialsRetro CTE
+	DECLARE @MileStoneId INT 
+	SELECT @MileStoneId = m.MilestoneId
+	FROM dbo.MilestonePerson AS mp
+	INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId AND mpe.Id = @IdLocal
+	INNER JOIN dbo.Milestone AS m ON mp.MilestoneId = m.MilestoneId
+
+
+	SELECT 
 	CASE COUNT(te.TimeEntryId)
 	           WHEN 0
 	           THEN  CONVERT(BIT,0)
@@ -36,17 +46,16 @@ SELECT
 		   mpe.Id,
 		   p.IsStrawman AS IsStrawman
 	  FROM dbo.MilestonePerson AS mp
-	       INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId
+	       INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId AND mpe.Id = @IdLocal
 	       INNER JOIN dbo.Milestone AS m ON mp.MilestoneId = m.MilestoneId
 	       INNER JOIN dbo.Person AS p ON mp.PersonId = p.PersonId
 	       LEFT JOIN dbo.PersonRole AS r ON mpe.PersonRoleId = r.PersonRoleId
 	       LEFT JOIN dbo.TimeEntries as te on te.MilestonePersonId = mp.MilestonePersonId
 		  AND (te.MilestoneDate BETWEEN mpe.StartDate AND  mpe.EndDate)
-	  WHERE mpe.Id = @Id
-	  GROUP BY mp.MilestonePersonId, p.SeniorityId,mp.PersonId,mpe.StartDate,mpe.EndDate,mpe.PersonRoleId,mpe.Amount,
+	  GROUP BY mpe.Id,mp.MilestonePersonId, p.SeniorityId,mp.PersonId,mpe.StartDate,mpe.EndDate,mpe.PersonRoleId,mpe.Amount,
 	       mpe.HoursPerDay,r.Name,mpe.Location,
 		   p.LastName,
-		   p.FirstName,m.ProjectedDeliveryDate,mpe.Id,p.IsStrawman
+		   p.FirstName,m.ProjectedDeliveryDate,p.IsStrawman
 
 	 ;WITH FinancialsRetro AS 
 	(
@@ -59,7 +68,7 @@ SELECT
 		   f.MLFOverheadRate,
 		   f.PersonHoursPerDay
 	FROM v_FinancialsRetrospective f
-	WHERE f.EntryId = @Id  
+	WHERE f.MilestoneId = @MilestoneId AND f.EntryId = @IdLocal  
 	)
 
 	SELECT  f.EntryId,
