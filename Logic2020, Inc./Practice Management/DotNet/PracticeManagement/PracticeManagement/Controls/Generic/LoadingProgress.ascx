@@ -5,7 +5,7 @@
 <AjaxControlToolkit:AlwaysVisibleControlExtender ID="AlwaysVisibleControlExtender1"
     TargetControlID="upTimeEntries$divLoadingProgressControl" HorizontalSide="Center"  VerticalOffset="250"
     runat="server" />
-<pcg:StyledUpdateProgress ID="upTimeEntries" runat="server">
+<pcg:StyledUpdateProgress ID="upTimeEntries"   DisplayAfter="1"  runat="server">
     <ProgressTemplate>
         <asp:Panel class="please-wait-holder ToolTip" ID="divLoadingProgressControl" runat="server"
             Style="display: block;">
