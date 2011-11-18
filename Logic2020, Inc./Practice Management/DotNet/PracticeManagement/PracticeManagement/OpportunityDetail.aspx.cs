@@ -727,9 +727,10 @@ namespace PraticeManagement
         protected void cvOpportunityStrawmanStartDateCheck_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             e.IsValid = true;
-            //Page.Validate(vsumOpportunity.ValidationGroup);
-            //if (Page.IsValid)
-            //{
+
+            compEndDate.Validate();
+            if (compEndDate.IsValid)
+            {
                 bool check = true;
                 DateTime? ProjectedStartDate = dpStartDate.DateValue != DateTime.MinValue ? (DateTime?)dpStartDate.DateValue : null;
                 String StrawManList = hdnTeamStructure.Value;
@@ -747,15 +748,16 @@ namespace PraticeManagement
                     }
                 }
                 e.IsValid = check;
-           //}
+            }
 
         }
         protected void cvOpportunityStrawmanEndDateCheck_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             e.IsValid = true;
-            //Page.Validate(vsumOpportunity.ValidationGroup);
-            //if (Page.IsValid)
-            //{
+            
+            compEndDate.Validate();
+            if (compEndDate.IsValid)
+            {
                 bool check = true;
                 DateTime? ProjectedEndDate = dpEndDate.DateValue != DateTime.MinValue ? (DateTime?)dpEndDate.DateValue : null;
                 String StrawManList = hdnTeamStructure.Value;
@@ -773,8 +775,7 @@ namespace PraticeManagement
                     }
                 }
                 e.IsValid = check;
-            //}
-        
+            }
         }
 
         protected override bool ValidateAndSave()
@@ -1291,6 +1292,19 @@ namespace PraticeManagement
                 if (ProposedPersons.Count() < 1 && StrawMans.Count() < 1)
                 {
                     mpePopup.Show();
+                    e.IsValid = false;
+                }
+            }
+        }
+
+        protected void cvLinkedToProject_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = true;
+            var selectedText = ddlPriority.SelectedItem.Text.ToUpperInvariant();
+            if (selectedText == "PO")
+            {
+                if (Opportunity.Project == null || !Opportunity.Project.Id.HasValue)
+                {
                     e.IsValid = false;
                 }
             }
