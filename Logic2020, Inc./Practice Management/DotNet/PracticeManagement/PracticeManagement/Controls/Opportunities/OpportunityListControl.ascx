@@ -512,7 +512,8 @@
 
         var showPopup = false;
         var endDateRequiredPopup = false;
-
+        var linkedToProjectPopup = false;
+        
         for (var i = 0; i < optionList.length; ++i) {
             if (optionList[i].value == ddlPriority.value) {
                 selectedText = optionList[i].innerHTML.toLowerCase();
@@ -527,6 +528,12 @@
 
         }
 
+        if (selectedText == "po") {
+            if (ddlPriority.attributes["isLinkedToProject"].value == "0") {
+                linkedToProjectPopup = true;
+            }
+        }
+
         if (selectedText == "a" || selectedText == "b") {
             if (ddlPriority.attributes["isEndDateAvailable"].value == "0") {
                 endDateRequiredPopup = true;
@@ -534,7 +541,7 @@
         }
 
 
-        if (showPopup == true || endDateRequiredPopup == true) {
+        if (showPopup == true || endDateRequiredPopup == true || linkedToProjectPopup == true) {
             var hdnRedirectOpportunityId = document.getElementById('<%= hdnRedirectOpportunityId.ClientID %>');
             var oppId = ddlPriority.attributes["OpportunityID"].value;
             hdnRedirectOpportunityId.value = oppId;
@@ -554,6 +561,10 @@
                 trTeamMakeupRequired.style.display = (showPopup == false) ? 'none' : '';
             }
 
+            var linkedToProject = document.getElementById('linkedToProject');
+            if (linkedToProject != null) {
+                linkedToProject.style.display = (linkedToProjectPopup == false) ? 'none' : '';
+            }
 
             $find('mpePriorityPopup').show();
 
@@ -1028,6 +1039,10 @@
                                     <p id="endDateRequired">
                                         <br />
                                         End date is required before opportunity can be saved with A, or B priority.
+                                    </p>
+                                    <p id="linkedToProject">
+                                    <br />
+                                        To save an Opportunity as “PO” priority, the Opportunity must first be linked to a Project.
                                     </p>
                                     <br />
                                     <p>
