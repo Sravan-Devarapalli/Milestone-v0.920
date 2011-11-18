@@ -11,9 +11,17 @@ namespace PraticeManagement.Controls.Generic
     {
         public string DisplayText { get; set; }
 
+        public string AssociatedUpdatePanelID
+        {
+            set 
+            {
+                upTimeEntries.AssociatedUpdatePanelID = value;
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Page.Title == "Practice Management - Opportunity Details")
+            if (Page.Title == "Opportunity Details | Practice Management")
             {
                 DisplayText = "Saving ...";
             }
