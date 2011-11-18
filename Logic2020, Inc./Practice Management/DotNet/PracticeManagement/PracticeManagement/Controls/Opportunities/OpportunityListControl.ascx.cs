@@ -613,6 +613,7 @@ namespace PraticeManagement.Controls.Opportunities
                     ddlPriority.Attributes["isTeamstructueAvalilable"] = "false";
                     ddlPriority.Attributes["selectedPriorityId"] = oppty.Priority.Id.ToString();
                     ddlPriority.Attributes["isEndDateAvailable"] = oppty.ProjectedEndDate.HasValue ? "1" : "0";
+                    ddlPriority.Attributes["isLinkedToProject"] = oppty.Project != null && oppty.Project.Id.HasValue ? "1" : "0";
                 }
 
                 if (oppty != null && oppty.ProposedPersons != null)
