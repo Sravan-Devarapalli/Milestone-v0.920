@@ -232,6 +232,12 @@
 				        $(controller.ele).bind(
 									'click',
 									function () {
+									    if (this.value != '') {
+									        var d = Date.fromString(this.value);
+									        if (d) {
+									            controller.setSelected(d, true, true);
+									        }
+									    }
 									    $this.dpDisplay(this);
 									    this.blur();
 									    return false;
@@ -669,6 +675,9 @@
 		        }
 		        if (v == this.isSelected(d)) // this date is already un/selected
 		        {
+		            if (this.displayedYear != d.getFullYear() || this.displayedMonth != d.getMonth()) {
+		                this.setDisplayedMonth(d.getMonth(), d.getFullYear(), true);
+		            }
 		            return;
 		        }
 		        if (this.selectMultiple == false) {
