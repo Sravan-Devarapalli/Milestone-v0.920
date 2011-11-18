@@ -6,6 +6,8 @@
     TagPrefix="uc" %>
 <%@ Register Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic"
     TagPrefix="cc2" %>
+<%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
+    TagPrefix="uc1" %>
 <%@ Register Src="~/Controls/Opportunities/ProposedResources.ascx" TagName="ProposedResources"
     TagPrefix="uc" %>
 <%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
@@ -510,7 +512,7 @@
 
         var showPopup = false;
         var endDateRequiredPopup = false;
-        
+
         for (var i = 0; i < optionList.length; ++i) {
             if (optionList[i].value == ddlPriority.value) {
                 selectedText = optionList[i].innerHTML.toLowerCase();
@@ -532,7 +534,7 @@
         }
 
 
-        if (showPopup == true || endDateRequiredPopup == true ) {
+        if (showPopup == true || endDateRequiredPopup == true) {
             var hdnRedirectOpportunityId = document.getElementById('<%= hdnRedirectOpportunityId.ClientID %>');
             var oppId = ddlPriority.attributes["OpportunityID"].value;
             hdnRedirectOpportunityId.value = oppId;
@@ -997,6 +999,68 @@
         </div>
         <asp:HiddenField ID="hdnRedirectOpportunityId" runat="server" />
         <asp:HiddenField ID="hdnClickedRowIndex" runat="server" />
+        <asp:HiddenField ID="hdnCanShowPopup" Value="false" runat="server" />
+        <AjaxControlToolkit:ModalPopupExtender ID="mpePopup" runat="server" TargetControlID="hdnCanShowPopup"
+            CancelControlID="btnCancelSaving" BehaviorID="mpePriorityPopup" BackgroundCssClass="modalBackground"
+            PopupControlID="pnlPopup" DropShadow="false" />
+        <asp:Panel ID="pnlPopup" runat="server" BackColor="White" BorderColor="Black" CssClass="ConfirmBoxClassError"
+            Style="display: none" BorderWidth="2px">
+            <table width="100%">
+                <tr>
+                    <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
+                        valign="bottom">
+                        <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
+                        <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Cancel"
+                            OnClientClick="$find('mpePriorityPopup').hide(); return false;" Style="float: right;"
+                            Text="X"></asp:Button>
+                    </th>
+                </tr>
+                <tr>
+                    <td style="padding: 10px;" colspan="2">
+                        <table>
+                            <tr>
+                                <td>
+                                    <p id="teamMakeUpRequired">
+                                        You must add a Team Make-Up to
+                                        <asp:Label ID="lblOpportunityName" runat="server" Font-Bold="true"></asp:Label>
+                                        opportunity before it can be saved with a PO, A, or B priority.
+                                    </p>
+                                    <p id="endDateRequired">
+                                        <br />
+                                        End date is required before opportunity can be saved with A, or B priority.
+                                    </p>
+                                    <br />
+                                    <p>
+                                        Click OK to edit
+                                        <asp:Label ID="lblOpportunityName1" runat="server" Font-Bold="true"></asp:Label>
+                                        opportunity and make the necessary changes. Clicking Cancel will result in no changes
+                                        to the opportunity.</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="padding: 6px 6px 15px 6px;">
+                        <table>
+                            <tr>
+                                <td style="padding-right: 3px;">
+                                    <asp:Button ID="btnRedirectToOpportunityDetail" runat="server" Text="OK" ToolTip="OK"
+                                        OpportunityID="" OnClick="btnRedirectToOpportunityDetail_OnClick" />
+                                </td>
+                                <td style="padding-left: 3px;">
+                                    <asp:Button ID="btnCancelSaving" runat="server" Text="Cancel" ToolTip="Cancel" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </asp:Panel>
+    </ContentTemplate>
+</asp:UpdatePanel>
+<asp:UpdatePanel ID="UpdatePanel2" runat="server">
+    <ContentTemplate>
         <asp:HiddenField ID="hdnmpePotentialResources" runat="server" />
         <AjaxControlToolkit:ModalPopupExtender ID="mpePotentialResources" runat="server"
             BehaviorID="behaviorIdPotentialResources" TargetControlID="hdnmpePotentialResources"
@@ -1136,65 +1200,11 @@
         <asp:HiddenField ID="hdnTeamStructure" runat="server" Value="" />
         <asp:Button ID="btnSaveTeamStructureHidden" runat="server" OnClick="btnSaveTeamStructureHidden_OnClick"
             Style="display: none;" />
-        <asp:HiddenField ID="hdnCanShowPopup" Value="false" runat="server" />
-        <AjaxControlToolkit:ModalPopupExtender ID="mpePopup" runat="server" TargetControlID="hdnCanShowPopup"
-            CancelControlID="btnCancelSaving" BehaviorID="mpePriorityPopup" BackgroundCssClass="modalBackground"
-            PopupControlID="pnlPopup" DropShadow="false" />
-        <asp:Panel ID="pnlPopup" runat="server" BackColor="White" BorderColor="Black" CssClass="ConfirmBoxClassError"
-            Style="display: none" BorderWidth="2px">
-            <table width="100%">
-                <tr>
-                    <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
-                        valign="bottom">
-                        <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
-                        <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Cancel"
-                            OnClientClick="$find('mpePriorityPopup').hide(); return false;" Style="float: right;"
-                            Text="X"></asp:Button>
-                    </th>
-                </tr>
-                <tr>
-                    <td style="padding: 10px;" colspan="2">
-                        <table>
-                            <tr>
-                                <td>
-                                    <p id="teamMakeUpRequired">
-                                        You must add a Team Make-Up to
-                                        <asp:Label ID="lblOpportunityName" runat="server" Font-Bold="true"></asp:Label>
-                                        opportunity before it can be saved with a PO, A, or B priority.
-                                    </p>
-                                    <p id="endDateRequired">
-                                    <br />
-                                        End date is required before opportunity can be saved with A, or B priority.
-                                    </p>
-                                    <br />
-                                    <p>
-                                        Click OK to edit
-                                        <asp:Label ID="lblOpportunityName1" runat="server" Font-Bold="true"></asp:Label>
-                                        opportunity and make the necessary changes. Clicking Cancel will result in no changes
-                                        to the opportunity.</p>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" align="center" style="padding: 6px 6px 15px 6px;">
-                        <table>
-                            <tr>
-                                <td style="padding-right: 3px;">
-                                    <asp:Button ID="btnRedirectToOpportunityDetail" runat="server" Text="OK" ToolTip="OK"
-                                        OpportunityID="" OnClick="btnRedirectToOpportunityDetail_OnClick" />
-                                </td>
-                                <td style="padding-left: 3px;">
-                                    <asp:Button ID="btnCancelSaving" runat="server" Text="Cancel" ToolTip="Cancel" />
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </asp:Panel>
     </ContentTemplate>
 </asp:UpdatePanel>
+<uc1:LoadingProgress ID="LoadingProgress1" AssociatedUpdatePanelID="UpdatePanel1"
+    DisplayText="Please Wait ..." runat="server" />
+<uc1:LoadingProgress ID="LoadingProgress2" AssociatedUpdatePanelID="UpdatePanel2"
+    DisplayText="Saving ..." runat="server" />
 <asp:ValidationSummary ID="valsum" ValidationGroup="Notes" runat="server" />
 
