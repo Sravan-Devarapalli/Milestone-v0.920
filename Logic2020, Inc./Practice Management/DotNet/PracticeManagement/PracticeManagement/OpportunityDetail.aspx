@@ -1319,7 +1319,7 @@
                                                             </tr>
                                                         </table>
                                                     </div>
-                                                    <div class="cbfloatRight" style="height: 250px; width: 400px; overflow-y: scroll;
+                                                    <div  style="height: 250px; width: 400px; overflow-y: scroll;
                                                         border: 1px solid black; background: white; padding-left: 3px; text-align: left !important;">
                                                         <table width="100%" id="tblTeamStructure" class="strawman">
                                                             <tr>
@@ -1334,7 +1334,7 @@
                                                                     </asp:DropDownList>
                                                                 </td>
                                                                 <td align="center">
-                                                                    <asp:TextBox ID="txtNeedBy" runat="server" Style="width: 80px;" CssClass="date-pick"></asp:TextBox>
+                                                                    <asp:TextBox ID="txtNeedBy" runat="server" Style="width: 80px;float:left;" CssClass="date-pick"></asp:TextBox>
                                                                 </td>
                                                             </tr>
                                                             <tr>
