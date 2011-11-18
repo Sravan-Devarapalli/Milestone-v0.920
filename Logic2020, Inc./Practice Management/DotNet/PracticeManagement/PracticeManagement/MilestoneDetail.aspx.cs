@@ -59,7 +59,6 @@ namespace PraticeManagement
 
         #region Fields
 
-        private Project projectValue;
         private Milestone milestoneValue;
 
         protected int prevMilestoneId = -1;
@@ -171,13 +170,13 @@ namespace PraticeManagement
         {
             get
             {
-                if (projectValue == null)
+                if (ViewState["Project_Key"] == null)
                 {
                     using (var serviceClient = new ProjectServiceClient())
                     {
                         try
                         {
-                            projectValue =
+                            ViewState["Project_Key"] =
                                 serviceClient.GetProjectDetailWithoutMilestones(
                                     SelectedProjectId.Value, User.Identity.Name);
                         }
@@ -190,11 +189,11 @@ namespace PraticeManagement
 
                 }
 
-                return projectValue;
+                return ViewState["Project_Key"] as Project;
             }
             set
             {
-                projectValue = value;
+                ViewState["Project_Key"] = value;
             }
         }
 
