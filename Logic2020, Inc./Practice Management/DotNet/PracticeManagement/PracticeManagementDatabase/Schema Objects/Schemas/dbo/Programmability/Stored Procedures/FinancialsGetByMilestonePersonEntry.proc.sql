@@ -4,6 +4,16 @@
 )
 AS
 BEGIN
+    
+	DECLARE @IdLocal INT = @Id
+
+	-- Added @MileStoneId to improve performance of FinancialsRetro CTE
+	DECLARE @MileStoneId INT 
+	SELECT @MileStoneId = m.MilestoneId
+	FROM dbo.MilestonePerson AS mp
+	INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId AND mpe.Id = @IdLocal
+	INNER JOIN dbo.Milestone AS m ON mp.MilestoneId = m.MilestoneId
+
 
 	SET NOCOUNT ON;
 
@@ -31,7 +41,7 @@ BEGIN
 		   f.Discount,
 		   f.EntryId
 	FROM v_FinancialsRetrospective f
-	WHERE f.EntryId = @Id  
+	WHERE f.MilestoneId = @MilestoneId AND f.EntryId = @IdLocal  
 	)
 
 	SELECT f.ProjectId,
