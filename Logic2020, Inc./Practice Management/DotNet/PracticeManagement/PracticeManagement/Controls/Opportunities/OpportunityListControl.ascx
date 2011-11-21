@@ -1311,8 +1311,7 @@
                         </table>
                         <div id="divTeamResources" style="text-align: left; display: none; color: Red; width: 356px;
                             padding: 8px 0px 10px 0px">
-                            You must add a Team Make-Up to this opportunity before it can be saved with a PO,
-                            A, or B priority.
+                           An Opportunity with a PO, A, or B priority must have a Team Make-Up.
                         </div>
                     </td>
                 </tr>
@@ -1398,8 +1397,7 @@
                         </div>
                         <div id="divOpportunityError" style="text-align: left; display: none; color: Red;
                             width: 404px; padding: 8px 0px 10px 0px">
-                            You must add a Team Make-Up to this opportunity before it can be saved with a PO,
-                            A, or B priority.
+                            An Opportunity with a PO, A, or B priority must have a Team Make-Up.
                         </div>
                     </td>
                 </tr>
