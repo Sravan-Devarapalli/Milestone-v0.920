@@ -589,6 +589,8 @@ namespace PraticeManagement.Controls.Opportunities
 
                 imgPeople_icon.Attributes["RowIndex"] = imgTeamStructure.Attributes["RowIndex"] = (e.Item as ListViewDataItem).DataItemIndex.ToString();
 
+                imgPeople_icon.Attributes["anothorImageId"] = imgTeamStructure.ClientID;
+                imgTeamStructure.Attributes["anothorImageId"] = imgPeople_icon.ClientID;
 
                 var oppty = (e.Item as ListViewDataItem).DataItem as Opportunity;
 
@@ -616,6 +618,10 @@ namespace PraticeManagement.Controls.Opportunities
                     ddlPriority.Attributes["isLinkedToProject"] = oppty.Project != null && oppty.Project.Id.HasValue ? "1" : "0";
                 }
 
+                imgPeople_icon.Attributes["ddlPriorityId"] = imgTeamStructure.Attributes["ddlPriorityId"] = ddlPriority.ClientID;
+
+                bool hasProposedPersons = false, hasStrawMans = false;
+
                 if (oppty != null && oppty.ProposedPersons != null)
                 {
                     if (oppty.ProposedPersons.Count > 0)
@@ -623,16 +629,26 @@ namespace PraticeManagement.Controls.Opportunities
                         ddlPriority.Attributes["isTeamstructueAvalilable"] = "true";
                     }
 
-                    dtlProposedPersons.DataSource = oppty.ProposedPersons.FindAll(op => op.RelationType == (int)OpportunityPersonRelationType.ProposedResource).OrderBy(op => op.Person.LastName + op.Person.FirstName);
-                    dtlTeamStructure.DataSource = oppty.ProposedPersons.FindAll(op => op.RelationType == (int)OpportunityPersonRelationType.TeamStructure && op.NeedBy.HasValue).OrderBy(op => op.Person.LastName + op.Person.FirstName);
+                    var propsedPersonsList = oppty.ProposedPersons.FindAll(op => op.RelationType == (int)OpportunityPersonRelationType.ProposedResource).OrderBy(op => op.Person.LastName + op.Person.FirstName);
+                    var strawMansList = oppty.ProposedPersons.FindAll(op => op.RelationType == (int)OpportunityPersonRelationType.TeamStructure && op.NeedBy.HasValue).OrderBy(op => op.Person.LastName + op.Person.FirstName);
+
+                    hasProposedPersons =propsedPersonsList.Count() > 0;
+                    hasStrawMans = strawMansList.Count() > 0;
+
+                    dtlProposedPersons.DataSource = propsedPersonsList;
+                    dtlTeamStructure.DataSource = strawMansList;
                     dtlProposedPersons.DataBind();
                     dtlTeamStructure.DataBind();
                 }
+
                 if (oppty.ProposedPersons != null)
                 {
                     hdnProposedPersonsIndexes.Value = GetPersonsIndexesWithPersonTypeString(oppty.ProposedPersons, cblPotentialResources);
                     hdnTeamStructure.Value = GetTeamStructure(oppty.ProposedPersons);
                 }
+
+                imgTeamStructure.Attributes["hasproposedpersons"] = imgPeople_icon.Attributes["hasproposedpersons"] = hasProposedPersons ? "true" : "false";
+                imgTeamStructure.Attributes["hasstrawmans"] = imgPeople_icon.Attributes["hasstrawmans"] = hasStrawMans ? "true" : "false";
             }
         }
 
@@ -711,8 +727,33 @@ namespace PraticeManagement.Controls.Opportunities
             }
 
             UpdateAttributeForddlPriority(opportunityId);
+            UpdateAttributesForimg_ProposedResources(hdnProposedResourceIdsWithTypes.Value);
 
             hdnCurrentOpportunityId.Value = string.Empty;
+        }
+
+        private void UpdateAttributesForimg_ProposedResources(string selectedList)
+        {
+            if (!string.IsNullOrEmpty(hdnClickedRowIndex.Value))
+            {
+                var rowIndex = Convert.ToInt32(hdnClickedRowIndex.Value);
+
+                var imgTeamStructure = lvOpportunities.Items[rowIndex].FindControl("imgTeamStructure") as Image;
+                var imgPeople_icon = lvOpportunities.Items[rowIndex].FindControl("imgPeople_icon") as Image;
+                string result = "false";
+
+                if (string.IsNullOrEmpty(selectedList))
+                {
+                    result = "false";
+                }
+                else
+                {
+                    result = "true";
+                }
+
+                imgPeople_icon.Attributes["hasproposedpersons"] = imgTeamStructure.Attributes["hasproposedpersons"] = result.ToString();
+
+            }
         }
 
         private void UpdateAttributeForddlPriority(int opportunityId)
@@ -743,8 +784,32 @@ namespace PraticeManagement.Controls.Opportunities
             }
 
             UpdateAttributeForddlPriority(opportunityId);
-
+            UpdateAttributesForimg_TeamStructure(hdnTeamStructure.Value);
             hdnCurrentOpportunityId.Value = string.Empty;
+        }
+
+        private void UpdateAttributesForimg_TeamStructure(string selectedList)
+        {
+            if (!string.IsNullOrEmpty(hdnClickedRowIndex.Value))
+            {
+                var rowIndex = Convert.ToInt32(hdnClickedRowIndex.Value);
+
+                var imgTeamStructure = lvOpportunities.Items[rowIndex].FindControl("imgTeamStructure") as Image;
+                var imgPeople_icon = lvOpportunities.Items[rowIndex].FindControl("imgPeople_icon") as Image;
+                string result = "false";
+
+                if (string.IsNullOrEmpty(selectedList))
+                {
+                    result = "false";
+                }
+                else
+                {
+                    result = "true";
+                }
+
+                imgPeople_icon.Attributes["hasstrawmans"] = imgTeamStructure.Attributes["hasstrawmans"] = result.ToString();
+
+            }
         }
 
         protected static string GetFormattedPersonName(string personLastFirstName, int opportunityPersonTypeId)
