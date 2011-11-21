@@ -342,9 +342,11 @@ namespace PraticeManagement.Controls.Milestones
                     string ddlPersonSelectedValue = "", ddlRoleSelectedValue = "";
                     var count = 0;
 
+                    bool isStrawMan = false;
+
                     if (MilestonePersonsEntries[gvRow.DataItemIndex].IsShowPlusButton)
                     {
-                        ddlPersonSelectedValue = (gvRow.FindControl("ddlPersonName") as DropDownList).SelectedValue;
+                        ddlPersonSelectedValue = ddlPersonName.SelectedValue;
                         ddlRoleSelectedValue = (gvRow.FindControl("ddlRole") as DropDownList).SelectedValue;
                     }
                     else
@@ -353,48 +355,54 @@ namespace PraticeManagement.Controls.Milestones
 
                         ddlPersonSelectedValue = MilestonePersonsEntries[index].IsEditMode ? (gvMilestonePersonEntries.Rows[index].FindControl("ddlPersonName") as DropDownList).SelectedValue : MilestonePersonsEntries[index].ThisPerson.Id.ToString();
                         ddlRoleSelectedValue = MilestonePersonsEntries[index].IsEditMode ? (gvMilestonePersonEntries.Rows[index].FindControl("ddlRole") as DropDownList).SelectedValue : (MilestonePersonsEntries[index].Role != null ? MilestonePersonsEntries[index].Role.Id.ToString() : string.Empty);
+
+                        isStrawMan = MilestonePersonsEntries[index].IsEditMode ? (gvMilestonePersonEntries.Rows[index].FindControl("ddlPersonName") as DropDownList).SelectedItem.Attributes[Constants.Variables.IsStrawMan].ToLowerInvariant() == "true" : MilestonePersonsEntries[index].ThisPerson.IsStrawMan;
                     }
 
-                    var hdnPersonId = gvRow.FindControl("hdnPersonId") as HiddenField;
-                    var lblRole = gvRow.FindControl("lblRole") as Label;
-                    var oldRoleId = lblRole.Attributes["RoleId"];
-
-
-                    for (int i = 0; i < MilestonePersonsEntries.Count(); i++)
+                    if (!isStrawMan)
                     {
-                        var entry = MilestonePersonsEntries[i];
-                        if (entry.IsShowPlusButton)
+
+                        var hdnPersonId = gvRow.FindControl("hdnPersonId") as HiddenField;
+                        var lblRole = gvRow.FindControl("lblRole") as Label;
+                        var oldRoleId = lblRole.Attributes["RoleId"];
+
+
+                        for (int i = 0; i < MilestonePersonsEntries.Count(); i++)
                         {
-                            string personId = "", roleId = "";
-                            if (entry.IsEditMode)
+                            var entry = MilestonePersonsEntries[i];
+                            if (entry.IsShowPlusButton)
                             {
-                                personId = (gvMilestonePersonEntries.Rows[i].FindControl("ddlPersonName") as DropDownList).SelectedValue;
-                                roleId = (gvMilestonePersonEntries.Rows[i].FindControl("ddlRole") as DropDownList).SelectedValue;
+                                string personId = "", roleId = "";
+                                if (entry.IsEditMode)
+                                {
+                                    personId = (gvMilestonePersonEntries.Rows[i].FindControl("ddlPersonName") as DropDownList).SelectedValue;
+                                    roleId = (gvMilestonePersonEntries.Rows[i].FindControl("ddlRole") as DropDownList).SelectedValue;
+
+                                }
+                                else
+                                {
+                                    personId = entry.ThisPerson.Id.ToString();
+                                    roleId = entry.Role != null ? entry.Role.Id.ToString() : string.Empty;
+                                }
+
+                                if (personId == ddlPersonSelectedValue && roleId == ddlRoleSelectedValue)
+                                {
+                                    count = count + entry.ExtendedResourcesRowCount;
+                                }
 
                             }
-                            else
-                            {
-                                personId = entry.ThisPerson.Id.ToString();
-                                roleId = entry.Role != null ? entry.Role.Id.ToString() : string.Empty;
-                            }
-
-                            if (personId == ddlPersonSelectedValue && roleId == ddlRoleSelectedValue)
-                            {
-                                count = count + entry.ExtendedResourcesRowCount;
-                            }
-
                         }
+
+                        var newEntriesCount = repeaterOldValues.Where(entry => entry["ddlPerson"].ToLowerInvariant() == ddlPersonSelectedValue.ToLowerInvariant() && entry["ddlRole"].ToLowerInvariant() == ddlRoleSelectedValue.ToLowerInvariant()).Count();
+
+                        count = count + newEntriesCount;
+
+                        if (count > 5)
+                        {
+                            e.IsValid = false;
+                        }
+
                     }
-
-                    var newEntriesCount = repeaterOldValues.Where(entry => entry["ddlPerson"].ToLowerInvariant() == ddlPersonSelectedValue.ToLowerInvariant() && entry["ddlRole"].ToLowerInvariant() == ddlRoleSelectedValue.ToLowerInvariant()).Count();
-
-                    count = count + newEntriesCount;
-
-                    if (count > 5)
-                    {
-                        e.IsValid = false;
-                    }
-
                 }
                 else
                 {
