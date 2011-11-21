@@ -18,14 +18,21 @@
 <script src="Scripts/date.js" type="text/javascript"></script>
 <script src="Scripts/datepicker.js" type="text/javascript"></script>
 <script type="text/javascript" language="javascript">
-    function setcalendar() {
-        $('.date-pick').datePicker({ autoFocusNextInput: true });
-    }
+    var isStrawmansExistForCurrentOpportunity = "false";
+    var isProposedPersonsExistForCurrentOpportunity = "false";
+    var image_icon1 = null;
+    var image_icon2 = null;
+    var CurrentOpportunityPriorityName;
     var currenthdnProposedPersonsIndexesId = "";
     var currenthdnTeamStructurePersonsId = "";
     var refreshOpportunityIdsFromLastRefresh = new Array();
     var CurrentOptyStartDate = "";
     var CurrentOptyEndDate = "";
+
+    function setcalendar() {
+        $('.date-pick').datePicker({ autoFocusNextInput: true });
+    }
+
     function AddStrawmanRow() {
 
         var tblTeamStructure = document.getElementById('tblTeamStructure');
@@ -84,9 +91,31 @@
     }
 
     function ShowTeamStructureModal(image) {
+        
         clearErrorMessages();
+        image_icon1 = image;
+
+        var anothorImage = document.getElementById(image.attributes['anothorImageId'].value);
+        image_icon2 = anothorImage;
 
         var oppId = image.attributes['opportunityid'].value;
+
+        isProposedPersonsExistForCurrentOpportunity = image.attributes['hasproposedpersons'].value;
+        isStrawmansExistForCurrentOpportunity = image.attributes['hasstrawmans'].value;
+        var ddlPriority = document.getElementById(image.attributes['ddlPriorityId'].value);
+
+        var optionList = ddlPriority.getElementsByTagName('option');
+
+        var selectedText = "";
+        
+        for (var i = 0; i < optionList.length; ++i) {
+            if (optionList[i].value == ddlPriority.value) {
+                selectedText = optionList[i].innerHTML.toLowerCase();
+                break;
+            }
+        }
+
+        CurrentOpportunityPriorityName = selectedText;
 
         var hdnCurrentOpportunityId = document.getElementById('<%=hdnCurrentOpportunityId.ClientID %>');
         var hdnClickedRowIndex = document.getElementById('<%=hdnClickedRowIndex.ClientID %>');
@@ -149,7 +178,30 @@
 
 
     function ShowPotentialResourcesModal(image) {
+        clearErrorMessagesForTeamResources();
         var oppId = image.attributes['opportunityid'].value;
+        image_icon1 = image;
+
+        var anothorImage = document.getElementById(image.attributes['anothorImageId'].value);
+        image_icon2 = anothorImage;
+
+        isProposedPersonsExistForCurrentOpportunity = image.attributes['hasproposedpersons'].value;
+        isStrawmansExistForCurrentOpportunity = image.attributes['hasstrawmans'].value;
+        var ddlPriority = document.getElementById(image.attributes['ddlPriorityId'].value);
+
+        var optionList = ddlPriority.getElementsByTagName('option');
+
+        var selectedText = "";
+
+        for (var i = 0; i < optionList.length; ++i) {
+            if (optionList[i].value == ddlPriority.value) {
+                selectedText = optionList[i].innerHTML.toLowerCase();
+                break;
+            }
+        }
+
+        CurrentOpportunityPriorityName = selectedText;
+
 
         var hdnCurrentOpportunityId = document.getElementById('<%=hdnCurrentOpportunityId.ClientID %>');
         var hdnClickedRowIndex = document.getElementById('<%=hdnClickedRowIndex.ClientID %>');
@@ -208,10 +260,23 @@
                 }
             }
         }
+
+        if (PersonIdList == "") {
+            isProposedPersonsExistForCurrentOpportunity = "false";
+            image_icon1.attributes['hasproposedpersons'].value = "false";
+            image_icon2.attributes['hasproposedpersons'].value = "false";
+        }
+        else {
+            isProposedPersonsExistForCurrentOpportunity = "true";
+            image_icon1.attributes['hasproposedpersons'].value = "true";
+            image_icon2.attributes['hasproposedpersons'].value = "true";
+        }
+
         hdnProposedPersonIdsList.value = PersonIdList;
         var hdnProposedPersonsIndexes = document.getElementById(currenthdnProposedPersonsIndexesId);
         hdnProposedPersonsIndexes.value = personIndexesList;
     }
+
     function UpdateTeamStructureForHiddenfields() {
         var hdnTeamStructure = document.getElementById("<%= hdnTeamStructure.ClientID%>");
         var trTeamStructure = document.getElementById('tblTeamStructure').getElementsByTagName('tr');
@@ -247,20 +312,117 @@
             personType = '1';
             PersonIdList = PersonIdList + array[i].personId + ':' + personType + '|' + array[i].quantity + '?' + array[i].needBy + ',';
         }
+
+        if (PersonIdList == "") {
+            isStrawmansExistForCurrentOpportunity = "false";
+            image_icon1.attributes['hasstrawmans'].value = "false";
+            image_icon2.attributes['hasstrawmans'].value = "false";
+        }
+        else {
+            isStrawmansExistForCurrentOpportunity = "true";
+            image_icon1.attributes['hasstrawmans'].value = "true";
+            image_icon2.attributes['hasstrawmans'].value = "true";
+        }
+
         var currenthdnTeamStructurePersons = document.getElementById(currenthdnTeamStructurePersonsId);
         hdnTeamStructure.value = currenthdnTeamStructurePersons.value = PersonIdList;
     }
-    function saveProposedResources() {
-        var buttonSave = document.getElementById('<%=btnSaveProposedResourcesHidden.ClientID %>');
-        var trPotentialResources = document.getElementById('<%=cblPotentialResources.ClientID %>').getElementsByTagName('tr');
-        var hdnProposedPersonsIndexes = document.getElementById(currenthdnProposedPersonsIndexesId);
-        GetProposedPersonIdsListWithPersonType();
-        buttonSave.click();
+
+
+    function SetisProposedPersonsExistForCurrentOpportunity() {
+
+        var cblPotentialResources = document.getElementById("<%= cblPotentialResources.ClientID%>");
+        var potentialCheckboxes = $('#<%=cblPotentialResources.ClientID %> tr td :input');
+        var PersonIdList = '';
+
+        if (cblPotentialResources != null) {
+            for (var i = 0; i < potentialCheckboxes.length; ++i) {
+                if (potentialCheckboxes[i].checked) {
+                    PersonIdList += potentialCheckboxes[i].parentNode.attributes['personid'].value + ':' + potentialCheckboxes[i].parentNode.attributes['persontype'].value + ',';
+                }
+            }
+        }
+
+        if (PersonIdList == "") {
+            isProposedPersonsExistForCurrentOpportunity = "false";
+        }
+        else {
+            isProposedPersonsExistForCurrentOpportunity = "true";
+        }
     }
+
+    function SetisStrawmansExistForCurrentOpportunity() {
+        var trTeamStructure = document.getElementById('tblTeamStructure').getElementsByTagName('tr');
+        var PersonIdList = '';
+        var personType;
+        var array = new Array();
+        for (var i = 0; i < trTeamStructure.length - 1; i++) {
+            var ddlPerson = trTeamStructure[i].children[0].getElementsByTagName('SELECT')[0];
+            var ddlQuantity = trTeamStructure[i].children[1].getElementsByTagName('SELECT')[0];
+            var txtNeedBy = trTeamStructure[i].children[2].getElementsByTagName('input')[0];
+            var obj = null;
+            if (ddlPerson.value == "0" || ddlQuantity.value == "0" || txtNeedBy.value == '')
+                continue;
+            for (var j = 0; j < array.length; j++) {
+                if (array[j].personId == ddlPerson.value && array[j].needBy == (new Date(txtNeedBy.value)).format('MM/dd/yyyy')) {
+                    obj = array[j];
+                    break;
+                }
+            }
+            if (obj == null) {
+                obj = {
+                    "personId": ddlPerson.value,
+                    "needBy": txtNeedBy.value,
+                    "quantity": ddlQuantity.value
+                }
+                Array.add(array, obj);
+            }
+            else {
+                obj.quantity = parseInt(obj.quantity) + parseInt(ddlQuantity.value);
+            }
+        }
+        for (var i = 0; i < array.length; i++) {
+            personType = '1';
+            PersonIdList = PersonIdList + array[i].personId + ':' + personType + '|' + array[i].quantity + '?' + array[i].needBy + ',';
+        }
+
+        if (PersonIdList == "") {
+            isStrawmansExistForCurrentOpportunity = "false";
+        }
+        else {
+            isStrawmansExistForCurrentOpportunity = "true";
+        }
+    }
+
+    function validateOpportunity() {
+        if (CurrentOpportunityPriorityName == "po" || CurrentOpportunityPriorityName == "a" || CurrentOpportunityPriorityName == "b") {
+            if (isProposedPersonsExistForCurrentOpportunity == "false" && isStrawmansExistForCurrentOpportunity == "false") {
+                return false;
+            }
+
+        }
+
+        return true;
+    }
+
+    function saveProposedResources() {
+        SetisProposedPersonsExistForCurrentOpportunity();
+        if (validateOpportunity()) {
+            var buttonSave = document.getElementById('<%=btnSaveProposedResourcesHidden.ClientID %>');
+            var trPotentialResources = document.getElementById('<%=cblPotentialResources.ClientID %>').getElementsByTagName('tr');
+            var hdnProposedPersonsIndexes = document.getElementById(currenthdnProposedPersonsIndexesId);
+            GetProposedPersonIdsListWithPersonType();
+            buttonSave.click();
+            return true;
+        }
+        else {
+            showOpportunityErrorMessageForTeamResources();
+            return false;
+        }
+    }
+
     function saveTeamStructure() {
-
         clearErrorMessages();
-
         var tblTeamStructure = document.getElementById('tblTeamStructure');
         for (var i = 0; i < tblTeamStructure.rows.length - 1; i++) {
             var ddlQuantity = tblTeamStructure.rows[i].cells[1].children[0];
@@ -268,7 +430,7 @@
             txtNeedBy.style.backgroundColor = "";
             ddlQuantity.style.backgroundColor = "";
         }
-
+        SetisStrawmansExistForCurrentOpportunity();
         if (validateAll()) {
             var buttonSave = document.getElementById('<%=btnSaveTeamStructureHidden.ClientID %>');
             var trTeamStructure = document.getElementById('tblTeamStructure').getElementsByTagName('tr');
@@ -284,6 +446,7 @@
     function validateAll() {
         var result1 = true;
         var result2 = true;
+        var result3 = true;
 
         // Validate NeedByDate
         result1 = validateNeedByDates();
@@ -301,8 +464,14 @@
 
         }
 
+        result3 = validateOpportunity();
 
-        return result1 && result2;
+        if (!result3) {
+            showOpportunityErrorMessage();
+
+        }
+
+        return result1 && result2 && result3;
     }
 
     function validateNeedByDates() {
@@ -385,6 +554,14 @@
         return result;
     }
 
+    function showOpportunityErrorMessageForTeamResources() {
+        document.getElementById('divTeamResources').style.display = "block";
+    }
+
+    function showOpportunityErrorMessage() {
+        document.getElementById('divOpportunityError').style.display = "block";
+    }
+
     function showQuantityErrorMessage() {
         document.getElementById('divQuantityError').style.display = "block";
     }
@@ -400,7 +577,12 @@
     function clearErrorMessages() {
         document.getElementById('divNeedbyError').style.display = "none";
         document.getElementById('divQuantityError').style.display = "none";
+        document.getElementById('divOpportunityError').style.display = "none";
     }
+
+    function clearErrorMessagesForTeamResources() {
+        document.getElementById('divTeamResources').style.display = "none";
+     }
 
 
     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
@@ -455,7 +637,7 @@
     }
 
     function ClearProposedResources() {
-
+        clearErrorMessagesForTeamResources();
         var chkboxes = $('#<%=cblPotentialResources.ClientID %> tr td :input');
         for (var i = 0; i < chkboxes.length; i++) {
             chkboxes[i].checked = false;
@@ -513,7 +695,7 @@
         var showPopup = false;
         var endDateRequiredPopup = false;
         var linkedToProjectPopup = false;
-        
+
         for (var i = 0; i < optionList.length; ++i) {
             if (optionList[i].value == ddlPriority.value) {
                 selectedText = optionList[i].innerHTML.toLowerCase();
@@ -1041,8 +1223,9 @@
                                         End date is required before opportunity can be saved with A, or B priority.
                                     </p>
                                     <p id="linkedToProject">
-                                    <br />
-                                        To save an Opportunity as “PO” priority, the Opportunity must first be linked to a Project.
+                                        <br />
+                                        To save an Opportunity as “PO” priority, the Opportunity must first be linked to
+                                        a Project.
                                     </p>
                                     <br />
                                     <p>
@@ -1126,6 +1309,11 @@
                                 </td>
                             </tr>
                         </table>
+                        <div id="divTeamResources" style="text-align: left; display: none; color: Red; width: 356px;
+                            padding: 8px 0px 10px 0px">
+                            You must add a Team Make-Up to this opportunity before it can be saved with a PO,
+                            A, or B priority.
+                        </div>
                     </td>
                 </tr>
             </table>
@@ -1207,6 +1395,11 @@
                         <div id="divQuantityError" style="text-align: left; display: none; color: Red; width: 404px;
                             padding: 8px 0px 10px 0px">
                             Quantity for a Straw Man must be less than or equals to 10 for same Need By date.
+                        </div>
+                        <div id="divOpportunityError" style="text-align: left; display: none; color: Red;
+                            width: 404px; padding: 8px 0px 10px 0px">
+                            You must add a Team Make-Up to this opportunity before it can be saved with a PO,
+                            A, or B priority.
                         </div>
                     </td>
                 </tr>
