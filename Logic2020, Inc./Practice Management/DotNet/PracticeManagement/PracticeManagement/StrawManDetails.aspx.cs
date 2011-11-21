@@ -159,7 +159,7 @@ namespace PraticeManagement
             {
                 var currentPay = person.PaymentHistory.Where(p => (!p.EndDate.HasValue || SettingsHelper.GetCurrentPMTime().Date <= p.EndDate.Value.AddDays(-1)) && (p.StartDate == null || SettingsHelper.GetCurrentPMTime().Date >= p.StartDate)).First();
                 CurrentCompensation = currentPay;
-                paymentHistory.Remove(currentPay);
+                //paymentHistory.Remove(currentPay);
             }
 
             gvCompensationHistory.DataSource = paymentHistory;
