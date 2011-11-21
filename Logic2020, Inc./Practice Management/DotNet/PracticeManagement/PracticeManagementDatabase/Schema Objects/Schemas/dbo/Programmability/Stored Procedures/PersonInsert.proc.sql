@@ -79,12 +79,12 @@ AS
 
 		SELECT @PersonStatusId = CASE WHEN @TerminationDate<= @Today THEN 2 ELSE @PersonStatusId END
 		-- Inserting Person
-		INSERT Person
+		INSERT dbo.Person
 			(FirstName, LastName, PTODaysPerAnnum,  HireDate,  Alias, DefaultPractice, 
-		     PersonStatusId, EmployeeNumber, TerminationDate, SeniorityId, ManagerId, PracticeOwnedId, TelephoneNumber)
+		     PersonStatusId, EmployeeNumber, TerminationDate, SeniorityId, ManagerId, PracticeOwnedId, TelephoneNumber,IsStrawman)
 		VALUES
 			(@FirstName, @LastName, @PTODaysPerAnnum, @HireDate, @Alias, @DefaultPractice, 
-		     @PersonStatusId, @EmployeeNumber, @TerminationDate, @SeniorityId, @ManagerId, @PracticeOwnedId, @TelephoneNumber)
+		     @PersonStatusId, @EmployeeNumber, @TerminationDate, @SeniorityId, @ManagerId, @PracticeOwnedId, @TelephoneNumber,0)
 
 		-- End logging session
 		EXEC dbo.SessionLogUnprepare
