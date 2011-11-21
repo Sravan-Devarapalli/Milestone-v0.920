@@ -51,7 +51,7 @@ namespace PraticeManagement.Controls
             }
             set
             {
-                lblEndDate.Text = dpEndDate.DateValue.ToShortDateString();
+                lblEndDate.Text = dpEndDate.DateValue == DateTime.MinValue ? string.Empty : dpEndDate.DateValue.ToShortDateString();
                 dpEndDate.Visible = !value;
                 lblEndDate.Visible = value;
             }
