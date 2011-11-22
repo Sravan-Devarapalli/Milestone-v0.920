@@ -6,6 +6,7 @@ using DataTransferObjects;
 using DataTransferObjects.CompositeObjects;
 using DataTransferObjects.ContextObjects;
 using DataTransferObjects.TimeEntry;
+using System.Web;
 
 namespace PracticeManagementService
 {
@@ -27,7 +28,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetAllTimeTypes", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -46,7 +47,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "RemoveTimeType", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -65,7 +66,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "UpdateTimeType", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -85,7 +86,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "AddTimeType", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -104,7 +105,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "SetTimeZone", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -119,7 +120,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "TimeZonesAll", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -138,7 +139,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "RemoveTimeEntryById", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -157,7 +158,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "RemoveTimeEntry", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -177,7 +178,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "AddTimeEntry", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -196,7 +197,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "UpdateTimeEntry", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -243,7 +244,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ConstructAndUpdateTimeEntry", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -261,7 +262,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntriesForPerson", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -276,7 +277,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntriesProject", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -291,7 +292,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntriesProjectCumulative", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -306,7 +307,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntriesPerson", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -327,7 +328,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetCurrentMilestones", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -345,7 +346,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntryMilestones", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -362,7 +363,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetAllTimeEntries", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -377,7 +378,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntriesCount", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -395,7 +396,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ToggleIsCorrect", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -414,7 +415,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ToggleIsReviewed", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -433,7 +434,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ToggleIsChargeable", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -448,7 +449,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntrySums", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -463,7 +464,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "RemoveTimeEntries", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -513,7 +514,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetAllTimeEntryProjects", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -534,7 +535,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntryProjectsByClientId", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -555,7 +556,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetAllTimeEntryMilestones", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -576,7 +577,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetAllTimeEntryPersons", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -591,7 +592,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "HasTimeEntriesForMilestone", "TimeEntryService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
