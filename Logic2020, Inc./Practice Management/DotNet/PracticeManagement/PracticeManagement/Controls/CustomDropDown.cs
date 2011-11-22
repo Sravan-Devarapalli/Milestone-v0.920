@@ -9,35 +9,80 @@ namespace PraticeManagement.Controls
 {
     public class CustomDropDown : DropDownList
     {
-        /*
-            if (Items != null)
+        protected override void RenderContents(HtmlTextWriter writer)
+        {
+            string currentOptionGroup;
+            List<string> renderedOptionGroups = new List<string>();
+
+            foreach (ListItem item in this.Items)
             {
-                bool selected = false;
-
-                foreach (ListItem listItem in Items)
+                if (item.Attributes[Constants.Variables.OptionGroup] == null)
                 {
-                    writer.WriteBeginTag("option");
-
-                    if (listItem.Selected)
-                    {
-                        if (selected)
-                            //throw new HttpException(HttpRuntime.FormatResourceString("Cannot_Multiselect_In_DropDownList"));
-                            throw new HttpException("Cannot multiselect in DropDownList."); //TODO: this should be language independent
-                        selected = true;
-                        writer.WriteAttribute("selected", "selected", false);
-                    }
-                    writer.WriteAttribute("value", listItem.Value, true);
-
-                    listItem.Attributes.Render(writer); // This is the added code
-                    //TODO: What happens if "value" or "selected" are in listItem.Attributes?
-
-                    writer.Write('>');
-                    HttpUtility.HtmlEncode(listItem.Text, writer);
-
-                    writer.WriteEndTag("option");
-                    writer.WriteLine();
+                    RenderListItem(item, writer);
                 }
-            }*/
+                else
+                {
+                    currentOptionGroup = item.Attributes[Constants.Variables.OptionGroup];
+
+                    if (renderedOptionGroups.Contains(currentOptionGroup))
+                    {
+                        RenderListItem(item, writer);
+                    }
+                    else
+                    {
+                        if (renderedOptionGroups.Count > 0)
+                        {
+                            RenderOptionGroupEndTag(writer);
+                        }
+
+                        RenderOptionGroupBeginTag(currentOptionGroup, writer);
+                        renderedOptionGroups.Add(currentOptionGroup);
+
+                        RenderListItem(item, writer);
+                    }
+                }
+            }
+
+            if (renderedOptionGroups.Count > 0)
+            {
+                RenderOptionGroupEndTag(writer);
+            }
+        }
+
+        private void RenderOptionGroupBeginTag(string name, HtmlTextWriter writer)
+        {
+            writer.WriteBeginTag("optgroup");
+            writer.WriteAttribute("label", name);
+            writer.Write(HtmlTextWriter.TagRightChar);
+            writer.WriteLine();
+        }
+
+        private void RenderOptionGroupEndTag(HtmlTextWriter writer)
+        {
+            writer.WriteEndTag("optgroup");
+            writer.WriteLine();
+        }
+
+        private void RenderListItem(ListItem item, HtmlTextWriter writer)
+        {
+            writer.WriteBeginTag("option");
+            writer.WriteAttribute("value", item.Value, true);
+
+            if (item.Selected)
+            {
+                writer.WriteAttribute("selected", "selected", false);
+            }
+
+            foreach (string key in item.Attributes.Keys)
+            {
+                writer.WriteAttribute(key, item.Attributes[key]);
+            }
+
+            writer.Write(HtmlTextWriter.TagRightChar);
+            HttpUtility.HtmlEncode(item.Text, writer);
+            writer.WriteEndTag("option");
+            writer.WriteLine();
+        }
 
         protected override object SaveViewState()
         {
@@ -58,7 +103,7 @@ namespace PraticeManagement.Controls
                                                         attribute, li.Attributes[attribute] 
                                                    };
                 }
-               
+
                 allStates[i++] = attributes;
             }
 
