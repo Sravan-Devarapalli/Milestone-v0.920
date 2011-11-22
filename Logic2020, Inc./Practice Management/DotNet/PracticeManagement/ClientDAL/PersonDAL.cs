@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -168,6 +169,8 @@ namespace DataAccess
 
         private const string GetStrawManListAllProcedure = "dbo.GetStrawManListAll";
         private const string PersonFirstLastNameByIdProcedure = "dbo.PersonFirstLastNameById";
+
+        public const string GetConsultantDemandProcedure = "dbo.GetConsultantDemand";
 
         #endregion
 
@@ -3144,6 +3147,99 @@ namespace DataAccess
                     person.Id = (int)personIdParameter.Value;
                 }
             }
+        }
+
+        public static List<ConsultantDemandItem> GetConsultantswithDemand(DateTime startDate, DateTime endDate)
+        {
+            var consultants = new List<ConsultantDemandItem>();
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(GetConsultantDemandProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        var result = new List<Person>();
+                        ReadConConsultantDemandItems(reader, consultants);
+                        return consultants;
+                    }
+
+                }
+            }
+        }
+
+        private static void ReadConConsultantDemandItems(SqlDataReader reader, List<ConsultantDemandItem> consultants)
+        {
+            int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+            int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+            int objectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ObjectId);
+            int objectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ObjectName);
+            int objectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ObjectNumber);
+            int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+            int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientName);
+            int objectTypeIndex = reader.GetOrdinal(Constants.ColumnNames.ObjectType);
+            int quantityStringIndex = reader.GetOrdinal(Constants.ColumnNames.QuantityString);
+            int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
+            int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
+            int objectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ObjectStatusId);
+
+
+            int personIdIndex = reader.GetOrdinal(PersonIdColumn);
+            if (reader.HasRows)
+            {
+                var clients = new List<Client>();
+                var persons = new List<Person>();
+
+                while (reader.Read())
+                {
+                    var consultant = new ConsultantDemandItem
+                    {
+                        ObjectId = reader.GetInt32(objectIdIndex),
+                        ObjectName = reader.GetString(objectNameIndex),
+                        ObjectNumber = reader.GetString(objectNumberIndex),
+                        ObjectStatusId = reader.GetInt32(objectStatusIdIndex),
+                        QuantityString = reader.GetString(quantityStringIndex),
+                        ObjectType = reader.GetInt32(objectTypeIndex),
+                        StartDate = reader.GetDateTime(startDateIndex),
+                        EndDate = reader.GetDateTime(endDateIndex)
+                    };
+                    var clientId = reader.GetInt32(clientIdIndex);
+                    var client = clients.FirstOrDefault(c => c.Id.Value == clientId);
+                    var personId = reader.GetInt32(personIdIndex);
+                    var person = persons.FirstOrDefault(p => p.Id.Value == personId);
+                    if (client == null)
+                    {
+                        client = new Client
+                        {
+                            Id = clientId,
+                            Name = reader.GetString(clientNameIndex)
+                        };
+                        clients.Add(client);
+
+
+                    }
+                    if (person == null)
+                    {
+                        person = new Person
+                        {
+                            Id = reader.GetInt32(personIdIndex),
+                            LastName = reader.GetString(lastNameIndex),
+                            FirstName = reader.GetString(firstNameIndex)
+                        };
+                        persons.Add(person);
+                    }
+                    consultant.Client = client;
+                    consultant.Consultant = person;
+                    consultants.Add(consultant);
+                }
+            }
+
         }
 
         public static List<Person> GetStrawManListAll()
