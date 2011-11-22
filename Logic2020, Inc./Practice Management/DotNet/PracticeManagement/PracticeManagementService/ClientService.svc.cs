@@ -4,6 +4,7 @@ using System.ServiceModel.Activation;
 using System.Web.Security;
 using DataAccess;
 using DataTransferObjects;
+using System.Web;
 
 namespace PracticeManagementService
 {
@@ -116,7 +117,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ClientListAllSecure", "ClientService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -138,7 +139,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ClientListAllSecureByNewRule", "ClientService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
