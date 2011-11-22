@@ -120,6 +120,7 @@
     <Compile Include="ComputedFinancials.cs" />
     <Compile Include="ComputedFinancialsEx.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="ConsultantDemandItem.cs" />
     <Compile Include="ContextObjects\ActivityLogSelectContext.cs" />
     <Compile Include="ContextObjects\BenchReportContext.cs" />
     <Compile Include="ContextObjects\ConsultantMilestonesContext.cs" />
