@@ -425,6 +425,7 @@
     <Content Include="Images\right_icon.png" />
     <Content Include="Images\trash-icon-Large.png" />
     <Content Include="Reports\ConsultingCapacity.aspx" />
+    <Content Include="Reports\ConsultingDemand.aspx" />
     <Content Include="Reports\Expenses.aspx" />
     <Content Include="RevenueGoals.aspx" />
     <Content Include="Controls\BudgetEntries.ascx" />
@@ -488,6 +489,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.CompanyLogo1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.TimeEntryPersonProjects.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.TimeEntryProjectPerson.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ConsultantDemandItem.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.DefaultMilestone.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.EmailData.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Financials.MilestonePersonComputedFinancials.datasource" />
@@ -1078,6 +1080,7 @@
     <Compile Include="FilterObjects\ConsultantUtilTimeLineFilter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FilterObjects\ConsultingDemandFilter.cs" />
     <Compile Include="FilterObjects\GenericTimeEntryFilter.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1358,6 +1361,13 @@
     </Compile>
     <Compile Include="Reports\ConsultingCapacity.aspx.designer.cs">
       <DependentUpon>ConsultingCapacity.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ConsultingDemand.aspx.cs">
+      <DependentUpon>ConsultingDemand.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ConsultingDemand.aspx.designer.cs">
+      <DependentUpon>ConsultingDemand.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\Expenses.aspx.cs">
       <DependentUpon>Expenses.aspx</DependentUpon>
