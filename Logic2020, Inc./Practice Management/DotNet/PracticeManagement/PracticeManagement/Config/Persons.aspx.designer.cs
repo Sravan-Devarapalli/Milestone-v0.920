@@ -13,6 +13,15 @@ namespace PraticeManagement.Config {
     public partial class Persons {
         
         /// <summary>
+        /// lpPersons control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.LoadingProgress lpPersons;
+        
+        /// <summary>
         /// upnlBody control.
         /// </summary>
         /// <remarks>
