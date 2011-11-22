@@ -282,6 +282,8 @@ namespace PraticeManagement
         public static class Variables
         {
             public const string IsStrawMan = "IsStrawMan";
+            public const string OptionGroup = "OptionGroup";
+            
         }
     }
 }
