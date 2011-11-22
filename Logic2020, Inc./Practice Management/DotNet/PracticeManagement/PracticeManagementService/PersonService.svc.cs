@@ -1052,6 +1052,11 @@ namespace PracticeManagementService
             return PersonDAL.GetStrawManListAll();
         }
 
+        public List<ConsultantDemandItem> GetConsultantswithDemand(DateTime startDate, DateTime endDate)
+        {
+            return PersonDAL.GetConsultantswithDemand(startDate, endDate);
+        }
+
         #endregion
     }
 }
