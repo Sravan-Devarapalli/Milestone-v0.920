@@ -75,6 +75,12 @@
             public const string IsHourlyAmount = "IsHourlyAmount";
             public const string IsReviewed = "IsReviewed";
             public const string LastName = "LastName";
+            public const string ObjectId = "ObjectId";
+            public const string ObjectName = "ObjectName";
+            public const string ObjectNumber = "ObjectNumber";
+            public const string ObjectType = "ObjectType";
+            public const string ObjectStatusId = "ObjectStatusId";
+            public const string QuantityString = "QuantityString";
             public const string LastUpdateColumn = "LastUpdate";
             public const string ManagerAlias = "ManagerAlias";
             public const string ManagerFirstName = "ManagerFirstName";
