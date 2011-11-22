@@ -10,6 +10,7 @@ using DataAccess.Other;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
 using System;
+using System.Web;
 
 namespace PracticeManagementService
 {
@@ -258,7 +259,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "FilteredOpportunityListAll", "OpportunityService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
@@ -273,7 +274,7 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "OpportunitySearchText", "OpportunityService.svc", string.Empty,
-                    e.Message, e.Source, e.InnerException == null ? string.Empty : e.InnerException.Message, e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
