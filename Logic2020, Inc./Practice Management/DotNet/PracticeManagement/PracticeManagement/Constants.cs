@@ -79,6 +79,7 @@ namespace PraticeManagement
             public const string GenericTimeEntryFilterCookie = "GenericTimeEntryFilter";
             public const string ConsultantUtilTimeLineFilterCookie = "ConsultantUtilTimeLineFilter";
             public const string ConsultingCapacityFilterCookie = "ConsultingCapacityFilter";
+            public const string ConsultingDemandFilterCookie = "ConsultingDemandFilter";
         }
 
         /// <summary>
@@ -143,6 +144,8 @@ namespace PraticeManagement
             public const string ConsultingCapacityWithFilterQueryStringAndDetails = "~/Reports/ConsultingCapacity.aspx?ApplyFilterFromCookie=true#details";
             public const string ConsultingCapacityWithDetails = "~/Reports/ConsultingCapacity.aspx#details";
             public const string StrawmanDetails = "~/StrawManDetails.aspx";
+            public const string ConsultingDemand = "~/Reports/ConsultingDemand.aspx";
+            public const string ConsultingDemandWithFilterQueryString = "~/Reports/ConsultingDemand.aspx?ApplyFilterFromCookie=true";
         }
 
         /// <summary>
