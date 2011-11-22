@@ -108,5 +108,14 @@ namespace PraticeManagement.Controls.Reports
 
             return consultantsList;
         }
+
+        public static List<ConsultantDemandItem> GetConsultantDemand(DateTime startDate, DateTime endDate)
+        {
+            var consultants = ServiceCallers.Custom.Person(
+                client => client.GetConsultantswithDemand(startDate, endDate));
+
+            return consultants.ToList();
+        }
     }
 }
+
