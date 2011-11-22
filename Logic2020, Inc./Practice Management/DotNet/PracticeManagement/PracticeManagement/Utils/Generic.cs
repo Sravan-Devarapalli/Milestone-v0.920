@@ -209,6 +209,22 @@ namespace PraticeManagement.Utils
             page.Response.Cookies.Add(ck);
             return tkt;
         }
+
+        public static int[] StringToIntArray(string csv)
+        {
+            csv = csv.TrimEnd(',');
+            var values = csv.Split(',');
+
+            var res = new int[values.Length];
+
+            for (var i = 0; i < values.Length; i++)
+            {
+                if(!string.IsNullOrEmpty(values[i]))
+                    res[i] = Convert.ToInt32(values[i]);
+            }
+
+            return res;
+        }
     }
 }
 
