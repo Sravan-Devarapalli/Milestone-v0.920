@@ -8,6 +8,8 @@
 <%@ Register Src="~/Controls/PersonsFilter.ascx" TagName="PersonsFilter" TagPrefix="uc1" %>
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
+<%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress" TagPrefix="uc" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
     <title>Persons | Practice Management</title>
 </asp:Content>
@@ -49,6 +51,7 @@
             }
         }
     </script>
+    <uc:LoadingProgress ID="lpPersons" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
             <div class="buttons-block" style="padding-left: 5px !important; padding-right: 5px !important;">
