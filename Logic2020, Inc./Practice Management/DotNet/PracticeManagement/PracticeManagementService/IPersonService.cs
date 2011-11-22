@@ -553,6 +553,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         int SaveStrawManFromExisting(int existingPersonId, string newFirstName, string newLastName);
+
+        [OperationContract]
+        List<ConsultantDemandItem> GetConsultantswithDemand(DateTime startDate, DateTime endDate);
     }
 }
 
