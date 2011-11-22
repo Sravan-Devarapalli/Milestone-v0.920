@@ -58,16 +58,16 @@ namespace PraticeManagement.Utils
             //  Get settings from web.config
             ConsReportColoringElementSection coloring =
                 ConsReportColoringElementSection.ColorSettings;
-
-            if (isWeekEnd)
-                return Color.FromArgb(255, 255, 255);
-
+            
             if (!isHired || isTerminated)
                 return coloring.HiredColor;
 
             //  If that's vacation, return vacation color
             if (isVac)
                 return coloring.VacationColor;
+
+            if (isWeekEnd)
+                return Color.FromArgb(255, 255, 255);
 
             if (capacity >= 50 && capacity <= 100)
             {
@@ -106,6 +106,43 @@ namespace PraticeManagement.Utils
                 ConsReportColoringElementSection.ColorSettings;
             //  Add vacation item
             legendItems.Add(coloring.VacationColor, coloring.VacationTitle); 
+        }
+
+        public static Color GetColorByConsultingDemand(DataTransferObjects.ConsultantDemandItem item)
+        {
+            if (item.ObjectType == 2 && item.ObjectStatusId == 3) //Project with Active status.
+            {
+                return Color.FromArgb(255, 0, 0); //Red.
+            }
+            else if (item.ObjectType == 2 && item.ObjectStatusId == 2) //Project with Projected status.
+            {
+                return Color.FromArgb(255, 255, 0); // Yellow.
+            }
+            else if (item.ObjectType == 1 && item.ObjectStatusId == 1) //Opportunity with A priority.
+            {
+                return Color.FromArgb(82, 178, 0); // Green. 
+            }
+            else if (item.ObjectType == 1 && item.ObjectStatusId == 2) //Opportunity with B priority.
+            {
+                return Color.FromArgb(51, 204, 255); // Blue.
+            }
+            else
+            {
+                return Color.White;
+            }
+        }
+
+        public static void DemandColorLegends(Legend legend)
+        {
+            //  Clear legend items first
+            LegendItemsCollection legendItems = legend.CustomItems;
+            legendItems.Clear();
+
+            //  Iterate through all colors and put them on legend
+            legendItems.Add(Color.FromArgb(255, 0, 0), "Project with Active Status");//Red
+            legendItems.Add(Color.FromArgb(255, 255, 0), "Project with Projected Status");//Yellow
+            legendItems.Add(Color.FromArgb(82, 178, 0), "Opportunity with \"A\" Priority");//Green
+            legendItems.Add(Color.FromArgb(51, 204, 255), "Opportunity with \"B\" Priority");//Sky Blue.
         }
 
         /// <summary>
