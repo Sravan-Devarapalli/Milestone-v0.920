@@ -25,6 +25,7 @@ namespace PraticeManagement.Reporting
         private const string Title_Format = "Consulting Demand Report \n{0} to {1}";
         private const string DummyClientName = "!";
         private const string ChartSeriesId = "chartSeries";
+        private const string FULL_MONTH_NAME_FORMAT = "MMMM, yyyy";
 
         #endregion
 
@@ -33,6 +34,24 @@ namespace PraticeManagement.Reporting
         public Series ConsultingDemandSeries
         {
             get { return chrtConsultingDemand.Series[ChartSeriesId]; }
+        }
+
+        public DateTime DefaultStartDate
+        {
+            get
+            {
+                var date = Utils.SettingsHelper.GetCurrentPMTime();
+                return date.Date.AddDays((date.Day - 1) * -1);
+            }
+        }
+
+        public DateTime DefaultEndDate
+        {
+            get
+            {
+                var date = Utils.SettingsHelper.GetCurrentPMTime();
+                return date.Date.AddDays((date.Day) * -1).AddMonths(4);
+            }
         }
 
         public DateTime StartDate
@@ -45,8 +64,7 @@ namespace PraticeManagement.Reporting
                 }
                 else
                 {
-                    var date = Utils.SettingsHelper.GetCurrentPMTime();
-                    return date.Date.AddDays((date.Day - 1) * -1);
+                    return DefaultStartDate;
                 }
             }
         }
@@ -62,8 +80,7 @@ namespace PraticeManagement.Reporting
                 }
                 else
                 {
-                    var date = Utils.SettingsHelper.GetCurrentPMTime();
-                    return date.Date.AddDays((date.Day) * -1).AddMonths(4);
+                    return DefaultEndDate;
                 }
             }
 
@@ -213,15 +230,34 @@ namespace PraticeManagement.Reporting
                                 Resources.Controls.TimelineGeneralItemHeigth * report.Count +
                                 Resources.Controls.TimelineGeneralFooterHeigth;
 
-                if (EndDate.Subtract(StartDate).Days >= 31)
+                if (EndDate.Subtract(StartDate).Days >= 120)
                 {
                     chrtConsultingDemand.Width = EndDate.Subtract(StartDate).Days * 30;
                 }
                 else
                 {
-                    chrtConsultingDemand.Width = 1000;
+                    chrtConsultingDemand.Width = EndDate.Subtract(StartDate).Days * 40;
                 }
 
+                    //chrtConsultingDemand.Style.Add("text-align", "left");
+                    //chrtConsultingDemand.BackImageAlignment = ChartImageAlignmentStyle.Left;
+
+                    var chartMainArea = chrtConsultingDemand.ChartAreas[MAIN_CHART_AREA_NAME];
+                    //chartMainArea.AlignmentStyle = AreaAlignmentStyles.Position;
+                    //chartMainArea.AlignmentOrientation = AreaAlignmentOrientations.Horizontal;
+                    //chartMainArea.InnerPlotPosition = new ElementPosition(6, 3, 100, 85);
+                    //float height;
+                    //if (float.TryParse(chrtConsultingDemand.Height.Value.ToString(), height))
+                    //{
+                    //    height = 100;
+                    //}
+                    //var element = new ElementPosition();
+                    //element.X = 0;
+                    //element.Y = 15;
+                    //element.Width = 100;
+                    //element.Height = 75;
+
+                    chartMainArea.Position = new ElementPosition(-1, 15, 100, 75);// new ElementPosition(-1, 20, 100, 90);
             }
         }
 
@@ -327,7 +363,7 @@ namespace PraticeManagement.Reporting
                 if (item.ObjectName != " ")//To eliminate tooltip for transparent bar(it will present if the report contains only one bar).
                 {
                     var tooptip = GetToolTip(item, dailyDemands);
-                    range.MapAreaAttributes = "onmouseover=\"DisplayTooltip('" + tooptip + "');\" onmouseout=\"DisplayTooltip('');\"";
+                    range.MapAreaAttributes = "onmouseover=\"DisplayTooltip('" + tooptip + "');\" onmouseout=\"DisplayTooltip('');\" onblur=\"DisplayTooltip('');\"";
                 }
             }
         }
@@ -343,8 +379,11 @@ namespace PraticeManagement.Reporting
             var tooltip = "Total Demand by Month<br/>-----------------------------";
             int i = 0, day = 0;
 
+            var startDate = new DateTime(StartDate.Year, StartDate.Month, 1);
+            var endDate = new DateTime(EndDate.Year, EndDate.Month, 1);
+            endDate = endDate.AddMonths(1).AddDays(-1);
 
-            for (var date = StartDate; date <= EndDate; date = date.AddMonths(1), i++)
+            for (var date = startDate; date <= endDate; date = date.AddMonths(1), i++)
             {
                 var itemStartDate = new DateTime(item.StartDate.Year, item.StartDate.Month, 1);
                 var itemEndDate = new DateTime(item.EndDate.Year, item.EndDate.Month, 1);
@@ -356,12 +395,16 @@ namespace PraticeManagement.Reporting
                     //Sum up the demand for the month.
                     for (var perDay = date; perDay <= date.AddMonths(1).AddDays(-1); perDay = perDay.AddDays(1))
                     {
-                        if (item.StartDate <= perDay && item.EndDate >= perDay)
+                        if (perDay >= StartDate && perDay <= EndDate)
                         {
-                            //var index = perDay.Subtract(item.StartDate).Days;
-                            monthlyDemand = monthlyDemand + dailyDemands[day];
+                            //dailyDemands will exist only in Selected Date range, so we need to consider only selected range instead of startdate of the month.
+                            if (item.StartDate <= perDay && item.EndDate >= perDay)
+                            {
+                                //var index = perDay.Subtract(item.StartDate).Days;
+                                monthlyDemand = monthlyDemand + dailyDemands[day];
+                            }
+                            day = day + 1;
                         }
-                        day = day + 1;
                     }
                     tooltip += "<br/>" + String.Format("{0:MMMM yyyy} = {1}", date, monthlyDemand);
                 }
@@ -414,6 +457,25 @@ namespace PraticeManagement.Reporting
 
             horizAxis.IntervalType = DateTimeIntervalType.Days;
             horizAxis.Interval = 1;
+
+            var startDate = new DateTime(StartDate.Year, StartDate.Month, 1);
+            var endDate = new DateTime(EndDate.Year, EndDate.Month, 1);
+            endDate = endDate.AddMonths(1).AddDays(-1);
+            DateTime previousEndDate = startDate;
+
+            for (var date = startDate; date <= endDate; date = date.AddMonths(1))
+            {
+                var start = (date.Year == StartDate.Year && date.Month == StartDate.Month) ? StartDate : previousEndDate.AddDays(1);
+                previousEndDate = date.AddMonths(1).AddDays(-1);
+                var end = (date.Year == EndDate.Year && date.Month == EndDate.Month) ? EndDate : previousEndDate;
+
+                var label = horizAxis.CustomLabels.Add(
+                            start.ToOADate(),
+                            end.ToOADate(),
+                            start.ToString(FULL_MONTH_NAME_FORMAT).ToUpper(),
+                            1,
+                            LabelMarkStyle.None);
+            }
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -448,6 +510,9 @@ namespace PraticeManagement.Reporting
             hdnEndDateCalExtenderBehaviourId.Value = clToDate.BehaviorID;
 
             btnResetFilter.Enabled = (hdnFiltersChanged.Value == "1");
+            btnResetFilter.Attributes.Add("onclick", "if(!ResetFilters(this)){return false;}");
+            hdnDefaultStartDate.Value = DefaultStartDate.ToString("MM/dd/yyyy");
+            hdnDefaultEndDate.Value = DefaultEndDate.ToString("MM/dd/yyyy");
         }
     }
 }
