@@ -287,7 +287,10 @@
 
         function PeriodValidate() {
             var cstvalPeriodRange = document.getElementById('<%= cstvalPeriodRange.ClientID %>');
-            cstvalPeriodRange.style.display = 'none';
+            var valSummary = document.getElementById('<%= valSum.ClientID %>');
+            var lblPeriodRange = document.getElementById('<%= lblPeriodRange.ClientID %>');
+
+            cstvalPeriodRange.style.display = valSummary.style.display = lblPeriodRange.style.display = 'none';
 
             hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
             hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
@@ -313,16 +316,21 @@
                 else {
                     endMonth = parseInt(endDate.format('MM'));
                 }
-                if ((startYear == endYear && ((endMonth - startMonth + 1) <= 4))
-            || (((((endYear - startYear) * 12 + endMonth) - startMonth + 1)) <= 4)
+                if ((startYear == endYear && ((endMonth - startMonth + 1) <= 12))
+            || (((((endYear - startYear) * 12 + endMonth) - startMonth + 1)) <= 12)
             || ((endDate - startDate) / (1000 * 60 * 60 * 24)) < 90
             ) {
-                    cstvalPeriodRange.style.display = 'none';
                     return true;
                 }
+                else {
+                    cstvalPeriodRange.style.display = 'block';
+                    lblPeriodRange.style.display = '';
+                }
+            }
+            else {
+                valSummary.style.display = 'block';
             }
 
-            cstvalPeriodRange.style.display = 'block';
             return false;
         }
 
@@ -353,12 +361,15 @@
                     endMonth = parseInt(endDate.format('MM'));
                 }
                 if (startYear == endYear) {
-                    args.IsValid = ((endMonth - startMonth + 1) <= 4);
+                    args.IsValid = ((endMonth - startMonth + 1) <= 12);
                 }
                 else {
-                    args.IsValid = (((((endYear - startYear) * 12 + endMonth) - startMonth + 1)) <= 4);
+                    args.IsValid = (((((endYear - startYear) * 12 + endMonth) - startMonth + 1)) <= 12);
                 }
-                if (((endDate - startDate) / (1000 * 60 * 60 * 24)) < 90) {
+                if ((startYear == endYear && ((endMonth - startMonth + 1) <= 12))
+            || (((((endYear - startYear) * 12 + endMonth) - startMonth + 1)) <= 12)
+            || ((endDate - startDate) / (1000 * 60 * 60 * 24)) < 90
+            ) {
                     args.IsValid = true;
                 }
             }
@@ -368,11 +379,14 @@
         }
 
         function ClearValidations() {
-            var valSummary = document.getElementById('ctl00_body_valSum');
+            var valSummary = document.getElementById('<%= valSum.ClientID %>');
             var cstvalPeriodRange = document.getElementById('<%= cstvalPeriodRange.ClientID %>');
+            var lblPeriodRange = document.getElementById('<%= lblPeriodRange.ClientID %>');
 
-            cstvalPeriodRange.style.display = valSummary.style.display = 'none';
+            cstvalPeriodRange.style.display = lblPeriodRange.style.display = 'none';
+            valSummary.style.display = 'none';
         }
+
 
         function ResetFilters(btnReset) {
 
@@ -380,6 +394,10 @@
             var hdnFiltersChanged = document.getElementById('<%= hdnFiltersChanged.ClientID %>');
             var lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
             var imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
+            var hdnDefaultStartDate = document.getElementById('<%= hdnDefaultStartDate.ClientID %>');
+            var hdnDefaultEndDate = document.getElementById('<%= hdnDefaultEndDate.ClientID %>');
+            var hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
+            var hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
 
             if (ddlPeriod != null) {
                 ddlPeriod.value = '4';
@@ -387,9 +405,30 @@
             if (hdnFiltersChanged != null) {
                 hdnFiltersChanged.value = '0';
             }
+            if (hdnDefaultStartDate != null && hdnDefaultEndDate != null) {
+                var startDate = new Date(hdnDefaultStartDate.value);
+                var endDate = new Date(hdnDefaultEndDate.value);
+                var hdnStartDateCalExtenderBehaviourId = document.getElementById('<%= hdnStartDateCalExtenderBehaviourId.ClientID %>');
+                var hdnEndDateCalExtenderBehaviourId = document.getElementById('<%= hdnEndDateCalExtenderBehaviourId.ClientID %>');
+                var endDateCalExtender = $find(hdnEndDateCalExtenderBehaviourId.value);
+                var startDateCalExtender = $find(hdnStartDateCalExtenderBehaviourId.value);
 
-            imgCalender.style.display = 'none';
-            lblCustomDateRange.style.display = 'none';
+                if (startDateCalExtender != null) {
+                    startDateCalExtender.set_selectedDate(new Date(startDate.format("MM/dd/yyyy")));
+                }
+                if (endDateCalExtender != null) {
+                    endDateCalExtender.set_selectedDate(new Date(endDate.format("MM/dd/yyyy")));
+                }
+
+                hdnStartDate.value = startDate.format("MM/dd/yyyy");
+                hdnEndDate.value = endDate.format("MM/dd/yyyy");
+
+                lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
+                lblCustomDateRange.innerHTML = '(' + hdnStartDate.value + '&nbsp;-&nbsp;' + hdnEndDate.value + ')';
+            }
+
+            imgCalender.attributes["class"].value = "displayNone";
+            lblCustomDateRange.attributes["class"].value = "displayNone";
             btnReset.disabled = 'disabled';
 
             return false;
@@ -428,6 +467,8 @@
                                 <asp:HiddenField ID="hdnStartDateCalExtenderBehaviourId" runat="server" Value="" />
                                 <asp:HiddenField ID="hdnEndDateCalExtenderBehaviourId" runat="server" Value="" />
                                 <asp:HiddenField ID="hdnFiltersChanged" runat="server" Value="0" />
+                                <asp:HiddenField ID="hdnDefaultStartDate" runat="server" Value="" />
+                                <asp:HiddenField ID="hdnDefaultEndDate" runat="server" Value="" />
                                 <asp:Button ID="btnUpdateView" runat="server" Text="Update View" Width="90px" OnClick="btnUpdateView_OnClick"
                                     EnableViewState="False" />
                             </td>
@@ -449,7 +490,7 @@
                                                 FromToDateFieldWidth="70" />
                                         </td>
                                         <td style="min-width: 5px;">
-                                            <asp:CustomValidator ID="cstvalPeriodRange" runat="server" ClientValidationFunction="ValidatePeriod"
+                                            <asp:CustomValidator ID="cstvalPeriodRange" runat="server" ClientValidationFunction="ValidatePeriod" ValidationGroup='<%# ClientID %>'
                                                 SetFocusOnError="true" Text="*" EnableClientScript="true" ToolTip="Period should not be more than four months"
                                                 ErrorMessage="Period should not be more than 4 months." Display="Dynamic"></asp:CustomValidator>
                                         </td>
@@ -459,7 +500,7 @@
                         </tr>
                         <tr>
                             <td align="center" style="padding: 10px 0px 10px 0px;">
-                                <asp:Button ID="btnCustDatesOK" runat="server" OnClientClick="if(!CheckIfDatesValid()){return false;}"
+                                <asp:Button ID="btnCustDatesOK" runat="server" OnClientClick="if(!CheckIfDatesValid()){return false;}" ValidationGroup='<%# ClientID %>'
                                     Text="OK" Style="float: none !Important;" CausesValidation="true" />
                                 <asp:Button ID="btnCustDatesClose" runat="server" Style="display: none;" CausesValidation="true"
                                     OnClientClick="return false;" />
@@ -469,28 +510,28 @@
                         </tr>
                         <tr>
                             <td align="center">
-                                <asp:ValidationSummary ID="valSum" runat="server" />
+                                <asp:ValidationSummary ID="valSum" runat="server" ValidationGroup='<%# ClientID %>' />
+                                <asp:Label ID="lblPeriodRange" runat="server" Text="Period should not be more than 12 months." style="display:none;" ForeColor="Red"></asp:Label>
                             </td>
                         </tr>
                     </table>
                 </asp:Panel>
             </div>
-            <div id="chartDiv" runat="server" style="overflow-x: auto; overflow-y: hidden; height: 100%;
-                text-align: center;">
+            <div id="chartDiv" runat="server" style="overflow-x: auto; overflow-y: hidden; text-align:center;">
                 <asp:Chart ID="chrtConsultingDemand" runat="server" Width="920px">
                     <Legends>
                         <asp:Legend LegendStyle="Row" Name="Botom Legend" TableStyle="Wide" Docking="Bottom"
                             Alignment="Center">
                             <CellColumns>
                                 <asp:LegendCellColumn Name="Weeks" Text="">
-                                    <Margins Left="15" Right="15"></Margins>
+                                    <Margins Left="15" Right="15" Top="15" Bottom="15"></Margins>
                                 </asp:LegendCellColumn>
                             </CellColumns>
                         </asp:Legend>
                         <asp:Legend LegendStyle="Row" Name="Top Legend" TableStyle="Wide" Docking="Top" Alignment="Center">
                             <CellColumns>
                                 <asp:LegendCellColumn Name="Weeks" Text="">
-                                    <Margins Left="15" Right="15"></Margins>
+                                    <Margins Left="15" Right="15" Top="1" Bottom="1"></Margins>
                                 </asp:LegendCellColumn>
                             </CellColumns>
                         </asp:Legend>
@@ -503,12 +544,12 @@
                             <AxisY IsLabelAutoFit="False" LineDashStyle="NotSet">
                                 <MajorGrid LineColor="DimGray" />
                                 <MinorGrid Enabled="True" LineColor="Silver" LineDashStyle="Dot" />
-                                <LabelStyle Format="MMM, d" />
+                                <LabelStyle Format="dd"/>
                             </AxisY>
                             <AxisY2 IsLabelAutoFit="False" Enabled="True">
                                 <MajorGrid LineColor="DimGray" />
                                 <MinorGrid Enabled="True" LineColor="Silver" LineDashStyle="Dot" />
-                                <LabelStyle Format="MMM, d" />
+                                <LabelStyle Format="dd" />
                             </AxisY2>
                             <AxisX IsLabelAutoFit="true">
                                 <MajorGrid Interval="Auto" LineDashStyle="Dot" />
