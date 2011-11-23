@@ -304,18 +304,12 @@ namespace PraticeManagement.Controls.Milestones
             var dpPersonEnd = ((Control)sender).Parent.FindControl("dpPersonEnd") as DatePicker;
             Person person = GetPersonBySelectedValue(ddl.SelectedValue);
 
-            List<MilestonePersonEntry> entries = MilestonePersonsEntries.Where(entry => entry.ThisPerson.Id.Value == person.Id.Value).AsQueryable().ToList();
-
-            foreach (MilestonePersonEntry entry in entries)
+            if (person == null ||
+                person.HireDate.Date > dpPersonStart.DateValue.Date ||
+                (person.TerminationDate.HasValue &&
+                 person.TerminationDate.Value < dpPersonEnd.DateValue.Date))
             {
-                if (person == null ||
-                    person.HireDate > entry.StartDate ||
-                    (person.TerminationDate.HasValue && entry.EndDate.HasValue &&
-                     person.TerminationDate.Value < entry.EndDate))
-                {
-                    args.IsValid = false;
-                    break;
-                }
+                args.IsValid = false;
             }
         }
 
