@@ -27,65 +27,104 @@
         }
         .fontSkilltype
         {
-            font-size: 15px;
+            font-size: 15px !important;
         }
         .widthspace
         {
             width: 15px;
         }
+        .SkillsBody
+        {
+            background-color: #d4dff8;
+            padding : 10px;
+            padding-top :25px !important;
+            border-color: -moz-use-text-color #999999 #999999;
+            border: 1px solid #999999;
+        }
+        
+        .SkillsDataBody
+        {
+            background-color: White;
+            height: 360px;
+            overflow: auto;
+            padding-left: 2%; 
+            padding-top: 1%;  
+            text-align: center; 
+            overflow: auto;
+        }
+   
     </style>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
-   
-        <table style="width: 80%">
-            <tr>
-                <td colspan="4" style="padding-bottom: 30px;">
-                    <center>
-                        <h1>
-                            Skills Profile for
-                            <asp:Label ID="lblPersonName" runat="server"></asp:Label></h1>
-                    </center>
-                </td>
-            </tr>
-            </table>
-             <div style="padding-left: 5%; padding-right: 10%; text-align: center; overflow:auto; max-height:500px;">
-            <table  style="width: 80%">
-            <asp:Repeater ID="repIndustries" runat="server" OnItemDataBound="repIndustries_OnItemDataBound"  OnLoad="repIndustries_OnLoad" >
+    <table style="width: 100%">
+        <tr>
+            <td colspan="4" style="padding-bottom: 30px;">
+                <center>
+                    <h1>
+                        Skills Profile for
+                        <asp:Label ID="lblPersonName" runat="server"></asp:Label></h1>
+                </center>
+            </td>
+        </tr>
+    </table>
+    <div  class="SkillsBody">
+    <div style="" class="SkillsDataBody">
+        <table style="width: 77%; text-align:center;" >
+            <asp:Repeater ID="repIndustries" runat="server" OnItemDataBound="repIndustries_OnItemDataBound"
+                OnLoad="repIndustries_OnLoad" >
                 <HeaderTemplate>
-                    <tr>
-                        <th class="fontSkilltype" style="width: 40%;">
-                            Industries
-                        </th>
+                    <tr class="CompPerfHeader">
+                    <td style="width: 2%;">
+                           <div class="ie-bg no-wrap" ></div>
+                    </td>
+                        <td class="fontSkilltype" style="width: 40%;">
+                           <div class="ie-bg no-wrap" style="text-align:left;padding-left:5px;"> Industries</div>
+
+                        </td>
+                        <td style="width: 15%;text-align:right;">
+                            <div class="ie-bg no-wrap" style="text-align:center;">Experience</div>
+                        </td>
                         <th style="width: 15%;">
-                            Experience
                         </th>
-                        <td style="width: 15%;">
-                        </td>
-                        <td>
-                        </td>
+                        <th style="width: 10%;">
+                        </th>
                     </tr>
                     <tr>
-                    <td colspan="4" style="padding-top:15px;font-size:15px;">
+                    <td></td>
+                    <td colspan="4" style="padding-top:15px;font-weight:bold;">
                     <asp:Label ID="lblInduatriesMsg" runat="server"  Visible="false"></asp:Label>
                     </td>
                     </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr>
+                    <td> <div class="ie-bg no-wrap" style="text-align:center;"></div></td>
                         <td>
                             <asp:Label ID="lblIndustryDesc" runat="server"></asp:Label>
                         </td>
-                        <td>
+                        <td style="text-align:center;" >
                             <asp:Label ID="lblExp" runat="server"></asp:Label>
                         </td>
-                        <td colspan="2">
-                        </td>
+                        <th colspan="2">
+                        </th>
                     </tr>
                     
                 </ItemTemplate>
-                
+                <AlternatingItemTemplate>
+                    <tr >
+                        <td style="background-color:#f9faff;"> </td>
+                        <td style="background-color:#f9faff;">
+                            <asp:Label ID="lblIndustryDesc" runat="server"></asp:Label>
+                        </td>
+                        <td style="text-align:center;background-color:#f9faff;">
+                            <asp:Label ID="lblExp" runat="server"></asp:Label>
+                        </td>
+                        <th colspan="2">
+                        </th>
+                    </tr>
+                </AlternatingItemTemplate>
             </asp:Repeater>
             <tr>
                 <td colspan="5" class="space">
@@ -93,28 +132,30 @@
             </tr>
             <asp:Repeater ID="repTypes" runat="server" OnItemDataBound="repTypes_OnItemDataBound">
                 <ItemTemplate>
-                    <tr>
-                        <th class="fontSkilltype">
-                            <asp:Label ID="lblTypes" runat="server"></asp:Label>
-                        </th>
-                        <th>
-                            <asp:Label ID="lblLevel" runat="server"></asp:Label>
-                        </th>
-                        <th>
-                            <asp:Label ID="lblLastUsed" runat="server"></asp:Label>
-                        </th>
-                        <th>
-                            <asp:Label ID="lblYearsUsed" runat="server"></asp:Label>
-                        </th>
+                    <tr class="CompPerfHeader">
+                    <td> <div class="ie-bg no-wrap" style="text-align:center;"></div></td>
+                        <td class="fontSkilltype">
+                            <div class="ie-bg no-wrap" style="text-align:left;padding-left:5px;"><asp:Label ID="lblTypes" runat="server"></asp:Label></div>                        </td>
+                        <td>
+                            <div class="ie-bg no-wrap" style="text-align:center;"><asp:Label ID="lblLevel" runat="server"></asp:Label></div>
+                        </td>
+                        <td>
+                            <div class="ie-bg no-wrap" style="text-align:center;"><asp:Label ID="lblLastUsed" runat="server"></asp:Label></div>
+                        </td>
+                        <td>
+                            <div class="ie-bg no-wrap" style="text-align:center;"><asp:Label ID="lblYearsUsed" runat="server"></asp:Label></div>
+                        </td>
                     </tr>
                       <tr>
-                    <td colspan="4" style="padding-top:15px;font-size:15px;">
+                      <td></td>
+                    <td colspan="4" style="padding-top:15px;font-weight:bold;">
                     <asp:Label ID="lblTypesMsg" runat="server"  Visible="false"></asp:Label>
                     </td>
                     </tr>
                     <asp:Repeater ID="repCategories" runat="server" OnItemDataBound="repCategories_OnItemDataBound">
                         <ItemTemplate>
                             <tr>
+                            <td></td>
                                 <th>
                                     <u>
                                         <asp:Label ID="lblCategories" runat="server"></asp:Label></u>
@@ -125,21 +166,40 @@
                             <asp:Repeater ID="repSkills" runat="server" OnItemDataBound="repSkills_OnItemDataBound">
                                 <ItemTemplate>
                                     <tr>
+                                    <td></td>
                                         <td>
                                             <asp:Label ID="lblSkill" runat="server"></asp:Label>
                                             <span style="width: inherit"></span>
                                         </td>
-                                        <td>
+                                        <td style="text-align:center">
                                             <asp:Label ID="lblSkillLevel" runat="server"></asp:Label>
                                         </td>
-                                        <td>
+                                        <td style="text-align:center">
                                             <asp:Label ID="lblLastUsed" runat="server"></asp:Label>
                                         </td>
-                                        <td>
+                                        <td style="text-align:center;">
                                             <asp:Label ID="lblYearsUsed" runat="server"></asp:Label>
                                         </td>
                                     </tr>
                                 </ItemTemplate>
+                                <AlternatingItemTemplate>
+                                    <tr style="background-color:#f9faff;">
+                                        <td></td>
+                                        <td>
+                                            <asp:Label ID="lblSkill" runat="server"></asp:Label>
+                                            <span style="width: inherit"></span>
+                                        </td>
+                                        <td style="text-align:center">
+                                            <asp:Label ID="lblSkillLevel" runat="server"></asp:Label>
+                                        </td>
+                                        <td style="text-align:center" >
+                                            <asp:Label ID="lblLastUsed" runat="server"></asp:Label>
+                                        </td>
+                                        <td  style="text-align:center;" >
+                                            <asp:Label ID="lblYearsUsed" runat="server"></asp:Label>
+                                        </td>
+                                    </tr>
+                                </AlternatingItemTemplate>
                             </asp:Repeater>
                             <tr>
                                 <td colspan="5" class="space1">
@@ -153,16 +213,17 @@
                     </tr>
                 </ItemTemplate>
             </asp:Repeater>
-            </table>
-               </div>
-            <table style="width: 80%">
-            <tr>
-                <td colspan="4" align="right" style="text-align:right">
-                    <asp:Button runat="server" ID="btnUpdate" Text="Update" />
-                </td>
-            </tr>
         </table>
- 
+    </div>
+        </div>
+    <table style="width: 100%;">
+        <tr>
+            <td  style=" text-align:center; padding-top:15px;">
+                <asp:Button runat="server" ID="btnUpdate" Text="Update" />
+            </td>
+        </tr>
+    </table>
+
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="footer" runat="server">
 </asp:Content>
