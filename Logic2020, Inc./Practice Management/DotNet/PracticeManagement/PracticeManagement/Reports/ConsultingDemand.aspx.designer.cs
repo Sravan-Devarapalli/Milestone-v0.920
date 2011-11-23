@@ -130,6 +130,24 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.HiddenField hdnFiltersChanged;
         
         /// <summary>
+        /// hdnDefaultStartDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnDefaultStartDate;
+        
+        /// <summary>
+        /// hdnDefaultEndDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnDefaultEndDate;
+        
+        /// <summary>
         /// btnUpdateView control.
         /// </summary>
         /// <remarks>
@@ -209,6 +227,15 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ValidationSummary valSum;
+        
+        /// <summary>
+        /// lblPeriodRange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPeriodRange;
         
         /// <summary>
         /// chartDiv control.
