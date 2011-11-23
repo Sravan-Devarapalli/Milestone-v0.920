@@ -661,59 +661,7 @@ namespace PraticeManagement.Utils
 
         public static EndpointAddress GetEndpointAddress(string serviceClientName)
         {
-            string url = "";
-            switch (serviceClientName)
-            {
-                case "MilestonePersonServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "CalendarServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "ClientServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "MilestoneServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "ProjectServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "PersonServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "TimescaleServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "TimeEntryServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "ProjectGroupServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "ExpenseServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "ConfigurationServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "PracticeServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "ActivityLogServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "OverheadServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "ProjectStatusServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "PersonRoleServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "PersonStatusServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "ExpenseCategoryServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "OpportunityServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "DefaultRecruiterCommissionServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "DefaultCommissionServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "MembershipServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "AuthServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-                case "RoleServiceClient": url = GetClientUrl(serviceClientName);
-                    break;
-            }
-
+            string url = GetClientUrl(serviceClientName);
             return new EndpointAddress(url);
         }
 
