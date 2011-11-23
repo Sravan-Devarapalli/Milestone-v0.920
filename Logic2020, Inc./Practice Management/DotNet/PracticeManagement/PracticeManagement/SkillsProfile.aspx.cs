@@ -138,7 +138,7 @@ namespace PraticeManagement
                 var lblIndustryDesc = e.Item.FindControl("lblIndustryDesc") as Label;
                 var lblExp = e.Item.FindControl("lblExp") as Label;
                 lblIndustryDesc.Text = Industries.First(i => i.Id == dataItem.Industry.Id).Description;
-                lblExp.Text = dataItem.YearsExperience.ToString();
+                lblExp.Text = dataItem.YearsExperience.ToString().Length == 1 ? "0" + dataItem.YearsExperience.ToString() : dataItem.YearsExperience.ToString();
             }
 
         }
@@ -166,15 +166,15 @@ namespace PraticeManagement
                 var repCategories = e.Item.FindControl("repCategories") as Repeater;
                 var lblTypes = e.Item.FindControl("lblTypes") as Label;
                 var lblTypesMsg = e.Item.FindControl("lblTypesMsg") as Label;
-                if (dataItem.DisplayOrder == 1)
-                {
+                //if (dataItem.DisplayOrder == 1)
+                //{
                     var lblLevel = e.Item.FindControl("lblLevel") as Label;
                     var lblLastUsed = e.Item.FindControl("lblLastUsed") as Label;
                     var lblYearsUsed = e.Item.FindControl("lblYearsUsed") as Label;
                     lblLevel.Text = "Level";
                     lblLastUsed.Text = "Last Used";
                     lblYearsUsed.Text = "Years Used";
-                }
+                //}
                 lblTypes.Text = dataItem.Description;
                 if (Person.Skills.Any(s => s.Skill.Category.SkillType.Id == dataItem.Id))
                 {
@@ -219,7 +219,7 @@ namespace PraticeManagement
                 lblSkillLevel.Text = SkillLevels.First(s => s.Id == dataItem.SkillLevel.Id).Description;
                 lblSkill.Text = Skills.First(s => s.Id == dataItem.Skill.Id).Description;
                 lblLastUsed.Text = dataItem.LastUsed.ToString();
-                lblYearsUsed.Text = dataItem.YearsExperience.ToString();
+                lblYearsUsed.Text = dataItem.YearsExperience.ToString().Length == 1 ? "0" + dataItem.YearsExperience.ToString() : dataItem.YearsExperience.ToString();
             }
         }
 
@@ -256,3 +256,4 @@ namespace PraticeManagement
 
     }
 }
+
