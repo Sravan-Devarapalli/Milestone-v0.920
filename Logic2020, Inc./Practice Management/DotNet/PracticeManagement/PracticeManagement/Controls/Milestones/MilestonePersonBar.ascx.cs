@@ -306,23 +306,15 @@ namespace PraticeManagement.Controls.Milestones
 
         protected void custPersonInsert_ServerValidate(object sender, ServerValidateEventArgs args)
         {
-
             Person person = HostingControl.GetPersonBySelectedValue(ddlPerson.SelectedValue);
 
-            List<MilestonePersonEntry> entries = HostingControl.MilestonePersonsEntries.Where(entr => entr.ThisPerson.Id.Value == person.Id.Value).AsQueryable().ToList();
-
-            foreach (MilestonePersonEntry entry in entries)
+            if (person == null ||
+                person.HireDate.Date > dpPersonStartInsert.DateValue.Date ||
+                (person.TerminationDate.HasValue  &&
+                 person.TerminationDate.Value.Date < dpPersonEndInsert.DateValue.Date))
             {
-                if (person == null ||
-                    person.HireDate > entry.StartDate ||
-                    (person.TerminationDate.HasValue && entry.EndDate.HasValue &&
-                     person.TerminationDate.Value < entry.EndDate))
-                {
-                    args.IsValid = false;
-                    break;
-                }
+                args.IsValid = false;
             }
-
         }
 
         protected void cvHoursInPeriod_ServerValidate(object source, ServerValidateEventArgs e)
@@ -376,21 +368,6 @@ namespace PraticeManagement.Controls.Milestones
                 }
             }
             return days;
-        }
-
-        private bool ChechTerminationAndCompensation(DateTime endDate, Person person)
-        {
-
-            DateTime termDate =
-                person.TerminationDate.HasValue
-                    ?
-                        person.TerminationDate.Value
-                    :
-                        DateTime.MaxValue;
-
-            return
-                termDate >= endDate &&
-                DataHelper.IsCompensationCoversMilestone(person, person.HireDate, endDate);
         }
 
         protected void btnInsertPerson_Click(object sender, EventArgs e)
