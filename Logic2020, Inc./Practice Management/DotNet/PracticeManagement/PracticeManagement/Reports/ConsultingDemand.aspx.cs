@@ -9,6 +9,7 @@ using PraticeManagement.Controls;
 using System.Drawing;
 using PraticeManagement.Utils;
 using PraticeManagement.FilterObjects;
+using DataTransferObjects;
 
 namespace PraticeManagement.Reporting
 {
@@ -116,8 +117,9 @@ namespace PraticeManagement.Reporting
                 {
                     SetDefaultDateRange();//4 months(i.e current month + 3 months) is the default date range.
                 }
+                UpdateReport();
+                updReport.Update();
             }
-            UpdateReport();
         }
 
         private void SetDefaultDateRange()
@@ -145,6 +147,7 @@ namespace PraticeManagement.Reporting
         protected void btnUpdateView_OnClick(object sender, EventArgs e)
         {
             UpdateReport();
+            updReport.Update();
         }
 
         public void UpdateReport()
@@ -180,44 +183,7 @@ namespace PraticeManagement.Reporting
 
             if (report.Count > 0)
             {
-                var personIds = (report.Select(p => p.Consultant.Id.Value)).Distinct().ToList();
-
-                //ObjectMaxLength = report.Max(r => r.ObjectName.Length);
-
-                foreach (var personId in personIds)
-                {
-                    var consultant = report.First(r => r.Consultant.Id.Value == personId).Consultant;
-                    var dummyClient = new DataTransferObjects.Client();
-                    dummyClient.Name = DummyClientName;
-                    var subReport = new DataTransferObjects.ConsultantDemandItem
-                    {
-                        Consultant = consultant,
-                        ObjectType = 2, //Added this for the sort order.
-                        Client = dummyClient//Added this for the sort order.
-                    };
-
-                    report.Add(subReport);//Adding subReports to display Strawman Name in the Xaxis label.
-                }
-
-                if (report.Where(r => r.Client != null && r.Client.Id.HasValue).Count() == 1)//To fix the issue of single bar in the chart, adding additional transparent bar.
-                {
-                    var subReport = new DataTransferObjects.ConsultantDemandItem
-                    {
-                        Consultant = new DataTransferObjects.Person { LastName = "", FirstName = "" },
-                        ObjectType = 1,
-                        StartDate = StartDate,
-                        EndDate = StartDate.AddDays(0.1),
-                        QuantityString = ",",
-                        ObjectName = " ",
-                        Client = new DataTransferObjects.Client { Name = "@" }
-                    };
-
-                    report.Add(subReport);
-                }
-
-                report = report.OrderByDescending(c => c.Consultant.PersonLastFirstName).ThenBy(c => c.ObjectType).ThenByDescending(c => c.Client.Name).ToList();
-                
-                //ConsultantMaxLength = report.Max(r => r.Consultant.PersonLastFirstName.Length);
+                report = CustomizeTheReport(report);
                 
                 ConsultingDemandSeries.Points.Clear();
 
@@ -226,42 +192,83 @@ namespace PraticeManagement.Reporting
                     AddConsultant(report[personIndex], personIndex);
                 }
 
-                chrtConsultingDemand.Height = Resources.Controls.TimelineGeneralHeaderHeigth +
-                                Resources.Controls.TimelineGeneralItemHeigth * report.Count +
-                                Resources.Controls.TimelineGeneralFooterHeigth;
+                SetChartHeightAndWidth(report.Count);
 
-                if (EndDate.Subtract(StartDate).Days >= 120)
-                {
-                    chrtConsultingDemand.Width = EndDate.Subtract(StartDate).Days * 30;
-                }
-                else
-                {
-                    chrtConsultingDemand.Width = EndDate.Subtract(StartDate).Days * 40;
-                }
-
-                    //chrtConsultingDemand.Style.Add("text-align", "left");
-                    //chrtConsultingDemand.BackImageAlignment = ChartImageAlignmentStyle.Left;
-
-                    var chartMainArea = chrtConsultingDemand.ChartAreas[MAIN_CHART_AREA_NAME];
-                    //chartMainArea.AlignmentStyle = AreaAlignmentStyles.Position;
-                    //chartMainArea.AlignmentOrientation = AreaAlignmentOrientations.Horizontal;
-                    //chartMainArea.InnerPlotPosition = new ElementPosition(6, 3, 100, 85);
-                    //float height;
-                    //if (float.TryParse(chrtConsultingDemand.Height.Value.ToString(), height))
-                    //{
-                    //    height = 100;
-                    //}
-                    //var element = new ElementPosition();
-                    //element.X = 0;
-                    //element.Y = 15;
-                    //element.Width = 100;
-                    //element.Height = 75;
-
-                    chartMainArea.Position = new ElementPosition(-1, 15, 100, 75);// new ElementPosition(-1, 20, 100, 90);
+                SetChartAreaPosition(report.Where(r => r.ObjectName != null && r.Client != null && r.Client.Name != null).Count());
             }
         }
 
-        private void AddConsultant(DataTransferObjects.ConsultantDemandItem item, int personIndex)
+        private List<ConsultantDemandItem> CustomizeTheReport(List<ConsultantDemandItem> report)
+        {
+            var personIds = (report.Select(p => p.Consultant.Id.Value)).Distinct().ToList();
+
+            //ObjectMaxLength = report.Max(r => r.ObjectName.Length);
+
+            //To Display Starwmans.
+            foreach (var personId in personIds)
+            {
+                var consultant = report.First(r => r.Consultant.Id.Value == personId).Consultant;
+                var dummyClient = new DataTransferObjects.Client();
+                dummyClient.Name = DummyClientName;
+                var subReport = new DataTransferObjects.ConsultantDemandItem
+                {
+                    Consultant = consultant,
+                    ObjectType = 2, //Added this for the sort order.
+                    Client = dummyClient//Added this for the sort order.
+                };
+
+                report.Add(subReport);//Adding subReports to display Strawman Name in the Xaxis label.
+            }
+
+            //To Display single bar correctly if the chart contains single bar.
+            if (report.Where(r => r.Client != null && r.Client.Id.HasValue).Count() == 1)//To fix the issue of single bar in the chart, adding additional transparent bar.
+            {
+                var subReport = new DataTransferObjects.ConsultantDemandItem
+                {
+                    Consultant = new DataTransferObjects.Person { LastName = "z", FirstName = "" },
+                    ObjectType = 1,
+                    StartDate = StartDate,
+                    EndDate = StartDate.AddDays(0.1),
+                    QuantityString = ",",
+                    ObjectName = " ",
+                    Client = new DataTransferObjects.Client { Name = "Z" }
+                };
+
+                report.Add(subReport);
+            }
+
+            report = report.OrderByDescending(c => c.Consultant.PersonLastFirstName).ThenBy(c => c.ObjectType).ThenByDescending(c => c.Client.Name).ToList();
+
+            //ConsultantMaxLength = report.Max(r => r.Consultant.PersonLastFirstName.Length);
+
+            return report;
+        }
+
+        private void SetChartHeightAndWidth(int reportCount)
+        {
+            chrtConsultingDemand.Height = Resources.Controls.TimelineGeneralHeaderHeigth +
+                Resources.Controls.TimelineGeneralItemHeigth * reportCount +
+                            Resources.Controls.TimelineGeneralFooterHeigth;
+
+            if (EndDate.Subtract(StartDate).Days >= 120)
+            {
+                chrtConsultingDemand.Width = EndDate.Subtract(StartDate).Days * 30;
+            }
+            else
+            {
+                chrtConsultingDemand.Width = EndDate.Subtract(StartDate).Days * 40;
+            }
+        }
+
+        private void SetChartAreaPosition(int barsCount)
+        {
+            var chartMainArea = chrtConsultingDemand.ChartAreas[MAIN_CHART_AREA_NAME];
+            chrtConsultingDemand.Style.Add("vertical-align", "middle");
+
+            chartMainArea.Position = new ElementPosition(-1, barsCount <= 6 ? 25 : 15, 100, barsCount <= 6 ? 65 : 75);// new ElementPosition(-1, 20, 100, 90);
+        }
+
+        private void AddConsultant(ConsultantDemandItem item, int personIndex)
         {
             int day = 0;
             for (var date = StartDate; date <= EndDate; date = date.AddDays(1))
@@ -269,17 +276,14 @@ namespace PraticeManagement.Reporting
                 //  Add another range to the person's timeline
                 if (item.StartDate <= date && item.EndDate >= date)
                 {
-                    //day = date.Subtract(item.StartDate).Days;
-                    //day = item.StartDate.Subtract(date).Days;
                     AddRange(item, date, personIndex, day);
-                    //day = day + 1;
                 }
                 day = day + 1;
             }
             AddXAxisLabel(item, personIndex);
         }
 
-        private void AddXAxisLabel(DataTransferObjects.ConsultantDemandItem item, int personIndex)
+        private void AddXAxisLabel(ConsultantDemandItem item, int personIndex)
         {
             var labels =
               chrtConsultingDemand.ChartAreas[MAIN_CHART_AREA_NAME].AxisX.CustomLabels;
@@ -321,25 +325,31 @@ namespace PraticeManagement.Reporting
 
             if (item.Client != null && item.Client.Id.HasValue)
             {
-                //Adding objectNumberLabel label is for ObjectId Link.
-                var objectNumberLabel = labels.Add(
-                                                personIndex - 0.49, // From position
-                                                personIndex + 0.49, // To position
-                                                item.ObjectNumber, // Formated person title
-                                               0, // Index
-                                                LabelMarkStyle.None); // Mark style: none
-                objectNumberLabel.ForeColor = Color.FromArgb(8, 152, 230); //Color.FromArgb(0, 102, 153); //a onhover
-                objectNumberLabel.ToolTip = item.ObjectNumber;
-                objectNumberLabel.Url = item.ObjectType == 1 ?
-                    Urls.OpportunityDetailsLink(item.ObjectId)
-                    : Urls.GetProjectDetailsUrl(item.ObjectId,
-                                                (hdnFiltersChanged.Value == "1") ?
-                                                Constants.ApplicationPages.ConsultingDemandWithFilterQueryString : Constants.ApplicationPages.ConsultingDemand
-                                                );
+                //Add ObjectId Link to x axis label.
+                AddObjectIdLink(labels, item, personIndex);
             }
         }
 
-        private void AddRange(DataTransferObjects.ConsultantDemandItem item, DateTime date, int personIndex, int dayIndex)
+        private void AddObjectIdLink(CustomLabelsCollection labels,ConsultantDemandItem item, int personIndex)
+        {
+            //Adding objectNumberLabel label is for ObjectId Link.
+            var objectNumberLabel = labels.Add(
+                                            personIndex - 0.49, // From position
+                                            personIndex + 0.49, // To position
+                                            item.ObjectNumber, // Formated person title
+                                           0, // Index
+                                            LabelMarkStyle.None); // Mark style: none
+            objectNumberLabel.ForeColor = Color.FromArgb(8, 152, 230); //Color.FromArgb(0, 102, 153); //a onhover
+            objectNumberLabel.ToolTip = item.ObjectNumber;
+            objectNumberLabel.Url = item.ObjectType == 1 ?
+                Urls.OpportunityDetailsLink(item.ObjectId)
+                : Urls.GetProjectDetailsUrl(item.ObjectId,
+                                            (hdnFiltersChanged.Value == "1") ?
+                                            Constants.ApplicationPages.ConsultingDemandWithFilterQueryString : Constants.ApplicationPages.ConsultingDemand
+                                            );
+        }
+
+        private void AddRange(ConsultantDemandItem item, DateTime date, int personIndex, int dayIndex)
         {
             var start = date;
             var end = date.AddDays(1);
@@ -351,30 +361,37 @@ namespace PraticeManagement.Reporting
                 //Add color to the Bar.
                 AddColorToRangeBar(item, range);
 
-                var dailyDemands = Utils.Generic.StringToIntArray(item.QuantityString);//dailyDemands contains the range of values from Startdate and EndDate.
-
-                //Add text on the Range Bar.
-                var rangeText = AddRange(start, end.AddDays(-0.9), personIndex);
-                rangeText.Color = range.Color;
-                rangeText.Label = dailyDemands[dayIndex] == 0 ? string.Empty : dailyDemands[dayIndex].ToString();
-                rangeText.LabelToolTip = string.Format("{0:dd-MMM} : {1}", start, dailyDemands[dayIndex]);
-
-                //Add Tooltip on the Range Bar.
-                if (item.ObjectName != " ")//To eliminate tooltip for transparent bar(it will present if the report contains only one bar).
-                {
-                    var tooptip = GetToolTip(item, dailyDemands);
-                    range.MapAreaAttributes = "onmouseover=\"DisplayTooltip('" + tooptip + "');\" onmouseout=\"DisplayTooltip('');\" onblur=\"DisplayTooltip('');\"";
-                }
+                //Display demand on the bar and Monthly demand on the bar tooltip.
+                SetBarTextAndToolTip(item, start, end, range, personIndex, dayIndex);
             }
         }
 
-        private void AddColorToRangeBar(DataTransferObjects.ConsultantDemandItem item, DataPoint range)
+        private void AddColorToRangeBar(ConsultantDemandItem item, DataPoint range)
         {
             //Get color by consulting Demand.
             range.Color = Coloring.GetColorByConsultingDemand(item);
         }
 
-        private string GetToolTip(DataTransferObjects.ConsultantDemandItem item, int[] dailyDemands)
+        private void SetBarTextAndToolTip(ConsultantDemandItem item, DateTime start, DateTime end, DataPoint range, int personIndex, int dayIndex)
+        {
+            var dailyDemands = Utils.Generic.StringToIntArray(item.QuantityString);//dailyDemands contains the range of values from Startdate and EndDate.
+
+            //Add text on the Range Bar. 
+            //adding another range bar to display text correctly on the perticular date.
+            var rangeTextbar = AddRange(start, end.AddDays(-0.9), personIndex);
+            rangeTextbar.Color = range.Color;
+            rangeTextbar.Label = dailyDemands[dayIndex] == 0 ? string.Empty : dailyDemands[dayIndex].ToString();
+            rangeTextbar.LabelToolTip = string.Format("{0:dd-MMM} : {1}", start, dailyDemands[dayIndex]);
+
+            //Add Tooltip on the Range Bar.
+            if (item.ObjectName != " ")//To eliminate tooltip for transparent bar(it will present if the report contains only one bar).
+            {
+                var tooptip = GetToolTip(item, dailyDemands);
+                range.MapAreaAttributes = "onmouseover=\"DisplayTooltip('" + tooptip + "');\" onmouseout=\"DisplayTooltip('');\" onblur=\"DisplayTooltip('');\"";
+            } 
+        }
+
+        private string GetToolTip(ConsultantDemandItem item, int[] dailyDemands)
         {
             var tooltip = "Total Demand by Month<br/>-----------------------------";
             int i = 0, day = 0;
@@ -436,6 +453,7 @@ namespace PraticeManagement.Reporting
         {
             chrtConsultingDemand.Titles.Clear();
             chrtConsultingDemand.Titles.Add(string.Format(Title_Format, StartDate.ToString("MM/dd/yyyy"), EndDate.ToString("MM/dd/yyyy")));
+            chrtConsultingDemand.Titles[0].Font = new Font("Arial", 10, FontStyle.Bold);
         }
 
         private void InitLegends()
@@ -458,17 +476,29 @@ namespace PraticeManagement.Reporting
             horizAxis.IntervalType = DateTimeIntervalType.Days;
             horizAxis.Interval = 1;
 
+            //Draw a stripline for every end of the month.
+            //Display Month Name above the axis.
+            SetMonthDifferentiatorAndName(horizAxis);
+        }
+
+        private void SetMonthDifferentiatorAndName(Axis horizAxis)
+        {
             var startDate = new DateTime(StartDate.Year, StartDate.Month, 1);
             var endDate = new DateTime(EndDate.Year, EndDate.Month, 1);
             endDate = endDate.AddMonths(1).AddDays(-1);
-            DateTime previousEndDate = startDate;
+            DateTime previousEndDate = startDate;//Added previousEndDate variable for the custom dates(i.e if selected date is not start or end date of the month).
 
             for (var date = startDate; date <= endDate; date = date.AddMonths(1))
             {
+                //Set Month differentiator.
+                var stripLine = SetStripLine(date);
+                horizAxis.StripLines.Add(stripLine);
+
                 var start = (date.Year == StartDate.Year && date.Month == StartDate.Month) ? StartDate : previousEndDate.AddDays(1);
                 previousEndDate = date.AddMonths(1).AddDays(-1);
                 var end = (date.Year == EndDate.Year && date.Month == EndDate.Month) ? EndDate : previousEndDate;
 
+                //Set Month Name.
                 var label = horizAxis.CustomLabels.Add(
                             start.ToOADate(),
                             end.ToOADate(),
@@ -476,6 +506,20 @@ namespace PraticeManagement.Reporting
                             1,
                             LabelMarkStyle.None);
             }
+        }
+
+        private StripLine SetStripLine(DateTime date)
+        {
+            StripLine stripLine = new StripLine();
+            stripLine.BorderColor = Color.Blue;
+            stripLine.BorderWidth = 2;
+            stripLine.StripWidthType = DateTimeIntervalType.Days;
+            stripLine.Interval = 0;
+            stripLine.IntervalOffset = date.ToOADate();
+            stripLine.BorderDashStyle = ChartDashStyle.Solid;
+            stripLine.ToolTip = date.ToString(FULL_MONTH_NAME_FORMAT);
+
+            return stripLine;
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
