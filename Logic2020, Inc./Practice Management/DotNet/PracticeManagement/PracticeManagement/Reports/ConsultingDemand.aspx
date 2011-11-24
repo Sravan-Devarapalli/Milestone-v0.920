@@ -34,17 +34,24 @@
         .displayNone
         {
             display: none;
-        }        
+        }
         
         .SetScrollRightButtonStyle
-        { 
-            padding-left:10px; padding-right:8px; padding-top:4px; padding-bottom:4px; width:8px;
+        {
+            padding-left: 10px;
+            padding-right: 8px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            width: 8px;
         }
         .SetScrollLeftButtonStyle
         {
-            padding-left:2px; padding-right:12px; padding-top:4px; padding-bottom:4px; width:8px;
+            padding-left: 2px;
+            padding-right: 12px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            width: 8px;
         }
-        
     </style>
     <script type="text/javascript" language="javascript">
         var FADINGTOOLTIP;
@@ -142,9 +149,103 @@
             }
         }
 
+        function CheckIfDatesValid() {
+            hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
+            hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
+            txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
+            txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
+            var startDate = new Date(txtStartDate.value);
+            var endDate = new Date(txtEndDate.value);
+            if (txtStartDate.value != '' && txtEndDate.value != ''
+            && startDate <= endDate) {
+                var startYear = parseInt(startDate.format('yyyy'));
+                var endYear = parseInt(endDate.format('yyyy'));
+                var startMonth = 0;
+                var endMonth = 0;
+                if (startDate.format('MM')[0] == '0') {
+                    startMonth = parseInt(startDate.format('MM')[1]);
+                }
+                else {
+                    startMonth = parseInt(startDate.format('MM'));
+                }
+                if (endDate.format('MM')[0] == '0') {
+                    endMonth = parseInt(endDate.format('MM')[1]);
+                }
+                else {
+                    endMonth = parseInt(endDate.format('MM'));
+                }
+                if ((startYear == endYear && ((endMonth - startMonth + 1) <= 12))
+            || (((((endYear - startYear) * 12 + endMonth) - startMonth + 1)) <= 12)
+            || ((endDate - startDate) / (1000 * 60 * 60 * 24)) < 360
+            ) {
+                    var btnCustDatesClose = document.getElementById('<%= btnCustDatesClose.ClientID %>');
+                    hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
+                    hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
+                    lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
+                    var startDate = new Date(txtStartDate.value);
+                    var endDate = new Date(txtEndDate.value);
+                    var startDateStr = startDate.format("MM/dd/yyyy");
+                    var endDateStr = endDate.format("MM/dd/yyyy");
+                    hdnStartDate.value = startDateStr;
+                    hdnEndDate.value = endDateStr;
+                    lblCustomDateRange.innerHTML = '(' + startDateStr + '&nbsp;-&nbsp;' + endDateStr + ')';
+                    btnCustDatesClose.click();
+                }
+            }
+        }
+
+        function ValidatePeriod(sender, args) {
+            args.IsValid = PeriodValidate();
+        }
+
+        function PeriodValidate() {
+            hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
+            hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
+            txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
+            txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
+            ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
+            var startDate = new Date(txtStartDate.value);
+            var endDate = new Date(txtEndDate.value);
+            if (txtStartDate.value != '' && txtEndDate.value != ''
+            && startDate <= endDate && ddlPeriod.value == '0') {
+                var startYear = parseInt(startDate.format('yyyy'));
+                var endYear = parseInt(endDate.format('yyyy'));
+                var startMonth = 0;
+                var endMonth = 0;
+                if (startDate.format('MM')[0] == '0') {
+                    startMonth = parseInt(startDate.format('MM')[1]);
+                }
+                else {
+                    startMonth = parseInt(startDate.format('MM'));
+                }
+                if (endDate.format('MM')[0] == '0') {
+                    endMonth = parseInt(endDate.format('MM')[1]);
+                }
+                else {
+                    endMonth = parseInt(endDate.format('MM'));
+                }
+                if (startYear == endYear) {
+                    return ((endMonth - startMonth + 1) <= 12);
+                }
+                else {
+                    return (((((endYear - startYear) * 12 + endMonth) - startMonth + 1)) <= 12);
+                }
+                if (((endDate - startDate) / (1000 * 60 * 60 * 24)) < 360) {
+                    return true; //args.IsValid = true;
+                }
+            }
+            else {
+                return true;  //args.IsValid = true;
+            }
+
+            return false;
+        }
+
         function CheckAndShowCustomDatesPoup(ddlPeriod) {
             imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
             lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
+            ClearValidations();
+
             if (ddlPeriod.value == '0') {
                 imgCalender.attributes["class"].value = "";
                 lblCustomDateRange.attributes["class"].value = "";
@@ -168,7 +269,6 @@
                 }
             }
         }
-
         function ReAssignStartDateEndDates() {
             hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
             hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
@@ -185,14 +285,10 @@
             if (endDateCalExtender != null) {
                 endDateCalExtender.set_selectedDate(hdnEndDate.value);
             }
-            btnCustDatesOK = document.getElementById('<%= btnCustDatesOK.ClientID %>');
-            btnCustDatesOK.click();
         }
-
         function ChangeStartEndDates() {
             ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
             if (ddlPeriod.value == '0') {
-
                 hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
                 hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
                 hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
@@ -201,6 +297,7 @@
                 txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
                 hdnStartDateCalExtenderBehaviourId = document.getElementById('<%= hdnStartDateCalExtenderBehaviourId.ClientID %>');
                 hdnEndDateCalExtenderBehaviourId = document.getElementById('<%= hdnEndDateCalExtenderBehaviourId.ClientID %>');
+                lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
                 var startDate = new Date(txtStartDate.value);
                 var endDate = new Date(txtEndDate.value);
                 if (txtStartDate.value != '' && txtEndDate.value != ''
@@ -233,7 +330,7 @@
                         endDate = new Date(endMonth.toString() + '/01/' + endYear.toString());
                     }
                     endDate = new Date((endDate - (1000 * 60 * 60 * 24)));
-                    //                    if ((endYear - startYear) * 12 + endMonth - startMonth > 4) {
+                    //                    if ((endYear - startYear) * 12 + endMonth - startMonth > 3) {
                     //                        endMonth = (startMonth + 2) % 12;
                     //                        if (startMonth > endMonth) {
                     //                            endYear = startYear + 1;
@@ -252,138 +349,32 @@
                     if (endDateCalExtender != null) {
                         endDateCalExtender.set_selectedDate(new Date(endDate.format("MM/dd/yyyy")));
                     }
-
                     if (PeriodValidate()) {
                         hdnStartDate.value = startDate.format("MM/dd/yyyy");
                         hdnEndDate.value = endDate.format("MM/dd/yyyy");
-
-                        lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
                         lblCustomDateRange.innerHTML = '(' + hdnStartDate.value + '&nbsp;-&nbsp;' + hdnEndDate.value + ')';
                     }
-
                 }
             }
         }
-        function CheckIfDatesValid() {
 
-            if (PeriodValidate()) {
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
 
-                var btnCustDatesClose = document.getElementById('<%= btnCustDatesClose.ClientID %>');
-                hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
-                hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
-                lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
-                var startDate = new Date(txtStartDate.value);
-                var endDate = new Date(txtEndDate.value);
-                var startDateStr = startDate.format("MM/dd/yyyy");
-                var endDateStr = endDate.format("MM/dd/yyyy");
-                hdnStartDate.value = startDateStr;
-                hdnEndDate.value = endDateStr;
-                lblCustomDateRange.innerHTML = '(' + startDateStr + '&nbsp;-&nbsp;' + endDateStr + ')';
-                btnCustDatesClose.click();
-            }
-
-            return false;
-        }
-
-        function PeriodValidate() {
-            var cstvalPeriodRange = document.getElementById('<%= cstvalPeriodRange.ClientID %>');
-            var valSummary = document.getElementById('<%= valSum.ClientID %>');
-            var lblPeriodRange = document.getElementById('<%= lblPeriodRange.ClientID %>');
-
-            cstvalPeriodRange.style.display = valSummary.style.display = lblPeriodRange.style.display = 'none';
-
-            hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
-            hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
-            txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
-            txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
-            var startDate = new Date(txtStartDate.value);
-            var endDate = new Date(txtEndDate.value);
-            if (txtStartDate.value != '' && txtEndDate.value != ''
-            && startDate <= endDate) {
-                var startYear = parseInt(startDate.format('yyyy'));
-                var endYear = parseInt(endDate.format('yyyy'));
-                var startMonth = 0;
-                var endMonth = 0;
-                if (startDate.format('MM')[0] == '0') {
-                    startMonth = parseInt(startDate.format('MM')[1]);
-                }
-                else {
-                    startMonth = parseInt(startDate.format('MM'));
-                }
-                if (endDate.format('MM')[0] == '0') {
-                    endMonth = parseInt(endDate.format('MM')[1]);
-                }
-                else {
-                    endMonth = parseInt(endDate.format('MM'));
-                }
-                if ((startYear == endYear && ((endMonth - startMonth + 1) <= 12))
-            || (((((endYear - startYear) * 12 + endMonth) - startMonth + 1)) <= 12)
-            || ((endDate - startDate) / (1000 * 60 * 60 * 24)) < 90
-            ) {
-                    return true;
-                }
-                else {
-                    cstvalPeriodRange.style.display = 'block';
-                    lblPeriodRange.style.display = '';
-                }
-            }
-            else {
-                valSummary.style.display = 'block';
-            }
-
-            return false;
-        }
-
-        function ValidatePeriod(sender, args) {
-            hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
-            hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
-            txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
-            txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
+        function endRequestHandle(sender, Args) {
+            imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
+            lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
             ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
-            var startDate = new Date(txtStartDate.value);
-            var endDate = new Date(txtEndDate.value);
-            if (txtStartDate.value != '' && txtEndDate.value != ''
-            && startDate <= endDate && ddlPeriod.value == '0') {
-                var startYear = parseInt(startDate.format('yyyy'));
-                var endYear = parseInt(endDate.format('yyyy'));
-                var startMonth = 0;
-                var endMonth = 0;
-                if (startDate.format('MM')[0] == '0') {
-                    startMonth = parseInt(startDate.format('MM')[1]);
-                }
-                else {
-                    startMonth = parseInt(startDate.format('MM'));
-                }
-                if (endDate.format('MM')[0] == '0') {
-                    endMonth = parseInt(endDate.format('MM')[1]);
-                }
-                else {
-                    endMonth = parseInt(endDate.format('MM'));
-                }
-                if (startYear == endYear) {
-                    args.IsValid = ((endMonth - startMonth + 1) <= 12);
-                }
-                else {
-                    args.IsValid = (((((endYear - startYear) * 12 + endMonth) - startMonth + 1)) <= 12);
-                }
-                if ((startYear == endYear && ((endMonth - startMonth + 1) <= 12))
-            || (((((endYear - startYear) * 12 + endMonth) - startMonth + 1)) <= 12)
-            || ((endDate - startDate) / (1000 * 60 * 60 * 24)) < 90
-            ) {
-                    args.IsValid = true;
-                }
-            }
-            else {
-                args.IsValid = true;
+            if (imgCalender.fireEvent && ddlPeriod.value != '0') {
+                imgCalender.style.display = "none";
+                lblCustomDateRange.style.display = "none";
             }
         }
 
         function ClearValidations() {
             var valSummary = document.getElementById('<%= valSum.ClientID %>');
             var cstvalPeriodRange = document.getElementById('<%= cstvalPeriodRange.ClientID %>');
-            var lblPeriodRange = document.getElementById('<%= lblPeriodRange.ClientID %>');
 
-            cstvalPeriodRange.style.display = lblPeriodRange.style.display = 'none';
+            cstvalPeriodRange.style.display = 'none';
             valSummary.style.display = 'none';
         }
 
@@ -423,7 +414,6 @@
                 hdnStartDate.value = startDate.format("MM/dd/yyyy");
                 hdnEndDate.value = endDate.format("MM/dd/yyyy");
 
-                lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
                 lblCustomDateRange.innerHTML = '(' + hdnStartDate.value + '&nbsp;-&nbsp;' + hdnEndDate.value + ')';
             }
 
@@ -432,6 +422,11 @@
             btnReset.disabled = 'disabled';
 
             return false;
+        }
+
+        function ValidAll() {
+            //var validators = Page_Validators;
+            return Page_IsValid && PeriodValidate();
         }
 
     </script>
@@ -455,8 +450,7 @@
                             &nbsp;<asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
                             <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
                                 CancelControlID="btnCustDatesCancel" OkControlID="btnCustDatesClose" BackgroundCssClass="modalBackground"
-                                PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates" DropShadow="false"
-                                OnCancelScript="ReAssignStartDateEndDates(); ClearValidations();" OnOkScript="return false;" />
+                                PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates" DropShadow="false" />
                         </td>
                         <td>
                             <td>
@@ -489,10 +483,10 @@
                                             <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
                                                 FromToDateFieldWidth="70" />
                                         </td>
-                                        <td style="min-width: 5px;">
-                                            <asp:CustomValidator ID="cstvalPeriodRange" runat="server" ClientValidationFunction="ValidatePeriod" ValidationGroup='<%# ClientID %>'
-                                                SetFocusOnError="true" Text="*" EnableClientScript="true" ToolTip="Period should not be more than four months"
-                                                ErrorMessage="Period should not be more than 4 months." Display="Dynamic"></asp:CustomValidator>
+                                        <td>
+                                            <asp:CustomValidator ID="cstvalPeriodRange" runat="server" ClientValidationFunction="ValidatePeriod"
+                                                Text="*" EnableClientScript="true" ValidationGroup="<%# ClientID %>" ToolTip="Period should not be more than 12 months"
+                                                ErrorMessage="Period should not be more than 12 months." Display="Dynamic"></asp:CustomValidator>
                                         </td>
                                     </tr>
                                 </table>
@@ -500,38 +494,43 @@
                         </tr>
                         <tr>
                             <td align="center" style="padding: 10px 0px 10px 0px;">
-                                <asp:Button ID="btnCustDatesOK" runat="server" OnClientClick="if(!CheckIfDatesValid()){return false;}" ValidationGroup='<%# ClientID %>'
+                                <asp:Button ID="btnCustDatesOK" runat="server" OnClientClick="CheckIfDatesValid(); if(ValidAll()) return false;"
                                     Text="OK" Style="float: none !Important;" CausesValidation="true" />
                                 <asp:Button ID="btnCustDatesClose" runat="server" Style="display: none;" CausesValidation="true"
-                                    OnClientClick="return false;" />
+                                    OnClientClick="if(ValidAll()) return false;" />
                                 &nbsp; &nbsp;
-                                <asp:Button ID="btnCustDatesCancel" runat="server" Text="Cancel" Style="float: none !Important;" />
+                                <asp:Button ID="btnCustDatesCancel" OnClientClick="ReAssignStartDateEndDates(); ClearValidations(); return false;"
+                                    runat="server" Text="Cancel" Style="float: none !Important;" />
                             </td>
                         </tr>
                         <tr>
                             <td align="center">
-                                <asp:ValidationSummary ID="valSum" runat="server" ValidationGroup='<%# ClientID %>' />
-                                <asp:Label ID="lblPeriodRange" runat="server" Text="Period should not be more than 12 months." style="display:none;" ForeColor="Red"></asp:Label>
+                                <asp:ValidationSummary ID="valSum" runat="server" />
                             </td>
                         </tr>
                     </table>
                 </asp:Panel>
             </div>
-            <div id="chartDiv" runat="server" style="overflow-x: auto; overflow-y: hidden; text-align:center;">
+        </ContentTemplate>
+    </asp:UpdatePanel>
+    <asp:UpdatePanel ID="updReport" runat="server" UpdateMode="Conditional">
+        <ContentTemplate>
+            <div id="chartDiv" runat="server" style="overflow-x: auto;
+                overflow-y: hidden; text-align: center;">
                 <asp:Chart ID="chrtConsultingDemand" runat="server" Width="920px">
                     <Legends>
                         <asp:Legend LegendStyle="Row" Name="Botom Legend" TableStyle="Wide" Docking="Bottom"
                             Alignment="Center">
                             <CellColumns>
                                 <asp:LegendCellColumn Name="Weeks" Text="">
-                                    <Margins Left="15" Right="15" Top="15" Bottom="15"></Margins>
+                                    <Margins Left="15" Right="15"></Margins>
                                 </asp:LegendCellColumn>
                             </CellColumns>
                         </asp:Legend>
                         <asp:Legend LegendStyle="Row" Name="Top Legend" TableStyle="Wide" Docking="Top" Alignment="Center">
                             <CellColumns>
                                 <asp:LegendCellColumn Name="Weeks" Text="">
-                                    <Margins Left="15" Right="15" Top="1" Bottom="1"></Margins>
+                                    <Margins Left="15" Right="15" Bottom="1"></Margins>
                                 </asp:LegendCellColumn>
                             </CellColumns>
                         </asp:Legend>
@@ -544,7 +543,7 @@
                             <AxisY IsLabelAutoFit="False" LineDashStyle="NotSet">
                                 <MajorGrid LineColor="DimGray" />
                                 <MinorGrid Enabled="True" LineColor="Silver" LineDashStyle="Dot" />
-                                <LabelStyle Format="dd"/>
+                                <LabelStyle Format="dd" />
                             </AxisY>
                             <AxisY2 IsLabelAutoFit="False" Enabled="True">
                                 <MajorGrid LineColor="DimGray" />
