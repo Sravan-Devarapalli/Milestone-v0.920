@@ -710,7 +710,7 @@ namespace PraticeManagement
                     ? int.Parse(ddlDefaultTerms.SelectedValue)
                     : default(int);
 
-            client.IsMarginColorInfoEnabled = null;
+            client.IsMarginColorInfoEnabled = chbMarginThresholds.Checked;
             client.ClientMarginInfo = null;
             if (IntialClientMarginColorInfoList.Count == ClientMarginColorInfoList.Count)
             {
@@ -721,7 +721,6 @@ namespace PraticeManagement
                         && ClientMarginColorInfoList[i].StartRange == IntialClientMarginColorInfoList[i].StartRange
                         && ClientMarginColorInfoList[i].EndRange == IntialClientMarginColorInfoList[i].EndRange))
                     {
-                        client.IsMarginColorInfoEnabled = chbMarginThresholds.Checked;
                         client.ClientMarginInfo = ClientMarginColorInfoList;
                         break;
                     }
@@ -729,14 +728,12 @@ namespace PraticeManagement
 
                 if (chbMarginThresholds.Checked != IntialchbMarginThresholdsValue)
                 {
-                    client.IsMarginColorInfoEnabled = chbMarginThresholds.Checked;
                     client.ClientMarginInfo = ClientMarginColorInfoList;
                 }
 
             }
             else
             {
-                client.IsMarginColorInfoEnabled = chbMarginThresholds.Checked;
                 client.ClientMarginInfo = ClientMarginColorInfoList;
             }
 
