@@ -17,11 +17,17 @@ BEGIN
 		SELECT i.*,
 				S.Description 'SkillsDescription',
 				SL.Description 'SkillLevel',
-				P.LastName + ', ' + P.FirstName [Person]
+				P.LastName + ', ' + P.FirstName [Person],
+				SC.SkillCategoryId 'SkillCategoryId',
+				SC.Description 'SkillCategory',
+				ST.SkillTypeId 'SkillTypeId',
+				ST.Description 'SkillType'
 		  FROM inserted AS i
 			   INNER JOIN Skills.Skill AS S ON S.SkillId = i.SkillId
 			   INNER JOIN Skills.SkillLevel AS SL ON i.SkillLevelId = SL.SkillLevelId
 			   INNER JOIN dbo.Person AS P ON P.PersonId = i.PersonId
+			   INNER JOIN Skills.SkillCategory AS SC ON SC.SkillCategoryId = S.SkillCategoryId
+			   INNER JOIN Skills.SkillType AS ST ON ST.SkillTypeId = SC.SkillTypeId
 	),
 
 	OLD_VALUES AS
@@ -29,11 +35,17 @@ BEGIN
 		SELECT d.*,
 				S.Description 'SkillsDescription',
 				SL.Description 'SkillLevel',
-				P.LastName + ', ' + P.FirstName [Person]
+				P.LastName + ', ' + P.FirstName [Person],
+				SC.SkillCategoryId 'SkillCategoryId',
+				SC.Description 'SkillCategory',
+				ST.SkillTypeId 'SkillTypeId',
+				ST.Description 'SkillType'
 		  FROM deleted AS d
 			   INNER JOIN Skills.Skill AS S ON S.SkillId = d.SkillId
 			   INNER JOIN Skills.SkillLevel AS SL ON d.SkillLevelId = SL.SkillLevelId
 			   INNER JOIN dbo.Person AS P ON P.PersonId = d.PersonId
+			   INNER JOIN Skills.SkillCategory AS SC ON SC.SkillCategoryId = S.SkillCategoryId
+			   INNER JOIN Skills.SkillType AS ST ON ST.SkillTypeId = SC.SkillTypeId
 	)
 
 	-- Log an activity
@@ -63,11 +75,15 @@ BEGIN
 	       l.LastName,
 	       l.FirstName,
 	       Data =  CONVERT(NVARCHAR(MAX),(SELECT NEW_VALUES.SkillsDescription,
+												NEW_VALUES.SkillType,
+												NEW_VALUES.SkillCategory,
 												NEW_VALUES.Person,
 												NEW_VALUES.SkillLevel,
 												NEW_VALUES.YearsExperience,
 												NEW_VALUES.LastUsed,
 												OLD_VALUES.SkillsDescription,
+												OLD_VALUES.SkillType,
+												OLD_VALUES.SkillCategory,
 												OLD_VALUES.Person,
 												OLD_VALUES.SkillLevel,
 												OLD_VALUES.YearsExperience,
@@ -77,13 +93,17 @@ BEGIN
 			           WHERE (NEW_VALUES.SkillId = ISNULL(i.SkillId, d.SkillId) AND NEW_VALUES.PersonId = ISNULL(i.PersonId, d.PersonId))
 							OR (OLD_VALUES.SkillId = ISNULL(d.SkillId, i.SkillId) AND  OLD_VALUES.PersonId = ISNULL(d.PersonId, i.PersonId))
 					  FOR XML AUTO, ROOT('PersonSkill'))),
-			LogData = (SELECT   NEW_VALUES.SkillId,
-								NEW_VALUES.PersonId,
+			LogData = (SELECT   NEW_VALUES.PersonId,
+								NEW_VALUES.SkillId,
+								NEW_VALUES.SkillTypeId,
+								NEW_VALUES.SkillCategoryId,
 								NEW_VALUES.SkillLevelId,
 								NEW_VALUES.YearsExperience,
 								NEW_VALUES.LastUsed,
-								OLD_VALUES.SkillId,
 								OLD_VALUES.PersonId,
+								OLD_VALUES.SkillId,
+								OLD_VALUES.SkillTypeId,
+								OLD_VALUES.SkillCategoryId,
 								OLD_VALUES.SkillLevelId,
 								OLD_VALUES.YearsExperience,
 								OLD_VALUES.LastUsed
