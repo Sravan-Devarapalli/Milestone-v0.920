@@ -17,11 +17,17 @@ BEGIN
 		SELECT i.*,
 				S.Description 'SkillsDescription',
 				SL.Description 'SkillLevel',
-				P.LastName + ', ' + P.FirstName [Person]
+				P.LastName + ', ' + P.FirstName [Person],
+				SC.SkillCategoryId 'SkillCategoryId',
+				SC.Description 'SkillCategory',
+				ST.SkillTypeId 'SkillTypeId',
+				ST.Description 'SkillType'
 		  FROM inserted AS i
 			   INNER JOIN Skills.Skill AS S ON S.SkillId = i.SkillId
 			   INNER JOIN Skills.SkillLevel AS SL ON i.SkillLevelId = SL.SkillLevelId
 			   INNER JOIN dbo.Person AS P ON P.PersonId = i.PersonId
+			   INNER JOIN Skills.SkillCategory AS SC ON SC.SkillCategoryId = S.SkillCategoryId
+			   INNER JOIN Skills.SkillType AS ST ON ST.SkillTypeId = SC.SkillTypeId
 	)
 
 	-- Log an activity
@@ -47,8 +53,10 @@ BEGIN
 	       l.PersonID,
 	       l.LastName,
 	       l.FirstName,
-	       Data =  CONVERT(NVARCHAR(MAX),(SELECT NEW_VALUES.SkillsDescription,
-												NEW_VALUES.PersonId,
+	       Data =  CONVERT(NVARCHAR(MAX),(SELECT NEW_VALUES.PersonId,
+												NEW_VALUES.SkillsDescription,
+												NEW_VALUES.SkillType,
+												NEW_VALUES.SkillCategory,
 												NEW_VALUES.Person,
 												NEW_VALUES.SkillLevel,
 												NEW_VALUES.YearsExperience,
@@ -56,8 +64,10 @@ BEGIN
 					    FROM NEW_VALUES
 			           WHERE (NEW_VALUES.SkillId = i.SkillId AND NEW_VALUES.PersonId = i.PersonId)
 					  FOR XML AUTO, ROOT('PersonSkill'))),
-			LogData = (SELECT   NEW_VALUES.SkillId,
-								NEW_VALUES.PersonId,
+			LogData = (SELECT   NEW_VALUES.PersonId,
+								NEW_VALUES.SkillId,
+								NEW_VALUES.SkillTypeId,
+								NEW_VALUES.SkillCategoryId,
 								NEW_VALUES.SkillLevelId,
 								NEW_VALUES.YearsExperience,
 								NEW_VALUES.LastUsed
