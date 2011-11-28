@@ -356,6 +356,15 @@ namespace PraticeManagement
             if (ddlClientGroup.Items.Count > 0)
                 ddlClientGroup.SortByText();
 
+            if (hdnValueChanged.Value == "false")
+            {
+                btnSave.Attributes.Add("disabled", "true");
+            }
+            else
+            {
+                btnSave.Attributes.Remove("disabled");
+            }
+
             activityLog.OpportunityId = OpportunityId;
             activityLog.Update();
             upActivityLog.Update();
@@ -693,7 +702,6 @@ namespace PraticeManagement
                 }
                 ClearDirty();
             }
-            btnSave.Enabled = false;
         }
 
         private void ResetControls()
