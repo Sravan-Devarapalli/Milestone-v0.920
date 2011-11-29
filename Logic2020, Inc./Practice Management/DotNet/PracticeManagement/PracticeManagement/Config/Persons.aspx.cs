@@ -370,7 +370,7 @@ namespace PraticeManagement.Config
                 //LinkButton prevbottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(previousLinkButton.Attributes["Bottom"]);
 
                 prevtopButton.Font.Bold = false;
-               // prevbottomButton.Font.Bold = false;
+                // prevbottomButton.Font.Bold = false;
             }
 
             LinkButton alpha = (LinkButton)sender;
@@ -568,40 +568,40 @@ namespace PraticeManagement.Config
             int startIndex = currentRecords == 0 ? 0 : (gvPersons.PageIndex == 0 ? 1 : (gvPersons.PageIndex * Convert.ToInt32(ddlView.SelectedValue)) + 1);
             lblRecords.Text = String.Format(ViewingRecords, startIndex, currentRecords == 0 ? 0 : (startIndex + currentRecords - 1), totalRecords);
 
-            //if (ddlView.SelectedValue == "-1")
-            //{
-            //    lnkbtnPrevious.Enabled = lnkbtnPrevious1.Enabled = lnkbtnNext.Enabled = lnkbtnNext1.Enabled = false;
-            //}
-            //else
-            //{
-            //    lnkbtnPrevious.Enabled = lnkbtnPrevious1.Enabled = !(CurrentIndex == 0);
-            //    lnkbtnNext.Enabled = lnkbtnNext1.Enabled = !((gvPersons.Rows.Count == 0) || (currentRecords == totalRecords) || (currentRecords < Convert.ToInt32(ddlView.SelectedValue)));
-            //}
+            if (ddlView.SelectedValue == "-1")
+            {
+                lnkbtnPrevious.Enabled = lnkbtnNext.Enabled = false;
+            }
+            else
+            {
+                lnkbtnPrevious.Enabled = !(CurrentIndex == 0);
+                lnkbtnNext.Enabled = !((gvPersons.Rows.Count == 0) || (currentRecords == totalRecords) || (currentRecords < Convert.ToInt32(ddlView.SelectedValue)));
+            }
 
-            //if (!lnkbtnPrevious.Enabled)
-            //{
-            //    Color color = ColorTranslator.FromHtml("#8F8F8F");
-            //    lnkbtnPrevious.ForeColor = color;
-            //    lnkbtnPrevious1.ForeColor = color;
-            //}
-            //else
-            //{
-            //    Color color = ColorTranslator.FromHtml("#0898E6");
-            //    lnkbtnPrevious.ForeColor = color;
-            //    lnkbtnPrevious1.ForeColor = color;
-            //}
-            //if (!lnkbtnNext.Enabled)
-            //{
-            //    Color color = ColorTranslator.FromHtml("#8F8F8F");
-            //    lnkbtnNext.ForeColor = color;
-            //    lnkbtnNext1.ForeColor = color;
-            //}
-            //else
-            //{
-            //    Color color = ColorTranslator.FromHtml("#0898E6");
-            //    lnkbtnNext.ForeColor = color;
-            //    lnkbtnNext1.ForeColor = color;
-            //}
+            if (!lnkbtnPrevious.Enabled)
+            {
+                Color color = ColorTranslator.FromHtml("#8F8F8F");
+                lnkbtnPrevious.ForeColor = color;
+                //lnkbtnPrevious1.ForeColor = color;
+            }
+            else
+            {
+                Color color = ColorTranslator.FromHtml("#0898E6");
+                lnkbtnPrevious.ForeColor = color;
+                // lnkbtnPrevious1.ForeColor = color;
+            }
+            if (!lnkbtnNext.Enabled)
+            {
+                Color color = ColorTranslator.FromHtml("#8F8F8F");
+                lnkbtnNext.ForeColor = color;
+                // lnkbtnNext1.ForeColor = color;
+            }
+            else
+            {
+                Color color = ColorTranslator.FromHtml("#0898E6");
+                lnkbtnNext.ForeColor = color;
+                // lnkbtnNext1.ForeColor = color;
+            }
         }
 
         protected void StbAddStrawman_OnClick(object sender, EventArgs e)
@@ -651,9 +651,9 @@ namespace PraticeManagement.Config
             if (rbCopyStrawman.Checked)
             {
                 ddlStrawmanName.Enabled = true;
-                cvddlStrawmanName.Enabled =true;
+                cvddlStrawmanName.Enabled = true;
                 ddlStrawmanName_OnSelectedIndexChanged();
-                
+
             }
             else
             {
@@ -661,7 +661,7 @@ namespace PraticeManagement.Config
                 cvddlStrawmanName.Enabled = false;
                 ddlStrawmanName.SelectedValue = "-1";
                 ddlStrawmanName_OnSelectedIndexChanged();
-           
+
             }
         }
         private void ddlStrawmanName_OnSelectedIndexChanged()
@@ -677,7 +677,7 @@ namespace PraticeManagement.Config
             }
             else
             {
-               String[] names =  ddlStrawmanName.SelectedItem.Text.Split(',');
+                String[] names = ddlStrawmanName.SelectedItem.Text.Split(',');
                 tbFirstName.Enabled = true;
                 tbLastName.Enabled = true;
                 tbFirstName.Text = names[1].TrimStart();
