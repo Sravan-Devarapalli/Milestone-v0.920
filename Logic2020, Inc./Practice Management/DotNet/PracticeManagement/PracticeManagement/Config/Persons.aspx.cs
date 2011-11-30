@@ -249,9 +249,10 @@ namespace PraticeManagement.Config
                     {
                         LinkButton topButton = (LinkButton)trAlphabeticalPaging.FindControl("lnkbtn" + cookie.Alphabet.Value);
                         //LinkButton bottomButton = (LinkButton)trAlphabeticalPaging1.FindControl("lnkbtn1" + cookie.Alphabet.Value);
-                        //topButton.Font.Bold = bottomButton.Font.Bold = true;
+                        topButton.Font.Bold = true;
+                        //bottomButton.Font.Bold = true;
 
-                        //lnkbtnAll.Font.Bold = lnkbtnAll1.Font.Bold = false;
+                        lnkbtnAll.Font.Bold = false;//lnkbtnAll1.Font.Bold = false;
                         hdnAlphabet.Value = topButton.Text != "All" ? topButton.Text : null;
                         previousLetter = topButton.ID;
                     }
@@ -962,24 +963,24 @@ namespace PraticeManagement.Config
 
                 trAlphabeticalPaging.Controls.Add(tc);
 
-                LinkButton Alphabet1 = new LinkButton();
-                Alphabet1.ID = "lnkbtn1" + alphabet;
-                Alphabet1.Attributes.Add("Top", "lnkbtn" + alphabet);
-                Alphabet1.Attributes.Add("Bottom", "lnkbtn1" + alphabet);
+                //LinkButton Alphabet1 = new LinkButton();
+                //Alphabet1.ID = "lnkbtn1" + alphabet;
+                //Alphabet1.Attributes.Add("Top", "lnkbtn" + alphabet);
+                //Alphabet1.Attributes.Add("Bottom", "lnkbtn1" + alphabet);
 
 
-                HtmlTableCell tc1 = new HtmlTableCell();
-                tc1.ID = "td1" + alphabet;
-                tc1.Style.Add("padding-left", "15px");
-                tc1.Style.Add("padding-top", "10px");
-                tc1.Style.Add("padding-bottom", "10px");
-                tc1.Style.Add("text-align", "center");
+                //HtmlTableCell tc1 = new HtmlTableCell();
+                //tc1.ID = "td1" + alphabet;
+                //tc1.Style.Add("padding-left", "15px");
+                //tc1.Style.Add("padding-top", "10px");
+                //tc1.Style.Add("padding-bottom", "10px");
+                //tc1.Style.Add("text-align", "center");
 
-                Alphabet1.Text = alphabet.ToString();
-                Alphabet1.Font.Underline = false;
-                Alphabet1.Click += new EventHandler(Alphabet_Clicked);
+                //Alphabet1.Text = alphabet.ToString();
+                //Alphabet1.Font.Underline = false;
+                //Alphabet1.Click += new EventHandler(Alphabet_Clicked);
 
-                tc1.Controls.Add(Alphabet1);
+                //tc1.Controls.Add(Alphabet1);
 
                 //trAlphabeticalPaging1.Controls.Add(tc1);
             }
