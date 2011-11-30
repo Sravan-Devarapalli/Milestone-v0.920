@@ -159,6 +159,7 @@ AS
 			m.ProjectId,
 			m.IsHourlyAmount,
 			mpe.MilestonePersonId,
+			mpe.Id EntryId,
 			mpe.HoursPerDay AS HoursPerDay,
 			cal.Date,
 			mpe.StartDate AS EntryStartDate,
@@ -166,7 +167,7 @@ AS
 	   FROM dbo.[Milestone] AS m
 	   INNER JOIN dbo.MilestonePerson AS mp ON m.[MilestoneId] = mp.[MilestoneId]
 	   INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId			   
-	   INNER JOIN dbo.PersonCalendarAuto AS cal ON (cal.Date BETWEEN mpe.Startdate AND ISNULL(mpe.EndDate, m.ProjectedDeliveryDate) AND cal.PersonId = mp.PersonId)
+	   INNER JOIN dbo.PersonCalendarAuto AS cal ON (cal.Date BETWEEN mpe.Startdate AND mpe.EndDate AND cal.PersonId = mp.PersonId)
 	   WHERE cal.DayOff = 0 
 	),
 	CTEFinancialsRetroSpective
@@ -178,17 +179,18 @@ AS
 				   p.PracticeId,
 				   r.Discount,
 				   CASE
-					   WHEN r.IsHourlyAmount = 1 OR s.HoursPerDay = 0
+					   WHEN r.IsHourlyAmount = 1 OR r.HoursPerDay = 0
 					   THEN ISNULL(m.Amount*m.HoursPerDay, 0)
-					   ELSE ISNULL(r.MilestoneDailyAmount * m.HoursPerDay / s.HoursPerDay, r.MilestoneDailyAmount)
+					   ELSE ISNULL(r.MilestoneDailyAmount * m.HoursPerDay / r.HoursPerDay, r.MilestoneDailyAmount)
 				   END AS PersonMilestoneDailyAmount,
 				   CASE
-					   WHEN r.IsHourlyAmount = 1 OR s.HoursPerDay = 0
+					   WHEN r.IsHourlyAmount = 1 OR r.HoursPerDay = 0
 					   THEN ISNULL(m.Amount * m.HoursPerDay * r.Discount / 100, 0)
-					   ELSE ISNULL(r.MilestoneDailyAmount * m.HoursPerDay * r.Discount / (s.HoursPerDay * 100), r.MilestoneDailyAmount * r.Discount / 100)
+					   ELSE ISNULL(r.MilestoneDailyAmount * m.HoursPerDay * r.Discount / (r.HoursPerDay * 100), r.MilestoneDailyAmount * r.Discount / 100)
 				   END AS PersonDiscountDailyAmount,
 				   m.PersonId,
 				   m.MilestonePersonId,
+				   m.EntryId,
 				   m.EntryStartDate,
 				   m.HoursPerDay AS PersonHoursPerDay,
 				   CASE 
@@ -206,9 +208,9 @@ AS
 									   (CASE
 											 WHEN r.IsHourlyAmount = 1
 											 THEN m.Amount
-											 WHEN r.IsHourlyAmount = 0 OR s.HoursPerDay = 0
+											 WHEN r.IsHourlyAmount = 0 OR r.HoursPerDay = 0
 											 THEN 0
-											 ELSE r.MilestoneDailyAmount / s.HoursPerDay
+											 ELSE r.MilestoneDailyAmount / r.HoursPerDay
 										 END) * o.Rate / 100
 								   WHEN 4 THEN p.HourlyRate * o.Rate / 100
 								   -- Fixed
@@ -221,9 +223,9 @@ AS
 	                           (CASE
 	                                 WHEN r.IsHourlyAmount = 1
 	                                 THEN m.Amount
-	                                 WHEN r.IsHourlyAmount = 0 OR s.HoursPerDay = 0
+	                                 WHEN r.IsHourlyAmount = 0 OR r.HoursPerDay = 0
 	                                 THEN 0
-	                                 ELSE r.MilestoneDailyAmount / s.HoursPerDay
+	                                 ELSE r.MilestoneDailyAmount / r.HoursPerDay
 	                             END) * MLFO.Rate / 100
 	                       WHEN 4 THEN p.HourlyRate * MLFO.Rate / 100
 	                       -- Fixed
@@ -263,7 +265,8 @@ AS
 										   WHEN 0 THEN 0
 										   ELSE m.Amount / (DATEDIFF(dd, m.StartDate, m.ProjectedDeliveryDate) + 1)
 									   END)) AS MilestoneDailyAmount,
-							   p.Discount
+							   p.Discount,
+							   d.HoursPerDay/* Milestone Total  Hours per day*/
 						  FROM dbo.Milestone AS m
 							   INNER JOIN dbo.Calendar AS cal ON cal.Date BETWEEN m.StartDate AND m.ProjectedDeliveryDate
 							   INNER JOIN dbo.Project AS p ON m.ProjectId = p.ProjectId
@@ -285,7 +288,8 @@ AS
 								ps2.Date,
 							   ps2.IsHourlyAmount,
 							   ISNULL(SUM(ps2.Amount *( ps2.HoursPerDay )),0) MilestoneDailyAmount,
-							   MAX(p.Discount) AS Discount
+							   MAX(p.Discount) AS Discount,
+							   SUM(ps2.HoursPerDay) AS HoursPerDay/* Milestone Total  Hours per day*/
 						  FROM CTEMilestonePersonSchedule ps2
 							   INNER JOIN dbo.Project AS p ON ps2.ProjectId = p.ProjectId
 							   INNER JOIN dbo.Practice AS prac ON p.PracticeId = prac.PracticeId
@@ -294,13 +298,6 @@ AS
 					) AS r
 				   -- Linking to persons
 				   LEFT JOIN  CTEMilestonePersonSchedule m ON m.MilestoneId = r.MilestoneId AND m.Date = r.Date
-				   LEFT JOIN (
-									SELECT  ps3.[MilestoneId],
-											SUM(ps3.HoursPerDay )   HoursPerDay,
-											ps3.Date
-									FROM  CTEMilestonePersonSchedule ps3
-									GROUP BY ps3.Date,ps3.MilestoneId
-							  ) AS s  ON s.Date = r.Date AND s.MilestoneId = r.MilestoneId 
 				   -- Salary
 				   LEFT JOIN (
 				   
@@ -338,8 +335,8 @@ AS
 									  AND o.Inactive = 0
 									  AND o.TimescaleId = p.Timescale
 				 LEFT JOIN V_WorkinHoursByYear HY ON HY.[Year] = YEAR(r.Date)
-			GROUP BY r.Date, r.ProjectId, r.MilestoneId, r.MilestoneDailyAmount, r.Discount, p.HourlyRate,p.VacationDays,HY.HoursInYear,
-					 m.Amount, p.BonusAmount, p.BonusHoursToCollect, p.Timescale,p.PracticeId, s.HoursPerDay,
+			GROUP BY m.EntryId,r.Date, r.ProjectId, r.MilestoneId, r.MilestoneDailyAmount, r.Discount, p.HourlyRate,p.VacationDays,HY.HoursInYear,
+					 m.Amount, p.BonusAmount, p.BonusHoursToCollect, p.Timescale,p.PracticeId, r.HoursPerDay,
 					 r.IsHourlyAmount, m.HoursPerDay, m.PersonId,m.MilestonePersonId, m.EntryStartDate
 
 	  ),
@@ -414,10 +411,11 @@ AS
 					   --f.PracticeManagerId,
 					   f.PersonId
 					   , f.Discount
+					   ,f.EntryId
 				FROM CTEFinancialsRetroSpective f 
 			 ) as f
 		  JOIN MilestonePerson MP ON MP.MilestoneId = f.MilestoneId AND MP.PersonId = f.PersonId 
-		  JOIN MilestonePersonEntry MPE ON MP.MilestonePersonId = MPE.MilestonePersonId 
+		  JOIN MilestonePersonEntry MPE ON MP.MilestonePersonId = MPE.MilestonePersonId  AND f.EntryId = MPE.Id 
 											AND f.Date BETWEEN MPE.StartDate AND MPE.EndDate
 		  JOIN dbo.Milestone mile ON mile.MilestoneId = f.MilestoneId
 		  JOIN dbo.Practice pra ON pra.PracticeId = f.PracticeId
