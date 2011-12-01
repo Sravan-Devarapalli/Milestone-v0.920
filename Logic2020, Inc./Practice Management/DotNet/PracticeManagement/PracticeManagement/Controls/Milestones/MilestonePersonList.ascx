@@ -61,7 +61,7 @@
             </HeaderTemplate>
             <ItemStyle Width="2%" HorizontalAlign="Center" Height="20px" Wrap="false" />
             <ItemTemplate>
-                <asp:ImageButton ID="imgAdditionalAllocationOfResource" runat="server" OnClick="imgAdditionalAllocationOfResource_OnClick"
+                <asp:ImageButton ID="imgAdditionalAllocationOfResource" runat="server" OnClick="imgAdditionalAllocationOfResource_OnClick" ToolTip="Extend"
                     ImageUrl="~/Images/add_16.png" />
             </ItemTemplate>
         </asp:TemplateField>
@@ -104,7 +104,7 @@
                 <div class="ie-bg no-wrap">
                     Role</div>
             </HeaderTemplate>
-            <ItemStyle Width="10%" Height="20px" Wrap="false" />
+            <ItemStyle Width="10%" Height="20px" Wrap="false" HorizontalAlign="Center" />
             <ItemTemplate>
                 <asp:Label ID="lblRole" runat="server" RoleId='<%# Eval("Role.Id") %>' Text='<%# Eval("Role.Name") %>'></asp:Label>
                 <asp:DropDownList ID="ddlRole" runat="server" Visible="false" Width="98%">
