@@ -59,7 +59,7 @@ namespace PraticeManagement
             // TODO: Remove the dummy code.
             personnelCompensation.StartDate = DateTime.Today;
             DataHelper.FillOneOffList(ddlPersonName, "-- Select a Person --", DateTime.Today);
-            DataHelper.FillStrawManList(ddlStrawmanName, "-- Select a StrawMan --");
+            DataHelper.FillStrawManList(ddlStrawmanName, "-- Select a Strawman --");
 
             //recruiterInfo.Person = new Person();
             personnelCompensation.PaymentsVisible =
