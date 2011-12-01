@@ -1166,7 +1166,7 @@ namespace PraticeManagement.Controls
 
             if (persons.Length > 0)
             {
-                persons = persons.OrderByDescending(p => p.IsStrawMan).ThenBy(p => p.PersonLastFirstName).ToArray();
+                persons = persons.OrderBy(p => p.IsStrawMan).ThenBy(p => p.PersonLastFirstName).ToArray();
 
                 foreach (Person person in persons)
                 {
@@ -1176,7 +1176,7 @@ namespace PraticeManagement.Controls
 
 
                     personitem.Attributes[Constants.Variables.IsStrawMan] = person.IsStrawMan.ToString().ToLowerInvariant();
-                    personitem.Attributes[Constants.Variables.OptionGroup] = person.IsStrawMan ? "Straw Man(s) .." : "Person(s) ..";
+                    personitem.Attributes[Constants.Variables.OptionGroup] = person.IsStrawMan ? "Strawmen" : "Persons";
 
                     control.Items.Add(personitem);
                 }
