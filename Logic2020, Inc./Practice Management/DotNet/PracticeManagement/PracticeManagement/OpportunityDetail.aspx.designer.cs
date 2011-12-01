@@ -499,6 +499,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnClose;
         
         /// <summary>
+        /// btnOk control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnOk;
+        
+        /// <summary>
         /// tcOpportunityDetails control.
         /// </summary>
         /// <remarks>
