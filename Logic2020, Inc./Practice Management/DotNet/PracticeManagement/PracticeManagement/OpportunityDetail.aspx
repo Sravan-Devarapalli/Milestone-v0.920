@@ -1027,7 +1027,7 @@
                         <asp:HiddenField ID="hdnCanShowPopup" Value="false" runat="server" />
                         <AjaxControlToolkit:ModalPopupExtender ID="mpePopup" runat="server" TargetControlID="hdnCanShowPopup"
                             CancelControlID="btnClose" BehaviorID="mpePriorityPopup" BackgroundCssClass="modalBackground"
-                            PopupControlID="pnlPopup" DropShadow="false" />
+                            PopupControlID="pnlPopup" DropShadow="false" OkControlID="btnOk" />
                         <asp:Panel ID="pnlPopup" runat="server" BackColor="White" BorderColor="Black" CssClass="ConfirmBoxClassError"
                             Style="display: none" BorderWidth="2px">
                             <table width="100%">
@@ -1049,6 +1049,11 @@
                                                         A, or B priority.
                                                     </p>
                                                     <br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;">
+                                                    <asp:Button ID="btnOk" runat="server" Text="OK" OnClientClick="return false;" />
                                                 </td>
                                             </tr>
                                         </table>
