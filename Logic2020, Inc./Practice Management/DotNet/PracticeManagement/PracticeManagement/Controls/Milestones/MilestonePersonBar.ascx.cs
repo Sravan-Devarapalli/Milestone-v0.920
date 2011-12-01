@@ -319,22 +319,25 @@ namespace PraticeManagement.Controls.Milestones
 
         protected void cvHoursInPeriod_ServerValidate(object source, ServerValidateEventArgs e)
         {
-            var txtHoursInPeriod = txtHoursInPeriodInsert;
-            var value = txtHoursInPeriod.Text.Trim();
-
-            if (!string.IsNullOrEmpty(value))
+            if (reqPersonStart.IsValid && reqPersonEnd.IsValid)
             {
-                decimal Totalhours;
-                if (decimal.TryParse(value, out Totalhours) && Totalhours > 0M)
+                var txtHoursInPeriod = txtHoursInPeriodInsert;
+                var value = txtHoursInPeriod.Text.Trim();
+
+                if (!string.IsNullOrEmpty(value))
                 {
-                    var dpPersonStart = ((Control)source).Parent.FindControl("dpPersonStart") as DatePicker;
-                    var dpPersonEnd = ((Control)source).Parent.FindControl("dpPersonEnd") as DatePicker;
-                    int days = GetPersonWorkDaysNumber(dpPersonStartInsert.DateValue, dpPersonEndInsert.DateValue, ddlPerson);
+                    decimal Totalhours;
+                    if (decimal.TryParse(value, out Totalhours) && Totalhours > 0M)
+                    {
+                        var dpPersonStart = ((Control)source).Parent.FindControl("dpPersonStart") as DatePicker;
+                        var dpPersonEnd = ((Control)source).Parent.FindControl("dpPersonEnd") as DatePicker;
+                        int days = GetPersonWorkDaysNumber(dpPersonStartInsert.DateValue, dpPersonEndInsert.DateValue, ddlPerson);
 
-                    // calculate hours per day according to HoursInPerod 
-                    var hoursPerDay = (days != 0) ? decimal.Round(Totalhours / (days), 2) : 0;
+                        // calculate hours per day according to HoursInPerod 
+                        var hoursPerDay = (days != 0) ? decimal.Round(Totalhours / (days), 2) : 0;
 
-                    e.IsValid = hoursPerDay > 0M;
+                        e.IsValid = hoursPerDay > 0M;
+                    }
                 }
             }
         }
