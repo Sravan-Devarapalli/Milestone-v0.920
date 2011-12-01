@@ -871,8 +871,7 @@
                                                     Width="100%" Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"
                                                     Text="*" ToolTip="The Priority is required." ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
                                                 <asp:CustomValidator ID="cvPriority" runat="server" ControlToValidate="ddlPriority"
-                                                    ToolTip="You must add a Team Make-Up to this opportunity before it can be saved
-                                    with a PO, A, or B priority." Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                                    ToolTip="You must add a Team Make-Up to this opportunity before it can be saved with a PO, A, or B priority." Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                                     OnServerValidate="cvPriority_ServerValidate" ValidationGroup="Opportunity" />
                                                 <asp:CustomValidator ID="cvLinkedToProject" runat="server" ControlToValidate="ddlPriority"
                                                     ErrorMessage="To save an Opportunity as “PO” priority, the Opportunity must first be linked to a Project."
