@@ -2069,6 +2069,13 @@ table.CellPaddingClass td
     white-space: normal;
 }
 
+.OpportunitySummaryWordWrap
+{
+    word-wrap: break-word !important; /* Internet Explorer 5.5+ */
+    word-break: break-all;
+    white-space: normal !important;
+}
+
 .ApplyStyleForDashBoardLists P
 {
 	margin: 8px 0px 8px 8px;
