@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Calendar.aspx.cs" Inherits="PraticeManagement.Calendar" 
-MasterPageFile="~/PracticeManagementMain.Master" Title="Company Calendar" %>
+MasterPageFile="~/PracticeManagementMain.Master" Title="Calendar | Practice Management" %>
 
 <%@ Register Src="Controls/Calendar.ascx" TagName="Calendar" TagPrefix="uc" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="AjaxControlToolkit" %>
