@@ -1738,7 +1738,7 @@ DIV.DayOff
 {
     height: 24px;
     width: 24px;
-    background-color: #FFC7D9;
+    background-color: #FFAAFF;
 }
 
 DIV.DayOn
@@ -1773,12 +1773,12 @@ DIV.CompanyDayOn
 {
     height: 24px;
     width: 24px;
-    background-color: #FFD1C7;
+    background-color: #FF6600; 
 }
 
 TD.DayOff, TH.DayOff
 {
-    background-color: #FFC7D9;
+    background-color: #FFAAFF;
 }
 
 TD.DayOn, TH.DayOn
@@ -1793,7 +1793,7 @@ TD.CompanyDayOff, TH.CompanyDayOff
 
 TD.CompanyDayOn, TH.CompanyDayOn
 {
-    background-color: #FFD1C7;
+    background-color: #FF6600;
 }
 
 TD.WeekEndDayOff, TH.WeekEndDayOff
