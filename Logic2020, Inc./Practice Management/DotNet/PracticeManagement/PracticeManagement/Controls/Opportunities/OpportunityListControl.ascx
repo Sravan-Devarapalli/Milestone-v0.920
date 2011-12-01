@@ -966,7 +966,7 @@
                                         CssClass="arrow" CommandArgument="BuyerName" />
                                 </div>
                             </td>
-                            <td width="24%">
+                            <td width="23%">
                                 <div class="ie-bg no-wrap" style="white-space: nowrap">
                                     <asp:LinkButton ID="btnOpportunityNameSort" runat="server" Text="Opportunity Name"
                                         CommandName="Sort" CssClass="arrow" CommandArgument="OpportunityName" />
@@ -984,7 +984,7 @@
                                         CssClass="arrow" Style="padding-left: 10px !important;" CommandArgument="EstimatedRevenue" />
                                 </div>
                             </td>
-                            <td align="center" width="28%">
+                            <td align="center" width="29%">
                                 <div class="ie-bg no-wrap" style="color: Black;">
                                     Team Make-Up
                                 </div>
@@ -1016,24 +1016,24 @@
                                 <%# Eval("ProjectedStartDate") == null ? string.Empty : string.Format("{0:MMM} '{0:yy}", ((DateTime)Eval("ProjectedStartDate")))%>
                             </div>
                         </td>
-                        <td>
+                        <td class="WordWrap">
                             <div class="cell-pad">
-                                <asp:Label ID="lblClientName" runat="server" Text='<%# ((Opportunity) Container.DataItem).ClientAndGroup %>' /></div>
+                                <asp:Label ID="lblClientName" runat="server" Text='<%# GetWrappedText( ((Opportunity) Container.DataItem).ClientAndGroup, 17) %>' /></div>
                         </td>
-                        <td>
+                        <td class="WordWrap">
                             <div class="cell-pad">
-                                <asp:Label ID="lblBuyerName" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("BuyerName"))%>' /></div>
+                                <asp:Label ID="lblBuyerName" runat="server" Text='<%# GetWrappedText( HttpUtility.HtmlEncode((string)Eval("BuyerName")), 15) %>' /></div>
                         </td>
-                        <td>
+                        <td class="WordWrap">
                             <div class="cell-pad">
                                 <asp:HyperLink ID="hlName" Description='<%# GetWrappedText((string)((Opportunity) Container.DataItem).Description) %>'
                                     onmouseout="HidePanel();" onmouseover="SetTooltipText(this.attributes['Description'].value,this);"
                                     runat="server" NavigateUrl='<%# GetOpportunityDetailsLink((int) Eval("Id"), Container.DisplayIndex) %>'>
-                            <%# HttpUtility.HtmlEncode((string)Eval("Name")) %>
+                            <%# GetWrappedText(HttpUtility.HtmlEncode((string)Eval("Name")), 25)%>
                                 </asp:HyperLink>
                             </div>
                         </td>
-                        <td width="9%">
+                        <td class="WordWrap">
                             <div class="cell-pad">
                                 <asp:Label ID="lblSalesTeam" runat="server" Text='<%# GetSalesTeam((((Opportunity)Container.DataItem).Salesperson),(((Opportunity)Container.DataItem).Owner))%>' /></div>
                         </td>
@@ -1047,16 +1047,16 @@
                                 <table width="100%" style="padding: 2px;">
                                     <tr>
                                         <td style="width: 96%;">
-                                            <asp:DataList ID="dtlProposedPersons" runat="server" Style="white-space: normal;">
+                                            <asp:DataList ID="dtlProposedPersons" runat="server" ItemStyle-CssClass="OpportunitySummaryWordWrap">
                                                 <ItemTemplate>
-                                                    <%# GetFormattedPersonName(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 
-                                                    ((DataTransferObjects.OpportunityPerson)Container.DataItem).PersonType )%>
+                                                    <%# GetWrappedText( GetFormattedPersonName(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 
+                                                    ((DataTransferObjects.OpportunityPerson)Container.DataItem).PersonType ), 20) %>
                                                 </ItemTemplate>
                                             </asp:DataList>
-                                            <asp:DataList ID="dtlTeamStructure" runat="server" Style="white-space: normal;">
+                                            <asp:DataList ID="dtlTeamStructure" runat="server" ItemStyle-CssClass="OpportunitySummaryWordWrap">
                                                 <ItemTemplate>
-                                                    <%# GetFormattedPersonName(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 
-                                                    ((DataTransferObjects.OpportunityPerson)Container.DataItem).PersonType )%>
+                                                    <%# GetWrappedText( GetFormattedPersonName(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 
+                                                    ((DataTransferObjects.OpportunityPerson)Container.DataItem).PersonType ), 20)%>
                                                     (<%#((DataTransferObjects.OpportunityPerson)Container.DataItem).Quantity.ToString() %>)
                                                     <%-- By
                                                      ((DataTransferObjects.OpportunityPerson)Container.DataItem).NeedBy.Value.ToString("MM/dd/yyyy") %>--%>
@@ -1109,24 +1109,24 @@
                                 <%# Eval("ProjectedStartDate") == null ? string.Empty : string.Format("{0:MMM} '{0:yy}", ((DateTime)Eval("ProjectedStartDate")))%>
                             </div>
                         </td>
-                        <td>
+                        <td class="WordWrap">
                             <div class="cell-pad">
-                                <asp:Label ID="lblClientName" runat="server" Text='<%# ((Opportunity) Container.DataItem).ClientAndGroup %>' /></div>
+                                <asp:Label ID="lblClientName" runat="server" Text='<%# GetWrappedText( ((Opportunity) Container.DataItem).ClientAndGroup, 17) %>' /></div>
                         </td>
-                        <td>
+                        <td  class="WordWrap">
                             <div class="cell-pad">
-                                <asp:Label ID="lblBuyerName" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("BuyerName"))%>' /></div>
+                                <asp:Label ID="lblBuyerName" runat="server" Text='<%# GetWrappedText( HttpUtility.HtmlEncode((string)Eval("BuyerName")), 15)%>' /></div>
                         </td>
-                        <td>
+                        <td class="WordWrap">
                             <div class="cell-pad">
                                 <asp:HyperLink ID="hlName" Description='<%# GetWrappedText((string)((Opportunity) Container.DataItem).Description) %>'
                                     onmouseout="HidePanel();" onmouseover="SetTooltipText(this.attributes['Description'].value,this);"
                                     runat="server" NavigateUrl='<%# GetOpportunityDetailsLink((int) Eval("Id"), Container.DisplayIndex) %>'>
-                            <%# HttpUtility.HtmlEncode((string)Eval("Name")) %>
+                            <%# GetWrappedText(HttpUtility.HtmlEncode((string)Eval("Name")), 25)%>
                                 </asp:HyperLink>
                             </div>
                         </td>
-                        <td>
+                        <td class="WordWrap">
                             <div class="cell-pad">
                                 <asp:Label ID="lblSalesTeam" runat="server" Text='<%# GetSalesTeam((((Opportunity)Container.DataItem).Salesperson),(((Opportunity)Container.DataItem).Owner))%>' /></div>
                         </td>
@@ -1140,19 +1140,19 @@
                                 <table width="100%" style="padding: 2px;">
                                     <tr>
                                         <td style="width: 96%;">
-                                            <asp:DataList ID="dtlProposedPersons" runat="server" Style="white-space: normal;">
+                                            <asp:DataList ID="dtlProposedPersons" runat="server" ItemStyle-CssClass="OpportunitySummaryWordWrap">
                                                 <ItemTemplate>
-                                                    <%# GetFormattedPersonName(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 
-                                                    ((DataTransferObjects.OpportunityPerson)Container.DataItem).PersonType )%>
+                                                    <%# GetWrappedText( GetFormattedPersonName(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 
+                                                    ((DataTransferObjects.OpportunityPerson)Container.DataItem).PersonType ), 20)%>
                                                 </ItemTemplate>
                                             </asp:DataList>
                                             <%--<div style="white-space: normal;">
                                                 <asp:Literal ID="ltrlOutSideResources" runat="server"></asp:Literal>
                                             </div>--%>
-                                            <asp:DataList ID="dtlTeamStructure" runat="server" Style="white-space: normal;">
+                                            <asp:DataList ID="dtlTeamStructure" runat="server" ItemStyle-CssClass="OpportunitySummaryWordWrap">
                                                 <ItemTemplate>
-                                                    <%# GetFormattedPersonName(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 
-                                                    ((DataTransferObjects.OpportunityPerson)Container.DataItem).PersonType )%>
+                                                    <%# GetWrappedText( GetFormattedPersonName(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 
+                                                    ((DataTransferObjects.OpportunityPerson)Container.DataItem).PersonType ), 20)%>
                                                     (<%#((DataTransferObjects.OpportunityPerson)Container.DataItem).Quantity.ToString() %>)
                                                     <%--By  #((DataTransferObjects.OpportunityPerson)Container.DataItem).NeedBy.Value.ToString("MM/dd/yyyy") %>--%>
                                                 </ItemTemplate>
