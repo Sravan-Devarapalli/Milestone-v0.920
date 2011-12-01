@@ -420,9 +420,9 @@ namespace PraticeManagement.Controls.Opportunities
 
         protected static string GetSalesTeam(Person SalesPerson, Person Owner)
         {
-            string salesTeam = (IsNeedToShowPerson(SalesPerson) ? SalesPerson.LastName : string.Empty)
+            string salesTeam = (IsNeedToShowPerson(SalesPerson) ? GetWrappedText(SalesPerson.LastName, 15) : string.Empty)
                                + "<br/>"
-                               + (IsNeedToShowPerson(Owner) ? Owner.LastName : string.Empty);
+                               + (IsNeedToShowPerson(Owner) ? GetWrappedText(Owner.LastName, 15) : string.Empty);
 
             return salesTeam;
         }
@@ -847,6 +847,28 @@ namespace PraticeManagement.Controls.Opportunities
 
 
             return string.Format(Description, descriptionText); ;
+        }
+
+        protected static string GetWrappedText(string text, int wrapAfter)
+        {
+            var result = text;
+            if (!string.IsNullOrEmpty(result))
+            {
+                if (text.Length > wrapAfter)
+                {
+                    for (int index = wrapAfter, previousIndex = 0; index < result.Length; index = previousIndex + wrapAfter)
+                    {
+                        var subStringFromLastWrap = result.Substring(previousIndex, index - previousIndex);
+                        bool spaceExists = subStringFromLastWrap.Contains(' ');
+                        var spaceIndex = spaceExists ? previousIndex + subStringFromLastWrap.LastIndexOf(' ') : index;
+
+                        result = result.Insert(spaceIndex, WordBreak);
+                        previousIndex = spaceIndex + WordBreak.Length + (spaceExists ? 1 : 0); 
+                    }
+                }
+            }
+
+            return result;
         }
 
         private Table GetSummaryDetails()
