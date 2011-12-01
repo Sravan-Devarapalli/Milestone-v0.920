@@ -193,7 +193,7 @@ namespace PraticeManagement.Config
             AddAlphabetButtons();
             if (!IsPostBack)
             {
-                DataHelper.FillStrawManList(ddlStrawmanName, "-- Select a StrawMan --");
+                DataHelper.FillStrawManList(ddlStrawmanName, "-- Select a Strawman --");
                 bool userIsAdministrator =
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
                 bool userIsHR =
