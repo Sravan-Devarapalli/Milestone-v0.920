@@ -1311,7 +1311,7 @@ namespace PraticeManagement
             var selectedText = ddlPriority.SelectedItem.Text.ToUpperInvariant();
             if (selectedText == "PO")
             {
-                if (Opportunity.Project == null || !Opportunity.Project.Id.HasValue)
+                if (Opportunity != null && (Opportunity.Project == null || !Opportunity.Project.Id.HasValue))
                 {
                     e.IsValid = false;
                 }
