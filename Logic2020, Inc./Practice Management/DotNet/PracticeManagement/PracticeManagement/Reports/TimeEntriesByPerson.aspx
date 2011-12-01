@@ -281,7 +281,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <div class="PersonGridLeftPadding" runat="server" id="divTeTable">
+                            <div class="PersonGridLeftPadding" runat="server" id="divTeTable" style="overflow-x: auto; width: 1163px;overflow-y: display;">
                                 <table>
                                     <tr>
                                         <td colspan="4">
@@ -289,7 +289,7 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <div style="overflow-x: auto; overflow-y: display;">
+                             
                                     <asp:Repeater ID="repTeTable" runat="server" DataSource='<%# Eval("Value")%>' OnItemCreated="repTeTable_OnItemCreated">
                                         <HeaderTemplate>
                                             <table class="time-entry-person-projects WholeWidth" border="1" rules="rows" style="display: inline;">
@@ -361,7 +361,7 @@
                                             </tbody></table>
                                         </FooterTemplate>
                                     </asp:Repeater>
-                                </div>
+                             
                             </div>
                             <div class="PersonGridLeftPadding" style="overflow-x: auto; padding-top: 10px;" runat="server"
                                 id="divProjects">
