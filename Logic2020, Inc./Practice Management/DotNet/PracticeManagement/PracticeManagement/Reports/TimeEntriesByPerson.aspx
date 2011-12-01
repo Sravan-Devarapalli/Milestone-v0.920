@@ -56,17 +56,27 @@
         }
 
         function SetDivWidth() {
+            
             var datalist = $get("<%= dlPersons.ClientID %>");
             if (datalist != null) {
                 var tr = datalist.children[0].children;
                 for (var index = 0; index < tr.length; index = index + 1) {
+
                     var trchildOne = $("div[id$='divTeTable']");
                     var trchildTwo = $("div[id$='divProjects']");
                     var trchildThree = $("div[id$='divPersonNotEntered']");
+                    
+                    if (trchildOne[0] != null && trchildOne[0].children[1] != null && trchildOne[0].children[1] != "undefined") {
+                        $(trchildOne[0].children[1]).css("width", $(window).width() - 100);
+                    }
 
-                    $(trchildOne[0].children[1]).css("width", $(window).width() - 100);
-                    $(trchildTwo[0]).css("width", $(window).width() - 100);
-                    $(trchildThree[0]).css("width", $(window).width() - 100);
+                    if (trchildTwo[0] != null) {
+                        $(trchildTwo[0]).css("width", $(window).width() - 100);
+                    }
+
+                    if (trchildThree[0] != null) {
+                        $(trchildThree[0]).css("width", $(window).width() - 100);
+                    }
                 }
             }
         }
