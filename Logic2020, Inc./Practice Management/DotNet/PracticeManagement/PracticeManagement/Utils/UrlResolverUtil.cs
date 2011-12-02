@@ -110,6 +110,16 @@ namespace PraticeManagement.Utils
                 Constants.ApplicationPages.OpportunityDetail,
                 opportunityId);
         }
+
+        public static string OpportunityDetailsLink(int opportunityId, string returnTo)
+        {
+            var opportunityDetailsUrl = String.Format(
+                                        Constants.ApplicationPages.DetailRedirectFormat,
+                                        Constants.ApplicationPages.OpportunityDetail,
+                                        opportunityId);
+
+            return Generic.GetTargetUrlWithReturn(opportunityDetailsUrl, returnTo);
+        }
     }
 }
 
