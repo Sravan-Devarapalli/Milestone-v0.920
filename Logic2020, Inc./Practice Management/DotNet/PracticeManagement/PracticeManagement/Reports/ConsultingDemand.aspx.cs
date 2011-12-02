@@ -51,7 +51,8 @@ namespace PraticeManagement.Reporting
             get
             {
                 var date = Utils.SettingsHelper.GetCurrentPMTime();
-                return date.Date.AddDays((date.Day) * -1).AddMonths(4);
+                date = new DateTime(date.Year, date.Month, 1);
+                return date.Date.AddMonths(4).AddDays(-1);
             }
         }
 
@@ -111,14 +112,16 @@ namespace PraticeManagement.Reporting
                     if (cookie != null)
                     {
                         PopulateControlsFromCookie(cookie);
+                        UpdateReport();
+                        updReport.Update();
                     }
                 }
                 else
                 {
                     SetDefaultDateRange();//4 months(i.e current month + 3 months) is the default date range.
+
+                    chrtConsultingDemand.CssClass = "displayNone";
                 }
-                UpdateReport();
-                updReport.Update();
             }
         }
 
@@ -342,11 +345,8 @@ namespace PraticeManagement.Reporting
             objectNumberLabel.ForeColor = Color.FromArgb(8, 152, 230); //Color.FromArgb(0, 102, 153); //a onhover
             objectNumberLabel.ToolTip = item.ObjectNumber;
             objectNumberLabel.Url = item.ObjectType == 1 ?
-                Urls.OpportunityDetailsLink(item.ObjectId)
-                : Urls.GetProjectDetailsUrl(item.ObjectId,
-                                            (hdnFiltersChanged.Value == "1") ?
-                                            Constants.ApplicationPages.ConsultingDemandWithFilterQueryString : Constants.ApplicationPages.ConsultingDemand
-                                            );
+                Urls.OpportunityDetailsLink(item.ObjectId, Constants.ApplicationPages.ConsultingDemandWithFilterQueryString )
+                : Urls.GetProjectDetailsUrl(item.ObjectId, Constants.ApplicationPages.ConsultingDemandWithFilterQueryString );
         }
 
         private void AddRange(ConsultantDemandItem item, DateTime date, int personIndex, int dayIndex)
