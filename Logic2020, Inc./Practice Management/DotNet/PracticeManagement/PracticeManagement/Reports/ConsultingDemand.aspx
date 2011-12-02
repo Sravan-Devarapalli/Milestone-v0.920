@@ -178,6 +178,7 @@
             || (((((endYear - startYear) * 12 + endMonth) - startMonth + 1)) <= 12)
             || ((endDate - startDate) / (1000 * 60 * 60 * 24)) < 360
             ) {
+                    ClearValidations();
                     var btnCustDatesClose = document.getElementById('<%= btnCustDatesClose.ClientID %>');
                     hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
                     hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
@@ -272,6 +273,8 @@
         function ReAssignStartDateEndDates() {
             hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
             hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
+            hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
+            hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
             txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
             txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
             hdnStartDateCalExtenderBehaviourId = document.getElementById('<%= hdnStartDateCalExtenderBehaviourId.ClientID %>');
@@ -330,17 +333,7 @@
                         endDate = new Date(endMonth.toString() + '/01/' + endYear.toString());
                     }
                     endDate = new Date((endDate - (1000 * 60 * 60 * 24)));
-                    //                    if ((endYear - startYear) * 12 + endMonth - startMonth > 3) {
-                    //                        endMonth = (startMonth + 2) % 12;
-                    //                        if (startMonth > endMonth) {
-                    //                            endYear = startYear + 1;
-                    //                        }
-                    //                        else {
-                    //                            endYear = startYear;
-                    //                        }
-                    //                        endDate = new Date((endMonth + 1).toString() + '/01/' + endYear.toString());
-                    //                        endDate = new Date((endDate - (1000 * 60 * 60 * 24)));
-                    //                    }
+
                     var endDateCalExtender = $find(hdnEndDateCalExtenderBehaviourId.value);
                     var startDateCalExtender = $find(hdnStartDateCalExtenderBehaviourId.value);
                     if (startDateCalExtender != null) {
@@ -348,11 +341,6 @@
                     }
                     if (endDateCalExtender != null) {
                         endDateCalExtender.set_selectedDate(new Date(endDate.format("MM/dd/yyyy")));
-                    }
-                    if (PeriodValidate()) {
-                        hdnStartDate.value = startDate.format("MM/dd/yyyy");
-                        hdnEndDate.value = endDate.format("MM/dd/yyyy");
-                        lblCustomDateRange.innerHTML = '(' + hdnStartDate.value + '&nbsp;-&nbsp;' + hdnEndDate.value + ')';
                     }
                 }
             }
@@ -497,7 +485,7 @@
                                 <asp:Button ID="btnCustDatesOK" runat="server" OnClientClick="CheckIfDatesValid(); if(ValidAll()) return false;"
                                     Text="OK" Style="float: none !Important;" CausesValidation="true" />
                                 <asp:Button ID="btnCustDatesClose" runat="server" Style="display: none;" CausesValidation="true"
-                                    OnClientClick="if(ValidAll()) return false;" />
+                                    OnClientClick="return false;" />
                                 &nbsp; &nbsp;
                                 <asp:Button ID="btnCustDatesCancel" OnClientClick="ReAssignStartDateEndDates(); ClearValidations(); return false;"
                                     runat="server" Text="Cancel" Style="float: none !Important;" />
