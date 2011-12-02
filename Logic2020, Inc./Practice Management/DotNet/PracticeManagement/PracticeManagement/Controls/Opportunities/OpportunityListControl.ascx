@@ -862,7 +862,7 @@
                         </td>
                         <td>
                             <asp:ShadowedHyperlink runat="server" Text="Add Opportunity" ID="lnkAddOpportunity"
-                                CssClass="add-btn" NavigateUrl="~/OpportunityDetail.aspx" />
+                                CssClass="add-btn" NavigateUrl="~/OpportunityDetail.aspx?returnTo=DiscussionReview2.aspx" />
                         </td>
                     </tr>
                 </table>
