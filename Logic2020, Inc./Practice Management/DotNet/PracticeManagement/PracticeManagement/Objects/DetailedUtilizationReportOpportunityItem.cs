@@ -17,6 +17,7 @@ namespace PraticeManagement.Objects
                 base(reportStartDate, reportEndDate)
         {
             OpportunityTransition = opportunityTransition;
+            IsCapacityMode = isCapacityMode;
         }
 
         public override DateTime StartDate
