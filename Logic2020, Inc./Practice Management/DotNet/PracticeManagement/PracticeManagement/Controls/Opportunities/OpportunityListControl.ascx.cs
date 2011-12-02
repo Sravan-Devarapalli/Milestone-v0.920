@@ -710,7 +710,7 @@ namespace PraticeManagement.Controls.Opportunities
 
         protected void btnRedirectToOpportunityDetail_OnClick(object sender, EventArgs e)
         {
-            Response.Redirect(Constants.ApplicationPages.OpportunityDetail + "?id=" + hdnRedirectOpportunityId.Value);
+            Response.Redirect(Urls.OpportunityDetailsLink(Convert.ToInt32(hdnRedirectOpportunityId.Value), Constants.ApplicationPages.OpportunitySummary));
         }
 
         protected void btnSaveProposedResources_OnClick(object sender, EventArgs e)
