@@ -1446,17 +1446,23 @@
                                     <asp:ValidationSummary ID="vsumHasPersons" runat="server" ValidationGroup="HasPersons"
                                         DisplayMode="BulletList" EnableClientScript="false" HeaderText="Unable to convert opportunity due to the following errors:" />
                                 </td>
-                                <td style="padding: 4px; height: 35px; width: 13%;">
-                                    <asp:HiddenField ID="hdnOpportunityDelete" runat="server"></asp:HiddenField>
-                                    <asp:Button ID="btnDelete" runat="server" Visible="false" Enabled="false" Text="Delete Opportunity"
-                                        OnClientClick="ConfirmToDeleteOpportunity();" OnClick="btnDelete_Click" />
-                                </td>
-                                <td style="padding: 4px; height: 35px; width: 13%;">
-                                    <asp:Button ID="btnSave" runat="server" Text="Save Changes" OnClick="btnSave_Click" />
-                                </td>
-                                <td style="padding: 4px; height: 35px; width: 13%;">
-                                    <asp:Button ID="btnCancelChanges" runat="server" Text="Cancel Changes" OnClientClick="if(getDirty()){return true;}else{return false;}"
-                                        OnClick="btnCancelChanges_Click" />
+                                <td style="width: 36%;">
+                                    <table style="float:right;">
+                                        <tr>
+                                            <td style="padding: 8px;">                                        
+                                                <asp:HiddenField ID="hdnOpportunityDelete" runat="server"></asp:HiddenField>
+                                                <asp:Button ID="btnDelete" runat="server" Visible="false" Enabled="false" Text="Delete Opportunity"
+                                                    OnClientClick="ConfirmToDeleteOpportunity();" OnClick="btnDelete_Click" />
+                                            </td>
+                                            <td style="padding: 8px;">
+                                                <asp:Button ID="btnSave" runat="server" Text="Save Changes" OnClick="btnSave_Click" />
+                                            </td>
+                                            <td style="padding: 8px;">
+                                                <asp:Button ID="btnCancelChanges" runat="server" Text="Cancel" OnClientClick="if(getDirty()){return true;}else{return false;}"
+                                                    OnClick="btnCancelChanges_Click" />
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </td>
                             </tr>
                             <tr>
