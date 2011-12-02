@@ -376,6 +376,11 @@ namespace PraticeManagement
             ScriptManager.RegisterStartupScript(this, this.GetType(), "EnableOrDisableConvertOrAttachToProj", "EnableOrDisableConvertOrAttachToProj();", true);
 
             lbEndDate.Font.Bold = (ddlPriority.SelectedValue == "1" || ddlPriority.SelectedValue == "2");
+
+            if (!IsPostBack && (SelectedId.HasValue || !string.IsNullOrEmpty(ReturnUrl)))
+            {
+                btnCancelChanges.OnClientClick = string.Empty;
+            }
         }
 
         protected void cblPotentialResources_OnDataBound(object senser, EventArgs e)
@@ -687,7 +692,11 @@ namespace PraticeManagement
 
         protected void btnCancelChanges_Click(object sender, EventArgs e)
         {
-            if (IsDirty)
+            if (SelectedId.HasValue || !string.IsNullOrEmpty(ReturnUrl))
+            {
+                ReturnToPreviousPage();
+            }
+            else if (IsDirty)
             {
                 ViewState.Remove(NOTE_LIST_KEY);
                 ViewState.Remove(NEWLY_ADDED_NOTES_LIST);
