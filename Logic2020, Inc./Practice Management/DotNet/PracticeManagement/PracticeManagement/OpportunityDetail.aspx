@@ -638,26 +638,6 @@
                 }
             }
         }
-
-        function SetEndDateRequired(ddlPriority) {
-            var lbEndDate = document.getElementById('<%= lbEndDate.ClientID %>');
-
-            var optionList = ddlPriority.getElementsByTagName('option');
-            var selectedText = "";
-
-            for (var i = 0; i < optionList.length; ++i) {
-                if (optionList[i].value == ddlPriority.value) {
-                    selectedText = optionList[i].innerHTML.toLowerCase();
-                    break;
-                }
-            }
-
-            if (lbEndDate != null) {
-                lbEndDate.style.fontWeight = (selectedText == 'a' || selectedText == 'b') ? 'bold' : '';
-            }
-
-        }
-
          
     </script>
     <table class="CompPerfTable WholeWidth">
@@ -707,7 +687,7 @@
                                                     EnableClientScript="false" Display="Dynamic" Text="*" ValidationGroup="Opportunity"/>
                                             </td>
                                             <td style="padding-left: 4px; padding-right: 8px;">
-                                                <asp:Label ID="lbEndDate" runat="server" Text="End Date"></asp:Label>
+                                                <asp:Label ID="lbEndDate" style="font-weight:bold;" runat="server" Text="End Date"></asp:Label>
                                             </td>
                                             <td class="DatePickerPadding">
                                                 <uc1:DatePicker ID="dpEndDate" ValidationGroup="Opportunity" AutoPostBack="false"
@@ -715,8 +695,11 @@
                                             </td>
                                             <td>
                                                 <asp:RequiredFieldValidator ID="reqEndDate" runat="server" ControlToValidate="dpEndDate"
+                                                    ErrorMessage="The Projected End date is required" ToolTip="The Projected End date is required."
+                                                    ValidationGroup="Opportunity" Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>
+                                                <%--<asp:RequiredFieldValidator ID="reqEndDate" runat="server" ControlToValidate="dpEndDate"
                                                     ErrorMessage="End date is required to add Proposed Resources to project." ToolTip="End date is required to add Proposed Resources to project."
-                                                    ValidationGroup="HasPersons" Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>
+                                                    ValidationGroup="HasPersons" Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>--%>
                                                 <asp:CompareValidator ID="cmpEndDateDataTypeCheck" runat="server" ControlToValidate="dpEndDate"
                                                     ValidationGroup="Opportunity" Type="Date" Operator="DataTypeCheck" Text="*" Display="Dynamic"
                                                     ErrorMessage="The Projected End Date has an incorrect format. It must be 'MM/dd/yyyy'."
@@ -730,10 +713,10 @@
                                                     ErrorMessage="Some exsisting Strawman Need By date is Greater than New Opportunity EndDate."
                                                     ToolTip="Some exsisting Strawman Need By date is Greater than New Opportunity EndDate."
                                                     EnableClientScript="false" Display="Dynamic" Text="*" ValidationGroup="Opportunity" />
-                                                <asp:CustomValidator ID="cvEndDateRequired" runat="server" OnServerValidate="cvEndDateRequired_ServerValidate"
+                                                <%--<asp:CustomValidator ID="cvEndDateRequired" runat="server" OnServerValidate="cvEndDateRequired_ServerValidate"
                                                     ErrorMessage="End date is required before opportunity can be saved with A, or B priority."
                                                     ToolTip="End date is required before opportunity can be saved with A, or B priority."
-                                                    ValidationGroup="Opportunity" Display="Dynamic" Text="*" EnableClientScript="false"></asp:CustomValidator>
+                                                    ValidationGroup="Opportunity" Display="Dynamic" Text="*" EnableClientScript="false"></asp:CustomValidator>--%>
                                             </td>
                                         </tr>
                                     </table>
@@ -863,7 +846,7 @@
                                         <tr>
                                             <td style="width: 97%">
                                                 <asp:DropDownList ID="ddlPriority" runat="server" Width="100%" CssClass="WholeWidth"
-                                                    onchange="EnableSaveButton();setDirty();SetEndDateRequired(this);">
+                                                    onchange="EnableSaveButton();setDirty();">
                                                 </asp:DropDownList>
                                             </td>
                                             <td style="width: 3%">
@@ -1455,11 +1438,19 @@
                                                     OnClientClick="ConfirmToDeleteOpportunity();" OnClick="btnDelete_Click" />
                                             </td>
                                             <td style="padding: 8px;">
-                                                <asp:Button ID="btnSave" runat="server" Text="Save Changes" OnClick="btnSave_Click" />
+                                                <asp:UpdatePanel ID="upSave" runat="server">
+                                                    <ContentTemplate>
+                                                        <asp:Button ID="btnSave" runat="server" Text="Save Changes" OnClick="btnSave_Click" />
+                                                    </ContentTemplate>
+                                                </asp:UpdatePanel>
                                             </td>
                                             <td style="padding: 8px;">
-                                                <asp:Button ID="btnCancelChanges" runat="server" Text="Cancel" OnClientClick="if(getDirty()){return true;}else{return false;}"
-                                                    OnClick="btnCancelChanges_Click" />
+                                                <asp:UpdatePanel ID="upCancelChanges" runat="server">
+                                                    <ContentTemplate>
+                                                        <asp:Button ID="btnCancelChanges" runat="server" Text="Cancel" OnClientClick="if(getDirty()){return true;}else{return false;}"
+                                                            OnClick="btnCancelChanges_Click" />
+                                                    </ContentTemplate>
+                                                </asp:UpdatePanel>
                                             </td>
                                         </tr>
                                     </table>
@@ -1533,6 +1524,8 @@
             <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
         </Triggers>
     </asp:UpdatePanel>
-    <uc:LoadingProgress ID="lpOpportunityDetails" runat="server" />
+    <uc:LoadingProgress ID="lpOpportunityDetails" runat="server" DisplayText="Saving..." />
+    <uc:LoadingProgress ID="lpSave" runat="server" DisplayText="Saving..." AssociatedUpdatePanelID="upSave" />
+    <uc:LoadingProgress ID="lpCancel" runat="server" DisplayText="Please wait..." AssociatedUpdatePanelID="upCancelChanges" />
 </asp:Content>
 
