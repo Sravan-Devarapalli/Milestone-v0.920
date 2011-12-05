@@ -374,9 +374,7 @@ namespace PraticeManagement
 
             ScriptManager.RegisterStartupScript(this, this.GetType(), "MultipleSelectionCheckBoxes_OnClickKeyName", string.Format("MultipleSelectionCheckBoxes_OnClick('{0}');", cblPotentialResources.ClientID), true);
             ScriptManager.RegisterStartupScript(this, this.GetType(), "EnableOrDisableConvertOrAttachToProj", "EnableOrDisableConvertOrAttachToProj();", true);
-
-            lbEndDate.Font.Bold = (ddlPriority.SelectedValue == "1" || ddlPriority.SelectedValue == "2");
-
+            
             if (!IsPostBack && (SelectedId.HasValue || !string.IsNullOrEmpty(ReturnUrl)))
             {
                 btnCancelChanges.OnClientClick = string.Empty;
@@ -1333,17 +1331,6 @@ namespace PraticeManagement
                 }
             }
         }
-
-        protected void cvEndDateRequired_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            e.IsValid = true;
-            var selectedText = ddlPriority.SelectedItem.Text.ToUpperInvariant();
-            if (selectedText == "A" || selectedText == "B")
-            {
-                e.IsValid = !string.IsNullOrEmpty(dpEndDate.TextValue);
-            }
-        }
-
 
         #endregion
 
