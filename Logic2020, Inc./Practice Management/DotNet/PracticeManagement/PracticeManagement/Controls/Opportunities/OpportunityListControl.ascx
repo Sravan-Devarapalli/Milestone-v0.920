@@ -695,6 +695,7 @@
         var showPopup = false;
         var endDateRequiredPopup = false;
         var linkedToProjectPopup = false;
+        var startDateRequiredPopup = false;
 
         for (var i = 0; i < optionList.length; ++i) {
             if (optionList[i].value == ddlPriority.value) {
@@ -716,10 +717,12 @@
             }
         }
 
-        if (selectedText == "a" || selectedText == "b") {
-            if (ddlPriority.attributes["isEndDateAvailable"].value == "0") {
-                endDateRequiredPopup = true;
-            }
+        if (ddlPriority.attributes["isStartDateAvailable"].value == "0") {
+            startDateRequiredPopup = true;
+        }
+
+        if (ddlPriority.attributes["isEndDateAvailable"].value == "0") {
+            endDateRequiredPopup = true;
         }
 
 
@@ -732,6 +735,10 @@
             var lblOpportunityName1 = document.getElementById('<%= lblOpportunityName1.ClientID %>');
             lblOpportunityName1.innerHTML = lblOpportunityName.innerHTML = ddlPriority.attributes["OpportunityName"].value
 
+            var trStartDateRequied = document.getElementById('startDateRequired');
+            if (trStartDateRequied != null) {
+                trStartDateRequied.style.display = (startDateRequiredPopup == false) ? 'none' : '';
+            }
 
             var trEndDateRequired = document.getElementById('endDateRequired');
             if (trEndDateRequired != null) {
@@ -1218,9 +1225,13 @@
                                         <asp:Label ID="lblOpportunityName" runat="server" Font-Bold="true"></asp:Label>
                                         opportunity before it can be saved with a PO, A, or B priority.
                                     </p>
+                                    <p id="startDateRequired">
+                                        <br />
+                                        Projected Start date is required.
+                                    </p>
                                     <p id="endDateRequired">
                                         <br />
-                                        End date is required before opportunity can be saved with A, or B priority.
+                                        Projected End date is required.
                                     </p>
                                     <p id="linkedToProject">
                                         <br />
