@@ -166,15 +166,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator cvOpportunityStrawmanEndDateCheck;
         
         /// <summary>
-        /// cvEndDateRequired control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvEndDateRequired;
-        
-        /// <summary>
         /// txtOpportunityName control.
         /// </summary>
         /// <remarks>
@@ -985,6 +976,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnDelete;
         
         /// <summary>
+        /// upSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upSave;
+        
+        /// <summary>
         /// btnSave control.
         /// </summary>
         /// <remarks>
@@ -992,6 +992,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSave;
+        
+        /// <summary>
+        /// upCancelChanges control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upCancelChanges;
         
         /// <summary>
         /// btnCancelChanges control.
@@ -1055,6 +1064,24 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Generic.LoadingProgress lpOpportunityDetails;
+        
+        /// <summary>
+        /// lpSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.LoadingProgress lpSave;
+        
+        /// <summary>
+        /// lpCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.LoadingProgress lpCancel;
     }
 }
 
