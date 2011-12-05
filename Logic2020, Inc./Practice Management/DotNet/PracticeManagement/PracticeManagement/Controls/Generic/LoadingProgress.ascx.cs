@@ -21,11 +21,7 @@ namespace PraticeManagement.Controls.Generic
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Page.Title == "Opportunity Details | Practice Management")
-            {
-                DisplayText = "Saving ...";
-            }
-            else if(string.IsNullOrEmpty(DisplayText))
+            if(string.IsNullOrEmpty(DisplayText))
             {
                 DisplayText = "Please Wait..";
             }            
