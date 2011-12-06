@@ -512,6 +512,7 @@ namespace DataAccess
             using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.TimeEntriesGetByManyPersons, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonIds, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PersonIds, id => id));
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, reportContext.StartDate);
