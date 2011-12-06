@@ -56,7 +56,8 @@
         }
 
         function SetDivWidth() {
-            
+            var TotalPageWidth = $(window).width();
+            var divTeTableWidth = TotalPageWidth - 100;
             var datalist = $get("<%= dlPersons.ClientID %>");
             if (datalist != null) {
                 var tr = datalist.children[0].children;
@@ -65,7 +66,9 @@
                     var trchildOne = $("div[id$='divTeTable']");
                     var trchildTwo = $("div[id$='divProjects']");
                     var trchildThree = $("div[id$='divPersonNotEntered']");
-                    
+                    if (trchildOne != null && trchildOne != "undefined") {
+                            trchildOne.width(divTeTableWidth);
+                    }
                     if (trchildOne[0] != null && trchildOne[0].children[1] != null && trchildOne[0].children[1] != "undefined") {
                         $(trchildOne[0].children[1]).css("width", $(window).width() - 100);
                     }
@@ -291,7 +294,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <div class="PersonGridLeftPadding" runat="server" id="divTeTable" style="overflow-x: auto; width: 1163px;overflow-y: display;">
+                            <div class="PersonGridLeftPadding" runat="server" id="divTeTable" style="overflow-x: auto;overflow-y: display;">
                                 <table>
                                     <tr>
                                         <td colspan="4">
