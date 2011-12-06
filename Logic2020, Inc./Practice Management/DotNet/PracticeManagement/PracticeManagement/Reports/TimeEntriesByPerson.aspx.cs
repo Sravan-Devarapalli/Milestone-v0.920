@@ -38,22 +38,33 @@ namespace PraticeManagement.Sandbox
 
         protected void btnUpdate_OnClick(object sender, EventArgs e)
         {
-            btnExportToExcel.Enabled = true;
-            btnExportToPDF.Enabled = true;
+            try
+            {
+                btnExportToExcel.Enabled = true;
+                btnExportToPDF.Enabled = true;
 
-            dlPersons.DataBind();
-            System.Web.UI.ScriptManager.RegisterClientScriptBlock(updReport, updReport.GetType(), "", "SetDivWidth();", true);
-            if (hdnFiltersChanged.Value == "false")
-            {
-                btnResetFilter.Attributes.Add("disabled", "true");
+                dlPersons.DataBind();
+                System.Web.UI.ScriptManager.RegisterClientScriptBlock(updReport, updReport.GetType(), "", "SetDivWidth();", true);
+                if (hdnFiltersChanged.Value == "false")
+                {
+                    btnResetFilter.Attributes.Add("disabled", "true");
+                }
+                else
+                {
+                    btnResetFilter.Attributes.Remove("disabled");
+                }
+                AddAttributesToCheckBoxes(this.cblPractices);
+                AddAttributesToCheckBoxes(this.cblTimeScales);
+                AddAttributesToCheckBoxes(this.cblPersons);
             }
-            else
+            catch (Exception ex)
             {
-                btnResetFilter.Attributes.Remove("disabled");
+
+                string logText = string.Format(Constants.ActityLog.ErrorLogMessage,
+               "", "", "",
+               ex.ToString(), "", "", "");
+                ServiceCallers.Custom.ActivityLog(ac => ac.ActivityLogInsert(20, logText));
             }
-            AddAttributesToCheckBoxes(this.cblPractices);
-            AddAttributesToCheckBoxes(this.cblTimeScales);
-            AddAttributesToCheckBoxes(this.cblPersons);
         }
 
         protected void btnExport_OnClick(object sender, EventArgs e)
@@ -90,6 +101,10 @@ namespace PraticeManagement.Sandbox
 
         public void HTMLToPdf(String HTML, string fileName)
         {
+            if (HTML == String.Empty)
+            {
+                HTML = " &nbsp;  ";
+            }
 
             HtmlToPdfBuilder builder = new HtmlToPdfBuilder(iTextSharp.text.PageSize.A4_LANDSCAPE);
 
