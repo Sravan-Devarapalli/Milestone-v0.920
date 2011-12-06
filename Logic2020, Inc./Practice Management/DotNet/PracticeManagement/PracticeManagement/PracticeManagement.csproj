@@ -359,6 +359,7 @@
     <Content Include="ckeditor\themes\default\theme.js" />
     <Content Include="Controls\Calendar.ascx" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
+    <Content Include="Controls\Reports\ConsultingDemand.ascx" />
     <Content Include="Css\datepicker.css" />
     <Content Include="DashBoard.aspx" />
     <Content Include="Images\copy.png" />
@@ -1067,6 +1068,13 @@
     <Compile Include="Controls\OpportunityFilterSettings.cs" />
     <Compile Include="Controls\PracticeManagementExtendedPageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ConsultingDemand.ascx.cs">
+      <DependentUpon>ConsultingDemand.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ConsultingDemand.ascx.designer.cs">
+      <DependentUpon>ConsultingDemand.ascx</DependentUpon>
     </Compile>
     <Compile Include="DashBoard.aspx.cs">
       <DependentUpon>DashBoard.aspx</DependentUpon>
