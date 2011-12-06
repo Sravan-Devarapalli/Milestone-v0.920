@@ -33,10 +33,9 @@ BEGIN
 				JOIN Milestone M ON M.ProjectId = P.ProjectId
 				JOIN MilestonePerson MP ON MP.MilestoneId = M.MilestoneId
 				JOIN MilestonePersonEntry MPE ON MPE.MilestonePersonId = MP.MilestonePersonId
-				JOIN Person Per ON Per.PersonId = MP.PersonId
-				WHERE Per.PersonId = @StrawmanId AND P.ProjectId = @ObjectId
+				WHERE MP.PersonId = @StrawmanId AND P.ProjectId = @ObjectId
 					AND @Date = MPE.StartDate--AND @Date BETWEEN MPE.StartDate AND MPE.EndDate
-				GROUP BY MP.MilestonePersonId
+				GROUP BY P.ProjectId
 
 			END
 			ELSE
@@ -45,8 +44,6 @@ BEGIN
 				SELECT @value = OP.Quantity
 				FROM dbo.OpportunityPersons OP
 				JOIN dbo.Opportunity O ON O.OpportunityId = OP.OpportunityId
-				JOIN dbo.Person P ON P.PersonId = OP.PersonId
-				JOIN dbo.Client C ON O.ClientId = C.ClientId 
 				WHERE OP.RelationTypeId = 2 -- Team Structure
 					AND OP.PersonId = @StrawmanId AND OP.OpportunityId = @ObjectId
 					AND @Date = OP.NeedBy--AND @Date BETWEEN OP.NeedBy AND O.ProjectedEndDate
