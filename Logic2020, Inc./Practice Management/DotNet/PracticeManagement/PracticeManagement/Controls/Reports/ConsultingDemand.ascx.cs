@@ -402,23 +402,24 @@ namespace PraticeManagement.Controls.Reporting
                 var itemEndDate = new DateTime(item.EndDate.Year, item.EndDate.Month, 1);
                 itemEndDate = itemEndDate.AddMonths(1).AddDays(-1);
 
+                int monthlyDemand = 0;
+                //Sum up the demand for the month.
+                for (var perDay = date; perDay <= date.AddMonths(1).AddDays(-1); perDay = perDay.AddDays(1))
+                {
+                    if (perDay >= StartDate && perDay <= EndDate)
+                    {
+                        //dailyDemands will exist only in Selected Date range, so we need to consider only selected range instead of startdate of the month.
+                        if (item.StartDate <= perDay && item.EndDate >= perDay)
+                        {
+                            //var index = perDay.Subtract(item.StartDate).Days;
+                            monthlyDemand = monthlyDemand + dailyDemands[day];
+                        }
+                        day = day + 1;
+                    }
+                }
+
                 if (itemStartDate <= date && itemEndDate >= date)
                 {
-                    int monthlyDemand = 0;
-                    //Sum up the demand for the month.
-                    for (var perDay = date; perDay <= date.AddMonths(1).AddDays(-1); perDay = perDay.AddDays(1))
-                    {
-                        if (perDay >= StartDate && perDay <= EndDate)
-                        {
-                            //dailyDemands will exist only in Selected Date range, so we need to consider only selected range instead of startdate of the month.
-                            if (item.StartDate <= perDay && item.EndDate >= perDay)
-                            {
-                                //var index = perDay.Subtract(item.StartDate).Days;
-                                monthlyDemand = monthlyDemand + dailyDemands[day];
-                            }
-                            day = day + 1;
-                        }
-                    }
                     tooltip += "<br/>" + String.Format("{0:MMMM yyyy} = {1}", date, monthlyDemand);
                 }
             }
