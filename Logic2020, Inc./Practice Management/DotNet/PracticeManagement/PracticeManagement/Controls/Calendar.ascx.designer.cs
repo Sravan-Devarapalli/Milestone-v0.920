@@ -55,7 +55,7 @@ namespace PraticeManagement.Controls {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlPerson;
+        protected global::PraticeManagement.Controls.CustomDropDown ddlPerson;
         
         /// <summary>
         /// pnlButton control.
@@ -83,6 +83,42 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.UpdatePanelAnimationExtender pnlButton_UpdatePanelAnimationExtender;
+        
+        /// <summary>
+        /// trAlert control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl trAlert;
+        
+        /// <summary>
+        /// lbAlert1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbAlert1;
+        
+        /// <summary>
+        /// lbAlert2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbAlert2;
+        
+        /// <summary>
+        /// contactSupportMailToLink  control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink contactSupportMailToLink ;
         
         /// <summary>
         /// lblConsultantMessage control.
