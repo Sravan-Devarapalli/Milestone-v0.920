@@ -9,7 +9,26 @@ namespace PraticeManagement.Controls
 {
     public class CustomDropDown : DropDownList
     {
+        public bool IsOptionGroupRequired = true;
         protected override void RenderContents(HtmlTextWriter writer)
+        {
+            if (IsOptionGroupRequired)
+            {
+                RenderContentWithOptiongroup(writer);
+            }
+            else
+            {
+                RenderContentWithOutOptiongroup(writer);
+            }
+        }
+        private void RenderContentWithOutOptiongroup(HtmlTextWriter writer)
+        {
+            foreach (ListItem item in this.Items)
+            {
+                RenderListItem(item, writer);
+            }
+        }
+        private void RenderContentWithOptiongroup(HtmlTextWriter writer)
         {
             string currentOptionGroup;
             List<string> renderedOptionGroups = new List<string>();
@@ -133,3 +152,4 @@ namespace PraticeManagement.Controls
 
     }
 }
+
