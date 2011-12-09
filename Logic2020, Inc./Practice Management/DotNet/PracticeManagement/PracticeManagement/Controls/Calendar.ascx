@@ -168,6 +168,10 @@
     {
         background-color: #E9F0F9;
     }
+    .AlertColor
+    {
+        color: Red;
+    }
 </style>
 <table width="98%">
     <tr>
@@ -197,43 +201,54 @@
             <asp:UpdatePanel ID="pnlBody" runat="server" ChildrenAsTriggers="False" UpdateMode="Conditional">
                 <ContentTemplate>
                     <uc3:LoadingProgress ID="ldProgress" runat="server" />
-                    <table width="98%">
-                        <tr>
-                            <td style="width: 15%">
-                                &nbsp;
+                    <table width="98%" align="center" style="text-align: center;" class="CalendarTable">
+                        <tr id="trPersonDetails" runat="server">
+                            <td style="text-align: right; vertical-align: middle; width: 30%">
+                                Select a Person:
                             </td>
-                            <td style="width: 70%">
-                                <table class="CalendarTable">
-                                    <tr id="trPersonDetails" runat="server">
-                                        <td align="right">
-                                            Select a Person:
-                                        </td>
-                                        <td colspan="3" nowrap="nowrap" style="text-align: left;">
-                                            <asp:DropDownList ID="ddlPerson" runat="server">
-                                            </asp:DropDownList>
-                                            <asp:UpdatePanel ID="pnlButton" runat="server" RenderMode="Inline">
-                                                <ContentTemplate>
-                                                    <asp:Button ID="btnRetrieveCalendar" runat="server" Text="Retrieve Calendar" OnClick="btnRetrieveCalendar_Click" />
-                                                </ContentTemplate>
-                                            </asp:UpdatePanel>
-                                            <AjaxControlToolkit:UpdatePanelAnimationExtender ID="pnlButton_UpdatePanelAnimationExtender"
-                                                runat="server" Enabled="True" TargetControlID="pnlButton">
-                                                <Animations>
+                            <td nowrap="nowrap" style="text-align: left;">
+                                <uc:CustomDropDown ID="ddlPerson" runat="server" IsOptionGroupRequired="false">
+                                </uc:CustomDropDown>
+                                <asp:UpdatePanel ID="pnlButton" runat="server" RenderMode="Inline">
+                                    <ContentTemplate>
+                                        <asp:Button ID="btnRetrieveCalendar" runat="server" Text="Retrieve Calendar" OnClick="btnRetrieveCalendar_Click" />
+                                    </ContentTemplate>
+                                </asp:UpdatePanel>
+                                <AjaxControlToolkit:UpdatePanelAnimationExtender ID="pnlButton_UpdatePanelAnimationExtender"
+                                    runat="server" Enabled="True" TargetControlID="pnlButton">
+                                    <Animations>
 								<OnUpdating>
 									<EnableAction AnimationTarget="btnRetrieveCalendar" Enabled="false" />
 								</OnUpdating>
 								<OnUpdated>
 									<EnableAction AnimationTarget="btnRetrieveCalendar" Enabled="true" />
 								</OnUpdated>
-                                                </Animations>
-                                            </AjaxControlToolkit:UpdatePanelAnimationExtender>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="4" align="left">
-                                            <asp:Label ID="lblConsultantMessage" runat="server" Visible="false" Text="You can review your vacation days, but cannot change them. Please see your Practice Manager for updates to your vacation schedule."></asp:Label>
-                                        </td>
-                                    </tr>
+                                    </Animations>
+                                </AjaxControlToolkit:UpdatePanelAnimationExtender>
+                            </td>
+                        </tr>
+                        <tr >
+                            <td colspan="2" align="center" style="padding-top: 10px; padding-bottom: 10px;">
+                            <div id="trAlert" runat="server">
+                                <asp:Label ID="lbAlert1" runat="server" Text="Alert :" CssClass="AlertColor"></asp:Label>
+                                <asp:Label ID="lbAlert2" runat="server" Text=" You are viewing this calendar as READ-ONLY.  If you believe you should have permissions to make changes to this calendar, please "></asp:Label>
+                                <asp:HyperLink ID="contactSupportMailToLink" runat="server" Text="contact support" ForeColor="#0898E6"></asp:HyperLink>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <asp:Label ID="lblConsultantMessage" runat="server" Visible="false" Text="You can review your vacation days, but cannot change them. Please see your Practice Manager for updates to your vacation schedule."></asp:Label>
+                            </td>
+                        </tr>
+                    </table>
+                    <table width="98%" align="center">
+                        <tr>
+                            <td style="width: 15%">
+                                &nbsp;
+                            </td>
+                            <td style="width: 70%" align="center">
+                                <table class="CalendarTable">
                                     <tr>
                                         <td colspan="3" align="center">
                                             <table width="100%">
@@ -368,3 +383,4 @@
 <br />
 <uc2:CalendarLegend ID="CalendarLegend" runat="server" disableChevron="true" />
 <br />
+
