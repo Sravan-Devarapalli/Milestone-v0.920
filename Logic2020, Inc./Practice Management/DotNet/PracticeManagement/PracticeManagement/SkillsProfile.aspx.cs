@@ -148,7 +148,7 @@ namespace PraticeManagement
             if (repIndustries.Items.Count == 0)
             {
                 var lblInduatriesMsg = repIndustries.Controls[0].Controls[0].FindControl("lblInduatriesMsg") as Label;
-                lblInduatriesMsg.Text = "Person had not entered any Industry skills.";
+                lblInduatriesMsg.Text = "No industry experience entered.";
                 lblInduatriesMsg.Visible = true;
             }
             else
@@ -186,7 +186,7 @@ namespace PraticeManagement
                 }
                 else
                 {
-                    lblTypesMsg.Text = "Person had not entered any  " + dataItem.Description + " Skill.";
+                    lblTypesMsg.Text = "No " + dataItem.Description.ToLower() + " skills entered.";
                     lblTypesMsg.Visible = true;
                 }
             }
@@ -236,7 +236,7 @@ namespace PraticeManagement
                 {
                     Response.Redirect(Constants.ApplicationPages.AccessDeniedPage);
                 }
-                lblPersonName.Text = Person.PersonLastFirstName;
+                lblPersonName.Text = Person.FirstName + " " + Person.LastName;
                 repIndustries.DataSource = Person.Industries;
                 repIndustries.DataBind();
                 repTypes.DataSource = SkillTypes;
