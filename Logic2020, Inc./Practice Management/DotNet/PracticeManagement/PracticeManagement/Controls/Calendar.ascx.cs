@@ -9,6 +9,8 @@ using PraticeManagement.CalendarService;
 using PraticeManagement.Controls;
 using System.ServiceModel;
 using System.Web.Security;
+using PraticeManagement.PersonService;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement.Controls
 {
@@ -18,6 +20,7 @@ namespace PraticeManagement.Controls
 
         private const string YearKey = "Year";
         private const string ViewStatePreviousRecurringList = "ViewStatePreviousRecurringHolidaysList";
+        private const string MailToSubjectFormat = "mailto:{0}?subject=Permissions for {1}'s calendar";
 
         private CalendarItem[] days;
         private bool userIsPracticeManager;
@@ -59,7 +62,19 @@ namespace PraticeManagement.Controls
                 return personId;
             }
         }
+        private bool SelectedPersonHasPermissionToEditCalender
+        {
+            get
+            {
+                string HasPermissionToEditCalender = true.ToString();
+                if (ddlPerson.SelectedItem != null)
+                {
+                    HasPermissionToEditCalender = ddlPerson.SelectedItem.Attributes[Constants.Variables.HasPermissionToEditCalender];
+                }
+                return Convert.ToBoolean(HasPermissionToEditCalender.ToLower());
+            }
 
+        }
         public bool CompanyHolidays
         {
             get;
@@ -100,10 +115,26 @@ namespace PraticeManagement.Controls
                 mcApril.IsPersonCalendar = mcMay.IsPersonCalendar = mcJune.IsPersonCalendar =
                 mcJuly.IsPersonCalendar = mcAugust.IsPersonCalendar = mcSeptember.IsPersonCalendar =
                 mcOctober.IsPersonCalendar = mcNovember.IsPersonCalendar = mcDecember.IsPersonCalendar = !CompanyHolidays;
+            mcJanuary.IsReadOnly = mcFebruary.IsReadOnly = mcMarch.IsReadOnly =
+            mcApril.IsReadOnly = mcMay.IsReadOnly = mcJune.IsReadOnly =
+            mcJuly.IsReadOnly = mcAugust.IsReadOnly = mcSeptember.IsReadOnly =
+            mcOctober.IsReadOnly = mcNovember.IsReadOnly = mcDecember.IsReadOnly = !SelectedPersonHasPermissionToEditCalender;
+
+            SetMailToContactSupport();
+            if (SelectedPersonHasPermissionToEditCalender)
+            {
+                trAlert.Visible = false;
+            }
+            else
+            {
+                trAlert.Visible = true;
+            }
+            pnlBody.Update();
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            SetMailToContactSupport();
             userIsPracticeManager =
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName);
             userIsDirector =
@@ -128,37 +159,30 @@ namespace PraticeManagement.Controls
             {
                 if (!CompanyHolidays)
                 {
-                    if (userIsAdministrator || userIsSeniorLeadership || userIsHR)// #2817: userIsHR is added as per the requirement.
-                    {
-                        //DataHelper.FillPersonList(ddlPerson, Resources.Controls.CompanyCalendarTitle);
-                        DataHelper.FillPersonList(ddlPerson, null, (int)PersonStatusType.Active);
-                    }
-                    else
-                    {
-                        // if user does not have any role then we are just showing him in the dropdown
-                        ddlPerson.Items.Add(new ListItem(DataHelper.CurrentPerson.Name, DataHelper.CurrentPerson.Id.ToString()));
-                    }
-
+                    //#2961: allowing all persons to be in the dropdownlist irrespective of role.
+                    DataHelper.FillPersonList(ddlPerson, null, (int)PersonStatusType.Active);
                     Person current = DataHelper.CurrentPerson;
                     // Security
-                    if (!userIsAdministrator)
+                    Person[] persons = ServiceCallers.Custom.Person(p => p.GetCareerCounselorHierarchiPersons(current.Id.Value));
+                    var personsList = persons.ToList();
+                    personsList.Add(current);
+                    
+                    foreach (ListItem personitem in ddlPerson.Items)
                     {
-                        if (userIsPracticeManager || userIsDirector || userIsRecruiter || userIsSalesperson || userIsProjectLead || userIsConsultant && current != null)// #2817: userIsDirector is added as per the requirement.
+                        int personId = Convert.ToInt32(personitem.Value);
+                        string HasPermissionToEditCalender = false.ToString();
+                        if (!userIsAdministrator)
                         {
-                            DataHelper.FillCounselorHierarchiPersonsList(ddlPerson,//Adding Career Counselor Hierarchi Persons List as per #2952.
-                                    current.PersonLastFirstName,
-                                    current.Id.Value);
-
+                            if (userIsPracticeManager || userIsDirector || userIsRecruiter || userIsSalesperson || userIsProjectLead || userIsConsultant && current != null)// #2817: userIsDirector is added as per the requirement.
+                            {
+                                HasPermissionToEditCalender = personsList.Any(p => p.Id == personId) ? true.ToString() : false.ToString();
+                            }
                         }
-                        //Removing ddlPerson.Enabled = false; feature as per #2952.
-                        //else if (!userIsRecruiter && !userIsSalesperson && !userIsHR)// #2817: userIsHR is added as per the requirement.
-                        //{
-                        //    // Non-administrator users can view and edit the own schedule only.
-                        //    ddlPerson.Enabled = false;
-                        //}
-
-                        //Adding Person drop down items count as per #2952.
-                        btnRetrieveCalendar.Visible = userIsPracticeManager || userIsSalesperson || userIsRecruiter || userIsDirector || userIsSeniorLeadership || userIsHR || ddlPerson.Items.Count > 1; // #2817: userIsDirector is added as per the requirement.
+                        else
+                        {
+                            HasPermissionToEditCalender = true.ToString();
+                        }
+                        personitem.Attributes[Constants.Variables.HasPermissionToEditCalender] = HasPermissionToEditCalender;
                     }
 
                     ddlPerson.SelectedIndex =
@@ -273,7 +297,11 @@ namespace PraticeManagement.Controls
                 serviceClient.SetRecurringHoliday(id, isSet, user);
             }
         }
-
+        private void SetMailToContactSupport()
+        {
+            var _contactSupport = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.SMTP, Constants.ResourceKeys.PMSupportEmailAddressKey);
+            contactSupportMailToLink.NavigateUrl = string.Format(MailToSubjectFormat, _contactSupport, DataHelper.CurrentPerson.PersonLastFirstName);
+        }
         protected void calendar_PreRender(object sender, EventArgs e)
         {
             MonthCalendar calendar = sender as MonthCalendar;
@@ -319,11 +347,13 @@ namespace PraticeManagement.Controls
                 {
                     item.ReadOnly = true;
                 }
-
-                lblConsultantMessage.Visible = true;
+                trAlert.Visible = true;
+                pnlBody.Update();
+               // lblConsultantMessage.Visible = true;
             }
 
             calendar.CalendarItems = days;
         }
     }
 }
+
