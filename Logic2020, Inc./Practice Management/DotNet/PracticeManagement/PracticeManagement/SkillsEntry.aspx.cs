@@ -22,7 +22,7 @@ namespace PraticeManagement
         private const string SessionPersonWithSkills = "PersonWithSkills";
         private const string ViewStatePreviousActiveTabIndex = "PreviousActiveTabIndex";
         private const string ViewStatePreviousCategoryIndex = "PreviousCategoryIndex";
-        private const string ValidationPopUpMessage = "Please select a value for ‘Level’, ‘Experience’, ‘Last Used’, for below skills ";
+        private const string ValidationPopUpMessage = "Please select a value for ‘Level’, ‘Experience’, and ‘Last Used’ for the below skill(s):";
         private const string SuccessMessage = "Skills Saved Successfully.";
 
         //scripts
@@ -57,6 +57,7 @@ namespace PraticeManagement
         private const string hdnChangedId = "hdnChanged";
         private const string hdnIdId = "hdnId";
         private const string hdnDescriptionId = "hdnDescription";
+        private const string lnkbtnClearId = "lnkbtnClear";
 
         //Validator Ids
         private const string cvSkillsId = "cvSkills";
@@ -187,7 +188,7 @@ namespace PraticeManagement
                     Response.Redirect(Constants.ApplicationPages.AccessDeniedPage);
                 }
 
-                lblUserName.Text = Person.PersonLastFirstName;
+                lblUserName.Text = Person.FirstName + " " + Person.LastName;
                 RenderSkills(tcSkillsEntry.ActiveTabIndex);
 
                 if (ddlTechnicalCategory.DataSource == null && ddlTechnicalCategory.Items.Count == 0)
@@ -256,7 +257,10 @@ namespace PraticeManagement
                 var ddlExperience = e.Row.FindControl(ddlExperienceId) as DropDownList;
                 var ddlLastUsed = e.Row.FindControl(ddlLastUsedId) as DropDownList;
                 var hdnId = e.Row.FindControl(hdnIdId) as HiddenField;
-
+                var clearLink = e.Row.FindControl(lnkbtnClearId) as LinkButton;
+                clearLink.Enabled = false;
+                System.Drawing.Color gray = System.Drawing.ColorTranslator.FromHtml("#8F8F8F");
+                clearLink.ForeColor = gray;
                 if (Person.Skills.Count > 0)
                 {
                     if (Person.Skills.Where(s => s.Skill.Id == Convert.ToInt32(hdnId.Value)).Count() > 0)
@@ -268,6 +272,10 @@ namespace PraticeManagement
                             ddlLevel.SelectedValue = skill.SkillLevel.Id.ToString();
                             ddlExperience.SelectedValue = skill.YearsExperience.Value.ToString();
                             ddlLastUsed.SelectedValue = skill.LastUsed.ToString();
+                            clearLink.Enabled = true;
+                            clearLink.Attributes["disable"] = false.ToString();
+                            System.Drawing.Color blue = System.Drawing.ColorTranslator.FromHtml("#0898E6");
+                            clearLink.ForeColor = blue;
                         }
                     }
                 }
@@ -341,8 +349,8 @@ namespace PraticeManagement
                 {
                     if (ddlLevel.SelectedIndex == 0 || ddlExperience.SelectedIndex == 0 || ddlLastUsed.SelectedIndex == 0)
                     {
-                        lblValidationMessage.Text = (lblValidationMessage.Text == "") ? hdnDescription.Value
-                                                                                    : lblValidationMessage.Text + ",<br />" + hdnDescription.Value;
+                        lblValidationMessage.Text = (lblValidationMessage.Text == "") ? "- " + hdnDescription.Value
+                                                                                    : lblValidationMessage.Text + ",<br />" + "- " + hdnDescription.Value;
                         e.IsValid = false;
                         var cvLevel = row.FindControl(cvLevelId) as CustomValidator;
                         var cvExperience = row.FindControl(cvExperienceId) as CustomValidator;
@@ -373,6 +381,7 @@ namespace PraticeManagement
         protected new void btnCancel_Click(object sender, EventArgs e)
         {
             BindSkills(tcSkillsEntry.ActiveTabIndex);
+            ClearDirty();
         }
 
         private bool ValidateAndSave(int activeTabIndex)
@@ -402,10 +411,39 @@ namespace PraticeManagement
                     break;
             }
             EnableSaveAndCancelButtons(!result);
+            EnableClickLinkButton();
             hdnIsValid.Value = result.ToString().ToLower();
             return result;
         }
-
+        private void EnableClickLinkButton()
+        {
+            var rows = gvBusinessSkills.Rows;
+            foreach (GridViewRow row in rows)
+            {
+                var hdnChanged = row.FindControl(hdnChangedId) as HiddenField;
+                if (hdnChanged != null && hdnChanged.Value == "1")
+                {
+                    var ddlLevel = row.FindControl(ddlLevelId) as DropDownList;
+                    var ddlExperience = row.FindControl(ddlExperienceId) as DropDownList;
+                    var ddlLastUsed = row.FindControl(ddlLastUsedId) as DropDownList;
+                    var clearLink = row.FindControl(lnkbtnClearId) as LinkButton;
+                    if (!(ddlLevel.SelectedIndex == 0 && ddlExperience.SelectedIndex == 0 && ddlLastUsed.SelectedIndex == 0))
+                    {
+                        clearLink.Enabled = true;
+                        clearLink.Attributes["disable"] = false.ToString();
+                        System.Drawing.Color blue = System.Drawing.ColorTranslator.FromHtml("#0898E6");
+                        clearLink.ForeColor = blue;
+                    }
+                    else
+                    {
+                        clearLink.Enabled = false;
+                        clearLink.Attributes["disable"] = true.ToString();
+                        System.Drawing.Color gray = System.Drawing.ColorTranslator.FromHtml("#8F8F8F");
+                        clearLink.ForeColor = gray;
+                    }
+                }
+            }
+        }
         private void EnableSaveAndCancelButtons(bool enable)
         {
             btnSave.Enabled = enable;
@@ -490,10 +528,24 @@ namespace PraticeManagement
                     var ddlLevel = row.FindControl(ddlLevelId) as DropDownList;
                     var ddlExperience = row.FindControl(ddlExperienceId) as DropDownList;
                     var ddlLastUsed = row.FindControl(ddlLastUsedId) as DropDownList;
+                    var clearLink = row.FindControl(lnkbtnClearId) as LinkButton;
                     var hdnId = row.FindControl(hdnIdId) as HiddenField;
                     int skillId = Convert.ToInt32(hdnId.Value);
                     bool isModified = true;
-
+                    if (!(ddlLevel.SelectedIndex == 0 && ddlExperience.SelectedIndex == 0 && ddlLastUsed.SelectedIndex == 0))
+                    {
+                        clearLink.Enabled = true;
+                        clearLink.Attributes["disable"] = false.ToString();
+                        System.Drawing.Color blue = System.Drawing.ColorTranslator.FromHtml("#0898E6");
+                        clearLink.ForeColor = blue;
+                    }
+                    else
+                    {
+                        clearLink.Enabled = false;
+                        clearLink.Attributes["disable"] = true.ToString();
+                        System.Drawing.Color gray = System.Drawing.ColorTranslator.FromHtml("#8F8F8F");
+                        clearLink.ForeColor = gray;
+                    }
                     if (Person.Skills.Count > 0 && Person.Skills.Where(skill => skill.Skill != null && skill.Skill.Id == Convert.ToInt32(hdnId.Value)).Count() > 0)
                     {
                         if (!(ddlLevel.SelectedIndex == 0 && ddlExperience.SelectedIndex == 0 && ddlLastUsed.SelectedIndex == 0))
