@@ -93,7 +93,37 @@ namespace PraticeManagement.Controls
             private get;
             set;
         }
+        public bool IsReadOnly
+        {
+            get
+            {
+                return ViewState["IsReadOnly"] == null ? true : (bool)ViewState["IsReadOnly"];
+            }
+            set
+            {
+                ViewState["IsReadOnly"] = value;
+            }
+        }
 
+        public bool GetIsReadOnly(bool DateLevelReadonly)
+        {
+            if (IsPersonCalendar)
+            {
+                if (IsReadOnly)
+                {
+                    return true;
+                }
+                else
+                {
+                    return DateLevelReadonly;
+                }
+            }
+            else
+            {
+                return DateLevelReadonly;
+
+            }
+        }
         public bool IsPersonCalendar
         {
             get
@@ -229,3 +259,4 @@ namespace PraticeManagement.Controls
         #endregion
     }
 }
+
