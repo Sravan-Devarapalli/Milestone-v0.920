@@ -72,6 +72,25 @@
             setDirty();
 
             disableButtons(false);
+            var clearLink = row.find("a[id$='lnkbtnClear']")[0];
+            if (row.find("select[id$='ddlLevel']")[0].value != 0 || row.find("select[id$='ddlExperience']")[0].value != 0 || row.find("select[id$='ddlLastUsed']")[0].value != 0) {
+                clearLink.disabled = false;
+                clearLink.attributes['disable'].value = 'False';
+                clearLink.style.color = "#0898E6";
+                clearLink.style.cursor = "pointer";
+            }
+            else {
+                clearLink.disabled = true;
+                clearLink.attributes['disable'].value = 'True';
+                clearLink.style.color = "#8F8F8F";
+                clearLink.style.cursor = "text";
+            }
+        }
+        function ddlChangedIndustry(changedObject) {
+            var row = $(changedObject.parentNode.parentNode);
+            row.find("input[id$='hdnChanged']")[0].value = 1;
+            setDirty();
+            disableButtons(false);
         }
 
         function disableButtons(disable) {
@@ -83,10 +102,18 @@
 
         function ClearAllFields(clearLink) {
             var row = $(clearLink.parentNode.parentNode);
+            if (clearLink.attributes['disable'].value == 'False')
+            {
             row.find("select[id$='ddlLevel']")[0].value = 0;
             row.find("select[id$='ddlExperience']")[0].value = 0;
             row.find("select[id$='ddlLastUsed']")[0].value = 0;
             var ddlLevel = clearLink;
+            clearLink.disabled = true;
+            clearLink.attributes['disable'].value = 'True';
+            clearLink.style.color = "#8F8F8F";
+            clearLink.style.cursor = "text";
+            ddlChanged(clearLink);
+            }
         }
 
         function setHintPosition(img, displayPnl) {
@@ -218,7 +245,7 @@
                                             <ItemStyle Width="8%" />
                                             <ItemTemplate>
                                                 <asp:LinkButton runat="server" ID="lnkbtnClear" Text="clear" ToolTip="Clear Level, Experience, Last Used in this row."
-                                                    OnClientClick="ClearAllFields(this); ddlChanged(this); return false;">
+                                                    OnClientClick="ClearAllFields(this);  return false;" Font-Underline="true" disable="">
                                                 </asp:LinkButton>
                                             </ItemTemplate>
                                         </asp:TemplateField>
@@ -330,7 +357,7 @@
                                             <ItemStyle Width="8%" />
                                             <ItemTemplate>
                                                 <asp:LinkButton runat="server" ID="lnkbtnClear" Text="clear" ToolTip="Clear Level, Experience, Last Used in this row."
-                                                    OnClientClick="ClearAllFields(this); ddlChanged(this); return false;">
+                                                    OnClientClick="ClearAllFields(this); return false;" Enabled="false" Font-Underline="true" disable="">
                                                 </asp:LinkButton>
                                             </ItemTemplate>
                                         </asp:TemplateField>
@@ -366,7 +393,7 @@
                                             </HeaderTemplate>
                                             <ItemTemplate>
                                                 <asp:DropDownList runat="server" ID="ddlExperience" DataSourceID="odsExperience"
-                                                    DataTextField="Name" DataValueField="Id" onchange="ddlChanged(this);">
+                                                    DataTextField="Name" DataValueField="Id" onchange="ddlChangedIndustry(this);">
                                                 </asp:DropDownList>
                                             </ItemTemplate>
                                         </asp:TemplateField>
@@ -381,9 +408,9 @@
             <asp:Label ID="lblMessage" runat="server" ForeColor="Green" Text=""></asp:Label>
             <div class="WholeWidth">
                 <div style="width: 98%; text-align: right;">
-                    <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save Changes" OnClick="btnSave_Click"
+                    <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save Changes" OnClick="btnSave_Click" EnableViewState="false"
                         Enabled="false" />
-                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" ToolTip="Cancel Changes"
+                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" ToolTip="Cancel" EnableViewState="false"
                         OnClick="btnCancel_Click" Enabled="false" />
                 </div>
             </div>
@@ -400,7 +427,7 @@
                     </div>
                     <div style="vertical-align: top; max-height: 500px; overflow-y: auto; padding: 10px;
                         background-color: White;">
-                        <b>Please select a value for ‘Level’, ‘Experience’, ‘Last Used’, for below skills:
+                        <b>Please select a value for ‘Level’, ‘Experience’, and ‘Last Used’ for the below skill(s):
                         </b>
                         <br />
                         <br />
