@@ -519,7 +519,7 @@
                     </asp:Legend>
                 </Legends>
                 <Series>
-                    <asp:Series Name="chartSeries" ChartType="RangeBar" ><SmartLabelStyle AllowOutsidePlotArea="No" /></asp:Series>
+                    <asp:Series Name="chartSeries" ChartType="RangeBar" ></asp:Series>
                 </Series>
                 <ChartAreas>
                     <asp:ChartArea Name="MainArea">
