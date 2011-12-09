@@ -283,6 +283,7 @@ namespace PraticeManagement
         {
             public const string IsStrawMan = "IsStrawMan";
             public const string OptionGroup = "OptionGroup";
+            public const string HasPermissionToEditCalender = "HasPermissionToEditCalender";
             
         }
     }
