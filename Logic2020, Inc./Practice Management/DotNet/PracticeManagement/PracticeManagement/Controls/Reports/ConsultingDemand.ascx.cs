@@ -536,9 +536,7 @@ namespace PraticeManagement.Controls.Reporting
                         monthMiddle.Day.ToString(),
                         0,
                         LabelMarkStyle.None);
-
-            monthMiddlelabel.LabelMark = LabelMarkStyle.Box;
-
+            
             var monthMiddleLine = SetStripLine(monthMiddle, Color.Black, 1, ChartDashStyle.Solid);
             horizAxis.StripLines.Add(monthMiddleLine);
 
@@ -608,3 +606,4 @@ namespace PraticeManagement.Controls.Reporting
         }
     }
 }
+
