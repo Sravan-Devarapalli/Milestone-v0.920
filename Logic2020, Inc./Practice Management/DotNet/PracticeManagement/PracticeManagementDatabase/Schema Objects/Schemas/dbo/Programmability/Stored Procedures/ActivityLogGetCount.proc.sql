@@ -153,6 +153,14 @@ AS
 																					OR (a.LogData.exist('/BecomeUser') = 1)
 																				)
 				     )
+				  OR ( (@EventSource = 'Skills' OR @EventSource = 'All') AND (a.LogData.exist('/PersonSkill') = 1 or a.LogData.exist('/PersonIndustry') = 1)
+					 )
+				  OR ( (@EventSource = 'AddedSkills' OR @EventSource = 'All') AND (a.LogData.exist('/PersonSkill') = 1 or a.LogData.exist('/PersonIndustry') = 1) AND t.ActivityName = 'Added'
+					 )
+				  OR ( (@EventSource = 'ChangedSkills' OR @EventSource = 'All') AND (a.LogData.exist('/PersonSkill') = 1 or a.LogData.exist('/PersonIndustry') = 1) AND t.ActivityName = 'Changed'
+					 )
+				  OR ( (@EventSource = 'DeletedSkills' OR @EventSource = 'All') AND (a.LogData.exist('/PersonSkill') = 1 or a.LogData.exist('/PersonIndustry') = 1) AND t.ActivityName = 'Deleted'
+					 )
 					)
 	
 					AND (@ProjectId IS NULL 
