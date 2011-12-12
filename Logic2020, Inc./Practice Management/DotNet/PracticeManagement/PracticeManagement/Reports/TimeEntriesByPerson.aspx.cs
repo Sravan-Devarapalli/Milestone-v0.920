@@ -16,6 +16,8 @@ using System.Web.UI;
 using System.Web;
 using PraticeManagement.Objects;
 
+using PraticeManagement.CalendarService;
+
 namespace PraticeManagement.Sandbox
 {
     public partial class TimeEntriesByPerson : PracticeManagementPageBase
@@ -38,11 +40,21 @@ namespace PraticeManagement.Sandbox
 
         protected void btnUpdate_OnClick(object sender, EventArgs e)
         {
-            try
+            if (diRange.FromDate.HasValue)
             {
-                btnExportToExcel.Enabled = true;
+                btnExportToXL.Disabled = false;
                 btnExportToPDF.Enabled = true;
 
+                var personIds = cblPersons.SelectedValues;
+                var startDate = this.diRange.FromDate.Value;
+                var endDate = this.diRange.ToDate.HasValue ? this.diRange.ToDate.Value : DateTime.Today;
+                var payTypeIds = this.cblTimeScales.SelectedValues;
+                var practiceIds = this.cblPractices.SelectedValues;
+
+
+                Dictionary<TimeEntriesGroupedByPersonProject, Dictionary<TimeEntryHours, TimeEntryRecord[]>> persons = PraticeManagement.Utils.TimeEntryHelper.GetTimeEntriesForPerson(personIds, startDate, endDate, payTypeIds, practiceIds);
+
+                dlPersons.DataSource = persons;
                 dlPersons.DataBind();
                 System.Web.UI.ScriptManager.RegisterClientScriptBlock(updReport, updReport.GetType(), "", "SetDivWidth();", true);
                 if (hdnFiltersChanged.Value == "false")
@@ -56,38 +68,11 @@ namespace PraticeManagement.Sandbox
                 AddAttributesToCheckBoxes(this.cblPractices);
                 AddAttributesToCheckBoxes(this.cblTimeScales);
                 AddAttributesToCheckBoxes(this.cblPersons);
+
+                hlnkExportToExcel.NavigateUrl = "../Controls/Reports/TimeEntriesGetByPersonHandler.ashx?ExportToExcel=true&PersonID=" 
+                    + cblPersons.SelectedItems + "&StartDate=" + startDate.ToString() + "&EndDate=" + endDate.ToString()
+                    + "&PayScaleIds=" + cblTimeScales.SelectedItems + "&PracticeIds=" + cblPractices.SelectedItems;
             }
-            catch (Exception ex)
-            {
-
-                string logText = string.Format(Constants.ActityLog.ErrorLogMessage,
-               "", "", "",
-               ex.ToString(), "", "", "");
-                ServiceCallers.Custom.ActivityLog(ac => ac.ActivityLogInsert(20, logText));
-            }
-        }
-
-        protected void btnExport_OnClick(object sender, EventArgs e)
-        {
-            DataHelper.InsertExportActivityLogMessage(TEByPersonExport);
-
-            string fileName = "TimeEntriesForPersons.xls";
-            HttpContext.Current.Response.Clear();
-            HttpContext.Current.Response.AddHeader(
-                "content-disposition", string.Format("attachment; filename={0}", fileName));
-            HttpContext.Current.Response.ContentType = "application/vnd.ms-excel";
-
-            using (StringWriter sw = new StringWriter())
-            {
-                using (HtmlTextWriter htw = new HtmlTextWriter(sw))
-                {
-                    HttpContext.Current.Response.Write(AddExcelStyling());
-                    //  render the htmlwriter into the response
-                    HttpContext.Current.Response.Write(hdnSaveReportExcel.Value);//sw.ToString());//
-                    HttpContext.Current.Response.End();
-                }
-            }
-
         }
 
         protected void ExportToPDF(object sender, EventArgs e)
@@ -142,75 +127,6 @@ namespace PraticeManagement.Sandbox
                 }
             }
 
-
-        }
-
-        private string AddExcelStyling()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("<html xmlns:o='urn:schemas-microsoft-com:office:office'\n" +
-
-            "xmlns:x='urn:schemas-microsoft-com:office:excel'\n" +
-            "xmlns='http://www.w3.org/TR/REC-html40'>\n" +
-
-            "<head>\n");
-            sb.Append("<style>\n");
-
-            sb.Append("@page");
-            sb.Append("{margin:.5in .20in .5in .20in;\n");
-
-            sb.Append("mso-header-margin:.5in;\n");
-            sb.Append("mso-footer-margin:.5in;\n");
-
-            sb.Append("mso-page-orientation:landscape;}\n");
-            sb.Append("</style>\n");
-
-            sb.Append("<!--[if gte mso 9]><xml>\n");
-            sb.Append("<x:ExcelWorkbook>\n");
-
-            sb.Append("<x:ExcelWorksheets>\n");
-            sb.Append("<x:ExcelWorksheet>\n");
-
-            sb.Append("<x:Name>Projects 3 </x:Name>\n");
-            sb.Append("<x:WorksheetOptions>\n");
-
-            sb.Append("<x:Print>\n");
-            sb.Append("<x:ValidPrinterInfo/>\n");
-
-            sb.Append("<x:PaperSizeIndex>9</x:PaperSizeIndex>\n");
-            sb.Append("<x:HorizontalResolution>600</x:HorizontalResolution\n");
-
-            sb.Append("<x:VerticalResolution>600</x:VerticalResolution\n");
-            sb.Append("</x:Print>\n");
-
-            sb.Append("<x:Selected/>\n");
-            sb.Append("<x:DoNotDisplayGridlines/>\n");
-
-            sb.Append("<x:ProtectContents>False</x:ProtectContents>\n");
-            sb.Append("<x:ProtectObjects>False</x:ProtectObjects>\n");
-
-            sb.Append("<x:ProtectScenarios>False</x:ProtectScenarios>\n");
-            sb.Append("</x:WorksheetOptions>\n");
-
-            sb.Append("</x:ExcelWorksheet>\n");
-            sb.Append("</x:ExcelWorksheets>\n");
-
-            sb.Append("<x:WindowHeight>12780</x:WindowHeight>\n");
-            sb.Append("<x:WindowWidth>19035</x:WindowWidth>\n");
-
-            sb.Append("<x:WindowTopX>0</x:WindowTopX>\n");
-            sb.Append("<x:WindowTopY>15</x:WindowTopY>\n");
-
-            sb.Append("<x:ProtectStructure>False</x:ProtectStructure>\n");
-            sb.Append("<x:ProtectWindows>False</x:ProtectWindows>\n");
-
-            sb.Append("</x:ExcelWorkbook>\n");
-            sb.Append("</xml><![endif]-->\n");
-
-            sb.Append("</head>\n");
-            sb.Append("<body>\n");
-
-            return sb.ToString(); 
 
         }
 
@@ -291,7 +207,7 @@ namespace PraticeManagement.Sandbox
         protected void pcPersons_PersonChanged(object sender, PersonChangedEventArguments args)
         {
         }
-        
+
         protected void repTeTable_OnItemCreated(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Footer)
@@ -335,6 +251,29 @@ namespace PraticeManagement.Sandbox
             }
         }
 
+
+        protected void repTeTable_OnItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Header)
+            {
+                var dlProject = e.Item.FindControl("dlProject") as Repeater;
+
+                if (diRange.FromDate.HasValue)
+                {
+                    var personId = calendarPersonId;
+                    var startDate = this.diRange.FromDate.Value;
+                    var endDate = this.diRange.ToDate.HasValue ? this.diRange.ToDate.Value : DateTime.Today;
+
+                    using (var serviceClient = new CalendarServiceClient())
+                    {
+                        var result = serviceClient.GetCalendar(startDate, endDate, personId, null);
+                        dlProject.DataSource = result;
+                        dlProject.DataBind();
+                    }
+                }
+            }
+        }
+
         protected void dlPersons_OnItemCreated(object sender, DataListItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
@@ -356,7 +295,7 @@ namespace PraticeManagement.Sandbox
                 e.Row.Cells[1].Attributes["valign"] = "middle";
                 e.Row.Cells[2].Attributes["valign"] = "middle";
                 e.Row.Cells[3].Attributes["valign"] = "middle";
-                
+
                 if (e.Row.RowType == DataControlRowType.Footer)
                 {
                     foreach (TableCell cell in e.Row.Cells)
@@ -423,45 +362,7 @@ namespace PraticeManagement.Sandbox
             ColspanForTotals = 0;
         }
 
-        protected void odsCalendar_OnSelecting(object sender, ObjectDataSourceSelectingEventArgs e)
-        {
-            if (!diRange.FromDate.HasValue)
-            {
-                e.Cancel = true;
-                return;
-            }
-            e.InputParameters["personId"] = calendarPersonId;
-            e.InputParameters["startDate"] = this.diRange.FromDate.Value;
-            e.InputParameters["endDate"] = this.diRange.ToDate.HasValue ? this.diRange.ToDate.Value : DateTime.Today;
-        }
 
-        protected void odsPersonTimeEntries_OnSelecting(object sender, ObjectDataSourceSelectingEventArgs e)
-        {
-            if (!diRange.FromDate.HasValue)
-            {
-                e.Cancel = true;
-                return;
-            }
-
-            e.InputParameters["personIds"] = cblPersons.SelectedValues;
-            e.InputParameters["startDate"] = this.diRange.FromDate.Value;
-            e.InputParameters["endDate"] = this.diRange.ToDate.HasValue ? this.diRange.ToDate.Value : DateTime.Today;
-            e.InputParameters["payTypeIds"] = this.cblTimeScales.SelectedValues;
-            e.InputParameters["practiceIds"] = this.cblPractices.SelectedValues;
-        }
-
-        protected void odsCumulativeTes_OnSelecting(object sender, ObjectDataSourceSelectingEventArgs e)
-        {
-            if (!diRange.FromDate.HasValue)
-            {
-                e.Cancel = true;
-                return;
-            }
-
-            e.InputParameters["personIds"] = cblPersons.SelectedValues;//this.prfilter.SelectedValues;
-            e.InputParameters["startDate"] = this.diRange.FromDate.Value;
-            e.InputParameters["endDate"] = this.diRange.ToDate.HasValue ? this.diRange.ToDate.Value : DateTime.Today;
-        }
 
         protected void btnResetFilter_OnClick(object sender, EventArgs e)
         {
