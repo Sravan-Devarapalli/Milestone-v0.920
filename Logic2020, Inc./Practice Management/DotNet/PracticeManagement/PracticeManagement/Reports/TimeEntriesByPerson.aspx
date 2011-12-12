@@ -29,8 +29,16 @@
         });
 
         function saveReportExcel() {
-            var hlnkExportToExcel = document.getElementById('<%= hlnkExportToExcel.ClientID %>');
-            hlnkExportToExcel.click();
+            var hlnkExportToExcel = document.getElementById('<%= hlnkExportToExcel.ClientID %>'); 
+            if (navigator.userAgent.indexOf(' Chrome/') > -1) {
+                var evObj = document.createEvent('MouseEvents');
+                evObj.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, true, false, 0, null);
+                hlnkExportToExcel.dispatchEvent(evObj);
+            }
+            else {
+                hlnkExportToExcel.click();
+            }
+
         }
 
         function saveReport() {
