@@ -20,6 +20,9 @@
                     }
                 }
                 else {
+                    var hdnDayOff = $get(btnOk.attributes['HiddenDayOffID'].value);
+                    hdnDayOff.value = 'false';
+                    
                     if (rbFloating.checked) {
                         SaveDetails(popupExtendar, btnOk);
                     }
@@ -103,15 +106,15 @@
                       )
                 )
             )
-            ) : "" %>' ToolTip='<%# string.IsNullOrEmpty((string)Eval("HolidayDescription"))? "":((string)Eval("HolidayDescription"))%>'>
+            ) : "" %>' ToolTip='<%# GetToolTip( (string)Eval("HolidayDescription"), (bool)Eval("IsFloatingHoliday"), (bool)Eval("DayOff"), (bool)Eval("CompanyDayOff"), (double?)Eval("ActualHours") )%>'>
                     <asp:LinkButton ID="btnDay" runat="server" Text='<%# Eval("Date.Day") %>' Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year && !(bool)GetIsReadOnly((bool)Eval("ReadOnly")) %>'
                         DayOff='<%# (bool)Eval("DayOff") ? "true":"false" %>' Date='<%# Eval("Date") %>'
                         OnClientClick='<%# DayOnClientClick((DateTime)Eval("Date")) %>' IsRecurringHoliday='<%# (bool)Eval("IsRecurringHoliday") %>'
-                        ToolTip='<%# string.IsNullOrEmpty((string)Eval("HolidayDescription"))? "":((string)Eval("HolidayDescription"))%>'
+                        ToolTip='<%# GetToolTip( (string)Eval("HolidayDescription"), (bool)Eval("IsFloatingHoliday"), (bool)Eval("DayOff"), (bool)Eval("CompanyDayOff"), (double?)Eval("ActualHours") )%>'
                         HolidayDescription='<%# string.IsNullOrEmpty((string)Eval("HolidayDescription"))? "":((string)Eval("HolidayDescription"))%>'
                         RecurringHolidayId='<%# (int?) Eval("RecurringHolidayId")%>' RecurringHolidayDate='<%# (DateTime?) Eval("RecurringHolidayDate") %>'
                         IsWeekEnd='<%# GetIsWeekend(((DateTime)Eval("Date"))) %>' Enabled='<%# NeedToEnable((DateTime)Eval("Date")) %>'
-                        CompanyDayOff='<%# (bool)Eval("CompanyDayOff") ? "true" : "false" %>'></asp:LinkButton>
+                        CompanyDayOff='<%# (bool)Eval("CompanyDayOff") ? "true" : "false" %>' ActualHours='<%# (double?)Eval("ActualHours") %>' IsFloatingHoliday='<%# (bool)Eval("IsFloatingHoliday") %>'></asp:LinkButton>
                     <asp:Label ID="lblDay" runat="server" Text='<%# Eval("Date.Day") %>' Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year &&  GetIsReadOnly((bool)Eval("ReadOnly")) %>'></asp:Label>
                     <%--<asp:Label ID="lblDayOut" runat="server" Text='<%# Eval("Date.Day") %>'
 						Visible='<%# ((DateTime)Eval("Date")).Month != Month || ((DateTime)Eval("Date")).Year != Year %>'></asp:Label>--%>
@@ -158,6 +161,8 @@
                     <td align="center" style="padding: 10px 0px 10px 0px;">
                         <asp:Button ID="btnDayOK" runat="server" Text="OK" HiddenDayOffID="" HiddenDateID=""
                             SaveDayButtonID="" TextID="" ErrorMessageID="" ExtendarId="" TxtActualHoursID="" RbFloatingID="" OnClientClick="ClickSaveDay(this, 'true'); return false;" />
+                        &nbsp; &nbsp;
+                        <asp:Button ID="btnDayDelete" runat="server" Text="Delete" OnClick="btnDayOK_OnClick" />
                         &nbsp; &nbsp;
                         <asp:Button ID="btnDayCancel" runat="server" Text="Cancel" />
                     </td>
