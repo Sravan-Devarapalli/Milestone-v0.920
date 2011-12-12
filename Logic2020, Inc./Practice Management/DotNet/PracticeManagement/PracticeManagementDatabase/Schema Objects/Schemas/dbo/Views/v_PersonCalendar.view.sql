@@ -10,7 +10,9 @@ AS
 	SELECT cal.Date,
 	       p.[PersonId],
 	       ISNULL(pcal.DayOff, cal.DayOff) AS DayOff,
-	       cal.DayOff AS CompanyDayOff
+	       cal.DayOff AS CompanyDayOff,
+		   ISNULL(pcal.IsFloatingHoliday, 0) AS 'IsFloatingHoliday',
+		   pcal.ActualHours
 	  FROM dbo.Calendar AS cal
 	       INNER JOIN dbo.Person AS p ON cal.Date >= p.HireDate AND cal.Date < ISNULL(p.TerminationDate, dbo.GetFutureDate())
 	       LEFT JOIN dbo.PersonCalendar AS pcal ON pcal.Date = cal.Date AND pcal.PersonId = p.PersonId
