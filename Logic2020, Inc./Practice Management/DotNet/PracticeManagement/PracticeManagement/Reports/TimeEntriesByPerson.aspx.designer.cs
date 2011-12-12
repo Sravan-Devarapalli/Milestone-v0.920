@@ -103,22 +103,22 @@ namespace PraticeManagement.Sandbox {
         protected global::System.Web.UI.WebControls.Button btnResetFilter;
         
         /// <summary>
-        /// btnExportToExcel control.
+        /// btnExportToXL control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnExportToExcel;
+        protected global::System.Web.UI.HtmlControls.HtmlInputButton btnExportToXL;
         
         /// <summary>
-        /// hdnSaveReportExcel control.
+        /// hlnkExportToExcel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnSaveReportExcel;
+        protected global::System.Web.UI.WebControls.HyperLink hlnkExportToExcel;
         
         /// <summary>
         /// btnExportToPDF control.
@@ -290,24 +290,6 @@ namespace PraticeManagement.Sandbox {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hdnGuid;
-        
-        /// <summary>
-        /// odsPersonTimeEntries control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource odsPersonTimeEntries;
-        
-        /// <summary>
-        /// odsCalendar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource odsCalendar;
     }
 }
 
