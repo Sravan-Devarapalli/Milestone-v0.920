@@ -16,6 +16,8 @@ namespace PraticeManagement.Controls
         private const string MonthKey = "Month";
         private const string PersonIdKey = "PersonId";
         private const string ValueArgument = "value";
+        private const string FloatingHoliday = "Floating Holiday";
+        private const string PTOToolTipFormat = "PTO - {0}Hrs";
 
         #endregion
 
@@ -148,7 +150,7 @@ namespace PraticeManagement.Controls
             if (dateValue.Date >= SettingsHelper.GetCurrentPMTime().Date || IsPersonCalendar)
             {
                 return string.Format(@"updatingCalendarContainer = $get('{0}');
-                return ShowPopup(this,'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}');"
+                return ShowPopup(this,'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}');"
                     , lstCalendar.ClientID
                     , mpeHoliday.BehaviorID + Month
                     , btnSaveDay.ClientID
@@ -165,7 +167,8 @@ namespace PraticeManagement.Controls
                     , txtActualHours.ClientID
                     , lblActualHours.ClientID
                     , rbPTO.ClientID
-                    , rbFloatingHoliday.ClientID);
+                    , rbFloatingHoliday.ClientID
+                    , btnDayDelete.ClientID);
             }
             else
             {
@@ -208,16 +211,21 @@ namespace PraticeManagement.Controls
         {
             CalendarItem item = new CalendarItem();
             item.Date = DateTime.Parse(hdnDate.Value);
-            item.DayOff = !(bool.Parse(hndDayOff.Value));
+            item.DayOff = !(bool.Parse(hndDayOff.Value));//Here Changing dayOff value.
             item.PersonId = PersonId;
             item.IsRecurringHoliday = chkMakeRecurringHoliday.Checked;
             item.HolidayDescription = txtHolidayDescription.Text;
             item.ActualHours = string.IsNullOrEmpty(txtActualHours.Text) ? null : (Double?)Convert.ToDouble(txtActualHours.Text);
             item.RecurringHolidayId = string.IsNullOrEmpty(hdnRecurringHolidayId.Value) ? null : (int?)Convert.ToInt32(hdnRecurringHolidayId.Value);
-            item.RecurringHolidayDate = item.IsRecurringHoliday && !item.RecurringHolidayId.HasValue ? (DateTime?)(item.DayOff ? item.Date : Convert.ToDateTime(hdnRecurringHolidayDate.Value)) : null;
+            item.RecurringHolidayDate = (item.IsRecurringHoliday && !item.RecurringHolidayId.HasValue) ? (DateTime?)(item.DayOff ? item.Date : GetRecurringHolidayDate()) : null;
             item.IsFloatingHoliday = rbFloatingHoliday.Checked;
             SaveDate(item);
             Display();
+        }
+
+        private DateTime? GetRecurringHolidayDate()
+        {
+            return Convert.ToDateTime(hdnRecurringHolidayDate.Value);
         }
 
         private void SaveDate(CalendarItem item)
@@ -242,6 +250,17 @@ namespace PraticeManagement.Controls
                                         || dateValue.DayOfWeek == DayOfWeek.Sunday) ? "true" : "false";
 
             return result;
+        }
+
+        protected string GetToolTip(string holidayDescription, bool isFloatingHoliday, bool personDayOff, bool comapnyDayOff, double? actualHours)
+        {
+            string toolTip = holidayDescription;
+
+            if(string.IsNullOrEmpty(holidayDescription) && IsPersonCalendar)
+            {
+                toolTip = isFloatingHoliday ? FloatingHoliday : (personDayOff && !comapnyDayOff && actualHours.HasValue ? string.Format(PTOToolTipFormat, actualHours) : string.Empty);
+            }
+            return toolTip;
         }
 
         protected bool NeedToEnable(DateTime dateValue)
