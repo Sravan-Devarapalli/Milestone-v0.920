@@ -223,21 +223,21 @@ namespace PracticeManagementService
             try
             {
                 var te = new TimeEntryRecord
-                             {
-                                 Id = id,
-                                 MilestoneDate = DateTime.Parse(milestoneDate),
-                                 EntryDate = DateTime.Parse(entryDate),
-                                 ParentMilestonePersonEntry = new MilestonePersonEntry(milestonePersonId),
-                                 TimeType = new TimeTypeRecord(timeTypeId),
-                                 ActualHours = actualHours,
-                                 ForecastedHours = forecastedHours,
-                                 Note = note,
-                                 IsReviewed = (ReviewStatus) Enum.Parse(typeof (ReviewStatus), isReviewed),
-                                 IsChargeable = isChargeable,
-                                 IsCorrect = isCorrect,
-                                 ModifiedDate = DateTime.Now,
-                                 ModifiedBy = new Person(modifiedById)
-                             };
+                {
+                    Id = id,
+                    MilestoneDate = DateTime.Parse(milestoneDate),
+                    EntryDate = DateTime.Parse(entryDate),
+                    ParentMilestonePersonEntry = new MilestonePersonEntry(milestonePersonId),
+                    TimeType = new TimeTypeRecord(timeTypeId),
+                    ActualHours = actualHours,
+                    ForecastedHours = forecastedHours,
+                    Note = note,
+                    IsReviewed = (ReviewStatus)Enum.Parse(typeof(ReviewStatus), isReviewed),
+                    IsChargeable = isChargeable,
+                    IsCorrect = isCorrect,
+                    ModifiedDate = DateTime.Now,
+                    ModifiedBy = new Person(modifiedById)
+                };
 
                 UpdateTimeEntry(te, 0);
             }
@@ -321,7 +321,7 @@ namespace PracticeManagementService
         {
             try
             {
-                MilestonePersonEntry[] milestones = 
+                MilestonePersonEntry[] milestones =
                     TimeEntryDAL.GetCurrentMilestones(person, startDate, endDate, defaultMilestoneId);
                 return milestones;
             }
@@ -599,6 +599,12 @@ namespace PracticeManagementService
         }
 
         #endregion
+
+
+        public System.Data.DataSet TimeEntriesByPersonGetExcelSet(TimeEntryPersonReportContext reportContext)
+        {
+            return TimeEntryDAL.TimeEntriesByPersonGetExcelSet(reportContext);
+        }
     }
 }
 
