@@ -18,7 +18,7 @@ namespace PraticeManagement
             {
                 var companyTitle = HttpUtility.HtmlDecode(BrandingConfigurationManager.GetCompanyTitle());
                 lblSearchTitle.Text = string.Format("{0} Employee Skills Search", companyTitle);
-                DataHelper.FillPersonList(ddlEmployees, null, (int)PersonStatusType.Active);
+                DataHelper.FillPersonListWithPersonFirstLastName(ddlEmployees, null, null, (int)PersonStatusType.Active);
             }
         }
 
@@ -26,7 +26,10 @@ namespace PraticeManagement
         {
 
         }
-
+        public string GetPersonFirstLastName(Person person)
+        {
+            return person.FirstName + ", " + person.LastName;
+        }
         protected void btnSearch_OnClick(object sender, EventArgs e)
         {
             if (!pnlSearchResults.Visible)
@@ -44,7 +47,7 @@ namespace PraticeManagement
                 persons = service.PersonsSearchBySkillsText(txtSearch.Text);
             }
 
-            dlPerson.DataSource = persons.OrderBy(p => p.Name);
+            dlPerson.DataSource = persons.OrderBy(p => p.FirstName).ThenBy(p => p.LastName);
             dlPerson.DataBind();
 
             if (persons.Any())
@@ -71,3 +74,4 @@ namespace PraticeManagement
         }
     }
 }
+
