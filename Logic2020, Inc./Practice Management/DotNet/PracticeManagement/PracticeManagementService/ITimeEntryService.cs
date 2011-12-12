@@ -181,7 +181,10 @@ namespace PracticeManagementService
         [OperationContract]
         TimeEntrySums GetTimeEntrySums(TimeEntrySelectContext selectContext);
 
-		#endregion
+        [OperationContract]
+        System.Data.DataSet TimeEntriesByPersonGetExcelSet(TimeEntryPersonReportContext reportContext);
+
+        #endregion
 
 		#region Toggling
 
