@@ -107,11 +107,11 @@ namespace DataAccess
                 while (reader.Read())
                 {
                     var tt = new TimeTypeRecord
-                                 {
-                                     Id = reader.GetInt32(timeTypeIdIndex),
-                                     Name = reader.GetString(nameIndex),
-                                     IsDefault = reader.GetBoolean(isDefaultIndex)
-                                 };
+                    {
+                        Id = reader.GetInt32(timeTypeIdIndex),
+                        Name = reader.GetString(nameIndex),
+                        IsDefault = reader.GetBoolean(isDefaultIndex)
+                    };
                     //  Make default time types marked as InUse to disallow removing them
                     tt.InUse = bool.Parse(reader.GetString(inUseIndex)) || tt.IsDefault;
                     tt.IsSystemTimeType = reader.GetBoolean(isSystemTimeTypeIndex);
@@ -527,6 +527,31 @@ namespace DataAccess
             }
         }
 
+
+        public static DataSet TimeEntriesByPersonGetExcelSet(TimeEntryPersonReportContext reportContext)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.TimeEntriesGetByPersonsForExcel, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIds, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PersonIds, id => id));
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, reportContext.StartDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, reportContext.EndDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PracticeIds, id => id));
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimescaleIds, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PayTypeIds, id => id));
+
+                connection.Open();
+
+                var adapter = new SqlDataAdapter(command);
+                var dataset = new DataSet();
+                adapter.Fill(dataset, "excelDataTable");
+                return dataset;
+
+            }
+        }
+
         private static GroupedTimeEntries<Person> ReadMilestoneTimeEntryProjectPerson(SqlDataReader reader)
         {
             var result = new GroupedTimeEntries<Person>();
@@ -558,14 +583,14 @@ namespace DataAccess
             //CalendarDAL.GetCalendarItemIndexes(reader, out dateIndex, out dayOffIndex, out companyDayOffIndex, out readOnlyIndex);
 
             return new TimeEntryHours
-                       {
-                           //Calendar = CalendarDAL.ReadSingleCalendarItem(reader, dateIndex, dayOffIndex, companyDayOffIndex, readOnlyIndex),
-                           Id = reader.GetInt32(reader.GetOrdinal(Constants.ColumnNames.Id)),
-                           Name = reader.GetString(reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn))
-                           + " - " + reader.GetString(reader.GetOrdinal(Constants.ColumnNames.Name))
-                           + " - " + reader.GetString(reader.GetOrdinal(Constants.ColumnNames.TimeTypeName))
+            {
+                //Calendar = CalendarDAL.ReadSingleCalendarItem(reader, dateIndex, dayOffIndex, companyDayOffIndex, readOnlyIndex),
+                Id = reader.GetInt32(reader.GetOrdinal(Constants.ColumnNames.Id)),
+                Name = reader.GetString(reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn))
+                + " - " + reader.GetString(reader.GetOrdinal(Constants.ColumnNames.Name))
+                + " - " + reader.GetString(reader.GetOrdinal(Constants.ColumnNames.TimeTypeName))
 
-                       };
+            };
         }
 
         private static GroupedTimeEntries<Project> ReadMilestoneTimeEntryPersonProject(SqlDataReader reader)
@@ -766,10 +791,10 @@ namespace DataAccess
                 var forecastIndex = reader.GetOrdinal(Constants.ColumnNames.TotalForecastedHours);
 
                 return new TimeEntrySums
-                    {
-                        TotalActualHours = reader.IsDBNull(actualIndex) ? 0.0 : reader.GetDouble(actualIndex),
-                        TotalForecastedHours = reader.IsDBNull(forecastIndex) ? 0.0 : reader.GetDouble(forecastIndex)
-                    };
+                {
+                    TotalActualHours = reader.IsDBNull(actualIndex) ? 0.0 : reader.GetDouble(actualIndex),
+                    TotalForecastedHours = reader.IsDBNull(forecastIndex) ? 0.0 : reader.GetDouble(forecastIndex)
+                };
             }
 
             return null;
@@ -932,24 +957,24 @@ namespace DataAccess
             }
 
             var timeEntry = new TimeEntryRecord
-                                {
-                                    Id = reader.GetInt32(teIdIndex),
-                                    Note = reader.GetString(noteIndex),
-                                    EntryDate = reader.GetDateTime(entryDateIndex),
-                                    MilestoneDate = reader.GetDateTime(milestoneDateIndex),
-                                    TimeType = timeType,
-                                    ActualHours = reader.GetFloat(actualHrsIndex),
-                                    ForecastedHours = reader.GetFloat(forecastedHrsIndex),
-                                    ModifiedDate = reader.GetDateTime(modifiedDateIndex),
-                                    ModifiedBy = ReadModifiedBy(reader),
-                                    ParentMilestonePersonEntry =
-                                        new MilestonePersonEntry(reader.GetInt32(milestonePersonIdIndex)),
-                                    IsChargeable = reader.GetBoolean(isChargeableIndex),
-                                    IsCorrect = reader.GetBoolean(isCorrectIndex),
-                                    IsReviewed = reader.IsDBNull(isReviewedIndex)
-                                                     ? ReviewStatus.Pending
-                                                     : Utils.Bool2ReviewStatus(reader.GetBoolean(isReviewedIndex))
-                                };
+            {
+                Id = reader.GetInt32(teIdIndex),
+                Note = reader.GetString(noteIndex),
+                EntryDate = reader.GetDateTime(entryDateIndex),
+                MilestoneDate = reader.GetDateTime(milestoneDateIndex),
+                TimeType = timeType,
+                ActualHours = reader.GetFloat(actualHrsIndex),
+                ForecastedHours = reader.GetFloat(forecastedHrsIndex),
+                ModifiedDate = reader.GetDateTime(modifiedDateIndex),
+                ModifiedBy = ReadModifiedBy(reader),
+                ParentMilestonePersonEntry =
+                    new MilestonePersonEntry(reader.GetInt32(milestonePersonIdIndex)),
+                IsChargeable = reader.GetBoolean(isChargeableIndex),
+                IsCorrect = reader.GetBoolean(isCorrectIndex),
+                IsReviewed = reader.IsDBNull(isReviewedIndex)
+                                 ? ReviewStatus.Pending
+                                 : Utils.Bool2ReviewStatus(reader.GetBoolean(isReviewedIndex))
+            };
 
             return timeEntry;
         }
@@ -979,14 +1004,14 @@ namespace DataAccess
             }
 
             timeEntry.ParentMilestonePersonEntry = new MilestonePersonEntry(reader.GetInt32(milestonePersonIdIndex))
-                                                        {
-                                                            ThisPerson = new Person()
-                                                            {
-                                                                FirstName = reader.GetString(firstNameIndex),
-                                                                LastName = reader.GetString(lastNameIndex),
-                                                                Id = reader.GetInt32(personIdIndex)
-                                                            }
-                                                        };
+            {
+                ThisPerson = new Person()
+                {
+                    FirstName = reader.GetString(firstNameIndex),
+                    LastName = reader.GetString(lastNameIndex),
+                    Id = reader.GetInt32(personIdIndex)
+                }
+            };
 
             return timeEntry;
         }
@@ -1033,11 +1058,11 @@ namespace DataAccess
         private static Milestone ReadMilestone(DbDataReader reader)
         {
             var milestone = new Milestone
-                                {
-                                    Id = reader.GetInt32(reader.GetOrdinal(Constants.ParameterNames.MilestoneId)),
-                                    Description =
-                                        reader.GetString(reader.GetOrdinal(Constants.ParameterNames.MilestoneName))
-                                };
+            {
+                Id = reader.GetInt32(reader.GetOrdinal(Constants.ParameterNames.MilestoneId)),
+                Description =
+                    reader.GetString(reader.GetOrdinal(Constants.ParameterNames.MilestoneName))
+            };
             return milestone;
         }
 
@@ -1045,10 +1070,10 @@ namespace DataAccess
         {
             // Client details
             var tt = new TimeTypeRecord
-                         {
-                             Id = reader.GetInt32(reader.GetOrdinal(Constants.ParameterNames.TimeTypeId)),
-                             Name = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.TimeTypeName))
-                         };
+            {
+                Id = reader.GetInt32(reader.GetOrdinal(Constants.ParameterNames.TimeTypeId)),
+                Name = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.TimeTypeName))
+            };
             return tt;
         }
 
@@ -1056,31 +1081,31 @@ namespace DataAccess
         {
             // Client details
             var client = new Client
-                             {
-                                 Id = reader.GetInt32(reader.GetOrdinal(Constants.ParameterNames.ClientId)),
-                                 Name = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ClientName))
-                             };
+            {
+                Id = reader.GetInt32(reader.GetOrdinal(Constants.ParameterNames.ClientId)),
+                Name = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ClientName))
+            };
             return client;
         }
 
         private static ProjectStatus ReadProjectStatus(DbDataReader reader)
         {
             var projectStatus = new ProjectStatus
-                                    {
-                                        Id =
-                                            reader.GetInt32(reader.GetOrdinal(Constants.ParameterNames.ProjectStatusId))
-                                    };
+            {
+                Id =
+                    reader.GetInt32(reader.GetOrdinal(Constants.ParameterNames.ProjectStatusId))
+            };
             return projectStatus;
         }
 
         private static Project ReadProject(DbDataReader reader)
         {
             var project = new Project
-                              {
-                                  Id = reader.GetInt32(reader.GetOrdinal(Constants.ParameterNames.ProjectId)),
-                                  Name = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ProjectName)),
-                                  ProjectNumber = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ProjectNumber))
-                              };
+            {
+                Id = reader.GetInt32(reader.GetOrdinal(Constants.ParameterNames.ProjectId)),
+                Name = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ProjectName)),
+                ProjectNumber = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ProjectNumber))
+            };
             try
             {
 
@@ -1095,25 +1120,25 @@ namespace DataAccess
         private static Person ReadObjectPerson(DbDataReader reader)
         {
             var person = new Person
-                             {
-                                 Id = reader.GetInt32(reader.GetOrdinal(Constants.ParameterNames.PersonId)),
-                                 FirstName =
-                                     reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ObjectFirstName)),
-                                 LastName = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ObjectLastName))
-                             };
+            {
+                Id = reader.GetInt32(reader.GetOrdinal(Constants.ParameterNames.PersonId)),
+                FirstName =
+                    reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ObjectFirstName)),
+                LastName = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ObjectLastName))
+            };
             return person;
         }
 
         private static Person ReadModifiedBy(DbDataReader reader)
         {
             var person = new Person
-                             {
-                                 Id = reader.GetInt32(reader.GetOrdinal(Constants.ParameterNames.ModifiedBy)),
-                                 FirstName =
-                                     reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ModifiedFirstName)),
-                                 LastName =
-                                     reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ModifiedLastName))
-                             };
+            {
+                Id = reader.GetInt32(reader.GetOrdinal(Constants.ParameterNames.ModifiedBy)),
+                FirstName =
+                    reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ModifiedFirstName)),
+                LastName =
+                    reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ModifiedLastName))
+            };
             return person;
         }
 
