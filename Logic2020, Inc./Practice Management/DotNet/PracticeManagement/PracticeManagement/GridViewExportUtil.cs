@@ -23,7 +23,7 @@ public class GridViewExportUtil
     /// </summary>
     /// <param name="fileName"></param>
     /// <param name="gv"></param>
-    public static void Export(string fileName, GridView gv, string title)
+    public static void Export(string fileName, GridView gv, string title, string cellMaxHeight = "20px")
     {
         HttpContext.Current.Response.Clear();
         HttpContext.Current.Response.AddHeader(
@@ -43,7 +43,7 @@ public class GridViewExportUtil
                     titleCell.Text = title;
                     titleCell.Font.Bold = true;
                     titleCell.Font.Size = new FontUnit(FontSize.Medium);
-                    if(gv.HeaderRow != null)
+                    if (gv.HeaderRow != null)
                         titleCell.ColumnSpan = gv.HeaderRow.Cells.Count;
 
                     TableRow titleRow = new TableRow();
@@ -53,7 +53,7 @@ public class GridViewExportUtil
                     titleTable.RenderControl(htw);
                 }
 
-                Table reportTable = PrepareReportTable(gv);
+                Table reportTable = PrepareReportTable(gv, cellMaxHeight);
                 //  render the table into the htmlwriter
                 reportTable.RenderControl(htw);
 
@@ -64,7 +64,7 @@ public class GridViewExportUtil
         }
     }
 
-    public static void Export(string fileName, GridView gv, Table summaryTable, string title)
+    public static void Export(string fileName, GridView gv, Table summaryTable, string title, string cellMaxHeight = "20px")
     {
         HttpContext.Current.Response.Clear();
         HttpContext.Current.Response.AddHeader(
@@ -100,18 +100,28 @@ public class GridViewExportUtil
 
                 summaryTable.RenderControl(htw);
 
-                Table reportTable = PrepareReportTable(gv);
+                Table reportTable = PrepareReportTable(gv, cellMaxHeight);
                 //  render the table into the htmlwriter
                 reportTable.RenderControl(htw);
 
                 //  render the htmlwriter into the response
-                HttpContext.Current.Response.Write(sw.ToString());
+                int chunkSize = 256;
+
+                char[] data = sw.ToString().ToCharArray();
+                for (int index = 0; index < data.Length; index = index + chunkSize)
+                {
+                    if (data.Length - index < chunkSize)
+                        chunkSize = data.Length - index;
+
+                    HttpContext.Current.Response.Write(data, index, chunkSize);
+                }
+
                 HttpContext.Current.Response.End();
             }
         }
     }
 
-    private static Table PrepareReportTable(GridView gv)
+    private static Table PrepareReportTable(GridView gv, string cellMaxHeight)
     {
         //  Create a table to contain the grid
         Table table = new Table();
@@ -140,8 +150,12 @@ public class GridViewExportUtil
             table.Rows.Add(gv.FooterRow);
         }
 
-        foreach (TableRow trow in table.Rows)
-            trow.Style.Add(HtmlTextWriterStyle.Height, "20px");
+        if (cellMaxHeight != null)
+        {
+            foreach (TableRow trow in table.Rows)
+                trow.Style.Add(HtmlTextWriterStyle.Height, "20px");
+        }
+
         return table;
     }
 
