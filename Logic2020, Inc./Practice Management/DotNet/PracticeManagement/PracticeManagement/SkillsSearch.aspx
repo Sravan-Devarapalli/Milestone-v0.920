@@ -160,12 +160,12 @@
                                         Width="100%">
                                         <ItemTemplate>
                                             <asp:HyperLink NavigateUrl='<%# GetSkillProfileUrl(((DataTransferObjects.Person)Container.DataItem).Id.ToString()) %>'
-                                                Text="<%# ((DataTransferObjects.Person)Container.DataItem).Name%>" runat="server"
+                                                Text="<%# GetPersonFirstLastName(((DataTransferObjects.Person)Container.DataItem))  %>" runat="server"
                                                 Target="_blank"></asp:HyperLink>
                                         </ItemTemplate>
                                         <AlternatingItemTemplate>
                                             <asp:HyperLink NavigateUrl='<%# GetSkillProfileUrl(((DataTransferObjects.Person)Container.DataItem).Id.ToString()) %>'
-                                                Text="<%# ((DataTransferObjects.Person)Container.DataItem).Name%>" runat="server"
+                                                Text="<%# GetPersonFirstLastName(((DataTransferObjects.Person)Container.DataItem))%>" runat="server"
                                                 Target="_blank"></asp:HyperLink>
                                         </AlternatingItemTemplate>
                                     </asp:DataList>
