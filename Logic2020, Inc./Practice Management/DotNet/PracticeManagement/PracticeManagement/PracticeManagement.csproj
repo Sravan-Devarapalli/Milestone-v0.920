@@ -484,6 +484,7 @@
     <Content Include="Controls\Projects\ProjectAttachmentHandler.ashx" />
     <Content Include="OpportunityPriorityHandler.ashx" />
     <None Include="ckeditor\.htaccess" />
+    <Content Include="Controls\Reports\TimeEntriesGetByPersonHandler.ashx" />
     <None Include="PracticeManagementStrongNameKey.snk" />
     <None Include="Properties\DataSources\DataTransferObjects.ClientMarginColorInfo.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.ColorInformation.datasource" />
@@ -857,6 +858,9 @@
     <None Include="Service References\TimeEntryService\TimeEntryService10.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService106.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\TimeEntryService\TimeEntryService11.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -979,7 +983,6 @@
     <None Include="Service References\OverheadService\OverheadService1.disco" />
     <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
-    <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
     <None Include="Service References\PersonSkillService\configuration91.svcinfo" />
     <None Include="Service References\PersonSkillService\configuration.svcinfo" />
     <None Include="Service References\PersonSkillService\Reference.svcmap">
@@ -989,6 +992,7 @@
     <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\PersonSkillService\PersonSkillService2.disco" />
     <None Include="Service References\OpportunityService\OpportunityService1.disco" />
+    <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
     <Content Include="SkillsEntry.aspx" />
     <Content Include="SkillsProfile.aspx" />
     <Content Include="SkillsSearch.aspx" />
@@ -1075,6 +1079,9 @@
     </Compile>
     <Compile Include="Controls\Reports\ConsultingDemand.ascx.designer.cs">
       <DependentUpon>ConsultingDemand.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\TimeEntriesGetByPersonHandler.ashx.cs">
+      <DependentUpon>TimeEntriesGetByPersonHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="DashBoard.aspx.cs">
       <DependentUpon>DashBoard.aspx</DependentUpon>
