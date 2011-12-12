@@ -1183,6 +1183,43 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public static void FillPersonListWithPersonFirstLastName(ListControl control, string firstItemText, string firstItemValue, int statusId)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    Person[] persons = serviceClient.PersonListAllShort(null, statusId, DateTime.MinValue, DateTime.MinValue);
+                    control.Items.Clear();
+                    if (!string.IsNullOrEmpty(firstItemText))
+                    {
+                        var listitem = new ListItem() { Text = firstItemText, Value = firstItemValue };
+                        listitem.Attributes[Constants.Variables.IsStrawMan] = "false";
+                        control.Items.Add(listitem);
+                    }
+                    if (persons.Length > 0)
+                    {
+                        persons = persons.OrderBy(p => p.IsStrawMan).ThenBy(p => p.FirstName).ThenBy(p => p.LastName).ToArray();
+                        foreach (Person person in persons)
+                        {
+                            var personitem = new ListItem(
+                                                  person.FirstName + ", " + person.LastName,
+                                                  person.Id.Value.ToString());
+                            personitem.Attributes[Constants.Variables.IsStrawMan] = person.IsStrawMan.ToString().ToLowerInvariant();
+                            personitem.Attributes[Constants.Variables.OptionGroup] = person.IsStrawMan ? "Strawmen" : "Persons";
+                            control.Items.Add(personitem);
+                        }
+                    }
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+           
+        }
+
         /// <summary>
         /// Fills the list control with the list of registered overhead rate types.
         /// </summary>
