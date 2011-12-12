@@ -218,6 +218,9 @@ namespace PraticeManagement.TimeEntryService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetTimeEntrySums", ReplyAction="http://tempuri.org/ITimeEntryService/GetTimeEntrySumsResponse")]
         DataTransferObjects.TimeEntry.TimeEntrySums GetTimeEntrySums(DataTransferObjects.ContextObjects.TimeEntrySelectContext selectContext);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/TimeEntriesByPersonGetExcelSet", ReplyAction="http://tempuri.org/ITimeEntryService/TimeEntriesByPersonGetExcelSetResponse")]
+        System.Data.DataSet TimeEntriesByPersonGetExcelSet(DataTransferObjects.ContextObjects.TimeEntryPersonReportContext reportContext);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/ToggleIsCorrect", ReplyAction="http://tempuri.org/ITimeEntryService/ToggleIsCorrectResponse")]
         void ToggleIsCorrect(DataTransferObjects.TimeEntry.TimeEntryRecord timeEntry);
         
@@ -247,7 +250,7 @@ namespace PraticeManagement.TimeEntryService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class TimeEntryServiceClient : System.ServiceModel.ClientBase<PraticeManagement.TimeEntryService.ITimeEntryService>, PraticeManagement.TimeEntryService.ITimeEntryService {
-        
+      
         public TimeEntryServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -350,6 +353,10 @@ namespace PraticeManagement.TimeEntryService {
         
         public DataTransferObjects.TimeEntry.TimeEntrySums GetTimeEntrySums(DataTransferObjects.ContextObjects.TimeEntrySelectContext selectContext) {
             return base.Channel.GetTimeEntrySums(selectContext);
+        }
+        
+        public System.Data.DataSet TimeEntriesByPersonGetExcelSet(DataTransferObjects.ContextObjects.TimeEntryPersonReportContext reportContext) {
+            return base.Channel.TimeEntriesByPersonGetExcelSet(reportContext);
         }
         
         public void ToggleIsCorrect(DataTransferObjects.TimeEntry.TimeEntryRecord timeEntry) {
