@@ -91,9 +91,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 ViewState[VIEW_STATE_ISNOTEREQUIREDLIST] = value;
             }
         }
-
-
-
+        
         public MilestonePersonEntry[] MilestonePersonEntries
         {
             get
@@ -115,6 +113,8 @@ namespace PraticeManagement.Controls.TimeEntry
                     yield return control.FindControl(CONTROL_TeBar) as TimeEntryBar;
             }
         }
+
+        private bool HasPTOTimeEntries { get; set; }
 
         #endregion
 
@@ -161,6 +161,9 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 if (specialTimeTypes.Count() > 0)
                 {
+                    //PTOTimeEnteredDates = grid.TimeEntries.Where(te => te.TimeType != null && te.TimeType.Name == "PTO").Select(te => te.MilestoneDate).ToList();
+                    var ptoID = SettingsHelper.GetSystemTimeTypes().Where(ty => ty.Name == "PTO").Select(ty => ty.Id).First();
+                    HasPTOTimeEntries = grid.TimeEntries.Where(te => te.TimeType != null && te.TimeType.Id == ptoID).Count() > 0;
                     tes.DataSource = grid.OrderByDescending(g => g.TimeTypeBehind !=null && g.TimeTypeBehind.IsSystemTimeType);
                 }
                 else
@@ -203,6 +206,7 @@ namespace PraticeManagement.Controls.TimeEntry
             var row = e.Item.DataItem as TeGridRow;
 
             bar.RowBehind = row;
+            bar.HasPTOTimeEntries = HasPTOTimeEntries;
             bar.UpdateTimeEntries();
         }
 
