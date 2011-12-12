@@ -85,6 +85,14 @@ namespace DataTransferObjects
         PasswordResetRequests = 37,
         [EnumMember]
         BecomeUser = 38,
+        [EnumMember]
+        Skills = 39,
+        [EnumMember]
+        AddedSkills = 40,
+        [EnumMember]
+        ChangedSkills = 41,
+        [EnumMember]
+        DeletedSkills = 42
     }
 }
 
