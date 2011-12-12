@@ -29,16 +29,8 @@
         });
 
         function saveReportExcel() {
-            var divPersonListSummary = $("div[id$='divPersonListSummary']");
-            var hdnSaveReportExcel = document.getElementById('<%= hdnSaveReportExcel.ClientID %>');
-            var html = "";
-            if (divPersonListSummary != null && divPersonListSummary.length > 0) {
-                for (var i = 0; i < divPersonListSummary.length; i++) {
-                    html += divPersonListSummary[i].innerHTML;
-                }
-            }
-
-            hdnSaveReportExcel.value = html;
+            var hlnkExportToExcel = document.getElementById('<%= hlnkExportToExcel.ClientID %>');
+            hlnkExportToExcel.click();
         }
 
         function saveReport() {
@@ -67,7 +59,7 @@
                     var trchildTwo = $("div[id$='divProjects']");
                     var trchildThree = $("div[id$='divPersonNotEntered']");
                     if (trchildOne != null && trchildOne != "undefined") {
-                            trchildOne.width(divTeTableWidth);
+                        trchildOne.width(divTeTableWidth);
                     }
                     if (trchildOne[0] != null && trchildOne[0].children[1] != null && trchildOne[0].children[1] != "undefined") {
                         $(trchildOne[0].children[1]).css("width", $(window).width() - 100);
@@ -184,9 +176,10 @@
                         <td align="right">
                         </td>
                         <td style="padding-top: 5px;">
-                            <asp:Button ID="btnExportToExcel" runat="server" Text="Export To Excel" Width="100px"
-                                Enabled="false" OnClientClick="saveReportExcel();" OnClick="btnExport_OnClick"
-                                EnableViewState="False" /><asp:HiddenField ID="hdnSaveReportExcel" runat="server" />
+                            <input type="button" runat="server" id="btnExportToXL" value="Export To Excel" disabled="disabled" enableviewstate="false"
+                                style="width: 100px" onclick="saveReportExcel();" title="Export To Excel" />
+                            <asp:HyperLink ID="hlnkExportToExcel" runat="server" Style="display: none;" Text="Export To Excel"
+                                ToolTip="Export To Excel"></asp:HyperLink>
                             <asp:Button ID="btnExportToPDF" runat="server" Text="Export To PDF" OnClientClick="saveReport();"
                                 Enabled="false" Width="100px" OnClick="ExportToPDF" EnableViewState="False" /><asp:HiddenField
                                     ID="hdnSaveReportText" runat="server" />
@@ -279,8 +272,8 @@
         <ContentTemplate>
             <asp:Panel ID="pnlList" runat="server">
                 <uc2:CalendarLegend ID="CalendarLegend" runat="server" />
-                <asp:DataList ID="dlPersons" runat="server" DataSourceID="odsPersonTimeEntries" CssClass="WholeWidth"
-                    OnItemDataBound="dlPersons_OnItemDataBound" OnItemCreated="dlPersons_OnItemCreated ">
+                <asp:DataList ID="dlPersons" runat="server" CssClass="WholeWidth" OnItemDataBound="dlPersons_OnItemDataBound"
+                    OnItemCreated="dlPersons_OnItemCreated ">
                     <ItemTemplate>
                         <div id="divPersonListSummary" runat="server">
                             <table>
@@ -294,7 +287,8 @@
                                     </td>
                                 </tr>
                             </table>
-                            <div class="PersonGridLeftPadding" runat="server" id="divTeTable" style="overflow-x: auto;overflow-y: display;">
+                            <div class="PersonGridLeftPadding" runat="server" id="divTeTable" style="overflow-x: auto;
+                                overflow-y: display;">
                                 <table>
                                     <tr>
                                         <td colspan="4">
@@ -302,79 +296,80 @@
                                         </td>
                                     </tr>
                                 </table>
-                             
-                                    <asp:Repeater ID="repTeTable" runat="server" DataSource='<%# Eval("Value")%>' OnItemCreated="repTeTable_OnItemCreated">
-                                        <HeaderTemplate>
-                                            <table class="time-entry-person-projects WholeWidth" border="1" rules="rows" style="display: inline;">
-                                                <thead>
-                                                    <tr style="border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;vertical-align:middle; ">
-                                                        <th valign="middle" colspan="2" style="text-align: left; border-bottom: 1px solid gray; border-top: 1px solid gray;
-                                                            width: 20%;">
-                                                            <asp:Label ID="lblPType" runat="server" Font-Bold="true" Text="Client-Project-Time Type"></asp:Label>
-                                                        </th>
-                                                        <asp:Repeater ID="dlProject" runat="server" DataSourceID="odsCalendar" OnItemCreated="dlProject_OnItemCreated"
-                                                            OnInit="dlProject_OnInit">
-                                                            <ItemTemplate>
-                                                                <th valign="middle" style="padding-left: 5px; padding-right: 5px;vertical-align:middle;text-align:center;  border-bottom: 1px solid gray;
-                                                                    font-weight: bold; border-top: 1px solid gray;" class="<%# PraticeManagement.Utils.Calendar.GetCssClassByCalendarItem((CalendarItem) Container.DataItem) %>">
-                                                                    <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd<br/>MMM d}")%>
-                                                                </th>
-                                                            </ItemTemplate>
-                                                        </asp:Repeater>
-                                                        <th valign="middle" style="padding-left: 5px; padding-right: 5px;vertical-align:middle;text-align:center;  border-bottom: 1px solid gray;
-                                                            font-weight: bold; border-top: 1px solid gray;">
-                                                            Totals
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                        </HeaderTemplate>
-                                        <ItemTemplate>
-                                            <tr style="border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;"
-                                                class="<%# Container.ItemIndex % 2 == 0 ? "alterrow" : string.Empty %>">
-                                                <td valign="middle" colspan="2" style="text-align: left;vertical-align:middle; border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;
-                                                    width: 20%;">
-                                                    <asp:Label ID="lblPTypeValue" runat="server" Text='<%#  DataBinder.Eval(Container.DataItem, "Key")%>'></asp:Label>
-                                                </td>
-                                                <asp:Repeater ID="dlProject" runat="server" DataSource='<%# GetUpdatedDatasource(DataBinder.Eval(Container.DataItem, "Value")) %>'
-                                                    OnItemDataBound="dlProject_OnItemDataBound">
-                                                    <ItemTemplate>
-                                                        <td valign="middle" style="padding-left: 5px; text-align: center;vertical-align:middle; padding-right: 5px; border-bottom: 1px solid lightgray;
-                                                            border-top: 1px solid lightgray;">
-                                                            <%#  ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")) != null ? string.Format("{0:F2}",((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")).ActualHours) : string.Empty%>
-                                                        </td>
-                                                    </ItemTemplate>
-                                                </asp:Repeater>
-                                                <td valign="middle" style="font-weight: bold; padding-left: 5px; text-align: center;vertical-align:middle; padding-right: 5px;
-                                                    border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;">
-                                                    <%# ProjectTotals.ToString(PraticeManagement.Constants.Formatting.DoubleFormat) %>
-                                                </td>
-                                            </tr>
-                                        </ItemTemplate>
-                                        <FooterTemplate>
-                                            <tr style="font-weight: bold; border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;">
-                                                <td colspan="2" style="text-align: left; border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;
-                                                    width: 20%;">
-                                                    Totals
-                                                </td>
-                                                <asp:Repeater ID="dlTotals" runat="server" OnItemDataBound="dlTotals_OnItemDataBound"
-                                                    OnInit="dlTotals_OnInit">
-                                                    <ItemTemplate>
-                                                        <td style="padding-left: 5px; padding-right: 5px; border-bottom: 1px solid lightgray;
-                                                            text-align: center; border-top: 1px solid lightgray;">
-                                                            <%# ((double?)DataBinder.Eval(Container.DataItem, "Value"))!=null ?string.Format("{0:F2}",((double?)DataBinder.Eval(Container.DataItem, "Value")).Value) : string.Empty %>
-                                                        </td>
-                                                    </ItemTemplate>
-                                                </asp:Repeater>
-                                                <td style="font-size: 15px; padding-left: 5px; padding-right: 5px; border-bottom: 1px solid lightgray;
-                                                    text-align: center; border-top: 1px solid lightgray;">
-                                                    <%# GrandTotal.ToString(PraticeManagement.Constants.Formatting.DoubleFormat) %>
-                                                </td>
-                                            </tr>
-                                            </tbody></table>
-                                        </FooterTemplate>
-                                    </asp:Repeater>
-                             
+                                <asp:Repeater ID="repTeTable" runat="server" DataSource='<%# Eval("Value")%>' OnItemDataBound="repTeTable_OnItemDataBound"
+                                    OnItemCreated="repTeTable_OnItemCreated">
+                                    <HeaderTemplate>
+                                        <table class="time-entry-person-projects WholeWidth" border="1" rules="rows" style="display: inline;">
+                                            <thead>
+                                                <tr style="border-bottom: 1px solid lightgray; border-top: 1px solid lightgray; vertical-align: middle;">
+                                                    <th valign="middle" colspan="2" style="text-align: left; border-bottom: 1px solid gray;
+                                                        border-top: 1px solid gray; width: 20%;">
+                                                        <asp:Label ID="lblPType" runat="server" Font-Bold="true" Text="Client-Project-Time Type"></asp:Label>
+                                                    </th>
+                                                    <asp:Repeater ID="dlProject" runat="server" OnItemCreated="dlProject_OnItemCreated"
+                                                        OnInit="dlProject_OnInit">
+                                                        <ItemTemplate>
+                                                            <th valign="middle" style="padding-left: 5px; padding-right: 5px; vertical-align: middle;
+                                                                text-align: center; border-bottom: 1px solid gray; font-weight: bold; border-top: 1px solid gray;"
+                                                                class="<%# PraticeManagement.Utils.Calendar.GetCssClassByCalendarItem((CalendarItem) Container.DataItem) %>">
+                                                                <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd<br/>MMM d}")%>
+                                                            </th>
+                                                        </ItemTemplate>
+                                                    </asp:Repeater>
+                                                    <th valign="middle" style="padding-left: 5px; padding-right: 5px; vertical-align: middle;
+                                                        text-align: center; border-bottom: 1px solid gray; font-weight: bold; border-top: 1px solid gray;">
+                                                        Totals
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <tr style="border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;"
+                                            class="<%# Container.ItemIndex % 2 == 0 ? "alterrow" : string.Empty %>">
+                                            <td valign="middle" colspan="2" style="text-align: left; vertical-align: middle;
+                                                border-bottom: 1px solid lightgray; border-top: 1px solid lightgray; width: 20%;">
+                                                <asp:Label ID="lblPTypeValue" runat="server" Text='<%#  DataBinder.Eval(Container.DataItem, "Key")%>'></asp:Label>
+                                            </td>
+                                            <asp:Repeater ID="dlProject" runat="server" DataSource='<%# GetUpdatedDatasource(DataBinder.Eval(Container.DataItem, "Value")) %>'
+                                                OnItemDataBound="dlProject_OnItemDataBound">
+                                                <ItemTemplate>
+                                                    <td valign="middle" style="padding-left: 5px; text-align: center; vertical-align: middle;
+                                                        padding-right: 5px; border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;">
+                                                        <%#  ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")) != null ? string.Format("{0:F2}",((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")).ActualHours) : string.Empty%>
+                                                    </td>
+                                                </ItemTemplate>
+                                            </asp:Repeater>
+                                            <td valign="middle" style="font-weight: bold; padding-left: 5px; text-align: center;
+                                                vertical-align: middle; padding-right: 5px; border-bottom: 1px solid lightgray;
+                                                border-top: 1px solid lightgray;">
+                                                <%# ProjectTotals.ToString(PraticeManagement.Constants.Formatting.DoubleFormat) %>
+                                            </td>
+                                        </tr>
+                                    </ItemTemplate>
+                                    <FooterTemplate>
+                                        <tr style="font-weight: bold; border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;">
+                                            <td colspan="2" style="text-align: left; border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;
+                                                width: 20%;">
+                                                Totals
+                                            </td>
+                                            <asp:Repeater ID="dlTotals" runat="server" OnItemDataBound="dlTotals_OnItemDataBound"
+                                                OnInit="dlTotals_OnInit">
+                                                <ItemTemplate>
+                                                    <td style="padding-left: 5px; padding-right: 5px; border-bottom: 1px solid lightgray;
+                                                        text-align: center; border-top: 1px solid lightgray;">
+                                                        <%# ((double?)DataBinder.Eval(Container.DataItem, "Value"))!=null ?string.Format("{0:F2}",((double?)DataBinder.Eval(Container.DataItem, "Value")).Value) : string.Empty %>
+                                                    </td>
+                                                </ItemTemplate>
+                                            </asp:Repeater>
+                                            <td style="font-size: 15px; padding-left: 5px; padding-right: 5px; border-bottom: 1px solid lightgray;
+                                                text-align: center; border-top: 1px solid lightgray;">
+                                                <%# GrandTotal.ToString(PraticeManagement.Constants.Formatting.DoubleFormat) %>
+                                            </td>
+                                        </tr>
+                                        </tbody></table>
+                                    </FooterTemplate>
+                                </asp:Repeater>
                             </div>
                             <div class="PersonGridLeftPadding" style="overflow-x: auto; padding-top: 10px;" runat="server"
                                 id="divProjects">
@@ -441,8 +436,8 @@
                                                     <ItemStyle Width="24%" VerticalAlign="Middle" />
                                                     <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
                                                     <FooterTemplate>
-                                                        <div  class="ie-bg" style="text-align: right;">
-                                                            <asp:Label  ID="lblGvGridTotalText" runat="server" Text="Total =" Font-Bold="true"></asp:Label></div>
+                                                        <div class="ie-bg" style="text-align: right;">
+                                                            <asp:Label ID="lblGvGridTotalText" runat="server" Text="Total =" Font-Bold="true"></asp:Label></div>
                                                     </FooterTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField ItemStyle-CssClass="AlignCentre" FooterStyle-CssClass="AlignCentre">
@@ -485,28 +480,8 @@
             <asp:HiddenField ID="hdnGuid" runat="server" />
         </ContentTemplate>
         <Triggers>
-            <asp:PostBackTrigger ControlID="btnExportToExcel" />
             <asp:PostBackTrigger ControlID="btnExportToPDF" />
         </Triggers>
     </asp:UpdatePanel>
-    <asp:ObjectDataSource ID="odsPersonTimeEntries" runat="server" SelectMethod="GetTimeEntriesForPerson"
-        TypeName="PraticeManagement.Utils.TimeEntryHelper" OnSelecting="odsPersonTimeEntries_OnSelecting">
-        <SelectParameters>
-            <asp:Parameter Name="personIds" Type="Object" />
-            <asp:Parameter Name="startDate" Type="DateTime" />
-            <asp:Parameter Name="endDate" Type="DateTime" />
-            <asp:Parameter Name="payTypeIds" Type="Object" />
-            <asp:Parameter Name="practiceIds" Type="Object" />
-        </SelectParameters>
-    </asp:ObjectDataSource>
-    <asp:ObjectDataSource ID="odsCalendar" runat="server" SelectMethod="GetCalendar"
-        TypeName="PraticeManagement.CalendarService.CalendarServiceClient" OnSelecting="odsCalendar_OnSelecting">
-        <SelectParameters>
-            <asp:Parameter Name="startDate" Type="DateTime" />
-            <asp:Parameter Name="endDate" Type="DateTime" />
-            <asp:Parameter Name="personId" Type="Int32" />
-            <asp:Parameter Name="practiceManagerId" Type="Int32" />
-        </SelectParameters>
-    </asp:ObjectDataSource>
 </asp:Content>
 
