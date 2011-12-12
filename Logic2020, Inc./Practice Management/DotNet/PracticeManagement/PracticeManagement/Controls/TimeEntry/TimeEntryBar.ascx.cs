@@ -17,7 +17,11 @@ namespace PraticeManagement.Controls.TimeEntry
         #region Constants
 
         private const string CONTROL_STE_ITEM = "ste";
-        private const string ViewStateRecurringHolidaysList = "ViewStateRecurringHolidaysList";
+        private const string VIEWSTATE_DEFAULTPROJECTID = "ViewStateDefaultProjectId";
+        private const string VIEWSTATE_PTOTIMETYPE_LISTITEM = "ViewStatePTOTimetypeListItem";
+        private const string VIEWSTATE_HASPTOTIMEENTRIES = "ViewStatePTOTimeEntries";
+        private const string IsDefaultProject = "IsDefaultProject";
+        private const string IsPTOEntered = "IsPTOEntered";
 
         #endregion
 
@@ -31,6 +35,18 @@ namespace PraticeManagement.Controls.TimeEntry
 
         public TeGridRow RowBehind { get; set; }
         private bool isSystemTimeType { get; set; }
+        public bool HasPTOTimeEntries
+        {
+            get
+            {
+                return (bool)ViewState[VIEWSTATE_HASPTOTIMEENTRIES];
+            }
+            set
+            {
+                ViewState[VIEWSTATE_HASPTOTIMEENTRIES] = value;
+            }
+        }
+
         public Person SelectedPerson
         {
             get
@@ -50,6 +66,41 @@ namespace PraticeManagement.Controls.TimeEntry
             {
                 foreach (Control entry in tes.Controls)
                     yield return entry.FindControl(CONTROL_STE_ITEM) as SingleTimeEntry;
+            }
+        }
+
+        public int DefaultProjectId
+        {
+            get
+            {
+                if (ViewState[VIEWSTATE_DEFAULTPROJECTID] == null)
+                { 
+                    using(var serviceClient = new MilestoneService.MilestoneServiceClient())
+                    {
+                        var defaultProject = serviceClient.GetDefaultMilestone();
+                        ViewState[VIEWSTATE_DEFAULTPROJECTID] = defaultProject.ProjectId;
+                    }
+                }
+
+                return (int)ViewState[VIEWSTATE_DEFAULTPROJECTID];
+            }
+        }
+
+        public ListItem PTOTimeTypeListitem
+        {
+            get
+            {
+                string value = (string)ViewState[VIEWSTATE_PTOTIMETYPE_LISTITEM];
+                ListItem PTOListItem = new ListItem("PTO", value);
+                return PTOListItem;
+            }
+            set
+            {
+                if (ViewState[VIEWSTATE_PTOTIMETYPE_LISTITEM] == null)
+                {
+                    var PTOListItem = value;
+                    ViewState[VIEWSTATE_PTOTIMETYPE_LISTITEM] = PTOListItem.Value;
+                }
             }
         }
 
@@ -104,6 +155,34 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            if (!HasPTOTimeEntries)
+            {
+                if (ddlProjectMilestone.SelectedItem.Attributes[IsDefaultProject] != "1")
+                {
+                    ddlTimeTypes.Items.Remove(PTOTimeTypeListitem);
+                }
+                else
+                {
+                    if (!ddlTimeTypes.Items.Contains(PTOTimeTypeListitem))
+                        ddlTimeTypes.Items.Add(PTOTimeTypeListitem);
+                }
+            }
+            else
+            {
+                if (ddlProjectMilestone.SelectedItem.Attributes[IsDefaultProject] == "1" && ddlProjectMilestone.SelectedItem.Attributes[IsPTOEntered] == "1")
+                {
+                    if (!ddlTimeTypes.Items.Contains(PTOTimeTypeListitem))
+                        ddlTimeTypes.Items.Add(PTOTimeTypeListitem);
+                }
+                else
+                {
+                    ddlTimeTypes.Items.Remove(PTOTimeTypeListitem);
+                }
+            }
+        }
+
         private string GetDefaultTimeType()
         {
             var allTimeTypes = odsTimeTypes.Select();
@@ -134,18 +213,19 @@ namespace PraticeManagement.Controls.TimeEntry
 
             int ptoId = Convert.ToInt32(ddlTimeTypes.Items.FindByText("PTO").Value);//Added this as per #2904 to edit/Add row for PTO time type.
             isSystemTimeType = (RowBehind.TimeTypeBehind != null && RowBehind.TimeTypeBehind.IsSystemTimeType && RowBehind.TimeTypeBehind.Id != ptoId);
+            bool isPTOTimeType = (RowBehind.TimeTypeBehind != null && RowBehind.TimeTypeBehind.IsSystemTimeType && RowBehind.TimeTypeBehind.Id == ptoId);
             UpdateControlStatuses();
             imgDropTes.Enabled = !(isSystemTimeType && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName));
 
             var systemTimeTypes = SettingsHelper.GetSystemTimeTypes();
-            if (isSystemTimeType)
+            if (isSystemTimeType || isPTOTimeType)
             {
                 systemTimeTypes = systemTimeTypes.Where(tt => tt.Id != RowBehind.TimeTypeBehind.Id).ToList();
             }
             foreach (var item in systemTimeTypes)
             {
-                if (item.Id != ptoId)//Added this as per #2904 to edit/Add row for PTO time type.
-                    ddlTimeTypes.Items.Remove(ddlTimeTypes.Items.FindByValue(item.Id.ToString()));
+                //Added this as per #2904 to edit/Add row for PTO time type.
+                ddlTimeTypes.Items.Remove(ddlTimeTypes.Items.FindByValue(item.Id.ToString()));
             }
 
             tes.DataSource = RowBehind;
@@ -159,7 +239,9 @@ namespace PraticeManagement.Controls.TimeEntry
             List<ListItem> listitems = new List<ListItem>();
 
             //according to Bug# 2821 we need to add a new item to promt user to select a project-Milestone.
-            ddlProjectMilestones.Items.Add(new ListItem("1. Select Project - Milestone", "-1"));
+            var firstItem = new ListItem("1. Select Project - Milestone", "-1");
+            firstItem.Attributes.Add(IsDefaultProject, "1");
+            ddlProjectMilestones.Items.Add(firstItem);
             foreach (MilestonePersonEntry mpe in milestonePersonEntries)
             {
                 ListItem item = new ListItem(mpe.ParentMilestone.ToString(Milestone.MilestoneFormat.ProjectMilestone), mpe.MilestonePersonId.ToString());
@@ -171,6 +253,17 @@ namespace PraticeManagement.Controls.TimeEntry
                     if (timeEntriesEntered.Any(c => c.TimeEntry.MilestoneDate.Date < mpe.StartDate.Date || (mpe.EndDate.HasValue && c.TimeEntry.MilestoneDate.Date > mpe.EndDate.Value.Date)))
                     {
                         item.Attributes.Add("ShowPopUp", "1");
+                    }
+
+                    if (mpe.ParentMilestone.Project.Id.HasValue && mpe.ParentMilestone.Project.Id == DefaultProjectId)
+                    {
+                        item.Attributes.Add(IsDefaultProject, "1");
+                        int ptoId = Convert.ToInt32(ddlTimeTypes.Items.FindByText("PTO").Value);
+                        if (RowBehind.TimeTypeBehind != null && RowBehind.TimeTypeBehind.IsSystemTimeType && RowBehind.TimeTypeBehind.Id == ptoId)
+                        {
+                            item.Attributes.Add(IsPTOEntered, "1");
+                            firstItem.Attributes.Add(IsPTOEntered, "1");
+                        }
                     }
 
                     ddlProjectMilestones.Items.Add(item);
@@ -389,6 +482,8 @@ namespace PraticeManagement.Controls.TimeEntry
             if (ddlTimeTypes.Items.FindByValue("-1") == null)
                 ddlTimeTypes.Items.Insert(0, (new ListItem("2. Select Time Type", "-1")));
             AddTitlestoListItems(ddlTimeTypes);
+
+            PTOTimeTypeListitem = ddlTimeTypes.Items.FindByText("PTO");
         }
 
         protected void imgDropTes_Click(object sender, ImageClickEventArgs e)
