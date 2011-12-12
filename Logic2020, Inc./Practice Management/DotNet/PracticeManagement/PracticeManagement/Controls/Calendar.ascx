@@ -43,7 +43,7 @@
     }
     function ShowPopup(dayLink, peBehaviourId, saveDayButtonID, hiddenDayOffID, hiddenDateID,
                         txtHolidayDescriptionID, chkMakeRecurringHolidayId, hdnRecurringHolidayIdClientID, hdnRecurringHolidayDateClientID, lblDateID,
-                        ErrorMessageID, btnOkID, personId, txtActualHoursID, lblActualHoursClientID, rbPTOClientID, rbFloatingHolidayClientID) {
+                        ErrorMessageID, btnOkID, personId, txtActualHoursID, lblActualHoursClientID, rbPTOClientID, rbFloatingHolidayClientID, btnDeleteId) {
         var txtHolidayDescription = $get(txtHolidayDescriptionID);
         var txtActualHours = $get(txtActualHoursID);
         var lblDateDescription = $get(lblDateID);
@@ -52,10 +52,12 @@
         var hdnDate = $get(hiddenDateID);
         var hdnRecurringHolidayId = $get(hdnRecurringHolidayIdClientID);
         var hdnRecurringHolidayDate = $get(hdnRecurringHolidayDateClientID);
+        var DeleteButton = $get(btnDeleteId);
         hndDayOff.value = dayLink.attributes['DayOff'].value;
         hdnDate.value = dayLink.attributes['Date'].value;
         hdnRecurringHolidayId.value = dayLink.attributes['RecurringHolidayId'].value;
         hdnRecurringHolidayDate.value = dayLink.attributes['RecurringHolidayDate'].value;
+        DeleteButton.disabled = 'disabled';
 
         if (personId == "") {
             if (hndDayOff.value == 'true'
@@ -77,6 +79,9 @@
                     (dayLink.attributes['DayOff'].value == 'true' && dayLink.attributes['IsRecurringHoliday'].value == 'False')) {
                 if (dayLink.attributes['IsWeekEnd'].value == 'true') {
                     chkMakeRecurringHoliday.checked = false;
+                }
+                else {
+                    chkMakeRecurringHoliday.checked = (dayLink.attributes['IsRecurringHoliday'].value == 'true');
                 }
                 $get(saveDayButtonID).click();
             }
@@ -100,6 +105,7 @@
                 rbPTO.nextSibling.style.display = 'none';
                 rbFloatingHoliday.style.display = 'none';
                 rbFloatingHoliday.nextSibling.style.display = 'none';
+                DeleteButton.style.display = 'none';
                 txtActualHours.value = '';
                 lblDateDescription.innerHTML = date.format('MM/dd/yyyy');
                 txtHolidayDescription.value = dayLink.attributes['HolidayDescription'].value;
@@ -108,8 +114,8 @@
             }
         }
         else {
-            if (dayLink.attributes['DayOff'].value == 'false' && dayLink.attributes['CompanyDayOff'].value == 'false' && dayLink.attributes['IsWeekEnd'].value == 'false' && dayLink.attributes['HolidayDescription'].value == '') {
-                
+            if (dayLink.attributes['CompanyDayOff'].value == 'false' && dayLink.attributes['IsWeekEnd'].value == 'false' && dayLink.attributes['HolidayDescription'].value == '') {
+
                 var date = new Date(hdnDate.value);
                 var popupExtendar = $find(peBehaviourId);
                 var OkButton = $get(btnOkID);
@@ -121,11 +127,19 @@
                 OkButton.attributes['TxtActualHoursID'].value = txtActualHoursID;
                 OkButton.attributes['ExtendarId'].value = peBehaviourId;
                 OkButton.attributes['RbFloatingID'].value = rbFloatingHolidayClientID;
+                OkButton.attributes['HiddenDayOffID'].value = hiddenDayOffID;
                 rbPTO.attributes['onclick'].value = "disableActualHours( " + txtActualHoursID + ", 'false')";
                 rbFloatingHoliday.attributes['onclick'].value = "disableActualHours( " + txtActualHoursID + ", 'true')";
 
-                rbPTO.checked = true;
-                txtActualHours.value = '8.00';
+                DeleteButton.disabled = (dayLink.attributes['DayOff'].value == 'false') ? 'disabled' : '';
+                if (dayLink.attributes['IsFloatingHoliday'].value.toLowerCase() == 'true') {
+                    rbFloatingHoliday.checked = true;
+                }
+                else {
+                    rbPTO.checked = true;
+                }
+                txtActualHours.value = (dayLink.attributes['DayOff'].value == 'false' || rbFloatingHoliday.checked ) ? '8.00' : parseFloat( dayLink.attributes['ActualHours'].value.toString() );
+                txtActualHours.disabled = rbFloatingHoliday.checked ? 'disabled' : '';
                 lblDateDescription.innerHTML = date.format('MM/dd/yyyy');
                 errorMessage.style.display = 'none';
                 txtHolidayDescription.style.display = 'none';
