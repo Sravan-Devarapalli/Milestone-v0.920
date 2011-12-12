@@ -20,12 +20,26 @@ CREATE PROCEDURE [dbo].[CalendarUpdate]
 )
 AS
 	SET NOCOUNT ON
+		
+	/*
+		From CalendarPage:
+
+		For W2Salaried Person:-
+		1. If Company Holiday then insert Holiday Time Entry.
+		2. If Person PTO then insert PTO Time Entry(Update/Delete also).
+
+		For Non W2Salaried person:-
+		1. If person kept PTO then not inserting Time Entry.
+		1. If updating PTO actual hours then Updating the actual hours.
+		2. If person kept FloatingHoliday then, Deleting the time Entry(No Time Entry for floating Holiday).
+		3. If Person kept FloatingHoliday, later kept PTO then, not inserting PTO time entry.
+	*/
 	
 	DECLARE @Today DATETIME,
 			@DefaultMilestoneId INT,
 			@PTOTimeTypeId INT
 
-	SELECT @Today = dbo.GettingPMTime(GETDATE())
+	SELECT @Today = dbo.GettingPMTime(GETUTCDATE())
 	SELECT @DefaultMilestoneId = MilestoneId FROM DefaultMilestoneSetting
 	SELECT @PTOTimeTypeId = TimeTypeId FROM TimeType WHERE Name = 'PTO'
 
@@ -117,6 +131,15 @@ AS
 	                  FROM dbo.Calendar AS cal
 	                 WHERE cal.Date = @Date AND cal.DayOff = @DayOff)
 	BEGIN
+		/*
+			1. If we remove PTO and company don't have holiday then we need to delete.
+			2. Person kept PTO on a date, 
+				company kept holiday on the same date, 
+				later person removed PTO on the day from person calendar page,
+				then we need to remove record in PersonCalendar table.
+			3. Company has holiday,
+				person wants to work on that date and later dont want to work.
+		*/
 		-- Clear the person record
 		DELETE
 		  FROM dbo.PersonCalendar
@@ -126,13 +149,23 @@ AS
 	                  FROM dbo.PersonCalendar AS pcal
 	                 WHERE pcal.Date = @Date AND pcal.PersonId = @PersonId)
 	BEGIN
+		/*
+			1. We have an updating option to update PTO/IsFloatingHoliday and actualhours in Person Calendar page, then we will update.
+			2. Person kept PTO on a date, company kept holiday on the same date then we will update person dayOff=0.
+		*/
 		-- Update an existing person record
 		UPDATE dbo.PersonCalendar
-		   SET DayOff = @DayOff
+		   SET DayOff = @DayOff,
+				ActualHours = @ActualHours,
+				IsFloatingHoliday = @IsFloatingHoliday
 		 WHERE Date = @Date AND PersonId = @PersonId
 	END
 	ELSE
 	BEGIN
+		/*
+			1. To keep PTO then we need to insert entry with DayOff=1 into PersonCalendar.
+			2. If company has holiday on a date and person wants to work then we need to insert an entry with dayOff = 0.
+		*/
 		-- A person record does not exist - create it
 		INSERT INTO dbo.PersonCalendar
 		            (Date, PersonId, DayOff, ActualHours, IsFloatingHoliday)
@@ -210,6 +243,19 @@ AS
 			JOIN MilestonePersonEntry mpe ON mpe.MilestonePersonId = MP.MilestonePersonId
 			WHERE P.IsStrawman = 0
 		END
+		ELSE
+		BEGIN
+			--For Non W2Salaried person.
+			DELETE TE 
+			FROM TimeEntries TE
+			JOIN MilestonePerson MP ON MP.MilestonePersonId = TE.MilestonePersonId AND mp.MilestoneId = @DefaultMilestoneId AND MP.PersonId = @PersonId
+			JOIN Pay pay ON pay.Person = mp.PersonId  AND pay.Timescale <> 2
+			JOIN Person p ON p.PersonId = pay.Person AND @Date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
+																															ELSE pay.EndDate - 1
+																															END)
+			JOIN Calendar c ON c.Date = @Date AND DATEPART(DW, c.date) NOT IN (1,7)
+			WHERE P.IsStrawman = 0 AND TE.TimeTypeId = @PTOTimeTypeId
+		END
 	END
 	ELSE
 	BEGIN
@@ -284,7 +330,39 @@ AS
 				AND (te.MilestoneDate IS NULL) 
 				AND (mp.PersonId = @PersonId OR @PersonId IS NULL)
 
+		-- For non-W2Salaried person.
+		IF @PersonId IS NOT NULL
+		BEGIN
+			IF @IsFloatingHoliday = 1
+			BEGIN
+				--For Non W2Salaryed person.
+				DELETE TE 
+				FROM TimeEntries TE
+				JOIN MilestonePerson MP ON MP.MilestonePersonId = TE.MilestonePersonId AND mp.MilestoneId = @DefaultMilestoneId AND MP.PersonId = @PersonId
+				JOIN Pay pay ON pay.Person = mp.PersonId  AND pay.Timescale <> 2
+				JOIN Person p ON p.PersonId = pay.Person AND @Date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
+																																ELSE pay.EndDate - 1
+																																END)
+				JOIN Calendar c ON c.Date = @Date AND DATEPART(DW, c.date) NOT IN (1,7)
+				WHERE P.IsStrawman = 0 AND TE.TimeTypeId = @PTOTimeTypeId
 
+			END
+			ELSE
+			BEGIN
+
+				UPDATE TE
+				SET TE.ActualHours = @ActualHours
+				FROM TimeEntries TE
+				JOIN MilestonePerson MP ON MP.MilestonePersonId = TE.MilestonePersonId AND mp.MilestoneId = @DefaultMilestoneId AND MP.PersonId = @PersonId
+				JOIN Pay pay ON pay.Person = mp.PersonId  AND pay.Timescale <> 2
+				JOIN Person p ON p.PersonId = pay.Person AND @Date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
+																																ELSE pay.EndDate - 1
+																																END)
+				JOIN Calendar c ON c.Date = @Date AND DATEPART(DW, c.date) NOT IN (1,7)
+				WHERE P.IsStrawman = 0 AND TE.TimeTypeId = @PTOTimeTypeId
+			END
+
+		END
 	END
 
 	COMMIT TRAN tran_CalendarUpdate
