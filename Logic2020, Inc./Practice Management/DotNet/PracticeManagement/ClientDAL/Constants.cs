@@ -248,6 +248,7 @@
             public const string RecurringHolidayIdColumn = "RecurringHolidayId";
             public const string HolidayDescriptionColumn = "HolidayDescription";
             public const string RecurringHolidayDateColumn = "RecurringHolidayDate";
+            public const string IsFloatingHolidayColumn = "IsFloatingHoliday";
             public const string IsSystemTimeTypeColumn = "IsSystemTimeType";
             public const string HasAttachmentsColumn = "HasAttachments";
             public const string DashBoardTypeIdColumn = "DashBoardTypeId";
