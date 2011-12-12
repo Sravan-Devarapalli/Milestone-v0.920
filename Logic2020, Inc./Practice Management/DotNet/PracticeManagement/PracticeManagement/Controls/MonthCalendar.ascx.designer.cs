@@ -175,7 +175,7 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.Button btnDayOK;
         
         /// <summary>
-        /// btnDayDelet e control.
+        /// btnDayDelete control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
