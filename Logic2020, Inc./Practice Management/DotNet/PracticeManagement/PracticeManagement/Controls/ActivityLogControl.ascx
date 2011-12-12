@@ -190,6 +190,10 @@
                                         <asp:ListItem Text="&nbsp; Account Lockouts" Value="36"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Password Reset Requests" Value="37"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Become User" Value="38"></asp:ListItem>
+                                        <asp:ListItem Text="ALL Skill Events" Value="39"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Added Skills" Value="40"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Changed Skills" Value="41"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Deleted Skills" Value="42"></asp:ListItem>
                                     </asp:DropDownList>
                                 </td>
                                 <td id="tdYear" runat="server" style="padding-left:2px;">
