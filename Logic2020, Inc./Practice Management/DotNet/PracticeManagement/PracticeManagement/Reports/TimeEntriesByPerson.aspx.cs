@@ -50,12 +50,9 @@ namespace PraticeManagement.Sandbox
                 var endDate = this.diRange.ToDate.HasValue ? this.diRange.ToDate.Value : DateTime.Today;
                 var payTypeIds = this.cblTimeScales.SelectedValues;
                 var practiceIds = this.cblPractices.SelectedValues;
-
-
-                Dictionary<TimeEntriesGroupedByPersonProject, Dictionary<TimeEntryHours, TimeEntryRecord[]>> persons = PraticeManagement.Utils.TimeEntryHelper.GetTimeEntriesForPerson(personIds, startDate, endDate, payTypeIds, practiceIds);
-
-                dlPersons.DataSource = persons;
-                dlPersons.DataBind();
+                var persons = PraticeManagement.Utils.TimeEntryHelper.GetTimeEntriesForPerson(personIds, startDate, endDate, payTypeIds, practiceIds);
+                repPersons.DataSource = persons;
+                repPersons.DataBind();
                 System.Web.UI.ScriptManager.RegisterClientScriptBlock(updReport, updReport.GetType(), "", "SetDivWidth();", true);
                 if (hdnFiltersChanged.Value == "false")
                 {
@@ -69,9 +66,9 @@ namespace PraticeManagement.Sandbox
                 AddAttributesToCheckBoxes(this.cblTimeScales);
                 AddAttributesToCheckBoxes(this.cblPersons);
 
-                hlnkExportToExcel.NavigateUrl = "../Controls/Reports/TimeEntriesGetByPersonHandler.ashx?ExportToExcel=true&PersonID=" 
+                hlnkExportToExcel.NavigateUrl = "../Controls/Reports/TimeEntriesGetByPersonHandler.ashx?ExportToExcel=true&PersonID="
                     + cblPersons.SelectedItems + "&StartDate=" + startDate.ToString() + "&EndDate=" + endDate.ToString()
-                    + "&PayScaleIds=" + cblTimeScales.SelectedItems + "&PracticeIds=" + cblPractices.SelectedItems;
+                    + "&PayScaleIds=" + (payTypeIds != null ? cblTimeScales.SelectedItems : "null") + "&PracticeIds=" + (practiceIds != null ? cblPractices.SelectedItems : "null");
             }
         }
 
@@ -208,17 +205,48 @@ namespace PraticeManagement.Sandbox
         {
         }
 
+        private static IEnumerable<KeyValuePair<DateTime, double>> GetTotalsByDate<T>(Dictionary<T, TimeEntryRecord[]> groupedTimeEtnries)
+        {
+            var res = new SortedDictionary<DateTime, double>();
+
+            foreach (var etnry in groupedTimeEtnries)
+                foreach (var record in etnry.Value)
+                {
+                    var date = record.MilestoneDate;
+                    var hours = record.ActualHours;
+
+                    try
+                    {
+                        res[date] += hours;
+                    }
+                    catch (Exception)
+                    {
+                        res.Add(date, hours);
+                    }
+                }
+
+            return res;
+        }
+
         protected void repTeTable_OnItemCreated(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Footer)
             {
-                var dsource = ((sender as Repeater).DataSource as Dictionary<TimeEntryHours, TimeEntryRecord[]>);
+                var dsource = ((sender as Repeater).DataSource as Dictionary<string, List<TimeEntryRecord>>);
                 if (dsource != null)
                 {
+                    Dictionary<string, TimeEntryRecord[]> dic = new Dictionary<string, TimeEntryRecord[]>();
+
+                    foreach (var item in dsource)
+                    {
+                        dic.Add(item.Key, item.Value.ToArray());
+                    }
+
+
                     var totalsFooter = e.Item.FindControl("dlTotals") as Repeater;
                     if (totalsFooter != null)
                     {
-                        var totals = Generic.GetTotalsByDate(dsource).ToList();
+                        var totals = GetTotalsByDate(dic).ToList();
 
                         var modifiedTotals = new List<KeyValuePair<DateTime, double?>>();
 
@@ -274,14 +302,14 @@ namespace PraticeManagement.Sandbox
             }
         }
 
-        protected void dlPersons_OnItemCreated(object sender, DataListItemEventArgs e)
+        protected void dlPersons_OnItemCreated(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
                 if (e.Item.DataItem != null)
                 {
-                    var item = (KeyValuePair<TimeEntriesGroupedByPersonProject, Dictionary<TimeEntryHours, TimeEntryRecord[]>>)e.Item.DataItem;
-                    calendarPersonId = item.Key.PersonId;
+                    var item = (TimeEntriesGroupedByPersonProject)e.Item.DataItem;
+                    calendarPersonId = item.PersonId;
                 }
             }
         }
@@ -362,6 +390,10 @@ namespace PraticeManagement.Sandbox
             ColspanForTotals = 0;
         }
 
+        protected void odsCalendar_OnSelecting(object sender, ObjectDataSourceSelectingEventArgs e)
+        {
+
+        }
 
 
         protected void btnResetFilter_OnClick(object sender, EventArgs e)
@@ -460,11 +492,11 @@ namespace PraticeManagement.Sandbox
             }
         }
 
-        protected void dlPersons_OnItemDataBound(object sender, DataListItemEventArgs e)
+        protected void dlPersons_OnItemDataBound(object sender, RepeaterItemEventArgs e)
         {
 
-            var dataItem = (KeyValuePair<TimeEntriesGroupedByPersonProject, Dictionary<TimeEntryHours, TimeEntryRecord[]>>)e.Item.DataItem;
-            if (dataItem.Key.GroupedTimeEtnries == null || dataItem.Key.GroupedTimeEtnries.Count == 0)
+            var dataItem = (TimeEntriesGroupedByPersonProject)e.Item.DataItem;
+            if (dataItem.GroupedTimeEtnries == null || dataItem.GroupedTimeEtnries.Count == 0)
             {
                 var divProjects = e.Item.FindControl("divProjects") as System.Web.UI.HtmlControls.HtmlGenericControl;
                 var divTeTable = e.Item.FindControl("divTeTable") as System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -477,19 +509,24 @@ namespace PraticeManagement.Sandbox
 
         protected Dictionary<DateTime, TimeEntryRecord> GetUpdatedDatasource(object teRecords)
         {
-            List<TimeEntryRecord> teRecordsList = new List<TimeEntryRecord>();
+            List<TimeEntryRecord> teRecordsList = teRecords as List<TimeEntryRecord>;
             var listOfRecordsWithDates = new Dictionary<DateTime, TimeEntryRecord>();
-
-            if (teRecords != null)
-            {
-                teRecordsList = ((TimeEntryRecord[])teRecords).AsQueryable().ToList();
-            }
             var startDate = diRange.FromDate.HasValue ? diRange.FromDate.Value.Date : DateTime.Now.Date;
             var endDate = diRange.ToDate.HasValue ? diRange.ToDate.Value.Date : DateTime.Now.Date;
 
             while (startDate <= endDate)
             {
-                var ter = teRecordsList.Any(t => t.MilestoneDate.Date == startDate) ? teRecordsList.First(t => t.MilestoneDate.Date == startDate) : null;
+                var ters = teRecordsList.Any(t => t.MilestoneDate.Date == startDate) ? teRecordsList.Where(t => t.MilestoneDate.Date == startDate) : null;
+                TimeEntryRecord ter = null;
+
+                if (ters != null)
+                {
+                    ter = new TimeEntryRecord()
+                    {
+                        ActualHours = ters.Sum(p => p.ActualHours)
+                    };
+                }
+
                 listOfRecordsWithDates.Add(startDate, ter);
                 startDate = startDate.AddDays(1);
             }
@@ -498,7 +535,39 @@ namespace PraticeManagement.Sandbox
 
         }
 
-        protected void dlProjects_OnItemDataBound(object sender, DataListItemEventArgs e)
+
+        protected Dictionary<string, List<TimeEntryRecord>> GetModifiedDatasource(object groupedTES)
+        {
+            Dictionary<Project, List<TimeEntryRecord>> groupedTESList = groupedTES as Dictionary<Project, List<TimeEntryRecord>>;
+
+
+            var modifiedgroupedTESList = new Dictionary<string, List<TimeEntryRecord>>();
+
+            if (groupedTESList != null && groupedTESList.Count > 0)
+            {
+
+                foreach (var keyVal in groupedTESList)
+                {
+                    if (keyVal.Value.Count() > 0)
+                    {
+                        var timeTypes = keyVal.Value.Select(t => t.TimeType.Name).Distinct();
+
+                        foreach (var name in timeTypes)
+                        {
+                            modifiedgroupedTESList.Add(keyVal.Key.Client.Name  + " - " + keyVal.Key.Name
+                           + " - " + name, keyVal.Value.Where(k => k.TimeType.Name == name).ToList());
+                        }
+                        
+                    }
+                }
+
+            }
+
+            
+            return modifiedgroupedTESList;
+        }
+
+        protected void dlProjects_OnItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
