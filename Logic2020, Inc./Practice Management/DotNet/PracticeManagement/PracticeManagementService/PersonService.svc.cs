@@ -293,6 +293,11 @@ namespace PracticeManagementService
             return PersonDAL.GetPersonListByPersonIdList(PersonIds);
         }
 
+        public List<Person> GetPersonListByPersonIdsAndPayTypeIds(string personIds, string paytypeIds, string practiceIds, DateTime startDate, DateTime endDate)
+        {
+            return PersonDAL.GetPersonListByPersonIdsAndPayTypeIds(personIds, paytypeIds, practiceIds, startDate, endDate);
+        }
+
         /// <summary>
         /// Retrives a short info on persons who are not in the Administration practice.
         /// </summary>
