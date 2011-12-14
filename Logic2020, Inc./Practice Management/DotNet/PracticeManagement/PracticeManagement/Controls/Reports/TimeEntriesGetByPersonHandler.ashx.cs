@@ -117,34 +117,34 @@ namespace PraticeManagement.Controls.Reports
                 GridViewExportUtil.Export("TimeEntry_Report_By_Person.xls", excelGrid, summaryTable, null, null);
 
             }
+            else
+            {
+                var personid = Convert.ToInt32(context.Request.QueryString["PersonID"]);
+                var persons = PraticeManagement.Utils.TimeEntryHelper.GetTimeEntriesForPerson(new List<int>() { personid }, startDate, endDate, payTypeIds.ToLower() != "null" ? payscales : null, practiceIds.ToLower() != "null" ? practices : null);
+
+                PraticeManagement.Sandbox.TimeEntriesByPerson page = new PraticeManagement.Sandbox.TimeEntriesByPerson();
+                TimeEntriesByPerson cntrlTimeEntriesByPerson = (TimeEntriesByPerson)page.LoadControl("~/Controls/Reports/TimeEntriesByPerson.ascx");
+
+                cntrlTimeEntriesByPerson.StartDate = startDate;
+                cntrlTimeEntriesByPerson.EndDate = endDate;
+                cntrlTimeEntriesByPerson.repPersonsObject.DataSource = persons;
+                cntrlTimeEntriesByPerson.repPersonsObject.DataBind();
+                string html = "";
+                page.Controls.Add(cntrlTimeEntriesByPerson);
+
+                using (System.IO.StringWriter sw = new System.IO.StringWriter())
+                {
+                    cntrlTimeEntriesByPerson.repPersonsObject.RenderControl(new HtmlTextWriter(sw));
+                    html = sw.ToString();
+                }
+
+                context.Response.ContentType = "text/plain";
+
+                context.Response.Write(html);
+            }
         }
 
-        //if (!ExportToExcel)
-        //{
-        //    // var personid = Convert.ToInt32(context.Request.QueryString["PersonID"]);
-        //    // var persons = PraticeManagement.Utils.TimeEntryHelper.GetTimeEntriesForPerson(new List<int>() { personid }, startDate, endDate, payscales, practices);
-
-        //    //PraticeManagement.Sandbox.TimeEntriesByPerson page = new PraticeManagement.Sandbox.TimeEntriesByPerson();
-        //    //TimeEntriesByPerson cntrlTimeEntriesByPerson = (TimeEntriesByPerson)page.LoadControl("~/Controls/Reports/TimeEntriesByPerson.ascx");
-
-        //    //cntrlTimeEntriesByPerson.StartDate = startDate;
-        //    //cntrlTimeEntriesByPerson.EndDate = endDate;
-        //    //cntrlTimeEntriesByPerson.repPersonsObject.DataSource = persons;
-        //    //cntrlTimeEntriesByPerson.repPersonsObject.DataBind();
-        //    //string html = "";
-        //    //page.Controls.Add(cntrlTimeEntriesByPerson);
-
-        //    //using (System.IO.StringWriter sw = new System.IO.StringWriter())
-        //    //{
-        //    //    cntrlTimeEntriesByPerson.repPersonsObject.RenderControl(new HtmlTextWriter(sw));
-        //    //    html = sw.ToString();
-        //    //}
-
-        //    //context.Response.ContentType = "text/plain";
-
-        //    //context.Response.Write(html);
-        //}
-
+        
         void excelGrid_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.Header)
