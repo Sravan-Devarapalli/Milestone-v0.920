@@ -46,13 +46,15 @@ namespace PraticeManagement.Sandbox
                 btnExportToPDF.Enabled = true;
 
                 var personIds = cblPersons.SelectedValues;
+
+                personIds = personIds.Count > 0 ? new List<int>() {  } : new List<int>();
                 var startDate = this.diRange.FromDate.Value;
                 var endDate = this.diRange.ToDate.HasValue ? this.diRange.ToDate.Value : DateTime.Today;
                 var payTypeIds = this.cblTimeScales.SelectedValues;
                 var practiceIds = this.cblPractices.SelectedValues;
-                var persons = PraticeManagement.Utils.TimeEntryHelper.GetTimeEntriesForPerson(personIds, startDate, endDate, payTypeIds, practiceIds);
-                repPersons.DataSource = persons;
-                repPersons.DataBind();
+                //var persons = PraticeManagement.Utils.TimeEntryHelper.GetTimeEntriesForPerson(personIds, startDate, endDate, payTypeIds, practiceIds);
+                //repPersons.DataSource = persons;
+                //repPersons.DataBind();
                 System.Web.UI.ScriptManager.RegisterClientScriptBlock(updReport, updReport.GetType(), "", "SetDivWidth();", true);
                 if (hdnFiltersChanged.Value == "false")
                 {
@@ -66,9 +68,20 @@ namespace PraticeManagement.Sandbox
                 AddAttributesToCheckBoxes(this.cblTimeScales);
                 AddAttributesToCheckBoxes(this.cblPersons);
 
+                var selectedvalues = cblPersons.SelectedItems;
+                var index = selectedvalues.Any(c => c == ',') ? selectedvalues.IndexOf(',') : -1;
+                hdnPersonIds.Value = cblPersons.SelectedItems;// (index != -1) ? selectedvalues.Remove(0, index + 1) : "";
+
+                hdnPracticeIds.Value = practiceIds != null ? cblPractices.SelectedItems : "null";
+                hdnPayScaleIds.Value = payTypeIds != null ? cblTimeScales.SelectedItems : "null";
+                hdnStartDate.Value = startDate.ToString();
+                hdnEndDate.Value = endDate.ToString();
                 hlnkExportToExcel.NavigateUrl = "../Controls/Reports/TimeEntriesGetByPersonHandler.ashx?ExportToExcel=true&PersonID="
                     + cblPersons.SelectedItems + "&StartDate=" + startDate.ToString() + "&EndDate=" + endDate.ToString()
                     + "&PayScaleIds=" + (payTypeIds != null ? cblTimeScales.SelectedItems : "null") + "&PracticeIds=" + (practiceIds != null ? cblPractices.SelectedItems : "null");
+
+                hdnUpdateClicked.Value = "true";
+                updReport.Update();
             }
         }
 
@@ -129,6 +142,8 @@ namespace PraticeManagement.Sandbox
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            hdnUpdateClicked.Value = "false";
+
             TextBox fromDate = diRange.FindControl("tbFrom") as TextBox;
             TextBox toDate = diRange.FindControl("tbTo") as TextBox;
 
@@ -169,6 +184,10 @@ namespace PraticeManagement.Sandbox
             toDate.TextChanged += diRange_SelectionChanged;
         }
 
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            UpdatePanel1.Update();
+        }
 
         private void AddAttributesToCheckBoxes(ScrollingDropDown ddlpractices)
         {
@@ -554,16 +573,16 @@ namespace PraticeManagement.Sandbox
 
                         foreach (var name in timeTypes)
                         {
-                            modifiedgroupedTESList.Add(keyVal.Key.Client.Name  + " - " + keyVal.Key.Name
+                            modifiedgroupedTESList.Add(keyVal.Key.Client.Name + " - " + keyVal.Key.Name
                            + " - " + name, keyVal.Value.Where(k => k.TimeType.Name == name).ToList());
                         }
-                        
+
                     }
                 }
 
             }
 
-            
+
             return modifiedgroupedTESList;
         }
 
