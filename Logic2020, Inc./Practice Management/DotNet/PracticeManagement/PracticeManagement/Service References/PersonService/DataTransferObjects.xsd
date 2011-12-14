@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataTransferObjects" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/System" />
   <xs:complexType name="Timescale">
     <xs:sequence>
@@ -12,44 +12,87 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Timescale" nillable="true" type="tns:Timescale" />
-  <xs:complexType name="ArrayOfOpportunity">
+  <xs:complexType name="ArrayOfProject">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Opportunity" nillable="true" type="tns:Opportunity" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Project" nillable="true" type="tns:Project" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfOpportunity" nillable="true" type="tns:ArrayOfOpportunity" />
-  <xs:complexType name="Opportunity">
+  <xs:element name="ArrayOfProject" nillable="true" type="tns:ArrayOfProject" />
+  <xs:complexType name="Project">
     <xs:sequence>
+      <xs:element minOccurs="0" name="AccessLevel" nillable="true" type="tns:Seniority" />
+      <xs:element minOccurs="0" name="Attachments" nillable="true" type="tns:ArrayOfProjectAttachment" />
+      <xs:element minOccurs="0" name="BillingInfo" nillable="true" type="tns:BillingInfo" />
       <xs:element minOccurs="0" name="BuyerName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Client" nillable="true" type="tns:Client" />
-      <xs:element minOccurs="0" name="CreateDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
       <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="EstimatedRevenue" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Director" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="Discount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Group" nillable="true" type="tns:ProjectGroup" />
+      <xs:element minOccurs="0" name="HasAttachments" type="xs:boolean" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="LastUpdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ManagementCommission" nillable="true" type="tns:Commission" />
+      <xs:element minOccurs="0" name="Milestones" nillable="true" type="tns:ArrayOfMilestone" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="OpportunityIndex" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="OpportunityNumber" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="OpportunityRevenueType" type="tns:RevenueType" />
-      <xs:element minOccurs="0" name="OutSideResources" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Owner" nillable="true" type="tns:Person" />
-      <xs:element minOccurs="0" name="Pipeline" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OpportunityId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="Practice" nillable="true" type="tns:Practice" />
-      <xs:element minOccurs="0" name="Priority" nillable="true" type="tns:OpportunityPriority" />
-      <xs:element minOccurs="0" name="Project" nillable="true" type="tns:Project" />
-      <xs:element minOccurs="0" name="ProjectedEndDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="ProjectedStartDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Proposed" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ProposedPersonIdList" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ProposedPersons" nillable="true" type="tns:ArrayOfOpportunityPerson" />
-      <xs:element minOccurs="0" name="Salesperson" nillable="true" type="tns:Person" />
-      <xs:element minOccurs="0" name="SendOut" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Status" nillable="true" type="tns:OpportunityStatus" />
-      <xs:element minOccurs="0" name="StrawManList" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PracticeManagerCommission" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="ProjectManagerIdsList" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProjectManagers" nillable="true" type="tns:ArrayOfPerson" />
+      <xs:element minOccurs="0" name="ProjectNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProjectPersons" nillable="true" type="tns:ArrayOfMilestonePerson" />
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q1:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
+      <xs:element minOccurs="0" name="SalesCommission" nillable="true" type="tns:ArrayOfCommission" />
+      <xs:element minOccurs="0" name="SalesPersonName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="StartDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Status" nillable="true" type="tns:ProjectStatus" />
+      <xs:element minOccurs="0" name="Terms" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="Opportunity" nillable="true" type="tns:Opportunity" />
+  <xs:element name="Project" nillable="true" type="tns:Project" />
+  <xs:complexType name="Seniority">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SeniorityValue" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Seniority" nillable="true" type="tns:Seniority" />
+  <xs:complexType name="ArrayOfProjectAttachment">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectAttachment" nillable="true" type="tns:ProjectAttachment" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfProjectAttachment" nillable="true" type="tns:ArrayOfProjectAttachment" />
+  <xs:complexType name="ProjectAttachment">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AttachmentData" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="AttachmentFileName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AttachmentId" type="xs:int" />
+      <xs:element minOccurs="0" name="AttachmentSize" type="xs:int" />
+      <xs:element minOccurs="0" name="UploadedDate" nillable="true" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ProjectAttachment" nillable="true" type="tns:ProjectAttachment" />
+  <xs:complexType name="BillingInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BillingAddress1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BillingAddress2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BillingCity" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BillingContact" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BillingEmail" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BillingPhone" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BillingState" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BillingType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BillingZip" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="PurchaseOrder" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BillingInfo" nillable="true" type="tns:BillingInfo" />
   <xs:complexType name="Client">
     <xs:sequence>
       <xs:element minOccurs="0" name="ClientMarginInfo" nillable="true" type="tns:ArrayOfClientMarginColorInfo" />
@@ -104,94 +147,25 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectGroup" nillable="true" type="tns:ProjectGroup" />
-  <xs:simpleType name="RevenueType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Unknown" />
-      <xs:enumeration value="New" />
-      <xs:enumeration value="Old" />
-      <xs:enumeration value="Undefined" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="RevenueType" nillable="true" type="tns:RevenueType" />
-  <xs:complexType name="Person">
+  <xs:complexType name="ComputedFinancials">
     <xs:sequence>
-      <xs:element minOccurs="0" name="Alias" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BilledTimeList" nillable="true" type="tns:ArrayOfBilledTime" />
-      <xs:element minOccurs="0" name="CommissionList" nillable="true" type="tns:ArrayOfCommission" />
-      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="ContactInfoList" nillable="true" type="q1:ArrayOfPersonContactInfo" />
-      <xs:element minOccurs="0" name="CurrentPay" nillable="true" type="tns:Pay" />
-      <xs:element minOccurs="0" name="DefaultPersonCommissions" nillable="true" type="tns:ArrayOfDefaultCommission" />
-      <xs:element minOccurs="0" name="DefaultPersonRecruiterCommission" nillable="true" type="tns:ArrayOfDefaultRecruiterCommission" />
-      <xs:element minOccurs="0" name="DefaultPractice" nillable="true" type="tns:Practice" />
-      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Documents" nillable="true" type="q2:ArrayOfPersonDocument" />
-      <xs:element minOccurs="0" name="EmployeeNumber" nillable="true" type="xs:string" />
-      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Employers" nillable="true" type="q3:ArrayOfPersonEmployer" />
-      <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="HireDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="ImageUrl" nillable="true" type="xs:string" />
-      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Industries" nillable="true" type="q4:ArrayOfPersonIndustry" />
-      <xs:element minOccurs="0" name="IsDefaultManager" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsStrawMan" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsWelcomeEmailSent" type="xs:boolean" />
-      <xs:element minOccurs="0" name="LastLogin" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="LockedOut" type="xs:boolean" />
-      <xs:element minOccurs="0" name="Manager" nillable="true" type="tns:Person" />
-      <xs:element minOccurs="0" name="MiddleName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ModifiedDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="OverheadList" nillable="true" type="tns:ArrayOfPersonOverhead" />
-      <xs:element minOccurs="0" name="PaymentHistory" nillable="true" type="tns:ArrayOfPay" />
-      <xs:element minOccurs="0" name="PracticesOwned" nillable="true" type="tns:ArrayOfPractice" />
-      <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q5:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
-      <xs:element minOccurs="0" name="PtoDays" type="xs:int" />
-      <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Qualifications" nillable="true" type="q6:ArrayOfPersonQualification" />
-      <xs:element minOccurs="0" name="RecruiterCommission" nillable="true" type="tns:ArrayOfRecruiterCommission" />
-      <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="RoleNames" nillable="true" type="q7:ArrayOfstring" />
-      <xs:element minOccurs="0" name="Seniority" nillable="true" type="tns:Seniority" />
-      <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Skills" nillable="true" type="q8:ArrayOfPersonSkill" />
-      <xs:element minOccurs="0" name="Status" nillable="true" type="tns:PersonStatus" />
-      <xs:element minOccurs="0" name="TelephoneNumber" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TerminationDate" nillable="true" type="xs:dateTime" />
-      <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Trainings" nillable="true" type="q9:ArrayOfPersonTraining" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="Person" nillable="true" type="tns:Person" />
-  <xs:complexType name="ArrayOfBilledTime">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="BilledTime" nillable="true" type="tns:BilledTime" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfBilledTime" nillable="true" type="tns:ArrayOfBilledTime" />
-  <xs:complexType name="BilledTime">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="DateBilled" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="EntryStartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="BillRateMinusDiscount" nillable="true" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="Cogs" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Expenses" type="xs:decimal" />
+      <xs:element minOccurs="0" name="FinancialDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="GrossMargin" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="HoursBilled" type="xs:decimal" />
-      <xs:element minOccurs="0" name="MilestoneBilled" nillable="true" type="tns:Milestone" />
+      <xs:element minOccurs="0" name="PracticeManagementCommission" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="ReimbursedExpenses" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Revenue" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="RevenueNet" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="SalesCommission" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="Timescale" type="tns:TimescaleType" />
+      <xs:element minOccurs="0" name="TimescaleChangeStatus" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="BilledTime" nillable="true" type="tns:BilledTime" />
-  <xs:complexType name="Milestone">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="ActualDeliveryDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Amount" nillable="true" type="tns:PracticeManagementCurrency" />
-      <xs:element minOccurs="0" name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
-      <xs:element minOccurs="0" name="ConsultantsCanAdjust" type="xs:boolean" />
-      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ExpectedHours" type="xs:decimal" />
-      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsHourlyAmount" type="xs:boolean" />
-      <xs:element minOccurs="0" name="MilestonePersons" nillable="true" type="tns:ArrayOfMilestonePerson" />
-      <xs:element minOccurs="0" name="PersonCount" type="xs:int" />
-      <xs:element minOccurs="0" name="Project" nillable="true" type="tns:Project" />
-      <xs:element minOccurs="0" name="ProjectedDeliveryDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="ProjectedDuration" type="xs:int" />
-      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="Milestone" nillable="true" type="tns:Milestone" />
+  <xs:element name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
   <xs:complexType name="PracticeManagementCurrency">
     <xs:annotation>
       <xs:appinfo>
@@ -240,25 +214,6 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="NumberFormatStyle" nillable="true" type="tns:NumberFormatStyle" />
-  <xs:complexType name="ComputedFinancials">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="BillRateMinusDiscount" nillable="true" type="tns:PracticeManagementCurrency" />
-      <xs:element minOccurs="0" name="Cogs" type="tns:PracticeManagementCurrency" />
-      <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Expenses" type="xs:decimal" />
-      <xs:element minOccurs="0" name="FinancialDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="GrossMargin" type="tns:PracticeManagementCurrency" />
-      <xs:element minOccurs="0" name="HoursBilled" type="xs:decimal" />
-      <xs:element minOccurs="0" name="PracticeManagementCommission" type="tns:PracticeManagementCurrency" />
-      <xs:element minOccurs="0" name="ReimbursedExpenses" type="xs:decimal" />
-      <xs:element minOccurs="0" name="Revenue" type="tns:PracticeManagementCurrency" />
-      <xs:element minOccurs="0" name="RevenueNet" type="tns:PracticeManagementCurrency" />
-      <xs:element minOccurs="0" name="SalesCommission" type="tns:PracticeManagementCurrency" />
-      <xs:element minOccurs="0" name="Timescale" type="tns:TimescaleType" />
-      <xs:element minOccurs="0" name="TimescaleChangeStatus" type="xs:int" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
   <xs:simpleType name="TimescaleType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Hourly">
@@ -292,6 +247,85 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="TimescaleType" nillable="true" type="tns:TimescaleType" />
+  <xs:complexType name="Person">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Alias" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BilledTimeList" nillable="true" type="tns:ArrayOfBilledTime" />
+      <xs:element minOccurs="0" name="CommissionList" nillable="true" type="tns:ArrayOfCommission" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="ContactInfoList" nillable="true" type="q2:ArrayOfPersonContactInfo" />
+      <xs:element minOccurs="0" name="CurrentPay" nillable="true" type="tns:Pay" />
+      <xs:element minOccurs="0" name="DefaultPersonCommissions" nillable="true" type="tns:ArrayOfDefaultCommission" />
+      <xs:element minOccurs="0" name="DefaultPersonRecruiterCommission" nillable="true" type="tns:ArrayOfDefaultRecruiterCommission" />
+      <xs:element minOccurs="0" name="DefaultPractice" nillable="true" type="tns:Practice" />
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Documents" nillable="true" type="q3:ArrayOfPersonDocument" />
+      <xs:element minOccurs="0" name="EmployeeNumber" nillable="true" type="xs:string" />
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Employers" nillable="true" type="q4:ArrayOfPersonEmployer" />
+      <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="HireDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ImageUrl" nillable="true" type="xs:string" />
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Industries" nillable="true" type="q5:ArrayOfPersonIndustry" />
+      <xs:element minOccurs="0" name="IsDefaultManager" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsStrawMan" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsWelcomeEmailSent" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LastLogin" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LockedOut" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Manager" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="MiddleName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ModifiedDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="OverheadList" nillable="true" type="tns:ArrayOfPersonOverhead" />
+      <xs:element minOccurs="0" name="PaymentHistory" nillable="true" type="tns:ArrayOfPay" />
+      <xs:element minOccurs="0" name="PracticesOwned" nillable="true" type="tns:ArrayOfPractice" />
+      <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q6:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
+      <xs:element minOccurs="0" name="PtoDays" type="xs:int" />
+      <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Qualifications" nillable="true" type="q7:ArrayOfPersonQualification" />
+      <xs:element minOccurs="0" name="RecruiterCommission" nillable="true" type="tns:ArrayOfRecruiterCommission" />
+      <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="RoleNames" nillable="true" type="q8:ArrayOfstring" />
+      <xs:element minOccurs="0" name="Seniority" nillable="true" type="tns:Seniority" />
+      <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Skills" nillable="true" type="q9:ArrayOfPersonSkill" />
+      <xs:element minOccurs="0" name="Status" nillable="true" type="tns:PersonStatus" />
+      <xs:element minOccurs="0" name="TelephoneNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TerminationDate" nillable="true" type="xs:dateTime" />
+      <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Trainings" nillable="true" type="q10:ArrayOfPersonTraining" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Person" nillable="true" type="tns:Person" />
+  <xs:complexType name="ArrayOfBilledTime">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BilledTime" nillable="true" type="tns:BilledTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfBilledTime" nillable="true" type="tns:ArrayOfBilledTime" />
+  <xs:complexType name="BilledTime">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DateBilled" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="EntryStartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="HoursBilled" type="xs:decimal" />
+      <xs:element minOccurs="0" name="MilestoneBilled" nillable="true" type="tns:Milestone" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BilledTime" nillable="true" type="tns:BilledTime" />
+  <xs:complexType name="Milestone">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ActualDeliveryDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Amount" nillable="true" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
+      <xs:element minOccurs="0" name="ConsultantsCanAdjust" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ExpectedHours" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsHourlyAmount" type="xs:boolean" />
+      <xs:element minOccurs="0" name="MilestonePersons" nillable="true" type="tns:ArrayOfMilestonePerson" />
+      <xs:element minOccurs="0" name="PersonCount" type="xs:int" />
+      <xs:element minOccurs="0" name="Project" nillable="true" type="tns:Project" />
+      <xs:element minOccurs="0" name="ProjectedDeliveryDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ProjectedDuration" type="xs:int" />
+      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Milestone" nillable="true" type="tns:Milestone" />
   <xs:complexType name="ArrayOfMilestonePerson">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="MilestonePerson" nillable="true" type="tns:MilestonePerson" />
@@ -361,7 +395,7 @@
       <xs:element minOccurs="0" name="PracticeManagers" nillable="true" type="tns:ArrayOfPracticeManagerHistory" />
       <xs:element minOccurs="0" name="PracticeOwner" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="PracticeOwnerName" nillable="true" type="xs:string" />
-      <xs:element xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q10:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
+      <xs:element xmlns:q11="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q11:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Practice" nillable="true" type="tns:Practice" />
@@ -382,80 +416,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PracticeManagerHistory" nillable="true" type="tns:PracticeManagerHistory" />
-  <xs:complexType name="Project">
+  <xs:complexType name="ArrayOfCommission">
     <xs:sequence>
-      <xs:element minOccurs="0" name="AccessLevel" nillable="true" type="tns:Seniority" />
-      <xs:element minOccurs="0" name="Attachments" nillable="true" type="tns:ArrayOfProjectAttachment" />
-      <xs:element minOccurs="0" name="BillingInfo" nillable="true" type="tns:BillingInfo" />
-      <xs:element minOccurs="0" name="BuyerName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Client" nillable="true" type="tns:Client" />
-      <xs:element minOccurs="0" name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
-      <xs:element minOccurs="0" name="Director" nillable="true" type="tns:Person" />
-      <xs:element minOccurs="0" name="Discount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Group" nillable="true" type="tns:ProjectGroup" />
-      <xs:element minOccurs="0" name="HasAttachments" type="xs:boolean" />
-      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
-      <xs:element minOccurs="0" name="ManagementCommission" nillable="true" type="tns:Commission" />
-      <xs:element minOccurs="0" name="Milestones" nillable="true" type="tns:ArrayOfMilestone" />
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="OpportunityId" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="Practice" nillable="true" type="tns:Practice" />
-      <xs:element minOccurs="0" name="PracticeManagerCommission" type="tns:PracticeManagementCurrency" />
-      <xs:element minOccurs="0" name="ProjectManagerIdsList" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ProjectManagers" nillable="true" type="tns:ArrayOfPerson" />
-      <xs:element minOccurs="0" name="ProjectNumber" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ProjectPersons" nillable="true" type="tns:ArrayOfMilestonePerson" />
-      <xs:element xmlns:q11="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q11:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
-      <xs:element minOccurs="0" name="SalesCommission" nillable="true" type="tns:ArrayOfCommission" />
-      <xs:element minOccurs="0" name="SalesPersonName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="StartDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Status" nillable="true" type="tns:ProjectStatus" />
-      <xs:element minOccurs="0" name="Terms" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Commission" nillable="true" type="tns:Commission" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="Project" nillable="true" type="tns:Project" />
-  <xs:complexType name="Seniority">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Id" type="xs:int" />
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="SeniorityValue" type="xs:int" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="Seniority" nillable="true" type="tns:Seniority" />
-  <xs:complexType name="ArrayOfProjectAttachment">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectAttachment" nillable="true" type="tns:ProjectAttachment" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfProjectAttachment" nillable="true" type="tns:ArrayOfProjectAttachment" />
-  <xs:complexType name="ProjectAttachment">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="AttachmentData" nillable="true" type="xs:base64Binary" />
-      <xs:element minOccurs="0" name="AttachmentFileName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="AttachmentId" type="xs:int" />
-      <xs:element minOccurs="0" name="AttachmentSize" type="xs:int" />
-      <xs:element minOccurs="0" name="UploadedDate" nillable="true" type="xs:dateTime" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ProjectAttachment" nillable="true" type="tns:ProjectAttachment" />
-  <xs:complexType name="BillingInfo">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="BillingAddress1" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingAddress2" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingCity" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingContact" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingEmail" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingPhone" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingState" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingType" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingZip" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="PurchaseOrder" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="BillingInfo" nillable="true" type="tns:BillingInfo" />
+  <xs:element name="ArrayOfCommission" nillable="true" type="tns:ArrayOfCommission" />
   <xs:complexType name="Commission">
     <xs:sequence>
       <xs:element minOccurs="0" name="FractionOfMargin" type="xs:decimal">
@@ -536,31 +502,6 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="CommissionType" nillable="true" type="tns:CommissionType" />
-  <xs:complexType name="ArrayOfMilestone">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Milestone" nillable="true" type="tns:Milestone" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfMilestone" nillable="true" type="tns:ArrayOfMilestone" />
-  <xs:complexType name="ArrayOfPerson">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Person" nillable="true" type="tns:Person" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfPerson" nillable="true" type="tns:ArrayOfPerson" />
-  <xs:complexType name="ArrayOfCommission">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Commission" nillable="true" type="tns:Commission" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfCommission" nillable="true" type="tns:ArrayOfCommission" />
-  <xs:complexType name="ProjectStatus">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Id" type="xs:int" />
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ProjectStatus" nillable="true" type="tns:ProjectStatus" />
   <xs:complexType name="Pay">
     <xs:sequence>
       <xs:element minOccurs="0" name="Amount" type="tns:PracticeManagementCurrency" />
@@ -693,6 +634,72 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PersonStatus" nillable="true" type="tns:PersonStatus" />
+  <xs:complexType name="ArrayOfMilestone">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Milestone" nillable="true" type="tns:Milestone" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMilestone" nillable="true" type="tns:ArrayOfMilestone" />
+  <xs:complexType name="ArrayOfPerson">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Person" nillable="true" type="tns:Person" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPerson" nillable="true" type="tns:ArrayOfPerson" />
+  <xs:complexType name="ProjectStatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ProjectStatus" nillable="true" type="tns:ProjectStatus" />
+  <xs:complexType name="ArrayOfOpportunity">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Opportunity" nillable="true" type="tns:Opportunity" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfOpportunity" nillable="true" type="tns:ArrayOfOpportunity" />
+  <xs:complexType name="Opportunity">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BuyerName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Client" nillable="true" type="tns:Client" />
+      <xs:element minOccurs="0" name="CreateDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EstimatedRevenue" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Group" nillable="true" type="tns:ProjectGroup" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="LastUpdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OpportunityIndex" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="OpportunityNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OpportunityRevenueType" type="tns:RevenueType" />
+      <xs:element minOccurs="0" name="OutSideResources" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Owner" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="Pipeline" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Practice" nillable="true" type="tns:Practice" />
+      <xs:element minOccurs="0" name="Priority" nillable="true" type="tns:OpportunityPriority" />
+      <xs:element minOccurs="0" name="Project" nillable="true" type="tns:Project" />
+      <xs:element minOccurs="0" name="ProjectedEndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ProjectedStartDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Proposed" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProposedPersonIdList" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProposedPersons" nillable="true" type="tns:ArrayOfOpportunityPerson" />
+      <xs:element minOccurs="0" name="Salesperson" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="SendOut" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Status" nillable="true" type="tns:OpportunityStatus" />
+      <xs:element minOccurs="0" name="StrawManList" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Opportunity" nillable="true" type="tns:Opportunity" />
+  <xs:simpleType name="RevenueType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown" />
+      <xs:enumeration value="New" />
+      <xs:enumeration value="Old" />
+      <xs:enumeration value="Undefined" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RevenueType" nillable="true" type="tns:RevenueType" />
   <xs:complexType name="OpportunityPriority">
     <xs:sequence>
       <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
@@ -711,6 +718,7 @@
   <xs:element name="ArrayOfOpportunityPerson" nillable="true" type="tns:ArrayOfOpportunityPerson" />
   <xs:complexType name="OpportunityPerson">
     <xs:sequence>
+      <xs:element minOccurs="0" name="NeedBy" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Person" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="PersonType" type="xs:int" />
       <xs:element minOccurs="0" name="Quantity" type="xs:int" />
@@ -736,10 +744,15 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Client" nillable="true" type="tns:Client" />
       <xs:element minOccurs="0" name="Consultant" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EndDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="ObjectId" type="xs:int" />
       <xs:element minOccurs="0" name="ObjectName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ObjectNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ObjectStatusId" type="xs:int" />
+      <xs:element minOccurs="0" name="ObjectType" type="xs:int" />
       <xs:element minOccurs="0" name="QuantityString" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ConsultantDemandItem" nillable="true" type="tns:ConsultantDemandItem" />
@@ -978,12 +991,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="UserPasswordsHistory" nillable="true" type="tns:UserPasswordsHistory" />
-  <xs:complexType name="ArrayOfProject">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Project" nillable="true" type="tns:Project" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfProject" nillable="true" type="tns:ArrayOfProject" />
   <xs:complexType name="ArrayOfQuadrupleOfPersonArrayOfintintintlqlLCQKx">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="QuadrupleOfPersonArrayOfintintintlqlLCQKx" nillable="true" type="tns:QuadrupleOfPersonArrayOfintintintlqlLCQKx" />
