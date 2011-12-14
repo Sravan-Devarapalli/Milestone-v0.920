@@ -274,13 +274,13 @@ namespace PraticeManagement.Sandbox {
         protected global::PraticeManagement.Controls.CalendarLegend CalendarLegend;
         
         /// <summary>
-        /// dlPersons control.
+        /// repPersons control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DataList dlPersons;
+        protected global::System.Web.UI.WebControls.Repeater repPersons;
         
         /// <summary>
         /// hdnGuid control.
