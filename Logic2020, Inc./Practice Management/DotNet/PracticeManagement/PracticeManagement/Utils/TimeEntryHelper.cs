@@ -369,11 +369,11 @@ namespace PraticeManagement.Utils
                 defaultMilestone = serv.GetMilestoneDataById(defaultMilestoneId);
             }
             var defMpe = new MilestonePersonEntry
-                             {
-                                 ParentMilestone = defaultMilestone,
-                                 StartDate = startDate,
-                                 EndDate = endDate
-                             };
+            {
+                ParentMilestone = defaultMilestone,
+                StartDate = startDate,
+                EndDate = endDate
+            };
             return defMpe;
         }
 
@@ -468,7 +468,7 @@ namespace PraticeManagement.Utils
             return byProject._groupedTimeEtnries;
         }
 
-        public static Dictionary<TimeEntriesGroupedByPersonProject, Dictionary<TimeEntryHours, TimeEntryRecord[]>> GetTimeEntriesForPerson(IEnumerable<int> personIds, DateTime? startDate, DateTime? endDate, IEnumerable<int> payTypeIds, IEnumerable<int> practiceIds)
+        public static List<TimeEntriesGroupedByPersonProject> GetTimeEntriesForPerson(IEnumerable<int> personIds, DateTime? startDate, DateTime? endDate, IEnumerable<int> payTypeIds, IEnumerable<int> practiceIds)
         {
             var reportContext = new TimeEntryPersonReportContext
             {
@@ -480,11 +480,10 @@ namespace PraticeManagement.Utils
             };
 
             var byPerson = ServiceCallers.Custom.TimeEntry(client => client.GetTimeEntriesPerson(reportContext));
-            var byProject = ServiceCallers.Custom.TimeEntry(client => client.GetTimeEntriesProjectCumulative(reportContext));
 
-
-            var result = new Dictionary<TimeEntriesGroupedByPersonProject, Dictionary<TimeEntryHours, TimeEntryRecord[]>>();
+            var result = new List<TimeEntriesGroupedByPersonProject>();
             var personIdList = new List<int>();
+          
 
             foreach (var teList in byPerson._groupedTimeEtnries.Values)
             {
@@ -509,25 +508,20 @@ namespace PraticeManagement.Utils
                 }
 
                 tEGPP.GroupedTimeEtnries = tEGPP.GroupedTimeEtnries.OrderBy(gTE => gTE.Key.Name).ToDictionary(v => v.Key, v => v.Value);
+
                 var thisPerson = byPerson._groupedTimeEtnries.First(kvp => kvp.Value.ToList().FindAll(te => te.ParentMilestonePersonEntry.ThisPerson.Id == personId).Any()).Value.ToList().First(te => te.ParentMilestonePersonEntry.ThisPerson.Id == personId).ParentMilestonePersonEntry.ThisPerson;
                 tEGPP.PersonName = thisPerson.LastName + ", " + thisPerson.FirstName;
                 tEGPP.PersonId = thisPerson.Id.Value;
 
-                var teForProjectCumulative = new Dictionary<TimeEntryHours, TimeEntryRecord[]>();
-                foreach (var keyValuePair in byProject._groupedTimeEtnries)
-                {
-                    var temeEntryRecords = keyValuePair.Value.ToList().FindAll(te => te.ParentMilestonePersonEntry.ThisPerson.Id == personId);
-                    if (temeEntryRecords.Any())
-                        teForProjectCumulative.Add(keyValuePair.Key, temeEntryRecords.ToArray());
-                }
-
-                result.Add(tEGPP, teForProjectCumulative);
+                result.Add(tEGPP);
             }
+
             var emptyPersons = personIds.Except(personIdList);
 
-            var Persons = ServiceCallers.Custom.Person(p => p.GetPersonListByPersonIdList(FormCSV(emptyPersons)));
+            //As per #2962, filtering persons with paytypeIds && practiceIds.
+            var persons = ServiceCallers.Custom.Person(p => p.GetPersonListByPersonIdsAndPayTypeIds(FormCSV(emptyPersons), payTypeIds != null ? FormCSV(payTypeIds) : null, practiceIds != null ? FormCSV(practiceIds) : null, startDate.Value, endDate.Value));
 
-            foreach (var person in Persons)
+            foreach (var person in persons)
             {
                 var emptyTEGPP = new TimeEntriesGroupedByPersonProject
                 {
@@ -535,10 +529,10 @@ namespace PraticeManagement.Utils
                     PersonId = person.Id.Value
                 };
 
-                result.Add(emptyTEGPP, null);
+                result.Add(emptyTEGPP);
             }
 
-            return result.OrderBy(te => te.Key.PersonName).ToDictionary(v => v.Key, v => v.Value);
+            return result.OrderBy(te => te.PersonName).ToList();
         }
 
         private static string FormCSV(IEnumerable<int> IdList)
