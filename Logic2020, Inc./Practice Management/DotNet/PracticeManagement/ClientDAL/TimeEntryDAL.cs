@@ -478,7 +478,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, reportContext.StartDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, reportContext.EndDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PracticeIds, id => id));
-                command.Parameters.AddWithValue(Constants.ParameterNames.TimescaleIds, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PayTypeIds, id => id));
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimescaleIds, reportContext.PayTypeIds != null ? (object)DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PayTypeIds, id => id) : DBNull.Value);
 
                 connection.Open();
 
@@ -517,8 +517,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonIds, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PersonIds, id => id));
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, reportContext.StartDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, reportContext.EndDate);
-                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PracticeIds, id => id));
-                command.Parameters.AddWithValue(Constants.ParameterNames.TimescaleIds, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PayTypeIds, id => id));
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, reportContext.PracticeIds != null ? (object)DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PracticeIds, id => id) : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimescaleIds, reportContext.PayTypeIds != null ? (object)DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PayTypeIds, id => id) : DBNull.Value);
 
                 connection.Open();
 
@@ -539,8 +539,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonIds, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PersonIds, id => id));
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, reportContext.StartDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, reportContext.EndDate);
-                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PracticeIds, id => id));
-                command.Parameters.AddWithValue(Constants.ParameterNames.TimescaleIds, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PayTypeIds, id => id));
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, reportContext.PracticeIds != null ? (object)DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PracticeIds, id => id) : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimescaleIds, reportContext.PayTypeIds != null ? (object)DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PayTypeIds, id => id) : DBNull.Value);
 
                 connection.Open();
 
