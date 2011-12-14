@@ -360,6 +360,7 @@
     <Content Include="Controls\Calendar.ascx" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
+    <Content Include="Controls\Reports\TimeEntriesByPerson.ascx" />
     <Content Include="Css\datepicker.css" />
     <Content Include="DashBoard.aspx" />
     <Content Include="Images\copy.png" />
@@ -1079,6 +1080,13 @@
     </Compile>
     <Compile Include="Controls\Reports\ConsultingDemand.ascx.designer.cs">
       <DependentUpon>ConsultingDemand.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\TimeEntriesByPerson.ascx.cs">
+      <DependentUpon>TimeEntriesByPerson.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\TimeEntriesByPerson.ascx.designer.cs">
+      <DependentUpon>TimeEntriesByPerson.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reports\TimeEntriesGetByPersonHandler.ashx.cs">
       <DependentUpon>TimeEntriesGetByPersonHandler.ashx</DependentUpon>
