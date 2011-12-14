@@ -86,6 +86,7 @@ namespace DataAccess
         private const string InactiveParam = "@Inactive";
         private const string AlphabetParam = "@Alphabet";
         private const string CounselorIdParam = "@CounselorId";
+        private const string TimeScaleIdsParam = "@TimescaleIds";
 
         //StrawMan Puppose.
         private const string AmountParam = "@Amount";
@@ -122,6 +123,7 @@ namespace DataAccess
         private const string PersonGetCountByCommaSeparatedIdsListProcedure = "dbo.PersonGetCountByCommaSeparatedIdsList";
         private const string PersonListBenchExpenseProcedure = "dbo.PersonListBenchExpense";
         private const string UpdateLastPasswordChangedDateForPersonProcedure = "dbo.UpdateLastPasswordChangedDateForPerson";
+        private const string GetPersonListByPersonIdsAndPayTypeIdsProcedure = "dbo.GetPersonListByPersonIdsAndPayTypeIds";
 
 
         private const string MilestonePersonListOverheadByPersonProcedure =
@@ -2694,6 +2696,30 @@ namespace DataAccess
             }
         }
 
+        public static List<Person> GetPersonListByPersonIdsAndPayTypeIds(string personIds, string paytypeIds, string practiceIds, DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(GetPersonListByPersonIdsAndPayTypeIdsProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(PersonIdsParam, personIds);
+                command.Parameters.AddWithValue(TimeScaleIdsParam, paytypeIds == null ? DBNull.Value : (object)paytypeIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, practiceIds == null ? DBNull.Value : (object)practiceIds);
+                command.Parameters.AddWithValue(StartDateParam, startDate);
+                command.Parameters.AddWithValue(EndDateParam, endDate);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<Person>();
+                    ReadPersonsShort(reader, result);
+                    return result;
+                }
+            }
+        }
+
         /// <summary>
         /// Retrieves a short info on persons.
         /// </summary>
@@ -3188,7 +3214,7 @@ namespace DataAccess
             int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
             int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
             int objectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ObjectStatusId);
-
+            //int descriptionIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
 
             int personIdIndex = reader.GetOrdinal(PersonIdColumn);
             if (reader.HasRows)
@@ -3207,7 +3233,9 @@ namespace DataAccess
                         QuantityString = reader.GetString(quantityStringIndex),
                         ObjectType = reader.GetInt32(objectTypeIndex),
                         StartDate = reader.GetDateTime(startDateIndex),
-                        EndDate = reader.GetDateTime(endDateIndex)
+                        EndDate = reader.GetDateTime(endDateIndex),
+                       // Description = !reader.IsDBNull(descriptionIndex) ? reader.GetString(descriptionIndex) : string.Empty
+
                     };
                     var clientId = reader.GetInt32(clientIdIndex);
                     var client = clients.FirstOrDefault(c => c.Id.Value == clientId);
