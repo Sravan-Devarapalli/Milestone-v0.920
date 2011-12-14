@@ -129,7 +129,8 @@
         var eventSource = document.getElementById('<%= ddlEventSource.ClientID %>');
         projectList = document.getElementById('<%= ddlProjects.ClientID %>');
         if (eventSource != null && projectList != null && eventSource.value != 'undefind') {
-            if ((eventSource.value >= 3 && eventSource.value <= 5) || (eventSource.value >= 32 && eventSource.value <= 38) || (eventSource.value >= 21 && eventSource.value <= 27)) {
+            if ((eventSource.value >= 3 && eventSource.value <= 5) || (eventSource.value >= 21 && eventSource.value <= 27)
+                 || (eventSource.value >= 32 && eventSource.value <= 42)) {
                 projectList.disabled = 'true';
                 projectList[0].selected = 'true';
             }
