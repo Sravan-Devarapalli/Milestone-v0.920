@@ -501,6 +501,9 @@ namespace PracticeManagementService
         List<Person> GetPersonListByPersonIdList(string PersonIds);
 
         [OperationContract]
+        List<Person> GetPersonListByPersonIdsAndPayTypeIds(string personIds, string paytypeIds, string practiceIds, DateTime startDate, DateTime endDate);
+
+        [OperationContract]
         bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl);
 
         [OperationContract]
