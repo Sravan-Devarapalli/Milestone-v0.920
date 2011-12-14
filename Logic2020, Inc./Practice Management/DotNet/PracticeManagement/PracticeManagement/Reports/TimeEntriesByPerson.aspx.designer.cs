@@ -49,6 +49,15 @@ namespace PraticeManagement.Sandbox {
         protected global::System.Web.UI.WebControls.Image btnExpandCollapseFilter;
         
         /// <summary>
+        /// lblCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCount;
+        
+        /// <summary>
         /// diRange control.
         /// </summary>
         /// <remarks>
@@ -92,6 +101,15 @@ namespace PraticeManagement.Sandbox {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnUpdateView;
+        
+        /// <summary>
+        /// hdnUpdateClicked control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnUpdateClicked;
         
         /// <summary>
         /// btnResetFilter control.
@@ -290,6 +308,51 @@ namespace PraticeManagement.Sandbox {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hdnGuid;
+        
+        /// <summary>
+        /// hdnPersonIds control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnPersonIds;
+        
+        /// <summary>
+        /// hdnStartDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnStartDate;
+        
+        /// <summary>
+        /// hdnEndDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnEndDate;
+        
+        /// <summary>
+        /// hdnPayScaleIds control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnPayScaleIds;
+        
+        /// <summary>
+        /// hdnPracticeIds control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnPracticeIds;
     }
 }
 
