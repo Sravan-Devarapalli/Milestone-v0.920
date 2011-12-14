@@ -19,7 +19,6 @@
     <title>Time Entry By Person | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
-    <script language="javascript" type="text/javascript" src="../Scripts/jquery-1.4.1.js"></script>
     <script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
     <script language="javascript" type="text/javascript">
 
@@ -29,7 +28,7 @@
         });
 
         function saveReportExcel() {
-            var hlnkExportToExcel = document.getElementById('<%= hlnkExportToExcel.ClientID %>'); 
+            var hlnkExportToExcel = document.getElementById('<%= hlnkExportToExcel.ClientID %>');
             if (navigator.userAgent.indexOf(' Chrome/') > -1) {
                 var evObj = document.createEvent('MouseEvents');
                 evObj.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, true, false, 0, null);
@@ -58,7 +57,7 @@
         function SetDivWidth() {
             var TotalPageWidth = $(window).width();
             var divTeTableWidth = TotalPageWidth - 100;
-            var datalist = $get("<%= dlPersons.ClientID %>");
+            var datalist = $get("<%= repPersons.ClientID %>");
             if (datalist != null) {
                 var tr = datalist.children[0].children;
                 for (var index = 0; index < tr.length; index = index + 1) {
@@ -86,7 +85,7 @@
 
         function EnableResetButton() {
             var button = document.getElementById("<%= btnResetFilter.ClientID%>");
-            var hiddenField = document.getElementById("<%= hdnFiltersChanged.ClientID%>")
+            var hiddenField = document.getElementById("<%= hdnFiltersChanged.ClientID%>");
             if (button != null) {
                 button.disabled = false;
                 hiddenField.value = "true";
@@ -184,8 +183,8 @@
                         <td align="right">
                         </td>
                         <td style="padding-top: 5px;">
-                            <input type="button" runat="server" id="btnExportToXL" value="Export To Excel" disabled="disabled" enableviewstate="false"
-                                style="width: 100px" onclick="saveReportExcel();" title="Export To Excel" />
+                            <input type="button" runat="server" id="btnExportToXL" value="Export To Excel" disabled="disabled"
+                                enableviewstate="false" style="width: 100px" onclick="saveReportExcel();" title="Export To Excel" />
                             <asp:HyperLink ID="hlnkExportToExcel" runat="server" Style="display: none;" Text="Export To Excel"
                                 ToolTip="Export To Excel"></asp:HyperLink>
                             <asp:Button ID="btnExportToPDF" runat="server" Text="Export To PDF" OnClientClick="saveReport();"
@@ -232,7 +231,7 @@
                                         <td>
                                         </td>
                                         <td class="floatRight" style="padding-top: 5px; padding-left: 3px;">
-                                            <cc2:ScrollingDropDown ID="cblTimeScales" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
+                                            <cc2:ScrollingDropDown ID="cblTimeScales" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"
                                                 onclick="scrollingDropdown_onclick('cblTimeScales','Pay Type')" BackColor="White"
                                                 CellPadding="3" NoItemsType="All" SetDirty="False" Width="200px" DropDownListType="Pay Type"
                                                 Height="100px" BorderWidth="0" />
@@ -243,7 +242,7 @@
                                         <td>
                                         </td>
                                         <td class="floatRight" style="padding-top: 5px; padding-left: 3px;">
-                                            <cc2:ScrollingDropDown ID="cblPractices" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
+                                            <cc2:ScrollingDropDown ID="cblPractices" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"
                                                 onclick="scrollingDropdown_onclick('cblPractices','Practice Area')" BackColor="White"
                                                 CellPadding="3" Height="250px" NoItemsType="All" SetDirty="False" DropDownListType="Practice Area"
                                                 Width="260px" BorderWidth="0" />
@@ -280,8 +279,8 @@
         <ContentTemplate>
             <asp:Panel ID="pnlList" runat="server">
                 <uc2:CalendarLegend ID="CalendarLegend" runat="server" />
-                <asp:DataList ID="dlPersons" runat="server" CssClass="WholeWidth" OnItemDataBound="dlPersons_OnItemDataBound"
-                    OnItemCreated="dlPersons_OnItemCreated ">
+                <asp:Repeater ID="repPersons" runat="server" OnItemDataBound="dlPersons_OnItemDataBound"
+                    EnableViewState="false" OnItemCreated="dlPersons_OnItemCreated ">
                     <ItemTemplate>
                         <div id="divPersonListSummary" runat="server">
                             <table>
@@ -289,7 +288,7 @@
                                     <td colspan="4">
                                         <div runat="server" id="divPersonName" style="padding-bottom: 5px;">
                                             <font style="font-size: 20px; font-weight: bold;">
-                                                <%# Eval("Key.PersonName") %></font>
+                                                <%# Eval("PersonName") %></font>
                                         </div>
                                         <br class="NotVisible" />
                                     </td>
@@ -304,8 +303,8 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <asp:Repeater ID="repTeTable" runat="server" DataSource='<%# Eval("Value")%>' OnItemDataBound="repTeTable_OnItemDataBound"
-                                    OnItemCreated="repTeTable_OnItemCreated">
+                                <asp:Repeater ID="repTeTable" runat="server" DataSource='<%# GetModifiedDatasource(DataBinder.Eval(Container.DataItem, "GroupedTimeEtnries")) %>'
+                                    OnItemDataBound="repTeTable_OnItemDataBound" EnableViewState="false" OnItemCreated="repTeTable_OnItemCreated">
                                     <HeaderTemplate>
                                         <table class="time-entry-person-projects WholeWidth" border="1" rules="rows" style="display: inline;">
                                             <thead>
@@ -315,7 +314,7 @@
                                                         <asp:Label ID="lblPType" runat="server" Font-Bold="true" Text="Client-Project-Time Type"></asp:Label>
                                                     </th>
                                                     <asp:Repeater ID="dlProject" runat="server" OnItemCreated="dlProject_OnItemCreated"
-                                                        OnInit="dlProject_OnInit">
+                                                        EnableViewState="false" OnInit="dlProject_OnInit">
                                                         <ItemTemplate>
                                                             <th valign="middle" style="padding-left: 5px; padding-right: 5px; vertical-align: middle;
                                                                 text-align: center; border-bottom: 1px solid gray; font-weight: bold; border-top: 1px solid gray;"
@@ -337,10 +336,10 @@
                                             class="<%# Container.ItemIndex % 2 == 0 ? "alterrow" : string.Empty %>">
                                             <td valign="middle" colspan="2" style="text-align: left; vertical-align: middle;
                                                 border-bottom: 1px solid lightgray; border-top: 1px solid lightgray; width: 20%;">
-                                                <asp:Label ID="lblPTypeValue" runat="server" Text='<%#  DataBinder.Eval(Container.DataItem, "Key")%>'></asp:Label>
+                                                <asp:Label ID="lblPTypeValue" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "Key")%>'></asp:Label>
                                             </td>
                                             <asp:Repeater ID="dlProject" runat="server" DataSource='<%# GetUpdatedDatasource(DataBinder.Eval(Container.DataItem, "Value")) %>'
-                                                OnItemDataBound="dlProject_OnItemDataBound">
+                                                EnableViewState="false" OnItemDataBound="dlProject_OnItemDataBound">
                                                 <ItemTemplate>
                                                     <td valign="middle" style="padding-left: 5px; text-align: center; vertical-align: middle;
                                                         padding-right: 5px; border-bottom: 1px solid lightgray; border-top: 1px solid lightgray;">
@@ -362,7 +361,7 @@
                                                 Totals
                                             </td>
                                             <asp:Repeater ID="dlTotals" runat="server" OnItemDataBound="dlTotals_OnItemDataBound"
-                                                OnInit="dlTotals_OnInit">
+                                                EnableViewState="false" OnInit="dlTotals_OnInit">
                                                 <ItemTemplate>
                                                     <td style="padding-left: 5px; padding-right: 5px; border-bottom: 1px solid lightgray;
                                                         text-align: center; border-top: 1px solid lightgray;">
@@ -389,9 +388,8 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <br class="NotVisible" />
-                                <asp:DataList ID="dlProjects" runat="server" DataSource='<%# Eval("Key.GroupedTimeEtnries") %>'
-                                    OnItemDataBound="dlProjects_OnItemDataBound" CssClass="WholeWidth">
+                                <asp:Repeater ID="dlProjects" runat="server" DataSource='<%# DataBinder.Eval(Container.DataItem, "GroupedTimeEtnries")  %>'
+                                    EnableViewState="false" OnItemDataBound="dlProjects_OnItemDataBound">
                                     <ItemTemplate>
                                         <table>
                                             <tr>
@@ -406,9 +404,9 @@
                                         </table>
                                         <br class="NotVisible" />
                                         <asp:GridView ID="gvTimeEntries" runat="server" AutoGenerateColumns="False" DataSource='<%# Eval("Value") %>'
-                                            EnableModelValidation="True" CssClass="CompPerfTable WholeWidth" GridLines="Both"
-                                            ShowFooter="true" OnRowDataBound="gvTimeEntries_OnRowDataBound" BackColor="White"
-                                            EmptyDataText="This person has not entered any time for the period selected.">
+                                            EnableViewState="false" EnableModelValidation="True" CssClass="CompPerfTable WholeWidth"
+                                            GridLines="Both" ShowFooter="true" OnRowDataBound="gvTimeEntries_OnRowDataBound"
+                                            BackColor="White" EmptyDataText="This person has not entered any time for the period selected.">
                                             <AlternatingRowStyle BackColor="#F9FAFF" />
                                             <Columns>
                                                 <asp:TemplateField>
@@ -468,7 +466,7 @@
                                             </Columns>
                                         </asp:GridView>
                                     </ItemTemplate>
-                                </asp:DataList>
+                                </asp:Repeater>
                             </div>
                             <div id="divPersonNotEntered" runat="server" class="PersonGridLeftPadding">
                                 &nbsp;
@@ -483,7 +481,7 @@
                                 margin-right: 5px;" />
                         </div>
                     </ItemTemplate>
-                </asp:DataList>
+                </asp:Repeater>
             </asp:Panel>
             <asp:HiddenField ID="hdnGuid" runat="server" />
         </ContentTemplate>
