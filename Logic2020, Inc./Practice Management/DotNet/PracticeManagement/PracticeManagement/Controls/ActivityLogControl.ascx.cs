@@ -364,7 +364,7 @@ namespace PraticeManagement.Controls
         private void EnableProjectsDropDown()
         {
             int eventSourceValue = Convert.ToInt32(ddlEventSource.SelectedValue);
-            ddlProjects.Enabled = !((eventSourceValue >= 3 && eventSourceValue <= 5) || (eventSourceValue >= 32 && eventSourceValue <= 38) || (eventSourceValue >= 21 && eventSourceValue <= 27));
+            ddlProjects.Enabled = !((eventSourceValue >= 3 && eventSourceValue <= 5) || (eventSourceValue >= 32 && eventSourceValue <= 42) || (eventSourceValue >= 21 && eventSourceValue <= 27));
         }
 
         private void SaveFilterSettings()
