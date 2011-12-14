@@ -103,8 +103,50 @@
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
 
 
+        function MakeAsynchronousCalls() {
+            var hdnPersonIds = document.getElementById("<%= hdnPersonIds.ClientID%>");
+            var hdnStartDate = document.getElementById("<%= hdnStartDate.ClientID%>");
+            var hdnEndDate = document.getElementById("<%= hdnEndDate.ClientID%>");
+            var hdnPayScaleIds = document.getElementById("<%= hdnPayScaleIds.ClientID%>");
+            var hdnPracticeIds = document.getElementById("<%= hdnPracticeIds.ClientID%>");
+            var lblCount = document.getElementById("<%= lblCount.ClientID%>");
+            var displayPanel = $("#" + "<%= pnlList.ClientID%>");
+            var hmlData = "";
+            
+            if (hdnPersonIds.value != "") {
+                var array = hdnPersonIds.value.split(',');
+
+                var temp = 0;
+                for (var i = 0; i < array.length; i++) {
+
+                    if (array[i] != "" && array[i] != "undefined") {
+
+                        var urlVal = "../Controls/Reports/TimeEntriesGetByPersonHandler.ashx?PersonID=" + array[i].toString() + "&StartDate=" + hdnStartDate.value + "&EndDate=" + hdnEndDate.value + "&PayScaleIds=" + hdnPayScaleIds.value + "&PracticeIds=" + hdnPracticeIds.value;
+                        $.post(urlVal, function (data) {
+                            temp++;
+                            lblCount.innerHTML = temp.toString();
+                            displayPanel.append(data);
+                            SetDivWidth();
+
+                            if (temp == array.length - 1) {
+                                alert("completed.");
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
+
         function endRequestHandle(sender, Args) {
             SetDivWidth();
+
+            var hdnUpdateClicked = document.getElementById("<%= hdnUpdateClicked.ClientID%>");
+
+            if (hdnUpdateClicked.value == "true") {
+                MakeAsynchronousCalls();
+            }
+
         }
     </script>
     <style type="text/css">
@@ -124,7 +166,7 @@
             visibility: hidden;
         }
     </style>
-    <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+    <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server">
         <ContentTemplate>
             <div class="buttons-block">
                 <table class="WholeWidth">
@@ -140,6 +182,7 @@
                         </td>
                         <td style="width: 13%; padding-top: 3px; white-space: nowrap;" align="left">
                             &nbsp;&nbsp;Show Time Entered
+                            <asp:Label ID="lblCount" runat="server" ForeColor="Red"></asp:Label>
                         </td>
                         <td style="width: 20%" align="left">
                             <uc:DateInterval ID="diRange" runat="server" FromToDateFieldWidth="70" IsFromDateRequired="true"
@@ -167,6 +210,7 @@
                                         <td>
                                             <asp:Button ID="btnUpdateView" runat="server" Text="Update View" Width="100px" OnClick="btnUpdate_OnClick"
                                                 EnableViewState="False" />
+                                            <asp:HiddenField ID="hdnUpdateClicked" runat="server" />
                                         </td>
                                         <td>
                                             <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" Width="100px"
@@ -275,7 +319,7 @@
         </ContentTemplate>
     </asp:UpdatePanel>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
-    <asp:UpdatePanel ID="updReport" runat="server">
+    <asp:UpdatePanel ID="updReport" UpdateMode="Conditional" runat="server">
         <ContentTemplate>
             <asp:Panel ID="pnlList" runat="server">
                 <uc2:CalendarLegend ID="CalendarLegend" runat="server" />
@@ -283,26 +327,14 @@
                     EnableViewState="false" OnItemCreated="dlPersons_OnItemCreated ">
                     <ItemTemplate>
                         <div id="divPersonListSummary" runat="server">
-                            <table>
-                                <tr>
-                                    <td colspan="4">
-                                        <div runat="server" id="divPersonName" style="padding-bottom: 5px;">
-                                            <font style="font-size: 20px; font-weight: bold;">
-                                                <%# Eval("PersonName") %></font>
-                                        </div>
-                                        <br class="NotVisible" />
-                                    </td>
-                                </tr>
-                            </table>
+                            <div runat="server" id="divPersonName" style="padding-bottom: 5px;">
+                                <font style="font-size: 20px; font-weight: bold;">
+                                    <%# Eval("PersonName") %></font>
+                            </div>
+                            <br class="NotVisible" />
                             <div class="PersonGridLeftPadding" runat="server" id="divTeTable" style="overflow-x: auto;
                                 overflow-y: display;">
-                                <table>
-                                    <tr>
-                                        <td colspan="4">
-                                            <font style="font-style: italic; font-size: 16px; font-weight: bold;">Time Entry Summary</font>
-                                        </td>
-                                    </tr>
-                                </table>
+                                <font style="font-style: italic; font-size: 16px; font-weight: bold;">Time Entry Summary</font>
                                 <asp:Repeater ID="repTeTable" runat="server" DataSource='<%# GetModifiedDatasource(DataBinder.Eval(Container.DataItem, "GroupedTimeEtnries")) %>'
                                     OnItemDataBound="repTeTable_OnItemDataBound" EnableViewState="false" OnItemCreated="repTeTable_OnItemCreated">
                                     <HeaderTemplate>
@@ -381,27 +413,15 @@
                             <div class="PersonGridLeftPadding" style="overflow-x: auto; padding-top: 10px;" runat="server"
                                 id="divProjects">
                                 <br class="NotVisible" />
-                                <table>
-                                    <tr>
-                                        <td colspan="4">
-                                            <font style="font-style: italic; font-size: 16px; font-weight: bold;">Time Entry Detail</font>
-                                        </td>
-                                    </tr>
-                                </table>
+                                <font style="font-style: italic; font-size: 16px; font-weight: bold;">Time Entry Detail</font>
                                 <asp:Repeater ID="dlProjects" runat="server" DataSource='<%# DataBinder.Eval(Container.DataItem, "GroupedTimeEtnries")  %>'
                                     EnableViewState="false" OnItemDataBound="dlProjects_OnItemDataBound">
                                     <ItemTemplate>
-                                        <table>
-                                            <tr>
-                                                <td colspan="4">
-                                                    <div style="padding-top: 3px;">
-                                                        <font style="font-size: 14px; font-weight: bold;">
-                                                            <%# Eval("Key.Client.Name") + " - " + Eval("Key.Name")%>
-                                                        </font>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </table>
+                                        <div style="padding-top: 3px;">
+                                            <font style="font-size: 14px; font-weight: bold;">
+                                                <%# Eval("Key.Client.Name") + " - " + Eval("Key.Name")%>
+                                            </font>
+                                        </div>
                                         <br class="NotVisible" />
                                         <asp:GridView ID="gvTimeEntries" runat="server" AutoGenerateColumns="False" DataSource='<%# Eval("Value") %>'
                                             EnableViewState="false" EnableModelValidation="True" CssClass="CompPerfTable WholeWidth"
@@ -484,6 +504,11 @@
                 </asp:Repeater>
             </asp:Panel>
             <asp:HiddenField ID="hdnGuid" runat="server" />
+            <asp:HiddenField ID="hdnPersonIds" runat="server" />
+            <asp:HiddenField ID="hdnStartDate" runat="server" />
+            <asp:HiddenField ID="hdnEndDate" runat="server" />
+            <asp:HiddenField ID="hdnPayScaleIds" runat="server" />
+            <asp:HiddenField ID="hdnPracticeIds" runat="server" />
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnExportToPDF" />
