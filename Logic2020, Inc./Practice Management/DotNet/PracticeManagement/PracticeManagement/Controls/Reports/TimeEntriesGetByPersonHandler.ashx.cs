@@ -62,8 +62,8 @@ namespace PraticeManagement.Controls.Reports
                     PersonIds = persons,
                     StartDate = startDate,
                     EndDate = endDate,
-                    PayTypeIds = payscales,
-                    PracticeIds = practices
+                    PayTypeIds = payTypeIds.ToLower() != "null" ? payscales : null,
+                    PracticeIds = practiceIds.ToLower() != "null" ? practices : null
                 };
 
                 var dsPersons = ServiceCallers.Custom.TimeEntry(client => client.TimeEntriesByPersonGetExcelSet(reportContext));
@@ -114,7 +114,7 @@ namespace PraticeManagement.Controls.Reports
                 tableRow2.Controls.Add(col22);
                 summaryTable.Controls.Add(tableRow2);
 
-                GridViewExportUtil.Export("TimeEntry Report By Person.xls", excelGrid, summaryTable, null, null);
+                GridViewExportUtil.Export("TimeEntry_Report_By_Person.xls", excelGrid, summaryTable, null, null);
 
             }
         }
