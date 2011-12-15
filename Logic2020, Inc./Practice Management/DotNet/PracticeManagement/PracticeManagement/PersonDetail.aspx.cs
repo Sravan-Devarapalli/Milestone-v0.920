@@ -22,6 +22,7 @@ using DataTransferObjects.ContextObjects;
 using PraticeManagement.Utils;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using System.IO;
+using System.Threading;
 
 namespace PraticeManagement
 {
@@ -46,7 +47,10 @@ namespace PraticeManagement
         private const string lblTerminationDateErrorFormat = "Unable to set Termination Date for {0} due to the following:";
         private const string lblOwnerProjectsExistFormat = "{0} is designated as the Owner for the following project(s):";
         private const string lblOwnerOpportunitiesFormat = "{0} is designated as the Owner for the following Opportunities:";
-
+        private const string StartDateIncorrect = "The Start Date is incorrect. There are several other compensation records for the specified period. Please edit them first.";
+        private const string EndDateIncorrect = "The End Date is incorrect. There are several other compensation records for the specified period. Please edit them first.";
+        private const string PeriodIncorrect = "The period is incorrect. There records falls into the period specified in an existing record.";
+        private const string HireDateInCorrect = "Person cannot have the compensation for the days before his hire date.";
 
         #endregion
 
@@ -164,11 +168,37 @@ namespace PraticeManagement
             set { ViewState["UserIsRecruiter"] = value; }
         }
 
+
+        private Pay PayFooter
+        {
+            get
+            {
+                return ViewState["PayFooter"] as Pay;
+            }
+            set
+            {
+                ViewState["PayFooter"] = value;
+            }
+        }
+
+        private List<Pay> PayHistory
+        {
+            get
+            {
+                return ViewState["PAY_HISTORY"] as List<Pay>;
+            }
+            set
+            {
+                ViewState["PAY_HISTORY"] = value;
+            }
+        }
         #endregion
+
+        #region page events
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+            mlConfirmation.ClearMessage();
             if (!IsPostBack)
             {
                 DataHelper.FillPracticeListOnlyActive(ddlDefaultPractice, string.Empty);
@@ -211,6 +241,8 @@ namespace PraticeManagement
             btnAddDefaultRecruitingCommission.Enabled = UserIsAdministrator || UserIsRecruiter || UserIsHR;//#2817 UserisHR is added as per requirement.
             cellPermissions.Visible = UserIsAdministrator || UserIsHR;//#2817 UserisHR is added as per requirement.
         }
+
+        #endregion
 
         private void RestrictRecruiterPrivs()
         {
@@ -318,6 +350,7 @@ namespace PraticeManagement
                 {
                     lblEmployeeNumber.Visible = true;
                     txtEmployeeNumber.Visible = true;
+                    PayHistory = person.PaymentHistory;
                     PopulateControls(person);
                 }
             }
@@ -632,6 +665,7 @@ namespace PraticeManagement
 
                 if (person != null)
                 {
+                    PayHistory = person.PaymentHistory;
                     PopulateControls(person);
                 }
                 else
@@ -722,7 +756,7 @@ namespace PraticeManagement
             PopulateRecruiterCommissions(person);
 
             // Payment history
-            PopulatePaymentAndOverheads(person);
+            PopulatePayment(person);
 
             // Default commissions info
             PopulatePersonCommissions(person);
@@ -814,9 +848,14 @@ namespace PraticeManagement
             }
         }
 
-        private void PopulatePaymentAndOverheads(Person person)
+        private void PopulatePayment(Person person)
         {
-            gvCompensationHistory.DataSource = person.PaymentHistory;
+            PopulatePayment(person.PaymentHistory);
+        }
+
+        private void PopulatePayment(List<Pay> paymentHistory)
+        {
+            gvCompensationHistory.DataSource = paymentHistory;
             gvCompensationHistory.DataBind();
         }
 
@@ -1120,6 +1159,60 @@ namespace PraticeManagement
         }
 
         #region Validation
+
+        private ExceptionDetail internalException;
+
+        protected void custValPractice_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            var custValPractice = sender as CustomValidator;
+
+            var gvRow = custValPractice.NamingContainer as GridViewRow;
+
+            var ddlPractice = gvRow.FindControl("ddlPractice") as DropDownList;
+
+            e.IsValid = ddlPractice.SelectedIndex > 0;
+        }
+
+        protected void custValSeniority_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            var custValPractice = sender as CustomValidator;
+
+            var gvRow = custValPractice.NamingContainer as GridViewRow;
+
+            var ddlSeniorityName = gvRow.FindControl("ddlSeniorityName") as DropDownList;
+
+            e.IsValid = ddlSeniorityName.SelectedIndex > 0;
+        }
+
+        protected void custValSalesCommission_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            var custValSalesCommission = sender as CustomValidator;
+
+            var gvRow = custValSalesCommission.NamingContainer as GridViewRow;
+
+            var txtSalesCommission = gvRow.FindControl("txtSalesCommission") as TextBox;
+
+            var salesComm = txtSalesCommission.Text;
+            decimal salecCommValue;
+            if (!string.IsNullOrEmpty(salesComm))
+            {
+                if (!decimal.TryParse(salesComm, out salecCommValue))
+                {
+                    e.IsValid = false;
+                    custValSalesCommission.ErrorMessage = custValSalesCommission.ToolTip =
+                        "A number with 2 decimal digits is allowed for the sales commission %.";
+                    return;
+                }
+                else if (salecCommValue < 0.00M)
+                {
+                    e.IsValid = false;
+                    custValSalesCommission.ErrorMessage = custValSalesCommission.ToolTip =
+                        "Sales Commission % must be greater than or equal 0.";
+                    return;
+                }
+            }
+            e.IsValid = true;
+        }
 
         protected void custPersonName_ServerValidate(object source, ServerValidateEventArgs args)
         {
@@ -1462,7 +1555,359 @@ namespace PraticeManagement
             }
         }
 
+        #region gvCompensationHistory Events
 
+        private void _gvCompensationHistory_OnRowDataBound(GridViewRow gvRow, Pay pay)
+        {
+
+            var dpStartDate = gvRow.FindControl("dpStartDate") as DatePicker;
+            var dpEndDate = gvRow.FindControl("dpEndDate") as DatePicker;
+            var ddlBasis = gvRow.FindControl("ddlBasis") as DropDownList;
+            var ddlPractice = gvRow.FindControl("ddlPractice") as DropDownList;
+            var ddlSeniorityName = gvRow.FindControl("ddlSeniorityName") as DropDownList;
+            var txtAmount = gvRow.FindControl("txtAmount") as TextBox;
+            var txtVacationDays = gvRow.FindControl("txtVacationDays") as TextBox;
+            var txtSalesCommission = gvRow.FindControl("txtSalesCommission") as TextBox;
+
+            DataHelper.FillSenioritiesList(ddlSeniorityName, "-- Select Seniority --");
+            DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select Practice Area --");
+
+            dpStartDate.DateValue = pay.StartDate;
+            dpEndDate.DateValue = pay.EndDate.HasValue ? pay.EndDate.Value.AddDays(-1) : DateTime.MinValue;
+            ddlBasis.Attributes["vacationdaysId"] = txtVacationDays.ClientID;
+           
+            if (pay.Timescale == TimescaleType.Salary)
+            {
+                ddlBasis.SelectedIndex = 0;
+                txtVacationDays.Enabled = true;
+            }
+            else if (pay.Timescale == TimescaleType.Hourly)
+            {
+                ddlBasis.SelectedIndex = 1;
+                txtVacationDays.Enabled = true;
+            }
+            else if (pay.Timescale == TimescaleType._1099Ctc)
+            {
+                ddlBasis.SelectedIndex = 2;
+                txtVacationDays.Enabled = false;
+            }
+            else
+            {
+                ddlBasis.SelectedIndex = 3;
+                txtVacationDays.Enabled = false;
+            }
+
+            txtAmount.Text = pay.Amount.Value.ToString();
+
+            if (pay.PracticeId.HasValue)
+            {
+                ListItem selectedPractice = ddlPractice.Items.FindByValue(pay.PracticeId.Value.ToString());
+                if (selectedPractice == null)
+                {
+                    var practices = DataHelper.GetPracticeById(pay.PracticeId);
+                    if (practices != null && practices.Length > 0)
+                    {
+                        selectedPractice = new ListItem(practices[0].Name, practices[0].Id.ToString());
+                        ddlPractice.Items.Add(selectedPractice);
+                        ddlPractice.SortByText();
+                        ddlPractice.SelectedValue = selectedPractice.Value;
+                    }
+                }
+                else
+                {
+                    ddlPractice.SelectedValue = selectedPractice.Value;
+                }
+            }
+
+
+            if (pay.SeniorityId.HasValue)
+            {
+                ListItem selectedSeniority = ddlSeniorityName.Items.FindByValue(pay.SeniorityId.Value.ToString());
+                if (selectedSeniority != null)
+                {
+                    ddlSeniorityName.SelectedValue = selectedSeniority.Value;
+                }
+            }
+
+            txtVacationDays.Text = pay.VacationDays.HasValue ? pay.VacationDays.Value.ToString() : "0";
+            txtSalesCommission.Text = pay.SalesCommissionFractionOfMargin.HasValue ? pay.SalesCommissionFractionOfMargin.Value.ToString() : "0.00";
+        }
+
+        protected void gvCompensationHistory_OnRowDataBound(object sender, GridViewRowEventArgs e)
+        {
+
+            if (e.Row.RowType == DataControlRowType.DataRow && gvCompensationHistory.EditIndex == e.Row.DataItemIndex)
+            {
+                var gvRow = e.Row;
+                var pay = gvRow.DataItem as Pay;
+                _gvCompensationHistory_OnRowDataBound(gvRow, pay);
+
+            }
+            if (e.Row.RowType == DataControlRowType.Footer && e.Row.Visible && PayFooter != null)
+            {
+                var gvRow = e.Row;
+                _gvCompensationHistory_OnRowDataBound(gvRow, PayFooter);
+            }
+
+        }
+
+        protected void imgCompensationDelete_OnClick(object sender, EventArgs args)
+        {
+            var imgCompensationDelete = sender as ImageButton;
+
+            var row = imgCompensationDelete.NamingContainer as GridViewRow;
+            var cvDeleteCompensation = row.FindControl("cvDeleteCompensation") as CustomValidator;
+            cvDeleteCompensation.IsValid = true;
+
+            var startDate = Convert.ToDateTime(imgCompensationDelete.Attributes["StartDate"]);
+            var endDateText = imgCompensationDelete.Attributes["EndDate"];
+            DateTime? endDate = null;
+
+            if (endDateText != string.Empty)
+            {
+                endDate = Convert.ToDateTime(endDateText);
+            }
+
+            bool result = true;
+
+            if (PersonId.HasValue)
+            {
+                using (var serviceClient = new PersonServiceClient())
+                {
+                    result = serviceClient.IsPersonHaveActiveStatusDuringThisPeriod(PersonId.Value, startDate, endDate);
+                }
+
+                if (result)
+                {
+                    cvDeleteCompensation.IsValid = false;
+                }
+                else
+                {
+                    using (var serviceClient = new PersonServiceClient())
+                    {
+                        serviceClient.DeletePay(PersonId.Value, startDate);
+
+                        PayHistory.Remove(PayHistory.First(p => p.StartDate.Date == startDate));
+                        PayHistory = PayHistory;
+                        PopulatePayment(PayHistory);
+                    }
+                }
+            }
+
+        }
+
+        protected void imgCancel_OnClick(object sender, EventArgs e)
+        {
+            mlConfirmation.ClearMessage();
+            gvCompensationHistory.EditIndex = -1;
+            PopulatePayment(PayHistory);
+        }
+
+        protected void imgEditCompensation_OnClick(object sender, EventArgs e)
+        {
+            ImageButton imgEdit = sender as ImageButton;
+            GridViewRow row = imgEdit.NamingContainer as GridViewRow;
+            gvCompensationHistory.EditIndex = row.DataItemIndex;
+            gvCompensationHistory.ShowFooter = false;
+            PopulatePayment(PayHistory);
+        }
+
+        private bool validateAndSave(object sender, EventArgs e)
+        {
+            bool resultreturn = true;
+            ImageButton imgUpdate = sender as ImageButton;
+            GridViewRow gvRow = imgUpdate.NamingContainer as GridViewRow;
+            var _gvCompensationHistory = gvRow.NamingContainer as GridView;
+            var ddlBasis = gvRow.FindControl("ddlBasis") as DropDownList;
+            var compVacationDays = gvRow.FindControl("compVacationDays") as CompareValidator;
+            var rfvVacationDays = gvRow.FindControl("rfvVacationDays") as RequiredFieldValidator;
+            var txtVacationDays = gvRow.FindControl("txtVacationDays") as TextBox;
+            if (ddlBasis.SelectedIndex == 2 || ddlBasis.SelectedIndex == 3)
+            {
+                compVacationDays.Enabled = false;
+                rfvVacationDays.Enabled = false;
+                txtVacationDays.Enabled = false;
+
+            }
+            else
+            {
+                compVacationDays.Enabled = true;
+                rfvVacationDays.Enabled = true;
+                txtVacationDays.Enabled = true;
+            }
+            Page.Validate(valSumCompensation.ValidationGroup);
+            if (Page.IsValid)
+            {
+                var operation = Convert.ToString(imgUpdate.Attributes["operation"]);
+                DateTime startDate;
+                var dpStartDate = gvRow.FindControl("dpStartDate") as DatePicker;
+                var dpEndDate = gvRow.FindControl("dpEndDate") as DatePicker;
+                var ddlPractice = gvRow.FindControl("ddlPractice") as DropDownList;
+                var ddlSeniorityName = gvRow.FindControl("ddlSeniorityName") as DropDownList;
+                var txtAmount = gvRow.FindControl("txtAmount") as TextBox;
+                var txtSalesCommission = gvRow.FindControl("txtSalesCommission") as TextBox;
+
+                Pay pay = new Pay();
+                var index = 0;
+                Pay oldPay;
+                if (operation == "Update")
+                {
+                    startDate = Convert.ToDateTime(imgUpdate.Attributes["StartDate"]);
+                    index = PayHistory.FindIndex(p => p.StartDate.Date == startDate);
+                    oldPay = PayHistory[index];
+                    pay.OldStartDate = oldPay.StartDate;
+                    pay.OldEndDate = oldPay.EndDate;
+                }
+                else
+                {
+                    oldPay = PayFooter;
+                }
+                pay.TimesPaidPerMonth = oldPay.TimesPaidPerMonth;
+                pay.DefaultHoursPerDay = oldPay.DefaultHoursPerDay;
+                pay.Terms = !(ddlBasis.SelectedIndex == 2 || ddlBasis.SelectedIndex == 3) ? 5 : 14;
+                pay.IsYearBonus = !(ddlBasis.SelectedIndex == 2 || ddlBasis.SelectedIndex == 3) ? oldPay.IsYearBonus : false;
+                pay.BonusAmount = !(ddlBasis.SelectedIndex == 2 || ddlBasis.SelectedIndex == 3) ? oldPay.BonusAmount : 0;
+                pay.BonusHoursToCollect = !(ddlBasis.SelectedIndex == 2 || ddlBasis.SelectedIndex == 3) ? oldPay.BonusHoursToCollect : null;
+
+                pay.StartDate = dpStartDate.DateValue;
+                pay.EndDate = dpEndDate.DateValue != DateTime.MinValue ? (DateTime?)dpEndDate.DateValue.AddDays(1) : null;
+
+                if (ddlBasis.SelectedIndex == 0)
+                {
+                    pay.Timescale = TimescaleType.Salary;
+                }
+                else if (ddlBasis.SelectedIndex == 1)
+                {
+                    pay.Timescale = TimescaleType.Hourly;
+                }
+                else if (ddlBasis.SelectedIndex == 2)
+                {
+                    pay.Timescale = TimescaleType._1099Ctc;
+                }
+                else
+                {
+                    pay.Timescale = TimescaleType.PercRevenue;
+                }
+
+                decimal result;
+                if (decimal.TryParse(txtAmount.Text, out result))
+                {
+                    pay.Amount = result;
+                }
+
+                pay.VacationDays = !string.IsNullOrEmpty(txtVacationDays.Text) && !(ddlBasis.SelectedIndex == 2 || ddlBasis.SelectedIndex == 3) ?
+                   (int?)int.Parse(txtVacationDays.Text) : null;
+
+                pay.SeniorityId = int.Parse(ddlSeniorityName.SelectedValue);
+                pay.PracticeId = int.Parse(ddlPractice.SelectedValue);
+                pay.SalesCommissionFractionOfMargin = Convert.ToDecimal(String.IsNullOrEmpty(txtSalesCommission.Text) ? "0.00" : txtSalesCommission.Text);
+
+                pay.PersonId = PersonId.Value;
+
+                using (PersonServiceClient serviceClient = new PersonServiceClient())
+                {
+                    try
+                    {
+                        serviceClient.SavePay(pay, HttpContext.Current.User.Identity.Name);
+                    }
+                    catch (FaultException<ExceptionDetail> ex)
+                    {
+                        internalException = ex.Detail;
+                        serviceClient.Abort();
+                        Logging.LogErrorMessage(
+                            ex.Message,
+                            ex.Source,
+                            internalException.InnerException != null ? internalException.InnerException.Message : string.Empty,
+                            string.Empty,
+                            HttpContext.Current.Request.Url.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped),
+                            string.Empty,
+                            Thread.CurrentPrincipal.Identity.Name);
+                        resultreturn = false;
+                    }
+                }
+
+            }
+            else
+            {
+                resultreturn = false;
+            }
+
+
+            return resultreturn;
+        }
+
+        protected void imgUpdateCompensation_OnClick(object sender, EventArgs e)
+        {
+            mlConfirmation.ClearMessage();
+            if (validateAndSave(sender, e))
+            {
+                ImageButton imgUpdate = sender as ImageButton;
+                GridViewRow gvRow = imgUpdate.NamingContainer as GridViewRow;
+                var _gvCompensationHistory = gvRow.NamingContainer as GridView;
+                var operation = Convert.ToString(imgUpdate.Attributes["operation"]);
+                if (operation != "Update")
+                {
+                    _gvCompensationHistory.ShowFooter = false;
+                    PayFooter = null;
+                }
+                gvCompensationHistory.EditIndex = -1;
+                ClearDirty();
+                var person = GetPerson(PersonId);
+                if (person != null)
+                {
+                    PayHistory = person.PaymentHistory;
+                    PopulateControls(person);
+                }
+                mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Compensation"));
+            }
+            else
+            {
+                Page.Validate(valSumCompensation.ValidationGroup);
+                if (Page.IsValid)
+                {
+                    if (internalException != null)
+                    {
+                        string data = internalException.ToString();
+                        string innerexceptionMessage = internalException.InnerException.Message;
+                        if (data.Contains("CK_Pay_DateRange"))
+                        {
+                            mlConfirmation.ShowErrorMessage("Compensation for the same period already exists.");
+                        }
+                        else if (innerexceptionMessage == StartDateIncorrect || innerexceptionMessage == EndDateIncorrect || innerexceptionMessage == PeriodIncorrect || innerexceptionMessage == HireDateInCorrect)
+                        {
+                            mlConfirmation.ShowErrorMessage(innerexceptionMessage);
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void imgCancelFooter_OnClick(object sender, EventArgs e)
+        {
+            ImageButton imgCancle = sender as ImageButton;
+            GridViewRow row = imgCancle.NamingContainer as GridViewRow;
+            var _gvCompensationHistory = row.NamingContainer as GridView;
+            _gvCompensationHistory.ShowFooter = false;
+            PopulatePayment(PayHistory);
+            mlConfirmation.ClearMessage();
+
+        }
+
+        protected void imgCopy_OnClick(object sender, EventArgs e)
+        {
+            ImageButton imgCopy = sender as ImageButton;
+            GridViewRow row = imgCopy.NamingContainer as GridViewRow;
+            var _gvCompensationHistory = row.NamingContainer as GridView;
+            gvCompensationHistory.EditIndex = -1;
+            var pay = (Pay)PayHistory[row.DataItemIndex];
+            var gvRow = _gvCompensationHistory.FooterRow;
+            _gvCompensationHistory.ShowFooter = true;
+            PayFooter = pay;
+            _gvCompensationHistory.DataSource = PayHistory;
+            _gvCompensationHistory.DataBind();
+        }
+
+        #endregion
 
         #region IPostBackEventHandler Members
 
