@@ -270,6 +270,22 @@ namespace PraticeManagement.Controls.Generic.DirtyState
             }
         }
 
+        [ExtenderControlProperty]
+        [DefaultValue("false")]
+        [IDReferenceProperty(typeof(HiddenField))]
+        [ClientPropertyName("IsPTOTimeType")]
+        public string IsPTOTimeType
+        {
+            get
+            {
+                return GetPropertyValue("IsPTOTimeType", string.Empty);
+            }
+            set
+            {
+                SetPropertyValue("IsPTOTimeType", value);
+            }
+        }
+
         #endregion
 
     }
