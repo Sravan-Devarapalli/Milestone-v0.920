@@ -43,7 +43,7 @@
             var fuControl = document.getElementById('<%= fuProjectAttachment.ClientID %>');
             var FileUploadPath = fuControl.value;
             var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
-            if (Extension == "pdf") {
+            if (Extension == "pdf" || Extension == "doc" || Extension == "docx") {
                 args.IsValid = true; // Valid file type
             }
             else {
@@ -742,8 +742,8 @@
                             <asp:CustomValidator ID="cvProjectAttachment" runat="server" ControlToValidate="fuProjectAttachment"
                                 EnableClientScript="true" ClientValidationFunction="cvProjectAttachment_ClientValidationFunction"
                                 SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvProjectAttachment_OnServerValidate"
-                                ValidationGroup="ProjectAttachment" Text="*" ToolTip="File Format must be PDF."
-                                ErrorMessage="File Format must be PDF."></asp:CustomValidator>
+                                ValidationGroup="ProjectAttachment" Text="*" ToolTip="File Format must be PDF/DOC/DOCX."
+                                ErrorMessage="File Format must be PDF/DOC/DOCX."></asp:CustomValidator>
                             <asp:CustomValidator ID="cvalidatorProjectAttachment" runat="server" ControlToValidate="fuProjectAttachment"
                                 EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvalidatorProjectAttachment_OnServerValidate"
                                 ValidationGroup="ProjectAttachment" Text="*"></asp:CustomValidator>
