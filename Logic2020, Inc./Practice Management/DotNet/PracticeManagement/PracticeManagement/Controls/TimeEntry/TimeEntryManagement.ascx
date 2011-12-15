@@ -50,7 +50,7 @@
                     CommandName="Cancel" Text="Cancel" ImageUrl="~/Images/no.png" />
             </EditItemTemplate>
             <ItemTemplate>
-                <asp:ImageButton ID="lnkEdit" runat="server" CausesValidation="False" 
+                <asp:ImageButton ID="lnkEdit" runat="server" CausesValidation="False" Enabled='<%# NeedToEnableEditButton(((TimeEntryRecord)Container.DataItem).TimeType.Name) %>'
                     CommandName="Edit" Text="Edit" ImageUrl="~/Images/icon-edit.png" />
             </ItemTemplate>
         </asp:TemplateField>
@@ -145,6 +145,8 @@
                         ErrorMessage="Actual hours is real value between 0 and 24" MaximumValue="24"
                         MinimumValue="0" SetFocusOnError="True" ToolTip="Actual hours is real value between 0 and 24"
                         Type="Double">*</asp:RangeValidator>
+                    <asp:RequiredFieldValidator ID="rfvActualHours" runat="server" ControlToValidate="ftbActualEdit" ErrorMessage="Actual hours is required."
+                        Text="*" SetFocusOnError="true" ToolTip="Actual hours is required."></asp:RequiredFieldValidator>
                 </div>
             </EditItemTemplate>
              <FooterTemplate>
@@ -186,7 +188,7 @@
                 </asp:HyperLink>
             </ItemTemplate>
             <EditItemTemplate>
-                <asp:DropDownList ID="ddlProjectMilestonesEdit" runat="server" DataSourceID="odsCurrentMilestones"
+                <asp:DropDownList ID="ddlProjectMilestonesEdit" runat="server" DataSourceID="odsCurrentMilestones" Enabled='<%# NeedToEnableProjectMilestoneDropDown(((TimeEntryRecord)Container.DataItem).TimeType.Name) %>'
                     DataTextField="Value" DataValueField="Key" Width="130" SelectedValue='<%# Eval("ParentMilestonePersonEntry.MilestonePersonId") %>' />
             </EditItemTemplate>
         </asp:TemplateField>
@@ -266,7 +268,7 @@
                     NoSortingText="" SortExpression="TimeTypeId" />
             </HeaderTemplate>
             <EditItemTemplate>
-                <asp:DropDownList ID="ddlTimeTypeEdit" runat="server" DataSourceID="odsTimeTypes" Width="150"
+                <asp:DropDownList ID="ddlTimeTypeEdit" runat="server" DataSourceID="odsTimeTypes" Width="150" OnDataBound="OnDataBound_ddlTimeTypeEdit"
                     DataTextField="Name" DataValueField="Id" SelectedValue='<%# ((TimeEntryRecord)Container.DataItem).TimeType.Id %>'>
                 </asp:DropDownList>
             </EditItemTemplate>
