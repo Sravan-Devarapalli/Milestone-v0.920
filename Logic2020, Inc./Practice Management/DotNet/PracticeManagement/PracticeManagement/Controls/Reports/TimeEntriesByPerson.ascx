@@ -18,18 +18,18 @@
                         <table class="time-entry-person-projects WholeWidth">
                             <thead>
                                 <tr>
-                                    <th valign="middle" colspan="2" class="ClientProjectTimeType">
+                                    <th class="ClientProjectTimeType">
                                         Client-Project-Time Type
                                     </th>
                                     <asp:Repeater ID="dlProject" runat="server" OnItemCreated="dlProject_OnItemCreated"
                                         EnableViewState="false" OnInit="dlProject_OnInit">
                                         <ItemTemplate>
-                                            <th valign="middle" class="<%# PraticeManagement.Utils.Calendar.GetCssClassByCalendarItem((CalendarItem) Container.DataItem) %>">
+                                            <th class="<%# PraticeManagement.Utils.Calendar.GetCssClassByCalendarItem((CalendarItem) Container.DataItem) %>">
                                                 <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd<br/>MMM d}")%>
                                             </th>
                                         </ItemTemplate>
                                     </asp:Repeater>
-                                    <th valign="middle">
+                                    <th>
                                         Totals
                                     </th>
                                 </tr>
@@ -38,25 +38,25 @@
                     </HeaderTemplate>
                     <ItemTemplate>
                         <tr class="<%# Container.ItemIndex % 2 == 0 ? "alterrow" : string.Empty %>">
-                            <td valign="middle" colspan="2" class="ClientProjectTimeType">
+                            <td class="ClientProjectTimeType">
                                 <%# DataBinder.Eval(Container.DataItem, "Key")%>
                             </td>
                             <asp:Repeater ID="dlProject" runat="server" DataSource='<%# GetUpdatedDatasource(DataBinder.Eval(Container.DataItem, "Value")) %>'
                                 EnableViewState="false" OnItemDataBound="dlProject_OnItemDataBound">
                                 <ItemTemplate>
-                                    <td valign="middle">
+                                    <td>
                                         <%#  ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")) != null ? string.Format("{0:F2}",((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")).ActualHours) : string.Empty%>
                                     </td>
                                 </ItemTemplate>
                             </asp:Repeater>
-                            <td valign="middle" style="font-weight: bold;">
+                            <td>
                                 <%# ProjectTotals.ToString(PraticeManagement.Constants.Formatting.DoubleFormat) %>
                             </td>
                         </tr>
                     </ItemTemplate>
                     <FooterTemplate>
                         <tr>
-                            <td colspan="2" class="ClientProjectTimeType HeaderDiv">
+                            <td class="ClientProjectTimeType HeaderDiv">
                                 Totals
                             </td>
                             <asp:Repeater ID="dlTotals" runat="server" OnItemDataBound="dlTotals_OnItemDataBound"
@@ -98,8 +98,7 @@
                                     <ItemTemplate>
                                         <%# ((TimeEntryRecord)Container.DataItem).MilestoneDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
                                     </ItemTemplate>
-                                    <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
-                                    <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="8%" />
+                                    <ItemStyle Width="8%" />
                                 </asp:TemplateField>
                                 <asp:TemplateField>
                                     <HeaderTemplate>
@@ -107,10 +106,9 @@
                                             Note</div>
                                     </HeaderTemplate>
                                     <ItemTemplate>
-                                        <asp:Label ID="lblNote" runat="server" Text='<%# Bind("Note") %>'></asp:Label>
+                                        <%# Eval("Note") %>
                                     </ItemTemplate>
-                                    <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
-                                    <ItemStyle HorizontalAlign="Left" VerticalAlign="Top" Width="60%" />
+                                    <ItemStyle Width="60%" />
                                 </asp:TemplateField>
                                 <asp:TemplateField FooterStyle-CssClass="AlignRight">
                                     <HeaderTemplate>
@@ -120,8 +118,7 @@
                                     <ItemTemplate>
                                         <%#((TimeEntryRecord)Container.DataItem).TimeType.Name %>
                                     </ItemTemplate>
-                                    <ItemStyle Width="24%" VerticalAlign="Middle" />
-                                    <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
+                                    <ItemStyle Width="24%" />
                                     <FooterTemplate>
                                         <div class="ie-bg AlignRight">
                                             <asp:Label ID="lblGvGridTotalText" runat="server" Text="Total =" Font-Bold="true"></asp:Label></div>
@@ -137,8 +134,7 @@
                                             <%#((TimeEntryRecord)Container.DataItem).ActualHours.ToString(PraticeManagement.Constants.Formatting.DoubleFormat)%>
                                         </div>
                                     </ItemTemplate>
-                                    <ItemStyle Width="8%" VerticalAlign="Middle" HorizontalAlign="Center" />
-                                    <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
+                                    <ItemStyle Width="8%" />
                                     <FooterTemplate>
                                         <div class="ie-bg TextAlignCenter">
                                             <asp:Label ID="lblGvGridTotal" runat="server" Font-Bold="true"></asp:Label></div>
@@ -151,8 +147,8 @@
             </div>
             <div id="divPersonNotEntered" runat="server" class="PersonGridLeftPadding">
                 &nbsp;
-                <asp:Label ID="lblnoDataMesssage" runat="server" Text="This person has not entered any time for the period selected."
-                    Visible="false"></asp:Label>
+                <asp:Literal ID="lblnoDataMesssage" runat="server" Text="This person has not entered any time for the period selected." 
+                    Visible="false"></asp:Literal>
             </div>
         </div>
         <div id="divhr" runat="server" class="divHrClass">
