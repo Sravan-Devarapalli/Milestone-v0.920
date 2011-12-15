@@ -91,6 +91,12 @@
             text-align: center;
             padding-right: -1px;
         }
+        
+        .TextAlignCenter
+        {
+            text-align: center;
+        }
+        
         .NotVisible
         {
             display: none;
