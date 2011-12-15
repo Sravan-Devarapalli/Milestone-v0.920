@@ -319,7 +319,7 @@ AS
 	FROM dbo.TimeEntries TE
 	JOIN Calendar C ON (C.Date BETWEEN ISNULL(@PreviousRecordStartDate,CASE WHEN @StartDate > @OLD_StartDate  THEN @OLD_StartDate ELSE @StartDate END) AND 
 							ISNULL(@NextRecordEndDate,CASE WHEN @EndDate < @OLD_EndDate THEN @OLD_EndDate ELSE @EndDate END)-1)
-		AND TE.MilestoneDate = C.Date AND te.TimeTypeId  IN (@HolidayTimeTypeId , @PTOTimeTypeId)
+		AND TE.MilestoneDate = C.Date AND te.TimeTypeId  IN (@HolidayTimeTypeId )
 	JOIN MilestonePerson mp ON mp.MilestoneId = @DefaultMilestoneId AND mp.PersonId = @PersonId AND TE.MilestonePersonId = mp.MilestonePersonId
 	LEFT JOIN Pay P ON P.Person = mp.PersonId AND C.Date BETWEEN p.StartDate AND P.EndDate-1
 	WHERE C.Date >= @Today AND (P.Person IS NULL OR  p.Timescale <> @W2SalaryId)
