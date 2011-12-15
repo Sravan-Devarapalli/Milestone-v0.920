@@ -214,11 +214,11 @@ namespace PraticeManagement.Controls
             item.DayOff = !(bool.Parse(hndDayOff.Value));//Here Changing dayOff value.
             item.PersonId = PersonId;
             item.IsRecurringHoliday = chkMakeRecurringHoliday.Checked;
+            item.IsFloatingHoliday = rbFloatingHoliday.Checked;
             item.HolidayDescription = txtHolidayDescription.Text;
-            item.ActualHours = string.IsNullOrEmpty(txtActualHours.Text) ? null : (Double?)Convert.ToDouble(txtActualHours.Text);
+            item.ActualHours = string.IsNullOrEmpty(txtActualHours.Text) ? null : (item.IsFloatingHoliday ? 8 : (Double?)Convert.ToDouble(txtActualHours.Text));
             item.RecurringHolidayId = string.IsNullOrEmpty(hdnRecurringHolidayId.Value) ? null : (int?)Convert.ToInt32(hdnRecurringHolidayId.Value);
             item.RecurringHolidayDate = (item.IsRecurringHoliday && !item.RecurringHolidayId.HasValue) ? (DateTime?)(item.DayOff ? item.Date : GetRecurringHolidayDate()) : null;
-            item.IsFloatingHoliday = rbFloatingHoliday.Checked;
             SaveDate(item);
             Display();
         }
