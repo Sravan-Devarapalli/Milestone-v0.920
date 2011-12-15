@@ -88,7 +88,7 @@ namespace PraticeManagement
 
                     if (SelectedStartDate.HasValue)
                     {
-                        Pay pay = serviceClient.GetPayment(SelectedId.Value, SelectedStartDate.Value);
+                        Pay pay = person.PaymentHistory.First(pa => pa.StartDate.Date == SelectedStartDate.Value.Date);
 
                         PopulateControls(pay);
                     }
