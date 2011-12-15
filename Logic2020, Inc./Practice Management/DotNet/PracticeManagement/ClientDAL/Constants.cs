@@ -572,6 +572,7 @@
                 public const string PersonListByCategoryTypeAndPeriod = "[dbo].[PersonListByCategoryTypeAndPeriod]";
                 public const string UpdateIsWelcomeEmailSentForPerson = "dbo.UpdateIsWelcomeEmailSentForPerson";
                 public const string GetNoteRequiredDetailsForSelectedDateRange = "dbo.GetNoteRequiredDetailsForSelectedDateRange";
+                public const string IsPersonHaveActiveStatusDuringThisPeriod = "dbo.IsPersonHaveActiveStatusDuringThisPeriod";
 
             }
 
