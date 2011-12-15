@@ -173,9 +173,8 @@ namespace PraticeManagement.Controls.Opportunities
 
         public Opportunity[] GetOpportunities()
         {
-
-            return DataHelper.GetFilteredOpportunitiesForDiscussionReview2();
-
+            var opportunitys =  DataHelper.GetFilteredOpportunitiesForDiscussionReview2();
+            return opportunitys;
         }
 
         protected void lvOpportunities_Sorting(object sender, ListViewSortEventArgs e)
@@ -583,6 +582,7 @@ namespace PraticeManagement.Controls.Opportunities
                 var hdnTeamStructure = e.Item.FindControl("hdnTeamStructure") as HiddenField;
                 var hdnStartDate = e.Item.FindControl("hdnStartDate") as HiddenField;
                 var hdnEndDate = e.Item.FindControl("hdnEndDate") as HiddenField;
+                var lblRefreshMessage = e.Item.FindControl("lblRefreshMessage") as Label;
 
                 var imgTeamStructure = e.Item.FindControl("imgTeamStructure") as Image;
                 var imgPeople_icon = e.Item.FindControl("imgPeople_icon") as Image;
@@ -595,6 +595,7 @@ namespace PraticeManagement.Controls.Opportunities
                 var oppty = (e.Item as ListViewDataItem).DataItem as Opportunity;
 
                 var ddlPriority = e.Item.FindControl("ddlPriorityList") as DropDownList;
+                ddlPriority.Attributes["lblRefreshMessageClientId"] = lblRefreshMessage.ClientID;
                 if (oppty.ProjectedStartDate.HasValue)
                 {
                     hdnStartDate.Value = oppty.ProjectedStartDate.Value.ToString("MM/dd/yyyy");
@@ -614,8 +615,7 @@ namespace PraticeManagement.Controls.Opportunities
                     ddlPriority.Attributes["OpportunityName"] = oppty.Name;
                     ddlPriority.Attributes["isTeamstructueAvalilable"] = "false";
                     ddlPriority.Attributes["selectedPriorityId"] = oppty.Priority.Id.ToString();
-                    ddlPriority.Attributes["isEndDateAvailable"] = oppty.ProjectedEndDate.HasValue ? "1" : "0";
-                    ddlPriority.Attributes["isStartDateAvailable"] = oppty.ProjectedStartDate.HasValue ? "1" : "0";
+                    ddlPriority.Attributes["ClientId"] = oppty.Client != null ? oppty.Client.Id.ToString() : String.Empty;
                     ddlPriority.Attributes["isLinkedToProject"] = oppty.Project != null && oppty.Project.Id.HasValue ? "1" : "0";
                 }
 
