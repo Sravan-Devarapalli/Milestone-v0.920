@@ -1111,6 +1111,33 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.ValidationSummary valsManager;
         
         /// <summary>
+        /// valSumCompensationDelete control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSumCompensationDelete;
+        
+        /// <summary>
+        /// valSumCompensation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSumCompensation;
+        
+        /// <summary>
+        /// mlConfirmation  control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.MessageLabel mlConfirmation ;
+        
+        /// <summary>
         /// mlError control.
         /// </summary>
         /// <remarks>
