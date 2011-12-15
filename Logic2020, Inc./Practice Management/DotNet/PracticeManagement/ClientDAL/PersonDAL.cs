@@ -3350,6 +3350,27 @@ namespace DataAccess
         }
 
 
+
+        public static bool IsPersonHaveActiveStatusDuringThisPeriod(int personId, DateTime startDate, DateTime? endDate)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Person.IsPersonHaveActiveStatusDuringThisPeriod, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+
+                if (endDate != null && endDate.HasValue)
+                {
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate.Value);
+                }
+
+                connection.Open();
+                return ((bool)command.ExecuteScalar());
+            }
+        }
     }
 }
 
