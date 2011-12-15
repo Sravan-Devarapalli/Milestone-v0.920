@@ -40,6 +40,11 @@ AS
 		FROM TimeType
 		WHERE Name = 'Holiday'
 
+		IF @TimeTypeId = @PTOTimeTypeId
+		BEGIN
+			SET @Note = 'PTO'
+		END
+
 		SET @Today = CONVERT(DATETIME, CONVERT(DATE, dbo.GettingPMTime(GETUTCDATE())))
 		
         --DECLARE @IsChargeable BIT
@@ -142,8 +147,8 @@ AS
 								FROM dbo.PersonCalendar
 								WHERE PersonId = @PersonId AND Date = @MilestoneDate)
 				BEGIN
-					INSERT INTO dbo.PersonCalendar (Date, PersonId, DayOff, ActualHours, IsFloatingHoliday)
-					VALUES (@MilestoneDate, @PersonId, 1, @ActualHours, 0)
+					INSERT INTO dbo.PersonCalendar (Date, PersonId, DayOff, ActualHours, IsFloatingHoliday, IsFromTimeEntry)
+					VALUES (@MilestoneDate, @PersonId, 1, @ActualHours, 0, 1)
 				END
 				ELSE
 				BEGIN
@@ -153,7 +158,8 @@ AS
 					UPDATE PC
 					SET PC.DayOff = 1,
 						PC.ActualHours = @ActualHours,
-						PC.IsFloatingHoliday = 0
+						PC.IsFloatingHoliday = 0,
+						PC.IsFromTimeEntry = 1
 					FROM PersonCalendar PC
 					WHERE PC.PersonId = @PersonId AND PC.Date = @MilestoneDate
 				END
