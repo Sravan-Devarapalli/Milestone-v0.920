@@ -139,13 +139,13 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::AjaxControlToolkit.ModalPopupExtender mpePopup;
         
         /// <summary>
-        /// pnlPopup control.
+        /// pnlTeamStructueMessagePopup control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlPopup;
+        protected global::System.Web.UI.WebControls.Panel pnlTeamStructueMessagePopup;
         
         /// <summary>
         /// btnClose control.
@@ -184,13 +184,76 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::System.Web.UI.WebControls.Button btnRedirectToOpportunityDetail;
         
         /// <summary>
-        /// btnCancelSaving control.
+        /// btnCancelTeamstructueMessagePopup control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancelSaving;
+        protected global::System.Web.UI.WebControls.Button btnCancelTeamstructueMessagePopup;
+        
+        /// <summary>
+        /// hdMpePopupAttachToProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdMpePopupAttachToProject;
+        
+        /// <summary>
+        /// mpePopupAttachToProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpePopupAttachToProject;
+        
+        /// <summary>
+        /// pnlAttachToProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlAttachToProject;
+        
+        /// <summary>
+        /// lblOpportunityName2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblOpportunityName2;
+        
+        /// <summary>
+        /// ddlProjects control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlProjects;
+        
+        /// <summary>
+        /// btnAttach control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAttach;
+        
+        /// <summary>
+        /// btnCancleAttachToProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancleAttachToProject;
         
         /// <summary>
         /// UpdatePanel2 control.
