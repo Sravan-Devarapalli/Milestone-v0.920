@@ -22,10 +22,10 @@
             <td style="width: 350px;">
                 &nbsp;
             </td>
-            <td>
+            <td style="width: 120px;">
                 <asp:Button ID="btnApply" runat="server" Text="Update" OnClick="btnApply_OnClick" />
             </td>
-            <td>
+            <td style="width: 120px;">
                 <asp:Button ID="btnReset" runat="server" Text="Reset Filters" OnClick="btnReset_OnClick" />
             </td>
         </tr>
