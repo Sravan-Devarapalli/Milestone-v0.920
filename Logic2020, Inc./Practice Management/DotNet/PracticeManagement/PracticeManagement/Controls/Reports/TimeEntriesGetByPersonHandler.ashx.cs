@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Text.RegularExpressions;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -138,13 +139,36 @@ namespace PraticeManagement.Controls.Reports
                     html = sw.ToString();
                 }
 
-                context.Response.ContentType = "text/plain";
+                html = RemoveWhitespaceFromHtml(html);
+
+                
 
                 context.Response.Write(html);
+    
+
             }
         }
 
-        
+
+        private static readonly Regex RegexBetweenTags = new Regex(@">(?! )\s+", RegexOptions.Compiled);
+
+        private static readonly Regex RegexLineBreaks = new Regex(@"([\n\s])+?(?<= {2,})<", RegexOptions.Compiled);
+
+
+        public static string RemoveWhitespaceFromHtml(string html)
+        {
+
+            html = RegexBetweenTags.Replace(html, ">");
+
+            html = RegexLineBreaks.Replace(html, "<");
+
+
+
+            return html.Trim();
+
+        }
+
+
         void excelGrid_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.Header)
@@ -227,3 +251,4 @@ namespace PraticeManagement.Controls.Reports
 
     }
 }
+
