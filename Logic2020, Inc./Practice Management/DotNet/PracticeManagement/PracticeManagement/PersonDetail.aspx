@@ -307,6 +307,17 @@
                 }
             }
         }
+        function EnableDisableVacationDays(ddlBasic) {
+            var vacationdaysId = ddlBasic.getAttribute("vacationdaysId");
+            var vacationdays = document.getElementById(vacationdaysId);
+            if (!(ddlBasic.value == 'W2-Salary' || ddlBasic.value == 'W2-Hourly')) {
+                vacationdays.setAttribute("disabled", "disabled");
+            }
+            else {
+                vacationdays.removeAttribute("disabled");
+            }
+            return false;
+        }
     </script>
     <style>
         /* --------- Tabs for person and project details pages ------ */
@@ -791,99 +802,357 @@
                                             &nbsp;<asp:CustomValidator ID="custCompensationCoversMilestone" runat="server" ValidationGroup="Person"
                                                 ErrorMessage="This person has a status of Active, but does not have an active compensation record. &nbsp;Go back to their record so you can create a compensation record for them, or set their status as Projected or Terminated."
                                                 OnServerValidate="custCompensationCoversMilestone_ServerValidate" Text="*"> </asp:CustomValidator>
-                                            <%--<ext:ElementDisablerExtender ID="edeAddCompensationButton" runat="server" TargetControlID="btnAddCompensation" ControlToDisableID="btnSave" />--%>
                                             <div class="clear0">
                                             </div>
                                         </div>
                                     </div>
                                     <asp:GridView ID="gvCompensationHistory" runat="server" AutoGenerateColumns="False"
-                                        EmptyDataText="No compensation history for this person." CssClass="CompPerfTable WholeWidth"
-                                        GridLines="None" BackColor="White">
+                                        OnRowDataBound="gvCompensationHistory_OnRowDataBound" EmptyDataText="No compensation history for this person."
+                                        CssClass="CompPerfTable WholeWidth" GridLines="None" BackColor="White" ShowFooter="false">
                                         <AlternatingRowStyle BackColor="#F9FAFF" />
                                         <Columns>
-                                            <asp:TemplateField HeaderText="Start">
+                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+                                                <HeaderTemplate>
+                                                    <div class="ie-bg">
+                                                    </div>
+                                                </HeaderTemplate>
+                                                <ItemStyle Width="2%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px"
+                                                    Wrap="false" />
                                                 <ItemTemplate>
-                                                    <asp:LinkButton ID="btnStartDate" runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>'
-                                                        CommandArgument='<%# Eval("StartDate") %>' OnCommand="btnStartDate_Command" OnClientClick="if (!confirmSaveDirty()) return false;"></asp:LinkButton>
+                                                    <asp:ImageButton ID="imgCopy" ToolTip="Copy" runat="server" OnClick="imgCopy_OnClick"
+                                                        ImageUrl="~/Images/copy.png" />
                                                 </ItemTemplate>
+                                                <EditItemTemplate>
+                                                </EditItemTemplate>
+                                                <FooterTemplate>
+                                                </FooterTemplate>
+                                                <FooterStyle Width="2%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px"
+                                                    Wrap="false" />
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+                                                <HeaderTemplate>
+                                                    <div class="ie-bg">
+                                                        &nbsp;
+                                                    </div>
+                                                </HeaderTemplate>
+                                                <ItemStyle Width="4%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px"
+                                                    Wrap="false" />
+                                                <ItemTemplate>
+                                                    <asp:ImageButton ID="imgEditCompensation" ToolTip="Edit Compensation" runat="server"
+                                                        OnClick="imgEditCompensation_OnClick" ImageUrl="~/Images/icon-edit.png" />
+                                                </ItemTemplate>
+                                                <EditItemTemplate>
+                                                    <asp:ImageButton ID="imgUpdateCompensation" StartDate='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>'
+                                                        ToolTip="Save" runat="server" ImageUrl="~/Images/icon-check.png" OnClick="imgUpdateCompensation_OnClick"
+                                                        operation="Update" />
+                                                    <asp:ImageButton ID="imgCancel" ToolTip="Cancel" runat="server" ImageUrl="~/Images/no.png"
+                                                        OnClick="imgCancel_OnClick" />
+                                                </EditItemTemplate>
+                                                <FooterTemplate>
+                                                    <asp:ImageButton ID="imgUpdateCompensation" operation="Insert" ToolTip="Save" runat="server"
+                                                        ImageUrl="~/Images/icon-check.png" OnClick="imgUpdateCompensation_OnClick" />
+                                                    <asp:ImageButton ID="imgCancel" ToolTip="Cancel" runat="server" ImageUrl="~/Images/no.png"
+                                                        OnClick="imgCancelFooter_OnClick" />
+                                                </FooterTemplate>
+                                                <FooterStyle Width="4%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px"
+                                                    Wrap="false" />
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         Start</div>
                                                 </HeaderTemplate>
-                                                <ItemStyle HorizontalAlign="Center" />
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="End">
                                                 <ItemTemplate>
-                                                    <asp:Label ID="lblEndDate" runat="server" Text='<%# ((DateTime?)Eval("EndDate")).HasValue ? ((DateTime?)Eval("EndDate")).Value.AddDays(-1).ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label></ItemTemplate>
+                                                    <asp:LinkButton ID="btnStartDate" runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>'
+                                                        CommandArgument='<%# Eval("StartDate") %>' OnCommand="btnStartDate_Command" OnClientClick="if (!confirmSaveDirty()) return false;"></asp:LinkButton>
+                                                </ItemTemplate>
+                                                <EditItemTemplate>
+                                                    <span style="float: left; width: 85%;">
+                                                        <uc2:DatePicker ID="dpStartDate" ValidationGroup="CompensationUpdate" runat="server"
+                                                            TextBoxWidth="90%" AutoPostBack="false" />
+                                                    </span><span style="width: 15%;vertical-align:middle"">
+                                                        <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpStartDate"
+                                                            ValidationGroup="CompensationUpdate" ErrorMessage="The Start Date is required."
+                                                            ToolTip="The Start Date is required." Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                            Display="Static"></asp:RequiredFieldValidator>
+                                                        <asp:CompareValidator ID="compStartDate" runat="server" ControlToValidate="dpStartDate"
+                                                            ValidationGroup="CompensationUpdate" ErrorMessage="The Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                                                            ToolTip="The Start Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
+                                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
+                                                            Type="Date"></asp:CompareValidator>
+                                                    </span>
+                                                </EditItemTemplate>
+                                                <FooterTemplate>
+                                                    <span style="float: left; width: 85%;">
+                                                        <uc2:DatePicker ID="dpStartDate" ValidationGroup="CompensationUpdate" runat="server"
+                                                            TextBoxWidth="90%" AutoPostBack="false" />
+                                                    </span><span style="width: 15%;vertical-align:middle"">
+                                                        <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpStartDate"
+                                                            ValidationGroup="CompensationUpdate" ErrorMessage="The Start Date is required."
+                                                            ToolTip="The Start Date is required." Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                            Display="Static"></asp:RequiredFieldValidator>
+                                                        <asp:CompareValidator ID="compStartDate" runat="server" ControlToValidate="dpStartDate"
+                                                            ValidationGroup="CompensationUpdate" ErrorMessage="The Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                                                            ToolTip="The Start Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
+                                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
+                                                            Type="Date"></asp:CompareValidator>
+                                                    </span>
+                                                </FooterTemplate>
+                                                <ItemStyle Width="11%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <FooterStyle Width="11%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         End</div>
                                                 </HeaderTemplate>
-                                                <ItemStyle HorizontalAlign="Center" />
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Practice Area">
                                                 <ItemTemplate>
-                                                    <asp:Label ID="lblpractice" runat="server" Text='<%# Eval("PracticeName")%>'></asp:Label></ItemTemplate>
+                                                    <asp:Label ID="lblEndDate" runat="server" Text='<%# ((DateTime?)Eval("EndDate")).HasValue ? ((DateTime?)Eval("EndDate")).Value.AddDays(-1).ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label></ItemTemplate>
+                                                <EditItemTemplate>
+                                                    <span style="float: left; width: 85%;">
+                                                        <uc2:DatePicker ID="dpEndDate" ValidationGroup="CompensationUpdate" runat="server"
+                                                            TextBoxWidth="90%" AutoPostBack="false" />
+                                                    </span><span style="width: 15%;vertical-align:middle"">
+                                                        <asp:CompareValidator ID="compDateRange" runat="server" ControlToValidate="dpEndDate"
+                                                            ValidationGroup="CompensationUpdate" ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than the Start Date."
+                                                            ToolTip="The End Date must be greater than the Start Date." Text="*" EnableClientScript="false"
+                                                            SetFocusOnError="true" Display="Static" Operator="GreaterThan" Type="Date"></asp:CompareValidator>
+                                                        <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpEndDate"
+                                                            ValidationGroup="CompensationUpdate" ErrorMessage="The End Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                                                            ToolTip="The End Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
+                                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
+                                                            Type="Date"></asp:CompareValidator>
+                                                    </span>
+                                                </EditItemTemplate>
+                                                <FooterTemplate>
+                                                    <span style="float: left; width: 85%;">
+                                                        <uc2:DatePicker ID="dpEndDate" ValidationGroup="CompensationUpdate" runat="server"
+                                                            TextBoxWidth="90%" AutoPostBack="false" />
+                                                    </span><span style="width: 15%;vertical-align:middle"">
+                                                        <asp:CompareValidator ID="compDateRange" runat="server" ControlToValidate="dpEndDate"
+                                                            ValidationGroup="CompensationUpdate" ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than the Start Date."
+                                                            ToolTip="The End Date must be greater than the Start Date." Text="*" EnableClientScript="false"
+                                                            SetFocusOnError="true" Display="Static" Operator="GreaterThan" Type="Date"></asp:CompareValidator>
+                                                        <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpEndDate"
+                                                            ValidationGroup="CompensationUpdate" ErrorMessage="The End Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                                                            ToolTip="The End Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
+                                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
+                                                            Type="Date"></asp:CompareValidator>
+                                                    </span>
+                                                </FooterTemplate>
+                                                <ItemStyle Width="11%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <FooterStyle Width="11%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         Practice Area</div>
                                                 </HeaderTemplate>
-                                                <ItemStyle HorizontalAlign="center" />
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Seniority">
                                                 <ItemTemplate>
-                                                    <asp:Label ID="lblseniority" runat="server" Text='<%# Eval("SeniorityName")%>'></asp:Label></ItemTemplate>
+                                                    <asp:Label ID="lblpractice" runat="server" Text='<%# Eval("PracticeName")%>'></asp:Label></ItemTemplate>
+                                                <EditItemTemplate>
+                                                    <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlPractice" runat="server"
+                                                        Width="85%">
+                                                    </asp:DropDownList>
+                                                    <asp:CustomValidator ID="custValPractice" runat="server" ToolTip="Please select Practice Area"
+                                                        ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Practice Area"
+                                                        OnServerValidate="custValPractice_OnServerValidate">
+                                                    </asp:CustomValidator>
+                                                </EditItemTemplate>
+                                                <FooterTemplate>
+                                                    <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlPractice" runat="server"
+                                                        Width="85%">
+                                                    </asp:DropDownList>
+                                                    <asp:CustomValidator ID="custValPractice" runat="server" ToolTip="Please select Practice Area"
+                                                        ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Practice Area"
+                                                        OnServerValidate="custValPractice_OnServerValidate">
+                                                    </asp:CustomValidator>
+                                                </FooterTemplate>
+                                                <ItemStyle Width="14%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <FooterStyle Width="14%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         Seniority</div>
                                                 </HeaderTemplate>
-                                                <ItemStyle HorizontalAlign="center" />
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Basis">
                                                 <ItemTemplate>
-                                                    <asp:Label ID="lblBasis" runat="server" Text='<%# Eval("TimescaleName") %>'></asp:Label></ItemTemplate>
+                                                    <asp:Label ID="lblseniority" runat="server" Text='<%# Eval("SeniorityName")%>'></asp:Label>
+                                                </ItemTemplate>
+                                                <EditItemTemplate>
+                                                    <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlSeniorityName" runat="server"
+                                                        Width="80%">
+                                                    </asp:DropDownList>
+                                                    <asp:CustomValidator ID="custValSeniority" runat="server" ToolTip="Please select Seniority"
+                                                        ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Seniority"
+                                                        OnServerValidate="custValSeniority_OnServerValidate">
+                                                    </asp:CustomValidator>
+                                                </EditItemTemplate>
+                                                <FooterTemplate>
+                                                    <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlSeniorityName" runat="server"
+                                                        Width="80%">
+                                                    </asp:DropDownList>
+                                                    <asp:CustomValidator ID="custValSeniority" runat="server" ToolTip="Please select Seniority"
+                                                        ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Seniority"
+                                                        OnServerValidate="custValSeniority_OnServerValidate">
+                                                    </asp:CustomValidator>
+                                                </FooterTemplate>
+                                                <ItemStyle Width="14%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <FooterStyle Width="14%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         Basis</div>
                                                 </HeaderTemplate>
-                                                <ItemStyle HorizontalAlign="Center" />
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblBasis" runat="server" Text='<%# Eval("TimescaleName") %>'></asp:Label></ItemTemplate>
+                                                <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" />
+                                                <EditItemTemplate>
+                                                    <asp:DropDownList ID="ddlBasis" runat="server" Width="90%" onchange="return EnableDisableVacationDays(this);">
+                                                        <asp:ListItem Text="W2-Salary" Value="W2-Salary"></asp:ListItem>
+                                                        <asp:ListItem Text="W2-Hourly" Value="W2-Hourly"></asp:ListItem>
+                                                        <asp:ListItem Text="1099/Hourly" Value="1099/Hourly"></asp:ListItem>
+                                                        <asp:ListItem Text="1099/POR" Value="1099/POR"></asp:ListItem>
+                                                    </asp:DropDownList>
+                                                </EditItemTemplate>
+                                                <FooterTemplate>
+                                                    <asp:DropDownList ID="ddlBasis" runat="server" Width="90%" onchange="return EnableDisableVacationDays(this);">
+                                                        <asp:ListItem Text="W2-Salary" Value="W2-Salary"></asp:ListItem>
+                                                        <asp:ListItem Text="W2-Hourly" Value="W2-Hourly"></asp:ListItem>
+                                                        <asp:ListItem Text="1099/Hourly" Value="1099/Hourly"></asp:ListItem>
+                                                        <asp:ListItem Text="1099/POR" Value="1099/POR"></asp:ListItem>
+                                                    </asp:DropDownList>
+                                                </FooterTemplate>
+                                                <ItemStyle Width="8%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <FooterStyle Width="8%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
                                             </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Amount">
+                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         Amount</div>
                                                 </HeaderTemplate>
-                                                <ItemStyle HorizontalAlign="Center" />
-                                                <EditItemTemplate>
-                                                    <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("Amount") %>'></asp:TextBox>
-                                                </EditItemTemplate>
                                                 <ItemTemplate>
-                                                    <asp:Label ID="Label1" runat="server" Text='<%# Bind("Amount") %>'></asp:Label>
+                                                    <asp:Label ID="lbAmount" runat="server" Text='<%# Bind("Amount") %>'></asp:Label>
                                                 </ItemTemplate>
+                                                <EditItemTemplate>
+                                                    <span style="width: 85%; float: left;">
+                                                        <asp:TextBox ID="txtAmount" ValidationGroup="CompensationUpdate" runat="server" Width="80%"
+                                                            Style="text-align: right;"></asp:TextBox>
+                                                    </span><span style="width: 15%">
+                                                        <asp:RequiredFieldValidator ID="reqAmount" runat="server" ControlToValidate="txtAmount"
+                                                            ValidationGroup="CompensationUpdate" ErrorMessage="The Amount is required." ToolTip="The Amount is required."
+                                                            Text="*" EnableClientScript="false" Display="Dynamic" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                                        <asp:CompareValidator ID="compAmount" runat="server" ControlToValidate="txtAmount"
+                                                            ValidationGroup="CompensationUpdate" ErrorMessage="A number with 2 decimal digits is allowed for the Amount."
+                                                            ToolTip="A number with 2 decimal digits is allowed for the Amount." Text="*"
+                                                            EnableClientScript="false" SetFocusOnError="true" Operator="DataTypeCheck" Type="Currency"
+                                                            Display="Dynamic"></asp:CompareValidator>
+                                                    </span>
+                                                </EditItemTemplate>
+                                                <FooterTemplate>
+                                                    <span style="width: 85%; float: left;">
+                                                        <asp:TextBox ID="txtAmount" ValidationGroup="CompensationUpdate" runat="server" Width="80%"
+                                                            Style="text-align: right;"></asp:TextBox>
+                                                    </span><span style="width: 15%;vertical-align:middle"">
+                                                        <asp:RequiredFieldValidator ID="reqAmount" runat="server" ControlToValidate="txtAmount"
+                                                            ValidationGroup="CompensationUpdate" ErrorMessage="The Amount is required." ToolTip="The Amount is required."
+                                                            Text="*" EnableClientScript="false" Display="Dynamic" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                                        <asp:CompareValidator ID="compAmount" runat="server" ControlToValidate="txtAmount"
+                                                            ValidationGroup="CompensationUpdate" ErrorMessage="A number with 2 decimal digits is allowed for the Amount."
+                                                            ToolTip="A number with 2 decimal digits is allowed for the Amount." Text="*"
+                                                            EnableClientScript="false" SetFocusOnError="true" Operator="DataTypeCheck" Type="Currency"
+                                                            Display="Dynamic"></asp:CompareValidator>
+                                                    </span>
+                                                </FooterTemplate>
+                                                <ItemStyle Width="6%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <FooterStyle Width="6%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
                                             </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Vacation">
+                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         Vacation</div>
                                                 </HeaderTemplate>
-                                                <ItemStyle HorizontalAlign="Center" />
-                                                <EditItemTemplate>
-                                                    <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("VacationDays") %>'></asp:TextBox>
-                                                </EditItemTemplate>
                                                 <ItemTemplate>
-                                                    <asp:Label ID="Label2" runat="server" Text='<%# Bind("VacationDays") %>'></asp:Label>
+                                                    <asp:Label ID="lbVacationDays" runat="server" Text='<%# Bind("VacationDays") %>'></asp:Label>
                                                 </ItemTemplate>
+                                                <EditItemTemplate>
+                                                    <span style="width: 85%; float: left;">
+                                                        <asp:TextBox ID="txtVacationDays" ValidationGroup="CompensationUpdate" runat="server"
+                                                            Width="80%" Text="0"></asp:TextBox>
+                                                    </span><span style="width: 15%;vertical-align:middle">
+                                                        <asp:CompareValidator ID="compVacationDays" runat="server" ControlToValidate="txtVacationDays"
+                                                            ValidationGroup="CompensationUpdate" Display="Dynamic" EnableClientScript="False"
+                                                            ErrorMessage="The Vacation Days must be an integer number." Operator="DataTypeCheck"
+                                                            ToolTip="The Vacation Days must be an integer number." Type="Integer">*</asp:CompareValidator>
+                                                        <asp:RequiredFieldValidator ID="rfvVacationDays" runat="server" ControlToValidate="txtVacationDays"
+                                                            ValidationGroup="CompensationUpdate" Text="*" EnableClientScript="false" Display="Dynamic"
+                                                            ErrorMessage="Vacation days is required" ToolTip="Vacation days is required"></asp:RequiredFieldValidator>
+                                                    </span>
+                                                </EditItemTemplate>
+                                                <FooterTemplate>
+                                                    <span style="width: 85%; float: left;">
+                                                        <asp:TextBox ID="txtVacationDays" ValidationGroup="CompensationUpdate" runat="server"
+                                                            Width="80%" Text="0"></asp:TextBox>
+                                                    </span><span style="width: 15%;vertical-align:middle"">
+                                                        <asp:CompareValidator ID="compVacationDays" runat="server" ControlToValidate="txtVacationDays"
+                                                            ValidationGroup="CompensationUpdate" Display="Dynamic" EnableClientScript="False"
+                                                            ErrorMessage="The Vacation Days must be an integer number." Operator="DataTypeCheck"
+                                                            ToolTip="The Vacation Days must be an integer number." Type="Integer">*</asp:CompareValidator>
+                                                        <asp:RequiredFieldValidator ID="rfvVacationDays" runat="server" ControlToValidate="txtVacationDays"
+                                                            ValidationGroup="CompensationUpdate" Text="*" EnableClientScript="false" Display="Dynamic"
+                                                            ErrorMessage="Vacation days is required" ToolTip="Vacation days is required"></asp:RequiredFieldValidator>
+                                                    </span>
+                                                </FooterTemplate>
+                                                <ItemStyle Width="6%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <FooterStyle Width="6%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
                                             </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Sales Commission %">
+                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         Sales Commission %</div>
                                                 </HeaderTemplate>
-                                                <ItemStyle HorizontalAlign="Center" />
                                                 <ItemTemplate>
                                                     <asp:Label ID="lblSalesCommFraction" runat="server" Text='<%# ((decimal?)Eval("SalesCommissionFractionOfMargin")).HasValue ? 
                                                     ((decimal?)Eval("SalesCommissionFractionOfMargin")).Value.ToString() : string.Empty %>'></asp:Label>
                                                 </ItemTemplate>
+                                                <EditItemTemplate>
+                                                    <asp:TextBox ID="txtSalesCommission" ValidationGroup="CompensationUpdate" runat="server"
+                                                        Width="80%"></asp:TextBox>
+                                                    <asp:CustomValidator ID="custValSalesCommission" runat="server" Display="Dynamic"
+                                                        ValidationGroup="CompensationUpdate" Text="*" OnServerValidate="custValSalesCommission_OnServerValidate">
+                                                    </asp:CustomValidator>
+                                                </EditItemTemplate>
+                                                <FooterTemplate>
+                                                    <asp:TextBox ID="txtSalesCommission" ValidationGroup="CompensationUpdate" runat="server"
+                                                        Width="80%"></asp:TextBox>
+                                                    <asp:CustomValidator ID="custValSalesCommission" runat="server" Display="Dynamic"
+                                                        ValidationGroup="CompensationUpdate" Text="*" OnServerValidate="custValSalesCommission_OnServerValidate">
+                                                    </asp:CustomValidator>
+                                                </FooterTemplate>
+                                                <ItemStyle Width="5%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <FooterStyle Width="5%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+                                                <HeaderTemplate>
+                                                    <div class="ie-bg">
+                                                    </div>
+                                                </HeaderTemplate>
+                                                <ItemTemplate>
+                                                    <asp:ImageButton ID="imgCompensationDelete" runat="server" AlternateText="Delete"
+                                                        EndDate='<%# ((DateTime?)Eval("EndDate")).HasValue ? ((DateTime?)Eval("EndDate")).Value.ToString("MM/dd/yyyy") : string.Empty %>'
+                                                        StartDate='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>' ImageUrl="~/Images/cross_icon.png"
+                                                        OnClick="imgCompensationDelete_OnClick" />
+                                                    <ajaxToolkit:ConfirmButtonExtender ID="ConfirmButtonExtender1" ConfirmText="Are you sure you want to delete this Compensation?"
+                                                        runat="server" TargetControlID="imgCompensationDelete">
+                                                    </ajaxToolkit:ConfirmButtonExtender>
+                                                    <asp:CustomValidator ID="cvDeleteCompensation" runat="server" Text="*" ErrorMessage="The Person is active during this compensation period."
+                                                        ToolTip="The Person is active during this compensation period." ValidationGroup="CompensationDelete"></asp:CustomValidator>
+                                                </ItemTemplate>
+                                                <EditItemTemplate>
+                                                </EditItemTemplate>
+                                                <ItemStyle Width="3%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <FooterStyle Width="3%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
                                             </asp:TemplateField>
                                         </Columns>
                                     </asp:GridView>
@@ -1196,6 +1465,12 @@
                             ValidationGroup="Person" />
                         <asp:ValidationSummary ID="valsManager" runat="server" EnableClientScript="false"
                             ValidationGroup="ActiveManagers" />
+                        <asp:ValidationSummary ID="valSumCompensationDelete" runat="server" EnableClientScript="false"
+                            ValidationGroup="CompensationDelete" />
+                        <asp:ValidationSummary ID="valSumCompensation" runat="server" EnableClientScript="false"
+                            ValidationGroup="CompensationUpdate" />
+                        <uc:MessageLabel ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green"
+                            WarningColor="Orange" />
                     </td>
                 </tr>
                 <tr>
