@@ -49,15 +49,6 @@ namespace PraticeManagement.Sandbox {
         protected global::System.Web.UI.WebControls.Image btnExpandCollapseFilter;
         
         /// <summary>
-        /// lblCount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblCount;
-        
-        /// <summary>
         /// diRange control.
         /// </summary>
         /// <remarks>
@@ -290,15 +281,6 @@ namespace PraticeManagement.Sandbox {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.CalendarLegend CalendarLegend;
-        
-        /// <summary>
-        /// repPersons control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater repPersons;
         
         /// <summary>
         /// hdnGuid control.
