@@ -559,6 +559,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<ConsultantDemandItem> GetConsultantswithDemand(DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        bool IsPersonHaveActiveStatusDuringThisPeriod(int personId, DateTime startDate,DateTime? endDate);
     }
 }
 
