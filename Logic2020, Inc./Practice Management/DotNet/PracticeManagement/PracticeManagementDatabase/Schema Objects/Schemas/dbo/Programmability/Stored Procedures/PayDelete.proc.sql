@@ -35,4 +35,10 @@ BEGIN
 			WHERE EndDate = @StartDate AND Person = @PersonId
 		END
 	END
+	ELSE IF EXISTS(SELECT 1 FROM dbo.Person WHERE PersonId = @PersonId AND IsStrawman =0 )
+	BEGIN
+	        DELETE FROM dbo.Pay
+			WHERE Person = @PersonId AND StartDate = @StartDate
+	END
 END
+
