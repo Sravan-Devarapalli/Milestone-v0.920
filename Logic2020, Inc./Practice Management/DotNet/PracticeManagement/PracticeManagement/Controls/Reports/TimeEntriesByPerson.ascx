@@ -18,7 +18,7 @@
                         <table class="time-entry-person-projects WholeWidth">
                             <thead>
                                 <tr>
-                                    <th valign="middle" colspan="2" style="text-align: left">
+                                    <th valign="middle" colspan="2" class="ClientProjectTimeType">
                                         Client-Project-Time Type
                                     </th>
                                     <asp:Repeater ID="dlProject" runat="server" OnItemCreated="dlProject_OnItemCreated"
@@ -38,7 +38,7 @@
                     </HeaderTemplate>
                     <ItemTemplate>
                         <tr class="<%# Container.ItemIndex % 2 == 0 ? "alterrow" : string.Empty %>">
-                            <td valign="middle" colspan="2" style="text-align: left">
+                            <td valign="middle" colspan="2" class="ClientProjectTimeType">
                                 <%# DataBinder.Eval(Container.DataItem, "Key")%>
                             </td>
                             <asp:Repeater ID="dlProject" runat="server" DataSource='<%# GetUpdatedDatasource(DataBinder.Eval(Container.DataItem, "Value")) %>'
@@ -49,25 +49,25 @@
                                     </td>
                                 </ItemTemplate>
                             </asp:Repeater>
-                            <td valign="middle" style="font-weight: bold">
+                            <td valign="middle" style="font-weight: bold;">
                                 <%# ProjectTotals.ToString(PraticeManagement.Constants.Formatting.DoubleFormat) %>
                             </td>
                         </tr>
                     </ItemTemplate>
                     <FooterTemplate>
                         <tr>
-                            <td colspan="2" style="text-align: left">
+                            <td colspan="2" class="ClientProjectTimeType HeaderDiv">
                                 Totals
                             </td>
                             <asp:Repeater ID="dlTotals" runat="server" OnItemDataBound="dlTotals_OnItemDataBound"
                                 EnableViewState="false" OnInit="dlTotals_OnInit">
                                 <ItemTemplate>
-                                    <td>
+                                    <td class="HeaderDiv">
                                         <%# ((double?)DataBinder.Eval(Container.DataItem, "Value"))!=null ?string.Format("{0:F2}",((double?)DataBinder.Eval(Container.DataItem, "Value")).Value) : string.Empty %>
                                     </td>
                                 </ItemTemplate>
                             </asp:Repeater>
-                            <td style="font-size: 15px;">
+                            <td class="HeaderDiv" style="font-size: 15px;">
                                 <%# GrandTotal.ToString(PraticeManagement.Constants.Formatting.DoubleFormat) %>
                             </td>
                         </tr>
