@@ -31,7 +31,7 @@ namespace PraticeManagement
         private const string ProjectIdFormat = "projectId={0}";
         private const string ProjectKey = "Project";
         private const string ProjectAttachmentHandlerUrl = "~/Controls/Projects/ProjectAttachmentHandler.ashx?ProjectId={0}&FileName={1}&AttachmentId={2}";
-        private const string AttachSOWMessage = "File must be in PDF format and no larger than {0}kb";
+        private const string AttachSOWMessage = "File must be in PDF/DOC/DOCX format and no larger than {0}kb";
         private const string AttachmentFileSize = "AttachmentFileSize";
         private const string ProjectAttachmentsKey = "ProjectAttachmentsKey";
         #endregion
@@ -704,8 +704,8 @@ namespace PraticeManagement
             args.IsValid = true;
             if (fuProjectAttachment.HasFile)
             {
-                string extension = System.IO.Path.GetExtension(fuProjectAttachment.FileName);
-                if (!(extension.ToLowerInvariant() == ".pdf"))
+                string extension = System.IO.Path.GetExtension(fuProjectAttachment.FileName).ToLowerInvariant();
+                if (!(extension == ".pdf" || extension == ".doc" || extension == ".docx"))
                 {
                     args.IsValid = false;
                 }
@@ -717,8 +717,8 @@ namespace PraticeManagement
             args.IsValid = true;
             if (fuProjectAttachment.HasFile)
             {
-                string extension = System.IO.Path.GetExtension(fuProjectAttachment.FileName);
-                if (extension.ToLowerInvariant() == ".pdf")
+                string extension = System.IO.Path.GetExtension(fuProjectAttachment.FileName).ToLowerInvariant();
+                if (!(extension == ".pdf" || extension == ".doc" || extension == ".docx"))
                 {
                     int size = Convert.ToInt32(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Project, AttachmentFileSize));
 
