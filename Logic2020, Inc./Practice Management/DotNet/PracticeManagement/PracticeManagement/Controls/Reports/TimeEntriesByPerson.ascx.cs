@@ -250,7 +250,7 @@ namespace PraticeManagement.Controls.Reports
             {
                 var divProjects = e.Item.FindControl("divProjects") as System.Web.UI.HtmlControls.HtmlGenericControl;
                 var divTeTable = e.Item.FindControl("divTeTable") as System.Web.UI.HtmlControls.HtmlGenericControl;
-                var lblnoDataMesssage = e.Item.FindControl("lblnoDataMesssage") as Label;
+                var lblnoDataMesssage = e.Item.FindControl("lblnoDataMesssage") as Literal;
                 lblnoDataMesssage.Visible = true;
                 divProjects.Visible = false;
                 divTeTable.Visible = false;
