@@ -43,6 +43,13 @@ BEGIN
                 @DefaultMpId = @DefaultMilestoneId,
                 @NewMilestonePersonId = @MilestonePersonId OUTPUT
 
+	IF @PersonId = 0
+	BEGIN
+		SELECT @PersonId = MP.PersonId
+		FROM TimeEntries TE
+		JOIN MilestonePerson MP ON TE.MilestonePersonId = MP.MilestonePersonId AND TE.TimeEntryId = @TimeEntryId
+	END
+
 	IF EXISTS(SELECT 1 FROM dbo.MilestonePerson MP
 				JOIN MilestonePersonEntry MPE
 				ON MPE.MilestonePersonId = MP.MilestonePersonId AND @MilestoneDate BETWEEN MPE.StartDate AND MPE.EndDate
@@ -74,7 +81,7 @@ BEGIN
 				  ,[ForecastedHours] = @ForecastedHours
 				  ,[TimeTypeId] = @TimeTypeId
 				  ,[ModifiedBy] = @ModifiedBy
-				  ,[Note] = @Note
+				  ,[Note] = CASE WHEN @TimeTypeId = @PTOTimeTypeId THEN 'PTO' ELSE @Note END
 				  ,[IsChargeable] = @IsChargeable
 				  ,[MilestoneDate] = @MilestoneDate
 				  ,[IsReviewed] = case when @OldIsReviewed = 0 and @IsReviewed = 0 then NULL else @IsReviewed end
@@ -109,8 +116,8 @@ BEGIN
 									FROM dbo.PersonCalendar
 									WHERE PersonId = @PersonId AND Date = @MilestoneDate)
 					BEGIN
-						INSERT INTO dbo.PersonCalendar (Date, PersonId, DayOff, ActualHours, IsFloatingHoliday)
-						VALUES (@MilestoneDate, @PersonId, 1, @ActualHours, 0)
+						INSERT INTO dbo.PersonCalendar (Date, PersonId, DayOff, ActualHours, IsFloatingHoliday, IsFromTimeEntry)
+						VALUES (@MilestoneDate, @PersonId, 1, @ActualHours, 0, 1)
 					END
 					ELSE
 					BEGIN
@@ -120,7 +127,8 @@ BEGIN
 						UPDATE PC
 						SET PC.DayOff = 1,
 							PC.ActualHours = @ActualHours,
-							PC.IsFloatingHoliday = 0
+							PC.IsFloatingHoliday = 0,
+							PC.IsFromTimeEntry = 1
 						FROM PersonCalendar PC
 						WHERE PC.PersonId = @PersonId AND PC.Date = @MilestoneDate
 					END
@@ -145,7 +153,8 @@ BEGIN
 				ELSE IF @PreviousTimeTypeId = @TimeTypeId AND @PreviousActualHours <> @ActualHours
 				BEGIN
 					UPDATE PC
-					SET PC.ActualHours = @ActualHours
+					SET PC.ActualHours = @ActualHours,
+						PC.IsFromTimeEntry = 1
 					FROM PersonCalendar PC
 					WHERE PC.PersonId = @PersonId AND PC.Date = @MilestoneDate
 				END
