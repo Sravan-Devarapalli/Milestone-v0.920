@@ -176,6 +176,11 @@
             width: 100%;
             color: #888888;
         }
+        .ClientProjectTimeType
+        {
+            text-align: left !important;
+            width: 20%;
+        }
     </style>
     <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server">
         <ContentTemplate>
