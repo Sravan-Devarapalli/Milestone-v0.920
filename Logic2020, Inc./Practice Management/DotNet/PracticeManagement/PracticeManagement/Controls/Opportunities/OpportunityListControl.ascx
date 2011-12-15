@@ -91,7 +91,7 @@
     }
 
     function ShowTeamStructureModal(image) {
-        
+
         clearErrorMessages();
         image_icon1 = image;
 
@@ -107,7 +107,7 @@
         var optionList = ddlPriority.getElementsByTagName('option');
 
         var selectedText = "";
-        
+
         for (var i = 0; i < optionList.length; ++i) {
             if (optionList[i].value == ddlPriority.value) {
                 selectedText = optionList[i].innerHTML.toLowerCase();
@@ -582,7 +582,7 @@
 
     function clearErrorMessagesForTeamResources() {
         document.getElementById('divTeamResources').style.display = "none";
-     }
+    }
 
 
     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
@@ -686,16 +686,106 @@
         item.offset({ top: ytop, left: xleft });
     }
 
-    function ddlPriorityList_onchange(ddlPriority) {
+    /* Start: Attach to project logic*/
 
+    function addOptionsToDropDownList(ddlProjects, projectsJsonstring) {
+
+        var projectsJson = jQuery.parseJSON(projectsJsonstring);
+        $.each(projectsJson, function (key, value) {
+            var ddlOption = document.createElement("option");
+            ddlOption.text = value;
+            ddlOption.value = key;
+            ddlProjects.add(ddlOption);
+        });
+
+        $find('mpePopupAttachToProject').show();
+    }
+
+    function getvalueinDropDownForGivenText(dropdown, dropdowntext) {
+        var dropdownvalue = "";
+
+        var optionList = dropdown.getElementsByTagName('option');
+
+        for (var i = 0; i < optionList.length; ++i) {
+            if (optionList[i].innerHTML.toLowerCase() == dropdowntext) {
+                dropdownvalue = optionList[i].value;
+                break;
+            }
+        }
+        return dropdownvalue;
+    }
+
+    function ddlProjects_change(ddlProjects) {
+        var btnAttach = document.getElementById('<%= btnAttach.ClientID %>');
+        if (ddlProjects.value == -1) {
+            btnAttach.setAttribute('disabled', 'disabled');
+        }
+        else {
+            btnAttach.removeAttribute('disabled');
+        }
+    }
+
+    function btnAttach_onclick() {
+
+        var ddlProjects = document.getElementById('<%= ddlProjects.ClientID %>');
+        var projectId = ddlProjects.value;
+
+        if (projectId == -1) {
+            return false;
+        }
+
+        var ddlPriorityClientId = ddlProjects.attributes["ddlPriorityClientId"].value;
+        var ddlPriority = document.getElementById(ddlPriorityClientId);
+        var opportunityID = ddlPriority.attributes["OpportunityID"].value;
+
+        var priorityId = getvalueinDropDownForGivenText(ddlPriority, 'po');
+      
+        if (opportunityID != null && opportunityID != 'undefined' && projectId != null && projectId != 'undefined' && priorityId != null && priorityId != 'undefined') {
+            var urlVal = "AttachProjectToOpportunityHandler.ashx?opportunityID=" + opportunityID + "&projectId=" + projectId + "&priorityId=" + priorityId;
+            $.post(urlVal, function (dat) {
+
+                ddlPriority.value = priorityId;
+                ddlPriority.attributes["isLinkedToProject"].value = "1";
+
+                //To Show "Please refresh message" for that opportunity
+                var lblRefreshMessageClientId = ddlPriority.attributes["lblRefreshMessageClientId"].value;
+                if (lblRefreshMessageClientId != "") {
+                    var lblRefreshMessage = document.getElementById(lblRefreshMessageClientId);
+                    lblRefreshMessage.style.display = 'block';
+                    Array.add(refreshOpportunityIdsFromLastRefresh, opportunityID);
+                }
+            });
+        }
+        $find('mpePopupAttachToProject').hide();
+        return false;
+    }
+
+
+
+    function btnCancleAttachToProject_OnClientClick() {
+        //To reset the ddlPriority value
+        var ddlProjects = document.getElementById('<%= ddlProjects.ClientID %>');
+        var ddlPriorityClientId = ddlProjects.attributes["ddlPriorityClientId"].value;
+        var ddlPriority = document.getElementById(ddlPriorityClientId);
+        ddlPriority.value = ddlPriority.attributes["selectedPriorityId"].value;
+
+        ddlProjects.value = "-1";
+        //To disable the attach button
+        ddlProjects_change(ddlProjects);
+
+        $find('mpePopupAttachToProject').hide();
+        return false;
+    }
+
+    function btnCancelTeamstructueMessagePopup_OnClientClick() {
+        $find('mpePopup').hide();
+        return false;
+    }
+
+    function ddlPriorityList_onchange(ddlPriority) {
         var optionList = ddlPriority.getElementsByTagName('option');
 
         var selectedText = "";
-
-        var showPopup = false;
-        var endDateRequiredPopup = false;
-        var linkedToProjectPopup = false;
-        var startDateRequiredPopup = false;
 
         for (var i = 0; i < optionList.length; ++i) {
             if (optionList[i].value == ddlPriority.value) {
@@ -704,69 +794,82 @@
             }
         }
 
-        if (selectedText == "po" || selectedText == "a" || selectedText == "b") {
-            if (ddlPriority.attributes["isTeamstructueAvalilable"].value.toLowerCase() != "true") {
-                showPopup = true;
-            }
+        var opportunityID = ddlPriority.attributes["OpportunityID"].value;
 
+        if (!(selectedText == "po" || selectedText == "a" || selectedText == "b")) {
+            changeOpportunityStatus(opportunityID, ddlPriority);
+            return true;
         }
 
-        if (selectedText == "po") {
-            if (ddlPriority.attributes["isLinkedToProject"].value == "0") {
-                linkedToProjectPopup = true;
-            }
+        var havingTeamStructure = false;
+        var isProjectLinked = false;
+
+        if (ddlPriority.attributes["isTeamstructueAvalilable"].value.toLowerCase() == "true") {
+            havingTeamStructure = true;
         }
 
-        if (ddlPriority.attributes["isStartDateAvailable"].value == "0") {
-            startDateRequiredPopup = true;
+        if (ddlPriority.attributes["isLinkedToProject"].value == "1") {
+            isProjectLinked = true;
         }
 
-        if (ddlPriority.attributes["isEndDateAvailable"].value == "0") {
-            endDateRequiredPopup = true;
-        }
+        if (!havingTeamStructure) {
 
-
-        if (showPopup == true || endDateRequiredPopup == true || linkedToProjectPopup == true) {
-            var hdnRedirectOpportunityId = document.getElementById('<%= hdnRedirectOpportunityId.ClientID %>');
-            var oppId = ddlPriority.attributes["OpportunityID"].value;
-            hdnRedirectOpportunityId.value = oppId;
-            ddlPriority.value = ddlPriority.attributes["selectedPriorityId"].value;
+            // Show error message saying that team structure not defined.
             var lblOpportunityName = document.getElementById('<%= lblOpportunityName.ClientID %>');
             var lblOpportunityName1 = document.getElementById('<%= lblOpportunityName1.ClientID %>');
-            lblOpportunityName1.innerHTML = lblOpportunityName.innerHTML = ddlPriority.attributes["OpportunityName"].value
+            lblOpportunityName1.innerHTML = lblOpportunityName.innerHTML = ddlPriority.attributes["OpportunityName"].value;
 
-            var trStartDateRequied = document.getElementById('startDateRequired');
-            if (trStartDateRequied != null) {
-                trStartDateRequied.style.display = (startDateRequiredPopup == false) ? 'none' : '';
-            }
+            ddlPriority.value = ddlPriority.attributes["selectedPriorityId"].value;
 
-            var trEndDateRequired = document.getElementById('endDateRequired');
-            if (trEndDateRequired != null) {
-                trEndDateRequired.style.display = (endDateRequiredPopup == false) ? 'none' : '';
-            }
+            $find('mpePopup').show();
 
-            var trTeamMakeupRequired = document.getElementById('teamMakeUpRequired');
-            if (trTeamMakeupRequired != null) {
-                trTeamMakeupRequired.style.display = (showPopup == false) ? 'none' : '';
-            }
-
-            var linkedToProject = document.getElementById('linkedToProject');
-            if (linkedToProject != null) {
-                linkedToProject.style.display = (linkedToProjectPopup == false) ? 'none' : '';
-            }
-
-            $find('mpePriorityPopup').show();
-
-
+            return false;
         }
-        else {
-            var urlVal = "OpportunityPriorityHandler.ashx?OpportunityID=" + ddlPriority.attributes["OpportunityID"].value + "&PriorityID=" + ddlPriority.value;
-            $.post(urlVal, function (dat) {
-            });
 
-            ddlPriority.attributes["selectedPriorityId"].value = ddlPriority.value;
+        if (selectedText != "po") {
+            changeOpportunityStatus(opportunityID, ddlPriority);
+            return true;
         }
+
+        if (isProjectLinked) {
+            changeOpportunityStatus(opportunityID, ddlPriority);
+            return true;
+        }
+
+        // now we need to show attach to project window.
+        showAttachToProjectWindow(ddlPriority);
     }
+
+    function GetClientProjects(clientId, ddlProjects) {
+        var urlVal = "AttachProjectToOpportunityHandler.ashx?clientId=" + clientId + "&getClientProjects=true";
+        $.post(urlVal, function (data) {
+            addOptionsToDropDownList(ddlProjects, data);
+        });
+    }
+
+    function showAttachToProjectWindow(ddlPriority) {
+
+        var ddlProjects = document.getElementById('<%=ddlProjects.ClientID %>');
+
+        ddlProjects.setAttribute("ddlPriorityClientId", ddlPriority.getAttribute("id"));
+        var clientId = ddlPriority.attributes["ClientId"].value;
+
+        //To show OpportunityName in the popup window
+        var lblOpportunityName2 = document.getElementById('<%= lblOpportunityName2.ClientID %>');
+        lblOpportunityName2.innerHTML = ddlPriority.attributes["OpportunityName"].value;
+
+        GetClientProjects(clientId, ddlProjects);
+    }
+
+    function changeOpportunityStatus(OpportunityID, ddlPriority) {
+        var urlVal = "OpportunityPriorityHandler.ashx?OpportunityID=" + OpportunityID + "&PriorityID=" + ddlPriority.value;
+        $.post(urlVal, function (dat) {
+        });
+        ddlPriority.attributes["selectedPriorityId"].value = ddlPriority.value;
+
+    }
+
+    /* End: Attach to project logic*/
 
     function SetTooltipText(descriptionText, hlinkObj) {
         var hlinkObjct = $('#' + hlinkObj.id);
@@ -1013,7 +1116,7 @@
                         </td>
                         <td align="center">
                             <div class="cell-pad">
-                                <asp:DropDownList ID="ddlPriorityList" onchange="ddlPriorityList_onchange(this);"
+                                <asp:DropDownList ID="ddlPriorityList" onchange="return ddlPriorityList_onchange(this);"
                                     runat="server">
                                 </asp:DropDownList>
                             </div>
@@ -1106,7 +1209,7 @@
                         </td>
                         <td align="center">
                             <div class="cell-pad">
-                                <asp:DropDownList ID="ddlPriorityList" onchange="ddlPriorityList_onchange(this);"
+                                <asp:DropDownList ID="ddlPriorityList" onchange="return ddlPriorityList_onchange(this);"
                                     runat="server">
                                 </asp:DropDownList>
                             </div>
@@ -1120,7 +1223,7 @@
                             <div class="cell-pad">
                                 <asp:Label ID="lblClientName" runat="server" Text='<%# GetWrappedText( ((Opportunity) Container.DataItem).ClientAndGroup, 17) %>' /></div>
                         </td>
-                        <td  class="WordWrap">
+                        <td class="WordWrap">
                             <div class="cell-pad">
                                 <asp:Label ID="lblBuyerName" runat="server" Text='<%# GetWrappedText( HttpUtility.HtmlEncode((string)Eval("BuyerName")), 15)%>' /></div>
                         </td>
@@ -1201,17 +1304,17 @@
         <asp:HiddenField ID="hdnClickedRowIndex" runat="server" />
         <asp:HiddenField ID="hdnCanShowPopup" Value="false" runat="server" />
         <AjaxControlToolkit:ModalPopupExtender ID="mpePopup" runat="server" TargetControlID="hdnCanShowPopup"
-            CancelControlID="btnCancelSaving" BehaviorID="mpePriorityPopup" BackgroundCssClass="modalBackground"
-            PopupControlID="pnlPopup" DropShadow="false" />
-        <asp:Panel ID="pnlPopup" runat="server" BackColor="White" BorderColor="Black" CssClass="ConfirmBoxClassError"
-            Style="display: none" BorderWidth="2px">
+            CancelControlID="btnCancelTeamstructueMessagePopup" BehaviorID="mpePopup" BackgroundCssClass="modalBackground"
+            PopupControlID="pnlTeamStructueMessagePopup" DropShadow="false" />
+        <asp:Panel ID="pnlTeamStructueMessagePopup" runat="server" BackColor="White" BorderColor="Black"
+            CssClass="ConfirmBoxClassError" Style="display: none" BorderWidth="2px">
             <table width="100%">
                 <tr>
                     <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
                         valign="bottom">
                         <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
                         <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Cancel"
-                            OnClientClick="$find('mpePriorityPopup').hide(); return false;" Style="float: right;"
+                            OnClientClick="$find('mpePopup').hide(); return false;" Style="float: right;"
                             Text="X"></asp:Button>
                     </th>
                 </tr>
@@ -1220,23 +1323,10 @@
                         <table>
                             <tr>
                                 <td>
-                                    <p id="teamMakeUpRequired">
+                                    <p>
                                         You must add a Team Make-Up to
                                         <asp:Label ID="lblOpportunityName" runat="server" Font-Bold="true"></asp:Label>
                                         opportunity before it can be saved with a PO, A, or B priority.
-                                    </p>
-                                    <p id="startDateRequired">
-                                        <br />
-                                        Projected Start date is required.
-                                    </p>
-                                    <p id="endDateRequired">
-                                        <br />
-                                        Projected End date is required.
-                                    </p>
-                                    <p id="linkedToProject">
-                                        <br />
-                                        To save an Opportunity as “PO” priority, the Opportunity must first be linked to
-                                        a Project.
                                     </p>
                                     <br />
                                     <p>
@@ -1258,10 +1348,71 @@
                                         OpportunityID="" OnClick="btnRedirectToOpportunityDetail_OnClick" />
                                 </td>
                                 <td style="padding-left: 3px;">
-                                    <asp:Button ID="btnCancelSaving" runat="server" Text="Cancel" ToolTip="Cancel" />
+                                    <asp:Button ID="btnCancelTeamstructueMessagePopup" runat="server" Text="Cancel" ToolTip="Cancel"
+                                        OnClientClick="return btnCancelTeamstructueMessagePopup_OnClientClick();" />
                                 </td>
                             </tr>
                         </table>
+                    </td>
+                </tr>
+            </table>
+        </asp:Panel>
+        <asp:HiddenField ID="hdMpePopupAttachToProject" Value="false" runat="server" />
+        <AjaxControlToolkit:ModalPopupExtender ID="mpePopupAttachToProject" runat="server"
+            TargetControlID="hdMpePopupAttachToProject" CancelControlID="btnCancleAttachToProject"
+            BehaviorID="mpePopupAttachToProject" BackgroundCssClass="modalBackground" PopupControlID="pnlAttachToProject"
+            DropShadow="false" />
+        <asp:Panel ID="pnlAttachToProject" runat="server" BackColor="White" BorderColor="Black"
+            CssClass="ConfirmBoxClass" Style="display: none" BorderWidth="2px">
+            <table width="100%">
+                <tr style="background-color: Gray; height: 27px;">
+                    <td align="center" style="white-space: nowrap; font-size: 14px; width: 100%">
+                        Attach This Opportunity to Existing Project
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px;">
+                        <table>
+                            <tr>
+                                <td>
+                                    <p>
+                                        Select a Project and Click Attach to Link
+                                        <asp:Label ID="lblOpportunityName2" runat="server" Font-Bold="true"></asp:Label>
+                                        opportunity.
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="padding: 6px 6px 2px 2px;">
+                        <asp:DropDownList ID="ddlProjects" runat="server" AppendDataBoundItems="true" onchange="setDirty(); ddlProjects_change(this);"
+                            OpportunityID="" AutoPostBack="false" Style="width: 350px">
+                        </asp:DropDownList>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="padding: 6px 6px 2px 2px; white-space: nowrap;">
+                        <asp:Button ID="btnAttach" runat="server" Text="Attach" OnClientClick="return btnAttach_onclick();"
+                            po disabled="disabled" />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <asp:Button ID="btnCancleAttachToProject" runat="server" Text="Cancel" OnClientClick="return btnCancleAttachToProject_OnClientClick();" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;
                     </td>
                 </tr>
             </table>
@@ -1322,7 +1473,7 @@
                         </table>
                         <div id="divTeamResources" style="text-align: left; display: none; color: Red; width: 356px;
                             padding: 8px 0px 10px 0px">
-                           An Opportunity with a PO, A, or B priority must have a Team Make-Up.
+                            An Opportunity with a PO, A, or B priority must have a Team Make-Up.
                         </div>
                     </td>
                 </tr>
