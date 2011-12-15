@@ -22,6 +22,9 @@ namespace PraticeManagement.Controls.TimeEntry
         private double _totalActual = 0d;
         private double _totalForecasted = 0d;
 
+        private const string PTOLoweredString = "pto";
+        private const string HolidayLoweredString = "holiday";
+
         protected void Page_Load(object sender, EventArgs e)
         {
             UserIsAdmin =
@@ -142,6 +145,8 @@ namespace PraticeManagement.Controls.TimeEntry
 
         private void UpdateGrid()
         {
+            // Resetting the grid's edit index as we are updating the rows.
+            gvTimeEntries.EditIndex = -1;
             // Resetting the grid's page index to zero as we need to update.
             gvTimeEntries.PageIndex = 0;
             gvTimeEntries.DataBind();
@@ -459,6 +464,37 @@ namespace PraticeManagement.Controls.TimeEntry
             var defaultMileStoneId = MileStoneConfigurationManager.GetMileStoneId();
             var projectId = Int32.Parse(mileStoneIdObj.ToString());
             return defaultMileStoneId.HasValue && defaultMileStoneId.Value == projectId;
+        }
+
+        public bool NeedToEnableEditButton(string selectedTimeType)
+        {
+            if (selectedTimeType.ToLower() == HolidayLoweredString)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool NeedToEnableProjectMilestoneDropDown(string selectedTimeType)
+        {
+            if (selectedTimeType.ToLower() == PTOLoweredString || selectedTimeType.ToLower() == HolidayLoweredString)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public void OnDataBound_ddlTimeTypeEdit(object sender, EventArgs e)
+        {
+            var senderObject = (DropDownList)sender;
+            if (senderObject.SelectedItem.Text.ToLower() != HolidayLoweredString)
+            {
+                senderObject.Items.Remove(senderObject.Items.FindByText("Holiday"));
+            }
+            if (senderObject.SelectedItem.Text.ToLower() != PTOLoweredString)
+            {
+                senderObject.Items.Remove(senderObject.Items.FindByText("PTO"));
+            }
         }
     }
 }
