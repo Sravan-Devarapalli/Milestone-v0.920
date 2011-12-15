@@ -484,6 +484,7 @@
     <Content Include="Controls\CompanyLogoImage.ashx" />
     <Content Include="Controls\Projects\ProjectAttachmentHandler.ashx" />
     <Content Include="OpportunityPriorityHandler.ashx" />
+    <Content Include="AttachProjectToOpportunityHandler.ashx" />
     <None Include="ckeditor\.htaccess" />
     <Content Include="Controls\Reports\TimeEntriesGetByPersonHandler.ashx" />
     <None Include="PracticeManagementStrongNameKey.snk" />
@@ -1055,6 +1056,9 @@
     </Compile>
     <Compile Include="ActivityLog_Old.aspx.designer.cs">
       <DependentUpon>ActivityLog_Old.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AttachProjectToOpportunityHandler.ashx.cs">
+      <DependentUpon>AttachProjectToOpportunityHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Calendar.ascx.cs">
       <DependentUpon>Calendar.ascx</DependentUpon>
