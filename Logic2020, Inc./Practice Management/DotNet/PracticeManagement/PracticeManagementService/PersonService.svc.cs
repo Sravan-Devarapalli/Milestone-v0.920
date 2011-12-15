@@ -1062,6 +1062,11 @@ namespace PracticeManagementService
             return PersonDAL.GetConsultantswithDemand(startDate, endDate);
         }
 
+        public bool IsPersonHaveActiveStatusDuringThisPeriod(int personId, DateTime startDate, DateTime? endDate)
+        {
+            return PersonDAL.IsPersonHaveActiveStatusDuringThisPeriod(personId, startDate, endDate);
+        }
+
         #endregion
     }
 }
