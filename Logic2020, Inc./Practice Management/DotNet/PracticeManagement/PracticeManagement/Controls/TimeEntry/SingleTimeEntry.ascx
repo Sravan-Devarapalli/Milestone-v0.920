@@ -88,11 +88,12 @@
     <asp:HiddenField ID="hfHorizontalTotalCalculatorExtender" runat="server" />
     <asp:HiddenField ID="hfSpreadSheetTotalCalculatorExtender" runat="server" />
     <asp:HiddenField ID="hdnIsNoteRequired" runat="server" />
+    <asp:HiddenField ID="hdnIsPTOTimeType" runat="server" />
     <ext:DirtyExtender ID="deActualHours" runat="server" TargetControlID="hfDirtyHours"
         HiddenActualHoursId="hdnActualHours" NoteId="tbNotes" ActualHoursId="tbActualHours"
         IsCorrectId="chbForDiffProject" HiddenNoteId="hdnNotes" HiddenIsChargeableId="hdnIsChargeable"
         HiddenIsCorrectId="hdnForDiffProject" HiddenDefaultIsChargeableIdValue="hdnDefaultIsChargeable"
         HorizontalTotalCalculatorExtenderId="hfHorizontalTotalCalculatorExtender" VerticalTotalCalculatorExtenderId="hfVerticalTotalCalculatorExtender" IsNoteRequired="hdnIsNoteRequired"
-        SpreadSheetExtenderId="hfSpreadSheetTotalCalculatorExtender" IsChargeableId="chbIsChargeable" />
+        SpreadSheetExtenderId="hfSpreadSheetTotalCalculatorExtender" IsChargeableId="chbIsChargeable" IsPTOTimeType="hdnIsPTOTimeType" />
 </asp:Panel>
 
