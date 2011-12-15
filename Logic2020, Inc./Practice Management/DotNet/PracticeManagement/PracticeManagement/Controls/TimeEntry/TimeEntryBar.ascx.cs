@@ -35,6 +35,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
         public TeGridRow RowBehind { get; set; }
         private bool isSystemTimeType { get; set; }
+        private bool isPTOTimeType { get; set; }
         public bool HasPTOTimeEntries
         {
             get
@@ -213,7 +214,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
             int ptoId = Convert.ToInt32(ddlTimeTypes.Items.FindByText("PTO").Value);//Added this as per #2904 to edit/Add row for PTO time type.
             isSystemTimeType = (RowBehind.TimeTypeBehind != null && RowBehind.TimeTypeBehind.IsSystemTimeType && RowBehind.TimeTypeBehind.Id != ptoId);
-            bool isPTOTimeType = (RowBehind.TimeTypeBehind != null && RowBehind.TimeTypeBehind.IsSystemTimeType && RowBehind.TimeTypeBehind.Id == ptoId);
+            isPTOTimeType = (RowBehind.TimeTypeBehind != null && RowBehind.TimeTypeBehind.IsSystemTimeType && RowBehind.TimeTypeBehind.Id == ptoId);
             UpdateControlStatuses();
             imgDropTes.Enabled = !(isSystemTimeType && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName));
 
@@ -289,6 +290,11 @@ namespace PraticeManagement.Controls.TimeEntry
                     ste.CanelControlStyle();
                 }
             }
+            else if (isPTOTimeType)
+            {
+                ste.IsPTOTimeType = (ddlTimeTypes.SelectedItem.Text.ToUpper() == "PTO").ToString().ToLower();
+                ste.InActiveNotes = true;
+            }
         }
 
         private void InitTimeEntryControl(SingleTimeEntry ste, TeGridCell cell)
@@ -334,6 +340,8 @@ namespace PraticeManagement.Controls.TimeEntry
                 )
             {
                 disabled = ste.Disabled = true;
+                if (ste.TimeEntryBehind != null && ste.TimeEntryBehind.IsReviewed == ReviewStatus.Approved)
+                    ste.CanelControlStyle();
             }
             if (!disabled && ste.TimeEntryBehind == null && entries.Any()
                 && entries.First().ParentMilestone.Project.Status != null)
@@ -414,6 +422,10 @@ namespace PraticeManagement.Controls.TimeEntry
                     imgNote.ImageUrl = string.IsNullOrEmpty(tbNotes.Text) ?
                         PraticeManagement.Constants.ApplicationResources.AddCommentIcon :
                         PraticeManagement.Constants.ApplicationResources.RecentCommentIcon;
+
+                    entryControl.InActiveNotes = (ddlTimeTypes.SelectedItem.Text.ToUpper() == "PTO");
+                    entryControl.IsPTOTimeType = (ddlTimeTypes.SelectedItem.Text.ToUpper() == "PTO").ToString().ToLower();
+
                     DisableInvalidDatesAndChargeability(entryControl, entryControl.DateBehind, selMpe);
 
                     if (!enableSaveAllButton &&
