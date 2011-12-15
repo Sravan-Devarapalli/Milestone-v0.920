@@ -21,6 +21,7 @@ PraticeManagement.Controls.Generic.DirtyState.DirtyBehavior = function (element)
     this._TimeTypeDropdownIdValue = null;
     this._ProjectMilestoneDropdownIdValue = null;
     this._IsNoteRequired = null;
+    this._IsPTOTimeType = null;
 
     // Add particular STE to the array if it's not there yet
     if (!Array.contains(allSingleTEs, this))
@@ -224,6 +225,12 @@ PraticeManagement.Controls.Generic.DirtyState.DirtyBehavior.prototype = {
     get_IsNoteRequired: function () {
         return this._IsNoteRequired;
     },
+    set_IsPTOTimeType: function (value) {
+        this._IsPTOTimeType = value;
+    },
+    get_IsPTOTimeType: function () {
+        return this._IsPTOTimeType;
+    },
 
 
     isValidNote: function () {
@@ -235,7 +242,10 @@ PraticeManagement.Controls.Generic.DirtyState.DirtyBehavior.prototype = {
                 return true;
             }
             else {
-                if ($get(this._IsNoteRequired).value == "true") {
+                if ($get(this._IsPTOTimeType).value == "true") {
+                    return true;
+                }
+                else if ($get(this._IsNoteRequired).value == "true") {
                     return false;
                 }
                 else {
