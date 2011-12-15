@@ -45,7 +45,7 @@ AS
 
  
 	
-	SELECT @Today = dbo.GettingPMTime(GETDATE())
+	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
 	SET @CurrentPMTime = dbo.InsertingTime()
 	SELECT @W2SalaryId = TimescaleId FROM Timescale WHERE Name = 'W2-Salary'
 	SELECT @DefaultMilestoneId = MilestoneId FROM DefaultMilestoneSetting
@@ -136,11 +136,14 @@ AS
 				AND DF.StartDate < @EndDate
 		
 		-- Auto-adjust a previous record
-		UPDATE dbo.Pay
-		   SET EndDate = @StartDate
-		 WHERE Person = @PersonId AND EndDate = @OLD_StartDate
+		DECLARE @PrevRecordEndtDate DATETIME
+
+		SELECT @PrevRecordEndtDate = MAX(EndDate) from  dbo.Pay where Person = @PersonId AND EndDate <=  @OLD_StartDate 
+
+			UPDATE dbo.Pay
+			SET EndDate = @StartDate
+			WHERE Person = @PersonId AND EndDate = @PrevRecordEndtDate AND  @PrevRecordEndtDate >= @StartDate
 		 
-	
 		UPDATE dbo.[DefaultCommission]
 		SET EndDate = @StartDate
 		WHERE PersonId = @PersonId
@@ -148,9 +151,13 @@ AS
 			   AND EndDate = @OLD_StartDate
 
 		-- Auto-adjust a next record
+		DECLARE @NextRecordStartDate DATETIME
+
+		SELECT @NextRecordStartDate = MIN(StartDate) from  dbo.Pay where Person = @PersonId AND StartDate >=  @OLD_EndDate
+		
 		UPDATE dbo.Pay
 		SET StartDate = @EndDate
-		WHERE Person = @PersonId AND StartDate = @OLD_EndDate
+		WHERE Person = @PersonId AND StartDate = @NextRecordStartDate AND @NextRecordStartDate <= @EndDate
 
 
 		UPDATE dbo.[DefaultCommission]
@@ -300,6 +307,18 @@ AS
 			SET IsActivePay = CASE WHEN StartDate <= @Today AND  EndDate > @Today
 								   THEN 1 ELSE 0 END
 			WHERE Person = @PersonId
+	END
+	--NO compersation is active we need to consider next future compersation as active and update the default practiceid and serniorityid in person table.
+	IF((SELECT COUNT(*) FROM dbo.Pay where @Today BETWEEN StartDate AND EndDate-1 and Person = @PersonId) = 0)
+	BEGIN
+		UPDATE P
+			SET P.SeniorityId = Pa.SeniorityId,
+			P.DefaultPractice = Pa.PracticeId
+			FROM dbo.Person P
+			JOIN dbo.Pay Pa
+			ON P.PersonId = Pa.Person AND 
+			pa.StartDate = (SELECT MIN(StartDate) FROM dbo.Pay where Person = @PersonId and StartDate > @Today)
+			WHERE P.PersonId = @PersonId
 	END
 	SELECT @PreviousRecordStartDate = StartDate
 	FROM dbo.Pay
