@@ -123,24 +123,24 @@
                                     <ItemStyle Width="24%" VerticalAlign="Middle" />
                                     <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
                                     <FooterTemplate>
-                                        <div class="ie-bg" style="text-align: right">
+                                        <div class="ie-bg AlignRight">
                                             <asp:Label ID="lblGvGridTotalText" runat="server" Text="Total =" Font-Bold="true"></asp:Label></div>
                                     </FooterTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField ItemStyle-CssClass="AlignCentre" FooterStyle-CssClass="AlignCentre">
                                     <HeaderTemplate>
-                                        <div style="text-align: center; font-weight: bold" class="ie-bg">
+                                        <div class="ie-bg HeaderDiv">
                                             Hours</div>
                                     </HeaderTemplate>
                                     <ItemTemplate>
-                                        <div style="text-align: center;">
+                                        <div class="TextAlignCenter">
                                             <%#((TimeEntryRecord)Container.DataItem).ActualHours.ToString(PraticeManagement.Constants.Formatting.DoubleFormat)%>
                                         </div>
                                     </ItemTemplate>
                                     <ItemStyle Width="8%" VerticalAlign="Middle" HorizontalAlign="Center" />
                                     <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
                                     <FooterTemplate>
-                                        <div class="ie-bg" style="text-align: center">
+                                        <div class="ie-bg TextAlignCenter">
                                             <asp:Label ID="lblGvGridTotal" runat="server" Font-Bold="true"></asp:Label></div>
                                     </FooterTemplate>
                                 </asp:TemplateField>
