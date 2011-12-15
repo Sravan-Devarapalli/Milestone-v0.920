@@ -1268,6 +1268,26 @@ namespace DataAccess
             }
         }
 
+        public static void AttachProjectToOpportunity(int opportunityId, int projectId, int priorityId, string userName)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.AttachProjectToOpportunity, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityIdParam, opportunityId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PriorityIdParam, priorityId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam,
+                                              !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+        
+
         public static List<Opportunity> FilteredOpportunityListAll(bool showActive, bool showExperimental, bool showInactive, bool showLost, bool showWon, string clientIdsList, string opportunityGroupIdsList, string opportunityOwnerIdsList, string salespersonIdsList)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
