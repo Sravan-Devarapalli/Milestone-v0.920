@@ -638,7 +638,72 @@
                 }
             }
         }
-         
+
+        /* Start: Attach to project logic*/
+        function ddlPriority_OnSelectedIndexChanged(ddlPriority) {
+            EnableSaveButton(); 
+            setDirty();
+            var optionList = ddlPriority.getElementsByTagName('option');
+            var selectedText = "";
+
+            for (var i = 0; i < optionList.length; ++i) {
+                if (optionList[i].value == ddlPriority.value) {
+                    selectedText = optionList[i].innerHTML.toLowerCase();
+                    break;
+                }
+            }
+            if (selectedText != "po") {
+                ddlPriority.setAttribute("selectedPriorityText", selectedText);
+            }
+            else {
+                var btnAttachToProject = document.getElementById("<%= btnAttachToProject.ClientID%>");
+             
+                //Raise btnAttachToProject_Click event
+                btnAttachToProject.click();
+            }
+            return false;
+        }
+
+        function btnCancel_click() {
+
+            var ddlPriority = document.getElementById("<%= ddlPriority.ClientID%>");
+            var ddlProjects = document.getElementById("<%= ddlProjects.ClientID%>");
+            ddlProjects.value = "";
+            var selectedPriorityText = ddlPriority.getAttribute("selectedPriorityText").toLowerCase();
+            var optionList = ddlPriority.getElementsByTagName('option');
+            var selectedText = "";
+            var selectedPriorityId = "";
+            //PervTextValue
+            for (var i = 0; i < optionList.length; ++i) {
+                if (optionList[i].value == ddlPriority.value) {
+                    selectedText = optionList[i].innerHTML.toLowerCase();
+                    break;
+                }
+            }
+            if (selectedText == "po") {
+                for (var i = 0; i < optionList.length; ++i) {
+                    if (optionList[i].innerHTML.toLowerCase() == selectedPriorityText) {
+                        PervValue = optionList[i].value;
+                        break;
+                    }
+                }
+                ddlPriority.value = PervValue;
+            }
+            return false;
+        }
+
+        function ddlProjects_change(ddlProjects) {
+            var btnAttach = document.getElementById('<%= btnAttach.ClientID %>');
+            if (ddlProjects.value == "") {
+                btnAttach.setAttribute('disabled', 'disabled');
+            }
+            else {
+                btnAttach.removeAttribute('disabled');
+            }
+        }
+
+        /* End: Attach to project logic*/
+
     </script>
     <table class="CompPerfTable WholeWidth">
         <tr>
@@ -846,7 +911,7 @@
                                         <tr>
                                             <td style="width: 97%">
                                                 <asp:DropDownList ID="ddlPriority" runat="server" Width="100%" CssClass="WholeWidth"
-                                                    onchange="EnableSaveButton();setDirty();">
+                                                    onchange="return ddlPriority_OnSelectedIndexChanged(this);  " >
                                                 </asp:DropDownList>
                                             </td>
                                             <td style="width: 3%">
@@ -856,11 +921,6 @@
                                                 <asp:CustomValidator ID="cvPriority" runat="server" ControlToValidate="ddlPriority"
                                                     ToolTip="You must add a Team Make-Up to this opportunity before it can be saved with a PO, A, or B priority." Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                                     OnServerValidate="cvPriority_ServerValidate" ValidationGroup="Opportunity" />
-                                                <asp:CustomValidator ID="cvLinkedToProject" runat="server" ControlToValidate="ddlPriority"
-                                                    ErrorMessage="To save an Opportunity as “PO” priority, the Opportunity must first be linked to a Project."
-                                                    ToolTip="To save an Opportunity as “PO” priority, the Opportunity must first be linked to a Project."
-                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                                    OnServerValidate="cvLinkedToProject_ServerValidate" ValidationGroup="Opportunity" />
                                             </td>
                                         </tr>
                                     </table>
@@ -1484,13 +1544,28 @@
                         </td>
                     </tr>
                     <tr>
+                        <td style="padding: 10px;">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <p>
+                                            Select a Project and Click Attach to Link
+                                            <asp:Label ID="lblOpportunityName" runat="server" Font-Bold="true"></asp:Label>
+                                            opportunity.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>
                             &nbsp;
                         </td>
                     </tr>
                     <tr>
                         <td align="center" style="padding: 6px 6px 2px 2px;">
-                            <asp:DropDownList ID="ddlProjects" runat="server" AppendDataBoundItems="true" onchange="setDirty();"
+                            <asp:DropDownList ID="ddlProjects" runat="server" AppendDataBoundItems="true" onchange="setDirty();ddlProjects_change(this);"
                                 AutoPostBack="false" Style="width: 350px">
                             </asp:DropDownList>
                         </td>
@@ -1502,9 +1577,9 @@
                     </tr>
                     <tr>
                         <td align="center" style="padding: 6px 6px 2px 2px; white-space: nowrap;">
-                            <asp:Button ID="btnAttach" runat="server" Text="Attach" OnClick="btnSave_Click" />
+                            <asp:Button ID="btnAttach" runat="server" Text="Attach" OnClick="btnSave_Click" disabled="disabled" />
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <asp:Button ID="btnCancel" runat="server" Text="Cancel" />
+                            <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClientClick="return btnCancel_click()" />
                         </td>
                     </tr>
                     <tr>
