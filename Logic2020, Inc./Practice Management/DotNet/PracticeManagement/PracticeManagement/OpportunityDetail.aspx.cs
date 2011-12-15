@@ -683,6 +683,7 @@ namespace PraticeManagement
                 ClearDirty();
                 if (IsPostBack && Page.IsValid)
                 {
+                    ViewState.Remove(OPPORTUNITY_KEY);
                     LoadOpportunityDetails();
                 }
             }
@@ -717,6 +718,7 @@ namespace PraticeManagement
             txtDescription.Text = string.Empty;
             txtEstRevenue.Text = string.Empty;
             txtOpportunityName.Text = string.Empty;
+            lblOpportunityName.Text = string.Empty;
             ddlClient.SelectedIndex = 0;
             ddlClientGroup.SelectedIndex = 0;
             ddlPractice.SelectedIndex = 0;
@@ -725,6 +727,7 @@ namespace PraticeManagement
             ddlStatus.SelectedIndex = 0;
             dpStartDate.TextValue = string.Empty;
             dpEndDate.TextValue = string.Empty;
+            ddlPriority.Attributes["selectedPriorityText"] = ddlPriority.SelectedItem.Text;
             //ucProposedResources.ResetProposedResources();
             //ucProposedResources.FillPotentialResources();
             //upProposedResources.Update();
@@ -802,7 +805,12 @@ namespace PraticeManagement
             {
                 var opportunity = new Opportunity();
                 PopulateData(opportunity);
-
+                string poPriorityID = ((ListItem)ddlPriority.Items.FindByText("PO")).Value;
+                if (opportunity.Priority.Id.ToString() == poPriorityID && opportunity.Project == null)
+                {
+                    mpeAttachToProject.Show();
+                    return false;
+                }
                 using (var serviceClient = new OpportunityServiceClient())
                 {
                     try
@@ -931,6 +939,7 @@ namespace PraticeManagement
         {
             txtEstRevenue.Text = opportunity.EstimatedRevenue != null ? opportunity.EstimatedRevenue.Value.ToString("###,###,###,###,##0") : string.Empty;
             txtOpportunityName.Text = opportunity.Name;
+            lblOpportunityName.Text = opportunity.Name;
             lblOpportunityNumber.Text = opportunity.OpportunityNumber;
             if (opportunity.Project != null)
             {
@@ -969,6 +978,7 @@ namespace PraticeManagement
                 ddlPriority.Items.IndexOf(
                 ddlPriority.Items.FindByValue(opportunity.Priority == null ? "0" : opportunity.Priority.Id.ToString()));
 
+            ddlPriority.Attributes["selectedPriorityText"] = ddlPriority.SelectedItem.Text;
             //if (!string.IsNullOrEmpty(opportunity.OutSideResources))
             //{
             //    if (opportunity.OutSideResources[opportunity.OutSideResources.Length - 1] == ';')
@@ -1307,26 +1317,6 @@ namespace PraticeManagement
                 if (ProposedPersons.Count() < 1 && StrawMans.Count() < 1)
                 {
                     mpePopup.Show();
-                    e.IsValid = false;
-                }
-            }
-        }
-
-        protected void cvLinkedToProject_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            e.IsValid = true;
-            var selectedText = ddlPriority.SelectedItem.Text.ToUpperInvariant();
-            if (selectedText == "PO")
-            {
-                if (Opportunity != null)
-                {
-                    if (Opportunity.Project == null || !Opportunity.Project.Id.HasValue)
-                    {
-                        e.IsValid = false;
-                    }
-                }
-                else
-                {
                     e.IsValid = false;
                 }
             }
