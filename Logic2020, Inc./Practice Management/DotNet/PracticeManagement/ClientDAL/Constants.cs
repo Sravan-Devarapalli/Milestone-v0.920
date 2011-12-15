@@ -773,6 +773,7 @@
                 public const string GetOpportunityPriorityTransitionCount = "dbo.GetOpportunityPriorityTransitionCount";
                 public const string GetOpportunityStatusChangeCount = "dbo.GetOpportunityStatusChangeCount";
                 public const string OpportunitySearchText = "dbo.OpportunitySearchText";
+                public const string AttachProjectToOpportunity = "dbo.AttachProjectToOpportunity";
 
             }
 
