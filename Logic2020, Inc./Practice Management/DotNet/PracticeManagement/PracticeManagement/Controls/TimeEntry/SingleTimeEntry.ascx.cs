@@ -122,6 +122,18 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        public string IsPTOTimeType
+        {
+            get
+            {
+                return hdnIsPTOTimeType.Value;
+            }
+            set
+            {
+                hdnIsPTOTimeType.Value = value;
+            }
+        }
+
         public string TimeTypeDropdownClientId
         {
             set
@@ -262,6 +274,11 @@ namespace PraticeManagement.Controls.TimeEntry
                         PraticeManagement.Constants.ApplicationResources.RecentCommentIcon;
 
             var note = tbNotes.Text;
+
+            if (hdnIsPTOTimeType.Value == "true")
+            {
+                return true;
+            }
 
             if (hdnIsNoteRequired.Value == "true")
             {
@@ -432,6 +449,14 @@ namespace PraticeManagement.Controls.TimeEntry
                 tbActualHours.ReadOnly = value;
 
                 ApplyControlStyle();
+            }
+        }
+
+        public bool InActiveNotes
+        {
+            set
+            {
+                imgNote.Enabled = !value;
             }
         }
 
