@@ -820,7 +820,8 @@
             lblOpportunityName1.innerHTML = lblOpportunityName.innerHTML = ddlPriority.attributes["OpportunityName"].value;
 
             ddlPriority.value = ddlPriority.attributes["selectedPriorityId"].value;
-
+            var hdnRedirectOpportunityId = document.getElementById('<%= hdnRedirectOpportunityId.ClientID %>');
+            hdnRedirectOpportunityId.value = opportunityID;
             $find('mpePopup').show();
 
             return false;
