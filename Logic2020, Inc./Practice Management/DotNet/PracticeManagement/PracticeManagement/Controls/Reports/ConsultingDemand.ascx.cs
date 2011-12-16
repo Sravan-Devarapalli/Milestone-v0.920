@@ -20,10 +20,11 @@ namespace PraticeManagement.Controls.Reporting
 
         private const string WEEKS_SERIES_NAME = "Weeks";
         private const string MAIN_CHART_AREA_NAME = "MainArea";
-        private const string DemandItemtextFormat = "{0} - {1} -         {2}"; // 7 spaces between 1 and 2;
+        private const string DemandItemtextWithSingleObjectLinkFormat = "{0} - {1} -                ."; // 16 spaces between 1 and 2;
+        private const string DemandItemtextWithTwoObjectsLinksFormat = "{0} - {1} -                 -               .";
+        private const string DemandItemtextProjectLinkFormat = "{0}                   .";
         private const string DemandItemtextTooltipFormat = "{0} - {1}";
         private const string RedirectFormat = "{0}?id={1}";
-        private const string EmptyObjectNumberFormat = "       {0}"; // 7 spaces
         private const string Title_Format = "Consulting Demand Report \n{0} to {1}";
         private const string DummyClientName = "!";
         private const string ChartSeriesId = "chartSeries";
@@ -184,6 +185,7 @@ namespace PraticeManagement.Controls.Reporting
                 report = CustomizeTheReport(report);
 
                 ConsultingDemandSeries.Points.Clear();
+                ConsultingDemandSeries.BackImageAlignment = ChartImageAlignmentStyle.Left;
 
                 for (int personIndex = 0; personIndex < report.Count; personIndex++)
                 {
@@ -258,7 +260,7 @@ namespace PraticeManagement.Controls.Reporting
         {
             var chartMainArea = chrtConsultingDemand.ChartAreas[MAIN_CHART_AREA_NAME];
 
-            chartMainArea.Position = new ElementPosition(-1.8f, barsCount <= 7 ? 25 : 17, 100, barsCount <= 7 ? 65 : 75);// new ElementPosition(-1, 20, 100, 90);
+            chartMainArea.Position = new ElementPosition(-2f, barsCount <= 7 ? 25 : 17, 100, barsCount <= 7 ? 65 : 75);// new ElementPosition(-1, 20, 100, 90);
             chartMainArea.AlignmentStyle = AreaAlignmentStyles.Position;
         }
 
@@ -294,9 +296,7 @@ namespace PraticeManagement.Controls.Reporting
                 demandItemName = item.ObjectName;
             }
 
-            string emptyObjectNumber = string.Format(EmptyObjectNumberFormat, '.');
-
-            var labelText = item.Client != null && item.Client.Id.HasValue ? string.Format(DemandItemtextFormat, item.Client.Name.Length > 15 ? item.Client.Name.Substring(0, 12) + "..." : item.Client.Name, demandItemName.Length > 15 ? demandItemName.Substring(0, 12) + "..." : demandItemName, emptyObjectNumber)// item.ObjectNumber)
+            var labelText = item.Client != null && item.Client.Id.HasValue ? string.Format(item.LinkedObjectId.HasValue ? DemandItemtextWithTwoObjectsLinksFormat : DemandItemtextWithSingleObjectLinkFormat, item.Client.Name.Length > 15 ? item.Client.Name.Substring(0, 12) + "..." : item.Client.Name, demandItemName.Length > 15 ? demandItemName.Substring(0, 12) + "..." : demandItemName)// item.ObjectNumber)
                 : demandItemName.Length > 40 ? demandItemName.Substring(0, 37) + "..." : demandItemName;
 
             //  Create new label to display at left side of the Chart.
@@ -330,7 +330,7 @@ namespace PraticeManagement.Controls.Reporting
             var objectNumberLabel = labels.Add(
                                             personIndex - 0.49, // From position
                                             personIndex + 0.49, // To position
-                                            item.ObjectNumber, // Formated person title
+                                            (!item.LinkedObjectId.HasValue) ? item.ObjectNumber : string.Format(DemandItemtextProjectLinkFormat, item.ObjectNumber), // Formated person title
                                            0, // Index
                                             LabelMarkStyle.None); // Mark style: none
             objectNumberLabel.ForeColor = Color.FromArgb(8, 152, 230); //Color.FromArgb(0, 102, 153); //a onhover
@@ -338,6 +338,20 @@ namespace PraticeManagement.Controls.Reporting
             objectNumberLabel.Url = item.ObjectType == 1 ?
                 Urls.OpportunityDetailsLink(item.ObjectId, Constants.ApplicationPages.ConsultingDemandWithFilterQueryString)
                 : Urls.GetProjectDetailsUrl(item.ObjectId, Constants.ApplicationPages.ConsultingDemandWithFilterQueryString);
+
+            if (item.LinkedObjectId.HasValue)
+            {
+                var linkedOpportunityNumberLabel = labels.Add(
+                                                personIndex - 0.49, // From position
+                                                personIndex + 0.49, // To position
+                                                item.LinkedObjectNumber, // Formated person title
+                                               0, // Index
+                                                LabelMarkStyle.None); // Mark style: none
+                linkedOpportunityNumberLabel.ForeColor = Color.FromArgb(8, 152, 230);
+                linkedOpportunityNumberLabel.ToolTip = item.LinkedObjectNumber;
+                linkedOpportunityNumberLabel.Url = Urls.OpportunityDetailsLink(item.LinkedObjectId.Value, Constants.ApplicationPages.ConsultingDemandWithFilterQueryString);
+            }
+
         }
 
         private void AddRange(ConsultantDemandItem item, DateTime date, int personIndex, int dayIndex)
