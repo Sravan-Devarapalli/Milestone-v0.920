@@ -46,6 +46,20 @@ namespace DataTransferObjects
         }
 
         [DataMember]
+        public int? LinkedObjectId
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public string LinkedObjectNumber
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public string ObjectNumber
         {
             get;
