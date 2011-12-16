@@ -3215,6 +3215,8 @@ namespace DataAccess
             int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
             int objectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ObjectStatusId);
             //int descriptionIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
+            int linkedObjectIdIndex = reader.GetOrdinal(Constants.ColumnNames.LinkedObjectId);
+            int linkedObjectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.LinkedObjectNumber);
 
             int personIdIndex = reader.GetOrdinal(PersonIdColumn);
             if (reader.HasRows)
@@ -3234,7 +3236,9 @@ namespace DataAccess
                         ObjectType = reader.GetInt32(objectTypeIndex),
                         StartDate = reader.GetDateTime(startDateIndex),
                         EndDate = reader.GetDateTime(endDateIndex),
-                       // Description = !reader.IsDBNull(descriptionIndex) ? reader.GetString(descriptionIndex) : string.Empty
+                        LinkedObjectId = reader.IsDBNull(linkedObjectIdIndex) ? null : (int?)reader.GetInt32(linkedObjectIdIndex),
+                        LinkedObjectNumber = reader.IsDBNull(linkedObjectNumberIndex) ? null : reader.GetString(linkedObjectNumberIndex)
+                        // Description = !reader.IsDBNull(descriptionIndex) ? reader.GetString(descriptionIndex) : string.Empty
 
                     };
                     var clientId = reader.GetInt32(clientIdIndex);
