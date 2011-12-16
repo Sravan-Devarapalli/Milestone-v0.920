@@ -80,6 +80,8 @@
             public const string ObjectNumber = "ObjectNumber";
             public const string ObjectType = "ObjectType";
             public const string ObjectStatusId = "ObjectStatusId";
+            public const string LinkedObjectId = "LinkedObjectId";
+            public const string LinkedObjectNumber = "LinkedObjectNumber";
             public const string QuantityString = "QuantityString";
             public const string LastUpdateColumn = "LastUpdate";
             public const string ManagerAlias = "ManagerAlias";
