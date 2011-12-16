@@ -18,7 +18,9 @@ BEGIN
 		dbo.GetDailyDemand(@StartDate, @EndDate, P.PersonId, O.OpportunityId, 1) QuantityString ,-- CONVERT(NVARCHAR,OP.Quantity)
 		CONVERT(INT,1) ObjectType,
 		O.ProjectedStartDate [StartDate],
-		ISNULL(O.ProjectedEndDate, dbo.GetFutureDate()) [EndDate]
+		ISNULL(O.ProjectedEndDate, dbo.GetFutureDate()) [EndDate],
+		NULL [LinkedObjectId],
+		NULL [LinkedObjectNumber]
 		
 	FROM dbo.OpportunityPersons OP
 	JOIN dbo.Opportunity O ON O.OpportunityId = OP.OpportunityId
@@ -44,16 +46,19 @@ BEGIN
 			dbo.GetDailyDemand(@StartDate, @EndDate, Per.PersonId, P.ProjectId, 2) QuantityString, -- COUNT(MPE.MilestoneId)
 			CONVERT(INT,2) ObjectType,
 			P.StartDate [StartDate],
-			P.EndDate [EndDate]
+			P.EndDate [EndDate],
+			P.OpportunityId [LinkedObjectId],
+			O.OpportunityNumber [LinkedObjectNumber]
 	FROM Project P
 	JOIN Client C ON C.ClientId = P.ClientId
 	JOIN Milestone M ON M.ProjectId = P.ProjectId
 	JOIN MilestonePerson MP ON MP.MilestoneId = M.MilestoneId
 	JOIN MilestonePersonEntry MPE ON MPE.MilestonePersonId = MP.MilestonePersonId
 	JOIN Person Per ON Per.PersonId = MP.PersonId
+	LEFT JOIN Opportunity O ON O.OpportunityId = P.OpportunityId
 	WHERE Per.IsStrawman = 1 
 		AND MPE.StartDate <= @EndDate AND MPE.StartDate >= @StartDate
 		AND P.StartDate <= @EndDate AND P.EndDate >= @StartDate
 		AND P.ProjectStatusId IN (2,3) -- Only Active and Projected status Projects.
-	GROUP BY P.ProjectId, Per.PersonId,  Per.LastName, Per.FirstName, P.ProjectStatusId, P.Name, P.ProjectNumber, P.ClientId, C.Name, P.StartDate, P.EndDate
+	GROUP BY P.ProjectId, Per.PersonId,  Per.LastName, Per.FirstName, P.ProjectStatusId, P.Name, P.ProjectNumber, P.ClientId, C.Name, P.StartDate, P.EndDate, P.OpportunityId, O.OpportunityNumber
 END
