@@ -16,6 +16,7 @@
 <%@ Register Src="~/Controls/Opportunities/PrevNextOpportunity.ascx" TagPrefix="uc"
     TagName="PrevNextOpportunity" %>
 <%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
+<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Opportunity Details | Practice Management</title>
 </asp:Content>
@@ -130,6 +131,64 @@
                 setHintPosition(imgPriorityHint, divPriority);
             });
         }
+
+        function selectDefaultoption() {
+            var ddlProjects = document.getElementById('<%= ddlProjects.ClientID %>');
+            var optionList = ddlProjects.getElementsByTagName('option');
+            ddlProjects.value = optionList[0].value;
+        }
+
+        function ShowDescriptionSelections(ddlProjects) {
+
+            var divDescription = document.getElementById('<%= divDescription.ClientID %>');
+
+            if (ddlProjects.value != "-1" && ddlProjects.value != "") {
+
+                var rbtnOpportunityDescription = document.getElementById('<%= rbtnOpportunityDescription.ClientID %>');
+                var rbtnProjectDescription = document.getElementById('<%= rbtnProjectDescription.ClientID %>');
+                var lblOpportunityDescription = document.getElementById('<%= lblOpportunityDescription.ClientID %>');
+                var lblProjectDescription = document.getElementById('<%= lblProjectDescription.ClientID %>');
+                var txtDescription = document.getElementById('<%= txtDescription.ClientID %>');
+
+
+                lblOpportunityDescription.innerHTML = "";
+                lblProjectDescription.innerHTML = "";
+                divDescription.style.display = "none";
+                var optionList = ddlProjects.getElementsByTagName('option');
+
+                var selectedProjectDescription = "";
+
+                for (var i = 0; i < optionList.length; ++i) {
+                    if (optionList[i].value == ddlProjects.value) {
+                        selectedProjectDescription = optionList[i].attributes["Description"].value;
+                        break;
+                    }
+                }
+
+                lblOpportunityDescription.title = txtDescription.value;
+                lblProjectDescription.title = selectedProjectDescription;
+
+                if (txtDescription.value.length > 100) {
+                    lblOpportunityDescription.innerHTML = txtDescription.value.substring(0, 100) + "..";
+                }
+                else {
+                    lblOpportunityDescription.innerHTML = txtDescription.value;
+                }
+
+                if (selectedProjectDescription.length > 100) {
+                    lblProjectDescription.innerHTML = selectedProjectDescription.substring(0, 100) + "..";
+                }
+                else {
+                    lblProjectDescription.innerHTML = selectedProjectDescription;
+                }
+
+                divDescription.style.display = "";
+            }
+            else {
+                divDescription.style.display = "none";
+            }
+        }
+
 
         function setcalendar() {
             $('.date-pick').datePicker({ autoFocusNextInput: true });
@@ -641,7 +700,7 @@
 
         /* Start: Attach to project logic*/
         function ddlPriority_OnSelectedIndexChanged(ddlPriority) {
-            EnableSaveButton(); 
+            EnableSaveButton();
             setDirty();
             var optionList = ddlPriority.getElementsByTagName('option');
             var selectedText = "";
@@ -657,7 +716,7 @@
             }
             else {
                 var btnAttachToProject = document.getElementById("<%= btnAttachToProject.ClientID%>");
-             
+
                 //Raise btnAttachToProject_Click event
                 btnAttachToProject.click();
             }
@@ -667,32 +726,36 @@
         function btnCancel_click() {
 
             var ddlPriority = document.getElementById("<%= ddlPriority.ClientID%>");
-            var ddlProjects = document.getElementById("<%= ddlProjects.ClientID%>");
-            ddlProjects.value = "";
-            var selectedPriorityText = ddlPriority.getAttribute("selectedPriorityText").toLowerCase();
-            var optionList = ddlPriority.getElementsByTagName('option');
-            var selectedText = "";
-            var selectedPriorityId = "";
-            //PervTextValue
-            for (var i = 0; i < optionList.length; ++i) {
-                if (optionList[i].value == ddlPriority.value) {
-                    selectedText = optionList[i].innerHTML.toLowerCase();
-                    break;
-                }
-            }
-            if (selectedText == "po") {
+            selectDefaultoption();
+
+            if (ddlPriority.getAttribute("selectedPriorityText") != null) {
+                var selectedPriorityText = ddlPriority.getAttribute("selectedPriorityText").toLowerCase();
+                var optionList = ddlPriority.getElementsByTagName('option');
+                var selectedText = "";
+                var selectedPriorityId = "";
+                //PervTextValue
                 for (var i = 0; i < optionList.length; ++i) {
-                    if (optionList[i].innerHTML.toLowerCase() == selectedPriorityText) {
-                        PervValue = optionList[i].value;
+                    if (optionList[i].value == ddlPriority.value) {
+                        selectedText = optionList[i].innerHTML.toLowerCase();
                         break;
                     }
                 }
-                ddlPriority.value = PervValue;
+                if (selectedText == "po") {
+                    for (var i = 0; i < optionList.length; ++i) {
+                        if (optionList[i].innerHTML.toLowerCase() == selectedPriorityText) {
+                            PervValue = optionList[i].value;
+                            break;
+                        }
+                    }
+                    ddlPriority.value = PervValue;
+                }
             }
+
             return false;
         }
 
         function ddlProjects_change(ddlProjects) {
+            ShowDescriptionSelections(ddlProjects);
             var btnAttach = document.getElementById('<%= btnAttach.ClientID %>');
             if (ddlProjects.value == "") {
                 btnAttach.setAttribute('disabled', 'disabled');
@@ -749,10 +812,10 @@
                                                 <asp:CustomValidator ID="cvOpportunityStrawmanStartDateCheck" runat="server" OnServerValidate="cvOpportunityStrawmanStartDateCheck_ServerValidate"
                                                     ErrorMessage="Some exsisting Strawman Need By date is less than New Opportunity StartDate."
                                                     ToolTip="Some exsisting Strawman Need By date is less than New Opportunity StartDate."
-                                                    EnableClientScript="false" Display="Dynamic" Text="*" ValidationGroup="Opportunity"/>
+                                                    EnableClientScript="false" Display="Dynamic" Text="*" ValidationGroup="Opportunity" />
                                             </td>
                                             <td style="padding-left: 4px; padding-right: 8px;">
-                                                <asp:Label ID="lbEndDate" style="font-weight:bold;" runat="server" Text="End Date"></asp:Label>
+                                                <asp:Label ID="lbEndDate" Style="font-weight: bold;" runat="server" Text="End Date"></asp:Label>
                                             </td>
                                             <td class="DatePickerPadding">
                                                 <uc1:DatePicker ID="dpEndDate" ValidationGroup="Opportunity" AutoPostBack="false"
@@ -762,9 +825,6 @@
                                                 <asp:RequiredFieldValidator ID="reqEndDate" runat="server" ControlToValidate="dpEndDate"
                                                     ErrorMessage="The Projected End date is required" ToolTip="The Projected End date is required."
                                                     ValidationGroup="Opportunity" Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>
-                                                <%--<asp:RequiredFieldValidator ID="reqEndDate" runat="server" ControlToValidate="dpEndDate"
-                                                    ErrorMessage="End date is required to add Proposed Resources to project." ToolTip="End date is required to add Proposed Resources to project."
-                                                    ValidationGroup="HasPersons" Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>--%>
                                                 <asp:CompareValidator ID="cmpEndDateDataTypeCheck" runat="server" ControlToValidate="dpEndDate"
                                                     ValidationGroup="Opportunity" Type="Date" Operator="DataTypeCheck" Text="*" Display="Dynamic"
                                                     ErrorMessage="The Projected End Date has an incorrect format. It must be 'MM/dd/yyyy'."
@@ -778,10 +838,6 @@
                                                     ErrorMessage="Some exsisting Strawman Need By date is Greater than New Opportunity EndDate."
                                                     ToolTip="Some exsisting Strawman Need By date is Greater than New Opportunity EndDate."
                                                     EnableClientScript="false" Display="Dynamic" Text="*" ValidationGroup="Opportunity" />
-                                                <%--<asp:CustomValidator ID="cvEndDateRequired" runat="server" OnServerValidate="cvEndDateRequired_ServerValidate"
-                                                    ErrorMessage="End date is required before opportunity can be saved with A, or B priority."
-                                                    ToolTip="End date is required before opportunity can be saved with A, or B priority."
-                                                    ValidationGroup="Opportunity" Display="Dynamic" Text="*" EnableClientScript="false"></asp:CustomValidator>--%>
                                             </td>
                                         </tr>
                                     </table>
@@ -911,7 +967,7 @@
                                         <tr>
                                             <td style="width: 97%">
                                                 <asp:DropDownList ID="ddlPriority" runat="server" Width="100%" CssClass="WholeWidth"
-                                                    onchange="return ddlPriority_OnSelectedIndexChanged(this);  " >
+                                                    onchange="return ddlPriority_OnSelectedIndexChanged(this);  ">
                                                 </asp:DropDownList>
                                             </td>
                                             <td style="width: 3%">
@@ -919,7 +975,8 @@
                                                     Width="100%" Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"
                                                     Text="*" ToolTip="The Priority is required." ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
                                                 <asp:CustomValidator ID="cvPriority" runat="server" ControlToValidate="ddlPriority"
-                                                    ToolTip="You must add a Team Make-Up to this opportunity before it can be saved with a PO, A, or B priority." Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                                    ToolTip="You must add a Team Make-Up to this opportunity before it can be saved with a PO, A, or B priority."
+                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                                     OnServerValidate="cvPriority_ServerValidate" ValidationGroup="Opportunity" />
                                             </td>
                                         </tr>
@@ -1094,7 +1151,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="text-align:center;">
+                                                <td style="text-align: center;">
                                                     <asp:Button ID="btnOk" runat="server" Text="OK" OnClientClick="return false;" />
                                                 </td>
                                             </tr>
@@ -1106,7 +1163,6 @@
                     </ContentTemplate>
                     <Triggers>
                         <asp:AsyncPostBackTrigger ControlID="btnAttach" />
-                        <asp:AsyncPostBackTrigger ControlID="btnCancel" />
                         <asp:AsyncPostBackTrigger ControlID="btnSave" />
                         <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
                         <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
@@ -1148,7 +1204,6 @@
                                     </ContentTemplate>
                                     <Triggers>
                                         <asp:AsyncPostBackTrigger ControlID="btnAttach" />
-                                        <asp:AsyncPostBackTrigger ControlID="btnCancel" />
                                         <asp:AsyncPostBackTrigger ControlID="btnSave" />
                                         <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
                                         <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
@@ -1320,21 +1375,6 @@
                                                     <div style="text-align: right; width: 356px; padding: 8px 0px 8px 0px">
                                                         <input type="button" value="Clear All" onclick="javascript:ClearProposedResources();" />
                                                     </div>
-                                                    <%-- <table style="width: 100%">
-                                                        <tr>
-                                                            <td style="width: 93% !important;">
-                                                                <asp:TextBox ID="txtOutSideResources" runat="server" Width="100%" Height="16px" Style="padding-bottom: 4px;
-                                                                    margin-bottom: 4px;" MaxLength="4000"></asp:TextBox>
-                                                                <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmOutSideResources" runat="server"
-                                                                    TargetControlID="txtOutSideResources" WatermarkText="Enter Other Names(s) (optional) separated by semi-colons."
-                                                                    EnableViewState="false" WatermarkCssClass="watermarkedtext" BehaviorID="wmBhOutSideResources" />
-                                                            </td>
-                                                            <td align="right">
-                                                                <img id="imgtrash" src="Images/trash-icon-Large.png" onclick="clearOutSideResources();"
-                                                                    style="cursor: pointer; padding-bottom: 5px;" />
-                                                            </td>
-                                                        </tr>
-                                                    </table>--%>
                                                     <br />
                                                     <table width="356px;">
                                                         <tr>
@@ -1378,8 +1418,8 @@
                                                             </tr>
                                                         </table>
                                                     </div>
-                                                    <div  style="height: 250px; width: 400px; overflow-y: scroll;
-                                                        border: 1px solid black; background: white; padding-left: 3px; text-align: left !important;">
+                                                    <div style="height: 250px; width: 400px; overflow-y: scroll; border: 1px solid black;
+                                                        background: white; padding-left: 3px; text-align: left !important;">
                                                         <table width="100%" id="tblTeamStructure" class="strawman">
                                                             <tr>
                                                                 <td style="width: 220px;">
@@ -1393,7 +1433,7 @@
                                                                     </asp:DropDownList>
                                                                 </td>
                                                                 <td align="center">
-                                                                    <asp:TextBox ID="txtNeedBy" runat="server" Style="width: 80px;float:left;" CssClass="date-pick"></asp:TextBox>
+                                                                    <asp:TextBox ID="txtNeedBy" runat="server" Style="width: 80px; float: left;" CssClass="date-pick"></asp:TextBox>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -1459,7 +1499,7 @@
                                         OnClick="btnAttachToProject_Click" ToolTip="Attach This Opportunity to Existing Project" />
                                     <asp:HiddenField ID="hdnField" runat="server" />
                                     <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachToProject" runat="server" TargetControlID="hdnField"
-                                        CancelControlID="btnCancel" BackgroundCssClass="modalBackground" PopupControlID="pnlAttachToProject"
+                                        BackgroundCssClass="modalBackground" PopupControlID="pnlAttachToProject" CancelControlID="btnCancel"
                                         DropShadow="false" />
                                 </td>
                             </tr>
@@ -1490,9 +1530,9 @@
                                         DisplayMode="BulletList" EnableClientScript="false" HeaderText="Unable to convert opportunity due to the following errors:" />
                                 </td>
                                 <td style="width: 36%;">
-                                    <table style="float:right;">
+                                    <table style="float: right;">
                                         <tr>
-                                            <td style="padding: 8px;">                                        
+                                            <td style="padding: 8px;">
                                                 <asp:HiddenField ID="hdnOpportunityDelete" runat="server"></asp:HiddenField>
                                                 <asp:Button ID="btnDelete" runat="server" Visible="false" Enabled="false" Text="Delete Opportunity"
                                                     OnClientClick="ConfirmToDeleteOpportunity();" OnClick="btnDelete_Click" />
@@ -1565,14 +1605,47 @@
                     </tr>
                     <tr>
                         <td align="center" style="padding: 6px 6px 2px 2px;">
-                            <asp:DropDownList ID="ddlProjects" runat="server" AppendDataBoundItems="true" onchange="setDirty();ddlProjects_change(this);"
+                            <cc2:CustomDropDown ID="ddlProjects" runat="server" AppendDataBoundItems="true" onchange="setDirty();ddlProjects_change(this);"
                                 AutoPostBack="false" Style="width: 350px">
-                            </asp:DropDownList>
+                            </cc2:CustomDropDown>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            &nbsp;
+                            <div id="divDescription" runat="server" style="display: none; padding: 15px;">
+                                <table style="width: 100%;">
+                                    <tr>
+                                        <td style="width: 3%;">
+                                        </td>
+                                        <td style="width: 94%;">
+                                            <table style="width: 100%; padding: 8px; border-color: Black; border-width: 1px;
+                                                border-style: solid;">
+                                                <tr>
+                                                    <td style="width: 100%; padding: 4px;">
+                                                        <b>Please choose any one of the project/opportunity description.</b>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" style="width: 100%; padding: 4px;">
+                                                        <asp:RadioButton ID="rbtnOpportunityDescription" runat="server" GroupName="Description"
+                                                            Checked="true" /><b>Opportunity :</b>
+                                                        <asp:Label ID="lblOpportunityDescription" runat="server"></asp:Label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" style="width: 100%; padding: 4px;">
+                                                        <asp:RadioButton ID="rbtnProjectDescription" runat="server" GroupName="Description"
+                                                            Checked="false" /><b>Project &nbsp;:</b>
+                                                        <asp:Label ID="lblProjectDescription" runat="server"></asp:Label>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td style="width: 3%;">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -1592,7 +1665,6 @@
         </ContentTemplate>
         <Triggers>
             <asp:AsyncPostBackTrigger ControlID="btnAttach" />
-            <asp:AsyncPostBackTrigger ControlID="btnCancel" />
             <asp:AsyncPostBackTrigger ControlID="btnSave" />
             <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
             <asp:AsyncPostBackTrigger ControlID="btnConvertToProject" />
