@@ -181,6 +181,19 @@ namespace PraticeManagement.Controls
             set { dateRangeVal.ErrorMessage = value; } 
         }
 
+        [Category("Behaviour")]
+        public string BehaviorID
+        {
+            get
+            {
+                return txtDate_CalendarExtender.BehaviorID;
+            }
+            set
+            {
+                txtDate_CalendarExtender.BehaviorID = value;
+            }
+        }
+
         #endregion
 
         #region Events
