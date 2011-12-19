@@ -13,7 +13,8 @@ CREATE PROCEDURE dbo.ProjectUpdate
 	@GroupId			INT,
 	@IsChargeable		BIT,
 	@DirectorId			INT,
-	@ProjectManagerIdsList	NVARCHAR(MAX)
+	@ProjectManagerIdsList	NVARCHAR(MAX),
+	@Description           NVARCHAR(MAX)
 )
 AS
 BEGIN
@@ -22,37 +23,57 @@ BEGIN
 
 	BEGIN TRAN  T1;
 
-	-- Start logging session
-	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
+		-- Start logging session
+		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
-	UPDATE dbo.Project
-	   SET ClientId			= @ClientId,
-	       Discount			= @Discount,
-	       Terms			= @Terms,
-	       NAME				= @Name,
-	       PracticeId		= @PracticeId,
-	       ProjectStatusId	= @ProjectStatusId,
-	       BuyerName		= @BuyerName,
-	       GroupId			= @GroupId,
-	       IsChargeable		= @IsChargeable,
-		   DirectorId		= @DirectorId
-	 WHERE ProjectId = @ProjectId
+		UPDATE dbo.Project
+			SET ClientId			= @ClientId,
+				Discount			= @Discount,
+				Terms			= @Terms,
+				NAME				= @Name,
+				PracticeId		= @PracticeId,
+				ProjectStatusId	= @ProjectStatusId,
+				BuyerName		= @BuyerName,
+				GroupId			= @GroupId,
+				IsChargeable		= @IsChargeable,
+				DirectorId		= @DirectorId,
+				Description		=@Description
+			WHERE ProjectId = @ProjectId
 
-	        DELETE pm
-			FROM ProjectManagers pm
-			LEFT JOIN [dbo].ConvertStringListIntoTable(@ProjectManagerIdsList) AS p 
-			ON pm.ProjectId = @ProjectId AND pm.ProjectManagerId = p.ResultId 
-			WHERE p.ResultId IS NULL and pm.ProjectId = @ProjectId
+		DECLARE @OpportunityId INT = NULL
+		
+		SELECT @OpportunityId = OpportunityId 
+								 FROM  dbo.Project 
+								 WHERE ProjectId = @ProjectId
+	  
+			
+		IF(@OpportunityId IS NOT NULL)
+		BEGIN
+	  
+		  UPDATE dbo.Opportunity 
+		  SET Description = @Description
+		  WHERE OpportunityId = @OpportunityId 
+	 
+		END
 
-			INSERT INTO ProjectManagers(ProjectId,ProjectManagerId)
-			SELECT @ProjectId ,p.ResultId
-			FROM [dbo].ConvertStringListIntoTable(@ProjectManagerIdsList) AS p 
-			LEFT JOIN ProjectManagers pm
-			ON p.ResultId = pm.ProjectManagerId AND pm.ProjectId=@ProjectId
-			WHERE pm.ProjectManagerId IS NULL
 
-	-- End logging session
-	EXEC dbo.SessionLogUnprepare
+	    DELETE pm
+		FROM ProjectManagers pm
+		LEFT JOIN [dbo].ConvertStringListIntoTable(@ProjectManagerIdsList) AS p 
+		ON pm.ProjectId = @ProjectId AND pm.ProjectManagerId = p.ResultId 
+		WHERE p.ResultId IS NULL and pm.ProjectId = @ProjectId
+
+		INSERT INTO ProjectManagers(ProjectId,ProjectManagerId)
+		SELECT @ProjectId ,p.ResultId
+		FROM [dbo].ConvertStringListIntoTable(@ProjectManagerIdsList) AS p 
+		LEFT JOIN ProjectManagers pm
+		ON p.ResultId = pm.ProjectManagerId AND pm.ProjectId=@ProjectId
+		WHERE pm.ProjectManagerId IS NULL
+
+
+
+		-- End logging session
+		EXEC dbo.SessionLogUnprepare
 
 	COMMIT TRAN T1;	
 
