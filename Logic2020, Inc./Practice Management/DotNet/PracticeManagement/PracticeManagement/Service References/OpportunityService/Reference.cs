@@ -19,7 +19,7 @@ namespace PraticeManagement.OpportunityService {
         void UpdatePriorityIdForOpportunity(int opportunityId, int priorityId, string userName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/AttachProjectToOpportunity", ReplyAction="http://tempuri.org/IOpportunityService/AttachProjectToOpportunityResponse")]
-        void AttachProjectToOpportunity(int opportunityId, int projectId, int priorityId, string userName);
+        void AttachProjectToOpportunity(int opportunityId, int projectId, int priorityId, string userName, bool isOpportunityDescriptionSelected);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/OpportunityGetExcelSet", ReplyAction="http://tempuri.org/IOpportunityService/OpportunityGetExcelSetResponse")]
         System.Data.DataSet OpportunityGetExcelSet();
@@ -119,7 +119,6 @@ namespace PraticeManagement.OpportunityService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class OpportunityServiceClient : System.ServiceModel.ClientBase<PraticeManagement.OpportunityService.IOpportunityService>, PraticeManagement.OpportunityService.IOpportunityService {
         
-      
         
         public OpportunityServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -141,8 +140,8 @@ namespace PraticeManagement.OpportunityService {
             base.Channel.UpdatePriorityIdForOpportunity(opportunityId, priorityId, userName);
         }
         
-        public void AttachProjectToOpportunity(int opportunityId, int projectId, int priorityId, string userName) {
-            base.Channel.AttachProjectToOpportunity(opportunityId, projectId, priorityId, userName);
+        public void AttachProjectToOpportunity(int opportunityId, int projectId, int priorityId, string userName, bool isOpportunityDescriptionSelected) {
+            base.Channel.AttachProjectToOpportunity(opportunityId, projectId, priorityId, userName, isOpportunityDescriptionSelected);
         }
         
         public System.Data.DataSet OpportunityGetExcelSet() {
