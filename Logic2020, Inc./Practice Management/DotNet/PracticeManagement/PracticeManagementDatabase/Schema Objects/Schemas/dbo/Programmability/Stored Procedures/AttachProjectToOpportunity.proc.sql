@@ -3,7 +3,8 @@
 	@ProjectId			INT,
 	@PriorityId			INT,
 	@OpportunityId      INT,
-	@UserLogin          NVARCHAR(255)
+	@UserLogin          NVARCHAR(255),
+	@IsOpportunityDescriptionSelected BIT
 )
 AS
 BEGIN
@@ -13,11 +14,42 @@ BEGIN
 		DECLARE @ErrorMessage NVARCHAR(MAX)
 	
 		BEGIN TRY
+		    
+			 DECLARE @Description NVARCHAR(MAX)
+
 			UPDATE dbo.Opportunity
 			SET   ProjectId = @ProjectId,
 				  PriorityId = @PriorityId,
 				  LastUpdated = GETUTCDATE()
 			WHERE OpportunityId = @OpportunityId
+
+
+			IF(@IsOpportunityDescriptionSelected = 1)
+			BEGIN
+				
+				SELECT @Description = op.Description 
+				FROM dbo.Opportunity op 
+				WHERE op.OpportunityId = @OpportunityId 
+
+				UPDATE dbo.Project 
+				SET Description = @Description
+				where ProjectId = @ProjectId
+
+			END
+			ELSE
+			BEGIN
+			   
+				SELECT @Description = p.Description 
+				FROM dbo.Project p 
+				WHERE p.ProjectId = @ProjectId 
+
+				UPDATE dbo.Opportunity 
+				SET Description = @Description
+				where OpportunityId = @OpportunityId
+			 
+			END
+
+
 		END TRY
 		BEGIN CATCH
 			
