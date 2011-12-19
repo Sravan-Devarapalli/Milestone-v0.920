@@ -5,6 +5,11 @@
 )
 AS
 BEGIN 
+
+    DECLARE @FutureDate DATETIME 
+
+	SET @FutureDate = dbo.GetFutureDate()
+
 	SELECT 
 		O.OpportunityId ObjectId,
 		O.Name [ObjectName],
@@ -18,9 +23,10 @@ BEGIN
 		dbo.GetDailyDemand(@StartDate, @EndDate, P.PersonId, O.OpportunityId, 1) QuantityString ,-- CONVERT(NVARCHAR,OP.Quantity)
 		CONVERT(INT,1) ObjectType,
 		O.ProjectedStartDate [StartDate],
-		ISNULL(O.ProjectedEndDate, dbo.GetFutureDate()) [EndDate],
+		ISNULL(O.ProjectedEndDate, @FutureDate) [EndDate],
 		NULL [LinkedObjectId],
-		NULL [LinkedObjectNumber]
+		NULL [LinkedObjectNumber],
+		O.Description
 		
 	FROM dbo.OpportunityPersons OP
 	JOIN dbo.Opportunity O ON O.OpportunityId = OP.OpportunityId
@@ -28,7 +34,7 @@ BEGIN
 	JOIN dbo.Client C ON O.ClientId = C.ClientId 
 	WHERE OP.RelationTypeId = 2 -- Team Structure
 		AND OP.NeedBy <= @EndDate AND OP.NeedBy >= @StartDate
-		AND O.ProjectedStartDate <= @EndDate AND ISNULL(O.ProjectedEndDate, dbo.GetFutureDate()) >= @StartDate
+		AND O.ProjectedStartDate <= @EndDate AND ISNULL(O.ProjectedEndDate, @FutureDate) >= @StartDate
 		AND O.PriorityId IN (1, 2) AND O.OpportunityStatusId = 1 --Priorities A OR B with Active Status.
 		AND O.ProjectId IS NULL --Only Opportunities Not Linked To Project.
 
@@ -48,7 +54,8 @@ BEGIN
 			P.StartDate [StartDate],
 			P.EndDate [EndDate],
 			P.OpportunityId [LinkedObjectId],
-			O.OpportunityNumber [LinkedObjectNumber]
+			O.OpportunityNumber [LinkedObjectNumber],
+			P.Description
 	FROM Project P
 	JOIN Client C ON C.ClientId = P.ClientId
 	JOIN Milestone M ON M.ProjectId = P.ProjectId
@@ -60,5 +67,6 @@ BEGIN
 		AND MPE.StartDate <= @EndDate AND MPE.StartDate >= @StartDate
 		AND P.StartDate <= @EndDate AND P.EndDate >= @StartDate
 		AND P.ProjectStatusId IN (2,3) -- Only Active and Projected status Projects.
-	GROUP BY P.ProjectId, Per.PersonId,  Per.LastName, Per.FirstName, P.ProjectStatusId, P.Name, P.ProjectNumber, P.ClientId, C.Name, P.StartDate, P.EndDate, P.OpportunityId, O.OpportunityNumber
+	GROUP BY P.ProjectId, Per.PersonId,  Per.LastName, Per.FirstName, P.ProjectStatusId, P.Name, P.ProjectNumber, P.ClientId, C.Name, P.StartDate, P.EndDate, P.OpportunityId, O.OpportunityNumber,P.Description
 END
+
