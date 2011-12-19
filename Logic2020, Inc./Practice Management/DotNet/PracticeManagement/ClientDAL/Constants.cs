@@ -501,6 +501,7 @@
             public const string TextParam = "@Text";
             public const string RichTextParam = "@RichText";
             public const string ShowAll = "@ShowAll";
+            public const string isOpportunityDescriptionSelected = "@IsOpportunityDescriptionSelected";
 
         }
 
