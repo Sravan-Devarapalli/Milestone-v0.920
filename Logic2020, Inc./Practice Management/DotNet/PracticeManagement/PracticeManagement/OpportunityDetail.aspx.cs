@@ -342,12 +342,30 @@ namespace PraticeManagement
 
                 var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(Opportunity.Client.Id, true));
                 DataHelper.FillListDefault(ddlProjects, "Select Project ...", projects, false, "Id", "DetailedProjectTitle");
+
+                AddAttrbuteToddlProjects(projects);
+
                 if (ddlProjects.Items.Count == 1)
                 {
                     ddlProjects.Items[0].Enabled = true;
                 }
                 upAttachToProject.Update();
                 upOpportunityDetail.Update();
+            }
+        }
+
+        private void AddAttrbuteToddlProjects(Project[] projects)
+        {
+            foreach (ListItem item in ddlProjects.Items)
+            {
+                if (projects.Any(p => p.Id.Value.ToString() == item.Value.ToString()))
+                {
+                    item.Attributes.Add("Description", projects.First(p => p.Id.Value.ToString() == item.Value.ToString()).Description);
+                }
+                else
+                {
+                    item.Attributes.Add("Description", string.Empty);
+                }
             }
         }
 
@@ -374,7 +392,7 @@ namespace PraticeManagement
 
             ScriptManager.RegisterStartupScript(this, this.GetType(), "MultipleSelectionCheckBoxes_OnClickKeyName", string.Format("MultipleSelectionCheckBoxes_OnClick('{0}');", cblPotentialResources.ClientID), true);
             ScriptManager.RegisterStartupScript(this, this.GetType(), "EnableOrDisableConvertOrAttachToProj", "EnableOrDisableConvertOrAttachToProj();", true);
-            
+
             if (!IsPostBack && (SelectedId.HasValue || !string.IsNullOrEmpty(ReturnUrl)))
             {
                 btnCancelChanges.OnClientClick = string.Empty;
@@ -421,6 +439,28 @@ namespace PraticeManagement
                         sb.Append(person.PersonType.ToString());
                         sb.Append(',');
                     }
+                }
+            }
+            return sb.ToString();
+        }
+
+
+        private string GetPersonsIdsWithPersonTypeString(List<OpportunityPerson> persons)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var operson in persons)
+            {
+
+                if (operson.Person.Id.HasValue)
+                {
+
+                    sb.Append(operson.Person.Id.Value).ToString();
+                                   
+                        sb.Append(':');
+                        sb.Append(operson.PersonType.ToString());
+                        sb.Append(',');
+
                 }
             }
             return sb.ToString();
@@ -636,7 +676,7 @@ namespace PraticeManagement
 
                     var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, true));
                     DataHelper.FillListDefault(ddlProjects, "Select Project ...", projects, false, "Id", "DetailedProjectTitle");
-
+                    AddAttrbuteToddlProjects(projects);
                     if (ddlProjects.Items.Count == 1)
                     {
                         ddlProjects.Items[0].Enabled = true;
@@ -943,6 +983,7 @@ namespace PraticeManagement
             lblOpportunityNumber.Text = opportunity.OpportunityNumber;
             if (opportunity.Project != null)
             {
+                hpProject.Visible = true;
                 hpProject.Text = string.Format("Linked to Project {0}", opportunity.Project.ProjectNumber);
                 hpProject.NavigateUrl =
                       Utils.Generic.GetTargetUrlWithReturn(string.Format(Constants.ApplicationPages.DetailRedirectFormat,
@@ -979,16 +1020,7 @@ namespace PraticeManagement
                 ddlPriority.Items.FindByValue(opportunity.Priority == null ? "0" : opportunity.Priority.Id.ToString()));
 
             ddlPriority.Attributes["selectedPriorityText"] = ddlPriority.SelectedItem.Text;
-            //if (!string.IsNullOrEmpty(opportunity.OutSideResources))
-            //{
-            //    if (opportunity.OutSideResources[opportunity.OutSideResources.Length - 1] == ';')
-            //    {
-            //        opportunity.OutSideResources = opportunity.OutSideResources.Substring(0, opportunity.OutSideResources.Length - 1);
-            //    }
-            //    ltrlOutSideResources.Text = opportunity.OutSideResources.Replace(";", "<br/>");
-            //}
-
-
+            
             PopulateSalesPersonDropDown();
 
             PopulatePracticeDropDown();
@@ -1000,8 +1032,8 @@ namespace PraticeManagement
             hdnValueChanged.Value = "false";
             btnSave.Attributes.Add("disabled", "true");
 
+            hdnProposedResourceIdsWithTypes.Value = GetPersonsIdsWithPersonTypeString(ProposedPersons.AsQueryable().ToList());
             hdnProposedPersonsIndexes.Value = GetPersonsIndexesWithPersonTypeString(ProposedPersons.AsQueryable().ToList());
-            //hdnProposedOutSideResources.Value = opportunity.OutSideResources;
             hdnTeamStructure.Value = GetTeamStructure(StrawMans.AsQueryable().ToList());
         }
 
@@ -1141,11 +1173,18 @@ namespace PraticeManagement
 
             opportunity.EstimatedRevenue = Convert.ToDecimal(txtEstRevenue.Text);
 
+
+            opportunity.Description = txtDescription.Text;
+
             if (!(string.IsNullOrEmpty(ddlProjects.SelectedValue)
                  || ddlProjects.SelectedValue == "-1")
                )
             {
                 opportunity.Project = new Project { Id = int.Parse(ddlProjects.SelectedValue) };
+                if (rbtnProjectDescription.Checked)
+                {
+                    opportunity.Description = ddlProjects.SelectedItem.Attributes["Description"];
+                }
             }
 
             var selectedValue = ddlOpportunityOwner.SelectedValue;
@@ -1332,6 +1371,7 @@ namespace PraticeManagement
         {
             if (IsDirty)
             {
+              
                 if (ValidateAndSave())
                 {
                     Redirect(eventArgument == string.Empty ? Constants.ApplicationPages.OpportunityList : eventArgument);
