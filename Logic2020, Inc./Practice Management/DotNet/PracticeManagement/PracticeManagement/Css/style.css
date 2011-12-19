@@ -2098,4 +2098,21 @@ table.CellPaddingClass td
 {
     list-style-type: disc;
 }
+        
+.ConfirmBoxErrorClass
+{
+    min-height: 60px;
+    min-width: 200px;
+    max-width: 600px;
+    max-height: 500px;
+}
 
+.AttentionPopUpHeaderStyle
+{
+    text-align:center;
+    background-color: Gray;
+    vertical-align:bottom;
+    font-size: 14px;
+    padding-top: 4px;
+    font-weight: bold;
+}
