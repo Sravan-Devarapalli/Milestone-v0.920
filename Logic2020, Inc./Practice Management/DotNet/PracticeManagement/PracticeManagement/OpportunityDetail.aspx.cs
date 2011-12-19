@@ -35,7 +35,7 @@ namespace PraticeManagement
 
         #endregion
 
-        #region Properties
+        #region Constants
 
         private const int WonProjectId = 4;
         private const string OPPORTUNITY_KEY = "OPPORTUNITY_KEY";
@@ -47,6 +47,10 @@ namespace PraticeManagement
         private const string NEWLY_ADDED_NOTES_LIST = "NEWLY_ADDED_NOTES_LIST";
         private const string OpportunityPersons_Key = "OpportunityPersons_Key_1";
         private const string StrawMan_Key = "STRAWMAN_KEY_1";
+        private const string StrawMansListEncodeFormat = "{0}:{1}|{2}?{3},";
+        private const string StrawMansImpactOkSaveButtonId = "btnStrawmansImpactOkSave";
+        private const string SaveButtonId = "btnSave";
+        private const string StrawMansDateEncodeFormat = "MM/dd/yyyy";
         private List<NameValuePair> quantities;
 
         private const string ANIMATION_SHOW_SCRIPT =
@@ -72,6 +76,10 @@ namespace PraticeManagement
                         		</Parallel>
                         	</Sequence>
                         </OnClick>";
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// 	Gets a selected opportunity
@@ -292,10 +300,19 @@ namespace PraticeManagement
                 dtlProposedPersons.DataSource = ProposedPersons.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType }).OrderBy(p => p.Name);
                 dtlProposedPersons.DataBind();
 
-                dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity, NeedBy = p.NeedBy }).OrderBy(p => p.NeedBy).ThenBy(p => p.Name);
-                dtlTeamStructure.DataBind();
-
+                FillStrawMans(StrawMans);
             }
+        }
+
+        public void FillStrawMans(OpportunityPerson[] strawMans)
+        {
+            dtlTeamStructure.DataSource = GetTeamStructureDataSource(StrawMans);
+            dtlTeamStructure.DataBind();
+        }
+
+        private object GetTeamStructureDataSource(OpportunityPerson[] strawMans)
+        {
+            return StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity, NeedBy = p.NeedBy }).OrderBy(p => p.NeedBy).ThenBy(p => p.Name);
         }
 
 
@@ -397,6 +414,15 @@ namespace PraticeManagement
             {
                 btnCancelChanges.OnClientClick = string.Empty;
             }
+
+            if (Opportunity != null && Opportunity.ProjectedStartDate.HasValue)
+            {
+                hdnOpportunityProjectedStartDate.Value = Opportunity.ProjectedStartDate.Value.Date.ToShortDateString();
+            }
+            else
+            {
+                hdnOpportunityProjectedStartDate.Value = string.Empty;
+            }
         }
 
         protected void cblPotentialResources_OnDataBound(object senser, EventArgs e)
@@ -475,11 +501,11 @@ namespace PraticeManagement
                 if (optyperson.Person != null && optyperson.Person.Id.HasValue)
                 {
                     sb.Append(
-                        string.Format("{0}:{1}|{2}?{3},",
+                        string.Format(StrawMansListEncodeFormat,
                         optyperson.Person.Id.Value.ToString(),
                         optyperson.PersonType.ToString(),
                         optyperson.Quantity,
-                        optyperson.NeedBy.Value.ToString("MM/dd/yyyy")));
+                        optyperson.NeedBy.Value.ToString(StrawMansDateEncodeFormat)));
                 }
             }
             return sb.ToString();
@@ -716,17 +742,32 @@ namespace PraticeManagement
         {
             upAttachToProject.Update();
             bool IsSavedWithoutErrors = ValidateAndSave();
+
+            ProcessAfterSave(IsSavedWithoutErrors);
+        }
+
+        private void ProcessAfterSave(bool isSavedWithoutErrors)
+        {
             activityLog.Update();
-            if (IsSavedWithoutErrors)
+            if (isSavedWithoutErrors)
             {
                 mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Opportunity"));
                 ClearDirty();
                 if (IsPostBack && Page.IsValid)
                 {
-                    ViewState.Remove(OPPORTUNITY_KEY);
                     LoadOpportunityDetails();
                 }
             }
+        }
+
+        protected void btnStrawmansImpactOkSave_Click(object sender, EventArgs e)
+        {
+            hdnTeamStructure.Value = hdnNewStrawmansList.Value;
+            StrawMans = strawMansListDecode(hdnNewStrawmansList.Value);
+            FillStrawMans(StrawMans);
+            bool IsSavedWithoutErrors = SaveData(false);
+
+            ProcessAfterSave(IsSavedWithoutErrors);
         }
 
         protected void btnCancelChanges_Click(object sender, EventArgs e)
@@ -782,33 +823,6 @@ namespace PraticeManagement
             }
         }
 
-        protected void cvOpportunityStrawmanStartDateCheck_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            e.IsValid = true;
-
-            compEndDate.Validate();
-            if (compEndDate.IsValid)
-            {
-                bool check = true;
-                DateTime? ProjectedStartDate = dpStartDate.DateValue != DateTime.MinValue ? (DateTime?)dpStartDate.DateValue : null;
-                String StrawManList = hdnTeamStructure.Value;
-                string[] strawMansSelectedWithIds = hdnTeamStructure.Value.Split(',');
-                for (int i = 0; i < strawMansSelectedWithIds.Length; i++)
-                {
-                    string[] splitArray = { "?" }; // personId:personType|Quantity?NeedBy
-                    string[] list = strawMansSelectedWithIds[i].Split(splitArray, StringSplitOptions.None);
-                    if (list.Length == 2)
-                    {
-                        var NeedBy = DateTime.Parse(list[1]);
-                        check = (ProjectedStartDate != null ? NeedBy >= ProjectedStartDate : true);
-                        if (!check)
-                            break;
-                    }
-                }
-                e.IsValid = check;
-            }
-
-        }
         protected void cvOpportunityStrawmanEndDateCheck_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             e.IsValid = true;
@@ -843,39 +857,11 @@ namespace PraticeManagement
             Page.Validate(vsumOpportunity.ValidationGroup);
             if (Page.IsValid)
             {
-                var opportunity = new Opportunity();
-                PopulateData(opportunity);
-                string poPriorityID = ((ListItem)ddlPriority.Items.FindByText("PO")).Value;
-                if (opportunity.Priority.Id.ToString() == poPriorityID && opportunity.Project == null)
+                var strawMansNeedbyDatesValid = ValidateStrawMansNeedByDates();
+
+                if (strawMansNeedbyDatesValid)
                 {
-                    mpeAttachToProject.Show();
-                    return false;
-                }
-                using (var serviceClient = new OpportunityServiceClient())
-                {
-                    try
-                    {
-                        int? id = serviceClient.OpportunitySave(opportunity, User.Identity.Name);
-
-                        if (id.HasValue)
-                        {
-                            OpportunityId = id;
-                        }
-
-                        retValue = true;
-                        ClearDirty();
-
-                        ViewState.Remove(OPPORTUNITY_KEY);
-                        ViewState.Remove(PreviousReportContext_Key);
-                        ViewState.Remove(DistinctPotentialBoldPersons_Key);
-                        ViewState.Remove(NEWLY_ADDED_NOTES_LIST);
-                        btnSave.Enabled = false;
-                    }
-                    catch (CommunicationException ex)
-                    {
-                        serviceClient.Abort();
-                        throw;
-                    }
+                    retValue = SaveData(retValue);
                 }
             }
             else
@@ -885,6 +871,112 @@ namespace PraticeManagement
             }
 
             return retValue;
+        }
+
+        private bool SaveData(bool result)
+        {
+            var opportunity = new Opportunity();
+            PopulateData(opportunity);
+            string poPriorityID = ((ListItem)ddlPriority.Items.FindByText("PO")).Value;
+            if (opportunity.Priority.Id.ToString() == poPriorityID && opportunity.Project == null)
+            {
+                mpeAttachToProject.Show();
+                return false;
+            }
+
+            using (var serviceClient = new OpportunityServiceClient())
+            {
+                try
+                {
+                    int? id = serviceClient.OpportunitySave(opportunity, User.Identity.Name);
+
+                        if (id.HasValue)
+                        {
+                            OpportunityId = id;
+                        }
+
+                        result = true;
+                        ClearDirty();
+
+                    ViewState.Remove(OPPORTUNITY_KEY);
+                    ViewState.Remove(PreviousReportContext_Key);
+                    ViewState.Remove(DistinctPotentialBoldPersons_Key);
+                    ViewState.Remove(NEWLY_ADDED_NOTES_LIST);
+                    btnSave.Enabled = false;
+                }
+                catch (CommunicationException ex)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+            return result;
+        }
+
+        private bool ValidateStrawMansNeedByDates()
+        {
+            //If Startdate modifies then Check Strawmans needby date impact with StartDate.
+            bool impacted = false;
+            DateTime? StartDate = dpStartDate.DateValue;
+            DateTime opportunityProjectedStartDate;
+            bool startDateMovedBackward = false;
+
+            if (Opportunity != null && Opportunity.ProjectedStartDate.HasValue)
+            {
+                opportunityProjectedStartDate = Opportunity.ProjectedStartDate.Value.Date;
+                startDateMovedBackward = (Opportunity.ProjectedStartDate.Value.Date > dpStartDate.DateValue.Date);
+            }
+            else
+            {
+                opportunityProjectedStartDate = StartDate.Value.Date;
+            }
+            
+            lblStrawmansImpacted.Text = string.Empty;
+            lblNewOpportunityStartDate.Text = StartDate.Value.ToShortDateString();
+
+            string[] strawMansSelectedWithIds = hdnTeamStructure.Value.Split(',');
+            var newStrawMansList = new StringBuilder();
+            for (int i = 0; i < strawMansSelectedWithIds.Length; i++)
+            {
+                string[] splitArray = { ":", "|", "?" }; // personId:personType|Quantity?NeedBy
+                string[] list = strawMansSelectedWithIds[i].Split(splitArray, StringSplitOptions.None);
+                if (list.Length == 4)
+                {
+                    var id = Convert.ToInt32(list[0]);
+                    var personType = Convert.ToInt32(list[1]);
+                    var quantity = Convert.ToInt32(list[2]);
+                    var needBy = DateTime.Parse(list[3]);
+
+                    if (((Opportunity == null || !startDateMovedBackward) && needBy.Date < StartDate.Value.Date)
+                        || (Opportunity != null && startDateMovedBackward && needBy.Date == opportunityProjectedStartDate)
+                        )
+                    {
+                        lblStrawmansImpacted.Text = lblStrawmansImpacted.Text + "<br/> - " + ddlStrawmen.Items.FindByValue(list[0]).Text + "(" + quantity + ")";
+                        impacted = true;
+                        newStrawMansList.Append(string.Format(StrawMansListEncodeFormat, 
+                                                                id, 
+                                                                personType, 
+                                                                quantity,
+                                                                StartDate.Value.ToString(StrawMansDateEncodeFormat)));
+                    }
+                    else
+                    {
+                        newStrawMansList.Append(string.Format(StrawMansListEncodeFormat, 
+                                                                id, 
+                                                                personType, 
+                                                                quantity,
+                                                                needBy.ToString(StrawMansDateEncodeFormat)));
+                    }
+                }
+            }
+            hdnNewStrawmansList.Value = newStrawMansList.ToString();
+
+            if (impacted)
+            {
+                mpeStrawmansImpactedWithOpportunityStartDate.Show();
+            }
+
+            return !impacted;
         }
 
         protected override void Display()
@@ -906,6 +998,7 @@ namespace PraticeManagement
                     upOpportunityDetail.Update();
                     upDescription.Update();
                     upAttachToProject.Update();
+                    upTeamMakeUp.Update();
                 }
             }
         }
@@ -1225,8 +1318,15 @@ namespace PraticeManagement
 
         protected void btnSaveTeamStructure_OnClick(object sender, EventArgs e)
         {
+            StrawMans = strawMansListDecode(hdnTeamStructure.Value);
 
-            string[] strawMansSelectedWithIds = hdnTeamStructure.Value.Split(',');
+            dtlTeamStructure.DataSource = GetTeamStructureDataSource(StrawMans);
+            dtlTeamStructure.DataBind();
+        }
+
+        private OpportunityPerson[] strawMansListDecode(string strawMansList)
+        {
+            string[] strawMansSelectedWithIds = strawMansList.Split(',');
 
             List<OpportunityPerson> opportunityPersons = new List<OpportunityPerson>();
 
@@ -1254,11 +1354,7 @@ namespace PraticeManagement
                     opportunityPersons.Add(operson);
                 }
             }
-
-            StrawMans = opportunityPersons.AsQueryable().ToArray();
-
-            dtlTeamStructure.DataSource = StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity, NeedBy = p.NeedBy }).OrderBy(p => p.NeedBy).ThenBy(p => p.Name);
-            dtlTeamStructure.DataBind();
+            return opportunityPersons.AsQueryable().ToArray();
         }
 
         protected void btnAddProposedResources_Click(object sender, EventArgs e)
