@@ -18,7 +18,8 @@ CREATE PROCEDURE dbo.ProjectInsert
 	@IsChargeable		BIT,
 	@ProjectManagerIdsList	NVARCHAR(MAX),
 	@DirectorId			INT = NULL,
-	@OpportunityId		INT = NULL
+	@OpportunityId		INT = NULL,
+	@Description           NVARCHAR(MAX)
 )
 AS
 BEGIN
@@ -37,9 +38,18 @@ BEGIN
 	-- Inserting Project
 	INSERT INTO dbo.Project
 	            (ClientId, Discount, Terms, Name, PracticeId,
-	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, IsChargeable,  DirectorId, OpportunityId)
+	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, IsChargeable,  DirectorId, OpportunityId,Description)
 	     VALUES (@ClientId, @Discount, @Terms, @Name, @PracticeId,
-	             @ProjectStatusId, @ProjectNumber, @BuyerName, @GroupId, @IsChargeable, @DirectorId, @OpportunityId)
+	             @ProjectStatusId, @ProjectNumber, @BuyerName, @GroupId, @IsChargeable, @DirectorId, @OpportunityId,@Description)
+
+	IF(@OpportunityId IS NOT NULL)
+	BEGIN
+	  
+	  UPDATE dbo.Opportunity 
+	  SET Description = @Description
+	  WHERE OpportunityId = @OpportunityId 
+	 
+	END
 
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
