@@ -15,52 +15,40 @@ CREATE PROCEDURE [dbo].[GetProjectListWithFinancials]
 	@EndDate			DATETIME,
 	@ExcludeInternalPractices BIT = 0
 AS 
+BEGIN
 	SET NOCOUNT ON ;
 
-	-- Convert client ids from string to table
-	declare @ClientsList table (Id int)
-	insert into @ClientsList
-	select * FROM dbo.ConvertStringListIntoTable(@ClientIds)
+	-- Convert client ids from string to TABLE
+	DECLARE @ClientsList TABLE (Id INT)
+	INSERT INTO @ClientsList
+	SELECT * FROM dbo.ConvertStringListIntoTable(@ClientIds)
 
-	-- Convert practice ids from string to table
-	declare @PracticesList table (Id int)
-	insert into @PracticesList
-	select * FROM dbo.ConvertStringListIntoTable(@PracticeIds)
+	-- Convert practice ids from string to TABLE
+	DECLARE @PracticesList TABLE (Id INT)
+	INSERT INTO @PracticesList
+	SELECT * FROM dbo.ConvertStringListIntoTable(@PracticeIds)
 
-	-- Convert project group ids from string to table
-	declare @ProjectGroupsList table (Id int)
-	insert into @ProjectGroupsList
-	select * FROM dbo.ConvertStringListIntoTable(@ProjectGroupIds)
+	-- Convert project group ids from string to TABLE
+	DECLARE @ProjectGroupsList TABLE (Id INT)
+	INSERT INTO @ProjectGroupsList
+	SELECT * FROM dbo.ConvertStringListIntoTable(@ProjectGroupIds)
 
-	-- Convert project owner ids from string to table
-	declare @ProjectOwnersList table (Id int)
-	insert into @ProjectOwnersList
-	select * FROM dbo.ConvertStringListIntoTable(@ProjectOwnerIds)
+	-- Convert project owner ids from string to TABLE
+	DECLARE @ProjectOwnersList TABLE (Id INT)
+	INSERT INTO @ProjectOwnersList
+	SELECT * FROM dbo.ConvertStringListIntoTable(@ProjectOwnerIds)
 
-	-- Convert salesperson ids from string to table
-	declare @SalespersonsList table (Id int)
-	insert into @SalespersonsList
-	select * FROM dbo.ConvertStringListIntoTable(@SalespersonIds)
-	union all
-	-- All persons with Role = Salesperson
-	select PersonId from v_UsersInRoles where RoleName = 'Salesperson'
-	union all
-	-- All persons that have commission
-	SELECT c.PersonId FROM dbo.DefaultCommission AS c
-    WHERE [type] = 1 AND dbo.IsDateRangeWithingTimeInterval(c.StartDate, c.EndDate, @StartDate, @EndDate) = 1
-	union all
-	-- All persons that have project commission
-	SELECT com.PersonId FROM dbo.Commission AS com
-    WHERE com.CommissionType = 1
-	/*union all
-	-- All active persons
-	select PersonId from Person where PersonStatusId = 1*/
+	-- Convert salesperson ids from string to TABLE
+	DECLARE @SalespersonsList TABLE (Id INT)
+	INSERT INTO @SalespersonsList
+	SELECT * FROM dbo.ConvertStringListIntoTable(@SalespersonIds)
+	
 	
 	DECLARE @DefaultProjectId INT
 	SELECT @DefaultProjectId = ProjectId
 	FROM dbo.DefaultMilestoneSetting
 
-	DECLARE @TempProjectResult table(
+	DECLARE @TempProjectResult TABLE(
 	ClientId					INT,
 	ProjectId					INT,
 	Name						NVARCHAR(100),
@@ -118,7 +106,7 @@ AS
 	LEFT JOIN dbo.ProjectGroup PG	ON PG.GroupId = p.GroupId
 	WHERE	    (c.CommissionType is NULL OR c.CommissionType = 1)
 		    AND (dbo.IsDateRangeWithingTimeInterval(p.StartDate, p.EndDate, @StartDate, @EndDate) = 1 OR (p.StartDate IS NULL AND p.EndDate IS NULL))
-			AND ( @ClientIds IS NULL OR p.ClientId IN (select Id from @ClientsList) )
+			AND ( @ClientIds IS NULL OR p.ClientId IN (SELECT Id from @ClientsList) )
 			AND ( @ProjectGroupIds IS NULL OR p.GroupId IN (SELECT Id from @ProjectGroupsList) )
 			AND ( @PracticeIds IS NULL OR p.PracticeId IN (SELECT Id FROM @PracticesList) OR p.PracticeId IS NULL )
 			AND ( @ProjectOwnerIds IS NULL 
@@ -129,8 +117,7 @@ AS
 				)
 			AND (    @SalespersonIds IS NULL 
 				  OR c.PersonId IN (SELECT Id FROM @SalespersonsList)
-				  OR c.PersonId is null
-			)
+			    )
 			AND (    ( @ShowProjected = 1 AND p.ProjectStatusId = 2 )
 				  OR ( @ShowActive = 1 AND p.ProjectStatusId = 3 )
 				  OR ( @ShowCompleted = 1 AND p.ProjectStatusId = 4 )
@@ -225,4 +212,4 @@ AS
 	FULL JOIN ProjectExpensesMonthly PEM 
 	ON PEM.ProjectId = pf.ProjectId AND pf.FinancialDate = PEM.FinancialDate  AND Pf.MonthEnd = PEM.MonthEnd
 	
-
+END
