@@ -13,7 +13,7 @@ namespace PraticeManagement.Controls
             DataHelper.FillSalespersonList(
                 msddSalespersons,
                 Resources.Controls.AllSalespersonsText,
-                false);
+                true);
 
             DataHelper.FillProjectOwnerList(
                 msddPracticeManagers,
