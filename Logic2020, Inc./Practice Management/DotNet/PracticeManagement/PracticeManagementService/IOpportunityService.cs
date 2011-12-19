@@ -13,7 +13,7 @@ namespace PracticeManagementService
         void UpdatePriorityIdForOpportunity(int opportunityId, int priorityId, string userName);
 
         [OperationContract]
-        void AttachProjectToOpportunity(int opportunityId, int projectId, int priorityId, string userName);
+        void AttachProjectToOpportunity(int opportunityId, int projectId, int priorityId, string userName, bool isOpportunityDescriptionSelected);
 
         /// <summary>
         /// Retrives a list of the opportunities for excel export.
