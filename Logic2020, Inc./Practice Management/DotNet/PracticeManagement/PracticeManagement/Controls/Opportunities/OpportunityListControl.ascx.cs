@@ -595,7 +595,9 @@ namespace PraticeManagement.Controls.Opportunities
                 var oppty = (e.Item as ListViewDataItem).DataItem as Opportunity;
 
                 var ddlPriority = e.Item.FindControl("ddlPriorityList") as DropDownList;
-                ddlPriority.Attributes["lblRefreshMessageClientId"] = lblRefreshMessage.ClientID;
+                
+                
+
                 if (oppty.ProjectedStartDate.HasValue)
                 {
                     hdnStartDate.Value = oppty.ProjectedStartDate.Value.ToString("MM/dd/yyyy");
@@ -611,6 +613,8 @@ namespace PraticeManagement.Controls.Opportunities
                     OpportunityPriority[] priorities = GetOpportunityPriorities();
                     DataHelper.FillListDefault(ddlPriority, string.Empty, priorities, true, "Id", "Priority");
                     ddlPriority.SelectedValue = oppty.Priority.Id.ToString();
+                    ddlPriority.Attributes["Description"] = oppty.Description;
+                    ddlPriority.Attributes["lblRefreshMessageClientId"] = lblRefreshMessage.ClientID;
                     ddlPriority.Attributes["OpportunityID"] = oppty.Id.Value.ToString();
                     ddlPriority.Attributes["OpportunityName"] = oppty.Name;
                     ddlPriority.Attributes["isTeamstructueAvalilable"] = "false";
