@@ -10,9 +10,9 @@
   <xsl:variable name="root" select="node()"/>
   <xsl:variable name="rootName" select="name($root)" />
   <xsl:variable name="redirectUrl">
-    &amp;returnTo=<xsl:value-of select="$currentUrl"/>
+    <xsl:text>&amp;returnTo=</xsl:text>
+    <xsl:value-of select="$currentUrl"/>
   </xsl:variable>
-
   <xsl:template match="/">
     <xsl:apply-templates select="//NEW_VALUES" mode="list"></xsl:apply-templates>
   </xsl:template>
@@ -47,7 +47,7 @@
   </xsl:template>
 
   <xsl:template match="NEW_VALUES" mode="update">
-    
+
     <xsl:for-each select="./attribute::*">
       <xsl:variable name="value" select="." />
       <xsl:variable name="attrName" select="name()" />
@@ -151,7 +151,8 @@
   <xsl:template name="NEW_VALUES_EXPORT">
     <xsl:for-each select="./attribute::*[name() = 'From']">
       <xsl:value-of select="name()"/>:&#160;
-      <b><xsl:value-of select="."/>
+      <b>
+        <xsl:value-of select="."/>
       </b>
     </xsl:for-each>
   </xsl:template>
@@ -214,6 +215,7 @@
                     or (($rootName = 'MilestonePerson' or $rootName = 'TimeEntry') and name() = 'MilestonePersonId'
                         and //DefaultMileStoneId = ./../@MilestoneId)
                     or ($rootName = 'Opportunity' and name() = 'Description')
+                    or ($rootName = 'Project' and name() = 'Description')
                     or ($rootName = 'ProjectAttachment' and name() = 'ProjectName')">
             <xsl:call-template name="DisplayValue" />
           </xsl:when>
@@ -377,6 +379,7 @@
       <xsl:when test="$attrName = 'ObjectName'">Person Name</xsl:when>
       <xsl:when test="$attrName = 'ObjectPersonId'">Person Id</xsl:when>
       <xsl:when test="($rootName = 'Opportunity') and ($attrName = 'Description')">Description</xsl:when>
+      <xsl:when test="($rootName = 'Project') and ($attrName = 'Description')">Description</xsl:when>
       <xsl:when test="$attrName = 'Description'">Milestone Name</xsl:when>
       <xsl:when test="$attrName = 'ClientId'">Client Id</xsl:when>
       <xsl:when test="$attrName = 'FirstName'">First Name</xsl:when>
