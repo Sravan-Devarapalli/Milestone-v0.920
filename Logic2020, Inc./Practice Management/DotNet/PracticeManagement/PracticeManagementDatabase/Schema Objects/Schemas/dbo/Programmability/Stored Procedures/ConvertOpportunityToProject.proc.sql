@@ -25,7 +25,8 @@ BEGIN
 	DECLARE @ProjectManagerId NVARCHAR(255)
 	DECLARE @OpportunityPerson NVARCHAR(100)
 	DECLARE @MilestonePersonId INT
-	
+	DECLARE @Description NVARCHAR(MAX)
+
 	SELECT TOP 1
 		   @ClientId = o.ClientId,
 	       @Discount = o.Discount,
@@ -39,7 +40,8 @@ BEGIN
 	       @BuyerName = o.BuyerName,
 	       @GroupId = pg.GroupId,
 	       @IsChargeable = 1,
-	       @ProjectManagerId = CONVERT(NVARCHAR(255),ISNULL(o.OwnerId, pr.PracticeManagerId))
+	       @ProjectManagerId = CONVERT(NVARCHAR(255),ISNULL(o.OwnerId, pr.PracticeManagerId)),
+		   @Description =Description
 	  FROM dbo.v_Opportunity AS o
 	  inner join dbo.ProjectGroup as pg on pg.ClientId = o.ClientId
 	  inner join dbo.Practice as pr on pr.PracticeId = o.PracticeId
@@ -64,8 +66,8 @@ BEGIN
 		@IsChargeable = @IsChargeable,
 		@ProjectManagerIdsList = @ProjectManagerId,
 	    @ProjectId = @ProjectId OUTPUT,
-		@OpportunityId = @OpportunityId
-
+		@OpportunityId = @OpportunityId,
+		@Description   = @Description
 
 	-- Add a sales commission
 	INSERT INTO dbo.Commission
