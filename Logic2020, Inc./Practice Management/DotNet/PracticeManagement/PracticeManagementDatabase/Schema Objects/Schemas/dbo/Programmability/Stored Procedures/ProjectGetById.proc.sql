@@ -34,6 +34,7 @@ AS
 		   p.DirectorLastName,
 		   p.DirectorFirstName,
 		   pg.Name AS GroupName,
+		   p.Description,
 		   1 InUse,
 		   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
 					ELSE 0 END AS HasAttachments
