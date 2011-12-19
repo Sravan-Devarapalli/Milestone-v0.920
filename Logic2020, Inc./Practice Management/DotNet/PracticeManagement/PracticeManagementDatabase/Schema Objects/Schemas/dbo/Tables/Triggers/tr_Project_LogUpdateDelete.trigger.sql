@@ -33,6 +33,7 @@ BEGIN
 		       i.BuyerName
 				,i.GroupId
 				,PG.Name AS 'ProjectGroup'
+				,i.Description
 				,i.DirectorId
 				,Dir.LastName + ', ' + Dir.FirstName AS 'ProjectDirector'
 				,CASE WHEN i.IsChargeable = 1 THEN 'Yes'
@@ -63,6 +64,7 @@ BEGIN
 		       d.BuyerName
 				,d.GroupId
 				,PG.Name AS 'ProjectGroup'
+				,d.Description
 				,d.DirectorId
 				,Dir.LastName + ', ' + Dir.FirstName AS 'ProjectDirector'
 				,CASE WHEN d.IsChargeable = 1 THEN 'Yes'
@@ -116,12 +118,14 @@ BEGIN
 							NEW_VALUES.StartDate,
 							NEW_VALUES.EndDate,
 							NEW_VALUES.ProjectNumber,
+							NEW_VALUES.Description,
 							OLD_VALUES.ProjectId,
 							OLD_VALUES.Terms,
 							OLD_VALUES.PracticeManagerId,
 							OLD_VALUES.StartDate,
 							OLD_VALUES.EndDate,
-							OLD_VALUES.ProjectNumber
+							OLD_VALUES.ProjectNumber,
+							OLD_VALUES.Description
 					    FROM NEW_VALUES
 					         FULL JOIN OLD_VALUES ON NEW_VALUES.ProjectId = OLD_VALUES.ProjectId
 			           WHERE NEW_VALUES.ProjectId = ISNULL(i.ProjectId, d.ProjectId) OR OLD_VALUES.ProjectId = ISNULL(i.ProjectId, d.ProjectId)
@@ -145,7 +149,7 @@ BEGIN
 	    OR ISNULL(i.StartDate, '2029-10-31') <> ISNULL(d.StartDate, '2029-10-31')
 	    OR ISNULL(i.EndDate, '2029-10-31') <> ISNULL(d.EndDate, '2029-10-31')
 	    OR i.IsChargeable <> d.IsChargeable
-	
+	    OR ISNULL(i.Description,'') <> ISNULL(d.Description, '')
 	-- End logging session
 	 EXEC dbo.SessionLogUnprepare
 END
