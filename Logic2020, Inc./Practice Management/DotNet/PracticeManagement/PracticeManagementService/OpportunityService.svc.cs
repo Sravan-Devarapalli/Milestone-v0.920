@@ -38,9 +38,9 @@ namespace PracticeManagementService
             OpportunityDAL.UpdatePriorityIdForOpportunity(opportunityId, priorityId, userName);
         }
 
-        public void AttachProjectToOpportunity(int opportunityId, int projectId, int priorityId, string userName)
+        public void AttachProjectToOpportunity(int opportunityId, int projectId, int priorityId, string userName, bool isOpportunityDescriptionSelected)
         {
-            OpportunityDAL.AttachProjectToOpportunity(opportunityId, projectId, priorityId, userName);
+            OpportunityDAL.AttachProjectToOpportunity(opportunityId, projectId, priorityId, userName, isOpportunityDescriptionSelected);
         }
 
         /// <summary>
