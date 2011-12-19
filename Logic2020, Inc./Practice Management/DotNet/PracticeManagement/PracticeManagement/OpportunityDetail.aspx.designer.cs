@@ -103,15 +103,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CompareValidator cmpStartDateDataTypeCheck;
         
         /// <summary>
-        /// cvOpportunityStrawmanStartDateCheck control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvOpportunityStrawmanStartDateCheck;
-        
-        /// <summary>
         /// lbEndDate control.
         /// </summary>
         /// <remarks>
@@ -488,6 +479,78 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnOk;
+        
+        /// <summary>
+        /// hdnNewStrawmansList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnNewStrawmansList;
+        
+        /// <summary>
+        /// mpeStrawmansImpactedWithOpportunityStartDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeStrawmansImpactedWithOpportunityStartDate;
+        
+        /// <summary>
+        /// pnlStrawmansImpactedWithOpportunityStartDatePopUp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlStrawmansImpactedWithOpportunityStartDatePopUp;
+        
+        /// <summary>
+        /// btnPopupClose control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnPopupClose;
+        
+        /// <summary>
+        /// lblNewOpportunityStartDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblNewOpportunityStartDate;
+        
+        /// <summary>
+        /// lblStrawmansImpacted control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblStrawmansImpacted;
+        
+        /// <summary>
+        /// btnStrawmansImpactOkSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnStrawmansImpactOkSave;
+        
+        /// <summary>
+        /// btnStrawmansImpactCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnStrawmansImpactCancel;
         
         /// <summary>
         /// tcOpportunityDetails control.
@@ -1001,6 +1064,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancelChanges;
+        
+        /// <summary>
+        /// hdnOpportunityProjectedStartDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnOpportunityProjectedStartDate;
         
         /// <summary>
         /// upAttachToProject control.
