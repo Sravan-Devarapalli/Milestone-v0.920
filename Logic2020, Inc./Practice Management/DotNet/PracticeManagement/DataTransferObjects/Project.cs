@@ -332,6 +332,18 @@ namespace DataTransferObjects
         [DataMember]
         public List<ProjectAttachment> Attachments { get; set; }
 
+
+        /// <summary>
+        /// Gets or sets a description for the Project.
+        /// </summary>
+        [DataMember]
+        public string Description
+        {
+            get;
+            set;
+        }
+
+
         #endregion
 
         #region Formatting
