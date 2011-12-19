@@ -689,14 +689,21 @@
     /* Start: Attach to project logic*/
 
     function addOptionsToDropDownList(ddlProjects, projectsJsonstring) {
-
+        ddlProjects.options.length = 0;
         var projectsJson = jQuery.parseJSON(projectsJsonstring);
-        $.each(projectsJson, function (key, value) {
+        var ddlOption = document.createElement("option");
+        ddlOption.text = "Select Project ...";
+        ddlOption.setAttribute("Description", "");
+        ddlOption.value = "-1";
+        ddlProjects.add(ddlOption);
+
+        for (var i = 0; i < projectsJson.length; i++) {
             var ddlOption = document.createElement("option");
-            ddlOption.text = value;
-            ddlOption.value = key;
+            ddlOption.text = projectsJson[i].DetailedProjectTitle;
+            ddlOption.setAttribute("Description", projectsJson[i].Description);
+            ddlOption.value = projectsJson[i].Value;
             ddlProjects.add(ddlOption);
-        });
+        }
 
         $find('mpePopupAttachToProject').show();
     }
@@ -715,7 +722,61 @@
         return dropdownvalue;
     }
 
+    function ShowDescriptionSelections(ddlProjects) {
+
+        var divDescription = document.getElementById('<%= divDescription.ClientID %>');
+
+        if (ddlProjects.value != "-1" && ddlProjects.value != "") {
+
+            var rbtnOpportunityDescription = document.getElementById('<%= rbtnOpportunityDescription.ClientID %>');
+            var rbtnProjectDescription = document.getElementById('<%= rbtnProjectDescription.ClientID %>');
+            var lblOpportunityDescription = document.getElementById('<%= lblOpportunityDescription.ClientID %>');
+            var lblProjectDescription = document.getElementById('<%= lblProjectDescription.ClientID %>');
+            var ddlPriorityClientId = ddlProjects.attributes["ddlPriorityClientId"].value;
+            var ddlPriority = document.getElementById(ddlPriorityClientId);
+            var opptyDescription = ddlPriority.attributes["Description"].value;
+
+            lblOpportunityDescription.innerHTML = "";
+            lblProjectDescription.innerHTML = "";
+            divDescription.style.display = "none";
+            var optionList = ddlProjects.getElementsByTagName('option');
+
+            var selectedProjectDescription = "";
+
+            for (var i = 0; i < optionList.length; ++i) {
+                if (optionList[i].value == ddlProjects.value) {
+                    selectedProjectDescription = optionList[i].attributes["Description"].value;
+                    break;
+                }
+            }
+
+            lblOpportunityDescription.title = opptyDescription;
+            lblProjectDescription.title = selectedProjectDescription;
+
+            if (opptyDescription.length > 100) {
+                lblOpportunityDescription.innerHTML = opptyDescription.substring(0, 100) + "..";
+            }
+            else {
+                lblOpportunityDescription.innerHTML = opptyDescription;
+            }
+
+            if (selectedProjectDescription.length > 100) {
+                lblProjectDescription.innerHTML = selectedProjectDescription.substring(0, 100) + "..";
+            }
+            else {
+                lblProjectDescription.innerHTML = selectedProjectDescription;
+            }
+
+            divDescription.style.display = "";
+        }
+        else {
+            divDescription.style.display = "none";
+        }
+    }
+
+
     function ddlProjects_change(ddlProjects) {
+        ShowDescriptionSelections(ddlProjects);
         var btnAttach = document.getElementById('<%= btnAttach.ClientID %>');
         if (ddlProjects.value == -1) {
             btnAttach.setAttribute('disabled', 'disabled');
@@ -737,11 +798,11 @@
         var ddlPriorityClientId = ddlProjects.attributes["ddlPriorityClientId"].value;
         var ddlPriority = document.getElementById(ddlPriorityClientId);
         var opportunityID = ddlPriority.attributes["OpportunityID"].value;
-
+        var rbtnOpportunityDescription = document.getElementById('<%= rbtnOpportunityDescription.ClientID %>');
         var priorityId = getvalueinDropDownForGivenText(ddlPriority, 'po');
-      
+
         if (opportunityID != null && opportunityID != 'undefined' && projectId != null && projectId != 'undefined' && priorityId != null && priorityId != 'undefined') {
-            var urlVal = "AttachProjectToOpportunityHandler.ashx?opportunityID=" + opportunityID + "&projectId=" + projectId + "&priorityId=" + priorityId;
+            var urlVal = "AttachProjectToOpportunityHandler.ashx?opportunityID=" + opportunityID + "&projectId=" + projectId + "&priorityId=" + priorityId + "&isOpportunityDescriptionSelected=" + (rbtnOpportunityDescription.checked ? "true" : "false");
             $.post(urlVal, function (dat) {
 
                 ddlPriority.value = priorityId;
@@ -1393,20 +1454,53 @@
                 </tr>
                 <tr>
                     <td align="center" style="padding: 6px 6px 2px 2px;">
-                        <asp:DropDownList ID="ddlProjects" runat="server" AppendDataBoundItems="true" onchange="setDirty(); ddlProjects_change(this);"
+                        <asp:DropDownList ID="ddlProjects" runat="server" AppendDataBoundItems="true" onchange="ddlProjects_change(this);"
                             OpportunityID="" AutoPostBack="false" Style="width: 350px">
                         </asp:DropDownList>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        &nbsp;
+                        <div id="divDescription" runat="server" style="display: none; padding: 15px;">
+                            <table style="width: 100%;">
+                                <tr>
+                                    <td style="width: 3%;">
+                                    </td>
+                                    <td style="width: 94%;">
+                                        <table style="width: 100%; padding: 8px; border-color: Black; border-width: 1px;
+                                            border-style: solid;">
+                                            <tr>
+                                                <td style="width: 100%; padding: 4px;">
+                                                    <b>Please choose any one of the project/opportunity description.</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top" style="width: 100%; padding: 4px;">
+                                                    <asp:RadioButton ID="rbtnOpportunityDescription" runat="server" GroupName="Description"
+                                                        Checked="true" /><b>Opportunity :</b>
+                                                    <asp:Label ID="lblOpportunityDescription" runat="server"></asp:Label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top" style="width: 100%; padding: 4px;">
+                                                    <asp:RadioButton ID="rbtnProjectDescription" runat="server" GroupName="Description"
+                                                        Checked="false" /><b>Project &nbsp;:</b>
+                                                    <asp:Label ID="lblProjectDescription" runat="server"></asp:Label>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="width: 3%;">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </td>
                 </tr>
                 <tr>
                     <td align="center" style="padding: 6px 6px 2px 2px; white-space: nowrap;">
                         <asp:Button ID="btnAttach" runat="server" Text="Attach" OnClientClick="return btnAttach_onclick();"
-                            po disabled="disabled" />
+                            disabled="disabled" />
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <asp:Button ID="btnCancleAttachToProject" runat="server" Text="Cancel" OnClientClick="return btnCancleAttachToProject_OnClientClick();" />
                     </td>
