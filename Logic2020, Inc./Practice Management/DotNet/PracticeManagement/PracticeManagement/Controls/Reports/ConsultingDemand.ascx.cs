@@ -31,8 +31,8 @@ namespace PraticeManagement.Controls.Reporting
         private const string FULL_MONTH_NAME_FORMAT = "MMMM, yyyy";
         private const string DemandToolTip = "<b>Date</b>: {0:MMM-dd-yyyy} <br/><b>Demand:</b> {1}";
         private const string DefaultMonthsTextInDropDownFormat = "Next {0} Months";
-        
-        
+
+
         #endregion
 
         #region Properties
@@ -334,7 +334,7 @@ namespace PraticeManagement.Controls.Reporting
                                            0, // Index
                                             LabelMarkStyle.None); // Mark style: none
             objectNumberLabel.ForeColor = Color.FromArgb(8, 152, 230); //Color.FromArgb(0, 102, 153); //a onhover
-            objectNumberLabel.ToolTip = item.ObjectNumber;
+            objectNumberLabel.ToolTip = item.Description;
             objectNumberLabel.Url = item.ObjectType == 1 ?
                 Urls.OpportunityDetailsLink(item.ObjectId, Constants.ApplicationPages.ConsultingDemandWithFilterQueryString)
                 : Urls.GetProjectDetailsUrl(item.ObjectId, Constants.ApplicationPages.ConsultingDemandWithFilterQueryString);
@@ -348,7 +348,7 @@ namespace PraticeManagement.Controls.Reporting
                                                0, // Index
                                                 LabelMarkStyle.None); // Mark style: none
                 linkedOpportunityNumberLabel.ForeColor = Color.FromArgb(8, 152, 230);
-                linkedOpportunityNumberLabel.ToolTip = item.LinkedObjectNumber;
+                linkedOpportunityNumberLabel.ToolTip = item.Description;
                 linkedOpportunityNumberLabel.Url = Urls.OpportunityDetailsLink(item.LinkedObjectId.Value, Constants.ApplicationPages.ConsultingDemandWithFilterQueryString);
             }
 
@@ -365,7 +365,7 @@ namespace PraticeManagement.Controls.Reporting
 
                 //Add color to the Bar.
                 AddColorToRangeBar(item, range);
-                
+
                 var dailyDemands = Utils.Generic.StringToIntArray(item.QuantityString);
                 if (dailyDemands[dayIndex] > 0)
                 {
@@ -537,7 +537,7 @@ namespace PraticeManagement.Controls.Reporting
                                     monthStart.Day.ToString(),
                                     0,
                                     LabelMarkStyle.None);
-            
+
                 var monthStartLine = SetStripLine(monthStart, Color.Black, 1, ChartDashStyle.Solid);
                 horizAxis.StripLines.Add(monthStartLine);
             }
@@ -550,7 +550,7 @@ namespace PraticeManagement.Controls.Reporting
                         monthMiddle.Day.ToString(),
                         0,
                         LabelMarkStyle.None);
-            
+
             var monthMiddleLine = SetStripLine(monthMiddle, Color.Black, 1, ChartDashStyle.Solid);
             horizAxis.StripLines.Add(monthMiddleLine);
 
