@@ -767,6 +767,19 @@
 
         /* End: Attach to project logic*/
 
+        function ResetStartDate() {
+            var hdnOpportunityProjectedStartDate = document.getElementById('<%= hdnOpportunityProjectedStartDate.ClientID %>');
+            var dpStartDate = document.getElementById('<%= (dpStartDate.FindControl("txtDate") as TextBox).ClientID %>');
+            var dpStartDateExtender = $find('dpStartDateBehaviourId');
+            
+            if (hdnOpportunityProjectedStartDate != null && hdnOpportunityProjectedStartDate.value != '' && dpStartDate != null && dpStartDateExtender != null) {
+                var previousStartDate = new Date(hdnOpportunityProjectedStartDate.value).format('MM/dd/yyyy');
+
+                dpStartDate.value = previousStartDate;
+                dpStartDateExtender.set_selectedDate(previousStartDate);
+            }
+        }
+
     </script>
     <table class="CompPerfTable WholeWidth">
         <tr>
@@ -798,7 +811,7 @@
                                                 <b>Start Date</b>
                                             </td>
                                             <td class="DatePickerPadding" style="padding-left: 4px; padding-right: 4px;">
-                                                <uc1:DatePicker ID="dpStartDate" ValidationGroup="Opportunity" AutoPostBack="false"
+                                                <uc1:DatePicker ID="dpStartDate" ValidationGroup="Opportunity" AutoPostBack="false" BehaviorID="dpStartDateBehaviourId"
                                                     OnClientChange="EnableSaveButton();setDirty();" TextBoxWidth="62px" runat="server" />
                                             </td>
                                             <td>
@@ -809,10 +822,6 @@
                                                     ValidationGroup="Opportunity" Type="Date" Operator="DataTypeCheck" Text="*" Display="Dynamic"
                                                     ErrorMessage="The Projected Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
                                                     ToolTip="The Projected Start Date has an incorrect format. It must be 'MM/dd/yyyy'."></asp:CompareValidator>
-                                                <asp:CustomValidator ID="cvOpportunityStrawmanStartDateCheck" runat="server" OnServerValidate="cvOpportunityStrawmanStartDateCheck_ServerValidate"
-                                                    ErrorMessage="Some exsisting Strawman Need By date is less than New Opportunity StartDate."
-                                                    ToolTip="Some exsisting Strawman Need By date is less than New Opportunity StartDate."
-                                                    EnableClientScript="false" Display="Dynamic" Text="*" ValidationGroup="Opportunity" />
                                             </td>
                                             <td style="padding-left: 4px; padding-right: 8px;">
                                                 <asp:Label ID="lbEndDate" Style="font-weight: bold;" runat="server" Text="End Date"></asp:Label>
@@ -1160,6 +1169,41 @@
                                 </tr>
                             </table>
                         </asp:Panel>
+                        <asp:HiddenField ID="hdnNewStrawmansList" Value="" runat="server" />
+                        <AjaxControlToolkit:ModalPopupExtender ID="mpeStrawmansImpactedWithOpportunityStartDate" runat="server" TargetControlID="hdnNewStrawmansList"
+                            CancelControlID="btnStrawmansImpactCancel" BehaviorID="mpeBehaviourStrawmansImpactedWithOpportunityStartDate" BackgroundCssClass="modalBackground"
+                            PopupControlID="pnlStrawmansImpactedWithOpportunityStartDatePopUp" DropShadow="false" OnCancelScript="ResetStartDate(); return false;" />
+                        <asp:Panel ID="pnlStrawmansImpactedWithOpportunityStartDatePopUp" BackColor="White" BorderColor="Black" BorderWidth="2px" runat="server" 
+                            CssClass="ConfirmBoxErrorClass" style="display:none;">
+                            <table width="100%">
+                                <tr>
+                                    <td valign="bottom" class="AttentionPopUpHeaderStyle">
+                                        Attention!
+                                        <asp:Button ID="btnPopupClose" runat="server" CssClass="mini-report-close" ToolTip="Cancel"
+                                            OnClientClick="$find('mpeBehaviourStrawmansImpactedWithOpportunityStartDate').hide(); return false;" Style="float: right;"
+                                            Text="X"></asp:Button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:6px;">
+                                        Following Strawman(s) Need by date will be Adjusted to Opportunity's New Start Date 
+                                        <asp:Label ID="lblNewOpportunityStartDate" Font-Bold="true" runat="server"></asp:Label>.
+                                        <br />
+                                        <asp:Label ID="lblStrawmansImpacted" runat="server"></asp:Label>
+                                        <p>
+                                        <br />
+                                            Click Ok to update the Strawman(s) 'Needed By' dates to reflect new Opportunity's Start Date.
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="padding:6px;">
+                                        <asp:Button ID="btnStrawmansImpactOkSave" runat="server" Text="Ok" OnClick="btnStrawmansImpactOkSave_Click" />
+                                        <asp:Button ID="btnStrawmansImpactCancel" runat="server" Text="Cancel" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </asp:Panel>
                     </ContentTemplate>
                     <Triggers>
                         <asp:AsyncPostBackTrigger ControlID="btnAttach" />
@@ -1477,6 +1521,7 @@
                                     <asp:AsyncPostBackTrigger ControlID="btnAttach" />
                                     <asp:AsyncPostBackTrigger ControlID="btnSave" />
                                     <asp:AsyncPostBackTrigger ControlID="btnCancelChanges" />
+                                    <asp:AsyncPostBackTrigger ControlID="btnStrawmansImpactOkSave" />
                                 </Triggers>
                             </asp:UpdatePanel>
                         </td>
@@ -1561,6 +1606,7 @@
                                 </td>
                             </tr>
                         </table>
+                        <asp:HiddenField ID="hdnOpportunityProjectedStartDate" runat="server" Value="" />
                     </ContentTemplate>
                     <Triggers>
                         <asp:AsyncPostBackTrigger ControlID="btnSave" />
