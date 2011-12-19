@@ -13,10 +13,11 @@ BEGIN
 			   p.Name,
 			   p.ClientName,
 			   p.ProjectNumber,
-			   p.BuyerName
+			   p.BuyerName,
+			   p.Description
 		FROM dbo.v_Project AS p
 		WHERE p.ClientId = @ClientId 
-			   AND p.ProjectStatusId IN (2,3)
+			   AND p.ProjectStatusId IN (2,3) 
 		ORDER BY p.Name
 	END
 	ELSE
@@ -26,7 +27,8 @@ BEGIN
 			   p.Name,
 			   p.ClientName,
 			   p.ProjectNumber,
-			   p.BuyerName
+			   p.BuyerName,
+			   p.Description    
 		FROM dbo.v_Project AS p
 		WHERE p.ClientId = @ClientId 
 		ORDER BY p.Name
