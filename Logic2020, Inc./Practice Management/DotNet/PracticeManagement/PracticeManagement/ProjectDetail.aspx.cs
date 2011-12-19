@@ -31,7 +31,7 @@ namespace PraticeManagement
         private const string ProjectIdFormat = "projectId={0}";
         private const string ProjectKey = "Project";
         private const string ProjectAttachmentHandlerUrl = "~/Controls/Projects/ProjectAttachmentHandler.ashx?ProjectId={0}&FileName={1}&AttachmentId={2}";
-        private const string AttachSOWMessage = "File must be in PDF/DOC/DOCX format and no larger than {0}kb";
+        private const string AttachSOWMessage = "File must be in PDF format and no larger than {0}kb";
         private const string AttachmentFileSize = "AttachmentFileSize";
         private const string ProjectAttachmentsKey = "ProjectAttachmentsKey";
         #endregion
@@ -324,6 +324,11 @@ namespace PraticeManagement
                     btnDelete.Enabled = false;
                 }
             }
+        }
+
+        protected void custProjectDesciption_ServerValidation(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = txtDescription.Text.Length <= 2000;
         }
 
         protected void btnMilestoneName_Command(object sender, CommandEventArgs e)
@@ -917,6 +922,7 @@ namespace PraticeManagement
         private void PopulateControls(Project project)
         {
             txtProjectName.Text = project.Name;
+            txtDescription.Text = project.Description;
             lblProjectNumber.Text = project.ProjectNumber;
             chbIsChargeable.Checked = project.IsChargeable;
 
@@ -1170,6 +1176,8 @@ namespace PraticeManagement
             PopulateSalesCommission(project);
             PopulatePracticeManagementCommission(project);
             project.BillingInfo = billingInfo.Info;
+            project.Description = txtDescription.Text;
+
             if (ddlDirector.SelectedIndex > 0)
                 project.Director = new Person { Id = int.Parse(ddlDirector.SelectedValue) };
 
