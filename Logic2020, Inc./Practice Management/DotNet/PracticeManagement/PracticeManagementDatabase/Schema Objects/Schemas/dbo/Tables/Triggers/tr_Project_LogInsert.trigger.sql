@@ -31,6 +31,7 @@ BEGIN
 				,i.BuyerName AS 'BuyerName'
 				,i.GroupId
 				,PG.Name AS 'ProjectGroup'
+				,i.Description
 				,i.DirectorId
 				,D.LastName + ', ' + D.FirstName AS 'ProjectDirector'
 				,CASE WHEN i.IsChargeable = 1 THEN 'Yes'
