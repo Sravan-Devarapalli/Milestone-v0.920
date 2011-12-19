@@ -63,6 +63,13 @@ BEGIN
 					 @ProjectedStartDate, @ProjectedEndDate, @OpportunityNumber, @Description, @PracticeId, @BuyerName,
 					 @Pipeline, @Proposed, @SendOut, @OpportunityIndex, @ProjectId, @OwnerId, @GroupId ,@EstimatedRevenue)
 
+		IF(@ProjectId IS NOT NULL)
+		BEGIN
+		  UPDATE dbo.Project
+		  SET Description = @Description
+		  WHERE ProjectId = @ProjectId
+		END
+
 		SET @OpportunityId = SCOPE_IDENTITY()
 
 		DECLARE @PersonId INT
