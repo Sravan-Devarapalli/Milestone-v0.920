@@ -1268,7 +1268,7 @@ namespace DataAccess
             }
         }
 
-        public static void AttachProjectToOpportunity(int opportunityId, int projectId, int priorityId, string userName)
+        public static void AttachProjectToOpportunity(int opportunityId, int projectId, int priorityId, string userName, bool isOpportunityDescriptionSelected)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.AttachProjectToOpportunity, connection))
@@ -1279,6 +1279,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityIdParam, opportunityId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PriorityIdParam, priorityId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.isOpportunityDescriptionSelected, isOpportunityDescriptionSelected);
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam,
                                               !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
 
