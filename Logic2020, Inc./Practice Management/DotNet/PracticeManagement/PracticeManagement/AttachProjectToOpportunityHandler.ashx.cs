@@ -26,13 +26,9 @@ namespace PraticeManagement
                     var clientId = Convert.ToInt32(context.Request.QueryString["clientId"]);
                     var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, true));
 
-                    Dictionary<string, string> values = new Dictionary<string, string>();
-                    values.Add("-1", "Select Project ...");
-                    foreach (Project project in projects)
-                    {
-                        values.Add(project.Id.ToString(), project.DetailedProjectTitle);
-                    }
-                    string ClientProjects =AttachProjectToOpportunityHandler.ToJSON(values);
+                    var SelectedList = projects.Select(p => new { p.Id.Value, p.DetailedProjectTitle, p.Description });
+
+                    string ClientProjects = AttachProjectToOpportunityHandler.ToJSON(SelectedList);
                     context.Response.Write(ClientProjects);
                 }
             }
@@ -43,19 +39,22 @@ namespace PraticeManagement
                     var opportunityId = Convert.ToInt32(context.Request.QueryString["opportunityID"]);
                     var projectId = Convert.ToInt32(context.Request.QueryString["projectId"]);
                     var priorityId = Convert.ToInt32(context.Request.QueryString["priorityId"]);
-                    ServiceCallers.Custom.Opportunity(os => os.AttachProjectToOpportunity(opportunityId, projectId, priorityId, context.User.Identity.Name));
+                    var isOpportunityDescriptionSelected = Convert.ToBoolean(context.Request.QueryString["isOpportunityDescriptionSelected"]);
+
+                    ServiceCallers.Custom.Opportunity(os => os.AttachProjectToOpportunity(opportunityId, projectId, priorityId, context.User.Identity.Name, isOpportunityDescriptionSelected));
                     context.Response.Write("Save Completed.");
                 }
 
             }
 
-         
+
         }
-        private static string ToJSON(Object obj) 
-        { 
-            JavaScriptSerializer serializer = new JavaScriptSerializer(); 
-            return serializer.Serialize(obj); 
-        } 
+
+        private static string ToJSON(Object obj)
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            return serializer.Serialize(obj);
+        }
 
         public bool IsReusable
         {
