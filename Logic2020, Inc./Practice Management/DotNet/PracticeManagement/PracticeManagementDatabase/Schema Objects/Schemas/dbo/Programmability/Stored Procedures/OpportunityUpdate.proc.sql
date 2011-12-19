@@ -76,6 +76,13 @@ BEGIN
 			   ,LastUpdated = GETDATE()
 		 WHERE OpportunityId = @OpportunityId
 
+		IF(@ProjectId IS NOT NULL)
+		BEGIN
+		  UPDATE dbo.Project
+		  SET Description = @Description
+		  WHERE ProjectId = @ProjectId
+		END
+
 		-- Logging changes
 		DECLARE @NoteText NVARCHAR(2000)
 		DECLARE @PersonId INT
