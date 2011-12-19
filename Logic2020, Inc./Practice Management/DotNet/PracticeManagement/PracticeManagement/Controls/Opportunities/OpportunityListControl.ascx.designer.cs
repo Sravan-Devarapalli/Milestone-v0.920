@@ -238,6 +238,51 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::System.Web.UI.WebControls.DropDownList ddlProjects;
         
         /// <summary>
+        /// divDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDescription;
+        
+        /// <summary>
+        /// rbtnOpportunityDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbtnOpportunityDescription;
+        
+        /// <summary>
+        /// lblOpportunityDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblOpportunityDescription;
+        
+        /// <summary>
+        /// rbtnProjectDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbtnProjectDescription;
+        
+        /// <summary>
+        /// lblProjectDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblProjectDescription;
+        
+        /// <summary>
         /// btnAttach control.
         /// </summary>
         /// <remarks>
