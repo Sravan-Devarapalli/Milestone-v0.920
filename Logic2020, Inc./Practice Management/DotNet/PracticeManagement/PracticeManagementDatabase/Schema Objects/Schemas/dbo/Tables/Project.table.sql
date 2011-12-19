@@ -14,6 +14,7 @@
     [GroupId]          INT             NULL,
     [IsChargeable]     BIT             NOT NULL,
 	[DirectorId]	   INT			   NULL,
+	[Description]      NVARCHAR (MAX) NULL,
     FOREIGN KEY ([GroupId]) REFERENCES [dbo].[ProjectGroup] ([GroupId]) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
