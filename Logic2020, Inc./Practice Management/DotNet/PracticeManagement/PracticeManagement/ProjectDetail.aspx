@@ -12,6 +12,7 @@
     TagName="ProjectMilestonesFinancials" %>
 <%@ Register Src="Controls/ProjectExpenses/ProjectExpensesControl.ascx" TagName="ProjectExpenses"
     TagPrefix="uc2" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajax" %>
 <%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectFinancials.ascx" TagName="ProjectFinancials" %>
 <%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectPersons.ascx" TagName="ProjectPersons" %>
 <%@ Register Src="~/Controls/Generic/Notes.ascx" TagName="Notes" TagPrefix="uc" %>
@@ -389,7 +390,7 @@
                                         Project Manager(s)
                                     </td>
                                     <td class="floatRight" colspan="3">
-                                        <cc2:ScrollingDropDown ID="cblProjectManagers" runat="server" SetDirty="true" Width="240" 
+                                        <cc2:ScrollingDropDown ID="cblProjectManagers" runat="server" SetDirty="true" Width="240"
                                             AllSelectedReturnType="AllItems" Height="240px" onclick="scrollingDropdown_onclick('cblProjectManagers','Project Manager');"
                                             DropDownListType="Project Manager" CellPadding="3" />
                                         <ext:ScrollableDropdownExtender ID="sdeProjectManagers" runat="server" TargetControlID="cblProjectManagers"
@@ -513,6 +514,29 @@
                                 </tr>
                             </table>
                         </asp:Panel>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-bottom: 6px;">
+                        <br style="height: 1px;" />
+                        <ajax:TabContainer ID="tcProjectDetails" runat="server" CssClass="CustomTabStyle"
+                            ActiveTabIndex="0">
+                            <ajax:TabPanel ID="tpDescription" runat="server">
+                                <HeaderTemplate>
+                                    <span class="bg"><a href="#"><span>Description</span></a></span>
+                                </HeaderTemplate>
+                                <ContentTemplate>
+                                    <div style="padding-bottom: 6px;">
+                                        <asp:TextBox ID="txtDescription" runat="server" TextMode="MultiLine" Rows="5" Width="95%"
+                                            Height="80px" onchange="setDirty();" Style="overflow-y: auto; resize: none; font-size: 12px;
+                                            font-family: Arial, Helvetica, sans-serif;"></asp:TextBox>
+                                        <asp:CustomValidator ID="custProjectDesciption" runat="server" ControlToValidate="txtDescription"
+                                            Display="Dynamic" OnServerValidate="custProjectDesciption_ServerValidation" SetFocusOnError="True" ErrorMessage="The project description cannot be more than 2000 symbols"
+                                            ToolTip="The project description cannot be more than 2000 symbols" ValidationGroup="Project">*</asp:CustomValidator>
+                                    </div>
+                                </ContentTemplate>
+                            </ajax:TabPanel>
+                        </ajax:TabContainer>
                     </td>
                 </tr>
                 <tr>
