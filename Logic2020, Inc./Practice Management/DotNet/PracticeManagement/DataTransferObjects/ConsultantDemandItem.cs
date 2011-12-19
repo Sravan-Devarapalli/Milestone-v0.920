@@ -93,6 +93,13 @@ namespace DataTransferObjects
             get;
             set;
         }
+
+        [DataMember]
+        public string Description
+        {
+            get;
+            set;
+        }
     }
 }
 
