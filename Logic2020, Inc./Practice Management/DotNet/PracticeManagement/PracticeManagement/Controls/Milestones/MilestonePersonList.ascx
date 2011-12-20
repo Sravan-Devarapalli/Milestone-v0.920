@@ -61,8 +61,8 @@
             </HeaderTemplate>
             <ItemStyle Width="2%" HorizontalAlign="Center" Height="20px" Wrap="false" />
             <ItemTemplate>
-                <asp:ImageButton ID="imgAdditionalAllocationOfResource" runat="server" OnClick="imgAdditionalAllocationOfResource_OnClick" ToolTip="Extend"
-                    ImageUrl="~/Images/add_16.png" />
+                <asp:ImageButton ID="imgAdditionalAllocationOfResource" runat="server" OnClick="imgAdditionalAllocationOfResource_OnClick"
+                    ToolTip="Extend" ImageUrl="~/Images/add_16.png" />
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
@@ -305,16 +305,72 @@
             </HeaderTemplate>
             <ItemStyle Width="3%" HorizontalAlign="Center" Height="20px" Wrap="false" />
             <ItemTemplate>
-                <asp:ImageButton ID="imgMilestonePersonDelete" ToolTip="Delete" runat="server" OnClick="imgMilestonePersonDelete_OnClick"
-                    MilestonePersonEntryId='<%# Eval("Id") %>' ImageUrl="~/Images/cross_icon.png" />
-                <ajaxToolkit:ConfirmButtonExtender ConfirmText="Are you sure you want to delete this person?"
-                    runat="server" TargetControlID="imgMilestonePersonDelete">
-                </ajaxToolkit:ConfirmButtonExtender>
+                <asp:ImageButton ID="imgMilestonePersonDelete" ToolTip="Delete" runat="server" OnClientClick="return imgMilestonePersonDelete_OnClientClick(this);"
+                    MilestonePersonEntryId='<%# Eval("Id") %>' IsOriginalResource="" ImageUrl="~/Images/cross_icon.png" />
                 <%-- Empty in edit mode --%>
             </ItemTemplate>
         </asp:TemplateField>
     </Columns>
 </asp:GridView>
+<asp:HiddenField ID="hdMpePopupDeleteMileStonePersons" Value="false" runat="server" />
+<AjaxControlToolkit:ModalPopupExtender ID="mpeDeleteMileStonePersons" runat="server"
+    TargetControlID="hdMpePopupDeleteMileStonePersons" CancelControlID="btnCancel"
+    BehaviorID="mpeDeleteMileStonePersons" BackgroundCssClass="modalBackground" PopupControlID="pnlDeleteMileStonePersons"
+    DropShadow="false" />
+<asp:Panel ID="pnlDeleteMileStonePersons" runat="server" BackColor="White" BorderColor="Black"
+    CssClass="ConfirmBoxClass" Style="display: none; min-width:300px !important;" BorderWidth="2px">
+    <table width="100%">
+        <tr>
+            <th align="center" style="text-align: center; background-color: Gray;" valign="bottom">
+                <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
+                <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Cancel Changes"
+                    Style="float: right;" OnClientClick="return btnClose_OnClientClick();" Text="X">
+                </asp:Button>
+            </th>
+        </tr>
+        <tr>
+            <td style="padding: 10px;" >
+                <table>
+                    <tr id="trDeleteOriginalEntry">
+                        <td style="text-align: left;">
+                            Clicking "Delete" will result in deleting only this entry.<br /><br />
+                            Clicking "Delete All" will result in deleting all the extensions for this entry.
+                        </td>
+                    </tr>
+                    <tr id="trDeleteExtendedEntry">
+                        <td style="padding-left : 30px;">
+                            Are you sure you want to delete this Entry?
+                        </td>
+                    </tr>
+                </table>
+                <asp:HiddenField ID="hdMilestonePersonEntryId" runat="server" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <br />
+            </td>
+        </tr>
+        <tr>
+           <td align="center" style="padding: 6px 6px 15px 6px;">
+                <table >
+                    <tr>
+                        <td style="padding-right:5px;">
+                            <asp:Button ID="btnDeletePersonEntry" Text="Delete" runat="server" OnClick="btnDeletePersonEntry_OnClick" />
+                        </td>
+                        <td  id="tdbtnDeleteAllPersonEntries">
+                            <asp:Button ID="btnDeleteAllPersonEntries" Text="Delete All" runat="server" OnClick="btnDeleteAllPersonEntries_OnClick" />
+                        </td>
+                        <td style="padding-left:5px;">
+                            <asp:Button ID="btnCancel" Text="Cancel" runat="server" OnClientClick="return btnClose_OnClientClick();" />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+
+        </tr>
+    </table>
+</asp:Panel>
 <asp:Panel ID="pnlInsertMilestonePerson" runat="server" Wrap="False">
     <table width="100%" class="CompPerfTable" cellspacing="0" border="0" style="background-color: White;
         border-collapse: collapse;">
