@@ -728,6 +728,7 @@
                 public const string MilestonePersonGetByMilestonePersonId = "dbo.MilestonePersonGetByMilestonePersonId";
                 public const string MilestonePersonEntryListByMilestonePersonId = "dbo.MilestonePersonEntryListByMilestonePersonId";
                 public const string CheckTimeEntriesForMilestonePerson = "dbo.CheckTimeEntriesForMilestonePerson";
+                public const string CheckTimeEntriesForMilestonePersonWithGivenRoleId = "dbo.CheckTimeEntriesForMilestonePersonWithGivenRoleId";
                 public const string MilestonePersonsGetByMilestoneId = "dbo.MilestonePersonsGetByMilestoneId";
                 public const string MilestonePersonEntriesWithFinancialsByMilestoneId = "dbo.MilestonePersonEntriesWithFinancialsByMilestoneId";
                 public const string MilestonePersonEntryWithFinancials = "dbo.MilestonePersonEntryWithFinancials";
