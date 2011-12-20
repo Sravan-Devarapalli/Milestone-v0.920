@@ -204,6 +204,39 @@
             }
         }
 
+
+        //milestonePersonList.ascx
+        function imgMilestonePersonDelete_OnClientClick(imgDelete) {
+            var hdMilestonePersonEntryId = document.getElementById('<%= MilestonePersonEntryListControl.ClientID%>' + '_hdMilestonePersonEntryId');
+            var btnDeleteAllPersonEntries = document.getElementById('<%= MilestonePersonEntryListControl.ClientID%>' + '_btnDeleteAllPersonEntries');
+            var btnDeletePersonEntry = document.getElementById('<%= MilestonePersonEntryListControl.ClientID%>' + '_btnDeletePersonEntry');
+            var trDeleteOriginalEntry = document.getElementById('trDeleteOriginalEntry');
+            var trDeleteExtendedEntry = document.getElementById('trDeleteExtendedEntry');
+            var IsOriginalResource = imgDelete.getAttribute("IsOriginalResource");
+           
+            hdMilestonePersonEntryId.value = imgDelete.getAttribute("MilestonePersonEntryId");
+           
+            if (IsOriginalResource == 'false') {
+                btnDeleteAllPersonEntries.style.display = "none";
+                btnDeletePersonEntry.value = "   OK   ";
+                trDeleteOriginalEntry.style.display = "none";
+                trDeleteExtendedEntry.style.display = "block";
+            }
+            else {
+                btnDeleteAllPersonEntries.style.display = "block";
+                btnDeletePersonEntry.value = "Delete";
+                trDeleteOriginalEntry.style.display = "block";
+                trDeleteExtendedEntry.style.display = "none";
+            }
+
+            $find('mpeDeleteMileStonePersons').show();
+            return false;
+        }
+        function btnClose_OnClientClick() {
+            $find('mpeDeleteMileStonePersons').hide();
+            return false;
+        }
+      
     </script>
     <style type="text/css">
         /* --------- Tabs for person and project details pages ------ */
