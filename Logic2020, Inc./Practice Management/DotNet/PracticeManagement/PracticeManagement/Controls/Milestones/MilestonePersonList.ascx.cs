@@ -44,6 +44,7 @@ namespace PraticeManagement.Controls.Milestones
         private const string txtHoursPerDayInsert = "txtHoursPerDayInsert";
         private const string txtHoursInPeriodInsert = "txtHoursInPeriodInsert";
         private const string milestoneHasTimeEntries = "Cannot delete milesone person because this person has already entered time for this milestone.";
+        private const string allMilestoneHasTimeEntries = "Cannot delete all milesone person entries because this person has already entered time for this milestone.";
         private const string milestonePersonEntry = "MilestonePersonEntry";
 
         #endregion
@@ -945,7 +946,7 @@ namespace PraticeManagement.Controls.Milestones
 
             IsSaveCommit = true;
             ISDatBindRows = true;
-
+            lblResultMessage.ClearMessage();
             if (!IsPostBack)
             {
 
@@ -1141,11 +1142,18 @@ namespace PraticeManagement.Controls.Milestones
 
 
                 imgAdditionalAllocationOfResource.Attributes["entriesCount"] = entry.ExtendedResourcesRowCount.ToString();
+                imgMilestonePersonDelete.Attributes["IsOriginalResource"] = "false";
 
                 if (!entry.IsShowPlusButton)
                 {
                     imgAdditionalAllocationOfResource.Visible = ddlPersonName.Visible = ddlRole.Visible = lnkPersonName.Visible = lblRole.Visible = false;
-
+                }
+                else
+                {
+                    if (entry.ExtendedResourcesRowCount > 1)
+                    {
+                        imgMilestonePersonDelete.Attributes["IsOriginalResource"] = "true";
+                    }
                 }
 
                 if (entry.IsEditMode)
@@ -1705,28 +1713,67 @@ namespace PraticeManagement.Controls.Milestones
             OnEditClick(row.DataItemIndex);
         }
 
-        protected void imgMilestonePersonDelete_OnClick(object sender, EventArgs e)
+        protected void btnDeletePersonEntry_OnClick(object sender, EventArgs e)
         {
-            ImageButton imgDelete = sender as ImageButton;
-            GridViewRow row = imgDelete.NamingContainer as GridViewRow;
+            var milestonePersonEntryId = Convert.ToInt32(hdMilestonePersonEntryId.Value);
+            var index = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == milestonePersonEntryId);
+            var entry = MilestonePersonsEntries[index];
 
-            var entry = MilestonePersonsEntries[row.DataItemIndex];
-
-
-            lblResultMessage.ClearMessage();
-
-            //if two entries are there with overlapping periods then we are allowing to delete entry as per #2925 Jason mail.
-            if (CheckTimeEntriesExist(entry.MilestonePersonId, entry.StartDate, entry.EndDate, true, true))
+            if (!entry.ThisPerson.IsStrawMan)
             {
-                lblResultMessage.ShowErrorMessage(milestoneHasTimeEntries);
-                return;
+                //if two entries are there with overlapping periods then we are allowing to delete entry as per #2925 Jason mail.
+                if (CheckTimeEntriesExist(entry.MilestonePersonId, entry.StartDate, entry.EndDate, true, true))
+                {
+                    lblResultMessage.ShowErrorMessage(milestoneHasTimeEntries);
+                    return;
+                }
             }
 
             // Delete mPersonEntry 
-            var milestonePersonEntryId = Convert.ToInt32(imgDelete.Attributes["MilestonePersonEntryId"]);
 
             ServiceCallers.Custom.MilestonePerson(mp => mp.DeleteMilestonePersonEntry(milestonePersonEntryId, Context.User.Identity.Name));
-            MilestonePersonsEntries.RemoveAt(row.DataItemIndex);
+            MilestonePersonsEntries.RemoveAt(index);
+            MilestonePersonsEntries = MilestonePersonsEntries;
+            MilestonePersonsEntries = GetSortedEntries(MilestonePersonsEntries);
+            BindEntriesGrid(MilestonePersonsEntries);
+
+            // Get latest data in detail tab
+
+            HostingPage.Milestone = null;
+        }
+
+
+        protected void btnDeleteAllPersonEntries_OnClick(object sender, EventArgs e)
+        {
+            var milestonePersonEntryId = Convert.ToInt32(hdMilestonePersonEntryId.Value);
+
+            var deleteEntry = MilestonePersonsEntries.First(m => m.Id == milestonePersonEntryId);
+
+            lblResultMessage.ClearMessage();
+
+            var PersonEntries = MilestonePersonsEntries.FindAll(m=>m.MilestonePersonId == deleteEntry.MilestonePersonId);
+
+            int? milestonePersonEntryRoleId = deleteEntry.Role != null ?  (int?)deleteEntry.Role.Id  : null;
+
+            //if two entries are there with overlapping periods then we are allowing to delete entry as per #2925 Jason mail.
+            if (CheckTimeEntriesForMilestonePersonWithGivenRoleId(deleteEntry.MilestonePersonId, milestonePersonEntryRoleId))
+            {
+                lblResultMessage.ShowErrorMessage(allMilestoneHasTimeEntries);
+                return;
+            }
+
+            //delete all mPersonEntries
+            foreach (MilestonePersonEntry entry in PersonEntries)
+            {
+                if ((entry.Role == null && milestonePersonEntryRoleId == null) || (entry.Role != null && milestonePersonEntryRoleId != null && entry.Role.Id == milestonePersonEntryRoleId ))
+                {
+                    // Delete mPersonEntry 
+                    ServiceCallers.Custom.MilestonePerson(mp => mp.DeleteMilestonePersonEntry(entry.Id, Context.User.Identity.Name));
+                    var index = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == entry.Id);
+                    MilestonePersonsEntries.RemoveAt(index);
+                    //MilestonePersonsEntries.Remove(entry);//need to check
+                }
+            }
             MilestonePersonsEntries = MilestonePersonsEntries;
             MilestonePersonsEntries = GetSortedEntries(MilestonePersonsEntries);
             BindEntriesGrid(MilestonePersonsEntries);
@@ -1735,9 +1782,18 @@ namespace PraticeManagement.Controls.Milestones
 
             HostingPage.Milestone = null;
 
+
         }
+        
+        protected void imgMilestonePersonDelete_OnClick(object sender, EventArgs e)
+        {
+            ImageButton imgDelete = sender as ImageButton;
 
+            hdMilestonePersonEntryId.Value = imgDelete.Attributes["MilestonePersonEntryId"];
 
+            mpeDeleteMileStonePersons.Show();
+        }
+      
         public void OnEditClick(int editRowIndex)
         {
             var entries = MilestonePersonsEntries;
@@ -2210,6 +2266,23 @@ namespace PraticeManagement.Controls.Milestones
                 try
                 {
                     return serviceClient.CheckTimeEntriesForMilestonePerson(MilestonePersonId, startDate, endDate, checkStartDateEquality, checkEndDateEquality);
+
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        private bool CheckTimeEntriesForMilestonePersonWithGivenRoleId(int MilestonePersonId, int? MilestonePersonRoleId)
+        {
+            using (var serviceClient = new MilestonePersonServiceClient())
+            {
+                try
+                {
+                    return serviceClient.CheckTimeEntriesForMilestonePersonWithGivenRoleId(MilestonePersonId, MilestonePersonRoleId);
 
                 }
                 catch (CommunicationException)
