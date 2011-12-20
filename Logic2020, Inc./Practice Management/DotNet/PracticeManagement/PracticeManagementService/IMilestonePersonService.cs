@@ -58,13 +58,22 @@ namespace PracticeManagementService
         MilestonePerson GetMilestonePersonDetail(int milestonePersonId);
 
         /// <summary>
-        /// Checks whether there are any time entries for a given MilestonepersonId.
+        /// Checks whether there are any time entries for a given MilestonepersonId in between the given startdate and enddate.
         /// </summary>
         /// <param name="milestonePersonId"></param>
         /// <returns></returns>
         [OperationContract]
         bool CheckTimeEntriesForMilestonePerson(int milestonePersonId, DateTime? startDate, DateTime? endDate,
                                                 bool checkStartDateEquality, bool checkEndDateEquality);
+
+
+        /// <summary>
+        /// Checks whether there are any time entries for a given MilestonepersonId for the given MilestonePersonRoleId.
+        /// </summary>
+        /// <param name="milestonePersonId"></param>
+        /// <returns></returns>
+        [OperationContract]
+        bool CheckTimeEntriesForMilestonePersonWithGivenRoleId(int milestonePersonId, int? milestonePersonRoleId);
 
         /// <summary>
         /// Saves the specified <see cref="Milestone"/>-<see cref="Person"/> link to the database.
