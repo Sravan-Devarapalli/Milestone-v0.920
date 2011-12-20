@@ -42,6 +42,11 @@ namespace PraticeManagement.MilestonePersonService {
             "onse")]
         bool CheckTimeEntriesForMilestonePerson(int milestonePersonId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate, bool checkStartDateEquality, bool checkEndDateEquality);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestonePersonService/CheckTimeEntriesForMilestonePersonWith" +
+            "GivenRoleId", ReplyAction="http://tempuri.org/IMilestonePersonService/CheckTimeEntriesForMilestonePersonWith" +
+            "GivenRoleIdResponse")]
+        bool CheckTimeEntriesForMilestonePersonWithGivenRoleId(int milestonePersonId, System.Nullable<int> milestonePersonRoleId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestonePersonService/SaveMilestonePerson", ReplyAction="http://tempuri.org/IMilestonePersonService/SaveMilestonePersonResponse")]
         void SaveMilestonePerson(ref DataTransferObjects.MilestonePerson milestonePerson, string userName);
         
@@ -101,6 +106,8 @@ namespace PraticeManagement.MilestonePersonService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class MilestonePersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.MilestonePersonService.IMilestonePersonService>, PraticeManagement.MilestonePersonService.IMilestonePersonService {
         
+       
+        
         public MilestonePersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -143,6 +150,10 @@ namespace PraticeManagement.MilestonePersonService {
         
         public bool CheckTimeEntriesForMilestonePerson(int milestonePersonId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate, bool checkStartDateEquality, bool checkEndDateEquality) {
             return base.Channel.CheckTimeEntriesForMilestonePerson(milestonePersonId, startDate, endDate, checkStartDateEquality, checkEndDateEquality);
+        }
+        
+        public bool CheckTimeEntriesForMilestonePersonWithGivenRoleId(int milestonePersonId, System.Nullable<int> milestonePersonRoleId) {
+            return base.Channel.CheckTimeEntriesForMilestonePersonWithGivenRoleId(milestonePersonId, milestonePersonRoleId);
         }
         
         public void SaveMilestonePerson(ref DataTransferObjects.MilestonePerson milestonePerson, string userName) {
