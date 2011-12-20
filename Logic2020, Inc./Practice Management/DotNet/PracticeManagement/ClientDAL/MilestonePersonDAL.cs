@@ -359,6 +359,34 @@ namespace DataAccess
             return result;
         }
 
+        public static bool CheckTimeEntriesForMilestonePersonWithGivenRoleId(int milestonePersonId, int? milestonePersonRoleId)
+        {
+            bool result;
+            try
+            {
+                using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.MilestonePerson.CheckTimeEntriesForMilestonePersonWithGivenRoleId, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(MilestonePersonIdParam, milestonePersonId);
+                    if(milestonePersonRoleId.HasValue)
+                    {
+                        command.Parameters.AddWithValue(PersonRoleIdParam,milestonePersonRoleId );
+                    }
+                    connection.Open();
+                    result = Convert.ToBoolean(command.ExecuteScalar());
+                }
+            }
+            catch (Exception ex)
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// 	Inserts the specified <see cref = "Milestone" />-<see cref = "Person" /> link to the database.
         /// </summary>
