@@ -672,7 +672,10 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MilestonePersonService\MilestonePersonService1.wsdl" />
-    <None Include="Service References\MilestonePersonService\MilestonePersonService19.xsd">
+    <None Include="Service References\MilestonePersonService\MilestonePersonService10.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestonePersonService\MilestonePersonService11.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MilestonePersonService\MilestonePersonService3.xsd">
@@ -983,7 +986,6 @@
     <None Include="Service References\ProjectGroupService\ProjectGroupService15.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService12.disco" />
     <None Include="Service References\OverheadService\OverheadService1.disco" />
-    <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <None Include="Service References\PersonSkillService\configuration91.svcinfo" />
     <None Include="Service References\PersonSkillService\configuration.svcinfo" />
@@ -995,6 +997,7 @@
     <None Include="Service References\PersonSkillService\PersonSkillService2.disco" />
     <None Include="Service References\OpportunityService\OpportunityService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
+    <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
     <Content Include="SkillsEntry.aspx" />
     <Content Include="SkillsProfile.aspx" />
     <Content Include="SkillsSearch.aspx" />
