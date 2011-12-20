@@ -146,7 +146,7 @@ namespace PracticeManagementService
         }
 
         /// <summary>
-        /// Checks whether there are any time entries for a given MilestonepersonId.
+        /// Checks whether there are any time entries for a given MilestonepersonId in between the given startdate and enddate.
         /// </summary>
         /// <param name="milestonePersonId"></param>
         /// <returns></returns>
@@ -156,6 +156,18 @@ namespace PracticeManagementService
             return MilestonePersonDAL.CheckTimeEntriesForMilestonePerson(milestonePersonId, startDate, endDate,
                                                                             checkStartDateEquality, checkEndDateEquality);
         }
+
+        /// <summary>
+        /// Checks whether there are any time entries for a given MilestonepersonId for the given MilestonePersonRoleId.
+        /// </summary>
+        /// <param name="milestonePersonId"></param>
+        /// <param name="milestonePersonRoleId"></param>
+        /// <returns></returns>
+        public bool CheckTimeEntriesForMilestonePersonWithGivenRoleId(int milestonePersonId, int? milestonePersonRoleId)
+        {
+            return MilestonePersonDAL.CheckTimeEntriesForMilestonePersonWithGivenRoleId(milestonePersonId, milestonePersonRoleId);
+        }
+
 
         /// <summary>
         /// Saves the specified <see cref="Milestone"/>-<see cref="Person"/> link to the database.
