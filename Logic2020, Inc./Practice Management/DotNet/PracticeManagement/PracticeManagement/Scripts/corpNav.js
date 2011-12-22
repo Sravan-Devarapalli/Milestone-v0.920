@@ -8,6 +8,7 @@
         $('li#' + menuItem).addClass('l1hover');
         $(selectDefList).slideDown(150);
     };
+
     $('.l1').hover(function () {
         hoverItem = $(this).attr('id');
         selectDefList = 'li#' + hoverItem + ' dl';
@@ -25,16 +26,24 @@ function () {
     $(selectDefList).slideUp(150);
     return false;
 });
-    $('dd.l3').hover(function () {
-        var selectL2 = $(this).attr('id');
+
+$('dd.l3').hover(function (e) {
+       var selectL2 = $(this).attr('id');
         if ($('dd#' + selectL2 + ' .flyout').is(':hidden')) {
             $('dd#' + selectL2 + ' a').addClass('ddBG');
             $('dd#' + selectL2 + ' .flyout').show(0);
+           }
+        },
+        function (e) {
+              var  selectL2 = $(this).attr('id');
+//            if ($('dd#' + selectL2 + ' .flyout').is(':visible')) {
+                $('dd#' + selectL2 + ' a').removeClass('ddBG');
+                $('dd#' + selectL2 + ' .flyout').hide();
+//            }
         }
-        else {
-            $('dd#' + selectL2 + ' a').removeClass('ddBG');
-            $('dd#' + selectL2 + ' .flyout').hide();
-        }
-    }
 );
+   
 });
+
+
+
