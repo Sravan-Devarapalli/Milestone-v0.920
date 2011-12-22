@@ -15,7 +15,7 @@
 .l1
 {
     float: left;
-    width: 137px;
+    width: 130px;
     list-style: none outside none;
     margin: 0;
     padding: 0;
@@ -30,7 +30,7 @@
 li.l1 a
 {
     display: block;
-    width: 137px;
+    width: 130px;
     height: 34px;
     line-height: 30px;
     text-align: center;
@@ -63,7 +63,7 @@ li.l1 a:hover
 .l2 dd
 {
     display: inline-block;
-    width: 135px;
+    width: 128px;
     margin: 0;
     background: url('../images/bg_corpnav_mid.png') repeat-y;
     border-left: 1px solid #aaa;
