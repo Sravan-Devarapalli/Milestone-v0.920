@@ -3,18 +3,42 @@ AS
 	BEGIN
 
 
- IF OBJECT_ID('#LastPay') IS NOT NULL DROP TABLE #LastPay
- CREATE TABLE #LastPay
-    (
-      Person INT,
-      EndDate SMALLDATETIME
-    )
+ --IF OBJECT_ID('#LastPay') IS NOT NULL DROP TABLE #LastPay
+ --CREATE TABLE #LastPay
+ --   (
+ --     Person INT,
+ --     EndDate SMALLDATETIME
+ --   ) 
  
- INSERT INTO #LastPay
-        SELECT  pay.PersonId,
-                MAX(ISNULL(pay.EndDate, dbo.GetFutureDate())) AS EndDate
-        FROM    v_pay AS pay
-        GROUP BY pay.PersonId
+ --INSERT INTO #LastPay
+ --       SELECT  pay.PersonId,
+ --               MAX(ISNULL(pay.EndDate, dbo.GetFutureDate())) AS EndDate
+ --       FROM    v_pay AS pay
+ --       GROUP BY pay.PersonId
+
+ DECLARE @Today DATETIME = dbo.GettingPMTime(GETUTCDATE())
+ DECLARE @FutureDate DATETIME = dbo.GetFutureDate()
+
+ --As per the bug #2977 , now considering current pay instead of lastpay.
+;WITH CurrentPay AS (
+	SELECT p.PersonId, ISNULL(p.EndDate, @FutureDate) AS EndDate
+	  FROM dbo.v_Pay AS p
+	 WHERE @Today >= p.StartDate
+	   AND @Today < ISNULL(p.EndDateOrig, @FutureDate)
+	   ),
+CurrentElseLastPay AS--If no currentpay then considering last pay.
+(
+	SELECT PersonId, EndDate
+	FROM CurrentPay
+	UNION
+	SELECT 
+	p.PersonId, MAX(ISNULL(p.EndDate, @FutureDate)) AS EndDate
+	FROM dbo.v_Pay AS p
+	--WHERE p.PersonId NOT IN (SELECT PersonId FROM CurrentPay)
+	LEFT JOIN CurrentPay CP ON CP.PersonId = p.PersonId
+	WHERE CP.PersonId IS NULL
+	GROUP BY p.PersonId
+)
 
 
     SELECT  pers.PersonId AS 'Id',
@@ -55,7 +79,7 @@ AS
             --rcd.cd2 AS 'Recruiting comission 2 days'
     FROM    dbo.Person AS pers
             LEFT OUTER JOIN dbo.v_Pay AS pay ON pers.PersonId = pay.PersonId
-            INNER JOIN #LastPay AS lp ON lp.Person = pay.PersonId AND (lp.EndDate = pay.EndDate OR pay.EndDate IS NULL)
+            INNER JOIN CurrentElseLastPay AS lp ON lp.PersonId = pay.PersonId AND (lp.EndDate = ISNULL(pay.EndDate, @FutureDate))
             LEFT OUTER JOIN dbo.Timescale AS paytype ON paytype.TimescaleId = pay.Timescale
             LEFT OUTER JOIN dbo.Seniority AS sen ON pers.SeniorityId = sen.SeniorityId
             LEFT OUTER JOIN dbo.PersonStatus AS stat ON stat.PersonStatusId = pers.PersonStatusId
