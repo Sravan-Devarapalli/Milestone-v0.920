@@ -76,8 +76,11 @@ li.l1 a:hover
     background-image: none;
     width: 105px;
     height: auto;
-    margin: 0 5px;
-    padding: 5px 10px;
+    margin: 0 0px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-left:10px;
+    padding-right:13px;
     text-align: left;
     font-size: 12px;
     line-height: 15px;
@@ -101,11 +104,21 @@ li.l1 a:hover
     min-width: 135px;
     margin: 0;
     padding: 0;
-    left: 130px;
     padding-bottom: 5px;
     width: auto;
     background: #e0e7eb;
 }
+
+.flyoutLeft
+{
+    left: 130px;
+}
+
+.flyoutRight
+{
+    right: 130px;
+}
+
 .l2 dd div.flyout a
 {
     color: #5a8293;
