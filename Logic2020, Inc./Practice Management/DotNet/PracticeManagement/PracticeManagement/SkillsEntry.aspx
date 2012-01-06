@@ -420,7 +420,7 @@
                 ValidationGroup="TechnicalGroup" />
             <asp:HiddenField ID="hdnIsValid" runat="server" Value="true" />
             <asp:HiddenField ID="hdnValidationMessage" runat="server" Value="" />
-            <asp:Panel ID="pnlValidations" runat="server">
+            <asp:Panel ID="pnlValidations" style="display:none;" runat="server">
                 <div style="border: 1px solid black;">
                     <div style="text-align: center; font-weight: bold; padding: 3px; background-color: Gray;">
                         Alert!
