@@ -41,22 +41,11 @@
                 e = window.event;
             }
             if (e.keyCode == 13) {
-                //debugger;
                 var btn = document.getElementById('<%= btnSearch.ClientID %>');
                 btn.click();
+
             }
         }
-
-        function ChangeDefaultFocusToOKButton(e) {
-            if (window.event) {
-                e = window.event;
-            }
-            if (e.keyCode == 13) {
-                var btn = document.getElementById('<%= btnEmployeeOK.ClientID %>');
-                btn.click();
-            }
-        }
-
     </script>
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
@@ -106,7 +95,7 @@
                                             Clear</button>
                                         &nbsp;&nbsp;
                                         <asp:Button ID="btnSearch" runat="server" Text="Search" OnClick="btnSearch_OnClick"
-                                            ValidationGroup="Search" CausesValidation="true" />
+                                            UseSubmitBehavior="false" EnableViewState="false" ValidationGroup="Search" CausesValidation="true" />
                                         &nbsp;&nbsp;
                                     </td>
                                     <td>
@@ -160,13 +149,13 @@
                                         Width="100%">
                                         <ItemTemplate>
                                             <asp:HyperLink NavigateUrl='<%# GetSkillProfileUrl(((DataTransferObjects.Person)Container.DataItem).Id.ToString()) %>'
-                                                Text="<%# GetPersonFirstLastName(((DataTransferObjects.Person)Container.DataItem))  %>" runat="server"
-                                                Target="_blank"></asp:HyperLink>
+                                                Text="<%# GetPersonFirstLastName(((DataTransferObjects.Person)Container.DataItem))  %>"
+                                                runat="server" Target="_blank"></asp:HyperLink>
                                         </ItemTemplate>
                                         <AlternatingItemTemplate>
                                             <asp:HyperLink NavigateUrl='<%# GetSkillProfileUrl(((DataTransferObjects.Person)Container.DataItem).Id.ToString()) %>'
-                                                Text="<%# GetPersonFirstLastName(((DataTransferObjects.Person)Container.DataItem))%>" runat="server"
-                                                Target="_blank"></asp:HyperLink>
+                                                Text="<%# GetPersonFirstLastName(((DataTransferObjects.Person)Container.DataItem))%>"
+                                                runat="server" Target="_blank"></asp:HyperLink>
                                         </AlternatingItemTemplate>
                                     </asp:DataList>
                                 </div>
