@@ -41,6 +41,11 @@
       <siteMapNode url="~/Calendar.aspx"  VirtualPath="~/Calendar.aspx" QuickLinkTitle="Calendar"  title="Calendar" description="Calendar" ShowURL="true"  />
     </siteMapNode>
     <siteMapNode url="~/MarginTest.aspx" VirtualPath="~/MarginTest.aspx" QuickLinkTitle="Margin Test"  title="Margin Test" description="Margin Test" ShowURL="true"  />
+    <siteMapNode title="Skills"  url="Temp.aspx?from=Skills">
+      <siteMapNode url="~/SkillsEntry.aspx" VirtualPath="~/SkillsEntry.aspx" QuickLinkTitle="Skills Entry" title="Skills Entry" description="Skills Entry" ShowURL="true"/>
+      <siteMapNode url="~/SkillsSearch.aspx" VirtualPath="~/SkillsSearch.aspx" QuickLinkTitle="Skills Search" title="Skills Search" description="Skills Search" ShowURL="true"/>
+      <siteMapNode url="~/SkillsProfile.aspx" VirtualPath="~/SkillsProfile.aspx" QuickLinkTitle="Skills Profile" title="Skills Profile" description="Skills Profile" ShowURL="true"/>
+    </siteMapNode>
     <siteMapNode url="Temp.aspx?from=Configuration" title="Configuration" description="System configuration"  >
       <siteMapNode url="Temp.aspx?from=Company_Resources" title="Company Resources" description="Company Resources">
         <siteMapNode url="~/Config/Branding.aspx" title="Branding/Logo"  VirtualPath="~/Config/Branding.aspx" QuickLinkTitle="Branding/Logo"  description="Branding/Logo"  />
@@ -84,11 +89,6 @@
         <siteMapNode url="~/Config/SiteMap.aspx"  VirtualPath="~/Config/SiteMap.aspx" QuickLinkTitle="Site Map"  title="Site Map" description="Site Map"  />
         <siteMapNode url="~/Config/SupportLink.aspx"  VirtualPath="~/Config/SupportLink.aspx" QuickLinkTitle="Support Link"  title="Support Link" description="Support Link"  />
       </siteMapNode>
-    </siteMapNode>
-    <siteMapNode title="Skills"  url="Temp.aspx?from=Skills">
-      <siteMapNode url="~/SkillsEntry.aspx" VirtualPath="~/SkillsEntry.aspx" QuickLinkTitle="Skills Entry" title="Skills Entry" description="Skills Entry" ShowURL="true"/>
-      <siteMapNode url="~/SkillsSearch.aspx" VirtualPath="~/SkillsSearch.aspx" QuickLinkTitle="Skills Search" title="Skills Search" description="Skills Search" ShowURL="true"/>
-      <siteMapNode url="~/SkillsProfile.aspx" VirtualPath="~/SkillsProfile.aspx" QuickLinkTitle="Skills Profile" title="Skills Profile" description="Skills Profile" ShowURL="true"/>
     </siteMapNode>
   </siteMapNode>
 </siteMap>
