@@ -711,31 +711,8 @@ namespace PraticeManagement
                     : default(int);
 
             client.IsMarginColorInfoEnabled = chbMarginThresholds.Checked;
-            client.ClientMarginInfo = null;
-            if (IntialClientMarginColorInfoList.Count == ClientMarginColorInfoList.Count)
-            {
-                for (int i = 0; i < ClientMarginColorInfoList.Count; i++)
-                {
-                    if (!(ClientMarginColorInfoList[i].ColorInfo.ColorId == IntialClientMarginColorInfoList[i].ColorInfo.ColorId
-                        && ClientMarginColorInfoList[i].ColorInfo.ColorValue == IntialClientMarginColorInfoList[i].ColorInfo.ColorValue
-                        && ClientMarginColorInfoList[i].StartRange == IntialClientMarginColorInfoList[i].StartRange
-                        && ClientMarginColorInfoList[i].EndRange == IntialClientMarginColorInfoList[i].EndRange))
-                    {
-                        client.ClientMarginInfo = ClientMarginColorInfoList;
-                        break;
-                    }
-                }
+            client.ClientMarginInfo = ClientMarginColorInfoList;
 
-                if (chbMarginThresholds.Checked != IntialchbMarginThresholdsValue)
-                {
-                    client.ClientMarginInfo = ClientMarginColorInfoList;
-                }
-
-            }
-            else
-            {
-                client.ClientMarginInfo = ClientMarginColorInfoList;
-            }
 
 
         }
