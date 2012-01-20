@@ -10,6 +10,7 @@
     Assembly="PraticeManagement" %>
 <%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectMilestonesFinancials.ascx"
     TagName="ProjectMilestonesFinancials" %>
+<%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectTimeTypes.ascx" TagName="ProjectTimeTypes" %>
 <%@ Register Src="Controls/ProjectExpenses/ProjectExpensesControl.ascx" TagName="ProjectExpenses"
     TagPrefix="uc2" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajax" %>
@@ -121,7 +122,6 @@
         }
 
         function CheckIfDatesValid() {
-
             txtStartDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbFrom');
             txtEndDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbTo');
             var startDate = new Date(txtStartDate.value);
@@ -206,6 +206,239 @@
 
         }
 
+        //region projecttimetypes script
+
+        function changeAlternateitemscolrsForCBL() {
+            var cblTimeTypesAssignedToProjectItemsCount = 0;
+            var cblTimeTypesNotAssignedToProjectItemsCount = 0;
+            var cblTimeTypesAssignedToProject = document.getElementById('<%=(ProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID %>');
+            if (cblTimeTypesAssignedToProject != null) {
+                SetAlternateColors(cblTimeTypesAssignedToProject);
+                cblTimeTypesAssignedToProjectItemsCount = cblTimeTypesAssignedToProject.children[0].children.length;
+            }
+
+            var cblTimeTypesNotAssignedToProject = document.getElementById('<%=(ProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID %>');
+            if (cblTimeTypesNotAssignedToProject != null) {
+                SetAlternateColors(cblTimeTypesNotAssignedToProject);
+                cblTimeTypesNotAssignedToProjectItemsCount = cblTimeTypesNotAssignedToProject.children[0].children.length;
+            }
+
+            var divTimeTypesAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("divTimeTypesAssignedToProject") as HtmlGenericControl).ClientID%>');
+            var divTimeTypesNotAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("divTimeTypesNotAssignedToProject") as HtmlGenericControl).ClientID%>');
+
+        }
+
+        function SetAlternateColors(chkboxList) {
+
+            var chkboxes = chkboxList.getElementsByTagName('input');
+            var index = 0;
+            for (var i = 0; i < chkboxes.length; i++) {
+                if (chkboxes[i].parentNode.style.display != "none") {
+                    index++;
+
+                    if ((index) % 2 == 0) {
+                        chkboxes[i].parentNode.parentNode.style.backgroundColor = "#f9faff";
+
+                    }
+                    else {
+                        chkboxes[i].parentNode.parentNode.style.backgroundColor = "";
+                    }
+                }
+            }
+        }
+
+        function UnAssignAllTimeTypes_Click() {
+            var cblTimeTypesAssignedToProjectCheckboxes = $('#<%=(ProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID %> tr td :input');
+            for (var i = 0; i < cblTimeTypesAssignedToProjectCheckboxes.length; ++i) {
+                cblTimeTypesAssignedToProjectCheckboxes[i].checked = true;
+            }
+            UnAssignTimeType_Click();
+        }
+
+        function AssignAllTimeTypes_Click() {
+            var cblTimeTypesNotAssignedToProjectCheckboxes = $('#<%=(ProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID %> tr td :input');
+            for (var i = 0; i < cblTimeTypesNotAssignedToProjectCheckboxes.length; ++i) {
+                cblTimeTypesNotAssignedToProjectCheckboxes[i].checked = true;
+            }
+            AssignTimeType_Click();
+        }
+
+        function AssignTimeType_Click() {
+            var cblTimeTypesNotAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID%>');
+            var cblTimeTypesAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID%>');
+
+            var cblTimeTypesNotAssignedToProjectCheckboxes = $('#<%=(ProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID %> tr td :input');
+
+            for (var i = 0; i < cblTimeTypesNotAssignedToProjectCheckboxes.length; ++i) {
+
+                if (cblTimeTypesNotAssignedToProjectCheckboxes[i].checked) {
+
+                    if (cblTimeTypesAssignedToProject == null) {
+                        var divTimeTypesAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("divTimeTypesAssignedToProject") as HtmlGenericControl).ClientID%>');
+                        cblTimeTypesAssignedToProject = document.createElement('table');
+                        cblTimeTypesAssignedToProject.setAttribute('id', '<%= (ProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID%>');
+                        cblTimeTypesAssignedToProject.setAttribute('cellpadding', '0');
+                        cblTimeTypesAssignedToProject.setAttribute('border', '0');
+                        cblTimeTypesAssignedToProject.setAttribute('style', 'background-color:White;width:100%;');
+                        tableBody = document.createElement('tbody');
+                        cblTimeTypesAssignedToProject.appendChild(tableBody);
+                        divTimeTypesAssignedToProject.appendChild(cblTimeTypesAssignedToProject);
+                    }
+                    addCheckBoxItem(cblTimeTypesAssignedToProject,
+                                    cblTimeTypesAssignedToProject.children[0].children.length,
+                                    '0',
+                                    cblTimeTypesNotAssignedToProjectCheckboxes[i].parentNode.attributes['timeTypename'].value,
+                                    cblTimeTypesNotAssignedToProjectCheckboxes[i].parentNode.attributes['timeTypeid'].value
+                                    );
+                    setDirty();
+                }
+            }
+            RemoveTimeTypesFromList(cblTimeTypesNotAssignedToProject);
+            changeAlternateitemscolrsForCBL();
+        }
+        function IsTimeTypeHasAnyTimeEntriesForTheProject(timetypeId) {
+            var hdnProjectTimeTypesInUse = document.getElementById('<%= (ProjectTimeTypes.FindControl("hdnProjectTimeTypesInUse") as HiddenField).ClientID%>');
+            //check weather the timetypeId is in hdnProjectTimeTypesInUse if yes return true else return false
+            var ids = hdnProjectTimeTypesInUse.value.split(',');
+            for (var i = 0; i < ids.length; ++i) {
+                if (ids[i] == timetypeId) {
+                    return true
+                }
+            }
+            return false;
+        }
+        function btnClose_OnClientClick() {
+            $find("mpeTimetypeAlertMessage").hide();
+            return false;
+        }
+        function UnAssignTimeType_Click() {
+            var cblTimeTypesNotAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID%>');
+            var cblTimeTypesAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID%>');
+            var cblTimeTypesAssignedToProjectCheckboxes = $('#<%=(ProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID %> tr td :input');
+
+            var timeTypesHavingTimeEntries = "<br/>";
+
+            for (var i = 0; i < cblTimeTypesAssignedToProjectCheckboxes.length; ++i) {
+                if (cblTimeTypesAssignedToProjectCheckboxes[i].checked) {
+                    if (IsTimeTypeHasAnyTimeEntriesForTheProject(cblTimeTypesAssignedToProjectCheckboxes[i].parentNode.attributes['timeTypeid'].value)) {
+                        //format alert message here
+                        timeTypesHavingTimeEntries = timeTypesHavingTimeEntries + '-' + cblTimeTypesAssignedToProjectCheckboxes[i].parentNode.attributes['timeTypename'].value + '<br/>';
+                    }
+                }
+            }
+
+            if (timeTypesHavingTimeEntries != "<br/>") {
+                var lbAlertMessage = document.getElementById('<%= (ProjectTimeTypes.FindControl("lbAlertMessage") as Label).ClientID%>');
+                lbAlertMessage.innerHTML = timeTypesHavingTimeEntries;
+                $find("mpeTimetypeAlertMessage").show();
+            }
+            else {
+                for (var i = 0; i < cblTimeTypesAssignedToProjectCheckboxes.length; ++i) {
+                    if (cblTimeTypesAssignedToProjectCheckboxes[i].checked) {
+                        if (cblTimeTypesNotAssignedToProject == null) {
+                            var divTimeTypesNotAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("divTimeTypesNotAssignedToProject") as HtmlGenericControl).ClientID%>');
+                            cblTimeTypesNotAssignedToProject = document.createElement('table');
+                            cblTimeTypesNotAssignedToProject.setAttribute('id', '<%= (ProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID%>');
+                            cblTimeTypesNotAssignedToProject.setAttribute('cellpadding', '0');
+                            cblTimeTypesNotAssignedToProject.setAttribute('border', '0');
+                            cblTimeTypesNotAssignedToProject.setAttribute('style', 'background-color:White;width:100%;');
+                            tableBody = document.createElement('tbody');
+                            cblTimeTypesNotAssignedToProject.appendChild(tableBody);
+                            divTimeTypesNotAssignedToProject.appendChild(cblTimeTypesNotAssignedToProject);
+                        }
+                        addCheckBoxItem(cblTimeTypesNotAssignedToProject,
+                                        cblTimeTypesNotAssignedToProject.children[0].children.length,
+                                        '0',
+                                        cblTimeTypesAssignedToProjectCheckboxes[i].parentNode.attributes['timeTypename'].value,
+                                        cblTimeTypesAssignedToProjectCheckboxes[i].parentNode.attributes['timeTypeid'].value
+                                        );
+                        setDirty();
+                    }
+                }
+
+                RemoveTimeTypesFromList(cblTimeTypesAssignedToProject);
+                changeAlternateitemscolrsForCBL();
+            }
+        }
+
+
+        function addCheckBoxItem(checkBoxListRef, rowPosition, checkBoxValue, displayText, Id) {
+
+            var checkBoxListId = checkBoxListRef.id;
+            var rowArray = checkBoxListRef.getElementsByTagName('tr');
+            var rowCount = rowArray.length;
+
+            var rowElement = checkBoxListRef.insertRow(rowPosition);
+            var columnElement = rowElement.insertCell(0);
+
+            var spanRef = document.createElement('span');
+            var checkBoxRef = document.createElement('input');
+            var labelRef = document.createElement('label');
+
+            spanRef.setAttribute('timeTypeid', Id);
+            spanRef.setAttribute('timeTypename', displayText);
+
+            checkBoxRef.type = 'checkbox';
+            checkBoxRef.value = checkBoxValue;
+            checkBoxRef.id = checkBoxListId + '_' + rowPosition;
+            labelRef.innerHTML = displayText;
+            labelRef.setAttribute('for', checkBoxRef.id);
+            columnElement.appendChild(spanRef);
+            spanRef.appendChild(checkBoxRef);
+            spanRef.appendChild(labelRef);
+        }
+
+
+        function RemoveTimeTypesFromList(cbl) {
+            if (cbl != null) {
+                for (var i = cbl.children[0].children.length - 1; i >= 0; i--) {
+                    if (cbl.children[0].children[i].getElementsByTagName('input')[0] != null) {
+                        if (cbl.children[0].children[i].getElementsByTagName('input')[0].checked) {
+                            cbl.deleteRow(i);
+                            setDirty();
+                        }
+                    }
+                }
+            }
+        }
+
+        function SetTimeTypesAssignedToProject() {
+            var cblTimeTypesAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID%>');
+            var hdnTimeTypesAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("hdnTimeTypesAssignedToProject") as HiddenField).ClientID%>');
+            if (cblTimeTypesAssignedToProject != null && hdnTimeTypesAssignedToProject != null) {
+                var TimeTypesAssignedToProject = ',';
+                if (cblTimeTypesAssignedToProject != null) {
+                    for (var i = 0; i < cblTimeTypesAssignedToProject.children[0].children.length; ++i) {
+                        TimeTypesAssignedToProject += cblTimeTypesAssignedToProject.children[0].children[i].getElementsByTagName('span')[0].attributes['timeTypeId'].value + ',';
+                    }
+                }
+                hdnTimeTypesAssignedToProject.value = TimeTypesAssignedToProject;
+            }
+        }
+
+        function chbCanCreateCustomWorkTypes_Change() {
+            var chbCanCreateCustomWorkTypes = document.getElementById('<%= chbCanCreateCustomWorkTypes.ClientID%>');
+            var imgAddNewTimeType = document.getElementById('<%= (ProjectTimeTypes.FindControl("imgAddNewTimeType") as ImageButton).ClientID%>');
+            if (imgAddNewTimeType != null  && chbCanCreateCustomWorkTypes != null) {
+                if (chbCanCreateCustomWorkTypes.checked) {
+                    imgAddNewTimeType.style.display = "";
+                }
+                else {
+                    imgAddNewTimeType.style.display = "none";
+                }
+            }
+
+        }
+        // End Region projecttimetypes script
+
+    
+    </script>
+    <script type="text/javascript">
+        function getid(text) {
+            alert(text);
+            alert(document.getElementById(text));
+            return document.getElementById(text);
+        }
     </script>
     <style type="text/css">
         /* --------- Tabs for person and project details pages ------ */
@@ -329,7 +562,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        Client
+                                        Account
                                     </td>
                                     <td>
                                         <asp:DropDownList ID="ddlClientName" runat="server" CssClass="WholeWidth" OnSelectedIndexChanged="ddlClientName_SelectedIndexChanged"
@@ -338,7 +571,7 @@
                                     </td>
                                     <td>
                                         <asp:RequiredFieldValidator ID="reqClientName" runat="server" ControlToValidate="ddlClientName"
-                                            ErrorMessage="The Client Name is required." ToolTip="The Client Name is required."
+                                            ErrorMessage="The Account Name is required." ToolTip="The Account Name is required."
                                             ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
                                     </td>
                                     <td>
@@ -440,15 +673,22 @@
                                             Display="Dynamic" ValidationExpression="^[a-zA-Z'\-]{2,30}$"></asp:RegularExpressionValidator>
                                     </td>
                                     <td>
-                                        Client discount&nbsp;
+                                        Account discount&nbsp;
                                     </td>
                                     <td>
                                         <asp:TextBox ID="txtClientDiscount" runat="server" onchange="setDirty();"></asp:TextBox>
                                         <asp:CompareValidator ID="compClientDiscount" runat="server" ControlToValidate="txtClientDiscount"
-                                            ErrorMessage="A number with 2 decimal digits is allowed for the Client Discount."
-                                            ToolTip="A number with 2 decimal digits is allowed for the Client Discount."
+                                            ErrorMessage="A number with 2 decimal digits is allowed for the Account Discount."
+                                            ToolTip="A number with 2 decimal digits is allowed for the Account Discount."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="Project"
                                             Operator="DataTypeCheck" Type="Currency"></asp:CompareValidator>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8">
+                                        <asp:CheckBox ID="chbIsInternal" runat="server" Text="IsInternal" disabled="disabled" />
+                                        <asp:CheckBox ID="chbCanCreateCustomWorkTypes" onclick="chbCanCreateCustomWorkTypes_Change();"
+                                            runat="server" Text="Can Add New Custom Work Types."  />
                                     </td>
                                 </tr>
                                 <tr>
@@ -531,8 +771,9 @@
                                             Height="80px" onchange="setDirty();" Style="overflow-y: auto; resize: none; font-size: 12px;
                                             font-family: Arial, Helvetica, sans-serif;"></asp:TextBox>
                                         <asp:CustomValidator ID="custProjectDesciption" runat="server" ControlToValidate="txtDescription"
-                                            Display="Dynamic" OnServerValidate="custProjectDesciption_ServerValidation" SetFocusOnError="True" ErrorMessage="The project description cannot be more than 2000 symbols"
-                                            ToolTip="The project description cannot be more than 2000 symbols" ValidationGroup="Project">*</asp:CustomValidator>
+                                            Display="Dynamic" OnServerValidate="custProjectDesciption_ServerValidation" SetFocusOnError="True"
+                                            ErrorMessage="The project description cannot be more than 2000 symbols" ToolTip="The project description cannot be more than 2000 symbols"
+                                            ValidationGroup="Project">*</asp:CustomValidator>
                                     </div>
                                 </ContentTemplate>
                             </ajax:TabPanel>
@@ -592,6 +833,12 @@
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnProjectTools" runat="server" Text="Tools" CausesValidation="false"
                                             OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton></span>
+                                    </span>
+                                </asp:TableCell>
+                                <asp:TableCell ID="CellProjectTimeTypes" runat="server">
+                                    <span class="bg"><span>
+                                        <asp:LinkButton ID="btnProjectTimeTypes" runat="server" Text="Project Work Types" CausesValidation="false"
+                                            OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                             </asp:TableRow>
@@ -717,6 +964,11 @@
                                     <asp:ObjectDataSource ID="odsProjectStatus" runat="server" SelectMethod="GetProjectStatuses"
                                         TypeName="PraticeManagement.ProjectStatusService.ProjectStatusServiceClient">
                                     </asp:ObjectDataSource>
+                                </asp:Panel>
+                            </asp:View>
+                            <asp:View ID="vwProjectTimeTypes" runat="server">
+                                <asp:Panel ID="pnlProjectTimeTypes" runat="server" CssClass="tab-pane">
+                                    <uc:ProjectTimeTypes ID="ProjectTimeTypes" runat="server" />
                                 </asp:Panel>
                             </asp:View>
                         </asp:MultiView>
