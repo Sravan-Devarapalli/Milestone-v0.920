@@ -119,7 +119,7 @@ AS
 			   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
 						ELSE 0 END AS HasAttachments
 		  FROM dbo.v_Milestone AS m
-			   INNER JOIN ProjectManagers AS projManagers ON projManagers.ProjectId = m.ProjectId
+			   INNER JOIN ProjectManagers AS projManagers ON projManagers.ProjectId = m.ProjectId AND m.IsAllowedToShow = 1
 			   INNER JOIN dbo.Commission AS c ON m.ProjectId = c.ProjectId 
 			   INNER JOIN dbo.ProjectStatus AS s ON m.ProjectStatusId = s.ProjectStatusId
 		  OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = m.ProjectId) A
@@ -149,7 +149,7 @@ AS
 			   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
 						ELSE 0 END AS HasAttachments
 		  FROM dbo.v_Project AS p
-		  INNER JOIN ProjectManagers AS projManagers ON projManagers.ProjectId = p.ProjectId
+		  INNER JOIN ProjectManagers AS projManagers ON projManagers.ProjectId = p.ProjectId AND p.IsAllowedToShow = 1
 			INNER JOIN dbo.Commission AS c ON  p.ProjectId = c.ProjectId 
 		  OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = p.ProjectId) A
 		 WHERE NOT EXISTS (SELECT 1 FROM dbo.Milestone AS m WHERE m.ProjectId = p.ProjectId)
