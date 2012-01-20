@@ -292,7 +292,7 @@
                     </tr>--%>
                     <tr id="tr1" runat="server" visible="true">
                         <td colspan="2">
-                            Client Discount (optional)
+                            Account Discount (optional)
                         </td>
                         <td colspan="4" style="padding-right: 242px;" align="right">
                             <asp:TextBox ID="txtClientDiscount" Style="text-align: right;" Width="95px" runat="server"
@@ -302,8 +302,8 @@
                                 EnableClientScript="false" Display="Dynamic" Text="*" ValidateEmptyText="false"
                                 SetFocusOnError="true" OnServerValidate="custClientDiscount_ServerValidate" ValidationGroup="ComputeRate"></asp:CustomValidator>--%>
                             <asp:CompareValidator ID="compClientDiscount" runat="server" ControlToValidate="txtClientDiscount"
-                                ErrorMessage="A number with 2 decimal digits is allowed for the Client Discount."
-                                ToolTip="A number with 2 decimal digits is allowed for the Client Discount."
+                                ErrorMessage="A number with 2 decimal digits is allowed for the Account Discount."
+                                ToolTip="A number with 2 decimal digits is allowed for the Account Discount."
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="ComputeRate"
                                 Operator="DataTypeCheck" Type="Currency"></asp:CompareValidator>
                         </td>
