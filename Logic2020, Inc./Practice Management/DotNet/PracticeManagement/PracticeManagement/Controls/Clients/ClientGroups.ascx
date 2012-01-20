@@ -37,11 +37,11 @@
                                 Width="96%" ValidationGroup="UpdateGroup"></asp:TextBox>
                             <asp:HiddenField ID="hidKey" runat="server" Value='<%# Eval("Key") %>' />
                             <asp:RequiredFieldValidator ID="reqGropuName" runat="server" ControlToValidate="txtGroupName"
-                                ErrorMessage="The name of group is required." ToolTip="The name of group is required."
+                                ErrorMessage="The name of Business Unit is required." ToolTip="The name of Business Unit is required."
                                 EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" ValidationGroup="UpdateGroup">*</asp:RequiredFieldValidator>
                             <asp:CustomValidator ID="custNewGroupName" runat="server" ControlToValidate="txtGroupName"
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                ErrorMessage="The name of group must to be unique." ToolTip="The name of group must to be unique."
+                                ErrorMessage="The name of Business Unit must to be unique." ToolTip="The name of Business Unit  must to be unique."
                                 ValidationGroup="UpdateGroup" >*</asp:CustomValidator>
                         </EditItemTemplate>
                     </asp:TemplateField>
@@ -73,7 +73,7 @@
                 <tr style="background-color: #F9FAFF;">
                     <td align="center" style="width: 15%; padding-top: 10px;">
                         <asp:ImageButton ID="btnPlus" runat="server" ImageUrl="~/Images/add_16.png" OnClick="btnPlus_Click"
-                            ToolTip="Add Group" Visible="true" />
+                            ToolTip="Add Business Unit" Visible="true" />
                         <asp:ImageButton ID="btnAddGroup" runat="server" ValidationGroup="NewGroup" ImageUrl="~/Images/icon-check.png"
                             ToolTip="Confirm" Visible="false" OnClick="btnAddGroup_Click" />
                         <asp:ImageButton ID="btnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="btnCancel_Click"
@@ -86,13 +86,13 @@
                         <asp:TextBox ID="txtNewGroupName" runat="server" ValidationGroup="NewGroup" Width="96%"
                             Visible="false" />
                         <AjaxControlToolkit:TextBoxWatermarkExtender ID="waterMarker" runat="server" TargetControlID="txtNewGroupName"
-                            WatermarkText="New Group" WatermarkCssClass="watermarked" />
+                            WatermarkText="New Business Unit" WatermarkCssClass="watermarked" />
                         <asp:RequiredFieldValidator ID="reqNewGroupName" runat="server" ControlToValidate="txtNewGroupName"
-                            ErrorMessage="Group name is required." ToolTip="Group name is required." EnableClientScript="false"
+                            ErrorMessage="Business Unit name is required." ToolTip="Business Unit name is required." EnableClientScript="false"
                             SetFocusOnError="true" Display="Dynamic" ValidationGroup="NewGroup">*</asp:RequiredFieldValidator>
                         <asp:CustomValidator ID="custNewGroupName" runat="server" ControlToValidate="txtNewGroupName"
                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                            ErrorMessage="There is already a group with the same name." ToolTip="There is already a group with the same name."
+                            ErrorMessage="There is already a Business Unit with the same name." ToolTip="There is already a group with the same name."
                             ValidationGroup="NewGroup" OnServerValidate="custNewGroupName_ServerValidate">*</asp:CustomValidator>
                     </td>
                     <td style="width: 0%;"></td>
