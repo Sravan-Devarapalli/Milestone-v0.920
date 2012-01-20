@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[TimeEntrySection]
+(
+	Id		INT IDENTITY(1,1) NOT NULL,
+	Name	NVARCHAR(200) NOT NULL,
+	CONSTRAINT PK_TimeEntrySection_Id PRIMARY KEY (Id ASC)
+);
+
