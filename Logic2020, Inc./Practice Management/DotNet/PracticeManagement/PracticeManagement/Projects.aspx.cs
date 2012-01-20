@@ -104,7 +104,7 @@ namespace PraticeManagement
         private const string ExportId = "ExportID";
         private const string ExportAllId = "ExportAllID";
         private const string ExportDateRangeFormat = "Date Range: {0} - {1}";
-        private const string ClientGroupHeader = "Client-Group";
+        private const string ClientGroupHeader = "Business Unit";
 
         protected const string PagerNextCommand = "Next";
         protected const string PagerPrevCommand = "Prev";
@@ -1562,8 +1562,8 @@ namespace PraticeManagement
                                 {
                                     ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                     ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
-                                    Client = (pro.Client != null && pro.Client.Name != null) ? pro.Client.Name.ToString() : string.Empty,
-                                    Group = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
+                                    Account = (pro.Client != null && pro.Client.Name != null) ? pro.Client.Name.ToString() : string.Empty,
+                                    BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
                                     Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
                                     Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
@@ -1801,8 +1801,8 @@ namespace PraticeManagement
                                 {
                                     ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                     ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
-                                    Client = (pro.Client != null && pro.Client.Name != null) ? pro.Client.Name.ToString() : string.Empty,
-                                    Group = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
+                                    Account = (pro.Client != null && pro.Client.Name != null) ? pro.Client.Name.ToString() : string.Empty,
+                                    BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
                                     Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
                                     Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
