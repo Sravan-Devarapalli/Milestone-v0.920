@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using System.ComponentModel;
 
 namespace DataTransferObjects
 {
@@ -94,6 +95,24 @@ namespace DataTransferObjects
         Admin = 7,
         [EnumMember]
         ProjectLead = 8
+
+    }
+
+    [DataContract]
+    public enum TimeEntrySectionType
+    {
+        [EnumMember]
+        [Description("Project")] 
+        Project = 1,
+        [EnumMember]
+        [Description("Business Development")] 
+        BusinessDevelopment = 2,
+        [EnumMember]
+        [Description("Internal")] 
+        Internal = 3,
+        [EnumMember]
+        [Description("Administrative")] 
+        Administrative = 4
 
     }
 
