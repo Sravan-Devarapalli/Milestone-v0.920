@@ -121,10 +121,10 @@
     <value>Activity log: there's no such filter</value>
   </data>
   <data name="AllClientsText" xml:space="preserve">
-    <value>All Clients</value>
+    <value>All Accounts</value>
   </data>
   <data name="AllGroupsText" xml:space="preserve">
-    <value>All Groups</value>
+    <value>All Business Units</value>
   </data>
   <data name="AllPersons" xml:space="preserve">
     <value>All Persons</value>
@@ -241,7 +241,7 @@
     <value>Selected: {0}</value>
   </data>
   <data name="SelectTimeType" xml:space="preserve">
-    <value>Select Time Type...</value>
+    <value>Select Work Type...</value>
   </data>
   <data name="SelectItemDefault" xml:space="preserve">
     <value>Select...</value>
@@ -333,7 +333,7 @@
     <comment>CancelAndReturn description</comment>
   </data>
   <data name="TimeTypeAddedSuccessfully" xml:space="preserve">
-    <value>Time type added successfully.</value>
+    <value>Work type added successfully.</value>
   </data>
   <data name="AllTypes" xml:space="preserve">
     <value>All Types</value>
@@ -384,3 +384,4 @@
     <value>Security Events</value>
   </data>
 </root>
+
