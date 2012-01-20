@@ -4,6 +4,7 @@ using System.Data;
 using System.ServiceModel;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
+using DataTransferObjects.TimeEntry;
 
 namespace PracticeManagementService
 {
@@ -69,7 +70,7 @@ namespace PracticeManagementService
         List<Project> ListProjectsByClient(int? clientId, string viewerUsername);
 
         [OperationContract]
-        List<Project> ListProjectsByClientShort(int? clientId, bool IsOnlyActiveAndProjective);
+        List<Project> ListProjectsByClientShort(int? clientId, bool IsOnlyActiveAndProjective, bool IsOnlyActiveAndInternal);
 
         [OperationContract]
         List<Project> ListProjectsByClientWithSort(int? clientId, string viewerUsername, string sortBy);
@@ -346,6 +347,24 @@ namespace PracticeManagementService
 
         [OperationContract]
         bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId);
+
+        [OperationContract]
+        List<Project> GetProjectsListByProjectGroupId(int projectGroupId);
+
+        [OperationContract]
+        Project GetBusinessDevelopmentProject();
+
+        [OperationContract]
+        Project GetProjectByIdShort(int projectId);
+
+        [OperationContract]
+        List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId);
+
+        [OperationContract]
+        void SetProjectTimeTypes(int projectId, string projectTimeTypesList);
+
+        [OperationContract]
+        Dictionary<DateTime, bool> GetIsHourlyRevenueByPeriod(int projectId, int personId, DateTime startDate, DateTime endDate);
     }
 }
 
