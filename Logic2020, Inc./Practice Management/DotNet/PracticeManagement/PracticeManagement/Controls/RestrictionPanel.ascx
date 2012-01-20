@@ -15,8 +15,8 @@
 <asp:Panel ID="pnlRestrictionPanel" runat="server">
     <table cellpadding="5" class="style1">
         <tr>
-        <td><strong>Clients</strong></td>
-        <td><strong>Groups</strong></td>
+        <td><strong>Accounts</strong></td>
+        <td><strong>Business Units</strong></td>
         <td><strong>Salespersons</strong></td>
         <td><strong>Project Managers</strong></td>
         <td><strong>Practice Areas</strong></td>
