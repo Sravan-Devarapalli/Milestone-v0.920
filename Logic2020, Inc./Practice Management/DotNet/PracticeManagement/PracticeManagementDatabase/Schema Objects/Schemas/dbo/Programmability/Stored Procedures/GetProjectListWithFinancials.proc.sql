@@ -127,6 +127,7 @@ BEGIN
 			)
 			AND  (ISNULL(pr.IsCompanyInternal, 0) = 0 AND @ExcludeInternalPractices  = 1 OR @ExcludeInternalPractices = 0)				
 			AND P.ProjectId <> @DefaultProjectId
+			AND P.IsAllowedToShow = 1
 	ORDER BY CASE p.ProjectStatusId
 			   WHEN 2 THEN p.StartDate
 			   ELSE p.EndDate
