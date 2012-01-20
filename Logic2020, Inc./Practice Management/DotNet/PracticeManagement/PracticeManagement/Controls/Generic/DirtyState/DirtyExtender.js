@@ -306,11 +306,26 @@ PraticeManagement.Controls.Generic.DirtyState.DirtyBehavior.prototype = {
             var horizontalExtenderId = $get(this.get_HorizontalTotalCalculatorExtenderIdValue()).value;
             var verticalExtenderId = $get(this.get_VerticalTotalCalculatorExtenderIdValue()).value;
             var spreadSheetExtenderId = $get(this.get_SpreadSheetExtenderIdValue()).value;
+
             if (horizontalExtenderId != '') {
                 $find(horizontalExtenderId).update();
             }
-            $find(verticalExtenderId).update();
-            $find(spreadSheetExtenderId).update();
+
+            if (verticalExtenderId != '') {
+                $find(verticalExtenderId).update();
+            }
+
+            if (spreadSheetExtenderId != '') {
+
+                var spreadSheetExtenderIdArray = spreadSheetExtenderId.split(';');
+                for (var i = 0; i < spreadSheetExtenderIdArray.length; i++) {
+                    var clientId = spreadSheetExtenderIdArray[i];
+                    if (clientId != '')
+                        $find(clientId).update();
+                }
+
+            }
+
             if ($get(this.get_HiddenActualHoursIdValue()).value != '') {
                 this.get_element().value = "dirty";
                 setDirty();
