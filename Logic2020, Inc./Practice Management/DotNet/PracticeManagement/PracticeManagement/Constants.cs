@@ -115,6 +115,8 @@ namespace PraticeManagement
             public const string OpportunityList = "~/OpportunityList.aspx";
             public const string TimeEntryForAdmin = "~/TimeEntry.aspx?day={0}&SelectedPersonId={1}";
             public const string TimeEntry = "~/TimeEntry.aspx?day={0}";
+            public const string TimeEntry_NewForAdmin = "~/TimeEntry_New.aspx?day={0}&SelectedPersonId={1}";
+            public const string TimeEntry_New = "~/TimeEntry_New.aspx?day={0}";
             public const string DetailsWithPrevNext = "{0}?id={1}&index={2}";
             public const string DetailRedirectFormat = "{0}?id={1}";
             public const string DetailRedirectWithReturnFormat = "{0}?id={1}&returnTo={2}";
