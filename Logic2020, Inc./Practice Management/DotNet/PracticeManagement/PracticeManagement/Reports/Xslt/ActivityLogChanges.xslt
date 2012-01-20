@@ -66,7 +66,7 @@
                   or $attrName = 'MilestonePersonId' or $attrName = 'Id' or $attrName = 'ModifiedByName' or $attrName = 'TimeTypeId' or $attrName = 'OpportunityId'
                   or $attrName = 'SalespersonId' or $attrName = 'PracticeId' or $attrName = 'OpportunityStatusId' or $attrName = 'OwnerId' or $attrName = 'GroupId'
                   or $attrName = 'LastUpdated' or $attrName = 'Tag' or $attrName = 'OpportunityTransitionStatusId' or $attrName='ProjectStatusId' or $attrName = 'ProjectManagerId'
-                  or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId'"></xsl:when>
+                  or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId' or $attrName = 'ProjectGroupId'"></xsl:when>
         <xsl:otherwise>
           <xsl:for-each select="parent::*/OLD_VALUES/attribute::*">
             <xsl:if test="name() = $attrName and . != $value">
@@ -99,7 +99,7 @@
                   or $attrName = 'MilestonePersonId' or $attrName = 'Id' or $attrName = 'ModifiedByName' or $attrName = 'TimeTypeId' or $attrName = 'OpportunityId'
                   or $attrName = 'SalespersonId' or $attrName = 'PracticeId' or $attrName = 'OpportunityStatusId' or $attrName = 'OwnerId' or $attrName = 'GroupId'
                   or $attrName = 'LastUpdated' or $attrName = 'Tag' or $attrName = 'OpportunityTransitionStatusId' or $attrName='ProjectStatusId' or $attrName = 'ProjectManagerId'
-                  or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId'"></xsl:when>
+                  or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId' or $attrName = 'ProjectGroupId'"></xsl:when>
         <xsl:otherwise>
           <xsl:if test="not(parent::*/parent::*/attribute::*[name() = $attrName])">
             <xsl:call-template name="DisplayChange">
@@ -167,7 +167,7 @@
                   or $attrName = 'MilestonePersonId' or $attrName = 'Id' or $attrName = 'ModifiedByName' or $attrName = 'TimeTypeId' or $attrName = 'OpportunityId'
                   or $attrName = 'SalespersonId' or $attrName = 'PracticeId' or $attrName = 'OpportunityStatusId' or $attrName = 'OwnerId' or $attrName = 'GroupId'
                   or $attrName = 'LastUpdated' or $attrName = 'Tag' or $attrName = 'OpportunityTransitionStatusId' or $attrName='ProjectStatusId' or $attrName = 'ProjectManagerId'
-                  or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId'"></xsl:when>
+                  or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId' or $attrName = 'ProjectGroupId'"></xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="FriendlyName">
             <xsl:with-param name="attrName" select="name()" />
@@ -365,12 +365,13 @@
 
     <xsl:choose>
       <!-- Time Entry -->
+      <xsl:when test="$attrName = 'CreateDate'">Entry Date</xsl:when>
       <xsl:when test="$attrName = 'EntryDate'">Entry Date</xsl:when>
       <xsl:when test="$attrName = 'ModifiedDate'">Modified Date</xsl:when>
       <xsl:when test="$attrName = 'ActualHours'">Actual Hours</xsl:when>
       <xsl:when test="$attrName = 'ForecastedHours'">Forecasted Hours</xsl:when>
-      <xsl:when test="$attrName = 'TimeTypeId'">Time Type</xsl:when>
-      <xsl:when test="$attrName = 'TimeTypeName'">Time Type</xsl:when>
+      <xsl:when test="$attrName = 'TimeTypeId'">Work Type Id</xsl:when>
+      <xsl:when test="$attrName = 'TimeTypeName'">Work Type</xsl:when>
       <xsl:when test="$attrName = 'ModifiedBy'">Modified By Id</xsl:when>
       <xsl:when test="$attrName = 'IsReviewed'">Is Reviewed</xsl:when>
       <xsl:when test="$attrName = 'ModifiedByName'">Modified By Name</xsl:when>
@@ -381,7 +382,7 @@
       <xsl:when test="($rootName = 'Opportunity') and ($attrName = 'Description')">Description</xsl:when>
       <xsl:when test="($rootName = 'Project') and ($attrName = 'Description')">Description</xsl:when>
       <xsl:when test="$attrName = 'Description'">Milestone Name</xsl:when>
-      <xsl:when test="$attrName = 'ClientId'">Client Id</xsl:when>
+      <xsl:when test="$attrName = 'ClientId'">Account Id</xsl:when>
       <xsl:when test="$attrName = 'FirstName'">First Name</xsl:when>
       <xsl:when test="$attrName = 'HashedPassword'">Password Reset</xsl:when>
       <xsl:when test="$attrName = 'LastName'">Last Name</xsl:when>
@@ -392,7 +393,7 @@
       <xsl:when test="$attrName = 'EmployeeNumber'">Employee Number</xsl:when>
       <xsl:when test="$attrName = 'PersonId'">Person ID</xsl:when>
       <xsl:when test="$attrName = 'ProjectId'">Project ID</xsl:when>
-      <xsl:when test="$attrName = 'ClientName'">Client</xsl:when>
+      <xsl:when test="$attrName = 'ClientName'">Account</xsl:when>
       <xsl:when test="$attrName = 'PracticeManagerId'">Practice Area Manager ID</xsl:when>
       <xsl:when test="$attrName = 'PracticeManagerFullName'">Practice Area Manager</xsl:when>
       <xsl:when test="$attrName = 'PracticeName'">Practice Area</xsl:when>
@@ -422,6 +423,11 @@
       <xsl:when test="$attrName = 'IndustryDescription'">Industry</xsl:when>
       <xsl:when test="$attrName = 'IsDefaultManager'">Is Career Counselor</xsl:when>
       <xsl:when test="$attrName = 'ManagerName'">Career Counselor name</xsl:when>
+      <xsl:when test="$attrName = 'ProjectGroupId'">Business Unit Id</xsl:when>
+      <xsl:when test="$attrName = 'ProjectGroupName'">Business Unit</xsl:when>
+      <xsl:when test="$attrName = 'Client'">Account</xsl:when>
+      <xsl:when test="$attrName = 'TimeType'">Work Type</xsl:when>
+      <xsl:when test="$attrName = 'Group'">Business Unit</xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$attrName"/>
       </xsl:otherwise>
