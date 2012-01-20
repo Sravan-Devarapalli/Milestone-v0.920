@@ -895,7 +895,7 @@
                             </tr>
                             <tr style="height: 30px;">
                                 <td style="font-weight: bold; width: 12%;">
-                                    Client
+                                    Account
                                 </td>
                                 <td style="width: 38%;">
                                     <table width="100%">
@@ -907,7 +907,7 @@
                                             </td>
                                             <td style="width: 3%">
                                                 <asp:RequiredFieldValidator ID="reqClient" runat="server" ControlToValidate="ddlClient"
-                                                    Width="100%" ToolTip="The Client is required." Text="*" EnableClientScript="false"
+                                                    Width="100%" ToolTip="The Account is required." Text="*" EnableClientScript="false"
                                                     SetFocusOnError="true" Display="Dynamic" ValidationGroup="Opportunity" />
                                             </td>
                                         </tr>
