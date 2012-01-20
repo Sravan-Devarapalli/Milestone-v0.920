@@ -332,7 +332,7 @@ namespace PraticeManagement.Utils
         private static Table AddUniqueClientsCell(int uniqueClientsCount)
         {
             Table uniqueClients = new Table();
-            AddHeaderRow("Unique Clients", uniqueClients);
+            AddHeaderRow("Unique Accounts", uniqueClients);
 
             AddDataRowWithTwoCells(uniqueClientsCount.ToString(), uniqueClients);
 
@@ -357,7 +357,7 @@ namespace PraticeManagement.Utils
 
             Table topClientsTable = new Table();
 
-            AddHeaderRow("Top 3 Clients", topClientsTable);
+            AddHeaderRow("Top 3 Accounts", topClientsTable);
 
             foreach (var item in list)
             {
