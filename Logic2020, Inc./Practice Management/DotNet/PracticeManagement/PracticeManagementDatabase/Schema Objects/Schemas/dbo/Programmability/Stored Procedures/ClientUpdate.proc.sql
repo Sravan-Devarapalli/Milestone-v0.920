@@ -8,7 +8,8 @@
 	@IsChargeable         BIT,
 	@Inactive             BIT,
 	@DefaultTerms         INT,
-	@IsMarginColorInfoEnabled BIT = NULL
+	@IsMarginColorInfoEnabled BIT = NULL,
+	@IsInternal		      BIT
 )
 AS
 	SET NOCOUNT ON;
@@ -29,7 +30,8 @@ AS
 			   Name = @Name,
 			   Inactive = @Inactive,
 			   IsChargeable = @IsChargeable,
-			   IsMarginColorInfoEnabled = @IsMarginColorInfoEnabled
+			   IsMarginColorInfoEnabled = @IsMarginColorInfoEnabled,
+			   IsInternal = @IsInternal
 		 WHERE ClientId = @ClientId
 	END
 
