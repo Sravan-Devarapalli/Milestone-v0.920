@@ -251,13 +251,21 @@
             public const string HolidayDescriptionColumn = "HolidayDescription";
             public const string RecurringHolidayDateColumn = "RecurringHolidayDate";
             public const string IsFloatingHolidayColumn = "IsFloatingHoliday";
-            public const string IsSystemTimeTypeColumn = "IsSystemTimeType";
+            public const string IsAllowedToEditColumn = "IsAllowedToEdit";
             public const string HasAttachmentsColumn = "HasAttachments";
             public const string DashBoardTypeIdColumn = "DashBoardTypeId";
             public const string LinkNameColumn = "LinkName";
             public const string VirtualPathColumn = "VirtualPath";
             public const string IsStrawmanColumn = "IsStrawman";
-
+            public const string TimeEntrySectionId = "TimeEntrySectionId";
+            public const string ChargeCodeId = "ChargeCodeId";
+            public const string IsRecursive = "IsRecursive";
+            public const string ChargeCodeDate = "ChargeCodeDate";
+            public const string IsInternalColumn = "IsInternal";
+            public const string CanCreateCustomWorkTypesColumn = "CanCreateCustomWorkTypes";
+            public const string InFutureUse = "InFutureUse";
+  public const string IsChargeCodeOffColumn = "IsChargeCodeOff";
+            public const string IsHourlyRevenueColumn = "IsHourlyRevenue";
         }
 
         #endregion
@@ -502,6 +510,17 @@
             public const string RichTextParam = "@RichText";
             public const string ShowAll = "@ShowAll";
             public const string isOpportunityDescriptionSelected = "@IsOpportunityDescriptionSelected";
+            public const string projectTimeTypesParam = "@ProjectTimeTypes";
+            public const string IsInternalParam = "@IsInternal";
+            public const string CanCreateCustomWorkTypesParam = "@CanCreateCustomWorkTypes";
+            public const string TimeEntriesXmlParam = "@TimeEntriesXml";
+            public const string DateParam = "@Date";
+            public const string IncludePTOAndHolidayParam = "@IncludePTOAndHoliday";
+            public const string IsOnlyActiveAndInternal = "@IsOnlyActiveAndInternal";
+            public const string TimeEntrySectionIdParam = "@TimeEntrySectionId";
+            public const string IsDeleteParam = "@IsDelete";
+            public const string IsRecursiveParam = "@IsRecursive";
+
 
         }
 
@@ -576,6 +595,9 @@
                 public const string UpdateIsWelcomeEmailSentForPerson = "dbo.UpdateIsWelcomeEmailSentForPerson";
                 public const string GetNoteRequiredDetailsForSelectedDateRange = "dbo.GetNoteRequiredDetailsForSelectedDateRange";
                 public const string IsPersonHaveActiveStatusDuringThisPeriod = "dbo.IsPersonHaveActiveStatusDuringThisPeriod";
+                public const string GetCustomRolePagePermissions = "dbo.GetCustomRolePagePermissions";
+                public const string IsHavingCustomRolePermission = "dbo.IsHavingCustomRolePermission";
+                public const string SaveCustomRolePagePermissions = "dbo.SaveCustomRolePagePermissions";
 
             }
 
@@ -603,10 +625,18 @@
                 public const string ListAll = "dbo.TimeEntriesAll";
                 public const string GetCount = "dbo.TimeEntriesGetCount";
                 public const string GetTotals = "dbo.TimeEntriesGetTotals";
+                public const string GetPersonTimeEnteredHoursByDay = "dbo.GetPersonTimeEnteredHoursByDay";
+                public const string PersonTimeEntriesByPeriod = "dbo.PersonTimeEntriesByPeriod";
 
                 public const string ToggleIsReviewed = "dbo.TimeEntryToggleIsReviewed";
                 public const string ToggleIsCorrect = "dbo.TimeEntryToggleIsCorrect";
                 public const string ToggleIsChargeable = "dbo.TimeEntryToggleIsChargeable";
+
+                //New sproc timetrack
+                public const string DeleteTimeTrackProcedure = "dbo.DeleteTimeTrack";
+                public const string SaveTimeTrackProcedure = "dbo.SaveTimeTrack";
+                public const string SetPersonTimeEntryRecursiveSelectionProcedure = "dbo.SetPersonTimeEntryRecursiveSelection";
+                public const string SetPersonTimeEntrySelectionProcedure = "dbo.SetPersonTimeEntrySelection";
 
                 #endregion
 
@@ -708,6 +738,11 @@
                 public const string IsUserHasPermissionOnProject = "dbo.IsUserHasPermissionOnProject";
                 public const string IsUserIsOwnerOfProject = "dbo.IsUserIsOwnerOfProject";
                 public const string GetProjectAttachments = "dbo.GetProjectAttachments";
+                public const string ProjectsListByProjectGroupId = "dbo.ProjectsListByProjectGroupId";
+                public const string GetBusinessDevelopmentProject = "dbo.GetBusinessDevelopmentProject";
+                public const string GetProjectByIdShort = "dbo.GetProjectByIdShort";
+                public const string GetIsHourlyRevenueByPeriod = "dbo.GetIsHourlyRevenueByPeriod";
+                
 
             }
 
