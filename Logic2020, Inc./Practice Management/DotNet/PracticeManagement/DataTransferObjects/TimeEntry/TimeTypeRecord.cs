@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.Serialization;
+using System.Collections.Generic;
 
 namespace DataTransferObjects.TimeEntry
 {
@@ -24,10 +25,33 @@ namespace DataTransferObjects.TimeEntry
         public bool InUse { get; set; }
 
         [DataMember]
+        public bool InFutureUse { get; set; }
+
+        [DataMember]
         public bool IsDefault { get; set; }
 
         [DataMember]
-        public bool IsSystemTimeType { get; set; }
+        public bool IsSystemTimeType
+        {
+            get
+            {
+                return !IsAllowedToEdit;
+
+            }
+            set
+            {
+                IsAllowedToEdit = !value;
+            }
+        }
+
+        [DataMember]
+        public bool IsAllowedToEdit { get; set; }
+
+        [DataMember]
+        public bool IsInternal { get; set; }
+
+        [DataMember]
+        public bool IsActive { get; set; }
 
         #endregion
 
@@ -48,12 +72,13 @@ namespace DataTransferObjects.TimeEntry
         /// <summary>
         /// Init constructor of TimeTypeRecord.
         /// </summary>
-        public TimeTypeRecord(string id) : this(Convert.ToInt32(id))
+        public TimeTypeRecord(string id)
+            : this(Convert.ToInt32(id))
         {
         }
 
-	    #endregion       
-    
+        #endregion
+
         #region IEquatable<TimeTypeRecord> Members
 
         public bool Equals(TimeTypeRecord other)
@@ -65,6 +90,8 @@ namespace DataTransferObjects.TimeEntry
         }
 
         #endregion
+
     }
+
 }
 
