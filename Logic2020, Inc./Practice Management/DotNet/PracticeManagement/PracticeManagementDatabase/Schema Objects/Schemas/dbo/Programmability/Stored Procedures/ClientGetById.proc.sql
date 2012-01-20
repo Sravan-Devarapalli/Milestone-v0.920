@@ -19,7 +19,8 @@ AS
 	       c.Name,
 	       c.Inactive,
 	       c.IsChargeable,
-		   c.IsMarginColorInfoEnabled
+		   c.IsMarginColorInfoEnabled,
+		   c.IsInternal
 	  FROM dbo.Client AS c
 	 WHERE c.ClientId = @ClientId
 
