@@ -9,13 +9,13 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO [dbo].[ProjectExpense]
-			   ([Name]
-			   ,[Amount]
-			   ,[Reimbursement]
-			   ,[MilestoneId])
-	 select Name, Amount, Reimbursement, @NewMilestoneId
-	 from ProjectExpense
-	 where MilestoneId = @OldMilestoneId
+	--INSERT INTO [dbo].[ProjectExpense]
+	--		   ([Name]
+	--		   ,[Amount]
+	--		   ,[Reimbursement]
+	--		   ,[MilestoneId])
+	-- select Name, Amount, Reimbursement, @NewMilestoneId
+	-- from ProjectExpense
+	-- where MilestoneId = @OldMilestoneId
 END
 
