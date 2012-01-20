@@ -128,6 +128,8 @@
                 OkButton.attributes['ExtendarId'].value = peBehaviourId;
                 OkButton.attributes['RbFloatingID'].value = rbFloatingHolidayClientID;
                 OkButton.attributes['HiddenDayOffID'].value = hiddenDayOffID;
+                OkButton.attributes['PersonId'].value = personId;
+                OkButton.attributes['Date'].value = date.format('MM/dd/yyyy');
                 rbPTO.attributes['onclick'].value = "disableActualHours( " + txtActualHoursID + ", 'false')";
                 rbFloatingHoliday.attributes['onclick'].value = "disableActualHours( " + txtActualHoursID + ", 'true')";
 
