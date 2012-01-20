@@ -7,27 +7,29 @@ CREATE PROCEDURE dbo.TimeTypeGetAll
 AS
 BEGIN
 
-	WITH UsageInfo AS (
-	SELECT 
-		tt.TimeTypeId, 
-		tt.[Name], 
-		'True' AS InUse,
-		tt.IsDefault,
-		tt.IsSystemTimeType
-	FROM TimeType AS tt
-	WHERE tt.TimeTypeId IN (SELECT DISTINCT(TimeTypeId) FROM TimeEntries)
-	UNION 
-	SELECT 
-		tt.TimeTypeId, 
-		tt.[Name], 
-		'False' AS InUse,
-		tt.IsDefault,
-		tt.IsSystemTimeType
-	FROM TimeType AS tt
-	WHERE tt.TimeTypeId NOT IN (SELECT DISTINCT(TimeTypeId) FROM TimeEntries)
+DECLARE @NOW DATETIME = dbo.gettingPmtime(GETUTCDATE())
+
+	;WITH UsedTimeTypes AS
+	(
+		SELECT CC.TimeTypeId,MAX(TT.ChargeCodeDate) as MaxUsedDate 
+		FROM TimeTrack TT
+		INNER JOIN ChargeCode CC ON CC.Id = TT.ChargeCodeId
+		GROUP BY CC.TimeTypeId
 	)
-	SELECT * 
-	FROM UsageInfo
-	ORDER BY Name
+
+	SELECT 
+		tt.TimeTypeId, 
+		tt.[Name], 
+		CASE WHEN UTT.TimeTypeId IS NOT NULL THEN 'True'
+				ELSE 'False' END AS InUse,
+		CASE WHEN UTT.TimeTypeId IS NOT NULL AND UTT.MaxUsedDate > @NOW THEN 1
+				ELSE 0 END AS InFutureUse,
+		tt.IsDefault,
+		tt.IsAllowedToEdit ,
+		tt.IsActive,
+		tt.IsInternal
+	FROM TimeType AS tt
+	LEFT JOIN UsedTimeTypes UTT ON UTT.TimeTypeId = tt.TimeTypeId
+	ORDER BY tt.Name
 END
 
