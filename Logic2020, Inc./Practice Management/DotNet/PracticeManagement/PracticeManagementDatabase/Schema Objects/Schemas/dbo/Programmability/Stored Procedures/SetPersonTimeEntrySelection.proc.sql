@@ -1,0 +1,207 @@
+﻿CREATE PROCEDURE [dbo].[SetPersonTimeEntrySelection]
+	@PersonId			INT,
+	@ClientId			INT,
+	@ProjectGroupId		INT,
+	@ProjectId			INT,
+	@TimeEntrySectionId	INT,
+	@IsDelete        BIT ,
+	@StartDate			DATETIME,
+	@EndDate			DATETIME
+AS
+BEGIN
+/*
+if @IsDelete = 0 
+--insert section
+check weather next record or prev record exists 
+if not Insert 
+else
+update the nextreocord startdate with the @startDate.
+find  @NextRecordEndDate 
+Adjust the previous record with either @NextRecordEndDate or @EndDate.
+if (count of records with EndDate = @NextRecordEndDate) >1
+delete record EndDate = @NextRecordEndDate AND StartDate = @StartDate
+
+else
+--delete section
+case1 @startdate = startdate and @enddate = enddate 
+	delete the record
+case2 @startdate = startdate 
+	update startdate = @enddate+1
+case3 @enddate = enddate
+	update endate = @startdate-1
+case 4 else
+find @recordenddate in which @startdate and @enddate exists 
+update record enddate to  @startdate-1
+insert (startdate,enddate)
+(@enddate+1,@recordenddate)
+
+
+*/
+
+	IF (@IsDelete = 0 AND @StartDate < @EndDate)
+	BEGIN
+		--If any entry exists immediate next week then update that startdate with the @startDate.
+		--Adjust the next record.
+		UPDATE PTRS
+		SET StartDate = @StartDate
+		FROM PersonTimeEntryRecursiveSelection PTRS
+		WHERE PersonId = @PersonId 
+				AND ClientId = @ClientId 
+				AND ProjectGroupId = @ProjectGroupId
+				AND ProjectId = @ProjectId
+				AND	TimeEntrySectionId = @TimeEntrySectionId
+				AND StartDate = @EndDate + 1
+
+		DECLARE @NextRecordEndDate DATETIME
+
+		SELECT @NextRecordEndDate = ISNULL(EndDate,dbo.GetFutureDate()) --if next record enddate is null then set to futuredate
+		FROM PersonTimeEntryRecursiveSelection PTRS
+		WHERE PersonId = @PersonId 
+			AND ClientId = @ClientId 
+			AND ProjectGroupId = @ProjectGroupId
+			AND ProjectId = @ProjectId
+			AND	TimeEntrySectionId = @TimeEntrySectionId
+			AND StartDate = @StartDate
+
+		SELECT @NextRecordEndDate
+		
+		--Adjust the previous record with either @NextRecordEndDate or @EndDate.
+		UPDATE PTRS
+		SET EndDate = CASE WHEN @NextRecordEndDate = dbo.GetFutureDate()THEN NULL 
+						   ELSE ISNULL(@NextRecordEndDate, @EndDate) END
+		FROM PersonTimeEntryRecursiveSelection PTRS
+		WHERE PersonId = @PersonId 
+			AND ClientId = @ClientId 
+			AND ProjectGroupId = @ProjectGroupId
+			AND ProjectId = @ProjectId
+			AND	TimeEntrySectionId = @TimeEntrySectionId
+			AND EndDate + 1 = @StartDate
+		
+		IF 1 < (
+		SELECT COUNT(*) FROM PersonTimeEntryRecursiveSelection PTRS
+									WHERE PersonId = @PersonId 
+									AND ClientId = @ClientId 
+									AND ProjectGroupId = @ProjectGroupId
+									AND ProjectId = @ProjectId
+									AND	TimeEntrySectionId = @TimeEntrySectionId
+									AND StartDate < @EndDate 
+									AND ISNULL(EndDate,dbo.GetFutureDate()) > @StartDate
+								)
+		BEGIN
+			DELETE PTRS
+			FROM PersonTimeEntryRecursiveSelection PTRS
+			WHERE PersonId = @PersonId 
+			AND ClientId = @ClientId 
+			AND ProjectGroupId = @ProjectGroupId
+			AND ProjectId = @ProjectId
+			AND	TimeEntrySectionId = @TimeEntrySectionId
+			AND StartDate = @StartDate
+		END
+
+		IF NOT EXISTS (SELECT 1 FROM PersonTimeEntryRecursiveSelection PTRS
+								WHERE PersonId = @PersonId 
+								AND ClientId = @ClientId 
+								AND ProjectGroupId = @ProjectGroupId
+								AND ProjectId = @ProjectId
+								AND	TimeEntrySectionId = @TimeEntrySectionId
+								AND (@StartDate BETWEEN StartDate AND ISNULL(EndDate,dbo.GetFutureDate()) + 1 OR @EndDate BETWEEN StartDate - 1 AND ISNULL(EndDate,dbo.GetFutureDate()) )
+						)
+		BEGIN
+			INSERT INTO PersonTimeEntryRecursiveSelection(StartDate, EndDate, PersonId, ClientId, ProjectGroupId, ProjectId, TimeEntrySectionId)
+			VALUES (@StartDate, @EndDate, @PersonId, @ClientId, @ProjectGroupId, @ProjectId, @TimeEntrySectionId)
+		END
+	END
+	ELSE IF (@IsDelete = 1 AND @StartDate < @EndDate)
+	BEGIN
+		IF EXISTS(SELECT 1 FROM PersonTimeEntryRecursiveSelection
+						WHERE PersonId = @PersonId AND ClientId = @ClientId AND ProjectId = @ProjectId AND ProjectGroupId = @ProjectGroupId 
+						AND TimeEntrySectionId = @TimeEntrySectionId AND EndDate = @EndDate AND StartDate = @StartDate 
+				 )
+		BEGIN
+			DELETE PTRS
+			FROM PersonTimeEntryRecursiveSelection PTRS
+			WHERE PersonId = @PersonId 
+				AND ClientId = @ClientId 
+				AND ProjectGroupId = @ProjectGroupId
+				AND ProjectId = @ProjectId
+				AND	TimeEntrySectionId = @TimeEntrySectionId
+				AND EndDate = @EndDate
+				AND StartDate = @StartDate
+		END
+		ELSE
+		BEGIN
+			-- if endate = @EndDate then update endate 
+			UPDATE PTRS
+				SET EndDate = @StartDate-1
+			FROM PersonTimeEntryRecursiveSelection PTRS
+			WHERE PersonId = @PersonId 
+				AND ClientId = @ClientId 
+				AND ProjectGroupId = @ProjectGroupId
+				AND ProjectId = @ProjectId
+				AND	TimeEntrySectionId = @TimeEntrySectionId
+				AND EndDate = @EndDate
+
+			-- if StartDate = @StartDate then update StartDate
+			UPDATE PTRS
+				SET StartDate = @EndDate+1 
+			FROM PersonTimeEntryRecursiveSelection PTRS
+			WHERE PersonId = @PersonId 
+				AND ClientId = @ClientId 
+				AND ProjectGroupId = @ProjectGroupId
+				AND ProjectId = @ProjectId
+				AND	TimeEntrySectionId = @TimeEntrySectionId
+				AND StartDate = @StartDate
+
+			-- else  
+			IF EXISTS (SELECT 1 FROM PersonTimeEntryRecursiveSelection 
+							WHERE PersonId = @PersonId 
+								AND ClientId = @ClientId 
+								AND ProjectGroupId = @ProjectGroupId
+								AND ProjectId = @ProjectId
+								AND	TimeEntrySectionId = @TimeEntrySectionId
+								AND StartDate < @EndDate 
+								AND ISNULL(EndDate,dbo.GetFutureDate()) > @StartDate)
+			BEGIN
+				DECLARE @RecordStartDate DATETIME
+
+				SELECT @RecordStartDate = startdate
+				FROM PersonTimeEntryRecursiveSelection 
+				WHERE PersonId = @PersonId 
+					AND ClientId = @ClientId 
+					AND ProjectGroupId = @ProjectGroupId
+					AND ProjectId = @ProjectId
+					AND	TimeEntrySectionId = @TimeEntrySectionId
+					AND StartDate < @EndDate 
+					AND ISNULL(EndDate,dbo.GetFutureDate()) > @StartDate
+
+			
+				--update record startdate to  @enddate+1
+				UPDATE PTRS
+					SET startdate =  @enddate+1
+				FROM PersonTimeEntryRecursiveSelection PTRS
+				WHERE PersonId = @PersonId 
+					AND ClientId = @ClientId 
+					AND ProjectGroupId = @ProjectGroupId
+					AND ProjectId = @ProjectId
+					AND TimeEntrySectionId = @TimeEntrySectionId
+					AND StartDate = @RecordStartDate
+	
+				INSERT INTO PersonTimeEntryRecursiveSelection(StartDate, EndDate, PersonId, ClientId, ProjectGroupId, ProjectId, TimeEntrySectionId)
+				VALUES (@RecordStartDate,@startdate-1, @PersonId, @ClientId, @ProjectGroupId, @ProjectId, @TimeEntrySectionId)								
+			END
+							
+		END
+
+		--Delete all time entries for that section
+		DELETE TT 
+		FROM dbo.TimeTrack TT INNER JOIN dbo.ChargeCode cc
+			ON TT.ChargeCodeId = cc.Id 
+				AND cc.ClientId = @ClientId 
+				AND cc.ProjectGroupId = @ProjectGroupId 
+				AND cc.ProjectId = @ProjectId 
+				AND	cc.TimeEntrySectionId = @TimeEntrySectionId
+		WHERE TT.ChargeCodeDate BETWEEN @StartDate AND @EndDate 
+				AND TT.PersonId = @personId 
+
+	END
+END
