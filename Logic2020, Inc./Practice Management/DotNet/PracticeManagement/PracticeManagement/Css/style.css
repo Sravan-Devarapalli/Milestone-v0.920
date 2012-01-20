@@ -2116,3 +2116,58 @@ table.CellPaddingClass td
     padding-top: 4px;
     font-weight: bold;
 }
+
+.time-entry-bar-time-typesNew
+{
+    width: 20%;
+    padding-left: 0px;
+    text-align: left;
+    border-right: 5px;
+    padding-right: 0px;
+}
+    
+.time-entry-bar-time-typesNew-select-Normal
+{
+    width: 98% !important;
+}
+
+.time-entry-bar-time-typesNew-select-Extended
+{
+    width: 98%;
+}
+
+.time-entry-bar-single-teNew
+{
+    /*padding-left: 3px;*/
+    text-align: center;
+    vertical-align: middle;
+    width: 10%;
+}
+
+.time-entry-bar .time-entry-bar-single-teNew
+{
+    padding: 5px 0px 5px 0px;
+}
+
+.time-entry-bar-single-teNew input[type=text]
+{
+    width: 95% !important;
+    margin: 1px 0px 0px 2px;
+    border: 1px solid #aaa;
+    height: 16px;
+}
+
+.time-entry-bar-single-teNew input[type=image]
+{
+    margin-bottom: -3px;
+}
+
+.time-entry-total-hoursNew
+{
+    text-align: right;
+    vertical-align: middle;
+    padding-right: 5px;
+    width: 7%;
+}
+
+
