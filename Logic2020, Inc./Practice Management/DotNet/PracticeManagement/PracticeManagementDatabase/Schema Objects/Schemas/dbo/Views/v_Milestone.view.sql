@@ -39,7 +39,8 @@ AS
 	          FROM dbo.Calendar AS cal
 	         WHERE cal.Date BETWEEN m.StartDate AND ProjectedDeliveryDate AND cal.DayOff = 0) AS ProjectedDuration,
 	       p.BuyerName,
-           p.GroupId
+           p.GroupId,
+		   p.IsAllowedToShow
 	  FROM dbo.Milestone AS m
 	       INNER JOIN dbo.Project AS p ON m.ProjectId = p.ProjectId
 	       INNER JOIN dbo.Client AS c ON p.ClientId = c.ClientId
