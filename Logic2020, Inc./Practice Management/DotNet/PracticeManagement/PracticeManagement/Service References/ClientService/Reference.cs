@@ -50,6 +50,12 @@ namespace PraticeManagement.ClientService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://www.logic2020.com/IClientService/GetClientMarginColorInfo", ReplyAction="http://www.logic2020.com/IClientService/GetClientMarginColorInfoResponse")]
         DataTransferObjects.ClientMarginColorInfo[] GetClientMarginColorInfo(int clientId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://www.logic2020.com/IClientService/ClientListAllWithoutPermissions", ReplyAction="http://www.logic2020.com/IClientService/ClientListAllWithoutPermissionsResponse")]
+        DataTransferObjects.Client[] ClientListAllWithoutPermissions();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://www.logic2020.com/IClientService/GetInternalAccount", ReplyAction="http://www.logic2020.com/IClientService/GetInternalAccountResponse")]
+        DataTransferObjects.Client GetInternalAccount();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -59,7 +65,7 @@ namespace PraticeManagement.ClientService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ClientServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ClientService.IClientService>, PraticeManagement.ClientService.IClientService {
-        
+     
         public ClientServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -122,6 +128,14 @@ namespace PraticeManagement.ClientService {
         
         public DataTransferObjects.ClientMarginColorInfo[] GetClientMarginColorInfo(int clientId) {
             return base.Channel.GetClientMarginColorInfo(clientId);
+        }
+        
+        public DataTransferObjects.Client[] ClientListAllWithoutPermissions() {
+            return base.Channel.ClientListAllWithoutPermissions();
+        }
+        
+        public DataTransferObjects.Client GetInternalAccount() {
+            return base.Channel.GetInternalAccount();
         }
     }
 }
