@@ -33,7 +33,7 @@
         </act:TabPanel>
         <act:TabPanel runat="server" ID="tpnlClientList" Visible="false">
             <HeaderTemplate>
-                <span class="bg"><a href="#"><span>Clients</span></a> </span>
+                <span class="bg"><a href="#"><span>Accounts</span></a> </span>
             </HeaderTemplate>
             <ContentTemplate>
                 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
