@@ -34,6 +34,9 @@ namespace PraticeManagement
         private const string AttachSOWMessage = "File must be in PDF format and no larger than {0}kb";
         private const string AttachmentFileSize = "AttachmentFileSize";
         private const string ProjectAttachmentsKey = "ProjectAttachmentsKey";
+        public const string AllTimeTypesKey = "AllTimeTypesKey";
+        public const string ProjectTimeTypesKey = "ProjectTimeTypesKey";
+
         #endregion
 
         #region Properties
@@ -126,6 +129,22 @@ namespace PraticeManagement
             }
         }
 
+        private int tblProjectDetailTabViewSwitch_ActiveViewIndex
+        {
+            get
+            {
+                if (ViewState["tblProjectDetailTabViewSwitch_ActiveViewIndex"] == null)
+                {
+                    return 0;
+                }
+                return (int)ViewState["tblProjectDetailTabViewSwitch_ActiveViewIndex"]; ;
+            }
+            set
+            {
+                ViewState["tblProjectDetailTabViewSwitch_ActiveViewIndex"] = value;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -186,9 +205,10 @@ namespace PraticeManagement
             mlConfirmation.ClearMessage();
 
             btnUpload.Attributes["onclick"] = "return CanShowPrompt();";
-
-
-
+            if (tblProjectDetailTabViewSwitch_ActiveViewIndex == 8)
+            {
+                ProjectTimeTypes.PopulateControls();
+            }
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -307,6 +327,8 @@ namespace PraticeManagement
                 lbOpportunity.Enabled = false;//as per #2941.
                 cellProjectTools.Visible = false;
             }
+
+            chbCanCreateCustomWorkTypes.Visible = userIsAdministrator || userIsProjectLead;
         }
 
         private void NeedToShowDeleteButton()
@@ -850,6 +872,9 @@ namespace PraticeManagement
                     svc.SaveProjectAttachment(attachment, result, User.Identity.Name);
                 }
                 ViewState.Remove(ProjectAttachmentsKey);
+                ViewState.Remove(AllTimeTypesKey);
+                ViewState.Remove(ProjectTimeTypesKey);
+
             }
 
             return result;
@@ -859,7 +884,7 @@ namespace PraticeManagement
         protected override void Display()
         {
             DataHelper.FillPracticeWithOwnerListOnlyActive(ddlPractice, string.Empty);
-            DataHelper.FillClientListForProject(ddlClientName, "-- Select Client --", ProjectId);
+            DataHelper.FillClientListForProject(ddlClientName, "-- Select Account --", ProjectId);
             DataHelper.FillSalespersonListOnlyActive(ddlSalesperson, "-- Select Sales person --");
             DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty);
             DataHelper.FillDirectorsList(ddlDirector, "-- Select Client Director --");
@@ -925,6 +950,11 @@ namespace PraticeManagement
             txtDescription.Text = project.Description;
             lblProjectNumber.Text = project.ProjectNumber;
             chbIsChargeable.Checked = project.IsChargeable;
+            if (project.Client != null)
+            {
+                chbIsInternal.Checked = project.Client.IsInternal;
+            }
+            chbCanCreateCustomWorkTypes.Checked = project.CanCreateCustomWorkTypes;
 
             PopulateClientDropDown(project);
             FillAndSelectProjectGroupList(project);
@@ -1172,6 +1202,8 @@ namespace PraticeManagement
             project.Status = new ProjectStatus { Id = int.Parse(ddlProjectStatus.SelectedValue) };
             project.ProjectManagerIdsList = cblProjectManagers.SelectedItems;
             project.IsChargeable = chbIsChargeable.Checked;
+           // project.IsInternal = chbIsInternal.Checked;
+            project.CanCreateCustomWorkTypes = chbCanCreateCustomWorkTypes.Checked;
             PopulateProjectGroup(project);
             PopulateSalesCommission(project);
             PopulatePracticeManagementCommission(project);
@@ -1181,6 +1213,11 @@ namespace PraticeManagement
             if (ddlDirector.SelectedIndex > 0)
                 project.Director = new Person { Id = int.Parse(ddlDirector.SelectedValue) };
 
+            string hdnTimeTypesAssignedToProject = (ProjectTimeTypes.FindControl("hdnTimeTypesAssignedToProject") as HiddenField).Value;
+            if (!String.IsNullOrEmpty(hdnTimeTypesAssignedToProject))
+            {
+                project.ProjectWorkTypesList = hdnTimeTypesAssignedToProject;
+            }
         }
 
         private AttachmentService.ProjectAttachment PopulateProjectAttachment()
@@ -1262,15 +1299,20 @@ namespace PraticeManagement
         {
             int viewIndex = int.Parse((string)e.CommandArgument);
             SelectView((Control)sender, viewIndex, false);
-
+            tblProjectDetailTabViewSwitch_ActiveViewIndex = viewIndex;
             if (viewIndex == 6) //History
             {
                 activityLog.Update();
+            }
+            else if (viewIndex == 8)
+            {
+                ProjectTimeTypes.PopulateControls();
             }
             else if (viewIndex == 0 && ProjectId.HasValue)
             {
                 financials.Project = GetCurrentProject(ProjectId.Value);
             }
+
 
         }
 
