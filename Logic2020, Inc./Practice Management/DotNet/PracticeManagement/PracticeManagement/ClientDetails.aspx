@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ClientDetails.aspx.cs"
-    Inherits="PraticeManagement.ClientDetails" Title="Client Details | Practice Management"
+    Inherits="PraticeManagement.ClientDetails" Title="Account Details | Practice Management"
     MasterPageFile="~/PracticeManagementMain.Master" %>
 
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
@@ -11,10 +11,10 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Client Details | Practice Management</title>
+    <title>Account Details | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
-    Client Details
+    Account Details
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <script src="Scripts/jquery-1.4.1.js"></script>
@@ -80,7 +80,7 @@
                     <table>
                         <tr>
                             <td>
-                                Client Active?
+                                Account Active?
                             </td>
                             <td>
                                 <asp:CheckBox ID="chbActive" runat="server" Checked="true" onclick="setDirty();setClassForAddProject();" />
@@ -95,14 +95,24 @@
                             </td>
                             <td>
                                 <asp:CheckBox ID="chbIsChar" runat="server" Checked="true" onclick="setDirty();"
-                                    ToolTip="Projects for this client are billable by default." />
+                                    ToolTip="Projects for this account are billable by default." />
                             </td>
                             <td>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                Client Name
+                                Is Client Internal?
+                            </td>
+                            <td>
+                                <asp:CheckBox ID="chbIsInternal" runat="server" Checked="false" Enabled="false" />
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Account Name
                             </td>
                             <td>
                                 <asp:TextBox ID="txtClientName" runat="server" onchange="setDirty();" Width="194px"
@@ -110,10 +120,10 @@
                             </td>
                             <td>
                                 <asp:RequiredFieldValidator ID="reqClientName" runat="server" ControlToValidate="txtClientName"
-                                    ErrorMessage="The Client Name is required." ToolTip="The Client Name is required."
+                                    ErrorMessage="The Account Name is required." ToolTip="The Account Name is required."
                                     Text="*" SetFocusOnError="True" EnableClientScript="False" ValidationGroup="Client" />
                                 <asp:CustomValidator ID="custClientName" runat="server" ControlToValidate="txtClientName"
-                                    ErrorMessage="There is another Client with the same Name." ToolTip="There is another Client with the same Name."
+                                    ErrorMessage="There is another Account with the same Name." ToolTip="There is another Account with the same Name."
                                     Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                     OnServerValidate="custClientName_ServerValidate" ValidationGroup="Client" />
                                 <asp:CustomValidator ID="custClient" runat="server" ControlToValidate="txtClientName"
@@ -195,7 +205,7 @@
                 </HeaderTemplate>
                 <ContentTemplate>
                     <asp:UpdatePanel ID="upnlClientThrsholds" runat="server">
-                        <ContentTemplate>
+                        <contenttemplate>
                             <table width="100%">
                                 <tr>
                                     <td valign="top" style="width: 50%;">
@@ -294,7 +304,7 @@
                                     </td>
                                 </tr>
                             </table>
-                        </ContentTemplate>
+                        </contenttemplate>
                     </asp:UpdatePanel>
                 </ContentTemplate>
             </ajaxToolkit:TabPanel>
@@ -335,23 +345,23 @@
                 <ContentTemplate>
                     <div class="project-filter">
                         <asp:UpdatePanel ID="updprojects" runat="server">
-                            <ContentTemplate>
+                            <contenttemplate>
                                 <uc:ClientProjects ID="projects" runat="server" />
-                            </ContentTemplate>
+                            </contenttemplate>
                         </asp:UpdatePanel>
                     </div>
                 </ContentTemplate>
             </ajaxToolkit:TabPanel>
             <ajaxToolkit:TabPanel runat="server" ID="tpGroups">
                 <HeaderTemplate>
-                    <span class="bg"><a href="#"><span>Groups</span></a> </span>
+                    <span class="bg"><a href="#"><span>Business Units</span></a> </span>
                 </HeaderTemplate>
                 <ContentTemplate>
                     <div class="project-filter">
                         <asp:UpdatePanel ID="updGroups" runat="server">
-                            <ContentTemplate>
+                            <contenttemplate>
                                 <uc:ClientGroups ID="groups" runat="server" />
-                            </ContentTemplate>
+                            </contenttemplate>
                         </asp:UpdatePanel>
                     </div>
                 </ContentTemplate>
