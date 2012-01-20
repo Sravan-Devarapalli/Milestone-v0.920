@@ -53,7 +53,7 @@
                                     </td>
                                     <td align="left">
                                         <label for="chbIsChargeable" runat="server">
-                                            Time entered is billable to client.</label>
+                                            Time entered is billable to account.</label>
                                     </td>
                                 </tr>
                                 <tr>
