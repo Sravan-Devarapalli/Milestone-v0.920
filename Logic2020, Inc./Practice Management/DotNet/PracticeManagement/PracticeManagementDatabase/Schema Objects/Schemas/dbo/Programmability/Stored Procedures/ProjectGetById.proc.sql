@@ -37,7 +37,8 @@ AS
 		   p.Description,
 		   1 InUse,
 		   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
-					ELSE 0 END AS HasAttachments
+					ELSE 0 END AS HasAttachments,
+		   p.CanCreateCustomWorkTypes
 	  FROM dbo.v_Project AS p
 	  INNER JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	  INNER JOIN Person AS person ON p.PracticeManagerId = person.PersonId
