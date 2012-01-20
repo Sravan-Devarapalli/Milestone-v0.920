@@ -37,13 +37,13 @@
             <tr>
                 <td style="width: 80px;">
                     <label for="<%=ddlClients.ClientID%>">
-                        Client</label>
+                        Account</label>
                 </td>
                 <td style="padding-left: 5px; padding-right: 5px;">
                     <asp:DropDownList ID="ddlClients" Width="200" runat="server">
                     </asp:DropDownList>
                     <asp:CustomValidator ID="cvClients" runat="server" ControlToValidate="ddlClients" ValidationGroup="cvMilestone"
-                        EnableClientScript="false" SetFocusOnError="true" ValidateEmptyText="true" ErrorMessage="Please Select a Client"
+                        EnableClientScript="false" SetFocusOnError="true" ValidateEmptyText="true" ErrorMessage="Please Select an Account"
                         Display="None" OnServerValidate="cvClients_Validate">*</asp:CustomValidator>
                 </td>
                 <td>
