@@ -166,6 +166,19 @@ namespace PracticeManagementService
         {
             return ClientDAL.GetClientMarginColorInfo(clientId);
         }
+
+        public List<Client> ClientListAllWithoutPermissions()
+        {
+            return ClientDAL.ClientListAllWithoutPermissions();
+        }
+
+        public Client GetInternalAccount()
+        {
+            return ClientDAL.GetInternalAccount();
+        }
+
+
         #endregion
     }
 }
+
