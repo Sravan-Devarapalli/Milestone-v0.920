@@ -4,22 +4,44 @@
   <xs:complexType name="TimeTypeRecord">
     <xs:sequence>
       <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="InFutureUse" type="xs:boolean" />
       <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsAllowedToEdit" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsDefault" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsInternal" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsSystemTimeType" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="TimeTypeRecord" nillable="true" type="tns:TimeTypeRecord" />
-  <xs:complexType name="ArrayOfTimeTypeRecord">
+  <xs:complexType name="ArrayOfTimeEntrySection">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="TimeTypeRecord" nillable="true" type="tns:TimeTypeRecord" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TimeEntrySection" nillable="true" type="tns:TimeEntrySection" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfTimeTypeRecord" nillable="true" type="tns:ArrayOfTimeTypeRecord" />
+  <xs:element name="ArrayOfTimeEntrySection" nillable="true" type="tns:ArrayOfTimeEntrySection" />
+  <xs:complexType name="TimeEntrySection">
+    <xs:sequence>
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Account" nillable="true" type="q1:Client" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="BusinessUnit" nillable="true" type="q2:ProjectGroup" />
+      <xs:element minOccurs="0" name="IsRecursive" type="xs:boolean" />
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Project" nillable="true" type="q3:Project" />
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="SectionId" type="q4:TimeEntrySectionType" />
+      <xs:element minOccurs="0" name="TimeEntries" nillable="true" type="tns:ArrayOfTimeEntryRecord" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TimeEntrySection" nillable="true" type="tns:TimeEntrySection" />
+  <xs:complexType name="ArrayOfTimeEntryRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TimeEntryRecord" nillable="true" type="tns:TimeEntryRecord" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTimeEntryRecord" nillable="true" type="tns:ArrayOfTimeEntryRecord" />
   <xs:complexType name="TimeEntryRecord">
     <xs:sequence>
       <xs:element minOccurs="0" name="ActualHours" type="xs:double" />
+      <xs:element minOccurs="0" name="ChargeCodeId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="EntryDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="ForecastedHours" type="xs:double" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
@@ -27,10 +49,10 @@
       <xs:element minOccurs="0" name="IsCorrect" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsReviewed" type="tns:ReviewStatus" />
       <xs:element minOccurs="0" name="MilestoneDate" type="xs:dateTime" />
-      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ModifiedBy" nillable="true" type="q1:Person" />
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ModifiedBy" nillable="true" type="q5:Person" />
       <xs:element minOccurs="0" name="ModifiedDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Note" nillable="true" type="xs:string" />
-      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ParentMilestonePersonEntry" nillable="true" type="q2:MilestonePersonEntry" />
+      <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ParentMilestonePersonEntry" nillable="true" type="q6:MilestonePersonEntry" />
       <xs:element minOccurs="0" name="TimeType" nillable="true" type="tns:TimeTypeRecord" />
     </xs:sequence>
   </xs:complexType>
@@ -43,15 +65,15 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ReviewStatus" nillable="true" type="tns:ReviewStatus" />
-  <xs:complexType name="ArrayOfTimeEntryRecord">
+  <xs:complexType name="ArrayOfTimeTypeRecord">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="TimeEntryRecord" nillable="true" type="tns:TimeEntryRecord" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TimeTypeRecord" nillable="true" type="tns:TimeTypeRecord" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfTimeEntryRecord" nillable="true" type="tns:ArrayOfTimeEntryRecord" />
+  <xs:element name="ArrayOfTimeTypeRecord" nillable="true" type="tns:ArrayOfTimeTypeRecord" />
   <xs:complexType name="TimeEntryHours">
     <xs:sequence>
-      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Calendar" nillable="true" type="q3:CalendarItem" />
+      <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Calendar" nillable="true" type="q7:CalendarItem" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
     </xs:sequence>
