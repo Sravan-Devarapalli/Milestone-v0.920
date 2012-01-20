@@ -115,7 +115,7 @@
             else {
                 cblList[0].disabled = "disabled";
             }
-            custom_ScrollingDropdown_onclick('cblProjectGroup', 'Group');
+            custom_ScrollingDropdown_onclick('cblProjectGroup', 'Business Unit');
         }
 
         function resetFiltersTab() {
@@ -124,7 +124,7 @@
             GetDefault(document.getElementById("<%= cblSalesperson.ClientID %>"));
             GetDefault(document.getElementById("<%= cblPractice.ClientID %>"));
             GetDefault(document.getElementById("<%= cblProjectOwner.ClientID %>"));
-            custom_ScrollingDropdown_onclick('cblProjectGroup', 'Group');
+            custom_ScrollingDropdown_onclick('cblProjectGroup', 'Business Unit');
         }
 
         function GetDefaultcblList() {
@@ -418,7 +418,7 @@
                                     <table class="WholeWidth" style="height: 80px;">
                                         <tr class="tb-header">
                                             <td style="border-bottom: 1px solid black; width: 190px; text-align: center">
-                                                Client / Group
+                                                Account / Business Unit
                                             </td>
                                             <td style="padding: 5px; width: 10px;">
                                             </td>
@@ -450,8 +450,8 @@
                                         <tr>
                                             <td style="padding: 5px;">
                                                 <uc:CascadingMsdd ID="cblClient" runat="server" TargetControlId="cblProjectGroup"
-                                                    SetDirty="false" Width="240" Height="240px" onclick="scrollingDropdown_onclick('cblClient','Client');EnableOrDisableGroup();"
-                                                    DropDownListType="Client" CellPadding="3" />
+                                                    SetDirty="false" Width="240" Height="240px" onclick="scrollingDropdown_onclick('cblClient','Account');EnableOrDisableGroup();"
+                                                    DropDownListType="Account" CellPadding="3" />
                                                 <ext:ScrollableDropdownExtender ID="sdeCblClient" runat="server" TargetControlID="cblClient"
                                                     UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px">
                                                 </ext:ScrollableDropdownExtender>
@@ -480,8 +480,8 @@
                                         <tr>
                                             <td style="padding: 5px;">
                                                 <uc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" Width="240"
-                                                    Height="240px" onclick="custom_ScrollingDropdown_onclick('cblProjectGroup','Group')"
-                                                    DropDownListType="Group" CellPadding="3" />
+                                                    Height="240px" onclick="custom_ScrollingDropdown_onclick('cblProjectGroup','Business Unit')"
+                                                    DropDownListType="Business Unit" CellPadding="3" />
                                                 <ext:ScrollableDropdownExtender ID="sdeCblProjectGroup" runat="server" TargetControlID="cblProjectGroup"
                                                     UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px">
                                                 </ext:ScrollableDropdownExtender>
@@ -615,7 +615,7 @@
                                 <td class="CompPerfClient">
                                     <div class="ie-bg">
                                         <asp:LinkButton ID="btnSortClient" CommandArgument="2" CommandName="Sort" runat="server"
-                                            CssClass="arrow">Client</asp:LinkButton>
+                                            CssClass="arrow">Account</asp:LinkButton>
                                     </div>
                                 </td>
                                 <td class="CompPerfProject">
