@@ -406,7 +406,7 @@ namespace PraticeManagement
                 imgBtnRecurrenceBusinessDevelopmentSection.Attributes[ProjectIdXname] = ProjectId;
                 imgBtnRecurrenceBusinessDevelopmentSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
                 imgBtnRecurrenceBusinessDevelopmentSection.Attributes[IsRecursiveXname] = isRecursive;
-                imgBtnRecurrenceBusinessDevelopmentSection.Attributes[TimeEntrySectionIdXname] = TimeEntrySectionType.BusinessDevelopment.ToString();
+                imgBtnRecurrenceBusinessDevelopmentSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.BusinessDevelopment).ToString();
 
                 var imgBtnDeleteBusinessDevelopmentSection = e.Item.FindControl(imgBtnDeleteBusinessDevelopmentSectionImage) as ImageButton;
                 imgBtnDeleteBusinessDevelopmentSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.BusinessDevelopment).ToString();
@@ -443,7 +443,7 @@ namespace PraticeManagement
                 imgBtnRecurrenceInternalSection.Attributes[ProjectIdXname] = ProjectId;
                 imgBtnRecurrenceInternalSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
                 imgBtnRecurrenceInternalSection.Attributes[IsRecursiveXname] = isRecursive;
-                imgBtnRecurrenceInternalSection.Attributes[TimeEntrySectionIdXname] = TimeEntrySectionType.Internal.ToString();
+                imgBtnRecurrenceInternalSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Internal).ToString();
 
                 var imgBtnDeleteInternalSection = e.Item.FindControl(imgBtnDeleteInternalSectionImage) as ImageButton;
                 imgBtnDeleteInternalSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Internal).ToString();
