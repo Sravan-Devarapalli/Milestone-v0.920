@@ -86,14 +86,30 @@ namespace PraticeManagement.Controls.Persons
 
         protected virtual void OnPersonChanged(int personId)
         {
-            SelectedPerson = DataHelper.GetPersonWithoutFinancials(personId);
+            var isSaved = true;
+            if (Page is TimeEntry_New)
+            {
+                if (((TimeEntry_New)Page).IsDirty)
+                {
+                    isSaved = ((TimeEntry_New)Page).SaveData();
+                }
+            }
 
-            PersonChanged(this,
-                          new PersonChangedEventArguments(
-                              new Person
-                                  {
-                                      Id = personId
-                                  }));
+            if (isSaved)
+            {
+                SelectedPerson = DataHelper.GetPersonWithoutFinancials(personId);
+
+                PersonChanged(this,
+                              new PersonChangedEventArguments(
+                                  new Person
+                                      {
+                                          Id = personId
+                                      }));
+            }
+            else
+            {
+                ddlPersons.SelectedValue = SelectedPerson.Id.Value.ToString();
+            }
         }
     }
 }
