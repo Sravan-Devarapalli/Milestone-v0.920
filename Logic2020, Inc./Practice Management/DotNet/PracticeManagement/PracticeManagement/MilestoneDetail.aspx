@@ -556,7 +556,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Client discount (<asp:Label ID="lblClientDiscount" runat="server"></asp:Label>
+                                    Account discount (<asp:Label ID="lblClientDiscount" runat="server"></asp:Label>
                                     &nbsp;%)
                                 </td>
                                 <td align="right">
