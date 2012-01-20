@@ -492,7 +492,7 @@ namespace PraticeManagement.Controls.TimeEntry
         protected void ddlTimeTypes_DataBound(object sender, EventArgs e)
         {
             if (ddlTimeTypes.Items.FindByValue("-1") == null)
-                ddlTimeTypes.Items.Insert(0, (new ListItem("2. Select Time Type", "-1")));
+                ddlTimeTypes.Items.Insert(0, (new ListItem("2. Select Work Type", "-1")));
             AddTitlestoListItems(ddlTimeTypes);
 
             PTOTimeTypeListitem = ddlTimeTypes.Items.FindByText("PTO");
