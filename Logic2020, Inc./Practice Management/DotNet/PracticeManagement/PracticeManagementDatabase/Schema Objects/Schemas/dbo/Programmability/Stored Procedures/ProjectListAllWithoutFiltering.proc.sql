@@ -37,6 +37,7 @@ AS
 	LEFT JOIN dbo.Commission c ON c.ProjectId = p.ProjectId AND c.CommissionType = 1
 	LEFT JOIN dbo.Person cp ON cp.PersonId = c.PersonId
 	WHERE P.ProjectId <> @DefaultProjectId
+	AND P.IsAllowedToShow = 1
 
 GO
 
