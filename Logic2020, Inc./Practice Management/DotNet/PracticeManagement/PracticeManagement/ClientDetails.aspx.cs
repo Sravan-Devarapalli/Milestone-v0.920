@@ -432,7 +432,7 @@ namespace PraticeManagement
                     {
                         ClientId = id;
                         ClearDirty();
-                        mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Client"));
+                        mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Account"));
                     }
 
                     Redirect(Constants.ApplicationPages.ClientList);
@@ -667,6 +667,7 @@ namespace PraticeManagement
                 btnAddProject.CssClass = "darkadd-btn-project";
             }
             chbIsChar.Checked = client.IsChargeable;
+            chbIsInternal.Checked = client.IsInternal;
             ddlDefaultTerms.SelectedIndex =
                 ddlDefaultTerms.Items.IndexOf(ddlDefaultTerms.Items.FindByValue(client.DefaultTerms.ToString()));
 
@@ -705,14 +706,38 @@ namespace PraticeManagement
             client.DefaultDiscount = decimal.Parse(txtDefaultDiscount.Text);
             client.Inactive = !chbActive.Checked;
             client.IsChargeable = chbIsChar.Checked;
+            client.IsInternal = chbIsInternal.Checked;
             client.DefaultTerms =
                 !string.IsNullOrEmpty(ddlDefaultTerms.SelectedValue)
                     ? int.Parse(ddlDefaultTerms.SelectedValue)
                     : default(int);
 
             client.IsMarginColorInfoEnabled = chbMarginThresholds.Checked;
-            client.ClientMarginInfo = ClientMarginColorInfoList;
+            client.ClientMarginInfo = null;
+            if (IntialClientMarginColorInfoList.Count == ClientMarginColorInfoList.Count)
+            {
+                for (int i = 0; i < ClientMarginColorInfoList.Count; i++)
+                {
+                    if (!(ClientMarginColorInfoList[i].ColorInfo.ColorId == IntialClientMarginColorInfoList[i].ColorInfo.ColorId
+                        && ClientMarginColorInfoList[i].ColorInfo.ColorValue == IntialClientMarginColorInfoList[i].ColorInfo.ColorValue
+                        && ClientMarginColorInfoList[i].StartRange == IntialClientMarginColorInfoList[i].StartRange
+                        && ClientMarginColorInfoList[i].EndRange == IntialClientMarginColorInfoList[i].EndRange))
+                    {
+                        client.ClientMarginInfo = ClientMarginColorInfoList;
+                        break;
+                    }
+                }
 
+                if (chbMarginThresholds.Checked != IntialchbMarginThresholdsValue)
+                {
+                    client.ClientMarginInfo = ClientMarginColorInfoList;
+                }
+
+            }
+            else
+            {
+                client.ClientMarginInfo = ClientMarginColorInfoList;
+            }
 
 
         }
