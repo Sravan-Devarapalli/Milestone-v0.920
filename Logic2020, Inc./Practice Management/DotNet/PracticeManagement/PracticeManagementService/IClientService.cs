@@ -4,7 +4,7 @@ using DataTransferObjects;
 
 namespace PracticeManagementService
 {
-    [ServiceContract(Namespace="http://www.logic2020.com")]
+    [ServiceContract(Namespace = "http://www.logic2020.com")]
     public interface IClientService
     {
         /// <summary>
@@ -12,7 +12,7 @@ namespace PracticeManagementService
         /// </summary>
         /// <param name="client"><see cref="Client"/> with information to be changed</param>
         [OperationContract]
-		int? SaveClientDetail(Client client);
+        int? SaveClientDetail(Client client);
 
         /// <summary>
         /// Get a client
@@ -25,7 +25,7 @@ namespace PracticeManagementService
         /// there is no system restriction on the value for the identifier in this call.
         /// </remarks>
         [OperationContract]
-		Client GetClientDetail(int clientId, string viewerUsername);
+        Client GetClientDetail(int clientId, string viewerUsername);
 
         /// <summary>
         /// Inactivate (hide) a client
@@ -66,7 +66,7 @@ namespace PracticeManagementService
         /// <returns>A <see cref="List{T}"/> of <see cref="Client"/>s in the system</returns>
         [OperationContract]
         List<Client> ClientListAllSecure(Person person, bool inactives);
-        
+
         /// <summary>
         /// List all active and inactive clients in the system
         /// </summary>
@@ -83,12 +83,12 @@ namespace PracticeManagementService
         [OperationContract]
         List<Client> ClientListAllWithInactive();
 
-		/// <summary>
-		/// Retrives the list clients available for the specific project.
-		/// </summary>
-		/// <param name="projectId">An ID of the project to retrive the data for.</param>
-		/// <returns>The list of the <see cref="Client"/> objects.</returns>
-		[OperationContract]
+        /// <summary>
+        /// Retrives the list clients available for the specific project.
+        /// </summary>
+        /// <param name="projectId">An ID of the project to retrive the data for.</param>
+        /// <returns>The list of the <see cref="Client"/> objects.</returns>
+        [OperationContract]
         List<Client> ClientListAllForProject(int? projectId, int? loggedInPersonId);
 
         [OperationContract]
@@ -97,5 +97,13 @@ namespace PracticeManagementService
         [OperationContract]
         List<ClientMarginColorInfo> GetClientMarginColorInfo(int clientId);
 
+        [OperationContract]
+        List<Client> ClientListAllWithoutPermissions();
+
+        [OperationContract]
+        Client GetInternalAccount();
+        
+
     }
 }
+
