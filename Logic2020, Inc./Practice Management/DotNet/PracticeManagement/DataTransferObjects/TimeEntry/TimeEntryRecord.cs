@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.Serialization;
+using System.Collections.Generic;
+using System.Web;
 
 namespace DataTransferObjects.TimeEntry
 {
@@ -24,6 +26,9 @@ namespace DataTransferObjects.TimeEntry
 
         [DataMember]
         public int? Id { get; set; }
+
+        [DataMember]
+        public int? ChargeCodeId { get; set; }
 
         /// <summary>
         /// Date that this time entry is about
@@ -70,6 +75,9 @@ namespace DataTransferObjects.TimeEntry
         [DataMember]
         public bool IsCorrect { get; set; }
 
+        public bool IsChargeCodeOff { get; set; }
+
+
         #endregion
 
         #region Formatting
@@ -80,10 +88,19 @@ namespace DataTransferObjects.TimeEntry
             {
                 return Note.
                     Substring(0, Note.Length > ShortNoteLen ? ShortNoteLen : Note.Length).
-                    Replace(Environment.NewLine, NewLineSeparator) + 
+                    Replace(Environment.NewLine, NewLineSeparator) +
                    (Note.Length > ShortNoteLen ? ShortNote : String.Empty);
             }
         }
+
+        public string HtmlEncodedNote
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(Note);
+            }
+        }
+
 
         #endregion
 
@@ -102,6 +119,8 @@ namespace DataTransferObjects.TimeEntry
         }
 
         #endregion
+
+
     }
 }
 
