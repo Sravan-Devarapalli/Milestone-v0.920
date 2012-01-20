@@ -600,11 +600,98 @@ namespace PracticeManagementService
 
         #endregion
 
+        public List<TimeEntrySection> PersonTimeEntriesByPeriod(int personId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                return TimeEntryDAL.PersonTimeEntriesByPeriod(personId, startDate, endDate);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "PersonTimeEntriesByPeriod", "TimeEntryService.svc", string.Empty,
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+        }
+
 
         public System.Data.DataSet TimeEntriesByPersonGetExcelSet(TimeEntryPersonReportContext reportContext)
         {
             return TimeEntryDAL.TimeEntriesByPersonGetExcelSet(reportContext);
         }
+
+        #region TimeTrack Methods
+        public void DeleteTimeTrack(int clientId, int projectId, int personId, int timetypeId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                TimeEntryDAL.DeleteTimeTrack(clientId, projectId, personId, timetypeId, startDate, endDate);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "DeleteTimeTrack", "TimeEntryService.svc", string.Empty,
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+        }
+
+        public void SaveTimeTrack(string timeEntriesXml, int personId, DateTime startDate, DateTime endDate, string userLogin)
+        {
+            try
+            {
+                TimeEntryDAL.SaveTimeTrack(timeEntriesXml, personId, startDate, endDate, userLogin);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "SaveTimeTrack", "TimeEntryService.svc", string.Empty,
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+        }
+
+        public double? GetPersonTimeEnteredHoursByDay(int personId, DateTime date, bool includePTOAndHoliday)
+        {
+            return TimeEntryDAL.GetPersonTimeEnteredHoursByDay(personId, date, includePTOAndHoliday);
+        }
+
+
+
+        public void SetPersonTimeEntryRecursiveSelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isRecursive, DateTime startDate)
+        {
+            try
+            {
+                TimeEntryDAL.SetPersonTimeEntryRecursiveSelection(personId, clientId, projectGroupId, projectId, timeEntrySectionId, isRecursive, startDate);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "SetPersonTimeEntryRecursiveSelection", "TimeEntryService.svc", string.Empty,
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+        }
+
+        public void SetPersonTimeEntrySelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isDelete, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                TimeEntryDAL.SetPersonTimeEntrySelection(personId, clientId, projectGroupId, projectId, timeEntrySectionId, isDelete, startDate, endDate);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "SetPersonTimeEntrySelection", "TimeEntryService.svc", string.Empty,
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+        }
+
+        #endregion
+
+
     }
 }
 
