@@ -32,7 +32,7 @@ AS
 			   p.DirectorFirstName,
 			   p.DirectorLastName
 		  FROM dbo.v_Project AS p
-		 WHERE p.ClientId = @ClientId
+		 WHERE p.ClientId = @ClientId AND p.IsAllowedToShow = 1
 		ORDER BY p.Name
 	ELSE 
 	BEGIN 
@@ -73,7 +73,7 @@ AS
 			   p.DirectorLastName
 		  FROM dbo.v_Project AS p
 		 WHERE 
-			p.ClientId = @ClientId AND
+			p.ClientId = @ClientId AND p.IsAllowedToShow = 1 AND 
 			(
 				p.GroupId IN (SELECT TargetId FROM Perms AS s WHERE s.TargetType = 2) OR
 				p.PracticeId IN (SELECT TargetId FROM Perms AS s WHERE s.TargetType = 5) OR
