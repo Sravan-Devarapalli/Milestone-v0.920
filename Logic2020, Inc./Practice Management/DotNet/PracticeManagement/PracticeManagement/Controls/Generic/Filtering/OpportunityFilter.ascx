@@ -46,11 +46,11 @@
         GetDefaultcblList("<%= cblOpportunityOwner.ClientID %>");
         GetDefaultcblList("<%= cblSalesperson.ClientID %>");
         GetDefaultcblList("<%= cblOpportunityGroup.ClientID %>");
-        scrollingDropdown_onclick('cblClient', 'Client');
+        scrollingDropdown_onclick('cblClient', 'Account');
         EnableOrDisableGroup();
         scrollingDropdown_onclick('cblSalesperson', 'Salesperson');
         scrollingDropdown_onclick('cblOpportunityOwner', 'Owner');
-        custom_ScrollingDropdown_onclick('cblOpportunityGroup', 'Group');
+        custom_ScrollingDropdown_onclick('cblOpportunityGroup', 'Business Unit');
 
     }
 
@@ -144,7 +144,7 @@
                         <td style="width: 20px;">
                         </td>
                         <td style="border-bottom: 1px solid black; width: 190px; text-align: center">
-                            Client / Group
+                            Account / Business Unit
                         </td>
                         <td style="padding: 5px; width: 10px;">
                         </td>
@@ -212,8 +212,8 @@
                         </td>
                         <td style="padding: 5px;">
                             <uc:CascadingMsdd ID="cblClient" runat="server" TargetControlId="cblOpportunityGroup"
-                                SetDirty="false" Width="240" Height="240px" onclick="scrollingDropdown_onclick('cblClient','Client');EnableOrDisableGroup();"
-                                DropDownListType="Client" CellPadding="3" />
+                                SetDirty="false" Width="240" Height="240px" onclick="scrollingDropdown_onclick('cblClient','Account');EnableOrDisableGroup();"
+                                DropDownListType="Account" CellPadding="3" />
                             <ext:ScrollableDropdownExtender ID="sdeCblClient" runat="server" TargetControlID="cblClient"
                                 UseAdvanceFeature="true" EditImageUrl="../../../Images/Dropdown_Arrow.png" Width="240px">
                             </ext:ScrollableDropdownExtender>
@@ -234,8 +234,8 @@
                         </td>
                         <td style="padding: 5px;">
                             <uc:ScrollingDropDown ID="cblOpportunityGroup" runat="server" SetDirty="false" Width="240"
-                                Height="240px" onclick="custom_ScrollingDropdown_onclick('cblOpportunityGroup','Group')"
-                                DropDownListType="Group" CellPadding="3" />
+                                Height="240px" onclick="custom_ScrollingDropdown_onclick('cblOpportunityGroup','Business Unit')"
+                                DropDownListType="Business Unit" CellPadding="3" />
                             <ext:ScrollableDropdownExtender ID="sdeCblOpportunityGroup" runat="server" TargetControlID="cblOpportunityGroup"
                                 UseAdvanceFeature="true" EditImageUrl="../../../Images/Dropdown_Arrow.png" Width="240px">
                             </ext:ScrollableDropdownExtender>
