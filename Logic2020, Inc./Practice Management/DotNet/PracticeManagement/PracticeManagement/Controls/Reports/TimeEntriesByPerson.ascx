@@ -19,7 +19,7 @@
                             <thead>
                                 <tr>
                                     <th class="ClientProjectTimeType">
-                                        Client-Project-Time Type
+                                        Account-Project-Work Type
                                     </th>
                                     <asp:Repeater ID="dlProject" runat="server" OnItemCreated="dlProject_OnItemCreated"
                                         EnableViewState="false" OnInit="dlProject_OnInit">
@@ -113,7 +113,7 @@
                                 <asp:TemplateField FooterStyle-CssClass="AlignRight">
                                     <HeaderTemplate>
                                         <div class="ie-bg HeaderDiv">
-                                            Time Type</div>
+                                            Work Type</div>
                                     </HeaderTemplate>
                                     <ItemTemplate>
                                         <%#((TimeEntryRecord)Container.DataItem).TimeType.Name %>
