@@ -14,7 +14,8 @@ CREATE PROCEDURE dbo.ProjectUpdate
 	@IsChargeable		BIT,
 	@DirectorId			INT,
 	@ProjectManagerIdsList	NVARCHAR(MAX),
-	@Description           NVARCHAR(MAX)
+	@Description           NVARCHAR(MAX),
+	@CanCreateCustomWorkTypes BIT 
 )
 AS
 BEGIN
@@ -37,7 +38,8 @@ BEGIN
 				GroupId			= @GroupId,
 				IsChargeable		= @IsChargeable,
 				DirectorId		= @DirectorId,
-				Description		=@Description
+				Description		=@Description,
+				CanCreateCustomWorkTypes = @CanCreateCustomWorkTypes
 			WHERE ProjectId = @ProjectId
 
 		DECLARE @OpportunityId INT = NULL
@@ -78,3 +80,4 @@ BEGIN
 	COMMIT TRAN T1;	
 
 END
+
