@@ -103,6 +103,33 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.RadioButton rbIsDefault;
         
         /// <summary>
+        /// rbIsInternal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbIsInternal;
+        
+        /// <summary>
+        /// cvIsDefaultOrInternal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvIsDefaultOrInternal;
+        
+        /// <summary>
+        /// rbIsActive control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox rbIsActive;
+        
+        /// <summary>
         /// valsumTimeType control.
         /// </summary>
         /// <remarks>
@@ -128,15 +155,6 @@ namespace PraticeManagement.Config {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.MessageLabel mlInsertStatus;
-        
-        /// <summary>
-        /// odsTimeTypes control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource odsTimeTypes;
     }
 }
 
