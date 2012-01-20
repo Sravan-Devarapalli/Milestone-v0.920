@@ -12,7 +12,7 @@ namespace PraticeManagement.Config
 {
     public partial class Clients : PracticeManagementPageBase
     {
-        private const string ViewingRecords = "Viewing {0} - {1} of {2} Clients";
+        private const string ViewingRecords = "Viewing {0} - {1} of {2} Accounts";
 
         private string previousAlphabetLnkButtonId
         {
