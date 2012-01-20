@@ -41,7 +41,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 Person person = (isUserAdministrator || isUserSeniorLeadership) ? null : DataHelper.CurrentPerson;
                 var clients = DataHelper.GetAllClientsSecure(person, true, true);
-                DataHelper.FillListDefault(ddlClients, "-- Select a Client -- ", clients as object[], false);
+                DataHelper.FillListDefault(ddlClients, "-- Select an Account -- ", clients as object[], false);
             }
         }
 
