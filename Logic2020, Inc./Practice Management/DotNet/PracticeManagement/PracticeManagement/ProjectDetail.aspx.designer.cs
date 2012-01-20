@@ -283,6 +283,24 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CompareValidator compClientDiscount;
         
         /// <summary>
+        /// chbIsInternal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbIsInternal;
+        
+        /// <summary>
+        /// chbCanCreateCustomWorkTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbCanCreateCustomWorkTypes;
+        
+        /// <summary>
         /// btnAttachSOW control.
         /// </summary>
         /// <remarks>
@@ -524,6 +542,24 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnProjectTools;
+        
+        /// <summary>
+        /// CellProjectTimeTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableCell CellProjectTimeTypes;
+        
+        /// <summary>
+        /// btnProjectTimeTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnProjectTimeTypes;
         
         /// <summary>
         /// mvProjectDetailTab control.
@@ -866,6 +902,33 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ObjectDataSource odsProjectStatus;
+        
+        /// <summary>
+        /// vwProjectTimeTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.View vwProjectTimeTypes;
+        
+        /// <summary>
+        /// pnlProjectTimeTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlProjectTimeTypes;
+        
+        /// <summary>
+        /// ProjectTimeTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Projects.ProjectTimeTypes ProjectTimeTypes;
         
         /// <summary>
         /// vsumProject control.
