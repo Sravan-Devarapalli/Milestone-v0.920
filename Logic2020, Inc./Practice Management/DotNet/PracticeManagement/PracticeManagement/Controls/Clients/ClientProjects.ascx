@@ -11,7 +11,7 @@
                     CommandArgument='<%# Eval("Id") %>' OnCommand="btnProjectName_Command" Enabled='<%# !CheckIfDefaultProject(Eval("Id")) %>'></asp:LinkButton>
             </ItemTemplate>
         </asp:TemplateField>
-        <asp:TemplateField HeaderText="<div class='ie-bg' >Group</div>" SortExpression="GroupName">
+        <asp:TemplateField HeaderText="<div class='ie-bg' >Business Unit</div>" SortExpression="GroupName">
             <ItemTemplate>
                 <asp:Label ID="lblGroup" runat="server" Text='<%# Eval("Group.Name") != null ? Eval("Group.Name").ToString() : string.Empty %>' />
             </ItemTemplate>
