@@ -38,7 +38,7 @@ BEGIN
 	SELECT DISTINCT 
 		   p.LastName +', ' +p.FirstName Name,
 		   proj.ProjectNumber AS 'P#',
-		   c.Name Client,
+		   c.Name 'Account',
 		   proj.Name AS 'Project Name',
 		   m.Description AS Milestone,
 		   tt.Name TimeType,
