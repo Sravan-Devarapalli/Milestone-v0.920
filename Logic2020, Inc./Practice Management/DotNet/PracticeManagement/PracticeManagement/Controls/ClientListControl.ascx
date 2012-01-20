@@ -12,7 +12,7 @@
                                 ExpandControlID="btnExpandCollapseFilter" Collapsed="True" TextLabelID="lblFilter" />                        
                 <asp:Label ID="lblFilter" runat="server"></asp:Label>&nbsp;
                 <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Filters" />
-                <asp:ShadowedHyperlink runat="server" Text="Add Client" ID="lnkAddClient" CssClass="add-btn" NavigateUrl = "~/ClientDetails.aspx?returnTo=Config/GeneralConfiguration.aspx" />
+                <asp:ShadowedHyperlink runat="server" Text="Add Account" ID="lnkAddClient" CssClass="add-btn" NavigateUrl = "~/ClientDetails.aspx?returnTo=Config/GeneralConfiguration.aspx" />
             </div>
             <asp:Panel CssClass="filters" ID="pnlFilters" runat="server">
                 <AjaxControlToolkit:TabContainer ID="TabContainer1" runat="server" ActiveTabIndex="0"
@@ -22,7 +22,7 @@
                             <span class="bg  DefaultCursor"><span class="NoHyperlink" >Filters</span></span>
                         </HeaderTemplate>
                         <ContentTemplate>
-                            <asp:CheckBox ID="chbShowActive" runat="server" AutoPostBack="true" Text="Show Active Clients Only"
+                            <asp:CheckBox ID="chbShowActive" runat="server" AutoPostBack="true" Text="Show Active Accounts Only"
                                 Checked="True" OnCheckedChanged="chbShowActive_CheckedChanged" />
                         </ContentTemplate>
                     </ajaxToolkit:TabPanel>
@@ -36,7 +36,7 @@
                 <asp:TemplateField>
                     <HeaderTemplate>
                         <div class="ie-bg">
-                            Client Name</div>
+                            Account Name</div>
                     </HeaderTemplate>
                     <ItemTemplate>
                         <asp:HyperLink ID="btnClientName" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("Name")) %>'
