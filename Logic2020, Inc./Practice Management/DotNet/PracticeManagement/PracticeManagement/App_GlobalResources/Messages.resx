@@ -210,7 +210,7 @@
     <value>* Please note that this person has {0} vacation day(s) scheduled during the period you have selected. These vacation days have not been considered in the calculations on this page.</value>
   </data>
   <data name="ProjectsListSecure" xml:space="preserve">
-    <value>Other projects also exist for this client, but your permissions do not allow you to see them.</value>
+    <value>Other projects also exist for this account, but your permissions do not allow you to see them.</value>
   </data>
   <data name="PersonDetail_custTerminationDateMustBeEmpty" xml:space="preserve">
     <value>The Termination Date for Active person must be Empty</value>
@@ -243,3 +243,4 @@
     <value>Data saved successfully</value>
   </data>
 </root>
+
