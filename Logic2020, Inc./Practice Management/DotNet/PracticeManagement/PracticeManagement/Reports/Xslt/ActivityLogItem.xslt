@@ -73,10 +73,35 @@
         <xsl:choose>
           <xsl:when test="name() = 'TimeEntry'">
             <p>
-              D: <xsl:value-of select="//NEW_VALUES/@MilestoneDate"/><br/>
-              M: <xsl:value-of select="//NEW_VALUES/@Description"/><br/>
-              P: <xsl:value-of select="//NEW_VALUES/@ObjectName"/><br/>
-              Pr: <xsl:value-of select="//NEW_VALUES/@ProjectName"/><br/>
+              <xsl:for-each select="//NEW_VALUES/attribute::*">
+                <xsl:variable name="value" select="." />
+                <xsl:variable name="attrName" select="name()" />
+                
+                <xsl:if test="$attrName = 'MilestoneDate'">
+                  D: <xsl:value-of select="$value"/>
+                  <br/>
+                </xsl:if>
+                <xsl:if test="$attrName = 'ChargeCodeDate'">
+                  D: <xsl:value-of select="$value"/>
+                  <br/>
+                </xsl:if>
+                <xsl:if test="$attrName = 'Description'">
+                  M: <xsl:value-of select="$value"/>
+                  <br/>
+                </xsl:if>
+                <xsl:if test="$attrName = 'ObjectName'">
+                  P: <xsl:value-of select="$value"/>
+                  <br/>
+                </xsl:if>
+                <xsl:if test="$attrName = 'ProjectName'">
+                  Pr: <xsl:value-of select="$value"/>
+                  <br/>
+                </xsl:if>
+                <xsl:if test="$attrName = 'ChargeCode'">
+                  ChargeCode: <xsl:value-of select="$value"/>
+                  <br/>
+                </xsl:if>                
+              </xsl:for-each>
             </p>
           </xsl:when>
           <xsl:when test="name() = 'Export' "></xsl:when>
