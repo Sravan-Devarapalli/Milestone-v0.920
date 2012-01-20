@@ -8,6 +8,6 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT * from v_ProjectExpenses where ExpenseId = @ExpenseId
+	--SELECT * from v_ProjectExpenses where ExpenseId = @ExpenseId
 END
 
