@@ -4,8 +4,11 @@
 -- Description:	Insert new time type
 -- =============================================
 CREATE PROCEDURE [dbo].[TimeTypeInsert]
+	@TimeTypeId   INT OUT,
 	@Name VARCHAR(50),
-	@IsDefault BIT
+	@IsDefault BIT,
+	@IsInternal	BIT,
+	@IsActive	BIT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -13,18 +16,64 @@ BEGIN
 	IF EXISTS(SELECT 1 FROM dbo.TimeType WHERE [Name] = @Name)
 	BEGIN
 		DECLARE @Error NVARCHAR(200)
-		SET @Error = 'This time type already exists. Please add a different time type.'
+		SET @Error = 'This work type already exists. Please add a different work type.'
 		RAISERROR(@Error,16,1)
 		RETURN
 	END
-	
-	IF @IsDefault = 1
+	/*
+	@IsDefault = 0 for Custom WorkType  W0000 - W5999.
+				= 1 for Default WorkType. W6000 - W6999.
+	 */
+	 DECLARE	 @TimeTypeCode			 NVARCHAR(10),
+				 @LowerLimitRange		 INT ,
+				 @HigherLimitRange		 INT ,
+				 @NextTimeTypeNumber	 INT
+		
+	IF (@IsDefault = 1)
 	BEGIN
-		UPDATE TimeType
-		SET IsDefault = 0
+		SET @LowerLimitRange = 6000
+		SET @HigherLimitRange = 6999
+		SET @Error = 'Default worktype code not avaliable'
+	END
+	ELSE
+	BEGIN
+		SET @LowerLimitRange = 0
+		SET @HigherLimitRange = 5999
+		SET @Error = 'Custom worktype code not avaliable'
 	END
 
-	INSERT INTO dbo.TimeType ([Name],[IsDefault],[IsSystemTimeType]) VALUES (@Name, @IsDefault, 0)
+	DECLARE @TimeTypeRanksList TABLE (TimeTypeNumber INT,TimeTypeNumberRank INT)
+	INSERT INTO @TimeTypeRanksList 
+	SELECT Convert(INT,SUBSTRING(Code,2,5)) as TimeTypeNumber ,
+			RANK() OVER (ORDER BY Convert(INT,SUBSTRING(Code,2,5)))+@LowerLimitRange-1 AS  TimeTypeNumberRank
+	FROM dbo.TimeType 
+	WHERE IsDefault = @IsDefault AND ISNUMERIC( SUBSTRING(Code,2,5)) = 1
+
+
+	INSERT INTO @TimeTypeRanksList 
+	SELECT -1,MAX(TimeTypeNumberRank)+1 FROM @TimeTypeRanksList
+
+	SELECT TOP 1 @NextTimeTypeNumber = TimeTypeNumberRank 
+		FROM @TimeTypeRanksList  
+		WHERE TimeTypeNumber != TimeTypeNumberRank 
+		ORDER BY TimeTypeNumberRank
+
+				
+	IF (@NextTimeTypeNumber IS NULL AND NOT EXISTS(SELECT 1 FROM @TimeTypeRanksList WHERE TimeTypeNumber != -1))
+	BEGIN 
+		SET  @NextTimeTypeNumber = @LowerLimitRange
+	END 
+	ELSE IF (@NextTimeTypeNumber > @HigherLimitRange )
+	BEGIN
+		RAISERROR (@Error, 16, 1)
+		RETURN
+	END
+
+	SET @TimeTypeCode = 'W'+ REPLICATE('0',4-LEN(@NextTimeTypeNumber)) + CONVERT(NVARCHAR,@NextTimeTypeNumber)
+
+	INSERT INTO dbo.TimeType ([Name], [IsDefault], [IsInternal], [IsAllowedToEdit],Code,[IsActive]) VALUES (@Name, @IsDefault, @IsInternal, 1,@TimeTypeCode,@IsActive)
+
+	SET @TimeTypeId = SCOPE_IDENTITY()
 END
 
 GO
