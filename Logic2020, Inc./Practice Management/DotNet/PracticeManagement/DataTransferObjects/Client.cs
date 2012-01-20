@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Web;
 
 namespace DataTransferObjects
 {
@@ -75,6 +76,16 @@ namespace DataTransferObjects
             set { _name = value; }
         }
 
+        public string HtmlEncodedName
+        {
+            get 
+            {
+                return HttpUtility.HtmlEncode(Name);
+            }
+        }
+
+       
+
         /// <summary>
         /// Client can be filtered from display if this is true.
         /// </summary>
@@ -146,6 +157,13 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public bool IsInternal
+        {
+            get;
+            set;
+        }
+
 		#endregion
 
 		#region Construction
@@ -173,3 +191,4 @@ namespace DataTransferObjects
         #endregion
 	}
 }
+
