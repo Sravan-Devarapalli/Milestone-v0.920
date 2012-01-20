@@ -1,14 +1,14 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
-    CodeBehind="ClientList.aspx.cs" Inherits="PraticeManagement.ClientList" Title="Client List | Practice Management" %>
+    CodeBehind="ClientList.aspx.cs" Inherits="PraticeManagement.ClientList" Title="Account List | Practice Management" %>
 
 <%@ Register Src="Controls/PracticeFilter.ascx" TagName="PracticeFilter" TagPrefix="uc1" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons" Assembly="PraticeManagement" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Client List | Practice Management</title>
+    <title>Account List | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
-    Client List
+    Account List
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <asp:UpdatePanel ID="pnlBody" runat="server">
@@ -20,7 +20,7 @@
                                 ExpandControlID="btnExpandCollapseFilter" Collapsed="True" TextLabelID="lblFilter" />                        
                 <asp:Label ID="lblFilter" runat="server"></asp:Label>&nbsp;
                 <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Filters" />
-                <asp:ShadowedHyperlink runat="server" Text="Add Client" ID="lnkAddClient" CssClass="add-btn" NavigateUrl="~/ClientDetails.aspx?returnTo=ClientList.aspx"/>
+                <asp:ShadowedHyperlink runat="server" Text="Add Account" ID="lnkAddClient" CssClass="add-btn" NavigateUrl="~/ClientDetails.aspx?returnTo=ClientList.aspx"/>
             </div>
             <asp:Panel CssClass="filters" ID="pnlFilters" runat="server">
                 <AjaxControlToolkit:TabContainer ID="TabContainer1" runat="server" ActiveTabIndex="0"
@@ -30,7 +30,7 @@
                             <span class="bg  DefaultCursor"><span class="NoHyperlink" >Filters</span></span>
                         </HeaderTemplate>
                         <ContentTemplate>
-                            <asp:CheckBox ID="chbShowActive" runat="server" AutoPostBack="true" Text="Show Active Clients Only"
+                            <asp:CheckBox ID="chbShowActive" runat="server" AutoPostBack="true" Text="Show Active Accounts Only"
                                 Checked="True" OnCheckedChanged="chbShowActive_CheckedChanged" />
                         </ContentTemplate>
                     </ajaxToolkit:TabPanel>
@@ -44,7 +44,7 @@
                 <asp:TemplateField>
                     <HeaderTemplate>
                         <div class="ie-bg">
-                            Client Name</div>
+                            Account Name</div>
                     </HeaderTemplate>
                     <ItemTemplate>
                         <asp:HyperLink ID="btnClientName" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("Name")) %>'
