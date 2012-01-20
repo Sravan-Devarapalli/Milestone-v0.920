@@ -56,7 +56,7 @@ AS
 		  FROM dbo.v_Project AS p
 		  INNER JOIN dbo.ProjectGroup AS pg 
 		  ON p.GroupId = pg.GroupId
-		  WHERE p.ClientId = @ClientId
+		  WHERE p.ClientId = @ClientId AND p.IsAllowedToShow = 1
 		' + @OrderBy +' 
 	ELSE 
 	BEGIN 
@@ -99,7 +99,7 @@ AS
 			   1 InUse 
 		  FROM dbo.v_Project AS p
 		  INNER JOIN dbo.ProjectGroup AS pg 
-		  ON p.GroupId = pg.GroupId
+		  ON p.GroupId = pg.GroupId AND p.IsAllowedToShow = 1
 		 WHERE 
 			p.ClientId = @ClientId AND
 			(
