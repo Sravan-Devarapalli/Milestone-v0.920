@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Web;
 
 namespace DataTransferObjects
 {
@@ -44,6 +45,15 @@ namespace DataTransferObjects
             get { return _name; }
             set { _name = value; }
         }
+
+        public string HtmlEncodedName
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(Name);
+            }
+        }
+
 
         /// <summary>
         /// True if client have any project with this group.
