@@ -85,7 +85,7 @@
             </td>
             <td class="time-entry-bar-time-types">
                 <div class="ie-bg">
-                    Time Type</div>
+                    Work Type</div>
             </td>
             <asp:Repeater ID="repEntriesHeader" runat="server">
                 <ItemTemplate>
