@@ -1,0 +1,38 @@
+﻿<Sections>
+  <Section Id="1">
+    <AccountAndProjectSelection AccountId="0" AccountName="1" ProjectId="2" ProjectName="3" ProjectNumber="{4}"  BusinessUnitId="{5}" BusinessUnitName="{6}" >
+      <WorkType Id="">
+        <CalendarItem  Date="0" CssClass="1" >
+          <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsCorrect="{4}" ></TimeEntryRecord>
+          <TimeEntryRecord  ActualHours="{0}" Note="{1}" IsChargeable="{2}" EntryDate="{3}" IsCorrect="{4}" ></TimeEntryRecord>
+        </CalendarItem>
+        <!--<CalendarItem Date="" >
+        <TimeEntryRecord ActualHours="" Note="" ></TimeEntryRecord>
+        <TimeEntryRecord ActualHours="" Note="" ></TimeEntryRecord>
+      </CalendarItem>-->
+      </WorkType>
+      <!--<WorkType  Id="">
+      <CalendarItem Date="" >
+        <TimeEntryRecord ActualHours="" Note="" ></TimeEntryRecord>
+        <TimeEntryRecord ActualHours="" Note="" ></TimeEntryRecord>
+      </CalendarItem>
+    </WorkType>-->
+    </AccountAndProjectSelection>
+    <!--<AccountAndProjectSelection AccountName="" ProjectName="" ProjectNumber="" >
+    <WorkType ID="">
+      <CalendarItem Date="" >
+        <TimeEntryRecord ActualHours="" Note="" ></TimeEntryRecord>
+        <TimeEntryRecord ActualHours="" Note="" ></TimeEntryRecord>
+      </CalendarItem>
+    </WorkType>
+  </AccountAndProjectSelection>-->
+  </Section>
+  <Section Id="2">
+  </Section>
+  <Section Id="3">
+  </Section>
+  <Section Id="4">
+  </Section>
+</Sections>
+
+
