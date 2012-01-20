@@ -152,6 +152,18 @@ namespace PraticeManagement.TimeEntryService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="TimeEntryService.ITimeEntryService")]
     public interface ITimeEntryService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryMilestones", ReplyAction="http://tempuri.org/ITimeEntryService/GetAllTimeEntryMilestonesResponse")]
+        DataTransferObjects.Milestone[] GetAllTimeEntryMilestones();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryPersons", ReplyAction="http://tempuri.org/ITimeEntryService/GetAllTimeEntryPersonsResponse")]
+        DataTransferObjects.Person[] GetAllTimeEntryPersons(System.DateTime entryDateFrom, System.DateTime entryDateTo);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/PersonTimeEntriesByPeriod", ReplyAction="http://tempuri.org/ITimeEntryService/PersonTimeEntriesByPeriodResponse")]
+        DataTransferObjects.TimeEntry.TimeEntrySection[] PersonTimeEntriesByPeriod(int personId, System.DateTime startDate, System.DateTime endDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetPersonTimeEnteredHoursByDay", ReplyAction="http://tempuri.org/ITimeEntryService/GetPersonTimeEnteredHoursByDayResponse")]
+        System.Nullable<double> GetPersonTimeEnteredHoursByDay(int personId, System.DateTime date, bool includePTOAndHoliday);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetAllTimeTypes", ReplyAction="http://tempuri.org/ITimeEntryService/GetAllTimeTypesResponse")]
         DataTransferObjects.TimeEntry.TimeTypeRecord[] GetAllTimeTypes();
         
@@ -221,6 +233,19 @@ namespace PraticeManagement.TimeEntryService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/TimeEntriesByPersonGetExcelSet", ReplyAction="http://tempuri.org/ITimeEntryService/TimeEntriesByPersonGetExcelSetResponse")]
         System.Data.DataSet TimeEntriesByPersonGetExcelSet(DataTransferObjects.ContextObjects.TimeEntryPersonReportContext reportContext);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/DeleteTimeTrack", ReplyAction="http://tempuri.org/ITimeEntryService/DeleteTimeTrackResponse")]
+        void DeleteTimeTrack(int clientId, int projectId, int personId, int timetypeId, System.DateTime startDate, System.DateTime endDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/SaveTimeTrack", ReplyAction="http://tempuri.org/ITimeEntryService/SaveTimeTrackResponse")]
+        void SaveTimeTrack(string timeEntriesXml, int personId, System.DateTime startDate, System.DateTime endDate, string userLogin);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/SetPersonTimeEntryRecursiveSelection", ReplyAction="http://tempuri.org/ITimeEntryService/SetPersonTimeEntryRecursiveSelectionResponse" +
+            "")]
+        void SetPersonTimeEntryRecursiveSelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isRecursive, System.DateTime startDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/SetPersonTimeEntrySelection", ReplyAction="http://tempuri.org/ITimeEntryService/SetPersonTimeEntrySelectionResponse")]
+        void SetPersonTimeEntrySelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isDelete, System.DateTime startDate, System.DateTime endDate);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/ToggleIsCorrect", ReplyAction="http://tempuri.org/ITimeEntryService/ToggleIsCorrectResponse")]
         void ToggleIsCorrect(DataTransferObjects.TimeEntry.TimeEntryRecord timeEntry);
         
@@ -235,12 +260,6 @@ namespace PraticeManagement.TimeEntryService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetTimeEntryProjectsByClientId", ReplyAction="http://tempuri.org/ITimeEntryService/GetTimeEntryProjectsByClientIdResponse")]
         DataTransferObjects.Project[] GetTimeEntryProjectsByClientId(System.Nullable<int> clientId, System.Nullable<int> personId, bool showActiveAndInternalProjectsOnly);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryMilestones", ReplyAction="http://tempuri.org/ITimeEntryService/GetAllTimeEntryMilestonesResponse")]
-        DataTransferObjects.Milestone[] GetAllTimeEntryMilestones();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryPersons", ReplyAction="http://tempuri.org/ITimeEntryService/GetAllTimeEntryPersonsResponse")]
-        DataTransferObjects.Person[] GetAllTimeEntryPersons(System.DateTime entryDateFrom, System.DateTime entryDateTo);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -250,7 +269,7 @@ namespace PraticeManagement.TimeEntryService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class TimeEntryServiceClient : System.ServiceModel.ClientBase<PraticeManagement.TimeEntryService.ITimeEntryService>, PraticeManagement.TimeEntryService.ITimeEntryService {
-      
+       
         public TimeEntryServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -265,6 +284,22 @@ namespace PraticeManagement.TimeEntryService {
         
         public TimeEntryServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public DataTransferObjects.Milestone[] GetAllTimeEntryMilestones() {
+            return base.Channel.GetAllTimeEntryMilestones();
+        }
+        
+        public DataTransferObjects.Person[] GetAllTimeEntryPersons(System.DateTime entryDateFrom, System.DateTime entryDateTo) {
+            return base.Channel.GetAllTimeEntryPersons(entryDateFrom, entryDateTo);
+        }
+        
+        public DataTransferObjects.TimeEntry.TimeEntrySection[] PersonTimeEntriesByPeriod(int personId, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.PersonTimeEntriesByPeriod(personId, startDate, endDate);
+        }
+        
+        public System.Nullable<double> GetPersonTimeEnteredHoursByDay(int personId, System.DateTime date, bool includePTOAndHoliday) {
+            return base.Channel.GetPersonTimeEnteredHoursByDay(personId, date, includePTOAndHoliday);
         }
         
         public DataTransferObjects.TimeEntry.TimeTypeRecord[] GetAllTimeTypes() {
@@ -359,6 +394,22 @@ namespace PraticeManagement.TimeEntryService {
             return base.Channel.TimeEntriesByPersonGetExcelSet(reportContext);
         }
         
+        public void DeleteTimeTrack(int clientId, int projectId, int personId, int timetypeId, System.DateTime startDate, System.DateTime endDate) {
+            base.Channel.DeleteTimeTrack(clientId, projectId, personId, timetypeId, startDate, endDate);
+        }
+        
+        public void SaveTimeTrack(string timeEntriesXml, int personId, System.DateTime startDate, System.DateTime endDate, string userLogin) {
+            base.Channel.SaveTimeTrack(timeEntriesXml, personId, startDate, endDate, userLogin);
+        }
+        
+        public void SetPersonTimeEntryRecursiveSelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isRecursive, System.DateTime startDate) {
+            base.Channel.SetPersonTimeEntryRecursiveSelection(personId, clientId, projectGroupId, projectId, timeEntrySectionId, isRecursive, startDate);
+        }
+        
+        public void SetPersonTimeEntrySelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isDelete, System.DateTime startDate, System.DateTime endDate) {
+            base.Channel.SetPersonTimeEntrySelection(personId, clientId, projectGroupId, projectId, timeEntrySectionId, isDelete, startDate, endDate);
+        }
+        
         public void ToggleIsCorrect(DataTransferObjects.TimeEntry.TimeEntryRecord timeEntry) {
             base.Channel.ToggleIsCorrect(timeEntry);
         }
@@ -377,14 +428,6 @@ namespace PraticeManagement.TimeEntryService {
         
         public DataTransferObjects.Project[] GetTimeEntryProjectsByClientId(System.Nullable<int> clientId, System.Nullable<int> personId, bool showActiveAndInternalProjectsOnly) {
             return base.Channel.GetTimeEntryProjectsByClientId(clientId, personId, showActiveAndInternalProjectsOnly);
-        }
-        
-        public DataTransferObjects.Milestone[] GetAllTimeEntryMilestones() {
-            return base.Channel.GetAllTimeEntryMilestones();
-        }
-        
-        public DataTransferObjects.Person[] GetAllTimeEntryPersons(System.DateTime entryDateFrom, System.DateTime entryDateTo) {
-            return base.Channel.GetAllTimeEntryPersons(entryDateFrom, entryDateTo);
         }
     }
 }
