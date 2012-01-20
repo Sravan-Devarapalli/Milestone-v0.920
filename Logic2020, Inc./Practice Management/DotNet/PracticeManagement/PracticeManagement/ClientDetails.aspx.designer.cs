@@ -58,6 +58,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CheckBox chbIsChar;
         
         /// <summary>
+        /// chbIsInternal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbIsInternal;
+        
+        /// <summary>
         /// txtClientName control.
         /// </summary>
         /// <remarks>
