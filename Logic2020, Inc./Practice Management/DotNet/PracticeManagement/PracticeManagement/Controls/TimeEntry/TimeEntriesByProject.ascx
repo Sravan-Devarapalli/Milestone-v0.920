@@ -129,7 +129,7 @@
                         <table class="opportunity-description">
                             <tr>
                                 <td>
-                                    Client
+                                    Account
                                 </td>
                                 <td>
                                     <asp:DropDownList ID="ddlClients" runat="server" Width="460" OnSelectedIndexChanged="ddlClients_OnSelectedIndexChanged"
