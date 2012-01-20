@@ -30,12 +30,36 @@
                         var hoursTextStr = actualHoursText.value.toString();
                         if (hoursTextStr.length > 0) {
                             var hours = parseFloat(hoursTextStr);
-                            if (hours >= 0.0 && hours <= 24.0 && hours == hoursTextStr) {
-
-                                SaveDetails(popupExtendar, btnOk);
+                            if (hours >= 0.0 && hours <= 8.0 && hours == hoursTextStr) {
+                                var PersonId = btnOk.attributes['PersonId'].value;
+                                var Date = btnOk.attributes['Date'].value;
+                                var maxHours;
+                                var enteredHours;
+                                var urlVal = 'TimeEnteredHoursHandler.ashx?PersonId=' + PersonId + '&Date=' + Date;
+                                try {
+                                    var value = $.post(urlVal, function (returnData) {
+                                        enteredHours = returnData;
+                                        if (enteredHours != null) {
+                                            maxHours = 8 - enteredHours;
+                                        }
+                                        if (maxHours != null && maxHours > 0 && hours <= maxHours) {
+                                            SaveDetails(popupExtendar, btnOk);
+                                        }
+                                        else if (maxHours != null && maxHours < 0) {
+                                            errorText.innerHTML = 'This Person already worked ' + enteredHours + ' hours. so no need to keep PTO.';
+                                        }
+                                        else {
+                                            errorText.innerHTML = 'This Person already worked ' + enteredHours + ' hours. so you can keep PTO upto ' + maxHours + ' hours only';
+                                        }
+                                    });
+                                }
+                                catch (error) {
+                                    alert(error.description);
+                                    errorText.innerHTML = error.message;
+                                }
                             }
                             else {
-                                errorText.innerHTML = '* Hours should be real and 0.00-24.00.';
+                                errorText.innerHTML = '* Hours should be real and 0.00-8.00.';
                             }
                         }
                         else {
@@ -159,7 +183,7 @@
                 </tr>
                 <tr>
                     <td align="center" style="padding: 10px 0px 10px 0px;">
-                        <asp:Button ID="btnDayOK" runat="server" Text="OK" HiddenDayOffID="" HiddenDateID=""
+                        <asp:Button ID="btnDayOK" runat="server" Text="OK" HiddenDayOffID="" HiddenDateID="" PersonId="" Date=""
                             SaveDayButtonID="" TextID="" ErrorMessageID="" ExtendarId="" TxtActualHoursID="" RbFloatingID="" OnClientClick="ClickSaveDay(this, 'true'); return false;" />
                         &nbsp; &nbsp;
                         <asp:Button ID="btnDayDelete" runat="server" Text="Delete" OnClick="btnDayOK_OnClick" />
