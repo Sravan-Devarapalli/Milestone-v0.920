@@ -10,6 +10,7 @@ using DataAccess.Other;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
 using System.Web;
+using DataTransferObjects.TimeEntry;
 
 namespace PracticeManagementService
 {
@@ -133,11 +134,11 @@ namespace PracticeManagementService
 
         }
 
-        public List<Project> ListProjectsByClientShort(int? clientId, bool IsOnlyActiveAndProjective)
+        public List<Project> ListProjectsByClientShort(int? clientId, bool IsOnlyActiveAndProjective, bool IsOnlyActiveAndInternal)
         {
             try
             {
-                return clientId != null ? ProjectDAL.ListProjectsByClientShort(clientId.Value, IsOnlyActiveAndProjective) : null;
+                return clientId != null ? ProjectDAL.ListProjectsByClientShort(clientId.Value, IsOnlyActiveAndProjective, IsOnlyActiveAndInternal) : null;
             }
             catch (Exception e)
             {
@@ -696,6 +697,11 @@ namespace PracticeManagementService
                         ProjectBillingInfoDAL.ProjectBillingInfoDelete(project.Id.Value, connection, currentTransaction);
                     }
 
+                    //Save ProjectTimetypes
+                    if (!String.IsNullOrEmpty(project.ProjectWorkTypesList))
+                    {
+                        ProjectDAL.SetProjectTimeTypes(project.Id.Value, project.ProjectWorkTypesList, connection, currentTransaction);
+                    }
                     currentTransaction.Commit();
                 }
 
@@ -1076,6 +1082,38 @@ namespace PracticeManagementService
             }
 
         }
+
+        public List<Project> GetProjectsListByProjectGroupId(int projectGroupId)
+        {
+            return ProjectDAL.GetProjectsListByProjectGroupId(projectGroupId);
+        }
+
+
+        public Project GetBusinessDevelopmentProject()
+        {
+            return ProjectDAL.GetBusinessDevelopmentProject();
+        }
+
+        public Project GetProjectByIdShort(int projectId)
+        {
+            return ProjectDAL.GetProjectByIdShort(projectId);
+        }
+	
+	    public List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId)
+        {
+            return ProjectDAL.GetTimeTypesByProjectId(projectId);
+        }
+
+        public void SetProjectTimeTypes(int projectId, string projectTimeTypesList)
+        {
+            ProjectDAL.SetProjectTimeTypes(projectId,projectTimeTypesList,null,null);
+        }
+
+        public Dictionary<DateTime, bool> GetIsHourlyRevenueByPeriod(int projectId, int personId, DateTime startDate, DateTime endDate)
+        {
+            return ProjectDAL.GetIsHourlyRevenueByPeriod(projectId, personId, startDate, endDate);
+        }
+
 
         #endregion
     }
