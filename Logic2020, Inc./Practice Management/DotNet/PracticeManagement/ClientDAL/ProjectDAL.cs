@@ -11,6 +11,7 @@ using DataTransferObjects.ContextObjects;
 namespace DataAccess
 {
     using System.Data.SqlTypes;
+    using DataTransferObjects.TimeEntry;
 
     /// <summary>
     /// Access project data in database
@@ -18,7 +19,8 @@ namespace DataAccess
     public class ProjectDAL
     {
         public const string GetOwnerProjectsAfterTerminationDateProcedure = "dbo.GetOwnerProjectsAfterTerminationDate";
-
+        public const string GetTimeTypesByProjectIdProcedure = "dbo.GetProjectTimeTypes";
+        public const string SetProjectTimeTypesProcedure = "dbo.SetProjectTimeTypes";
         /// <summary>
         /// Retrieves the list of projects which intended for the specific client.
         /// </summary>
@@ -74,7 +76,7 @@ namespace DataAccess
         }
 
 
-        public static List<Project> ListProjectsByClientShort(int clientId, bool IsOnlyActiveAndProjective)
+        public static List<Project> ListProjectsByClientShort(int clientId, bool IsOnlyActiveAndProjective, bool IsOnlyActiveAndInternal)
         {
             var projectList = new List<Project>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -86,6 +88,7 @@ namespace DataAccess
 
                     command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdParam, clientId);
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsOnlyActiveAndProjective, IsOnlyActiveAndProjective);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsOnlyActiveAndInternal, IsOnlyActiveAndInternal);
 
                     connection.Open();
 
@@ -800,6 +803,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.DescriptionParam, !string.IsNullOrEmpty(project.Description) ? (object)project.Description : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.DirecterIdParam,
                     project.Director != null && project.Director.Id.HasValue ? (object)project.Director.Id.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.CanCreateCustomWorkTypesParam, project.CanCreateCustomWorkTypes);
 
                 SqlParameter projectIdParam = new SqlParameter(Constants.ParameterNames.ProjectIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
                 command.Parameters.Add(projectIdParam);
@@ -853,6 +857,7 @@ namespace DataAccess
                     !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.DescriptionParam, !string.IsNullOrEmpty(project.Description) ? (object)project.Description : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsChargeable, project.IsChargeable);
+                command.Parameters.AddWithValue(Constants.ParameterNames.CanCreateCustomWorkTypesParam, project.CanCreateCustomWorkTypes);
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.DirecterIdParam,
                    project.Director != null && project.Director.Id.HasValue ? (object)project.Director.Id.Value : DBNull.Value);
@@ -959,6 +964,7 @@ namespace DataAccess
                     int groupInUseIndex = -1;
                     int isMarginColorInfoEnabledIndex = -1;
                     int hasAttachmentsIndex = -1;
+                    int canCreateCustomWorkTypesIndex = -1;
 
                     try
                     {
@@ -1015,7 +1021,14 @@ namespace DataAccess
                     {
                         isMarginColorInfoEnabledIndex = -1;
                     }
-
+                    try
+                    {
+                        canCreateCustomWorkTypesIndex = reader.GetOrdinal(Constants.ColumnNames.CanCreateCustomWorkTypesColumn);
+                    }
+                    catch
+                    {
+                        canCreateCustomWorkTypesIndex = -1;
+                    }
                     while (reader.Read())
                     {
                         var project = new Project
@@ -1094,7 +1107,10 @@ namespace DataAccess
 
                             }
                         }
-
+                        if (canCreateCustomWorkTypesIndex > -1)
+                        {
+                            project.CanCreateCustomWorkTypes = reader.GetBoolean(canCreateCustomWorkTypesIndex);
+                        }
 
                         project.Status = new ProjectStatus
                         {
@@ -2305,6 +2321,186 @@ namespace DataAccess
                 }
             }
         }
+
+        public static List<Project> GetProjectsListByProjectGroupId(int projectGroupId)
+        {
+            var projectList = new List<Project>();
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.ProjectsListByProjectGroupId, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectGroupIdParam, projectGroupId);
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var project = new Project { Id = (int)reader[Constants.ColumnNames.ProjectIdColumn], Name = (string)reader[Constants.ColumnNames.NameColumn] };
+                            projectList.Add(project);
+                        }
+                    }
+                }
+            }
+            return projectList;
+        }
+
+        public static Project GetBusinessDevelopmentProject()
+        {
+            Project project = null;
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.GetBusinessDevelopmentProject, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        project = ReadProjectShort(reader);
+                    }
+                }
+            }
+            return project;
+        }
+
+        public static Project GetProjectByIdShort(int projectId)
+        {
+            Project project = null;
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.GetProjectByIdShort, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        project = ReadProjectShort(reader);
+                    }
+                }
+            }
+            return project;
+        }
+
+        private static Project ReadProjectShort(SqlDataReader reader)
+        {
+            return new Project { Id = (int)reader[Constants.ColumnNames.ProjectIdColumn], Name = (string)reader[Constants.ColumnNames.NameColumn], ProjectNumber = (string)reader[Constants.ColumnNames.ProjectNumberColumn] };
+        }
+
+        public static List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(GetTimeTypesByProjectIdProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    List<TimeTypeRecord> result = new List<TimeTypeRecord>();
+
+                    ReadTimeTypes(reader, result);
+
+                    return result;
+                }
+            }
+
+        }
+
+        private static void ReadTimeTypes(SqlDataReader reader, List<TimeTypeRecord> result)
+        {
+            if (reader.HasRows)
+            {
+                int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
+                int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+                int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
+
+                while (reader.Read())
+                {
+                    var tt = new TimeTypeRecord
+                    {
+                        Id = reader.GetInt32(timeTypeIdIndex),
+                        Name = reader.GetString(nameIndex),
+                        InUse = Convert.ToBoolean(reader.GetInt32(inUseIndex))
+                    };
+
+                    result.Add(tt);
+                }
+            }
+        }
+
+        public static void SetProjectTimeTypes(int projectId, string projectTimeTypesList, SqlConnection connection, SqlTransaction currentTransaction)
+        {
+            if (connection == null)
+            {
+                connection = new SqlConnection(DataSourceHelper.DataConnection);
+            }
+            using (SqlCommand command = new SqlCommand(SetProjectTimeTypesProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.projectTimeTypesParam, projectTimeTypesList);
+                try
+                {
+                    if (currentTransaction != null)
+                    {
+                        command.Transaction = currentTransaction;
+                    }
+
+                    command.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    throw new DataAccessException(ex);
+                }
+            }
+        }
+
+
+        public static Dictionary<DateTime,bool> GetIsHourlyRevenueByPeriod(int projectId, int personId, DateTime startDate, DateTime endDate)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.GetIsHourlyRevenueByPeriod, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        Dictionary<DateTime, bool> result = new Dictionary<DateTime, bool>();
+                        if (reader.HasRows)
+                        {
+                            var chargeCodeDateIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeDate);
+                            var isHourlyRevenueIndex = reader.GetOrdinal(Constants.ColumnNames.IsHourlyRevenueColumn);
+
+                            while (reader.Read())
+                            {
+                                DateTime key = reader.GetDateTime(chargeCodeDateIndex);
+                                bool value = reader.GetBoolean(isHourlyRevenueIndex);
+                                result.Add(key,value);
+                            }
+                        }
+                        return result;
+                    }
+                }
+            }
+        }
+        
+
     }
 }
 
