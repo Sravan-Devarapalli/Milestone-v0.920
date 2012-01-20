@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Web;
+using DataTransferObjects.TimeEntry;
 
 namespace DataTransferObjects
 {
@@ -121,6 +123,15 @@ namespace DataTransferObjects
             get;
             set;
         }
+
+        public string HtmlEncodedName
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(Name);
+            }
+        }
+
 
         /// <summary>
         /// Gets or sets a project's practice.
@@ -343,6 +354,14 @@ namespace DataTransferObjects
             set;
         }
 
+       
+        [DataMember]
+        public bool CanCreateCustomWorkTypes { get; set; }
+
+        public List<TimeTypeRecord> ProjectWorkTypes { get; set; }
+
+        [DataMember]
+        public string ProjectWorkTypesList { get; set; }
 
         #endregion
 
