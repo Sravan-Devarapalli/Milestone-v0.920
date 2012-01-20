@@ -20,7 +20,7 @@ namespace PraticeManagement.Controls
         {
             if (!IsPostBack)
             {
-                DataHelper.FillClientList(ddlClients, "Please Select a Client");
+                DataHelper.FillClientList(ddlClients, "Please Select an Account");
                 this.txtLowerBound.Text = MileStoneConfigurationManager.GetLowerBound().ToString();
                 this.txtUpperBound.Text = MileStoneConfigurationManager.GetUpperBound().ToString();
             }
@@ -110,3 +110,4 @@ namespace PraticeManagement.Controls
         #endregion "Validation"
     }
 }
+
