@@ -1,15 +1,10 @@
-﻿
-
-
-
-
-CREATE PROCEDURE [dbo].[OpportunityExcelSet]
+﻿CREATE PROCEDURE [dbo].[OpportunityExcelSet]
 AS 
     BEGIN
 
         SELECT	ROW_NUMBER() OVER (ORDER BY opt.OpportunityId) AS 'Review Order', opt.OpportunityId,
 				optstat.[Name] AS 'Status', opt.Priority, opt.ProjectedStartDate AS 'Projected Start Date',
-				client.[Name] AS 'Client name', prgroup.[Name] AS 'Client Group', opt.[Name] AS 'Opportunity name', 
+				client.[Name] AS 'Account name', prgroup.[Name] AS 'Business Unit', opt.[Name] AS 'Opportunity name', 
 				pers.FirstName + ' ' + pers.LastName AS 'Salesperson', opt.BuyerName AS 'Buyer Name',
 				pract.[Name] AS 'Practice', opt.OpportunityNumber AS 'Opportunity Number', rev.[Name] AS 'Revenue type',
 				proj.[ProjectNumber] as 'Attached Project',  dbo.GetOpportunityHistory(opt.OpportunityId) AS 'History'
