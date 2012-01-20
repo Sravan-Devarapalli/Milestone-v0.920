@@ -165,7 +165,7 @@
                     </td>
                     <td width="15%">
                         <div class="ie-bg no-wrap">
-                            <asp:LinkButton ID="btnClientNameSort" runat="server" Text="Client - Group" CommandName="Sort"
+                            <asp:LinkButton ID="btnClientNameSort" runat="server" Text="Business Unit" CommandName="Sort"
                                 CssClass="arrow" CommandArgument="ClientName" />
                         </div>
                     </td>
