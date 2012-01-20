@@ -29,13 +29,13 @@
     </tr>
     <tr>
         <td>
-            Client Discount</td>
+            Account Discount</td>
         <td>
             <asp:Label ID="lblClientDiscount" runat="server" Text="Unavailable" 
                 CssClass="Revenue"></asp:Label>
         </td>
         <td class="align-center">
-            CD</td>
+            AD</td>
         <td>
             Predefined discount for this project</td>
     </tr>
@@ -87,7 +87,7 @@
         <td class="align-center">
             PMRC</td>
         <td>
-            HIP x GHBR - CD</td>
+            HIP x GHBR - AD</td>
     </tr>
     <tr>
         <td>
