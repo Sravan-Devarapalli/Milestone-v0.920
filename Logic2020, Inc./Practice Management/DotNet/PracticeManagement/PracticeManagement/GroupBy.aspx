@@ -352,10 +352,10 @@
                             <table class="WholeWidth">
                                 <tr class="tb-header">
                                     <td>
-                                        Client
+                                        Account
                                     </td>
                                     <td>
-                                        Project Group
+                                        Business Unit
                                     </td>
                                     <td>
                                         Salesperson
@@ -399,7 +399,7 @@
                         OnSorting="PersonListView_OnSorting" OnSorted="lvGroupByPerson_Sorted">
                         <LayoutTemplate>
                             <table class="CompPerfTable WholeWidth">
-                                <tr runat="server" id="lvHeader" class="CompPerfHeader" >
+                                <tr runat="server" id="lvHeader" class="CompPerfHeaderGroupBy" >
                                     <td align="center" style="width: 170px!important;">
                                         <div class="ie-bg" style="width: 170px!important;">
                                             <asp:LinkButton ID="btnSortDirector" CommandArgument="0" CommandName="Sort" runat="server" 
@@ -407,8 +407,8 @@
                                         </div>
                                     </td>
                                     <td align="center" style="width: 180px!important;">
-                                        <div class="ie-bg" style="width: 180px!important;">
-                                            Client / Client-Group / Project</div>
+                                        <div class="ie-bg" style="width: 180px!important;white-space:normal;">
+                                            Account / Business Unit / Project</div>
                                     </td>
                                     <td align="center" class="MonthSummary" >
                                         <div class="ie-bg" >
@@ -458,8 +458,8 @@
                                         </div>
                                     </td>
                                     <td align="center" style="width: 180px!important; ">
-                                        <div class="ie-bg" style="width: 180px!important;">
-                                            Client / Client-Group / Project</div>
+                                        <div class="ie-bg" style="width: 180px!important;white-space:normal;">
+                                            Account / Business Unit / Project</div>
                                     </td>
                                     <td align="center" class="MonthSummary" >
                                         <div class="ie-bg" >
@@ -509,8 +509,8 @@
                                         </div>
                                     </td>
                                     <td align="center" style="width: 180px!important; ">
-                                        <div class="ie-bg" style="width: 180px!important;">
-                                            Client / Client-Group / Project</div>
+                                        <div class="ie-bg" style="width: 180px!important;white-space:normal;">
+                                            Account / Business Unit / Project</div>
                                     </td>
                                     <td align="center" class="MonthSummary" >
                                         <div class="ie-bg" >
