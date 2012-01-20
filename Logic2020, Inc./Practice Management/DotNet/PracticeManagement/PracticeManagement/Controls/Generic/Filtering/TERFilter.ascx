@@ -172,7 +172,7 @@
                             &nbsp;
                         </td>
                         <td class="tem-filter-title-cell">
-                            Time Type
+                            Work Type
                         </td>
                         <td class="tem-filter-control-cell">
                             <cc1:SingleOption ID="soTimeTypes" runat="server" DataSourceID="odsTimeTypes" DataTextField="Name"
