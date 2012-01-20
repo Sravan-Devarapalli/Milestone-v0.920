@@ -63,7 +63,7 @@ namespace PraticeManagement
         private const string PersonAttributeTemplate = " Person = '{0}' ";
         private const string ClientAttributeTemplate = " Client = '{0}' ";
         private const string ExpandCollapseStatusAttribute = " ExpandCollapseStatus = 'Collapse' ";
-        private const string ClientGroupAttributeTemplate = " ClientGroup = '{0}' ";
+        private const string ClientGroupAttributeTemplate = " Business Unit = '{0}' ";
         private const string ProjectsWithoutDirectorText = "Projects Without Client Director";
         private const string IncludeProjectsWithoutDirectorItemKey = "ShowWithoutDirector";
         private const string LinkHTMLTemplate = "<a href='{0}' target='_blank'>{1}</a>";
