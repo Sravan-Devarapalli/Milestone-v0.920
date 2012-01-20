@@ -36,7 +36,7 @@
     <div style="background-color: #d4dff8; border-top: 1px solid #fff; border-bottom: 1px solid #eef2fc;
         padding-left: 10px;">
         <div style="padding-top: 10px; padding-bottom: 10px;">
-            <b>Client Goal Default</b></div>
+            <b>Account Goal Default</b></div>
         <asp:UpdatePanel ID="upnlClientGoalDefault" runat="server">
             <ContentTemplate>
                 <table width="100%">
@@ -82,8 +82,8 @@
                                             <asp:CustomValidator ID="cvgvClientRange" runat="server" ToolTip="The End must be greater than or equals to Start."
                                                 Text="*" EnableClientScript="false" OnServerValidate="cvgvClientRange_OnServerValidate"
                                                 SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
-                                            <asp:CustomValidator ID="cvgvClientOverLapRange" runat="server" ErrorMessage="The specified Client goal threshold Percentage range overlaps with another Client goal threshold Percentage range."
-                                                ToolTip="The specified Client goal threshold Percentage range overlaps with another Client goal threshold Percentage range."
+                                            <asp:CustomValidator ID="cvgvClientOverLapRange" runat="server" ErrorMessage="The specified Account goal threshold Percentage range overlaps with another Account goal threshold Percentage range."
+                                                ToolTip="The specified Account goal threshold Percentage range overlaps with another Account goal threshold Percentage range."
                                                 OnServerValidate="cvgvClientOverLapRange_OnServerValidate" Text="*" EnableClientScript="false"
                                                 SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
                                         </ItemTemplate>
@@ -133,7 +133,7 @@
                                     <br />
                                 </p>
                                 <p>
-                                    NOTE: It is also possible to specify individual Client margin goals from each Client's
+                                    NOTE: It is also possible to specify individual Account margin goals from each Account's
                                     profile page, either in lieu of these default margin goals, or by overriding them.<br />
                                     <br />
                                 </p>
@@ -146,8 +146,8 @@
             </ContentTemplate>
         </asp:UpdatePanel>
         <asp:CustomValidator ID="cvClientThresholds" runat="server" OnServerValidate="cvClientThresholds_ServerValidate"
-            ErrorMessage="Client goal thresholds must be added up to  100% or more and must be continuous."
-            ToolTip="Client goal thresholds must be added up to  100% or more and must be continuous."
+            ErrorMessage="Account goal thresholds must be added up to  100% or more and must be continuous."
+            ToolTip="Account goal thresholds must be added up to  100% or more and must be continuous."
             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="None" ValidationGroup="Client" />
         <asp:CustomValidator ID="cvClientColors" runat="server" OnServerValidate="cvClientColors_ServerValidate"
             ErrorMessage="Color must not be selected more than once." ToolTip="Color must not be selected more than once."
