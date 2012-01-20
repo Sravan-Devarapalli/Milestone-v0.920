@@ -12,7 +12,7 @@ BEGIN
 		--StatusIds for Inactive:-1,  Experimental:-5
 		RAISERROR('To Delete a Project, Project must be Inactive/Experimental',16,1)
 	END
-	ELSE IF EXISTS (SELECT 1 FROM v_TimeEntries WHERE ProjectId = @ProjectID)
+	ELSE IF EXISTS (SELECT TOP 1 1 FROM dbo.ChargeCode cc INNER JOIN dbo.TimeTrack tt on tt.ChargeCodeId = cc.Id AND cc.ProjectId = @ProjectID)
 	BEGIN
 		RAISERROR ('This project cannot be deleted, because there are time entries related to it.', 16, 1)
 	END
@@ -32,6 +32,20 @@ BEGIN
 			-- Start logging session
 			EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 			
+			DELETE dbo.PersonTimeEntryRecursiveSelection  WHERE ProjectId = @ProjectID
+
+			--Delete chargeCode related to the project
+			IF EXISTS (SELECT TOP 1 1 FROM dbo.ChargeCode cc WHERE cc.ProjectId = @ProjectID)
+			BEGIN
+
+				DELETE cch
+				FROM dbo.ChargeCodeTurnOffHistory cch INNER JOIN dbo.ChargeCode cc ON cch.ChargeCodeId = cc.Id WHERE cc.ProjectId = @ProjectID
+
+				DELETE cc 
+				FROM dbo.ChargeCode cc WHERE cc.ProjectId = @ProjectID
+
+			END
+
 			-- Delete Milestones of this project.
 			IF EXISTS (SELECT 1 FROM Milestone WHERE ProjectId = @ProjectID)
 			BEGIN
@@ -131,3 +145,4 @@ BEGIN
 		END CATCH
 	END
 END
+
