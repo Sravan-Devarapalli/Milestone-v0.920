@@ -33,6 +33,28 @@ namespace PraticeManagement.ProjectService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/IsUserIsOwnerOfProject", ReplyAction="http://tempuri.org/IProjectService/IsUserIsOwnerOfProjectResponse")]
         bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId", ReplyAction="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupIdResponse")]
+        DataTransferObjects.Project[] GetProjectsListByProjectGroupId(int projectGroupId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetBusinessDevelopmentProject", ReplyAction="http://tempuri.org/IProjectService/GetBusinessDevelopmentProjectResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
+        DataTransferObjects.Project GetBusinessDevelopmentProject();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectByIdShort", ReplyAction="http://tempuri.org/IProjectService/GetProjectByIdShortResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
+        DataTransferObjects.Project GetProjectByIdShort(int projectId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetTimeTypesByProjectId", ReplyAction="http://tempuri.org/IProjectService/GetTimeTypesByProjectIdResponse")]
+        DataTransferObjects.TimeEntry.TimeTypeRecord[] GetTimeTypesByProjectId(int projectId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/SetProjectTimeTypes", ReplyAction="http://tempuri.org/IProjectService/SetProjectTimeTypesResponse")]
+        void SetProjectTimeTypes(int projectId, string projectTimeTypesList);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetIsHourlyRevenueByPeriod", ReplyAction="http://tempuri.org/IProjectService/GetIsHourlyRevenueByPeriodResponse")]
+        System.Collections.Generic.Dictionary<System.DateTime, bool> GetIsHourlyRevenueByPeriod(int projectId, int personId, System.DateTime startDate, System.DateTime endDate);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectGetById", ReplyAction="http://tempuri.org/IProjectService/ProjectGetByIdResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
@@ -60,7 +82,7 @@ namespace PraticeManagement.ProjectService {
         DataTransferObjects.Project[] ListProjectsByClient(System.Nullable<int> clientId, string viewerUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ListProjectsByClientShort", ReplyAction="http://tempuri.org/IProjectService/ListProjectsByClientShortResponse")]
-        DataTransferObjects.Project[] ListProjectsByClientShort(System.Nullable<int> clientId, bool IsOnlyActiveAndProjective);
+        DataTransferObjects.Project[] ListProjectsByClientShort(System.Nullable<int> clientId, bool IsOnlyActiveAndProjective, bool IsOnlyActiveAndInternal);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ListProjectsByClientWithSort", ReplyAction="http://tempuri.org/IProjectService/ListProjectsByClientWithSortResponse")]
         DataTransferObjects.Project[] ListProjectsByClientWithSort(System.Nullable<int> clientId, string viewerUsername, string sortBy);
@@ -166,6 +188,7 @@ namespace PraticeManagement.ProjectService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
         
+      
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -202,6 +225,30 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.IsUserIsOwnerOfProject(user, id, isProjectId);
         }
         
+        public DataTransferObjects.Project[] GetProjectsListByProjectGroupId(int projectGroupId) {
+            return base.Channel.GetProjectsListByProjectGroupId(projectGroupId);
+        }
+        
+        public DataTransferObjects.Project GetBusinessDevelopmentProject() {
+            return base.Channel.GetBusinessDevelopmentProject();
+        }
+        
+        public DataTransferObjects.Project GetProjectByIdShort(int projectId) {
+            return base.Channel.GetProjectByIdShort(projectId);
+        }
+        
+        public DataTransferObjects.TimeEntry.TimeTypeRecord[] GetTimeTypesByProjectId(int projectId) {
+            return base.Channel.GetTimeTypesByProjectId(projectId);
+        }
+        
+        public void SetProjectTimeTypes(int projectId, string projectTimeTypesList) {
+            base.Channel.SetProjectTimeTypes(projectId, projectTimeTypesList);
+        }
+        
+        public System.Collections.Generic.Dictionary<System.DateTime, bool> GetIsHourlyRevenueByPeriod(int projectId, int personId, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.GetIsHourlyRevenueByPeriod(projectId, personId, startDate, endDate);
+        }
+        
         public DataTransferObjects.Project ProjectGetById(int projectId) {
             return base.Channel.ProjectGetById(projectId);
         }
@@ -234,8 +281,8 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.ListProjectsByClient(clientId, viewerUsername);
         }
         
-        public DataTransferObjects.Project[] ListProjectsByClientShort(System.Nullable<int> clientId, bool IsOnlyActiveAndProjective) {
-            return base.Channel.ListProjectsByClientShort(clientId, IsOnlyActiveAndProjective);
+        public DataTransferObjects.Project[] ListProjectsByClientShort(System.Nullable<int> clientId, bool IsOnlyActiveAndProjective, bool IsOnlyActiveAndInternal) {
+            return base.Channel.ListProjectsByClientShort(clientId, IsOnlyActiveAndProjective, IsOnlyActiveAndInternal);
         }
         
         public DataTransferObjects.Project[] ListProjectsByClientWithSort(System.Nullable<int> clientId, string viewerUsername, string sortBy) {
