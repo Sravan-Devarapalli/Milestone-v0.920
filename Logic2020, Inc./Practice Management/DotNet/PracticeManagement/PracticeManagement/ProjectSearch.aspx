@@ -100,7 +100,7 @@
                         </td>
                         <td class="CompPerfProjectNumber AddLeftPadding">
                             <div class="ie-bg">
-                                Client</div>
+                                Account</div>
                         </td>
                         <td class="CompPerfClient AddLeftPadding">
                             <div class="ie-bg">
