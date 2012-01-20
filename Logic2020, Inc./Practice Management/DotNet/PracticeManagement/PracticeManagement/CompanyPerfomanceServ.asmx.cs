@@ -29,14 +29,13 @@ namespace PraticeManagement
         public CascadingDropDownNameValue[] GetDdlProjectGroupContents(string knownCategoryValues, string category, string contextKey)
         {
             var clientId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
-            var selectedGroupId = contextKey == null ? -1 : int.Parse(contextKey);
+            //var selectedGroupId = contextKey == null ? -1 : int.Parse(contextKey);
             var groups = ServiceCallers.Custom.Group(client => client.GroupListAll(clientId, null));
-            groups = groups.AsQueryable().Where(g =>( g.IsActive == true || g.Id.ToString() == contextKey)).ToArray();
+            //groups = groups.AsQueryable().Where(g =>( g.IsActive == true || g.Id.ToString() == contextKey)).ToArray();
             return groups.Select(group =>
                 new CascadingDropDownNameValue(
                             group.Name,
-                            group.Id.ToString(),
-                            group.Id.Value == selectedGroupId)).ToArray();
+                            group.Id.ToString())).ToArray();
         }
 
         [WebMethod]
@@ -82,7 +81,7 @@ namespace PraticeManagement
         {
             var clientId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
             var selectedProjectId = contextKey == null ? -1 : int.Parse(contextKey);
-            var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, false));
+            var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, false, false));
 
             return projects.Select(
                 project => new CascadingDropDownNameValue(
@@ -91,13 +90,44 @@ namespace PraticeManagement
                                     project.Id.Value == selectedProjectId)).ToArray();
         }
 
+
+        [WebMethod]
+        [ScriptMethod]
+        public CascadingDropDownNameValue[] GetProjectsListByProjectGroupId(string knownCategoryValues, string category, string contextKey)
+        {
+            var groupId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
+            //var selectedProjectId = contextKey == null ? -1 : int.Parse(contextKey);
+            var projects = ServiceCallers.Custom.Project(group => group.GetProjectsListByProjectGroupId(groupId)).OrderBy(p => p.Name);
+
+            return projects.Select(
+                project => new CascadingDropDownNameValue(
+                                   project.ProjectNumber + " - " + project.Name,
+                                    project.Id.ToString())).ToArray();
+        }
+
+
+        [WebMethod]
+        [ScriptMethod]
+        public CascadingDropDownNameValue[] GetProjectsList(string knownCategoryValues, string category, string contextKey)
+        {
+            var clientId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
+            //var selectedProjectId = contextKey == null ? -1 : int.Parse(contextKey);
+            var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, false, true)).OrderBy(p => p.Name);
+
+            var cddlist = projects.Select(
+                project => new CascadingDropDownNameValue(
+                                   project.ProjectNumber + " - " + project.Name,
+                                    project.Id.ToString())).ToArray();
+            return cddlist;
+        }
+
         [WebMethod]
         [ScriptMethod]
         public CascadingDropDownNameValue[] GetActiveAndProjectedProjects(string knownCategoryValues, string category, string contextKey)
         {
             var clientId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
             var selectedProjectId = contextKey == null ? -1 : int.Parse(contextKey);
-            var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, true));
+            var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, true, false));
 
             return projects.Select(
                 project => new CascadingDropDownNameValue(
