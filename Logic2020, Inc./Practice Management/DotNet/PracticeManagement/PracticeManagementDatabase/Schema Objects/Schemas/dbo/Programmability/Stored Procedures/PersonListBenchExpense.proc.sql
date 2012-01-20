@@ -97,7 +97,7 @@ AS
 										
 				CASE pay.BonusHoursToCollect
 				   WHEN 0 THEN 0
-				   ELSE pay.BonusAmount / (CASE WHEN pay.BonusAmount = 2080 THEN HY.HoursInYear ELSE pay.BonusHoursToCollect END)
+				   ELSE pay.BonusAmount / (CASE WHEN pay.BonusHoursToCollect = 2080 THEN HY.HoursInYear ELSE pay.BonusHoursToCollect END)
 			   END AS BonusRate,
 			
 				ISNULL((SELECT SUM(CASE
