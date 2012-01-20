@@ -143,6 +143,7 @@ AS
 									)
 						)
 				)
+			AND P.IsAllowedToShow = 1
 	ORDER BY CASE p.ProjectStatusId
 			   WHEN 2 THEN p.StartDate
 			   ELSE p.EndDate
