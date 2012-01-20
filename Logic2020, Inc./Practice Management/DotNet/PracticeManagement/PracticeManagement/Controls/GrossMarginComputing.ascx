@@ -25,157 +25,157 @@
             </th>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td   nowrap="nowrap">
                 BHE
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 Bonus Hourly Expense
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 FCOGS
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 Full-COGS (based on FLHR)
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 FLHR
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 Fully-Loaded Hourly Rate
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 HBR
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 Hourly Bill Rate
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 HPW
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 Hours per Week (Working)
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 HPY
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 Hours per Year (Working)
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 MGM
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 Monthly Gross Margin
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 MGR
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 Monthly Gross Revenue
             </td>
         </tr> 
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 ML%
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 Minimun Load Percentage
             </td>
         </tr>       
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 MLF
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 Minimum Load Factor
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 RHR
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 Raw Hourly Rate
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 VD
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 Vacation Days (per Year)
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 VHE
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 Vacation Hourly Expense
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
-                CD%
+            <td  nowrap="nowrap">
+                AD%
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
-                Client Discount Percentage
+            <td  nowrap="nowrap">
+                Account Discount Percentage
             </td>
         </tr>
         <tr>
@@ -184,90 +184,90 @@
             </th>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 BHE
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 [Bonus] / HPY
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 FCOGS
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 FLHR * HPW * 4.2
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 HPY
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 (52 * HPW)
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 MGM
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
-                (MGR - [CD%]) - FCOGS
+            <td  nowrap="nowrap">
+                (MGR - [AD%]) - FCOGS
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 MGR
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 HBR * HPW * 4.2
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 ML%
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 <a target="_blank" href="Config/Overheads.aspx">Defined in Overheads</a>
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 MLF
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 RHR * [ML%]
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 Monthly COGS
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 FCOGS
             </td>
         </tr>
@@ -283,24 +283,24 @@
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 FLHR
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                RHR + [Applicable Overheads] OR [MLF]
             </td>
         </tr>
         <tr>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 VHE
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
-            <td style="no-wrap" nowrap="nowrap">
+            <td  nowrap="nowrap">
                 RHR * (VD * (HPW / 5)) / HPY
             </td>
         </tr>
