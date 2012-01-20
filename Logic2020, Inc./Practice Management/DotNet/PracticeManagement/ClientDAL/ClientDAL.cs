@@ -25,6 +25,9 @@ namespace DataAccess
         private const string ColorsListAllProcedure = "dbo.ColorsListAll";
         private const string GetClientMarginColorInfoProcedure = "dbo.GetClientMarginColorInfo";
         private const string ClientMarginColorInfoInsertProcedure = "dbo.ClientMarginColorInfoInsert";
+        private const string ClientListAllWithoutPermissionsProcedure = "dbo.ClientListAllWithoutPermissions";
+        private const string GetInternalAccountProcedure = "dbo.GetInternalAccount";
+
         #endregion
 
         #region Parameters
@@ -45,6 +48,7 @@ namespace DataAccess
         private const string EndRangeParam = "@EndRange";
         private const string isDeletePreviousMarginInfoParam = "@isDeletePreviousMarginInfo";
         private const string ApplyNewRuleParam = "@ApplyNewRule";
+        private const string IsInternalParam = "@IsInternal";
 
         #endregion
 
@@ -94,6 +98,8 @@ namespace DataAccess
                     command.Parameters.Add(clientIdParameter);
 
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsMarginColorInfoEnabled, client.IsMarginColorInfoEnabled);
+                    command.Parameters.AddWithValue(IsInternalParam, client.IsInternal);
+
 
                     try
                     {
@@ -132,7 +138,7 @@ namespace DataAccess
             }
         }
 
-        private static void ClientMarginColorInfoInsert(int? clientId, ClientMarginColorInfo marginColorInfo,bool isDeletePreviousMarginInfo, SqlConnection connection = null, SqlTransaction activeTransaction = null)
+        private static void ClientMarginColorInfoInsert(int? clientId, ClientMarginColorInfo marginColorInfo, bool isDeletePreviousMarginInfo, SqlConnection connection = null, SqlTransaction activeTransaction = null)
         {
             if (connection == null)
             {
@@ -167,7 +173,7 @@ namespace DataAccess
                 {
                     throw ex;
                 }
-                
+
             }
         }
 
@@ -200,7 +206,7 @@ namespace DataAccess
                     command.Parameters.AddWithValue(InactiveParam, client.Inactive);
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsChargeable, client.IsChargeable);
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsMarginColorInfoEnabled, client.IsMarginColorInfoEnabled);
-
+                    command.Parameters.AddWithValue(IsInternalParam, client.IsInternal);
                     try
                     {
                         connection.Open();
@@ -459,6 +465,16 @@ namespace DataAccess
                     isMarginColorInfoEnabledIndex = -1;
                 }
 
+                int isInternalIndex = -1;
+                try
+                {
+                    isInternalIndex = reader.GetOrdinal(Constants.ColumnNames.IsInternalColumn);
+                }
+                catch
+                {
+                    isInternalIndex = -1;
+                }
+
                 while (reader.Read())
                 {
                     var client = ReadClientBasic(reader);
@@ -469,7 +485,10 @@ namespace DataAccess
                         client.DefaultDirectorId = (int)reader[DefaultDirectorIdColumn];
                     client.Inactive = (bool)reader[InactiveColumn];
                     client.IsChargeable = (bool)reader[Constants.ColumnNames.IsChargeable];
-
+                    if (isInternalIndex > -1)
+                    {
+                        client.IsInternal = reader.GetBoolean(isInternalIndex);
+                    }
                     if (isMarginColorInfoEnabledIndex >= 0)
                     {
                         try
@@ -620,6 +639,55 @@ namespace DataAccess
                 }
             }
         }
+
+        public static List<Client> ClientListAllWithoutPermissions()
+        {
+            var clientList = new List<Client>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(ClientListAllWithoutPermissionsProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                   
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var client = ReadClientBasic(reader);
+                            clientList.Add(client);
+                        }
+                    }
+                }
+            }
+            return clientList;
+        }
+
+        public static Client GetInternalAccount()
+        {
+            Client client = new Client();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(GetInternalAccountProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                           client = ReadClientBasic(reader);
+                        }
+                    }
+                }
+            }
+            return client;
+        }
+
+
     }
 }
 
