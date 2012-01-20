@@ -71,6 +71,10 @@
                 button.disabled = !enable;
             }
         }
+
+        function ChangeTooltip(tbnote) {
+        }
+
     </script>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
@@ -109,7 +113,7 @@
                             <td colspan="3">
                                 <p>
                                     <asp:Label ID="lblProjMile" EnableViewState="False" ForeColor="Red" Visible="False"
-                                        runat="server">When milestone-project or time type are changed, please update individual cells in the row to save that changes.</asp:Label>
+                                        runat="server">When milestone-project or work type are changed, please update individual cells in the row to save that changes.</asp:Label>
                                 </p>
                             </td>
                         </tr>
@@ -128,7 +132,7 @@
                                 <asp:Button ID="btnSave" runat="server" OnClick="btnSave_Click" Text="Save All" ValidationGroup="TE"
                                     CssClass="mrg0" OnClientClick="hideSuccessMessage();" />
                                 <asp:CustomValidator ID="valMileProjTimeTypeDropdown" runat="server" ClientValidationFunction="ValidateTEBarDropdowns"
-                                    ErrorMessage="Please select Project - Milestone(s)/Time Type(s) highlighted in red."
+                                    ErrorMessage="Please select Project - Milestone(s)/Work Type(s) highlighted in red."
                                     Text="*" ValidationGroup="TE" CssClass="fl-right" Display="None" />
                                 <asp:CustomValidator ID="valTeHours" runat="server" ClientValidationFunction="ValidateAllHours"
                                     ErrorMessage="Hours should be real and 0.00-24.00. Invalid entries are highlighted in red."
