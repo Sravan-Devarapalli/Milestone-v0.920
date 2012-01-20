@@ -49,7 +49,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeId, timeType.Id);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Name, timeType.Name);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsDefault, timeType.IsDefault);
-
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, timeType.IsInternal);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsActive, timeType.IsActive);
                 connection.Open();
 
                 command.ExecuteNonQuery();
@@ -69,10 +70,17 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.Name, timeType.Name);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsDefault, timeType.IsDefault);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, timeType.IsInternal);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsActive, timeType.IsActive);
+
+                SqlParameter timeTypeIdParam = new SqlParameter(Constants.ParameterNames.TimeTypeId, SqlDbType.Int) { Direction = ParameterDirection.Output };
+                command.Parameters.Add(timeTypeIdParam);
 
                 connection.Open();
 
-                return command.ExecuteNonQuery();
+                command.ExecuteNonQuery();
+                timeType.Id = (int)timeTypeIdParam.Value;
+                return timeType.Id;
             }
         }
 
@@ -101,8 +109,11 @@ namespace DataAccess
                 int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
                 int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
                 int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
+                int inFutureUseIndex = reader.GetOrdinal(Constants.ColumnNames.InFutureUse);
                 int isDefaultIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefault);
-                int isSystemTimeTypeIndex = reader.GetOrdinal(Constants.ColumnNames.IsSystemTimeTypeColumn);
+                int isAllowedToEditColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsAllowedToEditColumn);
+                int isActiveColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsActive);
+                int isInternalColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsInternalColumn);
 
                 while (reader.Read())
                 {
@@ -110,12 +121,15 @@ namespace DataAccess
                     {
                         Id = reader.GetInt32(timeTypeIdIndex),
                         Name = reader.GetString(nameIndex),
-                        IsDefault = reader.GetBoolean(isDefaultIndex)
+                        IsDefault = reader.GetBoolean(isDefaultIndex),
+                        IsAllowedToEdit = reader.GetBoolean(isAllowedToEditColumnIndex),
+                        IsActive = reader.GetBoolean(isActiveColumnIndex),
+                        IsInternal = reader.GetBoolean(isInternalColumnIndex),
+                        InFutureUse = Convert.ToBoolean(reader.GetInt32(inFutureUseIndex)),
+                        InUse = bool.Parse(reader.GetString(inUseIndex))
                     };
-                    //  Make default time types marked as InUse to disallow removing them
-                    tt.InUse = bool.Parse(reader.GetString(inUseIndex)) || tt.IsDefault;
-                    tt.IsSystemTimeType = reader.GetBoolean(isSystemTimeTypeIndex);
                     yield return tt;
+
                 }
             }
         }
@@ -933,24 +947,25 @@ namespace DataAccess
             var isChargeableIndex = reader.GetOrdinal(Constants.ParameterNames.IsChargeable);
             var isCorrectIndex = reader.GetOrdinal(Constants.ParameterNames.IsCorrect);
             var isReviewedIndex = reader.GetOrdinal(Constants.ParameterNames.IsReviewed);
-            var isSystemTimeTypeIndex = -1;
+
+            var isAllowedToEditIndex = -1;
             try
             {
-                isSystemTimeTypeIndex = reader.GetOrdinal(Constants.ColumnNames.IsSystemTimeTypeColumn);
+                isAllowedToEditIndex = reader.GetOrdinal(Constants.ColumnNames.IsAllowedToEditColumn);
             }
             catch
             {
-                isSystemTimeTypeIndex = -1;
+                isAllowedToEditIndex = -1;
             }
 
             var timeType = new TimeTypeRecord();
             timeType.Id = reader.GetInt32(timeTypeIdIndex);
 
-            if (isSystemTimeTypeIndex != -1)
+            if (isAllowedToEditIndex != -1)
             {
                 try
                 {
-                    timeType.IsSystemTimeType = reader.GetBoolean(isSystemTimeTypeIndex);
+                    timeType.IsAllowedToEdit = reader.GetBoolean(isAllowedToEditIndex);
                 }
                 catch
                 { }
@@ -1142,6 +1157,86 @@ namespace DataAccess
             return person;
         }
 
+        #region TimeTrack Methods
+
+        public static void DeleteTimeTrack(int clientId, int projectId, int personId, int timetypeId, DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.DeleteTimeTrackProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.ClientId, clientId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, projectId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeId, timetypeId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void SaveTimeTrack(string timeEntriesXml, int personId, DateTime startDate, DateTime endDate, string userLogin)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.SaveTimeTrackProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimeEntriesXmlParam, timeEntriesXml);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void SetPersonTimeEntryRecursiveSelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isRecursive, DateTime startDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.SetPersonTimeEntryRecursiveSelectionProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ClientId, clientId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectGroupIdParam, projectGroupId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, projectId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimeEntrySectionIdParam, timeEntrySectionId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsRecursiveParam, isRecursive);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+
+        }
+
+        public static void SetPersonTimeEntrySelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isDelete, DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.SetPersonTimeEntrySelectionProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ClientId, clientId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectGroupIdParam, projectGroupId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, projectId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimeEntrySectionIdParam, timeEntrySectionId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsDeleteParam, isDelete);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+
+        }
+
+
+        #endregion
+
         #region Filtering
 
         public static Project[] GetTimeEntryProjectsByClientId(int? clientId, int? personId = null, bool showActiveAndInternalProjectsOnly = false)
@@ -1273,6 +1368,159 @@ namespace DataAccess
                     }
                     return result;
                 }
+            }
+        }
+
+        public static List<TimeEntrySection> PersonTimeEntriesByPeriod(int personId, DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.PersonTimeEntriesByPeriod, connection))
+            {
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var timeEntries = new List<TimeEntryRecord>();
+                    ReadTimeEntries(reader, timeEntries);
+
+                    var timeEntrySections = new List<TimeEntrySection>();
+                    reader.NextResult();
+                    ReadTimeEntriesSections(reader, timeEntrySections, timeEntries);
+
+                    return timeEntrySections;
+                }
+            }
+        }
+
+        public static void ReadTimeEntriesSections(SqlDataReader reader, List<TimeEntrySection> timeEntrySections, List<TimeEntryRecord> timeEntries)
+        {
+            if (reader.HasRows)
+            {
+                int timeEntrySectionIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeEntrySectionId);
+                int chargeCodeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeId);
+                int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIdColumn);
+                int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
+                int projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
+                int projectGroupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNameColumn);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
+                int isRecursiveIndex = reader.GetOrdinal(Constants.ColumnNames.IsRecursive);
+
+                while (reader.Read())
+                {
+                    var timeEntrySection = new TimeEntrySection
+                    {
+                        SectionId = ((TimeEntrySectionType)Enum.Parse(typeof(TimeEntrySectionType), reader.GetInt32(timeEntrySectionIdIndex).ToString())),
+                        Account = new Client { Id = reader.GetInt32(clientIdIndex), Name = reader.GetString(clientNameIndex) },
+                        Project = new Project
+                        {
+                            Id = reader.GetInt32(projectIdIndex),
+                            Name = reader.GetString(projectNameIndex),
+                            ProjectNumber = reader.GetString(projectNumberIndex)
+                        },
+                        BusinessUnit = reader.IsDBNull(projectGroupIdIndex) ? null
+                                        : new ProjectGroup { Id = reader.GetInt32(projectGroupIdIndex), Name = reader.GetString(projectGroupNameIndex) },
+                        IsRecursive = reader.GetInt32(isRecursiveIndex) > 0
+
+                    };
+
+
+                    if (timeEntrySections.Any(tes => tes.Project.Id == timeEntrySection.Project.Id && tes.Account.Id == timeEntrySection.Account.Id && (timeEntrySection.BusinessUnit != null && tes.BusinessUnit.Id.Value == timeEntrySection.BusinessUnit.Id.Value)))
+                    {
+                        timeEntrySection = timeEntrySections.First(tes => tes.Project.Id == timeEntrySection.Project.Id && tes.Account.Id == timeEntrySection.Account.Id && (tes.BusinessUnit.Id.Value == timeEntrySection.BusinessUnit.Id.Value));
+                    }
+                    else
+                    {
+                        timeEntrySections.Add(timeEntrySection);
+                    }
+
+                    var chargeCodeId = !reader.IsDBNull(chargeCodeIdIndex) ? ((int?)reader.GetInt32(chargeCodeIdIndex)) : null;
+
+                    var tentries = timeEntries.Where(te => te.ChargeCodeId == chargeCodeId);
+
+                    if (tentries.Count() > 0)
+                    {
+                        timeEntrySection.TimeEntries = timeEntrySection.TimeEntries ?? new List<TimeEntryRecord>();
+
+                        timeEntrySection.TimeEntries.AddRange(tentries);
+                    }
+
+                }
+            }
+        }
+
+        public static void ReadTimeEntries(SqlDataReader reader, List<TimeEntryRecord> timeEntries)
+        {
+            if (reader.HasRows)
+            {
+                var teIdIndex = reader.GetOrdinal(Constants.ParameterNames.TimeEntryId);
+                var noteIndex = reader.GetOrdinal(Constants.ParameterNames.Note);
+                var timeTypeIdIndex = reader.GetOrdinal(Constants.ParameterNames.TimeTypeId);
+                var chargeCodeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeId);
+                var chargeCodeDateIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeDate);
+                var createDateIndex = reader.GetOrdinal(Constants.ColumnNames.CreateDateColumn);
+                var modifiedDateIndex = reader.GetOrdinal(Constants.ParameterNames.ModifiedDate);
+                var actualHrsIndex = reader.GetOrdinal(Constants.ParameterNames.ActualHours);
+                var forecastedHrsIndex = reader.GetOrdinal(Constants.ParameterNames.ForecastedHours);
+                var isChargeableIndex = reader.GetOrdinal(Constants.ParameterNames.IsChargeable);
+                var isCorrectIndex = reader.GetOrdinal(Constants.ParameterNames.IsCorrect);
+                var isReviewedIndex = reader.GetOrdinal(Constants.ParameterNames.IsReviewed);
+                var IsChargeCodeOffIndex = reader.GetOrdinal(Constants.ColumnNames.IsChargeCodeOffColumn);
+
+                while (reader.Read())
+                {
+
+                    var timeType = new TimeTypeRecord();
+                    timeType.Id = reader.GetInt32(timeTypeIdIndex);
+
+                    var timeEntry = new TimeEntryRecord
+                    {
+                        Id = reader.GetInt32(teIdIndex),
+                        ChargeCodeId = reader.GetInt32(chargeCodeIdIndex),
+                        Note = reader.GetString(noteIndex),
+                        EntryDate = reader.GetDateTime(createDateIndex),
+                        MilestoneDate = reader.GetDateTime(chargeCodeDateIndex),
+                        TimeType = timeType,
+                        ActualHours = reader.GetFloat(actualHrsIndex),
+                        ForecastedHours = reader.GetFloat(forecastedHrsIndex),
+                        ModifiedDate = reader.GetDateTime(modifiedDateIndex),
+                        IsChargeable = reader.GetBoolean(isChargeableIndex),
+                        IsCorrect = reader.GetBoolean(isCorrectIndex),
+                        IsReviewed = reader.IsDBNull(isReviewedIndex)
+                                         ? ReviewStatus.Pending
+                                         : Utils.Bool2ReviewStatus(reader.GetBoolean(isReviewedIndex)),
+                        IsChargeCodeOff = reader.GetBoolean(IsChargeCodeOffIndex)
+                      
+                    };
+
+                    timeEntries.Add(timeEntry);
+                }
+            }
+        }
+       
+        public static double? GetPersonTimeEnteredHoursByDay(int personId, DateTime date, bool includePTOAndHoliday)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.GetPersonTimeEnteredHoursByDay, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DateParam, date);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IncludePTOAndHolidayParam, includePTOAndHoliday);
+
+                connection.Open();
+
+                string result = command.ExecuteScalar().ToString();
+
+                return string.IsNullOrEmpty(result) ? null : (double?)Convert.ToDouble(result);
             }
         }
 
