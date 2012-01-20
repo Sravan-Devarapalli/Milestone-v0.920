@@ -144,12 +144,12 @@ namespace PraticeManagement.Controls.Clients
                 e.Row.Cells[gvGroups.Columns.Count - 1].Visible = !inUse;
                 try
                 {
-                    ((ImageButton)e.Row.Cells[0].Controls[0]).ToolTip = "Edit Group";
+                    ((ImageButton)e.Row.Cells[0].Controls[0]).ToolTip = "Edit Business Unit";
 
                 }
                 catch
                 {
-                    e.Row.Cells[0].ToolTip = "Edit Group";
+                    e.Row.Cells[0].ToolTip = "Edit Business Unit";
                 }
 
 
@@ -157,12 +157,12 @@ namespace PraticeManagement.Controls.Clients
                 {
                     try
                     {
-                        ((ImageButton)e.Row.Cells[gvGroups.Columns.Count - 1].Controls[0]).ToolTip = "Delete Group";
+                        ((ImageButton)e.Row.Cells[gvGroups.Columns.Count - 1].Controls[0]).ToolTip = "Delete Business Unit";
 
                     }
                     catch
                     {
-                        e.Row.Cells[gvGroups.Columns.Count - 1].ToolTip = "Delete Group";
+                        e.Row.Cells[gvGroups.Columns.Count - 1].ToolTip = "Delete Business Unit";
                     }
 
                 }
