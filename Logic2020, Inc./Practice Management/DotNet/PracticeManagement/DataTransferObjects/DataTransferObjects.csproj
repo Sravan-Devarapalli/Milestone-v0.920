@@ -219,6 +219,7 @@
     <Compile Include="TimeEntry\TimeEntryHours.cs" />
     <Compile Include="TimeEntry\TimeEntryRecord.cs" />
     <Compile Include="TimeEntry\TimeEntryRole.cs" />
+    <Compile Include="TimeEntry\TimeEntrySection.cs" />
     <Compile Include="TimeEntry\TimeEntrySums.cs" />
     <Compile Include="TimeEntry\TimeTypeRecord.cs" />
     <Compile Include="Timescale.cs" />
