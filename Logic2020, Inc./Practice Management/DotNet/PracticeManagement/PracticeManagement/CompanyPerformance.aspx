@@ -91,10 +91,10 @@
                                 <table class="WholeWidth" cellpadding="5">
                                     <tr>
                                         <td style="background: #DDDDDD;">
-                                            <b>Client</b>
+                                            <b>Account</b>
                                         </td>
                                         <td style="background: #DDDDDD;">
-                                            <b>Project Group</b>
+                                            <b>Business Unit</b>
                                         </td>
                                         <td style="background: #EEEEEE;">
                                             <b>Salesperson</b>
@@ -194,7 +194,7 @@
                             <HeaderStyle CssClass="CompPerfProjectNumber"></HeaderStyle>
                             <ItemStyle CssClass="CompPerfProjectNumber"></ItemStyle>
                         </asp:BoundField>
-                        <asp:BoundField HeaderText="Client" HeaderStyle-CssClass="CompPerfClient" ItemStyle-CssClass="CompPerfClient"
+                        <asp:BoundField HeaderText="Account" HeaderStyle-CssClass="CompPerfClient" ItemStyle-CssClass="CompPerfClient"
                             SortExpression="Client">
                             <HeaderStyle CssClass="CompPerfClient"></HeaderStyle>
                             <ItemStyle CssClass="CompPerfClient"></ItemStyle>
@@ -422,7 +422,7 @@
             <td id="tdAddButton" runat="server" align="right" valign="top">
                 <asp:Button runat="server" ID="buttonAddProject" Text="Add Project" OnClick="buttonAddProject_Click" /><br />
                 To edit or delete a project please click the Project Name.<br />
-                To edit or delete a client please click the Client Name.
+                To edit or delete an account please click the Account Name.
             </td>
         </tr>
     </table>
