@@ -159,14 +159,14 @@
             <HeaderTemplate>
                 <!-- Project - Milestone -->
                 <div class="ie-bg no-wrap">
-                    <asp:Label ID="lblProjectMilestone" runat="server" Text="Project - Milestone" ToolTip="Client - project - milestone this time entry is about"/>
+                    <asp:Label ID="lblProjectMilestone" runat="server" Text="Project - Milestone" ToolTip="Account - project - milestone this time entry is about"/>
                 </div>
                 <cc2:MultisortExtender ID="msProjectMilestone" runat="server" TargetControlID="lblProjectMilestone"
                     SynchronizerID="hfSortingSync" AscendingText="&uarr;" DescendingText="&darr;"
                     NoSortingText="" SortExpression="MilestonePersonId" />
             </HeaderTemplate>
             <ItemTemplate>
-                <asp:Label runat="server" ID="lblClientTooltip" ToolTip="Client">[C]</asp:Label>
+                <asp:Label runat="server" ID="lblClientTooltip" ToolTip="Account">[A]</asp:Label>
                 <asp:HyperLink ID="hlClient" runat="server" NavigateUrl='<%# GetClientUrl(((TimeEntryRecord)Container.DataItem).ParentMilestonePersonEntry.ParentMilestone.Project.Client) %>'>
                 <%# ((TimeEntryRecord)Container.DataItem).
                                     ParentMilestonePersonEntry.ParentMilestone.Project.Client.Name%>
@@ -219,7 +219,7 @@
             <HeaderTemplate>
                 <!-- Correct -->
                 <div class="ie-bg no-wrap">
-                    <asp:Label ID="lblIsChargeable" runat="server" Text="Bill." ToolTip="Is this time entry billable to the client, click to change" />
+                    <asp:Label ID="lblIsChargeable" runat="server" Text="Bill." ToolTip="Is this time entry billable to the account, click to change" />
                 </div>
             </HeaderTemplate>
             <ItemStyle HorizontalAlign="Center" />
@@ -255,13 +255,13 @@
                 <asp:CheckBox ID="chbIsCorrectEdit" runat="server" Checked='<%# Bind("IsCorrect") %>' />
             </EditItemTemplate>
         </asp:TemplateField>
-        <asp:TemplateField HeaderText="Time Type">
+        <asp:TemplateField HeaderText="Work Type">
             <HeaderStyle CssClass="tem-grid-date-cell" />
             <ItemStyle Width="100" />
             <HeaderTemplate>
-                <!-- Time Type -->
+                <!-- Work Type -->
                 <div class="ie-bg no-wrap">
-                    <asp:Label ID="lblTimeType" runat="server" Text="Time Type" ToolTip="Time type"/>
+                    <asp:Label ID="lblTimeType" runat="server" Text="Work Type" ToolTip="Work type"/>
                 </div>
                 <cc2:MultisortExtender ID="msTimeType" runat="server" TargetControlID="lblTimeType"
                     SynchronizerID="hfSortingSync" AscendingText="&uarr;" DescendingText="&darr;"
