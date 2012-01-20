@@ -322,7 +322,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Other projects also exist for this client, but your permissions do not allow you to see them..
+        ///   Looks up a localized string similar to Other projects also exist for this account, but your permissions do not allow you to see them..
         /// </summary>
         internal static string ProjectsListSecure {
             get {
