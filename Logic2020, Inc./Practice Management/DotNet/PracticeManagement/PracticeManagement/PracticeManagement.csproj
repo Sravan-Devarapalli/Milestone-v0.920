@@ -360,7 +360,7 @@
     <Content Include="Controls\Calendar.ascx" />
     <EmbeddedResource Include="Controls\Generic\MaxValueAllowedForTextBox\MaxValueAllowedForTextBoxExtender.js" />
     <EmbeddedResource Include="Controls\Generic\DuplicateOptionsRemove\DupilcateOptionsRemoveExtender.js" />
-    <Content Include="Controls\Generic\EnableDisableExtender\EnableDisableExtender.js" />
+    <EmbeddedResource Include="Controls\Generic\EnableDisableExtender\EnableDisableExtender.js" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
