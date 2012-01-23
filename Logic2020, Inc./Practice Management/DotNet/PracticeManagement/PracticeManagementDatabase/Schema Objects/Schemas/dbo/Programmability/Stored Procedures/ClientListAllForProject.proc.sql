@@ -36,7 +36,7 @@ BEGIN
 		IF(@IsAdmin = 1)
 		BEGIN
 			SELECT c.ClientId, c.DefaultDiscount, c.DefaultTerms
-			, c.DefaultSalespersonId, c.DefaultDirectorID, c.[Name], c.Inactive, c.IsChargeable
+			, c.DefaultSalespersonId, c.DefaultDirectorID, c.[Name], c.Inactive, c.IsChargeable,c.IsInternal
 			FROM dbo.Client AS c 
 			WHERE c.Inactive = 0
 			ORDER BY c.[Name]
@@ -44,7 +44,7 @@ BEGIN
 		ELSE
 		BEGIN
 			SELECT c.ClientId, c.DefaultDiscount, c.DefaultTerms
-			, c.DefaultSalespersonId, c.DefaultDirectorID, c.[Name], c.Inactive, c.IsChargeable
+			, c.DefaultSalespersonId, c.DefaultDirectorID, c.[Name], c.Inactive, c.IsChargeable,c.IsInternal
 			FROM dbo.Client AS c
 			JOIN dbo.Permission AS perm ON perm.PersonId = @PersonId
 			WHERE (perm.TargetId = c.ClientId AND perm.TargetType = 1 AND c.Inactive = 0) 
@@ -57,7 +57,7 @@ BEGIN
 		IF(@IsAdmin = 1)
 		BEGIN
 			SELECT DISTINCT c.ClientId, c.DefaultDiscount, c.DefaultTerms
-			, c.DefaultSalespersonId, c.DefaultDirectorID, c.[Name], c.Inactive, c.IsChargeable
+			, c.DefaultSalespersonId, c.DefaultDirectorID, c.[Name], c.Inactive, c.IsChargeable,c.IsInternal
 			FROM dbo.Client AS c 
 			JOIN dbo.Project    AS pro  ON  pro.ProjectId = @ProjectId 
 			WHERE (c.Inactive = 0 )
@@ -67,7 +67,7 @@ BEGIN
 		ELSE
 		BEGIN
 			SELECT DISTINCT c.ClientId, c.DefaultDiscount, c.DefaultTerms
-			, c.DefaultSalespersonId, c.DefaultDirectorID, c.[Name], c.Inactive, c.IsChargeable
+			, c.DefaultSalespersonId, c.DefaultDirectorID, c.[Name], c.Inactive, c.IsChargeable,c.IsInternal
 			FROM dbo.Client AS c
 			JOIN dbo.Permission AS perm ON  perm.PersonId = @PersonId
 			JOIN dbo.Project    AS pro  ON  pro.ProjectId = @ProjectId 
