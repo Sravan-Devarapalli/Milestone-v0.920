@@ -329,7 +329,7 @@ namespace PraticeManagement
                 cellProjectTools.Visible = false;
             }
 
-            chbCanCreateCustomWorkTypes.Visible = userIsAdministrator || userIsProjectLead;
+            chbCanCreateCustomWorkTypes.Enabled = userIsAdministrator ;
         }
 
         private void NeedToShowDeleteButton()
