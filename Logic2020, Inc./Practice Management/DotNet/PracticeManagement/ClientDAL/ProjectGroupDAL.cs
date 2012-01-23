@@ -32,6 +32,7 @@ namespace DataAccess
         private const string IsActiveColumn = "Active";
         private const string NameColumn = "Name";
         private const string InUseColumn = "InUse";
+        private const string CodeColumn = "Code";
 
         #endregion
 
@@ -170,6 +171,43 @@ namespace DataAccess
                            IsActive = (bool)reader[IsActiveColumn],
                            InUse = (int) reader[InUseColumn] == 1
                        };
+        }
+
+        public static List<ProjectGroup> GetInternalBusinessUnits()
+        {
+            List<ProjectGroup> groupList = new List<ProjectGroup>();
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.ProjectGroup.GetInternalBusinessUnits, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                 
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            int groupIdIndex = reader.GetOrdinal(GroupIdColumn);
+                            int nameIndex = reader.GetOrdinal(NameColumn);
+                            int codeIndex = reader.GetOrdinal(CodeColumn);
+
+                            while (reader.Read())
+                            {
+                               ProjectGroup projectGroup =  new ProjectGroup
+                                {
+                                    Id = (int)reader.GetInt32(groupIdIndex),
+                                    Name = (string)reader.GetString(nameIndex),
+                                    Code = (string)reader.GetString(codeIndex)
+                                };
+                               groupList.Add(projectGroup);
+                            }
+                        }
+                    }
+                }
+            }
+            return groupList;
+        
         }
     }
 }
