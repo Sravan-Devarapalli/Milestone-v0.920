@@ -2338,7 +2338,12 @@ namespace DataAccess
                     {
                         while (reader.Read())
                         {
-                            var project = new Project { Id = (int)reader[Constants.ColumnNames.ProjectIdColumn], Name = (string)reader[Constants.ColumnNames.NameColumn] };
+                            var project = new Project 
+                                            { 
+                                                Id = (int)reader[Constants.ColumnNames.ProjectIdColumn],
+                                                Name = (string)reader[Constants.ColumnNames.NameColumn],
+                                                ProjectNumber = (string)reader[Constants.ColumnNames.ProjectNumberColumn]
+                                            };
                             projectList.Add(project);
                         }
                     }
