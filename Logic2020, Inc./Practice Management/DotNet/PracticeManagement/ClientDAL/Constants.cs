@@ -264,7 +264,7 @@
             public const string IsInternalColumn = "IsInternal";
             public const string CanCreateCustomWorkTypesColumn = "CanCreateCustomWorkTypes";
             public const string InFutureUse = "InFutureUse";
-  public const string IsChargeCodeOffColumn = "IsChargeCodeOff";
+            public const string IsChargeCodeOffColumn = "IsChargeCodeOff";
             public const string IsHourlyRevenueColumn = "IsHourlyRevenue";
         }
 
@@ -697,6 +697,8 @@
                 public const string ProjectGroupRenameByClient = "dbo.ProjectGroupRenameByClient";
                 public const string ProjectGroupInsert = "dbo.ProjectGroupInsert";
                 public const string ProjectGroupDelete = "dbo.ProjectGroupDelete";
+                public const string GetInternalBusinessUnits = "dbo.GetInternalBusinessUnits";
+                
             }
 
             public class Note
