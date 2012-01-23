@@ -42,6 +42,9 @@ namespace PracticeManagementService
         /// <returns>True for successfull renaming</returns>
         [OperationContract]
         bool ProjectGroupDelete(int groupId);
+
+        [OperationContract]
+        List<ProjectGroup> GetInternalBusinessUnits();
     }
 }
 
