@@ -196,6 +196,7 @@ namespace PraticeManagement
                 {
                     TableCellHistoryg.Visible = true;
                     cellProjectTools.Visible = true;
+                    CellProjectTimeTypes.Visible = true;
                 }
 
                 int size = Convert.ToInt32(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Project, AttachmentFileSize));
@@ -501,6 +502,7 @@ namespace PraticeManagement
             {
                 int clientId = int.Parse(ddlClientName.SelectedValue);
                 SetClientDefaultValues(clientId);
+
             }
 
         }
@@ -539,7 +541,7 @@ namespace PraticeManagement
                         client.DefaultDiscount != 0 ? client.DefaultDiscount.ToString() : string.Empty;
 
                     chbIsChargeable.Checked = client.IsChargeable;
-
+                    chbIsInternal.Checked = client.IsInternal;
 
                     if (Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName)
                         && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName)
