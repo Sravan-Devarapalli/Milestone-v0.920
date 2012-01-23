@@ -64,7 +64,7 @@ namespace PraticeManagement.Controls.TimeEntry {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.TimeEntryHoursTextBoxEnableDisable.TimeEntryHoursTextBoxEnableDisable extEnableDisable;
+        protected global::PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtender extEnableDisable;
         
         /// <summary>
         /// imgDropTes control.
