@@ -292,13 +292,16 @@ PraticeManagement.Controls.Generic.DirtyState.DirtyBehavior.prototype = {
     },
 
     _setBackground: function (bgcolor) {
-        $get(this.get_ActualHoursIdValue()).style.background = bgcolor;
+        var actualHours = $get(this.get_ActualHoursIdValue());
+        if (!actualHours.disabled)
+            actualHours.style.background = bgcolor;
     },
 
     _clearData: function () {
-        if (!$get(this.get_NoteIdValue()).disabled) {
+        var ActualHours = $get(this.get_ActualHoursIdValue());
+        if (!$get(this.get_NoteIdValue()).disabled && !ActualHours.disabled) {
 
-            $get(this.get_ActualHoursIdValue()).value = '';
+            ActualHours.value = '';
             $get(this.get_NoteIdValue()).value = '';
             $get(this.get_IsChargeableIdValue()).checked = $get(this.get_HiddenDefaultIsChargeableIdValue()).value == 'true';
             $get(this.get_IsCorrectIdValue()).checked = false;
@@ -335,7 +338,7 @@ PraticeManagement.Controls.Generic.DirtyState.DirtyBehavior.prototype = {
                 this.get_element().value = '';
             }
             this.cancelBackground();
-            $get(this.get_ActualHoursIdValue()).style.background = 'white';
+            this._setBackground('white');
         }
     },
 
