@@ -95,7 +95,7 @@
            <th align="center" style="text-align: center; background-color: Gray;" valign="bottom">
                 <b style="font-size: 14px; padding-top: 2px;">Add WorkType</b>
                 <asp:Button ID="btnCloseWorkType" runat="server" CssClass="mini-report-close" ToolTip="Close"
-                    Style="float: right;" OnClientClick="return btnClose_OnClientClick();" Text="X">
+                    Style="float: right;" OnClientClick="return btnCloseWorkType_OnClientClick();" Text="X">
                 </asp:Button>
             </th>
         </tr>
@@ -127,7 +127,7 @@
             <td align="center">
                 <asp:Button ID="btnInsertTimeType" runat="server" OnClick="btnInsertTimeType_OnClick"
                     ToolTip="Confirm" Text="Add" />
-                <asp:Button ID="btnCancleTimeType" runat="server" ToolTip="Cancel" Text="Cancle" />
+                <asp:Button ID="btnCancleTimeType" runat="server" ToolTip="Cancel" Text="Cancle" OnClientClick="return btnCloseWorkType_OnClientClick();"  />
             </td>
         </tr>
         <tr>
