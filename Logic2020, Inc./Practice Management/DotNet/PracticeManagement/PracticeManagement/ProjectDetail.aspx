@@ -311,6 +311,13 @@
             $find("mpeTimetypeAlertMessage").hide();
             return false;
         }
+        function btnCloseWorkType_OnClientClick() {
+            $find("mpeAddTimeType").hide();
+            var txtNewTimeType = document.getElementById('<%= (ProjectTimeTypes.FindControl("txtNewTimeType") as TextBox).ClientID%>');
+            txtNewTimeType.value = '';
+
+            return false;
+        }
         function UnAssignTimeType_Click() {
             var cblTimeTypesNotAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID%>');
             var cblTimeTypesAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID%>');
@@ -688,7 +695,7 @@
                                     <td colspan="8">
                                         <asp:CheckBox ID="chbIsInternal" runat="server" Text="IsInternal" Enabled="false" />
                                         <asp:CheckBox ID="chbCanCreateCustomWorkTypes" onclick="chbCanCreateCustomWorkTypes_Change();"
-                                            runat="server" Text="Can Add New Custom Work Types."  />
+                                            runat="server" Text="Can Add New Custom Work Types." Enabled="false" />
                                     </td>
                                 </tr>
                                 <tr>
