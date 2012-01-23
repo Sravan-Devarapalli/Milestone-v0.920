@@ -31,13 +31,13 @@ namespace PraticeManagement.Controls.Projects {
         protected global::System.Web.UI.WebControls.HiddenField hdnProjectTimeTypesInUse;
         
         /// <summary>
-        /// imgAddNewTimeType control.
+        /// btnAddNewTimeType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton imgAddNewTimeType;
+        protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedTextButton btnAddNewTimeType;
         
         /// <summary>
         /// mpeAddTimeType control.
@@ -47,6 +47,15 @@ namespace PraticeManagement.Controls.Projects {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.ModalPopupExtender mpeAddTimeType;
+        
+        /// <summary>
+        /// cvTimetype control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvTimetype;
         
         /// <summary>
         /// divTimeTypesAssignedToProject control.
@@ -94,6 +103,15 @@ namespace PraticeManagement.Controls.Projects {
         protected global::System.Web.UI.WebControls.Panel pnlAddNewTimeType;
         
         /// <summary>
+        /// btnCloseWorkType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCloseWorkType;
+        
+        /// <summary>
         /// txtNewTimeType control.
         /// </summary>
         /// <remarks>
@@ -112,40 +130,49 @@ namespace PraticeManagement.Controls.Projects {
         protected global::AjaxControlToolkit.FilteredTextBoxExtender fteNewTimeType;
         
         /// <summary>
-        /// rvUpdatedTimeType control.
+        /// rvNewTimeType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rvUpdatedTimeType;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rvNewTimeType;
         
         /// <summary>
-        /// cvUpdatedTimeTypeName control.
+        /// cvNewTimeTypeName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvUpdatedTimeTypeName;
+        protected global::System.Web.UI.WebControls.CustomValidator cvNewTimeTypeName;
         
         /// <summary>
-        /// imgUpdateTimeType control.
+        /// btnInsertTimeType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton imgUpdateTimeType;
+        protected global::System.Web.UI.WebControls.Button btnInsertTimeType;
         
         /// <summary>
-        /// imgCancelTimeType control.
+        /// btnCancleTimeType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton imgCancelTimeType;
+        protected global::System.Web.UI.WebControls.Button btnCancleTimeType;
+        
+        /// <summary>
+        /// vsumNewTimeType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary vsumNewTimeType;
         
         /// <summary>
         /// hdTimetypeAlertMessage control.
