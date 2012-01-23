@@ -1,0 +1,6 @@
+﻿ALTER TABLE [dbo].[TimeEntry]
+	ADD CONSTRAINT [FK_TimeEntry_ChargeCodeId] 
+	FOREIGN KEY (ChargeCodeId)
+	REFERENCES dbo.ChargeCode(Id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
