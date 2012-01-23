@@ -418,13 +418,13 @@
 
         function chbCanCreateCustomWorkTypes_Change() {
             var chbCanCreateCustomWorkTypes = document.getElementById('<%= chbCanCreateCustomWorkTypes.ClientID%>');
-            var imgAddNewTimeType = document.getElementById('<%= (ProjectTimeTypes.FindControl("imgAddNewTimeType") as ImageButton).ClientID%>');
-            if (imgAddNewTimeType != null  && chbCanCreateCustomWorkTypes != null) {
+            var btnAddNewTimeType = document.getElementById('<%= (ProjectTimeTypes.FindControl("btnAddNewTimeType") as LinkButton).ClientID%>');
+            if (btnAddNewTimeType != null && chbCanCreateCustomWorkTypes != null) {
                 if (chbCanCreateCustomWorkTypes.checked) {
-                    imgAddNewTimeType.style.display = "";
+                    btnAddNewTimeType.style.display = "";
                 }
                 else {
-                    imgAddNewTimeType.style.display = "none";
+                    btnAddNewTimeType.style.display = "none";
                 }
             }
 
@@ -686,7 +686,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="8">
-                                        <asp:CheckBox ID="chbIsInternal" runat="server" Text="IsInternal" disabled="disabled" />
+                                        <asp:CheckBox ID="chbIsInternal" runat="server" Text="IsInternal" Enabled="false" />
                                         <asp:CheckBox ID="chbCanCreateCustomWorkTypes" onclick="chbCanCreateCustomWorkTypes_Change();"
                                             runat="server" Text="Can Add New Custom Work Types."  />
                                     </td>
@@ -835,7 +835,7 @@
                                             OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
-                                <asp:TableCell ID="CellProjectTimeTypes" runat="server">
+                                <asp:TableCell ID="CellProjectTimeTypes" runat="server" Visible="false">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnProjectTimeTypes" runat="server" Text="Project Work Types" CausesValidation="false"
                                             OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton></span>
