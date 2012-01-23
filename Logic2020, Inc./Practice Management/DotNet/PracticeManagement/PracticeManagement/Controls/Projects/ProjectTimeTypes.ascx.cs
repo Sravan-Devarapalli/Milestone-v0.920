@@ -77,13 +77,13 @@ namespace PraticeManagement.Controls.Projects
                     hdnProjectTimeTypesInUse.Value = projectTimeTypesInUseIds;
                     if (project.CanCreateCustomWorkTypes)
                     {
-                        imgAddNewTimeType.Style["display"] = "none";
+                        btnAddNewTimeType.Style["display"] = "none";
                     }
                 }
                 else
                 {
                     ProjectTimetypes = AllTimeTypes.Where(t => t.IsDefault).ToArray();
-                    AllTimeTypes = AllTimeTypes.AsQueryable().Where(T => 1 == 2).ToArray();//remove all
+                    AllTimeTypes = new List<TimeTypeRecord>().ToArray();//remove all
                 }
                 AllTimeTypes = AllTimeTypes.AsQueryable().Except(ProjectTimetypes).ToArray();
             }
@@ -142,11 +142,30 @@ namespace PraticeManagement.Controls.Projects
             }
         }
 
-        protected void imgUpdateTimeType_OnClick(object sender, EventArgs e)
+        protected void cvNewTimeTypeName_OnServerValidate(object sender, ServerValidateEventArgs e)
         {
+            e.IsValid = true;
             if (IsTimeTypeAlreadyExisting(txtNewTimeType.Text))
             {
-                cvUpdatedTimeTypeName.IsValid = false;
+                e.IsValid = false;
+            }
+        }
+        protected void cvTimetype_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = true;
+            if (hdnTimeTypesAssignedToProject.Value == ",")
+            {
+                e.IsValid = false;
+            }
+        }
+
+        
+        protected void btnInsertTimeType_OnClick(object sender, EventArgs e)
+        {
+            Page.Validate("NewTimeType");
+            if (!Page.IsValid)
+            {
+                mpeAddTimeType.Show();
             }
             else
             {
@@ -156,7 +175,6 @@ namespace PraticeManagement.Controls.Projects
                     customTimeType.IsDefault = false;
                     customTimeType.IsInternal = false;
                     customTimeType.Name = txtNewTimeType.Text;
-                    customTimeType.IsInternal = false;
                     int customTimeTypeId = ServiceCallers.Invoke<TimeEntryServiceClient, int>(TimeType => TimeType.AddTimeType(customTimeType));
                     customTimeType.Id = customTimeTypeId;
                     var ptt = ProjectTimetypes.ToList();
@@ -165,10 +183,13 @@ namespace PraticeManagement.Controls.Projects
                     cblTimeTypesAssignedToProject.DataSource = ProjectTimetypes.OrderBy(t => t.Name);
                     cblTimeTypesAssignedToProject.DataBind();
                     AddAttributesTocblTimeTypesAssignedToProject();
+                    txtNewTimeType.Text = "";
                 }
                 catch (Exception e1)
                 {
-
+                    cvNewTimeTypeName.ToolTip = "Error Occured.";
+                    cvNewTimeTypeName.IsValid = false;
+                    mpeAddTimeType.Show();
                 }
             }
         }
@@ -193,3 +214,4 @@ namespace PraticeManagement.Controls.Projects
 
     }
 }
+
