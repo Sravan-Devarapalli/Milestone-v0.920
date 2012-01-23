@@ -186,7 +186,7 @@
                                         </td>
                                         <td style="text-align: right">
                                             <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecursiveProjectSection" runat="server"
-                                                TargetControlID="imgBtnRecursiveProjectSection" ConfirmText="Are you sure to make the section as recursive?">
+                                                TargetControlID="imgBtnRecursiveProjectSection" >
                                             </AjaxControlToolkit:ConfirmButtonExtender>
                                             <asp:ImageButton ID="imgBtnRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png"
                                                 OnClick="imgBtnRecursiveSection_OnClick" CssClass="mrg0" />
@@ -271,7 +271,7 @@
                                         </td>
                                         <td style="text-align: right">
                                             <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecurrenceBusinessDevelopmentSection"
-                                                runat="server" TargetControlID="imgBtnRecurrenceBusinessDevelopmentSection" ConfirmText="Are you sure to make the section as recursive?">
+                                                runat="server" TargetControlID="imgBtnRecurrenceBusinessDevelopmentSection" >
                                             </AjaxControlToolkit:ConfirmButtonExtender>
                                             <asp:ImageButton ID="imgBtnRecurrenceBusinessDevelopmentSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick"
                                                 CssClass="mrg0" />
@@ -356,7 +356,7 @@
                                         </td>
                                         <td style="text-align: right">
                                             <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecurrenceInternalSection"
-                                                runat="server" TargetControlID="imgBtnRecurrenceInternalSection" ConfirmText="Are you sure to make the section as recursive?">
+                                                runat="server" TargetControlID="imgBtnRecurrenceInternalSection" >
                                             </AjaxControlToolkit:ConfirmButtonExtender>
                                             <asp:ImageButton ID="imgBtnRecurrenceInternalSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick"
                                                 CssClass="mrg0" />
