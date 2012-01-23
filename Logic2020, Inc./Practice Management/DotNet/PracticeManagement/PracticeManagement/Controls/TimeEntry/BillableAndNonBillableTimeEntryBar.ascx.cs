@@ -66,10 +66,7 @@ namespace PraticeManagement.Controls.TimeEntry
         {
 
         }
-        protected void Page_PreRender(object sender, EventArgs e)
-        {
-            extEnableDisable.TotalExtenderClientId = extTotalHours.ClientID;
-        }
+     
         protected bool steItem_OnReadyToUpdateTE(object sender, ReadyToUpdateTeArguments args)
         {
             return false;
@@ -100,7 +97,10 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 var billableTbId = billableAndNonBillableSte.BillableTextBoxClientId;
                 var nonBillableTbId = billableAndNonBillableSte.NonBillableTextBoxClientId;
+                var tbNotes = billableAndNonBillableSte.FindControl("tbNotes") as TextBox;
+
                 extTotalHours.ControlsToCheck += billableTbId + ";" + nonBillableTbId + ";";
+                extEnableDisable.ControlsToCheck += billableTbId + ";" + nonBillableTbId + ";" ;
 
                 billableAndNonBillableSte.HorizontalTotalCalculatorExtenderId = extTotalHours.ClientID;
 
