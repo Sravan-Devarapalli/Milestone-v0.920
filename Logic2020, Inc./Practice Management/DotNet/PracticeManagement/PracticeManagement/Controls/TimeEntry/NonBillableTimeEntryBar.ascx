@@ -6,7 +6,7 @@
     TagPrefix="te" %>
 <%@ Register TagPrefix="ext1" Namespace="PraticeManagement.Controls.Generic.TotalCalculator"
     Assembly="PraticeManagement" %>
-<%@ Register TagPrefix="ext2" Namespace="PraticeManagement.Controls.Generic.TimeEntryHoursTextBoxEnableDisable"
+<%@ Register TagPrefix="ext2" Namespace="PraticeManagement.Controls.Generic.EnableDisableExtender"
     Assembly="PraticeManagement" %>
 <%@ Import Namespace="PraticeManagement.Controls.TimeEntry" %>
 <table class="WholeWidth">
@@ -37,7 +37,7 @@
         <td class="time-entry-total-hoursNew">
             <label id="lblTotalHours" runat="server" />
             <ext1:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lblTotalHours" />
-            <ext2:TimeEntryHoursTextBoxEnableDisable ID="extEnableDisable" runat="server" TargetControlID="ddlTimeTypes" />
+            <ext2:EnableDisableExtender ID="extEnableDisable" runat="server" TargetControlID="ddlTimeTypes" />
         </td>
         <td style="width: 3%; text-align: center;">
             <asp:ImageButton ID="imgDropTes" runat="server" OnClientClick='return confirm ("This will delete the time and notes entered for the entire row!  Are you sure?")'
