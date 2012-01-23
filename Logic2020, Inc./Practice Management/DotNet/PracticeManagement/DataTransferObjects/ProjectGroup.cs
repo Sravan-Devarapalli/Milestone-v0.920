@@ -72,6 +72,9 @@ namespace DataTransferObjects
             set { _isActive = value; }
         }
 
+        [DataMember]
+        public string Code { get; set; }
+
         #endregion
     }
 }
