@@ -92,7 +92,7 @@
                             <asp:RadioButton ID="rbIsInternal" runat="server" Checked='<%# Bind("IsInternal") %>'
                                 Enabled="false" />
                             <asp:CustomValidator ID="cvIsDefaultOrInternalEdit" runat="server" Display="Dynamic"
-                                ToolTip="WorkType should be Isdefalult OrIsInternal" ErrorMessage="WorkType should be Isdefalult OrIsInternal"
+                                ToolTip="WorkType should be Isdefalult Or IsInternal" ErrorMessage="WorkType should be Isdefalult Or IsInternal"
                                 ValidationGroup="NewTimeType" OnServerValidate="cvIsDefaultOrInternalEdit_Servervalidate"
                                 Text="*" />
                         </EditItemTemplate>
@@ -154,7 +154,7 @@
                         <td align="center" style="width: 15%">
                             <asp:RadioButton ID="rbIsInternal" runat="server" Visible="false" GroupName="rbNewTimeType" />
                             <asp:CustomValidator ID="cvIsDefaultOrInternal" runat="server" Display="Dynamic"
-                                ToolTip="WorkType should be Isdefalult OrIsInternal" ErrorMessage="WorkType should be Isdefalult OrIsInternal"
+                                ToolTip="WorkType should be Isdefalult Or IsInternal" ErrorMessage="WorkType should be Isdefalult Or IsInternal"
                                 ValidationGroup="NewTimeType" OnServerValidate="cvIsDefaultOrInternal_Servervalidate"
                                 Text="*" />
                         </td>
