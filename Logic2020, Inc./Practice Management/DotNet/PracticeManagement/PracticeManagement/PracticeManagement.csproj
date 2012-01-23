@@ -360,7 +360,6 @@
     <Content Include="Controls\Calendar.ascx" />
     <EmbeddedResource Include="Controls\Generic\MaxValueAllowedForTextBox\MaxValueAllowedForTextBoxExtender.js" />
     <EmbeddedResource Include="Controls\Generic\DuplicateOptionsRemove\DupilcateOptionsRemoveExtender.js" />
-    <EmbeddedResource Include="Controls\Generic\EnableDisableExtender\EnableDisableExtender.js" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
@@ -1123,7 +1122,6 @@
     </Compile>
     <Compile Include="Controls\Generic\CustomCheckBoxList.cs" />
     <Compile Include="Controls\Generic\DuplicateOptionsRemove\DupilcateOptionsRemoveExtender.cs" />
-    <Compile Include="Controls\Generic\EnableDisableExtender\EnableDisableExtender.cs" />
     <Compile Include="Controls\Generic\MaxValueAllowedForTextBox\MaxValueAllowedForTextBoxExtender.cs" />
     <Compile Include="Controls\Milestones\MilestonePersonBar.ascx.cs">
       <DependentUpon>MilestonePersonBar.ascx</DependentUpon>
