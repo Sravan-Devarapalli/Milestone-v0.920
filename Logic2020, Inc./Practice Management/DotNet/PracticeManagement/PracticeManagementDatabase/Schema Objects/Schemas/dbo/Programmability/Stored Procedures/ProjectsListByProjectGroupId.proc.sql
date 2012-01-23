@@ -4,7 +4,9 @@
 )
 AS
 BEGIN
-	SELECT ProjectId,Name  
+	SELECT ProjectId
+	,Name
+	,ProjectNumber  
 	FROM dbo.Project 
 	WHERE GroupId = @ProjectGroupId
 END
