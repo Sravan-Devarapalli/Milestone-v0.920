@@ -2,6 +2,8 @@
     Inherits="PraticeManagement.Controls.Projects.ProjectTimeTypes" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajax" %>
 <%@ Register TagPrefix="uc" Namespace="PraticeManagement.Controls.Generic" Assembly="PraticeManagement" %>
+<%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
+    Assembly="PraticeManagement" %>
 <table width="100%" class="WholeWidth">
     <tr>
         <td style="padding-top: 5px;">
@@ -11,11 +13,11 @@
     </tr>
     <tr>
         <td style="padding-top: 5px;">
-            <asp:ImageButton ID="imgAddNewTimeType" runat="server" ImageUrl="~/Images/add_16.png"
-                ToolTip="Add New WorkType" />
-            <AjaxControlToolkit:ModalPopupExtender ID="mpeAddTimeType" runat="server" TargetControlID="imgAddNewTimeType"
+            <asp:ShadowedTextButton ID="btnAddNewTimeType" runat="server" CausesValidation="false"
+                CssClass="add-btn" Text="Add WorkType" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeAddTimeType" runat="server" TargetControlID="btnAddNewTimeType"
                 BackgroundCssClass="modalBackground" PopupControlID="pnlAddNewTimeType" DropShadow="false"
-                CancelControlID="imgCancelTimeType" />
+                BehaviorID="mpeAddTimeType" CancelControlID="btnCancleTimeType" />
             <br />
         </td>
     </tr>
@@ -31,6 +33,9 @@
                     <td align="center" style="padding-left: 6px; padding-right: 6px; text-align: center;
                         padding-top: 2px; width: 44%">
                         <b>Work Types Assigned to Project</b>
+                        <asp:CustomValidator ID="cvTimetype" runat="server" ValidationGroup="Project" OnServerValidate="cvTimetype_OnServerValidate"
+                            Display="Dynamic" ErrorMessage="Atleast one WorkType should be assigned to the project." ToolTip="Atleast one WorkType should be assigned to the project."
+                            Text="*"></asp:CustomValidator>
                     </td>
                     <td valign="middle" align="center" style="width: 12%">
                     </td>
@@ -78,18 +83,6 @@
                     </td>
                 </tr>
             </table>
-            <%-- <table class="WholeWidth">
-                <tr>
-                    <td style="padding: 4px; height: 35px; width: 70%;">
-                        <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
-                        <asp:ValidationSummary ID="vsumNotes" runat="server" ValidationGroup="Notes" />
-                    </td>
-                    <td align="right" style="padding: 4px; padding-right: 0px; height: 35px; width: 30%;">
-                        <asp:Button ID="btnSave" Enabled="false" runat="server" Text="Save Changes" OnClientClick="hideSuccessMessage();"
-                            OnClick="btnSave_Click" />
-                    </td>
-                </tr>
-            </table>--%>
         </td>
         <td style="width: 15%;">
         </td>
@@ -99,9 +92,12 @@
     Style="display: none" BorderWidth="2px">
     <table width="100%" style="padding: 5px;">
         <tr style="background-color: Gray; height: 27px;">
-            <td align="center" style="white-space: nowrap; font-size: 14px; width: 100%">
-                Add New WorkType
-            </td>
+           <th align="center" style="text-align: center; background-color: Gray;" valign="bottom">
+                <b style="font-size: 14px; padding-top: 2px;">Add WorkType</b>
+                <asp:Button ID="btnCloseWorkType" runat="server" CssClass="mini-report-close" ToolTip="Close"
+                    Style="float: right;" OnClientClick="return btnClose_OnClientClick();" Text="X">
+                </asp:Button>
+            </th>
         </tr>
         <tr>
             <td>
@@ -115,15 +111,11 @@
                     FilterType="LowercaseLetters ,UppercaseLetters,Custom" FilterMode="ValidChars"
                     runat="server">
                 </ajax:FilteredTextBoxExtender>
-                <asp:RequiredFieldValidator ID="rvUpdatedTimeType" runat="server" ControlToValidate="txtNewTimeType"
-                    Display="Dynamic" ErrorMessage="Work Type Name is required" ToolTip="Work Type Name is required"
-                    ValidationGroup="UpdateTimeType">*</asp:RequiredFieldValidator>
-                <asp:CustomValidator ID="cvUpdatedTimeTypeName" runat="server" ControlToValidate="txtNewTimeType"
+                <asp:RequiredFieldValidator ID="rvNewTimeType" runat="server" ControlToValidate="txtNewTimeType"
+                    ValidationGroup="NewTimeType" Display="Dynamic" ToolTip="Work Type Name is required">*</asp:RequiredFieldValidator>
+                <asp:CustomValidator ID="cvNewTimeTypeName" runat="server" ControlToValidate="txtNewTimeType"
+                    ValidationGroup="NewTimeType" OnServerValidate="cvNewTimeTypeName_OnServerValidate"
                     Display="Dynamic" ToolTip="This work type already exists. Please enter a different work type.">*</asp:CustomValidator>
-                <asp:ImageButton ID="imgUpdateTimeType" runat="server" ImageUrl="~/Images/icon-check.png"
-                    OnClick="imgUpdateTimeType_OnClick" ToolTip="Confirm" />
-                <asp:ImageButton ID="imgCancelTimeType" runat="server" ImageUrl="~/Images/no.png"
-                    ToolTip="Cancel" />
             </td>
         </tr>
         <tr>
@@ -131,28 +123,45 @@
                 &nbsp;
             </td>
         </tr>
+        <tr>
+            <td align="center">
+                <asp:Button ID="btnInsertTimeType" runat="server" OnClick="btnInsertTimeType_OnClick"
+                    ToolTip="Confirm" Text="Add" />
+                <asp:Button ID="btnCancleTimeType" runat="server" ToolTip="Cancel" Text="Cancle" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;
+                <asp:ValidationSummary ID="vsumNewTimeType" runat="server" EnableClientScript="false"
+                    ValidationGroup="NewTimeType" />
+            </td>
+        </tr>
     </table>
 </asp:Panel>
 <asp:HiddenField ID="hdTimetypeAlertMessage" runat="server" />
-<AjaxControlToolkit:ModalPopupExtender ID="mpeTimetypeAlertMessage" runat="server" BehaviorID="mpeTimetypeAlertMessage"
-    TargetControlID="hdTimetypeAlertMessage" BackgroundCssClass="modalBackground"
-    PopupControlID="pnlTimetypeAlertMessage" DropShadow="false" CancelControlID="btnClose" />
+<AjaxControlToolkit:ModalPopupExtender ID="mpeTimetypeAlertMessage" runat="server"
+    BehaviorID="mpeTimetypeAlertMessage" TargetControlID="hdTimetypeAlertMessage"
+    BackgroundCssClass="modalBackground" PopupControlID="pnlTimetypeAlertMessage"
+    DropShadow="false" CancelControlID="btnClose" />
 <asp:Panel ID="pnlTimetypeAlertMessage" runat="server" BackColor="White" BorderColor="Black"
-    Style="display: none" BorderWidth="2px"  Width="380px">
-    <table width="100%" style="padding: 5px; ">
+    Style="display: none" BorderWidth="2px" Width="380px">
+    <table width="100%" style="padding: 5px;">
         <tr>
-            <th align="center" style="text-align: center; background-color: Gray;" 
-                valign="bottom">
+            <th align="center" style="text-align: center; background-color: Gray;" valign="bottom">
                 <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
                 <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Close"
-                    Style="float: right;" OnClientClick="return btnClose_OnClientClick();" Text="X"></asp:Button>
+                    Style="float: right;" OnClientClick="return btnClose_OnClientClick();" Text="X">
+                </asp:Button>
             </th>
         </tr>
         <tr>
-            <td style="font-weight:bold;">
-                &nbsp;
-                Below WorkTypes are having time entries <br />
-                 for this project so they can't be unassign from the project: <br /><br />
+            <td style="font-weight: bold;">
+                &nbsp; Below WorkTypes are having time entries
+                <br />
+                for this project so they can't be unassign from the project:
+                <br />
+                <br />
             </td>
         </tr>
         <tr>
@@ -162,10 +171,7 @@
         </tr>
         <tr>
             <td>
-                &nbsp;
-                &nbsp;
-                &nbsp;
-
+                &nbsp; &nbsp; &nbsp;
             </td>
         </tr>
     </table>
