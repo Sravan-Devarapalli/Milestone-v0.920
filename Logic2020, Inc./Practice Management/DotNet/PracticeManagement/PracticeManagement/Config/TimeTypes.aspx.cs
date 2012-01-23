@@ -56,9 +56,10 @@ namespace PraticeManagement.Config
 
         private void showPlusIcon(bool showPlus)
         {
+            tbNewTimeType.Text = "New work type";
             ibtnInsertTimeType.Visible = showPlus;
             ibtnInsert.Visible = ibtnCancel.Visible = tbNewTimeType.Visible = rbIsDefault.Visible = rbIsInternal.Visible = rbIsActive.Visible =  !showPlus;
-
+            rbIsDefault.Checked = rbIsInternal.Checked = rbIsActive.Checked = !showPlus;
             if (!showPlus)
             {
                 tbNewTimeType.Text = string.Empty;
@@ -114,10 +115,7 @@ namespace PraticeManagement.Config
                     ViewState.Remove("AllTimeTypes");
                     populatecontrols();
 
-                    //HttpContext.Current.Cache[CacheKey] = InsertAction;
                     mlInsertStatus.ShowInfoMessage(Resources.Controls.TimeTypeAddedSuccessfully);
-                    tbNewTimeType.Text = "New work type";
-                    rbIsDefault.Checked = rbIsInternal.Checked = rbIsActive.Checked = false;
                     showPlusIcon(true);
                 }
             }
@@ -129,18 +127,8 @@ namespace PraticeManagement.Config
 
         protected void ibtnCancel_OnClick(object sender, EventArgs e)
         {
-            showPlusIcon(true);
+           showPlusIcon(true);
         }
-
-        //protected void odsTimeTypes_Updated(object sender, ObjectDataSourceStatusEventArgs e)
-        //{
-        //    HttpContext.Current.Cache[CacheKey] = UpdateAction;
-        //}
-
-        //protected void odsTimeTypes_Deleted(object sender, ObjectDataSourceStatusEventArgs e)
-        //{
-        //    HttpContext.Current.Cache[CacheKey] = DeleteAction;
-        //}
 
         protected void gvTimeTypes_RowDataBound(object sender, GridViewRowEventArgs e)
         {
