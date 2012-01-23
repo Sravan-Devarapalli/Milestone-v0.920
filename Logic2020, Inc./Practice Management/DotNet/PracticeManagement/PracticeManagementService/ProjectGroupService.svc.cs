@@ -59,6 +59,11 @@ namespace PracticeManagementService
             return result;
         }
 
+        public List<ProjectGroup> GetInternalBusinessUnits()
+        {
+            return ProjectGroupDAL.GetInternalBusinessUnits();
+        }
+
         #endregion
 	}
 }
