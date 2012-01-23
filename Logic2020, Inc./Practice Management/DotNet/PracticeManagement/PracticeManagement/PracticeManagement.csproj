@@ -360,7 +360,7 @@
     <Content Include="Controls\Calendar.ascx" />
     <EmbeddedResource Include="Controls\Generic\MaxValueAllowedForTextBox\MaxValueAllowedForTextBoxExtender.js" />
     <EmbeddedResource Include="Controls\Generic\DuplicateOptionsRemove\DupilcateOptionsRemoveExtender.js" />
-    <EmbeddedResource Include="Controls\Generic\TimeEntryHoursTextBoxEnableDisable\TimeEntryHoursTextBoxEnableDisable.js" />
+    <EmbeddedResource Include="Controls\Generic\EnableDisableExtender\EnableDisableExtender.js" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
@@ -450,7 +450,43 @@
     <Content Include="Controls\Generic\Filtering\OpportunityFilter.ascx" />
     <Content Include="Controls\Generic\Filtering\PersonReportFilter.ascx" />
     <Content Include="Controls\Generic\RecentNotes.ascx" />
+    <None Include="Service References\ProjectGroupService\ProjectGroupService10.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectGroupService\ProjectGroupService11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectGroupService\ProjectGroupService2.wsdl" />
+    <None Include="Service References\ProjectGroupService\ProjectGroupService3.wsdl" />
+    <None Include="Service References\ProjectGroupService\ProjectGroupService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectGroupService\ProjectGroupService4.wsdl" />
+    <None Include="Service References\ProjectGroupService\ProjectGroupService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectGroupService\ProjectGroupService5.wsdl" />
+    <None Include="Service References\ProjectGroupService\ProjectGroupService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectGroupService\ProjectGroupService6.wsdl" />
+    <None Include="Service References\ProjectGroupService\ProjectGroupService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectGroupService\ProjectGroupService7.wsdl" />
+    <None Include="Service References\ProjectGroupService\ProjectGroupService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectGroupService\ProjectGroupService8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectGroupService\ProjectGroupService9.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ProjectService\ProjectService1.disco" />
+    <None Include="Service References\ProjectGroupService\ProjectGroupService1.disco" />
+    <None Include="Service References\ProjectGroupService\ProjectGroupService2.disco" />
+    <None Include="Service References\ProjectGroupService\ProjectGroupService3.disco" />
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -815,17 +851,6 @@
     <None Include="Service References\PersonStatusService\PersonStatusService5.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ProjectGroupService\ProjectGroupService210.wsdl" />
-    <None Include="Service References\ProjectGroupService\ProjectGroupService211.wsdl" />
-    <None Include="Service References\ProjectGroupService\ProjectGroupService315.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ProjectGroupService\ProjectGroupService316.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ProjectGroupService\ProjectGroupService317.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\ProjectService\ProjectService1.wsdl" />
     <None Include="Service References\ProjectService\ProjectService1.xsd">
       <SubType>Designer</SubType>
@@ -1009,7 +1034,6 @@
     <None Include="Service References\TimeEntryService\TimeEntryService2.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService3.disco" />
     <None Include="Service References\TimescaleService\TimescaleService1.disco" />
-    <None Include="Service References\ProjectGroupService\ProjectGroupService15.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService12.disco" />
     <None Include="Service References\OverheadService\OverheadService1.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
@@ -1099,8 +1123,8 @@
     </Compile>
     <Compile Include="Controls\Generic\CustomCheckBoxList.cs" />
     <Compile Include="Controls\Generic\DuplicateOptionsRemove\DupilcateOptionsRemoveExtender.cs" />
+    <Compile Include="Controls\Generic\EnableDisableExtender\EnableDisableExtender.cs" />
     <Compile Include="Controls\Generic\MaxValueAllowedForTextBox\MaxValueAllowedForTextBoxExtender.cs" />
-    <Compile Include="Controls\Generic\TimeEntryHoursTextBoxEnableDisable\TimeEntryHoursTextBoxEnableDisable.cs" />
     <Compile Include="Controls\Milestones\MilestonePersonBar.ascx.cs">
       <DependentUpon>MilestonePersonBar.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
