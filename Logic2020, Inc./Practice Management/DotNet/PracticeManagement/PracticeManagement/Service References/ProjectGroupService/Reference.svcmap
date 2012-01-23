@@ -21,12 +21,12 @@
     <MetadataSource Address="http://localhost/PracticeManagementService/ProjectGroupService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="ProjectGroupService315.xsd" MetadataType="Schema" ID="e21f1927-f2b2-4bbf-9e20-3f1a1cf37d29" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ProjectGroupService.svc?xsd=xsd2" />
-    <MetadataFile FileName="ProjectGroupService15.disco" MetadataType="Disco" ID="4f6947a5-a02e-46b7-907c-c8ba267347b6" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ProjectGroupService.svc?disco" />
-    <MetadataFile FileName="ProjectGroupService210.wsdl" MetadataType="Wsdl" ID="60f0291e-0fa8-4d6c-ad67-7a4be5833f46" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ProjectGroupService.svc?wsdl=wsdl0" />
-    <MetadataFile FileName="ProjectGroupService211.wsdl" MetadataType="Wsdl" ID="b6fe2655-3500-425e-b02c-8741985de7a1" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ProjectGroupService.svc?wsdl" />
-    <MetadataFile FileName="ProjectGroupService316.xsd" MetadataType="Schema" ID="3f62cb52-a8c4-4a5b-81c9-9c57c8f0633f" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ProjectGroupService.svc?xsd=xsd1" />
-    <MetadataFile FileName="ProjectGroupService317.xsd" MetadataType="Schema" ID="b7e953c1-160b-4c96-8d6d-ea52c319ced4" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/ProjectGroupService.svc?xsd=xsd0" />
+    <MetadataFile FileName="ProjectGroupService6.wsdl" MetadataType="Wsdl" ID="036b44cd-4477-4e87-8000-ea1d33affdc1" SourceId="1" SourceUrl="http://system44.ggk.com/PracticeManagementService/ProjectGroupService.svc?wsdl" />
+    <MetadataFile FileName="ProjectGroupService9.xsd" MetadataType="Schema" ID="e09c0401-86cc-4cc1-aae1-fdfa083e1c4a" SourceId="1" SourceUrl="http://system44.ggk.com/PracticeManagementService/ProjectGroupService.svc?xsd=xsd0" />
+    <MetadataFile FileName="ProjectGroupService10.xsd" MetadataType="Schema" ID="ddd5651f-dbb2-4c2c-a5c6-0c2b51537c7b" SourceId="1" SourceUrl="http://system44.ggk.com/PracticeManagementService/ProjectGroupService.svc?xsd=xsd1" />
+    <MetadataFile FileName="ProjectGroupService11.xsd" MetadataType="Schema" ID="0e95d69b-9f43-461c-b43c-39a01a848e09" SourceId="1" SourceUrl="http://system44.ggk.com/PracticeManagementService/ProjectGroupService.svc?xsd=xsd2" />
+    <MetadataFile FileName="ProjectGroupService7.wsdl" MetadataType="Wsdl" ID="aa70bdc9-290d-46e2-82db-55aa68e17202" SourceId="1" SourceUrl="http://system44.ggk.com/PracticeManagementService/ProjectGroupService.svc?wsdl=wsdl0" />
+    <MetadataFile FileName="ProjectGroupService3.disco" MetadataType="Disco" ID="521fb46e-c527-4218-a494-18379c61fb73" SourceId="1" SourceUrl="http://system44.ggk.com/PracticeManagementService/ProjectGroupService.svc?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
