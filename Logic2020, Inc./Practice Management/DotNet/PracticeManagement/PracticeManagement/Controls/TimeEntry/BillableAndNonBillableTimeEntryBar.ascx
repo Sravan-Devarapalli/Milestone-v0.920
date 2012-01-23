@@ -2,7 +2,7 @@
     Inherits="PraticeManagement.Controls.TimeEntry.BillableAndNonBillableTimeEntryBar" %>
 <%@ Register TagPrefix="ext" Namespace="PraticeManagement.Controls.Generic.SelectCutOff"
     Assembly="PraticeManagement" %>
-<%@ Register TagPrefix="ext2" Namespace="PraticeManagement.Controls.Generic.TimeEntryHoursTextBoxEnableDisable"
+<%@ Register TagPrefix="ext2" Namespace="PraticeManagement.Controls.Generic.EnableDisableExtender"
     Assembly="PraticeManagement" %>
 <%@ Register Src="~/Controls/TimeEntry/BillableAndNonBillableSingleTimeEntry.ascx"
     TagName="BillableAndNonBillableSingleTimeEntry" TagPrefix="te" %>
@@ -28,7 +28,7 @@
         <td class="time-entry-total-hoursNew">
             <label id="lblTotalHours" runat="server" />
             <ext1:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lblTotalHours" />
-            <ext2:TimeEntryHoursTextBoxEnableDisable ID="extEnableDisable" runat="server" TargetControlID="ddlTimeTypes" />
+            <ext2:EnableDisableExtender ID="extEnableDisable" runat="server" TargetControlID="ddlTimeTypes" />
         </td>
         <td style="width: 3%; text-align: center;">
             <asp:ImageButton ID="imgDropTes" runat="server" OnClientClick='return confirm ("This will delete the time and notes entered for the entire row!  Are you sure?")'
