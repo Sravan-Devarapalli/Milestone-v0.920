@@ -50,10 +50,7 @@ namespace PraticeManagement.Controls.TimeEntry
         {
 
         }
-        protected void Page_PreRender(object sender, EventArgs e)
-        {
-            extEnableDisable.TotalExtenderClientId = extTotalHours.ClientID;
-        }
+
         protected string GetDayOffCssCalss(XElement calendarItem)
         {
             return calendarItem.Attribute(XName.Get("CssClass")).Value;
@@ -75,6 +72,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 var nonbillableTbId = ste.Controls[1].ClientID;
                 extTotalHours.ControlsToCheck += nonbillableTbId + ";";
+                extEnableDisable.ControlsToCheck += nonbillableTbId + ";" ;
 
                 NonBillableTbAcutualHoursClientIds = NonBillableTbAcutualHoursClientIds ?? new Dictionary<int, string>();
                 NonBillableTbAcutualHoursClientIds.Add(e.Item.ItemIndex, nonbillableTbId);
