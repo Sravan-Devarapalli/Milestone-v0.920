@@ -942,7 +942,7 @@ namespace PraticeManagement
                 DateTime[] dates = SelectedDates;
                 int timeEntrySectionId = (int)TimeEntrySectionType.Project;
                 int projectGroupId = project.Group.Id.Value;
-                ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntrySelection(personId, accountId, projectGroupId, projectId, timeEntrySectionId, false, dates[0], dates[dates.Length - 1]));
+                ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntrySelection(personId, accountId, projectGroupId, projectId, timeEntrySectionId, false, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
 
             }
 
@@ -1633,7 +1633,7 @@ namespace PraticeManagement
                 DatabindRepeater(repInternalSections, xlist);
             }
 
-            ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntrySelection(personId, accountId, businessUnitId, projectId, timeEntrySectionId, true, dates[0], dates[dates.Length - 1]));
+            ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntrySelection(personId, accountId, businessUnitId, projectId, timeEntrySectionId, true, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
 
         }
        
