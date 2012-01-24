@@ -1159,10 +1159,10 @@ namespace DataAccess
 
         #region TimeTrack Methods
 
-        public static void DeleteTimeTrack(int clientId, int projectId, int personId, int timetypeId, DateTime startDate, DateTime endDate)
+        public static void DeleteTimeEntry(int clientId, int projectId, int personId, int timetypeId, DateTime startDate, DateTime endDate, string userName)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.DeleteTimeTrackProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.DeleteTimeEntryProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.ClientId, clientId);
@@ -1171,6 +1171,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeId, timetypeId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userName);
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -1213,7 +1214,7 @@ namespace DataAccess
 
         }
 
-        public static void SetPersonTimeEntrySelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isDelete, DateTime startDate, DateTime endDate)
+        public static void SetPersonTimeEntrySelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isDelete, DateTime startDate, DateTime endDate, string userName)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.SetPersonTimeEntrySelectionProcedure, connection))
@@ -1227,6 +1228,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsDeleteParam, isDelete);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userName);
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -1470,7 +1472,7 @@ namespace DataAccess
                 var forecastedHrsIndex = reader.GetOrdinal(Constants.ParameterNames.ForecastedHours);
                 var isChargeableIndex = reader.GetOrdinal(Constants.ParameterNames.IsChargeable);
                 var isCorrectIndex = reader.GetOrdinal(Constants.ParameterNames.IsCorrect);
-                var isReviewedIndex = reader.GetOrdinal(Constants.ParameterNames.IsReviewed);
+                var revieweStatusIdIndex = reader.GetOrdinal(Constants.ParameterNames.ReviewStatusId);
                 var IsChargeCodeOffIndex = reader.GetOrdinal(Constants.ColumnNames.IsChargeCodeOffColumn);
 
                 while (reader.Read())
@@ -1492,18 +1494,16 @@ namespace DataAccess
                         ModifiedDate = reader.GetDateTime(modifiedDateIndex),
                         IsChargeable = reader.GetBoolean(isChargeableIndex),
                         IsCorrect = reader.GetBoolean(isCorrectIndex),
-                        IsReviewed = reader.IsDBNull(isReviewedIndex)
-                                         ? ReviewStatus.Pending
-                                         : Utils.Bool2ReviewStatus(reader.GetBoolean(isReviewedIndex)),
+                        IsReviewed = (ReviewStatus)Enum.Parse(typeof(ReviewStatus), reader.GetInt32(revieweStatusIdIndex).ToString()),
                         IsChargeCodeOff = reader.GetBoolean(IsChargeCodeOffIndex)
-                      
+
                     };
 
                     timeEntries.Add(timeEntry);
                 }
             }
         }
-       
+
         public static double? GetPersonTimeEnteredHoursByDay(int personId, DateTime date, bool includePTOAndHoliday)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
