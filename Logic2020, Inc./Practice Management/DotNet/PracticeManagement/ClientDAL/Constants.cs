@@ -74,6 +74,7 @@
             public const string IsDefaultManager = "IsDefaultManager";
             public const string IsHourlyAmount = "IsHourlyAmount";
             public const string IsReviewed = "IsReviewed";
+            public const string ReviewStatusId = "ReviewStatusId";
             public const string LastName = "LastName";
             public const string ObjectId = "ObjectId";
             public const string ObjectName = "ObjectName";
@@ -362,6 +363,7 @@
             public const string IsProjectChargeable = ColumnNames.IsProjectChargeable;
             public const string IsDefault = ColumnNames.IsDefault;
             public const string IsReviewed = ColumnNames.IsReviewed;
+            public const string ReviewStatusId = ColumnNames.ReviewStatusId;
             public const string ManagerAlias = ColumnNames.ManagerAlias;
             public const string ManagerFirstName = ColumnNames.ManagerFirstName;
             public const string ManagerId = ColumnNames.ManagerId;
@@ -633,7 +635,7 @@
                 public const string ToggleIsChargeable = "dbo.TimeEntryToggleIsChargeable";
 
                 //New sproc timetrack
-                public const string DeleteTimeTrackProcedure = "dbo.DeleteTimeTrack";
+                public const string DeleteTimeEntryProcedure = "dbo.DeleteTimeEntry";
                 public const string SaveTimeTrackProcedure = "dbo.SaveTimeTrack";
                 public const string SetPersonTimeEntryRecursiveSelectionProcedure = "dbo.SetPersonTimeEntryRecursiveSelection";
                 public const string SetPersonTimeEntrySelectionProcedure = "dbo.SetPersonTimeEntrySelection";
