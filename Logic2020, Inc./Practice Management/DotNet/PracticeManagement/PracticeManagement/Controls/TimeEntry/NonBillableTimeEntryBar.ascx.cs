@@ -72,7 +72,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 var nonbillableTbId = ste.Controls[1].ClientID;
                 extTotalHours.ControlsToCheck += nonbillableTbId + ";";
-                extEnableDisable.ControlsToCheck += nonbillableTbId + ";" ;
+                extEnableDisable.ControlsToCheck += nonbillableTbId + ";";
 
                 NonBillableTbAcutualHoursClientIds = NonBillableTbAcutualHoursClientIds ?? new Dictionary<int, string>();
                 NonBillableTbAcutualHoursClientIds.Add(e.Item.ItemIndex, nonbillableTbId);
@@ -109,7 +109,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
         protected void imgDropTes_Click(object sender, ImageClickEventArgs e)
         {
-            
+
             var imgDropTes = ((ImageButton)(sender));
 
             var repItem = imgDropTes.NamingContainer.NamingContainer as RepeaterItem;
@@ -133,7 +133,7 @@ namespace PraticeManagement.Controls.TimeEntry
             if (workTypeOldID > 0)
             {
                 //old one
-                ServiceCallers.Custom.TimeEntry(te => te.DeleteTimeTrack(accountId, projectId, personId, workTypeOldID, dates[0], dates[dates.Length - 1]));
+                ServiceCallers.Custom.TimeEntry(te => te.DeleteTimeEntry(accountId, projectId, personId, workTypeOldID, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
             }
 
         }
