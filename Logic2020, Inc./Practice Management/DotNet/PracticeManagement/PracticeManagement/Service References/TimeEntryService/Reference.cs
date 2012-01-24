@@ -233,8 +233,8 @@ namespace PraticeManagement.TimeEntryService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/TimeEntriesByPersonGetExcelSet", ReplyAction="http://tempuri.org/ITimeEntryService/TimeEntriesByPersonGetExcelSetResponse")]
         System.Data.DataSet TimeEntriesByPersonGetExcelSet(DataTransferObjects.ContextObjects.TimeEntryPersonReportContext reportContext);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/DeleteTimeTrack", ReplyAction="http://tempuri.org/ITimeEntryService/DeleteTimeTrackResponse")]
-        void DeleteTimeTrack(int clientId, int projectId, int personId, int timetypeId, System.DateTime startDate, System.DateTime endDate);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/DeleteTimeEntry", ReplyAction="http://tempuri.org/ITimeEntryService/DeleteTimeEntryResponse")]
+        void DeleteTimeEntry(int clientId, int projectId, int personId, int timetypeId, System.DateTime startDate, System.DateTime endDate, string userName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/SaveTimeTrack", ReplyAction="http://tempuri.org/ITimeEntryService/SaveTimeTrackResponse")]
         void SaveTimeTrack(string timeEntriesXml, int personId, System.DateTime startDate, System.DateTime endDate, string userLogin);
@@ -244,7 +244,7 @@ namespace PraticeManagement.TimeEntryService {
         void SetPersonTimeEntryRecursiveSelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isRecursive, System.DateTime startDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/SetPersonTimeEntrySelection", ReplyAction="http://tempuri.org/ITimeEntryService/SetPersonTimeEntrySelectionResponse")]
-        void SetPersonTimeEntrySelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isDelete, System.DateTime startDate, System.DateTime endDate);
+        void SetPersonTimeEntrySelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isDelete, System.DateTime startDate, System.DateTime endDate, string userName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/ToggleIsCorrect", ReplyAction="http://tempuri.org/ITimeEntryService/ToggleIsCorrectResponse")]
         void ToggleIsCorrect(DataTransferObjects.TimeEntry.TimeEntryRecord timeEntry);
@@ -269,7 +269,7 @@ namespace PraticeManagement.TimeEntryService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class TimeEntryServiceClient : System.ServiceModel.ClientBase<PraticeManagement.TimeEntryService.ITimeEntryService>, PraticeManagement.TimeEntryService.ITimeEntryService {
-       
+      
         public TimeEntryServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -394,8 +394,8 @@ namespace PraticeManagement.TimeEntryService {
             return base.Channel.TimeEntriesByPersonGetExcelSet(reportContext);
         }
         
-        public void DeleteTimeTrack(int clientId, int projectId, int personId, int timetypeId, System.DateTime startDate, System.DateTime endDate) {
-            base.Channel.DeleteTimeTrack(clientId, projectId, personId, timetypeId, startDate, endDate);
+        public void DeleteTimeEntry(int clientId, int projectId, int personId, int timetypeId, System.DateTime startDate, System.DateTime endDate, string userName) {
+            base.Channel.DeleteTimeEntry(clientId, projectId, personId, timetypeId, startDate, endDate, userName);
         }
         
         public void SaveTimeTrack(string timeEntriesXml, int personId, System.DateTime startDate, System.DateTime endDate, string userLogin) {
@@ -406,8 +406,8 @@ namespace PraticeManagement.TimeEntryService {
             base.Channel.SetPersonTimeEntryRecursiveSelection(personId, clientId, projectGroupId, projectId, timeEntrySectionId, isRecursive, startDate);
         }
         
-        public void SetPersonTimeEntrySelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isDelete, System.DateTime startDate, System.DateTime endDate) {
-            base.Channel.SetPersonTimeEntrySelection(personId, clientId, projectGroupId, projectId, timeEntrySectionId, isDelete, startDate, endDate);
+        public void SetPersonTimeEntrySelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isDelete, System.DateTime startDate, System.DateTime endDate, string userName) {
+            base.Channel.SetPersonTimeEntrySelection(personId, clientId, projectGroupId, projectId, timeEntrySectionId, isDelete, startDate, endDate, userName);
         }
         
         public void ToggleIsCorrect(DataTransferObjects.TimeEntry.TimeEntryRecord timeEntry) {
