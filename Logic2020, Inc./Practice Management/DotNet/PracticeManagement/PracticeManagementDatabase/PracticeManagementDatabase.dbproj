@@ -3897,9 +3897,6 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetPTOTimeTypeId.function.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\DeleteTimeTrack.proc.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\SetProjectTimeTypes.proc.sql">
       <SubType>Code</SubType>
     </Build>
@@ -3940,6 +3937,15 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_TimeEntryHours_TimeEntryId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\DeleteTimeEntry.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Triggers\tr_TEH_LogUpdate.trigger.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Triggers\tr_TE_LogUpdate.trigger.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>
@@ -4006,3 +4012,4 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
+
