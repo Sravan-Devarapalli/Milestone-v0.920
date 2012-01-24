@@ -66,7 +66,7 @@ namespace PraticeManagement.Controls.TimeEntry
         {
 
         }
-     
+
         protected bool steItem_OnReadyToUpdateTE(object sender, ReadyToUpdateTeArguments args)
         {
             return false;
@@ -100,7 +100,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 var tbNotes = billableAndNonBillableSte.FindControl("tbNotes") as TextBox;
 
                 extTotalHours.ControlsToCheck += billableTbId + ";" + nonBillableTbId + ";";
-                extEnableDisable.ControlsToCheck += billableTbId + ";" + nonBillableTbId + ";" ;
+                extEnableDisable.ControlsToCheck += billableTbId + ";" + nonBillableTbId + ";";
 
                 billableAndNonBillableSte.HorizontalTotalCalculatorExtenderId = extTotalHours.ClientID;
 
@@ -167,7 +167,7 @@ namespace PraticeManagement.Controls.TimeEntry
             if (workTypeOldID > 0)
             {
                 //old one
-                ServiceCallers.Custom.TimeEntry(te => te.DeleteTimeTrack(accountId, projectId, personId, workTypeOldID, dates[0], dates[dates.Length - 1]));
+                ServiceCallers.Custom.TimeEntry(te => te.DeleteTimeEntry(accountId, projectId, personId, workTypeOldID, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
             }
         }
 
@@ -318,7 +318,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 if (!isThereAtleastOneTimeEntryrecord)
                 {
-                  isThereAtleastOneTimeEntryrecord = billableAndNonbillableSte.IsThereAtleastOneTimeEntryrecord;
+                    isThereAtleastOneTimeEntryrecord = billableAndNonbillableSte.IsThereAtleastOneTimeEntryrecord;
                 }
 
                 billableAndNonbillableSte.ValidateNoteAndHours();
