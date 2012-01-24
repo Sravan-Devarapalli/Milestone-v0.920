@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[SetPersonTimeEntrySelection]
+﻿CREATE PROCEDURE 
+(
 	@PersonId			INT,
 	@ClientId			INT,
 	@ProjectGroupId		INT,
@@ -6,9 +7,18 @@
 	@TimeEntrySectionId	INT,
 	@IsDelete        BIT ,
 	@StartDate			DATETIME,
-	@EndDate			DATETIME
+	@EndDate			DATETIME,
+	@UserLogin  NVARCHAR(255)
+)
 AS
+
 BEGIN
+
+
+ BEGIN TRAN PersonTimeEntrySelection
+ 
+	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
+
 /*
 if @IsDelete = 0 
 --insert section
@@ -193,15 +203,31 @@ insert (startdate,enddate)
 		END
 
 		--Delete all time entries for that section
-		DELETE TT 
-		FROM dbo.TimeTrack TT INNER JOIN dbo.ChargeCode cc
-			ON TT.ChargeCodeId = cc.Id 
-				AND cc.ClientId = @ClientId 
-				AND cc.ProjectGroupId = @ProjectGroupId 
-				AND cc.ProjectId = @ProjectId 
-				AND	cc.TimeEntrySectionId = @TimeEntrySectionId
-		WHERE TT.ChargeCodeDate BETWEEN @StartDate AND @EndDate 
-				AND TT.PersonId = @personId 
+		DELETE TEH 
+		FROM dbo.TimeEntry TE 
+	    INNER JOIN dbo.TimeEntryHours AS TEH  ON TE.TimeEntryId = TEH.TimeEntryId
+		INNER JOIN dbo.ChargeCode cc ON TE.ChargeCodeId = cc.Id 
+										AND cc.ClientId = @ClientId 
+										AND cc.ProjectGroupId = @ProjectGroupId 
+										AND cc.ProjectId = @ProjectId 
+										AND	cc.TimeEntrySectionId = @TimeEntrySectionId
+		WHERE TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate 
+				AND TE.PersonId = @personId 
+
+		DELETE TE 
+		FROM dbo.TimeEntry TE 
+		INNER JOIN dbo.ChargeCode cc ON TE.ChargeCodeId = cc.Id 
+										AND cc.ClientId = @ClientId 
+										AND cc.ProjectGroupId = @ProjectGroupId 
+										AND cc.ProjectId = @ProjectId 
+										AND	cc.TimeEntrySectionId = @TimeEntrySectionId
+		WHERE TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate 
+				AND TE.PersonId = @personId 
 
 	END
+
+	EXEC dbo.SessionLogUnprepare
+
+ COMMIT TRAN PersonTimeEntrySelection
+
 END
