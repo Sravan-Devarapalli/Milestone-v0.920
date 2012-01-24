@@ -404,7 +404,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DeleteTimeTrack">
+  <xs:element name="DeleteTimeEntry">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="clientId" type="xs:int" />
@@ -413,10 +413,11 @@
         <xs:element minOccurs="0" name="timetypeId" type="xs:int" />
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DeleteTimeTrackResponse">
+  <xs:element name="DeleteTimeEntryResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
@@ -466,6 +467,7 @@
         <xs:element minOccurs="0" name="isDelete" type="xs:boolean" />
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
