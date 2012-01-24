@@ -41,12 +41,12 @@ BEGIN
 	WHERE P.Alias = @UserLogin
 
 	BEGIN TRY
-		BEGIN TRAN TimeTrack
+		BEGIN TRAN TimeEntry
 
 		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
 		--Insert ChargeCode if not exists in ChargeCode Table.
-		INSERT INTO ChargeCode(ClientId, ProjectGroupId, ProjectId, PhaseId, TimeTypeId, TimeEntrySectionId)
+		INSERT INTO dbo.ChargeCode(ClientId, ProjectGroupId, ProjectId, PhaseId, TimeTypeId, TimeEntrySectionId)
 		SELECT t.c.value('..[1]/@AccountId', 'INT') ClientId,
 				t.c.value('..[1]/@BusinessUnitId', 'INT') ProjectGroupId,
 				t.c.value('..[1]/@ProjectId', 'INT') ProjectId,
@@ -54,99 +54,147 @@ BEGIN
 				t.c.value('@Id', 'INT') TimeTypeId,
 				t.c.value('..[1]/..[1]/@Id', 'INT') TimeEntrySectionId
 		FROM @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType') t(c)
-		LEFT JOIN ChargeCode CC ON CC.ClientId = t.c.value('..[1]/@AccountId', 'INT')
+		LEFT JOIN dbo.ChargeCode CC ON CC.ClientId = t.c.value('..[1]/@AccountId', 'INT')
 							AND CC.ProjectGroupId = t.c.value('..[1]/@BusinessUnitId', 'INT')
 							AND CC.ProjectId = t.c.value('..[1]/@ProjectId', 'INT')
 							AND CC.TimeTypeId = t.c.value('@Id', 'INT')
 		WHERE CC.Id IS NULL AND t.c.value('@Id', 'INT') > 0
 
 		--Delete timeEntries which are not exists in the xml and timeEntries having ActualHours=0 in xml.
-		DELETE TT
-		FROM TimeTrack TT
-		JOIN ChargeCode CC ON CC.Id = TT.ChargeCodeId AND TT.PersonId = @PersonId AND TT.ChargeCodeDate BETWEEN @StartDate AND @EndDate
+		DELETE TEH
+		FROM dbo.TimeEntry TE
+		INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId  
+		JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate
 		LEFT JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
-			ON TT.ChargeCodeDate = NEW.c.value('..[1]/@Date', 'DATETIME')
+			ON TE.ChargeCodeDate = NEW.c.value('..[1]/@Date', 'DATETIME')
 				AND CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
 				AND CC.ProjectGroupId = NEW.c.value('..[1]/..[1]/..[1]/@BusinessUnitId', 'INT')
 				AND CC.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT')
 				AND CC.TimeTypeId = NEW.c.value('..[1]/..[1]/@Id', 'INT')
 				AND NEW.c.value('@ActualHours', 'REAL') > 0
-				AND NEW.c.value('@IsChargeable', 'BIT') = TT.IsChargeable
+				AND NEW.c.value('@IsChargeable', 'BIT') = TEH.IsChargeable
 		WHERE NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT') IS NULL
 
+
+		DELETE TE
+		FROM dbo.TimeEntry TE
+		JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate
+		LEFT JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem') NEW(c)
+			ON TE.ChargeCodeDate = NEW.c.value('@Date', 'DATETIME')
+				AND CC.ClientId = NEW.c.value('..[1]/..[1]/@AccountId', 'INT')
+				AND CC.ProjectGroupId = NEW.c.value('..[1]/..[1]/@BusinessUnitId', 'INT')
+				AND CC.ProjectId = NEW.c.value('..[1]/..[1]/@ProjectId', 'INT')
+				AND CC.TimeTypeId = NEW.c.value('..[1]/@Id', 'INT')
+				AND New.c.exist('/TimeEntryRecord') != 1
+		WHERE NEW.c.value('..[1]/..[1]/@AccountId', 'INT') IS NULL
+
 		--Update TimeEntries which are modified.
-		UPDATE TT
-		SET	TT.ActualHours = NEW.c.value('@ActualHours', 'REAL'),
-			TT.Note = NEW.c.value('@Note', 'NVARCHAR(1000)'),
-			TT.IsCorrect = NEW.c.value('@IsCorrect', 'BIT'),
-			TT.IsChargeable = NEW.c.value('@IsChargeable', 'BIT'),
-			TT.ModifiedDate = @CurrentPMTime,
-			TT.ModifiedBy = @ModifiedBy
-		FROM TimeTrack TT
-		JOIN ChargeCode CC ON CC.Id = TT.ChargeCodeId AND TT.PersonId = @PersonId
+		UPDATE TEH
+		SET	TEH.ActualHours = NEW.c.value('@ActualHours', 'REAL'),
+			TEH.IsChargeable = NEW.c.value('@IsChargeable', 'BIT'),
+			TEH.ModifiedDate = @CurrentPMTime,
+			TEH.ModifiedBy = @ModifiedBy
+		FROM dbo.TimeEntry TE
+		INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId   
+		JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId
 		JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
-			ON NEW.c.value('..[1]/@Date', 'DATETIME') = TT.ChargeCodeDate
+			ON NEW.c.value('..[1]/@Date', 'DATETIME') = TE.ChargeCodeDate
 				AND CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
 				AND CC.ProjectGroupId = NEW.c.value('..[1]/..[1]/..[1]/@BusinessUnitId', 'INT')
 				AND CC.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT')
 				AND CC.TimeTypeId = NEW.c.value('..[1]/..[1]/@Id', 'INT')	
-				AND TT.IsChargeable = NEW.c.value('@IsChargeable', 'BIT')
-				AND (TT.ActualHours <> NEW.c.value('@ActualHours', 'REAL') 
-						OR TT.Note <> NEW.c.value('@Note', 'NVARCHAR(1000)')
-						OR TT.IsCorrect <> NEW.c.value('@IsCorrect', 'BIT')
+				AND TEH.IsChargeable = NEW.c.value('@IsChargeable', 'BIT')
+				AND (
+						TEH.ActualHours <> NEW.c.value('@ActualHours', 'REAL')  
+						OR TE.Note <> NEW.c.value('@Note', 'NVARCHAR(1000)')
+						OR TE.IsCorrect <> NEW.c.value('@IsCorrect', 'BIT')
+				     )
+
+		UPDATE TE
+		SET	TE.Note = NEW.c.value('@Note', 'NVARCHAR(1000)'),
+			TE.IsCorrect = NEW.c.value('@IsCorrect', 'BIT')
+		FROM dbo.TimeEntry TE
+		INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId   
+		INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId
+		INNER JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
+			ON NEW.c.value('..[1]/@Date', 'DATETIME') = TE.ChargeCodeDate
+				AND CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
+				AND CC.ProjectGroupId = NEW.c.value('..[1]/..[1]/..[1]/@BusinessUnitId', 'INT')
+				AND CC.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT')
+				AND CC.TimeTypeId = NEW.c.value('..[1]/..[1]/@Id', 'INT')	
+				AND TEH.IsChargeable = NEW.c.value('@IsChargeable', 'BIT')
+				AND ( TE.Note <> NEW.c.value('@Note', 'NVARCHAR(1000)')
+						OR TE.IsCorrect <> NEW.c.value('@IsCorrect', 'BIT')
 						)
 
 		;WITH ForecastedHours AS 
 		(
 			SELECT MP.PersonId, M.ProjectId, C.Date, SUM(MPE.HoursPerDay) AS 'ForcastedHours'
 			FROM @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
-			JOIN Milestone M ON M.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT')
-			JOIN MilestonePerson MP ON MP.PersonId = @PersonId AND M.MilestoneId = MP.MilestoneId
-			JOIN MilestonePersonEntry MPE ON MPE.MilestonePersonId = MP.MilestonePersonId AND NEW.c.value('..[1]/@Date', 'DATETIME') BETWEEN MPE.StartDate AND MPE.EndDate
-			JOIN Calendar C ON C.Date = NEW.c.value('..[1]/@Date', 'DATETIME')
+			JOIN dbo.Milestone M ON M.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT')
+			JOIN dbo.MilestonePerson MP ON MP.PersonId = @PersonId AND M.MilestoneId = MP.MilestoneId
+			JOIN dbo.MilestonePersonEntry MPE ON MPE.MilestonePersonId = MP.MilestonePersonId AND NEW.c.value('..[1]/@Date', 'DATETIME') BETWEEN MPE.StartDate AND MPE.EndDate
+			JOIN dbo.Calendar C ON C.Date = NEW.c.value('..[1]/@Date', 'DATETIME')
 			GROUP BY MP.PersonId, M.ProjectId, MP.PersonId, C.Date
 		)
 
 		--Insert any new entries exists.
-		INSERT INTO TimeTrack(PersonId, 
+		INSERT INTO dbo.TimeEntry(PersonId, 
 								ChargeCodeId, 
 								ChargeCodeDate,
-								ActualHours,
 								ForecastedHours,
 								Note,
-								IsChargeable,
 								IsCorrect,
-								CreateDate,
-								ModifiedDate,
-								ModifiedBy,
 								IsAutoGenerated)
 		SELECT @PersonId,
 				CC.Id,
 				NEW.c.value('..[1]/@Date', 'DATETIME'),
-				NEW.c.value('@ActualHours', 'REAL'),
 				ISNULL(FH.ForcastedHours, 0),
 				CASE WHEN CC.TimeTypeId = @PTOTimeTypeId THEN 'PTO' ELSE NEW.c.value('@Note', 'NVARCHAR(1000)') END,
-				NEW.c.value('@IsChargeable', 'BIT'),
 				NEW.c.value('@IsCorrect', 'BIT'),
-				@CurrentPMTime,
-				@CurrentPMTime,
-				@ModifiedBy,
 				0
 		FROM @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
-		JOIN ChargeCode CC ON CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
+		JOIN dbo.ChargeCode CC ON CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
 								AND CC.ProjectGroupId = NEW.c.value('..[1]/..[1]/..[1]/@BusinessUnitId', 'INT')
 								AND CC.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT')
 								AND CC.TimeTypeId = NEW.c.value('..[1]/..[1]/@Id', 'INT')	
-		LEFT JOIN TimeTrack TT ON TT.ChargeCodeId = CC.Id AND TT.PersonId = @PersonId
-				AND TT.ChargeCodeDate = NEW.c.value('..[1]/@Date', 'DATETIME')
-				AND TT.IsChargeable = NEW.c.value('@IsChargeable', 'BIT')
-				AND (TT.ActualHours = NEW.c.value('@ActualHours', 'REAL')
-						OR TT.Note = NEW.c.value('@Note', 'NVARCHAR(1000)')
-						OR TT.IsCorrect = NEW.c.value('@IsCorrect', 'BIT')
-						)
+		LEFT JOIN dbo.TimeEntry TE ON TE.ChargeCodeId = CC.Id AND TE.PersonId = @PersonId
+										AND TE.ChargeCodeDate = NEW.c.value('..[1]/@Date', 'DATETIME')
+										AND (TE.Note = NEW.c.value('@Note', 'NVARCHAR(1000)')
+												OR TE.IsCorrect = NEW.c.value('@IsCorrect', 'BIT')
+												)
 		LEFT JOIN ForecastedHours FH ON FH.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT') 
 										AND FH.Date = NEW.c.value('..[1]/@Date', 'DATETIME')
-		WHERE TT.TimeEntryId IS NULL
+		WHERE TE.TimeEntryId IS NULL
+			AND NEW.c.value('@ActualHours', 'REAL') > 0
+
+
+		INSERT INTO dbo.TimeEntryHours(TimeEntryId,
+									   ActualHours,
+									   IsChargeable,
+										CreateDate,
+										ModifiedDate,
+										ModifiedBy,
+										ReviewStatusId)
+		SELECT  TE.TimeEntryId,
+				NEW.c.value('@ActualHours', 'REAL'),
+				NEW.c.value('@IsChargeable', 'BIT'),
+				@CurrentPMTime,
+				@CurrentPMTime,
+				@ModifiedBy,
+				1 -- pending status
+		FROM @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
+		JOIN dbo.ChargeCode CC ON CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
+								AND CC.ProjectGroupId = NEW.c.value('..[1]/..[1]/..[1]/@BusinessUnitId', 'INT')
+								AND CC.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT')
+								AND CC.TimeTypeId = NEW.c.value('..[1]/..[1]/@Id', 'INT')	
+		INNER JOIN dbo.TimeEntry TE ON TE.ChargeCodeId = CC.Id AND TE.PersonId = @PersonId
+										AND TE.ChargeCodeDate = NEW.c.value('..[1]/@Date', 'DATETIME')
+		LEFT JOIN dbo.TimeEntryHours TEH ON (  TEH.TimeEntryId = TE.TimeEntryId
+											   AND TEH.IsChargeable = NEW.c.value('@IsChargeable', 'BIT')
+											)
+
+		WHERE TEH.TimeEntryId IS NULL
 			AND NEW.c.value('@ActualHours', 'REAL') > 0
 			
 		
@@ -192,7 +240,7 @@ BEGIN
 
 		--Delete PTO entry from PersonCalendar.
 		DELETE PC
-		FROM PersonCalendar PC
+		FROM dbo.PersonCalendar PC
 		LEFT JOIN @DailyTotalHoursWithOutPTOHoliday DTH ON DTH.Date = PC.Date 
 		LEFT JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') Dates(c)
 				ON Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4 
@@ -204,7 +252,7 @@ BEGIN
 		--Update PTO.
 		UPDATE PC
 		SET	ActualHours = ISNULL(Dates.c.value('@ActualHours', 'REAL'), 8 - DTH.TotalHours)
-		FROM PersonCalendar PC
+		FROM dbo.PersonCalendar PC
 		LEFT JOIN @DailyTotalHoursWithOutPTOHoliday DTH ON DTH.Date = PC.Date  AND DTH.TotalHours < 8
 		LEFT JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') Dates(c)
 			ON Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4
@@ -224,10 +272,10 @@ BEGIN
 
 		 EXEC dbo.SessionLogUnprepare
 
-		 COMMIT TRAN TimeTrack
+		 COMMIT TRAN TimeEntry
 	END TRY
 	BEGIN CATCH
-		ROLLBACK TRAN TimeTrack
+		ROLLBACK TRAN TimeEntry
 
 		DECLARE @ErrorMessage NVARCHAR(2000)
 		SET @ErrorMessage = ERROR_MESSAGE()
