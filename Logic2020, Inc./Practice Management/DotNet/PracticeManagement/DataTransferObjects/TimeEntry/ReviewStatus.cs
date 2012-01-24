@@ -9,12 +9,12 @@ namespace DataTransferObjects.TimeEntry
     public enum ReviewStatus
     {
         [EnumMember]
-        Pending,
+        Pending = 1,
 
         [EnumMember]
-        Approved,
+        Approved = 2,
 
         [EnumMember]
-        Declined
+        Declined = 3
     }
 }
