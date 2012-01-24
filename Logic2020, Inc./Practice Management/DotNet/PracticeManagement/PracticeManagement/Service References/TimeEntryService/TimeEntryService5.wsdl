@@ -176,11 +176,11 @@
   <wsdl:message name="ITimeEntryService_TimeEntriesByPersonGetExcelSet_OutputMessage">
     <wsdl:part name="parameters" element="tns:TimeEntriesByPersonGetExcelSetResponse" />
   </wsdl:message>
-  <wsdl:message name="ITimeEntryService_DeleteTimeTrack_InputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteTimeTrack" />
+  <wsdl:message name="ITimeEntryService_DeleteTimeEntry_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteTimeEntry" />
   </wsdl:message>
-  <wsdl:message name="ITimeEntryService_DeleteTimeTrack_OutputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteTimeTrackResponse" />
+  <wsdl:message name="ITimeEntryService_DeleteTimeEntry_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteTimeEntryResponse" />
   </wsdl:message>
   <wsdl:message name="ITimeEntryService_SaveTimeTrack_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveTimeTrack" />
@@ -339,9 +339,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/TimeEntriesByPersonGetExcelSet" message="tns:ITimeEntryService_TimeEntriesByPersonGetExcelSet_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/TimeEntriesByPersonGetExcelSetResponse" message="tns:ITimeEntryService_TimeEntriesByPersonGetExcelSet_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="DeleteTimeTrack">
-      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/DeleteTimeTrack" message="tns:ITimeEntryService_DeleteTimeTrack_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/DeleteTimeTrackResponse" message="tns:ITimeEntryService_DeleteTimeTrack_OutputMessage" />
+    <wsdl:operation name="DeleteTimeEntry">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/DeleteTimeEntry" message="tns:ITimeEntryService_DeleteTimeEntry_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/DeleteTimeEntryResponse" message="tns:ITimeEntryService_DeleteTimeEntry_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SaveTimeTrack">
       <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/SaveTimeTrack" message="tns:ITimeEntryService_SaveTimeTrack_InputMessage" />
@@ -621,8 +621,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="DeleteTimeTrack">
-      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/DeleteTimeTrack" style="document" />
+    <wsdl:operation name="DeleteTimeEntry">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/DeleteTimeEntry" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
