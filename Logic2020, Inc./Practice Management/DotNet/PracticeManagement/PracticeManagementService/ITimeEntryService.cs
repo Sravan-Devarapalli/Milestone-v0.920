@@ -186,7 +186,7 @@ namespace PracticeManagementService
 
         //new timetrack methods
         [OperationContract]
-        void DeleteTimeTrack(int clientId, int projectId, int personId, int timetypeId, DateTime startDate, DateTime endDate);
+        void DeleteTimeEntry(int clientId, int projectId, int personId, int timetypeId, DateTime startDate, DateTime endDate, string userName);
 
         [OperationContract]
         void SaveTimeTrack(string timeEntriesXml, int personId, DateTime startDate, DateTime endDate, string userLogin);
@@ -195,7 +195,7 @@ namespace PracticeManagementService
         void SetPersonTimeEntryRecursiveSelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isRecursive, DateTime startDate);
 
         [OperationContract]
-        void SetPersonTimeEntrySelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isDelete, DateTime startDate, DateTime endDate);
+        void SetPersonTimeEntrySelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isDelete, DateTime startDate, DateTime endDate, string userName);
 
         #endregion
 
