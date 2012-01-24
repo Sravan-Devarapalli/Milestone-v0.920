@@ -333,7 +333,7 @@
       <xs:element minOccurs="0" name="ProjectManagers" nillable="true" type="tns:ArrayOfPerson" />
       <xs:element minOccurs="0" name="ProjectNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProjectPersons" nillable="true" type="tns:ArrayOfMilestonePerson" />
-      <xs:element minOccurs="0" name="ProjectTimeTypesList" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProjectWorkTypesList" nillable="true" type="xs:string" />
       <xs:element xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q10:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
       <xs:element minOccurs="0" name="SalesCommission" nillable="true" type="tns:ArrayOfCommission" />
       <xs:element minOccurs="0" name="SalesPersonName" nillable="true" type="xs:string" />
@@ -431,6 +431,7 @@
   <xs:element name="ArrayOfProjectGroup" nillable="true" type="tns:ArrayOfProjectGroup" />
   <xs:complexType name="ProjectGroup">
     <xs:sequence>
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
