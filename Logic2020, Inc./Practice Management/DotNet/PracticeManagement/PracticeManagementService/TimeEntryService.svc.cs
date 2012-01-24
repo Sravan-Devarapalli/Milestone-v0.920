@@ -622,11 +622,12 @@ namespace PracticeManagementService
         }
 
         #region TimeTrack Methods
-        public void DeleteTimeTrack(int clientId, int projectId, int personId, int timetypeId, DateTime startDate, DateTime endDate)
+
+        public void DeleteTimeEntry(int clientId, int projectId, int personId, int timetypeId, DateTime startDate, DateTime endDate, string userName)
         {
             try
             {
-                TimeEntryDAL.DeleteTimeTrack(clientId, projectId, personId, timetypeId, startDate, endDate);
+                TimeEntryDAL.DeleteTimeEntry(clientId, projectId, personId, timetypeId, startDate, endDate, userName);
             }
             catch (Exception e)
             {
@@ -674,11 +675,11 @@ namespace PracticeManagementService
             }
         }
 
-        public void SetPersonTimeEntrySelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isDelete, DateTime startDate, DateTime endDate)
+        public void SetPersonTimeEntrySelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isDelete, DateTime startDate, DateTime endDate, string userName)
         {
             try
             {
-                TimeEntryDAL.SetPersonTimeEntrySelection(personId, clientId, projectGroupId, projectId, timeEntrySectionId, isDelete, startDate, endDate);
+                TimeEntryDAL.SetPersonTimeEntrySelection(personId, clientId, projectGroupId, projectId, timeEntrySectionId, isDelete, startDate, endDate, userName);
             }
             catch (Exception e)
             {
