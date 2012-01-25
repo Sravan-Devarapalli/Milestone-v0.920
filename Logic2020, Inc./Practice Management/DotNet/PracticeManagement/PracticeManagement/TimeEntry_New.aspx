@@ -28,11 +28,11 @@
 </asp:Content>
 <asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript">
-    
+      
         function SetFocus(modalExId, tbNotesId, tbBillableHoursId, chbIsChargeableId, chbForDiffProjectId, btnSaveNotesId, tbNonBillableHoursId) {
-          
+
             var tbActualHours = $find(tbBillableHours);
-          
+
             var modalEx = $find(modalExId);
             modalEx.show();
             var tbNotes = $get(tbNotesId);
@@ -43,20 +43,20 @@
             var tbNonBillableHours = $get(tbNonBillableHoursId);
 
             if (tbBillableHours.disabled && tbNonBillableHours.disabled) {
-                tbNotes.disabled = 'disabled' ;
+                tbNotes.disabled = 'disabled';
                 chbIsChargeable.disabled = 'disabled';
                 chbForDiffProject.disabled = 'disabled';
                 btnSaveNotes.disabled = 'disabled';
             }
-            else{
+            else {
                 tbNotes.disabled = '';
                 chbIsChargeable.disabled = '';
                 chbForDiffProject.disabled = '';
                 btnSaveNotes.disabled = '';
-            
+
             }
-            
-            if ( tbNotes && !tbNotes.disabled) tbNotes.focus();
+
+            if (tbNotes && !tbNotes.disabled) tbNotes.focus();
         }
 
         function changeIcon(tbNotesId, imgNoteId) {
@@ -116,7 +116,8 @@
             imgNoteClientId.title = tbnote.value;
             changeIcon(tbnote.id, imgNoteClientId.id);
         }
-       
+
+        
     </script>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
@@ -151,6 +152,15 @@
     <div id="updateContainer" class="time-entry-grid">
         <asp:UpdatePanel ID="updTimeEntries" runat="server">
             <ContentTemplate>
+                <script type="text/javascript">
+                    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+
+                    function endRequestHandle(sender, args) {
+                        var cpeProjectSection = $find('cpeProjectSection');
+                        cpeProjectSection._collapsed = false;
+                        cpeProjectSection._autoExpand = true;
+                    }
+                </script>
                 <uc:MessageLabel ID="mlErrors" runat="server" ErrorColor="Red" InfoColor="DarkGreen"
                     WarningColor="Orange" EnableViewState="false" />
                 <asp:Panel ID="pnlShowTimeEntries" Visible="false" runat="server">
@@ -161,7 +171,7 @@
                                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeProjectSection" runat="Server"
                                         EnableViewState="false" TargetControlID="pnlProjectSection" ImageControlID="btnExpandCollapseFilter"
                                         CollapsedImage="Images/expand.jpg" ExpandedImage="Images/collapse.jpg" CollapseControlID="btnExpandCollapseFilter"
-                                        ExpandControlID="btnExpandCollapseFilter" TextLabelID="lblFilter" />
+                                        ExpandControlID="btnExpandCollapseFilter" TextLabelID="lblFilter" BehaviorID="cpeProjectSection" />
                                     <asp:Label ID="lblFilter" runat="server"></asp:Label>
                                     <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg"
                                         ToolTip="Expand Filters" />&nbsp;<b>Project</b>
@@ -186,7 +196,7 @@
                                         </td>
                                         <td style="text-align: right">
                                             <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecursiveProjectSection" runat="server"
-                                                TargetControlID="imgBtnRecursiveProjectSection" >
+                                                TargetControlID="imgBtnRecursiveProjectSection">
                                             </AjaxControlToolkit:ConfirmButtonExtender>
                                             <asp:ImageButton ID="imgBtnRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png"
                                                 OnClick="imgBtnRecursiveSection_OnClick" CssClass="mrg0" />
@@ -271,7 +281,7 @@
                                         </td>
                                         <td style="text-align: right">
                                             <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecurrenceBusinessDevelopmentSection"
-                                                runat="server" TargetControlID="imgBtnRecurrenceBusinessDevelopmentSection" >
+                                                runat="server" TargetControlID="imgBtnRecurrenceBusinessDevelopmentSection">
                                             </AjaxControlToolkit:ConfirmButtonExtender>
                                             <asp:ImageButton ID="imgBtnRecurrenceBusinessDevelopmentSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick"
                                                 CssClass="mrg0" />
@@ -356,7 +366,7 @@
                                         </td>
                                         <td style="text-align: right">
                                             <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecurrenceInternalSection"
-                                                runat="server" TargetControlID="imgBtnRecurrenceInternalSection" >
+                                                runat="server" TargetControlID="imgBtnRecurrenceInternalSection">
                                             </AjaxControlToolkit:ConfirmButtonExtender>
                                             <asp:ImageButton ID="imgBtnRecurrenceInternalSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick"
                                                 CssClass="mrg0" />
