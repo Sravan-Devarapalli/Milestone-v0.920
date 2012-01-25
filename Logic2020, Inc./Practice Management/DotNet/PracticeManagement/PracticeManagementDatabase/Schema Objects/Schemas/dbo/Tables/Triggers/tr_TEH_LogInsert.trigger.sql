@@ -133,7 +133,7 @@ BEGIN
 									NEW_VALUES.ProjectId
 					         FROM  NEW_VALUES
 			           WHERE NEW_VALUES.Id = i.Id
-					  FOR XML AUTO, ROOT('Project'), TYPE),
+					  FOR XML AUTO, ROOT('TimeEntry'), TYPE),
 				@CurrentPMTime
 		  FROM inserted AS i
 			   INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
