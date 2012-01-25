@@ -7,16 +7,16 @@ AS
 BEGIN
 	DECLARE @ErrorMessage NVARCHAR(MAX)
 		
-	IF NOT EXISTS (SELECT 1 FROM Project WHERE ProjectId = @ProjectID AND ProjectStatusId IN (1, 5))
+	IF NOT EXISTS (SELECT 1 FROM dbo.Project WHERE ProjectId = @ProjectID AND ProjectStatusId IN (1, 5))
 	BEGIN
 		--StatusIds for Inactive:-1,  Experimental:-5
 		RAISERROR('To Delete a Project, Project must be Inactive/Experimental',16,1)
 	END
-	ELSE IF EXISTS (SELECT TOP 1 1 FROM dbo.ChargeCode cc INNER JOIN dbo.TimeTrack tt on tt.ChargeCodeId = cc.Id AND cc.ProjectId = @ProjectID)
+	ELSE IF EXISTS (SELECT TOP 1 1 FROM dbo.ChargeCode cc INNER JOIN dbo.TimeEntry TE on TE.ChargeCodeId = cc.Id AND cc.ProjectId = @ProjectID)
 	BEGIN
 		RAISERROR ('This project cannot be deleted, because there are time entries related to it.', 16, 1)
 	END
-	ELSE IF EXISTS (SELECT 1 FROM DefaultMilestoneSetting WHERE ProjectId = @ProjectID)
+	ELSE IF EXISTS (SELECT 1 FROM dbo.DefaultMilestoneSetting WHERE ProjectId = @ProjectID)
 	BEGIN
 		RAISERROR ('This project cannot be deleted, because it is set as Default Milestone Project',16,1)
 	END
