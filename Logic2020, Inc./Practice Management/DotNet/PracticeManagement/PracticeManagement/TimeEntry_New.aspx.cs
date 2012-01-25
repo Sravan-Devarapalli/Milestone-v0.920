@@ -108,6 +108,9 @@ namespace PraticeManagement
         private const string nonBillableControlIds = "nonBillableControlIds";
         private const string lblDupilcateOptionsRemoveExtender = "lblDupilcateOptionsRemoveExtender";
 
+        public const string selectedInActiveWorktypeName = "selectedInActiveWorktypeName";
+        public const string selectedInActiveWorktypeid = "selectedInActiveWorktypeid";
+
         #endregion
 
         #region properties
@@ -488,7 +491,7 @@ namespace PraticeManagement
                     Id = Convert.ToInt32(workTypeElement.Attribute(XName.Get(IdXname)).Value)
                 };
 
-                bar.WorkTypes = ServiceCallers.Custom.Project(p => p.GetTimeTypesByProjectId(Convert.ToInt32(ProjectId)));
+                bar.WorkTypes = ServiceCallers.Custom.Project(p => p.GetTimeTypesByProjectId(Convert.ToInt32(ProjectId),true));
                 bar.TeBarDataSource = workTypeElement.Descendants(XName.Get(CalendarItemXname)).ToList();
 
 
@@ -530,7 +533,7 @@ namespace PraticeManagement
                     Id = Convert.ToInt32(workTypeElement.Attribute(XName.Get(IdXname)).Value)
                 };
 
-                bar.TimeTypes = ServiceCallers.Custom.Project(p => p.GetTimeTypesByProjectId(Convert.ToInt32(ProjectId)));
+                bar.TimeTypes = ServiceCallers.Custom.Project(p => p.GetTimeTypesByProjectId(Convert.ToInt32(ProjectId), true));
                 bar.TeBarDataSource = workTypeElement.Descendants(XName.Get(CalendarItemXname)).ToList();
 
 
@@ -574,7 +577,7 @@ namespace PraticeManagement
                     Id = Convert.ToInt32(workTypeElement.Attribute(XName.Get(IdXname)).Value)
                 };
 
-                bar.TimeTypes = ServiceCallers.Custom.Project(p => p.GetTimeTypesByProjectId(Convert.ToInt32(ProjectId)));
+                bar.TimeTypes = ServiceCallers.Custom.Project(p => p.GetTimeTypesByProjectId(Convert.ToInt32(ProjectId), true));
                 bar.TeBarDataSource = workTypeElement.Descendants(XName.Get(CalendarItemXname)).ToList();
 
 
@@ -626,7 +629,7 @@ namespace PraticeManagement
                     bar.Disabled = true;
                 }
 
-                bar.WorkType = ServiceCallers.Custom.Project(p => p.GetTimeTypesByProjectId(projectId))[0];
+                bar.WorkType = ServiceCallers.Custom.Project(p => p.GetTimeTypesByProjectId(projectId, true))[0];
                 bar.TeBarDataSource = teSectionDataItem.Descendants(XName.Get(CalendarItemXname)).ToList();
                 bar.UpdateTimeEntries();
 
@@ -988,6 +991,12 @@ namespace PraticeManagement
 
             ddlBusinessUnitBusinessDevlopmentSection.SelectedIndex = 0;
             ddlAccountBusinessDevlopmentSection.SelectedIndex = 0;
+
+            int personId = SelectedPerson.Id.Value;
+            DateTime[] dates = SelectedDates;
+            int timeEntrySectionId = (int)TimeEntrySectionType.BusinessDevelopment;
+            ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntrySelection(personId, accountId, businessUnitId, project.Id.Value, timeEntrySectionId, false, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
+
         }
 
         protected void btnAddInternalProjectSection_OnClick(object sender, EventArgs e)
@@ -1028,6 +1037,12 @@ namespace PraticeManagement
 
             ddlProjectInternal.SelectedIndex = 0;
             ddlBusinessUnitInternal.SelectedIndex = 0;
+
+            int personId = SelectedPerson.Id.Value;
+            DateTime[] dates = SelectedDates;
+            int timeEntrySectionId = (int)TimeEntrySectionType.Internal;
+            ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntrySelection(personId, account.Id.Value, businessUnitId, projectId, timeEntrySectionId, false, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
+
         }
 
         protected void pcPersons_PersonChanged(object sender, PersonChangedEventArguments args)
