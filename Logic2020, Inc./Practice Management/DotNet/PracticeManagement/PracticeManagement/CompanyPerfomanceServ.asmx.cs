@@ -30,7 +30,7 @@ namespace PraticeManagement
         {
             var clientId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
             //var selectedGroupId = contextKey == null ? -1 : int.Parse(contextKey);
-            var groups = ServiceCallers.Custom.Group(client => client.GroupListAll(clientId, null));
+            var groups = ServiceCallers.Custom.Group(client => client.GroupListAll(clientId, null)).OrderBy(g=>g.Name).ToArray();
             //groups = groups.AsQueryable().Where(g =>( g.IsActive == true || g.Id.ToString() == contextKey)).ToArray();
             return groups.Select(group =>
                 new CascadingDropDownNameValue(
