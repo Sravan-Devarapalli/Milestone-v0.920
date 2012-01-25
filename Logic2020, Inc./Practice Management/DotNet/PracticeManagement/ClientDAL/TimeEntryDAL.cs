@@ -1157,6 +1157,34 @@ namespace DataAccess
             return person;
         }
 
+        public static string GetWorkTypeNameById(int worktypeId)
+        {
+            string name = "";
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.GetWorkTypeNameByIdProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeId, worktypeId);
+              
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            name = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.Name));
+                        }
+                    }
+
+                }
+            }
+
+            return name;
+
+        }
+
+
         #region TimeTrack Methods
 
         public static void DeleteTimeEntry(int clientId, int projectId, int personId, int timetypeId, DateTime startDate, DateTime endDate, string userName)
