@@ -20,7 +20,8 @@ CREATE PROCEDURE dbo.ProjectInsert
 	@DirectorId			INT = NULL,
 	@OpportunityId		INT = NULL,
 	@Description        NVARCHAR(MAX),
-	@CanCreateCustomWorkTypes BIT 
+	@CanCreateCustomWorkTypes BIT,
+	@IsInternal			BIT 
 )
 AS
 BEGIN
@@ -30,8 +31,7 @@ BEGIN
 	BEGIN TRAN  T1;
 
 	-- Generating Project Number
-	DECLARE @ProjectNumber NVARCHAR(12) ,@IsInternal BIT 
-	SELECT @IsInternal = IsInternal FROM dbo.Client WHERE ClientId = @ClientId
+	DECLARE @ProjectNumber NVARCHAR(12) 
 	EXEC dbo.GenerateNewProjectNumber @IsInternal , @ProjectNumber OUTPUT 
 
 	-- Start logging session
@@ -40,9 +40,9 @@ BEGIN
 	-- Inserting Project
 	INSERT INTO dbo.Project
 	            (ClientId, Discount, Terms, Name, PracticeId,
-	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, IsChargeable,  DirectorId, OpportunityId,Description,CanCreateCustomWorkTypes)
+	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, IsChargeable,  DirectorId, OpportunityId,Description,CanCreateCustomWorkTypes,IsInternal)
 	     VALUES (@ClientId, @Discount, @Terms, @Name, @PracticeId,
-	             @ProjectStatusId, @ProjectNumber, @BuyerName, @GroupId, @IsChargeable, @DirectorId, @OpportunityId,@Description,@CanCreateCustomWorkTypes)
+	             @ProjectStatusId, @ProjectNumber, @BuyerName, @GroupId, @IsChargeable, @DirectorId, @OpportunityId,@Description,@CanCreateCustomWorkTypes,@IsInternal)
 
 	IF(@OpportunityId IS NOT NULL)
 	BEGIN
