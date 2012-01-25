@@ -76,7 +76,7 @@ namespace DataAccess
         }
 
 
-        public static List<Project> ListProjectsByClientShort(int clientId, bool IsOnlyActiveAndProjective, bool IsOnlyActiveAndInternal)
+        public static List<Project> ListProjectsByClientShort(int clientId, bool IsOnlyActiveAndProjective, bool IsOnlyActiveAndInternal, bool IsOnlyEnternalProjects)
         {
             var projectList = new List<Project>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -89,6 +89,7 @@ namespace DataAccess
                     command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdParam, clientId);
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsOnlyActiveAndProjective, IsOnlyActiveAndProjective);
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsOnlyActiveAndInternal, IsOnlyActiveAndInternal);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsOnlyEnternalProjectsParam, IsOnlyEnternalProjects);
 
                     connection.Open();
 
@@ -804,6 +805,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.DirecterIdParam,
                     project.Director != null && project.Director.Id.HasValue ? (object)project.Director.Id.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.CanCreateCustomWorkTypesParam, project.CanCreateCustomWorkTypes);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, project.IsInternal);
 
                 SqlParameter projectIdParam = new SqlParameter(Constants.ParameterNames.ProjectIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
                 command.Parameters.Add(projectIdParam);
@@ -858,6 +860,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.DescriptionParam, !string.IsNullOrEmpty(project.Description) ? (object)project.Description : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsChargeable, project.IsChargeable);
                 command.Parameters.AddWithValue(Constants.ParameterNames.CanCreateCustomWorkTypesParam, project.CanCreateCustomWorkTypes);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, project.IsInternal);
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.DirecterIdParam,
                    project.Director != null && project.Director.Id.HasValue ? (object)project.Director.Id.Value : DBNull.Value);
@@ -965,6 +968,8 @@ namespace DataAccess
                     int isMarginColorInfoEnabledIndex = -1;
                     int hasAttachmentsIndex = -1;
                     int canCreateCustomWorkTypesIndex = -1;
+                    int IsInternalIndex = -1;
+                    int ClientIsInternalIndex = -1;
 
                     try
                     {
@@ -1029,6 +1034,23 @@ namespace DataAccess
                     {
                         canCreateCustomWorkTypesIndex = -1;
                     }
+                    try
+                    {
+                        IsInternalIndex = reader.GetOrdinal(Constants.ColumnNames.IsInternalColumn);
+                    }
+                    catch
+                    {
+                        IsInternalIndex = -1;
+                    }
+                     try
+                    {
+                        ClientIsInternalIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIsInternal);
+                    }
+                    catch
+                    {
+                        ClientIsInternalIndex = -1;
+                    }
+                    
                     while (reader.Read())
                     {
                         var project = new Project
@@ -1111,7 +1133,14 @@ namespace DataAccess
                         {
                             project.CanCreateCustomWorkTypes = reader.GetBoolean(canCreateCustomWorkTypesIndex);
                         }
-
+                        if (IsInternalIndex > -1)
+                        {
+                            project.IsInternal = reader.GetBoolean(IsInternalIndex);
+                        }
+                        if (ClientIsInternalIndex > -1)
+                        {
+                            project.Client.IsInternal = reader.GetBoolean(ClientIsInternalIndex);
+                        }
                         project.Status = new ProjectStatus
                         {
                             Id = reader.GetInt32(projectStatusIdIndex),
@@ -2322,7 +2351,7 @@ namespace DataAccess
             }
         }
 
-        public static List<Project> GetProjectsListByProjectGroupId(int projectGroupId)
+        public static List<Project> GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal)
         {
             var projectList = new List<Project>();
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -2332,6 +2361,8 @@ namespace DataAccess
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
                     command.Parameters.AddWithValue(Constants.ParameterNames.ProjectGroupIdParam, projectGroupId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, isInternal);
+
                     connection.Open();
 
                     using (SqlDataReader reader = command.ExecuteReader())
@@ -2398,7 +2429,7 @@ namespace DataAccess
             return new Project { Id = (int)reader[Constants.ColumnNames.ProjectIdColumn], Name = (string)reader[Constants.ColumnNames.NameColumn], ProjectNumber = (string)reader[Constants.ColumnNames.ProjectNumberColumn] };
         }
 
-        public static List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId)
+        public static List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId, bool IsOnlyActive)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (SqlCommand command = new SqlCommand(GetTimeTypesByProjectIdProcedure, connection))
@@ -2407,6 +2438,7 @@ namespace DataAccess
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsOnlyActiveParam, IsOnlyActive);
                 connection.Open();
                 using (var reader = command.ExecuteReader())
                 {
