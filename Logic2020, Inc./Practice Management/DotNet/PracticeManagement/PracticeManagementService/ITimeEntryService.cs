@@ -184,6 +184,9 @@ namespace PracticeManagementService
         [OperationContract]
         System.Data.DataSet TimeEntriesByPersonGetExcelSet(TimeEntryPersonReportContext reportContext);
 
+        [OperationContract]
+        string GetWorkTypeNameById(int worktypeId);
+
         //new timetrack methods
         [OperationContract]
         void DeleteTimeEntry(int clientId, int projectId, int personId, int timetypeId, DateTime startDate, DateTime endDate, string userName);
