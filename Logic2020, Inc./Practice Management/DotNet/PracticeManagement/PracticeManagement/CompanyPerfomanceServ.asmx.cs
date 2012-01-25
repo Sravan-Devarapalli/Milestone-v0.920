@@ -81,7 +81,7 @@ namespace PraticeManagement
         {
             var clientId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
             var selectedProjectId = contextKey == null ? -1 : int.Parse(contextKey);
-            var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, false, false));
+            var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, false, false, false));
 
             return projects.Select(
                 project => new CascadingDropDownNameValue(
@@ -97,7 +97,7 @@ namespace PraticeManagement
         {
             var groupId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
             //var selectedProjectId = contextKey == null ? -1 : int.Parse(contextKey);
-            var projects = ServiceCallers.Custom.Project(group => group.GetProjectsListByProjectGroupId(groupId)).OrderBy(p => p.Name);
+            var projects = ServiceCallers.Custom.Project(group => group.GetProjectsListByProjectGroupId(groupId,true)).OrderBy(p => p.Name);
 
             return projects.Select(
                 project => new CascadingDropDownNameValue(
@@ -112,7 +112,7 @@ namespace PraticeManagement
         {
             var clientId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
             //var selectedProjectId = contextKey == null ? -1 : int.Parse(contextKey);
-            var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, false, true)).OrderBy(p => p.Name);
+            var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, false, true, true)).OrderBy(p => p.Name);
 
             var cddlist = projects.Select(
                 project => new CascadingDropDownNameValue(
@@ -127,7 +127,7 @@ namespace PraticeManagement
         {
             var clientId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
             var selectedProjectId = contextKey == null ? -1 : int.Parse(contextKey);
-            var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, true, false));
+            var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, true, false, false));
 
             return projects.Select(
                 project => new CascadingDropDownNameValue(
