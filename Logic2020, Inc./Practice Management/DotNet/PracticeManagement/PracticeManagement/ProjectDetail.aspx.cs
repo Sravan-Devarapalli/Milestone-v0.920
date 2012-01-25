@@ -892,7 +892,9 @@ namespace PraticeManagement
                 }
                 ViewState.Remove(ProjectAttachmentsKey);
             }
-            if (chbIsInternal.Checked != Convert.ToBoolean(hdIsInternal.Value))
+            bool isinternal = false;
+            Boolean.TryParse(hdIsInternal.Value, out isinternal);
+            if (chbIsInternal.Checked != isinternal)
             {
                 ProjectTimeTypes.AllTimeTypes = null;
                 ProjectTimeTypes.ProjectTimetypes = null;
