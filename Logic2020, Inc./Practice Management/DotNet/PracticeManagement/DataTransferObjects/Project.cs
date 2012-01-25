@@ -358,6 +358,9 @@ namespace DataTransferObjects
         [DataMember]
         public bool CanCreateCustomWorkTypes { get; set; }
 
+        [DataMember]
+        public bool IsInternal { get; set; }
+
         public List<TimeTypeRecord> ProjectWorkTypes { get; set; }
 
         [DataMember]
