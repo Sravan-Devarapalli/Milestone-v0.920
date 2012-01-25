@@ -292,7 +292,7 @@ PraticeManagement.Controls.Generic.DirtyState.DirtyBehavior.prototype = {
     },
 
     _setBackground: function (bgcolor) {
-        var actualHours = $get(this.get_ActualHoursIdValue());
+       var actualHours = $get(this.get_ActualHoursIdValue());
         if (!actualHours.disabled)
             actualHours.style.background = bgcolor;
     },
