@@ -487,6 +487,34 @@
     <None Include="Service References\ProjectGroupService\ProjectGroupService1.disco" />
     <None Include="Service References\ProjectGroupService\ProjectGroupService2.disco" />
     <None Include="Service References\ProjectGroupService\ProjectGroupService3.disco" />
+    <None Include="Service References\TimeEntryService\TimeEntryService36.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService37.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService38.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService39.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService40.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService41.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService42.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService43.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService44.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -914,9 +942,6 @@
     <None Include="Service References\TimeEntryService\TimeEntryService10.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService106.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\TimeEntryService\TimeEntryService11.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -953,34 +978,13 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\TimeEntryService\TimeEntryService3.wsdl" />
-    <None Include="Service References\TimeEntryService\TimeEntryService36.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService37.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService38.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService39.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService40.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService41.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService42.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService43.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService44.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\TimeEntryService\TimeEntryService5.wsdl" />
+    <None Include="Service References\TimeEntryService\TimeEntryService58.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService59.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\TimeEntryService\TimeEntryService8.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -1045,7 +1049,6 @@
     </None>
     <None Include="Service References\PersonSkillService\PersonSkillService2.disco" />
     <None Include="Service References\OpportunityService\OpportunityService1.disco" />
-    <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
     <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
     <Content Include="SkillsEntry.aspx" />
     <Content Include="SkillsProfile.aspx" />
