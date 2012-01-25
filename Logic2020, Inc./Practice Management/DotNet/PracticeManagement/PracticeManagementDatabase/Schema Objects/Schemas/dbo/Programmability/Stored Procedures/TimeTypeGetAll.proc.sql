@@ -11,9 +11,9 @@ DECLARE @NOW DATETIME = dbo.gettingPmtime(GETUTCDATE())
 
 	;WITH UsedTimeTypes AS
 	(
-		SELECT CC.TimeTypeId,MAX(TT.ChargeCodeDate) as MaxUsedDate 
-		FROM TimeTrack TT
-		INNER JOIN ChargeCode CC ON CC.Id = TT.ChargeCodeId
+		SELECT CC.TimeTypeId,MAX(TE.ChargeCodeDate) as MaxUsedDate 
+		FROM dbo.TimeEntry TE
+		INNER JOIN ChargeCode CC ON CC.Id = TE.ChargeCodeId
 		GROUP BY CC.TimeTypeId
 	)
 
