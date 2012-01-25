@@ -24,7 +24,7 @@ namespace PraticeManagement
                 if (getClientProjects)
                 {
                     var clientId = Convert.ToInt32(context.Request.QueryString["clientId"]);
-                    var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, true, false));
+                    var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, true, false,false));
 
                     var SelectedList = projects.Select(p => new { p.Id.Value, p.DetailedProjectTitle, p.Description });
 
