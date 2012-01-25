@@ -110,6 +110,7 @@ namespace PraticeManagement
 
         public const string selectedInActiveWorktypeName = "selectedInActiveWorktypeName";
         public const string selectedInActiveWorktypeid = "selectedInActiveWorktypeid";
+        public const string SavedAllConfirmation = "TimeEntries saved sucessfully.";
 
         #endregion
 
@@ -338,7 +339,7 @@ namespace PraticeManagement
 
                 AddAttributesToDropDowns();
             }
-
+            mlConfirmation.ClearMessage();
             SpreadSheetTotalCalculatorExtenderId = extTotalHours.ClientID + ";" + extNonBillableGrandTotal.ClientID + ";" + extBillableGrandTotal.ClientID;
         }
 
@@ -906,6 +907,7 @@ namespace PraticeManagement
             ClearDirty();
 
             IsSaving = false;
+            mlConfirmation.ShowInfoMessage(SavedAllConfirmation);
         }
 
         protected void btnAddProjectSection_OnClick(object sender, EventArgs e)
