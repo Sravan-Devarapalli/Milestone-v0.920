@@ -70,7 +70,7 @@ namespace PracticeManagementService
         List<Project> ListProjectsByClient(int? clientId, string viewerUsername);
 
         [OperationContract]
-        List<Project> ListProjectsByClientShort(int? clientId, bool IsOnlyActiveAndProjective, bool IsOnlyActiveAndInternal);
+        List<Project> ListProjectsByClientShort(int? clientId, bool IsOnlyActiveAndProjective, bool IsOnlyActiveAndInternal, bool IsOnlyEnternalProjects);
 
         [OperationContract]
         List<Project> ListProjectsByClientWithSort(int? clientId, string viewerUsername, string sortBy);
@@ -349,7 +349,7 @@ namespace PracticeManagementService
         bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId);
 
         [OperationContract]
-        List<Project> GetProjectsListByProjectGroupId(int projectGroupId);
+        List<Project> GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal);
 
         [OperationContract]
         Project GetBusinessDevelopmentProject();
@@ -358,7 +358,7 @@ namespace PracticeManagementService
         Project GetProjectByIdShort(int projectId);
 
         [OperationContract]
-        List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId);
+        List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId, bool IsOnlyActive);
 
         [OperationContract]
         void SetProjectTimeTypes(int projectId, string projectTimeTypesList);
