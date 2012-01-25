@@ -181,6 +181,14 @@ namespace PraticeManagement.Controls.TimeEntry
             if (SelectedWorkType != null && SelectedWorkType.Id > 0)
             {
                 ddlTimeTypes.SelectedValue = SelectedWorkType.Id.ToString();
+                if (ddlTimeTypes.SelectedIndex == 0)
+                {
+                    string timetypename = ServiceCallers.Custom.TimeEntry(te => te.GetWorkTypeNameById(SelectedWorkType.Id));
+                    ddlTimeTypes.Items.Add(new ListItem(timetypename, SelectedWorkType.Id.ToString()));
+                    ddlTimeTypes.SelectedValue = SelectedWorkType.Id.ToString();
+                    ddlTimeTypes.Attributes[TimeEntry_New.selectedInActiveWorktypeid] = SelectedWorkType.Id.ToString();
+                    ddlTimeTypes.Attributes[TimeEntry_New.selectedInActiveWorktypeName] = timetypename;
+                }
             }
             else
             {
