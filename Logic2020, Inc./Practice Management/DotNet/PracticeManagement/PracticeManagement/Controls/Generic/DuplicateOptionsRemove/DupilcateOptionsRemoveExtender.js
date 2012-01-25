@@ -34,10 +34,17 @@ PraticeManagement.Controls.Generic.DuplicateOptionsRemove.DuplicateOptionsRemove
             var control = document.getElementById(controlIds[i]);
             if (control) {
                 var items = control.getElementsByTagName("option");
+                var inActiveOptionValue = control.getAttribute('selectedInActiveWorktypeid');
                 var ddlOptionList = new Array();
                 for (i = 0; i < items.length; i++) {
                     var opt = new Option(items[i].text, items[i].value);
-                    Array.add(ddlOptionList, opt);
+                    if (isNaN(inActiveOptionValue) || inActiveOptionValue == null) {
+                        Array.add(ddlOptionList, opt);
+                    } else {
+                        if (inActiveOptionValue != items[i].value) {
+                            Array.add(ddlOptionList, opt);
+                        }
+                    }
                 }
                 ddlOptionList.sort(this.compareOptionText);
                 var target = this.get_element();
@@ -57,6 +64,8 @@ PraticeManagement.Controls.Generic.DuplicateOptionsRemove.DuplicateOptionsRemove
         for (i = 0; i < controlIds.length; i++) {
             var control = document.getElementById(controlIds[i]);
             if (control) {
+                var inActiveOptionText = control.getAttribute('selectedInActiveWorktypeName');
+                var inActiveOptionValue = control.getAttribute('selectedInActiveWorktypeid');
                 var selectedVal = control.value;
                 control.options.length = 0;
                 var target = this.get_element();
@@ -72,6 +81,9 @@ PraticeManagement.Controls.Generic.DuplicateOptionsRemove.DuplicateOptionsRemove
                     if (addOption) {
                         control.add(new Option(optionList[j].text, optionList[j].value));
                     }
+                }
+                if (!isNaN(inActiveOptionValue) && inActiveOptionValue != '' && inActiveOptionValue != null) {
+                    control.add(new Option(inActiveOptionText, inActiveOptionValue));
                 }
                 control.value = selectedVal;
             }
