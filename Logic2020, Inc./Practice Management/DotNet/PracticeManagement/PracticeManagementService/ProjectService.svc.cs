@@ -134,11 +134,11 @@ namespace PracticeManagementService
 
         }
 
-        public List<Project> ListProjectsByClientShort(int? clientId, bool IsOnlyActiveAndProjective, bool IsOnlyActiveAndInternal)
+        public List<Project> ListProjectsByClientShort(int? clientId, bool IsOnlyActiveAndProjective, bool IsOnlyActiveAndInternal, bool IsOnlyEnternalProjects)
         {
             try
             {
-                return clientId != null ? ProjectDAL.ListProjectsByClientShort(clientId.Value, IsOnlyActiveAndProjective, IsOnlyActiveAndInternal) : null;
+                return clientId != null ? ProjectDAL.ListProjectsByClientShort(clientId.Value, IsOnlyActiveAndProjective, IsOnlyActiveAndInternal, IsOnlyEnternalProjects) : null;
             }
             catch (Exception e)
             {
@@ -1083,9 +1083,9 @@ namespace PracticeManagementService
 
         }
 
-        public List<Project> GetProjectsListByProjectGroupId(int projectGroupId)
+        public List<Project> GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal)
         {
-            return ProjectDAL.GetProjectsListByProjectGroupId(projectGroupId);
+            return ProjectDAL.GetProjectsListByProjectGroupId(projectGroupId, isInternal);
         }
 
 
@@ -1098,10 +1098,10 @@ namespace PracticeManagementService
         {
             return ProjectDAL.GetProjectByIdShort(projectId);
         }
-	
-	    public List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId)
+
+        public List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId, bool IsOnlyActive)
         {
-            return ProjectDAL.GetTimeTypesByProjectId(projectId);
+            return ProjectDAL.GetTimeTypesByProjectId(projectId, IsOnlyActive);
         }
 
         public void SetProjectTimeTypes(int projectId, string projectTimeTypesList)
