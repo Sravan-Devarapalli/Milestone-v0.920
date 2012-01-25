@@ -424,10 +424,12 @@
         }
 
         function chbCanCreateCustomWorkTypes_Change() {
+
+            var chbIsInternal = document.getElementById('<%= chbIsInternal.ClientID%>');
             var chbCanCreateCustomWorkTypes = document.getElementById('<%= chbCanCreateCustomWorkTypes.ClientID%>');
             var btnAddNewTimeType = document.getElementById('<%= (ProjectTimeTypes.FindControl("btnAddNewTimeType") as LinkButton).ClientID%>');
             if (btnAddNewTimeType != null && chbCanCreateCustomWorkTypes != null) {
-                if (chbCanCreateCustomWorkTypes.checked) {
+                if (chbCanCreateCustomWorkTypes.checked && !chbIsInternal.checked) {
                     btnAddNewTimeType.style.display = "";
                 }
                 else {
@@ -693,7 +695,12 @@
                                 </tr>
                                 <tr>
                                     <td colspan="8">
-                                        <asp:CheckBox ID="chbIsInternal" runat="server" Text="IsInternal" Enabled="false" />
+                                        <asp:CheckBox ID="chbIsInternal" runat="server" Text="IsInternal" Enabled="false"
+                                            onclick="chbCanCreateCustomWorkTypes_Change();" />
+                                        <asp:CustomValidator ID="cvIsInternal" runat="server" EnableClientScript="false"
+                                             ErrorMessage="Can not change project status as some timetypes are already in use."
+                                            ValidateEmptyText="true" Text="*" ToolTip="Can not change project status as some timetypes are already in use."></asp:CustomValidator>
+                                        <asp:HiddenField ID="hdIsInternal" runat="server" />
                                         <asp:CheckBox ID="chbCanCreateCustomWorkTypes" onclick="chbCanCreateCustomWorkTypes_Change();"
                                             runat="server" Text="Can Add New Custom Work Types." Enabled="false" />
                                     </td>
@@ -844,8 +851,8 @@
                                 </asp:TableCell>
                                 <asp:TableCell ID="CellProjectTimeTypes" runat="server" Visible="false">
                                     <span class="bg"><span>
-                                        <asp:LinkButton ID="btnProjectTimeTypes" runat="server" Text="Project Work Types" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton></span>
+                                        <asp:LinkButton ID="btnProjectTimeTypes" runat="server" Text="Project Work Types"
+                                            CausesValidation="false" OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                             </asp:TableRow>
