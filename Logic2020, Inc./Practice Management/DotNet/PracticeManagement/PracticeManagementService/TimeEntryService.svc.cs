@@ -621,6 +621,21 @@ namespace PracticeManagementService
             return TimeEntryDAL.TimeEntriesByPersonGetExcelSet(reportContext);
         }
 
+        public string GetWorkTypeNameById(int worktypeId)
+        {
+            try
+            {
+                return TimeEntryDAL.GetWorkTypeNameById(worktypeId);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetWorkTypeNameById", "TimeEntryService.svc", string.Empty,
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+        }
+
         #region TimeTrack Methods
 
         public void DeleteTimeEntry(int clientId, int projectId, int personId, int timetypeId, DateTime startDate, DateTime endDate, string userName)
