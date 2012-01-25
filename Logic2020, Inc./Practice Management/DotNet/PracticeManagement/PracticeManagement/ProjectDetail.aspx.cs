@@ -36,6 +36,8 @@ namespace PraticeManagement
         private const string ProjectAttachmentsKey = "ProjectAttachmentsKey";
         public const string AllTimeTypesKey = "AllTimeTypesKey";
         public const string ProjectTimeTypesKey = "ProjectTimeTypesKey";
+        public const string IsInternalChangeErrorMessage = "Can not change project status as some timetypes are already in use.";
+        
 
         #endregion
 
@@ -206,10 +208,7 @@ namespace PraticeManagement
             mlConfirmation.ClearMessage();
 
             btnUpload.Attributes["onclick"] = "return CanShowPrompt();";
-            if (tblProjectDetailTabViewSwitch_ActiveViewIndex == 8)
-            {
-                ProjectTimeTypes.PopulateControls();
-            }
+          
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -224,6 +223,11 @@ namespace PraticeManagement
             }
             if (ddlProjectGroup.Items.Count > 0)
                 ddlProjectGroup.SortByText();
+
+            if (tblProjectDetailTabViewSwitch_ActiveViewIndex == 8)
+            {
+                ProjectTimeTypes.PopulateControls();
+            }
         }
 
         /// <summary>
@@ -430,6 +434,11 @@ namespace PraticeManagement
                 if (Project != null)
                     PopulateControls(Project);
             }
+            else
+            { 
+                if(!cvIsInternal.IsValid)
+                    mlConfirmation.ShowErrorMessage(IsInternalChangeErrorMessage);
+            }
         }
 
         protected void btnUpload_Click(object sender, EventArgs e)
@@ -541,7 +550,8 @@ namespace PraticeManagement
                         client.DefaultDiscount != 0 ? client.DefaultDiscount.ToString() : string.Empty;
 
                     chbIsChargeable.Checked = client.IsChargeable;
-                    chbIsInternal.Checked = client.IsInternal;
+                    chbIsInternal.Enabled = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) && client.IsInternal;
+                    chbIsInternal.Checked = false ;
 
                     if (Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName)
                         && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName)
@@ -862,7 +872,14 @@ namespace PraticeManagement
                 catch (CommunicationException ex)
                 {
                     serviceClient.Abort();
-                    throw;
+                    if (ex.Message == IsInternalChangeErrorMessage)
+                    {
+                        cvIsInternal.IsValid = false;
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
 
@@ -874,9 +891,11 @@ namespace PraticeManagement
                     svc.SaveProjectAttachment(attachment, result, User.Identity.Name);
                 }
                 ViewState.Remove(ProjectAttachmentsKey);
-                ViewState.Remove(AllTimeTypesKey);
-                ViewState.Remove(ProjectTimeTypesKey);
-
+            }
+            if (chbIsInternal.Checked != Convert.ToBoolean(hdIsInternal.Value))
+            {
+                ProjectTimeTypes.AllTimeTypes = null;
+                ProjectTimeTypes.ProjectTimetypes = null;
             }
 
             return result;
@@ -952,9 +971,11 @@ namespace PraticeManagement
             txtDescription.Text = project.Description;
             lblProjectNumber.Text = project.ProjectNumber;
             chbIsChargeable.Checked = project.IsChargeable;
+            chbIsInternal.Checked = project.IsInternal;
+            hdIsInternal.Value = project.IsInternal.ToString();
             if (project.Client != null)
             {
-                chbIsInternal.Checked = project.Client.IsInternal;
+                chbIsInternal.Enabled = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) && project.Client.IsInternal;
             }
             chbCanCreateCustomWorkTypes.Checked = project.CanCreateCustomWorkTypes;
 
@@ -1204,7 +1225,15 @@ namespace PraticeManagement
             project.Status = new ProjectStatus { Id = int.Parse(ddlProjectStatus.SelectedValue) };
             project.ProjectManagerIdsList = cblProjectManagers.SelectedItems;
             project.IsChargeable = chbIsChargeable.Checked;
-           // project.IsInternal = chbIsInternal.Checked;
+            if (Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName))
+            {
+                project.IsInternal = chbIsInternal.Checked;
+            }
+            else
+            {
+                project.IsInternal = false;
+            }
+
             project.CanCreateCustomWorkTypes = chbCanCreateCustomWorkTypes.Checked;
             PopulateProjectGroup(project);
             PopulateSalesCommission(project);
@@ -1216,10 +1245,11 @@ namespace PraticeManagement
                 project.Director = new Person { Id = int.Parse(ddlDirector.SelectedValue) };
 
             string hdnTimeTypesAssignedToProject = (ProjectTimeTypes.FindControl("hdnTimeTypesAssignedToProject") as HiddenField).Value;
-            if (!String.IsNullOrEmpty(hdnTimeTypesAssignedToProject))
+            if (hdIsInternal.Value == chbIsInternal.Checked.ToString() && !String.IsNullOrEmpty(hdnTimeTypesAssignedToProject))
             {
                 project.ProjectWorkTypesList = hdnTimeTypesAssignedToProject;
             }
+
         }
 
         private AttachmentService.ProjectAttachment PopulateProjectAttachment()
