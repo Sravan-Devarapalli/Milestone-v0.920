@@ -547,6 +547,7 @@
                                     <asp:CustomValidator ID="cvDayTotal" runat="server" ErrorMessage="Day Total hours must be lessthan or equals to 24."
                                         OnServerValidate="cvDayTotal_ServerValidate" EnableClientScript="false" Text="*"
                                         Display="None" SetFocusOnError="true" ValidationGroup="TE" ToolTip="Day Total hours must be lessthan or equals to 24." />
+                                      <uc:MessageLabel ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
                                     <asp:ValidationSummary ID="valSumSaveTimeEntries" runat="server" ValidationGroup="TE" />
                                 </td>
                                 <td valign="middle">
