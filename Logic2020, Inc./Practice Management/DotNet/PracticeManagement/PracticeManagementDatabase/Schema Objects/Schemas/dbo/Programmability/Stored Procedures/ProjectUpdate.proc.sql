@@ -15,7 +15,8 @@ CREATE PROCEDURE dbo.ProjectUpdate
 	@DirectorId			INT,
 	@ProjectManagerIdsList	NVARCHAR(MAX),
 	@Description           NVARCHAR(MAX),
-	@CanCreateCustomWorkTypes BIT 
+	@CanCreateCustomWorkTypes BIT,
+	@IsInternal			BIT  
 )
 AS
 BEGIN
@@ -26,6 +27,26 @@ BEGIN
 
 		-- Start logging session
 		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
+
+		IF EXISTS (SELECT 1 FROM dbo.Project WHERE ProjectId = @ProjectId AND IsInternal != @IsInternal)
+		BEGIN
+			IF EXISTS (SELECT 1	FROM dbo.TimeType tt 
+						INNER JOIN dbo.CHARGECODE cc ON tt.TimeTypeId = cc.TimeTypeId 
+													AND cc.ProjectID = @ProjectId 
+													AND tt.IsInternal != @IsInternal 
+													AND tt.IsDefault = 0 
+						INNER JOIN dbo.TimeEntry te ON cc.ID = te.ChargeCodeId )
+			BEGIN
+				RAISERROR ('Can not change project status as some timetypes are already in use.', 16, 1)
+			END
+		--to delete existing projecttimetypes
+		DELETE ptt 
+		FROM dbo.ProjectTimeType ptt 
+		WHERE ptt.ProjectId = @ProjectId 
+
+		END
+
+	
 
 		UPDATE dbo.Project
 			SET ClientId			= @ClientId,
@@ -39,7 +60,8 @@ BEGIN
 				IsChargeable		= @IsChargeable,
 				DirectorId		= @DirectorId,
 				Description		=@Description,
-				CanCreateCustomWorkTypes = @CanCreateCustomWorkTypes
+				CanCreateCustomWorkTypes = @CanCreateCustomWorkTypes,
+				IsInternal		=@IsInternal
 			WHERE ProjectId = @ProjectId
 
 		DECLARE @OpportunityId INT = NULL
