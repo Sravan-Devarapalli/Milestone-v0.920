@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[ProjectsListByProjectGroupId]
 (
-	@ProjectGroupId int
+	@ProjectGroupId INT,
+	@IsInternal		BIT
 )
 AS
 BEGIN
@@ -8,5 +9,8 @@ BEGIN
 	,Name
 	,ProjectNumber  
 	FROM dbo.Project 
-	WHERE GroupId = @ProjectGroupId
+	WHERE GroupId = @ProjectGroupId 
+		AND IsInternal = @IsInternal 
+		AND ProjectStatusId IN (3,6)
+		AND Name NOT IN ('PTO','HOL')
 END
