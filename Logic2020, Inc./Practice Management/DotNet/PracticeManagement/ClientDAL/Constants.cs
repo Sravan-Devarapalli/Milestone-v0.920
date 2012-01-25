@@ -267,6 +267,7 @@
             public const string InFutureUse = "InFutureUse";
             public const string IsChargeCodeOffColumn = "IsChargeCodeOff";
             public const string IsHourlyRevenueColumn = "IsHourlyRevenue";
+            public const string ClientIsInternal = "ClientIsInternal";
         }
 
         #endregion
@@ -522,6 +523,8 @@
             public const string TimeEntrySectionIdParam = "@TimeEntrySectionId";
             public const string IsDeleteParam = "@IsDelete";
             public const string IsRecursiveParam = "@IsRecursive";
+            public const string IsOnlyActiveParam = "@IsOnlyActive";
+            public const string IsOnlyEnternalProjectsParam = "@IsOnlyEnternalProjects";
 
 
         }
@@ -629,6 +632,7 @@
                 public const string GetTotals = "dbo.TimeEntriesGetTotals";
                 public const string GetPersonTimeEnteredHoursByDay = "dbo.GetPersonTimeEnteredHoursByDay";
                 public const string PersonTimeEntriesByPeriod = "dbo.PersonTimeEntriesByPeriod";
+                public const string GetWorkTypeNameByIdProcedure = "dbo.GetWorkTypeNameById";
 
                 public const string ToggleIsReviewed = "dbo.TimeEntryToggleIsReviewed";
                 public const string ToggleIsCorrect = "dbo.TimeEntryToggleIsCorrect";
