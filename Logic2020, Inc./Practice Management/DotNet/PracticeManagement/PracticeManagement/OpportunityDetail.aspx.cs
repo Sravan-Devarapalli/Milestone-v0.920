@@ -357,7 +357,7 @@ namespace PraticeManagement
                 groups = groups.AsQueryable().Where(g => (g.IsActive == true)).ToArray();
                 DataHelper.FillListDefault(ddlClientGroup, string.Empty, groups, false);
 
-                var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(Opportunity.Client.Id, true, false));
+                var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(Opportunity.Client.Id, true, false,false));
                 DataHelper.FillListDefault(ddlProjects, "Select Project ...", projects, false, "Id", "DetailedProjectTitle");
 
                 AddAttrbuteToddlProjects(projects);
@@ -700,7 +700,7 @@ namespace PraticeManagement
                     groups = groups.AsQueryable().Where(g => (g.IsActive == true)).ToArray();
                     DataHelper.FillListDefault(ddlClientGroup, string.Empty, groups, false);
 
-                    var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, true, false));
+                    var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, true, false, false));
                     DataHelper.FillListDefault(ddlProjects, "Select Project ...", projects, false, "Id", "DetailedProjectTitle");
                     AddAttrbuteToddlProjects(projects);
                     if (ddlProjects.Items.Count == 1)
