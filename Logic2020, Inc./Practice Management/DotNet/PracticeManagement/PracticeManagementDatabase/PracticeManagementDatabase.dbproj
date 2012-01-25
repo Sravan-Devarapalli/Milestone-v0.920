@@ -3932,6 +3932,8 @@
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\Triggers\tr_TE_LogUpdate.trigger.sql">
       <SubType>Code</SubType>
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\Triggers\tr_TEH_LogDelete.trigger.sql">
       <SubType>Code</SubType>
@@ -4006,3 +4008,4 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
+
