@@ -11,19 +11,19 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @IsInternal BIT,
-		@ProjectGroupCode NVARCHAR (5)
+	--DECLARE @IsInternal BIT,
+	--	@ProjectGroupCode NVARCHAR (5)
 				
-	SELECT @IsInternal = i.IsInternal FROM inserted AS i
+	--SELECT @IsInternal = i.IsInternal FROM inserted AS i
 
-	EXEC [GenerateNewProjectGroupCode] @IsInternal, @ProjectGroupCode OUTPUT
+	--EXEC [GenerateNewProjectGroupCode] @IsInternal, @ProjectGroupCode OUTPUT
 
 	INSERT INTO dbo.ProjectGroup (
 		ClientId,
 		[Name],
 		Code
 	)  ( 
-		SELECT i.ClientId, 'Default Group' AS [Name], @ProjectGroupCode 
+		SELECT i.ClientId, 'Default Group' AS [Name], 'B0001' 
 		FROM inserted AS i
 	) 
 
