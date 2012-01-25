@@ -3802,9 +3802,6 @@
     <Build Include="Schema Objects\Schemas\dbo\Tables\ChargeCodeTurnOffHistory.table.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Tables\TimeTrack.table.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_ChargeCode_ClientId.fkey.sql">
       <SubType>Code</SubType>
     </Build>
@@ -3824,12 +3821,6 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_ProjectTimeType_TimeTypeId.fkey.sql">
-      <SubType>Code</SubType>
-    </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_TimeTrack_PersonId.fkey.sql">
-      <SubType>Code</SubType>
-    </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_TimeTrack_ChargeCodeId.fkey.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetProjectTimeTypes.proc.sql">
@@ -3903,12 +3894,6 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetPersonTimeEnteredHoursByDay.proc.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Tables\Triggers\tr_TT_LogInsert.trigger.sql">
-      <SubType>Code</SubType>
-    </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Tables\Triggers\tr_TT_LogUpdateDelete.trigger.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetIsHourlyRevenueByPeriod.proc.sql">
       <SubType>Code</SubType>
     </Build>
@@ -3946,6 +3931,12 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\Triggers\tr_TE_LogUpdate.trigger.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Triggers\tr_TEH_LogDelete.trigger.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Triggers\tr_TEH_LogInsert.trigger.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>
@@ -4012,4 +4003,3 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
-
