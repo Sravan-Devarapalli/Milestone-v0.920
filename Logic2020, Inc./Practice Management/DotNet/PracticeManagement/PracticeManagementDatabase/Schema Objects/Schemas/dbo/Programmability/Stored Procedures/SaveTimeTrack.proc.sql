@@ -78,15 +78,8 @@ BEGIN
 
 		DELETE TE
 		FROM dbo.TimeEntry TE
-		JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate
-		LEFT JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem') NEW(c)
-			ON TE.ChargeCodeDate = NEW.c.value('@Date', 'DATETIME')
-				AND CC.ClientId = NEW.c.value('..[1]/..[1]/@AccountId', 'INT')
-				AND CC.ProjectGroupId = NEW.c.value('..[1]/..[1]/@BusinessUnitId', 'INT')
-				AND CC.ProjectId = NEW.c.value('..[1]/..[1]/@ProjectId', 'INT')
-				AND CC.TimeTypeId = NEW.c.value('..[1]/@Id', 'INT')
-				AND New.c.exist('/TimeEntryRecord') != 1
-		WHERE NEW.c.value('..[1]/..[1]/@AccountId', 'INT') IS NULL
+		LEFT JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId
+		WHERE TEH.Id IS NULL AND TE.PersonId = @PersonId AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate
 
 		--Update TimeEntries which are modified.
 		UPDATE TEH
@@ -283,3 +276,4 @@ BEGIN
 		RAISERROR(@ErrorMessage, 16, 1)
 	END CATCH
 END
+
