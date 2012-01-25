@@ -1,8 +1,9 @@
 ﻿CREATE PROCEDURE dbo.ListProjectsByClientShort
 (
 	@ClientId INT,
-	@IsOnlyActiveAndProjective BIT,
-	@IsOnlyActiveAndInternal	BIT = 0
+	@IsOnlyActiveAndProjective BIT,-- = 1 If project status is active or projective
+	@IsOnlyActiveAndInternal	BIT = 0,-- = 1 If project status is active or internal
+	@IsOnlyEnternalProjects    BIT = 0 -- =1 if project is external i.e. project.isinternal = 0
 )
 AS
 BEGIN
@@ -24,7 +25,7 @@ BEGIN
 			p.BuyerName,
 			p.Description
 	FROM dbo.v_Project AS p
-	WHERE p.ClientId = @ClientId AND p.IsAllowedToShow = 1
+	WHERE p.ClientId = @ClientId AND p.IsAllowedToShow = 1 AND ((@IsOnlyEnternalProjects  = 1 AND p.IsInternal = 0) OR @IsOnlyEnternalProjects = 0 )
 		AND ( (@IsOnlyActiveAndProjective = 1 AND @IsOnlyActiveAndInternal = 0 AND p.ProjectStatusId IN (2,3))
 			OR (@IsOnlyActiveAndProjective = 0 AND @IsOnlyActiveAndInternal = 1 AND p.ProjectStatusId IN (3,6))
 			OR (@IsOnlyActiveAndProjective = 1 AND @IsOnlyActiveAndInternal = 1 AND p.ProjectStatusId IN (2,3,6))
