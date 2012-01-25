@@ -35,7 +35,9 @@ AS
 		   d.FirstName as 'DirectorFirstName',
 		   p.Description,
 		   p.CanCreateCustomWorkTypes,
-		   p.IsAllowedToShow
+		   p.IsAllowedToShow,
+		   p.IsInternal,
+		   c.IsInternal AS 'ClientIsInternal'
 	  FROM dbo.Project AS p
 		   INNER JOIN dbo.Practice AS r ON p.PracticeId = r.PracticeId
 		   INNER JOIN dbo.Client AS c ON p.ClientId = c.ClientId
