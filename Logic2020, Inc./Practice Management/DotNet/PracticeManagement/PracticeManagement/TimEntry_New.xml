@@ -3,26 +3,26 @@
     <AccountAndProjectSelection AccountId="0" AccountName="1" ProjectId="2" ProjectName="3" ProjectNumber="{4}"  BusinessUnitId="{5}" BusinessUnitName="{6}" IsRecursive="{7}" >
       <WorkType Id="">
           <CalendarItem  Date="0" CssClass="{1}" IsNoteRequired="{2}"  IsHourlyRevenue="{3}">
-              <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsCorrect="{4}" IsReviewed="{5}" IsChargeCodeOff="{6}" IsDirty="{7}" ></TimeEntryRecord>
-              <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsCorrect="{4}" IsReviewed="{5}" IsChargeCodeOff="{6}" IsDirty="{7}" ></TimeEntryRecord>
+              <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsReviewed="{4}" IsChargeCodeOff="{5}" IsDirty="{6}" ></TimeEntryRecord>
+              <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsReviewed="{4}" IsChargeCodeOff="{5}" IsDirty="{6}" ></TimeEntryRecord>
           </CalendarItem>
         <!-- <CalendarItem  Date="0" CssClass="{1}" IsNoteRequired="{2}"  IsHourlyRevenue="{3}">
-              <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsCorrect="{4}" IsReviewed="{5}" IsChargeCodeOff="{6}" IsDirty="{7}" ></TimeEntryRecord>
-              <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsCorrect="{4}" IsReviewed="{5}" IsChargeCodeOff="{6}" IsDirty="{7}" ></TimeEntryRecord>
+              <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsReviewed="{4}" IsChargeCodeOff="{5}" IsDirty="{6}" ></TimeEntryRecord>
+              <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsReviewed="{4}" IsChargeCodeOff="{5}" IsDirty="{6}" ></TimeEntryRecord>
           </CalendarItem>-->
       </WorkType>
   <!--<WorkType Id="">
           <CalendarItem  Date="0" CssClass="{1}" IsNoteRequired="{2}"  IsHourlyRevenue="{3}">
-              <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsCorrect="{4}" IsReviewed="{5}" IsChargeCodeOff="{6}" IsDirty="{7}" ></TimeEntryRecord>
-              <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsCorrect="{4}" IsReviewed="{5}" IsChargeCodeOff="{6}" IsDirty="{7}" ></TimeEntryRecord>
+              <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsReviewed="{4}" IsChargeCodeOff="{5}" IsDirty="{6}" ></TimeEntryRecord>
+              <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsReviewed="{4}" IsChargeCodeOff="{5}" IsDirty="{6}" ></TimeEntryRecord>
           </CalendarItem>
       </WorkType>-->
     </AccountAndProjectSelection>
 <!--<AccountAndProjectSelection AccountId="0" AccountName="1" ProjectId="2" ProjectName="3" ProjectNumber="{4}"  BusinessUnitId="{5}" BusinessUnitName="{6}" IsRecursive="{7}" >
       <WorkType Id="">
           <CalendarItem  Date="0" CssClass="{1}" IsNoteRequired="{2}"  IsHourlyRevenue="{3}">
-              <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsCorrect="{4}" IsReviewed="{5}" IsChargeCodeOff="{6}" IsDirty="{7}" ></TimeEntryRecord>
-              <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsCorrect="{4}" IsReviewed="{5}" IsChargeCodeOff="{6}" IsDirty="{7}" ></TimeEntryRecord>
+              <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsReviewed="{4}" IsChargeCodeOff="{5}" IsDirty="{6}" ></TimeEntryRecord>
+              <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsReviewed="{4}" IsChargeCodeOff="{5}" IsDirty="{6}" ></TimeEntryRecord>
           </CalendarItem>
       </WorkType>
   </AccountAndProjectSelection>-->
