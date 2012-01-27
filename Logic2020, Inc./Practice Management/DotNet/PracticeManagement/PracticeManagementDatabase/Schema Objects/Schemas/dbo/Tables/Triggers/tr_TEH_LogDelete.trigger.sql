@@ -29,9 +29,7 @@ BEGIN
 					,tType.[Name] AS 'TimeTypeName'
 					,i.[ModifiedBy] AS 'ModifiedBy'
 					,TE.[Note] AS 'Note'
-					,TER.Name AS 'ReviewStatus' 
-					,CASE TE.[IsCorrect] WHEN 1 THEN 'Correct'
-											ELSE 'InCorrect' END AS 'IsCorrect'
+					,TER.Name AS 'ReviewStatus'
 					,CASE i.[IsChargeable] WHEN 1 THEN 'Billable'
 											ELSE 'Not Billable' END AS 'IsBillable'
 					,CONVERT(VARCHAR(10), TE.[ChargeCodeDate], 101) AS 'ChargeCodeDate'
@@ -45,6 +43,7 @@ BEGIN
 					,proj.[Name] AS 'ProjectName'
 					,proj.ProjectId AS 'ProjectId'
 					,clnt.[Code] + ' - ' + PG.[Code] + ' - ' + proj.ProjectNumber + ' - ' + '01 - ' + tType.Code AS 'ChargeCode'
+					,proj.IsAllowedToShow AS 'IsAllowedToShow'
 			FROM inserted AS i
 			INNER JOIN dbo.TimeEntry AS TE ON TE.TimeEntryId = i.TimeEntryId
 			INNER JOIN dbo.TimeEntryReviewStatus AS TER ON TER.Id = i.ReviewStatusId
@@ -71,9 +70,7 @@ BEGIN
 					,tType.[Name] AS 'TimeTypeName'
 					,d.[ModifiedBy] AS 'ModifiedBy'
 					,TE.[Note] AS 'Note'
-					,TER.Name AS 'ReviewStatus' 
-					,CASE TE.[IsCorrect] WHEN 1 THEN 'Correct'
-											ELSE 'InCorrect' END AS 'IsCorrect'
+					,TER.Name AS 'ReviewStatus'
 					,CASE d.[IsChargeable] WHEN 1 THEN 'Billable'
 											ELSE 'Not Billable' END AS 'IsBillable'
 					,CONVERT(VARCHAR(10), TE.[ChargeCodeDate], 101) AS 'ChargeCodeDate'
@@ -87,6 +84,7 @@ BEGIN
 					,proj.[Name] AS 'ProjectName'
 					,proj.ProjectId AS 'ProjectId'
 					,clnt.[Code] + ' - ' + PG.[Code] + ' - ' + proj.ProjectNumber + ' - ' + '01 - ' + tType.Code AS 'ChargeCode'
+					,proj.IsAllowedToShow AS 'IsAllowedToShow'
 			FROM deleted AS d
 			INNER JOIN dbo.TimeEntry AS TE ON TE.TimeEntryId = d.TimeEntryId
 			INNER JOIN dbo.TimeEntryReviewStatus AS TER ON TER.Id = d.ReviewStatusId
@@ -133,8 +131,7 @@ BEGIN
 														NEW_VALUES.TimeTypeName,
 														NEW_VALUES.ModifiedBy,
 														NEW_VALUES.Note,
-														NEW_VALUES.ReviewStatus, 
-														NEW_VALUES.IsCorrect,
+														NEW_VALUES.ReviewStatus,
 														NEW_VALUES.IsBillable,
 														NEW_VALUES.ChargeCodeDate,
 														NEW_VALUES.ModifiedByName,
@@ -147,6 +144,7 @@ BEGIN
 														NEW_VALUES.ProjectName,
 														NEW_VALUES.ProjectId,
 														NEW_VALUES.ChargeCode,
+														NEW_VALUES.IsAllowedToShow,
 														OLD_VALUES.Tag,
 														OLD_VALUES.Parent, 
 														OLD_VALUES.TimeEntryId,
@@ -158,8 +156,7 @@ BEGIN
 														OLD_VALUES.TimeTypeName,
 														OLD_VALUES.ModifiedBy,
 														OLD_VALUES.Note,
-														OLD_VALUES.ReviewStatus, 
-														OLD_VALUES.IsCorrect,
+														OLD_VALUES.ReviewStatus,
 														OLD_VALUES.IsBillable,
 														OLD_VALUES.ChargeCodeDate,
 														OLD_VALUES.ModifiedByName,
@@ -171,7 +168,8 @@ BEGIN
 														OLD_VALUES.ProjectGroupId,
 														OLD_VALUES.ProjectName,
 														OLD_VALUES.ProjectId,
-														OLD_VALUES.ChargeCode
+														OLD_VALUES.ChargeCode,
+														OLD_VALUES.IsAllowedToShow
 												FROM NEW_VALUES
 												FULL JOIN OLD_VALUES ON NEW_VALUES.Id = OLD_VALUES.Id
 												WHERE OLD_VALUES.Id = d.Id
