@@ -343,7 +343,6 @@ namespace DataTransferObjects
         [DataMember]
         public List<ProjectAttachment> Attachments { get; set; }
 
-
         /// <summary>
         /// Gets or sets a description for the Project.
         /// </summary>
@@ -353,7 +352,6 @@ namespace DataTransferObjects
             get;
             set;
         }
-
        
         [DataMember]
         public bool CanCreateCustomWorkTypes { get; set; }
@@ -365,6 +363,9 @@ namespace DataTransferObjects
 
         [DataMember]
         public string ProjectWorkTypesList { get; set; }
+
+        [DataMember]
+        public bool HasTimeEntries { get; set; }
 
         #endregion
 
