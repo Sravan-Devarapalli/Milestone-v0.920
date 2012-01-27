@@ -238,6 +238,7 @@ namespace PraticeManagement
             }
         }
 
+        #endregion
 
         protected void custWorkType_ServerValidate(object source, ServerValidateEventArgs args)
         {
@@ -254,13 +255,11 @@ namespace PraticeManagement
             args.IsValid = IsValidHours;
         }
 
-
         protected void custNote_ServerValidate(object source, ServerValidateEventArgs args)
         {
             args.IsValid = IsValidNote;
         }
 
-        #endregion
 
         private void ValidateAll()
         {
@@ -329,6 +328,11 @@ namespace PraticeManagement
 
         protected void Page_Load(object sender, EventArgs e)
         {
+
+            btnAddProjectSection.Attributes["onclick"] = "ExpandPanel('" +cpeProjectSection.BehaviorID + "');";
+            btnAddInternalProjectSection.Attributes["onclick"] = "ExpandPanel('" + cpeInternalSection.BehaviorID + "');";
+            btnAddBusinessDevelopmentSection.Attributes["onclick"] = "ExpandPanel('" + cpeBusinessDevelopmentSection.BehaviorID + "');";
+
             if (!IsPostBack)
             {
                 var clients = ServiceCallers.Custom.Client(c => c.ClientListAllWithoutPermissions());
@@ -378,7 +382,7 @@ namespace PraticeManagement
 
 
                 var imgBtnRecursiveProjectSection = e.Item.FindControl(imgBtnRecursiveProjectSectionImage) as ImageButton;
-                var cbeImgBtnRecursiveProjectSection = e.Item.FindControl(cbeImgBtnRecursiveProjectSectionExtender) as ConfirmButtonExtender; 
+                var cbeImgBtnRecursiveProjectSection = e.Item.FindControl(cbeImgBtnRecursiveProjectSectionExtender) as ConfirmButtonExtender;
                 imgBtnRecursiveProjectSection.ImageUrl = Convert.ToBoolean(isRecursive) ? recursiveSectionImageUrl : nonRecursiveSectionImageUrl;
                 cbeImgBtnRecursiveProjectSection.ConfirmText = Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmText : nonRecursiveSectionConfirmText;
                 imgBtnRecursiveProjectSection.Attributes[AccountIdXname] = AccountId;
@@ -418,7 +422,7 @@ namespace PraticeManagement
 
                 var imgBtnRecurrenceBusinessDevelopmentSection = e.Item.FindControl(imgBtnRecurrenceBusinessDevelopmentSectionImage) as ImageButton;
                 var cbeImgBtnRecurrenceBusinessDevelopmentSection = e.Item.FindControl(cbeImgBtnRecurrenceBusinessDevelopmentSectionExtender) as ConfirmButtonExtender;
-                
+
                 imgBtnRecurrenceBusinessDevelopmentSection.ImageUrl = Convert.ToBoolean(isRecursive) ? recursiveSectionImageUrl : nonRecursiveSectionImageUrl;
                 cbeImgBtnRecurrenceBusinessDevelopmentSection.ConfirmText = Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmText : nonRecursiveSectionConfirmText;
                 imgBtnRecurrenceBusinessDevelopmentSection.Attributes[AccountIdXname] = AccountId;
@@ -457,10 +461,10 @@ namespace PraticeManagement
 
 
                 var imgBtnRecurrenceInternalSection = e.Item.FindControl(imgBtnRecurrenceInternalSectionImage) as ImageButton;
-                var cbeImgBtnRecurrenceInternalSection = e.Item.FindControl(cbeImgBtnRecurrenceInternalSectionExtender) as ConfirmButtonExtender; 
+                var cbeImgBtnRecurrenceInternalSection = e.Item.FindControl(cbeImgBtnRecurrenceInternalSectionExtender) as ConfirmButtonExtender;
                 imgBtnRecurrenceInternalSection.ImageUrl = Convert.ToBoolean(isRecursive) ? recursiveSectionImageUrl : nonRecursiveSectionImageUrl;
                 cbeImgBtnRecurrenceInternalSection.ConfirmText = Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmText : nonRecursiveSectionConfirmText;
-                
+
                 imgBtnRecurrenceInternalSection.Attributes[AccountIdXname] = AccountId;
                 imgBtnRecurrenceInternalSection.Attributes[ProjectIdXname] = ProjectId;
                 imgBtnRecurrenceInternalSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
@@ -492,7 +496,7 @@ namespace PraticeManagement
                     Id = Convert.ToInt32(workTypeElement.Attribute(XName.Get(IdXname)).Value)
                 };
 
-                bar.WorkTypes = ServiceCallers.Custom.Project(p => p.GetTimeTypesByProjectId(Convert.ToInt32(ProjectId),true));
+                bar.WorkTypes = ServiceCallers.Custom.Project(p => p.GetTimeTypesByProjectId(Convert.ToInt32(ProjectId), true));
                 bar.TeBarDataSource = workTypeElement.Descendants(XName.Get(CalendarItemXname)).ToList();
 
 
@@ -659,6 +663,7 @@ namespace PraticeManagement
                     NonBillableControlIds += bar.TbAcutualHoursClientIds[index] + ";";
 
                     bar.UpdateVerticalTotalCalculatorExtenderId(index, extColumnDayTotalHours.ClientID);
+                    bar.AddAttributeToPTOTextBox(index);
                 }
 
 
@@ -1408,9 +1413,12 @@ namespace PraticeManagement
             extBillableGrandTotal.ControlsToCheck = BillableControlIds;
             extNonBillableGrandTotal.ControlsToCheck = NonBillableControlIds;
 
-            cpeProjectSection.Collapsed = !(repProjectSections.Items.Count > 0);
-            cpeBusinessDevelopmentSection.Collapsed = !(repBusinessDevelopmentSections.Items.Count > 0);
-            cpeInternalSection.Collapsed = !(repInternalSections.Items.Count > 0);
+            if (!IsPostBack)
+            {
+                cpeProjectSection.Collapsed = !(repProjectSections.Items.Count > 0);
+                cpeBusinessDevelopmentSection.Collapsed = !(repBusinessDevelopmentSections.Items.Count > 0);
+                cpeInternalSection.Collapsed = !(repInternalSections.Items.Count > 0);
+            }
         }
 
         protected void dpChoose_OnSelectionChanged(object sender, EventArgs args)
@@ -1593,7 +1601,7 @@ namespace PraticeManagement
                 cbeimgBtnRecursiveSection = repeaterItem.FindControl(cbeImgBtnRecurrenceInternalSectionExtender) as ConfirmButtonExtender;
             }
 
-            cbeimgBtnRecursiveSection.ConfirmText =  Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmText : nonRecursiveSectionConfirmText;
+            cbeimgBtnRecursiveSection.ConfirmText = Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmText : nonRecursiveSectionConfirmText;
 
             List<XElement> xlist = xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
             XElement accountAndProjectSelectionElement = xlist.First(element => element.Attribute(XName.Get(AccountIdXname)).Value == accountId.ToString() && element.Attribute(XName.Get(ProjectIdXname)).Value == projectId.ToString() && element.Attribute(XName.Get(BusinessUnitIdXname)).Value == businessUnitId.ToString());
@@ -1653,7 +1661,7 @@ namespace PraticeManagement
             ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntrySelection(personId, accountId, businessUnitId, projectId, timeEntrySectionId, true, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
 
         }
-       
+
     }
 }
 
