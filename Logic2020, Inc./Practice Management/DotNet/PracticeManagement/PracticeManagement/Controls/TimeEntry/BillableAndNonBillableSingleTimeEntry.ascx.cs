@@ -247,11 +247,6 @@ namespace PraticeManagement.Controls.TimeEntry
             }
             hdnBillableHours.Value = tbBillableHours.Text;
 
-            chbIsChargeable.Checked = Convert.ToBoolean(TimeEntryRecordBillableElement.Attribute(XName.Get("IsChargeable")).Value);
-            hdnIsChargeable.Value = chbIsChargeable.Checked.ToString().ToLower();
-            chbForDiffProject.Checked = !Convert.ToBoolean(TimeEntryRecordBillableElement.Attribute(XName.Get("IsCorrect")).Value); ;
-            hdnForDiffProject.Value = chbForDiffProject.Checked.ToString().ToLower();
-
             var isReviewd = TimeEntryRecordBillableElement.Attribute(XName.Get("IsReviewed")).Value;
             lblReview.Text = isReviewd;
             if (isReviewd == ReviewStatus.Approved.ToString())
@@ -277,11 +272,6 @@ namespace PraticeManagement.Controls.TimeEntry
 
             hdnNonBillableHours.Value = tbNonBillableHours.Text;
 
-            chbIsChargeable.Checked = Convert.ToBoolean(TimeEntryRecordNonBillableElement.Attribute(XName.Get("IsChargeable")).Value);
-            hdnIsChargeable.Value = chbIsChargeable.Checked.ToString().ToLower();
-            chbForDiffProject.Checked = !Convert.ToBoolean(TimeEntryRecordNonBillableElement.Attribute(XName.Get("IsCorrect")).Value); ;
-            hdnForDiffProject.Value = chbForDiffProject.Checked.ToString().ToLower();
-
             var isReviewd = TimeEntryRecordNonBillableElement.Attribute(XName.Get("IsReviewed")).Value;
             lblReview.Text = isReviewd;
             if (isReviewd == ReviewStatus.Approved.ToString())
@@ -291,7 +281,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
             imgNote.ToolTip = tbNotes.Text;
 
-           // MaintainEditedtbHoursStyle();
+            MaintainEditedtbHoursStyle();
         }
 
 
@@ -319,8 +309,6 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 btnSaveNotes.Enabled =
                 tbNotes.Enabled =
-                chbIsChargeable.Enabled =
-                chbForDiffProject.Enabled =
                 tbBillableHours.Enabled = tbNonBillableHours.Enabled = enabled;
             }
         }
@@ -332,7 +320,6 @@ namespace PraticeManagement.Controls.TimeEntry
             {
                 element.Attribute(XName.Get("ActualHours")).Value = tbBillableHours.Text;
                 element.Attribute(XName.Get("Note")).Value = tbNotes.Text;
-                element.Attribute(XName.Get("IsCorrect")).Value = (!(chbForDiffProject.Checked)).ToString();
                 element.Attribute(XName.Get("IsDirty")).Value = hfDirtyBillableHours.Value;
             }
             else
@@ -341,7 +328,6 @@ namespace PraticeManagement.Controls.TimeEntry
                 element.SetAttributeValue(XName.Get("ActualHours"), tbBillableHours.Text);
                 element.SetAttributeValue(XName.Get("Note"), tbNotes.Text);
                 element.SetAttributeValue(XName.Get("EntryDate"), time.ToString(Constants.Formatting.EntryDateFormat));
-                element.SetAttributeValue(XName.Get("IsCorrect"), (!(chbForDiffProject.Checked)).ToString());
                 element.SetAttributeValue(XName.Get("IsDirty"), hfDirtyBillableHours.Value);
             }
         }
@@ -352,7 +338,6 @@ namespace PraticeManagement.Controls.TimeEntry
             {
                 element.Attribute(XName.Get("ActualHours")).Value = tbNonBillableHours.Text;
                 element.Attribute(XName.Get("Note")).Value = tbNotes.Text;
-                element.Attribute(XName.Get("IsCorrect")).Value = (!(chbForDiffProject.Checked)).ToString();
                 element.Attribute(XName.Get("IsDirty")).Value = hfDirtyNonBillableHours.Value;
             }
             else
@@ -361,7 +346,6 @@ namespace PraticeManagement.Controls.TimeEntry
                 element.SetAttributeValue(XName.Get("ActualHours"), tbNonBillableHours.Text);
                 element.SetAttributeValue(XName.Get("Note"), tbNotes.Text);
                 element.SetAttributeValue(XName.Get("EntryDate"), time.ToString(Constants.Formatting.EntryDateFormat));
-                element.SetAttributeValue(XName.Get("IsCorrect"), (!(chbForDiffProject.Checked)).ToString());
                 element.SetAttributeValue(XName.Get("IsDirty"), hfDirtyNonBillableHours.Value);
             }
         }
