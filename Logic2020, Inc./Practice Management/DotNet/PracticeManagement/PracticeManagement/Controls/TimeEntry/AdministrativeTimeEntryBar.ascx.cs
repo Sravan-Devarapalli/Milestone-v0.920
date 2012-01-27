@@ -159,7 +159,15 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             var nonbillableSte = tes.Items[index].FindControl("ste") as SingleTimeEntry_New;
             nonbillableSte.UpdateVerticalTotalCalculatorExtenderId(clientId);
+        }
 
+        internal void AddAttributeToPTOTextBox(int index)
+        {
+            if (IsPTO)
+            {
+                var nonbillableSte = tes.Items[index].FindControl("ste") as SingleTimeEntry_New;
+                nonbillableSte.AddAttributeToPTOTextBox(extTotalHours.ClientID);
+            }
         }
 
         internal void ValidateAll()
