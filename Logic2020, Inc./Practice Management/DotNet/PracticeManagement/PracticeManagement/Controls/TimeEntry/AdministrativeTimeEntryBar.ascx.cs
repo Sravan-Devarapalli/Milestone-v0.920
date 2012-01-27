@@ -44,7 +44,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            
+          
         }
 
 
@@ -175,6 +175,7 @@ namespace PraticeManagement.Controls.TimeEntry
             foreach (RepeaterItem tesItem in tes.Items)
             {
                 var nonbillableSte = tesItem.FindControl("ste") as SingleTimeEntry_New;
+                nonbillableSte.IsPTO = IsPTO;
                 nonbillableSte.ValidateNoteAndHours();
             }
         }
