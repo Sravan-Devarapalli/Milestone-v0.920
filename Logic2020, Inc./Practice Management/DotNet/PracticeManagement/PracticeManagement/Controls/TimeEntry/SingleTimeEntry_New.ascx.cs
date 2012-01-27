@@ -328,7 +328,15 @@ namespace PraticeManagement.Controls.TimeEntry
             return false;
         }
 
+
+        internal void AddAttributeToPTOTextBox(string clientId)
+        {
+            tbActualHours.Attributes["HorizontalTotalCalculator"] = clientId;
+        }
+
         #endregion
+
+       
     }
 }
 
