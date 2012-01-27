@@ -970,6 +970,7 @@ namespace DataAccess
                     int canCreateCustomWorkTypesIndex = -1;
                     int IsInternalIndex = -1;
                     int ClientIsInternalIndex = -1;
+                    int hasTimeEntriesIndex = -1;
 
                     try
                     {
@@ -1050,6 +1051,15 @@ namespace DataAccess
                     {
                         ClientIsInternalIndex = -1;
                     }
+
+                     try
+                     {
+                         hasTimeEntriesIndex = reader.GetOrdinal(Constants.ParameterNames.HasTimeEntries);
+                     }
+                     catch
+                     {
+                         hasTimeEntriesIndex = -1;
+                     }
                     
                     while (reader.Read())
                     {
@@ -1085,6 +1095,11 @@ namespace DataAccess
                         if (hasAttachmentsIndex >= 0)
                         {
                             project.HasAttachments = (int)reader[hasAttachmentsIndex] == 1;
+                        }
+
+                        if (hasTimeEntriesIndex >= 0)
+                        {
+                            project.HasTimeEntries = reader.GetBoolean(hasTimeEntriesIndex);
                         }
 
                         if (practiceOwnerNameIndex >= 0)
