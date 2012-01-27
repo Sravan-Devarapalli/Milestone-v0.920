@@ -1499,9 +1499,18 @@ namespace DataAccess
                 var actualHrsIndex = reader.GetOrdinal(Constants.ParameterNames.ActualHours);
                 var forecastedHrsIndex = reader.GetOrdinal(Constants.ParameterNames.ForecastedHours);
                 var isChargeableIndex = reader.GetOrdinal(Constants.ParameterNames.IsChargeable);
-                var isCorrectIndex = reader.GetOrdinal(Constants.ParameterNames.IsCorrect);
+                var isCorrectIndex = -1;
                 var revieweStatusIdIndex = reader.GetOrdinal(Constants.ParameterNames.ReviewStatusId);
                 var IsChargeCodeOffIndex = reader.GetOrdinal(Constants.ColumnNames.IsChargeCodeOffColumn);
+
+                try
+                {
+                    isCorrectIndex = reader.GetOrdinal(Constants.ParameterNames.IsCorrect);
+                }
+                catch
+                {
+                    isCorrectIndex = -1;
+                }
 
                 while (reader.Read())
                 {
@@ -1521,11 +1530,15 @@ namespace DataAccess
                         ForecastedHours = reader.GetFloat(forecastedHrsIndex),
                         ModifiedDate = reader.GetDateTime(modifiedDateIndex),
                         IsChargeable = reader.GetBoolean(isChargeableIndex),
-                        IsCorrect = reader.GetBoolean(isCorrectIndex),
                         IsReviewed = (ReviewStatus)Enum.Parse(typeof(ReviewStatus), reader.GetInt32(revieweStatusIdIndex).ToString()),
                         IsChargeCodeOff = reader.GetBoolean(IsChargeCodeOffIndex)
 
                     };
+
+                    if (isCorrectIndex >= 0)
+                    {
+                        timeEntry.IsCorrect = reader.GetBoolean(isCorrectIndex);
+                    }
 
                     timeEntries.Add(timeEntry);
                 }
