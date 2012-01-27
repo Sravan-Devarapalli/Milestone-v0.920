@@ -291,7 +291,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
             imgNote.ToolTip = tbNotes.Text;
 
-            MaintainEditedtbHoursStyle();
+           // MaintainEditedtbHoursStyle();
         }
 
 
@@ -374,16 +374,16 @@ namespace PraticeManagement.Controls.TimeEntry
         internal void ValidateNoteAndHours()
         {
             var isValidNote = IsValidNote();
-            var isValidHours = IsValidBillableHours();
+            var isValidBillableHours = IsValidBillableHours();
             var isValidNonBillableHours = IsValidNonBillableHours();
 
             if (!isValidNote)
                 HostingPage.IsValidNote = isValidNote;
 
-            if (!isValidHours)
-                HostingPage.IsValidHours = isValidHours && isValidNonBillableHours;
+            if (!(isValidBillableHours && isValidNonBillableHours))
+                HostingPage.IsValidHours = isValidBillableHours && isValidNonBillableHours;
 
-            if (isValidNote && isValidHours)
+            if (isValidNote && isValidBillableHours && isValidNonBillableHours)
             {
                 tbBillableHours.BackColor = tbBillableHours.BackColor != Color.Red ? tbBillableHours.BackColor : Color.White;
             }
@@ -393,7 +393,7 @@ namespace PraticeManagement.Controls.TimeEntry
             }
 
 
-            if (isValidNote && isValidNonBillableHours)
+            if (isValidNote && isValidBillableHours && isValidNonBillableHours)
             {
                 tbNonBillableHours.BackColor = tbNonBillableHours.BackColor != Color.Red ? tbNonBillableHours.BackColor : Color.White;
             }
@@ -412,11 +412,10 @@ namespace PraticeManagement.Controls.TimeEntry
 
             var note = tbNotes.Text;
 
-            if (hdnIsNoteRequired.Value == "true")
+            if (hdnIsNoteRequired.Value.ToLowerInvariant() == "true")
             {
                 if (string.IsNullOrEmpty(note) || note.Length < 3 || note.Length > 1000)
                 {
-
                     return false;
                 }
             }
