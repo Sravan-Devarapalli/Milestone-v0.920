@@ -16,7 +16,7 @@
 	[DirectorId]	   INT			   NULL,
 	[Description]      NVARCHAR (MAX)  NULL,
 	[CanCreateCustomWorkTypes]	BIT	   NOT NULL,
-	[IsInternal]	   BIT			   NOT NULL DEFAULT 0,--added as internal client can be having external projects.
-	[IsAllowedToShow]			BIT	   NOT NULL DEFAULT 1--For not showing internal projects(like PTO,HOL,etc)/"Business Development" project in overall PM site.
+	[IsInternal]	   BIT			   NOT NULL CONSTRAINT DF_Project_IsInternal DEFAULT 0,--added as internal client can be having external projects.
+	[IsAllowedToShow]			BIT	   NOT NULL CONSTRAINT DF_Project_IsAllowedToShow DEFAULT 1--For not showing internal projects(like PTO,HOL,etc)/"Business Development" project in overall PM site.
     FOREIGN KEY ([GroupId]) REFERENCES [dbo].[ProjectGroup] ([GroupId]) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
