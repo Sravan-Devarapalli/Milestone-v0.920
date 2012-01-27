@@ -30,7 +30,7 @@
             <ext1:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lblTotalHours" />
             <ext2:EnableDisableExtender ID="extEnableDisable" runat="server" TargetControlID="ddlTimeTypes" />
         </td>
-        <td style="width: 3%; text-align: center;">
+         <td class="DeleteWidth">
             <asp:ImageButton ID="imgDropTes" runat="server" OnClientClick='return confirm ("This will delete the time and notes entered for the entire row!  Are you sure?")'
                 ImageUrl="~/Images/close_16.png" OnClick="imgDropTes_Click" />
         </td>
