@@ -124,8 +124,6 @@ namespace PraticeManagement.Controls.TimeEntry
         protected void Page_PreRender(object sender, EventArgs e)
         {
             SpreadSheetTotalCalculatorExtenderId = HostingPage.SpreadSheetTotalCalculatorExtenderId;
-
-
         }
 
         public void CanelControlStyle()
@@ -184,10 +182,6 @@ namespace PraticeManagement.Controls.TimeEntry
 
             tbActualHours.Text = TimeEntryRecordElement.Attribute(XName.Get("ActualHours")).Value;
             hdnActualHours.Value = tbActualHours.Text;
-            chbIsChargeable.Checked = Convert.ToBoolean(TimeEntryRecordElement.Attribute(XName.Get("IsChargeable")).Value);
-            hdnIsChargeable.Value = chbIsChargeable.Checked.ToString().ToLower();
-            chbForDiffProject.Checked = !Convert.ToBoolean(TimeEntryRecordElement.Attribute(XName.Get("IsCorrect")).Value); ;
-            hdnForDiffProject.Value = (!(chbForDiffProject.Checked)).ToString().ToLower();
 
             var isReviewd = TimeEntryRecordElement.Attribute(XName.Get("IsReviewed")).Value;
             lblReview.Text = isReviewd;
@@ -218,10 +212,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 btnSaveNotes.Enabled =
                 tbNotes.Enabled =
-                chbForDiffProject.Enabled =
                 tbActualHours.Enabled = enabled;
-
-
             }
         }
 
@@ -239,7 +230,6 @@ namespace PraticeManagement.Controls.TimeEntry
             {
                 element.Attribute(XName.Get("ActualHours")).Value = tbActualHours.Text;
                 element.Attribute(XName.Get("Note")).Value = tbNotes.Text;
-                element.Attribute(XName.Get("IsCorrect")).Value = (!(chbForDiffProject.Checked)).ToString();
                 element.Attribute(XName.Get("IsDirty")).Value = hfDirtyHours.Value;
             }
             else
@@ -248,8 +238,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 element.SetAttributeValue(XName.Get("ActualHours"), tbActualHours.Text);
                 element.SetAttributeValue(XName.Get("Note"), tbNotes.Text);
                 element.SetAttributeValue(XName.Get("EntryDate"), time.ToString(Constants.Formatting.EntryDateFormat));
-                element.SetAttributeValue(XName.Get("IsCorrect"), (!(chbForDiffProject.Checked)).ToString());
-                element.SetAttributeValue(XName.Get("IsDirty"), hfDirtyHours.Value);
+                element.SetAttributeValue(XName.Get("IsDirty"), hfDirtyHours.Value );
             }
         }
 
