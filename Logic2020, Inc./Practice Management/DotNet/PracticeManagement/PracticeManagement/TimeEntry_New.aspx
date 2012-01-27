@@ -153,13 +153,12 @@
         <asp:UpdatePanel ID="updTimeEntries" runat="server">
             <ContentTemplate>
                 <script type="text/javascript">
-                    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
-
-                    function endRequestHandle(sender, args) {
-                        var cpeProjectSection = $find('cpeProjectSection');
-                        cpeProjectSection._collapsed = false;
-                        cpeProjectSection._autoExpand = true;
-                    }
+                    function ExpandPanel(name) {
+                        var isCollapsed = $find(name).get_Collapsed();
+                        if (isCollapsed) {
+                            $find(name).expandPanel();
+                        }
+                    } 
                 </script>
                 <uc:MessageLabel ID="mlErrors" runat="server" ErrorColor="Red" InfoColor="DarkGreen"
                     WarningColor="Orange" EnableViewState="false" />
@@ -169,12 +168,13 @@
                             <tr>
                                 <td>
                                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeProjectSection" runat="Server"
-                                        EnableViewState="false" TargetControlID="pnlProjectSection" ImageControlID="btnExpandCollapseFilter"
+                                        CollapsedText="Expand Section" ExpandedText="Collapse Section" EnableViewState="false"
+                                        TargetControlID="pnlProjectSection" ImageControlID="btnExpandCollapseFilter"
                                         CollapsedImage="Images/expand.jpg" ExpandedImage="Images/collapse.jpg" CollapseControlID="btnExpandCollapseFilter"
                                         ExpandControlID="btnExpandCollapseFilter" TextLabelID="lblFilter" BehaviorID="cpeProjectSection" />
-                                    <asp:Label ID="lblFilter" runat="server"></asp:Label>
+                                    <asp:Label ID="lblFilter" Style="display: none;" runat="server"></asp:Label>
                                     <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg"
-                                        ToolTip="Expand Filters" />&nbsp;<b>Project</b>
+                                        ToolTip="Expand Section" />&nbsp;<b>Project</b>
                                 </td>
                                 <td align="center">
                                 </td>
@@ -253,11 +253,12 @@
                             <tr>
                                 <td>
                                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeBusinessDevelopmentSection" runat="Server"
-                                        EnableViewState="false" TargetControlID="pnlBusinessDevelopmentSection" ImageControlID="Image1"
-                                        CollapsedImage="Images/expand.jpg" ExpandedImage="Images/collapse.jpg" CollapseControlID="Image1"
-                                        ExpandControlID="Image1" TextLabelID="Label1" />
-                                    <asp:Label ID="Label1" runat="server"></asp:Label>
-                                    <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Filters" />&nbsp;<b>Business
+                                        CollapsedText="Expand Section" ExpandedText="Collapse Section" EnableViewState="false" BehaviorID="cpeBusinessDevelopmentSection"
+                                        TargetControlID="pnlBusinessDevelopmentSection" ImageControlID="Image1" CollapsedImage="Images/expand.jpg"
+                                        ExpandedImage="Images/collapse.jpg" CollapseControlID="Image1" ExpandControlID="Image1"
+                                        TextLabelID="Label1" />
+                                    <asp:Label ID="Label1" Style="display: none;" runat="server"></asp:Label>
+                                    <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Section" />&nbsp;<b>Business
                                         Development</b>
                                 </td>
                                 <td align="center">
@@ -338,12 +339,13 @@
                         <table cellpadding="0" class="WholeWidth">
                             <tr>
                                 <td>
-                                    <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeInternalSection" runat="Server"
-                                        EnableViewState="false" TargetControlID="pnlInternalSection" ImageControlID="Image2"
-                                        CollapsedImage="Images/expand.jpg" ExpandedImage="Images/collapse.jpg" CollapseControlID="Image2"
-                                        ExpandControlID="Image2" TextLabelID="Label2" />
-                                    <asp:Label ID="Label2" runat="server"></asp:Label>
-                                    <asp:Image ID="Image2" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Filters" />&nbsp;<b>Internal</b>
+                                    <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeInternalSection" runat="Server" BehaviorID="cpeInternalSection"
+                                        CollapsedText="Expand Section" ExpandedText="Collapse Section" EnableViewState="false"
+                                        TargetControlID="pnlInternalSection" ImageControlID="Image2" CollapsedImage="Images/expand.jpg"
+                                        ExpandedImage="Images/collapse.jpg" CollapseControlID="Image2" ExpandControlID="Image2"
+                                        TextLabelID="Label2" />
+                                    <asp:Label ID="Label2" Style="display: none;" runat="server"></asp:Label>
+                                    <asp:Image ID="Image2" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Section" />&nbsp;<b>Internal</b>
                                 </td>
                                 <td align="center">
                                 </td>
@@ -547,7 +549,8 @@
                                     <asp:CustomValidator ID="cvDayTotal" runat="server" ErrorMessage="Day Total hours must be lessthan or equals to 24."
                                         OnServerValidate="cvDayTotal_ServerValidate" EnableClientScript="false" Text="*"
                                         Display="None" SetFocusOnError="true" ValidationGroup="TE" ToolTip="Day Total hours must be lessthan or equals to 24." />
-                                      <uc:MessageLabel ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
+                                    <uc:MessageLabel ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green"
+                                        WarningColor="Orange" />
                                     <asp:ValidationSummary ID="valSumSaveTimeEntries" runat="server" ValidationGroup="TE" />
                                 </td>
                                 <td valign="middle">
