@@ -97,7 +97,7 @@ namespace PraticeManagement
         {
             var groupId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
             //var selectedProjectId = contextKey == null ? -1 : int.Parse(contextKey);
-            var projects = ServiceCallers.Custom.Project(group => group.GetProjectsListByProjectGroupId(groupId,true)).OrderBy(p => p.Name);
+            var projects = ServiceCallers.Custom.Project(group => group.GetProjectsListByProjectGroupId(groupId, true)).OrderBy(p => p.ProjectNumber);
 
             return projects.Select(
                 project => new CascadingDropDownNameValue(
@@ -112,7 +112,7 @@ namespace PraticeManagement
         {
             var clientId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
             //var selectedProjectId = contextKey == null ? -1 : int.Parse(contextKey);
-            var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, false, true, true)).OrderBy(p => p.Name);
+            var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, false, true, true)).OrderBy(p => p.ProjectNumber);
 
             var cddlist = projects.Select(
                 project => new CascadingDropDownNameValue(
