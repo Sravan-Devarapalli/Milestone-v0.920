@@ -33,8 +33,6 @@ BEGIN
 					uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/@ModifiedBy)[1]', 'int') AS 'ModifiedBy',
 					i.[Note] AS 'Note',
 					uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/@ReviewStatus)[1]', 'VARCHAR(1000)') AS 'ReviewStatus',
-					CASE i.[IsCorrect] WHEN 1 THEN 'Correct'
-										 ELSE 'InCorrect' END AS 'IsCorrect',
 					uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/@IsBillable)[1]', 'VARCHAR(1000)') AS 'IsBillable',
 				 uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/@ChargeCodeDate)[1]', 'VARCHAR(10)') AS 'ChargeCodeDate',
 				 uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/@ModifiedByName)[1]', 'VARCHAR(1000)') AS 'ModifiedByName',
@@ -46,7 +44,8 @@ BEGIN
 				 uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/@ProjectGroupName)[1]', 'VARCHAR(1000)') AS 'ProjectGroupName',
 				 uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/@ProjectName)[1]', 'VARCHAR(1000)') AS 'ProjectName',
 				 uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/@ProjectId)[1]', 'INT') AS 'ProjectId',
-				 uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/@ChargeCode)[1]', 'VARCHAR(1000)') AS 'ChargeCode'
+				 uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/@ChargeCode)[1]', 'VARCHAR(1000)') AS 'ChargeCode',
+				 uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/@IsAllowedToShow)[1]', 'BIT') AS 'IsAllowedToShow'
 			FROM inserted AS i
 			INNER JOIN UALog ON i.TimeEntryId = uaLog.TimeEntryId and UALog.RANKnO = 1 
 		),
@@ -64,8 +63,6 @@ BEGIN
 					uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/OLD_VALUES/@ModifiedBy)[1]', 'int') AS 'ModifiedBy',
 					del.[Note] AS 'Note',
 					uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/OLD_VALUES/@ReviewStatus)[1]', 'VARCHAR(1000)') AS 'ReviewStatus',
-					CASE del.[IsCorrect] WHEN 1 THEN 'Correct'
-										 ELSE 'InCorrect' END AS 'IsCorrect',
 					uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/OLD_VALUES/@IsBillable)[1]', 'VARCHAR(1000)') AS 'IsBillable',
 				 uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/OLD_VALUES/@ChargeCodeDate)[1]', 'VARCHAR(10)') AS 'ChargeCodeDate',
 				 uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/OLD_VALUES/@ModifiedByName)[1]', 'VARCHAR(1000)') AS 'ModifiedByName',
@@ -77,7 +74,8 @@ BEGIN
 				 uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/OLD_VALUES/@ProjectGroupName)[1]', 'VARCHAR(1000)') AS 'ProjectGroupName',
 				 uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/OLD_VALUES/@ProjectName)[1]', 'VARCHAR(1000)') AS 'ProjectName',
 				 uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/OLD_VALUES/@ProjectId)[1]', 'INT') AS 'ProjectId',
-				 uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/OLD_VALUES/@ChargeCode)[1]', 'VARCHAR(1000)') AS 'ChargeCode'
+				 uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/OLD_VALUES/@ChargeCode)[1]', 'VARCHAR(1000)') AS 'ChargeCode',
+				 uaLog.XmlData.value('(/TimeEntry/NEW_VALUES/OLD_VALUES/@IsAllowedToShow)[1]', 'BIT') AS 'IsAllowedToShow'
 			FROM deleted AS del
 			INNER JOIN UALog ON del.TimeEntryId = uaLog.TimeEntryId and UALog.RANKnO = 1 
 		)
