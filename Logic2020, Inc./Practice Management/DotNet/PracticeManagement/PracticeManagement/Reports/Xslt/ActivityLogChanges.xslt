@@ -66,7 +66,7 @@
                   or $attrName = 'MilestonePersonId' or $attrName = 'Id' or $attrName = 'ModifiedByName' or $attrName = 'TimeTypeId' or $attrName = 'OpportunityId'
                   or $attrName = 'SalespersonId' or $attrName = 'PracticeId' or $attrName = 'OpportunityStatusId' or $attrName = 'OwnerId' or $attrName = 'GroupId'
                   or $attrName = 'LastUpdated' or $attrName = 'Tag' or $attrName = 'OpportunityTransitionStatusId' or $attrName='ProjectStatusId' or $attrName = 'ProjectManagerId'
-                  or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId' or $attrName = 'ProjectGroupId'"></xsl:when>
+                  or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId' or $attrName = 'ProjectGroupId' or $attrName = 'IsAllowedToShow'"></xsl:when>
         <xsl:otherwise>
           <xsl:for-each select="parent::*/OLD_VALUES/attribute::*">
             <xsl:if test="name() = $attrName and . != $value">
@@ -99,7 +99,7 @@
                   or $attrName = 'MilestonePersonId' or $attrName = 'Id' or $attrName = 'ModifiedByName' or $attrName = 'TimeTypeId' or $attrName = 'OpportunityId'
                   or $attrName = 'SalespersonId' or $attrName = 'PracticeId' or $attrName = 'OpportunityStatusId' or $attrName = 'OwnerId' or $attrName = 'GroupId'
                   or $attrName = 'LastUpdated' or $attrName = 'Tag' or $attrName = 'OpportunityTransitionStatusId' or $attrName='ProjectStatusId' or $attrName = 'ProjectManagerId'
-                  or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId' or $attrName = 'ProjectGroupId'"></xsl:when>
+                  or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId' or $attrName = 'ProjectGroupId' or $attrName = 'IsAllowedToShow'"></xsl:when>
         <xsl:otherwise>
           <xsl:if test="not(parent::*/parent::*/attribute::*[name() = $attrName])">
             <xsl:call-template name="DisplayChange">
@@ -167,7 +167,7 @@
                   or $attrName = 'MilestonePersonId' or $attrName = 'Id' or $attrName = 'ModifiedByName' or $attrName = 'TimeTypeId' or $attrName = 'OpportunityId'
                   or $attrName = 'SalespersonId' or $attrName = 'PracticeId' or $attrName = 'OpportunityStatusId' or $attrName = 'OwnerId' or $attrName = 'GroupId'
                   or $attrName = 'LastUpdated' or $attrName = 'Tag' or $attrName = 'OpportunityTransitionStatusId' or $attrName='ProjectStatusId' or $attrName = 'ProjectManagerId'
-                  or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId' or $attrName = 'ProjectGroupId'"></xsl:when>
+                  or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId' or $attrName = 'ProjectGroupId' or $attrName = 'IsAllowedToShow'"></xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="FriendlyName">
             <xsl:with-param name="attrName" select="name()" />
@@ -216,7 +216,8 @@
                         and //DefaultMileStoneId = ./../@MilestoneId)
                     or ($rootName = 'Opportunity' and name() = 'Description')
                     or ($rootName = 'Project' and name() = 'Description')
-                    or ($rootName = 'ProjectAttachment' and name() = 'ProjectName')">
+                    or ($rootName = 'ProjectAttachment' and name() = 'ProjectName')
+                    or ($rootName = 'TimeEntry' and name() = 'ProjectName' and ./../@IsAllowedToShow = 0)">
             <xsl:call-template name="DisplayValue" />
           </xsl:when>
           <xsl:otherwise>
