@@ -100,12 +100,10 @@ BEGIN
 				AND (
 						TEH.ActualHours <> NEW.c.value('@ActualHours', 'REAL')  
 						OR TE.Note <> NEW.c.value('@Note', 'NVARCHAR(1000)')
-						OR TE.IsCorrect <> NEW.c.value('@IsCorrect', 'BIT')
 				     )
 
 		UPDATE TE
-		SET	TE.Note = NEW.c.value('@Note', 'NVARCHAR(1000)'),
-			TE.IsCorrect = NEW.c.value('@IsCorrect', 'BIT')
+		SET	TE.Note = NEW.c.value('@Note', 'NVARCHAR(1000)')
 		FROM dbo.TimeEntry TE
 		INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId   
 		INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId
@@ -116,9 +114,7 @@ BEGIN
 				AND CC.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT')
 				AND CC.TimeTypeId = NEW.c.value('..[1]/..[1]/@Id', 'INT')	
 				AND TEH.IsChargeable = NEW.c.value('@IsChargeable', 'BIT')
-				AND ( TE.Note <> NEW.c.value('@Note', 'NVARCHAR(1000)')
-						OR TE.IsCorrect <> NEW.c.value('@IsCorrect', 'BIT')
-						)
+				AND ( TE.Note <> NEW.c.value('@Note', 'NVARCHAR(1000)'))
 
 		;WITH ForecastedHours AS 
 		(
@@ -144,7 +140,7 @@ BEGIN
 				NEW.c.value('..[1]/@Date', 'DATETIME'),
 				ISNULL(FH.ForcastedHours, 0),
 				CASE WHEN CC.TimeTypeId = @PTOTimeTypeId THEN 'PTO' ELSE NEW.c.value('@Note', 'NVARCHAR(1000)') END,
-				NEW.c.value('@IsCorrect', 'BIT'),
+				1,
 				0
 		FROM @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
 		JOIN dbo.ChargeCode CC ON CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
@@ -153,9 +149,7 @@ BEGIN
 								AND CC.TimeTypeId = NEW.c.value('..[1]/..[1]/@Id', 'INT')	
 		LEFT JOIN dbo.TimeEntry TE ON TE.ChargeCodeId = CC.Id AND TE.PersonId = @PersonId
 										AND TE.ChargeCodeDate = NEW.c.value('..[1]/@Date', 'DATETIME')
-										AND (TE.Note = NEW.c.value('@Note', 'NVARCHAR(1000)')
-												OR TE.IsCorrect = NEW.c.value('@IsCorrect', 'BIT')
-												)
+										AND (TE.Note = NEW.c.value('@Note', 'NVARCHAR(1000)') )
 		LEFT JOIN ForecastedHours FH ON FH.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT') 
 										AND FH.Date = NEW.c.value('..[1]/@Date', 'DATETIME')
 		WHERE TE.TimeEntryId IS NULL
