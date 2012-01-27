@@ -2,6 +2,7 @@
 AS
 BEGIN
 	SELECT ClientId,Name 
-	FROM dbo.Client 
+	FROM dbo.Client C
+	ORDER BY C.Name
 END
 
