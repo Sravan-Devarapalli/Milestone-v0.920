@@ -29,9 +29,7 @@ BEGIN
 					,tType.[Name] AS 'TimeTypeName'
 					,i.[ModifiedBy] AS 'ModifiedBy'
 					,TE.[Note] AS 'Note'
-					,TER.Name AS 'ReviewStatus' 
-					,CASE TE.[IsCorrect] WHEN 1 THEN 'Correct'
-											ELSE 'InCorrect' END AS 'IsCorrect'
+					,TER.Name AS 'ReviewStatus'
 					,CASE i.[IsChargeable] WHEN 1 THEN 'Billable'
 											ELSE 'Not Billable' END AS 'IsBillable'
 					,CONVERT(VARCHAR(10), TE.[ChargeCodeDate], 101) AS 'ChargeCodeDate'
@@ -45,6 +43,7 @@ BEGIN
 					,proj.[Name] AS 'ProjectName'
 					,proj.ProjectId AS 'ProjectId'
 					,clnt.[Code] + ' - ' + PG.[Code] + ' - ' + proj.ProjectNumber + ' - ' + '01 - ' + tType.Code AS 'ChargeCode'
+					,proj.IsAllowedToShow AS 'IsAllowedToShow'
 			FROM inserted AS i
 			INNER JOIN dbo.TimeEntry AS TE ON TE.TimeEntryId = i.TimeEntryId
 			INNER JOIN dbo.TimeEntryReviewStatus AS TER ON TER.Id = i.ReviewStatusId
@@ -91,8 +90,7 @@ BEGIN
 														NEW_VALUES.TimeTypeName,
 														NEW_VALUES.ModifiedBy,
 														NEW_VALUES.Note,
-														NEW_VALUES.ReviewStatus, 
-														NEW_VALUES.IsCorrect,
+														NEW_VALUES.ReviewStatus,
 														NEW_VALUES.IsBillable,
 														NEW_VALUES.ChargeCodeDate,
 														NEW_VALUES.ModifiedByName,
@@ -104,7 +102,8 @@ BEGIN
 														NEW_VALUES.ProjectGroupId,
 														NEW_VALUES.ProjectName,
 														NEW_VALUES.ProjectId,
-														NEW_VALUES.ChargeCode
+														NEW_VALUES.ChargeCode,
+														NEW_VALUES.IsAllowedToShow
 												FROM NEW_VALUES
 												WHERE NEW_VALUES.Id = i.Id
 												FOR XML AUTO, ROOT('TimeEntry'))),
