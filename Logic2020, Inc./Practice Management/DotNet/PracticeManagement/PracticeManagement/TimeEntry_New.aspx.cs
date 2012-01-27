@@ -96,9 +96,9 @@ namespace PraticeManagement
         private const string workTypeXmlClose = "</WorkType>";
         private const string calendarItemXmlOpen = "<CalendarItem Date=\"{0}\" CssClass=\"{1}\" IsNoteRequired=\"{2}\"  IsHourlyRevenue=\"{3}\" >";
         private const string calendarItemXmlClose = "</CalendarItem>";
-        private const string billableXmlOpen = "<TimeEntryRecord  ActualHours=\"{0}\" Note=\"{1}\" IsChargeable=\"{2}\" EntryDate=\"{3}\" IsCorrect=\"{4}\" IsReviewed=\"{5}\" IsChargeCodeOff=\"{6}\" IsDirty=\"{7}\" >";
+        private const string billableXmlOpen = "<TimeEntryRecord  ActualHours=\"{0}\" Note=\"{1}\" IsChargeable=\"{2}\" EntryDate=\"{3}\" IsReviewed=\"{4}\" IsChargeCodeOff=\"{5}\" IsDirty=\"{6}\" >";
         private const string billableXmlClose = "</TimeEntryRecord>";
-        private const string nonBillableXmlOpen = "<TimeEntryRecord  ActualHours=\"{0}\" Note=\"{1}\" IsChargeable=\"{2}\" EntryDate=\"{3}\"  IsCorrect=\"{4}\"  IsReviewed=\"{5}\" IsChargeCodeOff=\"{6}\" IsDirty=\"{7}\" >";
+        private const string nonBillableXmlOpen = "<TimeEntryRecord  ActualHours=\"{0}\" Note=\"{1}\" IsChargeable=\"{2}\" EntryDate=\"{3}\"  IsReviewed=\"{4}\" IsChargeCodeOff=\"{5}\" IsDirty=\"{6}\" >";
         private const string NonBillableXmlClose = "</TimeEntryRecord>";
 
         private const string businessDevelopmentSectionXml = "businessDevelopmentSectionXml";
@@ -111,6 +111,8 @@ namespace PraticeManagement
         public const string selectedInActiveWorktypeName = "selectedInActiveWorktypeName";
         public const string selectedInActiveWorktypeid = "selectedInActiveWorktypeid";
         public const string SavedAllConfirmation = "TimeEntries saved sucessfully.";
+
+        public const string lblRecursiveAlert = "lblRecursiveAlert";
 
         #endregion
 
@@ -406,6 +408,8 @@ namespace PraticeManagement
                 imgBtnRecursiveProjectSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Project).ToString();
                 var imgBtnDeleteProjectSection = e.Item.FindControl(imgBtnDeleteProjectSectionImage) as ImageButton;
                 imgBtnDeleteProjectSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Project).ToString();
+                var lblRecursiveNote = e.Item.FindControl(lblRecursiveAlert) as Label;
+                lblRecursiveNote.Visible = Convert.ToBoolean(isRecursive);
             }
         }
 
@@ -446,6 +450,8 @@ namespace PraticeManagement
                 var imgBtnDeleteBusinessDevelopmentSection = e.Item.FindControl(imgBtnDeleteBusinessDevelopmentSectionImage) as ImageButton;
                 imgBtnDeleteBusinessDevelopmentSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.BusinessDevelopment).ToString();
 
+                var lblRecursiveNote = e.Item.FindControl(lblRecursiveAlert) as Label;
+                lblRecursiveNote.Visible = Convert.ToBoolean(isRecursive);
             }
         }
 
@@ -484,6 +490,9 @@ namespace PraticeManagement
 
                 var imgBtnDeleteInternalSection = e.Item.FindControl(imgBtnDeleteInternalSectionImage) as ImageButton;
                 imgBtnDeleteInternalSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Internal).ToString();
+
+                var lblRecursiveNote = e.Item.FindControl(lblRecursiveAlert) as Label;
+                lblRecursiveNote.Visible = Convert.ToBoolean(isRecursive);
             }
         }
 
@@ -691,7 +700,7 @@ namespace PraticeManagement
                     }
 
                     var imgBtnDeleteProjectSection = barItem.FindControl(imgBtnDeleteProjectSectionImage) as ImageButton;
-                    imgBtnDeleteProjectSection.Attributes["onclick"] = "DeleteSection('" + cpeProjectSection.BehaviorID + "','" + repProjectSections.Items.Count.ToString() + "');";
+                    imgBtnDeleteProjectSection.Attributes["onclick"] = "return DeleteSection('" + cpeProjectSection.BehaviorID + "','" + repProjectSections.Items.Count.ToString() + "');";
 
                 }
 
@@ -708,7 +717,7 @@ namespace PraticeManagement
                     }
 
                     var imgBtnDeleteBusinessDevelopmentSection = barItem.FindControl(imgBtnDeleteBusinessDevelopmentSectionImage) as ImageButton;
-                    imgBtnDeleteBusinessDevelopmentSection.Attributes["onclick"] = "DeleteSection('" + cpeBusinessDevelopmentSection.BehaviorID + "','" + repBusinessDevelopmentSections.Items.Count.ToString() + "');";
+                    imgBtnDeleteBusinessDevelopmentSection.Attributes["onclick"] = "return DeleteSection('" + cpeBusinessDevelopmentSection.BehaviorID + "','" + repBusinessDevelopmentSections.Items.Count.ToString() + "');";
 
                 }
 
@@ -726,7 +735,7 @@ namespace PraticeManagement
                     }
 
                     var imgBtnDeleteInternalSection = barItem.FindControl(imgBtnDeleteInternalSectionImage) as ImageButton;
-                    imgBtnDeleteInternalSection.Attributes["onclick"] = "DeleteSection('" + cpeInternalSection.BehaviorID + "','" + repInternalSections.Items.Count.ToString() + "');";
+                    imgBtnDeleteInternalSection.Attributes["onclick"] = "return DeleteSection('" + cpeInternalSection.BehaviorID + "','" + repInternalSections.Items.Count.ToString() + "');";
 
                 }
 
@@ -1222,13 +1231,13 @@ namespace PraticeManagement
 
                         if (bterecord != null)
                         {
-                            xml.Append(string.Format(billableXmlOpen, bterecord.ActualHours.ToString(Constants.Formatting.DoubleFormat), bterecord.HtmlEncodedNote, bterecord.IsChargeable, bterecord.EntryDate.ToString(Constants.Formatting.EntryDateFormat), bterecord.IsCorrect, bterecord.IsReviewed.ToString(), bterecord.IsChargeCodeOff, "none"));
+                            xml.Append(string.Format(billableXmlOpen, bterecord.ActualHours.ToString(Constants.Formatting.DoubleFormat), bterecord.HtmlEncodedNote, bterecord.IsChargeable, bterecord.EntryDate.ToString(Constants.Formatting.EntryDateFormat), bterecord.IsReviewed.ToString(), bterecord.IsChargeCodeOff, "none"));
                             xml.Append(billableXmlClose);
                         }
 
                         if (nbterecord != null)
                         {
-                            xml.Append(string.Format(nonBillableXmlOpen, nbterecord.ActualHours.ToString(Constants.Formatting.DoubleFormat), nbterecord.HtmlEncodedNote, nbterecord.IsChargeable, nbterecord.EntryDate.ToString(Constants.Formatting.EntryDateFormat), nbterecord.IsCorrect, nbterecord.IsReviewed.ToString(), nbterecord.IsChargeCodeOff, "none"));
+                            xml.Append(string.Format(nonBillableXmlOpen, nbterecord.ActualHours.ToString(Constants.Formatting.DoubleFormat), nbterecord.HtmlEncodedNote, nbterecord.IsChargeable, nbterecord.EntryDate.ToString(Constants.Formatting.EntryDateFormat), nbterecord.IsReviewed.ToString(), nbterecord.IsChargeCodeOff, "none"));
                             xml.Append(NonBillableXmlClose);
                         }
                     }
@@ -1629,7 +1638,27 @@ namespace PraticeManagement
             XElement accountAndProjectSelectionElement = xlist.First(element => element.Attribute(XName.Get(AccountIdXname)).Value == accountId.ToString() && element.Attribute(XName.Get(ProjectIdXname)).Value == projectId.ToString() && element.Attribute(XName.Get(BusinessUnitIdXname)).Value == businessUnitId.ToString());
             accountAndProjectSelectionElement.SetAttributeValue(IsRecursiveXname, (isRecursive).ToString());
 
+
             ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntryRecursiveSelection(personId, accountId, businessUnitId, projectId, timeEntrySectionId, isRecursive, dates[0]));
+
+            var lblRecursiveNote = repeaterItem.FindControl(lblRecursiveAlert) as Label;
+            if (lblRecursiveNote != null)
+            {
+                lblRecursiveNote.Visible = Convert.ToBoolean(isRecursive);
+            }
+
+            if ((int)TimeEntrySectionType.Project == timeEntrySectionId)
+            {
+                ProjectSectionXml = xdoc.ToString();
+            }
+            else if ((int)TimeEntrySectionType.BusinessDevelopment == timeEntrySectionId)
+            {
+                BusinessDevelopmentSectionXml = xdoc.ToString();
+            }
+            else if ((int)TimeEntrySectionType.Internal == timeEntrySectionId)
+            {
+                InternalSectionXml = xdoc.ToString();
+            }
         }
 
         protected void imgBtnDeleteSection_OnClick(object sender, EventArgs args)
