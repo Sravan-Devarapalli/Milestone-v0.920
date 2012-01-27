@@ -2120,7 +2120,7 @@ table.CellPaddingClass td
 .time-entry-bar-time-typesNew
 {
     width: 20%;
-    padding-left: 0px;
+    padding-left: 3px;
     text-align: left;
     border-right: 5px;
     padding-right: 0px;
@@ -2168,6 +2168,27 @@ table.CellPaddingClass td
     vertical-align: middle;
     padding-right: 5px;
     width: 7%;
+    font-weight:bold;
+}
+.DeleteWidth
+{
+    padding-left:4px;
+    padding-right:4px;
+    width:3%;
+    text-align:right;
 }
 
+.time-entry-bar-total-hoursNew
+{
+    width: 7%;
+    text-align: center;
+}
+TABLE.Section td 
+{
+    padding: 4px 4px 4px 4px;
+}
 
+TABLE.Section
+{
+ border:1px solid Gray;
+}
