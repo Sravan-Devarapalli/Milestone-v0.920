@@ -582,6 +582,10 @@
                                         <asp:RequiredFieldValidator ID="reqClientName" runat="server" ControlToValidate="ddlClientName"
                                             ErrorMessage="The Account Name is required." ToolTip="The Account Name is required."
                                             ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                        <asp:CustomValidator ID="cvClient" runat="server" ErrorMessage="Project's account cannot be modified as it has time entries."
+                                            ToolTip="This project account cannot be modified as it has time entries." ValidationGroup="Project"
+                                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                            OnServerValidate="cvClient_ServerValidate"></asp:CustomValidator>
                                     </td>
                                     <td>
                                         Group
@@ -590,6 +594,10 @@
                                         <asp:DropDownList ID="ddlProjectGroup" runat="server" Enabled="false" CssClass="WholeWidth"
                                             OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged" AutoPostBack="true">
                                         </asp:DropDownList>
+                                        <asp:CustomValidator ID="cvGroup" runat="server" ErrorMessage="Project's business unit cannot be modified as it has time entries."
+                                            ToolTip="This project business unit cannot be modified as it has time entries." ValidationGroup="Project"
+                                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                            OnServerValidate="cvGroup_ServerValidate"></asp:CustomValidator>
                                     </td>
                                     <td colspan="2" style="white-space: nowrap">
                                         Practice Area
@@ -698,7 +706,7 @@
                                         <asp:CheckBox ID="chbIsInternal" runat="server" Text="IsInternal" Enabled="false"
                                             onclick="chbCanCreateCustomWorkTypes_Change();" />
                                         <asp:CustomValidator ID="cvIsInternal" runat="server" EnableClientScript="false"
-                                             ErrorMessage="Can not change project status as some timetypes are already in use."
+                                            ErrorMessage="Can not change project status as some work types are already in use."
                                             ValidateEmptyText="true" Text="*" ToolTip="Can not change project status as some timetypes are already in use."></asp:CustomValidator>
                                         <asp:HiddenField ID="hdIsInternal" runat="server" />
                                         <asp:CheckBox ID="chbCanCreateCustomWorkTypes" onclick="chbCanCreateCustomWorkTypes_Change();"
