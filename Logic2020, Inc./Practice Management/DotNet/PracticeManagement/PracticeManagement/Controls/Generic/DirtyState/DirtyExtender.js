@@ -61,6 +61,8 @@ PraticeManagement.Controls.Generic.DirtyState.DirtyBehavior.prototype = {
         return false;
     },
     _setDirty: function () {
+        this._upDateTotals();
+
         this._setBackground('gold');
 
         var note = new String($get(this.get_NoteIdValue()).value);
@@ -73,7 +75,21 @@ PraticeManagement.Controls.Generic.DirtyState.DirtyBehavior.prototype = {
         else
             this.get_element().value = "dirty";
     },
+    _upDateTotals: function () {
 
+        var spreadSheetExtenderId = $get(this.get_SpreadSheetExtenderIdValue()).value;
+        if (spreadSheetExtenderId != '') {
+
+            var spreadSheetExtenderIdArray = spreadSheetExtenderId.split(';');
+            for (var i = 0; i < spreadSheetExtenderIdArray.length; i++) {
+                var clientId = spreadSheetExtenderIdArray[i];
+                if (clientId != '')
+                    $find(clientId).update();
+            }
+
+        }
+
+    },
     _checkDirty: function () {
         var note = new String($get(this.get_NoteIdValue()).value);
         var hours = new String($get(this.get_ActualHoursIdValue()).value);
@@ -292,7 +308,7 @@ PraticeManagement.Controls.Generic.DirtyState.DirtyBehavior.prototype = {
     },
 
     _setBackground: function (bgcolor) {
-       var actualHours = $get(this.get_ActualHoursIdValue());
+        var actualHours = $get(this.get_ActualHoursIdValue());
         if (!actualHours.disabled)
             actualHours.style.background = bgcolor;
     },
@@ -308,7 +324,7 @@ PraticeManagement.Controls.Generic.DirtyState.DirtyBehavior.prototype = {
 
             var horizontalExtenderId = $get(this.get_HorizontalTotalCalculatorExtenderIdValue()).value;
             var verticalExtenderId = $get(this.get_VerticalTotalCalculatorExtenderIdValue()).value;
-            var spreadSheetExtenderId = $get(this.get_SpreadSheetExtenderIdValue()).value;
+
 
             if (horizontalExtenderId != '') {
                 $find(horizontalExtenderId).update();
@@ -318,17 +334,8 @@ PraticeManagement.Controls.Generic.DirtyState.DirtyBehavior.prototype = {
                 $find(verticalExtenderId).update();
             }
 
-            if (spreadSheetExtenderId != '') {
-
-                var spreadSheetExtenderIdArray = spreadSheetExtenderId.split(';');
-                for (var i = 0; i < spreadSheetExtenderIdArray.length; i++) {
-                    var clientId = spreadSheetExtenderIdArray[i];
-                    if (clientId != '')
-                        $find(clientId).update();
-                }
-
-            }
-
+            this._upDateTotals();
+           
             if ($get(this.get_HiddenActualHoursIdValue()).value != '') {
                 this.get_element().value = "dirty";
                 setDirty();
