@@ -249,7 +249,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 element.SetAttributeValue(XName.Get("Note"), tbNotes.Text);
                 element.SetAttributeValue(XName.Get("EntryDate"), time.ToString(Constants.Formatting.EntryDateFormat));
                 element.SetAttributeValue(XName.Get("IsCorrect"), (!(chbForDiffProject.Checked)).ToString());
-                element.SetAttributeValue(XName.Get("IsDirty"), hfDirtyHours.Value );
+                element.SetAttributeValue(XName.Get("IsDirty"), hfDirtyHours.Value);
             }
         }
 
@@ -262,6 +262,14 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             var isValidNote = IsValidNote();
             var isValidHours = IsValidHours();
+            var isValidPTOHours = true;
+
+            if (IsPTO)
+            {
+                isValidPTOHours = IsValidPTOHours();
+                if (!isValidPTOHours)
+                    HostingPage.IsValidPTOHours = isValidPTOHours;
+            }
 
             if (!isValidNote)
                 HostingPage.IsValidNote = isValidNote;
@@ -269,7 +277,7 @@ namespace PraticeManagement.Controls.TimeEntry
             if (!isValidHours)
                 HostingPage.IsValidHours = isValidHours;
 
-            if (isValidNote && isValidHours)
+            if (isValidNote && isValidHours && isValidPTOHours)
             {
                 tbActualHours.Style["background-color"] = "none";
             }
@@ -277,6 +285,29 @@ namespace PraticeManagement.Controls.TimeEntry
             {
                 tbActualHours.Style["background-color"] = "red";
             }
+        }
+
+        private bool IsValidPTOHours()
+        {
+            double hours;
+            if (string.IsNullOrEmpty(tbActualHours.Text))
+            {
+                if (string.IsNullOrEmpty(tbNotes.Text))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            //  Check that hours is double between 0.0 and 24.0
+            if (double.TryParse(tbActualHours.Text, out hours))
+            {
+                if (hours > 0.0 && hours <= 8)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private bool IsValidNote()
@@ -336,7 +367,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
         #endregion
 
-       
+
     }
 }
 
