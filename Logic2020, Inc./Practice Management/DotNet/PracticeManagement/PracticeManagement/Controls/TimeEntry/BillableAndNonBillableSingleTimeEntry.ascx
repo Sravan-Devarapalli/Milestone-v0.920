@@ -2,7 +2,7 @@
     Inherits="PraticeManagement.Controls.TimeEntry.BillableAndNonBillableSingleTimeEntry" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="MessageLabel" TagPrefix="uc" %>
-<%@ Register Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.DirtyState"
+<%@ Register Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.DirtyStateExtender"
     TagPrefix="ext" %>
 <table cellpadding="0" cellspacing="0px" class="WholeWidth">
     <tr>
@@ -17,7 +17,7 @@
             </ajaxToolkit:FilteredTextBoxExtender>
         </td>
         <td valign="middle" rowspan="2" style="padding: 6px 4px 6px 10px; width: 40%;">
-            <asp:ImageButton ID="imgNote" runat="server" OnClientClick='<%# "SetFocus(\"" + modalEx.ClientID + "\",\"" + tbNotes.ClientID + "\",\"" + tbBillableHours.ClientID + "\",\"" + chbIsChargeable.ClientID + "\",\"" + chbForDiffProject.ClientID + "\",\"" + btnSaveNotes.ClientID + "\",\"" + tbNonBillableHours.ClientID + "\"); return false;"%>'
+            <asp:ImageButton ID="imgNote" runat="server" OnClientClick='<%# "SetFocus(\"" + modalEx.ClientID + "\",\"" + tbNotes.ClientID + "\",\"" + tbBillableHours.ClientID + "\",\"" + btnSaveNotes.ClientID + "\",\"" + tbNonBillableHours.ClientID + "\"); return false;"%>'
                 ImageUrl='<%# string.IsNullOrEmpty(tbNotes.Text) ? PraticeManagement.Constants.ApplicationResources.AddCommentIcon : PraticeManagement.Constants.ApplicationResources.RecentCommentIcon %>' />
             <image src='Images/trash-icon.gif' id='imgClear' style='padding-top: 5px;' title="Clear time and notes entered for this day only."
                 onclick='<%# "javaScript:$find(\"" + deBillableHours.ClientID + "\").clearData(); $find(\"" + deNonBillableHours.ClientID + "\").clearData(); changeIcon(\"" + tbNotes.ClientID + "\",\"" + imgNote.ClientID + "\");"%>' />
@@ -62,33 +62,11 @@
                 <table>
                     <tr>
                         <td>
-                            <table>
-                                <tr>
-                                    <td>
-                                        <asp:CheckBox ID="chbIsChargeable" Enabled="false" runat="server" Text="" />
-                                        <asp:HiddenField ID="hdnIsChargeable" runat="server" Value="false" />
-                                        <asp:HiddenField ID="hdnDefaultIsChargeable" runat="server" Value="false" />
-                                    </td>
-                                    <td align="left">
-                                        <label id="Label1" for="chbIsChargeable" runat="server">
-                                            Time entered is billable to account.</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <asp:CheckBox ID="chbForDiffProject" runat="server" Checked="False" Text="" />
-                                        <asp:HiddenField ID="hdnForDiffProject" runat="server" Value="false" />
-                                    </td>
-                                    <td align="left">
-                                        <label id="Label2" for="chbForDiffProject" runat="server">
-                                            I am not sure this is the correct milestone.</label>
-                                    </td>
-                                </tr>
-                            </table>
+                            &nbsp;
                         </td>
                         <td align="right" style="padding-right: 4px;">
                             <asp:Button ID="btnSaveNotes" runat="server" CausesValidation="false" Text="Save Notes"
-                                OnClientClick='<%# "$find(\"" + deBillableHours.ClientID + "\").checkDirty(); $find(\"" + deNonBillableHours.ClientID + "\").checkDirty(); assignHiddenValues(\"" + hdnNotes.ClientID + "\",\"" + tbNotes.ClientID + "\",\"" + hdnIsChargeable.ClientID + "\",\"" + chbIsChargeable.ClientID + "\",\"" + hdnForDiffProject.ClientID + "\",\"" + chbForDiffProject.ClientID + "\"); changeIcon(\"" + tbNotes.ClientID + "\",\"" + imgNote.ClientID + "\"); $find(\"" + modalEx.ClientID + "\").hide(); $find(\"" + deBillableHours.ClientID + "\").makeDirty(); $find(\"" + deNonBillableHours.ClientID + "\").makeDirty(); return false;"%>' />
+                                OnClientClick='<%# "$find(\"" + deBillableHours.ClientID + "\").checkDirty(); $find(\"" + deNonBillableHours.ClientID + "\").checkDirty(); assignHiddenValues(\"" + hdnNotes.ClientID + "\",\"" + tbNotes.ClientID + "\"); changeIcon(\"" + tbNotes.ClientID + "\",\"" + imgNote.ClientID + "\"); $find(\"" + modalEx.ClientID + "\").hide(); $find(\"" + deBillableHours.ClientID + "\").makeDirty(); $find(\"" + deNonBillableHours.ClientID + "\").makeDirty(); return false;"%>' />
                         </td>
                     </tr>
                     <tr>
@@ -109,19 +87,15 @@
     <asp:HiddenField ID="hdnIsNoteRequired" runat="server" />
     <asp:HiddenField ID="hdnIsHourlyRevenue" runat="server" />
     <asp:HiddenField ID="hdnIsPTOTimeType" runat="server" />
-    <ext:DirtyExtender ID="deBillableHours" runat="server" TargetControlID="hfDirtyBillableHours"
+    <ext:DirtyStateExtender ID="deBillableHours" runat="server" TargetControlID="hfDirtyBillableHours"
         HiddenActualHoursId="hdnBillableHours" NoteId="tbNotes" ActualHoursId="tbBillableHours"
-        IsCorrectId="chbForDiffProject" HiddenNoteId="hdnNotes" HiddenIsChargeableId="hdnIsChargeable"
-        HiddenIsCorrectId="hdnForDiffProject" HiddenDefaultIsChargeableIdValue="hdnDefaultIsChargeable"
-        HorizontalTotalCalculatorExtenderId="hfHorizontalTotalCalculatorExtender" VerticalTotalCalculatorExtenderId="hfVerticalTotalCalculatorExtender"
-        IsNoteRequired="hdnIsNoteRequired" SpreadSheetExtenderId="hfSpreadSheetTotalCalculatorExtender"
-        IsChargeableId="chbIsChargeable" IsPTOTimeType="hdnIsPTOTimeType" />
-    <ext:DirtyExtender ID="deNonBillableHours" runat="server" TargetControlID="hfDirtyNonBillableHours"
+        HiddenNoteId="hdnNotes" HorizontalTotalCalculatorExtenderId="hfHorizontalTotalCalculatorExtender"
+        VerticalTotalCalculatorExtenderId="hfVerticalTotalCalculatorExtender" IsNoteRequired="hdnIsNoteRequired"
+        SpreadSheetExtenderId="hfSpreadSheetTotalCalculatorExtender" IsPTOTimeType="hdnIsPTOTimeType" />
+    <ext:DirtyStateExtender ID="deNonBillableHours" runat="server" TargetControlID="hfDirtyNonBillableHours"
         HiddenActualHoursId="hdnNonBillableHours" NoteId="tbNotes" ActualHoursId="tbNonBillableHours"
-        IsCorrectId="chbForDiffProject" HiddenNoteId="hdnNotes" HiddenIsChargeableId="hdnIsChargeable"
-        HiddenIsCorrectId="hdnForDiffProject" HiddenDefaultIsChargeableIdValue="hdnDefaultIsChargeable"
-        HorizontalTotalCalculatorExtenderId="hfHorizontalTotalCalculatorExtender" VerticalTotalCalculatorExtenderId="hfVerticalTotalCalculatorExtender"
-        IsNoteRequired="hdnIsNoteRequired" SpreadSheetExtenderId="hfSpreadSheetTotalCalculatorExtender"
-        IsChargeableId="chbIsChargeable" IsPTOTimeType="hdnIsPTOTimeType" />
+        HiddenNoteId="hdnNotes" HorizontalTotalCalculatorExtenderId="hfHorizontalTotalCalculatorExtender"
+        VerticalTotalCalculatorExtenderId="hfVerticalTotalCalculatorExtender" IsNoteRequired="hdnIsNoteRequired"
+        SpreadSheetExtenderId="hfSpreadSheetTotalCalculatorExtender" IsPTOTimeType="hdnIsPTOTimeType" />
 </asp:Panel>
 
