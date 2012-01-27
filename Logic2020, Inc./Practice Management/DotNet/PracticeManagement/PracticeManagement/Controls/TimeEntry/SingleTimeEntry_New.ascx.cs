@@ -318,7 +318,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
             var note = tbNotes.Text;
 
-            if (hdnIsNoteRequired.Value == "true")
+            if (hdnIsNoteRequired.Value.ToLowerInvariant() == "true" && !string.IsNullOrEmpty(tbActualHours.Text))
             {
                 if (string.IsNullOrEmpty(note) || note.Length < 3 || note.Length > 1000)
                 {
