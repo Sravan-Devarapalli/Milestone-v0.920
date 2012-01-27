@@ -36,7 +36,7 @@ namespace PraticeManagement
         private const string ProjectAttachmentsKey = "ProjectAttachmentsKey";
         public const string AllTimeTypesKey = "AllTimeTypesKey";
         public const string ProjectTimeTypesKey = "ProjectTimeTypesKey";
-        public const string IsInternalChangeErrorMessage = "Can not change project status as some timetypes are already in use.";
+        public const string IsInternalChangeErrorMessage = "Can not change project status as some work types are already in use.";
         
 
         #endregion
@@ -769,6 +769,22 @@ namespace PraticeManagement
                         args.IsValid = false;
                     }
                 }
+            }
+        }
+
+        protected void cvClient_ServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            if (Project != null && Project.Id.HasValue && Project.Client.Id.HasValue && Project.Client.Id.Value != Convert.ToInt32(ddlClientName.SelectedValue) && Project.HasTimeEntries)
+            {
+                args.IsValid = false;
+            }
+        }
+
+        protected void cvGroup_ServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            if (Project != null && Project.Id.HasValue && Project.Group.Id.HasValue && Project.Group.Id.Value != Convert.ToInt32(ddlProjectGroup.SelectedValue) && Project.HasTimeEntries)
+            {
+                args.IsValid = false;
             }
         }
 
