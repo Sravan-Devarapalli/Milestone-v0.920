@@ -78,8 +78,8 @@ namespace PraticeManagement
         private const string cbeImgBtnRecursiveProjectSectionExtender = "cbeImgBtnRecursiveProjectSection";
         private const string cbeImgBtnRecurrenceBusinessDevelopmentSectionExtender = "cbeImgBtnRecurrenceBusinessDevelopmentSection";
         private const string cbeImgBtnRecurrenceInternalSectionExtender = "cbeImgBtnRecurrenceInternalSection";
-        
-            
+
+
         private const string sectionsXmlOpen = "<Sections>";
         private const string sectionsXmlClose = "</Sections>";
         private const string projectSectionXmlOpen = "<Section Id=\"1\">";
@@ -121,6 +121,8 @@ namespace PraticeManagement
         public bool IsValidNote { get; set; }
 
         public bool IsValidHours { get; set; }
+
+        public bool IsValidPTOHours { get; set; }
 
         public bool IsValidWorkType { get; set; }
 
@@ -255,6 +257,11 @@ namespace PraticeManagement
             args.IsValid = IsValidHours;
         }
 
+        protected void custPTOHours_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = IsValidPTOHours;
+        }
+
         protected void custNote_ServerValidate(object source, ServerValidateEventArgs args)
         {
             args.IsValid = IsValidNote;
@@ -263,7 +270,7 @@ namespace PraticeManagement
 
         private void ValidateAll()
         {
-            IsValidDayTotal = IsValidHours = IsValidNote = IsValidWorkType = true;
+            IsValidDayTotal = IsValidHours = IsValidNote = IsValidWorkType = IsValidPTOHours = true;
 
             foreach (RepeaterItem barItem in repProjectSections.Items)
             {
@@ -303,6 +310,13 @@ namespace PraticeManagement
             foreach (RepeaterItem barItem in repAdministrativeTes.Items)
             {
                 var bar = barItem.FindControl(CONTROL_TeBar) as AdministrativeTimeEntryBar;
+
+                if (barItem.ItemIndex == 0)
+                {
+                    //For PTO 
+                    bar.IsPTO = true;
+
+                }
                 bar.ValidateAll();
             }
 
@@ -329,7 +343,7 @@ namespace PraticeManagement
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            btnAddProjectSection.Attributes["onclick"] = "ExpandPanel('" +cpeProjectSection.BehaviorID + "');";
+            btnAddProjectSection.Attributes["onclick"] = "ExpandPanel('" + cpeProjectSection.BehaviorID + "');";
             btnAddInternalProjectSection.Attributes["onclick"] = "ExpandPanel('" + cpeInternalSection.BehaviorID + "');";
             btnAddBusinessDevelopmentSection.Attributes["onclick"] = "ExpandPanel('" + cpeBusinessDevelopmentSection.BehaviorID + "');";
 
@@ -390,10 +404,8 @@ namespace PraticeManagement
                 imgBtnRecursiveProjectSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
                 imgBtnRecursiveProjectSection.Attributes[IsRecursiveXname] = isRecursive;
                 imgBtnRecursiveProjectSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Project).ToString();
-
                 var imgBtnDeleteProjectSection = e.Item.FindControl(imgBtnDeleteProjectSectionImage) as ImageButton;
                 imgBtnDeleteProjectSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Project).ToString();
-
             }
         }
 
@@ -434,7 +446,6 @@ namespace PraticeManagement
                 var imgBtnDeleteBusinessDevelopmentSection = e.Item.FindControl(imgBtnDeleteBusinessDevelopmentSectionImage) as ImageButton;
                 imgBtnDeleteBusinessDevelopmentSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.BusinessDevelopment).ToString();
 
-
             }
         }
 
@@ -473,7 +484,6 @@ namespace PraticeManagement
 
                 var imgBtnDeleteInternalSection = e.Item.FindControl(imgBtnDeleteInternalSectionImage) as ImageButton;
                 imgBtnDeleteInternalSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Internal).ToString();
-
             }
         }
 
@@ -680,6 +690,9 @@ namespace PraticeManagement
                         bar.UpdateVerticalTotalCalculatorExtenderId(index, extColumnDayTotalHours.ClientID);
                     }
 
+                    var imgBtnDeleteProjectSection = barItem.FindControl(imgBtnDeleteProjectSectionImage) as ImageButton;
+                    imgBtnDeleteProjectSection.Attributes["onclick"] = "DeleteSection('" + cpeProjectSection.BehaviorID + "','" + repProjectSections.Items.Count.ToString() + "');";
+
                 }
 
                 foreach (RepeaterItem barItem in repBusinessDevelopmentSections.Items)
@@ -693,6 +706,10 @@ namespace PraticeManagement
                         NonBillableControlIds += bar.NonBillableTbAcutualHoursClientIds[index] + ";";
                         bar.UpdateVerticalTotalCalculatorExtenderId(index, extColumnDayTotalHours.ClientID);
                     }
+
+                    var imgBtnDeleteBusinessDevelopmentSection = barItem.FindControl(imgBtnDeleteBusinessDevelopmentSectionImage) as ImageButton;
+                    imgBtnDeleteBusinessDevelopmentSection.Attributes["onclick"] = "DeleteSection('" + cpeBusinessDevelopmentSection.BehaviorID + "','" + repBusinessDevelopmentSections.Items.Count.ToString() + "');";
+
                 }
 
                 foreach (RepeaterItem barItem in repInternalSections.Items)
@@ -705,7 +722,12 @@ namespace PraticeManagement
                         controlIDList += bar.NonBillableTbAcutualHoursClientIds[index] + ";";
                         NonBillableControlIds += bar.NonBillableTbAcutualHoursClientIds[index] + ";";
                         bar.UpdateVerticalTotalCalculatorExtenderId(index, extColumnDayTotalHours.ClientID);
+
                     }
+
+                    var imgBtnDeleteInternalSection = barItem.FindControl(imgBtnDeleteInternalSectionImage) as ImageButton;
+                    imgBtnDeleteInternalSection.Attributes["onclick"] = "DeleteSection('" + cpeInternalSection.BehaviorID + "','" + repInternalSections.Items.Count.ToString() + "');";
+
                 }
 
                 extMaxValueAllowedForTextBoxExtender.ControlsToCheck = extColumnDayTotalHours.ControlsToCheck = controlIDList;
@@ -1661,6 +1683,7 @@ namespace PraticeManagement
             ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntrySelection(personId, accountId, businessUnitId, projectId, timeEntrySectionId, true, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
 
         }
+
 
     }
 }
