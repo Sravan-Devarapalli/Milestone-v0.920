@@ -28,7 +28,7 @@
 </asp:Content>
 <asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript">
-      
+
         function SetFocus(modalExId, tbNotesId, tbBillableHoursId, chbIsChargeableId, chbForDiffProjectId, btnSaveNotesId, tbNonBillableHoursId) {
 
             var tbActualHours = $find(tbBillableHours);
@@ -158,7 +158,28 @@
                         if (isCollapsed) {
                             $find(name).expandPanel();
                         }
-                    } 
+                    }
+
+                    function CollapsePanel(name, rowsCount) {
+                        if (rowsCount == 1) {
+                            var isCollapsed = $find(name).get_Collapsed();
+                            if (!isCollapsed) {
+                                $find(name).togglePanel();
+                            }
+                        }
+                    }
+
+                    function DeleteSection(name, rowsCount) {
+                        if (confirm("Are you sure to delete the section?")) {
+                            CollapsePanel(name, rowsCount);
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+
+                    }
+
                 </script>
                 <uc:MessageLabel ID="mlErrors" runat="server" ErrorColor="Red" InfoColor="DarkGreen"
                     WarningColor="Orange" EnableViewState="false" />
@@ -200,9 +221,6 @@
                                             </AjaxControlToolkit:ConfirmButtonExtender>
                                             <asp:ImageButton ID="imgBtnRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png"
                                                 OnClick="imgBtnRecursiveSection_OnClick" CssClass="mrg0" />
-                                            <AjaxControlToolkit:ConfirmButtonExtender ID="cbeimgBtnDeleteProjectSection" runat="server"
-                                                TargetControlID="imgBtnDeleteProjectSection" ConfirmText="Are you sure to delete the section?">
-                                            </AjaxControlToolkit:ConfirmButtonExtender>
                                             <asp:ImageButton ID="imgBtnDeleteProjectSection" runat="server" ImageUrl="~/Images/close_16.png"
                                                 OnClick="imgBtnDeleteSection_OnClick" CssClass="mrg0" />
                                         </td>
@@ -253,10 +271,10 @@
                             <tr>
                                 <td>
                                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeBusinessDevelopmentSection" runat="Server"
-                                        CollapsedText="Expand Section" ExpandedText="Collapse Section" EnableViewState="false" BehaviorID="cpeBusinessDevelopmentSection"
-                                        TargetControlID="pnlBusinessDevelopmentSection" ImageControlID="Image1" CollapsedImage="Images/expand.jpg"
-                                        ExpandedImage="Images/collapse.jpg" CollapseControlID="Image1" ExpandControlID="Image1"
-                                        TextLabelID="Label1" />
+                                        CollapsedText="Expand Section" ExpandedText="Collapse Section" EnableViewState="false"
+                                        BehaviorID="cpeBusinessDevelopmentSection" TargetControlID="pnlBusinessDevelopmentSection"
+                                        ImageControlID="Image1" CollapsedImage="Images/expand.jpg" ExpandedImage="Images/collapse.jpg"
+                                        CollapseControlID="Image1" ExpandControlID="Image1" TextLabelID="Label1" />
                                     <asp:Label ID="Label1" Style="display: none;" runat="server"></asp:Label>
                                     <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Section" />&nbsp;<b>Business
                                         Development</b>
@@ -286,9 +304,6 @@
                                             </AjaxControlToolkit:ConfirmButtonExtender>
                                             <asp:ImageButton ID="imgBtnRecurrenceBusinessDevelopmentSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick"
                                                 CssClass="mrg0" />
-                                            <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnDeleteBusinessDevelopmentSection"
-                                                runat="server" TargetControlID="imgBtnDeleteBusinessDevelopmentSection" ConfirmText="Are you sure to delete the section?">
-                                            </AjaxControlToolkit:ConfirmButtonExtender>
                                             <asp:ImageButton ID="imgBtnDeleteBusinessDevelopmentSection" runat="server" ImageUrl="~/Images/close_16.png"
                                                 OnClick="imgBtnDeleteSection_OnClick" CssClass="mrg0" />
                                         </td>
@@ -339,11 +354,11 @@
                         <table cellpadding="0" class="WholeWidth">
                             <tr>
                                 <td>
-                                    <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeInternalSection" runat="Server" BehaviorID="cpeInternalSection"
-                                        CollapsedText="Expand Section" ExpandedText="Collapse Section" EnableViewState="false"
-                                        TargetControlID="pnlInternalSection" ImageControlID="Image2" CollapsedImage="Images/expand.jpg"
-                                        ExpandedImage="Images/collapse.jpg" CollapseControlID="Image2" ExpandControlID="Image2"
-                                        TextLabelID="Label2" />
+                                    <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeInternalSection" runat="Server"
+                                        BehaviorID="cpeInternalSection" CollapsedText="Expand Section" ExpandedText="Collapse Section"
+                                        EnableViewState="false" TargetControlID="pnlInternalSection" ImageControlID="Image2"
+                                        CollapsedImage="Images/expand.jpg" ExpandedImage="Images/collapse.jpg" CollapseControlID="Image2"
+                                        ExpandControlID="Image2" TextLabelID="Label2" />
                                     <asp:Label ID="Label2" Style="display: none;" runat="server"></asp:Label>
                                     <asp:Image ID="Image2" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Section" />&nbsp;<b>Internal</b>
                                 </td>
@@ -372,9 +387,6 @@
                                             </AjaxControlToolkit:ConfirmButtonExtender>
                                             <asp:ImageButton ID="imgBtnRecurrenceInternalSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick"
                                                 CssClass="mrg0" />
-                                            <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnDeleteInternalSection" runat="server"
-                                                TargetControlID="imgBtnDeleteInternalSection" ConfirmText="Are you sure to delete the section?">
-                                            </AjaxControlToolkit:ConfirmButtonExtender>
                                             <asp:ImageButton ID="imgBtnDeleteInternalSection" runat="server" ImageUrl="~/Images/close_16.png"
                                                 OnClick="imgBtnDeleteSection_OnClick" CssClass="mrg0" />
                                         </td>
@@ -542,6 +554,10 @@
                                     <asp:CustomValidator ID="custActualHours" runat="server" ToolTip="Hours should be real and 0.01-24.00. Invalid entries are highlighted in red."
                                         ErrorMessage="Hours should be real and 0.01-24.00. Invalid entries are highlighted in red."
                                         SetFocusOnError="true" OnServerValidate="custActualHours_ServerValidate" EnableClientScript="false"
+                                        Display="None" Text="*" ValidationGroup="TE" />
+                                    <asp:CustomValidator ID="cvPTOHours" runat="server" ToolTip="PTO Hours should be real and less than 8. Invalid entries are highlighted in red."
+                                        ErrorMessage="PTO Hours should be real and less than 8. Invalid entries are highlighted in red."
+                                        SetFocusOnError="true" OnServerValidate="custPTOHours_ServerValidate" EnableClientScript="false"
                                         Display="None" Text="*" ValidationGroup="TE" />
                                     <asp:CustomValidator ID="custNote" runat="server" ErrorMessage="Note should be 3-1000 characters long. Invalid entries are highlighted in red."
                                         OnServerValidate="custNote_ServerValidate" EnableClientScript="false" Text="*"
