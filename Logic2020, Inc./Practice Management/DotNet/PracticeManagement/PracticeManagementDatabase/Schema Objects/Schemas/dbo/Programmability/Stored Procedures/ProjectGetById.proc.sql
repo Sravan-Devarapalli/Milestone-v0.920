@@ -40,7 +40,12 @@ AS
 					ELSE 0 END AS HasAttachments,
 		   p.CanCreateCustomWorkTypes,
 		   p.IsInternal,
-		   p.ClientIsInternal
+		   p.ClientIsInternal,
+		   CASE (SELECT COUNT(*) 
+				FROM dbo.ChargeCode CC 
+				INNER JOIN TimeEntry TE ON TE.ChargeCodeId = CC.Id AND CC.ProjectId = p.ProjectId) 
+			WHEN 0 THEN CAST(0 AS BIT)
+			ELSE CAST(1 AS BIT) END AS 'HasTimeEntries'
 	  FROM dbo.v_Project AS p
 	  INNER JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	  INNER JOIN Person AS person ON p.PracticeManagerId = person.PersonId
