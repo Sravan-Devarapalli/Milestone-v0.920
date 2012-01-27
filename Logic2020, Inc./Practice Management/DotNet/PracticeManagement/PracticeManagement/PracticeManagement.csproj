@@ -361,6 +361,7 @@
     <EmbeddedResource Include="Controls\Generic\MaxValueAllowedForTextBox\MaxValueAllowedForTextBoxExtender.js" />
     <EmbeddedResource Include="Controls\Generic\DuplicateOptionsRemove\DupilcateOptionsRemoveExtender.js" />
     <EmbeddedResource Include="Controls\Generic\EnableDisableExtender\EnableDisableExtender.js" />
+    <EmbeddedResource Include="Controls\Generic\DirtyStateExtender\DirtyStateExtender.js" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
@@ -1125,6 +1126,7 @@
       <DependentUpon>Calendar.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Generic\CustomCheckBoxList.cs" />
+    <Compile Include="Controls\Generic\DirtyStateExtender\DirtyStateExtender.cs" />
     <Compile Include="Controls\Generic\DuplicateOptionsRemove\DupilcateOptionsRemoveExtender.cs" />
     <Compile Include="Controls\Generic\EnableDisableExtender\EnableDisableExtender.cs" />
     <Compile Include="Controls\Generic\MaxValueAllowedForTextBox\MaxValueAllowedForTextBoxExtender.cs" />
