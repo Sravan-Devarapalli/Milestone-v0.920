@@ -15,7 +15,6 @@ BEGIN
 			TE.Note,
 			TEH.IsChargeable,
 			TEH.ReviewStatusId,
-			TE.IsCorrect,
 			CC.TimeTypeId,
 			TEH.ModifiedBy,
 			CASE WHEN CCH.ChargeCodeId IS NULL THEN CONVERT(BIT,0) ELSE CONVERT(BIT,1) END AS 'IsChargeCodeOff'
