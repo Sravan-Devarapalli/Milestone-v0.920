@@ -28,30 +28,24 @@
 </asp:Content>
 <asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript">
-
-        function SetFocus(modalExId, tbNotesId, tbBillableHoursId, chbIsChargeableId, chbForDiffProjectId, btnSaveNotesId, tbNonBillableHoursId) {
+      
+        function SetFocus(modalExId, tbNotesId, tbBillableHoursId, btnSaveNotesId, tbNonBillableHoursId) {
 
             var tbActualHours = $find(tbBillableHours);
 
             var modalEx = $find(modalExId);
             modalEx.show();
             var tbNotes = $get(tbNotesId);
-            var chbIsChargeable = $get(chbIsChargeableId);
-            var chbForDiffProject = $get(chbForDiffProjectId);
             var btnSaveNotes = $get(btnSaveNotesId);
             var tbBillableHours = $get(tbBillableHoursId);
             var tbNonBillableHours = $get(tbNonBillableHoursId);
 
             if (tbBillableHours.disabled && tbNonBillableHours.disabled) {
                 tbNotes.disabled = 'disabled';
-                chbIsChargeable.disabled = 'disabled';
-                chbForDiffProject.disabled = 'disabled';
                 btnSaveNotes.disabled = 'disabled';
             }
             else {
                 tbNotes.disabled = '';
-                chbIsChargeable.disabled = '';
-                chbForDiffProject.disabled = '';
                 btnSaveNotes.disabled = '';
 
             }
@@ -73,16 +67,10 @@
             }
         }
 
-        function assignHiddenValues(hiddenNoteId, noteId, hiddenIsChargeableId, IsChargeableId, hiddenIsCorrectId, IsCorrectId) {
+        function assignHiddenValues(hiddenNoteId, noteId) {
             var hiddenNote = $get(hiddenNoteId);
             var note = $get(noteId);
-            var hiddenIsChargeable = $get(hiddenIsChargeableId);
-            var IsChargeable = $get(IsChargeableId);
-            var hiddenIsCorrect = $get(hiddenIsCorrectId);
-            var IsCorrect = $get(IsCorrectId);
             hiddenNote.value = note.value;
-            hiddenIsCorrect.value = IsCorrect.checked;
-            hiddenIsChargeable.value = IsChargeable.checked;
         }
 
         function ddlChild_onchange(ddl) {
@@ -264,6 +252,12 @@
                                 <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
                                     TargetControlID="lblDupilcateOptionsRemoveExtender" />
                                 <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
+                                <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop">
+                                <div id="divRecursiveAlert" runat="server" class="TopCenterAlignWithoutPaddingTop">    <b>NOTE:</b> This section is marked as recursive, Click on  
+                                    <asp:Image ID="imgRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png" />
+                                    icon to mark it as non-recursive or Click on 
+                                    <asp:Image ID="ImageButton1" runat="server" ImageUrl="~/Images/close_16.png" /> icon to delete this section for this week.
+                                </div></asp:Label>
                             </ItemTemplate>
                         </asp:Repeater>
                     </asp:Panel>
@@ -346,6 +340,12 @@
                                             runat="server" ImageUrl="~/Images/add_16.png" ToolTip="Add Additional Work type" />
                                     </FooterTemplate>
                                 </asp:Repeater>
+                                <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop">
+                                <div id="divRecursiveAlert" runat="server" class="TopCenterAlignWithoutPaddingTop">    <b>NOTE:</b> This section is marked as recursive, Click on  
+                                    <asp:Image ID="imgRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png" />
+                                    icon to mark it as non-recursive or Click on 
+                                    <asp:Image ID="ImageButton1" runat="server" ImageUrl="~/Images/close_16.png" /> icon to delete this section for this week.
+                                </div></asp:Label>
                                 <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
                                     TargetControlID="lblDupilcateOptionsRemoveExtender" />
                                 <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
@@ -430,6 +430,12 @@
                                             runat="server" ImageUrl="~/Images/add_16.png" ToolTip="Add Additional Work type" />
                                     </FooterTemplate>
                                 </asp:Repeater>
+                                <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop">
+                                <div id="divRecursiveAlert" runat="server" class="TopCenterAlignWithoutPaddingTop">    <b>NOTE:</b> This section is marked as recursive, Click on  
+                                    <asp:Image ID="imgRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png" />
+                                    icon to mark it as non-recursive or Click on 
+                                    <asp:Image ID="ImageButton1" runat="server" ImageUrl="~/Images/close_16.png" /> icon to delete this section for this week.
+                                </div></asp:Label>
                                 <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
                                     TargetControlID="lblDupilcateOptionsRemoveExtender" />
                                 <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
