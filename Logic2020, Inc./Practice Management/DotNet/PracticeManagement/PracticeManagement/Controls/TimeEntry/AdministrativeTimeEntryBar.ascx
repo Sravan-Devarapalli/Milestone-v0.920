@@ -31,7 +31,7 @@
             <label id="lblTotalHours" runat="server" />
             <ext:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lblTotalHours" />
         </td>
-        <td style="width: 3%; text-align: center;">
+        <td class="DeleteWidth">
         </td>
     </tr>
 </table>
