@@ -22,7 +22,8 @@ AS
 BEGIN
 
 	SET NOCOUNT ON;
-
+	
+	BEGIN TRY
 	BEGIN TRAN  T1;
 
 		-- Start logging session
@@ -37,16 +38,40 @@ BEGIN
 													AND tt.IsDefault = 0 
 						INNER JOIN dbo.TimeEntry te ON cc.ID = te.ChargeCodeId )
 			BEGIN
-				RAISERROR ('Can not change project status as some timetypes are already in use.', 16, 1)
+				RAISERROR ('Can not change project status as some work types are already in use.', 16, 1)
 			END
-		--to delete existing projecttimetypes
-		DELETE ptt 
-		FROM dbo.ProjectTimeType ptt 
-		WHERE ptt.ProjectId = @ProjectId 
+			--to delete existing projecttimetypes
+			DELETE ptt 
+			FROM dbo.ProjectTimeType ptt 
+			WHERE ptt.ProjectId = @ProjectId 
+		END	
 
+		DECLARE @PreviousClientId INT, @PreviousGroupId INT
+
+		SELECT @PreviousClientId = ClientId, @PreviousGroupId = GroupId
+		FROM Project
+		WHERE ProjectId = @ProjectId
+
+		--If No timeEntries exists for the project then update exists chargeCode with new clientId or new ProjectGroupId.
+		IF @ClientId <> @PreviousClientId OR @GroupId <> @PreviousGroupId
+		BEGIN
+			IF EXISTS (SELECT 1
+						FROM dbo.ChargeCode CC
+						INNER JOIN TimeEntry TE ON TE.ChargeCodeId = CC.Id AND CC.ProjectId = @ProjectId
+						)
+			BEGIN
+				RAISERROR ('Can not change project account or business unit as it has time entries.', 16, 1)
+			END
+			ELSE
+			BEGIN
+				UPDATE CC
+					SET CC.ClientId = @ClientId,
+						CC.ProjectGroupId = @GroupId
+				FROM dbo.ChargeCode CC
+				WHERE CC.ProjectId = @ProjectId
+					AND ( CC.ClientId <> @ClientId OR CC.ProjectGroupId <> @GroupId )
+			END
 		END
-
-	
 
 		UPDATE dbo.Project
 			SET ClientId			= @ClientId,
@@ -93,13 +118,21 @@ BEGIN
 		LEFT JOIN ProjectManagers pm
 		ON p.ResultId = pm.ProjectManagerId AND pm.ProjectId=@ProjectId
 		WHERE pm.ProjectManagerId IS NULL
-
-
+				
 
 		-- End logging session
 		EXEC dbo.SessionLogUnprepare
 
 	COMMIT TRAN T1;	
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN T1
+		
+		DECLARE @ErrorMessage NVARCHAR(MAX)
+		SET @ErrorMessage = ERROR_MESSAGE()
+
+		RAISERROR(@ErrorMessage, 16, 1)
+	END CATCH
 
 END
 
