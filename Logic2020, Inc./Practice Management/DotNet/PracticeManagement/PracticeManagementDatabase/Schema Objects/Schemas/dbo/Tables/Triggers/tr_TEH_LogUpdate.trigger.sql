@@ -29,8 +29,6 @@ BEGIN
 				  ,ins.[ModifiedBy] AS 'ModifiedBy'
 				  ,TE.[Note] AS 'Note'
 				  ,TER.Name AS 'ReviewStatus'
-				  ,CASE TE.[IsCorrect] WHEN 1 THEN 'Correct'
-										 ELSE 'InCorrect' END AS 'IsCorrect'
 				  ,CASE ins.[IsChargeable] WHEN 1 THEN 'Billable'
 											ELSE 'Not Billable' END AS 'IsBillable'
 				  ,CONVERT(VARCHAR(10), TE.[ChargeCodeDate], 101) AS 'ChargeCodeDate'
@@ -44,6 +42,7 @@ BEGIN
 				  ,proj.[Name] AS 'ProjectName'
 				  ,proj.ProjectId AS 'ProjectId'
 				  ,clnt.[Code] + ' - ' + PG.[Code] + ' - ' + proj.ProjectNumber + ' - ' + '01 - ' + tType.Code AS 'ChargeCode'
+				  ,proj.IsAllowedToShow AS 'IsAllowedToShow'
 			FROM inserted AS ins
 			INNER JOIN dbo.TimeEntry AS  TE ON TE.TimeEntryId = ins.TimeEntryId
 			INNER JOIN dbo.TimeEntryReviewStatus AS TER ON TER.Id = ins.ReviewStatusId
@@ -71,8 +70,6 @@ BEGIN
 				  ,del.[ModifiedBy] AS 'ModifiedBy'
 				  ,TE.[Note] AS 'Note'
 				  ,TER.Name AS 'ReviewStatus'
-				  ,CASE TE.[IsCorrect] WHEN 1 THEN 'Correct'
-										 ELSE 'InCorrect' END AS 'IsCorrect'
 				  ,CASE del.[IsChargeable] WHEN 1 THEN 'Billable'
 											ELSE 'Not Billable' END AS 'IsBillable'
 				  ,CONVERT(VARCHAR(10), TE.[ChargeCodeDate], 101) AS 'ChargeCodeDate'
@@ -86,6 +83,7 @@ BEGIN
 				  ,proj.[Name] AS 'ProjectName'
 				  ,proj.ProjectId AS 'ProjectId'
 				  ,clnt.[Code] + ' - ' + PG.[Code] + ' - ' + proj.ProjectNumber + ' - ' + '01 - ' + tType.Code AS 'ChargeCode'
+				  ,proj.IsAllowedToShow AS 'IsAllowedToShow'
 			FROM deleted AS del
 			INNER JOIN dbo.TimeEntry AS  TE ON TE.TimeEntryId = del.TimeEntryId
 			INNER JOIN dbo.TimeEntryReviewStatus AS TER ON TER.Id = del.ReviewStatusId
