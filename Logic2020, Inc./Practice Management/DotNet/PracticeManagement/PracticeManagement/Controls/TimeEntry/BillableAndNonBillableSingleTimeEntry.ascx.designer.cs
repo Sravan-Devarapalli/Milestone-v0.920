@@ -130,69 +130,6 @@ namespace PraticeManagement.Controls.TimeEntry {
         protected global::System.Web.UI.WebControls.HiddenField hdnNotes;
         
         /// <summary>
-        /// chbIsChargeable control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chbIsChargeable;
-        
-        /// <summary>
-        /// hdnIsChargeable control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnIsChargeable;
-        
-        /// <summary>
-        /// hdnDefaultIsChargeable control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnDefaultIsChargeable;
-        
-        /// <summary>
-        /// Label1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Label1;
-        
-        /// <summary>
-        /// chbForDiffProject control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chbForDiffProject;
-        
-        /// <summary>
-        /// hdnForDiffProject control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnForDiffProject;
-        
-        /// <summary>
-        /// Label2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Label2;
-        
-        /// <summary>
         /// btnSaveNotes control.
         /// </summary>
         /// <remarks>
@@ -289,7 +226,7 @@ namespace PraticeManagement.Controls.TimeEntry {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.DirtyState.DirtyExtender deBillableHours;
+        protected global::PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateExtender deBillableHours;
         
         /// <summary>
         /// deNonBillableHours control.
@@ -298,7 +235,7 @@ namespace PraticeManagement.Controls.TimeEntry {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.DirtyState.DirtyExtender deNonBillableHours;
+        protected global::PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateExtender deNonBillableHours;
     }
 }
 
