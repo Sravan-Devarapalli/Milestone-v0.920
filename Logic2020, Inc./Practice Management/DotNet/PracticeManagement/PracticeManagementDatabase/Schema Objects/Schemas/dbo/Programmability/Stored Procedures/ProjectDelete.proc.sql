@@ -46,6 +46,11 @@ BEGIN
 
 			END
 
+			--Delete Project time Types if exists.
+			DELETE PTT
+			FROM ProjectTimeType PTT
+			WHERE PTT.ProjectId = @ProjectID
+
 			-- Delete Milestones of this project.
 			IF EXISTS (SELECT 1 FROM Milestone WHERE ProjectId = @ProjectID)
 			BEGIN
