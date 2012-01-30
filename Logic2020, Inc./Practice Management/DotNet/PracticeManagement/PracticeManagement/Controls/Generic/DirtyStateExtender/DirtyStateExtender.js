@@ -1,8 +1,5 @@
 ﻿Type.registerNamespace("PraticeManagement.Controls.Generic.DirtyStateExtender");
 
-// Array to store all single time entries on the page
-var allSingleTEs = new Array();
-
 PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateBehavior = function (element) {
     PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateBehavior.initializeBase(this, [element]);
 
@@ -13,14 +10,7 @@ PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateBehavior = funct
     this._HorizontalTotalCalculatorExtenderIdValue = null;
     this._VerticalTotalCalculatorExtenderIdValue = null;
     this._SpreadSheetExtenderIdValue = null;
-    this._TimeTypeDropdownIdValue = null;
-    this._ProjectMilestoneDropdownIdValue = null;
     this._IsNoteRequired = null;
-    this._IsPTOTimeType = null;
-
-    // Add particular STE to the array if it's not there yet
-    if (!Array.contains(allSingleTEs, this))
-        Array.add(allSingleTEs, this);
 }
 
 PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateBehavior.prototype = {
@@ -163,80 +153,12 @@ PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateBehavior.prototy
     set_NoteIdValue: function (value) {
         this._NoteIdValue = value;
     },
-
-    get_TimeTypeDropdownIdValue: function () {
-        return this._TimeTypeDropdownIdValue;
-    },
-    set_TimeTypeDropdownIdValue: function (value) {
-        this._TimeTypeDropdownIdValue = value;
-    },
-    get_TimeTypeDropdown: function () {
-        return $get(this._TimeTypeDropdownIdValue);
-    },
-    get_ProjectMilestoneDropdownIdValue: function () {
-        return this._ProjectMilestoneDropdownIdValue;
-    },
-
-    set_ProjectMilestoneDropdownIdValue: function (value) {
-        this._ProjectMilestoneDropdownIdValue = value;
-    },
-    get_ProjectMilestoneDropdown: function () {
-        return $get(this._ProjectMilestoneDropdownIdValue);
-    },
     set_IsNoteRequired: function (value) {
         this._IsNoteRequired = value;
     },
     get_IsNoteRequired: function () {
         return this._IsNoteRequired;
     },
-    set_IsPTOTimeType: function (value) {
-        this._IsPTOTimeType = value;
-    },
-    get_IsPTOTimeType: function () {
-        return this._IsPTOTimeType;
-    },
-
-
-    isValidNote: function () {
-        if (!this._isDirty())
-            return true;
-        var note = this._note();
-        if (note.trim().length == 0) {
-            if (this._hours().trim().length == 0) {
-                return true;
-            }
-            else {
-                if ($get(this._IsPTOTimeType).value == "true") {
-                    return true;
-                }
-                else if ($get(this._IsNoteRequired).value == "true") {
-                    return false;
-                }
-                else {
-                    return true;
-                }
-            }
-        }
-
-        return note.length >= 3 && note.length <= 1000;
-    },
-
-    isValidHours: function () {
-        if (!this._isDirty())
-            return true;
-        var hours = this._hours();
-
-        if (hours.trim().length == 0) {
-            if (this._note().trim().length == 0)
-                return true;
-            else
-                return false;
-        }
-
-        var parsedHrs = Number.parseInvariant(hours);
-        return parsedHrs >= 0.0 && parsedHrs <= 24.00;
-    },
-
     showErrorMessageColor: function () {
         this._setBackground('red');
     },
@@ -262,10 +184,12 @@ PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateBehavior.prototy
     },
 
     _clearData: function () {
-        var ActualHours = $get(this.get_ActualHoursIdValue());
-        if (!$get(this.get_NoteIdValue()).disabled && !ActualHours.disabled) {
+        var actualHours = $get(this.get_ActualHoursIdValue());
+        var isPTO = actualHours.getAttribute('IsPTO').toString().toLowerCase();
 
-            ActualHours.value = '';
+        if ((!$get(this.get_NoteIdValue()).disabled && !actualHours.disabled) || (isPTO && !actualHours.disabled)) {
+
+            actualHours.value = '';
             $get(this.get_NoteIdValue()).value = '';
 
             var horizontalExtenderId = $get(this.get_HorizontalTotalCalculatorExtenderIdValue()).value;
