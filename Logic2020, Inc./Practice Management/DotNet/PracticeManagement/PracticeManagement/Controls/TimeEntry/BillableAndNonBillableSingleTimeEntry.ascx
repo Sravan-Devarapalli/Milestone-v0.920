@@ -27,7 +27,7 @@
         <td style="width: 2%;">
             N
         </td>
-        <td style="padding: 6px 3px 6px 0px;  width: 58%;">
+        <td style="padding: 6px 3px 6px 0px; width: 58%;">
             <asp:TextBox ID="tbNonBillableHours" runat="server" MaxLength="5" onchange="setDirty();EnableSaveButton(true);" />
             <asp:HiddenField ID="hdnNonBillableHours" runat="server" Value="" />
             <ajaxToolkit:FilteredTextBoxExtender ID="fteNonBillableHours" TargetControlID="tbNonBillableHours"
@@ -86,16 +86,13 @@
     <asp:HiddenField ID="hfSpreadSheetTotalCalculatorExtender" runat="server" />
     <asp:HiddenField ID="hdnIsNoteRequired" runat="server" />
     <asp:HiddenField ID="hdnIsHourlyRevenue" runat="server" />
-    <asp:HiddenField ID="hdnIsPTOTimeType" runat="server" />
     <ext:DirtyStateExtender ID="deBillableHours" runat="server" TargetControlID="hfDirtyBillableHours"
         HiddenActualHoursId="hdnBillableHours" NoteId="tbNotes" ActualHoursId="tbBillableHours"
         HiddenNoteId="hdnNotes" HorizontalTotalCalculatorExtenderId="hfHorizontalTotalCalculatorExtender"
-        VerticalTotalCalculatorExtenderId="hfVerticalTotalCalculatorExtender" IsNoteRequired="hdnIsNoteRequired"
-        SpreadSheetExtenderId="hfSpreadSheetTotalCalculatorExtender" IsPTOTimeType="hdnIsPTOTimeType" />
+        VerticalTotalCalculatorExtenderId="hfVerticalTotalCalculatorExtender" SpreadSheetExtenderId="hfSpreadSheetTotalCalculatorExtender" />
     <ext:DirtyStateExtender ID="deNonBillableHours" runat="server" TargetControlID="hfDirtyNonBillableHours"
         HiddenActualHoursId="hdnNonBillableHours" NoteId="tbNotes" ActualHoursId="tbNonBillableHours"
         HiddenNoteId="hdnNotes" HorizontalTotalCalculatorExtenderId="hfHorizontalTotalCalculatorExtender"
-        VerticalTotalCalculatorExtenderId="hfVerticalTotalCalculatorExtender" IsNoteRequired="hdnIsNoteRequired"
-        SpreadSheetExtenderId="hfSpreadSheetTotalCalculatorExtender" IsPTOTimeType="hdnIsPTOTimeType" />
+        VerticalTotalCalculatorExtenderId="hfVerticalTotalCalculatorExtender" SpreadSheetExtenderId="hfSpreadSheetTotalCalculatorExtender" />
 </asp:Panel>
 
