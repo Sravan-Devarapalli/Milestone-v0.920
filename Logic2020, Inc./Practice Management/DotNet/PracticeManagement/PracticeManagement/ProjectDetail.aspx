@@ -582,20 +582,20 @@
                                         <asp:RequiredFieldValidator ID="reqClientName" runat="server" ControlToValidate="ddlClientName"
                                             ErrorMessage="The Account Name is required." ToolTip="The Account Name is required."
                                             ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
-                                        <asp:CustomValidator ID="cvClient" runat="server" ErrorMessage="Project's account cannot be modified as it has time entries."
-                                            ToolTip="This project account cannot be modified as it has time entries." ValidationGroup="Project"
+                                        <asp:CustomValidator ID="cvClient" runat="server" ErrorMessage="Project's account cannot be modified as some time entered towards this Account-BusinessUnit-Project."
+                                            ToolTip="Project's account cannot be modified as some time entered towards this Account-BusinessUnit-Project." ValidationGroup="Project"
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             OnServerValidate="cvClient_ServerValidate"></asp:CustomValidator>
                                     </td>
                                     <td>
-                                        Group
+                                        Business Unit
                                     </td>
                                     <td>
                                         <asp:DropDownList ID="ddlProjectGroup" runat="server" Enabled="false" CssClass="WholeWidth"
                                             OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged" AutoPostBack="true">
                                         </asp:DropDownList>
-                                        <asp:CustomValidator ID="cvGroup" runat="server" ErrorMessage="Project's business unit cannot be modified as it has time entries."
-                                            ToolTip="This project business unit cannot be modified as it has time entries." ValidationGroup="Project"
+                                        <asp:CustomValidator ID="cvGroup" runat="server" ErrorMessage="Project's business unit cannot be modified as some time entered towards this Account-BusinessUnit-Project."
+                                            ToolTip="Project's business unit cannot be modified as some time entered towards this Account-BusinessUnit-Project." ValidationGroup="Project"
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             OnServerValidate="cvGroup_ServerValidate"></asp:CustomValidator>
                                     </td>
