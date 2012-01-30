@@ -175,7 +175,7 @@ namespace PraticeManagement.Controls.TimeEntry
             for (int k = 0; k < calendarItemElements.Count; k++)
             {
 
-                var billableSte = tes.Items[k].FindControl("ste") as SingleTimeEntry_New;
+                var nonBillableSte = tes.Items[k].FindControl("ste") as SingleTimeEntry_New;
 
                 var calendarItemElement = calendarItemElements[k];
 
@@ -184,26 +184,30 @@ namespace PraticeManagement.Controls.TimeEntry
                     var nonbElements = calendarItemElement.Descendants(XName.Get("TimeEntryRecord")).ToList().Count > 0 ? calendarItemElement.Descendants(XName.Get("TimeEntryRecord")).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").ToList() : null;
                     if (nonbElements != null && nonbElements.Count > 0)
                     {
-                        var billableElement = nonbElements.First();
-                        billableSte.UpdateEditedValues(billableElement);
+                        var nonBillableElement = nonbElements.First();
+                        nonBillableSte.UpdateEditedValues(nonBillableElement);
                     }
                 }
                 else
                 {
                     //Add Element
-                    var billableElement = new XElement("TimeEntryRecord");
-                    billableElement.SetAttributeValue(XName.Get("IsChargeable"), "false");
-                    billableSte.UpdateEditedValues(billableElement);
-
-                    if (billableElement.Attribute(XName.Get("ActualHours")).Value != "" || billableElement.Attribute(XName.Get("Note")).Value != "")
-                    {
-                        calendarItemElement.Add(billableElement);
-                    }
-
+                    AddNonBillableElement(nonBillableSte, calendarItemElement);
                 }
             }
 
+        }
 
+        private void AddNonBillableElement(SingleTimeEntry_New nonBillableSte, XElement calendarItemElement)
+        {
+            var nonBillableElement = new XElement("TimeEntryRecord");
+            nonBillableElement.SetAttributeValue(XName.Get("IsChargeable"), "false");
+            nonBillableElement.SetAttributeValue(XName.Get("IsReviewed"), "Pending");
+            nonBillableSte.UpdateEditedValues(nonBillableElement);
+
+            if (nonBillableElement.Attribute(XName.Get("ActualHours")).Value != "" || (!HostingPage.IsSaving && nonBillableElement.Attribute(XName.Get("Note")).Value != ""))
+            {
+                calendarItemElement.Add(nonBillableElement);
+            }
         }
 
 
