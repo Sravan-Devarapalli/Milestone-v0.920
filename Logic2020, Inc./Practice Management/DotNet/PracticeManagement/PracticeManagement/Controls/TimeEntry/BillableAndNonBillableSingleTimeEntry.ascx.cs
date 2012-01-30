@@ -198,14 +198,15 @@ namespace PraticeManagement.Controls.TimeEntry
 
         private void MaintainEditedtbHoursStyle()
         {
-            if (tbBillableHours.BackColor != Color.Red)
+
+            if (tbBillableHours.Style["background-color"] != "red")
             {
-                tbBillableHours.BackColor = (hfDirtyBillableHours.Value == "dirty") ? Color.Gold : Color.White;
+                tbBillableHours.Style["background-color"] = (hfDirtyBillableHours.Value == "dirty") ? "gold" : "none";
             }
 
-            if (tbNonBillableHours.BackColor != Color.Red)
+            if (tbNonBillableHours.Style["background-color"] != "red")
             {
-                tbNonBillableHours.BackColor = (hfDirtyNonBillableHours.Value == "dirty") ? Color.Gold : Color.White;
+                tbNonBillableHours.Style["background-color"] = (hfDirtyNonBillableHours.Value == "dirty") ? "gold" : "none";
             }
         }
 
@@ -369,21 +370,22 @@ namespace PraticeManagement.Controls.TimeEntry
 
             if (isValidNote && isValidBillableHours && isValidNonBillableHours)
             {
-                tbBillableHours.BackColor = tbBillableHours.BackColor != Color.Red ? tbBillableHours.BackColor : Color.White;
+                tbBillableHours.Style["background-color"] = "none";
+                
             }
             else
             {
-                tbBillableHours.BackColor = Color.Red;
+                tbBillableHours.Style["background-color"] = "red";
             }
 
 
             if (isValidNote && isValidBillableHours && isValidNonBillableHours)
             {
-                tbNonBillableHours.BackColor = tbNonBillableHours.BackColor != Color.Red ? tbNonBillableHours.BackColor : Color.White;
+                tbNonBillableHours.Style["background-color"] = "none";
             }
             else
             {
-                tbNonBillableHours.BackColor = Color.Red;
+                tbNonBillableHours.Style["background-color"] = "red";
             }
 
         }
