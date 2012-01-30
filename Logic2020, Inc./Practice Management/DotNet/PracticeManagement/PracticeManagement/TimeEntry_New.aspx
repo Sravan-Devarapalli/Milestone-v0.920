@@ -28,7 +28,7 @@
 </asp:Content>
 <asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript">
-      
+
         function SetFocus(modalExId, tbNotesId, tbBillableHoursId, btnSaveNotesId, tbNonBillableHoursId) {
 
             var tbActualHours = $find(tbBillableHours);
@@ -45,9 +45,10 @@
                 btnSaveNotes.disabled = 'disabled';
             }
             else {
-                tbNotes.disabled = '';
-                btnSaveNotes.disabled = '';
-
+                if (!(tbBillableHours.getAttribute('IsPTO') != null && tbBillableHours.getAttribute('IsPTO').toString().toLowerCase() == "true")) {
+                    tbNotes.disabled = '';
+                    btnSaveNotes.disabled = '';
+                }
             }
 
             if (tbNotes && !tbNotes.disabled) tbNotes.focus();
@@ -198,7 +199,7 @@
                             <ItemTemplate>
                                 <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                     <tr>
-                                        <td style="width: 50%;font-weight:bold;" colspan="5">
+                                        <td style="width: 50%; font-weight: bold;" colspan="5">
                                             <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("AccountName")).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("ProjectName")).Value + "(" + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("ProjectNumber")).Value + ")"%>
                                         </td>
                                         <td style="width: 44%;" colspan="3">
@@ -208,11 +209,11 @@
                                                 TargetControlID="imgBtnRecursiveProjectSection">
                                             </AjaxControlToolkit:ConfirmButtonExtender>
                                             <asp:ImageButton ID="imgBtnRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png"
-                                                OnClick="imgBtnRecursiveSection_OnClick"  />
+                                                OnClick="imgBtnRecursiveSection_OnClick" />
                                         </td>
                                         <td class="DeleteWidth">
                                             <asp:ImageButton ID="imgBtnDeleteProjectSection" runat="server" ImageUrl="~/Images/close_16.png"
-                                                OnClick="imgBtnDeleteSection_OnClick"  />
+                                                OnClick="imgBtnDeleteSection_OnClick" />
                                         </td>
                                     </tr>
                                 </table>
@@ -253,11 +254,14 @@
                                     TargetControlID="lblDupilcateOptionsRemoveExtender" />
                                 <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
                                 <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop">
-                                <div id="divRecursiveAlert" runat="server" class="TopCenterAlignWithoutPaddingTop">    <b>NOTE:</b> This section is marked as recursive, Click on  
-                                    <asp:Image ID="imgRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png" />
-                                    icon to mark it as non-recursive or Click on 
-                                    <asp:Image ID="ImageButton1" runat="server" ImageUrl="~/Images/close_16.png" /> icon to delete this section for this week.
-                                </div></asp:Label>
+                                    <div id="divRecursiveAlert" runat="server" class="TopCenterAlignWithoutPaddingTop">
+                                        <b>NOTE:</b> This section is marked as recursive, Click on
+                                        <asp:Image ID="imgRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png" />
+                                        icon to mark it as non-recursive or Click on
+                                        <asp:Image ID="ImageButton1" runat="server" ImageUrl="~/Images/close_16.png" />
+                                        icon to delete this section for this week.
+                                    </div>
+                                </asp:Label>
                             </ItemTemplate>
                         </asp:Repeater>
                     </asp:Panel>
@@ -288,7 +292,7 @@
                             <ItemTemplate>
                                 <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                     <tr>
-                                        <td style="width: 50%;font-weight:bold;" colspan="5">
+                                        <td style="width: 50%; font-weight: bold;" colspan="5">
                                             <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("AccountName")).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("BusinessUnitName")).Value %>
                                         </td>
                                         <td style="width: 44%;" colspan="3">
@@ -297,12 +301,11 @@
                                             <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecurrenceBusinessDevelopmentSection"
                                                 runat="server" TargetControlID="imgBtnRecurrenceBusinessDevelopmentSection">
                                             </AjaxControlToolkit:ConfirmButtonExtender>
-                                            <asp:ImageButton ID="imgBtnRecurrenceBusinessDevelopmentSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick"
-                                                 />
+                                            <asp:ImageButton ID="imgBtnRecurrenceBusinessDevelopmentSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick" />
                                         </td>
                                         <td class="DeleteWidth">
                                             <asp:ImageButton ID="imgBtnDeleteBusinessDevelopmentSection" runat="server" ImageUrl="~/Images/close_16.png"
-                                                OnClick="imgBtnDeleteSection_OnClick"  />
+                                                OnClick="imgBtnDeleteSection_OnClick" />
                                         </td>
                                     </tr>
                                 </table>
@@ -341,11 +344,14 @@
                                     </FooterTemplate>
                                 </asp:Repeater>
                                 <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop">
-                                <div id="divRecursiveAlert" runat="server" class="TopCenterAlignWithoutPaddingTop">    <b>NOTE:</b> This section is marked as recursive, Click on  
-                                    <asp:Image ID="imgRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png" />
-                                    icon to mark it as non-recursive or Click on 
-                                    <asp:Image ID="ImageButton1" runat="server" ImageUrl="~/Images/close_16.png" /> icon to delete this section for this week.
-                                </div></asp:Label>
+                                    <div id="divRecursiveAlert" runat="server" class="TopCenterAlignWithoutPaddingTop">
+                                        <b>NOTE:</b> This section is marked as recursive, Click on
+                                        <asp:Image ID="imgRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png" />
+                                        icon to mark it as non-recursive or Click on
+                                        <asp:Image ID="ImageButton1" runat="server" ImageUrl="~/Images/close_16.png" />
+                                        icon to delete this section for this week.
+                                    </div>
+                                </asp:Label>
                                 <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
                                     TargetControlID="lblDupilcateOptionsRemoveExtender" />
                                 <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
@@ -378,7 +384,7 @@
                             <ItemTemplate>
                                 <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                     <tr>
-                                        <td style="width: 50%;font-weight:bold;" colspan="5">
+                                        <td style="width: 50%; font-weight: bold;" colspan="5">
                                             <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("BusinessUnitName")).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("ProjectName")).Value%>
                                         </td>
                                         <td style="width: 44%;" colspan="3">
@@ -387,12 +393,11 @@
                                             <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecurrenceInternalSection"
                                                 runat="server" TargetControlID="imgBtnRecurrenceInternalSection">
                                             </AjaxControlToolkit:ConfirmButtonExtender>
-                                            <asp:ImageButton ID="imgBtnRecurrenceInternalSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick"
-                                                 />
+                                            <asp:ImageButton ID="imgBtnRecurrenceInternalSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick" />
                                         </td>
                                         <td class="DeleteWidth">
                                             <asp:ImageButton ID="imgBtnDeleteInternalSection" runat="server" ImageUrl="~/Images/close_16.png"
-                                                OnClick="imgBtnDeleteSection_OnClick"  />
+                                                OnClick="imgBtnDeleteSection_OnClick" />
                                         </td>
                                     </tr>
                                 </table>
@@ -431,11 +436,14 @@
                                     </FooterTemplate>
                                 </asp:Repeater>
                                 <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop">
-                                <div id="divRecursiveAlert" runat="server" class="TopCenterAlignWithoutPaddingTop">    <b>NOTE:</b> This section is marked as recursive, Click on  
-                                    <asp:Image ID="imgRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png" />
-                                    icon to mark it as non-recursive or Click on 
-                                    <asp:Image ID="ImageButton1" runat="server" ImageUrl="~/Images/close_16.png" /> icon to delete this section for this week.
-                                </div></asp:Label>
+                                    <div id="divRecursiveAlert" runat="server" class="TopCenterAlignWithoutPaddingTop">
+                                        <b>NOTE:</b> This section is marked as recursive, Click on
+                                        <asp:Image ID="imgRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png" />
+                                        icon to mark it as non-recursive or Click on
+                                        <asp:Image ID="ImageButton1" runat="server" ImageUrl="~/Images/close_16.png" />
+                                        icon to delete this section for this week.
+                                    </div>
+                                </asp:Label>
                                 <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
                                     TargetControlID="lblDupilcateOptionsRemoveExtender" />
                                 <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
@@ -487,7 +495,8 @@
                             </ItemTemplate>
                         </asp:Repeater>
                     </asp:Panel>
-                    <asp:Panel ID="pnlTotalSection" runat="server" Style="padding:10px 0px 10px 0px" CssClass="cp bg-white">
+                    <asp:Panel ID="pnlTotalSection" runat="server" Style="padding: 10px 0px 10px 0px"
+                        CssClass="cp bg-white">
                         <table class="CompPerfTable WholeWidth">
                             <tr class="time-entry-bar">
                                 <td style="text-align: right; font-weight: bold; padding: 10px;" class="time-entry-bar-time-typesNew">
@@ -518,7 +527,7 @@
                                 <td colspan="7" style="width: 70%; text-align: right; font-weight: bold;">
                                     BILLABLE TOTAL :
                                 </td>
-                                <td class="time-entry-total-hoursNew" style="padding-left:4px;">
+                                <td class="time-entry-total-hoursNew" style="padding-left: 4px;">
                                     <label id="lblBillableGrandTotal" runat="server" />
                                     <ext:TotalCalculatorExtender ID="extBillableGrandTotal" runat="server" TargetControlID="lblBillableGrandTotal" />
                                 </td>
@@ -531,7 +540,7 @@
                                 <td colspan="7" style="width: 70%; text-align: right; font-weight: bold;">
                                     NON BILLABLE TOTAL :
                                 </td>
-                                <td class="time-entry-total-hoursNew" style="padding-left:4px;">
+                                <td class="time-entry-total-hoursNew" style="padding-left: 4px;">
                                     <label id="lblNonBillableGrandTotal" runat="server" />
                                     <ext:TotalCalculatorExtender ID="extNonBillableGrandTotal" runat="server" TargetControlID="lblNonBillableGrandTotal" />
                                 </td>
@@ -544,7 +553,7 @@
                                 <td colspan="7" style="width: 70%; text-align: right; font-weight: bold; padding-top: 15px;">
                                     TIME PERIOD GRAND TOTAL:
                                 </td>
-                                <td style="padding-top: 15px;padding-left:4px;" class="time-entry-total-hoursNew">
+                                <td style="padding-top: 15px; padding-left: 4px;" class="time-entry-total-hoursNew">
                                     <label id="lbltimePeriodGrandTotal" runat="server" />
                                     <ext:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lbltimePeriodGrandTotal" />
                                 </td>
