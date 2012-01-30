@@ -1486,10 +1486,10 @@ namespace PraticeManagement
             if (Page.IsValid)
             {
                 SaveAll();
-                int i = -1;
+                int i = 0;
                 int.TryParse(eventArgument, out i);
 
-                if (i > -1)
+                if (i > 0)
                 {
                     var urlTemplate = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) ?
                                         Constants.ApplicationPages.TimeEntry_NewForAdmin : Constants.ApplicationPages.TimeEntry_New;
