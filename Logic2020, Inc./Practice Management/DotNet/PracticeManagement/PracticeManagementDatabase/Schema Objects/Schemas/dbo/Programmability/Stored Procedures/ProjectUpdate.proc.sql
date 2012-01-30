@@ -24,7 +24,7 @@ BEGIN
 	SET NOCOUNT ON;
 	
 	BEGIN TRY
-	BEGIN TRAN  T1;
+	BEGIN TRAN  ProjectUpdate
 
 		-- Start logging session
 		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
@@ -60,7 +60,7 @@ BEGIN
 						INNER JOIN TimeEntry TE ON TE.ChargeCodeId = CC.Id AND CC.ProjectId = @ProjectId
 						)
 			BEGIN
-				RAISERROR ('Can not change project account or business unit as it has time entries.', 16, 1)
+				RAISERROR ('Can not change project account or business unit as some time entered towards this Account-BusinessUnit-Project.', 16, 1)
 			END
 			ELSE
 			BEGIN
@@ -123,10 +123,10 @@ BEGIN
 		-- End logging session
 		EXEC dbo.SessionLogUnprepare
 
-	COMMIT TRAN T1;	
+	COMMIT TRAN ProjectUpdate
 	END TRY
 	BEGIN CATCH
-		ROLLBACK TRAN T1
+		ROLLBACK TRAN ProjectUpdate
 		
 		DECLARE @ErrorMessage NVARCHAR(MAX)
 		SET @ErrorMessage = ERROR_MESSAGE()
