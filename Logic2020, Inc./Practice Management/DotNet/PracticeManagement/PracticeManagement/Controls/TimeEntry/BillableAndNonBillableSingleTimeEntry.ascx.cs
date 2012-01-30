@@ -193,7 +193,7 @@ namespace PraticeManagement.Controls.TimeEntry
             tbNonBillableHours.Attributes["IsPTO"] = IsPTO.ToString();
             tbNonBillableHours.Attributes["txtboxNoteClienId"] = tbNotes.ClientID;
 
-           // MaintainEditedtbHoursStyle();
+            MaintainEditedtbHoursStyle();
         }
 
         private void MaintainEditedtbHoursStyle()
