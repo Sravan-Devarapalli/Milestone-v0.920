@@ -37,8 +37,8 @@
         </tr>
         <tr>
             <td class="comment">
-                <asp:TextBox ID="tbNotes" runat="server" Columns="50" MaxLength="1000" Rows="5" TextMode="MultiLine" onchange="ChangeTooltip(this);"
-                    Style="resize: none; overflow-y: auto;" TabIndex="1" />
+                <asp:TextBox ID="tbNotes" runat="server" Columns="50" MaxLength="1000" Rows="5" TextMode="MultiLine"
+                    onchange="ChangeTooltip(this);" Style="resize: none; overflow-y: auto;" TabIndex="1" />
                 <asp:HiddenField ID="hdnNotes" runat="server" Value="" />
             </td>
         </tr>
@@ -69,11 +69,9 @@
     <asp:HiddenField ID="hfHorizontalTotalCalculatorExtender" runat="server" />
     <asp:HiddenField ID="hfSpreadSheetTotalCalculatorExtender" runat="server" />
     <asp:HiddenField ID="hdnIsNoteRequired" runat="server" />
-    <asp:HiddenField ID="hdnIsPTOTimeType" runat="server" />
     <ext:DirtyStateExtender ID="deActualHours" runat="server" TargetControlID="hfDirtyHours"
         HiddenActualHoursId="hdnActualHours" NoteId="tbNotes" ActualHoursId="tbActualHours"
         HiddenNoteId="hdnNotes" HorizontalTotalCalculatorExtenderId="hfHorizontalTotalCalculatorExtender"
-        VerticalTotalCalculatorExtenderId="hfVerticalTotalCalculatorExtender" IsNoteRequired="hdnIsNoteRequired"
-        SpreadSheetExtenderId="hfSpreadSheetTotalCalculatorExtender" IsPTOTimeType="hdnIsPTOTimeType" />
+        VerticalTotalCalculatorExtenderId="hfVerticalTotalCalculatorExtender" SpreadSheetExtenderId="hfSpreadSheetTotalCalculatorExtender" />
 </asp:Panel>
 
