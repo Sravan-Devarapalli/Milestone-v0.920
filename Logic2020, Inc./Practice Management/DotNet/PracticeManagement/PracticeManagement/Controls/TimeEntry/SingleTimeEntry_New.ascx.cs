@@ -67,14 +67,6 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
-        public string ProjectMilestoneDropdownClientId
-        {
-            set
-            {
-                this.deActualHours.ProjectMilestoneDropdownIdValue = value;
-            }
-        }
-
         public string IsNoteRequired
         {
             set
@@ -191,6 +183,12 @@ namespace PraticeManagement.Controls.TimeEntry
             hfDirtyHours.Value = TimeEntryRecordElement.Attribute(XName.Get("IsDirty")).Value;
 
             imgNote.ToolTip = tbNotes.Text;
+
+            if (IsPTO)
+            {
+                tbNotes.Enabled = false;
+                btnSaveNotes.Enabled = false;
+            }
         }
 
         protected string GetNowDate()
@@ -304,6 +302,9 @@ namespace PraticeManagement.Controls.TimeEntry
             imgNote.ImageUrl = string.IsNullOrEmpty(tbNotes.Text) ?
                         PraticeManagement.Constants.ApplicationResources.AddCommentIcon :
                         PraticeManagement.Constants.ApplicationResources.RecentCommentIcon;
+
+            if (IsPTO)
+                return true;
 
             var note = tbNotes.Text;
 
