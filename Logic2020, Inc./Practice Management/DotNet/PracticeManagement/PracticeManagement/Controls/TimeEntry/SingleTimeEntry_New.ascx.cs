@@ -27,7 +27,17 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
-        public bool IsPTO { get; set; }
+        public bool IsPTO
+        {
+            get
+            {
+                return ViewState["isPTOWOrktype"] != null ? (bool)ViewState["isPTOWOrktype"] : false;
+            }
+            set
+            {
+                ViewState["isPTOWOrktype"] = value;
+            }
+        }
 
         public XElement TimeEntryRecordElement
         {
@@ -133,6 +143,12 @@ namespace PraticeManagement.Controls.TimeEntry
                 FillControls();
             }
 
+            if (IsPTO)
+            {
+                tbNotes.Enabled = false;
+                btnSaveNotes.Enabled = false;
+            }
+
             CanelControlStyle();
             ApplyControlStyle();
 
@@ -184,11 +200,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
             imgNote.ToolTip = tbNotes.Text;
 
-            if (IsPTO)
-            {
-                tbNotes.Enabled = false;
-                btnSaveNotes.Enabled = false;
-            }
+
         }
 
         protected string GetNowDate()
@@ -236,7 +248,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 element.SetAttributeValue(XName.Get("ActualHours"), tbActualHours.Text);
                 element.SetAttributeValue(XName.Get("Note"), tbNotes.Text);
                 element.SetAttributeValue(XName.Get("EntryDate"), time.ToString(Constants.Formatting.EntryDateFormat));
-                element.SetAttributeValue(XName.Get("IsDirty"), hfDirtyHours.Value );
+                element.SetAttributeValue(XName.Get("IsDirty"), hfDirtyHours.Value);
             }
         }
 
