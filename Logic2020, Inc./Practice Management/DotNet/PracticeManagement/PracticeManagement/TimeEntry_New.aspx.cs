@@ -1457,7 +1457,7 @@ namespace PraticeManagement
             var dp = (TextBox)sender;
 
             var pageBase = this.Page as PracticeManagementPageBase;
-            if (pageBase.IsDirty)//&& !teList.SaveData())
+            if (pageBase.IsDirty && !SaveData())
             {
                 dp.Text = wsChoose.SelectedStartDate.ToShortDateString();
                 //   RaiseError();
