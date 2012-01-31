@@ -56,7 +56,6 @@ namespace PraticeManagement.Controls.Persons
                 if (userIsAdministrator)
                 {
                     DataHelper.FillPersonList(ddlPersons, null);
-                    ddlPersons.Items.RemoveAt(0);
 
                     string strSelectedPersonId = Request.QueryString["SelectedPersonId"];
                     if (!string.IsNullOrEmpty(strSelectedPersonId) && !Int32.TryParse(strSelectedPersonId, out personId))
