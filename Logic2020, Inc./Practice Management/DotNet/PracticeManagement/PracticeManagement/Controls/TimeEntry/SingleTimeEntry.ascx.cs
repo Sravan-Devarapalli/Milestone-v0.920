@@ -407,6 +407,8 @@ namespace PraticeManagement.Controls.TimeEntry
                 Convert.ToDouble(tbActualHours.Text);
             TimeEntryBehind.IsChargeable = chbIsChargeable.Checked;
             TimeEntryBehind.IsCorrect = !chbForDiffProject.Checked;
+            TimeEntryBehind.IsReviewed = lblReview.Text == "N/A" ? ((ReviewStatus)1) : ((ReviewStatus)Enum.Parse(typeof(ReviewStatus), lblReview.Text));
+
         }
 
         protected string GetNowDate()
