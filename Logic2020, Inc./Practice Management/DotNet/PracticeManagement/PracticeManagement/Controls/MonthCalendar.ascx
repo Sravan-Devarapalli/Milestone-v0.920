@@ -34,27 +34,26 @@
                                 var PersonId = btnOk.attributes['PersonId'].value;
                                 var Date = btnOk.attributes['Date'].value;
                                 var maxHours;
-                                var enteredHours;
                                 var urlVal = 'TimeEnteredHoursHandler.ashx?PersonId=' + PersonId + '&Date=' + Date;
                                 try {
+                                    errorText.innerHTML = '';
                                     var value = $.post(urlVal, function (returnData) {
-                                        enteredHours = returnData;
+                                        var enteredHours = returnData;
                                         if (enteredHours != null) {
                                             maxHours = 8 - enteredHours;
                                         }
                                         if (maxHours != null && maxHours > 0 && hours <= maxHours) {
                                             SaveDetails(popupExtendar, btnOk);
                                         }
-                                        else if (maxHours != null && maxHours < 0) {
+                                        else if (maxHours != null && maxHours <= 0) {
                                             errorText.innerHTML = 'This Person already worked ' + enteredHours + ' hours. so no need to keep PTO.';
                                         }
                                         else {
-                                            errorText.innerHTML = 'This Person already worked ' + enteredHours + ' hours. so you can keep PTO upto ' + maxHours + ' hours only';
+                                            errorText.innerHTML = 'This Person already worked ' + enteredHours + ' hours. so you can keep PTO upto ' + maxHours + ' hour(s) only';
                                         }
                                     });
                                 }
                                 catch (error) {
-                                    alert(error.description);
                                     errorText.innerHTML = error.message;
                                 }
                             }
