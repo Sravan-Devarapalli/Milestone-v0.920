@@ -3,20 +3,20 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="MessageLabel" TagPrefix="uc" %>
 <%@ Register Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.DirtyStateExtender"
-    TagPrefix="ext" %>
+    TagPrefix="ext" %> 
 <table cellpadding="0" cellspacing="0px" class="WholeWidth">
     <tr>
-        <td style="width: 2%;">
+        <td class="Width2Percent" >
             B
         </td>
-        <td style="padding: 6px 3px 6px 0px; width: 58%;">
+        <td class="Width58Percent">
             <asp:TextBox ID="tbBillableHours" runat="server" MaxLength="5" onchange="setDirty();EnableSaveButton(true);" />
             <asp:HiddenField ID="hdnBillableHours" runat="server" Value="" />
             <ajaxToolkit:FilteredTextBoxExtender ID="fteActualHours" TargetControlID="tbBillableHours"
                 FilterType="Numbers,Custom" FilterMode="ValidChars" ValidChars="." runat="server">
             </ajaxToolkit:FilteredTextBoxExtender>
         </td>
-        <td valign="middle" rowspan="2" style="padding: 6px 4px 6px 10px; width: 40%;">
+        <td valign="middle" rowspan="2" class="Width40Percent">
             <asp:ImageButton ID="imgNote" runat="server" OnClientClick='<%# "SetFocus(\"" + modalEx.ClientID + "\",\"" + tbNotes.ClientID + "\",\"" + tbBillableHours.ClientID + "\",\"" + btnSaveNotes.ClientID + "\",\"" + tbNonBillableHours.ClientID + "\"); return false;"%>'
                 ImageUrl='<%# string.IsNullOrEmpty(tbNotes.Text) ? PraticeManagement.Constants.ApplicationResources.AddCommentIcon : PraticeManagement.Constants.ApplicationResources.RecentCommentIcon %>' />
             <image src='Images/trash-icon.gif' id='imgClear' style='padding-top: 5px;' title="Clear time and notes entered for this day only."
@@ -24,10 +24,10 @@
         </td>
     </tr>
     <tr>
-        <td style="width: 2%;">
+        <td class="Width2Percent">
             N
         </td>
-        <td style="padding: 6px 3px 6px 0px; width: 58%;">
+        <td class="Width58Percent">
             <asp:TextBox ID="tbNonBillableHours" runat="server" MaxLength="5" onchange="setDirty();EnableSaveButton(true);" />
             <asp:HiddenField ID="hdnNonBillableHours" runat="server" Value="" />
             <ajaxToolkit:FilteredTextBoxExtender ID="fteNonBillableHours" TargetControlID="tbNonBillableHours"
