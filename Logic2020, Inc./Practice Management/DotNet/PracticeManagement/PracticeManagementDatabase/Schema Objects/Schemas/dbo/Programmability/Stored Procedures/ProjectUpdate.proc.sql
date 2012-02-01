@@ -70,6 +70,13 @@ BEGIN
 				FROM dbo.ChargeCode CC
 				WHERE CC.ProjectId = @ProjectId
 					AND ( CC.ClientId <> @ClientId OR CC.ProjectGroupId <> @GroupId )
+
+				UPDATE PTRS
+					SET PTRS.ClientId = @ClientId,
+						PTRS.ProjectGroupId = @GroupId
+				FROM dbo.PersonTimeEntryRecursiveSelection PTRS
+				WHERE PTRS.ProjectId = @ProjectId
+					AND ( PTRS.ClientId <> @ClientId OR PTRS.ProjectGroupId <> @GroupId )
 			END
 		END
 
