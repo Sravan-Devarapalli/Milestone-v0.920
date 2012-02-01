@@ -186,9 +186,9 @@
                                     <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg"
                                         ToolTip="Expand Section" />&nbsp;<b>Project</b>
                                 </td>
-                                <td align="center">
+                                <td>
                                 </td>
-                                <td style="text-align: right">
+                                <td>
                                     <asp:Button ID="btnAddProject" runat="server" Text="Add Project" CssClass="mrg0" />
                                 </td>
                             </tr>
@@ -199,10 +199,10 @@
                             <ItemTemplate>
                                 <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                     <tr>
-                                        <td style="width: 50%; font-weight: bold;" colspan="5">
+                                        <td class="SectionFirstTD" colspan="5">
                                             <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("AccountName")).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("ProjectName")).Value + "(" + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("ProjectNumber")).Value + ")"%>
                                         </td>
-                                        <td style="width: 44%;" colspan="3">
+                                        <td class="SectionSecondTD" colspan="3">
                                         </td>
                                         <td class="DeleteWidth">
                                             <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecursiveProjectSection" runat="server"
@@ -254,11 +254,11 @@
                                     TargetControlID="lblDupilcateOptionsRemoveExtender" />
                                 <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
                                 <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop">
-                                    <div id="divRecursiveAlert" runat="server" class="TopCenterAlignWithoutPaddingTop">
+                                    <div class="TopCenterAlignWithoutPaddingTop">
                                         <b>NOTE:</b> This section is marked as recursive, Click on
-                                        <asp:Image ID="imgRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png" />
+                                        <img alt="Recursive" src="Images/Recursive.png" title="Recursive" />
                                         icon to mark it as non-recursive or Click on
-                                        <asp:Image ID="ImageButton1" runat="server" ImageUrl="~/Images/close_16.png" />
+                                        <img alt="Delete" src="Images/close_16.png" title="Delete" />
                                         icon to delete this section for this week.
                                     </div>
                                 </asp:Label>
@@ -278,9 +278,9 @@
                                     <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Section" />&nbsp;<b>Business
                                         Development</b>
                                 </td>
-                                <td align="center">
+                                <td>
                                 </td>
-                                <td style="text-align: right">
+                                <td>
                                     <asp:Button ID="btnAddAccount" runat="server" Text="Add Account" CssClass="mrg0" />
                                 </td>
                             </tr>
@@ -292,10 +292,10 @@
                             <ItemTemplate>
                                 <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                     <tr>
-                                        <td style="width: 50%; font-weight: bold;" colspan="5">
+                                        <td class="SectionFirstTD" colspan="5">
                                             <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("AccountName")).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("BusinessUnitName")).Value %>
                                         </td>
-                                        <td style="width: 44%;" colspan="3">
+                                        <td class="SectionSecondTD" colspan="3">
                                         </td>
                                         <td class="DeleteWidth">
                                             <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecurrenceBusinessDevelopmentSection"
@@ -344,11 +344,11 @@
                                     </FooterTemplate>
                                 </asp:Repeater>
                                 <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop">
-                                    <div id="divRecursiveAlert" runat="server" class="TopCenterAlignWithoutPaddingTop">
+                                    <div  class="TopCenterAlignWithoutPaddingTop">
                                         <b>NOTE:</b> This section is marked as recursive, Click on
-                                        <asp:Image ID="imgRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png" />
+                                         <img alt="Recursive" src="Images/Recursive.png" title="Recursive" />
                                         icon to mark it as non-recursive or Click on
-                                        <asp:Image ID="ImageButton1" runat="server" ImageUrl="~/Images/close_16.png" />
+                                        <img alt="Delete" src="Images/close_16.png" title="Delete" />
                                         icon to delete this section for this week.
                                     </div>
                                 </asp:Label>
@@ -370,9 +370,9 @@
                                     <asp:Label ID="Label2" Style="display: none;" runat="server"></asp:Label>
                                     <asp:Image ID="Image2" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Section" />&nbsp;<b>Internal</b>
                                 </td>
-                                <td align="center">
+                                <td>
                                 </td>
-                                <td style="text-align: right">
+                                <td>
                                     <asp:Button ID="btnAddInternalProject" runat="server" Text="Add Project" CssClass="mrg0" />
                                 </td>
                             </tr>
@@ -384,10 +384,10 @@
                             <ItemTemplate>
                                 <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                     <tr>
-                                        <td style="width: 50%; font-weight: bold;" colspan="5">
+                                        <td class="SectionSecondTD"  colspan="5">
                                             <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("BusinessUnitName")).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("ProjectName")).Value%>
                                         </td>
-                                        <td style="width: 44%;" colspan="3">
+                                        <td class="SectionSecondTD" colspan="3">
                                         </td>
                                         <td class="DeleteWidth">
                                             <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecurrenceInternalSection"
@@ -436,11 +436,11 @@
                                     </FooterTemplate>
                                 </asp:Repeater>
                                 <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop">
-                                    <div id="divRecursiveAlert" runat="server" class="TopCenterAlignWithoutPaddingTop">
+                                    <div class="TopCenterAlignWithoutPaddingTop">
                                         <b>NOTE:</b> This section is marked as recursive, Click on
-                                        <asp:Image ID="imgRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png" />
+                                        <img alt="Recursive" src="Images/Recursive.png" title="Recursive" />
                                         icon to mark it as non-recursive or Click on
-                                        <asp:Image ID="ImageButton1" runat="server" ImageUrl="~/Images/close_16.png" />
+                                        <img alt="Delete" src="Images/close_16.png" title="Delete" />
                                         icon to delete this section for this week.
                                     </div>
                                 </asp:Label>
@@ -499,14 +499,13 @@
                         CssClass="cp bg-white">
                         <table class="CompPerfTable WholeWidth">
                             <tr class="time-entry-bar">
-                                <td style="text-align: right; font-weight: bold; padding: 10px;" class="time-entry-bar-time-typesNew">
+                                <td  class="time-entry-bar-time-typesNew TOTALHOURSTD">
                                     TOTAL HOURS:
                                 </td>
                                 <asp:Repeater ID="repDayTotalHours" OnItemDataBound="repDayTotalHours_OnItemDataBound"
                                     runat="server">
                                     <ItemTemplate>
-                                        <td class="time-entry-bar-single-teNew" style="border: 1px solid black; text-align: left;
-                                            padding-left: 12px;">
+                                        <td class="time-entry-bar-single-teNew DayTotalHours">
                                             <asp:Label ID="lblDayTotal" Font-Bold="true" TotalHours="" runat="server"></asp:Label>
                                             <ext:TotalCalculatorExtender ID="extDayTotal" runat="server" TargetControlID="lblDayTotal" />
                                             <asp:HiddenField ID="hdnDayTotal" runat="server"></asp:HiddenField>
@@ -524,10 +523,10 @@
                             <tr class="time-entry-bar">
                                 <td class="time-entry-bar-time-typesNew">
                                 </td>
-                                <td colspan="7" style="width: 70%; text-align: right; font-weight: bold;">
+                                <td colspan="7" class="TOTALTD">
                                     BILLABLE TOTAL :
                                 </td>
-                                <td class="time-entry-total-hoursNew" style="padding-left: 4px;">
+                                <td class="time-entry-total-hoursNew PaddingLeft4">
                                     <label id="lblBillableGrandTotal" runat="server" />
                                     <ext:TotalCalculatorExtender ID="extBillableGrandTotal" runat="server" TargetControlID="lblBillableGrandTotal" />
                                 </td>
@@ -537,10 +536,10 @@
                             <tr class="time-entry-bar">
                                 <td class="time-entry-bar-time-typesNew">
                                 </td>
-                                <td colspan="7" style="width: 70%; text-align: right; font-weight: bold;">
+                                <td colspan="7" class="TOTALTD">
                                     NON BILLABLE TOTAL :
                                 </td>
-                                <td class="time-entry-total-hoursNew" style="padding-left: 4px;">
+                                <td class="time-entry-total-hoursNew PaddingLeft4" >
                                     <label id="lblNonBillableGrandTotal" runat="server" />
                                     <ext:TotalCalculatorExtender ID="extNonBillableGrandTotal" runat="server" TargetControlID="lblNonBillableGrandTotal" />
                                 </td>
@@ -550,10 +549,10 @@
                             <tr class="time-entry-bar">
                                 <td class="time-entry-bar-time-typesNew">
                                 </td>
-                                <td colspan="7" style="width: 70%; text-align: right; font-weight: bold; padding-top: 15px;">
+                                <td colspan="7"  class="TOTALTD" style="padding-top: 15px;">
                                     TIME PERIOD GRAND TOTAL:
                                 </td>
-                                <td style="padding-top: 15px; padding-left: 4px;" class="time-entry-total-hoursNew">
+                                <td style="padding-top: 15px;" class="time-entry-total-hoursNew PaddingLeft4">
                                     <label id="lbltimePeriodGrandTotal" runat="server" />
                                     <ext:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lbltimePeriodGrandTotal" />
                                 </td>
