@@ -16,12 +16,11 @@ BEGIN
 			TEH.IsChargeable,
 			TEH.ReviewStatusId,
 			CC.TimeTypeId,
-			TEH.ModifiedBy,
-			CASE WHEN CCH.ChargeCodeId IS NULL THEN CONVERT(BIT,0) ELSE CONVERT(BIT,1) END AS 'IsChargeCodeOff'
+			TEH.ModifiedBy
 	FROM dbo.TimeEntry TE
 	INNER JOIN dbo.TimeEntryHours AS TEH  ON TE.TimeEntryId = TEH.TimeEntryId
 	INNER JOIN ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate
-	LEFT JOIN dbo.ChargeCodeTurnOffHistory CCH ON CC.Id = CCH.ChargeCodeId AND TE.ChargeCodeDate BETWEEN CCH.StartDate AND CCH.EndDate
+
 	
 	--List of Charge codes with recursive flag.
 	SELECT DISTINCT ISNULL(CC.TimeEntrySectionId, PTRS.TimeEntrySectionId) AS 'TimeEntrySectionId',
