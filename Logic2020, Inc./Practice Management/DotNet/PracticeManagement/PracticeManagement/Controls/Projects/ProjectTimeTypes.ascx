@@ -166,7 +166,7 @@
             </td>
         </tr>
         <tr>
-            <td>
+            <td align="center" style="padding-bottom: 10px;">
                 <asp:Button ID="btnOk" runat="server" Text="OK" OnClientClick="return btnClose_OnClientClick();"/>
             </td>
         </tr>
