@@ -89,6 +89,18 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        public string IsChargeCodeTurnOff
+        {
+            set
+            {
+                hdnIsChargeCodeTurnOff.Value = value;
+            }
+            get
+            {
+                return hdnIsChargeCodeTurnOff.Value;
+            }
+        }
+
         public string HorizontalTotalCalculatorExtenderId
         {
             get
@@ -126,6 +138,23 @@ namespace PraticeManagement.Controls.TimeEntry
         protected void Page_PreRender(object sender, EventArgs e)
         {
             SpreadSheetTotalCalculatorExtenderId = HostingPage.SpreadSheetTotalCalculatorExtenderId;
+
+            bool isChargeCodeTurnOff = false;
+            Boolean.TryParse(IsChargeCodeTurnOff, out isChargeCodeTurnOff);
+            if (isChargeCodeTurnOff)
+            {
+                if (!IsPostBack)
+                {
+                    tbActualHours.Attributes["isChargeCodeTurnOffDisable"] = "1";
+                }
+                tbActualHours.Enabled = false;
+                tbActualHours.BackColor = Color.Gray;
+            }
+            tbActualHours.Attributes["IsHireDateDisable"] = HostingPage.SelectedPerson.HireDate > DateBehind ? "1" : "0";
+            tbActualHours.Attributes["IsTerminationDateDisable"] = !HostingPage.SelectedPerson.TerminationDate.HasValue ||
+                        (HostingPage.SelectedPerson.TerminationDate.HasValue &&
+                                    HostingPage.SelectedPerson.TerminationDate.Value >= DateBehind
+                         ) ? "0" : "1";
         }
 
         public void CanelControlStyle()
