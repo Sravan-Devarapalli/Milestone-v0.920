@@ -75,8 +75,6 @@ namespace DataTransferObjects.TimeEntry
         [DataMember]
         public bool IsCorrect { get; set; }
 
-        public bool IsChargeCodeOff { get; set; }
-
 
         #endregion
 
