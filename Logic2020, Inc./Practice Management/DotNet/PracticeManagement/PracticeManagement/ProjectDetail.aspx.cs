@@ -333,7 +333,8 @@ namespace PraticeManagement
                 cellProjectTools.Visible = false;
             }
 
-            chbCanCreateCustomWorkTypes.Enabled = userIsAdministrator ;
+            chbCanCreateCustomWorkTypes.Enabled = userIsAdministrator && !chbIsInternal.Checked;
+            chbCanCreateCustomWorkTypes.Checked = chbIsInternal.Checked ? false : chbCanCreateCustomWorkTypes.Checked;
         }
 
         private void NeedToShowDeleteButton()
@@ -774,7 +775,7 @@ namespace PraticeManagement
 
         protected void cvClient_ServerValidate(object sender, ServerValidateEventArgs args)
         {
-            if (Project != null && Project.Id.HasValue && Project.Client.Id.HasValue && Project.Client.Id.Value != Convert.ToInt32(ddlClientName.SelectedValue) && Project.HasTimeEntries)
+            if (Project != null && Project.Id.HasValue && Project.Client.Id.HasValue && (ddlClientName.SelectedIndex == 0 || Project.Client.Id.Value != Convert.ToInt32(ddlClientName.SelectedValue)) && Project.HasTimeEntries)
             {
                 args.IsValid = false;
             }
@@ -826,6 +827,7 @@ namespace PraticeManagement
                 {
                     this.ProjectId = id;
                     projectExpenses.BindExpenses();
+                    CellProjectTimeTypes.Visible = true;
                 }
                 result = true;
             }
