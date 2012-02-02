@@ -40,7 +40,7 @@
             <ext2:EnableDisableExtender ID="extEnableDisable" runat="server" TargetControlID="ddlTimeTypes" />
         </td>
          <td class="DeleteWidth">
-            <asp:ImageButton ID="imgDropTes" runat="server" OnClientClick='return confirm ("This will delete the time and notes entered for the entire row!  Are you sure?")'
+            <asp:ImageButton ID="imgDropTes" runat="server" OnClientClick='return confirm ("This will delete the time and notes entered for the entire row!  Are you sure?")' ToolTip="Delete"
                 ImageUrl="~/Images/close_16.png" OnClick="imgDropTes_Click" />
         </td>
     </tr>
