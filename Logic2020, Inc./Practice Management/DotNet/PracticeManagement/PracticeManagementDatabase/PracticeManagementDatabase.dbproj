@@ -42,8 +42,8 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>.\sql\debug\</OutputPath>
     <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
-    <TargetConnectionString>Data Source=localhost;Integrated Security=True;Pooling=False</TargetConnectionString>
-    <TargetDatabase>ObfuscatedPracticeManagement</TargetDatabase>
+    <TargetConnectionString>Data Source=SERVER3;User ID=sa;Pooling=False</TargetConnectionString>
+    <TargetDatabase>ProdDataObfuscatedPM</TargetDatabase>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <SuppressWarnings>
     </SuppressWarnings>
@@ -3944,6 +3944,9 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetWorkTypeNameById.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetIsChargeCodeTurnOffByPeriod.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Schema Comparisons\v0.850.dbschema">
@@ -4008,4 +4011,3 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
-
