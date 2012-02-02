@@ -65,9 +65,9 @@ namespace PracticeManagementService
             }
             catch (Exception e)
             {
-                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "UpdateTimeType", "TimeEntryService.svc", string.Empty,
-                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
-                ActivityLogDAL.ActivityLogInsert(20, logData);
+                //string logData = string.Format(Constants.Formatting.ErrorLogMessage, "UpdateTimeType", "TimeEntryService.svc", string.Empty,
+                //    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                //ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
         }
@@ -85,9 +85,9 @@ namespace PracticeManagementService
             }
             catch (Exception e)
             {
-                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "AddTimeType", "TimeEntryService.svc", string.Empty,
-                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
-                ActivityLogDAL.ActivityLogInsert(20, logData);
+                //string logData = string.Format(Constants.Formatting.ErrorLogMessage, "AddTimeType", "TimeEntryService.svc", string.Empty,
+                //    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                //ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
         }
@@ -673,6 +673,20 @@ namespace PracticeManagementService
             return TimeEntryDAL.GetPersonTimeEnteredHoursByDay(personId, date, includePTOAndHoliday);
         }
 
+        public Dictionary<DateTime, bool> GetIsChargeCodeTurnOffByPeriod(int personId, int clientId, int groupId, int projectId, int timeTypeId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                return TimeEntryDAL.GetIsChargeCodeTurnOffByPeriod( personId,  clientId,  groupId,  projectId,  timeTypeId,  startDate,  endDate);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetIsChargeCodeTurnOffByPeriod", "TimeEntryService.svc", string.Empty,
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+        }
 
 
         public void SetPersonTimeEntryRecursiveSelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isRecursive, DateTime startDate)
