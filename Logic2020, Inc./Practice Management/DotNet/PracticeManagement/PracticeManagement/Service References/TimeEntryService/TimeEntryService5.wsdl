@@ -14,6 +14,12 @@
       <xsd:import schemaLocation="http://system44.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd9" />
     </xsd:schema>
   </wsdl:types>
+  <wsdl:message name="ITimeEntryService_GetAllTimeEntryProjects_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllTimeEntryProjects" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetAllTimeEntryProjects_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllTimeEntryProjectsResponse" />
+  </wsdl:message>
   <wsdl:message name="ITimeEntryService_GetTimeEntryProjectsByClientId_InputMessage">
     <wsdl:part name="parameters" element="tns:GetTimeEntryProjectsByClientId" />
   </wsdl:message>
@@ -200,6 +206,12 @@
   <wsdl:message name="ITimeEntryService_SaveTimeTrack_OutputMessage">
     <wsdl:part name="parameters" element="tns:SaveTimeTrackResponse" />
   </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetIsChargeCodeTurnOffByPeriod_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetIsChargeCodeTurnOffByPeriod" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetIsChargeCodeTurnOffByPeriod_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetIsChargeCodeTurnOffByPeriodResponse" />
+  </wsdl:message>
   <wsdl:message name="ITimeEntryService_SetPersonTimeEntryRecursiveSelection_InputMessage">
     <wsdl:part name="parameters" element="tns:SetPersonTimeEntryRecursiveSelection" />
   </wsdl:message>
@@ -230,13 +242,11 @@
   <wsdl:message name="ITimeEntryService_ToggleIsChargeable_OutputMessage">
     <wsdl:part name="parameters" element="tns:ToggleIsChargeableResponse" />
   </wsdl:message>
-  <wsdl:message name="ITimeEntryService_GetAllTimeEntryProjects_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllTimeEntryProjects" />
-  </wsdl:message>
-  <wsdl:message name="ITimeEntryService_GetAllTimeEntryProjects_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllTimeEntryProjectsResponse" />
-  </wsdl:message>
   <wsdl:portType name="ITimeEntryService">
+    <wsdl:operation name="GetAllTimeEntryProjects">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryProjects" message="tns:ITimeEntryService_GetAllTimeEntryProjects_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryProjectsResponse" message="tns:ITimeEntryService_GetAllTimeEntryProjects_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetTimeEntryProjectsByClientId">
       <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntryProjectsByClientId" message="tns:ITimeEntryService_GetTimeEntryProjectsByClientId_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntryProjectsByClientIdResponse" message="tns:ITimeEntryService_GetTimeEntryProjectsByClientId_OutputMessage" />
@@ -361,6 +371,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/SaveTimeTrack" message="tns:ITimeEntryService_SaveTimeTrack_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/SaveTimeTrackResponse" message="tns:ITimeEntryService_SaveTimeTrack_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetIsChargeCodeTurnOffByPeriod">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetIsChargeCodeTurnOffByPeriod" message="tns:ITimeEntryService_GetIsChargeCodeTurnOffByPeriod_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetIsChargeCodeTurnOffByPeriodResponse" message="tns:ITimeEntryService_GetIsChargeCodeTurnOffByPeriod_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SetPersonTimeEntryRecursiveSelection">
       <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/SetPersonTimeEntryRecursiveSelection" message="tns:ITimeEntryService_SetPersonTimeEntryRecursiveSelection_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/SetPersonTimeEntryRecursiveSelectionResponse" message="tns:ITimeEntryService_SetPersonTimeEntryRecursiveSelection_OutputMessage" />
@@ -381,13 +395,18 @@
       <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/ToggleIsChargeable" message="tns:ITimeEntryService_ToggleIsChargeable_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/ToggleIsChargeableResponse" message="tns:ITimeEntryService_ToggleIsChargeable_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetAllTimeEntryProjects">
-      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryProjects" message="tns:ITimeEntryService_GetAllTimeEntryProjects_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryProjectsResponse" message="tns:ITimeEntryService_GetAllTimeEntryProjects_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_ITimeEntryService" type="tns:ITimeEntryService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetAllTimeEntryProjects">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/GetAllTimeEntryProjects" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetTimeEntryProjectsByClientId">
       <soap:operation soapAction="http://tempuri.org/ITimeEntryService/GetTimeEntryProjectsByClientId" style="document" />
       <wsdl:input>
@@ -667,6 +686,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetIsChargeCodeTurnOffByPeriod">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/GetIsChargeCodeTurnOffByPeriod" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="SetPersonTimeEntryRecursiveSelection">
       <soap:operation soapAction="http://tempuri.org/ITimeEntryService/SetPersonTimeEntryRecursiveSelection" style="document" />
       <wsdl:input>
@@ -705,15 +733,6 @@
     </wsdl:operation>
     <wsdl:operation name="ToggleIsChargeable">
       <soap:operation soapAction="http://tempuri.org/ITimeEntryService/ToggleIsChargeable" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetAllTimeEntryProjects">
-      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/GetAllTimeEntryProjects" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
