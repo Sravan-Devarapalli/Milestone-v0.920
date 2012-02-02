@@ -222,7 +222,7 @@ AjaxControlToolkit.CascadingDropDownBehavior.prototype = {
                 var item = list.d[i], 
                     listItemName = item.name,
                     listItemValue = item.value,
-                    listItemOptionTitle = item.optionTitle;
+                    listItemOptionTitle = item.name;
                 
                 if (item.isDefaultValue) {
                     defaultIndex = i;
