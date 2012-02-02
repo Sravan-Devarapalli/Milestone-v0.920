@@ -1,6 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[GetProjectTimeTypes]
 	@ProjectId		INT,
-	@IsOnlyActive	BIT
+	@IsOnlyActive	BIT,
+	@StartDate		DATETIME = NULL,
+	@EndDate		DATETIME = NULL
 
 AS
 BEGIN
@@ -29,10 +31,23 @@ BEGIN
 		--Configure select columns.
 		SELECT ISNULL(PTT.TimeTypeId, DTT.TimeTypeId) AS 'TimeTypeId'
 			, ISNULL(PTT.Name, DTT.Name) AS 'Name'
-			, CASE WHEN ISNULL(PTT.TimeTypeId, DTT.TimeTypeId) IN (SELECT * FROM ProjectTimeTypesInUse) THEN 1 ELSE 0 END AS InUse
+			, CASE WHEN ISNULL(PTT.TimeTypeId, DTT.TimeTypeId) IN (SELECT * FROM ProjectTimeTypesInUse) THEN 1 ELSE 0 END AS 'InUse'
 		FROM ProjectTimeTypes PTT 
 		FULL JOIN DefaultTimeTypes DTT ON DTT.TimeTypeId = PTT.TimeTypeId
-		WHERE ISNULL(IsAllowedToShow, 1) = 1
+		LEFT JOIN dbo.ChargeCode CC  ON CC.ProjectId = @ProjectId AND ISNULL(PTT.TimeTypeId, DTT.TimeTypeId) = CC.TimeTypeId 
+		LEFT JOIN dbo.ChargeCodeTurnOffHistory CCH ON CC.Id = CCH.ChargeCodeId
+		WHERE ISNULL(IsAllowedToShow, 1) = 1 
+		AND ( 
+				( @StartDate IS NULL 
+					AND @EndDate IS NULL 
+				) 
+				OR ( CCH.ChargeCodeId IS NULL 
+						OR NOT ( CCH.StartDate <= @StartDate 
+									AND @EndDate <= ISNULL(CCH.EndDate,dbo.GetFutureDate())
+							   )	
+					)
+			)
+		ORDER BY 2
 
 END
 
