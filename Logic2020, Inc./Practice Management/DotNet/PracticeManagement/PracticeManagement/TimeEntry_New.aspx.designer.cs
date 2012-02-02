@@ -418,13 +418,13 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.CalendarLegend CalendarLegend;
         
         /// <summary>
-        /// mpePopup control.
+        /// mpeProjectSectionPopup control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.ModalPopupExtender mpePopup;
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeProjectSectionPopup;
         
         /// <summary>
         /// pnlProjectSectionPopup control.
@@ -490,13 +490,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnCancelProjectSection;
         
         /// <summary>
-        /// ModalPopupExtender1 control.
+        /// mpeBusinessDevelopmentSectionPopup control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.ModalPopupExtender ModalPopupExtender1;
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeBusinessDevelopmentSectionPopup;
         
         /// <summary>
         /// pnlBusinessDevelopmentSectionPopup control.
@@ -562,13 +562,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnCancelBusinessDevelopmentSection;
         
         /// <summary>
-        /// ModalPopupExtender2 control.
+        /// mpeInternalProjectSectionPopup control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.ModalPopupExtender ModalPopupExtender2;
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeInternalProjectSectionPopup;
         
         /// <summary>
         /// pnlInternalProjectSectionPopup control.
@@ -632,6 +632,51 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancelInternalProjectSection;
+        
+        /// <summary>
+        /// hdTimetypeAlertMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdTimetypeAlertMessage;
+        
+        /// <summary>
+        /// mpeTimetypeAlertMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeTimetypeAlertMessage;
+        
+        /// <summary>
+        /// pnlTimetypeAlertMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlTimetypeAlertMessage;
+        
+        /// <summary>
+        /// btnClose control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnClose;
+        
+        /// <summary>
+        /// btnOk control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnOk;
     }
 }
 
