@@ -121,6 +121,8 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="projectId" type="xs:int" />
         <xs:element minOccurs="0" name="IsOnlyActive" type="xs:boolean" />
+        <xs:element minOccurs="0" name="startDate" nillable="true" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" nillable="true" type="xs:dateTime" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
