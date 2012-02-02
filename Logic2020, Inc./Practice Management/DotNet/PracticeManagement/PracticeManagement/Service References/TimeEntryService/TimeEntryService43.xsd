@@ -4,6 +4,19 @@
   <xs:import schemaLocation="http://system44.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd1" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
   <xs:import schemaLocation="http://system44.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
   <xs:import schemaLocation="http://system44.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CompositeObjects" />
+  <xs:import schemaLocation="http://system44.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:element name="GetAllTimeEntryProjects">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllTimeEntryProjectsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetAllTimeEntryProjectsResult" nillable="true" type="q1:ArrayOfProject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="GetTimeEntryProjectsByClientId">
     <xs:complexType>
       <xs:sequence>
@@ -16,7 +29,7 @@
   <xs:element name="GetTimeEntryProjectsByClientIdResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetTimeEntryProjectsByClientIdResult" nillable="true" type="q1:ArrayOfProject" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetTimeEntryProjectsByClientIdResult" nillable="true" type="q2:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -28,7 +41,7 @@
   <xs:element name="GetAllTimeEntryMilestonesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetAllTimeEntryMilestonesResult" nillable="true" type="q2:ArrayOfMilestone" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetAllTimeEntryMilestonesResult" nillable="true" type="q3:ArrayOfMilestone" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -43,7 +56,7 @@
   <xs:element name="GetAllTimeEntryPersonsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetAllTimeEntryPersonsResult" nillable="true" type="q3:ArrayOfPerson" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetAllTimeEntryPersonsResult" nillable="true" type="q4:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -59,7 +72,7 @@
   <xs:element name="PersonTimeEntriesByPeriodResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="PersonTimeEntriesByPeriodResult" nillable="true" type="q4:ArrayOfTimeEntrySection" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="PersonTimeEntriesByPeriodResult" nillable="true" type="q5:ArrayOfTimeEntrySection" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -87,14 +100,14 @@
   <xs:element name="GetAllTimeTypesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="GetAllTimeTypesResult" nillable="true" type="q5:ArrayOfTimeTypeRecord" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="GetAllTimeTypesResult" nillable="true" type="q6:ArrayOfTimeTypeRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RemoveTimeType">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeType" nillable="true" type="q6:TimeTypeRecord" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeType" nillable="true" type="q7:TimeTypeRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -106,7 +119,7 @@
   <xs:element name="UpdateTimeType">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeType" nillable="true" type="q7:TimeTypeRecord" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeType" nillable="true" type="q8:TimeTypeRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -118,7 +131,7 @@
   <xs:element name="AddTimeType">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeType" nillable="true" type="q8:TimeTypeRecord" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeType" nillable="true" type="q9:TimeTypeRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -137,14 +150,14 @@
   <xs:element name="TimeZonesAllResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="TimeZonesAllResult" nillable="true" type="q9:ArrayOfTimezone" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="TimeZonesAllResult" nillable="true" type="q10:ArrayOfTimezone" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SetTimeZone">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="timezone" nillable="true" type="q10:Timezone" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="timezone" nillable="true" type="q11:Timezone" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -183,7 +196,7 @@
   <xs:element name="RemoveTimeEntry">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeEntry" nillable="true" type="q11:TimeEntryRecord" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeEntry" nillable="true" type="q12:TimeEntryRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -195,7 +208,7 @@
   <xs:element name="AddTimeEntry">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeEntry" nillable="true" type="q12:TimeEntryRecord" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeEntry" nillable="true" type="q13:TimeEntryRecord" />
         <xs:element minOccurs="0" name="defaultMpId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -226,7 +239,7 @@
   <xs:element name="UpdateTimeEntry">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeEntry" nillable="true" type="q13:TimeEntryRecord" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeEntry" nillable="true" type="q14:TimeEntryRecord" />
         <xs:element minOccurs="0" name="defaultMilestoneId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -262,7 +275,7 @@
   <xs:element name="GetTimeEntriesForPerson">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q14:Person" />
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q15:Person" />
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
       </xs:sequence>
@@ -271,56 +284,56 @@
   <xs:element name="GetTimeEntriesForPersonResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="GetTimeEntriesForPersonResult" nillable="true" type="q15:ArrayOfTimeEntryRecord" />
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="GetTimeEntriesForPersonResult" nillable="true" type="q16:ArrayOfTimeEntryRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetTimeEntriesProject">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="reportContext" nillable="true" type="q16:TimeEntryProjectReportContext" />
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="reportContext" nillable="true" type="q17:TimeEntryProjectReportContext" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetTimeEntriesProjectResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DataTransferObjects.CompositeObjects" minOccurs="0" name="GetTimeEntriesProjectResult" nillable="true" type="q17:TimeEntriesGroupedByPerson" />
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/DataTransferObjects.CompositeObjects" minOccurs="0" name="GetTimeEntriesProjectResult" nillable="true" type="q18:TimeEntriesGroupedByPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetTimeEntriesProjectCumulative">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="reportContext" nillable="true" type="q18:TimeEntryPersonReportContext" />
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="reportContext" nillable="true" type="q19:TimeEntryPersonReportContext" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetTimeEntriesProjectCumulativeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/DataTransferObjects.CompositeObjects" minOccurs="0" name="GetTimeEntriesProjectCumulativeResult" nillable="true" type="q19:TimeEntriesGroupedByTimeEntryHours" />
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/DataTransferObjects.CompositeObjects" minOccurs="0" name="GetTimeEntriesProjectCumulativeResult" nillable="true" type="q20:TimeEntriesGroupedByTimeEntryHours" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetTimeEntriesPerson">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="reportContext" nillable="true" type="q20:TimeEntryPersonReportContext" />
+        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="reportContext" nillable="true" type="q21:TimeEntryPersonReportContext" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetTimeEntriesPersonResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/DataTransferObjects.CompositeObjects" minOccurs="0" name="GetTimeEntriesPersonResult" nillable="true" type="q21:TimeEntriesGroupedByProject" />
+        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/DataTransferObjects.CompositeObjects" minOccurs="0" name="GetTimeEntriesPersonResult" nillable="true" type="q22:TimeEntriesGroupedByProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetCurrentMilestones">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q22:Person" />
+        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q23:Person" />
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="defaultMilestoneId" type="xs:int" />
@@ -330,14 +343,14 @@
   <xs:element name="GetCurrentMilestonesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetCurrentMilestonesResult" nillable="true" type="q23:ArrayOfMilestonePersonEntry" />
+        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetCurrentMilestonesResult" nillable="true" type="q24:ArrayOfMilestonePersonEntry" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetTimeEntryMilestones">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q24:Person" />
+        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q25:Person" />
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
       </xs:sequence>
@@ -346,14 +359,14 @@
   <xs:element name="GetTimeEntryMilestonesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetTimeEntryMilestonesResult" nillable="true" type="q25:ArrayOfMilestonePersonEntry" />
+        <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetTimeEntryMilestonesResult" nillable="true" type="q26:ArrayOfMilestonePersonEntry" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetAllTimeEntries">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="selectContext" nillable="true" type="q26:TimeEntrySelectContext" />
+        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="selectContext" nillable="true" type="q27:TimeEntrySelectContext" />
         <xs:element minOccurs="0" name="startRow" type="xs:int" />
         <xs:element minOccurs="0" name="maxRows" type="xs:int" />
       </xs:sequence>
@@ -362,14 +375,14 @@
   <xs:element name="GetAllTimeEntriesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="GetAllTimeEntriesResult" nillable="true" type="q27:ArrayOfTimeEntryRecord" />
+        <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="GetAllTimeEntriesResult" nillable="true" type="q28:ArrayOfTimeEntryRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetTimeEntriesCount">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="selectContext" nillable="true" type="q28:TimeEntrySelectContext" />
+        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="selectContext" nillable="true" type="q29:TimeEntrySelectContext" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -383,21 +396,21 @@
   <xs:element name="GetTimeEntrySums">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="selectContext" nillable="true" type="q29:TimeEntrySelectContext" />
+        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="selectContext" nillable="true" type="q30:TimeEntrySelectContext" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetTimeEntrySumsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="GetTimeEntrySumsResult" nillable="true" type="q30:TimeEntrySums" />
+        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="GetTimeEntrySumsResult" nillable="true" type="q31:TimeEntrySums" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="TimeEntriesByPersonGetExcelSet">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="reportContext" nillable="true" type="q31:TimeEntryPersonReportContext" />
+        <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="reportContext" nillable="true" type="q32:TimeEntryPersonReportContext" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -468,6 +481,26 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetIsChargeCodeTurnOffByPeriod">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="personId" type="xs:int" />
+        <xs:element minOccurs="0" name="clientId" type="xs:int" />
+        <xs:element minOccurs="0" name="groupId" type="xs:int" />
+        <xs:element minOccurs="0" name="projectId" type="xs:int" />
+        <xs:element minOccurs="0" name="timeTypeId" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetIsChargeCodeTurnOffByPeriodResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q33="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetIsChargeCodeTurnOffByPeriodResult" nillable="true" type="q33:ArrayOfKeyValueOfdateTimeboolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="SetPersonTimeEntryRecursiveSelection">
     <xs:complexType>
       <xs:sequence>
@@ -509,7 +542,7 @@
   <xs:element name="ToggleIsCorrect">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeEntry" nillable="true" type="q32:TimeEntryRecord" />
+        <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeEntry" nillable="true" type="q34:TimeEntryRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -521,7 +554,7 @@
   <xs:element name="ToggleIsReviewed">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeEntry" nillable="true" type="q33:TimeEntryRecord" />
+        <xs:element xmlns:q35="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeEntry" nillable="true" type="q35:TimeEntryRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -533,25 +566,13 @@
   <xs:element name="ToggleIsChargeable">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeEntry" nillable="true" type="q34:TimeEntryRecord" />
+        <xs:element xmlns:q36="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeEntry" nillable="true" type="q36:TimeEntryRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ToggleIsChargeableResponse">
     <xs:complexType>
       <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetAllTimeEntryProjects">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetAllTimeEntryProjectsResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q35="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetAllTimeEntryProjectsResult" nillable="true" type="q35:ArrayOfProject" />
-      </xs:sequence>
     </xs:complexType>
   </xs:element>
 </xs:schema>
