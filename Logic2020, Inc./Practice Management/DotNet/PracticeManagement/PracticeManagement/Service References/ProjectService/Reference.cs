@@ -47,7 +47,7 @@ namespace PraticeManagement.ProjectService {
         DataTransferObjects.Project GetProjectByIdShort(int projectId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetTimeTypesByProjectId", ReplyAction="http://tempuri.org/IProjectService/GetTimeTypesByProjectIdResponse")]
-        DataTransferObjects.TimeEntry.TimeTypeRecord[] GetTimeTypesByProjectId(int projectId, bool IsOnlyActive);
+        DataTransferObjects.TimeEntry.TimeTypeRecord[] GetTimeTypesByProjectId(int projectId, bool IsOnlyActive, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/SetProjectTimeTypes", ReplyAction="http://tempuri.org/IProjectService/SetProjectTimeTypesResponse")]
         void SetProjectTimeTypes(int projectId, string projectTimeTypesList);
@@ -188,7 +188,7 @@ namespace PraticeManagement.ProjectService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
         
-      
+     
         
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -238,8 +238,8 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.GetProjectByIdShort(projectId);
         }
         
-        public DataTransferObjects.TimeEntry.TimeTypeRecord[] GetTimeTypesByProjectId(int projectId, bool IsOnlyActive) {
-            return base.Channel.GetTimeTypesByProjectId(projectId, IsOnlyActive);
+        public DataTransferObjects.TimeEntry.TimeTypeRecord[] GetTimeTypesByProjectId(int projectId, bool IsOnlyActive, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate) {
+            return base.Channel.GetTimeTypesByProjectId(projectId, IsOnlyActive, startDate, endDate);
         }
         
         public void SetProjectTimeTypes(int projectId, string projectTimeTypesList) {
