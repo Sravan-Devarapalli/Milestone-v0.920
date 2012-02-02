@@ -20,6 +20,29 @@ namespace PraticeManagement.Controls.TimeEntry
 
         public bool Disabled { get; set; }
 
+        public string AccountId
+        {
+            set
+            {
+                extEnableDisable.AccountId = value;
+            }
+        }
+
+        public string BusinessUnitId
+        {
+            set
+            {
+                extEnableDisable.BusinessUnitId = value;
+            }
+        }
+
+        public string ProjectId
+        {
+            set
+            {
+                extEnableDisable.ProjectId = value;
+            }
+        }
 
         public bool IsPTO { get; set; }
 
@@ -44,7 +67,9 @@ namespace PraticeManagement.Controls.TimeEntry
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-          
+            extEnableDisable.WeekStartDate = HostingPage.SelectedDates[0].ToString();
+            extEnableDisable.PersonId = HostingPage.SelectedPerson.Id.ToString();
+            extEnableDisable.PopUpBehaviourId = TimeEntry_New.mpeTimetypeAlertMessageBehaviourId;
         }
 
 
@@ -84,9 +109,15 @@ namespace PraticeManagement.Controls.TimeEntry
                 TbAcutualHoursClientIds.Add(e.Item.ItemIndex, textBoxId);
                 TbAcutualHoursClientIds = TbAcutualHoursClientIds;
                 extTotalHours.ControlsToCheck += textBoxId + ";";
+                if (IsPTO)
+                {
+                    extEnableDisable.ControlsToCheck += textBoxId + ";";
+                }
 
                 ste.HorizontalTotalCalculatorExtenderId = extTotalHours.ClientID;
                 ste.IsNoteRequired = calendarItem.Attribute(XName.Get("IsNoteRequired")).Value;
+                ste.IsChargeCodeTurnOff = calendarItem.Attribute(XName.Get("IsChargeCodeOff")).Value;
+
                 ste.Disabled = Disabled;
                 ste.IsPTO = IsPTO;
 
@@ -187,3 +218,4 @@ namespace PraticeManagement.Controls.TimeEntry
 
     }
 }
+
