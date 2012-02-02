@@ -62,7 +62,7 @@ namespace PraticeManagement.Controls.Projects
                         AllTimeTypes = AllTimeTypes.AsQueryable().Where(T => T.IsDefault || !T.IsInternal).ToArray();
                     }
                     int projectId = ((ProjectDetail)Page).ProjectId.Value;
-                    ProjectTimetypes = ServiceCallers.Invoke<ProjectServiceClient, TimeTypeRecord[]>(Project => Project.GetTimeTypesByProjectId(projectId, false));
+                    ProjectTimetypes = ServiceCallers.Invoke<ProjectServiceClient, TimeTypeRecord[]>(Project => Project.GetTimeTypesByProjectId(projectId, false,null,null));
                     string projectTimeTypesInUseIds = "";
                     string ProjectTimetypesIds = "";
                     foreach (TimeTypeRecord ptt in ProjectTimetypes)
