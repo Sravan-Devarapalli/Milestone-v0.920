@@ -643,6 +643,8 @@
                 public const string SaveTimeTrackProcedure = "dbo.SaveTimeTrack";
                 public const string SetPersonTimeEntryRecursiveSelectionProcedure = "dbo.SetPersonTimeEntryRecursiveSelection";
                 public const string SetPersonTimeEntrySelectionProcedure = "dbo.SetPersonTimeEntrySelection";
+                public const string GetIsChargeCodeTurnOffByPeriodProcedure = "dbo.GetIsChargeCodeTurnOffByPeriod";
+
 
                 #endregion
 
