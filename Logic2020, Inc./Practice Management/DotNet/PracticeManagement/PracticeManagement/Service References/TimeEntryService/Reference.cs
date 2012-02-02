@@ -152,6 +152,9 @@ namespace PraticeManagement.TimeEntryService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="TimeEntryService.ITimeEntryService")]
     public interface ITimeEntryService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryProjects", ReplyAction="http://tempuri.org/ITimeEntryService/GetAllTimeEntryProjectsResponse")]
+        DataTransferObjects.Project[] GetAllTimeEntryProjects();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetTimeEntryProjectsByClientId", ReplyAction="http://tempuri.org/ITimeEntryService/GetTimeEntryProjectsByClientIdResponse")]
         DataTransferObjects.Project[] GetTimeEntryProjectsByClientId(System.Nullable<int> clientId, System.Nullable<int> personId, bool showActiveAndInternalProjectsOnly);
         
@@ -245,6 +248,9 @@ namespace PraticeManagement.TimeEntryService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/SaveTimeTrack", ReplyAction="http://tempuri.org/ITimeEntryService/SaveTimeTrackResponse")]
         void SaveTimeTrack(string timeEntriesXml, int personId, System.DateTime startDate, System.DateTime endDate, string userLogin);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetIsChargeCodeTurnOffByPeriod", ReplyAction="http://tempuri.org/ITimeEntryService/GetIsChargeCodeTurnOffByPeriodResponse")]
+        System.Collections.Generic.Dictionary<System.DateTime, bool> GetIsChargeCodeTurnOffByPeriod(int personId, int clientId, int groupId, int projectId, int timeTypeId, System.DateTime startDate, System.DateTime endDate);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/SetPersonTimeEntryRecursiveSelection", ReplyAction="http://tempuri.org/ITimeEntryService/SetPersonTimeEntryRecursiveSelectionResponse" +
             "")]
         void SetPersonTimeEntryRecursiveSelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isRecursive, System.DateTime startDate);
@@ -260,9 +266,6 @@ namespace PraticeManagement.TimeEntryService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/ToggleIsChargeable", ReplyAction="http://tempuri.org/ITimeEntryService/ToggleIsChargeableResponse")]
         void ToggleIsChargeable(DataTransferObjects.TimeEntry.TimeEntryRecord timeEntry);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetAllTimeEntryProjects", ReplyAction="http://tempuri.org/ITimeEntryService/GetAllTimeEntryProjectsResponse")]
-        DataTransferObjects.Project[] GetAllTimeEntryProjects();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -273,7 +276,7 @@ namespace PraticeManagement.TimeEntryService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class TimeEntryServiceClient : System.ServiceModel.ClientBase<PraticeManagement.TimeEntryService.ITimeEntryService>, PraticeManagement.TimeEntryService.ITimeEntryService {
         
-      
+        
         
         public TimeEntryServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -289,6 +292,10 @@ namespace PraticeManagement.TimeEntryService {
         
         public TimeEntryServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public DataTransferObjects.Project[] GetAllTimeEntryProjects() {
+            return base.Channel.GetAllTimeEntryProjects();
         }
         
         public DataTransferObjects.Project[] GetTimeEntryProjectsByClientId(System.Nullable<int> clientId, System.Nullable<int> personId, bool showActiveAndInternalProjectsOnly) {
@@ -415,6 +422,10 @@ namespace PraticeManagement.TimeEntryService {
             base.Channel.SaveTimeTrack(timeEntriesXml, personId, startDate, endDate, userLogin);
         }
         
+        public System.Collections.Generic.Dictionary<System.DateTime, bool> GetIsChargeCodeTurnOffByPeriod(int personId, int clientId, int groupId, int projectId, int timeTypeId, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.GetIsChargeCodeTurnOffByPeriod(personId, clientId, groupId, projectId, timeTypeId, startDate, endDate);
+        }
+        
         public void SetPersonTimeEntryRecursiveSelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isRecursive, System.DateTime startDate) {
             base.Channel.SetPersonTimeEntryRecursiveSelection(personId, clientId, projectGroupId, projectId, timeEntrySectionId, isRecursive, startDate);
         }
@@ -433,10 +444,6 @@ namespace PraticeManagement.TimeEntryService {
         
         public void ToggleIsChargeable(DataTransferObjects.TimeEntry.TimeEntryRecord timeEntry) {
             base.Channel.ToggleIsChargeable(timeEntry);
-        }
-        
-        public DataTransferObjects.Project[] GetAllTimeEntryProjects() {
-            return base.Channel.GetAllTimeEntryProjects();
         }
     }
 }
