@@ -6,7 +6,7 @@
 <%@ Register TagPrefix="ext2" Namespace="PraticeManagement.Controls.Generic.DuplicateOptionsRemove"
     Assembly="PraticeManagement" %>
 <%@ Register Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.MaxValueAllowedForTextBox"
-    TagPrefix="ext" %>
+    TagPrefix="ext3" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagPrefix="uc" TagName="MessageLabel" %>
 <%@ Register Src="~/Controls/TimeEntry/WeekSelector_New.ascx" TagName="WeekSelector"
     TagPrefix="uc" %>
@@ -119,7 +119,10 @@
             imgNoteClientId.title = tbnote.value;
             changeIcon(tbnote.id, imgNoteClientId.id);
         }
-
+        function btnClose_OnClientClick() {
+            $find("mpeTimetypeAlertMessage").hide();
+            return false;
+        }
         
     </script>
 </asp:Content>
@@ -221,7 +224,8 @@
                                 <td>
                                 </td>
                                 <td>
-                                    <asp:Button ID="btnAddProject" runat="server"  OnClientClick="SelectDefaultValues('cddClientProjects');" Text="Add Project" CssClass="mrg0" />
+                                    <asp:Button ID="btnAddProject" runat="server" OnClientClick="SelectDefaultValues('cddClientProjects');"
+                                        Text="Add Project" CssClass="mrg0" ToolTip="Add Project" />
                                 </td>
                             </tr>
                         </table>
@@ -245,7 +249,7 @@
                                         </td>
                                         <td class="DeleteWidth">
                                             <asp:ImageButton ID="imgBtnDeleteProjectSection" runat="server" ImageUrl="~/Images/close_16.png"
-                                                OnClick="imgBtnDeleteSection_OnClick" />
+                                                ToolTip="Delete Section" OnClick="imgBtnDeleteSection_OnClick" />
                                         </td>
                                     </tr>
                                 </table>
@@ -313,7 +317,8 @@
                                 <td>
                                 </td>
                                 <td>
-                                    <asp:Button ID="btnAddAccount" runat="server" OnClientClick="SelectDefaultValues('cddBusinessUnitBDSection');" Text="Add Account" CssClass="mrg0" />
+                                    <asp:Button ID="btnAddAccount" runat="server" OnClientClick="SelectDefaultValues('cddBusinessUnitBDSection');"
+                                        Text="Add Account" CssClass="mrg0" ToolTip="Add Account"/>
                                 </td>
                             </tr>
                         </table>
@@ -337,7 +342,7 @@
                                         </td>
                                         <td class="DeleteWidth">
                                             <asp:ImageButton ID="imgBtnDeleteBusinessDevelopmentSection" runat="server" ImageUrl="~/Images/close_16.png"
-                                                OnClick="imgBtnDeleteSection_OnClick" />
+                                                ToolTip="Delete Section" OnClick="imgBtnDeleteSection_OnClick" />
                                         </td>
                                     </tr>
                                 </table>
@@ -405,7 +410,8 @@
                                 <td>
                                 </td>
                                 <td>
-                                    <asp:Button ID="btnAddInternalProject" runat="server" OnClientClick="SelectDefaultValues('cddProjectsInternal');" Text="Add Project" CssClass="mrg0" />
+                                    <asp:Button ID="btnAddInternalProject" runat="server" OnClientClick="SelectDefaultValues('cddProjectsInternal');"
+                                        Text="Add Project" CssClass="mrg0" ToolTip="Add Project" />
                                 </td>
                             </tr>
                         </table>
@@ -429,7 +435,7 @@
                                         </td>
                                         <td class="DeleteWidth">
                                             <asp:ImageButton ID="imgBtnDeleteInternalSection" runat="server" ImageUrl="~/Images/close_16.png"
-                                                OnClick="imgBtnDeleteSection_OnClick" />
+                                                ToolTip="Delete Section" OnClick="imgBtnDeleteSection_OnClick" />
                                         </td>
                                     </tr>
                                 </table>
@@ -541,9 +547,9 @@
                                             <asp:Label ID="lblDayTotal" Font-Bold="true" TotalHours="" runat="server"></asp:Label>
                                             <ext:TotalCalculatorExtender ID="extDayTotal" runat="server" TargetControlID="lblDayTotal" />
                                             <asp:HiddenField ID="hdnDayTotal" runat="server"></asp:HiddenField>
-                                            <ext:MaxValueAllowedForTextBoxExtender ID="extMaxValueAllowedForTextBoxExtender"
+                                            <ext3:MaxValueAllowedForTextBoxExtender ID="extMaxValueAllowedForTextBoxExtender"
                                                 runat="server" TargetControlID="lblDayTotal">
-                                            </ext:MaxValueAllowedForTextBoxExtender>
+                                            </ext3:MaxValueAllowedForTextBoxExtender>
                                         </td>
                                     </ItemTemplate>
                                 </asp:Repeater>
@@ -627,10 +633,10 @@
                     </div>
                 </asp:Panel>
                 <uc2:CalendarLegend ID="CalendarLegend" runat="server" disableChevron="true" />
-                <AjaxControlToolkit:ModalPopupExtender ID="mpePopup" runat="server" TargetControlID="btnAddProject"
-                    CancelControlID="btnCancelProjectSection" BehaviorID="mpeProjectSectionPopup" 
-                     BackgroundCssClass="modalBackground"
-                    PopupControlID="pnlProjectSectionPopup" DropShadow="false" />
+                <AjaxControlToolkit:ModalPopupExtender ID="mpeProjectSectionPopup" runat="server"
+                    TargetControlID="btnAddProject" CancelControlID="btnCancelProjectSection" BehaviorID="mpeProjectSectionPopup"
+                    BackgroundCssClass="modalBackground" PopupControlID="pnlProjectSectionPopup"
+                    DropShadow="false" />
                 <asp:Panel ID="pnlProjectSectionPopup" runat="server" BackColor="White" BorderColor="Black"
                     CssClass="ConfirmBoxClass" Style="display: none" BorderWidth="2px">
                     <table width="100%">
@@ -660,7 +666,7 @@
                                             Project :
                                         </td>
                                         <td style="width: 80%;">
-                                            <asp:DropDownList ID="ddlProjectProjectSection"  onchange="ddlChild_onchange(this);"
+                                            <asp:DropDownList ID="ddlProjectProjectSection" onchange="ddlChild_onchange(this);"
                                                 Width="250px" runat="server">
                                             </asp:DropDownList>
                                             <AjaxControlToolkit:CascadingDropDown ID="cddClientProjects" runat="server" ParentControlID="ddlAccountProjectSection"
@@ -682,7 +688,8 @@
                                                 Enabled="false" Text="ADD" ToolTip="ADD" />
                                         </td>
                                         <td style="padding-left: 3px;">
-                                            <asp:Button ID="btnCancelProjectSection" runat="server" Text="Cancel" ToolTip="Cancel" />
+                                            <asp:Button ID="btnCancelProjectSection" runat="server" Text="Cancel" ToolTip="Cancel"
+                                                OnClientClick="$find('mpeProjectSectionPopup').hide(); return false;" />
                                         </td>
                                     </tr>
                                 </table>
@@ -690,10 +697,10 @@
                         </tr>
                     </table>
                 </asp:Panel>
-                <AjaxControlToolkit:ModalPopupExtender ID="ModalPopupExtender1" runat="server" TargetControlID="btnAddAccount" 
-                    CancelControlID="btnCancelBusinessDevelopmentSection" BehaviorID="mpeBusinessDevelopmentSectionPopup"
-                    BackgroundCssClass="modalBackground" PopupControlID="pnlBusinessDevelopmentSectionPopup" 
-                    DropShadow="false" />
+                <AjaxControlToolkit:ModalPopupExtender ID="mpeBusinessDevelopmentSectionPopup" runat="server"
+                    TargetControlID="btnAddAccount" CancelControlID="btnCancelBusinessDevelopmentSection"
+                    BehaviorID="mpeBusinessDevelopmentSectionPopup" BackgroundCssClass="modalBackground"
+                    PopupControlID="pnlBusinessDevelopmentSectionPopup" DropShadow="false" />
                 <asp:Panel ID="pnlBusinessDevelopmentSectionPopup" runat="server" BackColor="White"
                     BorderColor="Black" CssClass="ConfirmBoxClass" Style="display: none" BorderWidth="2px">
                     <table width="100%">
@@ -726,12 +733,12 @@
                                             <asp:DropDownList ID="ddlBusinessUnitBusinessDevlopmentSection" onchange="ddlChild_onchange(this);"
                                                 Width="250px" runat="server">
                                             </asp:DropDownList>
-                                            <AjaxControlToolkit:CascadingDropDown ID="cddBusinessUnitBDSection" runat="server" BehaviorID="cddBusinessUnitBDSection"
-                                                ParentControlID="ddlAccountBusinessDevlopmentSection" TargetControlID="ddlBusinessUnitBusinessDevlopmentSection"
-                                                Category="Group" LoadingText="Loading Projects..." EmptyText="No Projects found"
-                                                ScriptPath="~/Scripts/CascadingDropDownBehavior.js" ServicePath="~/CompanyPerfomanceServ.asmx"
-                                                PromptText="Please Select a Business Unit" PromptValue="-1" ServiceMethod="GetDdlProjectGroupContents"
-                                                UseContextKey="true" />
+                                            <AjaxControlToolkit:CascadingDropDown ID="cddBusinessUnitBDSection" runat="server"
+                                                BehaviorID="cddBusinessUnitBDSection" ParentControlID="ddlAccountBusinessDevlopmentSection"
+                                                TargetControlID="ddlBusinessUnitBusinessDevlopmentSection" Category="Group" LoadingText="Loading Projects..."
+                                                EmptyText="No Projects found" ScriptPath="~/Scripts/CascadingDropDownBehavior.js"
+                                                ServicePath="~/CompanyPerfomanceServ.asmx" PromptText="Please Select a Business Unit"
+                                                PromptValue="-1" ServiceMethod="GetDdlProjectGroupContents" UseContextKey="true" />
                                         </td>
                                     </tr>
                                 </table>
@@ -747,6 +754,7 @@
                                         </td>
                                         <td style="padding-left: 3px;">
                                             <asp:Button ID="btnCancelBusinessDevelopmentSection" runat="server" Text="Cancel"
+                                                OnClientClick="$find('mpeBusinessDevelopmentSectionPopup').hide(); return false;"
                                                 ToolTip="Cancel" />
                                         </td>
                                     </tr>
@@ -755,10 +763,10 @@
                         </tr>
                     </table>
                 </asp:Panel>
-                <AjaxControlToolkit:ModalPopupExtender ID="ModalPopupExtender2" runat="server" TargetControlID="btnAddInternalProject"
-                    CancelControlID="btnCancelInternalProjectSection" BehaviorID="mpeInternalProjectSectionPopup"  
-                    BackgroundCssClass="modalBackground" PopupControlID="pnlInternalProjectSectionPopup"
-                    DropShadow="false" />
+                <AjaxControlToolkit:ModalPopupExtender ID="mpeInternalProjectSectionPopup" runat="server"
+                    TargetControlID="btnAddInternalProject" CancelControlID="btnCancelInternalProjectSection"
+                    BehaviorID="mpeInternalProjectSectionPopup" BackgroundCssClass="modalBackground"
+                    PopupControlID="pnlInternalProjectSectionPopup" DropShadow="false" />
                 <asp:Panel ID="pnlInternalProjectSectionPopup" runat="server" BackColor="White" BorderColor="Black"
                     CssClass="ConfirmBoxClass" Style="display: none" BorderWidth="2px">
                     <table width="100%">
@@ -792,9 +800,10 @@
                                                 runat="server" />
                                             <AjaxControlToolkit:CascadingDropDown ID="cddProjectsInternal" runat="server" ParentControlID="ddlBusinessUnitInternal"
                                                 TargetControlID="ddlProjectInternal" Category="Group" LoadingText="Loading Projects..."
-                                                EmptyText="No Projects found" PromptText="Please Select a Project" PromptValue="-1" BehaviorID="cddProjectsInternal"
-                                                ScriptPath="~/Scripts/CascadingDropDownBehavior.js" ServicePath="~/CompanyPerfomanceServ.asmx"
-                                                ServiceMethod="GetProjectsListByProjectGroupId" UseContextKey="true" />
+                                                EmptyText="No Projects found" PromptText="Please Select a Project" PromptValue="-1"
+                                                BehaviorID="cddProjectsInternal" ScriptPath="~/Scripts/CascadingDropDownBehavior.js"
+                                                ServicePath="~/CompanyPerfomanceServ.asmx" ServiceMethod="GetProjectsListByProjectGroupId"
+                                                UseContextKey="true" />
                                         </td>
                                     </tr>
                                 </table>
@@ -809,10 +818,40 @@
                                                 OnClick="btnAddInternalProjectSection_OnClick" ToolTip="ADD" />
                                         </td>
                                         <td style="padding-left: 3px;">
-                                            <asp:Button ID="btnCancelInternalProjectSection" runat="server" Text="Cancel" ToolTip="Cancel" />
+                                            <asp:Button ID="btnCancelInternalProjectSection" runat="server" Text="Cancel" ToolTip="Cancel"
+                                                OnClientClick="$find('mpeInternalProjectSectionPopup').hide(); return false;" />
                                         </td>
                                     </tr>
                                 </table>
+                            </td>
+                        </tr>
+                    </table>
+                </asp:Panel>
+                <asp:HiddenField ID="hdTimetypeAlertMessage" runat="server" />
+                <AjaxControlToolkit:ModalPopupExtender ID="mpeTimetypeAlertMessage" runat="server"
+                    BehaviorID="mpeTimetypeAlertMessage" TargetControlID="hdTimetypeAlertMessage"
+                    BackgroundCssClass="modalBackground" PopupControlID="pnlTimetypeAlertMessage"
+                    DropShadow="false" CancelControlID="btnClose" />
+                <asp:Panel ID="pnlTimetypeAlertMessage" runat="server" BackColor="White" BorderColor="Black"
+                    Style="display: none" BorderWidth="2px" Width="380px">
+                    <table width="100%" style="padding: 5px;">
+                        <tr>
+                            <th align="center" style="text-align: center; background-color: Gray;" valign="bottom">
+                                <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
+                                <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Close"
+                                    Style="float: right;" OnClientClick="return btnClose_OnClientClick();" Text="X">
+                                </asp:Button>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold; padding: 8px;">
+                                There is a time entry for a date on which the selected ChargeCode is turned off.Please
+                                reassign the time entry to other ChargeCode or delete the time entry before changing.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; padding: 8px;">
+                                <asp:Button ID="btnOk" runat="server" Text="OK" OnClientClick="return btnClose_OnClientClick();" />
                             </td>
                         </tr>
                     </table>
