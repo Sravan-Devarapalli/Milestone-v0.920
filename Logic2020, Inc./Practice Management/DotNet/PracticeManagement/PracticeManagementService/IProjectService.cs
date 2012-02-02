@@ -358,7 +358,7 @@ namespace PracticeManagementService
         Project GetProjectByIdShort(int projectId);
 
         [OperationContract]
-        List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId, bool IsOnlyActive);
+        List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId, bool IsOnlyActive, DateTime? startDate, DateTime? endDate);
 
         [OperationContract]
         void SetProjectTimeTypes(int projectId, string projectTimeTypesList);
