@@ -49,6 +49,15 @@ namespace PraticeManagement.Controls.TimeEntry {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblTotalHours;
         
         /// <summary>
+        /// lblEnableDisable control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblEnableDisable;
+        
+        /// <summary>
         /// extTotalHours control.
         /// </summary>
         /// <remarks>
@@ -56,6 +65,15 @@ namespace PraticeManagement.Controls.TimeEntry {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Generic.TotalCalculator.TotalCalculatorExtender extTotalHours;
+        
+        /// <summary>
+        /// extEnableDisable control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtender extEnableDisable;
     }
 }
 
