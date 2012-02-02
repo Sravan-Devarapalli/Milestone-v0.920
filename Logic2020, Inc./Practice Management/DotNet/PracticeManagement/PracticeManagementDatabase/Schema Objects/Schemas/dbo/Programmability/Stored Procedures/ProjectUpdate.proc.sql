@@ -80,6 +80,13 @@ BEGIN
 			END
 		END
 
+		--if that projectstatus is other that active or internal recursive entries need to be removed
+		IF (@ProjectStatusId != 3 AND @ProjectStatusId != 6)
+		BEGIN
+			 DELETE [dbo].[PersonTimeEntryRecursiveSelection]
+   			 WHERE [ProjectId] = @ProjectId
+		END
+
 		UPDATE dbo.Project
 			SET ClientId			= @ClientId,
 				Discount			= @Discount,
