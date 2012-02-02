@@ -2444,7 +2444,7 @@ namespace DataAccess
             return new Project { Id = (int)reader[Constants.ColumnNames.ProjectIdColumn], Name = (string)reader[Constants.ColumnNames.NameColumn], ProjectNumber = (string)reader[Constants.ColumnNames.ProjectNumberColumn] };
         }
 
-        public static List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId, bool IsOnlyActive)
+        public static List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId, bool IsOnlyActive,DateTime? startDate,DateTime? endDate)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (SqlCommand command = new SqlCommand(GetTimeTypesByProjectIdProcedure, connection))
@@ -2454,6 +2454,12 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsOnlyActiveParam, IsOnlyActive);
+                if (startDate.HasValue && endDate.HasValue)
+                {
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                }
+
                 connection.Open();
                 using (var reader = command.ExecuteReader())
                 {
