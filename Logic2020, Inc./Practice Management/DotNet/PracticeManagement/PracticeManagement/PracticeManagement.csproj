@@ -1060,6 +1060,7 @@
     <Content Include="Third Party Tools\PdfGenerator\itextsharp.dll" />
     <Content Include="TimeEntrySetting.aspx" />
     <Content Include="TimeEnteredHoursHandler.ashx" />
+    <Content Include="TimeEntryHandler.ashx" />
     <None Include="Web References\AttachmentService\AttachmentService.disco" />
     <Content Include="TimeEntry_New.aspx" />
     <Content Include="Web.config">
@@ -1966,6 +1967,9 @@
     </Compile>
     <Compile Include="TimeEnteredHoursHandler.ashx.cs">
       <DependentUpon>TimeEnteredHoursHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="TimeEntryHandler.ashx.cs">
+      <DependentUpon>TimeEntryHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="TimeEntrySetting.aspx.cs">
       <DependentUpon>TimeEntrySetting.aspx</DependentUpon>
