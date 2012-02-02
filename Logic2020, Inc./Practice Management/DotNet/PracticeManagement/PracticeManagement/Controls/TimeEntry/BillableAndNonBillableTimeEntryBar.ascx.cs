@@ -33,6 +33,29 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        public string AccountId
+        {
+            set
+            {
+                extEnableDisable.AccountId = value;
+            }
+        }
+
+        public string BusinessUnitId
+        {
+            set
+            {
+                extEnableDisable.BusinessUnitId = value;
+            }
+        }
+
+        public string ProjectId
+        {
+            set
+            {
+                extEnableDisable.ProjectId = value;
+            }
+        }
 
         public TimeTypeRecord[] WorkTypes { get; set; }
 
@@ -62,9 +85,11 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
-        protected void Page_Load(object sender, EventArgs e)
+        protected void Page_PreRender(object sender, EventArgs e)
         {
-
+            extEnableDisable.WeekStartDate = HostingPage.SelectedDates[0].ToString();
+            extEnableDisable.PersonId = HostingPage.SelectedPerson.Id.ToString();
+            extEnableDisable.PopUpBehaviourId = TimeEntry_New.mpeTimetypeAlertMessageBehaviourId;
         }
 
         protected bool steItem_OnReadyToUpdateTE(object sender, ReadyToUpdateTeArguments args)
@@ -106,6 +131,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 billableAndNonBillableSte.IsNoteRequired = calendarItem.Attribute(XName.Get("IsNoteRequired")).Value;
                 billableAndNonBillableSte.IsHourlyRevenue = calendarItem.Attribute(XName.Get("IsHourlyRevenue")).Value;
+                billableAndNonBillableSte.IsChargeCodeTurnOff = calendarItem.Attribute(XName.Get("IsChargeCodeOff")).Value;
 
                 BillableTbAcutualHoursClientIds = BillableTbAcutualHoursClientIds ?? new Dictionary<int, string>();
                 BillableTbAcutualHoursClientIds.Add(e.Item.ItemIndex, billableTbId);
@@ -195,6 +221,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 ddlTimeTypes.SelectedIndex = 0;
             }
 
+            ddlTimeTypes.Attributes["previousId"] = ddlTimeTypes.SelectedValue.ToString();
             HostingPage.DdlWorkTypeIdsList += ddlTimeTypes.ClientID + ";";
 
 
@@ -289,9 +316,31 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
-        internal void UpdateWorkType(XElement workTypeElement)
+        internal void UpdateWorkType(XElement workTypeElement, XElement accountAndProjectSelectionElement)
         {
             workTypeElement.Attribute(XName.Get("Id")).Value = ddlTimeTypes.SelectedValue;
+            string OldId = workTypeElement.Attribute(XName.Get(TimeEntry_New.OldIdXname)) != null ? workTypeElement.Attribute(XName.Get(TimeEntry_New.OldIdXname)).Value : null;
+            if (!String.IsNullOrEmpty(OldId) && ddlTimeTypes.SelectedValue != OldId)
+            {
+                //need to update the ischargecodeturnoff in the xml for the calenderitems
+                int accountId = Convert.ToInt32(accountAndProjectSelectionElement.Attribute(XName.Get(TimeEntry_New.AccountIdXname)).Value);
+                int projectId = Convert.ToInt32(accountAndProjectSelectionElement.Attribute(XName.Get(TimeEntry_New.ProjectIdXname)).Value);
+                int businessUnitId = Convert.ToInt32(accountAndProjectSelectionElement.Attribute(XName.Get(TimeEntry_New.BusinessUnitIdXname)).Value);
+                int personId = HostingPage.SelectedPerson.Id.Value;
+                DateTime startDate = HostingPage.SelectedDates[0];
+                DateTime endDate = HostingPage.SelectedDates[HostingPage.SelectedDates.Length - 1];
+                int timeEntryId = Convert.ToInt32(ddlTimeTypes.SelectedValue);
+                Dictionary<DateTime, bool> isChargeCodeTurnOffList = ServiceCallers.Custom.TimeEntry(p => p.GetIsChargeCodeTurnOffByPeriod(personId, accountId, businessUnitId, projectId, timeEntryId, startDate, endDate));
+                var calendarItemElements = workTypeElement.Descendants(XName.Get(TimeEntry_New.CalendarItemXname)).ToList();
+
+                for (int j = 0; j < calendarItemElements.Count; j++)
+                {
+                    var calendarItemElement = calendarItemElements[j];
+                    calendarItemElement.Attribute(XName.Get("IsChargeCodeOff")).Value = isChargeCodeTurnOffList[startDate.AddDays(j)].ToString();
+                }
+
+
+            }
         }
 
         internal void UpdateVerticalTotalCalculatorExtenderId(int index, string clientId)
