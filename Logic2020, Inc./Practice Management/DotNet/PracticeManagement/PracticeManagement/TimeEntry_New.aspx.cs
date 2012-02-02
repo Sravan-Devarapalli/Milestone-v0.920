@@ -75,8 +75,8 @@ namespace PraticeManagement
         private const string nonRecursiveSectionImageUrl = "~/Images/Not_Recursive.png";
         private const string recursiveSectionConfirmText = "Are you sure to make the section as non-recursive?";
         private const string nonRecursiveSectionConfirmText = "Are you sure to make the section as recursive?";
-        private const string recursiveToolTip = "Recursive";
-        private const string nonRecursiveToolTip = "Non-Recursive";
+        private const string recursiveToolTip = "Non-Recursive";
+	private const string nonRecursiveToolTip = "Recursive";
         private const string cbeImgBtnRecursiveProjectSectionExtender = "cbeImgBtnRecursiveProjectSection";
         private const string cbeImgBtnRecurrenceBusinessDevelopmentSectionExtender = "cbeImgBtnRecurrenceBusinessDevelopmentSection";
         private const string cbeImgBtnRecurrenceInternalSectionExtender = "cbeImgBtnRecurrenceInternalSection";
