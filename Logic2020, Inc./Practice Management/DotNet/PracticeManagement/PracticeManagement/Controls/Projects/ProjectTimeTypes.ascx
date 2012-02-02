@@ -13,11 +13,11 @@
     </tr>
     <tr>
         <td style="padding-top: 5px;">
-            <asp:ShadowedTextButton ID="btnAddNewTimeType" runat="server" CausesValidation="false"
+            <asp:ShadowedTextButton ID="btnAddNewTimeType" runat="server" CausesValidation="false" 
                 CssClass="add-btn" Text="Add WorkType" />
             <AjaxControlToolkit:ModalPopupExtender ID="mpeAddTimeType" runat="server" TargetControlID="btnAddNewTimeType"
-                BackgroundCssClass="modalBackground" PopupControlID="pnlAddNewTimeType" DropShadow="false"
-                BehaviorID="mpeAddTimeType" CancelControlID="btnCancleTimeType" />
+                BackgroundCssClass="modalBackground" PopupControlID="pnlAddNewTimeType" DropShadow="false" 
+                BehaviorID="mpeAddTimeType" CancelControlID="btnCancleTimeType"  />
             <br />
         </td>
     </tr>
@@ -108,7 +108,7 @@
             <td style="white-space: nowrap; padding-left: 10px; padding-right: 20px;">
                 <asp:TextBox ID="txtNewTimeType" MaxLength="50" runat="server"></asp:TextBox>
                 <ajax:FilteredTextBoxExtender ID="fteNewTimeType" TargetControlID="txtNewTimeType"
-                    FilterType="LowercaseLetters ,UppercaseLetters,Custom" FilterMode="ValidChars"
+                    FilterType="LowercaseLetters ,UppercaseLetters,Custom" FilterMode="ValidChars" ValidChars=" "
                     runat="server">
                 </ajax:FilteredTextBoxExtender>
                 <asp:RequiredFieldValidator ID="rvNewTimeType" runat="server" ControlToValidate="txtNewTimeType"
@@ -127,7 +127,7 @@
             <td align="center">
                 <asp:Button ID="btnInsertTimeType" runat="server" OnClick="btnInsertTimeType_OnClick"
                     ToolTip="Confirm" Text="Add" />
-                <asp:Button ID="btnCancleTimeType" runat="server" ToolTip="Cancel" Text="Cancle" OnClientClick="return btnCloseWorkType_OnClientClick();"  />
+                <asp:Button ID="btnCancleTimeType" runat="server" ToolTip="Cancel" Text="Cancel" OnClientClick="return btnCloseWorkType_OnClientClick();"  />
             </td>
         </tr>
         <tr>
@@ -156,12 +156,8 @@
             </th>
         </tr>
         <tr>
-            <td style="font-weight: bold;">
-                &nbsp; Below WorkTypes are having time entries
-                <br />
-                for this project so they can't be unassign from the project:
-                <br />
-                <br />
+            <td style="font-weight: bold;padding: 8px;" >
+                Below WorkTypes are having time entries for this project so they can't be unassign from the project:
             </td>
         </tr>
         <tr>
@@ -171,7 +167,7 @@
         </tr>
         <tr>
             <td>
-                &nbsp; &nbsp; &nbsp;
+                <asp:Button ID="btnOk" runat="server" Text="OK" OnClientClick="return btnClose_OnClientClick();"/>
             </td>
         </tr>
     </table>
