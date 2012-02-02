@@ -29,6 +29,20 @@
 <asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript">
 
+        function pageLoad() {
+            SetTooltipsForallDropDowns();
+        }
+
+        function SetTooltipsForallDropDowns() {
+            var optionList = document.getElementsByTagName('option');
+
+            for (var i = 0; i < optionList.length; ++i) {
+
+                optionList[i].title = optionList[i].innerHTML;
+            }
+
+        }
+
         function SetFocus(modalExId, tbNotesId, tbBillableHoursId, btnSaveNotesId, tbNonBillableHoursId) {
 
             var tbActualHours = $find(tbBillableHours);
@@ -169,6 +183,24 @@
 
                     }
 
+                    function SelectDefaultValues(cddID) {
+                        var dd = $find(cddID);
+                        var parentElement = $get(dd._parentControlID);
+                        if (parentElement) {
+                            parentElement.selectedIndex = 0;
+                            ddlParent_onchange(parentElement);
+                        }
+
+                        dd.set_SelectedValue('');
+                        dd._onParentChange(null, true);
+                       
+                    }
+
+                    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+                    function endRequestHandle(sender, Args) {
+                        SetTooltipsForallDropDowns();
+                    }
+
                 </script>
                 <uc:MessageLabel ID="mlErrors" runat="server" ErrorColor="Red" InfoColor="DarkGreen"
                     WarningColor="Orange" EnableViewState="false" />
@@ -189,7 +221,7 @@
                                 <td>
                                 </td>
                                 <td>
-                                    <asp:Button ID="btnAddProject" runat="server" Text="Add Project" CssClass="mrg0" />
+                                    <asp:Button ID="btnAddProject" runat="server"  OnClientClick="SelectDefaultValues('cddClientProjects');" Text="Add Project" CssClass="mrg0" />
                                 </td>
                             </tr>
                         </table>
@@ -281,7 +313,7 @@
                                 <td>
                                 </td>
                                 <td>
-                                    <asp:Button ID="btnAddAccount" runat="server" Text="Add Account" CssClass="mrg0" />
+                                    <asp:Button ID="btnAddAccount" runat="server" OnClientClick="SelectDefaultValues('cddBusinessUnitBDSection');" Text="Add Account" CssClass="mrg0" />
                                 </td>
                             </tr>
                         </table>
@@ -373,7 +405,7 @@
                                 <td>
                                 </td>
                                 <td>
-                                    <asp:Button ID="btnAddInternalProject" runat="server" Text="Add Project" CssClass="mrg0" />
+                                    <asp:Button ID="btnAddInternalProject" runat="server" OnClientClick="SelectDefaultValues('cddProjectsInternal');" Text="Add Project" CssClass="mrg0" />
                                 </td>
                             </tr>
                         </table>
@@ -384,7 +416,7 @@
                             <ItemTemplate>
                                 <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                     <tr>
-                                        <td class="SectionSecondTD"  colspan="5">
+                                        <td class="SectionSecondTD" colspan="5">
                                             <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("BusinessUnitName")).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("ProjectName")).Value%>
                                         </td>
                                         <td class="SectionSecondTD" colspan="3">
@@ -499,7 +531,7 @@
                         CssClass="cp bg-white">
                         <table class="CompPerfTable WholeWidth">
                             <tr class="time-entry-bar">
-                                <td  class="time-entry-bar-time-typesNew TOTALHOURSTD">
+                                <td class="time-entry-bar-time-typesNew TOTALHOURSTD">
                                     TOTAL HOURS:
                                 </td>
                                 <asp:Repeater ID="repDayTotalHours" OnItemDataBound="repDayTotalHours_OnItemDataBound"
@@ -539,7 +571,7 @@
                                 <td colspan="7" class="TOTALTD">
                                     NON BILLABLE TOTAL :
                                 </td>
-                                <td class="time-entry-total-hoursNew PaddingLeft4" >
+                                <td class="time-entry-total-hoursNew PaddingLeft4">
                                     <label id="lblNonBillableGrandTotal" runat="server" />
                                     <ext:TotalCalculatorExtender ID="extNonBillableGrandTotal" runat="server" TargetControlID="lblNonBillableGrandTotal" />
                                 </td>
@@ -549,7 +581,7 @@
                             <tr class="time-entry-bar">
                                 <td class="time-entry-bar-time-typesNew">
                                 </td>
-                                <td colspan="7"  class="TOTALTD" style="padding-top: 15px;">
+                                <td colspan="7" class="TOTALTD" style="padding-top: 15px;">
                                     TIME PERIOD GRAND TOTAL:
                                 </td>
                                 <td style="padding-top: 15px;" class="time-entry-total-hoursNew PaddingLeft4">
@@ -596,9 +628,9 @@
                 </asp:Panel>
                 <uc2:CalendarLegend ID="CalendarLegend" runat="server" disableChevron="true" />
                 <AjaxControlToolkit:ModalPopupExtender ID="mpePopup" runat="server" TargetControlID="btnAddProject"
-                    CancelControlID="btnCancelProjectSection" BehaviorID="mpeProjectSectionPopup"
-                    BackgroundCssClass="modalBackground" PopupControlID="pnlProjectSectionPopup"
-                    DropShadow="false" />
+                    CancelControlID="btnCancelProjectSection" BehaviorID="mpeProjectSectionPopup" 
+                     BackgroundCssClass="modalBackground"
+                    PopupControlID="pnlProjectSectionPopup" DropShadow="false" />
                 <asp:Panel ID="pnlProjectSectionPopup" runat="server" BackColor="White" BorderColor="Black"
                     CssClass="ConfirmBoxClass" Style="display: none" BorderWidth="2px">
                     <table width="100%">
@@ -628,14 +660,14 @@
                                             Project :
                                         </td>
                                         <td style="width: 80%;">
-                                            <asp:DropDownList ID="ddlProjectProjectSection" onchange="ddlChild_onchange(this);"
+                                            <asp:DropDownList ID="ddlProjectProjectSection"  onchange="ddlChild_onchange(this);"
                                                 Width="250px" runat="server">
                                             </asp:DropDownList>
                                             <AjaxControlToolkit:CascadingDropDown ID="cddClientProjects" runat="server" ParentControlID="ddlAccountProjectSection"
                                                 TargetControlID="ddlProjectProjectSection" Category="Group" LoadingText="Loading Projects..."
                                                 EmptyText="No Projects found" ScriptPath="~/Scripts/CascadingDropDownBehavior.js"
-                                                PromptText="Please Select a Project" PromptValue="-1" ServicePath="~/CompanyPerfomanceServ.asmx"
-                                                ServiceMethod="GetProjectsList" UseContextKey="true" />
+                                                BehaviorID="cddClientProjects" PromptText="Please Select a Project" PromptValue="-1"
+                                                ServicePath="~/CompanyPerfomanceServ.asmx" ServiceMethod="GetProjectsList" UseContextKey="true" />
                                         </td>
                                     </tr>
                                 </table>
@@ -658,9 +690,9 @@
                         </tr>
                     </table>
                 </asp:Panel>
-                <AjaxControlToolkit:ModalPopupExtender ID="ModalPopupExtender1" runat="server" TargetControlID="btnAddAccount"
+                <AjaxControlToolkit:ModalPopupExtender ID="ModalPopupExtender1" runat="server" TargetControlID="btnAddAccount" 
                     CancelControlID="btnCancelBusinessDevelopmentSection" BehaviorID="mpeBusinessDevelopmentSectionPopup"
-                    BackgroundCssClass="modalBackground" PopupControlID="pnlBusinessDevelopmentSectionPopup"
+                    BackgroundCssClass="modalBackground" PopupControlID="pnlBusinessDevelopmentSectionPopup" 
                     DropShadow="false" />
                 <asp:Panel ID="pnlBusinessDevelopmentSectionPopup" runat="server" BackColor="White"
                     BorderColor="Black" CssClass="ConfirmBoxClass" Style="display: none" BorderWidth="2px">
@@ -694,7 +726,7 @@
                                             <asp:DropDownList ID="ddlBusinessUnitBusinessDevlopmentSection" onchange="ddlChild_onchange(this);"
                                                 Width="250px" runat="server">
                                             </asp:DropDownList>
-                                            <AjaxControlToolkit:CascadingDropDown ID="cddBusinessUnitBDSection" runat="server"
+                                            <AjaxControlToolkit:CascadingDropDown ID="cddBusinessUnitBDSection" runat="server" BehaviorID="cddBusinessUnitBDSection"
                                                 ParentControlID="ddlAccountBusinessDevlopmentSection" TargetControlID="ddlBusinessUnitBusinessDevlopmentSection"
                                                 Category="Group" LoadingText="Loading Projects..." EmptyText="No Projects found"
                                                 ScriptPath="~/Scripts/CascadingDropDownBehavior.js" ServicePath="~/CompanyPerfomanceServ.asmx"
@@ -724,7 +756,7 @@
                     </table>
                 </asp:Panel>
                 <AjaxControlToolkit:ModalPopupExtender ID="ModalPopupExtender2" runat="server" TargetControlID="btnAddInternalProject"
-                    CancelControlID="btnCancelInternalProjectSection" BehaviorID="mpeInternalProjectSectionPopup"
+                    CancelControlID="btnCancelInternalProjectSection" BehaviorID="mpeInternalProjectSectionPopup"  
                     BackgroundCssClass="modalBackground" PopupControlID="pnlInternalProjectSectionPopup"
                     DropShadow="false" />
                 <asp:Panel ID="pnlInternalProjectSectionPopup" runat="server" BackColor="White" BorderColor="Black"
@@ -760,7 +792,7 @@
                                                 runat="server" />
                                             <AjaxControlToolkit:CascadingDropDown ID="cddProjectsInternal" runat="server" ParentControlID="ddlBusinessUnitInternal"
                                                 TargetControlID="ddlProjectInternal" Category="Group" LoadingText="Loading Projects..."
-                                                EmptyText="No Projects found" PromptText="Please Select a Project" PromptValue="-1"
+                                                EmptyText="No Projects found" PromptText="Please Select a Project" PromptValue="-1" BehaviorID="cddProjectsInternal"
                                                 ScriptPath="~/Scripts/CascadingDropDownBehavior.js" ServicePath="~/CompanyPerfomanceServ.asmx"
                                                 ServiceMethod="GetProjectsListByProjectGroupId" UseContextKey="true" />
                                         </td>
