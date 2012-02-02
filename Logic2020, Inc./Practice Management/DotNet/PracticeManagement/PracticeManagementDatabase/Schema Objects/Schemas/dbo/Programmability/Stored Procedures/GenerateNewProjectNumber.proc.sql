@@ -32,10 +32,12 @@ BEGIN
 	SELECT Convert(INT,SUBSTRING(p.ProjectNumber,2,7)) as projectNumber ,
 		   RANK() OVER (ORDER BY Convert(INT,SUBSTRING(p.ProjectNumber,2,7)))+@LowerLimitRange-1 AS  projectNumberRank
 		FROM dbo.Project p 
-		WHERE ISNUMERIC( SUBSTRING(ProjectNumber,2,7))  = 1 AND p.IsInternal = @IsInternalProject
+		WHERE ISNUMERIC( SUBSTRING(ProjectNumber,2,7))  = 1 
+		--AND p.IsInternal = @IsInternalProject 
+		AND CONVERT(NUMERIC,SUBSTRING(ProjectNumber,2,7)) BETWEEN  @LowerLimitRange AND @HigherLimitRange
 
 	INSERT INTO @ProjectRanksList 
-	SELECT -1,MAX(projectNumberRank)+1 FROM @ProjectRanksList
+	SELECT -1,MAX(projectNumberRank)+1 FROM @ProjectRanksList 
 
 	SELECT TOP 1 @NextProjectNumber = projectNumberRank 
 		FROM @ProjectRanksList  
