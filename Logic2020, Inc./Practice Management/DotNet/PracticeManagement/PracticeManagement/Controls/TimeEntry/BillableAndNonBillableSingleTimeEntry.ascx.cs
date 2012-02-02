@@ -101,6 +101,18 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        public string IsChargeCodeTurnOff
+        {
+            get
+            {
+                return hdnIsChargeCodeTurnOff.Value;
+            }
+            set
+            {
+                hdnIsChargeCodeTurnOff.Value = value;
+            }
+        }
+
         public string HorizontalTotalCalculatorExtenderId
         {
             get
@@ -154,14 +166,6 @@ namespace PraticeManagement.Controls.TimeEntry
         protected void Page_PreRender(object sender, EventArgs e)
         {
             SpreadSheetTotalCalculatorExtenderId = HostingPage.SpreadSheetTotalCalculatorExtenderId;
-
-            var IsChargeCodeOff = TimeEntryRecordNonBillableElement != null ? TimeEntryRecordNonBillableElement.Attribute(XName.Get("IsChargeCodeOff")) : null;
-            if ((IsChargeCodeOff != null && IsChargeCodeOff.Value == 1.ToString()) || !Convert.ToBoolean(IsHourlyRevenue))
-            {
-                tbNonBillableHours.Attributes["disable"] = "1";
-            }
-
-
         }
 
         public void CanelControlStyle()
@@ -194,6 +198,21 @@ namespace PraticeManagement.Controls.TimeEntry
             tbNonBillableHours.Attributes["txtboxNoteClienId"] = tbNotes.ClientID;
 
             MaintainEditedtbHoursStyle();
+
+            tbNonBillableHours.Attributes["isHourlyRevenueDisable"] = Convert.ToBoolean(IsHourlyRevenue) ? "0" : "1";
+            tbNonBillableHours.Attributes["isChargeCodeTurnOffDisable"] = Convert.ToBoolean(IsChargeCodeTurnOff) ? "1" : "0";
+            tbBillableHours.Attributes["isChargeCodeTurnOffDisable"] = Convert.ToBoolean(IsChargeCodeTurnOff) ? "1" : "0";
+
+            tbNonBillableHours.Attributes["IsHireDateDisable"] = 
+                tbBillableHours.Attributes["IsHireDateDisable"] = 
+                    HostingPage.SelectedPerson.HireDate > DateBehind ? "1" : "0";
+
+            tbNonBillableHours.Attributes["IsTerminationDateDisable"] = 
+                tbBillableHours.Attributes["IsTerminationDateDisable"] = 
+                !HostingPage.SelectedPerson.TerminationDate.HasValue || 
+                        ( HostingPage.SelectedPerson.TerminationDate.HasValue && 
+                                    HostingPage.SelectedPerson.TerminationDate.Value >= DateBehind 
+                         ) ? "0" : "1";
         }
 
         private void MaintainEditedtbHoursStyle()
@@ -241,11 +260,6 @@ namespace PraticeManagement.Controls.TimeEntry
 
             tbBillableHours.Text = TimeEntryRecordBillableElement.Attribute(XName.Get("ActualHours")).Value;
 
-            var IsChargeCodeOff = TimeEntryRecordBillableElement.Attribute(XName.Get("IsChargeCodeOff"));
-            if (IsChargeCodeOff != null && IsChargeCodeOff.Value == 1.ToString())
-            {
-                tbBillableHours.Attributes["disable"] = "1";
-            }
             hdnBillableHours.Value = tbBillableHours.Text;
 
             var isReviewd = TimeEntryRecordBillableElement.Attribute(XName.Get("IsReviewed")).Value;
@@ -291,8 +305,6 @@ namespace PraticeManagement.Controls.TimeEntry
             return DateTime.Now.ToString(Constants.Formatting.EntryDateFormat);
         }
 
-
-
         private void ApplyControlStyle()
         {
             if (!tbBillableHours.Enabled && string.IsNullOrEmpty(tbBillableHours.Text))
@@ -313,7 +325,6 @@ namespace PraticeManagement.Controls.TimeEntry
                 tbBillableHours.Enabled = tbNonBillableHours.Enabled = enabled;
             }
         }
-
 
         internal void UpdateBillableElementEditedValues(XElement element)
         {
@@ -371,7 +382,7 @@ namespace PraticeManagement.Controls.TimeEntry
             if (isValidNote && isValidBillableHours && isValidNonBillableHours)
             {
                 tbBillableHours.Style["background-color"] = "none";
-                
+
             }
             else
             {
@@ -398,7 +409,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
             var note = tbNotes.Text;
 
-            if (hdnIsNoteRequired.Value.ToLowerInvariant() == "true" && (!string.IsNullOrEmpty(tbBillableHours.Text) ||!string.IsNullOrEmpty(tbNonBillableHours.Text)) )
+            if (hdnIsNoteRequired.Value.ToLowerInvariant() == "true" && (!string.IsNullOrEmpty(tbBillableHours.Text) || !string.IsNullOrEmpty(tbNonBillableHours.Text)))
             {
                 if (string.IsNullOrEmpty(note) || note.Length < 3 || note.Length > 1000)
                 {
