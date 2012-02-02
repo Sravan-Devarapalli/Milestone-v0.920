@@ -4,6 +4,8 @@
     TagPrefix="te" %>
 <%@ Register TagPrefix="ext" Namespace="PraticeManagement.Controls.Generic.TotalCalculator"
     Assembly="PraticeManagement" %>
+<%@ Register TagPrefix="ext2" Namespace="PraticeManagement.Controls.Generic.EnableDisableExtender"
+   Assembly="PraticeManagement" %>
 <%@ Import Namespace="PraticeManagement.Controls.TimeEntry" %>
 <table class="WholeWidth">
     <tr class="time-entry-bar">
@@ -29,7 +31,9 @@
         </asp:Repeater>
         <td class="time-entry-total-hoursNew">
             <label id="lblTotalHours" runat="server" />
+            <label id="lblEnableDisable" runat="server" />
             <ext:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lblTotalHours" />
+            <ext2:EnableDisableExtender ID="extEnableDisable" runat="server" TargetControlID="lblEnableDisable" />
         </td>
         <td class="DeleteWidth">
         </td>
