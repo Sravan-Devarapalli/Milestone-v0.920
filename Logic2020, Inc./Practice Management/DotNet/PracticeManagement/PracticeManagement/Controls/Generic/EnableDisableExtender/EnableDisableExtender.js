@@ -47,6 +47,7 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                         var isChargeCodeTurnOffDisable = 0;
                         var isTerminationDateDisable = 0;
                         var isHireDateDisable = 0;
+                        var isPTO = false
                         if (control != null) {
                             if (control.getAttribute('isHourlyRevenueDisable') != undefined && control.getAttribute('isHourlyRevenueDisable') != null) {
                                 isHourlyRevenueDisable = control.getAttribute('isHourlyRevenueDisable');
@@ -60,9 +61,13 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                             if (control.getAttribute('IsTerminationDateDisable') != undefined && control.getAttribute('IsTerminationDateDisable') != null) {
                                 isTerminationDateDisable = control.getAttribute('IsTerminationDateDisable');
                             }
+                            if (control.getAttribute('IsPTO') != undefined && control.getAttribute('IsPTO') != null) {
+                                isPTO = control.getAttribute('IsPTO') == 'True';
+                            }
+
                         }
                         if (isHourlyRevenueDisable == 0 && isChargeCodeTurnOffDisable == 0 && isHireDateDisable == 0 && isTerminationDateDisable == 0) {
-                            if (control.getAttribute('disabled') == 'disabled') {
+                            if (!isPTO && control.getAttribute('disabled') == 'disabled') {
                                 control.removeAttribute('disabled');
                                 control.style.backgroundColor = 'white';
                             }
@@ -174,12 +179,17 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                     if (control.getAttribute('IsTerminationDateDisable') != undefined && control.getAttribute('IsTerminationDateDisable') != null) {
                         isTerminationDateDisable = control.getAttribute('IsTerminationDateDisable');
                     }
+                    if (control.getAttribute('IsPTO') != undefined && control.getAttribute('IsPTO') != null) {
+                        isPTO = control.getAttribute('IsPTO') == 'True';
+                    }
                 }
                 if (isHourlyRevenueDisable == 0 && isChargeCodeTurnOffDisable == 0 && isHireDateDisable == 0 && isTerminationDateDisable == 0) {
-                    control.removeAttribute('disabled');
-                    var controlIsDirty = control.style.backgroundColor != 'white' && control.style.backgroundColor != 'gray';
-                    if (!controlIsDirty) {
-                        control.style.backgroundColor = 'white';
+                    if (!isPTO && control.getAttribute('disabled') == 'disabled') {
+                        control.removeAttribute('disabled');
+                        var controlIsDirty = control.style.backgroundColor != 'white' && control.style.backgroundColor != 'gray';
+                        if (!controlIsDirty) {
+                            control.style.backgroundColor = 'white';
+                        }
                     }
                 } else {
                     control.setAttribute('disabled', 'disabled');
