@@ -1099,9 +1099,9 @@ namespace PracticeManagementService
             return ProjectDAL.GetProjectByIdShort(projectId);
         }
 
-        public List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId, bool IsOnlyActive)
+        public List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId, bool IsOnlyActive, DateTime? startDate, DateTime? endDate)
         {
-            return ProjectDAL.GetTimeTypesByProjectId(projectId, IsOnlyActive);
+            return ProjectDAL.GetTimeTypesByProjectId(projectId, IsOnlyActive, startDate, endDate);
         }
 
         public void SetProjectTimeTypes(int projectId, string projectTimeTypesList)
