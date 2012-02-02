@@ -438,6 +438,21 @@
             }
 
         }
+
+        function chbIsInternal_Change() {
+            var chbIsInternal = document.getElementById('<%= chbIsInternal.ClientID%>');
+            var chbCanCreateCustomWorkTypes = document.getElementById('<%= chbCanCreateCustomWorkTypes.ClientID%>');
+            if (chbIsInternal.checked) {
+                chbCanCreateCustomWorkTypes.checked = false;
+                chbCanCreateCustomWorkTypes.setAttribute('disabled', 'disabled');
+            }
+            else {
+                chbCanCreateCustomWorkTypes.checked = true;
+                chbCanCreateCustomWorkTypes.removeAttribute('disabled');
+                chbCanCreateCustomWorkTypes.parentNode.removeAttribute('disabled');
+            }
+            chbCanCreateCustomWorkTypes_Change();
+        }
         // End Region projecttimetypes script
 
     
@@ -704,13 +719,13 @@
                                 <tr>
                                     <td colspan="8">
                                         <asp:CheckBox ID="chbIsInternal" runat="server" Text="IsInternal" Enabled="false"
-                                            onclick="chbCanCreateCustomWorkTypes_Change();" />
+                                            onclick="chbIsInternal_Change();" />
                                         <asp:CustomValidator ID="cvIsInternal" runat="server" EnableClientScript="false"
                                             ErrorMessage="Can not change project status as some work types are already in use."
                                             ValidateEmptyText="true" Text="*" ToolTip="Can not change project status as some timetypes are already in use."></asp:CustomValidator>
                                         <asp:HiddenField ID="hdIsInternal" runat="server" />
-                                        <asp:CheckBox ID="chbCanCreateCustomWorkTypes" onclick="chbCanCreateCustomWorkTypes_Change();"
-                                            runat="server" Text="Can Add New Custom Work Types." Enabled="false" />
+                                        <asp:CheckBox ID="chbCanCreateCustomWorkTypes" onclick="chbCanCreateCustomWorkTypes_Change();" 
+                                            runat="server" Text="Can Add New Custom Work Types." Enabled="false"/>
                                     </td>
                                 </tr>
                                 <tr>
