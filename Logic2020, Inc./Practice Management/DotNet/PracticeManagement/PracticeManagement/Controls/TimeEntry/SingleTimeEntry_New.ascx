@@ -69,6 +69,8 @@
     <asp:HiddenField ID="hfHorizontalTotalCalculatorExtender" runat="server" />
     <asp:HiddenField ID="hfSpreadSheetTotalCalculatorExtender" runat="server" />
     <asp:HiddenField ID="hdnIsNoteRequired" runat="server" />
+    <asp:HiddenField ID="hdnIsChargeCodeTurnOff" runat="server" />
+    <asp:HiddenField ID="hdnIsPTOTimeType" runat="server" />
     <ext:DirtyStateExtender ID="deActualHours" runat="server" TargetControlID="hfDirtyHours"
         HiddenActualHoursId="hdnActualHours" NoteId="tbNotes" ActualHoursId="tbActualHours"
         HiddenNoteId="hdnNotes" HorizontalTotalCalculatorExtenderId="hfHorizontalTotalCalculatorExtender"
