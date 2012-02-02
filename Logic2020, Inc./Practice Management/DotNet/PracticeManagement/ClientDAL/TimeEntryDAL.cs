@@ -1264,6 +1264,44 @@ namespace DataAccess
 
         }
 
+        public static Dictionary<DateTime, bool> GetIsChargeCodeTurnOffByPeriod(int personId,int clientId,int groupId,int projectId,int timeTypeId, DateTime startDate, DateTime endDate)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.TimeEntry.GetIsChargeCodeTurnOffByPeriodProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ClientId, clientId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectGroupIdParam, groupId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, projectId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeId, timeTypeId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        Dictionary<DateTime, bool> result = new Dictionary<DateTime, bool>();
+                        if (reader.HasRows)
+                        {
+                            var chargeCodeDateIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeDate);
+                            var isChargeCodeOffIndex = reader.GetOrdinal(Constants.ColumnNames.IsChargeCodeOffColumn);
+ 
+                            while (reader.Read())
+                            {
+                                DateTime key = reader.GetDateTime(chargeCodeDateIndex);
+                                bool value = reader.GetBoolean(isChargeCodeOffIndex);
+                                result.Add(key, value);
+                            }
+                        }
+                        return result;
+                    }
+                }
+            }
+        }
+
+
 
         #endregion
 
@@ -1501,7 +1539,6 @@ namespace DataAccess
                 var isChargeableIndex = reader.GetOrdinal(Constants.ParameterNames.IsChargeable);
                 var isCorrectIndex = -1;
                 var revieweStatusIdIndex = reader.GetOrdinal(Constants.ParameterNames.ReviewStatusId);
-                var IsChargeCodeOffIndex = reader.GetOrdinal(Constants.ColumnNames.IsChargeCodeOffColumn);
 
                 try
                 {
@@ -1530,8 +1567,7 @@ namespace DataAccess
                         ForecastedHours = reader.GetFloat(forecastedHrsIndex),
                         ModifiedDate = reader.GetDateTime(modifiedDateIndex),
                         IsChargeable = reader.GetBoolean(isChargeableIndex),
-                        IsReviewed = (ReviewStatus)Enum.Parse(typeof(ReviewStatus), reader.GetInt32(revieweStatusIdIndex).ToString()),
-                        IsChargeCodeOff = reader.GetBoolean(IsChargeCodeOffIndex)
+                        IsReviewed = (ReviewStatus)Enum.Parse(typeof(ReviewStatus), reader.GetInt32(revieweStatusIdIndex).ToString())
 
                     };
 
