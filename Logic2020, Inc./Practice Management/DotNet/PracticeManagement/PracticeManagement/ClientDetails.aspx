@@ -102,7 +102,7 @@
                         </tr>
                         <tr>
                             <td>
-                                Is Client Internal?
+                                Is Account Internal?
                             </td>
                             <td>
                                 <asp:CheckBox ID="chbIsInternal" runat="server" Checked="false" Enabled="false" />
