@@ -55,6 +55,7 @@ PraticeManagement.Controls.Generic.DuplicateOptionsRemove.DuplicateOptionsRemove
     update: function () {
         var ddlSelectedValList = new Array();
         var controlIds = this.getControlIdList();
+        var target = this.get_element();
         for (i = 0; i < controlIds.length; i++) {
             var control = document.getElementById(controlIds[i]);
             if (control && control.value > -1) {
@@ -68,7 +69,7 @@ PraticeManagement.Controls.Generic.DuplicateOptionsRemove.DuplicateOptionsRemove
                 var inActiveOptionValue = control.getAttribute('selectedInActiveWorktypeid');
                 var selectedVal = control.value;
                 control.options.length = 0;
-                var target = this.get_element();
+
                 var optionList = WorkTypeDropDownListOptions[target.id];
                 for (var j = 0; j < optionList.length; j++) {
                     var addOption = true;
@@ -88,6 +89,36 @@ PraticeManagement.Controls.Generic.DuplicateOptionsRemove.DuplicateOptionsRemove
                 control.value = selectedVal;
             }
         }
+        this.setDisplayForPlusButton();
+    },
+    setDisplayForPlusButton: function () {
+        var controlIds = this.getControlIdList();
+        if (controlIds.length > 0) {
+            var control = document.getElementById(controlIds[0]);
+            var count = this.getCountOfUnSelectedControls();
+            if (control.value > 0)
+                count++;
+            var plusButtonClientID = document.getElementById(this.plusButtonClientID);
+            if (plusButtonClientID != null) {
+                var controlItems = control.getElementsByTagName("option");
+                if (controlItems.length == count + 1) {
+                    plusButtonClientID.style.display = 'none';
+                } else {
+                    plusButtonClientID.style.display = 'block';
+                }
+            }
+        }
+    },
+    getCountOfUnSelectedControls: function () {
+        var controlIds = this.getControlIdList();
+        var count = 0;
+        for (i = 0; i < controlIds.length; i++) {
+            var control = document.getElementById(controlIds[i]);
+            if (control && control.value < 0) {
+                count = count + 1;
+            }
+        }
+        return count;
     },
     compareOptionText: function (a, b) {
         return a.text != b.text ? a.text < b.text ? -1 : 1 : 0;
