@@ -29,7 +29,7 @@ BEGIN
 		)
 
 		--Configure select columns.
-		SELECT ISNULL(PTT.TimeTypeId, DTT.TimeTypeId) AS 'TimeTypeId'
+		SELECT DISTINCT ISNULL(PTT.TimeTypeId, DTT.TimeTypeId) AS 'TimeTypeId'
 			, ISNULL(PTT.Name, DTT.Name) AS 'Name'
 			, CASE WHEN ISNULL(PTT.TimeTypeId, DTT.TimeTypeId) IN (SELECT * FROM ProjectTimeTypesInUse) THEN 1 ELSE 0 END AS 'InUse'
 		FROM ProjectTimeTypes PTT 
