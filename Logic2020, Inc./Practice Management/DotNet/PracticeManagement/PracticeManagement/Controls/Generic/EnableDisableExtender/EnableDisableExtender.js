@@ -208,7 +208,7 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
 
             if (control) {
                 control.setAttribute('disabled', 'disabled');
-                var controlIsDirty = control.style.backgroundColor != 'white' && control.style.backgroundColor != 'gray';
+                var controlIsDirty = control.style.backgroundColor.toLowerCase() != 'white' && control.style.backgroundColor.toLowerCase() != 'gray';
                 if (!controlIsDirty) {
                     control.style.backgroundColor = 'gray';
                 }
