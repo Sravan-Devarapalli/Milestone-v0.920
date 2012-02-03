@@ -18,6 +18,14 @@ namespace PraticeManagement.Controls.Generic.DuplicateOptionsRemove
             set { SetPropertyValue("controlsToCheck", value); }
         }
 
+        [ExtenderControlProperty]
+        [DefaultValue("")]
+        [ClientPropertyName("plusButtonClientID")]
+        public string PlusButtonClientID
+        {
+            get { return GetPropertyValue("plusButtonClientID", string.Empty); }
+            set { SetPropertyValue("plusButtonClientID", value); }
+        }
       
     }
 }
