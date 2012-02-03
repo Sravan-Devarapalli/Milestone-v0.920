@@ -76,7 +76,7 @@ namespace PraticeManagement
         private const string recursiveSectionConfirmText = "Are you sure to make the section as non-recursive?";
         private const string nonRecursiveSectionConfirmText = "Are you sure to make the section as recursive?";
         private const string recursiveToolTip = "Non-Recursive";
-	private const string nonRecursiveToolTip = "Recursive";
+	    private const string nonRecursiveToolTip = "Recursive";
         private const string cbeImgBtnRecursiveProjectSectionExtender = "cbeImgBtnRecursiveProjectSection";
         private const string cbeImgBtnRecurrenceBusinessDevelopmentSectionExtender = "cbeImgBtnRecurrenceBusinessDevelopmentSection";
         private const string cbeImgBtnRecurrenceInternalSectionExtender = "cbeImgBtnRecurrenceInternalSection";
@@ -393,6 +393,10 @@ namespace PraticeManagement
         protected override void Display()
         {
         }
+        private Control FindControlInFooter( Repeater repeater, string controlName) 
+        { 
+            return repeater.Controls[repeater.Controls.Count - 1].Controls[0].FindControl(controlName); 
+        }
 
         protected void repProjectSections_OnItemDataBound(object sender, RepeaterItemEventArgs e)
         {
@@ -414,8 +418,9 @@ namespace PraticeManagement
                 var extOptionRemove = e.Item.FindControl(extDupilcateOptionsRemoveExtender) as DupilcateOptionsRemoveExtender;
 
                 extOptionRemove.ControlsToCheck = DdlWorkTypeIdsList;
-
-
+                var imgPlusProjectSection = FindControlInFooter(repProjectTes,"imgPlusProjectSection") ;
+                extOptionRemove.PlusButtonClientID = imgPlusProjectSection != null ? imgPlusProjectSection.ClientID : String.Empty;
+                
                 var imgBtnRecursiveProjectSection = e.Item.FindControl(imgBtnRecursiveProjectSectionImage) as ImageButton;
                 var cbeImgBtnRecursiveProjectSection = e.Item.FindControl(cbeImgBtnRecursiveProjectSectionExtender) as ConfirmButtonExtender;
                 imgBtnRecursiveProjectSection.ImageUrl = Convert.ToBoolean(isRecursive) ? recursiveSectionImageUrl : nonRecursiveSectionImageUrl;
@@ -437,8 +442,6 @@ namespace PraticeManagement
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-
-
                 var repBusinessDevelopmentTes = e.Item.FindControl(repBusinessDevelopmentTesRepeater) as Repeater;
                 var teSectionDataItem = e.Item.DataItem as XElement;
 
@@ -454,8 +457,9 @@ namespace PraticeManagement
                 var extOptionRemove = e.Item.FindControl(extDupilcateOptionsRemoveExtender) as DupilcateOptionsRemoveExtender;
 
                 extOptionRemove.ControlsToCheck = DdlWorkTypeIdsList;
-
-
+                var imgPlusBusinessDevelopmentSection = FindControlInFooter(repBusinessDevelopmentTes, "imgPlusBusinessDevelopmentSection");
+                extOptionRemove.PlusButtonClientID = imgPlusBusinessDevelopmentSection != null ? imgPlusBusinessDevelopmentSection.ClientID : String.Empty;
+                
                 var imgBtnRecurrenceBusinessDevelopmentSection = e.Item.FindControl(imgBtnRecurrenceBusinessDevelopmentSectionImage) as ImageButton;
                 var cbeImgBtnRecurrenceBusinessDevelopmentSection = e.Item.FindControl(cbeImgBtnRecurrenceBusinessDevelopmentSectionExtender) as ConfirmButtonExtender;
                 imgBtnRecurrenceBusinessDevelopmentSection.ToolTip = Convert.ToBoolean(isRecursive) ? recursiveToolTip : nonRecursiveToolTip;
@@ -495,8 +499,9 @@ namespace PraticeManagement
                 var extOptionRemove = e.Item.FindControl(extDupilcateOptionsRemoveExtender) as DupilcateOptionsRemoveExtender;
 
                 extOptionRemove.ControlsToCheck = DdlWorkTypeIdsList;
-
-
+                var imgPlusInternalSection = FindControlInFooter(repInternalTes, "imgPlusInternalSection");
+                extOptionRemove.PlusButtonClientID = imgPlusInternalSection != null ? imgPlusInternalSection.ClientID : String.Empty;
+               
                 var imgBtnRecurrenceInternalSection = e.Item.FindControl(imgBtnRecurrenceInternalSectionImage) as ImageButton;
                 var cbeImgBtnRecurrenceInternalSection = e.Item.FindControl(cbeImgBtnRecurrenceInternalSectionExtender) as ConfirmButtonExtender;
                 imgBtnRecurrenceInternalSection.ImageUrl = Convert.ToBoolean(isRecursive) ? recursiveSectionImageUrl : nonRecursiveSectionImageUrl;
