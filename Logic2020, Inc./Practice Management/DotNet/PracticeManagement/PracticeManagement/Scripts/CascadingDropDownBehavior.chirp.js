@@ -349,6 +349,12 @@ AjaxControlToolkit.CascadingDropDownBehavior.prototype = {
             if (eventArgs.get_cancel()) {
                 return;
             }
+        var personId = parentElement.getAttribute('personId');
+        var startDate = parentElement.getAttribute('startDate');
+        var endDate = parentElement.getAttribute('endDate');
+	if (personId != null && startDate != null && endDate != null) {
+        	this._contextKey = personId + ';' + startDate + ';' + endDate + ';';
+              }
             
             var params = { knownCategoryValues:knownCategoryValues, category:this._category };
             if (this._useContextKey) {
