@@ -179,6 +179,7 @@ namespace PracticeManagementService
         /// </summary>
         /// <param name = "opportunityId">An ID of the opportunity to be converted.</param>
         /// <param name = "userName">A current user.</param>
+        /// Deprecated 
         public int OpportunityConvertToProject(int opportunityId, string userName)
         {
             var project = OpportunityDAL.OpportunityConvertToProject(opportunityId, userName);
