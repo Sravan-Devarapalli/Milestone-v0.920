@@ -150,6 +150,22 @@ namespace PracticeManagementService
 
         }
 
+        public List<Project> ListProjectsByClientAndPersonInPeriod(int clientId, bool isOnlyActiveAndInternal, bool isOnlyEnternalProjects, int personId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                return ProjectDAL.ListProjectsByClientAndPersonInPeriod(clientId, isOnlyActiveAndInternal, isOnlyEnternalProjects, personId, startDate, endDate);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ListProjectsByClientAndPersonInPeriod", "ProjectService.svc", string.Empty,
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
+        }
+
         public List<Project> ListProjectsByClientWithSort(int? clientId, string viewerUsername, string sortBy)
         {
             try
@@ -1083,9 +1099,9 @@ namespace PracticeManagementService
 
         }
 
-        public List<Project> GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal)
+        public List<Project> GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal,int personId,DateTime startDate, DateTime endDate)
         {
-            return ProjectDAL.GetProjectsListByProjectGroupId(projectGroupId, isInternal);
+            return ProjectDAL.GetProjectsListByProjectGroupId(projectGroupId, isInternal, personId, startDate,  endDate);
         }
 
 
