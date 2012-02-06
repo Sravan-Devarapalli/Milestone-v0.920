@@ -89,6 +89,43 @@ namespace DataAccess
             return groupList;
         }
 
+        public static List<ProjectGroup> ListGroupByClientAndPersonInPeriod(int clientId,int personId,DateTime startDate, DateTime endDate)
+        {
+            List<ProjectGroup> groupList = new List<ProjectGroup>();
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.ProjectGroup.ListGroupByClientAndPersonInPeriod, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(ClientIdParam,clientId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId,personId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            int groupIdIndex = reader.GetOrdinal(GroupIdColumn);
+                            int nameIndex = reader.GetOrdinal(NameColumn);
+
+                            while (reader.Read())
+                            {
+                               ProjectGroup projectGroup =  new ProjectGroup
+                                {
+                                    Id = (int)reader.GetInt32(groupIdIndex),
+                                    Name = (string)reader.GetString(nameIndex)
+                                };
+                               groupList.Add(projectGroup);
+                            }
+                        }
+                    }
+                }
+            }
+            return groupList;
+        }
+
         public static bool UpDateProductGroup(int clientId,int groupId,string groupName, bool isActive)
         {
             bool result = false;
