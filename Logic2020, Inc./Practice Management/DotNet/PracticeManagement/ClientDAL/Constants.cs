@@ -706,6 +706,7 @@
                 public const string ProjectGroupInsert = "dbo.ProjectGroupInsert";
                 public const string ProjectGroupDelete = "dbo.ProjectGroupDelete";
                 public const string GetInternalBusinessUnits = "dbo.GetInternalBusinessUnits";
+                public const string ListGroupByClientAndPersonInPeriod = "dbo.ListGroupByClientAndPersonInPeriod";
                 
             }
 
@@ -752,6 +753,7 @@
                 public const string GetBusinessDevelopmentProject = "dbo.GetBusinessDevelopmentProject";
                 public const string GetProjectByIdShort = "dbo.GetProjectByIdShort";
                 public const string GetIsHourlyRevenueByPeriod = "dbo.GetIsHourlyRevenueByPeriod";
+                public const string ListProjectsByClientAndPersonInPeriod = "dbo.ListProjectsByClientAndPersonInPeriod";
                 
 
             }
