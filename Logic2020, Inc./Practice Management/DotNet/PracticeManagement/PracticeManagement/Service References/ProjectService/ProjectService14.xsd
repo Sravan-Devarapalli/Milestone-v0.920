@@ -3,6 +3,47 @@
   <xs:import schemaLocation="http://system44.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:import schemaLocation="http://system44.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
   <xs:import schemaLocation="http://system44.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="ArrayOfCategoryItemBudget">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CategoryItemBudget" nillable="true" type="tns:CategoryItemBudget" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCategoryItemBudget" nillable="true" type="tns:ArrayOfCategoryItemBudget" />
+  <xs:complexType name="CategoryItemBudget">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="CategoryTypeId" type="tns:BudgetCategoryType" />
+      <xs:element minOccurs="0" name="ItemId" type="xs:int" />
+      <xs:element minOccurs="0" name="Month" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CategoryItemBudget" nillable="true" type="tns:CategoryItemBudget" />
+  <xs:simpleType name="BudgetCategoryType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ClientDirector">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="PracticeArea">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BusinessDevelopmentManager">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="BudgetCategoryType" nillable="true" type="tns:BudgetCategoryType" />
   <xs:complexType name="ProjectExpense">
     <xs:sequence>
       <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
@@ -713,32 +754,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PersonStats" nillable="true" type="tns:PersonStats" />
-  <xs:simpleType name="BudgetCategoryType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="ClientDirector">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="PracticeArea">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="BusinessDevelopmentManager">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="BudgetCategoryType" nillable="true" type="tns:BudgetCategoryType" />
   <xs:complexType name="ArrayOfProjectsGroupedByPerson">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectsGroupedByPerson" nillable="true" type="tns:ProjectsGroupedByPerson" />
@@ -815,19 +830,4 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectsGroupedByPractice" nillable="true" type="tns:ProjectsGroupedByPractice" />
-  <xs:complexType name="ArrayOfCategoryItemBudget">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="CategoryItemBudget" nillable="true" type="tns:CategoryItemBudget" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfCategoryItemBudget" nillable="true" type="tns:ArrayOfCategoryItemBudget" />
-  <xs:complexType name="CategoryItemBudget">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="CategoryTypeId" type="tns:BudgetCategoryType" />
-      <xs:element minOccurs="0" name="ItemId" type="xs:int" />
-      <xs:element minOccurs="0" name="Month" type="xs:int" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="CategoryItemBudget" nillable="true" type="tns:CategoryItemBudget" />
 </xs:schema>
