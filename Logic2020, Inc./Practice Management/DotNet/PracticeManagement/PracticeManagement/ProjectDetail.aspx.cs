@@ -139,7 +139,7 @@ namespace PraticeManagement
                 {
                     return 0;
                 }
-                return (int)ViewState["tblProjectDetailTabViewSwitch_ActiveViewIndex"]; ;
+                return (int)ViewState["tblProjectDetailTabViewSwitch_ActiveViewIndex"];
             }
             set
             {
@@ -816,11 +816,29 @@ namespace PraticeManagement
                 IsStatusValidForNonadmin(project.Status.Id);
         }
 
+        private bool ValidateProjectTimeTypesTab()
+        {
+            bool isValid = true;
+            if (CellProjectTimeTypes.Visible)
+            {
+                int activeIndex = mvProjectDetailTab.ActiveViewIndex;
+                mvProjectDetailTab.ActiveViewIndex = 8;
+                Page.Validate(vsumProject.ValidationGroup);
+                if(!Page.IsValid)
+                {
+                    isValid = false;
+                }
+                mvProjectDetailTab.ActiveViewIndex = activeIndex;
+            }
+            return isValid;
+        }
+
         protected override bool ValidateAndSave()
         {
             bool result = false;
+
             Page.Validate(vsumProject.ValidationGroup);
-            if (Page.IsValid)
+            if (Page.IsValid && ValidateProjectTimeTypesTab())
             {
                 int? id = SaveData();
                 if (id.HasValue)
