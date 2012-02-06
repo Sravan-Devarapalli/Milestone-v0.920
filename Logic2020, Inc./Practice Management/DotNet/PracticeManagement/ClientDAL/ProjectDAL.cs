@@ -102,6 +102,54 @@ namespace DataAccess
             return projectList;
         }
 
+        public static List<Project> ListProjectsByClientAndPersonInPeriod(int clientId, bool isOnlyActiveAndInternal, bool isOnlyEnternalProjects, int personId, DateTime startDate, DateTime endDate)
+        {
+            var projectList = new List<Project>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Project.ListProjectsByClientAndPersonInPeriod, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdParam, clientId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsOnlyActiveAndInternal, isOnlyActiveAndInternal);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsOnlyEnternalProjectsParam, isOnlyEnternalProjects);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+
+                    connection.Open();
+
+                    SqlDataReader reader = command.ExecuteReader();
+                    try
+                    {
+                        if (reader.HasRows)
+                        {
+                            int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+                            int nameIndex = reader.GetOrdinal(Constants.ColumnNames.NameColumn);
+
+                            while (reader.Read())
+                            {
+                                var project = new Project
+                                {
+                                    Id = reader.GetInt32(projectIdIndex),
+                                    Name = reader.GetString(nameIndex)
+                                };
+                                projectList.Add(project);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+            }
+
+            return projectList;
+        }
+
         private static void ReadProjectsShort(SqlDataReader reader, List<Project> resultList, bool readGroups)
         {
             try
@@ -2366,7 +2414,7 @@ namespace DataAccess
             }
         }
 
-        public static List<Project> GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal)
+        public static List<Project> GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal,int personId,DateTime startDate, DateTime endDate)
         {
             var projectList = new List<Project>();
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -2377,6 +2425,9 @@ namespace DataAccess
                     command.CommandTimeout = connection.ConnectionTimeout;
                     command.Parameters.AddWithValue(Constants.ParameterNames.ProjectGroupIdParam, projectGroupId);
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, isInternal);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
 
                     connection.Open();
 
@@ -2384,11 +2435,10 @@ namespace DataAccess
                     {
                         while (reader.Read())
                         {
-                            var project = new Project 
-                                            { 
+                            var project = new Project
+                                            {
                                                 Id = (int)reader[Constants.ColumnNames.ProjectIdColumn],
-                                                Name = (string)reader[Constants.ColumnNames.NameColumn],
-                                                ProjectNumber = (string)reader[Constants.ColumnNames.ProjectNumberColumn]
+                                                Name = (string)reader[Constants.ColumnNames.NameColumn]                                                
                                             };
                             projectList.Add(project);
                         }
