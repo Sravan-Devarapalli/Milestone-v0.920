@@ -4,6 +4,19 @@
   <xs:import schemaLocation="http://system44.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
   <xs:import schemaLocation="http://system44.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import schemaLocation="http://system44.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
+  <xs:element name="CategoryItemsSaveFromXML">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="categoryItems" nillable="true" type="q1:ArrayOfCategoryItemBudget" />
+        <xs:element minOccurs="0" name="year" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CategoryItemsSaveFromXMLResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="ProjectDelete">
     <xs:complexType>
       <xs:sequence>
@@ -20,14 +33,14 @@
   <xs:element name="GetProjectExpensesForProject">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="entity" nillable="true" type="q1:ProjectExpense" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="entity" nillable="true" type="q2:ProjectExpense" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetProjectExpensesForProjectResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectExpensesForProjectResult" nillable="true" type="q2:ArrayOfProjectExpense" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectExpensesForProjectResult" nillable="true" type="q3:ArrayOfProjectExpense" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -39,7 +52,7 @@
   <xs:element name="AllProjectsWithFinancialTotalsAndPersonsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="AllProjectsWithFinancialTotalsAndPersonsResult" nillable="true" type="q3:ArrayOfProject" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="AllProjectsWithFinancialTotalsAndPersonsResult" nillable="true" type="q4:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -80,13 +93,16 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="projectGroupId" type="xs:int" />
         <xs:element minOccurs="0" name="isInternal" type="xs:boolean" />
+        <xs:element minOccurs="0" name="personId" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetProjectsListByProjectGroupIdResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectsListByProjectGroupIdResult" nillable="true" type="q4:ArrayOfProject" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectsListByProjectGroupIdResult" nillable="true" type="q5:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -98,7 +114,7 @@
   <xs:element name="GetBusinessDevelopmentProjectResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetBusinessDevelopmentProjectResult" nillable="true" type="q5:Project" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetBusinessDevelopmentProjectResult" nillable="true" type="q6:Project" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -112,7 +128,7 @@
   <xs:element name="GetProjectByIdShortResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectByIdShortResult" nillable="true" type="q6:Project" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectByIdShortResult" nillable="true" type="q7:Project" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -129,7 +145,7 @@
   <xs:element name="GetTimeTypesByProjectIdResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="GetTimeTypesByProjectIdResult" nillable="true" type="q7:ArrayOfTimeTypeRecord" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="GetTimeTypesByProjectIdResult" nillable="true" type="q8:ArrayOfTimeTypeRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -159,7 +175,7 @@
   <xs:element name="GetIsHourlyRevenueByPeriodResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetIsHourlyRevenueByPeriodResult" nillable="true" type="q8:ArrayOfKeyValueOfdateTimeboolean" />
+        <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetIsHourlyRevenueByPeriodResult" nillable="true" type="q9:ArrayOfKeyValueOfdateTimeboolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -173,7 +189,7 @@
   <xs:element name="ProjectGetByIdResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ProjectGetByIdResult" nillable="true" type="q9:Project" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ProjectGetByIdResult" nillable="true" type="q10:Project" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -187,7 +203,7 @@
   <xs:element name="GetProjectBillingInfoResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectBillingInfoResult" nillable="true" type="q10:BillingInfo" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectBillingInfoResult" nillable="true" type="q11:BillingInfo" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -201,7 +217,7 @@
   <xs:element name="GetProjectsComputedFinancialsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectsComputedFinancialsResult" nillable="true" type="q11:ComputedFinancials" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectsComputedFinancialsResult" nillable="true" type="q12:ComputedFinancials" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -253,7 +269,7 @@
   <xs:element name="GetProjectListAllResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectListAllResult" nillable="true" type="q12:ArrayOfProject" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectListAllResult" nillable="true" type="q13:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -274,7 +290,7 @@
   <xs:element name="GetProjectListByDateRangeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectListByDateRangeResult" nillable="true" type="q13:ArrayOfProject" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectListByDateRangeResult" nillable="true" type="q14:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -289,7 +305,7 @@
   <xs:element name="ListProjectsByClientResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ListProjectsByClientResult" nillable="true" type="q14:ArrayOfProject" />
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ListProjectsByClientResult" nillable="true" type="q15:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -306,7 +322,26 @@
   <xs:element name="ListProjectsByClientShortResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ListProjectsByClientShortResult" nillable="true" type="q15:ArrayOfProject" />
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ListProjectsByClientShortResult" nillable="true" type="q16:ArrayOfProject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ListProjectsByClientAndPersonInPeriod">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="clientId" type="xs:int" />
+        <xs:element minOccurs="0" name="isOnlyActiveAndInternal" type="xs:boolean" />
+        <xs:element minOccurs="0" name="isOnlyEnternalProjects" type="xs:boolean" />
+        <xs:element minOccurs="0" name="personId" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ListProjectsByClientAndPersonInPeriodResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ListProjectsByClientAndPersonInPeriodResult" nillable="true" type="q17:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -322,14 +357,14 @@
   <xs:element name="ListProjectsByClientWithSortResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ListProjectsByClientWithSortResult" nillable="true" type="q16:ArrayOfProject" />
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ListProjectsByClientWithSortResult" nillable="true" type="q18:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="CloneProject">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="context" nillable="true" type="q17:ProjectCloningContext" />
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="context" nillable="true" type="q19:ProjectCloningContext" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -353,7 +388,7 @@
   <xs:element name="GetProjectListCustomResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectListCustomResult" nillable="true" type="q18:ArrayOfProject" />
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectListCustomResult" nillable="true" type="q20:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -372,14 +407,14 @@
         <xs:element minOccurs="0" name="practiceManagerId" nillable="true" type="xs:int" />
         <xs:element minOccurs="0" name="practiceId" nillable="true" type="xs:int" />
         <xs:element minOccurs="0" name="projectGroupId" nillable="true" type="xs:int" />
-        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="includeCurentYearFinancials" type="q19:ProjectCalculateRangeType" />
+        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="includeCurentYearFinancials" type="q21:ProjectCalculateRangeType" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetProjectListResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectListResult" nillable="true" type="q20:ArrayOfProject" />
+        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectListResult" nillable="true" type="q22:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -400,7 +435,7 @@
         <xs:element minOccurs="0" name="projectOwnerIdsList" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="practiceIdsList" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="projectGroupIdsList" nillable="true" type="xs:string" />
-        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="includeCurentYearFinancials" type="q21:ProjectCalculateRangeType" />
+        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="includeCurentYearFinancials" type="q23:ProjectCalculateRangeType" />
         <xs:element minOccurs="0" name="excludeInternalPractices" type="xs:boolean" />
         <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
       </xs:sequence>
@@ -409,7 +444,7 @@
   <xs:element name="ProjectListAllMultiParametersResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ProjectListAllMultiParametersResult" nillable="true" type="q22:ArrayOfProject" />
+        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ProjectListAllMultiParametersResult" nillable="true" type="q24:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -436,7 +471,7 @@
   <xs:element name="GetProjectListWithFinancialsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectListWithFinancialsResult" nillable="true" type="q23:ArrayOfProject" />
+        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectListWithFinancialsResult" nillable="true" type="q25:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -463,35 +498,35 @@
   <xs:element name="GetProjectListGroupByPracticeManagersResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectListGroupByPracticeManagersResult" nillable="true" type="q24:ArrayOfMilestonePerson" />
+        <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectListGroupByPracticeManagersResult" nillable="true" type="q26:ArrayOfMilestonePerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetBenchList">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="context" nillable="true" type="q25:BenchReportContext" />
+        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="context" nillable="true" type="q27:BenchReportContext" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetBenchListResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetBenchListResult" nillable="true" type="q26:ArrayOfProject" />
+        <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetBenchListResult" nillable="true" type="q28:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetBenchListWithoutBenchTotalAndAdminCosts">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="context" nillable="true" type="q27:BenchReportContext" />
+        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="context" nillable="true" type="q29:BenchReportContext" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetBenchListWithoutBenchTotalAndAdminCostsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetBenchListWithoutBenchTotalAndAdminCostsResult" nillable="true" type="q28:ArrayOfProject" />
+        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetBenchListWithoutBenchTotalAndAdminCostsResult" nillable="true" type="q30:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -506,7 +541,7 @@
   <xs:element name="GetProjectListByClientResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectListByClientResult" nillable="true" type="q29:ArrayOfProject" />
+        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectListByClientResult" nillable="true" type="q31:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -521,7 +556,7 @@
   <xs:element name="ProjectSearchTextResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ProjectSearchTextResult" nillable="true" type="q30:ArrayOfProject" />
+        <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ProjectSearchTextResult" nillable="true" type="q32:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -536,7 +571,7 @@
   <xs:element name="GetProjectDetailResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectDetailResult" nillable="true" type="q31:Project" />
+        <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectDetailResult" nillable="true" type="q33:Project" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -551,14 +586,14 @@
   <xs:element name="GetProjectDetailWithoutMilestonesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectDetailWithoutMilestonesResult" nillable="true" type="q32:Project" />
+        <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectDetailWithoutMilestonesResult" nillable="true" type="q34:Project" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SaveProjectDetail">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="project" nillable="true" type="q33:Project" />
+        <xs:element xmlns:q35="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="project" nillable="true" type="q35:Project" />
         <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -611,7 +646,7 @@
   <xs:element name="PersonStartsReportResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonStartsReportResult" nillable="true" type="q34:ArrayOfPersonStats" />
+        <xs:element xmlns:q36="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonStartsReportResult" nillable="true" type="q36:ArrayOfPersonStats" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -633,14 +668,14 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="year" type="xs:int" />
-        <xs:element xmlns:q35="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="categoryType" type="q35:BudgetCategoryType" />
+        <xs:element xmlns:q37="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="categoryType" type="q37:BudgetCategoryType" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="PersonBudgetListByYearResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q36="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonBudgetListByYearResult" nillable="true" type="q36:ArrayOfProjectsGroupedByPerson" />
+        <xs:element xmlns:q38="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonBudgetListByYearResult" nillable="true" type="q38:ArrayOfProjectsGroupedByPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -654,7 +689,7 @@
   <xs:element name="PracticeBudgetListByYearResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q37="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PracticeBudgetListByYearResult" nillable="true" type="q37:ArrayOfProjectsGroupedByPractice" />
+        <xs:element xmlns:q39="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PracticeBudgetListByYearResult" nillable="true" type="q39:ArrayOfProjectsGroupedByPractice" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -662,9 +697,9 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="itemId" type="xs:int" />
-        <xs:element xmlns:q38="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="categoryType" type="q38:BudgetCategoryType" />
+        <xs:element xmlns:q40="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="categoryType" type="q40:BudgetCategoryType" />
         <xs:element minOccurs="0" name="monthStartDate" type="xs:dateTime" />
-        <xs:element xmlns:q39="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="amount" type="q39:PracticeManagementCurrency" />
+        <xs:element xmlns:q41="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="amount" type="q41:PracticeManagementCurrency" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -687,14 +722,14 @@
         <xs:element minOccurs="0" name="practiceIdsList" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="excludeInternalPractices" type="xs:boolean" />
         <xs:element minOccurs="0" name="personIds" nillable="true" type="xs:string" />
-        <xs:element xmlns:q40="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="categoryType" type="q40:BudgetCategoryType" />
+        <xs:element xmlns:q42="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="categoryType" type="q42:BudgetCategoryType" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="CalculateBudgetForPersonsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q41="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="CalculateBudgetForPersonsResult" nillable="true" type="q41:ArrayOfProjectsGroupedByPerson" />
+        <xs:element xmlns:q43="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="CalculateBudgetForPersonsResult" nillable="true" type="q43:ArrayOfProjectsGroupedByPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -717,21 +752,8 @@
   <xs:element name="CalculateBudgetForPracticesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q42="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="CalculateBudgetForPracticesResult" nillable="true" type="q42:ArrayOfProjectsGroupedByPractice" />
+        <xs:element xmlns:q44="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="CalculateBudgetForPracticesResult" nillable="true" type="q44:ArrayOfProjectsGroupedByPractice" />
       </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="CategoryItemsSaveFromXML">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q43="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="categoryItems" nillable="true" type="q43:ArrayOfCategoryItemBudget" />
-        <xs:element minOccurs="0" name="year" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="CategoryItemsSaveFromXMLResponse">
-    <xs:complexType>
-      <xs:sequence />
     </xs:complexType>
   </xs:element>
 </xs:schema>
