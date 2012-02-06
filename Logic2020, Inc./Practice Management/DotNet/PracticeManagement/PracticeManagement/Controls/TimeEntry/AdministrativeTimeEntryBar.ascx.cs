@@ -12,6 +12,15 @@ namespace PraticeManagement.Controls.TimeEntry
 {
     public partial class AdministrativeTimeEntryBar : System.Web.UI.UserControl
     {
+        #region Constants
+
+        private const string AdministrativeTimeEntryBar_TbAcutualHoursClientIds = "AdministrativeTimeEntryBar_TbAcutualHoursClientIds";
+        private const string steId = "ste";
+
+        #endregion
+
+        #region Properties
+
         public List<XElement> TeBarDataSource
         {
             get;
@@ -52,13 +61,25 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             get
             {
-                return ViewState["AdministrativeTimeEntryBar_TbAcutualHoursClientIds"] as Dictionary<int, string>;
+                return ViewState[AdministrativeTimeEntryBar_TbAcutualHoursClientIds] as Dictionary<int, string>;
             }
             set
             {
-                ViewState["AdministrativeTimeEntryBar_TbAcutualHoursClientIds"] = value;
+                ViewState[AdministrativeTimeEntryBar_TbAcutualHoursClientIds] = value;
             }
         }
+
+        public TimeEntry_New HostingPage
+        {
+            get
+            {
+                return ((TimeEntry_New)Page);
+            }
+        }
+
+        #endregion
+
+        #region Control events
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -72,33 +93,11 @@ namespace PraticeManagement.Controls.TimeEntry
             extEnableDisable.PopUpBehaviourId = TimeEntry_New.mpeTimetypeAlertMessageBehaviourId;
         }
 
-
-        public TimeEntry_New HostingPage
-        {
-            get
-            {
-                return ((TimeEntry_New)Page);
-            }
-        }
-
-
-        protected string GetDayOffCssCalss(XElement calendarItem)
-        {
-            return calendarItem.Attribute(XName.Get("CssClass")).Value;
-        }
-
-
-        private void InitTimeEntryControl(SingleTimeEntry_New ste, DateTime date, XElement terXlement)
-        {
-            ste.DateBehind = date;
-            ste.TimeEntryRecordElement = terXlement;
-        }
-
         protected void repEntries_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-                var ste = e.Item.FindControl("ste") as SingleTimeEntry_New;
+                var ste = e.Item.FindControl(steId) as SingleTimeEntry_New;
 
                 var calendarItem = (XElement)e.Item.DataItem;
 
@@ -115,31 +114,33 @@ namespace PraticeManagement.Controls.TimeEntry
                 }
 
                 ste.HorizontalTotalCalculatorExtenderId = extTotalHours.ClientID;
-                ste.IsNoteRequired = calendarItem.Attribute(XName.Get("IsNoteRequired")).Value;
-                ste.IsChargeCodeTurnOff = calendarItem.Attribute(XName.Get("IsChargeCodeOff")).Value;
+                ste.IsNoteRequired = calendarItem.Attribute(XName.Get(TimeEntry_New.IsNoteRequiredXname)).Value;
+                ste.IsChargeCodeTurnOff = calendarItem.Attribute(XName.Get(TimeEntry_New.IsChargeCodeOffXname)).Value;
 
                 ste.Disabled = Disabled;
                 ste.IsPTO = IsPTO;
 
-                var nbterecord = (calendarItem.HasElements && calendarItem.Descendants(XName.Get("TimeEntryRecord")).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").ToList().Count > 0) ? calendarItem.Descendants(XName.Get("TimeEntryRecord")).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").First() : null;
-                var date = Convert.ToDateTime(calendarItem.Attribute(XName.Get("Date")).Value);
+                var nbterecord = (calendarItem.HasElements && calendarItem.Descendants(XName.Get(TimeEntry_New.TimeEntryRecordXname)).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").ToList().Count > 0) ? calendarItem.Descendants(XName.Get("TimeEntryRecord")).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").First() : null;
+                var date = Convert.ToDateTime(calendarItem.Attribute(XName.Get(TimeEntry_New.DateXname)).Value);
                 InitTimeEntryControl(ste, date, nbterecord);
 
 
             }
         }
 
-        protected void imgDropTes_Click(object sender, ImageClickEventArgs e)
+        #endregion
+
+        #region Methods
+
+        protected string GetDayOffCssCalss(XElement calendarItem)
         {
-            //var daysNumber = HostingPage.SelectedDates.Length;
-            //var startDate = HostingPage.SelectedDates[0];
-            //var endDate = HostingPage.SelectedDates[daysNumber - 1];
+            return calendarItem.Attribute(XName.Get(TimeEntry_New.CssClassXname)).Value;
+        }
 
-            //TimeEntryHelper.RemoveTimeEntries(ddlProjectMilestone.SelectedValue, ddlTimeTypes.SelectedValue, startDate, endDate);
-
-            //HostingPage.TimeEntryControl.UpdateTimeEntries();
-            //HostingPage.ClearDirtyState();
-            //HostingPage.SetAttributesToDropDowns();
+        private void InitTimeEntryControl(SingleTimeEntry_New ste, DateTime date, XElement terXlement)
+        {
+            ste.DateBehind = date;
+            ste.TimeEntryRecordElement = terXlement;
         }
 
         public void UpdateTimeEntries()
@@ -155,12 +156,12 @@ namespace PraticeManagement.Controls.TimeEntry
             for (int k = 0; k < calendarItemElements.Count; k++)
             {
 
-                var nonbillableSte = tes.Items[k].FindControl("ste") as SingleTimeEntry_New;
+                var nonbillableSte = tes.Items[k].FindControl(steId) as SingleTimeEntry_New;
 
                 var calendarItemElement = calendarItemElements[k];
                 if (calendarItemElement.HasElements)
                 {
-                    var nonBillableElements = calendarItemElement.Descendants(XName.Get("TimeEntryRecord")).ToList().Count > 0 ? calendarItemElement.Descendants(XName.Get("TimeEntryRecord")).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").ToList() : null;
+                    var nonBillableElements = calendarItemElement.Descendants(XName.Get(TimeEntry_New.TimeEntryRecordXname)).ToList().Count > 0 ? calendarItemElement.Descendants(XName.Get(TimeEntry_New.TimeEntryRecordXname)).Where(ter => ter.Attribute(XName.Get(TimeEntry_New.IsChargeableXname)).Value.ToLowerInvariant() == "false").ToList() : null;
                     if (nonBillableElements != null && nonBillableElements.Count > 0)
                     {
                         var nonbillableElement = nonBillableElements != null && nonBillableElements.Count > 0 ? nonBillableElements.First() : null;
@@ -170,11 +171,11 @@ namespace PraticeManagement.Controls.TimeEntry
                 else
                 {
                     //Add Element
-                    var nonBillableElement = new XElement("TimeEntryRecord");
-                    nonBillableElement.SetAttributeValue(XName.Get("IsChargeable"), "false");
+                    var nonBillableElement = new XElement(TimeEntry_New.TimeEntryRecordXname);
+                    nonBillableElement.SetAttributeValue(XName.Get(TimeEntry_New.IsChargeableXname), "false");
                     nonbillableSte.UpdateEditedValues(nonBillableElement);
 
-                    if (nonBillableElement.Attribute(XName.Get("ActualHours")).Value != "" || nonBillableElement.Attribute(XName.Get("Note")).Value != "")
+                    if (nonBillableElement.Attribute(XName.Get(TimeEntry_New.ActualHoursXname)).Value != "" || nonBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value != "")
                     {
                         calendarItemElement.Add(nonBillableElement);
                     }
@@ -185,10 +186,9 @@ namespace PraticeManagement.Controls.TimeEntry
 
         }
 
-
         internal void UpdateVerticalTotalCalculatorExtenderId(int index, string clientId)
         {
-            var nonbillableSte = tes.Items[index].FindControl("ste") as SingleTimeEntry_New;
+            var nonbillableSte = tes.Items[index].FindControl(steId) as SingleTimeEntry_New;
             nonbillableSte.UpdateVerticalTotalCalculatorExtenderId(clientId);
         }
 
@@ -196,7 +196,7 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             if (IsPTO)
             {
-                var nonbillableSte = tes.Items[index].FindControl("ste") as SingleTimeEntry_New;
+                var nonbillableSte = tes.Items[index].FindControl(steId) as SingleTimeEntry_New;
                 nonbillableSte.AddAttributeToPTOTextBox(extTotalHours.ClientID);
             }
         }
@@ -205,7 +205,7 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             foreach (RepeaterItem tesItem in tes.Items)
             {
-                var nonbillableSte = tesItem.FindControl("ste") as SingleTimeEntry_New;
+                var nonbillableSte = tesItem.FindControl(steId) as SingleTimeEntry_New;
                 nonbillableSte.IsPTO = IsPTO;
                 nonbillableSte.ValidateNoteAndHours();
             }
@@ -213,8 +213,10 @@ namespace PraticeManagement.Controls.TimeEntry
 
         internal void UpdateWorkType(XElement workTypeElement)
         {
-            workTypeElement.Attribute(XName.Get("Id")).Value = hdnworkTypeId.Value;
+            workTypeElement.Attribute(XName.Get(TimeEntry_New.IdXname)).Value = hdnworkTypeId.Value;
         }
+
+        #endregion
 
     }
 }
