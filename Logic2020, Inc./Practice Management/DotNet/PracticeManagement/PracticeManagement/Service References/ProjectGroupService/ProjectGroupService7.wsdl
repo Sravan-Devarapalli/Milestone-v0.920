@@ -37,6 +37,12 @@
   <wsdl:message name="IProjectGroupService_GetInternalBusinessUnits_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetInternalBusinessUnitsResponse" />
   </wsdl:message>
+  <wsdl:message name="IProjectGroupService_ListGroupByClientAndPersonInPeriod_InputMessage">
+    <wsdl:part name="parameters" element="tns:ListGroupByClientAndPersonInPeriod" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_ListGroupByClientAndPersonInPeriod_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ListGroupByClientAndPersonInPeriodResponse" />
+  </wsdl:message>
   <wsdl:portType name="IProjectGroupService">
     <wsdl:operation name="GroupListAll">
       <wsdl:input wsaw:Action="http://www.logic2020.com/IProjectGroupService/GroupListAll" message="tns:IProjectGroupService_GroupListAll_InputMessage" />
@@ -57,6 +63,10 @@
     <wsdl:operation name="GetInternalBusinessUnits">
       <wsdl:input wsaw:Action="http://www.logic2020.com/IProjectGroupService/GetInternalBusinessUnits" message="tns:IProjectGroupService_GetInternalBusinessUnits_InputMessage" />
       <wsdl:output wsaw:Action="http://www.logic2020.com/IProjectGroupService/GetInternalBusinessUnitsResponse" message="tns:IProjectGroupService_GetInternalBusinessUnits_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ListGroupByClientAndPersonInPeriod">
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IProjectGroupService/ListGroupByClientAndPersonInPeriod" message="tns:IProjectGroupService_ListGroupByClientAndPersonInPeriod_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IProjectGroupService/ListGroupByClientAndPersonInPeriodResponse" message="tns:IProjectGroupService_ListGroupByClientAndPersonInPeriod_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>
