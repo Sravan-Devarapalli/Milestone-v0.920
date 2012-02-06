@@ -2,7 +2,7 @@
 (
     Id                  INT	IDENTITY (1, 1) NOT NULL,
     ClientId            INT	NOT NULL,
-    ProjectGroupId      INT	NULL,
+    ProjectGroupId      INT	NOT NULL,
     ProjectId           INT	NOT NULL,
     PhaseId             INT	NOT NULL,
     TimeTypeId          INT	NOT NULL,
