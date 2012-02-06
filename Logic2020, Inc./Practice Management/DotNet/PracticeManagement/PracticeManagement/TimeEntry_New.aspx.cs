@@ -76,7 +76,7 @@ namespace PraticeManagement
         private const string recursiveSectionConfirmText = "Are you sure to make the section as non-recursive?";
         private const string nonRecursiveSectionConfirmText = "Are you sure to make the section as recursive?";
         private const string recursiveToolTip = "Non-Recursive";
-	    private const string nonRecursiveToolTip = "Recursive";
+        private const string nonRecursiveToolTip = "Recursive";
         private const string cbeImgBtnRecursiveProjectSectionExtender = "cbeImgBtnRecursiveProjectSection";
         private const string cbeImgBtnRecurrenceBusinessDevelopmentSectionExtender = "cbeImgBtnRecurrenceBusinessDevelopmentSection";
         private const string cbeImgBtnRecurrenceInternalSectionExtender = "cbeImgBtnRecurrenceInternalSection";
@@ -1029,7 +1029,8 @@ namespace PraticeManagement
             var project = ServiceCallers.Custom.Project(pro => pro.GetBusinessDevelopmentProject());
             var businessUnitId = Convert.ToInt32(ddlBusinessUnitBusinessDevlopmentSection.SelectedValue);
             var accountId = Convert.ToInt32(ddlAccountBusinessDevlopmentSection.SelectedValue);
-            var businessunitName = ddlBusinessUnitBusinessDevlopmentSection.SelectedItem.Text.Replace(":::", "");
+            var selectedBusinessunitText = ddlBusinessUnitBusinessDevlopmentSection.SelectedItem.Text;
+            var businessunitName = selectedBusinessunitText.Substring(0,selectedBusinessunitText.IndexOf(":::"));
 
             XDocument xdoc = PrePareXmlForBusinessDevelopmentSectionFromRepeater();
 
@@ -1073,7 +1074,7 @@ namespace PraticeManagement
         {
             var businessUnitId = Convert.ToInt32(ddlBusinessUnitInternal.SelectedValue);
             var projectId = Convert.ToInt32(ddlProjectInternal.SelectedValue);
-            var projectName = ddlProjectInternal.SelectedItem.Text.Replace(":::", string.Empty);
+            var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(projectId));
             var businessunitName = ddlBusinessUnitInternal.SelectedItem.Text;
             var account = ServiceCallers.Custom.Client(c => c.GetInternalAccount());
 
@@ -1086,7 +1087,7 @@ namespace PraticeManagement
             {
                 var teSection = new TimeEntrySection()
                 {
-                    Project = new Project() { Id = projectId, Name = projectName },
+                    Project = project,
                     Account = new Client() { Id = account.Id, Name = account.Name },
                     BusinessUnit = new ProjectGroup() { Id = businessUnitId, Name = businessunitName },
                     SectionId = TimeEntrySectionType.Internal,
@@ -1489,6 +1490,18 @@ namespace PraticeManagement
                 cpeBusinessDevelopmentSection.Collapsed = !(repBusinessDevelopmentSections.Items.Count > 0);
                 cpeInternalSection.Collapsed = !(repInternalSections.Items.Count > 0);
             }
+
+            ddlAccountProjectSection.Attributes["personId"] =
+            ddlAccountBusinessDevlopmentSection.Attributes["personId"] =
+            ddlBusinessUnitInternal.Attributes["personId"] = SelectedPerson.Id.ToString();
+
+            ddlAccountProjectSection.Attributes["startDate"] =
+            ddlAccountBusinessDevlopmentSection.Attributes["startDate"] =
+            ddlBusinessUnitInternal.Attributes["startDate"] = SelectedDates[0].ToString();
+
+            ddlAccountProjectSection.Attributes["endDate"] =
+            ddlAccountBusinessDevlopmentSection.Attributes["endDate"] =
+            ddlBusinessUnitInternal.Attributes["endDate"] = SelectedDates[SelectedDates.Length - 1].ToString();
         }
 
         protected void dpChoose_OnSelectionChanged(object sender, EventArgs args)
