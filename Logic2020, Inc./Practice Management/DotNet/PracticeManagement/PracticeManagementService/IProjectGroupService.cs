@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
 using DataTransferObjects;
+using System;
 
 namespace PracticeManagementService
 {
@@ -45,6 +46,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<ProjectGroup> GetInternalBusinessUnits();
+
+        [OperationContract]
+        List<ProjectGroup> ListGroupByClientAndPersonInPeriod(int clientId, int personId, DateTime startDate, DateTime endDate);
     }
 }
 
