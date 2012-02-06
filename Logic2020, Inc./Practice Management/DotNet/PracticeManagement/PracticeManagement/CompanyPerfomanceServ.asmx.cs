@@ -28,10 +28,12 @@ namespace PraticeManagement
         [ScriptMethod]
         public CascadingDropDownNameValue[] GetDdlProjectGroupContents(string knownCategoryValues, string category, string contextKey)
         {
-            var clientId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
-            //var selectedGroupId = contextKey == null ? -1 : int.Parse(contextKey);
-            var groups = ServiceCallers.Custom.Group(client => client.GroupListAll(clientId, null)).OrderBy(g=>g.Name).ToArray();
-            //groups = groups.AsQueryable().Where(g =>( g.IsActive == true || g.Id.ToString() == contextKey)).ToArray();
+            int clientId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
+            var contextKeyArray = contextKey.Split(';');
+            int personId = int.Parse(contextKeyArray[0]);
+            DateTime startDate = Convert.ToDateTime(contextKeyArray[1]);
+            DateTime endDate = Convert.ToDateTime(contextKeyArray[2]);
+            var groups = ServiceCallers.Custom.Group(client => client.ListGroupByClientAndPersonInPeriod(clientId, personId, startDate, endDate));
             return groups.Select(group =>
                 new CascadingDropDownNameValue(
                             group.Name,
@@ -96,13 +98,14 @@ namespace PraticeManagement
         public CascadingDropDownNameValue[] GetProjectsListByProjectGroupId(string knownCategoryValues, string category, string contextKey)
         {
             var groupId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
-            //var selectedProjectId = contextKey == null ? -1 : int.Parse(contextKey);
-            var projects = ServiceCallers.Custom.Project(group => group.GetProjectsListByProjectGroupId(groupId, true)).OrderBy(p => p.ProjectNumber);
+            var contextKeyArray = contextKey.Split(';');
+            int personId = int.Parse(contextKeyArray[0]);
+            DateTime startDate = Convert.ToDateTime(contextKeyArray[1]);
+            DateTime endDate = Convert.ToDateTime(contextKeyArray[2]);
+            var projects = ServiceCallers.Custom.Project(group => group.GetProjectsListByProjectGroupId(groupId, true, personId, startDate, endDate));
 
             return projects.Select(
-                project => new CascadingDropDownNameValue(
-                                   project.ProjectNumber + " - " + project.Name,
-                                    project.Id.ToString())).ToArray();
+                project => new CascadingDropDownNameValue(project.Name,project.Id.ToString())).ToArray();
         }
 
 
@@ -111,46 +114,17 @@ namespace PraticeManagement
         public CascadingDropDownNameValue[] GetProjectsList(string knownCategoryValues, string category, string contextKey)
         {
             var clientId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
-            //var selectedProjectId = contextKey == null ? -1 : int.Parse(contextKey);
-            var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, false, true, true)).OrderBy(p => p.ProjectNumber);
+            var contextKeyArray = contextKey.Split(';');
+            int personId = int.Parse(contextKeyArray[0]);
+            DateTime startDate = Convert.ToDateTime(contextKeyArray[1]);
+            DateTime endDate = Convert.ToDateTime(contextKeyArray[2]);
+            var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientAndPersonInPeriod(clientId, true, true, personId, startDate, endDate));
 
             var cddlist = projects.Select(
-                project => new CascadingDropDownNameValue(
-                                   project.ProjectNumber + " - " + project.Name,
-                                    project.Id.ToString())).ToArray();
+                project => new CascadingDropDownNameValue(project.Name,project.Id.ToString())).ToArray();
             return cddlist;
         }
 
-        [WebMethod]
-        [ScriptMethod]
-        public CascadingDropDownNameValue[] GetActiveAndProjectedProjects(string knownCategoryValues, string category, string contextKey)
-        {
-            var clientId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
-            var selectedProjectId = contextKey == null ? -1 : int.Parse(contextKey);
-            var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, true, false, false));
-
-            return projects.Select(
-                project => new CascadingDropDownNameValue(
-                                    DataHelper.FormatDetailedProjectName(project),
-                                    project.Id.ToString(),
-                                    project.Id.Value == selectedProjectId)).ToArray();
-        }
-
-        [WebMethod]
-        [ScriptMethod]
-        public CascadingDropDownNameValue[] GetAllTimeEntryProjectsByClientId(string knownCategoryValues, string category, string contextKey)
-        {
-            var clientId = int.Parse(knownCategoryValues.Split(':')[1].Split(';')[0]);
-            var selectedProjectId = contextKey == null ? -1 : int.Parse(contextKey);
-            var projects = ServiceCallers.Custom.TimeEntry(client => client.GetAllTimeEntryProjects());
-            projects = projects.ToList().FindAll(p => p.Client != null && p.Client.Id.HasValue && p.Client.Id.Value == clientId).ToArray();
-
-            return projects.Select(
-                project => new CascadingDropDownNameValue(
-                                    project.Name + " - " + project.ProjectNumber,
-                                    project.Id.ToString(),
-                                    project.Id.Value == selectedProjectId)).ToArray();
-        }
 
         [WebMethod]
         [ScriptMethod]
