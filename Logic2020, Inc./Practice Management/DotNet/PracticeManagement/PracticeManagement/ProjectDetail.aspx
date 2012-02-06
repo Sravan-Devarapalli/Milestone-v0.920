@@ -723,7 +723,7 @@
                                 </tr>
                                 <tr>
                                     <td valign="middle">
-                                        <asp:Button ID="btnAttachSOW" runat="server" Text="Attach SOW" ToolTip="Attach SOW" />
+                                        <asp:Button ID="btnAttachSOW" runat="server" Text="Attach SOW" ToolTip="Attach SOW"  UseSubmitBehavior="false" OnClientClick="return false;"/>
                                         <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachSOW" runat="server" TargetControlID="btnAttachSOW"
                                             BackgroundCssClass="modalBackground" PopupControlID="pnlAttachSOW" DropShadow="false" />
                                     </td>
