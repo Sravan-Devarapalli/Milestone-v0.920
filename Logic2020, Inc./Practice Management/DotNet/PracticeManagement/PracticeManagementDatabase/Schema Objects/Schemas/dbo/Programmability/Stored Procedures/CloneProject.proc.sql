@@ -18,8 +18,9 @@ AS
         BEGIN TRANSACTION
 
 		-- Generating Project Number
-        DECLARE @ProjectNumber NVARCHAR(12)
-        EXEC dbo.GenerateNewProjectNumber @ProjectNumber OUTPUT ;
+        DECLARE @ProjectNumber NVARCHAR(12),@IsInternal BIT 
+	    SELECT @IsInternal = IsInternal FROM dbo.Project WHERE ProjectId = @ProjectId
+		EXEC dbo.GenerateNewProjectNumber @IsInternal, @ProjectNumber OUTPUT ;
 
         INSERT  INTO dbo.Project
                 (
@@ -36,7 +37,9 @@ AS
                   OpportunityId,
                   GroupId,
                   IsChargeable,
-				  DirectorId
+				  DirectorId,
+				  IsInternal,
+  	              CanCreateCustomWorkTypes
                 )
                 SELECT  ClientId,
                         Discount,
@@ -51,11 +54,16 @@ AS
                         OpportunityId,
                         GroupId,
                         IsChargeable,                     
-						DirectorId
+						DirectorId,
+						IsInternal,
+						CanCreateCustomWorkTypes
                 FROM    dbo.Project AS p
                 WHERE   p.ProjectId = @projectId
                 
         SET @ClonedProjectId = SCOPE_IDENTITY()
+
+		INSERT INTO dbo.ProjectTimeType
+		SELECT @ClonedProjectId,TimeTypeId,IsAllowedToShow FROM dbo.ProjectTimeType WHERE ProjectId = @ProjectId
 
 		INSERT INTO ProjectManagers(ProjectId,ProjectManagerId)
 		SELECT  @ClonedProjectId,pm.ProjectManagerId
