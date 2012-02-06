@@ -457,13 +457,6 @@
 
     
     </script>
-    <script type="text/javascript">
-        function getid(text) {
-            alert(text);
-            alert(document.getElementById(text));
-            return document.getElementById(text);
-        }
-    </script>
     <style type="text/css">
         /* --------- Tabs for person and project details pages ------ */
         
