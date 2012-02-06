@@ -422,8 +422,8 @@
                             <ItemTemplate>
                                 <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                     <tr>
-                                        <td class="SectionSecondTD" colspan="5">
-                                            <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("BusinessUnitName")).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("ProjectName")).Value%>
+                                        <td class="SectionFirstTD" colspan="5">
+                                            <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("BusinessUnitName")).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("ProjectName")).Value + "(" + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("ProjectNumber")).Value + ")"%>
                                         </td>
                                         <td class="SectionSecondTD" colspan="3">
                                         </td>
