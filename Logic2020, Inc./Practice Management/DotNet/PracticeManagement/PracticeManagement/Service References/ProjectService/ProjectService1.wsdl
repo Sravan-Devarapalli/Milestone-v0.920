@@ -12,6 +12,12 @@
       <xsd:import schemaLocation="http://system44.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
     </xsd:schema>
   </wsdl:types>
+  <wsdl:message name="IProjectService_CategoryItemsSaveFromXML_InputMessage">
+    <wsdl:part name="parameters" element="tns:CategoryItemsSaveFromXML" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CategoryItemsSaveFromXML_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CategoryItemsSaveFromXMLResponse" />
+  </wsdl:message>
   <wsdl:message name="IProjectService_ProjectDelete_InputMessage">
     <wsdl:part name="parameters" element="tns:ProjectDelete" />
   </wsdl:message>
@@ -131,6 +137,12 @@
   </wsdl:message>
   <wsdl:message name="IProjectService_ListProjectsByClientShort_OutputMessage">
     <wsdl:part name="parameters" element="tns:ListProjectsByClientShortResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_ListProjectsByClientAndPersonInPeriod_InputMessage">
+    <wsdl:part name="parameters" element="tns:ListProjectsByClientAndPersonInPeriod" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_ListProjectsByClientAndPersonInPeriod_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ListProjectsByClientAndPersonInPeriodResponse" />
   </wsdl:message>
   <wsdl:message name="IProjectService_ListProjectsByClientWithSort_InputMessage">
     <wsdl:part name="parameters" element="tns:ListProjectsByClientWithSort" />
@@ -264,13 +276,11 @@
   <wsdl:message name="IProjectService_CalculateBudgetForPractices_OutputMessage">
     <wsdl:part name="parameters" element="tns:CalculateBudgetForPracticesResponse" />
   </wsdl:message>
-  <wsdl:message name="IProjectService_CategoryItemsSaveFromXML_InputMessage">
-    <wsdl:part name="parameters" element="tns:CategoryItemsSaveFromXML" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_CategoryItemsSaveFromXML_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CategoryItemsSaveFromXMLResponse" />
-  </wsdl:message>
   <wsdl:portType name="IProjectService">
+    <wsdl:operation name="CategoryItemsSaveFromXML">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CategoryItemsSaveFromXML" message="tns:IProjectService_CategoryItemsSaveFromXML_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CategoryItemsSaveFromXMLResponse" message="tns:IProjectService_CategoryItemsSaveFromXML_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ProjectDelete">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectDelete" message="tns:IProjectService_ProjectDelete_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectDeleteResponse" message="tns:IProjectService_ProjectDelete_OutputMessage" />
@@ -350,6 +360,10 @@
     <wsdl:operation name="ListProjectsByClientShort">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ListProjectsByClientShort" message="tns:IProjectService_ListProjectsByClientShort_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ListProjectsByClientShortResponse" message="tns:IProjectService_ListProjectsByClientShort_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ListProjectsByClientAndPersonInPeriod">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ListProjectsByClientAndPersonInPeriod" message="tns:IProjectService_ListProjectsByClientAndPersonInPeriod_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ListProjectsByClientAndPersonInPeriodResponse" message="tns:IProjectService_ListProjectsByClientAndPersonInPeriod_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ListProjectsByClientWithSort">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ListProjectsByClientWithSort" message="tns:IProjectService_ListProjectsByClientWithSort_InputMessage" />
@@ -439,13 +453,18 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CalculateBudgetForPractices" message="tns:IProjectService_CalculateBudgetForPractices_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CalculateBudgetForPracticesResponse" message="tns:IProjectService_CalculateBudgetForPractices_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="CategoryItemsSaveFromXML">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CategoryItemsSaveFromXML" message="tns:IProjectService_CategoryItemsSaveFromXML_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CategoryItemsSaveFromXMLResponse" message="tns:IProjectService_CategoryItemsSaveFromXML_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IProjectService" type="tns:IProjectService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CategoryItemsSaveFromXML">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/CategoryItemsSaveFromXML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="ProjectDelete">
       <soap:operation soapAction="http://tempuri.org/IProjectService/ProjectDelete" style="document" />
       <wsdl:input>
@@ -619,6 +638,15 @@
     </wsdl:operation>
     <wsdl:operation name="ListProjectsByClientShort">
       <soap:operation soapAction="http://tempuri.org/IProjectService/ListProjectsByClientShort" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListProjectsByClientAndPersonInPeriod">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/ListProjectsByClientAndPersonInPeriod" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -817,15 +845,6 @@
     </wsdl:operation>
     <wsdl:operation name="CalculateBudgetForPractices">
       <soap:operation soapAction="http://tempuri.org/IProjectService/CalculateBudgetForPractices" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CategoryItemsSaveFromXML">
-      <soap:operation soapAction="http://tempuri.org/IProjectService/CategoryItemsSaveFromXML" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
