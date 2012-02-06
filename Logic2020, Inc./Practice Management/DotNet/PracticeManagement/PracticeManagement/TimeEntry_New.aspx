@@ -236,7 +236,7 @@
                                 <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                     <tr>
                                         <td class="SectionFirstTD" colspan="5">
-                                            <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("AccountName")).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("ProjectName")).Value + "(" + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("ProjectNumber")).Value + ")"%>
+                                            <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value + "(" + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + ")"%>
                                         </td>
                                         <td class="SectionSecondTD" colspan="3">
                                         </td>
@@ -330,7 +330,7 @@
                                 <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                     <tr>
                                         <td class="SectionFirstTD" colspan="5">
-                                            <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("AccountName")).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("BusinessUnitName")).Value %>
+                                            <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value %>
                                         </td>
                                         <td class="SectionSecondTD" colspan="3">
                                         </td>
@@ -423,7 +423,7 @@
                                 <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                     <tr>
                                         <td class="SectionFirstTD" colspan="5">
-                                            <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("BusinessUnitName")).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("ProjectName")).Value + "(" + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get("ProjectNumber")).Value + ")"%>
+                                            <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value + "(" + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + ")"%>
                                         </td>
                                         <td class="SectionSecondTD" colspan="3">
                                         </td>
