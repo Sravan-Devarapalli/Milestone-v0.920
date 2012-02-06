@@ -73,6 +73,9 @@ namespace PracticeManagementService
         List<Project> ListProjectsByClientShort(int? clientId, bool IsOnlyActiveAndProjective, bool IsOnlyActiveAndInternal, bool IsOnlyEnternalProjects);
 
         [OperationContract]
+        List<Project> ListProjectsByClientAndPersonInPeriod(int clientId, bool isOnlyActiveAndInternal, bool isOnlyEnternalProjects, int personId, DateTime startDate, DateTime endDate);
+
+        [OperationContract]
         List<Project> ListProjectsByClientWithSort(int? clientId, string viewerUsername, string sortBy);
 
         /// <summary>
@@ -349,7 +352,7 @@ namespace PracticeManagementService
         bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId);
 
         [OperationContract]
-        List<Project> GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal);
+        List<Project> GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, DateTime startDate, DateTime endDate);
 
         [OperationContract]
         Project GetBusinessDevelopmentProject();
