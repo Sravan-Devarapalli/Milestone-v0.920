@@ -3,6 +3,7 @@ using System.ServiceModel.Activation;
 
 using DataAccess;
 using DataTransferObjects;
+using System;
 
 namespace PracticeManagementService
 {
@@ -20,6 +21,12 @@ namespace PracticeManagementService
         public List<ProjectGroup> GroupListAll(int? clientId, int? projectId)
         {
             var result = ProjectGroupDAL.GroupListAll(clientId, projectId);
+            return result;
+        }
+
+        public List<ProjectGroup> ListGroupByClientAndPersonInPeriod(int clientId, int personId, DateTime startDate, DateTime endDate)
+        {
+            var result = ProjectGroupDAL.ListGroupByClientAndPersonInPeriod(clientId, personId, startDate,  endDate);
             return result;
         }
 
