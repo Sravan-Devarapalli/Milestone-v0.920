@@ -16,7 +16,14 @@ namespace PraticeManagement.Controls.TimeEntry
         #region Constants
 
         private const string DateBehindViewstate = "7555B3A7-8713-490F-8D5B-368A02E6A205";
-
+        private const string imgNoteClientIdAttribute = "imgNoteClientId";
+        private const string IsPTOAttribute = "IsPTO";
+        private const string txtboxNoteClienIdAttribute = "txtboxNoteClienId";
+        private const string isChargeCodeTurnOffDisableAttribute = "isChargeCodeTurnOffDisable";
+        private const string isHourlyRevenueDisableAttribute = "isHourlyRevenueDisable";
+        private const string IsTerminationDateDisableAttribute = "IsTerminationDateDisable";
+        private const string IsHireDateDisableAttribute = "IsHireDateDisable";
+         
         #endregion
 
         #region Properties
@@ -155,12 +162,11 @@ namespace PraticeManagement.Controls.TimeEntry
 
         #endregion
 
-
         #region Control events
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            tbNotes.Attributes["imgNoteClientId"] = imgNote.ClientID;
+            tbNotes.Attributes[imgNoteClientIdAttribute] = imgNote.ClientID;
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -173,7 +179,6 @@ namespace PraticeManagement.Controls.TimeEntry
             tbBillableHours.BackColor = Color.White;
             tbNonBillableHours.BackColor = Color.White;
         }
-
 
         protected override void OnPreRender(EventArgs e)
         {
@@ -192,23 +197,23 @@ namespace PraticeManagement.Controls.TimeEntry
             CanelControlStyle();
             ApplyControlStyle();
 
-            tbBillableHours.Attributes["IsPTO"] = IsPTO.ToString();
-            tbBillableHours.Attributes["txtboxNoteClienId"] = tbNotes.ClientID;
-            tbNonBillableHours.Attributes["IsPTO"] = IsPTO.ToString();
-            tbNonBillableHours.Attributes["txtboxNoteClienId"] = tbNotes.ClientID;
+            tbBillableHours.Attributes[IsPTOAttribute] = IsPTO.ToString();
+            tbBillableHours.Attributes[txtboxNoteClienIdAttribute] = tbNotes.ClientID;
+            tbNonBillableHours.Attributes[IsPTOAttribute] = IsPTO.ToString();
+            tbNonBillableHours.Attributes[txtboxNoteClienIdAttribute] = tbNotes.ClientID;
 
             MaintainEditedtbHoursStyle();
 
-            tbNonBillableHours.Attributes["isHourlyRevenueDisable"] = Convert.ToBoolean(IsHourlyRevenue) ? "0" : "1";
-            tbNonBillableHours.Attributes["isChargeCodeTurnOffDisable"] = Convert.ToBoolean(IsChargeCodeTurnOff) ? "1" : "0";
-            tbBillableHours.Attributes["isChargeCodeTurnOffDisable"] = Convert.ToBoolean(IsChargeCodeTurnOff) ? "1" : "0";
+            tbNonBillableHours.Attributes[isHourlyRevenueDisableAttribute] = Convert.ToBoolean(IsHourlyRevenue) ? "0" : "1";
+            tbNonBillableHours.Attributes[isChargeCodeTurnOffDisableAttribute] = Convert.ToBoolean(IsChargeCodeTurnOff) ? "1" : "0";
+            tbBillableHours.Attributes[isChargeCodeTurnOffDisableAttribute] = Convert.ToBoolean(IsChargeCodeTurnOff) ? "1" : "0";
 
-            tbNonBillableHours.Attributes["IsHireDateDisable"] = 
-                tbBillableHours.Attributes["IsHireDateDisable"] = 
+            tbNonBillableHours.Attributes[IsHireDateDisableAttribute] = 
+                tbBillableHours.Attributes[IsHireDateDisableAttribute] = 
                     HostingPage.SelectedPerson.HireDate > DateBehind ? "1" : "0";
 
-            tbNonBillableHours.Attributes["IsTerminationDateDisable"] = 
-                tbBillableHours.Attributes["IsTerminationDateDisable"] = 
+            tbNonBillableHours.Attributes[IsTerminationDateDisableAttribute] = 
+                tbBillableHours.Attributes[IsTerminationDateDisableAttribute] = 
                 !HostingPage.SelectedPerson.TerminationDate.HasValue || 
                         ( HostingPage.SelectedPerson.TerminationDate.HasValue && 
                                     HostingPage.SelectedPerson.TerminationDate.Value >= DateBehind 
@@ -240,34 +245,32 @@ namespace PraticeManagement.Controls.TimeEntry
 
         #region Methods
 
-
         public void ShowWarningMessage(string message)
         {
             mlMessage.ShowWarningMessage(message);
         }
 
-
         private void FillBillableControls()
         {
             EnsureChildControls();
-            tbNotes.Text = TimeEntryRecordBillableElement.Attribute(XName.Get("Note")).Value;
-            hdnNotes.Value = TimeEntryRecordBillableElement.Attribute(XName.Get("Note")).Value;
+            tbNotes.Text = TimeEntryRecordBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value;
+            hdnNotes.Value = TimeEntryRecordBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value;
             imgNote.ImageUrl
                 = string.IsNullOrEmpty(tbNotes.Text)
                       ? Constants.ApplicationResources.AddCommentIcon
                       : Constants.ApplicationResources.RecentCommentIcon;
 
 
-            tbBillableHours.Text = TimeEntryRecordBillableElement.Attribute(XName.Get("ActualHours")).Value;
+            tbBillableHours.Text = TimeEntryRecordBillableElement.Attribute(XName.Get(TimeEntry_New.ActualHoursXname)).Value;
 
             hdnBillableHours.Value = tbBillableHours.Text;
 
-            var isReviewd = TimeEntryRecordBillableElement.Attribute(XName.Get("IsReviewed")).Value;
+            var isReviewd = TimeEntryRecordBillableElement.Attribute(XName.Get(TimeEntry_New.IsReviewedXname)).Value;
             lblReview.Text = isReviewd;
             if (isReviewd == ReviewStatus.Approved.ToString())
                 Disabled = true;
 
-            hfDirtyBillableHours.Value = TimeEntryRecordBillableElement.Attribute(XName.Get("IsDirty")).Value;
+            hfDirtyBillableHours.Value = TimeEntryRecordBillableElement.Attribute(XName.Get(TimeEntry_New.IsDirtyXname)).Value;
 
             imgNote.ToolTip = tbNotes.Text;
         }
@@ -275,30 +278,29 @@ namespace PraticeManagement.Controls.TimeEntry
         private void FillNonBillableControls()
         {
             EnsureChildControls();
-            tbNotes.Text = TimeEntryRecordNonBillableElement.Attribute(XName.Get("Note")).Value;
-            hdnNotes.Value = TimeEntryRecordNonBillableElement.Attribute(XName.Get("Note")).Value;
+            tbNotes.Text = TimeEntryRecordNonBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value;
+            hdnNotes.Value = TimeEntryRecordNonBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value;
             imgNote.ImageUrl
                 = string.IsNullOrEmpty(tbNotes.Text)
                       ? Constants.ApplicationResources.AddCommentIcon
                       : Constants.ApplicationResources.RecentCommentIcon;
 
-            tbNonBillableHours.Text = TimeEntryRecordNonBillableElement.Attribute(XName.Get("ActualHours")).Value;
+            tbNonBillableHours.Text = TimeEntryRecordNonBillableElement.Attribute(XName.Get(TimeEntry_New.ActualHoursXname)).Value;
 
 
             hdnNonBillableHours.Value = tbNonBillableHours.Text;
 
-            var isReviewd = TimeEntryRecordNonBillableElement.Attribute(XName.Get("IsReviewed")).Value;
+            var isReviewd = TimeEntryRecordNonBillableElement.Attribute(XName.Get(TimeEntry_New.IsReviewedXname)).Value;
             lblReview.Text = isReviewd;
             if (isReviewd == ReviewStatus.Approved.ToString())
                 Disabled = true;
 
-            hfDirtyNonBillableHours.Value = TimeEntryRecordNonBillableElement.Attribute(XName.Get("IsDirty")).Value;
+            hfDirtyNonBillableHours.Value = TimeEntryRecordNonBillableElement.Attribute(XName.Get(TimeEntry_New.IsDirtyXname)).Value;
 
             imgNote.ToolTip = tbNotes.Text;
 
             MaintainEditedtbHoursStyle();
         }
-
 
         protected string GetNowDate()
         {
@@ -328,37 +330,37 @@ namespace PraticeManagement.Controls.TimeEntry
 
         internal void UpdateBillableElementEditedValues(XElement element)
         {
-            if (element.HasAttributes && element.Attribute(XName.Get("ActualHours")) != null)
+            if (element.HasAttributes && element.Attribute(XName.Get(TimeEntry_New.ActualHoursXname)) != null)
             {
-                element.Attribute(XName.Get("ActualHours")).Value = tbBillableHours.Text;
-                element.Attribute(XName.Get("Note")).Value = tbNotes.Text;
-                element.Attribute(XName.Get("IsDirty")).Value = hfDirtyBillableHours.Value;
+                element.Attribute(XName.Get(TimeEntry_New.ActualHoursXname)).Value = tbBillableHours.Text;
+                element.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value = tbNotes.Text;
+                element.Attribute(XName.Get(TimeEntry_New.IsDirtyXname)).Value = hfDirtyBillableHours.Value;
             }
             else
             {
                 var time = SettingsHelper.GetCurrentPMTime();
-                element.SetAttributeValue(XName.Get("ActualHours"), tbBillableHours.Text);
-                element.SetAttributeValue(XName.Get("Note"), tbNotes.Text);
-                element.SetAttributeValue(XName.Get("EntryDate"), time.ToString(Constants.Formatting.EntryDateFormat));
-                element.SetAttributeValue(XName.Get("IsDirty"), hfDirtyBillableHours.Value);
+                element.SetAttributeValue(XName.Get(TimeEntry_New.ActualHoursXname), tbBillableHours.Text);
+                element.SetAttributeValue(XName.Get(TimeEntry_New.NoteXname), tbNotes.Text);
+                element.SetAttributeValue(XName.Get(TimeEntry_New.EntryDateXname), time.ToString(Constants.Formatting.EntryDateFormat));
+                element.SetAttributeValue(XName.Get(TimeEntry_New.IsDirtyXname), hfDirtyBillableHours.Value);
             }
         }
 
         internal void UpdateNonBillableElementEditedValues(XElement element)
         {
-            if (element.HasAttributes && element.Attribute(XName.Get("ActualHours")) != null)
+            if (element.HasAttributes && element.Attribute(XName.Get(TimeEntry_New.ActualHoursXname)) != null)
             {
-                element.Attribute(XName.Get("ActualHours")).Value = tbNonBillableHours.Text;
-                element.Attribute(XName.Get("Note")).Value = tbNotes.Text;
-                element.Attribute(XName.Get("IsDirty")).Value = hfDirtyNonBillableHours.Value;
+                element.Attribute(XName.Get(TimeEntry_New.ActualHoursXname)).Value = tbNonBillableHours.Text;
+                element.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value = tbNotes.Text;
+                element.Attribute(XName.Get(TimeEntry_New.IsDirtyXname)).Value = hfDirtyNonBillableHours.Value;
             }
             else
             {
                 var time = SettingsHelper.GetCurrentPMTime();
-                element.SetAttributeValue(XName.Get("ActualHours"), tbNonBillableHours.Text);
-                element.SetAttributeValue(XName.Get("Note"), tbNotes.Text);
-                element.SetAttributeValue(XName.Get("EntryDate"), time.ToString(Constants.Formatting.EntryDateFormat));
-                element.SetAttributeValue(XName.Get("IsDirty"), hfDirtyNonBillableHours.Value);
+                element.SetAttributeValue(XName.Get(TimeEntry_New.ActualHoursXname), tbNonBillableHours.Text);
+                element.SetAttributeValue(XName.Get(TimeEntry_New.NoteXname), tbNotes.Text);
+                element.SetAttributeValue(XName.Get(TimeEntry_New.EntryDateXname), time.ToString(Constants.Formatting.EntryDateFormat));
+                element.SetAttributeValue(XName.Get(TimeEntry_New.IsDirtyXname), hfDirtyNonBillableHours.Value);
             }
         }
 
