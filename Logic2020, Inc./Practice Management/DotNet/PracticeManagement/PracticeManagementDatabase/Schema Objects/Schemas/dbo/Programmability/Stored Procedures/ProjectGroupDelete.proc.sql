@@ -19,7 +19,41 @@ AS
 		END
 	
 	IF @Result = @Result_Success
-		DELETE ProjectGroup WHERE GroupId = @GroupId
+	BEGIN
+	BEGIN TRY
+		
+		BEGIN TRAN TranProjectGroup
+
+		DELETE CTH
+		FROM  dbo.ChargeCodeTurnOffHistory CTH
+		INNER JOIN dbo.ChargeCode CC ON CC.Id = CTH.ChargeCodeId
+		WHERE CC.ProjectGroupId = @GroupId 
+
+		DELETE CC
+		FROM  dbo.ChargeCode CC 
+		WHERE cc.ProjectGroupId = @GroupId
+
+		DELETE PTR
+		FROM  dbo.PersonTimeEntryRecursiveSelection PTR 
+		WHERE PTR.ProjectGroupId = @GroupId
+
+		DELETE dbo.ProjectGroup 
+		WHERE GroupId = @GroupId
+
+        COMMIT TRAN TranProjectGroup
+
+    END TRY
+	BEGIN CATCH
+	    
+		ROLLBACK TRAN TranProjectGroup
+
+		DECLARE @Error NVARCHAR(2000)
+		SET @Error = ERROR_MESSAGE()
+		RAISERROR(@Error, 16, 1)
+
+	END CATCH
+
+    END
 
 	SELECT @Result Result
 
