@@ -15,6 +15,9 @@ namespace PraticeManagement.ProjectService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ProjectService.IProjectService")]
     public interface IProjectService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CategoryItemsSaveFromXML", ReplyAction="http://tempuri.org/IProjectService/CategoryItemsSaveFromXMLResponse")]
+        void CategoryItemsSaveFromXML(DataTransferObjects.CategoryItemBudget[] categoryItems, int year);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectDelete", ReplyAction="http://tempuri.org/IProjectService/ProjectDeleteResponse")]
         void ProjectDelete(int projectId, string userName);
         
@@ -34,7 +37,7 @@ namespace PraticeManagement.ProjectService {
         bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId", ReplyAction="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupIdResponse")]
-        DataTransferObjects.Project[] GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal);
+        DataTransferObjects.Project[] GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetBusinessDevelopmentProject", ReplyAction="http://tempuri.org/IProjectService/GetBusinessDevelopmentProjectResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
@@ -83,6 +86,9 @@ namespace PraticeManagement.ProjectService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ListProjectsByClientShort", ReplyAction="http://tempuri.org/IProjectService/ListProjectsByClientShortResponse")]
         DataTransferObjects.Project[] ListProjectsByClientShort(System.Nullable<int> clientId, bool IsOnlyActiveAndProjective, bool IsOnlyActiveAndInternal, bool IsOnlyEnternalProjects);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ListProjectsByClientAndPersonInPeriod", ReplyAction="http://tempuri.org/IProjectService/ListProjectsByClientAndPersonInPeriodResponse")]
+        DataTransferObjects.Project[] ListProjectsByClientAndPersonInPeriod(int clientId, bool isOnlyActiveAndInternal, bool isOnlyEnternalProjects, int personId, System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ListProjectsByClientWithSort", ReplyAction="http://tempuri.org/IProjectService/ListProjectsByClientWithSortResponse")]
         DataTransferObjects.Project[] ListProjectsByClientWithSort(System.Nullable<int> clientId, string viewerUsername, string sortBy);
@@ -175,9 +181,6 @@ namespace PraticeManagement.ProjectService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CalculateBudgetForPractices", ReplyAction="http://tempuri.org/IProjectService/CalculateBudgetForPracticesResponse")]
         DataTransferObjects.ProjectsGroupedByPractice[] CalculateBudgetForPractices(System.DateTime startDate, System.DateTime endDate, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, string practiceIdsList, bool excludeInternalPractices);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CategoryItemsSaveFromXML", ReplyAction="http://tempuri.org/IProjectService/CategoryItemsSaveFromXMLResponse")]
-        void CategoryItemsSaveFromXML(DataTransferObjects.CategoryItemBudget[] categoryItems, int year);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -188,7 +191,7 @@ namespace PraticeManagement.ProjectService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
         
-     
+      
         
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -204,6 +207,10 @@ namespace PraticeManagement.ProjectService {
         
         public ProjectServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public void CategoryItemsSaveFromXML(DataTransferObjects.CategoryItemBudget[] categoryItems, int year) {
+            base.Channel.CategoryItemsSaveFromXML(categoryItems, year);
         }
         
         public void ProjectDelete(int projectId, string userName) {
@@ -226,8 +233,8 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.IsUserIsOwnerOfProject(user, id, isProjectId);
         }
         
-        public DataTransferObjects.Project[] GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal) {
-            return base.Channel.GetProjectsListByProjectGroupId(projectGroupId, isInternal);
+        public DataTransferObjects.Project[] GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.GetProjectsListByProjectGroupId(projectGroupId, isInternal, personId, startDate, endDate);
         }
         
         public DataTransferObjects.Project GetBusinessDevelopmentProject() {
@@ -284,6 +291,10 @@ namespace PraticeManagement.ProjectService {
         
         public DataTransferObjects.Project[] ListProjectsByClientShort(System.Nullable<int> clientId, bool IsOnlyActiveAndProjective, bool IsOnlyActiveAndInternal, bool IsOnlyEnternalProjects) {
             return base.Channel.ListProjectsByClientShort(clientId, IsOnlyActiveAndProjective, IsOnlyActiveAndInternal, IsOnlyEnternalProjects);
+        }
+        
+        public DataTransferObjects.Project[] ListProjectsByClientAndPersonInPeriod(int clientId, bool isOnlyActiveAndInternal, bool isOnlyEnternalProjects, int personId, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.ListProjectsByClientAndPersonInPeriod(clientId, isOnlyActiveAndInternal, isOnlyEnternalProjects, personId, startDate, endDate);
         }
         
         public DataTransferObjects.Project[] ListProjectsByClientWithSort(System.Nullable<int> clientId, string viewerUsername, string sortBy) {
@@ -389,10 +400,6 @@ namespace PraticeManagement.ProjectService {
         
         public DataTransferObjects.ProjectsGroupedByPractice[] CalculateBudgetForPractices(System.DateTime startDate, System.DateTime endDate, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, string practiceIdsList, bool excludeInternalPractices) {
             return base.Channel.CalculateBudgetForPractices(startDate, endDate, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, practiceIdsList, excludeInternalPractices);
-        }
-        
-        public void CategoryItemsSaveFromXML(DataTransferObjects.CategoryItemBudget[] categoryItems, int year) {
-            base.Channel.CategoryItemsSaveFromXML(categoryItems, year);
         }
     }
 }
