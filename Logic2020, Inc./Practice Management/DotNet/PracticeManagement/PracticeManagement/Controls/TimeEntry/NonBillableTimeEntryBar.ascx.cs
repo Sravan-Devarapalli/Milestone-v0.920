@@ -13,12 +13,17 @@ namespace PraticeManagement.Controls.TimeEntry
 {
     public partial class NonBillableTimeEntryBar : System.Web.UI.UserControl
     {
-        private const string AccountIdXname = "AccountId";
-        private const string ProjectIdXname = "ProjectId";
-        private const string WorkTypeXname = "WorkType";
-        private const string workTypeOldId = "workTypeOldId";
-        private const string BusinessUnitIdXname = "BusinessUnitId";
+        #region Constants
 
+        private const string NonBillableTbAcutualHoursClientIds_NonBillableTimeEntryBar = "NonBillableTbAcutualHoursClientIds_NonBillableTimeEntryBar";
+        private const string workTypeOldIdAttribute = "workTypeOldId";
+        private const string previousIdAttribute = "previousId";
+        private const string steId = "ste";
+
+        #endregion
+
+        #region Properties
+        
         public List<XElement> TeBarDataSource { get; set; }
 
         public TimeTypeRecord[] TimeTypes { get; set; }
@@ -61,13 +66,17 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             get
             {
-                return ViewState["NonBillableTbAcutualHoursClientIds_NonBillableTimeEntryBar"] as Dictionary<int, string>;
+                return ViewState[NonBillableTbAcutualHoursClientIds_NonBillableTimeEntryBar] as Dictionary<int, string>;
             }
             set
             {
-                ViewState["NonBillableTbAcutualHoursClientIds_NonBillableTimeEntryBar"] = value;
+                ViewState[NonBillableTbAcutualHoursClientIds_NonBillableTimeEntryBar] = value;
             }
         }
+
+        #endregion
+
+        #region Control events
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
@@ -76,22 +85,11 @@ namespace PraticeManagement.Controls.TimeEntry
             extEnableDisable.PopUpBehaviourId = TimeEntry_New.mpeTimetypeAlertMessageBehaviourId;
         }
 
-        protected string GetDayOffCssCalss(XElement calendarItem)
-        {
-            return calendarItem.Attribute(XName.Get("CssClass")).Value;
-        }
-
-        private void InitTimeEntryControl(SingleTimeEntry_New ste, DateTime date, XElement terXlement)
-        {
-            ste.DateBehind = date;
-            ste.TimeEntryRecordElement = terXlement;
-        }
-
         protected void repEntries_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-                var ste = e.Item.FindControl("ste") as SingleTimeEntry_New;
+                var ste = e.Item.FindControl(steId) as SingleTimeEntry_New;
 
                 var calendarItem = (XElement)e.Item.DataItem;
 
@@ -104,11 +102,11 @@ namespace PraticeManagement.Controls.TimeEntry
                 NonBillableTbAcutualHoursClientIds = NonBillableTbAcutualHoursClientIds;
 
                 ste.HorizontalTotalCalculatorExtenderId = extTotalHours.ClientID;
-                ste.IsNoteRequired = calendarItem.Attribute(XName.Get("IsNoteRequired")).Value;
-                ste.IsChargeCodeTurnOff = calendarItem.Attribute(XName.Get("IsChargeCodeOff")).Value;
+                ste.IsNoteRequired = calendarItem.Attribute(XName.Get(TimeEntry_New.IsNoteRequiredXname)).Value;
+                ste.IsChargeCodeTurnOff = calendarItem.Attribute(XName.Get(TimeEntry_New.IsChargeCodeOffXname)).Value;
 
-                var bterecord = (calendarItem.HasElements && calendarItem.Descendants(XName.Get("TimeEntryRecord")).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").ToList().Count > 0) ? calendarItem.Descendants(XName.Get("TimeEntryRecord")).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").First() : null;
-                var date = Convert.ToDateTime(calendarItem.Attribute(XName.Get("Date")).Value);
+                var bterecord = (calendarItem.HasElements && calendarItem.Descendants(XName.Get(TimeEntry_New.TimeEntryRecordXname)).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").ToList().Count > 0) ? calendarItem.Descendants(XName.Get(TimeEntry_New.TimeEntryRecordXname)).Where(ter => ter.Attribute(XName.Get(TimeEntry_New.IsChargeableXname)).Value.ToLowerInvariant() == "false").First() : null;
+                var date = Convert.ToDateTime(calendarItem.Attribute(XName.Get(TimeEntry_New.DateXname)).Value);
                 InitTimeEntryControl(ste, date, bterecord);
             }
         }
@@ -118,6 +116,52 @@ namespace PraticeManagement.Controls.TimeEntry
             if (ddlTimeTypes.Items.FindByValue("-1") == null)
                 ddlTimeTypes.Items.Insert(0, (new ListItem("1. Select Work Type", "-1")));
             AddTitlestoListItems(ddlTimeTypes);
+        }
+
+        protected void imgDropTes_Click(object sender, ImageClickEventArgs e)
+        {
+
+            var imgDropTes = ((ImageButton)(sender));
+
+            var repItem = imgDropTes.NamingContainer.NamingContainer as RepeaterItem;
+            var repItemIndex = repItem.ItemIndex;
+
+            int projectId = Convert.ToInt32(imgDropTes.Attributes[TimeEntry_New.ProjectIdXname]);
+            int accountId = Convert.ToInt32(imgDropTes.Attributes[TimeEntry_New.AccountIdXname]);
+            int businessUnitId = Convert.ToInt32(imgDropTes.Attributes[TimeEntry_New.BusinessUnitIdXname]);
+            int workTypeId = Convert.ToInt32(imgDropTes.Attributes[TimeEntry_New.WorkTypeXname]);
+            int workTypeOldID;
+            int.TryParse(imgDropTes.Attributes[workTypeOldIdAttribute], out workTypeOldID);
+            int personId = HostingPage.SelectedPerson.Id.Value;
+            DateTime[] dates = HostingPage.SelectedDates;
+
+            //Remove Worktype from xml
+            Project project = ServiceCallers.Custom.Project(pro => pro.GetBusinessDevelopmentProject());
+            bool isBusinessDevelopment = project.Id == projectId;
+            HostingPage.RemoveWorktypeFromXMLForBusinessDevelopmentAndInternalSection(accountId, businessUnitId, projectId, repItemIndex, isBusinessDevelopment);
+
+
+            //Delete TimeEntry from database
+            if (workTypeOldID > 0)
+            {
+                ServiceCallers.Custom.TimeEntry(te => te.DeleteTimeEntry(accountId, projectId, personId, workTypeOldID, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
+            }
+
+        }
+
+        #endregion
+
+        #region Methods
+
+        protected string GetDayOffCssCalss(XElement calendarItem)
+        {
+            return calendarItem.Attribute(XName.Get(TimeEntry_New.CssClassXname)).Value;
+        }
+
+        private void InitTimeEntryControl(SingleTimeEntry_New ste, DateTime date, XElement terXlement)
+        {
+            ste.DateBehind = date;
+            ste.TimeEntryRecordElement = terXlement;
         }
 
         public void AddTitlestoListItems(DropDownList dropDownList)
@@ -131,37 +175,6 @@ namespace PraticeManagement.Controls.TimeEntry
             {
                 item.Attributes.Add("title", item.Text);
             }
-        }
-
-        protected void imgDropTes_Click(object sender, ImageClickEventArgs e)
-        {
-
-            var imgDropTes = ((ImageButton)(sender));
-
-            var repItem = imgDropTes.NamingContainer.NamingContainer as RepeaterItem;
-            var repItemIndex = repItem.ItemIndex;
-
-            int projectId = Convert.ToInt32(imgDropTes.Attributes[ProjectIdXname]);
-            int accountId = Convert.ToInt32(imgDropTes.Attributes[AccountIdXname]);
-            int businessUnitId = Convert.ToInt32(imgDropTes.Attributes[BusinessUnitIdXname]);
-            int workTypeId = Convert.ToInt32(imgDropTes.Attributes[WorkTypeXname]);
-            int workTypeOldID;
-            int.TryParse(imgDropTes.Attributes[workTypeOldId], out workTypeOldID);
-            int personId = HostingPage.SelectedPerson.Id.Value;
-            DateTime[] dates = HostingPage.SelectedDates;
-            
-            //remove from xml
-            Project project = ServiceCallers.Custom.Project(pro => pro.GetBusinessDevelopmentProject());
-            bool isBusinessDevelopment = project.Id == projectId;
-            HostingPage.RemoveWorktypeFromXMLForBusinessDevelopmentAndInternalSection(accountId, businessUnitId, projectId, repItemIndex, isBusinessDevelopment);
-
-
-            //remove from database
-            if (workTypeOldID > 0)
-            {
-                ServiceCallers.Custom.TimeEntry(te => te.DeleteTimeEntry(accountId, projectId, personId, workTypeOldID, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
-            }
-
         }
 
         public void UpdateTimeEntries()
@@ -187,26 +200,25 @@ namespace PraticeManagement.Controls.TimeEntry
                 ddlTimeTypes.SelectedIndex = 0;
             }
 
-            ddlTimeTypes.Attributes["previousId"] = ddlTimeTypes.SelectedValue.ToString();
+            ddlTimeTypes.Attributes[previousIdAttribute] = ddlTimeTypes.SelectedValue.ToString();
             HostingPage.DdlWorkTypeIdsList += ddlTimeTypes.ClientID + ";";
 
             tes.DataSource = TeBarDataSource;
             tes.DataBind();
         }
 
-
         internal void UpdateNoteAndActualHours(List<XElement> calendarItemElements)
         {
             for (int k = 0; k < calendarItemElements.Count; k++)
             {
 
-                var nonBillableSte = tes.Items[k].FindControl("ste") as SingleTimeEntry_New;
+                var nonBillableSte = tes.Items[k].FindControl(steId) as SingleTimeEntry_New;
 
                 var calendarItemElement = calendarItemElements[k];
 
                 if (calendarItemElement.HasElements)
                 {
-                    var nonbElements = calendarItemElement.Descendants(XName.Get("TimeEntryRecord")).ToList().Count > 0 ? calendarItemElement.Descendants(XName.Get("TimeEntryRecord")).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").ToList() : null;
+                    var nonbElements = calendarItemElement.Descendants(XName.Get(TimeEntry_New.TimeEntryRecordXname)).ToList().Count > 0 ? calendarItemElement.Descendants(XName.Get(TimeEntry_New.TimeEntryRecordXname)).Where(ter => ter.Attribute(XName.Get(TimeEntry_New.IsChargeableXname)).Value.ToLowerInvariant() == "false").ToList() : null;
                     if (nonbElements != null && nonbElements.Count > 0)
                     {
                         var nonBillableElement = nonbElements.First();
@@ -224,21 +236,20 @@ namespace PraticeManagement.Controls.TimeEntry
 
         private void AddNonBillableElement(SingleTimeEntry_New nonBillableSte, XElement calendarItemElement)
         {
-            var nonBillableElement = new XElement("TimeEntryRecord");
-            nonBillableElement.SetAttributeValue(XName.Get("IsChargeable"), "false");
-            nonBillableElement.SetAttributeValue(XName.Get("IsReviewed"), "Pending");
+            var nonBillableElement = new XElement(TimeEntry_New.TimeEntryRecordXname);
+            nonBillableElement.SetAttributeValue(XName.Get(TimeEntry_New.IsChargeableXname), "false");
+            nonBillableElement.SetAttributeValue(XName.Get(TimeEntry_New.IsReviewedXname), "Pending");
             nonBillableSte.UpdateEditedValues(nonBillableElement);
 
-            if (nonBillableElement.Attribute(XName.Get("ActualHours")).Value != "" || (!HostingPage.IsSaving && nonBillableElement.Attribute(XName.Get("Note")).Value != ""))
+            if (nonBillableElement.Attribute(XName.Get(TimeEntry_New.ActualHoursXname)).Value != "" || (!HostingPage.IsSaving && nonBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value != ""))
             {
                 calendarItemElement.Add(nonBillableElement);
             }
         }
 
-
         internal void UpdateWorkType(XElement workTypeElement,XElement accountAndProjectSelectionElement)
         {
-            workTypeElement.Attribute(XName.Get("Id")).Value = ddlTimeTypes.SelectedValue;
+            workTypeElement.Attribute(XName.Get(TimeEntry_New.IdXname)).Value = ddlTimeTypes.SelectedValue;
             string OldId = workTypeElement.Attribute(XName.Get(TimeEntry_New.OldIdXname)) != null ? workTypeElement.Attribute(XName.Get(TimeEntry_New.OldIdXname)).Value : null;
             if (!String.IsNullOrEmpty(OldId) && ddlTimeTypes.SelectedValue != OldId)
             {
@@ -256,7 +267,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 for (int j = 0; j < calendarItemElements.Count; j++)
                 {
                     var calendarItemElement = calendarItemElements[j];
-                    calendarItemElement.Attribute(XName.Get("IsChargeCodeOff")).Value = isChargeCodeTurnOffList[startDate.AddDays(j)].ToString();
+                    calendarItemElement.Attribute(XName.Get(TimeEntry_New.IsChargeCodeOffXname)).Value = isChargeCodeTurnOffList[startDate.AddDays(j)].ToString();
                 }
 
             }
@@ -264,7 +275,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
         internal void UpdateVerticalTotalCalculatorExtenderId(int index, string clientId)
         {
-            var nonbillableSte = tes.Items[index].FindControl("ste") as SingleTimeEntry_New;
+            var nonbillableSte = tes.Items[index].FindControl(steId) as SingleTimeEntry_New;
             nonbillableSte.UpdateVerticalTotalCalculatorExtenderId(clientId);
         }
 
@@ -289,7 +300,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
             foreach (RepeaterItem tesItem in tes.Items)
             {
-                var nonbillableSte = tesItem.FindControl("ste") as SingleTimeEntry_New;
+                var nonbillableSte = tesItem.FindControl(steId) as SingleTimeEntry_New;
 
                 if (!isThereAtleastOneTimeEntryrecord)
                 {
@@ -305,6 +316,8 @@ namespace PraticeManagement.Controls.TimeEntry
                 HostingPage.IsValidWorkType = false;
             }
         }
+
+        #endregion
 
     }
 }
