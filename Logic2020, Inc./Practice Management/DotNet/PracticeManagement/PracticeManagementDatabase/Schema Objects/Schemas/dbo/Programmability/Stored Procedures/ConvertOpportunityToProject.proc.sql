@@ -67,7 +67,9 @@ BEGIN
 		@ProjectManagerIdsList = @ProjectManagerId,
 	    @ProjectId = @ProjectId OUTPUT,
 		@OpportunityId = @OpportunityId,
-		@Description   = @Description
+		@Description   = @Description,
+		@CanCreateCustomWorkTypes = 0,
+		@IsInternal = 0
 
 	-- Add a sales commission
 	INSERT INTO dbo.Commission
