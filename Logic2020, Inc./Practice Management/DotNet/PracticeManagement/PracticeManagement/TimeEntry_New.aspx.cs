@@ -32,7 +32,11 @@ namespace PraticeManagement
         #region XMLConstants
         
         public const string AccountIdXname = "AccountId";
+        public const string AccountNameXname = "AccountName";
         public const string ProjectIdXname = "ProjectId";
+        public const string ProjectNumberXname = "ProjectNumber";
+        public const string ProjectNameXname = "ProjectName";
+        public const string BusinessUnitNameXname = "BusinessUnitName";
         public const string TimeEntrySectionIdXname = "TimeEntrySectionId";
         public const string WorkTypeXname = "WorkType";
         public const string BusinessUnitIdXname = "BusinessUnitId";
@@ -68,6 +72,7 @@ namespace PraticeManagement
         private const string accountAndProjectSelectionXmlOpen = "<AccountAndProjectSelection AccountId=\"{0}\" AccountName=\"{1}\" ProjectId=\"{2}\" ProjectName=\"{3}\" ProjectNumber=\"{4}\" BusinessUnitId=\"{5}\" BusinessUnitName=\"{6}\" IsRecursive=\"{7}\"  >";
         private const string accountAndProjectSelectionXmlClose = "</AccountAndProjectSelection>";
         private const string workTypeXmlOpen = "<WorkType Id=\"{0}\" >";
+        private const string workTypeXmlOpenWithOldId = "<WorkType Id=\"{0}\"  OldId=\"{1}\" >";
         private const string workTypeXmlClose = "</WorkType>";
         private const string calendarItemXmlOpen = "<CalendarItem Date=\"{0}\" CssClass=\"{1}\" IsNoteRequired=\"{2}\"  IsHourlyRevenue=\"{3}\" IsChargeCodeOff=\"{4}\" >";
         private const string calendarItemXmlClose = "</CalendarItem>";
@@ -1448,12 +1453,11 @@ namespace PraticeManagement
                 int timeEntryId = keyVal.Key.Id;
                 if (intialPrepare)
                 {
-                    string workTypeXmlOpenWithOldId = "<WorkType Id=\"{0}\"  OldId=\"{1}\" >";
-                    xml.Append(string.Format(workTypeXmlOpenWithOldId, keyVal.Key.Id, keyVal.Key.Id));
+                    xml.Append(string.Format(workTypeXmlOpenWithOldId, timeEntryId, timeEntryId));
                 }
                 else
                 {
-                    xml.Append(string.Format(workTypeXmlOpen, keyVal.Key.Id));
+                    xml.Append(string.Format(workTypeXmlOpen, timeEntryId));
                 }
 
                 CalendarItems = CalendarItems ??
