@@ -196,7 +196,7 @@
 
                         dd.set_SelectedValue('');
                         dd._onParentChange(null, true);
-                       
+
                     }
 
                     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
@@ -289,7 +289,7 @@
                                 <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
                                     TargetControlID="lblDupilcateOptionsRemoveExtender" />
                                 <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
-                                <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop">
+                                <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop DisplayBlock">
                                     <div class="TopCenterAlignWithoutPaddingTop">
                                         <b>NOTE:</b> This section is marked as recursive, Click on
                                         <img alt="Recursive" src="Images/Recursive.png" title="Recursive" />
@@ -380,7 +380,7 @@
                                             runat="server" ImageUrl="~/Images/add_16.png" ToolTip="Add Additional Work type" />
                                     </FooterTemplate>
                                 </asp:Repeater>
-                                <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop">
+                                <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop DisplayBlock">
                                     <div  class="TopCenterAlignWithoutPaddingTop">
                                         <b>NOTE:</b> This section is marked as recursive, Click on
                                          <img alt="Recursive" src="Images/Recursive.png" title="Recursive" />
@@ -473,7 +473,7 @@
                                             runat="server" ImageUrl="~/Images/add_16.png" ToolTip="Add Additional Work type" />
                                     </FooterTemplate>
                                 </asp:Repeater>
-                                <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop">
+                                <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop DisplayBlock">
                                     <div class="TopCenterAlignWithoutPaddingTop">
                                         <b>NOTE:</b> This section is marked as recursive, Click on
                                         <img alt="Recursive" src="Images/Recursive.png" title="Recursive" />
