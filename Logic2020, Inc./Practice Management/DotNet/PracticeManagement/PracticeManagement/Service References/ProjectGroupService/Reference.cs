@@ -29,6 +29,10 @@ namespace PraticeManagement.ProjectGroupService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://www.logic2020.com/IProjectGroupService/GetInternalBusinessUnits", ReplyAction="http://www.logic2020.com/IProjectGroupService/GetInternalBusinessUnitsResponse")]
         DataTransferObjects.ProjectGroup[] GetInternalBusinessUnits();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://www.logic2020.com/IProjectGroupService/ListGroupByClientAndPersonInPeriod", ReplyAction="http://www.logic2020.com/IProjectGroupService/ListGroupByClientAndPersonInPeriodR" +
+            "esponse")]
+        DataTransferObjects.ProjectGroup[] ListGroupByClientAndPersonInPeriod(int clientId, int personId, System.DateTime startDate, System.DateTime endDate);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -39,7 +43,8 @@ namespace PraticeManagement.ProjectGroupService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectGroupServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectGroupService.IProjectGroupService>, PraticeManagement.ProjectGroupService.IProjectGroupService {
         
-    
+       
+        
         public ProjectGroupServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -74,6 +79,10 @@ namespace PraticeManagement.ProjectGroupService {
         
         public DataTransferObjects.ProjectGroup[] GetInternalBusinessUnits() {
             return base.Channel.GetInternalBusinessUnits();
+        }
+        
+        public DataTransferObjects.ProjectGroup[] ListGroupByClientAndPersonInPeriod(int clientId, int personId, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.ListGroupByClientAndPersonInPeriod(clientId, personId, startDate, endDate);
         }
     }
 }
