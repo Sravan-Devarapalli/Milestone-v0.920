@@ -130,8 +130,8 @@
     Time Entry
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <div class="time-entry-bg-light-frame">
-        <pcg:StyledUpdatePanel ID="updNavigation" runat="server" CssClass="tem-person-time"
+    <div class="time-entry-new-bg-light-frame">
+        <pcg:StyledUpdatePanel ID="updNavigation" runat="server" CssClass="tem-person-timeNew"
             UpdateMode="Conditional">
             <ContentTemplate>
                 <div>
@@ -713,7 +713,7 @@
                                     <tr>
                                         <td style="padding-right: 3px;">
                                             <asp:Button ID="btnAddProjectSection" OnClick="btnAddProjectSection_OnClick" runat="server"
-                                                Enabled="false" Text="ADD" ToolTip="ADD" />
+                                                Enabled="false" Text="Add" ToolTip="Add" />
                                         </td>
                                         <td style="padding-left: 3px;">
                                             <asp:Button ID="btnCancelProjectSection" runat="server" Text="Cancel" ToolTip="Cancel"
@@ -763,7 +763,7 @@
                                             </asp:DropDownList>
                                             <AjaxControlToolkit:CascadingDropDown ID="cddBusinessUnitBDSection" runat="server"
                                                 BehaviorID="cddBusinessUnitBDSection" ParentControlID="ddlAccountBusinessDevlopmentSection"
-                                                TargetControlID="ddlBusinessUnitBusinessDevlopmentSection" Category="Group" LoadingText="Loading Projects..."
+                                                TargetControlID="ddlBusinessUnitBusinessDevlopmentSection" Category="Group" LoadingText="Loading BusinessUnits..."
                                                 EmptyText="No Projects found" ScriptPath="~/Scripts/CascadingDropDownBehavior.js"
                                                 ServicePath="~/CompanyPerfomanceServ.asmx" PromptText="Please Select a Business Unit"
                                                 PromptValue="-1" ServiceMethod="GetDdlProjectGroupContents" UseContextKey="true" />
@@ -778,7 +778,7 @@
                                     <tr>
                                         <td style="padding-right: 3px;">
                                             <asp:Button ID="btnAddBusinessDevelopmentSection" runat="server" Enabled="false"
-                                                OnClick="btnAddBusinessDevelopmentSection_OnClick" Text="ADD" ToolTip="ADD" />
+                                                OnClick="btnAddBusinessDevelopmentSection_OnClick" Text="Add" ToolTip="Add" />
                                         </td>
                                         <td style="padding-left: 3px;">
                                             <asp:Button ID="btnCancelBusinessDevelopmentSection" runat="server" Text="Cancel"
@@ -842,8 +842,8 @@
                                 <table>
                                     <tr>
                                         <td style="padding-right: 3px;">
-                                            <asp:Button ID="btnAddInternalProjectSection" runat="server" Enabled="false" Text="ADD"
-                                                OnClick="btnAddInternalProjectSection_OnClick" ToolTip="ADD" />
+                                            <asp:Button ID="btnAddInternalProjectSection" runat="server" Enabled="false" Text="Add"
+                                                OnClick="btnAddInternalProjectSection_OnClick" ToolTip="Add" />
                                         </td>
                                         <td style="padding-left: 3px;">
                                             <asp:Button ID="btnCancelInternalProjectSection" runat="server" Text="Cancel" ToolTip="Cancel"
