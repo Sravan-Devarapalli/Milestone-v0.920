@@ -166,6 +166,7 @@ namespace PraticeManagement.Controls.TimeEntry
             //calendar.SelectedDates.SelectRange(startDate, startDate.AddDays(6));
             for (var i = 0; i < SelectedPeriodLength; i++)
                 calendar.SelectedDates.Add(startDate.AddDays(i));
+            HostingPage.IsWeekOrPersonChanged = true;
         }
 
         public void UpdateWeekLabel()
@@ -260,3 +261,4 @@ namespace PraticeManagement.Controls.TimeEntry
         }
     }
 }
+
