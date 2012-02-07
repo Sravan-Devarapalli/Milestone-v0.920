@@ -94,13 +94,13 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.CollapsiblePanelExtender cpeProjectSection;
         
         /// <summary>
-        /// lblFilter control.
+        /// lbProjectSection control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblFilter;
+        protected global::System.Web.UI.WebControls.Label lbProjectSection;
         
         /// <summary>
         /// btnExpandCollapseFilter control.
@@ -148,13 +148,13 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.CollapsiblePanelExtender cpeBusinessDevelopmentSection;
         
         /// <summary>
-        /// Label1 control.
+        /// lbBusinessDevelopmentSection control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label1;
+        protected global::System.Web.UI.WebControls.Label lbBusinessDevelopmentSection;
         
         /// <summary>
         /// Image1 control.
@@ -202,13 +202,13 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.CollapsiblePanelExtender cpeInternalSection;
         
         /// <summary>
-        /// Label2 control.
+        /// lbInternalSection control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label2;
+        protected global::System.Web.UI.WebControls.Label lbInternalSection;
         
         /// <summary>
         /// Image2 control.
@@ -641,6 +641,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hdTimetypeAlertMessage;
+        
+        /// <summary>
+        /// hdIsWeekOrPersonChanged control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdIsWeekOrPersonChanged;
         
         /// <summary>
         /// mpeTimetypeAlertMessage control.
