@@ -27,7 +27,8 @@ AS
 BEGIN
 
 	SET NOCOUNT ON;
-
+	
+	BEGIN TRY
 	BEGIN TRAN  T1;
 
 	-- Generating Project Number
@@ -43,7 +44,7 @@ BEGIN
 	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, IsChargeable,  DirectorId, OpportunityId,Description,CanCreateCustomWorkTypes,IsInternal)
 	     VALUES (@ClientId, @Discount, @Terms, @Name, @PracticeId,
 	             @ProjectStatusId, @ProjectNumber, @BuyerName, @GroupId, @IsChargeable, @DirectorId, @OpportunityId,@Description,@CanCreateCustomWorkTypes,@IsInternal)
-
+	
 	IF(@OpportunityId IS NOT NULL)
 	BEGIN
 	  
@@ -57,11 +58,33 @@ BEGIN
 	EXEC dbo.SessionLogUnprepare
 
 	SET @ProjectId = SCOPE_IDENTITY()
+		
+	IF @IsInternal = 1
+	BEGIN
+		INSERT INTO dbo.ProjectTimeType(ProjectId,TimeTypeId,IsAllowedToShow)
+		SELECT @ProjectId, TT.TimeTypeId, 0
+		FROM dbo.TimeType TT
+		WHERE TT.IsDefault = 1 AND TT.Code NOT IN ('W6000')--Here 'W6000' is code for General Default work type.
+
+	END
 
 	INSERT INTO ProjectManagers(ProjectId,ProjectManagerId)
 	SELECT  @ProjectId,ResultId
 	FROM    dbo.ConvertStringListIntoTable(@ProjectManagerIdsList)
      
 	COMMIT TRAN T1;
+	END TRY
+	BEGIN CATCH
+	ROLLBACK TRAN T1;
+		DECLARE	 @ERROR_STATE	tinyint
+				,@ERROR_SEVERITY		tinyint
+				,@ERROR_MESSAGE		    nvarchar(2000)
+				,@InitialTranCount		tinyint
+
+		SET	 @ERROR_MESSAGE		= ERROR_MESSAGE()
+		SET  @ERROR_SEVERITY	= ERROR_SEVERITY()
+		SET  @ERROR_STATE		= ERROR_STATE()
+		RAISERROR ('%s', @ERROR_SEVERITY, @ERROR_STATE, @ERROR_MESSAGE)
+	END CATCH
 END
 
