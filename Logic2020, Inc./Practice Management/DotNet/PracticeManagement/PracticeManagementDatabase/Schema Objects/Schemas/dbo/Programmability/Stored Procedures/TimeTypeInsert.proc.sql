@@ -49,18 +49,18 @@ BEGIN
 			DECLARE @TimeTypeRanksList TABLE (TimeTypeNumber INT,TimeTypeNumberRank INT)
 			INSERT INTO @TimeTypeRanksList 
 			SELECT Convert(INT,SUBSTRING(Code,2,5)) as TimeTypeNumber ,
-					RANK() OVER (ORDER BY Convert(INT,SUBSTRING(Code,2,5)))+@LowerLimitRange-1 AS  TimeTypeNumberRank
+					RANK() OVER (ORDER BY Convert(INT,SUBSTRING(Code,2,5))) + @LowerLimitRange - 1 AS  TimeTypeNumberRank
 			FROM dbo.TimeType 
 			WHERE IsDefault = @IsDefault AND ISNUMERIC( SUBSTRING(Code,2,5)) = 1
 
 
 			INSERT INTO @TimeTypeRanksList 
-			SELECT -1,MAX(TimeTypeNumberRank)+1 FROM @TimeTypeRanksList
+			SELECT -1, MAX(TimeTypeNumberRank)+1 FROM @TimeTypeRanksList
 
 			SELECT TOP 1 @NextTimeTypeNumber = TimeTypeNumberRank 
-				FROM @TimeTypeRanksList  
-				WHERE TimeTypeNumber != TimeTypeNumberRank 
-				ORDER BY TimeTypeNumberRank
+			FROM @TimeTypeRanksList  
+			WHERE TimeTypeNumber != TimeTypeNumberRank 
+			ORDER BY TimeTypeNumberRank
 
 				
 			IF (@NextTimeTypeNumber IS NULL AND NOT EXISTS(SELECT 1 FROM @TimeTypeRanksList WHERE TimeTypeNumber != -1))
@@ -73,24 +73,19 @@ BEGIN
 				RETURN
 			END
 
-			SET @TimeTypeCode = 'W'+ REPLICATE('0',4-LEN(@NextTimeTypeNumber)) + CONVERT(NVARCHAR,@NextTimeTypeNumber)
+			SET @TimeTypeCode = 'W'+ REPLICATE('0',4 - LEN(@NextTimeTypeNumber)) + CONVERT(NVARCHAR,@NextTimeTypeNumber)
 
 			INSERT INTO dbo.TimeType ([Name], [IsDefault], [IsInternal], [IsAllowedToEdit],Code,[IsActive]) VALUES (@Name, @IsDefault, @IsInternal, 1,@TimeTypeCode,@IsActive)
 
 			SET @TimeTypeId = SCOPE_IDENTITY()
 
-			--if default timetype is inserted need to unassign it for the pto project and holiday project
+			--If default timetype is inserted, need to unassign it for Internal projects and for 'Business Development' project.
 			IF (@IsDefault = 1)
 			BEGIN
-				DECLARE @PtoProjectId INT 
-				SELECT @PtoProjectId = [ProjectId] FROM [dbo].[Project] where ProjectNumber = 'P999905'
-				DECLARE @HolidayProjectId INT 
-				SELECT @HolidayProjectId = [ProjectId] FROM [dbo].[Project] where ProjectNumber = 'P999906'
-
-
 				INSERT INTO dbo.ProjectTimeType(ProjectId,TimeTypeId,IsAllowedToShow)
-				VALUES(@PtoProjectId,@TimeTypeId,0),
-					  (@HolidayProjectId,@TimeTypeId,0)
+				SELECT P.ProjectId, @TimeTypeId, 0
+				FROM dbo.Project AS P
+				WHERE P.IsInternal = 1 OR P.ProjectNumber = 'P999918'--Here 'P999918' is Business Development project's ProjectNumber(Code).
 		
 			END
 			COMMIT TRANSACTION TimeTypeInsert
