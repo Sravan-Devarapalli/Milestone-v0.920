@@ -137,6 +137,7 @@ namespace PraticeManagement
         public const string startDateAttribute = "startDate";
         public const string endDateAttribute = "endDate";
         public const string DayTotalAttribute = "DayTotal";
+        public const string RowsCountAttribute = "rowsCount";
 
         #endregion
 
@@ -182,6 +183,14 @@ namespace PraticeManagement
         public bool IsValidWorkType { get; set; }
 
         public bool IsValidDayTotal { get; set; }
+
+        public bool IsWeekOrPersonChanged
+        {
+            set
+            {
+                hdIsWeekOrPersonChanged.Value = value.ToString();
+            }
+        }
 
         public Dictionary<DateTime, bool> IsNoteRequiredList { get; set; }
 
@@ -346,6 +355,10 @@ namespace PraticeManagement
             ddlAccountProjectSection.Attributes[endDateAttribute] =
             ddlAccountBusinessDevlopmentSection.Attributes[endDateAttribute] =
             ddlBusinessUnitInternal.Attributes[endDateAttribute] = SelectedDates[SelectedDates.Length - 1].ToString();
+
+            lbProjectSection.Attributes[RowsCountAttribute] = repProjectSections.Items.Count.ToString();
+            lbBusinessDevelopmentSection.Attributes[RowsCountAttribute] = repBusinessDevelopmentSections.Items.Count.ToString();
+            lbInternalSection.Attributes[RowsCountAttribute] = repInternalSections.Items.Count.ToString();
         }
 
         #endregion
