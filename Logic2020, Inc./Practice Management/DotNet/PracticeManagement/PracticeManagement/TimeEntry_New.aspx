@@ -199,9 +199,37 @@
 
                     }
 
+                    function expandCollapseSections(SectionName, lblSection) {
+                        var cpeSection = $find(SectionName);
+                        var isCollapsed = cpeSection.get_Collapsed();
+                        var cpeSectionCount = lblSection.getAttribute('rowsCount');
+                        if (cpeSectionCount != '0')
+                        {
+                            if (isCollapsed) {
+                                cpeSection.togglePanel();
+                            }
+                        }
+                        else
+                        {
+                            if (!isCollapsed) {
+                                cpeSection.togglePanel();
+                            }
+                        }
+                    }
+
                     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
                     function endRequestHandle(sender, Args) {
                         SetTooltipsForallDropDowns();
+                        var hdIsWeekOrPersonChanged = document.getElementById('<%= hdIsWeekOrPersonChanged.ClientID %>');
+                        if (hdIsWeekOrPersonChanged.value.toLowerCase() == 'true') {
+                            var lbProjectSection = document.getElementById('<%=lbProjectSection.ClientID %>');
+                            var lbBusinessDevelopmentSection = document.getElementById('<%=lbBusinessDevelopmentSection.ClientID %>');
+                            var lbInternalSection = document.getElementById('<%=lbInternalSection.ClientID %>');
+                            expandCollapseSections('cpeProjectSection', lbProjectSection);
+                            expandCollapseSections('cpeBusinessDevelopmentSection',lbBusinessDevelopmentSection);
+                            expandCollapseSections('cpeInternalSection',lbInternalSection);
+                            hdIsWeekOrPersonChanged.value = 'false';
+                        }
                     }
 
                 </script>
@@ -216,8 +244,8 @@
                                         CollapsedText="Expand Section" ExpandedText="Collapse Section" EnableViewState="false"
                                         TargetControlID="pnlProjectSection" ImageControlID="btnExpandCollapseFilter"
                                         CollapsedImage="Images/expand.jpg" ExpandedImage="Images/collapse.jpg" CollapseControlID="btnExpandCollapseFilter"
-                                        ExpandControlID="btnExpandCollapseFilter" TextLabelID="lblFilter" BehaviorID="cpeProjectSection" />
-                                    <asp:Label ID="lblFilter" Style="display: none;" runat="server"></asp:Label>
+                                        ExpandControlID="btnExpandCollapseFilter" TextLabelID="lbProjectSection" BehaviorID="cpeProjectSection" />
+                                    <asp:Label ID="lbProjectSection" Style="display: none;" runat="server"></asp:Label>
                                     <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg"
                                         ToolTip="Expand Section" />&nbsp;<b>Project</b>
                                 </td>
@@ -310,7 +338,7 @@
                                         BehaviorID="cpeBusinessDevelopmentSection" TargetControlID="pnlBusinessDevelopmentSection"
                                         ImageControlID="Image1" CollapsedImage="Images/expand.jpg" ExpandedImage="Images/collapse.jpg"
                                         CollapseControlID="Image1" ExpandControlID="Image1" TextLabelID="Label1" />
-                                    <asp:Label ID="Label1" Style="display: none;" runat="server"></asp:Label>
+                                    <asp:Label ID="lbBusinessDevelopmentSection" Style="display: none;" runat="server"></asp:Label>
                                     <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Section" />&nbsp;<b>Business
                                         Development</b>
                                 </td>
@@ -403,8 +431,8 @@
                                         BehaviorID="cpeInternalSection" CollapsedText="Expand Section" ExpandedText="Collapse Section"
                                         EnableViewState="false" TargetControlID="pnlInternalSection" ImageControlID="Image2"
                                         CollapsedImage="Images/expand.jpg" ExpandedImage="Images/collapse.jpg" CollapseControlID="Image2"
-                                        ExpandControlID="Image2" TextLabelID="Label2" />
-                                    <asp:Label ID="Label2" Style="display: none;" runat="server"></asp:Label>
+                                        ExpandControlID="Image2" TextLabelID="lbInternalSection" />
+                                    <asp:Label ID="lbInternalSection" Style="display: none;" runat="server"></asp:Label>
                                     <asp:Image ID="Image2" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Section" />&nbsp;<b>Internal</b>
                                 </td>
                                 <td>
@@ -828,6 +856,7 @@
                     </table>
                 </asp:Panel>
                 <asp:HiddenField ID="hdTimetypeAlertMessage" runat="server" />
+                 <asp:HiddenField ID="hdIsWeekOrPersonChanged" runat="server" />
                 <AjaxControlToolkit:ModalPopupExtender ID="mpeTimetypeAlertMessage" runat="server"
                     BehaviorID="mpeTimetypeAlertMessage" TargetControlID="hdTimetypeAlertMessage"
                     BackgroundCssClass="modalBackground" PopupControlID="pnlTimetypeAlertMessage"
