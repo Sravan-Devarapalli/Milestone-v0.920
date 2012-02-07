@@ -1356,6 +1356,11 @@ table.sortable thead
     width: 100%;
 }
 
+.tem-person-timeNew
+{
+    width: 100%;
+}
+
 .tem-persons
 {
     float: left;
@@ -1410,6 +1415,13 @@ table.sortable thead
 {
     background-color: #e2ebff;
     padding: 10px 0px 10px 0px;
+    width: 97%;
+}
+
+.time-entry-new-bg-light-frame
+{
+    background-color: #e2ebff;
+    padding: 5px 0px 5px 0px;
     width: 97%;
 }
 
