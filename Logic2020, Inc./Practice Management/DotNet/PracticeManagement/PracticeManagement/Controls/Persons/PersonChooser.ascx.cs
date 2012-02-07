@@ -37,6 +37,18 @@ namespace PraticeManagement.Controls.Persons
         {
             get { return SelectedPerson.Id.Value; }
         }
+
+        public TimeEntry_New HostingPage
+        {
+            get
+            {
+                if (Page is TimeEntry_New)
+                    return ((TimeEntry_New)Page);
+                else
+                    return null;
+            }
+        }
+
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
@@ -86,11 +98,11 @@ namespace PraticeManagement.Controls.Persons
         protected virtual void OnPersonChanged(int personId)
         {
             var isSaved = true;
-            if (Page is TimeEntry_New)
+            if (HostingPage != null)
             {
-                if (((TimeEntry_New)Page).IsDirty)
+                if (HostingPage.IsDirty)
                 {
-                    isSaved = ((TimeEntry_New)Page).SaveData();
+                    isSaved = HostingPage.SaveData();
                 }
             }
 
@@ -104,6 +116,11 @@ namespace PraticeManagement.Controls.Persons
                                       {
                                           Id = personId
                                       }));
+                if(HostingPage != null)
+                {
+                    HostingPage.IsWeekOrPersonChanged = true; 
+                }
+
             }
             else
             {
