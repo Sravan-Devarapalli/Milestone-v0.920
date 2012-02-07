@@ -3,10 +3,6 @@ AS
 BEGIN
 
 	SELECT [GroupId] ,[Code],[Name]  
-		FROM dbo.ProjectGroup 
-		WHERE ClientId = (SELECT [ClientId] 
-								FROM [dbo].[Client] 
-								WHERE Code = 'C2020')
-
+	FROM dbo.ProjectGroup 
+	WHERE IsInternal = 1
 END
-
