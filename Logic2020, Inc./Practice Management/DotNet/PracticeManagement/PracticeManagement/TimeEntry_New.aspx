@@ -178,14 +178,13 @@
                     function DeleteSection(name, rowsCount, controlClientId) {
                         var imgControl = document.getElementById(controlClientId);
                         var confirmMessageFormat = "This will remove the {0} / {1} and any associated time entries!  If this {0} / {1} has been selected as recurring, continuing will result in the {0} / {1} being removed for only this time entry period.  Do you want to continue?";
-                        
-                        for(var i = 0; i< 3; i++)
-                        {
+
+                        for (var i = 0; i < 3; i++) {
                             confirmMessageFormat = confirmMessageFormat.replace('{0}', imgControl.getAttribute('FormatValueOne'));
                             confirmMessageFormat = confirmMessageFormat.replace('{1}', imgControl.getAttribute('FormatValueTwo'));
                         }
 
-                        if (confirm(confirmMessageFormat) ) {
+                        if (confirm(confirmMessageFormat)) {
                             CollapsePanel(name, rowsCount);
                             return true;
                         }
@@ -292,7 +291,11 @@
                                     <HeaderTemplate>
                                         <table class="CompPerfTable WholeWidth">
                                             <tr class="CompPerfHeader WholeWidth">
-                                                <td class="time-entry-bar-time-typesNew">
+                                                <td class="DeleteWidth">
+                                                    <div class="ie-bg">
+                                                    </div>
+                                                </td>
+                                                <td class="time-entry-bar-time-typesNewHeader">
                                                     <div class="ie-bg">
                                                         Work Type</div>
                                                 </td>
@@ -317,8 +320,16 @@
                                         <uc:BillableAndNonBillableTimeEntryBar runat="server" ID="bar" />
                                     </ItemTemplate>
                                     <FooterTemplate>
-                                        <asp:ImageButton ID="imgPlusProjectSection" OnClick="imgPlusProjectSection_OnClick"
-                                            runat="server" ImageUrl="~/Images/add_24.png"/>
+                                        <table cellpadding="0" cellspacing="0" class="PaddingClass WholeWidth">
+                                            <tr>
+                                                <td class="DeleteWidth">
+                                                    <asp:ImageButton ID="imgPlusProjectSection" OnClick="imgPlusProjectSection_OnClick"
+                                                        runat="server" ImageUrl="~/Images/add_24.png" />
+                                                </td>
+                                                <td colspan="10">
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </FooterTemplate>
                                 </asp:Repeater>
                                 <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
@@ -377,7 +388,11 @@
                                     <HeaderTemplate>
                                         <table class="CompPerfTable WholeWidth">
                                             <tr class="CompPerfHeader WholeWidth">
-                                                <td class="time-entry-bar-time-typesNew">
+                                                <td class="DeleteWidth">
+                                                    <div class="ie-bg">
+                                                    </div>
+                                                </td>
+                                                <td class="time-entry-bar-time-typesNewHeader">
                                                     <div class="ie-bg">
                                                         Work Type</div>
                                                 </td>
@@ -402,8 +417,16 @@
                                         <uc:NonBillableTimeEntryBar runat="server" ID="bar" />
                                     </ItemTemplate>
                                     <FooterTemplate>
-                                        <asp:ImageButton ID="imgPlusBusinessDevelopmentSection" OnClick="imgPlusBusinessDevelopmentSection_OnClick"
-                                            runat="server" ImageUrl="~/Images/add_24.png"/>
+                                        <table cellpadding="0" cellspacing="0" class="PaddingClass WholeWidth">
+                                            <tr>
+                                                <td class="DeleteWidth">
+                                                    <asp:ImageButton ID="imgPlusBusinessDevelopmentSection" OnClick="imgPlusBusinessDevelopmentSection_OnClick"
+                                                        runat="server" ImageUrl="~/Images/add_24.png" />
+                                                </td>
+                                                <td colspan="10">
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </FooterTemplate>
                                 </asp:Repeater>
                                 <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
@@ -461,7 +484,11 @@
                                     <HeaderTemplate>
                                         <table class="CompPerfTable WholeWidth">
                                             <tr class="CompPerfHeader WholeWidth">
-                                                <td class="time-entry-bar-time-typesNew">
+                                                <td class="DeleteWidth">
+                                                    <div class="ie-bg">
+                                                    </div>
+                                                </td>
+                                                <td class="time-entry-bar-time-typesNewHeader">
                                                     <div class="ie-bg">
                                                         Work Type</div>
                                                 </td>
@@ -486,8 +513,16 @@
                                         <uc:NonBillableTimeEntryBar runat="server" ID="bar" />
                                     </ItemTemplate>
                                     <FooterTemplate>
-                                        <asp:ImageButton ID="imgPlusInternalSection" OnClick="imgPlusInternalSection_OnClick"
-                                            runat="server" ImageUrl="~/Images/add_24.png"/>
+                                        <table cellpadding="0" cellspacing="0" class="PaddingClass WholeWidth">
+                                            <tr>
+                                                <td class="DeleteWidth">
+                                                    <asp:ImageButton ID="imgPlusInternalSection" OnClick="imgPlusInternalSection_OnClick"
+                                                        runat="server" ImageUrl="~/Images/add_24.png" />
+                                                </td>
+                                                <td colspan="10">
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </FooterTemplate>
                                 </asp:Repeater>
                                 <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
@@ -500,6 +535,7 @@
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
                                 <td>
+                                    <img src="Images/collapse.jpg" style="visibility: hidden;" />
                                     &nbsp;<b>ADMINISTRATIVE</b>
                                 </td>
                                 <td>
@@ -515,7 +551,11 @@
                             <HeaderTemplate>
                                 <table class="CompPerfTable WholeWidth">
                                     <tr class="CompPerfHeader WholeWidth">
-                                        <td class="time-entry-bar-time-typesNew">
+                                        <td class="DeleteWidth">
+                                            <div class="ie-bg">
+                                            </div>
+                                        </td>
+                                        <td class="time-entry-bar-time-typesNewHeader">
                                             <div class="ie-bg">
                                                 Work Type</div>
                                         </td>
@@ -545,6 +585,8 @@
                         CssClass="cp bg-white">
                         <table class="CompPerfTable WholeWidth">
                             <tr class="time-entry-bar">
+                                <td class="DeleteWidth">
+                                </td>
                                 <td class="time-entry-bar-time-typesNew TOTALHOURSTD">
                                     TOTAL HOURS:
                                 </td>
@@ -552,7 +594,8 @@
                                     runat="server">
                                     <ItemTemplate>
                                         <td class="time-entry-bar-single-teNew DayTotalHours">
-                                            <asp:Label ID="lblDayTotal" Font-Bold="true" TotalHours="" runat="server"></asp:Label>
+                                            <asp:Label ID="lblDayTotal" CssClass="alignRight" Font-Bold="true" TotalHours=""
+                                                runat="server"></asp:Label>
                                             <ext:TotalCalculatorExtender ID="extDayTotal" runat="server" TargetControlID="lblDayTotal" />
                                             <asp:HiddenField ID="hdnDayTotal" runat="server"></asp:HiddenField>
                                             <ext3:MaxValueAllowedForTextBoxExtender ID="extMaxValueAllowedForTextBoxExtender"
@@ -567,9 +610,11 @@
                                 </td>
                             </tr>
                             <tr class="time-entry-bar">
+                                <td class="DeleteWidth ">
+                                </td>
                                 <td class="time-entry-bar-time-typesNew">
                                 </td>
-                                <td colspan="7" class="TOTALTD">
+                                <td colspan="7" class="TOTALTD PaddingTop6">
                                     BILLABLE TOTAL :
                                 </td>
                                 <td class="time-entry-total-hoursNew PaddingLeft4">
@@ -580,6 +625,8 @@
                                 </td>
                             </tr>
                             <tr class="time-entry-bar">
+                                <td class="DeleteWidth">
+                                </td>
                                 <td class="time-entry-bar-time-typesNew">
                                 </td>
                                 <td colspan="7" class="TOTALTD">
@@ -593,6 +640,8 @@
                                 </td>
                             </tr>
                             <tr class="time-entry-bar">
+                                <td class="DeleteWidth">
+                                </td>
                                 <td class="time-entry-bar-time-typesNew">
                                 </td>
                                 <td colspan="7" class="TOTALTD" style="padding-top: 15px;">
@@ -661,7 +710,7 @@
                             <td style="padding: 10px;" colspan="2">
                                 <table class="WholeWidth">
                                     <tr>
-                                        <td  class="ModalPopUpSideHeading">
+                                        <td class="ModalPopUpSideHeading">
                                             Account :
                                         </td>
                                         <td class="Width80Percent">
@@ -670,7 +719,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td  class="ModalPopUpSideHeading ModalPopUpDropDownPadding">
+                                        <td class="ModalPopUpSideHeading ModalPopUpDropDownPadding">
                                             Project :
                                         </td>
                                         <td class="Width80Percent ModalPopUpDropDownPadding">
@@ -725,7 +774,7 @@
                             <td style="padding: 10px;" colspan="2">
                                 <table class="WholeWidth">
                                     <tr>
-                                        <td  class="ModalPopUpSideHeading">
+                                        <td class="ModalPopUpSideHeading">
                                             Account :
                                         </td>
                                         <td class="Width80Percent">
@@ -734,7 +783,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td  class="ModalPopUpSideHeading ModalPopUpDropDownPadding">
+                                        <td class="ModalPopUpSideHeading ModalPopUpDropDownPadding">
                                             Business Unit :
                                         </td>
                                         <td class="Width80Percent ModalPopUpDropDownPadding">
@@ -791,7 +840,7 @@
                             <td style="padding: 10px;" colspan="2">
                                 <table class="WholeWidth">
                                     <tr>
-                                        <td  class="ModalPopUpSideHeading">
+                                        <td class="ModalPopUpSideHeading">
                                             Business Unit :
                                         </td>
                                         <td class="Width80Percent">
@@ -800,7 +849,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td  class="ModalPopUpSideHeading ModalPopUpDropDownPadding">
+                                        <td class="ModalPopUpSideHeading ModalPopUpDropDownPadding">
                                             Project :
                                         </td>
                                         <td class="Width80Percent ModalPopUpDropDownPadding">
