@@ -1460,10 +1460,35 @@ namespace DataAccess
                     reader.NextResult();
                     ReadTimeEntriesSections(reader, timeEntrySections, timeEntries);
 
+                    reader.NextResult();
+                    ReadPTOHolidayAttributes(reader, timeEntrySections);
+
+
                     return timeEntrySections;
                 }
             }
         }
+
+        private static void ReadPTOHolidayAttributes(SqlDataReader reader, List<TimeEntrySection> timeEntrySections)
+        {
+            if (reader.HasRows)
+            {
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+                int isPTOIndex = reader.GetOrdinal(Constants.ColumnNames.IsPTOColumn);
+                int isHolidayIndex = reader.GetOrdinal(Constants.ColumnNames.IsHolidayColumn);
+
+                while (reader.Read())
+                {
+                    var tesection = timeEntrySections.First(tes => tes.SectionId == TimeEntrySectionType.Administrative && tes.Project.Id == reader.GetInt32(projectIdIndex));
+
+                    tesection.Project.IsPTOProject = (reader.GetInt32(isPTOIndex) == 1);
+                    tesection.Project.IsHolidayProject = (reader.GetInt32(isHolidayIndex) == 1);
+                }
+            }
+           
+        }
+
+            
 
         public static void ReadTimeEntriesSections(SqlDataReader reader, List<TimeEntrySection> timeEntrySections, List<TimeEntryRecord> timeEntries)
         {
