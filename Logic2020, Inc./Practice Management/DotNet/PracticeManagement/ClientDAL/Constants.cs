@@ -268,6 +268,8 @@
             public const string IsChargeCodeOffColumn = "IsChargeCodeOff";
             public const string IsHourlyRevenueColumn = "IsHourlyRevenue";
             public const string ClientIsInternal = "ClientIsInternal";
+            public const string IsPTOColumn = "IsPTO";
+            public const string IsHolidayColumn = "IsHoliday";
         }
 
         #endregion
@@ -707,7 +709,8 @@
                 public const string ProjectGroupDelete = "dbo.ProjectGroupDelete";
                 public const string GetInternalBusinessUnits = "dbo.GetInternalBusinessUnits";
                 public const string ListGroupByClientAndPersonInPeriod = "dbo.ListGroupByClientAndPersonInPeriod";
-                
+                public const string GetClientsGroups = "dbo.GetClientsGroups";
+
             }
 
             public class Note
@@ -754,7 +757,7 @@
                 public const string GetProjectByIdShort = "dbo.GetProjectByIdShort";
                 public const string GetIsHourlyRevenueByPeriod = "dbo.GetIsHourlyRevenueByPeriod";
                 public const string ListProjectsByClientAndPersonInPeriod = "dbo.ListProjectsByClientAndPersonInPeriod";
-                
+
 
             }
 
