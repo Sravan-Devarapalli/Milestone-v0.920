@@ -2137,29 +2137,37 @@ table.CellPaddingClass td
 
 .time-entry-bar-time-typesNew
 {
-    width: 20%;
-    padding-left: 3px;
+    width: 32%;
     text-align: left;
+    padding-left:3px;
+    border-right: 5px;
+    padding-right: 0px;
+}
+
+.time-entry-bar-time-typesNewHeader
+{
+    width: 32%;
+    text-align: center;
     border-right: 5px;
     padding-right: 0px;
 }
     
 .time-entry-bar-time-typesNew-select-Normal
 {
-    width: 98% !important;
+    width: 100% !important;
 }
 
 .time-entry-bar-time-typesNew-select-Extended
 {
-    width: 98%;
+    width: 100% !important;
 }
 
 .time-entry-bar-single-teNew
 {
-    /*padding-left: 3px;*/
     text-align: center;
     vertical-align: middle;
-    width: 10%;
+    
+    width: 8%;
 }
 
 .time-entry-bar .time-entry-bar-single-teNew
@@ -2169,10 +2177,11 @@ table.CellPaddingClass td
 
 .time-entry-bar-single-teNew input[type=text]
 {
-    width: 95% !important;
+    width: 32px !important;
     margin: 1px 0px 0px 2px;
     border: 1px solid #aaa;
     height: 16px;
+    text-align:right;
 }
 
 .time-entry-bar-single-teNew input[type=image]
@@ -2184,8 +2193,8 @@ table.CellPaddingClass td
 {
     text-align: right;
     vertical-align: middle;
-    padding-right: 5px;
-    width: 7%;
+    padding-right:3px;
+    width: 6%;
     font-weight:bold;
 }
 .DeleteWidth
@@ -2198,7 +2207,7 @@ table.CellPaddingClass td
 
 .time-entry-bar-total-hoursNew
 {
-    width: 7%;
+    width: 6%;
     text-align: center;
 }
 TABLE.Section td 
@@ -2243,8 +2252,6 @@ TABLE.Section
 .DayTotalHours
 {
     border: 1px solid black; 
-    text-align: left;
-    padding-left: 12px !important;
 }
 
 .TOTALTD
@@ -2257,18 +2264,22 @@ TABLE.Section
 {
     padding-left: 4px;
 }
+.PaddingTop6
+{
+    padding-top: 6px;
+}
 .Width2Percent
 {
     width: 2%;
 }
 .Width58Percent
 {
-    padding: 6px 3px 6px 0px;
+    padding: 1px 1px 1px 1px;
     width: 58%;
 }
 .Width40Percent
 {
-   padding: 6px 4px 6px 10px; 
+   padding: 1px 1px 1px 1px;
    width: 40%;
 }
 
@@ -2294,3 +2305,4 @@ TABLE.Section
 {
     padding-top:8px;
 }
+
