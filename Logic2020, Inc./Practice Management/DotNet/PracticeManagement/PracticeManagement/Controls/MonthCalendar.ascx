@@ -21,9 +21,9 @@
                 }
                 else {
                     var hdnDayOff = $get(btnOk.attributes['HiddenDayOffID'].value);
-                    hdnDayOff.value = 'false';
                     
                     if (rbFloating.checked) {
+                        hdnDayOff.value = 'false';//For Updating the Floating Holiday details.
                         SaveDetails(popupExtendar, btnOk);
                     }
                     else {
@@ -43,6 +43,7 @@
                                             maxHours = 8 - enteredHours;
                                         }
                                         if (maxHours != null && maxHours > 0 && hours <= maxHours) {
+                                            hdnDayOff.value = 'false'; //For Updating the PTO details.
                                             SaveDetails(popupExtendar, btnOk);
                                         }
                                         else if (maxHours != null && maxHours <= 0) {
