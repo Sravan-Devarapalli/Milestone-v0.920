@@ -267,7 +267,7 @@
                     <asp:Panel ID="pnlProjectSection" runat="server" CssClass="cp bg-white">
                         <asp:Repeater ID="repProjectSections" runat="server" OnItemDataBound="repProjectSections_OnItemDataBound">
                             <ItemTemplate>
-                                <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
+                                <table cellpadding="0" cellspacing="0" class="Section WholeWidth RemoveBorderLeftRight">
                                     <tr>
                                         <td class="SectionFirstTD" colspan="5">
                                             <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
@@ -364,7 +364,7 @@
                         <asp:Repeater ID="repBusinessDevelopmentSections" OnItemDataBound="repBusinessDevelopmentSections_OnItemDataBound"
                             runat="server">
                             <ItemTemplate>
-                                <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
+                                <table cellpadding="0" cellspacing="0" class="Section WholeWidth RemoveBorderLeftRight">
                                     <tr>
                                         <td class="SectionFirstTD" colspan="5">
                                             <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value %>
@@ -460,7 +460,7 @@
                         <asp:Repeater ID="repInternalSections" OnItemDataBound="repInternalSections_ItemDataBound"
                             runat="server">
                             <ItemTemplate>
-                                <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
+                                <table cellpadding="0" cellspacing="0" class="Section WholeWidth RemoveBorderLeftRight">
                                     <tr>
                                         <td class="SectionFirstTD" colspan="5">
                                             <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
@@ -535,8 +535,7 @@
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
                                 <td>
-                                    <img src="Images/collapse.jpg" style="visibility: hidden;" />
-                                    &nbsp;<b>ADMINISTRATIVE</b>
+                                    <img src="Images/collapse.jpg" style="visibility: hidden;" />&nbsp;<b>ADMINISTRATIVE</b>
                                 </td>
                                 <td>
                                 </td>
@@ -713,7 +712,7 @@
                                         <td class="ModalPopUpSideHeading">
                                             Account :
                                         </td>
-                                        <td class="Width80Percent">
+                                        <td class="Width70Percent">
                                             <asp:DropDownList ID="ddlAccountProjectSection" onchange="ddlParent_onchange(this);"
                                                 Width="250px" runat="server" />
                                         </td>
@@ -722,7 +721,7 @@
                                         <td class="ModalPopUpSideHeading ModalPopUpDropDownPadding">
                                             Project :
                                         </td>
-                                        <td class="Width80Percent ModalPopUpDropDownPadding">
+                                        <td class="Width70Percent ModalPopUpDropDownPadding">
                                             <asp:DropDownList ID="ddlProjectProjectSection" onchange="ddlChild_onchange(this);"
                                                 Width="250px" runat="server">
                                             </asp:DropDownList>
@@ -777,7 +776,7 @@
                                         <td class="ModalPopUpSideHeading">
                                             Account :
                                         </td>
-                                        <td class="Width80Percent">
+                                        <td class="Width70Percent">
                                             <asp:DropDownList ID="ddlAccountBusinessDevlopmentSection" onchange="ddlParent_onchange(this);"
                                                 Width="250px" runat="server" />
                                         </td>
@@ -786,7 +785,7 @@
                                         <td class="ModalPopUpSideHeading ModalPopUpDropDownPadding">
                                             Business Unit :
                                         </td>
-                                        <td class="Width80Percent ModalPopUpDropDownPadding">
+                                        <td class="Width70Percent ModalPopUpDropDownPadding">
                                             <asp:DropDownList ID="ddlBusinessUnitBusinessDevlopmentSection" onchange="ddlChild_onchange(this);"
                                                 Width="250px" runat="server">
                                             </asp:DropDownList>
@@ -843,7 +842,7 @@
                                         <td class="ModalPopUpSideHeading">
                                             Business Unit :
                                         </td>
-                                        <td class="Width80Percent">
+                                        <td class="Width70Percent">
                                             <asp:DropDownList ID="ddlBusinessUnitInternal" onchange="ddlParent_onchange(this);"
                                                 Width="250px" runat="server" />
                                         </td>
@@ -852,7 +851,7 @@
                                         <td class="ModalPopUpSideHeading ModalPopUpDropDownPadding">
                                             Project :
                                         </td>
-                                        <td class="Width80Percent ModalPopUpDropDownPadding">
+                                        <td class="Width70Percent ModalPopUpDropDownPadding">
                                             <asp:DropDownList ID="ddlProjectInternal" onchange="ddlChild_onchange(this);" Width="250px"
                                                 runat="server" />
                                             <AjaxControlToolkit:CascadingDropDown ID="cddProjectsInternal" runat="server" ParentControlID="ddlBusinessUnitInternal"
