@@ -27,8 +27,6 @@ namespace PraticeManagement.Controls.TimeEntry
             set;
         }
 
-        public bool Disabled { get; set; }
-
         public string AccountId
         {
             set
@@ -54,6 +52,8 @@ namespace PraticeManagement.Controls.TimeEntry
         }
 
         public bool IsPTO { get; set; }
+
+        public bool IsHoliday { get; set; }
 
         public TimeTypeRecord WorkType { get; set; }
 
@@ -117,8 +117,13 @@ namespace PraticeManagement.Controls.TimeEntry
                 ste.IsNoteRequired = calendarItem.Attribute(XName.Get(TimeEntry_New.IsNoteRequiredXname)).Value;
                 ste.IsChargeCodeTurnOff = calendarItem.Attribute(XName.Get(TimeEntry_New.IsChargeCodeOffXname)).Value;
 
-                ste.Disabled = Disabled;
+                if (IsHoliday)
+                {
+                    ste.Disabled = true;
+                }
+
                 ste.IsPTO = IsPTO;
+                ste.IsHoliday = IsHoliday;
 
                 var nbterecord = (calendarItem.HasElements && calendarItem.Descendants(XName.Get(TimeEntry_New.TimeEntryRecordXname)).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").ToList().Count > 0) ? calendarItem.Descendants(XName.Get("TimeEntryRecord")).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").First() : null;
                 var date = Convert.ToDateTime(calendarItem.Attribute(XName.Get(TimeEntry_New.DateXname)).Value);
