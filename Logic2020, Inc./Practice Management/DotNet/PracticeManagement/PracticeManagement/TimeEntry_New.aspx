@@ -155,7 +155,7 @@
         </pcg:StyledUpdatePanel>
     </div>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
-    <div id="updateContainer" class="time-entry-grid">
+    <div id="updateContainer" class="time-entry-new-grid">
         <asp:UpdatePanel ID="updTimeEntries" runat="server">
             <ContentTemplate>
                 <script type="text/javascript">
@@ -175,8 +175,17 @@
                         }
                     }
 
-                    function DeleteSection(name, rowsCount) {
-                        if (confirm("Are you sure to delete the section?")) {
+                    function DeleteSection(name, rowsCount, controlClientId) {
+                        var imgControl = document.getElementById(controlClientId);
+                        var confirmMessageFormat = "This will remove the {0} / {1} and any associated time entries!  If this {0} / {1} has been selected as recurring, continuing will result in the {0} / {1} being removed for only this time entry period.  Do you want to continue?";
+                        
+                        for(var i = 0; i< 3; i++)
+                        {
+                            confirmMessageFormat = confirmMessageFormat.replace('{0}', imgControl.getAttribute('FormatValueOne'));
+                            confirmMessageFormat = confirmMessageFormat.replace('{1}', imgControl.getAttribute('FormatValueTwo'));
+                        }
+
+                        if (confirm(confirmMessageFormat) ) {
                             CollapsePanel(name, rowsCount);
                             return true;
                         }
@@ -203,14 +212,12 @@
                         var cpeSection = $find(SectionName);
                         var isCollapsed = cpeSection.get_Collapsed();
                         var cpeSectionCount = lblSection.getAttribute('rowsCount');
-                        if (cpeSectionCount != '0')
-                        {
+                        if (cpeSectionCount != '0') {
                             if (isCollapsed) {
                                 cpeSection.togglePanel();
                             }
                         }
-                        else
-                        {
+                        else {
                             if (!isCollapsed) {
                                 cpeSection.togglePanel();
                             }
@@ -226,8 +233,8 @@
                             var lbBusinessDevelopmentSection = document.getElementById('<%=lbBusinessDevelopmentSection.ClientID %>');
                             var lbInternalSection = document.getElementById('<%=lbInternalSection.ClientID %>');
                             expandCollapseSections('cpeProjectSection', lbProjectSection);
-                            expandCollapseSections('cpeBusinessDevelopmentSection',lbBusinessDevelopmentSection);
-                            expandCollapseSections('cpeInternalSection',lbInternalSection);
+                            expandCollapseSections('cpeBusinessDevelopmentSection', lbBusinessDevelopmentSection);
+                            expandCollapseSections('cpeInternalSection', lbInternalSection);
                             hdIsWeekOrPersonChanged.value = 'false';
                         }
                     }
@@ -247,7 +254,7 @@
                                         ExpandControlID="btnExpandCollapseFilter" TextLabelID="lbProjectSection" BehaviorID="cpeProjectSection" />
                                     <asp:Label ID="lbProjectSection" Style="display: none;" runat="server"></asp:Label>
                                     <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg"
-                                        ToolTip="Expand Section" />&nbsp;<b>Project</b>
+                                        ToolTip="Expand Section" />&nbsp;<b>PROJECT</b>
                                 </td>
                                 <td>
                                 </td>
@@ -264,7 +271,7 @@
                                 <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                     <tr>
                                         <td class="SectionFirstTD" colspan="5">
-                                            <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value + "(" + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + ")"%>
+                                            <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
                                         </td>
                                         <td class="SectionSecondTD" colspan="3">
                                         </td>
@@ -276,8 +283,8 @@
                                                 OnClick="imgBtnRecursiveSection_OnClick" />
                                         </td>
                                         <td class="DeleteWidth">
-                                            <asp:ImageButton ID="imgBtnDeleteProjectSection" runat="server" ImageUrl="~/Images/close_16.png"
-                                                ToolTip="Delete Section" OnClick="imgBtnDeleteSection_OnClick" />
+                                            <asp:ImageButton ID="imgBtnDeleteProjectSection" runat="server" ImageUrl="~/Images/close_24.png"
+                                                OnClick="imgBtnDeleteSection_OnClick" />
                                         </td>
                                     </tr>
                                 </table>
@@ -311,21 +318,12 @@
                                     </ItemTemplate>
                                     <FooterTemplate>
                                         <asp:ImageButton ID="imgPlusProjectSection" OnClick="imgPlusProjectSection_OnClick"
-                                            runat="server" ImageUrl="~/Images/add_16.png" ToolTip="Add Additional Work type" />
+                                            runat="server" ImageUrl="~/Images/add_24.png"/>
                                     </FooterTemplate>
                                 </asp:Repeater>
                                 <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
                                     TargetControlID="lblDupilcateOptionsRemoveExtender" />
                                 <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
-                                <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop DisplayBlock">
-                                    <div class="TopCenterAlignWithoutPaddingTop">
-                                        <b>NOTE:</b> This section is marked as recursive, Click on
-                                        <img alt="Recursive" src="Images/Recursive.png" title="Recursive" />
-                                        icon to mark it as non-recursive or Click on
-                                        <img alt="Delete" src="Images/close_16.png" title="Delete" />
-                                        icon to delete this section for this week.
-                                    </div>
-                                </asp:Label>
                             </ItemTemplate>
                         </asp:Repeater>
                     </asp:Panel>
@@ -339,14 +337,14 @@
                                         ImageControlID="Image1" CollapsedImage="Images/expand.jpg" ExpandedImage="Images/collapse.jpg"
                                         CollapseControlID="Image1" ExpandControlID="Image1" TextLabelID="Label1" />
                                     <asp:Label ID="lbBusinessDevelopmentSection" Style="display: none;" runat="server"></asp:Label>
-                                    <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Section" />&nbsp;<b>Business
-                                        Development</b>
+                                    <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Section" />&nbsp;<b>BUSINESS
+                                        DEVELOPMENT</b>
                                 </td>
                                 <td>
                                 </td>
                                 <td>
                                     <asp:Button ID="btnAddAccount" runat="server" OnClientClick="SelectDefaultValues('cddBusinessUnitBDSection');"
-                                        Text="Add Account" CssClass="mrg0" ToolTip="Add Account"/>
+                                        Text="Add Account" CssClass="mrg0" ToolTip="Add Account" />
                                 </td>
                             </tr>
                         </table>
@@ -369,8 +367,8 @@
                                             <asp:ImageButton ID="imgBtnRecurrenceBusinessDevelopmentSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick" />
                                         </td>
                                         <td class="DeleteWidth">
-                                            <asp:ImageButton ID="imgBtnDeleteBusinessDevelopmentSection" runat="server" ImageUrl="~/Images/close_16.png"
-                                                ToolTip="Delete Section" OnClick="imgBtnDeleteSection_OnClick" />
+                                            <asp:ImageButton ID="imgBtnDeleteBusinessDevelopmentSection" runat="server" ImageUrl="~/Images/close_24.png"
+                                                OnClick="imgBtnDeleteSection_OnClick" />
                                         </td>
                                     </tr>
                                 </table>
@@ -405,18 +403,9 @@
                                     </ItemTemplate>
                                     <FooterTemplate>
                                         <asp:ImageButton ID="imgPlusBusinessDevelopmentSection" OnClick="imgPlusBusinessDevelopmentSection_OnClick"
-                                            runat="server" ImageUrl="~/Images/add_16.png" ToolTip="Add Additional Work type" />
+                                            runat="server" ImageUrl="~/Images/add_24.png"/>
                                     </FooterTemplate>
                                 </asp:Repeater>
-                                <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop DisplayBlock">
-                                    <div  class="TopCenterAlignWithoutPaddingTop">
-                                        <b>NOTE:</b> This section is marked as recursive, Click on
-                                         <img alt="Recursive" src="Images/Recursive.png" title="Recursive" />
-                                        icon to mark it as non-recursive or Click on
-                                        <img alt="Delete" src="Images/close_16.png" title="Delete" />
-                                        icon to delete this section for this week.
-                                    </div>
-                                </asp:Label>
                                 <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
                                     TargetControlID="lblDupilcateOptionsRemoveExtender" />
                                 <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
@@ -433,7 +422,7 @@
                                         CollapsedImage="Images/expand.jpg" ExpandedImage="Images/collapse.jpg" CollapseControlID="Image2"
                                         ExpandControlID="Image2" TextLabelID="lbInternalSection" />
                                     <asp:Label ID="lbInternalSection" Style="display: none;" runat="server"></asp:Label>
-                                    <asp:Image ID="Image2" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Section" />&nbsp;<b>Internal</b>
+                                    <asp:Image ID="Image2" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Section" />&nbsp;<b>INTERNAL</b>
                                 </td>
                                 <td>
                                 </td>
@@ -451,7 +440,7 @@
                                 <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                     <tr>
                                         <td class="SectionFirstTD" colspan="5">
-                                            <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value + "(" + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + ")"%>
+                                            <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
                                         </td>
                                         <td class="SectionSecondTD" colspan="3">
                                         </td>
@@ -462,8 +451,8 @@
                                             <asp:ImageButton ID="imgBtnRecurrenceInternalSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick" />
                                         </td>
                                         <td class="DeleteWidth">
-                                            <asp:ImageButton ID="imgBtnDeleteInternalSection" runat="server" ImageUrl="~/Images/close_16.png"
-                                                ToolTip="Delete Section" OnClick="imgBtnDeleteSection_OnClick" />
+                                            <asp:ImageButton ID="imgBtnDeleteInternalSection" runat="server" ImageUrl="~/Images/close_24.png"
+                                                OnClick="imgBtnDeleteSection_OnClick" />
                                         </td>
                                     </tr>
                                 </table>
@@ -498,18 +487,9 @@
                                     </ItemTemplate>
                                     <FooterTemplate>
                                         <asp:ImageButton ID="imgPlusInternalSection" OnClick="imgPlusInternalSection_OnClick"
-                                            runat="server" ImageUrl="~/Images/add_16.png" ToolTip="Add Additional Work type" />
+                                            runat="server" ImageUrl="~/Images/add_24.png"/>
                                     </FooterTemplate>
                                 </asp:Repeater>
-                                <asp:Label ID="lblRecursiveAlert" runat="server" CssClass="TopCenterAlignWithoutPaddingTop DisplayBlock">
-                                    <div class="TopCenterAlignWithoutPaddingTop">
-                                        <b>NOTE:</b> This section is marked as recursive, Click on
-                                        <img alt="Recursive" src="Images/Recursive.png" title="Recursive" />
-                                        icon to mark it as non-recursive or Click on
-                                        <img alt="Delete" src="Images/close_16.png" title="Delete" />
-                                        icon to delete this section for this week.
-                                    </div>
-                                </asp:Label>
                                 <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
                                     TargetControlID="lblDupilcateOptionsRemoveExtender" />
                                 <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
@@ -520,7 +500,7 @@
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
                                 <td>
-                                    &nbsp;<b>Administrative</b>
+                                    &nbsp;<b>ADMINISTRATIVE</b>
                                 </td>
                                 <td>
                                 </td>
@@ -681,26 +661,26 @@
                             <td style="padding: 10px;" colspan="2">
                                 <table class="WholeWidth">
                                     <tr>
-                                        <td style="width: 20%; font-weight: bold;">
+                                        <td  class="ModalPopUpSideHeading">
                                             Account :
                                         </td>
-                                        <td style="width: 80%;">
+                                        <td class="Width80Percent">
                                             <asp:DropDownList ID="ddlAccountProjectSection" onchange="ddlParent_onchange(this);"
                                                 Width="250px" runat="server" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width: 20%; font-weight: bold;">
+                                        <td  class="ModalPopUpSideHeading ModalPopUpDropDownPadding">
                                             Project :
                                         </td>
-                                        <td style="width: 80%;">
+                                        <td class="Width80Percent ModalPopUpDropDownPadding">
                                             <asp:DropDownList ID="ddlProjectProjectSection" onchange="ddlChild_onchange(this);"
                                                 Width="250px" runat="server">
                                             </asp:DropDownList>
                                             <AjaxControlToolkit:CascadingDropDown ID="cddClientProjects" runat="server" ParentControlID="ddlAccountProjectSection"
                                                 TargetControlID="ddlProjectProjectSection" Category="Group" LoadingText="Loading Projects..."
                                                 EmptyText="No Projects found" ScriptPath="~/Scripts/CascadingDropDownBehavior.js"
-                                                BehaviorID="cddClientProjects" PromptText="Please Select a Project" PromptValue="-1"
+                                                BehaviorID="cddClientProjects" PromptText="-- Select Project --" PromptValue="-1"
                                                 ServicePath="~/CompanyPerfomanceServ.asmx" ServiceMethod="GetProjectsList" UseContextKey="true" />
                                         </td>
                                     </tr>
@@ -745,27 +725,27 @@
                             <td style="padding: 10px;" colspan="2">
                                 <table class="WholeWidth">
                                     <tr>
-                                        <td style="width: 20%; font-weight: bold;">
+                                        <td  class="ModalPopUpSideHeading">
                                             Account :
                                         </td>
-                                        <td style="width: 80%;">
+                                        <td class="Width80Percent">
                                             <asp:DropDownList ID="ddlAccountBusinessDevlopmentSection" onchange="ddlParent_onchange(this);"
                                                 Width="250px" runat="server" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width: 20%; font-weight: bold;">
+                                        <td  class="ModalPopUpSideHeading ModalPopUpDropDownPadding">
                                             Business Unit :
                                         </td>
-                                        <td style="width: 80%;">
+                                        <td class="Width80Percent ModalPopUpDropDownPadding">
                                             <asp:DropDownList ID="ddlBusinessUnitBusinessDevlopmentSection" onchange="ddlChild_onchange(this);"
                                                 Width="250px" runat="server">
                                             </asp:DropDownList>
                                             <AjaxControlToolkit:CascadingDropDown ID="cddBusinessUnitBDSection" runat="server"
                                                 BehaviorID="cddBusinessUnitBDSection" ParentControlID="ddlAccountBusinessDevlopmentSection"
                                                 TargetControlID="ddlBusinessUnitBusinessDevlopmentSection" Category="Group" LoadingText="Loading BusinessUnits..."
-                                                EmptyText="No Projects found" ScriptPath="~/Scripts/CascadingDropDownBehavior.js"
-                                                ServicePath="~/CompanyPerfomanceServ.asmx" PromptText="Please Select a Business Unit"
+                                                EmptyText="No Business Units found" ScriptPath="~/Scripts/CascadingDropDownBehavior.js"
+                                                ServicePath="~/CompanyPerfomanceServ.asmx" PromptText="-- Select Business Unit --"
                                                 PromptValue="-1" ServiceMethod="GetDdlProjectGroupContents" UseContextKey="true" />
                                         </td>
                                     </tr>
@@ -811,24 +791,24 @@
                             <td style="padding: 10px;" colspan="2">
                                 <table class="WholeWidth">
                                     <tr>
-                                        <td style="width: 20%; font-weight: bold;">
+                                        <td  class="ModalPopUpSideHeading">
                                             Business Unit :
                                         </td>
-                                        <td style="width: 80%;">
+                                        <td class="Width80Percent">
                                             <asp:DropDownList ID="ddlBusinessUnitInternal" onchange="ddlParent_onchange(this);"
                                                 Width="250px" runat="server" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width: 20%; font-weight: bold;">
+                                        <td  class="ModalPopUpSideHeading ModalPopUpDropDownPadding">
                                             Project :
                                         </td>
-                                        <td style="width: 80%;">
+                                        <td class="Width80Percent ModalPopUpDropDownPadding">
                                             <asp:DropDownList ID="ddlProjectInternal" onchange="ddlChild_onchange(this);" Width="250px"
                                                 runat="server" />
                                             <AjaxControlToolkit:CascadingDropDown ID="cddProjectsInternal" runat="server" ParentControlID="ddlBusinessUnitInternal"
                                                 TargetControlID="ddlProjectInternal" Category="Group" LoadingText="Loading Projects..."
-                                                EmptyText="No Projects found" PromptText="Please Select a Project" PromptValue="-1"
+                                                EmptyText="No Projects found" PromptText="-- Select Project --" PromptValue="-1"
                                                 BehaviorID="cddProjectsInternal" ScriptPath="~/Scripts/CascadingDropDownBehavior.js"
                                                 ServicePath="~/CompanyPerfomanceServ.asmx" ServiceMethod="GetProjectsListByProjectGroupId"
                                                 UseContextKey="true" />
@@ -856,7 +836,7 @@
                     </table>
                 </asp:Panel>
                 <asp:HiddenField ID="hdTimetypeAlertMessage" runat="server" />
-                 <asp:HiddenField ID="hdIsWeekOrPersonChanged" runat="server" />
+                <asp:HiddenField ID="hdIsWeekOrPersonChanged" runat="server" />
                 <AjaxControlToolkit:ModalPopupExtender ID="mpeTimetypeAlertMessage" runat="server"
                     BehaviorID="mpeTimetypeAlertMessage" TargetControlID="hdTimetypeAlertMessage"
                     BackgroundCssClass="modalBackground" PopupControlID="pnlTimetypeAlertMessage"
