@@ -39,6 +39,18 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        public bool IsHoliday
+        {
+            get
+            {
+                return ViewState["IsHoliday"] != null ? (bool)ViewState["IsHoliday"] : false;
+            }
+            set
+            {
+                ViewState["IsHoliday"] = value;
+            }
+        }
+
         public XElement TimeEntryRecordElement
         {
             get;
@@ -176,6 +188,11 @@ namespace PraticeManagement.Controls.TimeEntry
             {
                 tbNotes.Enabled = false;
                 btnSaveNotes.Enabled = false;
+            }
+
+            if (IsHoliday)
+            {
+                imgClear.Style["display"] = "none";
             }
 
             CanelControlStyle();
