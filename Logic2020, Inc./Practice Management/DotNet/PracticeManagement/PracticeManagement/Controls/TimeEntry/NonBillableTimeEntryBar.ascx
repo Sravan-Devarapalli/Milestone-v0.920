@@ -11,6 +11,8 @@
 <%@ Import Namespace="PraticeManagement.Controls.TimeEntry" %>
 <table class="WholeWidth">
     <tr class="time-entry-bar">
+        <td class="DeleteWidth">
+        </td>
         <td class="time-entry-bar-time-typesNew">
             <asp:DropDownList ID="ddlTimeTypes" runat="server" CssClass="time-entry-bar-time-typesNew-select-Normal"
                 OnDataBound="ddlTimeTypes_DataBound" DataTextField="Name" DataValueField="Id"
@@ -21,12 +23,9 @@
         <asp:Repeater ID="tes" runat="server" OnItemDataBound="repEntries_ItemDataBound">
             <ItemTemplate>
                 <td class="time-entry-bar-single-teNew <%# GetDayOffCssCalss(((System.Xml.Linq.XElement)Container.DataItem)) %>">
-                    <table cellpadding="0" cellspacing="0" class="WholeWidth">
+                    <table class="WholeWidth">
                         <tr>
-                            <td>
-                                N
-                            </td>
-                            <td>
+                            <td align="center">
                                 <te:SingleTE runat="server" ID="ste" />
                             </td>
                         </tr>
@@ -39,9 +38,9 @@
             <ext1:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lblTotalHours" />
             <ext2:EnableDisableExtender ID="extEnableDisable" runat="server" TargetControlID="ddlTimeTypes" />
         </td>
-         <td class="DeleteWidth">
-            <asp:ImageButton ID="imgDropTes" runat="server" OnClientClick='return confirm ("This will remove the Work Type as well as any time and notes entered!  Are you sure?")' ToolTip="Remove Work Type"
-                ImageUrl="~/Images/close_16.png" OnClick="imgDropTes_Click" />
+        <td class="DeleteWidth">
+            <asp:ImageButton ID="imgDropTes" runat="server" OnClientClick='return confirm ("This will remove the Work Type as well as any time and notes entered!  Are you sure?")'
+                ToolTip="Remove Work Type" ImageUrl="~/Images/close_16.png" OnClick="imgDropTes_Click" />
         </td>
     </tr>
 </table>
