@@ -30,7 +30,7 @@ namespace PraticeManagement
         #region Constants
 
         #region XMLConstants
-        
+
         public const string AccountIdXname = "AccountId";
         public const string AccountNameXname = "AccountName";
         public const string ProjectIdXname = "ProjectId";
@@ -40,6 +40,8 @@ namespace PraticeManagement
         public const string TimeEntrySectionIdXname = "TimeEntrySectionId";
         public const string WorkTypeXname = "WorkType";
         public const string BusinessUnitIdXname = "BusinessUnitId";
+        public const string IsPTOXname = "IsPTO";
+        public const string IsHolidayXname = "IsHoliday";
         public const string IdXname = "Id";
         public const string OldIdXname = "OldId";
         public const string CssClassXname = "CssClass";
@@ -69,7 +71,7 @@ namespace PraticeManagement
         private const string internalSectionXmlClose = "</Section>";
         private const string administrativeSectionXmlOpen = "<Section Id=\"4\">";
         private const string administrativeSectionXmlClose = "</Section>";
-        private const string accountAndProjectSelectionXmlOpen = "<AccountAndProjectSelection AccountId=\"{0}\" AccountName=\"{1}\" ProjectId=\"{2}\" ProjectName=\"{3}\" ProjectNumber=\"{4}\" BusinessUnitId=\"{5}\" BusinessUnitName=\"{6}\" IsRecursive=\"{7}\"  >";
+        private const string accountAndProjectSelectionXmlOpen = "<AccountAndProjectSelection AccountId=\"{0}\" AccountName=\"{1}\" ProjectId=\"{2}\" ProjectName=\"{3}\" ProjectNumber=\"{4}\" BusinessUnitId=\"{5}\" BusinessUnitName=\"{6}\" IsRecursive=\"{7}\"  IsPTO=\"{8}\"  IsHoliday=\"{9}\"  >";
         private const string accountAndProjectSelectionXmlClose = "</AccountAndProjectSelection>";
         private const string workTypeXmlOpen = "<WorkType Id=\"{0}\" >";
         private const string workTypeXmlOpenWithOldId = "<WorkType Id=\"{0}\"  OldId=\"{1}\" >";
@@ -115,9 +117,9 @@ namespace PraticeManagement
         public const string imgPlusBusinessDevelopmentSectionId = "imgPlusBusinessDevelopmentSection";
         public const string imgPlusInternalSectionId = "imgPlusInternalSection";
         public const string extMaxValueAllowedForTextBoxExtenderId = "extMaxValueAllowedForTextBoxExtender";
-        
+
         #endregion
-        
+
         #region  Attributes
 
         private const string addAttribute = "add";
@@ -148,9 +150,9 @@ namespace PraticeManagement
 
         private const string AlertTextFormat = " :  Notes are {0} for time entered.";
         private const string SavedAllConfirmation = "TimeEntries saved sucessfully.";
-        
+
         #endregion
-        
+
         #region ViewStateKey
 
         private const string projectSectionXmlKey = "ProjectSection_Key";
@@ -427,7 +429,7 @@ namespace PraticeManagement
                 var cbeImgBtnRecursiveProjectSection = e.Item.FindControl(cbeImgBtnRecursiveProjectSectionExtender) as ConfirmButtonExtender;
                 imgBtnRecursiveProjectSection.ImageUrl = Convert.ToBoolean(isRecursive) ? recursiveSectionImageUrl : nonRecursiveSectionImageUrl;
                 imgBtnRecursiveProjectSection.ToolTip = Convert.ToBoolean(isRecursive) ? recursiveToolTip : nonRecursiveToolTip;
-                cbeImgBtnRecursiveProjectSection.ConfirmText = string.Format( Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat  : nonRecursiveSectionConfirmTextFormat , _projectName, _accountName);
+                cbeImgBtnRecursiveProjectSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, _projectName, _accountName);
                 imgBtnRecursiveProjectSection.Attributes[AccountIdXname] = AccountId;
                 imgBtnRecursiveProjectSection.Attributes[ProjectIdXname] = ProjectId;
                 imgBtnRecursiveProjectSection.Attributes[ProjectNameXname] = _projectName;
@@ -692,17 +694,9 @@ namespace PraticeManagement
                 bar.BusinessUnitId = teSectionDataItem.Attribute(XName.Get(BusinessUnitIdXname)).Value;
                 bar.ProjectId = projectId.ToString();
 
-                if (e.Item.ItemIndex == 0)
-                {
-                    //For PTO 
-                    bar.IsPTO = true;
+                bar.IsPTO = Convert.ToBoolean(teSectionDataItem.Attribute(XName.Get(IsPTOXname)).Value);
+                bar.IsHoliday = Convert.ToBoolean(teSectionDataItem.Attribute(XName.Get(IsHolidayXname)).Value);
 
-                }
-                else if (e.Item.ItemIndex == 1)
-                {
-                    //For holiday we are not allowing the user to change 
-                    bar.Disabled = true;
-                }
 
                 bar.WorkType = ServiceCallers.Custom.Project(p => p.GetTimeTypesByProjectId(projectId, true, SelectedDates[0], SelectedDates[SelectedDates.Length - 1]))[0];
                 bar.TeBarDataSource = teSectionDataItem.Descendants(XName.Get(CalendarItemXname)).ToList();
@@ -977,7 +971,7 @@ namespace PraticeManagement
             if ((int)TimeEntrySectionType.Project == timeEntrySectionId)
             {
                 xdoc = PrePareXmlForProjectSectionFromRepeater();
-                cbeimgBtnRecursiveSection = repeaterItem.FindControl(cbeImgBtnRecursiveProjectSectionExtender) as ConfirmButtonExtender; 
+                cbeimgBtnRecursiveSection = repeaterItem.FindControl(cbeImgBtnRecursiveProjectSectionExtender) as ConfirmButtonExtender;
                 cbeimgBtnRecursiveSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, projectName, accountName);
             }
             else if ((int)TimeEntrySectionType.BusinessDevelopment == timeEntrySectionId)
@@ -999,7 +993,7 @@ namespace PraticeManagement
 
 
             ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntryRecursiveSelection(personId, accountId, businessUnitId, projectId, timeEntrySectionId, isRecursive, dates[0]));
-            
+
             if ((int)TimeEntrySectionType.Project == timeEntrySectionId)
             {
                 ProjectSectionXml = xdoc.ToString();
@@ -1348,9 +1342,9 @@ namespace PraticeManagement
         {
         }
 
-        private Control FindControlInFooter( Repeater repeater, string controlName) 
-        { 
-            return repeater.Controls[repeater.Controls.Count - 1].Controls[0].FindControl(controlName); 
+        private Control FindControlInFooter(Repeater repeater, string controlName)
+        {
+            return repeater.Controls[repeater.Controls.Count - 1].Controls[0].FindControl(controlName);
         }
 
         public bool SaveData(bool isUpdateTimeEntries = false)
@@ -1479,7 +1473,7 @@ namespace PraticeManagement
             DateTime startDate = SelectedDates[0];
             DateTime endDate = SelectedDates[SelectedDates.Length - 1];
 
-            xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive));
+            xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive, teSection.Project.IsPTOProject.ToString(), teSection.Project.IsHolidayProject.ToString()));
 
 
             foreach (KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>> keyVal in teSection.TimeEntriesByTimeType)
@@ -1653,10 +1647,10 @@ namespace PraticeManagement
 
             var teSctions = ServiceCallers.Custom.TimeEntry(te => te.PersonTimeEntriesByPeriod(pcPersons.SelectedPerson.Id.Value, SelectedDates[0], SelectedDates[SelectedDates.Length - 1]));
 
-            AdminiStrativeSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Administrative).ToList();
-            InternalSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Internal).ToList();
-            BusinessDevelopmentSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.BusinessDevelopment).ToList();
-            ProjectSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Project).ToList();
+            AdminiStrativeSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Administrative).OrderByDescending(tes => tes.Project.IsHolidayProject).ThenByDescending(tes => tes.Project.IsPTOProject).ToList();
+            InternalSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Internal).OrderByDescending(tes => tes.IsRecursive).ToList();
+            BusinessDevelopmentSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.BusinessDevelopment).OrderByDescending(tes => tes.IsRecursive).ToList();
+            ProjectSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Project).OrderByDescending(tes => tes.IsRecursive).ToList();
 
             var isSelectedActive =
                  SelectedPerson.Status != null &&
