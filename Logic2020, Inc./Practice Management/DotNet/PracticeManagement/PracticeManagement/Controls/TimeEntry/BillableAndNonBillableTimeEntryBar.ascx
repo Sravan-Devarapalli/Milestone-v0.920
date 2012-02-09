@@ -11,6 +11,8 @@
 <%@ Import Namespace="PraticeManagement.Controls.TimeEntry" %>
 <table class="WholeWidth">
     <tr class="time-entry-bar">
+        <td class="DeleteWidth">
+        </td>
         <td class="time-entry-bar-time-typesNew">
             <asp:DropDownList ID="ddlTimeTypes" runat="server" CssClass="time-entry-bar-time-typesNew-select-Normal"
                 OnDataBound="ddlTimeTypes_DataBound" DataTextField="Name" DataValueField="Id"
@@ -21,7 +23,13 @@
         <asp:Repeater ID="tes" runat="server" OnItemDataBound="repEntries_ItemDataBound">
             <ItemTemplate>
                 <td class="time-entry-bar-single-teNew <%# GetDayOffCssCalss(((System.Xml.Linq.XElement)Container.DataItem)) %>">
-                    <te:BillableAndNonBillableSingleTimeEntry runat="server" ID="ste" />
+                    <table class="WholeWidth">
+                        <tr>
+                            <td align="center">
+                                <te:BillableAndNonBillableSingleTimeEntry runat="server" ID="ste" />
+                            </td>
+                        </tr>
+                    </table>
                 </td>
             </ItemTemplate>
         </asp:Repeater>
