@@ -1411,6 +1411,12 @@ table.sortable thead
     width: 97%;
 }
 
+.time-entry-new-grid
+{
+    vertical-align: top;
+    width: 100%;
+}
+
 .time-entry-bg-light-frame
 {
     background-color: #e2ebff;
@@ -1422,7 +1428,7 @@ table.sortable thead
 {
     background-color: #e2ebff;
     padding: 5px 0px 5px 0px;
-    width: 97%;
+    width: 100%;
 }
 
 .time-entry-bar-project-milestones
@@ -2219,7 +2225,7 @@ TABLE.Section
 {
     width: 50%;
     font-weight: bold;
-    
+    font-size: 14px;
 }
 
 .SectionSecondTD
@@ -2269,4 +2275,22 @@ TABLE.Section
 .DisplayBlock
 {
     display: block;
+}
+
+.Width80Percent
+{
+    width:80%;
+}
+
+.ModalPopUpSideHeading
+{
+    width: 20%;
+    font-weight: bold;
+    text-align: right;
+    padding-right: 4px;
+}
+
+.ModalPopUpDropDownPadding
+{
+    padding-top:8px;
 }
