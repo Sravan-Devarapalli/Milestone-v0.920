@@ -367,6 +367,12 @@ namespace DataTransferObjects
         [DataMember]
         public bool HasTimeEntries { get; set; }
 
+        [DataMember]
+        public bool IsPTOProject { get; set; }
+
+        [DataMember]
+        public bool IsHolidayProject { get; set; }
+
         #endregion
 
         #region Formatting
