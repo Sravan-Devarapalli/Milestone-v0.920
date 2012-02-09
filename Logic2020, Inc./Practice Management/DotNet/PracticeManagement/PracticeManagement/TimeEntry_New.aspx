@@ -728,7 +728,7 @@
                                             <AjaxControlToolkit:CascadingDropDown ID="cddClientProjects" runat="server" ParentControlID="ddlAccountProjectSection"
                                                 TargetControlID="ddlProjectProjectSection" Category="Group" LoadingText="Loading Projects..."
                                                 EmptyText="No Projects found" ScriptPath="~/Scripts/CascadingDropDownBehavior.js"
-                                                BehaviorID="cddClientProjects" PromptText="-- Select Project --" PromptValue="-1"
+                                                BehaviorID="cddClientProjects" PromptText="- - Select Project - -" PromptValue="-1"
                                                 ServicePath="~/CompanyPerfomanceServ.asmx" ServiceMethod="GetProjectsList" UseContextKey="true" />
                                         </td>
                                     </tr>
@@ -793,7 +793,7 @@
                                                 BehaviorID="cddBusinessUnitBDSection" ParentControlID="ddlAccountBusinessDevlopmentSection"
                                                 TargetControlID="ddlBusinessUnitBusinessDevlopmentSection" Category="Group" LoadingText="Loading BusinessUnits..."
                                                 EmptyText="No Business Units found" ScriptPath="~/Scripts/CascadingDropDownBehavior.js"
-                                                ServicePath="~/CompanyPerfomanceServ.asmx" PromptText="-- Select Business Unit --"
+                                                ServicePath="~/CompanyPerfomanceServ.asmx" PromptText="- - Select Business Unit - -"
                                                 PromptValue="-1" ServiceMethod="GetDdlProjectGroupContents" UseContextKey="true" />
                                         </td>
                                     </tr>
@@ -856,7 +856,7 @@
                                                 runat="server" />
                                             <AjaxControlToolkit:CascadingDropDown ID="cddProjectsInternal" runat="server" ParentControlID="ddlBusinessUnitInternal"
                                                 TargetControlID="ddlProjectInternal" Category="Group" LoadingText="Loading Projects..."
-                                                EmptyText="No Projects found" PromptText="-- Select Project --" PromptValue="-1"
+                                                EmptyText="No Projects found" PromptText="- - Select Project - -" PromptValue="-1"
                                                 BehaviorID="cddProjectsInternal" ScriptPath="~/Scripts/CascadingDropDownBehavior.js"
                                                 ServicePath="~/CompanyPerfomanceServ.asmx" ServiceMethod="GetProjectsListByProjectGroupId"
                                                 UseContextKey="true" />
