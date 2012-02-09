@@ -328,10 +328,10 @@ namespace PraticeManagement
             if (!IsPostBack)
             {
                 var clients = ServiceCallers.Custom.Client(c => c.ClientListAllWithoutPermissions());
-                DataHelper.FillListDefault(ddlAccountProjectSection, "-- Select Account --", clients, false);
-                DataHelper.FillListDefault(ddlAccountBusinessDevlopmentSection, "-- Select Account --", clients, false);
+                DataHelper.FillListDefault(ddlAccountProjectSection, "- - Select Account - -", clients, false);
+                DataHelper.FillListDefault(ddlAccountBusinessDevlopmentSection, "- - Select Account - -", clients, false);
                 var groups = ServiceCallers.Custom.Group(client => client.GetInternalBusinessUnits());
-                DataHelper.FillListDefault(ddlBusinessUnitInternal, "-- Select Business Unit --", groups, false);
+                DataHelper.FillListDefault(ddlBusinessUnitInternal, "- - Select Business Unit - -", groups, false);
 
                 AddAttributes();
             }
