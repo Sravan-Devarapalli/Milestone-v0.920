@@ -1,6 +1,6 @@
 ﻿<Sections>
   <Section Id="1">
-    <AccountAndProjectSelection AccountId="0" AccountName="1" ProjectId="2" ProjectName="3" ProjectNumber="{4}"  BusinessUnitId="{5}" BusinessUnitName="{6}" IsRecursive="{7}" >
+    <AccountAndProjectSelection AccountId="0" AccountName="1" ProjectId="2" ProjectName="3" ProjectNumber="{4}"  BusinessUnitId="{5}" BusinessUnitName="{6}" IsRecursive="{7}" IsPTO="{8}"  IsHoliday="{9}" >
       <WorkType Id="" OldId="{1}">
           <CalendarItem  Date="0" CssClass="{1}" IsNoteRequired="{2}"  IsHourlyRevenue="{3}" IsChargeCodeOff="{4}" >
               <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsReviewed="{4}" IsDirty="{5}" ></TimeEntryRecord>
@@ -18,7 +18,7 @@
           </CalendarItem>
       </WorkType>-->
     </AccountAndProjectSelection>
-<!--<AccountAndProjectSelection AccountId="0" AccountName="1" ProjectId="2" ProjectName="3" ProjectNumber="{4}"  BusinessUnitId="{5}" BusinessUnitName="{6}" IsRecursive="{7}" >
+<!--<AccountAndProjectSelection AccountId="0" AccountName="1" ProjectId="2" ProjectName="3" ProjectNumber="{4}"  BusinessUnitId="{5}" BusinessUnitName="{6}" IsRecursive="{7}" IsPTO="{8}"  IsHoliday="{9}" >
       <WorkType Id="" OldId="{1}">
            <CalendarItem  Date="0" CssClass="{1}" IsNoteRequired="{2}"  IsHourlyRevenue="{3}" IsChargeCodeOff="{4}" >
               <TimeEntryRecord   ActualHours="{0}" Note="{1}" IsChargeable="{2}"  EntryDate="{3}" IsReviewed="{4}" IsDirty="{5}" ></TimeEntryRecord>
