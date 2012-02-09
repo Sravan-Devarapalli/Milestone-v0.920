@@ -681,9 +681,9 @@
                                         WarningColor="Orange" />
                                     <asp:ValidationSummary ID="valSumSaveTimeEntries" runat="server" ValidationGroup="TE" />
                                 </td>
-                                <td valign="middle">
+                                <td>
                                     <asp:Button ID="btnSave" runat="server" OnClick="btnSave_OnClick" Text="Save All"
-                                        ToolTip="Save All" />
+                                        CssClass="mrg0" ToolTip="Save All" />
                                 </td>
                             </tr>
                         </table>
