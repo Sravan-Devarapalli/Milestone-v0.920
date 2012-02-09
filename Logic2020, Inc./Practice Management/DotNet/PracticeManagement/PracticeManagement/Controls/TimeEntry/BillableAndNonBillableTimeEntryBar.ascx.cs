@@ -150,7 +150,7 @@ namespace PraticeManagement.Controls.TimeEntry
         protected void ddlTimeTypes_DataBound(object sender, EventArgs e)
         {
             if (ddlTimeTypes.Items.FindByValue("-1") == null)
-                ddlTimeTypes.Items.Insert(0, (new ListItem("1. Select Work Type", "-1")));
+                ddlTimeTypes.Items.Insert(0, (new ListItem("-- Select Work Type --", "-1")));
             AddTitlestoListItems(ddlTimeTypes);
         }
 
