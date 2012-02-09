@@ -29,7 +29,7 @@ BEGIN
 		AND @EndDate <= ISNULL(EndDate,dbo.GetFutureDate())  
 	)
 	SELECT p.ProjectId,
-			p.ProjectNumber +'-'+ p.Name as Name
+			p.ProjectNumber +' - '+ p.Name as Name
 	FROM dbo.v_Project AS p
 	WHERE p.ClientId = @ClientId 
 		AND p.IsAllowedToShow = 1 
