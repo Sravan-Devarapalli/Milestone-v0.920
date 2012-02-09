@@ -4,20 +4,36 @@
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="MessageLabel" TagPrefix="uc" %>
 <%@ Register Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.DirtyStateExtender"
     TagPrefix="ext" %>
-<table cellpadding="0" cellspacing="0px" style="width: 90%">
+<table cellpadding="0" cellspacing="0px" >
     <tr>
-        <td style="width: 60%;">
+        <td>
+            &nbsp;N
+        </td>
+        <td>
             <asp:TextBox ID="tbActualHours" runat="server" MaxLength="5" onchange="setDirty();EnableSaveButton(true);" />
             <asp:HiddenField ID="hdnActualHours" runat="server" Value="" />
             <ajaxToolkit:FilteredTextBoxExtender ID="fteActualHours" TargetControlID="tbActualHours"
                 FilterType="Numbers,Custom" FilterMode="ValidChars" ValidChars="." runat="server">
             </ajaxToolkit:FilteredTextBoxExtender>
         </td>
-        <td style="padding-left: 10px; width: 40%;">
-            <asp:ImageButton ID="imgNote" runat="server" OnClientClick='<%# "SetFocus(\"" + modalEx.ClientID + "\",\"" + tbNotes.ClientID + "\",\"" + tbActualHours.ClientID + "\",\"" + btnSaveNotes.ClientID + "\",\"" + tbActualHours.ClientID + "\"); return false;"%>'
-                ImageUrl='<%# string.IsNullOrEmpty(tbNotes.Text) ? PraticeManagement.Constants.ApplicationResources.AddCommentIcon : PraticeManagement.Constants.ApplicationResources.RecentCommentIcon %>' />
-            <image src='Images/trash-icon.gif' id='imgClear' style='padding-top: 5px;' title="Clear time and notes entered for this day only."
-                onclick='<%# "javaScript:$find(\"" + deActualHours.ClientID + "\").clearData(); changeIcon(\"" + tbNotes.ClientID + "\",\"" + imgNote.ClientID + "\");"%>' />
+        <td>
+            &nbsp;
+        </td>
+        <td>
+            <table>
+                <tr>
+                    <td>
+                        <asp:ImageButton ID="imgNote" runat="server" OnClientClick='<%# "SetFocus(\"" + modalEx.ClientID + "\",\"" + tbNotes.ClientID + "\",\"" + tbActualHours.ClientID + "\",\"" + btnSaveNotes.ClientID + "\",\"" + tbActualHours.ClientID + "\"); return false;"%>'
+                            ImageUrl='<%# string.IsNullOrEmpty(tbNotes.Text) ? PraticeManagement.Constants.ApplicationResources.AddCommentIcon : PraticeManagement.Constants.ApplicationResources.RecentCommentIcon %>' />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <image src='Images/trash-icon.gif' runat="server" id='imgClear' style='padding-top: 5px;'
+                            title="Clear time and notes entered for this day only." onclick='<%# "javaScript:$find(\"" + deActualHours.ClientID + "\").clearData(); changeIcon(\"" + tbNotes.ClientID + "\",\"" + imgNote.ClientID + "\");"%>' />
+                    </td>
+                </tr>
+            </table>
         </td>
     </tr>
 </table>
