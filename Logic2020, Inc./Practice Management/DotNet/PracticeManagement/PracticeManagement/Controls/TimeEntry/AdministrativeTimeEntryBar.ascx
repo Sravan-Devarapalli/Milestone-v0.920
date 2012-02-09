@@ -5,10 +5,12 @@
 <%@ Register TagPrefix="ext" Namespace="PraticeManagement.Controls.Generic.TotalCalculator"
     Assembly="PraticeManagement" %>
 <%@ Register TagPrefix="ext2" Namespace="PraticeManagement.Controls.Generic.EnableDisableExtender"
-   Assembly="PraticeManagement" %>
+    Assembly="PraticeManagement" %>
 <%@ Import Namespace="PraticeManagement.Controls.TimeEntry" %>
 <table class="WholeWidth">
     <tr class="time-entry-bar">
+        <td class="DeleteWidth">
+        </td>
         <td class="time-entry-bar-time-typesNew">
             <asp:Label ID="lblTimeType" runat="server"></asp:Label>
             <asp:HiddenField ID="hdnworkTypeId" runat="server" />
@@ -16,12 +18,9 @@
         <asp:Repeater ID="tes" runat="server" OnItemDataBound="repEntries_ItemDataBound">
             <ItemTemplate>
                 <td class="time-entry-bar-single-teNew <%# GetDayOffCssCalss(((System.Xml.Linq.XElement)Container.DataItem)) %>">
-                    <table cellpadding="0" cellspacing="0" class="WholeWidth">
+                    <table class="WholeWidth">
                         <tr>
-                            <td>
-                                N
-                            </td>
-                            <td>
+                            <td align="center">
                                 <te:SingleTE runat="server" ID="ste" />
                             </td>
                         </tr>
