@@ -114,7 +114,7 @@ namespace PraticeManagement.Controls.TimeEntry
         protected void ddlTimeTypes_DataBound(object sender, EventArgs e)
         {
             if (ddlTimeTypes.Items.FindByValue("-1") == null)
-                ddlTimeTypes.Items.Insert(0, (new ListItem("-- Select Work Type --", "-1")));
+                ddlTimeTypes.Items.Insert(0, (new ListItem("- - Select Work Type - -", "-1")));
             AddTitlestoListItems(ddlTimeTypes);
         }
 
@@ -136,7 +136,7 @@ namespace PraticeManagement.Controls.TimeEntry
             DateTime[] dates = HostingPage.SelectedDates;
 
             //Remove Worktype from xml
-            Project project = ServiceCallers.Custom.Project(pro => pro.GetBusinessDevelopmentProject());
+            var project = ServiceCallers.Custom.Project(pro => pro.GetBusinessDevelopmentProject());
             bool isBusinessDevelopment = project.Id == projectId;
             HostingPage.RemoveWorktypeFromXMLForBusinessDevelopmentAndInternalSection(accountId, businessUnitId, projectId, repItemIndex, isBusinessDevelopment);
 
