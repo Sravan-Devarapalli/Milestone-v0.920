@@ -68,30 +68,7 @@ namespace DataTransferObjects.TimeEntry
                             }
                             else
                             {
-                                //if (keyValuePair.Value.Any(ter => ter.MilestoneDate.Date == terecord.MilestoneDate && ter.IsChargeable == terecord.IsChargeable))
-                                //{
-                                //    var listofKv = keyValuePair.Value.Where(ter => ter.MilestoneDate.Date == terecord.MilestoneDate && ter.IsChargeable == terecord.IsChargeable);
-
-                                //    if (listofKv.Count() > 1)
-                                //    {
-                                //        var isInserted = false;
-                                //        foreach (var keyVal in listofKv)
-                                //        {
-                                //            if(keyVal.MilestoneDate.Date == )
-                                //            {
-                                //                isInserted = true;
-                                //            }
-                                //        }
-                                //    }
-                                //    else
-                                //    {
-                                //        kvList.Add(new KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>>(terecord.TimeType, new List<TimeEntryRecord>() { terecord }));
-                                //    }
-                                //}
-                                //else
-                                //{
-                                    keyValuePair.Value.Add(terecord);
-                                //}
+                                keyValuePair.Value.Add(terecord);
                             }
                         }
                         else
