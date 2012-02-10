@@ -4,7 +4,7 @@
 	PersonId			INT NOT NULL,
 	ClientId			INT NOT NULL,
 	ProjectId			INT NOT NULL,
-	ProjectGroupId		INT NULL,
+	ProjectGroupId		INT NOT NULL,
 	TimeEntrySectionId	INT NOT NULL,
 	StartDate			DATETIME NOT NULL,
 	EndDate				DATETIME NULL,
