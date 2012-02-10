@@ -177,11 +177,10 @@
 
                     function DeleteSection(name, rowsCount, controlClientId) {
                         var imgControl = document.getElementById(controlClientId);
-                        var confirmMessageFormat = "This will remove the {0} / {1} and any associated time entries!  If this {0} / {1} has been selected as recurring, continuing will result in the {0} / {1} being removed for only this time entry period.  Do you want to continue?";
+                        var confirmMessageFormat = "This will remove the \"{0}\" and any associated time entries!  If this \"{0}\" has been selected as recurring, continuing will result in the \"{0}\" being removed for only this time entry period.  Do you want to continue?";
 
                         for (var i = 0; i < 3; i++) {
                             confirmMessageFormat = confirmMessageFormat.replace('{0}', imgControl.getAttribute('FormatValueOne'));
-                            confirmMessageFormat = confirmMessageFormat.replace('{1}', imgControl.getAttribute('FormatValueTwo'));
                         }
 
                         if (confirm(confirmMessageFormat)) {
@@ -230,10 +229,12 @@
                         if (hdIsWeekOrPersonChanged.value.toLowerCase() == 'true') {
                             var lbProjectSection = document.getElementById('<%=lbProjectSection.ClientID %>');
                             var lbBusinessDevelopmentSection = document.getElementById('<%=lbBusinessDevelopmentSection.ClientID %>');
-                            var lbInternalSection = document.getElementById('<%=lbInternalSection.ClientID %>');
+                            var lbInternalSection = document.getElementById( '<%=lbInternalSection.ClientID %>' );
+                            var lbAdministrativeSection = document.getElementById( '<%=lbAdministrativeSection.ClientID %>' );
                             expandCollapseSections('cpeProjectSection', lbProjectSection);
                             expandCollapseSections('cpeBusinessDevelopmentSection', lbBusinessDevelopmentSection);
-                            expandCollapseSections('cpeInternalSection', lbInternalSection);
+                            expandCollapseSections( 'cpeInternalSection', lbInternalSection );
+                            expandCollapseSections( 'cpeAdministrative', lbAdministrativeSection );
                             hdIsWeekOrPersonChanged.value = 'false';
                         }
                     }
@@ -535,7 +536,14 @@
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
                                 <td>
-                                    <img src="Images/collapse.jpg" style="visibility: hidden;" />&nbsp;<b>ADMINISTRATIVE</b>
+                                <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeAdministrative" runat="Server"
+                                        CollapsedText="Expand Section" ExpandedText="Collapse Section" EnableViewState="false"
+                                        TargetControlID="pnlAdministrativeSection" ImageControlID="btnAdmistrativeExpandCollapseFilter"
+                                        CollapsedImage="Images/expand.jpg" ExpandedImage="Images/collapse.jpg" CollapseControlID="btnAdmistrativeExpandCollapseFilter"
+                                        ExpandControlID="btnAdmistrativeExpandCollapseFilter" TextLabelID="lbAdministrativeSection" BehaviorID="cpeAdministrative" />
+                                    <asp:Label ID="lbAdministrativeSection" Style="display: none;" runat="server"></asp:Label>
+                                    <asp:Image ID="btnAdmistrativeExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg"
+                                        ToolTip="Expand Section" />&nbsp;<b>ADMINISTRATIVE</b>
                                 </td>
                                 <td>
                                 </td>
@@ -544,7 +552,7 @@
                             </tr>
                         </table>
                     </div>
-                    <asp:Panel ID="Panel3" runat="server" CssClass="cp bg-white">
+                    <asp:Panel ID="pnlAdministrativeSection" runat="server" CssClass="cp bg-white">
                         <asp:Repeater ID="repAdministrativeTes" OnItemDataBound="repAdministrativeTes_ItemDataBound"
                             runat="server">
                             <HeaderTemplate>
@@ -592,8 +600,8 @@
                                 <asp:Repeater ID="repDayTotalHours" OnItemDataBound="repDayTotalHours_OnItemDataBound"
                                     runat="server">
                                     <ItemTemplate>
-                                        <td class="time-entry-bar-single-teNew DayTotalHours">
-                                            <asp:Label ID="lblDayTotal" CssClass="alignRight" Font-Bold="true" TotalHours=""
+                                        <td class="time-entry-bar-single-teNew DayTotalHours <%# GetDayOffCssCalss(((DataTransferObjects.CalendarItem)Container.DataItem)) %>">
+                                            <asp:Label ID="lblDayTotal" CssClass="alignRight PaddingClass2" Font-Bold="true" TotalHours=""
                                                 runat="server"></asp:Label>
                                             <ext:TotalCalculatorExtender ID="extDayTotal" runat="server" TargetControlID="lblDayTotal" />
                                             <asp:HiddenField ID="hdnDayTotal" runat="server"></asp:HiddenField>
