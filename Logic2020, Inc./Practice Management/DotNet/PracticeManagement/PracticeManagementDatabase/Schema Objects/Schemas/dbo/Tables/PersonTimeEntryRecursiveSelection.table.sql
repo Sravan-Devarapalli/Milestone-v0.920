@@ -8,7 +8,7 @@
 	TimeEntrySectionId	INT NOT NULL,
 	StartDate			DATETIME NOT NULL,
 	EndDate				DATETIME NULL,
-	IsRecursive			BIT NOT NULL,
+	IsRecursive			BIT NOT NULL CONSTRAINT DF_PersonTimeEntryRecursiveSelection_IsRecursive DEFAULT 0,
 	CONSTRAINT PK_PersonTimeEntryRecursiveSelection_Id PRIMARY KEY CLUSTERED (Id ASC)
 );
 
