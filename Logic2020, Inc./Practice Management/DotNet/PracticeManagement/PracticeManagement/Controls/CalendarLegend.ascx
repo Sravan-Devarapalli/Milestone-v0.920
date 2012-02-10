@@ -40,7 +40,7 @@
                     </table>
                 </td>
                 <td style="margin-top: 5px; padding-top: 5px;">
-                    - This is a company work day, and the person is on vacation.
+                    - This is a company work day, and the person is taking paid or otherwise approved time off.
                 </td>
             </tr>
             <tr>
