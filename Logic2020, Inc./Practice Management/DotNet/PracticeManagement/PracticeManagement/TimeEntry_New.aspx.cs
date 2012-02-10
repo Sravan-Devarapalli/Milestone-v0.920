@@ -125,11 +125,11 @@ namespace PraticeManagement
         private const string addAttribute = "add";
         private const string recursiveSectionImageUrl = "~/Images/Recursive.png";
         private const string nonRecursiveSectionImageUrl = "~/Images/Not_Recursive.png";
-        private const string recursiveSectionConfirmTextFormat = "Continuing will disable the recurring functionality for this {0} / {1}. This {0} / {1} will cease to automatically appear in future time periods.  Are you sure you want to disable this functionality?";
-        private const string nonRecursiveSectionConfirmTextFormat = "Continuing will enable the recurring functionality for this {0} / {1}.  This {0} / {1} will continue to automatically appear in future time periods until either you disable the functionality, or until the {0} ends / {1} is disabled.  Are you sure you want to enable this functionality?";
+        private const string recursiveSectionConfirmTextFormat = "Continuing will disable the recurring functionality for this \"{0}\". This \"{0}\" will cease to automatically appear in future time periods.  Are you sure you want to disable this functionality?";
+        private const string nonRecursiveSectionConfirmTextFormat = "Continuing will enable the recurring functionality for this \"{0}\".  This \"{0}\" will continue to automatically appear in future time periods until either you disable the functionality, or until the {1}.  Are you sure you want to enable this functionality?";
         private const string recursiveToolTip = "Disable Recurring Behavior";
         private const string nonRecursiveToolTip = "Enable Recurring Behavior";
-        private const string deleteSectionToolTipFormat = "Remove {0} / {1}";
+        private const string deleteSectionToolTipFormat = "Remove {0}";
         private const string parentDropDownClientIdAttribute = "parentDropDownClientId";
         private const string childDropDownClientIdAttribute = "childDropDownClientId";
         private const string btnAddAttribute = "btnAdd";
@@ -142,7 +142,7 @@ namespace PraticeManagement
         public const string RowsCountAttribute = "rowsCount";
         public const string FormatValue_One = "FormatValueOne";
         public const string FormatValue_Two = "FormatValueTwo";
-        public const string PlusToolTipFormat = "Add additional Work Type to {0} / {1}";
+        public const string PlusToolTipFormat = "Add additional Work Type to {0}";
 
         #endregion
 
@@ -350,6 +350,8 @@ namespace PraticeManagement
                 cpeProjectSection.Collapsed = !(repProjectSections.Items.Count > 0);
                 cpeBusinessDevelopmentSection.Collapsed = !(repBusinessDevelopmentSections.Items.Count > 0);
                 cpeInternalSection.Collapsed = !(repInternalSections.Items.Count > 0);
+                var xdoc = XDocument.Parse(AdministrativeSectionXml);
+                cpeAdministrative.Collapsed = !(xdoc.Descendants(XName.Get(TimeEntryRecordXname)).ToList().Count > 0);
             }
 
             ddlAccountProjectSection.Attributes[personIdAttribute] =
@@ -367,6 +369,9 @@ namespace PraticeManagement
             lbProjectSection.Attributes[RowsCountAttribute] = repProjectSections.Items.Count.ToString();
             lbBusinessDevelopmentSection.Attributes[RowsCountAttribute] = repBusinessDevelopmentSections.Items.Count.ToString();
             lbInternalSection.Attributes[RowsCountAttribute] = repInternalSections.Items.Count.ToString();
+            var administrativeXdoc = XDocument.Parse(AdministrativeSectionXml);
+            int administrativeTECount = administrativeXdoc.Descendants(XName.Get(TimeEntryRecordXname)).ToList().Count ;
+            lbAdministrativeSection.Attributes[RowsCountAttribute] = administrativeTECount.ToString();
         }
 
         #endregion
@@ -429,7 +434,7 @@ namespace PraticeManagement
                 var cbeImgBtnRecursiveProjectSection = e.Item.FindControl(cbeImgBtnRecursiveProjectSectionExtender) as ConfirmButtonExtender;
                 imgBtnRecursiveProjectSection.ImageUrl = Convert.ToBoolean(isRecursive) ? recursiveSectionImageUrl : nonRecursiveSectionImageUrl;
                 imgBtnRecursiveProjectSection.ToolTip = Convert.ToBoolean(isRecursive) ? recursiveToolTip : nonRecursiveToolTip;
-                cbeImgBtnRecursiveProjectSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, _projectName, _accountName);
+                cbeImgBtnRecursiveProjectSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, _projectName,"\""+ _projectName+"\" end");
                 imgBtnRecursiveProjectSection.Attributes[AccountIdXname] = AccountId;
                 imgBtnRecursiveProjectSection.Attributes[ProjectIdXname] = ProjectId;
                 imgBtnRecursiveProjectSection.Attributes[ProjectNameXname] = _projectName;
@@ -440,9 +445,8 @@ namespace PraticeManagement
 
                 var imgBtnDeleteProjectSection = e.Item.FindControl(imgBtnDeleteProjectSectionImage) as ImageButton;
                 imgBtnDeleteProjectSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Project).ToString();
-                imgBtnDeleteProjectSection.ToolTip = String.Format(deleteSectionToolTipFormat, _projectName, _accountName);
+                imgBtnDeleteProjectSection.ToolTip = String.Format(deleteSectionToolTipFormat, _projectName);
                 imgBtnDeleteProjectSection.Attributes[FormatValue_One] = _projectName;
-                imgBtnDeleteProjectSection.Attributes[FormatValue_Two] = _accountName;
             }
         }
 
@@ -474,7 +478,7 @@ namespace PraticeManagement
                 var cbeImgBtnRecurrenceBusinessDevelopmentSection = e.Item.FindControl(cbeImgBtnRecurrenceBusinessDevelopmentSectionExtender) as ConfirmButtonExtender;
                 imgBtnRecurrenceBusinessDevelopmentSection.ToolTip = Convert.ToBoolean(isRecursive) ? recursiveToolTip : nonRecursiveToolTip;
                 imgBtnRecurrenceBusinessDevelopmentSection.ImageUrl = Convert.ToBoolean(isRecursive) ? recursiveSectionImageUrl : nonRecursiveSectionImageUrl;
-                cbeImgBtnRecurrenceBusinessDevelopmentSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, _businessUnitName, _accountName);
+                cbeImgBtnRecurrenceBusinessDevelopmentSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, _accountName,"\""+ _accountName + "\" is disabled");
                 imgBtnRecurrenceBusinessDevelopmentSection.Attributes[AccountIdXname] = AccountId;
                 imgBtnRecurrenceBusinessDevelopmentSection.Attributes[ProjectIdXname] = ProjectId;
                 imgBtnRecurrenceBusinessDevelopmentSection.Attributes[AccountNameXname] = _accountName;
@@ -485,9 +489,8 @@ namespace PraticeManagement
 
                 var imgBtnDeleteBusinessDevelopmentSection = e.Item.FindControl(imgBtnDeleteBusinessDevelopmentSectionImage) as ImageButton;
                 imgBtnDeleteBusinessDevelopmentSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.BusinessDevelopment).ToString();
-                imgBtnDeleteBusinessDevelopmentSection.ToolTip = String.Format(deleteSectionToolTipFormat, _businessUnitName, _accountName);
-                imgBtnDeleteBusinessDevelopmentSection.Attributes[FormatValue_One] = _businessUnitName;
-                imgBtnDeleteBusinessDevelopmentSection.Attributes[FormatValue_Two] = _accountName;
+                imgBtnDeleteBusinessDevelopmentSection.ToolTip = String.Format(deleteSectionToolTipFormat,_accountName);
+                imgBtnDeleteBusinessDevelopmentSection.Attributes[FormatValue_One] = _accountName;
             }
         }
 
@@ -520,7 +523,7 @@ namespace PraticeManagement
                 var cbeImgBtnRecurrenceInternalSection = e.Item.FindControl(cbeImgBtnRecurrenceInternalSectionExtender) as ConfirmButtonExtender;
                 imgBtnRecurrenceInternalSection.ImageUrl = Convert.ToBoolean(isRecursive) ? recursiveSectionImageUrl : nonRecursiveSectionImageUrl;
                 imgBtnRecurrenceInternalSection.ToolTip = Convert.ToBoolean(isRecursive) ? recursiveToolTip : nonRecursiveToolTip;
-                cbeImgBtnRecurrenceInternalSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, _projectName, _businessUnitName);
+                cbeImgBtnRecurrenceInternalSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, _projectName,"\""+ _projectName+ "\" end");
 
                 imgBtnRecurrenceInternalSection.Attributes[AccountIdXname] = AccountId;
                 imgBtnRecurrenceInternalSection.Attributes[ProjectIdXname] = ProjectId;
@@ -532,9 +535,8 @@ namespace PraticeManagement
 
                 var imgBtnDeleteInternalSection = e.Item.FindControl(imgBtnDeleteInternalSectionImage) as ImageButton;
                 imgBtnDeleteInternalSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Internal).ToString();
-                imgBtnDeleteInternalSection.ToolTip = String.Format(deleteSectionToolTipFormat, _projectName, _businessUnitName);
+                imgBtnDeleteInternalSection.ToolTip = String.Format(deleteSectionToolTipFormat, _projectName);
                 imgBtnDeleteInternalSection.Attributes[FormatValue_One] = _projectName;
-                imgBtnDeleteInternalSection.Attributes[FormatValue_Two] = _businessUnitName;
             }
         }
 
@@ -578,7 +580,7 @@ namespace PraticeManagement
                 var imgPlusProjectSection = e.Item.FindControl(imgPlusProjectSectionImage) as ImageButton;
                 imgPlusProjectSection.Attributes[AccountIdXname] = AccountId;
                 imgPlusProjectSection.Attributes[ProjectIdXname] = ProjectId;
-                imgPlusProjectSection.ToolTip = string.Format(PlusToolTipFormat, _projectName, _accountName);
+                imgPlusProjectSection.ToolTip = string.Format(PlusToolTipFormat, _projectName);
             }
         }
 
@@ -625,7 +627,7 @@ namespace PraticeManagement
                 imgPlusBusinessDevelopmentSection.Attributes[AccountIdXname] = AccountId;
                 imgPlusBusinessDevelopmentSection.Attributes[ProjectIdXname] = ProjectId;
                 imgPlusBusinessDevelopmentSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
-                imgPlusBusinessDevelopmentSection.ToolTip = string.Format(PlusToolTipFormat, _businessUnitName, _accountName);
+                imgPlusBusinessDevelopmentSection.ToolTip = string.Format(PlusToolTipFormat, _accountName);
             }
 
         }
@@ -672,7 +674,7 @@ namespace PraticeManagement
                 imgPlusInternalSection.Attributes[AccountIdXname] = AccountId;
                 imgPlusInternalSection.Attributes[ProjectIdXname] = ProjectId;
                 imgPlusInternalSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
-                imgPlusInternalSection.ToolTip = string.Format(PlusToolTipFormat, _projectName, _businessUnitName);
+                imgPlusInternalSection.ToolTip = string.Format(PlusToolTipFormat, _projectName);
             }
         }
 
@@ -702,6 +704,11 @@ namespace PraticeManagement
                 bar.TeBarDataSource = teSectionDataItem.Descendants(XName.Get(CalendarItemXname)).ToList();
                 bar.UpdateTimeEntries();
             }
+        }
+
+        protected string GetDayOffCssCalss(CalendarItem day)
+        {
+            return Utils.Calendar.GetCssClassByCalendarItem(day); 
         }
 
         protected void repDayTotalHours_OnItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -743,7 +750,7 @@ namespace PraticeManagement
                     }
 
                     var imgBtnDeleteProjectSection = barItem.FindControl(imgBtnDeleteProjectSectionImage) as ImageButton;
-                    imgBtnDeleteProjectSection.Attributes["onclick"] = "return DeleteSection('" + cpeProjectSection.BehaviorID + "','" + repProjectSections.Items.Count.ToString() + "','" + imgBtnDeleteProjectSection.ClientID + "');";
+                    imgBtnDeleteProjectSection.Attributes["onclick"] = "return DeleteSection('" + cpeProjectSection.BehaviorID + "','" + repProjectSections.Items.Count.ToString() + "','" + imgBtnDeleteProjectSection.ClientID + "','1');";
 
                 }
 
@@ -760,7 +767,7 @@ namespace PraticeManagement
                     }
 
                     var imgBtnDeleteBusinessDevelopmentSection = barItem.FindControl(imgBtnDeleteBusinessDevelopmentSectionImage) as ImageButton;
-                    imgBtnDeleteBusinessDevelopmentSection.Attributes["onclick"] = "return DeleteSection('" + cpeBusinessDevelopmentSection.BehaviorID + "','" + repBusinessDevelopmentSections.Items.Count.ToString() + "','" + imgBtnDeleteBusinessDevelopmentSection.ClientID + "');";
+                    imgBtnDeleteBusinessDevelopmentSection.Attributes["onclick"] = "return DeleteSection('" + cpeBusinessDevelopmentSection.BehaviorID + "','" + repBusinessDevelopmentSections.Items.Count.ToString() + "','" + imgBtnDeleteBusinessDevelopmentSection.ClientID + "','2');";
 
                 }
 
@@ -778,7 +785,7 @@ namespace PraticeManagement
                     }
 
                     var imgBtnDeleteInternalSection = barItem.FindControl(imgBtnDeleteInternalSectionImage) as ImageButton;
-                    imgBtnDeleteInternalSection.Attributes["onclick"] = "return DeleteSection('" + cpeInternalSection.BehaviorID + "','" + repInternalSections.Items.Count.ToString() + "','" + imgBtnDeleteInternalSection.ClientID + "');";
+                    imgBtnDeleteInternalSection.Attributes["onclick"] = "return DeleteSection('" + cpeInternalSection.BehaviorID + "','" + repInternalSections.Items.Count.ToString() + "','" + imgBtnDeleteInternalSection.ClientID + "','3');";
 
                 }
 
@@ -972,19 +979,19 @@ namespace PraticeManagement
             {
                 xdoc = PrePareXmlForProjectSectionFromRepeater();
                 cbeimgBtnRecursiveSection = repeaterItem.FindControl(cbeImgBtnRecursiveProjectSectionExtender) as ConfirmButtonExtender;
-                cbeimgBtnRecursiveSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, projectName, accountName);
+                cbeimgBtnRecursiveSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, projectName,"\""+ projectName + "\" end");
             }
             else if ((int)TimeEntrySectionType.BusinessDevelopment == timeEntrySectionId)
             {
                 xdoc = PrePareXmlForBusinessDevelopmentSectionFromRepeater();
                 cbeimgBtnRecursiveSection = repeaterItem.FindControl(cbeImgBtnRecurrenceBusinessDevelopmentSectionExtender) as ConfirmButtonExtender;
-                cbeimgBtnRecursiveSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, businessUnitName, accountName);
+                cbeimgBtnRecursiveSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, accountName, "\"" + accountName + "\" is disabled");
             }
             else if ((int)TimeEntrySectionType.Internal == timeEntrySectionId)
             {
                 xdoc = PrePareXmlForInternalSectionFromRepeater();
                 cbeimgBtnRecursiveSection = repeaterItem.FindControl(cbeImgBtnRecurrenceInternalSectionExtender) as ConfirmButtonExtender;
-                cbeimgBtnRecursiveSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, projectName, businessUnitName);
+                cbeimgBtnRecursiveSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, projectName, "\"" + projectName + "\" end");
             }
 
             List<XElement> xlist = xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
@@ -1719,9 +1726,13 @@ namespace PraticeManagement
 
             if (isDayTotalDatabind)
             {
+                CalendarItems = CalendarItems ??
+                                   ServiceCallers.Custom.Calendar(
+                                                                    c => c.GetCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
+                                                                  );
                 BillableControlIds = string.Empty;
                 NonBillableControlIds = string.Empty;
-                repDayTotalHours.DataSource = SelectedDates;
+                repDayTotalHours.DataSource = CalendarItems;
                 repDayTotalHours.DataBind();
             }
         }
