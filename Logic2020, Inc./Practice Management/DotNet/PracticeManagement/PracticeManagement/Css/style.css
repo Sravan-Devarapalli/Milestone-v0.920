@@ -2154,19 +2154,18 @@ table.CellPaddingClass td
     
 .time-entry-bar-time-typesNew-select-Normal
 {
-    width: 100% !important;
+    width: 92% !important;
 }
 
 .time-entry-bar-time-typesNew-select-Extended
 {
-    width: 100% !important;
+    width: 92% !important;
 }
 
 .time-entry-bar-single-teNew
 {
     text-align: center;
     vertical-align: middle;
-    
     width: 8%;
 }
 
@@ -2177,7 +2176,7 @@ table.CellPaddingClass td
 
 .time-entry-bar-single-teNew input[type=text]
 {
-    width: 32px !important;
+    width: 36px !important;
     margin: 1px 0px 0px 2px;
     border: 1px solid #aaa;
     height: 16px;
