@@ -225,7 +225,7 @@ BEGIN
 		) AS entryList
 		GROUP BY entryList.Date
 
-		--Delete PTO entry from PersonCalendar.
+		--Delete PTO entry from PersonCalendar only if the Person has PTO not Floating Holiday.
 		DELETE PC
 		FROM dbo.PersonCalendar PC
 		LEFT JOIN @DailyTotalHoursWithOutPTOHoliday DTH ON DTH.Date = PC.Date 
@@ -233,10 +233,10 @@ BEGIN
 				ON Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4 
 					AND Dates.c.value('..[1]/@Date', 'DATETIME') = PC.Date
 					AND Dates.c.value('..[1]/..[1]/@Id', 'INT') = @PTOTimeTypeId
-		WHERE PC.PersonId =  @PersonId AND PC.Date BETWEEN @StartDate AND @EndDate
+		WHERE PC.PersonId =  @PersonId AND PC.Date BETWEEN @StartDate AND @EndDate AND PC.IsFloatingHoliday <> 1
 			AND (DTH.TotalHours >= 8 OR (ISNULL(DTH.TotalHours, 0) < 8 AND Dates.c.value('@ActualHours', 'REAL') = 0))
 
-		--Update PTO.
+		--Update PTO actual hours.
 		UPDATE PC
 		SET	ActualHours = ISNULL(Dates.c.value('@ActualHours', 'REAL'), 8 - DTH.TotalHours)
 		FROM dbo.PersonCalendar PC
