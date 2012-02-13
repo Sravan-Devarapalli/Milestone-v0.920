@@ -12,7 +12,7 @@
         <td class="DeleteWidth">
         </td>
         <td class="time-entry-bar-time-typesNew">
-            <asp:Label ID="lblTimeType" runat="server" CssClass="worktypeLabel"></asp:Label>
+            <asp:Label ID="lblTimeType" runat="server" ></asp:Label>
             <asp:HiddenField ID="hdnworkTypeId" runat="server" />
         </td>
         <asp:Repeater ID="tes" runat="server" OnItemDataBound="repEntries_ItemDataBound">
