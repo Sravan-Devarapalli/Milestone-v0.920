@@ -1798,11 +1798,6 @@ TD.DayOff, TH.DayOff
 {
     background-color: #FFAAFF;
 }
-.worktypeLabel
-{
-    font-size:14px;
-    font-weight:bold;
-}
 TD.DayOn, TH.DayOn
 {
     background-color: Transparent;
