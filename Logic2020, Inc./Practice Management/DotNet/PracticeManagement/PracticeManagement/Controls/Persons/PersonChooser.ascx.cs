@@ -116,11 +116,6 @@ namespace PraticeManagement.Controls.Persons
                                       {
                                           Id = personId
                                       }));
-                if(HostingPage != null)
-                {
-                    HostingPage.IsWeekOrPersonChanged = true; 
-                }
-
             }
             else
             {
