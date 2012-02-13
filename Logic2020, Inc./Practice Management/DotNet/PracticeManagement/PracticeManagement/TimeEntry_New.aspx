@@ -892,7 +892,7 @@
                     </table>
                 </asp:Panel>
                 <asp:HiddenField ID="hdTimetypeAlertMessage" runat="server" />
-                <asp:HiddenField ID="hdIsWeekOrPersonChanged" runat="server" />
+                <asp:HiddenField ID="hdIsWeekOrPersonChanged" runat="server" Value="false" />
                 <AjaxControlToolkit:ModalPopupExtender ID="mpeTimetypeAlertMessage" runat="server"
                     BehaviorID="mpeTimetypeAlertMessage" TargetControlID="hdTimetypeAlertMessage"
                     BackgroundCssClass="modalBackground" PopupControlID="pnlTimetypeAlertMessage"
