@@ -1193,12 +1193,14 @@ namespace PraticeManagement
 
         protected void pcPersons_PersonChanged(object sender, PersonChangedEventArguments args)
         {
+            IsWeekOrPersonChanged = true;
             UpdateTimeEntries();
             wsChoose.UpdateWeekLabel();
         }
 
         protected void wsChoose_WeekChanged(object sender, WeekChangedEventArgs args)
         {
+            IsWeekOrPersonChanged = true;
             UpdateTimeEntries();
         }
 
