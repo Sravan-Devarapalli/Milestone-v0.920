@@ -175,14 +175,14 @@
                         }
                     }
 
-                    function DeleteSection(name, rowsCount, controlClientId) {
-                        var imgControl = document.getElementById(controlClientId);
-                        var confirmMessageFormat = "This will remove the \"{0}\" and any associated time entries!  If this \"{0}\" has been selected as recurring, continuing will result in the \"{0}\" being removed for only this time entry period.  Do you want to continue?";
-
-                        for (var i = 0; i < 3; i++) {
-                            confirmMessageFormat = confirmMessageFormat.replace('{0}', imgControl.getAttribute('FormatValueOne'));
-                        }
-
+                    function DeleteSection(name, rowsCount, controlClientId,sectionId) {
+                        var imgControl = document.getElementById( controlClientId );
+                        var projectConfirmMessageFormat = "This will remove the project and any associated time entries!  If this project has been selected as recurring, continuing will result in the project being removed for only this time entry period.  Do you want to continue?";
+                        var accountConfirmMessageFormat = "This will remove the account and any associated time entries!  If this account has been selected as recurring, continuing will result in the account being removed for only this time entry period.  Do you want to continue?";
+                        var confirmMessageFormat = projectConfirmMessageFormat;                       
+                        if(sectionId == '2')
+                            confirmMessageFormat = accountConfirmMessageFormat;
+                     
                         if (confirm(confirmMessageFormat)) {
                             CollapsePanel(name, rowsCount);
                             return true;
