@@ -152,16 +152,6 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             hdnworkTypeId.Value = WorkType.Id.ToString();
             lblTimeType.Text = lblTimeType.ToolTip = WorkType.Name;
-            if(IsPTO)
-            {
-                lblTimeType.Style.Add("color", "#FF6600");
-            }
-            if (IsHoliday)
-            {
-                lblTimeType.Style.Add("color", "#FFAAFF");
-            }
-
-
             tes.DataSource = TeBarDataSource;
             tes.DataBind();
         }
