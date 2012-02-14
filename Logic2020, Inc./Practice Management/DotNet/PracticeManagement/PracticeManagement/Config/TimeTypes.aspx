@@ -20,15 +20,26 @@
             }
             return true;
         }
+
+        function rbtn_OnClick(rbtn, adminCheckBoxId, value) {
+            var chb = document.getElementById(adminCheckBoxId);
+            chb.disabled = value;
+            chb.checked = false;
+        }
     </script>
     <asp:UpdatePanel ID="upnlTimeTypes" runat="server">
         <ContentTemplate>
-            <asp:GridView ID="gvTimeTypes" runat="server" Width="550px" BackColor="White" AutoGenerateColumns="False"
+            <asp:GridView ID="gvTimeTypes" runat="server" Width="80%" BackColor="White" AutoGenerateColumns="False"
                 OnRowDataBound="gvTimeTypes_RowDataBound" CssClass="CompPerfTable" GridLines="None"
                 EnableModelValidation="True">
                 <Columns>
                     <asp:TemplateField>
-                        <ItemStyle HorizontalAlign="Center" Width="10%" />
+                        <HeaderTemplate>
+                            <div class="ie-bg">
+                                &nbsp;
+                            </div>
+                        </HeaderTemplate>
+                        <ItemStyle HorizontalAlign="Center" Width="6%" />
                         <ItemTemplate>
                             <asp:ImageButton ID="imgEdit" runat="server" ImageUrl="~/Images/icon-edit.png" OnClick="imgEdit_OnClick"
                                 ToolTip="Edit Work Type" Visible='<%# (bool)Eval("IsAllowedToEdit") %>' />
@@ -42,9 +53,11 @@
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
-                        <ItemStyle HorizontalAlign="Left" Width="55%" Height="25px" />
+                        <ItemStyle HorizontalAlign="Left" Width="47%" Height="25px" />
                         <HeaderTemplate>
-                            <span class="bg">Work Type Name</span>
+                            <div class="ie-bg">
+                                Work Type Name
+                            </div>
                         </HeaderTemplate>
                         <ItemTemplate>
                             <asp:Label ID="lblName" runat="server" Text='<%# Eval("Name") %>' />
@@ -66,7 +79,8 @@
                     <asp:TemplateField>
                         <ItemStyle HorizontalAlign="Center" Width="10%" />
                         <HeaderTemplate>
-                            <span class="bg">Is Default</span>
+                            <div class="ie-bg">
+                                Is Default</div>
                         </HeaderTemplate>
                         <ItemStyle HorizontalAlign="Center" CssClass="CompPerfProjectNumber" />
                         <ItemTemplate>
@@ -81,7 +95,8 @@
                     <asp:TemplateField>
                         <ItemStyle HorizontalAlign="Center" Width="10%" />
                         <HeaderTemplate>
-                            <span class="bg">Is Internal</span>
+                            <div class="ie-bg">
+                                Is Internal</div>
                         </HeaderTemplate>
                         <ItemStyle HorizontalAlign="Center" CssClass="CompPerfProjectNumber" />
                         <ItemTemplate>
@@ -98,9 +113,26 @@
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
+                        <ItemStyle HorizontalAlign="Center" Width="12%" />
+                        <HeaderTemplate>
+                            <div class="ie-bg">
+                                Is Administrative</div>
+                        </HeaderTemplate>
+                        <ItemStyle HorizontalAlign="Center" CssClass="CompPerfProjectNumber" />
+                        <ItemTemplate>
+                            <asp:CheckBox ID="chbIsAdministrative" runat="server" Checked='<%# Eval("IsAdministrative") %>'
+                                Enabled="false" />
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <asp:CheckBox ID="chbIsAdministrative" runat="server" Checked='<%# Bind("IsAdministrative") %>'
+                                Enabled="false" />
+                        </EditItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField>
                         <ItemStyle HorizontalAlign="Center" Width="10%" />
                         <HeaderTemplate>
-                            <span class="bg">Is Active</span>
+                            <div class="ie-bg">
+                                Is Active</div>
                         </HeaderTemplate>
                         <ItemStyle HorizontalAlign="Center" CssClass="CompPerfProjectNumber" />
                         <ItemTemplate>
@@ -111,6 +143,11 @@
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
+                        <HeaderTemplate>
+                            <div class="ie-bg">
+                                &nbsp;
+                            </div>
+                        </HeaderTemplate>
                         <ItemStyle HorizontalAlign="Center" Width="5%" />
                         <ItemTemplate>
                             <asp:ImageButton ID="imgDelete" runat="server" ImageUrl="~/Images/icon-delete.png"
@@ -123,56 +160,57 @@
                 </Columns>
                 <AlternatingRowStyle BackColor="#F9FAFF" />
             </asp:GridView>
-            <p>
-                <table width="550px" style="padding-top: 6px; background-color: white; border-collapse: collapse;"
-                    border="0" cellspacing="0">
-                    <tr style="background-color: #F9FAFF; height: 30px;">
-                        <td align="center" valign="middle" style="width: 7%">
-                            <asp:ImageButton ID="ibtnInsertTimeType" runat="server" OnClick="ibtnInsertTimeType_Click"
-                                ImageUrl="~/Images/add_16.png" OnClientClick="hideSuccessMessage();" ToolTip="Add Work Type" />
-                            <asp:ImageButton ID="ibtnInsert" runat="server" ImageUrl="~/Images/icon-check.png"
-                                ToolTip="Confirm" Visible="false" OnClick="ibtnInsert_Click" OnClientClick="return hideSuccessMessage();"
-                                ValidationGroup="NewTimeType" />
-                            <asp:ImageButton ID="ibtnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="ibtnCancel_OnClick"
-                                ToolTip="Cancel" Visible="false" />
+            <table width="80%" class="CompPerfTable" style="padding-top: 6px; background-color: white;
+                border-collapse: collapse;" border="0" cellspacing="0">
+                <tr style="background-color: #F9FAFF; height: 25px;">
+                    <td align="center" style="width: 6%">
+                        <asp:ImageButton ID="ibtnInsertTimeType" runat="server" OnClick="ibtnInsertTimeType_Click"
+                            ImageUrl="~/Images/add_16.png" OnClientClick="hideSuccessMessage();" ToolTip="Add Work Type" />
+                        <asp:ImageButton ID="ibtnInsert" runat="server" ImageUrl="~/Images/icon-check.png"
+                            ToolTip="Confirm" Visible="false" OnClick="ibtnInsert_Click" OnClientClick="return hideSuccessMessage();"
+                            ValidationGroup="NewTimeType" />
+                        <asp:ImageButton ID="ibtnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="ibtnCancel_OnClick"
+                            ToolTip="Cancel" Visible="false" />
+                    </td>
+                    <td align="left" style="width: 47%">
+                        <asp:TextBox ID="tbNewTimeType" Style="width: 92%" Text="New work type" runat="server"
+                            Visible="false" />
+                        <AjaxControlToolkit:TextBoxWatermarkExtender ID="watermarker" runat="server" TargetControlID="tbNewTimeType"
+                            WatermarkText="New work type" EnableViewState="false" WatermarkCssClass="watermarked" />
+                        <asp:RequiredFieldValidator ID="rvNewTimeType" runat="server" ControlToValidate="tbNewTimeType"
+                            Display="Dynamic" ErrorMessage="Work Type Name is required" ToolTip="Work Type Name is required"
+                            ValidationGroup="NewTimeType">*</asp:RequiredFieldValidator>
+                        <asp:RegularExpressionValidator ID="regValTimeType" ControlToValidate="tbNewTimeType"
+                            Display="Dynamic" runat="server" ValidationGroup="NewTimeType" ValidationExpression="[a-zA-Z\s]{0,50}$"
+                            ErrorMessage="Work Type Name should have only alphabets and should not be more than 50 characters.">*</asp:RegularExpressionValidator>
+                    </td>
+                    <td align="center" style="width: 10%">
+                        <asp:RadioButton ID="rbIsDefault" runat="server" Visible="false" GroupName="rbNewTimeType" />
+                    </td>
+                    <td align="center" style="width: 10%">
+                        <asp:RadioButton ID="rbIsInternal" runat="server" Visible="false" GroupName="rbNewTimeType" />
+                        <asp:CustomValidator ID="cvIsDefaultOrInternal" runat="server" Display="Dynamic"
+                            ToolTip="WorkType should be Isdefalult Or IsInternal" ErrorMessage="WorkType should be Isdefalult Or IsInternal"
+                            ValidationGroup="NewTimeType" OnServerValidate="cvIsDefaultOrInternal_Servervalidate"
+                            Text="*" />
+                    </td>
+                    <td align="center" style="width: 12%">
+                        <asp:CheckBox ID="chbIsAdministrative" runat="server" Visible="false" />
+                    </td>
+                    <td align="center" style="width: 10%">
+                        <asp:CheckBox ID="rbIsActive" runat="server" Visible="false" />
+                    </td>
+                    <td style="width: 5%">
+                        &nbsp;
+                    </td>
+                    <tr>
+                        <td colspan="7">
+                            <asp:ValidationSummary ID="valsumTimeType" runat="server" ValidationGroup="NewTimeType" />
+                            <asp:ValidationSummary ID="valsumUpdateTimeType" runat="server" ValidationGroup="UpdateTimeType" />
                         </td>
-                        <td align="left" valign="middle" style="width: 52%">
-                            <asp:TextBox ID="tbNewTimeType" Style="width: 92%" Text="New work type" runat="server"
-                                Visible="false" />
-                            <AjaxControlToolkit:TextBoxWatermarkExtender ID="watermarker" runat="server" TargetControlID="tbNewTimeType"
-                                WatermarkText="New work type" EnableViewState="false" WatermarkCssClass="watermarked" />
-                            <asp:RequiredFieldValidator ID="rvNewTimeType" runat="server" ControlToValidate="tbNewTimeType"
-                                Display="Dynamic" ErrorMessage="Work Type Name is required" ToolTip="Work Type Name is required"
-                                ValidationGroup="NewTimeType">*</asp:RequiredFieldValidator>
-                            <asp:RegularExpressionValidator ID="regValTimeType" ControlToValidate="tbNewTimeType"
-                                Display="Dynamic" runat="server" ValidationGroup="NewTimeType" ValidationExpression="[a-zA-Z\s]{0,50}$"
-                                ErrorMessage="Work Type Name should have only alphabets and should not be more than 50 characters.">*</asp:RegularExpressionValidator>
-                        </td>
-                        <td align="center" style="width: 11%">
-                            <asp:RadioButton ID="rbIsDefault" runat="server" Visible="false" GroupName="rbNewTimeType" />
-                        </td>
-                        <td align="center" style="width: 15%">
-                            <asp:RadioButton ID="rbIsInternal" runat="server" Visible="false" GroupName="rbNewTimeType" />
-                            <asp:CustomValidator ID="cvIsDefaultOrInternal" runat="server" Display="Dynamic"
-                                ToolTip="WorkType should be Isdefalult Or IsInternal" ErrorMessage="WorkType should be Isdefalult Or IsInternal"
-                                ValidationGroup="NewTimeType" OnServerValidate="cvIsDefaultOrInternal_Servervalidate"
-                                Text="*" />
-                        </td>
-                        <td align="center" style="width: 12%">
-                            <asp:CheckBox ID="rbIsActive" runat="server" Visible="false" />
-                        </td>
-                        <td style="width: 3%">
-                            &nbsp;
-                        </td>
-                        <tr>
-                            <td colspan="6">
-                                <asp:ValidationSummary ID="valsumTimeType" runat="server" ValidationGroup="NewTimeType" />
-                                <asp:ValidationSummary ID="valsumUpdateTimeType" runat="server" ValidationGroup="UpdateTimeType" />
-                            </td>
-                        </tr>
                     </tr>
-                </table>
-            </p>
+                </tr>
+            </table>
             <uc:Label ID="mlInsertStatus" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
         </ContentTemplate>
     </asp:UpdatePanel>
