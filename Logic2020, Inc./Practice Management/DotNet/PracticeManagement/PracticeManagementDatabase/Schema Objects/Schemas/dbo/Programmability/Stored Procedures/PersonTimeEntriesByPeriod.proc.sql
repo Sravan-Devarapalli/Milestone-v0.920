@@ -59,7 +59,8 @@ BEGIN
 		ISNULL(CC.ProjectId, PTRS.ProjectId) AS 'ProjectId',
 		p.ProjectNumber, 
 		P.Name 'ProjectName',
-		CASE WHEN PTRS.Id IS NOT NULL AND PTRS.EndDate IS NULL THEN 1 ELSE 0 END AS 'IsRecursive'
+		ISNULL(CONVERT(NVARCHAR(1), PTRS.IsRecursive), 0) AS 'IsRecursive',
+		P.EndDate
 	FROM dbo.TimeEntry TE
 	INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId AND TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal
 	FULL JOIN dbo.PersonTimeEntryRecursiveSelection PTRS 
@@ -78,7 +79,8 @@ BEGIN
 		CC.ProjectId AS 'ProjectId', 
 		p.ProjectNumber,
 		P.Name 'ProjectName',
-		0 AS 'IsRecursive'
+		0 AS 'IsRecursive',
+		P.EndDate
 	FROM ChargeCode CC
 	INNER JOIN Client C ON C.ClientId = CC.ClientId AND CC.TimeEntrySectionId = 4 --Administrative Section 
 						   AND ((CC.TimeTypeId = @HolidayTimeTypeId AND @IsW2SalaryPerson = 1) OR CC.TimeTypeId = @PTOTimeTypeId)
