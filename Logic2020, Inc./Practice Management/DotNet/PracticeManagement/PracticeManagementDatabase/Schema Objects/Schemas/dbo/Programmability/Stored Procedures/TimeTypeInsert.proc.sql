@@ -1,14 +1,17 @@
 ﻿-- =============================================
--- Author:		Nikita Goncharenko
--- Create date: 2009-11-30
+-- Author:		ThulasiRam.P
+-- Modified date: 2012-02-14
 -- Description:	Insert new time type
 -- =============================================
 CREATE PROCEDURE [dbo].[TimeTypeInsert]
+(
 	@TimeTypeId   INT OUT,
 	@Name VARCHAR(50),
 	@IsDefault BIT,
 	@IsInternal	BIT,
-	@IsActive	BIT
+	@IsActive	BIT,
+	@IsAdministrative BIT
+)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -75,7 +78,8 @@ BEGIN
 
 			SET @TimeTypeCode = 'W'+ REPLICATE('0',4 - LEN(@NextTimeTypeNumber)) + CONVERT(NVARCHAR,@NextTimeTypeNumber)
 
-			INSERT INTO dbo.TimeType ([Name], [IsDefault], [IsInternal], [IsAllowedToEdit],Code,[IsActive]) VALUES (@Name, @IsDefault, @IsInternal, 1,@TimeTypeCode,@IsActive)
+			INSERT INTO dbo.TimeType ([Name], [IsDefault], [IsInternal], [IsAllowedToEdit],Code,[IsActive],IsAdministrative) 
+			VALUES (@Name, @IsDefault, @IsInternal, 1,@TimeTypeCode,@IsActive,@IsAdministrative)
 
 			SET @TimeTypeId = SCOPE_IDENTITY()
 
