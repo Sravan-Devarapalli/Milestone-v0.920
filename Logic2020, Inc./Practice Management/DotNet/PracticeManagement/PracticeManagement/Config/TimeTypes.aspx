@@ -53,7 +53,7 @@
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
-                        <ItemStyle HorizontalAlign="Left" Width="47%" Height="25px" />
+                        <ItemStyle HorizontalAlign="Left" Width="45%" Height="25px" />
                         <HeaderTemplate>
                             <div class="ie-bg">
                                 Work Type Name
@@ -82,7 +82,7 @@
                             <div class="ie-bg">
                                 Is Default</div>
                         </HeaderTemplate>
-                        <ItemStyle HorizontalAlign="Center" CssClass="CompPerfProjectNumber" />
+                        <ItemStyle HorizontalAlign="Center" />
                         <ItemTemplate>
                             <asp:RadioButton ID="rbIsDefault" runat="server" Checked='<%# Eval("IsDefault") %>'
                                 Enabled="false" />
@@ -98,7 +98,7 @@
                             <div class="ie-bg">
                                 Is Internal</div>
                         </HeaderTemplate>
-                        <ItemStyle HorizontalAlign="Center" CssClass="CompPerfProjectNumber" />
+                        <ItemStyle HorizontalAlign="Center" />
                         <ItemTemplate>
                             <asp:RadioButton ID="rbIsInternal" runat="server" Checked='<%# Eval("IsInternal") %>'
                                 Enabled="false" />
@@ -113,12 +113,12 @@
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
-                        <ItemStyle HorizontalAlign="Center" Width="12%" />
+                        <ItemStyle HorizontalAlign="Center" Width="14%" />
                         <HeaderTemplate>
                             <div class="ie-bg">
                                 Is Administrative</div>
                         </HeaderTemplate>
-                        <ItemStyle HorizontalAlign="Center" CssClass="CompPerfProjectNumber" />
+                        <ItemStyle HorizontalAlign="Center" />
                         <ItemTemplate>
                             <asp:CheckBox ID="chbIsAdministrative" runat="server" Checked='<%# Eval("IsAdministrative") %>'
                                 Enabled="false" />
@@ -134,7 +134,7 @@
                             <div class="ie-bg">
                                 Is Active</div>
                         </HeaderTemplate>
-                        <ItemStyle HorizontalAlign="Center" CssClass="CompPerfProjectNumber" />
+                        <ItemStyle HorizontalAlign="Center" />
                         <ItemTemplate>
                             <asp:CheckBox ID="rbIsActive" runat="server" Checked='<%# Eval("IsActive") %>' Enabled="false" />
                         </ItemTemplate>
@@ -172,7 +172,7 @@
                         <asp:ImageButton ID="ibtnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="ibtnCancel_OnClick"
                             ToolTip="Cancel" Visible="false" />
                     </td>
-                    <td align="left" style="width: 47%">
+                    <td align="left" style="width: 45%">
                         <asp:TextBox ID="tbNewTimeType" Style="width: 92%" Text="New work type" runat="server"
                             Visible="false" />
                         <AjaxControlToolkit:TextBoxWatermarkExtender ID="watermarker" runat="server" TargetControlID="tbNewTimeType"
@@ -194,7 +194,7 @@
                             ValidationGroup="NewTimeType" OnServerValidate="cvIsDefaultOrInternal_Servervalidate"
                             Text="*" />
                     </td>
-                    <td align="center" style="width: 12%">
+                    <td align="center" style="width: 14%">
                         <asp:CheckBox ID="chbIsAdministrative" runat="server" Visible="false" />
                     </td>
                     <td align="center" style="width: 10%">
