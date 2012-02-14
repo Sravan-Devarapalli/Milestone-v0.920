@@ -98,6 +98,7 @@ namespace PraticeManagement
         private const string repAdministrativeTesHeaderRepeater = "repAdministrativeTesHeader";
         private const string imgPlusProjectSectionImage = "imgPlusProjectSection";
         private const string imgPlusBusinessDevelopmentSectionImage = "imgPlusBusinessDevelopmentSection";
+        private const string imgPlusAdministrativeSectionImage = "imgPlusAdministrativeSection";
         private const string imgPlusInternalSectionImage = "imgPlusInternalSection";
         private const string extDupilcateOptionsRemoveExtender = "extDupilcateOptionsRemoveExtender";
         private const string imgDropTesImage = "imgDropTes";
@@ -200,6 +201,8 @@ namespace PraticeManagement
         public Dictionary<DateTime, bool> IsNoteRequiredList { get; set; }
 
         public Dictionary<DateTime, bool> IsHourlyRevenueList { get; set; }
+
+        public TimeTypeRecord[] AdministrativeTimeTypes { get; set; }
 
         public Person SelectedPerson
         {
@@ -666,6 +669,7 @@ namespace PraticeManagement
         {
             if (e.Item.ItemType == ListItemType.Header)
             {
+                DdlWorkTypeIdsList = string.Empty;
                 var repProjectTesHeader = e.Item.FindControl(repAdministrativeTesHeaderRepeater) as Repeater;
                 repProjectTesHeader.DataSource = SelectedDates;
                 repProjectTesHeader.DataBind();
@@ -683,16 +687,40 @@ namespace PraticeManagement
                 bar.IsPTO = Convert.ToBoolean(teSectionDataItem.Attribute(XName.Get(IsPTOXname)).Value);
                 bar.IsHoliday = Convert.ToBoolean(teSectionDataItem.Attribute(XName.Get(IsHolidayXname)).Value);
 
+                var workTypeElement = teSectionDataItem.Descendants(XName.Get(WorkTypeXname)).ToList()[0];
 
-                bar.WorkType = ServiceCallers.Custom.Project(p => p.GetTimeTypesByProjectId(projectId, true, SelectedDates[0], SelectedDates[SelectedDates.Length - 1]))[0];
+                AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes());
+
+                if (bar.IsPTO || bar.IsHoliday)
+                {
+                    bar.SelectedTimeType = ServiceCallers.Custom.Project(p => p.GetTimeTypesByProjectId(Convert.ToInt32(projectId), true, SelectedDates[0], SelectedDates[SelectedDates.Length - 1]))[0];
+                }
+                else
+                {
+                    bar.SelectedTimeType = new TimeTypeRecord()
+                    {
+                        Id = Convert.ToInt32(workTypeElement.Attribute(XName.Get(IdXname)).Value)
+                    };
+                }
+
+                bar.TimeTypes = AdministrativeTimeTypes;
                 bar.TeBarDataSource = teSectionDataItem.Descendants(XName.Get(CalendarItemXname)).ToList();
                 bar.UpdateTimeEntries();
             }
-        }
+            else if (e.Item.ItemType == ListItemType.Footer)
+            {
+                var imgPlus = e.Item.FindControl(imgPlusAdministrativeSectionImage) as ImageButton;
+                if (!IsPostBack)
+                {
+                    AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes());
 
-        protected string GetDayOffCssCalss(CalendarItem day)
-        {
-            return Utils.Calendar.GetCssClassByCalendarItem(day); 
+                    if (AdministrativeTimeTypes.Count() < 1)
+                        imgPlus.Style["display"] = "none";
+                }
+
+                extDupilcateOptionsRemoveExtenderAdministrative.ControlsToCheck = DdlWorkTypeIdsList;
+                extDupilcateOptionsRemoveExtenderAdministrative.PlusButtonClientID = imgPlus.ClientID;
+            }
         }
 
         protected void repDayTotalHours_OnItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -936,6 +964,34 @@ namespace PraticeManagement
             DatabindRepeater(repBusinessDevelopmentSections, xlist);
 
             IsDirty = true;
+        }
+
+        protected void imgPlusAdministrativeSection_OnClick(object sender, EventArgs e)
+        {
+            XDocument xdoc = PrePareXmlForAdminstrativeSectionFromRepeater();
+
+            List<XElement> xelementsList = xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
+
+
+            var teSection = new TimeEntrySection()
+            {
+                Project = new Project() { Id = -1 },
+                Account = new Client() { Id = -1 },
+                BusinessUnit = new ProjectGroup() { Id = -1 },
+                SectionId = TimeEntrySectionType.Administrative,
+                IsRecursive = false
+            };
+
+            StringBuilder xml = new StringBuilder();
+
+            PrePareXmlForAccountProjectSelection(xml, teSection);
+
+            xdoc.Descendants(XName.Get(SectionXname)).First().Add(XElement.Parse(xml.ToString()));
+
+            DatabindRepeater(repAdministrativeTes, xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList());
+
+            AdministrativeSectionXml = xdoc.ToString();
+
         }
 
         protected void imgBtnRecursiveSection_OnClick(object sender, EventArgs args)
@@ -1275,13 +1331,7 @@ namespace PraticeManagement
             foreach (RepeaterItem barItem in repAdministrativeTes.Items)
             {
                 var bar = barItem.FindControl(teBarId) as AdministrativeTimeEntryBar;
-
-                if (barItem.ItemIndex == 0)
-                {
-                    //For PTO 
-                    bar.IsPTO = true;
-
-                }
+                
                 bar.ValidateAll();
             }
 
@@ -1468,14 +1518,14 @@ namespace PraticeManagement
 
             foreach (KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>> keyVal in teSection.TimeEntriesByTimeType)
             {
-                int timeEntryId = keyVal.Key.Id;
+                int timeTypeId = keyVal.Key.Id;
                 if (intialPrepare)
                 {
-                    xml.Append(string.Format(workTypeXmlOpenWithOldId, timeEntryId, timeEntryId));
+                    xml.Append(string.Format(workTypeXmlOpenWithOldId, timeTypeId, timeTypeId));
                 }
                 else
                 {
-                    xml.Append(string.Format(workTypeXmlOpen, timeEntryId));
+                    xml.Append(string.Format(workTypeXmlOpen, timeTypeId));
                 }
 
                 CalendarItems = CalendarItems ??
@@ -1487,7 +1537,7 @@ namespace PraticeManagement
                 ;
 
                 IsHourlyRevenueList = ServiceCallers.Custom.Project(p => p.GetIsHourlyRevenueByPeriod(projectId, personId, startDate, endDate));
-                Dictionary<DateTime, bool> isChargeCodeTurnOffList = ServiceCallers.Custom.TimeEntry(p => p.GetIsChargeCodeTurnOffByPeriod(personId, accountId, businessUnitId, projectId, timeEntryId, startDate, endDate));
+                Dictionary<DateTime, bool> isChargeCodeTurnOffList = ServiceCallers.Custom.TimeEntry(p => p.GetIsChargeCodeTurnOffByPeriod(personId, accountId, businessUnitId, projectId, timeTypeId, startDate, endDate));
 
                 var teRecords = keyVal.Value;
                 foreach (CalendarItem day in CalendarItems)
@@ -1618,14 +1668,18 @@ namespace PraticeManagement
             {
                 var accountAndProjectSelectionElement = accountAndProjectSelectionElements[i];
                 var workTypeElement = accountAndProjectSelectionElement.Descendants(XName.Get(WorkTypeXname)).ToList()[0];
+                var calendarItemElements = workTypeElement.Descendants(XName.Get(CalendarItemXname)).ToList();
 
                 RepeaterItem repAdministrativeTesItem = repAdministrativeTes.Items[i];
-                var calendarItemElements = workTypeElement.Descendants(XName.Get(CalendarItemXname)).ToList();
+
 
                 var bar = repAdministrativeTesItem.FindControl(teBarId) as AdministrativeTimeEntryBar;
 
+                bar.UpdateAccountAndProjectWorkType(accountAndProjectSelectionElement, workTypeElement);
+
+
                 bar.UpdateNoteAndActualHours(calendarItemElements);
-                bar.UpdateWorkType(workTypeElement);
+
 
             }
 
