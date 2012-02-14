@@ -9,42 +9,9 @@ using DataTransferObjects.TimeEntry;
 namespace PracticeManagementService
 {
     [ServiceContract]
-    [ServiceKnownType(typeof(TimeTypeRecord))]
+    [ServiceKnownType(typeof(TimeEntryRecord))]
     public interface ITimeEntryService
     {
-        #region Time types
-
-        /// <summary>
-        /// Retrieves all existing time types
-        /// </summary>
-        /// <returns>Collection of new time types</returns>
-        [OperationContract]
-        IEnumerable<TimeTypeRecord> GetAllTimeTypes();
-
-        /// <summary>
-        /// Removes given time type
-        /// </summary>
-        /// <param name="timeType">Time type to remove</param>
-        [OperationContract]
-        void RemoveTimeType(TimeTypeRecord timeType);
-
-        /// <summary>
-        /// Updates given time type
-        /// </summary>
-        /// <param name="timeType">Time type to update</param>
-        [OperationContract]
-        void UpdateTimeType(TimeTypeRecord timeType);
-
-        /// <summary>
-        /// Adds new time type
-        /// </summary>
-        /// <param name="timeType">Time type to add</param>
-        /// <returns>Id of added time type</returns>
-        [OperationContract]
-        int AddTimeType(TimeTypeRecord timeType);
-
-        #endregion
-
         #region Time Zones
 
         /// <summary>
@@ -184,8 +151,6 @@ namespace PracticeManagementService
         [OperationContract]
         System.Data.DataSet TimeEntriesByPersonGetExcelSet(TimeEntryPersonReportContext reportContext);
 
-        [OperationContract]
-        string GetWorkTypeNameById(int worktypeId);
 
         //new timetrack methods
         [OperationContract]
