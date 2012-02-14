@@ -264,7 +264,7 @@
                                 </td>
                                 <td>
                                     <asp:Button ID="btnAddProject" runat="server" OnClientClick="SelectDefaultValues('cddClientProjects');"
-                                        Text="Add Project" CssClass="mrg0" ToolTip="Add PROJECT" />
+                                        Text="Add Project" CssClass="mrg0" ToolTip="Add Project" />
                                 </td>
                             </tr>
                         </table>
@@ -366,7 +366,7 @@
                                 </td>
                                 <td>
                                     <asp:Button ID="btnAddAccount" runat="server" OnClientClick="SelectDefaultValues('cddBusinessUnitBDSection');"
-                                        Text="Add Account" CssClass="mrg0" ToolTip="Add ACCOUNT" />
+                                        Text="Add Account" CssClass="mrg0" ToolTip="Add Account" />
                                 </td>
                             </tr>
                         </table>
@@ -468,7 +468,7 @@
                                 </td>
                                 <td>
                                     <asp:Button ID="btnAddInternalProject" runat="server" OnClientClick="SelectDefaultValues('cddProjectsInternal');"
-                                        Text="Add Project" CssClass="mrg0" ToolTip="Add PROJECT" />
+                                        Text="Add Project" CssClass="mrg0" ToolTip="Add Project" />
                                 </td>
                             </tr>
                         </table>
