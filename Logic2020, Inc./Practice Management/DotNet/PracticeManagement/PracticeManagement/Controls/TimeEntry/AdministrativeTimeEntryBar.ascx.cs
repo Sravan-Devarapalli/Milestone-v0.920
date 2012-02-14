@@ -16,6 +16,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
         private const string AdministrativeTimeEntryBar_TbAcutualHoursClientIds = "AdministrativeTimeEntryBar_TbAcutualHoursClientIds";
         private const string steId = "ste";
+        private const string previousIdAttribute = "previousId";
 
         #endregion
 
@@ -55,7 +56,9 @@ namespace PraticeManagement.Controls.TimeEntry
 
         public bool IsHoliday { get; set; }
 
-        public TimeTypeRecord WorkType { get; set; }
+        public TimeTypeRecord[] TimeTypes { get; set; }
+
+        public TimeTypeRecord SelectedTimeType { get; set; }
 
         public Dictionary<int, string> TbAcutualHoursClientIds
         {
@@ -137,6 +140,13 @@ namespace PraticeManagement.Controls.TimeEntry
 
         #region Methods
 
+
+        protected void ddlTimeTypes_DataBound(object sender, EventArgs e)
+        {
+            if (ddlTimeTypes.Items.FindByValue("-1") == null)
+                ddlTimeTypes.Items.Insert(0, (new ListItem("- - Select Work Type - -", "-1")));
+        }
+
         protected string GetDayOffCssCalss(XElement calendarItem)
         {
             return calendarItem.Attribute(XName.Get(TimeEntry_New.CssClassXname)).Value;
@@ -150,8 +160,49 @@ namespace PraticeManagement.Controls.TimeEntry
 
         public void UpdateTimeEntries()
         {
-            hdnworkTypeId.Value = WorkType.Id.ToString();
-            lblTimeType.Text = lblTimeType.ToolTip = WorkType.Name;
+            if (IsPTO || IsHoliday)
+            {
+                ddlTimeTypes.Visible = false;
+                lblTimeType.Visible = true;
+            }
+            else
+            {
+                lblTimeType.Visible = false;
+                ddlTimeTypes.Items.Clear();
+                ddlTimeTypes.DataSource = TimeTypes;
+                ddlTimeTypes.DataBind();
+
+                if (SelectedTimeType != null && SelectedTimeType.Id > 0)
+                {
+                    ListItem selectedTimeType = null;
+
+                    selectedTimeType = ddlTimeTypes.Items.FindByValue(SelectedTimeType.Id.ToString());
+
+                    if (selectedTimeType == null)
+                    {
+                        var timetypename = ServiceCallers.Custom.TimeType(te => te.GetWorkTypeNameById(SelectedTimeType.Id)); ;
+                        selectedTimeType = new ListItem(timetypename, SelectedTimeType.Id.ToString());
+                        ddlTimeTypes.Items.Add(selectedTimeType);
+                        ddlTimeTypes.Attributes[TimeEntry_New.selectedInActiveWorktypeid] = SelectedTimeType.Id.ToString();
+                        ddlTimeTypes.Attributes[TimeEntry_New.selectedInActiveWorktypeName] = timetypename;
+                    }
+
+                    ddlTimeTypes.SelectedValue = selectedTimeType.Value;
+                }
+                else
+                {
+                    ddlTimeTypes.SelectedIndex = 0;
+                }
+
+
+
+                ddlTimeTypes.Attributes[previousIdAttribute] = ddlTimeTypes.SelectedValue.ToString();
+                HostingPage.DdlWorkTypeIdsList += ddlTimeTypes.ClientID + ";";
+
+            }
+
+            hdnworkTypeId.Value = SelectedTimeType.Id.ToString();
+            lblTimeType.Text = lblTimeType.ToolTip = SelectedTimeType.Name;
             tes.DataSource = TeBarDataSource;
             tes.DataBind();
         }
@@ -206,19 +257,56 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        private bool ValideWorkTypeDropDown()
+        {
+            var result = ddlTimeTypes.SelectedIndex > 0;
+            if (result)
+            {
+                ddlTimeTypes.Style["background-color"] = "none";
+            }
+            else
+            {
+                ddlTimeTypes.Style["background-color"] = "red";
+            }
+
+            return result;
+        }
+
         internal void ValidateAll()
         {
+            bool isThereAtleastOneTimeEntryrecord = false;
+
             foreach (RepeaterItem tesItem in tes.Items)
             {
                 var nonbillableSte = tesItem.FindControl(steId) as SingleTimeEntry_New;
-                nonbillableSte.IsPTO = IsPTO;
+
+                if (!isThereAtleastOneTimeEntryrecord)
+                {
+                    isThereAtleastOneTimeEntryrecord = nonbillableSte.IsThereAtleastOneTimeEntryrecord;
+                }
+
                 nonbillableSte.ValidateNoteAndHours();
+            }
+
+            if (isThereAtleastOneTimeEntryrecord && !IsPTO && !IsHoliday && !ValideWorkTypeDropDown())
+            {
+                HostingPage.IsValidWorkType = false;
             }
         }
 
-        internal void UpdateWorkType(XElement workTypeElement)
+        internal void UpdateAccountAndProjectWorkType(XElement accountAndProjectSelectionElement, XElement workTypeElement)
         {
-            workTypeElement.Attribute(XName.Get(TimeEntry_New.IdXname)).Value = hdnworkTypeId.Value;
+            var workTypeId = (IsPTO || IsHoliday) ? Convert.ToInt32(hdnworkTypeId.Value) : Convert.ToInt32(ddlTimeTypes.SelectedValue); ;
+            workTypeElement.Attribute(XName.Get(TimeEntry_New.IdXname)).Value = workTypeId.ToString();
+
+            if (workTypeId > 0 && !(IsPTO || IsHoliday))
+            {
+                Triple<int,int,int> result = ServiceCallers.Custom.TimeType(tt => tt.GetAdministrativeChargeCodeValues(workTypeId));
+                accountAndProjectSelectionElement.Attribute(XName.Get(TimeEntry_New.AccountIdXname)).Value = result.First.ToString();
+                accountAndProjectSelectionElement.Attribute(XName.Get(TimeEntry_New.ProjectIdXname)).Value = result.Second.ToString();
+                accountAndProjectSelectionElement.Attribute(XName.Get(TimeEntry_New.BusinessUnitIdXname)).Value = result.Third.ToString();
+            }
+
         }
 
         #endregion
