@@ -149,7 +149,7 @@ namespace PraticeManagement
         #region text
 
         private const string AlertTextFormat = " :  Notes are {0} for time entered.";
-        private const string SavedAllConfirmation = "TimeEntries saved sucessfully.";
+        private const string SavedAllConfirmation = "Time Entries saved sucessfully.";
 
         #endregion
 
