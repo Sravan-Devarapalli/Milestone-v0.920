@@ -13,87 +13,7 @@ namespace PracticeManagementService
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class TimeEntryService : ITimeEntryService
     {
-        #region Time type
-
-        /// <summary>
-        /// Retrieves all existing time types
-        /// </summary>
-        /// <returns>Collection of new time types</returns>
-        public IEnumerable<TimeTypeRecord> GetAllTimeTypes()
-        {
-            try
-            {
-                return TimeEntryDAL.GetAllTimeTypes();
-            }
-            catch (Exception e)
-            {
-                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetAllTimeTypes", "TimeEntryService.svc", string.Empty,
-                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
-                ActivityLogDAL.ActivityLogInsert(20, logData);
-                throw e;
-            }
-        }
-
-        /// <summary>
-        /// Removes given time type
-        /// </summary>
-        /// <param name="timeType">Time type to remove</param>
-        public void RemoveTimeType(TimeTypeRecord timeType)
-        {
-            try
-            {
-                TimeEntryDAL.RemoveTimeType(timeType);
-            }
-            catch (Exception e)
-            {
-                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "RemoveTimeType", "TimeEntryService.svc", string.Empty,
-                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
-                ActivityLogDAL.ActivityLogInsert(20, logData);
-                throw e;
-            }
-        }
-
-        /// <summary>
-        /// Updates given time type
-        /// </summary>
-        /// <param name="timeType">Time type to update</param>
-        public void UpdateTimeType(TimeTypeRecord timeType)
-        {
-            try
-            {
-                TimeEntryDAL.UpdateTimeType(timeType);
-            }
-            catch (Exception e)
-            {
-                //string logData = string.Format(Constants.Formatting.ErrorLogMessage, "UpdateTimeType", "TimeEntryService.svc", string.Empty,
-                //    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
-                //ActivityLogDAL.ActivityLogInsert(20, logData);
-                throw e;
-            }
-        }
-
-        /// <summary>
-        /// Adds new time type
-        /// </summary>
-        /// <param name="timeType">Time type to add</param>
-        /// <returns>Id of added time type</returns>
-        public int AddTimeType(TimeTypeRecord timeType)
-        {
-            try
-            {
-                return TimeEntryDAL.AddTimeType(timeType);
-            }
-            catch (Exception e)
-            {
-                //string logData = string.Format(Constants.Formatting.ErrorLogMessage, "AddTimeType", "TimeEntryService.svc", string.Empty,
-                //    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
-                //ActivityLogDAL.ActivityLogInsert(20, logData);
-                throw e;
-            }
-        }
-
-        #endregion
-
+      
         #region Time Zone
 
         public void SetTimeZone(Timezone timezone)
@@ -619,21 +539,6 @@ namespace PracticeManagementService
         public System.Data.DataSet TimeEntriesByPersonGetExcelSet(TimeEntryPersonReportContext reportContext)
         {
             return TimeEntryDAL.TimeEntriesByPersonGetExcelSet(reportContext);
-        }
-
-        public string GetWorkTypeNameById(int worktypeId)
-        {
-            try
-            {
-                return TimeEntryDAL.GetWorkTypeNameById(worktypeId);
-            }
-            catch (Exception e)
-            {
-                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetWorkTypeNameById", "TimeEntryService.svc", string.Empty,
-                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
-                ActivityLogDAL.ActivityLogInsert(20, logData);
-                throw e;
-            }
         }
 
         #region TimeTrack Methods
