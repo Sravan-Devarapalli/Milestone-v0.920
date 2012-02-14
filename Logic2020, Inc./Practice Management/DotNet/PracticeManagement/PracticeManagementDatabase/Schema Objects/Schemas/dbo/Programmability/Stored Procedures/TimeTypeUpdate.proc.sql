@@ -1,14 +1,17 @@
 ﻿-- =============================================
--- Author:		Nikita Goncharenko
--- Create date: 2009-11-30
+-- Author:		ThulasiRam.P
+-- Modified date: 2012-02-14
 -- Description:	Update existing time type
 -- =============================================
 CREATE PROCEDURE dbo.TimeTypeUpdate
+(
 	@TimeTypeId INT,
 	@Name VARCHAR(50),
 	@IsDefault BIT,
 	@IsActive	BIT,
-	@IsInternal BIT
+	@IsInternal BIT,
+	@IsAdministrative BIT
+)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -21,9 +24,10 @@ BEGIN
 		RETURN
 	END
 		
-	UPDATE TimeType
+	UPDATE dbo.TimeType
 	SET [Name] = @Name,
-		[IsActive] = @IsActive
+		[IsActive] = @IsActive,
+		[IsAdministrative] = @IsAdministrative
 	WHERE TimeTypeId = @TimeTypeId
 END
 
