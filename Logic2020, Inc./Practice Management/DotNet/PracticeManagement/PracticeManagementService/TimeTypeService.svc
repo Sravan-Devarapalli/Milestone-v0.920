@@ -1,0 +1,2 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="PracticeManagementService.TimeTypeService" CodeBehind="TimeTypeService.svc.cs" %>
+
