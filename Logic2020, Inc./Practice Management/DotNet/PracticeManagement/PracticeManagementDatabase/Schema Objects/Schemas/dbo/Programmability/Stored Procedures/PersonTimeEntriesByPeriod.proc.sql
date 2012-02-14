@@ -81,7 +81,7 @@ BEGIN
 		0 AS 'IsRecursive'
 	FROM ChargeCode CC
 	INNER JOIN Client C ON C.ClientId = CC.ClientId AND CC.TimeEntrySectionId = 4 --Administrative Section 
-						   AND ((CC.TimeTypeId = @HolidayTimeTypeId AND @IsW2SalaryPerson = 1) OR CC.TimeTypeId != @HolidayTimeTypeId)
+						   AND ((CC.TimeTypeId = @HolidayTimeTypeId AND @IsW2SalaryPerson = 1) OR CC.TimeTypeId = @PTOTimeTypeId)
 	INNER JOIN Project P ON P.ProjectId = CC.ProjectId
 	INNER JOIN ProjectGroup PG ON PG.GroupId = CC.ProjectGroupId 
 
