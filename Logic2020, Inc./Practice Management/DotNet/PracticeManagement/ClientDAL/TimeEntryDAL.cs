@@ -1357,6 +1357,7 @@ namespace DataAccess
                 int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNameColumn);
                 int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
                 int isRecursiveIndex = reader.GetOrdinal(Constants.ColumnNames.IsRecursive);
+                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
 
                 while (reader.Read())
                 {
@@ -1368,7 +1369,8 @@ namespace DataAccess
                         {
                             Id = reader.GetInt32(projectIdIndex),
                             Name = reader.GetString(projectNameIndex),
-                            ProjectNumber = reader.GetString(projectNumberIndex)
+                            ProjectNumber = reader.GetString(projectNumberIndex),
+                            EndDate = reader.IsDBNull(endDateIndex) ? null : (DateTime?)reader.GetDateTime(endDateIndex)
                         },
                         BusinessUnit = reader.IsDBNull(projectGroupIdIndex) ? null
                                         : new ProjectGroup { Id = reader.GetInt32(projectGroupIdIndex), Name = reader.GetString(projectGroupNameIndex) },
