@@ -292,6 +292,24 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Repeater repAdministrativeTes;
         
         /// <summary>
+        /// extDupilcateOptionsRemoveExtenderAdministrative control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.DuplicateOptionsRemove.DupilcateOptionsRemoveExtender extDupilcateOptionsRemoveExtenderAdministrative;
+        
+        /// <summary>
+        /// lblDupilcateOptionsRemoveExtenderAdministrative control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDupilcateOptionsRemoveExtenderAdministrative;
+        
+        /// <summary>
         /// pnlTotalSection control.
         /// </summary>
         /// <remarks>
