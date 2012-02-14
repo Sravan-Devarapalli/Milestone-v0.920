@@ -1377,7 +1377,7 @@ namespace DataAccess
                     };
 
 
-                    if (timeEntrySections.Any(tes => tes.Project.Id == timeEntrySection.Project.Id && tes.Account.Id == timeEntrySection.Account.Id && (timeEntrySection.BusinessUnit != null && tes.BusinessUnit.Id.Value == timeEntrySection.BusinessUnit.Id.Value)))
+                    if (timeEntrySections.Any(tes => tes.SectionId != TimeEntrySectionType.Administrative && tes.Project.Id == timeEntrySection.Project.Id && tes.Account.Id == timeEntrySection.Account.Id && (timeEntrySection.BusinessUnit != null && tes.BusinessUnit.Id.Value == timeEntrySection.BusinessUnit.Id.Value)))
                     {
                         timeEntrySection = timeEntrySections.First(tes => tes.Project.Id == timeEntrySection.Project.Id && tes.Account.Id == timeEntrySection.Account.Id && (tes.BusinessUnit.Id.Value == timeEntrySection.BusinessUnit.Id.Value));
                     }
