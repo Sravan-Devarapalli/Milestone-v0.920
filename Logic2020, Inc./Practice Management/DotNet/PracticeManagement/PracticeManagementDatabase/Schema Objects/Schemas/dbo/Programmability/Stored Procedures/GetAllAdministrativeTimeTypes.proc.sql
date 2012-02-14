@@ -20,13 +20,10 @@ SELECT @HolidayTimeTypeId = dbo.GetPTOTimeTypeId(),
 
 	SELECT tt.TimeTypeId, 
 		   tt.[Name]
-	FROM TimeType AS tt
-	WHERE tt.IsAdministrative = 1 AND 
-	(
-	(@IncludePTOAndHoliday = 0 AND tt.TimeTypeId NOT IN (@HolidayTimeTypeId,@PTOTimeTypeId))
-	  OR (@IncludePTOAndHoliday = 1)
-	)
-
+	FROM dbo.TimeType AS tt
+		INNER JOIN dbo.ProjectTimeType ptt ON tt.IsAdministrative = 1 AND tt.TimeTypeId = ptt.TimeTypeId AND ptt.IsAllowedToShow = 1
+	WHERE
+	((@IncludePTOAndHoliday = 0 AND tt.TimeTypeId NOT IN (@HolidayTimeTypeId,@PTOTimeTypeId)) OR (@IncludePTOAndHoliday = 1))
 	
 END
 
