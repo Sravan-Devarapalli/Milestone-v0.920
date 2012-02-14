@@ -21,6 +21,7 @@ using PraticeManagement.ProjectGroupService;
 using PraticeManagement.ProjectService;
 using PraticeManagement.ProjectStatusService;
 using PraticeManagement.TimeEntryService;
+using PraticeManagement.TimeTypeService;
 using PraticeManagement.TimescaleService;
 using PraticeManagement.ConfigurationService;
 using PraticeManagement.DefaultRecruiterCommissionService;
@@ -268,6 +269,21 @@ namespace PraticeManagement.TimeEntryService
         }
     }
 }
+
+namespace PraticeManagement.TimeTypeService
+{
+    public partial class TimeTypeServiceClient
+    {
+        public TimeTypeServiceClient()
+        {
+            if (WCFClientUtility.IsWebAzureRole())
+            {
+                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("TimeTypeServiceClient");
+            }
+        }
+    }
+}
+
 
 namespace PraticeManagement.TimescaleService
 {
