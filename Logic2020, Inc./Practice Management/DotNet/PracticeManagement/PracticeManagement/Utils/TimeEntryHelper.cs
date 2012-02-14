@@ -39,7 +39,7 @@ namespace PraticeManagement.Utils
         public static void AddTimeType(string name)
         {
             var timeType = new TimeTypeRecord { Name = name };
-            ServiceCallers.Custom.TimeEntry(client => client.AddTimeType(timeType));
+            ServiceCallers.Custom.TimeType(client => client.AddTimeType(timeType));
         }
 
         #endregion
