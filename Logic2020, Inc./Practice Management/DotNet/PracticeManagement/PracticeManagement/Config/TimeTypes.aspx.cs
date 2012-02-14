@@ -7,6 +7,7 @@ using PraticeManagement.TimeEntryService;
 using PraticeManagement.Utils;
 using PraticeManagement.Controls;
 using System.Linq;
+using PraticeManagement.TimeTypeService;
 namespace PraticeManagement.Config
 {
     public partial class TimeTypes : PracticeManagementPageBase
@@ -18,7 +19,7 @@ namespace PraticeManagement.Config
             {
                 if (ViewState["AllTimeTypes"] == null)
                 {
-                    System.Collections.Generic.List<TimeTypeRecord> _AllTimeTypes = ServiceCallers.Custom.TimeEntry(t => t.GetAllTimeTypes()).ToList();
+                    System.Collections.Generic.List<TimeTypeRecord> _AllTimeTypes = ServiceCallers.Custom.TimeType(t => t.GetAllTimeTypes()).ToList();
                     _AllTimeTypes = _AllTimeTypes.AsQueryable().Where(t => t.IsDefault || t.IsInternal).ToList();
                     ViewState["AllTimeTypes"] = _AllTimeTypes;
                 }
@@ -107,7 +108,7 @@ namespace PraticeManagement.Config
                     newTimeType.IsDefault = rbIsDefault.Checked;
                     newTimeType.IsInternal = rbIsInternal.Checked;
                     newTimeType.IsActive = rbIsActive.Checked;
-                    using (var serviceClient = new TimeEntryServiceClient())
+                    using (var serviceClient = new TimeTypeServiceClient())
                     {
                         serviceClient.AddTimeType(newTimeType);
                     }
@@ -166,7 +167,7 @@ namespace PraticeManagement.Config
             var imgDelete = sender as ImageButton;
             string timetypeId = imgDelete.Attributes["timetypeId"];
             TimeTypeRecord tt = AllTimeTypes.AsQueryable().First(t => t.Id.ToString() == timetypeId);
-            using (var serviceClient = new TimeEntryServiceClient())
+            using (var serviceClient = new TimeTypeServiceClient())
             {
                 serviceClient.RemoveTimeType(tt);
             }
@@ -191,7 +192,7 @@ namespace PraticeManagement.Config
                 }
                 else
                 {
-                    using (var serviceClient = new TimeEntryServiceClient())
+                    using (var serviceClient = new TimeTypeServiceClient())
                     {
                         var timeType = AllTimeTypes.First(t => t.Id.ToString() == hdfTimeTypeId.Value);
                         timeType.Name = tbName.Text.Trim();
