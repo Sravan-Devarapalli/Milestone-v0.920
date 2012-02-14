@@ -449,7 +449,7 @@ namespace PraticeManagement
 
                 var imgBtnDeleteProjectSection = e.Item.FindControl(imgBtnDeleteProjectSectionImage) as ImageButton;
                 imgBtnDeleteProjectSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Project).ToString();
-                imgBtnDeleteProjectSection.ToolTip = String.Format(deleteSectionToolTipFormat, "PROJECT");
+                imgBtnDeleteProjectSection.ToolTip = String.Format(deleteSectionToolTipFormat, "Project");
 ;
             }
         }
@@ -489,7 +489,7 @@ namespace PraticeManagement
 
                 var imgBtnDeleteBusinessDevelopmentSection = e.Item.FindControl(imgBtnDeleteBusinessDevelopmentSectionImage) as ImageButton;
                 imgBtnDeleteBusinessDevelopmentSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.BusinessDevelopment).ToString();
-                imgBtnDeleteBusinessDevelopmentSection.ToolTip = String.Format(deleteSectionToolTipFormat,"ACCOUNT");
+                imgBtnDeleteBusinessDevelopmentSection.ToolTip = String.Format(deleteSectionToolTipFormat,"Account");
                 
             }
         }
@@ -531,7 +531,7 @@ namespace PraticeManagement
 
                 var imgBtnDeleteInternalSection = e.Item.FindControl(imgBtnDeleteInternalSectionImage) as ImageButton;
                 imgBtnDeleteInternalSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Internal).ToString();
-                imgBtnDeleteInternalSection.ToolTip = String.Format(deleteSectionToolTipFormat, "PROJECT");
+                imgBtnDeleteInternalSection.ToolTip = String.Format(deleteSectionToolTipFormat, "Project");
             }
         }
 
@@ -575,7 +575,7 @@ namespace PraticeManagement
                 var imgPlusProjectSection = e.Item.FindControl(imgPlusProjectSectionImage) as ImageButton;
                 imgPlusProjectSection.Attributes[AccountIdXname] = AccountId;
                 imgPlusProjectSection.Attributes[ProjectIdXname] = ProjectId;
-                imgPlusProjectSection.ToolTip = string.Format(PlusToolTipFormat, "PROJECT");
+                imgPlusProjectSection.ToolTip = string.Format(PlusToolTipFormat, "Project");
             }
         }
 
@@ -622,7 +622,7 @@ namespace PraticeManagement
                 imgPlusBusinessDevelopmentSection.Attributes[AccountIdXname] = AccountId;
                 imgPlusBusinessDevelopmentSection.Attributes[ProjectIdXname] = ProjectId;
                 imgPlusBusinessDevelopmentSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
-                imgPlusBusinessDevelopmentSection.ToolTip = string.Format(PlusToolTipFormat, "ACCOUNT");
+                imgPlusBusinessDevelopmentSection.ToolTip = string.Format(PlusToolTipFormat, "Account");
             }
 
         }
@@ -669,7 +669,7 @@ namespace PraticeManagement
                 imgPlusInternalSection.Attributes[AccountIdXname] = AccountId;
                 imgPlusInternalSection.Attributes[ProjectIdXname] = ProjectId;
                 imgPlusInternalSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
-                imgPlusInternalSection.ToolTip = string.Format(PlusToolTipFormat, "PROJECT");
+                imgPlusInternalSection.ToolTip = string.Format(PlusToolTipFormat, "Project");
             }
         }
 
