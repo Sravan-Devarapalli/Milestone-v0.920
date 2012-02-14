@@ -9,6 +9,7 @@ using DataTransferObjects.TimeEntry;
 using DataTransferObjects.Skills;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using System.Configuration;
+using PraticeManagement.TimeTypeService;
 
 namespace PraticeManagement.Utils
 {
@@ -229,7 +230,7 @@ namespace PraticeManagement.Utils
         {
             if (HttpContext.Current.Cache[TimeType_System] == null)
             {
-                using (var serviceClient = new TimeEntryService.TimeEntryServiceClient())
+                using (var serviceClient = new TimeTypeServiceClient())
                 {
                     HttpContext.Current.Cache[TimeType_System] = serviceClient.GetAllTimeTypes().Where(tt => tt.IsSystemTimeType).ToList();
                 }
