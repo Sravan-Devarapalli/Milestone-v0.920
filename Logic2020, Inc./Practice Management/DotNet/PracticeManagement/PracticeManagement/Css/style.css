@@ -814,6 +814,14 @@ TR.CompPerfHeader td, .CompPerfTable th
     background: url(../images/cp-header-bg.png) repeat-x 0px 0px;
 }
 
+.CompPerfTotalHeader
+{
+    border-bottom: 1px solid #c5c5c5;
+    height: 26px;
+    font: bold 11px Arial;
+    background: url(../images/cp-header-bg.png) repeat-x 0px 0px;
+}
+
 TR.CompPerfHeader td .ie-bg, .CompPerfTable th .ie-bg
 {
     /*background: url(../images/cp-header-div.png) no-repeat 100% 1px;*/
@@ -2230,16 +2238,12 @@ TABLE.Section
 
 .SectionFirstTD
 {
-    width: 50%;
+    width: 90%;
     font-weight: bold;
-    font-size: 14px;
+    font-style:italic;
+    font-size: 16px;
+ 
 }
-
-.SectionSecondTD
-{
-    width: 44%;
-}
-
 .TOTALHOURSTD
 {
     text-align: right; 
@@ -2266,10 +2270,22 @@ TABLE.Section
 {
     padding-top: 6px;
 }
-
 .PaddingClass2
 {
-    padding: 2px;
+    width: 36px !important;
+    margin: 1px 0px 0px 30px;
+    height: 18px;
+    background-color:White;
+    text-align:center;
+    
+}
+.PaddingClass21
+{
+    width:100%;
+    height:100%;  
+    vertical-align:middle;
+    text-align:center;
+    
 }
 .Width2Percent
 {
