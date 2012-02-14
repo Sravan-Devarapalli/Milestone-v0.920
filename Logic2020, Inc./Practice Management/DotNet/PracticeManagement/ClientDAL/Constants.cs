@@ -615,6 +615,8 @@
             public class TimeType
             {
                 public const string GetAll = "dbo.TimeTypeGetAll";
+                public const string GetAllAdministrativeTimeTypes = "dbo.GetAllAdministrativeTimeTypes";
+                public const string GetAdministrativeChargeCodeValues = "dbo.GetAdministrativeChargeCodeValues";
                 public const string Update = "dbo.TimeTypeUpdate";
                 public const string Insert = "dbo.TimeTypeInsert";
                 public const string Delete = "dbo.TimeTypeDelete";
