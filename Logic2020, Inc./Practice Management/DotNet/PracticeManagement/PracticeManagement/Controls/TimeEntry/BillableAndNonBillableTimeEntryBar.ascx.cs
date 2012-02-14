@@ -151,7 +151,6 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             if (ddlTimeTypes.Items.FindByValue("-1") == null)
                 ddlTimeTypes.Items.Insert(0, (new ListItem("- - Select Work Type - -", "-1")));
-            AddTitlestoListItems(ddlTimeTypes);
         }
 
         protected void imgDropTes_Click(object sender, ImageClickEventArgs e)
@@ -195,18 +194,6 @@ namespace PraticeManagement.Controls.TimeEntry
             ste.TimeEntryRecordNonBillableElement = nonbterXlement;
         }
 
-        public void AddTitlestoListItems(DropDownList dropDownList)
-        {
-            if (dropDownList == null)
-            {
-                return;
-            }
-
-            foreach (ListItem item in dropDownList.Items)
-            {
-                item.Attributes.Add("title", item.Text);
-            }
-        }
 
         public void UpdateTimeEntries()
         {
@@ -220,7 +207,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 ddlTimeTypes.SelectedValue = SelectedWorkType.Id.ToString();
                 if (ddlTimeTypes.SelectedIndex == 0)
                 {
-                    string timetypename = ServiceCallers.Custom.TimeEntry(te => te.GetWorkTypeNameById(SelectedWorkType.Id));
+                    string timetypename = ServiceCallers.Custom.TimeType(te => te.GetWorkTypeNameById(SelectedWorkType.Id));
                     ddlTimeTypes.Items.Add(new ListItem(timetypename, SelectedWorkType.Id.ToString()));
                     ddlTimeTypes.SelectedValue = SelectedWorkType.Id.ToString();
                     ddlTimeTypes.Attributes[TimeEntry_New.selectedInActiveWorktypeid] = SelectedWorkType.Id.ToString();
