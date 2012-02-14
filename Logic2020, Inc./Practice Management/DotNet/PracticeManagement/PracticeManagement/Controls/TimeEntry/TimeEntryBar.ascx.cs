@@ -9,6 +9,7 @@ using PraticeManagement.TimeEntryService;
 using System.ServiceModel;
 using System.Linq;
 using System.Web.Security;
+using PraticeManagement.TimeTypeService;
 
 namespace PraticeManagement.Controls.TimeEntry
 {
@@ -458,7 +459,7 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             TimeTypeRecord[] result;
 
-            using (var serviceClient = new TimeEntryServiceClient())
+            using (var serviceClient = new TimeTypeServiceClient())
             {
                 try
                 {
