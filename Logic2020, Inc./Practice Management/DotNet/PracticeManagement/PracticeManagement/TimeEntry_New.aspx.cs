@@ -1285,6 +1285,11 @@ namespace PraticeManagement
             }
         }
 
+        protected string GetDayOffCssCalss(CalendarItem calendarItem)
+        {
+            return Utils.Calendar.GetCssClassByCalendarItem(calendarItem); 
+        }
+
         #endregion
 
         #region Methods
