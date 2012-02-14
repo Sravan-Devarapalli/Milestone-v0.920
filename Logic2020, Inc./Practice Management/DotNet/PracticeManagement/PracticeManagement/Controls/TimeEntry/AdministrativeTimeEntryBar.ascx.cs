@@ -16,6 +16,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
         private const string AdministrativeTimeEntryBar_TbAcutualHoursClientIds = "AdministrativeTimeEntryBar_TbAcutualHoursClientIds";
         private const string steId = "ste";
+        private const string workTypeOldIdAttribute = "workTypeOldId";
         private const string previousIdAttribute = "previousId";
 
         #endregion
@@ -111,10 +112,6 @@ namespace PraticeManagement.Controls.TimeEntry
                 TbAcutualHoursClientIds.Add(e.Item.ItemIndex, textBoxId);
                 TbAcutualHoursClientIds = TbAcutualHoursClientIds;
                 extTotalHours.ControlsToCheck += textBoxId + ";";
-                if (IsPTO)
-                {
-                    extEnableDisable.ControlsToCheck += textBoxId + ";";
-                }
 
                 ste.HorizontalTotalCalculatorExtenderId = extTotalHours.ClientID;
                 ste.IsNoteRequired = calendarItem.Attribute(XName.Get(TimeEntry_New.IsNoteRequiredXname)).Value;
@@ -123,6 +120,10 @@ namespace PraticeManagement.Controls.TimeEntry
                 if (IsHoliday)
                 {
                     ste.Disabled = true;
+                }
+                else
+                {
+                    extEnableDisable.ControlsToCheck += textBoxId + ";";
                 }
 
                 ste.IsPTO = IsPTO;
@@ -136,10 +137,31 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
-        #endregion
+        protected void imgDropTes_Click(object sender, ImageClickEventArgs e)
+        {
 
-        #region Methods
+            var imgDropTes = ((ImageButton)(sender));
+            var repItem = imgDropTes.NamingContainer.NamingContainer as RepeaterItem;
+            var repItemIndex = repItem.ItemIndex;
+            int projectId = Convert.ToInt32(imgDropTes.Attributes[TimeEntry_New.ProjectIdXname]);
+            int accountId = Convert.ToInt32(imgDropTes.Attributes[TimeEntry_New.AccountIdXname]);
+            int businessUnitId = Convert.ToInt32(imgDropTes.Attributes[TimeEntry_New.BusinessUnitIdXname]);
+            int workTypeId = Convert.ToInt32(imgDropTes.Attributes[TimeEntry_New.WorkTypeXname]);
+            int personId = HostingPage.SelectedPerson.Id.Value;
+            DateTime[] dates = HostingPage.SelectedDates;
+            int workTypeOldID;
+            int.TryParse(imgDropTes.Attributes[workTypeOldIdAttribute], out workTypeOldID);
 
+            //Remove Worktype from xml
+            HostingPage.RemoveWorktypeFromXMLForAdminstrativeSection(repItemIndex);
+
+            //Delete TimeEntry from database
+            if (workTypeOldID > 0)
+            {
+                ServiceCallers.Custom.TimeEntry(te => te.DeleteTimeEntry(accountId, projectId, personId, workTypeOldID, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
+            }
+
+        }
 
         protected void ddlTimeTypes_DataBound(object sender, EventArgs e)
         {
@@ -147,7 +169,11 @@ namespace PraticeManagement.Controls.TimeEntry
                 ddlTimeTypes.Items.Insert(0, (new ListItem("- - Select Work Type - -", "-1")));
         }
 
-        protected string GetDayOffCssCalss(XElement calendarItem)
+        #endregion
+
+        #region Methods
+
+        protected string GetDayOffCssClass(XElement calendarItem)
         {
             return calendarItem.Attribute(XName.Get(TimeEntry_New.CssClassXname)).Value;
         }
@@ -164,6 +190,7 @@ namespace PraticeManagement.Controls.TimeEntry
             {
                 ddlTimeTypes.Visible = false;
                 lblTimeType.Visible = true;
+                imgDropTes.Visible = false;
             }
             else
             {
@@ -229,6 +256,7 @@ namespace PraticeManagement.Controls.TimeEntry
                     //Add Element
                     var nonBillableElement = new XElement(TimeEntry_New.TimeEntryRecordXname);
                     nonBillableElement.SetAttributeValue(XName.Get(TimeEntry_New.IsChargeableXname), "false");
+                    nonBillableElement.SetAttributeValue(XName.Get(TimeEntry_New.IsReviewedXname), "Pending");
                     nonbillableSte.UpdateEditedValues(nonBillableElement);
 
                     if (nonBillableElement.Attribute(XName.Get(TimeEntry_New.ActualHoursXname)).Value != "" || nonBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value != "")
