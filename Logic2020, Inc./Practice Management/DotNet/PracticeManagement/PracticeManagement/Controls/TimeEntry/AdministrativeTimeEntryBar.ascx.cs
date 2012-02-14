@@ -53,9 +53,29 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
-        public bool IsPTO { get; set; }
+        public bool IsPTO
+        {
+            get
+            {
+                return ViewState["ISPTO_KEY"] != null ? (bool)ViewState["ISPTO_KEY"] : false;
+            }
+            set
+            {
+                ViewState["ISPTO_KEY"] = value;
+            }
+        }
 
-        public bool IsHoliday { get; set; }
+        public bool IsHoliday
+        {
+            get
+            {
+                return ViewState["ISHOLIDAY_KEY"] != null ? (bool)ViewState["ISHOLIDAY_KEY"] : false;
+            }
+            set
+            {
+                ViewState["ISHOLIDAY_KEY"] = value;
+            }
+        }
 
         public TimeTypeRecord[] TimeTypes { get; set; }
 
