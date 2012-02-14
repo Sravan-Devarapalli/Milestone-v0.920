@@ -270,6 +270,7 @@
             public const string ClientIsInternal = "ClientIsInternal";
             public const string IsPTOColumn = "IsPTO";
             public const string IsHolidayColumn = "IsHoliday";
+            public const string IsAdministrativeColumn = "IsAdministrative";
         }
 
         #endregion
@@ -357,6 +358,7 @@
             public const string IncludeTotals = "IncludeTotals";
             public const string InUse = ColumnNames.InUse;
             public const string IsActive = ColumnNames.IsActive;
+            public const string IsAdministrative = "@IsAdministrative";
             public const string IsInserted = "@IsInserted";
             public const string IsChargeable = ColumnNames.IsChargeable;
             public const string IsStartDateChangeReflectedForMilestoneAndPersons = "@IsStartDateChangeReflectedForMilestoneAndPersons";
