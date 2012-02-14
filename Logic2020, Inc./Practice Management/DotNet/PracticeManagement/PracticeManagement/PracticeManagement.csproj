@@ -517,6 +517,17 @@
     <None Include="Service References\TimeEntryService\TimeEntryService44.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\TimeEntryService\TimeEntryService5.wsdl" />
+    <None Include="Service References\TimeEntryService\TimeEntryService59.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeTypeService\TimeTypeService.disco" />
+    <None Include="Service References\TimeTypeService\configuration91.svcinfo" />
+    <None Include="Service References\TimeTypeService\configuration.svcinfo" />
+    <None Include="Service References\TimeTypeService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
@@ -981,11 +992,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\TimeEntryService\TimeEntryService3.wsdl" />
-    <None Include="Service References\TimeEntryService\TimeEntryService5.wsdl" />
     <None Include="Service References\TimeEntryService\TimeEntryService58.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService59.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\TimeEntryService\TimeEntryService8.xsd">
@@ -1063,6 +1070,19 @@
     <Content Include="TimeEntrySetting.aspx" />
     <Content Include="TimeEnteredHoursHandler.ashx" />
     <Content Include="TimeEntryHandler.ashx" />
+    <None Include="Service References\TimeTypeService\TimeTypeService.wsdl" />
+    <None Include="Service References\TimeTypeService\TimeTypeService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeTypeService\TimeTypeService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeTypeService\TimeTypeService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TimeTypeService\TimeTypeService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web References\AttachmentService\AttachmentService.disco" />
     <Content Include="TimeEntry_New.aspx" />
     <Content Include="Web.config">
@@ -1935,6 +1955,11 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Service References\TimeEntryService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\TimeTypeService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -3363,6 +3388,7 @@
     <WCFMetadataStorage Include="Service References\RoleService\" />
     <WCFMetadataStorage Include="Service References\TimeEntryService\" />
     <WCFMetadataStorage Include="Service References\TimescaleService\" />
+    <WCFMetadataStorage Include="Service References\TimeTypeService\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
