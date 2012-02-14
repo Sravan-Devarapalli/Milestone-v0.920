@@ -614,7 +614,7 @@
                                     <tr>
                                         <td class="DeleteWidth">
                                             <asp:ImageButton ID="imgPlusAdministrativeSection" OnClick="imgPlusAdministrativeSection_OnClick"
-                                                runat="server" ImageUrl="~/Images/add_24.png" />
+                                                runat="server" ImageUrl="~/Images/add_24.png" ToolTip="Add additional Administrative Work Type"/>
                                         </td>
                                         <td colspan="10">
                                         </td>
