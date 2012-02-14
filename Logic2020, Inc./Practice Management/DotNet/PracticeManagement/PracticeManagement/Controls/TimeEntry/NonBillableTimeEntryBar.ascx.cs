@@ -152,7 +152,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
         #region Methods
 
-        protected string GetDayOffCssCalss(XElement calendarItem)
+        protected string GetDayOffCssClass(XElement calendarItem)
         {
             return calendarItem.Attribute(XName.Get(TimeEntry_New.CssClassXname)).Value;
         }
