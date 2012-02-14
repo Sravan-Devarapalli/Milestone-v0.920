@@ -22,7 +22,7 @@
         </td>
         <asp:Repeater ID="tes" runat="server" OnItemDataBound="repEntries_ItemDataBound">
             <ItemTemplate>
-                <td class="time-entry-bar-single-teNew <%# GetDayOffCssCalss(((System.Xml.Linq.XElement)Container.DataItem)) %>">
+                <td class="time-entry-bar-single-teNew <%# GetDayOffCssClass(((System.Xml.Linq.XElement)Container.DataItem)) %>">
                     <table class="WholeWidth">
                         <tr>
                             <td align="center">
