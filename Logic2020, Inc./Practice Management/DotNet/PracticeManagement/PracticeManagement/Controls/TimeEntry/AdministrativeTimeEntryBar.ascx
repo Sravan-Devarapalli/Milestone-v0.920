@@ -7,12 +7,19 @@
 <%@ Register TagPrefix="ext2" Namespace="PraticeManagement.Controls.Generic.EnableDisableExtender"
     Assembly="PraticeManagement" %>
 <%@ Import Namespace="PraticeManagement.Controls.TimeEntry" %>
+<%@ Register TagPrefix="extS" Namespace="PraticeManagement.Controls.Generic.SelectCutOff"
+    Assembly="PraticeManagement" %>
 <table class="WholeWidth">
     <tr class="time-entry-bar">
         <td class="DeleteWidth">
         </td>
         <td class="time-entry-bar-time-typesNew">
-            <asp:Label ID="lblTimeType" runat="server" ></asp:Label>
+            <asp:DropDownList ID="ddlTimeTypes" runat="server" CssClass="time-entry-bar-time-typesNew-select-Normal"
+                OnDataBound="ddlTimeTypes_DataBound" DataTextField="Name" DataValueField="Id"
+                ValidationGroup='<%# ClientID %>' onchange="setDirty();" />
+            <extS:SelectCutOffExtender ID="SelectCutOffExtender1" runat="server" NormalCssClass="time-entry-bar-time-typesNew-select-Normal"
+                ExtendedCssClass="time-entry-bar-time-typesNew-select-Extended" TargetControlID="ddlTimeTypes" />
+            <asp:Label ID="lblTimeType" runat="server"></asp:Label>
             <asp:HiddenField ID="hdnworkTypeId" runat="server" />
         </td>
         <asp:Repeater ID="tes" runat="server" OnItemDataBound="repEntries_ItemDataBound">
