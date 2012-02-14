@@ -250,7 +250,7 @@
                     <div class="buttons-block">
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
-                                <td>
+                                <td style="font-size:14px;">
                                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeProjectSection" runat="Server"
                                         CollapsedText="Expand Section" ExpandedText="Collapse Section" EnableViewState="false"
                                         TargetControlID="pnlProjectSection" ImageControlID="btnExpandCollapseFilter"
@@ -352,7 +352,7 @@
                     <div class="buttons-block">
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
-                                <td>
+                                <td style="font-size:14px;">
                                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeBusinessDevelopmentSection" runat="Server"
                                         CollapsedText="Expand Section" ExpandedText="Collapse Section" EnableViewState="false"
                                         BehaviorID="cpeBusinessDevelopmentSection" TargetControlID="pnlBusinessDevelopmentSection"
@@ -455,7 +455,7 @@
                     <div class="buttons-block">
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
-                                <td>
+                                <td style="font-size:14px;">
                                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeInternalSection" runat="Server"
                                         BehaviorID="cpeInternalSection" CollapsedText="Expand Section" ExpandedText="Collapse Section"
                                         EnableViewState="false" TargetControlID="pnlInternalSection" ImageControlID="Image2"
@@ -557,7 +557,7 @@
                     <div class="buttons-block">
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
-                                <td>
+                                <td style="font-size:14px;">
                                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeAdministrative" runat="Server"
                                         CollapsedText="Expand Section" ExpandedText="Collapse Section" EnableViewState="false"
                                         TargetControlID="pnlAdministrativeSection" ImageControlID="btnAdmistrativeExpandCollapseFilter"
