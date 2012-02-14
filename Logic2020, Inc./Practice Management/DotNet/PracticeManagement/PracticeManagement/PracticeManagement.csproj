@@ -381,6 +381,7 @@
     <Content Include="Images\People_Icon_Large.png" />
     <Content Include="Images\printer.png" />
     <Content Include="Images\Recursive.png" />
+    <Content Include="Images\save24.png" />
     <Content Include="Images\saveToDisk.png" />
     <Content Include="Images\Strawman.png" />
     <Content Include="Images\StrawMan_Large.png" />
