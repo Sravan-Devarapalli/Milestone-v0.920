@@ -57,6 +57,7 @@ namespace PraticeManagement
         public const string EntryDateXname = "EntryDate";
         public const string IsHourlyRevenueXname = "IsHourlyRevenue";
         public const string IsRecursiveXname = "IsRecursive";
+        public const string IsRecursiveAllowedXname = "IsRecursiveAllowed";
         public const string workTypeOldId = "workTypeOldId";
         public const string CalendarItemXname = "CalendarItem";
         private const string AccountAndProjectSelectionXname = "AccountAndProjectSelection";
@@ -71,7 +72,7 @@ namespace PraticeManagement
         private const string internalSectionXmlClose = "</Section>";
         private const string administrativeSectionXmlOpen = "<Section Id=\"4\">";
         private const string administrativeSectionXmlClose = "</Section>";
-        private const string accountAndProjectSelectionXmlOpen = "<AccountAndProjectSelection AccountId=\"{0}\" AccountName=\"{1}\" ProjectId=\"{2}\" ProjectName=\"{3}\" ProjectNumber=\"{4}\" BusinessUnitId=\"{5}\" BusinessUnitName=\"{6}\" IsRecursive=\"{7}\"  IsPTO=\"{8}\"  IsHoliday=\"{9}\"  >";
+        private const string accountAndProjectSelectionXmlOpen = "<AccountAndProjectSelection AccountId=\"{0}\" AccountName=\"{1}\" ProjectId=\"{2}\" ProjectName=\"{3}\" ProjectNumber=\"{4}\" BusinessUnitId=\"{5}\" BusinessUnitName=\"{6}\" IsRecursive=\"{7}\"  IsPTO=\"{8}\"  IsHoliday=\"{9}\" IsRecursiveAllowed=\"{10}\" >";
         private const string accountAndProjectSelectionXmlClose = "</AccountAndProjectSelection>";
         private const string workTypeXmlOpen = "<WorkType Id=\"{0}\" >";
         private const string workTypeXmlOpenWithOldId = "<WorkType Id=\"{0}\"  OldId=\"{1}\" >";
@@ -141,8 +142,6 @@ namespace PraticeManagement
         public const string endDateAttribute = "endDate";
         public const string DayTotalAttribute = "DayTotal";
         public const string RowsCountAttribute = "rowsCount";
-        public const string FormatValue_One = "FormatValueOne";
-        public const string FormatValue_Two = "FormatValueTwo";
         public const string PlusToolTipFormat = "Add additional Work Type to {0}";
 
         #endregion
@@ -352,6 +351,8 @@ namespace PraticeManagement
                 cpeInternalSection.Collapsed = !(repInternalSections.Items.Count > 0);
                 var xdoc = XDocument.Parse(AdministrativeSectionXml);
                 cpeAdministrative.Collapsed = !(xdoc.Descendants(XName.Get(TimeEntryRecordXname)).ToList().Count > 0);
+                repTotalHoursHeader.DataSource = SelectedDates;
+                repTotalHoursHeader.DataBind();
             }
 
             ddlAccountProjectSection.Attributes[personIdAttribute] =
@@ -413,6 +414,7 @@ namespace PraticeManagement
                 var repProjectTes = e.Item.FindControl(repProjectTesRepeater) as Repeater;
                 var teSectionDataItem = e.Item.DataItem as XElement;
                 var isRecursive = teSectionDataItem.Attribute(XName.Get(IsRecursiveXname)).Value;
+                var isRecursiveAllowed = teSectionDataItem.Attribute(XName.Get(IsRecursiveAllowedXname)).Value;
 
                 AccountId = teSectionDataItem.Attribute(XName.Get(AccountIdXname)).Value;
                 ProjectId = teSectionDataItem.Attribute(XName.Get(ProjectIdXname)).Value;
@@ -433,6 +435,12 @@ namespace PraticeManagement
                 imgBtnRecursiveProjectSection.ImageUrl = Convert.ToBoolean(isRecursive) ? recursiveSectionImageUrl : nonRecursiveSectionImageUrl;
                 imgBtnRecursiveProjectSection.ToolTip = Convert.ToBoolean(isRecursive) ? recursiveToolTip : nonRecursiveToolTip;
                 cbeImgBtnRecursiveProjectSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, "project", "project end");
+                if (isRecursiveAllowed == false.ToString())
+                {
+                    cbeImgBtnRecursiveProjectSection.Enabled = false;
+                    imgBtnRecursiveProjectSection.Attributes["onclick"] = "return IsrecusiveAllowed(this);";
+                    imgBtnRecursiveProjectSection.Attributes[IsRecursiveAllowedXname] = isRecursiveAllowed;
+                }
                 imgBtnRecursiveProjectSection.Attributes[AccountIdXname] = AccountId;
                 imgBtnRecursiveProjectSection.Attributes[ProjectIdXname] = ProjectId;
                 imgBtnRecursiveProjectSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
@@ -441,7 +449,7 @@ namespace PraticeManagement
 
                 var imgBtnDeleteProjectSection = e.Item.FindControl(imgBtnDeleteProjectSectionImage) as ImageButton;
                 imgBtnDeleteProjectSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Project).ToString();
-                imgBtnDeleteProjectSection.ToolTip = String.Format(deleteSectionToolTipFormat, "project");
+                imgBtnDeleteProjectSection.ToolTip = String.Format(deleteSectionToolTipFormat, "PROJECT");
 ;
             }
         }
@@ -481,7 +489,7 @@ namespace PraticeManagement
 
                 var imgBtnDeleteBusinessDevelopmentSection = e.Item.FindControl(imgBtnDeleteBusinessDevelopmentSectionImage) as ImageButton;
                 imgBtnDeleteBusinessDevelopmentSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.BusinessDevelopment).ToString();
-                imgBtnDeleteBusinessDevelopmentSection.ToolTip = String.Format(deleteSectionToolTipFormat,"account");
+                imgBtnDeleteBusinessDevelopmentSection.ToolTip = String.Format(deleteSectionToolTipFormat,"ACCOUNT");
                 
             }
         }
@@ -523,7 +531,7 @@ namespace PraticeManagement
 
                 var imgBtnDeleteInternalSection = e.Item.FindControl(imgBtnDeleteInternalSectionImage) as ImageButton;
                 imgBtnDeleteInternalSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Internal).ToString();
-                imgBtnDeleteInternalSection.ToolTip = String.Format(deleteSectionToolTipFormat, "project");
+                imgBtnDeleteInternalSection.ToolTip = String.Format(deleteSectionToolTipFormat, "PROJECT");
             }
         }
 
@@ -567,7 +575,7 @@ namespace PraticeManagement
                 var imgPlusProjectSection = e.Item.FindControl(imgPlusProjectSectionImage) as ImageButton;
                 imgPlusProjectSection.Attributes[AccountIdXname] = AccountId;
                 imgPlusProjectSection.Attributes[ProjectIdXname] = ProjectId;
-                imgPlusProjectSection.ToolTip = string.Format(PlusToolTipFormat, "project");
+                imgPlusProjectSection.ToolTip = string.Format(PlusToolTipFormat, "PROJECT");
             }
         }
 
@@ -614,7 +622,7 @@ namespace PraticeManagement
                 imgPlusBusinessDevelopmentSection.Attributes[AccountIdXname] = AccountId;
                 imgPlusBusinessDevelopmentSection.Attributes[ProjectIdXname] = ProjectId;
                 imgPlusBusinessDevelopmentSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
-                imgPlusBusinessDevelopmentSection.ToolTip = string.Format(PlusToolTipFormat, "account");
+                imgPlusBusinessDevelopmentSection.ToolTip = string.Format(PlusToolTipFormat, "ACCOUNT");
             }
 
         }
@@ -661,7 +669,7 @@ namespace PraticeManagement
                 imgPlusInternalSection.Attributes[AccountIdXname] = AccountId;
                 imgPlusInternalSection.Attributes[ProjectIdXname] = ProjectId;
                 imgPlusInternalSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
-                imgPlusInternalSection.ToolTip = string.Format(PlusToolTipFormat, "project");
+                imgPlusInternalSection.ToolTip = string.Format(PlusToolTipFormat, "PROJECT");
             }
         }
 
@@ -701,6 +709,15 @@ namespace PraticeManagement
                     {
                         Id = Convert.ToInt32(workTypeElement.Attribute(XName.Get(IdXname)).Value)
                     };
+
+                    var imgDropTes = bar.FindControl(imgDropTesImage) as ImageButton;
+                    imgDropTes.Attributes[AccountIdXname] = teSectionDataItem.Attribute(XName.Get(AccountIdXname)).Value;
+                    imgDropTes.Attributes[BusinessUnitIdXname] = teSectionDataItem.Attribute(XName.Get(BusinessUnitIdXname)).Value;
+                    imgDropTes.Attributes[ProjectIdXname] = teSectionDataItem.Attribute(XName.Get(ProjectIdXname)).Value;
+                    string OldId = workTypeElement.Attribute(XName.Get(OldIdXname)) != null ? workTypeElement.Attribute(XName.Get(OldIdXname)).Value : null;
+                    if (!String.IsNullOrEmpty(OldId))
+                        imgDropTes.Attributes[workTypeOldId] = OldId;
+                    imgDropTes.Attributes[WorkTypeXname] = workTypeElement.Attribute(XName.Get(IdXname)).Value;
                 }
 
                 bar.TimeTypes = AdministrativeTimeTypes;
@@ -1497,7 +1514,7 @@ namespace PraticeManagement
 
             foreach (TimeEntrySection teSection in AdminiStrativeSection)
             {
-                PrePareXmlForAccountProjectSelection(xml, teSection);
+                PrePareXmlForAccountProjectSelection(xml, teSection, true);
             }
 
             xml.Append(administrativeSectionXmlClose);
@@ -1517,8 +1534,9 @@ namespace PraticeManagement
             int personId = SelectedPerson.Id.Value;
             DateTime startDate = SelectedDates[0];
             DateTime endDate = SelectedDates[SelectedDates.Length - 1];
+            bool isRecursiveAllowed = teSection.Project.EndDate.HasValue && teSection.Project.EndDate.Value > endDate ;
 
-            xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive, teSection.Project.IsPTOProject.ToString(), teSection.Project.IsHolidayProject.ToString()));
+            xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive, teSection.Project.IsPTOProject.ToString(), teSection.Project.IsHolidayProject.ToString(), isRecursiveAllowed.ToString()));
 
 
             foreach (KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>> keyVal in teSection.TimeEntriesByTimeType)
@@ -1906,6 +1924,17 @@ namespace PraticeManagement
                 InternalSectionXml = xdoc.ToString();
                 DatabindRepeater(repInternalSections, xlist);
             }
+
+        }
+
+        public void RemoveWorktypeFromXMLForAdminstrativeSection(int repindex)
+        {
+            var xdoc = PrePareXmlForAdminstrativeSectionFromRepeater();
+            List<XElement> accountAndProjectSelectionElements = xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
+            var accountAndProjectSelectionElement = accountAndProjectSelectionElements.ElementAt(repindex);
+            accountAndProjectSelectionElement.Remove();
+            AdministrativeSectionXml = xdoc.ToString();
+            DatabindRepeater(repAdministrativeTes, xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList());
 
         }
 
