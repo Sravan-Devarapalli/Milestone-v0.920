@@ -5,6 +5,7 @@
     [IsDefault]			BIT					NOT NULL,
     [IsAllowedToEdit]	BIT					NULL,
     [IsInternal]		BIT					NOT NULL,
-	[IsActive]			BIT					NOT NULL
+	[IsActive]			BIT					NOT NULL,
+	[IsAdministrative]  BIT					NOT NULL CONSTRAINT [DF_TimeType_IsAdministrative] DEFAULT 0
 );
-
+ 
