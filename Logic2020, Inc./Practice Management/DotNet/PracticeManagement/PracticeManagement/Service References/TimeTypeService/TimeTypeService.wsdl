@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TimeTypeService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/TimeTypeService.svc?xsd=xsd2" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/TimeTypeService.svc?xsd=xsd0" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/TimeTypeService.svc?xsd=xsd1" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/TimeTypeService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ITimeTypeService_GetAllTimeTypes_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllTimeTypes" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_GetAllTimeTypes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllTimeTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_GetAllAdministrativeTimeTypes_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllAdministrativeTimeTypes" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_GetAllAdministrativeTimeTypes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllAdministrativeTimeTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_GetAdministrativeChargeCodeValues_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAdministrativeChargeCodeValues" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_GetAdministrativeChargeCodeValues_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAdministrativeChargeCodeValuesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_RemoveTimeType_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveTimeType" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_RemoveTimeType_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveTimeTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_UpdateTimeType_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateTimeType" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_UpdateTimeType_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateTimeTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_AddTimeType_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddTimeType" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_AddTimeType_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddTimeTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_GetWorkTypeNameById_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetWorkTypeNameById" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_GetWorkTypeNameById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetWorkTypeNameByIdResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ITimeTypeService">
+    <wsdl:operation name="GetAllTimeTypes">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeTypeService/GetAllTimeTypes" message="tns:ITimeTypeService_GetAllTimeTypes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeTypeService/GetAllTimeTypesResponse" message="tns:ITimeTypeService_GetAllTimeTypes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllAdministrativeTimeTypes">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeTypeService/GetAllAdministrativeTimeTypes" message="tns:ITimeTypeService_GetAllAdministrativeTimeTypes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeTypeService/GetAllAdministrativeTimeTypesResponse" message="tns:ITimeTypeService_GetAllAdministrativeTimeTypes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAdministrativeChargeCodeValues">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeTypeService/GetAdministrativeChargeCodeValues" message="tns:ITimeTypeService_GetAdministrativeChargeCodeValues_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeTypeService/GetAdministrativeChargeCodeValuesResponse" message="tns:ITimeTypeService_GetAdministrativeChargeCodeValues_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveTimeType">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeTypeService/RemoveTimeType" message="tns:ITimeTypeService_RemoveTimeType_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeTypeService/RemoveTimeTypeResponse" message="tns:ITimeTypeService_RemoveTimeType_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTimeType">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeTypeService/UpdateTimeType" message="tns:ITimeTypeService_UpdateTimeType_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeTypeService/UpdateTimeTypeResponse" message="tns:ITimeTypeService_UpdateTimeType_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddTimeType">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeTypeService/AddTimeType" message="tns:ITimeTypeService_AddTimeType_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeTypeService/AddTimeTypeResponse" message="tns:ITimeTypeService_AddTimeType_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetWorkTypeNameById">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeTypeService/GetWorkTypeNameById" message="tns:ITimeTypeService_GetWorkTypeNameById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeTypeService/GetWorkTypeNameByIdResponse" message="tns:ITimeTypeService_GetWorkTypeNameById_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_ITimeTypeService" type="tns:ITimeTypeService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetAllTimeTypes">
+      <soap:operation soapAction="http://tempuri.org/ITimeTypeService/GetAllTimeTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllAdministrativeTimeTypes">
+      <soap:operation soapAction="http://tempuri.org/ITimeTypeService/GetAllAdministrativeTimeTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAdministrativeChargeCodeValues">
+      <soap:operation soapAction="http://tempuri.org/ITimeTypeService/GetAdministrativeChargeCodeValues" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveTimeType">
+      <soap:operation soapAction="http://tempuri.org/ITimeTypeService/RemoveTimeType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTimeType">
+      <soap:operation soapAction="http://tempuri.org/ITimeTypeService/UpdateTimeType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddTimeType">
+      <soap:operation soapAction="http://tempuri.org/ITimeTypeService/AddTimeType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetWorkTypeNameById">
+      <soap:operation soapAction="http://tempuri.org/ITimeTypeService/GetWorkTypeNameById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TimeTypeService">
+    <wsdl:port name="BasicHttpBinding_ITimeTypeService" binding="tns:BasicHttpBinding_ITimeTypeService">
+      <soap:address location="http://system66.ggk.com/PracticeManagementService/TimeTypeService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
