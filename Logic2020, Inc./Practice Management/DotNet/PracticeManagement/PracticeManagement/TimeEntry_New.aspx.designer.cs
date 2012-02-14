@@ -319,6 +319,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Panel pnlTotalSection;
         
         /// <summary>
+        /// repTotalHoursHeader control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater repTotalHoursHeader;
+        
+        /// <summary>
         /// repDayTotalHours control.
         /// </summary>
         /// <remarks>
@@ -427,15 +436,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator cvDayTotal;
         
         /// <summary>
-        /// mlConfirmation control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.MessageLabel mlConfirmation;
-        
-        /// <summary>
         /// valSumSaveTimeEntries control.
         /// </summary>
         /// <remarks>
@@ -443,6 +443,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ValidationSummary valSumSaveTimeEntries;
+        
+        /// <summary>
+        /// mlConfirmation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.MessageLabel mlConfirmation;
         
         /// <summary>
         /// btnSave control.
