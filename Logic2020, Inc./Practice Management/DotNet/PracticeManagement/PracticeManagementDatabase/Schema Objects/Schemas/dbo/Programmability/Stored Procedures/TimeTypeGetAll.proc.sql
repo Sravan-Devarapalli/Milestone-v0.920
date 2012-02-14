@@ -1,6 +1,6 @@
 ﻿-- =============================================
--- Author:		Nikita Goncharenko
--- Create date: 2009-11-30
+-- Author:		ThulasiRam.P
+-- Modified date: 2012-02-14
 -- Description:	Gets all avaliable time types
 -- =============================================
 CREATE PROCEDURE dbo.TimeTypeGetAll
@@ -27,8 +27,9 @@ DECLARE @NOW DATETIME = dbo.gettingPmtime(GETUTCDATE())
 		tt.IsDefault,
 		tt.IsAllowedToEdit ,
 		tt.IsActive,
-		tt.IsInternal
-	FROM TimeType AS tt
+		tt.IsInternal,
+		tt.IsAdministrative
+	FROM dbo.TimeType AS tt
 	LEFT JOIN UsedTimeTypes UTT ON UTT.TimeTypeId = tt.TimeTypeId
 	ORDER BY tt.Name
 END
