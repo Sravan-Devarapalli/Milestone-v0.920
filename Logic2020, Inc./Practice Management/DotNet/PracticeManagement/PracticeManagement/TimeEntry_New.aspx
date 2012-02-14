@@ -34,45 +34,45 @@
         }
 
         function SetTooltipsForallDropDowns() {
-            var optionList = document.getElementsByTagName( 'option' );
+            var optionList = document.getElementsByTagName('option');
 
-            for ( var i = 0; i < optionList.length; ++i ) {
+            for (var i = 0; i < optionList.length; ++i) {
 
                 optionList[i].title = optionList[i].innerHTML;
             }
 
         }
 
-        function SetFocus( modalExId, tbNotesId, tbBillableHoursId, btnSaveNotesId, tbNonBillableHoursId ) {
+        function SetFocus(modalExId, tbNotesId, tbBillableHoursId, btnSaveNotesId, tbNonBillableHoursId) {
 
-            var tbActualHours = $find( tbBillableHours );
+            var tbActualHours = $find(tbBillableHours);
 
-            var modalEx = $find( modalExId );
+            var modalEx = $find(modalExId);
             modalEx.show();
-            var tbNotes = $get( tbNotesId );
-            var btnSaveNotes = $get( btnSaveNotesId );
-            var tbBillableHours = $get( tbBillableHoursId );
-            var tbNonBillableHours = $get( tbNonBillableHoursId );
+            var tbNotes = $get(tbNotesId);
+            var btnSaveNotes = $get(btnSaveNotesId);
+            var tbBillableHours = $get(tbBillableHoursId);
+            var tbNonBillableHours = $get(tbNonBillableHoursId);
 
-            if ( tbBillableHours.disabled && tbNonBillableHours.disabled ) {
+            if (tbBillableHours.disabled && tbNonBillableHours.disabled) {
                 tbNotes.disabled = 'disabled';
                 btnSaveNotes.disabled = 'disabled';
             }
             else {
-                if ( !( tbBillableHours.getAttribute( 'IsPTO' ) != null && tbBillableHours.getAttribute( 'IsPTO' ).toString().toLowerCase() == "true" ) ) {
+                if (!(tbBillableHours.getAttribute('IsPTO') != null && tbBillableHours.getAttribute('IsPTO').toString().toLowerCase() == "true")) {
                     tbNotes.disabled = '';
                     btnSaveNotes.disabled = '';
                 }
             }
 
-            if ( tbNotes && !tbNotes.disabled ) tbNotes.focus();
+            if (tbNotes && !tbNotes.disabled) tbNotes.focus();
         }
 
-        function changeIcon( tbNotesId, imgNoteId ) {
-            var tbNotes = $get( tbNotesId );
-            var imgNote = $get( imgNoteId );
-            if ( tbNotes && imgNote ) {
-                if ( tbNotes.value && tbNotes.value != '' ) {
+        function changeIcon(tbNotesId, imgNoteId) {
+            var tbNotes = $get(tbNotesId);
+            var imgNote = $get(imgNoteId);
+            if (tbNotes && imgNote) {
+                if (tbNotes.value && tbNotes.value != '') {
                     imgNote.src = 'Images/balloon-ellipsis.png';
                 }
                 else {
@@ -82,18 +82,18 @@
             }
         }
 
-        function assignHiddenValues( hiddenNoteId, noteId ) {
-            var hiddenNote = $get( hiddenNoteId );
-            var note = $get( noteId );
+        function assignHiddenValues(hiddenNoteId, noteId) {
+            var hiddenNote = $get(hiddenNoteId);
+            var note = $get(noteId);
             hiddenNote.value = note.value;
         }
 
-        function ddlChild_onchange( ddl ) {
+        function ddlChild_onchange(ddl) {
 
-            var btnAdd = document.getElementById( ddl.attributes["add"].value );
-            if ( ddl.options.length > 0 ) {
-                var optionList = ddl.getElementsByTagName( 'option' );
-                if ( optionList[0].value == ddl.value ) {
+            var btnAdd = document.getElementById(ddl.attributes["add"].value);
+            if (ddl.options.length > 0) {
+                var optionList = ddl.getElementsByTagName('option');
+                if (optionList[0].value == ddl.value) {
                     btnAdd.disabled = true;
                 }
                 else {
@@ -105,27 +105,27 @@
             }
         }
 
-        function ddlParent_onchange( ddl ) {
-            var btnAdd = document.getElementById( ddl.attributes["add"].value );
+        function ddlParent_onchange(ddl) {
+            var btnAdd = document.getElementById(ddl.attributes["add"].value);
             btnAdd.disabled = true;
         }
 
-        function EnableSaveButton( enable ) {
+        function EnableSaveButton(enable) {
 
         }
 
-        function ChangeTooltip( tbnote ) {
-            var imgNoteClientId = document.getElementById( tbnote.attributes["imgNoteClientId"].value );
+        function ChangeTooltip(tbnote) {
+            var imgNoteClientId = document.getElementById(tbnote.attributes["imgNoteClientId"].value);
             imgNoteClientId.title = tbnote.value;
-            changeIcon( tbnote.id, imgNoteClientId.id );
+            changeIcon(tbnote.id, imgNoteClientId.id);
         }
         function btnClose_OnClientClick() {
-            $find( "mpeTimetypeAlertMessage" ).hide();
+            $find("mpeTimetypeAlertMessage").hide();
             return false;
         }
 
-        function IsrecusiveAllowed( img ) {
-            alert( 'Can\'t enable recurring behavior as project enddate is less than the week startdate.' );
+        function IsrecusiveAllowed(img) {
+            alert('Can\'t enable recurring behavior as project enddate is less than the week startdate.');
             return false;
         }
     </script>
@@ -163,32 +163,32 @@
         <asp:UpdatePanel ID="updTimeEntries" runat="server">
             <ContentTemplate>
                 <script type="text/javascript">
-                    function ExpandPanel( name ) {
-                        var isCollapsed = $find( name ).get_Collapsed();
-                        if ( isCollapsed ) {
-                            $find( name ).expandPanel();
+                    function ExpandPanel(name) {
+                        var isCollapsed = $find(name).get_Collapsed();
+                        if (isCollapsed) {
+                            $find(name).expandPanel();
                         }
                     }
 
-                    function CollapsePanel( name, rowsCount ) {
-                        if ( rowsCount == 1 ) {
-                            var isCollapsed = $find( name ).get_Collapsed();
-                            if ( !isCollapsed ) {
-                                $find( name ).togglePanel();
+                    function CollapsePanel(name, rowsCount) {
+                        if (rowsCount == 1) {
+                            var isCollapsed = $find(name).get_Collapsed();
+                            if (!isCollapsed) {
+                                $find(name).togglePanel();
                             }
                         }
                     }
 
-                    function DeleteSection( name, rowsCount, controlClientId, sectionId ) {
-                        var imgControl = document.getElementById( controlClientId );
+                    function DeleteSection(name, rowsCount, controlClientId, sectionId) {
+                        var imgControl = document.getElementById(controlClientId);
                         var projectConfirmMessageFormat = "This will remove the project and any associated time entries!  If this project has been selected as recurring, continuing will result in the project being removed for only this time entry period.  Do you want to continue?";
                         var accountConfirmMessageFormat = "This will remove the account and any associated time entries!  If this account has been selected as recurring, continuing will result in the account being removed for only this time entry period.  Do you want to continue?";
                         var confirmMessageFormat = projectConfirmMessageFormat;
-                        if ( sectionId == '2' )
+                        if (sectionId == '2')
                             confirmMessageFormat = accountConfirmMessageFormat;
 
-                        if ( confirm( confirmMessageFormat ) ) {
-                            CollapsePanel( name, rowsCount );
+                        if (confirm(confirmMessageFormat)) {
+                            CollapsePanel(name, rowsCount);
                             return true;
                         }
                         else {
@@ -197,48 +197,48 @@
 
                     }
 
-                    function SelectDefaultValues( cddID ) {
-                        var dd = $find( cddID );
-                        var parentElement = $get( dd._parentControlID );
-                        if ( parentElement ) {
+                    function SelectDefaultValues(cddID) {
+                        var dd = $find(cddID);
+                        var parentElement = $get(dd._parentControlID);
+                        if (parentElement) {
                             parentElement.selectedIndex = 0;
-                            ddlParent_onchange( parentElement );
+                            ddlParent_onchange(parentElement);
                         }
 
-                        dd.set_SelectedValue( '' );
-                        dd._onParentChange( null, true );
+                        dd.set_SelectedValue('');
+                        dd._onParentChange(null, true);
 
                     }
 
-                    function expandCollapseSections( SectionName, lblSection ) {
-                        var cpeSection = $find( SectionName );
+                    function expandCollapseSections(SectionName, lblSection) {
+                        var cpeSection = $find(SectionName);
                         var isCollapsed = cpeSection.get_Collapsed();
-                        var cpeSectionCount = lblSection.getAttribute( 'rowsCount' );
-                        if ( cpeSectionCount != '0' ) {
-                            if ( isCollapsed ) {
+                        var cpeSectionCount = lblSection.getAttribute('rowsCount');
+                        if (cpeSectionCount != '0') {
+                            if (isCollapsed) {
                                 cpeSection.togglePanel();
                             }
                         }
                         else {
-                            if ( !isCollapsed ) {
+                            if (!isCollapsed) {
                                 cpeSection.togglePanel();
                             }
                         }
                     }
 
-                    Sys.WebForms.PageRequestManager.getInstance().add_endRequest( endRequestHandle );
-                    function endRequestHandle( sender, Args ) {
+                    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+                    function endRequestHandle(sender, Args) {
                         SetTooltipsForallDropDowns();
-                        var hdIsWeekOrPersonChanged = document.getElementById( '<%= hdIsWeekOrPersonChanged.ClientID %>' );
-                        if ( hdIsWeekOrPersonChanged.value.toLowerCase() == 'true' ) {
-                            var lbProjectSection = document.getElementById( '<%=lbProjectSection.ClientID %>' );
-                            var lbBusinessDevelopmentSection = document.getElementById( '<%=lbBusinessDevelopmentSection.ClientID %>' );
-                            var lbInternalSection = document.getElementById( '<%=lbInternalSection.ClientID %>' );
-                            var lbAdministrativeSection = document.getElementById( '<%=lbAdministrativeSection.ClientID %>' );
-                            expandCollapseSections( 'cpeProjectSection', lbProjectSection );
-                            expandCollapseSections( 'cpeBusinessDevelopmentSection', lbBusinessDevelopmentSection );
-                            expandCollapseSections( 'cpeInternalSection', lbInternalSection );
-                            expandCollapseSections( 'cpeAdministrative', lbAdministrativeSection );
+                        var hdIsWeekOrPersonChanged = document.getElementById('<%= hdIsWeekOrPersonChanged.ClientID %>');
+                        if (hdIsWeekOrPersonChanged.value.toLowerCase() == 'true') {
+                            var lbProjectSection = document.getElementById('<%=lbProjectSection.ClientID %>');
+                            var lbBusinessDevelopmentSection = document.getElementById('<%=lbBusinessDevelopmentSection.ClientID %>');
+                            var lbInternalSection = document.getElementById('<%=lbInternalSection.ClientID %>');
+                            var lbAdministrativeSection = document.getElementById('<%=lbAdministrativeSection.ClientID %>');
+                            expandCollapseSections('cpeProjectSection', lbProjectSection);
+                            expandCollapseSections('cpeBusinessDevelopmentSection', lbBusinessDevelopmentSection);
+                            expandCollapseSections('cpeInternalSection', lbInternalSection);
+                            expandCollapseSections('cpeAdministrative', lbAdministrativeSection);
                             hdIsWeekOrPersonChanged.value = 'false';
                         }
                     }
@@ -653,14 +653,13 @@
                                     runat="server">
                                     <ItemTemplate>
                                         <td class="time-entry-bar-single-teNew DayTotalHours <%# GetDayOffCssCalss(((DataTransferObjects.CalendarItem)Container.DataItem)) %>">
-                                            <div class="PaddingClass2">
-                                                <asp:Label ID="lblDayTotal" Font-Bold="true" TotalHours="" runat="server" CssClass="PaddingClass21"></asp:Label>
-                                                <ext:TotalCalculatorExtender ID="extDayTotal" runat="server" TargetControlID="lblDayTotal" />
-                                                <asp:HiddenField ID="hdnDayTotal" runat="server"></asp:HiddenField>
-                                                <ext3:MaxValueAllowedForTextBoxExtender ID="extMaxValueAllowedForTextBoxExtender"
-                                                    runat="server" TargetControlID="lblDayTotal">
-                                                </ext3:MaxValueAllowedForTextBoxExtender>
-                                            </div>
+                                            <asp:Label Width="38px" Height="17px" CssClass="DayTotalCSS" ID="lblDayTotal" TotalHours=""
+                                                runat="server"></asp:Label>
+                                            <ext:TotalCalculatorExtender ID="extDayTotal" runat="server" TargetControlID="lblDayTotal" />
+                                            <asp:HiddenField ID="hdnDayTotal" runat="server"></asp:HiddenField>
+                                            <ext3:MaxValueAllowedForTextBoxExtender ID="extMaxValueAllowedForTextBoxExtender"
+                                                runat="server" TargetControlID="lblDayTotal">
+                                            </ext3:MaxValueAllowedForTextBoxExtender>
                                         </td>
                                     </ItemTemplate>
                                 </asp:Repeater>
