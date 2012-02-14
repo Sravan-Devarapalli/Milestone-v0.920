@@ -14,145 +14,6 @@ namespace DataAccess
 {
     public static class TimeEntryDAL
     {
-        #region Time type
-
-        /// <summary>
-        /// Retrieves all existing time types
-        /// </summary>
-        /// <returns>Collection of new time types</returns>
-        public static IEnumerable<TimeTypeRecord> GetAllTimeTypes()
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.TimeType.GetAll, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-
-                connection.Open();
-
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    return new List<TimeTypeRecord>(ReadTimeTypes(reader));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Updates given time type
-        /// </summary>
-        /// <param name="timeType">Time type to update</param>
-        public static void UpdateTimeType(TimeTypeRecord timeType)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.TimeType.Update, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeId, timeType.Id);
-                command.Parameters.AddWithValue(Constants.ParameterNames.Name, timeType.Name);
-                command.Parameters.AddWithValue(Constants.ParameterNames.IsDefault, timeType.IsDefault);
-                command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, timeType.IsInternal);
-                command.Parameters.AddWithValue(Constants.ParameterNames.IsActive, timeType.IsActive);
-                connection.Open();
-
-                command.ExecuteNonQuery();
-            }
-        }
-
-        /// <summary>
-        /// Adds new time type
-        /// </summary>
-        /// <param name="timeType">Time type to add</param>
-        /// <returns>Id of added time type</returns>
-        public static int AddTimeType(TimeTypeRecord timeType)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.TimeType.Insert, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue(Constants.ParameterNames.Name, timeType.Name);
-                command.Parameters.AddWithValue(Constants.ParameterNames.IsDefault, timeType.IsDefault);
-                command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, timeType.IsInternal);
-                command.Parameters.AddWithValue(Constants.ParameterNames.IsActive, timeType.IsActive);
-
-                SqlParameter timeTypeIdParam = new SqlParameter(Constants.ParameterNames.TimeTypeId, SqlDbType.Int) { Direction = ParameterDirection.Output };
-                command.Parameters.Add(timeTypeIdParam);
-
-                connection.Open();
-
-                command.ExecuteNonQuery();
-                timeType.Id = (int)timeTypeIdParam.Value;
-                return timeType.Id;
-            }
-        }
-
-        /// <summary>
-        /// Removes given time type
-        /// </summary>
-        /// <param name="timeType">Time type to remove</param>
-        public static void RemoveTimeType(TimeTypeRecord timeType)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.TimeType.Delete, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeId, timeType.Id);
-
-                connection.Open();
-
-                command.ExecuteNonQuery();
-            }
-        }
-
-        private static IEnumerable<TimeTypeRecord> ReadTimeTypes(DbDataReader reader)
-        {
-            if (reader.HasRows)
-            {
-                int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
-                int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
-                int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
-                int inFutureUseIndex = reader.GetOrdinal(Constants.ColumnNames.InFutureUse);
-                int isDefaultIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefault);
-                int isAllowedToEditColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsAllowedToEditColumn);
-                int isActiveColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsActive);
-                int isInternalColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsInternalColumn);
-
-                while (reader.Read())
-                {
-                    var tt = new TimeTypeRecord
-                    {
-                        Id = reader.GetInt32(timeTypeIdIndex),
-                        Name = reader.GetString(nameIndex),
-                        IsDefault = reader.GetBoolean(isDefaultIndex),
-                        IsAllowedToEdit = reader.GetBoolean(isAllowedToEditColumnIndex),
-                        IsActive = reader.GetBoolean(isActiveColumnIndex),
-                        IsInternal = reader.GetBoolean(isInternalColumnIndex),
-                        InFutureUse = Convert.ToBoolean(reader.GetInt32(inFutureUseIndex)),
-                        InUse = bool.Parse(reader.GetString(inUseIndex))
-                    };
-                    yield return tt;
-
-                }
-            }
-        }
-
-        public static void RemoveTimeEntries(int milestonePersonId, int timeTypeId, DateTime startDate, DateTime endDate)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.RemoveTimeEntries, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-
-                command.Parameters.AddWithValue(Constants.ParameterNames.MilestonePersonId, milestonePersonId);
-                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeId, timeTypeId);
-                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
-                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
-
-                connection.Open();
-
-                command.ExecuteNonQuery();
-            }
-        }
-
-        #endregion
 
         #region Time Zone
 
@@ -272,6 +133,25 @@ namespace DataAccess
         }
 
         #endregion
+
+
+        public static void RemoveTimeEntries(int milestonePersonId, int timeTypeId, DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.RemoveTimeEntries, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.MilestonePersonId, milestonePersonId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeId, timeTypeId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+
+                connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+        }
 
         public static void RemoveTimeEntry(TimeEntryRecord timeEntry)
         {
@@ -1155,33 +1035,6 @@ namespace DataAccess
                     reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ModifiedLastName))
             };
             return person;
-        }
-
-        public static string GetWorkTypeNameById(int worktypeId)
-        {
-            string name = "";
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.GetWorkTypeNameByIdProcedure, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeId, worktypeId);
-              
-                connection.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            name = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.Name));
-                        }
-                    }
-
-                }
-            }
-
-            return name;
-
         }
 
 
