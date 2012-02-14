@@ -38,6 +38,7 @@
       <Setting name="ProjectServiceClient" />
       <Setting name="ProjectStatusServiceClient" />
       <Setting name="TimeEntryServiceClient" />
+      <Setting name="TimeTypeServiceClient"/>
       <Setting name="TimescaleServiceClient" />
       <Setting name="ConfigurationServiceClient" />
       <Setting name="DefaultRecruiterCommissionServiceClient" />
