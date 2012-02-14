@@ -104,6 +104,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsDefault, timeType.IsDefault);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, timeType.IsInternal);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsActive, timeType.IsActive);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsAdministrative, timeType.IsAdministrative);
                 connection.Open();
 
                 command.ExecuteNonQuery();
@@ -125,6 +126,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsDefault, timeType.IsDefault);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, timeType.IsInternal);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsActive, timeType.IsActive);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsAdministrative, timeType.IsAdministrative);
 
                 SqlParameter timeTypeIdParam = new SqlParameter(Constants.ParameterNames.TimeTypeId, SqlDbType.Int) { Direction = ParameterDirection.Output };
                 command.Parameters.Add(timeTypeIdParam);
@@ -167,6 +169,8 @@ namespace DataAccess
                 int isAllowedToEditColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsAllowedToEditColumn);
                 int isActiveColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsActive);
                 int isInternalColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsInternalColumn);
+                int isAdministrativeColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsAdministrativeColumn);
+
 
                 while (reader.Read())
                 {
@@ -179,7 +183,9 @@ namespace DataAccess
                         IsActive = reader.GetBoolean(isActiveColumnIndex),
                         IsInternal = reader.GetBoolean(isInternalColumnIndex),
                         InFutureUse = Convert.ToBoolean(reader.GetInt32(inFutureUseIndex)),
-                        InUse = bool.Parse(reader.GetString(inUseIndex))
+                        InUse = bool.Parse(reader.GetString(inUseIndex)),
+                        IsAdministrative = reader.GetBoolean(isAdministrativeColumnIndex)
+
                     };
                     yield return tt;
 
