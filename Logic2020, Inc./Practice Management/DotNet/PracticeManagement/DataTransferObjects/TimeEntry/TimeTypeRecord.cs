@@ -51,6 +51,9 @@ namespace DataTransferObjects.TimeEntry
         public bool IsInternal { get; set; }
 
         [DataMember]
+        public bool IsAdministrative { get; set; }
+
+        [DataMember]
         public bool IsActive { get; set; }
 
         #endregion
