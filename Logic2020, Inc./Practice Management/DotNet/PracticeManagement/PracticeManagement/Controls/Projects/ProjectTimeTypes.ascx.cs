@@ -11,6 +11,7 @@ using PraticeManagement.ProjectService;
 using DataTransferObjects.Utils;
 using System.Web.Security;
 using DataTransferObjects;
+using PraticeManagement.TimeTypeService;
 
 namespace PraticeManagement.Controls.Projects
 {
@@ -46,7 +47,7 @@ namespace PraticeManagement.Controls.Projects
         {
             if (AllTimeTypes == null && ProjectTimetypes == null)
             {
-                AllTimeTypes = ServiceCallers.Invoke<TimeEntryServiceClient, TimeTypeRecord[]>(TimeType => TimeType.GetAllTimeTypes());
+                AllTimeTypes = ServiceCallers.Invoke<TimeTypeServiceClient, TimeTypeRecord[]>(TimeType => TimeType.GetAllTimeTypes());
                 TimeTypeRecord[] NotIncludedTimeTypes = AllTimeTypes.AsQueryable().Where(T => T.Name == "PTO" || T.Name == "Holiday").ToArray();
                 AllTimeTypes = AllTimeTypes.AsQueryable().Except(NotIncludedTimeTypes).ToArray();
 
@@ -187,7 +188,7 @@ namespace PraticeManagement.Controls.Projects
                     customTimeType.Name = txtNewTimeType.Text;
                     customTimeType.IsActive = true;
                     customTimeType.IsAllowedToEdit = true;
-                    int customTimeTypeId = ServiceCallers.Invoke<TimeEntryServiceClient, int>(TimeType => TimeType.AddTimeType(customTimeType));
+                    int customTimeTypeId = ServiceCallers.Invoke<TimeTypeServiceClient, int>(TimeType => TimeType.AddTimeType(customTimeType));
                     customTimeType.Id = customTimeTypeId;
 
                     if (String.IsNullOrEmpty(hdnTimeTypesAssignedToProject.Value))
@@ -218,7 +219,7 @@ namespace PraticeManagement.Controls.Projects
         }
         private bool IsTimeTypeAlreadyExisting(string newTimeType)
         {
-            using (TimeEntryServiceClient serviceClient = new TimeEntryServiceClient())
+            using (var serviceClient = new TimeTypeServiceClient())
             {
                 TimeTypeRecord[] timeTypesArray = serviceClient.GetAllTimeTypes();
 
