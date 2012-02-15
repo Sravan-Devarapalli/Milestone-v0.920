@@ -31,32 +31,8 @@
                         if (hoursTextStr.length > 0) {
                             var hours = parseFloat(hoursTextStr);
                             if (hours >= 0.0 && hours <= 8.0 && hours == hoursTextStr) {
-                                var PersonId = btnOk.attributes['PersonId'].value;
-                                var Date = btnOk.attributes['Date'].value;
-                                var maxHours;
-                                var urlVal = 'TimeEnteredHoursHandler.ashx?PersonId=' + PersonId + '&Date=' + Date;
-                                try {
-                                    errorText.innerHTML = '';
-                                    var value = $.post(urlVal, function (returnData) {
-                                        var enteredHours = returnData;
-                                        if (enteredHours != null) {
-                                            maxHours = 8 - enteredHours;
-                                        }
-                                        if (maxHours != null && maxHours > 0 && hours <= maxHours) {
-                                            hdnDayOff.value = 'false'; //For Updating the PTO details.
-                                            SaveDetails(popupExtendar, btnOk);
-                                        }
-                                        else if (maxHours != null && maxHours <= 0) {
-                                            errorText.innerHTML = 'This Person already worked ' + enteredHours + ' hours. so no need to keep PTO.';
-                                        }
-                                        else {
-                                            errorText.innerHTML = 'This Person already worked ' + enteredHours + ' hours. so you can keep PTO upto ' + maxHours + ' hour(s) only';
-                                        }
-                                    });
-                                }
-                                catch (error) {
-                                    errorText.innerHTML = error.message;
-                                }
+                                hdnDayOff.value = 'false'; //For Updating the PTO details.
+                                SaveDetails( popupExtendar, btnOk );
                             }
                             else {
                                 errorText.innerHTML = '* Hours should be real and 0.00-8.00.';
