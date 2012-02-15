@@ -281,20 +281,18 @@
                                         <td class="SectionFirstTD" colspan="7">
                                             <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
                                         </td>
-                                        <td class="DeleteWidth">
-                                            <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecursiveProjectSection" runat="server"
-                                                TargetControlID="imgBtnRecursiveProjectSection">
-                                            </AjaxControlToolkit:ConfirmButtonExtender>
-                                            <asp:ImageButton ID="imgBtnRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png"
-                                                OnClick="imgBtnRecursiveSection_OnClick" />
-                                        </td>
-                                        <td>
-                                            <asp:ImageButton ID="imgBtnSaveAll" runat="server" OnClick="btnSave_OnClick" ToolTip="Save All"
-                                                ImageUrl="~/Images/save24.png" />
-                                        </td>
-                                        <td class="DeleteWidth">
-                                            <asp:ImageButton ID="imgBtnDeleteProjectSection" runat="server" ImageUrl="~/Images/close_24.png"
-                                                OnClick="imgBtnDeleteSection_OnClick" />
+                                        <td class="DeleteFixedWidth">
+                                            <div>
+                                                <asp:ImageButton ID="imgBtnDeleteProjectSection" runat="server" ImageUrl="~/Images/close_24.png"
+                                                    OnClick="imgBtnDeleteSection_OnClick" />
+                                            </div>
+                                            <div>
+                                                <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecursiveProjectSection" runat="server"
+                                                    TargetControlID="imgBtnRecursiveProjectSection">
+                                                </AjaxControlToolkit:ConfirmButtonExtender>
+                                                <asp:ImageButton ID="imgBtnRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png"
+                                                    OnClick="imgBtnRecursiveSection_OnClick" />
+                                            </div>
                                         </td>
                                     </tr>
                                 </table>
@@ -384,19 +382,17 @@
                                         <td class="SectionFirstTD" colspan="7">
                                             <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value %>
                                         </td>
-                                        <td class="DeleteWidth">
-                                            <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecurrenceBusinessDevelopmentSection"
-                                                runat="server" TargetControlID="imgBtnRecurrenceBusinessDevelopmentSection">
-                                            </AjaxControlToolkit:ConfirmButtonExtender>
-                                            <asp:ImageButton ID="imgBtnRecurrenceBusinessDevelopmentSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick" />
-                                        </td>
-                                        <td>
-                                            <asp:ImageButton ID="imgBtnSaveAll" runat="server" OnClick="btnSave_OnClick" ToolTip="Save All"
-                                                ImageUrl="~/Images/save24.png" />
-                                        </td>
-                                        <td class="DeleteWidth">
-                                            <asp:ImageButton ID="imgBtnDeleteBusinessDevelopmentSection" runat="server" ImageUrl="~/Images/close_24.png"
-                                                OnClick="imgBtnDeleteSection_OnClick" />
+                                        <td class="DeleteFixedWidth">
+                                            <div>
+                                                <asp:ImageButton ID="imgBtnDeleteBusinessDevelopmentSection" runat="server" ImageUrl="~/Images/close_24.png"
+                                                    OnClick="imgBtnDeleteSection_OnClick" />
+                                            </div>
+                                            <div>
+                                                <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecurrenceBusinessDevelopmentSection"
+                                                    runat="server" TargetControlID="imgBtnRecurrenceBusinessDevelopmentSection">
+                                                </AjaxControlToolkit:ConfirmButtonExtender>
+                                                <asp:ImageButton ID="imgBtnRecurrenceBusinessDevelopmentSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick" />
+                                            </div>
                                         </td>
                                     </tr>
                                 </table>
@@ -486,19 +482,17 @@
                                         <td class="SectionFirstTD" colspan="7">
                                             <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
                                         </td>
-                                        <td class="DeleteWidth">
-                                            <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecurrenceInternalSection"
-                                                runat="server" TargetControlID="imgBtnRecurrenceInternalSection">
-                                            </AjaxControlToolkit:ConfirmButtonExtender>
-                                            <asp:ImageButton ID="imgBtnRecurrenceInternalSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick" />
-                                        </td>
-                                        <td>
-                                            <asp:ImageButton ID="imgBtnSaveAll" runat="server" OnClick="btnSave_OnClick" ToolTip="Save All"
-                                                ImageUrl="~/Images/save24.png" />
-                                        </td>
-                                        <td class="DeleteWidth">
-                                            <asp:ImageButton ID="imgBtnDeleteInternalSection" runat="server" ImageUrl="~/Images/close_24.png"
-                                                OnClick="imgBtnDeleteSection_OnClick" />
+                                        <td class="DeleteFixedWidth">
+                                            <div>
+                                                <asp:ImageButton ID="imgBtnDeleteInternalSection" runat="server" ImageUrl="~/Images/close_24.png"
+                                                    OnClick="imgBtnDeleteSection_OnClick" />
+                                            </div>
+                                            <div>
+                                                <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecurrenceInternalSection"
+                                                    runat="server" TargetControlID="imgBtnRecurrenceInternalSection">
+                                                </AjaxControlToolkit:ConfirmButtonExtender>
+                                                <asp:ImageButton ID="imgBtnRecurrenceInternalSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick" />
+                                            </div>
                                         </td>
                                     </tr>
                                 </table>
@@ -612,7 +606,7 @@
                             <FooterTemplate>
                                 <table cellpadding="0" cellspacing="0" class="PaddingClass WholeWidth">
                                     <tr>
-                                        <td class="DeleteWidth">
+                                        <td class="DeleteWidth" style="text-align:left !important;">
                                             <asp:ImageButton ID="imgPlusAdministrativeSection" OnClick="imgPlusAdministrativeSection_OnClick"
                                                 runat="server" ImageUrl="~/Images/add_24.png" ToolTip="Add additional Administrative Work Type"/>
                                         </td>
@@ -653,7 +647,7 @@
                                     runat="server">
                                     <ItemTemplate>
                                         <td class="time-entry-bar-single-teNew DayTotalHours <%# GetDayOffCssCalss(((DataTransferObjects.CalendarItem)Container.DataItem)) %>">
-                                            <asp:Label Width="38px" Height="17px" CssClass="DayTotalCSS" ID="lblDayTotal" TotalHours=""
+                                            <asp:Label Width="36px" Height="18px" CssClass="DayTotalCSS" ID="lblDayTotal" TotalHours=""
                                                 runat="server"></asp:Label>
                                             <ext:TotalCalculatorExtender ID="extDayTotal" runat="server" TargetControlID="lblDayTotal" />
                                             <asp:HiddenField ID="hdnDayTotal" runat="server"></asp:HiddenField>
@@ -719,6 +713,18 @@
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
                                 <td style="width: 33%;">
+                                </td>
+                                <td style="width: 33%; font-size: 16px; text-align: center;">
+                                    <uc:MessageLabel ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green"
+                                        WarningColor="Orange" />
+                                </td>
+                                <td style="width: 33%; text-align: right;">
+                                    <asp:Button ID="btnSave" runat="server" OnClick="btnSave_OnClick" Text="Save All"
+                                        CssClass="mrg0" ToolTip="Save All" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="width: 50%;">
                                     <asp:CustomValidator ID="custWorkType" runat="server" ErrorMessage="Please select Work Type."
                                         OnServerValidate="custWorkType_ServerValidate" EnableClientScript="false" ToolTip="Please select Work Type."
                                         SetFocusOnError="true" Text="*" ValidationGroup="TE" Display="None" />
@@ -737,14 +743,6 @@
                                         OnServerValidate="cvDayTotal_ServerValidate" EnableClientScript="false" Text="*"
                                         Display="None" SetFocusOnError="true" ValidationGroup="TE" ToolTip="Day Total hours must be lessthan or equals to 24." />
                                     <asp:ValidationSummary ID="valSumSaveTimeEntries" runat="server" ValidationGroup="TE" />
-                                </td>
-                                <td style="width: 33%; text-align: center;">
-                                    <uc:MessageLabel ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green"
-                                        WarningColor="Orange" />
-                                </td>
-                                <td style="width: 33%; text-align: right;">
-                                    <asp:Button ID="btnSave" runat="server" OnClick="btnSave_OnClick" Text="Save All"
-                                        CssClass="mrg0" ToolTip="Save All" />
                                 </td>
                             </tr>
                         </table>
