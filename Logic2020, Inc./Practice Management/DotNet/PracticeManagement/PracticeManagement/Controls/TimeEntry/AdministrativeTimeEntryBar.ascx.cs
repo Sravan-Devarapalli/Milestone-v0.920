@@ -136,7 +136,12 @@ namespace PraticeManagement.Controls.TimeEntry
                 ste.HorizontalTotalCalculatorExtenderId = extTotalHours.ClientID;
                 ste.IsNoteRequired = calendarItem.Attribute(XName.Get(TimeEntry_New.IsNoteRequiredXname)).Value;
                 ste.IsChargeCodeTurnOff = calendarItem.Attribute(XName.Get(TimeEntry_New.IsChargeCodeOffXname)).Value;
-
+                if (calendarItem.Attribute(XName.Get(TimeEntry_New.IsPTODisableXname)) != null)
+                {
+                    bool isPTODisabled = calendarItem.Attribute(XName.Get(TimeEntry_New.IsPTODisableXname)).Value == true.ToString();
+                    var tbActualHours = ste.FindControl("tbActualHours") as TextBox;
+                    tbActualHours.ReadOnly = isPTODisabled;
+                }
                 if (IsHoliday)
                 {
                     ste.Disabled = true;
@@ -152,7 +157,6 @@ namespace PraticeManagement.Controls.TimeEntry
                 var nbterecord = (calendarItem.HasElements && calendarItem.Descendants(XName.Get(TimeEntry_New.TimeEntryRecordXname)).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").ToList().Count > 0) ? calendarItem.Descendants(XName.Get("TimeEntryRecord")).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").First() : null;
                 var date = Convert.ToDateTime(calendarItem.Attribute(XName.Get(TimeEntry_New.DateXname)).Value);
                 InitTimeEntryControl(ste, date, nbterecord);
-
 
             }
         }
@@ -240,12 +244,35 @@ namespace PraticeManagement.Controls.TimeEntry
                 {
                     ddlTimeTypes.SelectedIndex = 0;
                 }
-
-
-
                 ddlTimeTypes.Attributes[previousIdAttribute] = ddlTimeTypes.SelectedValue.ToString();
                 HostingPage.DdlWorkTypeIdsList += ddlTimeTypes.ClientID + ";";
 
+            }
+            if (IsPTO)
+            {
+                bool isHoliday = false;
+                var xdoc = XDocument.Parse(HostingPage.AdministrativeSectionXml);
+                if (xdoc.Descendants(XName.Get(TimeEntry_New.AccountAndProjectSelectionXname)).Where(p => p.Attribute(XName.Get(TimeEntry_New.IsHolidayXname)).Value == true.ToString()).Count() > 0)
+                {
+                    var holidayAccountAndProjectSelectionElement = xdoc.Descendants(XName.Get(TimeEntry_New.AccountAndProjectSelectionXname)).First(p => p.Attribute(XName.Get(TimeEntry_New.IsHolidayXname)).Value == true.ToString());
+                    var ptoAccountAndProjectSelectionElement = xdoc.Descendants(XName.Get(TimeEntry_New.AccountAndProjectSelectionXname)).First(p => p.Attribute(XName.Get(TimeEntry_New.IsPTOXname)).Value == true.ToString());
+                    var holidayCalendarElements = holidayAccountAndProjectSelectionElement.Descendants(XName.Get(TimeEntry_New.CalendarItemXname)).ToList();
+                    foreach (XElement holidayCalendarElement in holidayCalendarElements)
+                    {
+                        isHoliday = holidayCalendarElement.Descendants(XName.Get(TimeEntry_New.TimeEntryRecordXname)).ToList().Count > 0;
+                        var date = holidayCalendarElement.Attribute(XName.Get(TimeEntry_New.DateXname)).Value;
+                        XElement ptoCalendarElement = TeBarDataSource.First(c => c.Attribute(XName.Get(TimeEntry_New.DateXname)).Value == date);
+                        if (isHoliday)
+                        {
+                            ptoCalendarElement.SetAttributeValue(TimeEntry_New.IsPTODisableXname, true.ToString());
+                        }
+                        else
+                        {
+                            ptoCalendarElement.SetAttributeValue(TimeEntry_New.IsPTODisableXname, false.ToString());
+                        }
+                    }
+                    HostingPage.AdministrativeSectionXml = xdoc.ToString();
+                }
             }
 
             hdnworkTypeId.Value = SelectedTimeType.Id.ToString();
