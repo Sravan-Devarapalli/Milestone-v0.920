@@ -2211,6 +2211,19 @@ table.CellPaddingClass td
     text-align:right;
 }
 
+.DeleteFixedWidth
+{   
+    width:10%;
+    text-align:right !important;
+    padding:0 !important;
+   
+}
+.DeleteFixedWidth div
+{   
+    width: 30px;
+    float: right;
+    padding-right:5px;
+}
 .time-entry-bar-total-hoursNew
 {
     width: 6%;
@@ -2238,7 +2251,7 @@ TABLE.Section
 
 .SectionFirstTD
 {
-    width: 90%;
+    width: 87%;
     font-weight: bold;
     font-style:italic;
     font-size: 14px;
@@ -2316,8 +2329,8 @@ TABLE.Section
 }
 .DayTotalCSS
 {
-    padding-top:2px;
-    padding-right:1px;
+    padding : 2px 0px 0px 1px;
     font-weight:bold;
     text-align:right;
+    margin: 1px 7px 0px 0px;
 }
