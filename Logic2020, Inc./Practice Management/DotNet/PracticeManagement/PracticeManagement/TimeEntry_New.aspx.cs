@@ -47,6 +47,7 @@ namespace PraticeManagement
         public const string CssClassXname = "CssClass";
         public const string IsNoteRequiredXname = "IsNoteRequired";
         public const string IsChargeCodeOffXname = "IsChargeCodeOff";
+        public const string IsPTODisableXname = "IsPTODisable";
         public const string TimeEntryRecordXname = "TimeEntryRecord";
         public const string DateXname = "Date";
         public const string ActualHoursXname = "ActualHours";
@@ -60,7 +61,7 @@ namespace PraticeManagement
         public const string IsRecursiveAllowedXname = "IsRecursiveAllowed";
         public const string workTypeOldId = "workTypeOldId";
         public const string CalendarItemXname = "CalendarItem";
-        private const string AccountAndProjectSelectionXname = "AccountAndProjectSelection";
+        public const string AccountAndProjectSelectionXname = "AccountAndProjectSelection";
         private const string SectionXname = "Section";
         private const string sectionsXmlOpen = "<Sections>";
         private const string sectionsXmlClose = "</Sections>";
