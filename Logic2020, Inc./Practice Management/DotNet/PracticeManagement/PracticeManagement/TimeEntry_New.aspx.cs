@@ -352,8 +352,6 @@ namespace PraticeManagement
                 cpeInternalSection.Collapsed = !(repInternalSections.Items.Count > 0);
                 var xdoc = XDocument.Parse(AdministrativeSectionXml);
                 cpeAdministrative.Collapsed = !(xdoc.Descendants(XName.Get(TimeEntryRecordXname)).ToList().Count > 0);
-                repTotalHoursHeader.DataSource = SelectedDates;
-                repTotalHoursHeader.DataBind();
             }
 
             ddlAccountProjectSection.Attributes[personIdAttribute] =
@@ -1535,7 +1533,7 @@ namespace PraticeManagement
             int personId = SelectedPerson.Id.Value;
             DateTime startDate = SelectedDates[0];
             DateTime endDate = SelectedDates[SelectedDates.Length - 1];
-            bool isRecursiveAllowed = teSection.Project.EndDate.HasValue && teSection.Project.EndDate.Value > endDate ;
+            bool isRecursiveAllowed = teSection.Project.EndDate.HasValue ? teSection.Project.EndDate.Value > endDate : true ;
 
             xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive, teSection.Project.IsPTOProject.ToString(), teSection.Project.IsHolidayProject.ToString(), isRecursiveAllowed.ToString()));
 
@@ -1793,6 +1791,10 @@ namespace PraticeManagement
                                                                   );
                 BillableControlIds = string.Empty;
                 NonBillableControlIds = string.Empty;
+
+                repTotalHoursHeader.DataSource = SelectedDates;
+                repTotalHoursHeader.DataBind();
+
                 repDayTotalHours.DataSource = CalendarItems;
                 repDayTotalHours.DataBind();
             }
