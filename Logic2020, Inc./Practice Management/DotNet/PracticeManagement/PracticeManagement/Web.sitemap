@@ -36,9 +36,8 @@
         <siteMapNode url="~/Reports/TimeEntriesByPerson.aspx?from=reports"  VirtualPath="~/Reports/TimeEntriesByPerson.aspx?from=reports" QuickLinkTitle="Time Entry by Person"  title="Time Entry by Person"  description="Time Entry by Person" ShowURL="true" />
       </siteMapNode>
     </siteMapNode>
-    <siteMapNode url="~/TimeEntry.aspx?from=sub_toolbar" title="Time" description="Time Entry records">
-      <siteMapNode url="~/TimeEntry_new.aspx" VirtualPath="~/TimeEntry_new.aspx" QuickLinkTitle="Time Entry"  title="Time Entry New" description="Time Entry" ShowURL="true" />
-      <siteMapNode url="~/TimeEntry.aspx" VirtualPath="~/TimeEntry.aspx" QuickLinkTitle="Time Entry"  title="Time Entry" description="Time Entry" ShowURL="true" />
+    <siteMapNode url="~/TimeEntry_new.aspx?from=sub_toolbar" title="Time" description="Time Entry records">
+      <siteMapNode url="~/TimeEntry_new.aspx" VirtualPath="~/TimeEntry_new.aspx" QuickLinkTitle="Time Entry"  title="Time Entry" description="Time Entry" ShowURL="true" />
       <siteMapNode url="~/Calendar.aspx"  VirtualPath="~/Calendar.aspx" QuickLinkTitle="Calendar"  title="Calendar" description="Calendar" ShowURL="true"  />
     </siteMapNode>
     <siteMapNode url="~/MarginTest.aspx" VirtualPath="~/MarginTest.aspx" QuickLinkTitle="Margin Test"  title="Margin Test" description="Margin Test" ShowURL="true"  />
