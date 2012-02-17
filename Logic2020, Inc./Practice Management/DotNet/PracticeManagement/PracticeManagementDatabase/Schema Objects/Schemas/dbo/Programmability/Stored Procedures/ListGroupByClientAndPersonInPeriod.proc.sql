@@ -2,7 +2,7 @@
 	@ClientId	INT ,
 	@PersonId	INT ,
 	@StartDate	DATETIME,
-	@ENDDATE	DATETIME
+	@EndDate	DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
