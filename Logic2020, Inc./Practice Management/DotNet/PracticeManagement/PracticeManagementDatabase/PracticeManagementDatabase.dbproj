@@ -3089,10 +3089,10 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\SaveMinimumLoadFactorOverheadMultipliers.proc.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\dbo.CompanyLogoDataSave.proc.sql">
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\CompanyLogoDataSave.proc.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\dbo.GetCompanyLogoData.proc.sql">
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetCompanyLogoData.proc.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\CompanyLogoSetting.table.sql">
@@ -3180,7 +3180,7 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\OpportunityListAllShort.proc.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\dbo.GetTimeEntryMilestones.proc.sql">
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetTimeEntryMilestones.proc.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\ListProjectsByClientShort.proc.sql">
@@ -3903,7 +3903,7 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\IsProjectGroupInUse.function.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\dbo.GetInternalBusinessUnits.proc.sql">
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetInternalBusinessUnits.proc.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\TimeEntry.table.sql">
@@ -3950,7 +3950,7 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\ListProjectsByClientAndPersonInPeriod.proc.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\dbo.ListGroupByClientAndPersonInPeriod.proc.sql">
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\ListGroupByClientAndPersonInPeriod.proc.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetAllAdministrativeTimeTypes.proc.sql">
@@ -4039,3 +4039,4 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
+
