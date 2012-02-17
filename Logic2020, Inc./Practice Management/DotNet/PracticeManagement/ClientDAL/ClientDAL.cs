@@ -656,6 +656,7 @@ namespace DataAccess
                         while (reader.Read())
                         {
                             var client = ReadClientBasic(reader);
+                            client.Inactive = (bool)reader[InactiveColumn];
                             clientList.Add(client);
                         }
                     }
