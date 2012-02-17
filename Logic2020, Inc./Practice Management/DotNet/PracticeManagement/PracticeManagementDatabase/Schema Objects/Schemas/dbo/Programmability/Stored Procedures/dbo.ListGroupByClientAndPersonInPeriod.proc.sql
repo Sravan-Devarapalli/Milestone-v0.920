@@ -23,7 +23,7 @@ BEGIN
 		, pg.Name
 	FROM ProjectGroup AS pg
 	INNER JOIN dbo.Client AS cl 
-	ON pg.ClientId = cl.ClientId AND pg.ClientId = @ClientId
+	ON pg.ClientId = cl.ClientId AND pg.ClientId = @ClientId  AND pg.Active = 1
 	WHERE(pg.GroupId NOT IN (SELECT ProjectGroupId FROM UsedProjectGroupIds))
 	ORDER BY pg.Name
 END
