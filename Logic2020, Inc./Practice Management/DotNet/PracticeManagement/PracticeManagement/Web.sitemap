@@ -78,7 +78,6 @@
       <siteMapNode url="Temp.aspx?from=Time_Tracking" title="Time" description="Time">
         <siteMapNode url="~/Config/CompanyHolidays.aspx"  VirtualPath="~/Config/CompanyHolidays.aspx" QuickLinkTitle="Company Holidays"  title="Company Holidays" description="Company Holidays"  />
         <siteMapNode url="~/Config/Notes.aspx"  VirtualPath="~/Config/Notes.aspx" QuickLinkTitle="Notes"  title="Notes" description="Notes"  />
-        <siteMapNode url="~/DefaultMilestoneSetting.aspx"  VirtualPath="~/DefaultMilestoneSetting.aspx" QuickLinkTitle="Default Time Entry Project"  title="Default Time Entry Project" description="Default Time Entry Project"  />
         <siteMapNode url="~/Config/TimeTypes.aspx"  VirtualPath="~/Config/TimeTypes.aspx" QuickLinkTitle="Work Types"  title="Work Types" description="WorkTypes"  />
         <siteMapNode url="~/Config/TimeZones.aspx"  VirtualPath="~/Config/TimeZones.aspx" QuickLinkTitle="Time Zone"  title="Time Zone" description="TimeZone" />
       </siteMapNode>
