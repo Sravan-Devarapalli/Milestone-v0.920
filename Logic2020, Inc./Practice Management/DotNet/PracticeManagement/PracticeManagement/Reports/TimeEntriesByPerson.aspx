@@ -10,8 +10,6 @@
     TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
-<%@ Register Src="~/Controls/Persons/PersonChooser.ascx" TagName="PersonChooser"
-    TagPrefix="uc" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
