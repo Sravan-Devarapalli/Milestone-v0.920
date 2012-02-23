@@ -696,7 +696,7 @@ namespace PraticeManagement
 
                 var workTypeElement = teSectionDataItem.Descendants(XName.Get(WorkTypeXname)).ToList()[0];
 
-                AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes());
+                AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(false,false));
 
                 if (bar.IsPTO || bar.IsHoliday)
                 {
@@ -728,7 +728,7 @@ namespace PraticeManagement
                 var imgPlus = e.Item.FindControl(imgPlusAdministrativeSectionImage) as ImageButton;
                 if (!IsPostBack)
                 {
-                    AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes());
+                    AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(false,false));
 
                     if (AdministrativeTimeTypes.Count() < 1)
                         imgPlus.Style["display"] = "none";
