@@ -22,13 +22,13 @@ namespace PraticeManagement.Controls.TimeEntry {
         protected global::System.Web.UI.WebControls.Panel pnlWeekContainer;
         
         /// <summary>
-        /// hprlnkPreviousWeek control.
+        /// imgbtnPrevWeek control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink hprlnkPreviousWeek;
+        protected global::System.Web.UI.WebControls.ImageButton imgbtnPrevWeek;
         
         /// <summary>
         /// txtDate control.
@@ -67,13 +67,22 @@ namespace PraticeManagement.Controls.TimeEntry {
         protected global::System.Web.UI.WebControls.Label lblWeek;
         
         /// <summary>
-        /// hprlnkNextWeek control.
+        /// imgbtnNextWeek control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink hprlnkNextWeek;
+        protected global::System.Web.UI.WebControls.ImageButton imgbtnNextWeek;
+        
+        /// <summary>
+        /// hdPreviousWeekSelectedDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdPreviousWeekSelectedDay;
         
         /// <summary>
         /// pnlPopupCalendar control.
