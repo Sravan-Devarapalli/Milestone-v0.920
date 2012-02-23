@@ -41,6 +41,9 @@ namespace PraticeManagement.CalendarService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/SaveTimeOff", ReplyAction="http://tempuri.org/ICalendarService/SaveTimeOffResponse")]
         void SaveTimeOff(System.DateTime startDate, System.DateTime endDate, bool dayOff, int personId, System.Nullable<double> actualHours, int timeTypeId, string userLogin);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/GetTimeOffSeriesPeriod", ReplyAction="http://tempuri.org/ICalendarService/GetTimeOffSeriesPeriodResponse")]
+        System.Collections.Generic.KeyValuePair<System.DateTime, System.DateTime> GetTimeOffSeriesPeriod(int personId, System.DateTime date);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -50,7 +53,7 @@ namespace PraticeManagement.CalendarService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class CalendarServiceClient : System.ServiceModel.ClientBase<PraticeManagement.CalendarService.ICalendarService>, PraticeManagement.CalendarService.ICalendarService {
-        
+      
         public CalendarServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -101,6 +104,10 @@ namespace PraticeManagement.CalendarService {
         
         public void SaveTimeOff(System.DateTime startDate, System.DateTime endDate, bool dayOff, int personId, System.Nullable<double> actualHours, int timeTypeId, string userLogin) {
             base.Channel.SaveTimeOff(startDate, endDate, dayOff, personId, actualHours, timeTypeId, userLogin);
+        }
+        
+        public System.Collections.Generic.KeyValuePair<System.DateTime, System.DateTime> GetTimeOffSeriesPeriod(int personId, System.DateTime date) {
+            return base.Channel.GetTimeOffSeriesPeriod(personId, date);
         }
     }
 }
