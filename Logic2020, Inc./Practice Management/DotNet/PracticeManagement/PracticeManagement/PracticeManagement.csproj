@@ -362,6 +362,7 @@
     <EmbeddedResource Include="Controls\Generic\DuplicateOptionsRemove\DupilcateOptionsRemoveExtender.js" />
     <EmbeddedResource Include="Controls\Generic\EnableDisableExtender\EnableDisableExtender.js" />
     <EmbeddedResource Include="Controls\Generic\DirtyStateExtender\DirtyStateExtender.js" />
+    <Content Include="Controls\Generic\EnableDisableExtForAdminSection\EnableDisableExtForAdminSection.js" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
@@ -1153,6 +1154,7 @@
     <Compile Include="Controls\Generic\DirtyStateExtender\DirtyStateExtender.cs" />
     <Compile Include="Controls\Generic\DuplicateOptionsRemove\DupilcateOptionsRemoveExtender.cs" />
     <Compile Include="Controls\Generic\EnableDisableExtender\EnableDisableExtender.cs" />
+    <Compile Include="Controls\Generic\EnableDisableExtForAdminSection\EnableDisableExtForAdminSection.cs" />
     <Compile Include="Controls\Generic\MaxValueAllowedForTextBox\MaxValueAllowedForTextBoxExtender.cs" />
     <Compile Include="Controls\Milestones\MilestonePersonBar.ascx.cs">
       <DependentUpon>MilestonePersonBar.ascx</DependentUpon>
