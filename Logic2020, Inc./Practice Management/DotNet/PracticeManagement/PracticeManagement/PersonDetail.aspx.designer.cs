@@ -121,6 +121,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator custPersonStatus;
         
         /// <summary>
+        /// cvInactiveStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvInactiveStatus;
+        
+        /// <summary>
         /// txtLastName control.
         /// </summary>
         /// <remarks>
@@ -1129,13 +1138,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.ValidationSummary valSumCompensation;
         
         /// <summary>
-        /// mlConfirmation  control.
+        /// mlConfirmation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.MessageLabel mlConfirmation ;
+        protected global::PraticeManagement.Controls.MessageLabel mlConfirmation;
         
         /// <summary>
         /// mlError control.
