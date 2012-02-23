@@ -79,6 +79,11 @@ namespace PracticeManagementService
             CalendarDAL.SaveTimeOff(startDate, endDate, dayOff, personId, actualHours, timeTypeId, userLogin);
         }
 
+        public  KeyValuePair<DateTime,DateTime> GetTimeOffSeriesPeriod(int personId, DateTime date)
+        {
+            return CalendarDAL.GetTimeOffSeriesPeriod(personId, date);
+        }
+
 
         #endregion
     }
