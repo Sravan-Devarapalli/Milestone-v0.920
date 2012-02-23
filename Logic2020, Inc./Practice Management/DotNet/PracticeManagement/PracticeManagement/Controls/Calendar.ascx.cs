@@ -141,6 +141,7 @@ namespace PraticeManagement.Controls
         protected void Page_PreRender(object sender, EventArgs e)
         {
             upnlValsummary.Update();
+            upnlErrorsTimeOff.Update();
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -200,7 +201,7 @@ namespace PraticeManagement.Controls
                         ddlPerson.Items.IndexOf(ddlPerson.Items.FindByValue(current.Id.Value.ToString()));
 
                     var administrativeTimeTypes = ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(true, false));
-                    DataHelper.FillListDefault(ddlTimeTypes, "- - Make Selection - -", administrativeTimeTypes, false);
+                    DataHelper.FillListDefault(ddlTimeTypesTimeOff, "- - Make Selection - -", administrativeTimeTypes, false);
 
                 }
                 else
@@ -221,6 +222,46 @@ namespace PraticeManagement.Controls
             }
 
         }
+
+        protected void btnOkTimeOff_Click(object sender, EventArgs e)
+        {
+            Page.Validate(valSumTimeOff.ValidationGroup);
+            if (Page.IsValid)
+            {
+                ServiceCallers.Custom.Calendar(
+                    c => c.SaveTimeOff(dtpStartDateTimeOff.DateValue, 
+                                                                  dtpEndDateTimeOff.DateValue, 
+                                                                  true,
+                                                                  SelectedPersonId.Value, 
+                                                                  (double?)Convert.ToDouble(txthoursTimeOff.Text), 
+                                                                  Convert.ToInt32(ddlTimeTypesTimeOff.SelectedValue), 
+                                                                  Context.User.Identity.Name
+                                                                  )
+                                               );
+
+                mpeAddTimeOffPopup.Hide();
+            }
+        }
+
+        protected void btnDeleteTimeOff_Click(object sender, EventArgs e)
+        {
+            Page.Validate(valSumTimeOff.ValidationGroup);
+            if (Page.IsValid)
+            {
+                ServiceCallers.Custom.Calendar(
+                   c => c.SaveTimeOff(dtpStartDateTimeOff.DateValue,
+                                                                 dtpEndDateTimeOff.DateValue,
+                                                                 false,
+                                                                 SelectedPersonId.Value,
+                                                                 (double?)Convert.ToDouble(txthoursTimeOff.Text),
+                                                                 Convert.ToInt32(ddlTimeTypesTimeOff.SelectedValue),
+                                                                 Context.User.Identity.Name
+                                                                 )
+                                              );
+                mpeAddTimeOffPopup.Hide();
+            }
+        }
+
 
         protected void cvSubstituteDay_ServerValidate(object source, ServerValidateEventArgs args)
         {
