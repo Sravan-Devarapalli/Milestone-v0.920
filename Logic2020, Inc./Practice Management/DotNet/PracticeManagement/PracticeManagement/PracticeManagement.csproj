@@ -468,6 +468,9 @@
     <None Include="Service References\CalendarService\CalendarService6.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\CalendarService\CalendarService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ProjectGroupService\ProjectGroupService10.xsd">
       <SubType>Designer</SubType>
     </None>
