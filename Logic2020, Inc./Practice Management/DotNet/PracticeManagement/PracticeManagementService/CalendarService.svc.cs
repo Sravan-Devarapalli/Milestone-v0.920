@@ -38,6 +38,17 @@ namespace PracticeManagementService
             CalendarDAL.CalendarUpdate(item, userLogin);
 		}
 
+
+        public void SaveSubstituteDay(CalendarItem item, string userLogin)
+        {
+            CalendarDAL.SaveSubstituteDay(item, userLogin);
+        }
+
+        public void DeleteSubstituteDay(int personId, DateTime substituteDayDate, string userLogin)
+        {
+            CalendarDAL.DeleteSubstituteDay(personId, substituteDayDate, userLogin);
+        }
+
         /// <summary>
         /// Returns No. of Company holidays in a given year
         /// </summary>
@@ -62,6 +73,7 @@ namespace PracticeManagementService
         {
             return CalendarDAL.GetRecurringHolidaysInWeek(date, personId);
         }
+
 
 		#endregion
 	}
