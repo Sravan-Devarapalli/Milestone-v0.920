@@ -29,7 +29,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <image src='Images/trash-icon.gif' runat="server" id='imgClear' style='padding-top: 5px;'
+                        <image src='Images/trash-icon.gif' runat="server" id='imgClear' style='padding-top: 5px;' runat="server"
                             title="Clear time and notes entered for this day only." onclick='<%# "javaScript:$find(\"" + deActualHours.ClientID + "\").clearData(); changeIcon(\"" + tbNotes.ClientID + "\",\"" + imgNote.ClientID + "\");"%>' />
                     </td>
                 </tr>
