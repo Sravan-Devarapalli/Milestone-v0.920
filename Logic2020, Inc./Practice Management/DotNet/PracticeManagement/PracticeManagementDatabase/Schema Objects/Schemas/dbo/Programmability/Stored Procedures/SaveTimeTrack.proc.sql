@@ -31,9 +31,11 @@ BEGIN
 	*/
 	DECLARE @PTOTimeTypeId	INT,
 			@CurrentPMTime	DATETIME,
-			@ModifiedBy		INT
+			@ModifiedBy		INT,
+			@HolidayTimeTypeId INT
 
 	SET @PTOTimeTypeId = dbo.GetPTOTimeTypeId()
+	SET @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
 	SET @CurrentPMTime = dbo.InsertingTime()
 
 	SELECT @ModifiedBy = P.PersonId
@@ -139,14 +141,15 @@ BEGIN
 				CC.Id,
 				NEW.c.value('..[1]/@Date', 'DATETIME'),
 				ISNULL(FH.ForcastedHours, 0),
-				CASE WHEN CC.TimeTypeId = @PTOTimeTypeId THEN 'PTO' ELSE NEW.c.value('@Note', 'NVARCHAR(1000)') END,
+				CASE WHEN TT.IsAdministrative = 1 THEN TT.Name ELSE NEW.c.value('@Note', 'NVARCHAR(1000)') END,
 				1,
 				0
 		FROM @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
 		JOIN dbo.ChargeCode CC ON CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
 								AND CC.ProjectGroupId = NEW.c.value('..[1]/..[1]/..[1]/@BusinessUnitId', 'INT')
 								AND CC.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT')
-								AND CC.TimeTypeId = NEW.c.value('..[1]/..[1]/@Id', 'INT')	
+								AND CC.TimeTypeId = NEW.c.value('..[1]/..[1]/@Id', 'INT')
+		JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId
 		LEFT JOIN dbo.TimeEntry TE ON TE.ChargeCodeId = CC.Id AND TE.PersonId = @PersonId
 										AND TE.ChargeCodeDate = NEW.c.value('..[1]/@Date', 'DATETIME')
 										AND (TE.Note = NEW.c.value('@Note', 'NVARCHAR(1000)') )
@@ -180,7 +183,6 @@ BEGIN
 		LEFT JOIN dbo.TimeEntryHours TEH ON (  TEH.TimeEntryId = TE.TimeEntryId
 											   AND TEH.IsChargeable = NEW.c.value('@IsChargeable', 'BIT')
 											)
-
 		WHERE TEH.TimeEntryId IS NULL
 			AND NEW.c.value('@ActualHours', 'REAL') > 0
 			
@@ -190,7 +192,9 @@ BEGIN
 									PersonId,
 									DayOff,
 									ActualHours,
-									IsFloatingHoliday,
+									IsSeries,
+									TimeTypeId,
+									Description,
 									IsFromTimeEntry
 									)
 		SELECT Dates.c.value('..[1]/@Date', 'DATETIME'),
@@ -198,13 +202,15 @@ BEGIN
 				1,
 				Dates.c.value('@ActualHours', 'REAL'),
 				0,
+				Dates.c.value('..[1]/..[1]/@Id', 'INT'),
+				Dates.c.value('@Note', 'NVARCHAR(1000)'),
 				1
 		FROM PersonCalendar PC
 		RIGHT JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') Dates(c)
 				ON PC.PersonId =  @PersonId
 					AND Dates.c.value('..[1]/@Date', 'DATETIME') = PC.Date
 		WHERE Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4
-				AND Dates.c.value('..[1]/..[1]/@Id', 'INT') = @PTOTimeTypeId
+				AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @HolidayTimeTypeId
 				AND Dates.c.value('@ActualHours', 'REAL') > 0
 				AND PC.Date IS NULL
 
@@ -213,25 +219,60 @@ BEGIN
 		FROM dbo.PersonCalendar PC
 		JOIN Calendar C ON C.Date = PC.Date AND PC.PersonId =  @PersonId AND PC.Date BETWEEN @StartDate AND @EndDate
 		LEFT JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') Dates(c)
-				ON Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4 
+				ON Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4
 					AND Dates.c.value('..[1]/@Date', 'DATETIME') = PC.Date
-					AND Dates.c.value('..[1]/..[1]/@Id', 'INT') = @PTOTimeTypeId
-		WHERE PC.IsFloatingHoliday <> 1 AND C.DayOff <> 1 AND PC.IsFromTimeEntry = 1 --can delete only if it is entered for the timeentry page and not floating holiday
+					AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @HolidayTimeTypeId
+		WHERE PC.TimeTypeId <> @HolidayTimeTypeId AND C.DayOff <> 1 AND PC.IsFromTimeEntry = 1 --can delete only if it is entered for the timeentry page and not floating holiday
 			AND ( ISNULL(Dates.c.value('@ActualHours', 'REAL'), 0) = 0)
 
 		--Update PTO actual hours.
 		UPDATE PC
 		SET	ActualHours = Dates.c.value('@ActualHours', 'REAL'),
-		IsFromTimeEntry = 1,
-		IsFloatingHoliday = 0
+			IsSeries = 0,
+			IsFromTimeEntry = 1
 		FROM dbo.PersonCalendar PC
 		JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') Dates(c)
 			ON Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4
 				AND Dates.c.value('..[1]/@Date', 'DATETIME') = PC.Date
-				AND Dates.c.value('..[1]/..[1]/@Id', 'INT') = @PTOTimeTypeId
+				AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @HolidayTimeTypeId
 				AND Dates.c.value('@ActualHours', 'REAL') > 0
 		WHERE PC.PersonId = @PersonId AND PC.Date BETWEEN @StartDate AND @EndDate AND PC.DayOff = 1
 			AND Dates.c.value('@ActualHours', 'REAL') <> PC.ActualHours
+
+		DECLARE @BeforeStartDate DATETIME,
+				@AfterEndDate	DATETIME
+
+		SELECT @BeforeStartDate 
+		FROM dbo.Calendar  C
+		WHERE ( (DATEPART(DW, @BeforeStartDate) = 2 AND C.date = DATEADD(DD, -3, @BeforeStartDate))
+					OR  C.date = DATEADD(DD, -1, @BeforeStartDate)
+				)
+
+		SELECT @AfterEndDate 
+		FROM dbo.Calendar  C
+		WHERE ((DATEPART(DW, @AfterEndDate) = 6 AND C.date = DATEADD(DD,3, @AfterEndDate) )
+					OR  C.date = DATEADD(DD,1, @AfterEndDate)
+				)
+
+		;WITH NeedToModifyDates AS
+		(
+			SELECT  PC.PersonId, C.Date, CONVERT(BIT, 0) 'IsSeries'
+			FROM Calendar C
+			JOIN PersonCalendar PC ON C.Date BETWEEN @BeforeStartDate AND @AfterEndDate AND C.Date = PC.Date AND PC.DayOff = 1 AND PC.IsSeries = 1
+			LEFT JOIN PersonCalendar APC ON PC.PersonId = APC.PersonId AND APC.IsSeries = 1 AND APC.TimeTypeId = PC.TimeTypeId--APC:- AffectedPersonCalendar
+						AND ((DATEPART(DW, C.date) = 6 AND APC.date = DATEADD(DD,3, C.date) )
+								OR (DATEPART(DW, C.date) = 2 AND APC.date = DATEADD(DD, -3, C.date))
+								OR  APC.date = DATEADD(DD,1, C.date)
+								OR  APC.date = DATEADD(DD, -1, C.date)
+							)
+			GROUP BY PC.PersonId, C.date
+			Having COUNT(APC.date) < 2
+		)
+
+		UPDATE PC
+			SET IsSeries = NTMF.IsSeries
+		FROM PersonCalendar PC
+		JOIN NeedToModifyDates NTMF ON NTMF.PersonId = PC.PersonId AND NTMF.Date = PC.Date
 		
 		--Update PersonCalendarAuto table with PersonCalendar table changes.
 		UPDATE ca
