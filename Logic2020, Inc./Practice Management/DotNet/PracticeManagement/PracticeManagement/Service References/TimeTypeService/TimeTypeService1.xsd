@@ -6,6 +6,7 @@
       <xs:element minOccurs="0" name="InFutureUse" type="xs:boolean" />
       <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsAdministrative" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsAllowedToEdit" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsDefault" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsInternal" type="xs:boolean" />
