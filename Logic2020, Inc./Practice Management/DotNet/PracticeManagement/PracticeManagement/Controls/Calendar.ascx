@@ -184,6 +184,69 @@
         changeAlternateitemscolrsForCBL();
     }
 
+
+
+</script>
+<script type="text/javascript" language="javascript">
+    function ClickSaveDay(btnOk) {
+        var noteText = $get(btnOk.attributes['TextID'].value);
+        var popupExtendar = $find(btnOk.attributes['ExtendarId'].value);
+        var actualHoursText = $get(btnOk.attributes['TxtActualHoursID'].value);
+        var errorText = $get(btnOk.attributes['ErrorMessageID'].value);
+        var rbFloating = $get(btnOk.attributes['RbFloatingID'].value);
+
+        if (actualHoursText == null && noteText != '') {
+            var noteTextStr = noteText.value.toString();
+            if (noteTextStr.length > 0) {
+                SaveDetails(popupExtendar, btnOk);
+            }
+            else {
+                errorText.innerHTML = '* Please Enter Holiday Description.';
+            }
+        }
+        else {
+            var hdnDayOff = $get(btnOk.attributes['HiddenDayOffID'].value);
+
+            if (rbFloating.checked) {
+                hdnDayOff.value = 'false'; //For Updating the Floating Holiday details.
+                SaveDetails(popupExtendar, btnOk);
+            }
+            else {
+                var hoursTextStr = actualHoursText.value.toString();
+                if (hoursTextStr.length > 0) {
+                    var hours = parseFloat(hoursTextStr);
+                    if (hours >= 0.0 && hours <= 8.0 && hours == hoursTextStr) {
+                        hdnDayOff.value = 'false'; //For Updating the PTO details.
+                        SaveDetails(popupExtendar, btnOk);
+                    }
+                    else {
+                        errorText.innerHTML = '* Hours should be real and 0.00-8.00.';
+                    }
+                }
+                else {
+                    errorText.innerHTML = '* Please Enter Hours';
+                }
+            }
+        }
+        errorText.style.display = 'block';
+        return false;
+    }
+
+    function SaveDetails(popupExtendar, btnOk) {
+        btnSave = $get(btnOk.attributes['SaveDayButtonID'].value);
+        popupExtendar.hide();
+        btnSave.click();
+    }
+
+    function disableActualHours(txtBox, isFloatingHoliday) {
+        var item = txtBox;
+        if (isFloatingHoliday == 'true') {
+            item.disabled = 'disabled';
+        }
+        else {
+            item.disabled = '';
+        }
+    }
 </script>
 <style>
     .setCheckboxesLeft TD, .setCheckboxesLeft div
@@ -617,7 +680,7 @@
                                     colspan="3">
                                     Date:&nbsp;&nbsp;&nbsp;
                                     <asp:Label ID="lbdateSingleDay" runat="server" Text="2012/02/23"></asp:Label>
-                                    <asp:HiddenField ID="hdnDateSingleDay" runat="server" ></asp:HiddenField>
+                                    <asp:HiddenField ID="hdnDateSingleDay" runat="server"></asp:HiddenField>
                                 </td>
                             </tr>
                             <tr>
@@ -676,11 +739,12 @@
                             </tr>
                             <tr>
                                 <td colspan="3">
-                                    <asp:Button ID="btnOkSingleDay" OnClick="btnOkSingleDay_OnClick" Text="OK" ToolTip="OK" ValidationGroup="SingleDay"
-                                        runat="server" Style="padding-left: 10px" />
+                                    <asp:Button ID="btnOkSingleDay" OnClick="btnOkSingleDay_OnClick" Text="OK" ToolTip="OK"
+                                        ValidationGroup="SingleDay" runat="server" Style="padding-left: 10px" />
                                     <asp:Button ID="btnDeleteSingleDay" OnClick="btnDeleteSingleDay_OnClick" ValidationGroup="SingleDay"
                                         Text="Delete" ToolTip="Delete" runat="server" Style="padding-left: 10px" />
-                                    <asp:Button ID="btnCancelEditSingleDay" Text="Cancel" ToolTip="Cancel" runat="server" Style="padding-left: 10px" />
+                                    <asp:Button ID="btnCancelEditSingleDay" Text="Cancel" ToolTip="Cancel" runat="server"
+                                        Style="padding-left: 10px" />
                                 </td>
                             </tr>
                             <tr>
