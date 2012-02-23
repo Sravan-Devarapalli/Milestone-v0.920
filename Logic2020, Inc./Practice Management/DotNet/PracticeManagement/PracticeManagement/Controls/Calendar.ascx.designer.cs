@@ -310,6 +310,105 @@ namespace PraticeManagement.Controls {
         protected global::PraticeManagement.Controls.MonthCalendar mcDecember;
         
         /// <summary>
+        /// hdnHolidayDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnHolidayDate;
+        
+        /// <summary>
+        /// hdDeleteSubstituteDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdDeleteSubstituteDay;
+        
+        /// <summary>
+        /// hdEditSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button hdEditSingleDay;
+        
+        /// <summary>
+        /// hdEditCondtion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button hdEditCondtion;
+        
+        /// <summary>
+        /// mpeSelectEditCondtion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeSelectEditCondtion;
+        
+        /// <summary>
+        /// pnlSelectEditCondtion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlSelectEditCondtion;
+        
+        /// <summary>
+        /// lbDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbDate;
+        
+        /// <summary>
+        /// rbEditSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbEditSingleDay;
+        
+        /// <summary>
+        /// rbEditSeries control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbEditSeries;
+        
+        /// <summary>
+        /// btnOk_EditCondtion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnOk_EditCondtion;
+        
+        /// <summary>
+        /// btncancel_EditCondtion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btncancel_EditCondtion;
+        
+        /// <summary>
         /// mpeAddTimeOffPopup control.
         /// </summary>
         /// <remarks>
@@ -499,22 +598,76 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.ValidationSummary valSumTimeOff;
         
         /// <summary>
-        /// hdnHolidayDate control.
+        /// mpeEditSingleDay control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnHolidayDate;
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeEditSingleDay;
         
         /// <summary>
-        /// HiddenField1 control.
+        /// pnlEditSingleDay control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenField1;
+        protected global::System.Web.UI.WebControls.Panel pnlEditSingleDay;
+        
+        /// <summary>
+        /// lbdateSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbdateSingleDay;
+        
+        /// <summary>
+        /// DropDownList1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownList1;
+        
+        /// <summary>
+        /// TextBox1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox1;
+        
+        /// <summary>
+        /// btnOk_EditSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnOk_EditSingleDay;
+        
+        /// <summary>
+        /// btnDelete_EditSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnDelete_EditSingleDay;
+        
+        /// <summary>
+        /// btncancel_EditSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btncancel_EditSingleDay;
         
         /// <summary>
         /// mpeHolidayAndSubStituteDay control.
