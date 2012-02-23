@@ -454,6 +454,19 @@
     <Content Include="Controls\Generic\Filtering\OpportunityFilter.ascx" />
     <Content Include="Controls\Generic\Filtering\PersonReportFilter.ascx" />
     <Content Include="Controls\Generic\RecentNotes.ascx" />
+    <None Include="Service References\CalendarService\CalendarService1.wsdl" />
+    <None Include="Service References\CalendarService\CalendarService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalendarService\CalendarService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalendarService\CalendarService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalendarService\CalendarService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ProjectGroupService\ProjectGroupService10.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -530,6 +543,7 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
+    <None Include="Service References\CalendarService\CalendarService1.disco" />
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -642,19 +656,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\AuthService\AuthService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\CalendarService\CalendarService1.wsdl" />
-    <None Include="Service References\CalendarService\CalendarService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\CalendarService\CalendarService4.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\CalendarService\CalendarService5.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\CalendarService\CalendarService6.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ClientService\ClientService.wsdl" />
@@ -1035,7 +1036,6 @@
     <None Include="Service References\PersonStatusService\PersonStatusService1.disco" />
     <None Include="Service References\ProjectStatusService\ProjectStatusService1.disco" />
     <None Include="Service References\RoleService\RoleService1.disco" />
-    <None Include="Service References\CalendarService\CalendarService1.disco" />
     <Content Include="Service References\ClientService\ClientService.disco" />
     <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
     <None Include="Service References\ClientService\ClientService1.disco" />
