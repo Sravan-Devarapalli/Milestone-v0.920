@@ -147,8 +147,8 @@ AS
 								FROM dbo.PersonCalendar
 								WHERE PersonId = @PersonId AND Date = @MilestoneDate)
 				BEGIN
-					INSERT INTO dbo.PersonCalendar (Date, PersonId, DayOff, ActualHours, IsFloatingHoliday, IsFromTimeEntry)
-					VALUES (@MilestoneDate, @PersonId, 1, @ActualHours, 0, 1)
+					INSERT INTO dbo.PersonCalendar (Date, PersonId, DayOff, ActualHours, TimeTypeId, IsFromTimeEntry)
+					VALUES (@MilestoneDate, @PersonId, 1, @ActualHours, @PTOTimeTypeId, 1)
 				END
 				ELSE
 				BEGIN
@@ -158,7 +158,7 @@ AS
 					UPDATE PC
 					SET PC.DayOff = 1,
 						PC.ActualHours = @ActualHours,
-						PC.IsFloatingHoliday = 0,
+						PC.TimeTypeId = @PTOTimeTypeId,
 						PC.IsFromTimeEntry = 1
 					FROM PersonCalendar PC
 					WHERE PC.PersonId = @PersonId AND PC.Date = @MilestoneDate
