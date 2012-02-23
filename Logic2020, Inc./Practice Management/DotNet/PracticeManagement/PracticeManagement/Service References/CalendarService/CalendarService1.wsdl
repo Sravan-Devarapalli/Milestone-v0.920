@@ -56,6 +56,12 @@
   <wsdl:message name="ICalendarService_DeleteSubstituteDay_OutputMessage">
     <wsdl:part name="parameters" element="tns:DeleteSubstituteDayResponse" />
   </wsdl:message>
+  <wsdl:message name="ICalendarService_SaveTimeOff_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveTimeOff" />
+  </wsdl:message>
+  <wsdl:message name="ICalendarService_SaveTimeOff_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveTimeOffResponse" />
+  </wsdl:message>
   <wsdl:portType name="ICalendarService">
     <wsdl:operation name="GetCalendar">
       <wsdl:input wsaw:Action="http://tempuri.org/ICalendarService/GetCalendar" message="tns:ICalendarService_GetCalendar_InputMessage" />
@@ -88,6 +94,10 @@
     <wsdl:operation name="DeleteSubstituteDay">
       <wsdl:input wsaw:Action="http://tempuri.org/ICalendarService/DeleteSubstituteDay" message="tns:ICalendarService_DeleteSubstituteDay_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ICalendarService/DeleteSubstituteDayResponse" message="tns:ICalendarService_DeleteSubstituteDay_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveTimeOff">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICalendarService/SaveTimeOff" message="tns:ICalendarService_SaveTimeOff_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICalendarService/SaveTimeOffResponse" message="tns:ICalendarService_SaveTimeOff_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_ICalendarService" type="tns:ICalendarService">
@@ -157,6 +167,15 @@
     </wsdl:operation>
     <wsdl:operation name="DeleteSubstituteDay">
       <soap:operation soapAction="http://tempuri.org/ICalendarService/DeleteSubstituteDay" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveTimeOff">
+      <soap:operation soapAction="http://tempuri.org/ICalendarService/SaveTimeOff" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
