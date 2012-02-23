@@ -7,6 +7,8 @@
     Assembly="PraticeManagement" %>
 <%@ Register Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.MaxValueAllowedForTextBox"
     TagPrefix="ext3" %>
+<%@ Register TagPrefix="ext4" Namespace="PraticeManagement.Controls.Generic.EnableDisableExtForAdminSection"
+    Assembly="PraticeManagement" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagPrefix="uc" TagName="MessageLabel" %>
 <%@ Register Src="~/Controls/TimeEntry/WeekSelector_New.ascx" TagName="WeekSelector"
     TagPrefix="uc" %>
@@ -119,13 +121,20 @@
             imgNoteClientId.title = tbnote.value;
             changeIcon(tbnote.id, imgNoteClientId.id);
         }
-        function btnClose_OnClientClick() {
-            $find("mpeTimetypeAlertMessage").hide();
+        function btnClose_OnClientClick( popup ) {
+            $find( popup ).hide();
             return false;
         }
 
-        function IsrecusiveAllowed(img) {
-            alert('Can\'t enable recurring behavior as project enddate is less than the week startdate.');
+        function IsrecusiveAllowed() {
+            $find( 'mpeRecurringAllowed' ).show();
+            return false;
+        }
+        function checkDirtyWithRedirectInTimeEntry( isFromWeekChange ) {
+            if ( !showDialod() ) {
+                clearDirty();
+            }
+            __doPostBack( "__Page", isFromWeekChange );
             return false;
         }
     </script>
@@ -614,6 +623,16 @@
                                         </td>
                                     </tr>
                                 </table>
+                                <asp:Repeater ID="repAdministrativeTesFooter" runat="server" OnItemDataBound="repAdministrativeTesFooter_OnItemDataBound">
+                                    <ItemTemplate>
+                                        <asp:HiddenField ID="hdEnableDisableExtenderForAdminstratorSection" runat="server" />
+                                        <ext4:EnableDisableExtForAdminSection ID="extEnableDisableExtenderForAdminstratorSection"
+                                            runat="server" TargetControlID="hdEnableDisableExtenderForAdminstratorSection">
+                                        </ext4:EnableDisableExtForAdminSection>
+                                        <asp:HiddenField ID="hdTargetHoursClientId" runat="server" />
+                                        <asp:HiddenField ID="hdTargetNotesClientId" runat="server" />
+                                    </ItemTemplate>
+                                </asp:Repeater>
                             </FooterTemplate>
                         </asp:Repeater>
                         <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtenderAdministrative"
@@ -956,8 +975,8 @@
                             <th align="center" style="text-align: center; background-color: Gray;" valign="bottom">
                                 <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
                                 <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Close"
-                                    Style="float: right;" OnClientClick="return btnClose_OnClientClick();" Text="X">
-                                </asp:Button>
+                                    Style="float: right;" OnClientClick="return btnClose_OnClientClick('mpeTimetypeAlertMessage');"
+                                    Text="X"></asp:Button>
                             </th>
                         </tr>
                         <tr>
@@ -968,7 +987,60 @@
                         </tr>
                         <tr>
                             <td style="text-align: center; padding: 8px;">
-                                <asp:Button ID="btnOk" runat="server" Text="OK" OnClientClick="return btnClose_OnClientClick();" />
+                                <asp:Button ID="btnOk" runat="server" Text="OK" OnClientClick="return btnClose_OnClientClick('mpeTimetypeAlertMessage');" />
+                            </td>
+                        </tr>
+                    </table>
+                </asp:Panel>
+                <asp:HiddenField ID="hdPersonInactiveAlert" runat="server" />
+                <AjaxControlToolkit:ModalPopupExtender ID="mpePersonInactiveAlert" runat="server"
+                    BehaviorID="mpePersonInactiveAlert" TargetControlID="hdPersonInactiveAlert" BackgroundCssClass="modalBackground"
+                    PopupControlID="pnlPersonInactiveAlert" DropShadow="false" CancelControlID="btnClosePersonInactive" />
+                <asp:Panel ID="pnlPersonInactiveAlert" runat="server" BackColor="White" BorderColor="Black"
+                    Style="display: none" BorderWidth="2px" Width="380px">
+                    <table width="100%" style="padding: 5px;">
+                        <tr>
+                            <th align="center" style="text-align: center; background-color: Gray;" valign="bottom">
+                                <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
+                                <asp:Button ID="btnClosePersonInactive" runat="server" CssClass="mini-report-close"
+                                    ToolTip="Close" Style="float: right;" OnClientClick="return btnClose_OnClientClick('mpePersonInactiveAlert');"
+                                    Text="X"></asp:Button>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold; padding: 8px;">
+                                <asp:Label ID="lbMessage" runat="server"></asp:Label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; padding: 8px;">
+                                <asp:Button ID="btnOkPersonInactive" runat="server" Text="OK" OnClientClick="return btnClose_OnClientClick('mpePersonInactiveAlert');" />
+                            </td>
+                        </tr>
+                    </table>
+                </asp:Panel>
+                <asp:HiddenField ID="hdRecurringAllowed" runat="server" />
+                <AjaxControlToolkit:ModalPopupExtender ID="mpeRecurringAllowed" runat="server" BehaviorID="mpeRecurringAllowed"
+                    TargetControlID="hdRecurringAllowed" BackgroundCssClass="modalBackground"
+                    PopupControlID="pnlRecurringAllowed" DropShadow="false" CancelControlID="btnCloseRecurringAllowed" />
+                <asp:Panel ID="pnlRecurringAllowed" runat="server" BackColor="White" BorderColor="Black" Style="display: none"
+                    BorderWidth="2px" Width="380px">
+                    <table width="100%" style="padding: 5px;">
+                        <tr>
+                            <th align="center" style="text-align: center; background-color: Gray;" valign="bottom">
+                                <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
+                                <asp:Button ID="btnCloseRecurringAllowed" runat="server" CssClass="mini-report-close" ToolTip="Close"
+                                    Style="float: right;" OnClientClick="return btnClose_OnClientClick('mpeRecurringAllowed');"
+                                    Text="X"></asp:Button>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold; padding: 8px;">
+                               Can't enable recurring behavior as project enddate is less than the week startdate.
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; padding: 8px;">
+                                <asp:Button ID="btnOkRecurringAllowed" runat="server" Text="OK" OnClientClick="return btnClose_OnClientClick('mpeRecurringAllowed');" />
                             </td>
                         </tr>
                     </table>
