@@ -16,9 +16,8 @@
     <table cellpadding="3" cellspacing="3">
         <tr>
             <td>
-                <asp:HyperLink ID="hprlnkPreviousWeek" runat="server" Width="30" onclick="return checkDirtyWithRedirect(this.href)">
-        <img alt="Previous" src="Images/previous.gif" />
-                </asp:HyperLink>
+                <asp:ImageButton ID="imgbtnPrevWeek" runat="server" ImageUrl="~/Images/previous.gif" AlternateText="Previous" ToolTip="Previous"
+                 OnClick="imgbtnPrevWeek_OnClick" OnClientClick="return checkDirtyWithRedirect(true)" />
             </td>
             <td>
                 <table>
@@ -42,9 +41,9 @@
                 </table>
             </td>
             <td>
-                <asp:HyperLink ID="hprlnkNextWeek" runat="server" Width="30" onclick="return checkDirtyWithRedirect(this.href)">
-        <img alt="Next" src="Images/next.gif" />
-                </asp:HyperLink>
+                <asp:ImageButton ID="imgbtnNextWeek" runat="server" ImageUrl="~/Images/next.gif" AlternateText="Next" ToolTip="Next"
+                 OnClick="imgbtnNextWeek_OnClick" OnClientClick="return checkDirtyWithRedirect(true)" />
+                <asp:HiddenField ID="hdPreviousWeekSelectedDay" runat="server" />
             </td>
         </tr>
     </table>
