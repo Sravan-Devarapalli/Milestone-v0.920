@@ -176,7 +176,7 @@
         return false;
     }
 
-    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+    Sys.WebForms.PageRequestManager.getInstance().add_endRequest( endRequestHandle );
 
 
     function endRequestHandle(sender, Args) {
@@ -236,6 +236,20 @@
         <td style="width: 100%; text-align: center;">
             <asp:UpdatePanel ID="pnlBody" runat="server" ChildrenAsTriggers="False" UpdateMode="Conditional">
                 <ContentTemplate>
+                    <script type="text/javascript">
+                        function btnOk_EditCondtion() {
+                            $find( 'mpeSelectEditCondtion' ).hide();
+                            var rbEditSingleDay = document.getElementById( '<%=rbEditSingleDay.ClientID %>' );
+                            var rbEditSeries = document.getElementById( '<%=rbEditSeries.ClientID %>' );
+                            alert( rbEditSingleDay.value );
+                            if ( rbEditSingleDay.value ) {
+                                $find( 'mpeEditSingleDay' ).show();
+                            } else {
+                                $find( 'mpeAddTimeOffPopup' ).show();
+                            }
+
+                        }
+                    </script>
                     <uc3:LoadingProgress ID="ldProgress" runat="server" />
                     <table width="98%" align="center" style="text-align: center;" class="CalendarTable">
                         <tr id="trPersonDetails" runat="server">
@@ -262,7 +276,7 @@
                                     </Animations>
                                 </AjaxControlToolkit:UpdatePanelAnimationExtender>
                             </td>
-                            <td style="text-align: right; vertical-align: middle; width: 10%">
+                            <td style="text-align: left; vertical-align: middle; width: 30%">
                                 <asp:Button ID="btnAddTimeOff" runat="server" Text="Add Time Off" />
                             </td>
                         </tr>
@@ -410,11 +424,60 @@
                             </td>
                         </tr>
                     </table>
+                    <asp:HiddenField ID="hdnHolidayDate" runat="server" />
+                    <asp:HiddenField ID="hdDeleteSubstituteDay" runat="server" />
+                    <asp:Button ID="hdEditSingleDay" runat="server" Text="edit single day" />
+                    <asp:Button ID="hdEditCondtion" runat="server" Text="Edit Condition" />
+                    <AjaxControlToolkit:ModalPopupExtender ID="mpeSelectEditCondtion" runat="server"
+                        TargetControlID="hdEditCondtion" BackgroundCssClass="modalBackground" PopupControlID="pnlSelectEditCondtion"
+                        DropShadow="false" BehaviorID="mpeSelectEditCondtion" CancelControlID="btncancel_EditCondtion" />
+                    <asp:Panel ID="pnlSelectEditCondtion" runat="server" BackColor="White" BorderColor="Black"
+                        CssClass="ConfirmBoxClassError" Style="display: none;" BorderWidth="2px" Height="270px"
+                        Width="320px">
+                        <table width="100%" class="calendarPopup">
+                            <tr>
+                                <td colspan="3" style="height: 20px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 30%; text-align: right; font-weight: bold; padding-right: 5px;">
+                                    Date:
+                                </td>
+                                <td style="width: 40%; text-align: left; padding-left: 5px;">
+                                    <asp:Label ID="lbDate" runat="server" Text="2012/02/23"></asp:Label>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding-left: 40px; text-align: left;">
+                                    <asp:RadioButton ID="rbEditSingleDay" runat="server" Text="Edit Single Day" GroupName="EditDay"
+                                        Checked="true" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding-left: 40px; text-align: left;">
+                                    <asp:RadioButton ID="rbEditSeries" runat="server" Text="Edit Series" GroupName="EditDay" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="height: 10px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <asp:Button ID="btnOk_EditCondtion" Text="OK" runat="server" Style="padding-left: 10px"
+                                        OnClientClick="javascript:btnOk_EditCondtion();" />
+                                    <asp:Button ID="btncancel_EditCondtion" Text="Cancel" runat="server" Style="padding-left: 10px" />
+                                </td>
+                            </tr>
+                        </table>
+                    </asp:Panel>
                     <AjaxControlToolkit:ModalPopupExtender ID="mpeAddTimeOffPopup" runat="server" TargetControlID="btnAddTimeOff"
                         BackgroundCssClass="modalBackground" PopupControlID="pnlAddTimeOffPopup" DropShadow="false"
-                        CancelControlID="btnCancelTimeOff" />
+                        BehaviorID="mpeAddTimeOffPopup" CancelControlID="btnCancelTimeOff" />
                     <asp:Panel ID="pnlAddTimeOffPopup" runat="server" BackColor="White" BorderColor="Black"
-                        CssClass="ConfirmBoxClassError" Style="display: none;" BorderWidth="2px" Height="250px"
+                        CssClass="ConfirmBoxClassError" Style="display: none;" BorderWidth="2px" Height="270px"
                         Width="320px">
                         <table width="100%" class="calendarPopup">
                             <tr>
@@ -494,8 +557,8 @@
                                 <td width="10%" style="padding-left: 5px; text-align: left;">
                                     <asp:TextBox ID="txthoursTimeOff" runat="server" Style="width: 50px;"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="reqtxthoursTimeOff" runat="server" ControlToValidate="txthoursTimeOff"
-                                        ErrorMessage="The Hours is required." ToolTip="The Hours is required."
-                                        Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="TimeOff"></asp:RequiredFieldValidator>
+                                        ErrorMessage="The Hours is required." ToolTip="The Hours is required." Text="*"
+                                        EnableClientScript="false" SetFocusOnError="true" ValidationGroup="TimeOff"></asp:RequiredFieldValidator>
                                     <asp:CompareValidator ID="compHoursPerDay" runat="server" ControlToValidate="txthoursTimeOff"
                                         ErrorMessage="A number with 2 decimal digits is allowed for the Hours Per Day."
                                         ToolTip="A number with 2 decimal digits is allowed for the Hours Per Day." Text="*"
@@ -524,7 +587,7 @@
                                         OnClick="btnOkTimeOff_Click" Style="padding-left: 10px" />
                                     <asp:Button ID="btnDeleteTimeOff" Text="Delete" runat="server" ValidationGroup="TimeOff"
                                         OnClick="btnDeleteTimeOff_Click" Style="padding-left: 10px" />
-                                    <asp:Button ID="btnCancelTimeOff" Text="cancel" runat="server" Style="padding-left: 10px" />
+                                    <asp:Button ID="btnCancelTimeOff" Text="Cancel" runat="server" Style="padding-left: 10px" />
                                 </td>
                             </tr>
                             <tr>
@@ -538,38 +601,105 @@
                             </tr>
                         </table>
                     </asp:Panel>
-                    <asp:HiddenField ID="hdnHolidayDate" runat="server" />
-                    <asp:HiddenField ID="HiddenField1" runat="server" />
+                    <AjaxControlToolkit:ModalPopupExtender ID="mpeEditSingleDay" runat="server" TargetControlID="hdEditSingleDay"
+                        BackgroundCssClass="modalBackground" PopupControlID="pnlEditSingleDay" DropShadow="false"
+                        BehaviorID="mpeEditSingleDay" CancelControlID="btncancel_EditSingleDay" />
+                    <asp:Panel ID="pnlEditSingleDay" runat="server" BackColor="White" BorderColor="Black"
+                        CssClass="ConfirmBoxClassError" Style="display: none;" BorderWidth="2px" Height="200px"
+                        Width="320px">
+                        <table width="100%" class="calendarPopup">
+                            <tr>
+                                <td colspan="3" style="height: 20px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center; font-weight: bold; padding-right: 5px; width: 100%;"
+                                    colspan="3">
+                                    Date:&nbsp;&nbsp;&nbsp;
+                                    <asp:Label ID="lbdateSingleDay" runat="server" Text="2012/02/23"></asp:Label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding-left: 20px; text-align: left;">
+                                    1. Select type of time to be entered:
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding-left: 40px; text-align: left;">
+                                    <asp:DropDownList ID="DropDownList1" runat="server" Style="width: 70%;">
+                                    </asp:DropDownList>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="height: 10px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding-left: 20px; text-align: left;">
+                                    2. Enter the number of hours (per day, if applicable):
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="30%" style="padding-left: 10px; text-align: right; padding-right: 5px;">
+                                    Hours:
+                                </td>
+                                <td width="10%" style="padding-left: 5px; text-align: left;">
+                                    <asp:TextBox ID="TextBox1" runat="server" Style="width: 50px;"></asp:TextBox>
+                                </td>
+                                <td width="60%">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="height: 10px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <asp:Button ID="btnOk_EditSingleDay" Text="OK" runat="server" Style="padding-left: 10px" />
+                                    <asp:Button ID="btnDelete_EditSingleDay" Text="Delete" runat="server" Style="padding-left: 10px" />
+                                    <asp:Button ID="btncancel_EditSingleDay" Text="Cancel" runat="server" Style="padding-left: 10px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="height: 10px;">
+                                </td>
+                            </tr>
+                        </table>
+                    </asp:Panel>
                     <AjaxControlToolkit:ModalPopupExtender ID="mpeHolidayAndSubStituteDay" runat="server"
                         TargetControlID="hdnHolidayDate" CancelControlID="btnSubstituteDayCancel" BackgroundCssClass="modalBackground"
                         PopupControlID="pnlHolidayAndSubStituteDay" BehaviorID="mpeHolidayAndSubStituteDay"
                         DropShadow="false" />
                     <asp:Panel ID="pnlHolidayAndSubStituteDay" runat="server" BackColor="White" BorderColor="Black"
-                        Style="padding-top: 20px; padding-left: 10px; padding-right: 10px; min-width: 250px;
-                        max-width: 700px; min-height: 60px; display: none;" BorderWidth="2px">
+                        Style="padding-top: 20px; padding-left: 10px; padding-right: 10px; display: none;"
+                        BorderWidth="2px" min-Height="100px" Width="280px" max-Height="205px">
                         <table class="WholeWidth">
                             <tr>
-                                <td>
+                                <td style="width: 40%; text-align: left; height: 20px;">
                                     You have selected :
                                 </td>
-                                <td>
+                                <td style="width: 60%; text-align: left; padding-left: 3px; height: 20px;">
                                     <asp:Label ID="lblHolidayDate" Font-Bold="true" runat="server"></asp:Label>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                 </td>
-                                <td>
+                                <td style="width: 60%; text-align: left; padding-left: 3px; height: 20px;">
                                     <asp:Label ID="lblHolidayName" Font-Bold="true" runat="server"></asp:Label>
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="2">
+                                <td colspan="2" style="height: 20px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="height: 20px; text-align: left;">
                                     Please select substitute day for this holiday :
                                 </td>
                             </tr>
                             <tr>
-                                <td align="center" colspan="2">
+                                <td colspan="2" style="height: 50px; text-align: center; vertical-align: middle;">
                                     <uc:DatePicker ID="dpSubstituteDay" runat="server" OnClientChange="return true;"
                                         ValidationGroup="Substituteday" AutoPostBack="false" TextBoxWidth="90px" />
                                     <asp:CustomValidator ID="cvSubstituteDay" EnableClientScript="false" EnableViewState="false"
@@ -579,7 +709,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td align="center" style="padding: 10px 0px 10px 0px;">
+                                <td colspan="2" style="height: 50px; text-align: center; vertical-align: middle;">
                                     <asp:Button ID="btnSubstituteDayOK" OnClick="btnSubstituteDayOK_Click" runat="server"
                                         ValidationGroup="Substituteday" ToolTip="OK" Text="OK" />
                                     &nbsp; &nbsp;
@@ -587,7 +717,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="2">
+                                <td colspan="2" style="text-align: left; vertical-align: middle;">
                                     <asp:UpdatePanel ID="upnlValsummary" runat="server" UpdateMode="Conditional">
                                         <ContentTemplate>
                                             <asp:ValidationSummary ID="valSumsubstituteday" runat="server" ValidationGroup="Substituteday" />
@@ -595,11 +725,16 @@
                                     </asp:UpdatePanel>
                                 </td>
                             </tr>
+                            <tr>
+                                <td colspan="2" style="height: 5px;">
+                                </td>
+                            </tr>
                         </table>
                     </asp:Panel>
                     <AjaxControlToolkit:ModalPopupExtender ID="mpeDeleteSubstituteDay" runat="server"
-                        TargetControlID="HiddenField1" CancelControlID="btnCancelSubstituteDay" BackgroundCssClass="modalBackground"
-                        PopupControlID="pnlDeleteSubstituteDay" BehaviorID="mpeDeleteSubstituteDay" DropShadow="false" />
+                        TargetControlID="hdDeleteSubstituteDay" CancelControlID="btnCancelSubstituteDay"
+                        BackgroundCssClass="modalBackground" PopupControlID="pnlDeleteSubstituteDay"
+                        BehaviorID="mpeDeleteSubstituteDay" DropShadow="false" />
                     <asp:Panel ID="pnlDeleteSubstituteDay" runat="server" BackColor="White" BorderColor="Black"
                         Style="padding-top: 20px; padding-left: 10px; padding-right: 10px; min-width: 250px;
                         max-width: 700px; min-height: 60px; display: none;" BorderWidth="2px">
