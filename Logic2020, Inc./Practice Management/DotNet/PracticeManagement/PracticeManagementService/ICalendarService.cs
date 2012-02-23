@@ -58,6 +58,9 @@ namespace PracticeManagementService
         [OperationContract]
         void SaveTimeOff(DateTime startDate, DateTime endDate, bool dayOff, int personId, double? actualHours, int timeTypeId, string userLogin);
 
+        [OperationContract]
+        KeyValuePair<DateTime, DateTime> GetTimeOffSeriesPeriod(int personId, DateTime date);
+
     }
 }
 
