@@ -334,7 +334,7 @@ namespace PraticeManagement.Controls {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button hdEditSingleDay;
+        protected global::System.Web.UI.WebControls.HiddenField hdEditSingleDay;
         
         /// <summary>
         /// hdEditCondtion control.
@@ -343,7 +343,16 @@ namespace PraticeManagement.Controls {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button hdEditCondtion;
+        protected global::System.Web.UI.WebControls.HiddenField hdEditCondtion;
+        
+        /// <summary>
+        /// hfAddTimeOff control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfAddTimeOff;
         
         /// <summary>
         /// mpeSelectEditCondtion control.
@@ -875,15 +884,6 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancelSubstituteDay;
-        
-        /// <summary>
-        /// CalendarLegend control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.CalendarLegend CalendarLegend;
     }
 }
 
