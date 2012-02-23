@@ -508,7 +508,7 @@ namespace PraticeManagement
                 var extOptionRemove = e.Item.FindControl(extDupilcateOptionsRemoveExtender) as DupilcateOptionsRemoveExtender;
 
                 extOptionRemove.ControlsToCheck = DdlWorkTypeIdsList;
-                var imgPlusProjectSection = FindControlInFooter(repProjectTes, "imgPlusProjectSection");
+                var imgPlusProjectSection = FindControlInFooter(repProjectTes, imgPlusProjectSectionImage);
                 extOptionRemove.PlusButtonClientID = imgPlusProjectSection != null ? imgPlusProjectSection.ClientID : String.Empty;
 
                 var imgBtnRecursiveProjectSection = e.Item.FindControl(imgBtnRecursiveProjectSectionImage) as ImageButton;
@@ -1836,9 +1836,9 @@ namespace PraticeManagement
             var teSctions = ServiceCallers.Custom.TimeEntry(te => te.PersonTimeEntriesByPeriod(pcPersons.SelectedPerson.Id.Value, SelectedDates[0], SelectedDates[SelectedDates.Length - 1]));
 
             AdminiStrativeSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Administrative).OrderByDescending(tes => tes.Project.IsHolidayProject).ThenByDescending(tes => tes.Project.IsPTOProject).ToList();
-            InternalSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Internal).OrderByDescending(tes => tes.IsRecursive).ToList();
-            BusinessDevelopmentSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.BusinessDevelopment).OrderByDescending(tes => tes.IsRecursive).ToList();
-            ProjectSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Project).OrderByDescending(tes => tes.IsRecursive).ToList();
+            InternalSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Internal).OrderByDescending(tes => tes.IsRecursive).ThenBy(tes => tes.Project.ProjectNumber).ToList();
+            BusinessDevelopmentSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.BusinessDevelopment).OrderByDescending(tes => tes.IsRecursive).ThenBy(tes => tes.Account.Name).ThenBy(tes => tes.BusinessUnit.Name).ToList();
+            ProjectSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Project).OrderByDescending(tes => tes.IsRecursive).ThenBy(tes => tes.Project.ProjectNumber).ToList();
 
             var isSelectedActive =
                  SelectedPerson.Status != null &&
