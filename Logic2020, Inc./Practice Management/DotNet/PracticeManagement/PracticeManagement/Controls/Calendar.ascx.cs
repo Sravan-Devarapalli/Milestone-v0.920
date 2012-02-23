@@ -142,6 +142,7 @@ namespace PraticeManagement.Controls
         {
             upnlValsummary.Update();
             upnlErrorsTimeOff.Update();
+            upnlErrorSingleDay.Update();
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -171,7 +172,7 @@ namespace PraticeManagement.Controls
             {
                 if (!CompanyHolidays)
                 {
-                    //#2961: allowing all persons to be in the dropdownlist irrespective of role.
+                    //#2961: allowing all persons to be in the dropdown list irrespective of role.
                     DataHelper.FillPersonList(ddlPerson, null, (int)PersonStatusType.Active);
                     Person current = DataHelper.CurrentPerson;
                     // Security
@@ -201,6 +202,7 @@ namespace PraticeManagement.Controls
                         ddlPerson.Items.IndexOf(ddlPerson.Items.FindByValue(current.Id.Value.ToString()));
 
                     var administrativeTimeTypes = ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(true, false));
+                    DataHelper.FillListDefault(ddlTimeTypesSingleDay, "- - Make Selection - -", administrativeTimeTypes, false);
                     DataHelper.FillListDefault(ddlTimeTypesTimeOff, "- - Make Selection - -", administrativeTimeTypes, false);
 
                 }
@@ -221,6 +223,51 @@ namespace PraticeManagement.Controls
                 ScriptManager.RegisterStartupScript(this, GetType(), "", "changeAlternateitemscolrsForCBL();", true);
             }
 
+        }
+
+
+        protected void btnDeleteSingleDay_OnClick(object sender, EventArgs e)
+        {
+            Page.Validate(valSumErrorSingleDay.ValidationGroup);
+            if (Page.IsValid)
+            {
+                var date = Convert.ToDateTime(hdnDateSingleDay.Value);
+                ServiceCallers.Custom.Calendar(
+                                               c => c.SaveTimeOff(date,
+                                                                  date,
+                                                                  false,
+                                                                  SelectedPersonId.Value,
+                                                                  (double?)Convert.ToDouble(txtHoursSingleDay.Text),
+                                                                  Convert.ToInt32(ddlTimeTypesSingleDay.SelectedValue),
+                                                                  Context.User.Identity.Name
+                                                                  )
+                                               );
+
+                mpeEditSingleDay.Hide();
+            }
+ 
+        }
+
+        protected void btnOkSingleDay_OnClick(object sender, EventArgs e)
+        {
+
+            Page.Validate(valSumErrorSingleDay.ValidationGroup);
+            if (Page.IsValid)
+            {
+                var date = Convert.ToDateTime(hdnDateSingleDay.Value);
+                ServiceCallers.Custom.Calendar(
+                                               c => c.SaveTimeOff(date,
+                                                                  date,
+                                                                  true,
+                                                                  SelectedPersonId.Value,
+                                                                  (double?)Convert.ToDouble(txtHoursSingleDay.Text),
+                                                                  Convert.ToInt32(ddlTimeTypesSingleDay.SelectedValue),
+                                                                  Context.User.Identity.Name
+                                                                  )
+                                               );
+
+                mpeEditSingleDay.Hide();
+            }
         }
 
         protected void btnOkTimeOff_Click(object sender, EventArgs e)
