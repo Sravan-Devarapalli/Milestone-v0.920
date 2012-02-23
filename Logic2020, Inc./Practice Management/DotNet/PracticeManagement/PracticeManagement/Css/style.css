@@ -2334,3 +2334,9 @@ TABLE.Section
     text-align:right;
     margin: 1px 7px 0px 0px;
 }
+.calendarPopup tr td
+{
+    padding-top:3px;
+    padding-bottom:3px;
+}
+
