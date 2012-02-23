@@ -42,8 +42,8 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>.\sql\debug\</OutputPath>
     <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
-    <TargetConnectionString>Data Source=localhost;User ID=sa;Pooling=False</TargetConnectionString>
-    <TargetDatabase>ObfuscatedPracticeManagement</TargetDatabase>
+    <TargetConnectionString>Data Source=server3;User ID=sa;Pooling=False</TargetConnectionString>
+    <TargetDatabase>ObfuscatedPMProd_20120215</TargetDatabase>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <SuppressWarnings>
     </SuppressWarnings>
@@ -3989,6 +3989,12 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\PersonsListHavingActiveStatusDuringThisPeriod.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\SaveTimeOff.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetTimeOffSeriesPeriod.proc.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>
