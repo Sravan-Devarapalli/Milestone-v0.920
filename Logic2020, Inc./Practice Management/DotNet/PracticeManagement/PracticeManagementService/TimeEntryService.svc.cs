@@ -535,7 +535,6 @@ namespace PracticeManagementService
             }
         }
 
-
         public System.Data.DataSet TimeEntriesByPersonGetExcelSet(TimeEntryPersonReportContext reportContext)
         {
             return TimeEntryDAL.TimeEntriesByPersonGetExcelSet(reportContext);
@@ -593,7 +592,6 @@ namespace PracticeManagementService
             }
         }
 
-
         public void SetPersonTimeEntryRecursiveSelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isRecursive, DateTime startDate)
         {
             try
@@ -602,9 +600,12 @@ namespace PracticeManagementService
             }
             catch (Exception e)
             {
-                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "SetPersonTimeEntryRecursiveSelection", "TimeEntryService.svc", string.Empty,
-                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
-                ActivityLogDAL.ActivityLogInsert(20, logData);
+                if (e.Message != "Can not enable recurring behavior as project enddate is less than the week startdate.")
+                {
+                    string logData = string.Format(Constants.Formatting.ErrorLogMessage, "SetPersonTimeEntryRecursiveSelection", "TimeEntryService.svc", string.Empty,
+                        HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                    ActivityLogDAL.ActivityLogInsert(20, logData);
+                }
                 throw e;
             }
         }
