@@ -328,67 +328,175 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.Panel pnlAddTimeOffPopup;
         
         /// <summary>
-        /// dtpStartDate control.
+        /// dtpStartDateTimeOff control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.DatePicker dtpStartDate;
+        protected global::PraticeManagement.Controls.DatePicker dtpStartDateTimeOff;
         
         /// <summary>
-        /// dtpEndDate control.
+        /// reqStartDateTimeOff control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.DatePicker dtpEndDate;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqStartDateTimeOff;
         
         /// <summary>
-        /// ddlTimeTypes control.
+        /// compStartDateTimeOff control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlTimeTypes;
+        protected global::System.Web.UI.WebControls.CompareValidator compStartDateTimeOff;
         
         /// <summary>
-        /// txthours control.
+        /// dtpEndDateTimeOff control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txthours;
+        protected global::PraticeManagement.Controls.DatePicker dtpEndDateTimeOff;
         
         /// <summary>
-        /// btnok control.
+        /// reqEndDateTimeOff control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnok;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqEndDateTimeOff;
         
         /// <summary>
-        /// btbnDelete control.
+        /// compEndDateTimeOff control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btbnDelete;
+        protected global::System.Web.UI.WebControls.CompareValidator compEndDateTimeOff;
         
         /// <summary>
-        /// btncancel control.
+        /// compStartDateEndDateTimeOff control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btncancel;
+        protected global::System.Web.UI.WebControls.CompareValidator compStartDateEndDateTimeOff;
+        
+        /// <summary>
+        /// ddlTimeTypesTimeOff control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlTimeTypesTimeOff;
+        
+        /// <summary>
+        /// reqTimeTypesTimeOff control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqTimeTypesTimeOff;
+        
+        /// <summary>
+        /// txthoursTimeOff control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txthoursTimeOff;
+        
+        /// <summary>
+        /// reqtxthoursTimeOff control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqtxthoursTimeOff;
+        
+        /// <summary>
+        /// compHoursPerDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compHoursPerDay;
+        
+        /// <summary>
+        /// rangHoursPerDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RangeValidator rangHoursPerDay;
+        
+        /// <summary>
+        /// ftetxtHoursPerDayInsert control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender ftetxtHoursPerDayInsert;
+        
+        /// <summary>
+        /// btnOkTimeOff control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnOkTimeOff;
+        
+        /// <summary>
+        /// btnDeleteTimeOff control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnDeleteTimeOff;
+        
+        /// <summary>
+        /// btnCancelTimeOff control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelTimeOff;
+        
+        /// <summary>
+        /// upnlErrorsTimeOff control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upnlErrorsTimeOff;
+        
+        /// <summary>
+        /// valSumTimeOff control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSumTimeOff;
         
         /// <summary>
         /// hdnHolidayDate control.
