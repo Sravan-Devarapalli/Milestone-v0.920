@@ -48,6 +48,13 @@ namespace PracticeManagementService
 
         [OperationContract]
         Dictionary<DateTime, string> GetRecurringHolidaysInWeek(DateTime date, int personId);
+
+        [OperationContract]
+        void SaveSubstituteDay(CalendarItem item, string userLogin);
+
+        [OperationContract]
+        void DeleteSubstituteDay(int personId, DateTime substituteDayDate, string userLogin);
+
 	}
 }
 
