@@ -53,6 +53,12 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public string ExceptionMessage
+        {
+            get;
+            set;
+        }
+
         private int? SelectedPersonId
         {
             get
@@ -132,6 +138,11 @@ namespace PraticeManagement.Controls
             pnlBody.Update();
         }
 
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            upnlValsummary.Update();
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             SetMailToContactSupport();
@@ -139,8 +150,8 @@ namespace PraticeManagement.Controls
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName);
             userIsDirector =
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);
-             userIsSeniorLeadership =
-                  Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName); // #2913: userIsSeniorLeadership is added as per the requirement.
+            userIsSeniorLeadership =
+                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName); // #2913: userIsSeniorLeadership is added as per the requirement.
 
             userIsSalesperson =
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName);
@@ -166,7 +177,7 @@ namespace PraticeManagement.Controls
                     Person[] persons = ServiceCallers.Custom.Person(p => p.GetCareerCounselorHierarchiPersons(current.Id.Value));
                     var personsList = persons.ToList();
                     personsList.Add(current);
-                    
+
                     foreach (ListItem personitem in ddlPerson.Items)
                     {
                         int personId = Convert.ToInt32(personitem.Value);
@@ -187,6 +198,10 @@ namespace PraticeManagement.Controls
 
                     ddlPerson.SelectedIndex =
                         ddlPerson.Items.IndexOf(ddlPerson.Items.FindByValue(current.Id.Value.ToString()));
+
+                    var administrativeTimeTypes = ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(true, false));
+                    DataHelper.FillListDefault(ddlTimeTypes, "- - Make Selection - -", administrativeTimeTypes, false);
+
                 }
                 else
                 {
@@ -203,6 +218,62 @@ namespace PraticeManagement.Controls
             if (tdRecurringHolidaysDetails.Visible)
             {
                 ScriptManager.RegisterStartupScript(this, GetType(), "", "changeAlternateitemscolrsForCBL();", true);
+            }
+
+        }
+
+        protected void cvSubstituteDay_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (string.IsNullOrEmpty(dpSubstituteDay.TextValue) || !string.IsNullOrEmpty(ExceptionMessage))
+            {
+                args.IsValid = false;
+            }
+        }
+
+        protected void btnDeleteSubstituteDay_Click(object sender, EventArgs e)
+        {
+            var userName = Context.User.Identity.Name;
+            ServiceCallers.Custom.Calendar(c => c.DeleteSubstituteDay(SelectedPersonId.Value, Convert.ToDateTime(hdnHolidayDate.Value), userName));
+            mpeDeleteSubstituteDay.Hide();
+        }
+
+        protected void btnSubstituteDayOK_Click(object sender, EventArgs e)
+        {
+            Page.Validate(cvSubstituteDay.ValidationGroup);
+            if (Page.IsValid)
+            {
+                CalendarItem ci = new CalendarItem()
+                {
+                    SubstituteDayDate = dpSubstituteDay.DateValue,
+                    Date = Convert.ToDateTime(hdnHolidayDate.Value),
+                    PersonId = SelectedPersonId
+                };
+
+                var userName = Context.User.Identity.Name;
+
+                try
+                {
+                    ServiceCallers.Custom.Calendar(c => c.SaveSubstituteDay(ci, userName));
+                    mpeHolidayAndSubStituteDay.Hide();
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message == "Selected date is not a Working day.Please select any Working day.")
+                    {
+                        ExceptionMessage = ex.Message;
+                        Page.Validate(dpSubstituteDay.ValidationGroup);
+                        mpeHolidayAndSubStituteDay.Show();
+                    }
+                    else
+                    {
+                        throw ex;
+                    }
+
+                }
+            }
+            else
+            {
+                mpeHolidayAndSubStituteDay.Show();
             }
 
         }
@@ -309,9 +380,9 @@ namespace PraticeManagement.Controls
             if (days == null)
             {
                 int? practiceManagerId = null;
-                if ((!userIsAdministrator && userIsPracticeManager) || 
-                    (!userIsAdministrator && userIsDirector)        ||
-                    (!userIsAdministrator && userIsSeniorLeadership)  
+                if ((!userIsAdministrator && userIsPracticeManager) ||
+                    (!userIsAdministrator && userIsDirector) ||
+                    (!userIsAdministrator && userIsSeniorLeadership)
                     )// #2817:(!userIsAdministrator && userIsDirector) is added as per the requirement.
                 {
                     Person current = DataHelper.CurrentPerson;
@@ -349,11 +420,13 @@ namespace PraticeManagement.Controls
                 }
                 trAlert.Visible = true;
                 pnlBody.Update();
-               // lblConsultantMessage.Visible = true;
+                // lblConsultantMessage.Visible = true;
             }
 
             calendar.CalendarItems = days;
         }
+
+
     }
 }
 
