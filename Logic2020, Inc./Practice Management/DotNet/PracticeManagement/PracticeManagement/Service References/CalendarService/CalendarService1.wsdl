@@ -6,6 +6,7 @@
       <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
       <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/System.Collections.Generic" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="ICalendarService_GetCalendar_InputMessage">
@@ -62,6 +63,12 @@
   <wsdl:message name="ICalendarService_SaveTimeOff_OutputMessage">
     <wsdl:part name="parameters" element="tns:SaveTimeOffResponse" />
   </wsdl:message>
+  <wsdl:message name="ICalendarService_GetTimeOffSeriesPeriod_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTimeOffSeriesPeriod" />
+  </wsdl:message>
+  <wsdl:message name="ICalendarService_GetTimeOffSeriesPeriod_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTimeOffSeriesPeriodResponse" />
+  </wsdl:message>
   <wsdl:portType name="ICalendarService">
     <wsdl:operation name="GetCalendar">
       <wsdl:input wsaw:Action="http://tempuri.org/ICalendarService/GetCalendar" message="tns:ICalendarService_GetCalendar_InputMessage" />
@@ -98,6 +105,10 @@
     <wsdl:operation name="SaveTimeOff">
       <wsdl:input wsaw:Action="http://tempuri.org/ICalendarService/SaveTimeOff" message="tns:ICalendarService_SaveTimeOff_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ICalendarService/SaveTimeOffResponse" message="tns:ICalendarService_SaveTimeOff_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeOffSeriesPeriod">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICalendarService/GetTimeOffSeriesPeriod" message="tns:ICalendarService_GetTimeOffSeriesPeriod_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICalendarService/GetTimeOffSeriesPeriodResponse" message="tns:ICalendarService_GetTimeOffSeriesPeriod_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_ICalendarService" type="tns:ICalendarService">
@@ -176,6 +187,15 @@
     </wsdl:operation>
     <wsdl:operation name="SaveTimeOff">
       <soap:operation soapAction="http://tempuri.org/ICalendarService/SaveTimeOff" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeOffSeriesPeriod">
+      <soap:operation soapAction="http://tempuri.org/ICalendarService/GetTimeOffSeriesPeriod" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
