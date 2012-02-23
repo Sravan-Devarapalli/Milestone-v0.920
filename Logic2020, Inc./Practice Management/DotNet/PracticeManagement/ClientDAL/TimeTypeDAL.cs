@@ -35,12 +35,14 @@ namespace DataAccess
             }
         }
 
-        public static List<TimeTypeRecord> GetAllAdministrativeTimeTypes()
+        public static List<TimeTypeRecord> GetAllAdministrativeTimeTypes(bool includePTO, bool includeHoliday)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.TimeType.GetAllAdministrativeTimeTypes, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.IncludePTOParam, includePTO);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IncludeHolidayParam, includeHoliday);
 
                 connection.Open();
 
@@ -67,7 +69,7 @@ namespace DataAccess
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     int clientId = -1, projectId = -1, businessUnitId = -1;
-                   
+
                     if (reader.HasRows)
                     {
                         int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIdColumn);
