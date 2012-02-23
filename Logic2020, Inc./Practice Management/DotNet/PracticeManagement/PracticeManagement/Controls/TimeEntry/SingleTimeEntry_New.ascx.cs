@@ -51,8 +51,27 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        public bool IsAdminstrativeTimeType
+        {
+            get
+            {
+                return ViewState["isAdminstrativeTimeType"] != null ? (bool)ViewState["isAdminstrativeTimeType"] : false;
+            }
+            set
+            {
+                ViewState["isAdminstrativeTimeType"] = value;
+            }
+        }
+
         public XElement TimeEntryRecordElement
         {
+            get;
+            set;
+        }
+
+        public XElement ParentCalendarItem
+        {
+
             get;
             set;
         }
@@ -137,6 +156,18 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        public string EnableDisableExtForAdminSectionBehaviourId
+        {
+            get
+            {
+                return hdEnableDisableExtenderId.Value;
+            }
+            set
+            {
+                hdEnableDisableExtenderId.Value = value;
+            }
+        }
+
         #endregion
 
         #region Control events
@@ -182,8 +213,12 @@ namespace PraticeManagement.Controls.TimeEntry
             if (TimeEntryRecordElement != null)
             {
                 FillControls();
+                if (IsAdminstrativeTimeType)
+                {
+                    HostingPage.AdminstratorSectionTargetHours[DateBehind].Value = tbActualHours.ClientID;
+                    HostingPage.AdminstratorSectionTargetNotes[DateBehind].Value = tbNotes.ClientID;
+                }
             }
-
             if (IsPTO)
             {
                 tbNotes.Enabled = false;
