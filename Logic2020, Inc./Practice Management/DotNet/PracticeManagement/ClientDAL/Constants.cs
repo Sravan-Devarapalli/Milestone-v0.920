@@ -701,6 +701,7 @@
             {
                 public const string CalendarGetProcedure = "dbo.CalendarGet";
                 public const string CalendarUpdateProcedure = "dbo.CalendarUpdate";
+                public const string SaveTimeOffProcedure = "dbo.SaveTimeOff";
                 public const string SaveSubstituteDayProcedure = "dbo.SaveSubstituteDay";
                 public const string WorkDaysCompanyNumberProcedure = "dbo.WorkDaysCompanyNumber";
                 public const string WorkDaysPersonNumberProcedure = "dbo.WorkDaysPersonNumber";
