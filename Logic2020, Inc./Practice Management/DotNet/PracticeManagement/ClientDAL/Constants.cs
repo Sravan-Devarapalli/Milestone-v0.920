@@ -28,7 +28,7 @@
             public const string LoadedHourlyPayRate = "LoadedHourlyPayRate";
             public const string Id = "Id";
             public const string EntryId = "EntryId";
-            public const string Date = "Date";
+            public const string Date = "Date"; 
             public const string DayOff = "DayOff";
             public const string CompanyDayOff = "CompanyDayOff";
             public const string ReadOnly = "ReadOnly";
@@ -529,6 +529,9 @@
             public const string IsRecursiveParam = "@IsRecursive";
             public const string IsOnlyActiveParam = "@IsOnlyActive";
             public const string IsOnlyEnternalProjectsParam = "@IsOnlyEnternalProjects";
+            public const string IncludePTOParam = "@IncludePTO";
+            public const string IncludeHolidayParam = "@IncludeHoliday";
+            public const string SubstituteDayDateParam = "@SubstituteDayDate";
 
 
         }
@@ -697,12 +700,14 @@
             {
                 public const string CalendarGetProcedure = "dbo.CalendarGet";
                 public const string CalendarUpdateProcedure = "dbo.CalendarUpdate";
+                public const string SaveSubstituteDayProcedure = "dbo.SaveSubstituteDay";
                 public const string WorkDaysCompanyNumberProcedure = "dbo.WorkDaysCompanyNumber";
                 public const string WorkDaysPersonNumberProcedure = "dbo.WorkDaysPersonNumber";
                 public const string GetCompanyHolidaysProcedure = "dbo.GetCompanyHolidays";
                 public const string GetRecurringHolidaysList = "dbo.GetRecurringHolidaysList";
                 public const string SetRecurringHoliday = "dbo.SetRecurringHoliday";
                 public const string GetRecurringHolidaysInWeek = "dbo.GetRecurringHolidaysInWeek";
+                public const string DeleteSubstituteDayProcedure = "dbo.DeleteSubstituteDay";
             }
 
             public class ProjectGroup
