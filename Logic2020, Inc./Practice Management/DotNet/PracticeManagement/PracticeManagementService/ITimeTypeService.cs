@@ -23,7 +23,7 @@ namespace PracticeManagementService
 
 
         [OperationContract]
-        List<TimeTypeRecord> GetAllAdministrativeTimeTypes();
+        List<TimeTypeRecord> GetAllAdministrativeTimeTypes(bool includePTO, bool includeHoliday);
 
         [OperationContract]
         Triple<int, int, int> GetAdministrativeChargeCodeValues(int timeTypeId);
