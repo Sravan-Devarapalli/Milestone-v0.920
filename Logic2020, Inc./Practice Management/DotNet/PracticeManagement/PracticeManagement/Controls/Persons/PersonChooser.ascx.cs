@@ -2,6 +2,7 @@
 using System.Web.Security;
 using System.Web.UI;
 using DataTransferObjects;
+using System.Web.UI.WebControls;
 
 namespace PraticeManagement.Controls.Persons
 {
@@ -31,6 +32,14 @@ namespace PraticeManagement.Controls.Persons
         {
             get { return (Person) ViewState[SELECTED_PERSON_ID]; }
             set { ViewState[SELECTED_PERSON_ID] = value; }
+        }
+
+        public DropDownList ddlPersonsDropDown
+        {
+            get
+            {
+                return (DropDownList)ddlPersons;
+            }
         }
 
         public int SelectedPersonId
@@ -65,19 +74,7 @@ namespace PraticeManagement.Controls.Persons
                 // Set it's Id value
                 var personId = currentPerson.Id.Value;
 
-                if (userIsAdministrator)
-                {
-                    DataHelper.FillPersonList(ddlPersons, null);
-
-                    string strSelectedPersonId = Request.QueryString["SelectedPersonId"];
-                    if (!string.IsNullOrEmpty(strSelectedPersonId) && !Int32.TryParse(strSelectedPersonId, out personId))
-                    {
-                        personId = currentPerson.Id.Value;
-                    }
-                    ddlPersons.SelectedValue =
-                        personId.ToString();
-                }
-                else
+                if (!userIsAdministrator)
                 {
                     ddlPersons.Visible = false;
                     lblTip.Text =
