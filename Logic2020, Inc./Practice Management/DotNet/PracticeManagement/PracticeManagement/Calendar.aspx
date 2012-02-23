@@ -9,11 +9,6 @@ MasterPageFile="~/PracticeManagementMain.Master" Title="Calendar | Practice Mana
 	<title>Calendar | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
-	<asp:UpdatePanel ID="pnlHeader" runat="server">
-		<ContentTemplate>
-			Calendar&nbsp;-&nbsp;<asp:Label ID="lblCalendarOwnerName" runat="server" Text="Whole Company" EnableViewState="false"></asp:Label>
-		</ContentTemplate>
-	</asp:UpdatePanel>
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <uc:Calendar ID="calendar" runat="server" CompanyHolidays="false" />
