@@ -384,5 +384,27 @@ namespace DataAccess
                 command.ExecuteNonQuery();
             }
         }
+
+        public static void SaveTimeOff(DateTime startDate, DateTime endDate, bool dayOff, int personId, double? actualHours, int timeTypeId, string userLogin)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Calendar.SaveTimeOffProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DayOff, dayOff);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ActualHoursParam, actualHours.HasValue ? (object)actualHours : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeId, timeTypeId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
     }
 }
