@@ -38,6 +38,9 @@ namespace PraticeManagement.CalendarService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/DeleteSubstituteDay", ReplyAction="http://tempuri.org/ICalendarService/DeleteSubstituteDayResponse")]
         void DeleteSubstituteDay(int personId, System.DateTime substituteDayDate, string userLogin);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/SaveTimeOff", ReplyAction="http://tempuri.org/ICalendarService/SaveTimeOffResponse")]
+        void SaveTimeOff(System.DateTime startDate, System.DateTime endDate, bool dayOff, int personId, System.Nullable<double> actualHours, int timeTypeId, string userLogin);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -47,7 +50,7 @@ namespace PraticeManagement.CalendarService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class CalendarServiceClient : System.ServiceModel.ClientBase<PraticeManagement.CalendarService.ICalendarService>, PraticeManagement.CalendarService.ICalendarService {
-      
+        
         public CalendarServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -94,6 +97,10 @@ namespace PraticeManagement.CalendarService {
         
         public void DeleteSubstituteDay(int personId, System.DateTime substituteDayDate, string userLogin) {
             base.Channel.DeleteSubstituteDay(personId, substituteDayDate, userLogin);
+        }
+        
+        public void SaveTimeOff(System.DateTime startDate, System.DateTime endDate, bool dayOff, int personId, System.Nullable<double> actualHours, int timeTypeId, string userLogin) {
+            base.Channel.SaveTimeOff(startDate, endDate, dayOff, personId, actualHours, timeTypeId, userLogin);
         }
     }
 }
