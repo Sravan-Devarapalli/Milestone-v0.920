@@ -363,9 +363,6 @@ namespace DataAccess
             }
         }
 
-        #endregion
-
-
 
         public static void DeleteSubstituteDay(int personId, DateTime substituteDayDate, string userLogin)
         {
@@ -406,5 +403,46 @@ namespace DataAccess
             }
         }
 
+
+        public static KeyValuePair<DateTime, DateTime> GetTimeOffSeriesPeriod(int personId, DateTime date)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Calendar.GetTimeOffSeriesPeriod, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    connection.Open();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        var keyval = new KeyValuePair<DateTime, DateTime>();
+
+                        ReadGetTimeOffSeriesPeriod(reader, keyval);
+
+                        return keyval;
+                    }
+                }
+            }
+        }
+
+        private static void ReadGetTimeOffSeriesPeriod(SqlDataReader reader, KeyValuePair<DateTime, DateTime> keyval)
+        {
+            if (reader.HasRows)
+            {
+               
+                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
+                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
+
+                while (reader.Read())
+                {
+                    keyval = new KeyValuePair<DateTime, DateTime>(reader.GetDateTime(startDateIndex), reader.GetDateTime(endDateIndex));
+                }
+            }
+        }
+
+
+        #endregion
     }
 }
