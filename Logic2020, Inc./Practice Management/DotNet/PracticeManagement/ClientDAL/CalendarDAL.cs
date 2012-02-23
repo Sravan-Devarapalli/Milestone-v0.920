@@ -68,8 +68,6 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.Date, item.Date);
                 command.Parameters.AddWithValue(Constants.ParameterNames.DayOff, item.DayOff);
-                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId,
-                                                item.PersonId.HasValue ? (object)item.PersonId.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsRecurringHoliday, item.IsRecurringHoliday);
                 command.Parameters.AddWithValue(Constants.ParameterNames.RecurringHolidayId, item.RecurringHolidayId.HasValue ? (object)item.RecurringHolidayId.Value : DBNull.Value);
@@ -346,6 +344,45 @@ namespace DataAccess
             }
         }
 
+        public static void SaveSubstituteDay(CalendarItem item, string userLogin)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Calendar.SaveSubstituteDayProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.Date, item.Date);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId,
+                                                item.PersonId.HasValue ? (object)item.PersonId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SubstituteDayDateParam, item.SubstituteDayDate);
+                
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
         #endregion
+
+
+
+        public static void DeleteSubstituteDay(int personId, DateTime substituteDayDate, string userLogin)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Calendar.DeleteSubstituteDayProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId,
+                                                personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SubstituteDayDateParam, substituteDayDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }
