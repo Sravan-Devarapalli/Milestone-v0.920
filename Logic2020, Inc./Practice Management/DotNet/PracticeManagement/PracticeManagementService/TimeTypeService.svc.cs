@@ -30,11 +30,11 @@ namespace PracticeManagementService
             }
         }
 
-        public List<TimeTypeRecord> GetAllAdministrativeTimeTypes()
+        public List<TimeTypeRecord> GetAllAdministrativeTimeTypes(bool includePTO, bool includeHoliday)
         {
             try
             {
-                return TimeTypeDAL.GetAllAdministrativeTimeTypes();
+                return TimeTypeDAL.GetAllAdministrativeTimeTypes(includePTO, includeHoliday);
             }
             catch (Exception e)
             {
@@ -82,7 +82,7 @@ namespace PracticeManagementService
             }
             catch (Exception e)
             {
-               
+
                 throw e;
             }
         }
