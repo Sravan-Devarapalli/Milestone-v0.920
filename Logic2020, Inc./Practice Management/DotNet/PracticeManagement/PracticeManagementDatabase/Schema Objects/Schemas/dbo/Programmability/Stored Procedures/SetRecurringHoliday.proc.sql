@@ -7,26 +7,26 @@
 AS
 BEGIN
 
-DECLARE @Today DATETIME,
-	@ModifiedBy INT,
-	@HolidayTimeTypeId INT,
-	@CurrentPMTime DATETIME,
-	@PTOTimeTypeId INT,
-	@HolidayChargeCodeId INT,
-	@PTOChargeCodeId INT
+	DECLARE @Today DATETIME,
+		@ModifiedBy INT,
+		@HolidayTimeTypeId INT,
+		@CurrentPMTime DATETIME,
+		@PTOTimeTypeId INT,
+		@HolidayChargeCodeId INT,
+		@PTOChargeCodeId INT
 
-DECLARE @RecurringHolidaysDates TABLE( [Date] DATETIME, [Description] NVARCHAR(255), [Id] INT)
+	DECLARE @RecurringHolidaysDates TABLE( [Date] DATETIME, [Description] NVARCHAR(255), [Id] INT)
 
-SELECT @Today = dbo.GettingPMTime(GETUTCDATE())
-	, @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
-	, @CurrentPMTime = dbo.InsertingTime()
-	, @PTOTimeTypeId = dbo.GetPTOTimeTypeId()
+	SELECT @Today = dbo.GettingPMTime(GETUTCDATE())
+		, @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
+		, @CurrentPMTime = dbo.InsertingTime()
+		, @PTOTimeTypeId = dbo.GetPTOTimeTypeId()
 
-SELECT @ModifiedBy = PersonId
-FROM Person
-WHERE Alias = @UserLogin
-SELECT @PTOChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @PTOTimeTypeId
-SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTimeTypeId
+	SELECT @ModifiedBy = PersonId
+	FROM Person
+	WHERE Alias = @UserLogin
+	SELECT @PTOChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @PTOTimeTypeId
+	SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTimeTypeId
 	BEGIN TRY
 	
 	BEGIN TRANSACTION Tran_SetRecurringHoliday	
@@ -42,40 +42,38 @@ SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTime
 	SELECT C1.Date, crh.Description, crh.Id
 	FROM dbo.Calendar AS C1
 	JOIN dbo.CompanyRecurringHoliday crh ON C1.[Date] >= @Today
-			AND 
-			(
-					(crh.[Day] IS NOT NULL --If holiday is on exact Date.
-						AND (	--If Holiday comes in 
-								DAY(C1.[Date]) = crh.[Day] AND MONTH(C1.[Date]) = crh.[Month] AND DATEPART(DW,C1.[Date]) NOT IN(1,7)
-								OR DAY(DATEADD(DD,1,C1.[Date])) = crh.[Day] AND MONTH(DATEADD(DD,1,C1.[Date])) = crh.[Month]  AND DATEPART(DW,C1.[Date]) = 6
-								OR DAY(DATEADD(DD,-1,C1.[Date])) = crh.[Day] AND MONTH(DATEADD(DD,-1,C1.[Date])) = crh.[Month] AND DATEPART(DW,C1.[Date]) = 2
-							)
-						)
-						OR
-						( crh.[Day] IS NULL AND MONTH(C1.[Date]) = crh.[Month]
+		AND 
+		(
+			(crh.[Day] IS NOT NULL --If holiday is on exact Date.
+				AND (	--If Holiday comes in 
+						DAY(C1.[Date]) = crh.[Day] AND MONTH(C1.[Date]) = crh.[Month] AND DATEPART(DW,C1.[Date]) NOT IN(1,7)
+						OR DAY(DATEADD(DD,1,C1.[Date])) = crh.[Day] AND MONTH(DATEADD(DD,1,C1.[Date])) = crh.[Month]  AND DATEPART(DW,C1.[Date]) = 6
+						OR DAY(DATEADD(DD,-1,C1.[Date])) = crh.[Day] AND MONTH(DATEADD(DD,-1,C1.[Date])) = crh.[Month] AND DATEPART(DW,C1.[Date]) = 2
+					)
+				)
+				OR
+				( crh.[Day] IS NULL AND MONTH(C1.[Date]) = crh.[Month]
+				AND (
+						DATEPART(DW,C1.[Date]) = crh.DayOfTheWeek
 						AND (
-								DATEPART(DW,C1.[Date]) = crh.DayOfTheWeek
-								AND (
-										(crh.NumberInMonth IS NOT NULL
-											AND  (C1.[Date] - DAY(C1.[Date])+1) -
-														CASE WHEN (DATEPART(DW,C1.[Date]-DAY(C1.[Date])+1))%7 <= crh.DayOfTheWeek 
-																THEN (DATEPART(DW,C1.[Date]-DAY(C1.[Date])+1))%7
-																ELSE (DATEPART(DW,C1.[Date]-DAY(C1.[Date])+1)-7)
-																END +(7*(crh.NumberInMonth-1))+crh.DayOfTheWeek = C1.[Date]
-											)
-											OR( crh.NumberInMonth IS NULL 
-												AND (DATEADD(MM,1,C1.[Date] - DAY(C1.[Date])+1)- 1) - 
-														(CASE WHEN DATEPART(DW,(DATEADD(MM,1,C1.[Date] - DAY(C1.[Date])+1)- 1)) >= crh.DayOfTheWeek
-															THEN (DATEPART(DW,(DATEADD(MM,1,C1.[Date] - DAY(C1.[Date])+1)- 1)))-7
-															ELSE (DATEPART(DW,(DATEADD(MM,1,C1.[Date] - DAY(C1.[Date])+1)- 1)))
-															END)-(7-crh.DayOfTheWeek)= C1.[Date]
-											)
-										)
-							)
-						
-						)
-				 
-				)	
+								(crh.NumberInMonth IS NOT NULL
+									AND  (C1.[Date] - DAY(C1.[Date])+1) -
+												CASE WHEN (DATEPART(DW,C1.[Date]-DAY(C1.[Date])+1))%7 <= crh.DayOfTheWeek 
+														THEN (DATEPART(DW,C1.[Date]-DAY(C1.[Date])+1))%7
+														ELSE (DATEPART(DW,C1.[Date]-DAY(C1.[Date])+1)-7)
+														END +(7*(crh.NumberInMonth-1))+crh.DayOfTheWeek = C1.[Date]
+									)
+									OR( crh.NumberInMonth IS NULL 
+										AND (DATEADD(MM,1,C1.[Date] - DAY(C1.[Date])+1)- 1) - 
+												(CASE WHEN DATEPART(DW,(DATEADD(MM,1,C1.[Date] - DAY(C1.[Date])+1)- 1)) >= crh.DayOfTheWeek
+													THEN (DATEPART(DW,(DATEADD(MM,1,C1.[Date] - DAY(C1.[Date])+1)- 1)))-7
+													ELSE (DATEPART(DW,(DATEADD(MM,1,C1.[Date] - DAY(C1.[Date])+1)- 1)))
+													END)-(7-crh.DayOfTheWeek)= C1.[Date]
+									)
+								)
+					)
+				)
+			)	
 	WHERE crh.Id = @Id OR @Id IS NULL
 
 	--Update Calendar table.
@@ -88,7 +86,38 @@ SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTime
 		RecurringHolidayDate = NULL
 	FROM dbo.Calendar AS C1
 	JOIN @RecurringHolidaysDates rhd ON C1.Date = rhd.Date
-	
+
+	;WITH NeedToModifyDates AS
+	(
+		--APC:- AffectedPersonCalendar
+		--AFAPC:-  AffectedPersonCalendarForAffectedPersonCalendar
+		SELECT  PC.PersonId, APC.Date 'Date', CONVERT(BIT, 0) 'IsSeries'
+		FROM @RecurringHolidaysDates C
+		INNER JOIN dbo.PersonCalendar PC ON C.Date = PC.Date AND PC.DayOff = 1 AND PC.IsSeries = 1
+		LEFT JOIN dbo.PersonCalendar APC ON PC.PersonId = APC.PersonId AND APC.DayOff = 1 AND APC.IsSeries = 1 AND APC.TimeTypeId = PC.TimeTypeId AND APC.ActualHours = PC.ActualHours
+					AND ((DATEPART(DW, C.date) = 6 AND APC.date = DATEADD(DD,3, C.date) )
+							OR (DATEPART(DW, C.date) = 2 AND APC.date = DATEADD(DD, -3, C.date))
+							OR  APC.date = DATEADD(DD,1, C.date)
+							OR  APC.date = DATEADD(DD, -1, C.date)
+						)
+		LEFT JOIN dbo.PersonCalendar AFAPC ON APC.PersonId = AFAPC.PersonId AND AFAPC.DayOff = 1 AND AFAPC.IsSeries = 1 AND AFAPC.TimeTypeId = APC.TimeTypeId AND AFAPC.ActualHours = APC.ActualHours
+					AND ((DATEPART(DW, APC.date) = 6 AND AFAPC.date = DATEADD(DD,3, APC.date) )
+							OR (DATEPART(DW, APC.date) = 2 AND AFAPC.date = DATEADD(DD, -3, APC.date))
+							OR AFAPC.date = DATEADD(DD,1, APC.date)
+							OR AFAPC.date = DATEADD(DD, -1, APC.date)
+						)
+		GROUP BY PC.PersonId, C.date, APC.Date
+		Having COUNT(AFAPC.date) < 2
+		UNION
+		SELECT PC.PersonId, C.date 'Date', CONVERT(BIT, 0) 'IsSeries'
+		FROM @RecurringHolidaysDates C
+		INNER JOIN dbo.PersonCalendar PC ON C.Date = PC.Date AND PC.DayOff = 1 AND PC.IsSeries = 1
+	)
+
+	UPDATE PC
+		SET IsSeries = NTMF.IsSeries
+	FROM dbo.PersonCalendar PC
+	INNER JOIN NeedToModifyDates NTMF ON NTMF.PersonId = PC.PersonId AND NTMF.Date = PC.Date
 
 	--Update PersonCalendarAuto table
 	UPDATE C1
@@ -96,82 +125,81 @@ SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTime
 	FROM dbo.PersonCalendarAuto C1
 	JOIN @RecurringHolidaysDates rhd ON C1.Date = rhd.Date
 		
-	--Delete TimeEntryHours
+	--Delete all administrative worktype timeEntries.
 	DELETE TEH
 	FROM TimeEntryHours TEH
 	JOIN TimeEntry TE ON TE.TimeEntryId = TEH.TimeEntryId
 	JOIN @RecurringHolidaysDates rhd ON rhd.Date = TE.ChargeCodeDate
-	JOIN ChargeCode CC ON CC.Id = TE.ChargeCodeId AND CC.TimeTypeId IN (@PTOTimeTypeId, @HolidayTimeTypeId)
+	JOIN ChargeCode CC ON CC.Id = TE.ChargeCodeId
+	JOIN TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND TT.IsAdministrative = 1
 	
-	--Delete TimeEntry.
 	DELETE TE
 	FROM TimeEntry TE
 	JOIN @RecurringHolidaysDates rhd ON rhd.Date = TE.ChargeCodeDate
-	JOIN ChargeCode CC ON CC.Id = TE.ChargeCodeId AND CC.TimeTypeId IN (@PTOTimeTypeId, @HolidayTimeTypeId)
-
-				
+	JOIN ChargeCode CC ON CC.Id = TE.ChargeCodeId
+	JOIN TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND TT.IsAdministrative = 1
+	
 	IF @IsSet = 1
 	BEGIN
 
-	     DECLARE @SubDatesForPersons TABLE ([SubstituteDate] DATETIME,PersonId INT,[HolidayDate] DATETIME,IsW2Salaried BIT)
+	    DECLARE @SubDatesForPersons TABLE ([SubstituteDate] DATETIME,PersonId INT,[HolidayDate] DATETIME,IsW2Salaried BIT)
 
-			INSERT INTO @SubDatesForPersons
-			SELECT  PC.SubstituteDate,PC.PersonId, PC.Date,
-					(CASE WHEN  pay.Person IS NULL THEN 0
-					 ELSE 1 END) AS IsW2Salaried
-			FROM dbo.PersonCalendar AS PC 
-			INNER JOIN @RecurringHolidaysDates dates ON PC.SubstituteDate IS NOT NULL AND dates.date = PC.SubstituteDate  
-			LEFT JOIN  dbo.Pay pay  ON pay.Timescale = 2 /* 'W2-Salary' */ AND pay.Person = Pc.PersonId AND  
-									   PC.Date BETWEEN pay.StartDate AND ISNULL(pay.EndDate,dbo.GetFutureDate())
-
+		INSERT INTO @SubDatesForPersons
+		SELECT  PC.SubstituteDate,PC.PersonId, PC.Date,
+				(CASE WHEN  pay.Person IS NULL THEN 0
+					ELSE 1 END) AS IsW2Salaried
+		FROM dbo.PersonCalendar AS PC 
+		INNER JOIN @RecurringHolidaysDates dates ON PC.SubstituteDate IS NOT NULL AND dates.date = PC.SubstituteDate  
+		LEFT JOIN  dbo.Pay pay  ON pay.Timescale = 2 /* 'W2-Salary' */ AND pay.Person = Pc.PersonId AND  
+									PC.Date BETWEEN pay.StartDate AND ISNULL(pay.EndDate,dbo.GetFutureDate())
 			
-			DELETE pc
-			FROM dbo.PersonCalendar pc 
-			INNER JOIN @SubDatesForPersons AS SDP ON (pc.SubstituteDate = SDP.[SubstituteDate] AND pc.PersonId = SDP.PersonId) OR
-													 (pc.Date =SDP.[SubstituteDate] AND pc.PersonId = SDP.PersonId)
+		DELETE pc
+		FROM dbo.PersonCalendar pc 
+		INNER JOIN @SubDatesForPersons AS SDP ON (pc.SubstituteDate = SDP.[SubstituteDate] AND pc.PersonId = SDP.PersonId) OR
+													(pc.Date =SDP.[SubstituteDate] AND pc.PersonId = SDP.PersonId)
 
-			--Delete holiday timetype  Entry from TimeEntry table for substitute date.
-			--Delete From TimeEntryHours.
-			DELETE TEH
-			FROM dbo.TimeEntry TE 
-			INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId
-			INNER JOIN @SubDatesForPersons AS SDP ON TE.PersonId = SDP.PersonId AND TE.ChargeCodeDate = SDP.[SubstituteDate]
-			WHERE TE.ChargeCodeId = @HolidayChargeCodeId 
+		--Delete holiday timetype  Entry from TimeEntry table for substitute date.
+		--Delete From TimeEntryHours.
+		DELETE TEH
+		FROM dbo.TimeEntry TE 
+		INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId
+		INNER JOIN @SubDatesForPersons AS SDP ON TE.PersonId = SDP.PersonId AND TE.ChargeCodeDate = SDP.[SubstituteDate]
+		WHERE TE.ChargeCodeId = @HolidayChargeCodeId 
 
-			--Delete From TimeEntry.
-			DELETE TE
-			FROM dbo.TimeEntry TE 
-			INNER JOIN @SubDatesForPersons AS SDP ON TE.PersonId = SDP.PersonId AND TE.ChargeCodeDate = SDP.[SubstituteDate]
-			WHERE  TE.ChargeCodeId = @HolidayChargeCodeId
+		--Delete From TimeEntry.
+		DELETE TE
+		FROM dbo.TimeEntry TE 
+		INNER JOIN @SubDatesForPersons AS SDP ON TE.PersonId = SDP.PersonId AND TE.ChargeCodeDate = SDP.[SubstituteDate]
+		WHERE  TE.ChargeCodeId = @HolidayChargeCodeId
 
-			INSERT  INTO [dbo].[TimeEntry]
-								([PersonId],
-								[ChargeCodeId],
-								[ChargeCodeDate],
-								[Note],
-								[ForecastedHours],
-								[IsCorrect],
-								[IsAutoGenerated]
-								)
-			SELECT SDP.PersonId,@HolidayChargeCodeId,SDP.HolidayDate,c.HolidayDescription,0,1,1
-			FROM dbo.Calendar c 
-			INNER JOIN @SubDatesForPersons AS SDP ON SDP.HolidayDate =  c.Date  AND  SDP.IsW2Salaried = 1
+		INSERT  INTO [dbo].[TimeEntry]
+							([PersonId],
+							[ChargeCodeId],
+							[ChargeCodeDate],
+							[Note],
+							[ForecastedHours],
+							[IsCorrect],
+							[IsAutoGenerated]
+							)
+		SELECT SDP.PersonId,@HolidayChargeCodeId,SDP.HolidayDate,c.HolidayDescription,0,1,1
+		FROM dbo.Calendar c 
+		INNER JOIN @SubDatesForPersons AS SDP ON SDP.HolidayDate =  c.Date  AND  SDP.IsW2Salaried = 1
 				
-			INSERT INTO [dbo].[TimeEntryHours] 
-										(   [TimeEntryId],
-											[ActualHours],
-											[CreateDate],
-											[ModifiedDate],
-											[ModifiedBy],
-											[IsChargeable],
-											[ReviewStatusId]
-										)
-				SELECT TE.TimeEntryId, 8,@CurrentPMTime,@CurrentPMTime,@ModifiedBy,0,2 /* Approved */
-				FROM [dbo].[TimeEntry] AS TE 
-				INNER JOIN @SubDatesForPersons AS SDP ON SDP.HolidayDate =  TE.ChargeCodeDate 
-														 AND SDP.IsW2Salaried = 1  
-														 AND TE.PersonId = SDP.PersonId  
-														 AND TE.ChargeCodeId = @HolidayChargeCodeId
+		INSERT INTO [dbo].[TimeEntryHours]
+									(   [TimeEntryId],
+										[ActualHours],
+										[CreateDate],
+										[ModifiedDate],
+										[ModifiedBy],
+										[IsChargeable],
+										[ReviewStatusId]
+									)
+		SELECT TE.TimeEntryId, 8,@CurrentPMTime,@CurrentPMTime,@ModifiedBy,0,2 /* Approved */
+		FROM [dbo].[TimeEntry] AS TE
+		INNER JOIN @SubDatesForPersons AS SDP ON SDP.HolidayDate =  TE.ChargeCodeDate
+													AND SDP.IsW2Salaried = 1
+													AND TE.PersonId = SDP.PersonId
+													AND TE.ChargeCodeId = @HolidayChargeCodeId
 
 		INSERT  INTO [dbo].[TimeEntry]
 		                ( [PersonId],
@@ -183,7 +211,7 @@ SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTime
 							[IsAutoGenerated]
 		                )
 		SELECT P.PersonId
-				,CC.Id
+				,@HolidayChargeCodeId
 				,rhd.[Date]
 				,rhd.[Description]
 				,0 --Forecasted Hours.
@@ -194,8 +222,7 @@ SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTime
 		JOIN @RecurringHolidaysDates AS rhd ON rhd.Date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
 																															ELSE pay.EndDate - 1
 																															END)
-		JOIN ChargeCode CC ON CC.TimeTypeId = @HolidayTimeTypeId
-		LEFT JOIN TimeEntry TE ON TE.PersonId = P.PersonId AND TE.ChargeCodeId = CC.Id AND TE.ChargeCodeDate = rhd.Date
+		LEFT JOIN TimeEntry TE ON TE.PersonId = P.PersonId AND TE.ChargeCodeId = @HolidayChargeCodeId AND TE.ChargeCodeDate = rhd.Date
 		WHERE TE.TimeEntryId IS NULL
 
 		INSERT INTO [dbo].[TimeEntryHours] 
@@ -219,8 +246,7 @@ SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTime
 		JOIN @RecurringHolidaysDates AS rhd ON rhd.Date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
 																															ELSE pay.EndDate - 1
 																															END)
-		JOIN ChargeCode CC ON CC.TimeTypeId = @HolidayTimeTypeId
-		JOIN TimeEntry TE ON TE.PersonId = P.PersonId AND TE.ChargeCodeId = CC.Id AND TE.ChargeCodeDate = rhd.Date
+		JOIN TimeEntry TE ON TE.PersonId = P.PersonId AND TE.ChargeCodeId = @HolidayChargeCodeId AND TE.ChargeCodeDate = rhd.Date
 		LEFT JOIN TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId
 		WHERE TEH.TimeEntryId IS NULL
 		
@@ -228,34 +254,35 @@ SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTime
 	ELSE IF @IsSet = 0
 	BEGIN
 		
-		  DECLARE @SubDates TABLE ([date] DATETIME)
+		DECLARE @SubDates TABLE ([date] DATETIME)
 
-			INSERT INTO @SubDates
-			SELECT  PC.SubstituteDate
-			FROM dbo.PersonCalendar AS PC 
-			INNER JOIN @RecurringHolidaysDates dates ON dates.date = PC.Date AND PC.SubstituteDate IS NOT NULL
+		INSERT INTO @SubDates
+		SELECT  PC.SubstituteDate
+		FROM dbo.PersonCalendar AS PC 
+		INNER JOIN @RecurringHolidaysDates dates ON dates.date = PC.Date AND PC.SubstituteDate IS NOT NULL
 	    
-			UPDATE PC
-			SET PC.TimeTypeId = @PTOTimeTypeId
-			FROM dbo.PersonCalendar AS PC 
-			INNER JOIN @SubDates AS SUBDATES ON PC.Date = SUBDATES.date
+		UPDATE PC
+		SET PC.TimeTypeId = @PTOTimeTypeId,
+			PC.Description = 'PTO'
+		FROM dbo.PersonCalendar AS PC
+		INNER JOIN @SubDates AS SUBDATES ON PC.Date = SUBDATES.date
 
-			UPDATE TEH 
-			SET TEH.ModifiedBy = @ModifiedBy,
-				TEH.ModifiedDate = @CurrentPMTime
-			FROM dbo.TimeEntryHours AS TEH 
-			INNER JOIN dbo.TimeEntry AS TE ON TE.TimeEntryId = TEH.TimeEntryId
-			INNER JOIN @SubDates AS SUBDATES ON SUBDATES.date = TE.ChargeCodeDate AND TE.ChargeCodeId = @HolidayChargeCodeId 
+		UPDATE TEH
+		SET TEH.ModifiedBy = @ModifiedBy,
+			TEH.ModifiedDate = @CurrentPMTime
+		FROM dbo.TimeEntryHours AS TEH
+		INNER JOIN dbo.TimeEntry AS TE ON TE.TimeEntryId = TEH.TimeEntryId
+		INNER JOIN @SubDates AS SUBDATES ON SUBDATES.date = TE.ChargeCodeDate AND TE.ChargeCodeId = @HolidayChargeCodeId 
 
-			UPDATE TE 
-			SET TE.Note = 'PTO',
-				TE.ChargeCodeId = @PTOChargeCodeId
-			FROM dbo.TimeEntry AS TE 
-			INNER JOIN @SubDates AS SUBDATES ON SUBDATES.date = TE.ChargeCodeDate AND TE.ChargeCodeId = @HolidayChargeCodeId 
+		UPDATE TE 
+		SET TE.Note = 'PTO',
+			TE.ChargeCodeId = @PTOChargeCodeId
+		FROM dbo.TimeEntry AS TE
+		INNER JOIN @SubDates AS SUBDATES ON SUBDATES.date = TE.ChargeCodeDate AND TE.ChargeCodeId = @HolidayChargeCodeId 
 
-			DELETE PC
-			FROM dbo.PersonCalendar AS PC 
-			JOIN @RecurringHolidaysDates rhd ON rhd.Date = Pc.Date
+		DELETE PC
+		FROM dbo.PersonCalendar AS PC 
+		JOIN @RecurringHolidaysDates rhd ON rhd.Date = Pc.Date
 
 
 		INSERT  INTO [dbo].[TimeEntry]
@@ -267,7 +294,7 @@ SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTime
 					[IsCorrect],
 					[IsAutoGenerated]
 		        )
-		SELECT PC.PersonId,
+		SELECT DISTINCT PC.PersonId,
 				CC.Id,
 				PC.Date,
 				PC.Description,
@@ -280,9 +307,11 @@ SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTime
 		JOIN dbo.Pay pay ON pay.Person = PC.PersonId AND pay.Timescale = 2 AND d.date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
 																															ELSE pay.EndDate - 1
 																															END)
-		JOIN ChargeCode CC ON (PC.TimeTypeId = @HolidayTimeTypeId AND CC.TimeTypeId = @HolidayTimeTypeId) OR (PC.TimeTypeId = @PTOTimeTypeId  AND CC.TimeTypeId = @PTOTimeTypeId)
+		JOIN dbo.ChargeCode CC ON CC.TimeTypeId = PC.TimeTypeId
+		LEFT JOIN dbo.TimeEntry TE ON TE.PersonId = PC.PersonId AND TE.ChargeCodeId = CC.Id AND TE.ChargeCodeDate = PC.Date
+		WHERE TE.TimeEntryId IS NULL
 
-		INSERT INTO [dbo].[TimeEntryHours] 
+		INSERT INTO [dbo].[TimeEntryHours]
 						( [TimeEntryId],
 							[ActualHours],
 							[CreateDate],
@@ -292,20 +321,20 @@ SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTime
 							[ReviewStatusId]
 						)
 		SELECT TE.TimeEntryId,
-				CASE WHEN PC.ActualHours IS NOT NULL AND ISNULL(PC.IsFloatingHoliday,0) = 0 THEN PC.ActualHours ELSE 8 END,
+				CASE PC.TimeTypeId WHEN @HolidayTimeTypeId THEN 8 ELSE PC.ActualHours END,
 				@CurrentPMTime,
 				@CurrentPMTime,
 				@ModifiedBy,
 				0,--Non billable
-				CASE WHEN PC.IsFromTimeEntry <> 1 AND PC.IsFloatingHoliday <> 1 THEN 2 ELSE 1 END --ReviewStatusId 2 is Approved, 1 is Pending.
+				CASE WHEN PC.IsFromTimeEntry <> 1 AND PC.TimeTypeId <> @HolidayTimeTypeId THEN 2 ELSE 1 END --ReviewStatusId 2 is Approved, 1 is Pending.
 		FROM dbo.PersonCalendar PC
 		JOIN @RecurringHolidaysDates d ON d.date = PC.Date AND PC.DayOff = 1
 		JOIN dbo.Person p ON p.PersonId = PC.PersonId AND P.IsStrawman = 0
 		JOIN dbo.Pay pay ON pay.Person = PC.PersonId AND pay.Timescale = 2 AND d.date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
 																															ELSE pay.EndDate - 1
 																															END)
-		JOIN dbo.ChargeCode CC ON (PC.IsFloatingHoliday = 1 AND CC.TimeTypeId = @HolidayTimeTypeId) OR (PC.IsFloatingHoliday <> 1 AND CC.TimeTypeId = @PTOTimeTypeId)
-		JOIN dbo.TimeEntry TE ON TE.ChargeCodeId = CC.Id AND TE.ChargeCodeDate = d.Date AND TE.PersonId = p.PersonId
+		JOIN dbo.ChargeCode CC ON CC.TimeTypeId = PC.TimeTypeId
+		JOIN dbo.TimeEntry TE ON TE.PersonId = p.PersonId AND TE.ChargeCodeId = CC.Id AND TE.ChargeCodeDate = d.Date
 		LEFT JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId
 		WHERE TEH.TimeEntryId IS NULL
 	END
