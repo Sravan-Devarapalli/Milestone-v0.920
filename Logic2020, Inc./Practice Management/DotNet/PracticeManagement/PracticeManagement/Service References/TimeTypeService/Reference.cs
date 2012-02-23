@@ -19,7 +19,7 @@ namespace PraticeManagement.TimeTypeService {
         DataTransferObjects.TimeEntry.TimeTypeRecord[] GetAllTimeTypes();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeTypeService/GetAllAdministrativeTimeTypes", ReplyAction="http://tempuri.org/ITimeTypeService/GetAllAdministrativeTimeTypesResponse")]
-        DataTransferObjects.TimeEntry.TimeTypeRecord[] GetAllAdministrativeTimeTypes();
+        DataTransferObjects.TimeEntry.TimeTypeRecord[] GetAllAdministrativeTimeTypes(bool includePTO, bool includeHoliday);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeTypeService/GetAdministrativeChargeCodeValues", ReplyAction="http://tempuri.org/ITimeTypeService/GetAdministrativeChargeCodeValuesResponse")]
         DataTransferObjects.Triple<int, int, int> GetAdministrativeChargeCodeValues(int timeTypeId);
@@ -44,7 +44,6 @@ namespace PraticeManagement.TimeTypeService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class TimeTypeServiceClient : System.ServiceModel.ClientBase<PraticeManagement.TimeTypeService.ITimeTypeService>, PraticeManagement.TimeTypeService.ITimeTypeService {
-        
        
         public TimeTypeServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -66,8 +65,8 @@ namespace PraticeManagement.TimeTypeService {
             return base.Channel.GetAllTimeTypes();
         }
         
-        public DataTransferObjects.TimeEntry.TimeTypeRecord[] GetAllAdministrativeTimeTypes() {
-            return base.Channel.GetAllAdministrativeTimeTypes();
+        public DataTransferObjects.TimeEntry.TimeTypeRecord[] GetAllAdministrativeTimeTypes(bool includePTO, bool includeHoliday) {
+            return base.Channel.GetAllAdministrativeTimeTypes(includePTO, includeHoliday);
         }
         
         public DataTransferObjects.Triple<int, int, int> GetAdministrativeChargeCodeValues(int timeTypeId) {
