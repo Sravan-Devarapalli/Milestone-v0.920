@@ -114,4 +114,22 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="SaveTimeOff">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="dayOff" type="xs:boolean" />
+        <xs:element minOccurs="0" name="personId" type="xs:int" />
+        <xs:element minOccurs="0" name="actualHours" nillable="true" type="xs:double" />
+        <xs:element minOccurs="0" name="timeTypeId" type="xs:int" />
+        <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveTimeOffResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
 </xs:schema>
