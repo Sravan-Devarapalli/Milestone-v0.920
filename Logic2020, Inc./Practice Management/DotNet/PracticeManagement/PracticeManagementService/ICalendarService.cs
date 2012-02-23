@@ -6,31 +6,31 @@ using DataTransferObjects;
 
 namespace PracticeManagementService
 {
-	[ServiceContract]
-	public interface ICalendarService
-	{
-		/// <summary>
-		/// Retrieves a list of the calendar items from the database.
-		/// </summary>
-		/// <param name="startDate">The start of the period.</param>
-		/// <param name="endDate">The end of the period.</param>
-		/// <param name="personId">
-		/// An ID of the person to the cxalendar be retrived for.
-		/// If null the company calendar will be returned.
-		/// </param>
-		/// <param name="practiceManagerId">
-		/// An ID of the practice manager to retrieve the data for his subordinate
-		/// </param>
-		/// <returns>The list of the <see cref="CalendarItem"/> objects.</returns>
-		[OperationContract]
-		List<CalendarItem> GetCalendar(DateTime startDate, DateTime endDate, int? personId, int? practiceManagerId);
+    [ServiceContract]
+    public interface ICalendarService
+    {
+        /// <summary>
+        /// Retrieves a list of the calendar items from the database.
+        /// </summary>
+        /// <param name="startDate">The start of the period.</param>
+        /// <param name="endDate">The end of the period.</param>
+        /// <param name="personId">
+        /// An ID of the person to the calendar be retrieved for.
+        /// If null the company calendar will be returned.
+        /// </param>
+        /// <param name="practiceManagerId">
+        /// An ID of the practice manager to retrieve the data for his subordinate
+        /// </param>
+        /// <returns>The list of the <see cref="CalendarItem"/> objects.</returns>
+        [OperationContract]
+        List<CalendarItem> GetCalendar(DateTime startDate, DateTime endDate, int? personId, int? practiceManagerId);
 
-		/// <summary>
-		/// Saves a <see cref="CalendarItem"/> object to the database.
-		/// </summary>
-		/// <param name="item">The data to be saved to.</param>
-		[OperationContract]
-		void SaveCalendar(CalendarItem item, string userLogin);
+        /// <summary>
+        /// Saves a <see cref="CalendarItem"/> object to the database.
+        /// </summary>
+        /// <param name="item">The data to be saved to.</param>
+        [OperationContract]
+        void SaveCalendar(CalendarItem item, string userLogin);
 
         /// <summary>
         /// Returns No. of Company holidays in a given year
@@ -55,6 +55,9 @@ namespace PracticeManagementService
         [OperationContract]
         void DeleteSubstituteDay(int personId, DateTime substituteDayDate, string userLogin);
 
-	}
+        [OperationContract]
+        void SaveTimeOff(DateTime startDate, DateTime endDate, bool dayOff, int personId, double? actualHours, int timeTypeId, string userLogin);
+
+    }
 }
 
