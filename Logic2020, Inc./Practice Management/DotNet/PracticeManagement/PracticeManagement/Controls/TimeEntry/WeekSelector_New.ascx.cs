@@ -46,6 +46,21 @@ namespace PraticeManagement.Controls.TimeEntry
 
         #region Properties
 
+        public DateTime? PreviousWeekSelectedDay
+        {
+            get
+            {
+                DateTime day;
+                DateTime.TryParse(hdPreviousWeekSelectedDay.Value, out day);
+                return day;
+            }
+            set
+            {
+                hdPreviousWeekSelectedDay.Value = value.ToString();
+            }
+
+        }
+
         public byte SelectedPeriodLength
         {
             get { return GetViewStateValue(ViewStateSelectedPeriod, DefaultSelectedPeriod); }
@@ -156,8 +171,151 @@ namespace PraticeManagement.Controls.TimeEntry
                 InitSelection(day);
             }
 
-            UpdateWeekLabel();
             SetSelectedDates();
+            if (!Page.IsPostBack)
+            {
+                var currentPerson = DataHelper.CurrentPerson;
+                var personId = currentPerson.Id.Value;
+                string strSelectedPersonId = Request.QueryString["SelectedPersonId"];
+                if (!string.IsNullOrEmpty(strSelectedPersonId) && !Int32.TryParse(strSelectedPersonId, out personId))
+                {
+                    personId = currentPerson.Id.Value;
+                }
+                bool isPersonActive = ServiceCallers.Custom.Person(p => p.IsPersonHaveActiveStatusDuringThisPeriod(personId, StartDate, EndDate));
+                if (isPersonActive)
+                {
+                    var userIsAdministrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+                    if (userIsAdministrator)
+                    {
+                        var selectedValue = HostingPage.ddlPersonsDropDown.SelectedValue;
+                        var persons = ServiceCallers.Custom.Person(p => p.PersonsListHavingActiveStatusDuringThisPeriod(StartDate, EndDate));
+                        DataHelper.FillPersonList(HostingPage.ddlPersonsDropDown, null, persons, null);
+                        HostingPage.ddlPersonsDropDown.SelectedValue = personId.ToString();
+                        HostingPage.SelectedPerson = personId == currentPerson.Id.Value ? currentPerson : DataHelper.GetPerson(personId);
+                        PreviousWeekSelectedDay = StartDate;
+                    }
+                }
+                else
+                {
+                    if (PreviousWeekSelectedDay.HasValue)
+                    {
+                        HostingPage.SelectedPerson = personId == currentPerson.Id.Value ? currentPerson : DataHelper.GetPerson(personId);
+                        var message = string.Format(TimeEntry_New.WeekChangeAlertMessage, HostingPage.SelectedPerson.PersonLastFirstName, StartDate, EndDate);
+                        HostingPage.lbMessageControl.Text = message;
+                        HostingPage.mpePersonInactiveAlertControl.Show();
+                        OnWeekChanged(PreviousWeekSelectedDay.Value);
+                    }
+                }
+
+            }
+            UpdateWeekLabel();
+
+        }
+
+        protected void imgbtnPrevWeek_OnClick(object sender, ImageClickEventArgs e)
+        {
+            DateTime pervWeekStartDate = StartDate.AddDays(-SelectedPeriodLength);
+            DateTime pervWeekEndDate = EndDate.AddDays(-SelectedPeriodLength);
+            int personId ;
+            var userIsAdministrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+            if (userIsAdministrator)
+            {
+                personId = int.Parse(HostingPage.ddlPersonsDropDown.SelectedValue);
+            }
+            else
+            {
+                personId = DataHelper.CurrentPerson.Id.Value;
+            }
+            bool isPersonActive = ServiceCallers.Custom.Person(p => p.IsPersonHaveActiveStatusDuringThisPeriod(personId, pervWeekStartDate, pervWeekEndDate));
+            if (!isPersonActive)
+            {
+                var message = string.Format(TimeEntry_New.WeekChangeAlertMessage, HostingPage.SelectedPerson.PersonLastFirstName, pervWeekStartDate.ToString("yyyy/MM/dd"), pervWeekEndDate.ToString("yyyy/MM/dd"));
+                HostingPage.lbMessageControl.Text = message;
+                HostingPage.mpePersonInactiveAlertControl.Show();
+            }
+            else
+            {
+                var urlTemplate = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) ?
+                    Constants.ApplicationPages.TimeEntry_NewForAdmin : Constants.ApplicationPages.TimeEntry_New;
+                string url = string.Format(urlTemplate, pervWeekStartDate.ToString("yyyy-MM-dd"), SelectedPerson.Id);
+                Response.Redirect(url);
+            }
+        }
+
+        protected void imgbtnNextWeek_OnClick(object sender, ImageClickEventArgs e)
+        {
+            DateTime nextWeekStartDate = StartDate.AddDays(SelectedPeriodLength);
+            DateTime nextWeekEndDate = EndDate.AddDays(SelectedPeriodLength);
+            int personId;
+            var userIsAdministrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+            if (userIsAdministrator)
+            {
+                personId = int.Parse(HostingPage.ddlPersonsDropDown.SelectedValue);
+            }
+            else
+            {
+                personId = DataHelper.CurrentPerson.Id.Value;
+            }
+            bool isPersonActive = ServiceCallers.Custom.Person(p => p.IsPersonHaveActiveStatusDuringThisPeriod(personId, nextWeekStartDate, nextWeekEndDate));
+            if (!isPersonActive)
+            {
+                var message = string.Format(TimeEntry_New.WeekChangeAlertMessage, HostingPage.SelectedPerson.PersonLastFirstName, nextWeekStartDate.ToString("yyyy-MM-dd"), nextWeekEndDate.ToString("yyyy-MM-dd"));
+                HostingPage.lbMessageControl.Text = message;
+                HostingPage.mpePersonInactiveAlertControl.Show();
+            }
+            else
+            {
+                var urlTemplate = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) ?
+                    Constants.ApplicationPages.TimeEntry_NewForAdmin : Constants.ApplicationPages.TimeEntry_New;
+                string url = string.Format(urlTemplate, nextWeekStartDate.ToString("yyyy-MM-dd"), SelectedPerson.Id);
+                Response.Redirect(url);
+            }
+        }
+
+        private void BindPersonsList()
+        {
+            bool isPersonActive = true;
+            var currentPerson = DataHelper.CurrentPerson;
+            var personId = currentPerson.Id.Value;
+            string strSelectedPersonId = Request.QueryString["SelectedPersonId"];
+            string strSelectedDate = Request.QueryString["day"];
+            if (!string.IsNullOrEmpty(HostingPage.ddlPersonsDropDown.SelectedValue))
+            {
+                personId = int.Parse(HostingPage.ddlPersonsDropDown.SelectedValue);
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(strSelectedPersonId) && !Int32.TryParse(strSelectedPersonId, out personId))
+                {
+                    personId = currentPerson.Id.Value;
+                }
+            }
+            isPersonActive = ServiceCallers.Custom.Person(p => p.IsPersonHaveActiveStatusDuringThisPeriod(personId, StartDate, EndDate));
+            if (!isPersonActive)
+            {
+                if (PreviousWeekSelectedDay.HasValue)
+                {
+                    HostingPage.SelectedPerson = personId == currentPerson.Id.Value ? currentPerson : DataHelper.GetPerson(personId);
+                    var message = string.Format(TimeEntry_New.WeekChangeAlertMessage, HostingPage.SelectedPerson.PersonLastFirstName, StartDate.ToString("yyyy/MM/dd"), EndDate.ToString("yyyy/MM/dd"));
+                    HostingPage.lbMessageControl.Text = message;
+                    HostingPage.mpePersonInactiveAlertControl.Show();
+                    if (PreviousWeekSelectedDay.Value == DateTime.MinValue)
+                        PreviousWeekSelectedDay = Convert.ToDateTime(strSelectedDate);
+                    OnWeekChanged(PreviousWeekSelectedDay.Value);
+                }
+            }
+            else
+            {
+                var userIsAdministrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+                if (userIsAdministrator)
+                {
+                    var selectedValue = HostingPage.ddlPersonsDropDown.SelectedValue;
+                    var persons = ServiceCallers.Custom.Person(p => p.PersonsListHavingActiveStatusDuringThisPeriod(StartDate, EndDate));
+                    DataHelper.FillPersonList(HostingPage.ddlPersonsDropDown, null, persons, null);
+                    HostingPage.ddlPersonsDropDown.SelectedValue = selectedValue;
+                }
+                PreviousWeekSelectedDay = StartDate;
+            }
         }
 
         private void SelectPeriod(DateTime startDate)
@@ -179,10 +337,6 @@ namespace PraticeManagement.Controls.TimeEntry
                               today.Day,
                               curentCulture.DateTimeFormat.GetAbbreviatedMonthName(endMonth.Month),
                               endMonth.Day);
-            var urlTemplate = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) ?
-                Constants.ApplicationPages.TimeEntry_NewForAdmin : Constants.ApplicationPages.TimeEntry_New;
-            hprlnkPreviousWeek.NavigateUrl = string.Format(urlTemplate, today.AddDays(-SelectedPeriodLength).ToString("yyyy-MM-dd"), SelectedPerson.Id);
-            hprlnkNextWeek.NavigateUrl = string.Format(urlTemplate, today.AddDays(SelectedPeriodLength).ToString("yyyy-MM-dd"), SelectedPerson.Id);
         }
 
         public static int Week(DateTime tdDate)
@@ -202,7 +356,7 @@ namespace PraticeManagement.Controls.TimeEntry
         protected virtual void OnWeekChanged(DateTime day)
         {
             InitSelection(day);
-
+            BindPersonsList();
             WeekChanged(this, new WeekChangedEventArgs(StartDate, EndDate));
         }
 
