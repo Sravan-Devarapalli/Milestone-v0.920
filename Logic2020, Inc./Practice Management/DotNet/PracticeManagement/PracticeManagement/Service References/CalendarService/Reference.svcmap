@@ -26,6 +26,7 @@
     <MetadataFile FileName="CalendarService5.xsd" MetadataType="Schema" ID="5572b0df-93e7-4f7d-8974-723b4a68e95f" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd3" />
     <MetadataFile FileName="CalendarService6.xsd" MetadataType="Schema" ID="6dd683d9-437e-4711-9dbf-7e8597ae85ff" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd2" />
     <MetadataFile FileName="CalendarService1.wsdl" MetadataType="Wsdl" ID="0cde71ee-3128-4f3a-8a8e-f25efe7d47e5" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/CalendarService.svc?wsdl" />
+    <MetadataFile FileName="CalendarService7.xsd" MetadataType="Schema" ID="12ac519d-9d99-4a05-84b4-3f244b14b415" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd4" />
     <MetadataFile FileName="CalendarService1.disco" MetadataType="Disco" ID="158a859a-561c-462c-92d3-890e46ca1631" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/CalendarService.svc?disco" />
   </Metadata>
   <Extensions>
