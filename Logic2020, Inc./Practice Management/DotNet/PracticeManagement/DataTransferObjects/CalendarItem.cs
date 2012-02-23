@@ -22,6 +22,15 @@ namespace DataTransferObjects
             set;
         }
 
+
+        [DataMember]
+        public DateTime? SubstituteDayDate
+        {
+            get;
+            set;
+        }
+
+
         /// <summary>
         /// Gets or sets is a day is day-off
         /// </summary>
