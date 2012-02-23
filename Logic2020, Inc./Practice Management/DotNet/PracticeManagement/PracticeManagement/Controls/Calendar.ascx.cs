@@ -167,7 +167,6 @@ namespace PraticeManagement.Controls
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.HRRoleName);
             userIsProjectLead =
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead);
-            CalendarLegend.Visible = !CompanyHolidays;
             if (!IsPostBack)
             {
                 if (!CompanyHolidays)
