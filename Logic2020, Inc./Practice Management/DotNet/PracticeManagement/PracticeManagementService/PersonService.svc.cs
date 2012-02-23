@@ -1067,6 +1067,11 @@ namespace PracticeManagementService
             return PersonDAL.IsPersonHaveActiveStatusDuringThisPeriod(personId, startDate, endDate);
         }
 
+       public List<Person> PersonsListHavingActiveStatusDuringThisPeriod(DateTime startDate,DateTime endDate)
+       {
+           return PersonDAL.PersonsListHavingActiveStatusDuringThisPeriod(startDate, endDate);
+       }
+
         #endregion
     }
 }
