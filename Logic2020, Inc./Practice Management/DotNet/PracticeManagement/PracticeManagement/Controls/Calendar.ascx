@@ -176,7 +176,7 @@
         return false;
     }
 
-    Sys.WebForms.PageRequestManager.getInstance().add_endRequest( endRequestHandle );
+    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
 
 
     function endRequestHandle(sender, Args) {
@@ -238,14 +238,14 @@
                 <ContentTemplate>
                     <script type="text/javascript">
                         function btnOk_EditCondtion() {
-                            $find( 'mpeSelectEditCondtion' ).hide();
-                            var rbEditSingleDay = document.getElementById( '<%=rbEditSingleDay.ClientID %>' );
-                            var rbEditSeries = document.getElementById( '<%=rbEditSeries.ClientID %>' );
-                            alert( rbEditSingleDay.value );
-                            if ( rbEditSingleDay.value ) {
-                                $find( 'mpeEditSingleDay' ).show();
+                            $find('mpeSelectEditCondtion').hide();
+                            var rbEditSingleDay = document.getElementById('<%=rbEditSingleDay.ClientID %>');
+                            var rbEditSeries = document.getElementById('<%=rbEditSeries.ClientID %>');
+                            alert(rbEditSingleDay.value);
+                            if (rbEditSingleDay.value) {
+                                $find('mpeEditSingleDay').show();
                             } else {
-                                $find( 'mpeAddTimeOffPopup' ).show();
+                                $find('mpeAddTimeOffPopup').show();
                             }
 
                         }
@@ -565,10 +565,10 @@
                                         EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
                                         Type="Currency" ValidationGroup="TimeOff"></asp:CompareValidator>
                                     <asp:RangeValidator ID="rangHoursPerDay" runat="server" ControlToValidate="txthoursTimeOff"
-                                        ErrorMessage="The Hours Per Day must be greater than 0 and less or equals to 24."
-                                        ToolTip="The Hours Per Day must be greater than 0 and less or equals to 24."
-                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                        MinimumValue="0.01" MaximumValue="24" Type="Double" ValidationGroup="TimeOff"></asp:RangeValidator>
+                                        ErrorMessage="The Hours Per Day must be greater than 0 and less or equals to 8."
+                                        ToolTip="The Hours Per Day must be greater than 0 and less or equals to 8." Text="*"
+                                        EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" MinimumValue="0.01"
+                                        MaximumValue="8" Type="Double" ValidationGroup="TimeOff"></asp:RangeValidator>
                                     <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtHoursPerDayInsert" runat="server"
                                         TargetControlID="txthoursTimeOff" FilterMode="ValidChars" FilterType="Custom,Numbers"
                                         ValidChars=".">
@@ -603,7 +603,7 @@
                     </asp:Panel>
                     <AjaxControlToolkit:ModalPopupExtender ID="mpeEditSingleDay" runat="server" TargetControlID="hdEditSingleDay"
                         BackgroundCssClass="modalBackground" PopupControlID="pnlEditSingleDay" DropShadow="false"
-                        BehaviorID="mpeEditSingleDay" CancelControlID="btncancel_EditSingleDay" />
+                        BehaviorID="mpeEditSingleDay" CancelControlID="btnCancelEditSingleDay" />
                     <asp:Panel ID="pnlEditSingleDay" runat="server" BackColor="White" BorderColor="Black"
                         CssClass="ConfirmBoxClassError" Style="display: none;" BorderWidth="2px" Height="200px"
                         Width="320px">
@@ -617,6 +617,7 @@
                                     colspan="3">
                                     Date:&nbsp;&nbsp;&nbsp;
                                     <asp:Label ID="lbdateSingleDay" runat="server" Text="2012/02/23"></asp:Label>
+                                    <asp:HiddenField ID="hdnDateSingleDay" runat="server" ></asp:HiddenField>
                                 </td>
                             </tr>
                             <tr>
@@ -626,8 +627,11 @@
                             </tr>
                             <tr>
                                 <td colspan="3" style="padding-left: 40px; text-align: left;">
-                                    <asp:DropDownList ID="DropDownList1" runat="server" Style="width: 70%;">
+                                    <asp:DropDownList ID="ddlTimeTypesSingleDay" runat="server" Style="width: 70%;">
                                     </asp:DropDownList>
+                                    <asp:RequiredFieldValidator ID="reqddlTimeTypesSingleDay" runat="server" ControlToValidate="ddlTimeTypesSingleDay"
+                                        ErrorMessage="The Work Type is required." ToolTip="The Work Type is required."
+                                        Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="SingleDay"></asp:RequiredFieldValidator>
                                 </td>
                             </tr>
                             <tr>
@@ -644,7 +648,24 @@
                                     Hours:
                                 </td>
                                 <td width="10%" style="padding-left: 5px; text-align: left;">
-                                    <asp:TextBox ID="TextBox1" runat="server" Style="width: 50px;"></asp:TextBox>
+                                    <asp:TextBox ID="txtHoursSingleDay" runat="server" Style="width: 50px;"></asp:TextBox>
+                                    <asp:RequiredFieldValidator ID="reqHoursSingleDay" runat="server" ControlToValidate="txtHoursSingleDay"
+                                        ErrorMessage="The Hours is required." ToolTip="The Hours is required." Text="*"
+                                        EnableClientScript="false" SetFocusOnError="true" ValidationGroup="SingleDay"></asp:RequiredFieldValidator>
+                                    <asp:CompareValidator ID="compHoursSingleDay" runat="server" ControlToValidate="txtHoursSingleDay"
+                                        ErrorMessage="A number with 2 decimal digits is allowed for the Hours Per Day."
+                                        ToolTip="A number with 2 decimal digits is allowed for the Hours Per Day." Text="*"
+                                        EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
+                                        Type="Currency" ValidationGroup="SingleDay"></asp:CompareValidator>
+                                    <asp:RangeValidator ID="rangeHoursSingleDay" runat="server" ControlToValidate="txtHoursSingleDay"
+                                        ErrorMessage="The Hours Per Day must be greater than 0 and less or equals to 8."
+                                        ToolTip="The Hours Per Day must be greater than 0 and less or equals to 8." Text="*"
+                                        EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" MinimumValue="0.01"
+                                        MaximumValue="8" Type="Double" ValidationGroup="SingleDay"></asp:RangeValidator>
+                                    <AjaxControlToolkit:FilteredTextBoxExtender ID="fteHoursSingleDay" runat="server"
+                                        TargetControlID="txtHoursSingleDay" FilterMode="ValidChars" FilterType="Custom,Numbers"
+                                        ValidChars=".">
+                                    </AjaxControlToolkit:FilteredTextBoxExtender>
                                 </td>
                                 <td width="60%">
                                 </td>
@@ -655,13 +676,20 @@
                             </tr>
                             <tr>
                                 <td colspan="3">
-                                    <asp:Button ID="btnOk_EditSingleDay" Text="OK" runat="server" Style="padding-left: 10px" />
-                                    <asp:Button ID="btnDelete_EditSingleDay" Text="Delete" runat="server" Style="padding-left: 10px" />
-                                    <asp:Button ID="btncancel_EditSingleDay" Text="Cancel" runat="server" Style="padding-left: 10px" />
+                                    <asp:Button ID="btnOkSingleDay" OnClick="btnOkSingleDay_OnClick" Text="OK" ToolTip="OK" ValidationGroup="SingleDay"
+                                        runat="server" Style="padding-left: 10px" />
+                                    <asp:Button ID="btnDeleteSingleDay" OnClick="btnDeleteSingleDay_OnClick" ValidationGroup="SingleDay"
+                                        Text="Delete" ToolTip="Delete" runat="server" Style="padding-left: 10px" />
+                                    <asp:Button ID="btnCancelEditSingleDay" Text="Cancel" ToolTip="Cancel" runat="server" Style="padding-left: 10px" />
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="3" style="height: 10px;">
+                                    <asp:UpdatePanel ID="upnlErrorSingleDay" runat="server" UpdateMode="Conditional">
+                                        <ContentTemplate>
+                                            <asp:ValidationSummary ID="valSumErrorSingleDay" runat="server" ValidationGroup="SingleDay" />
+                                        </ContentTemplate>
+                                    </asp:UpdatePanel>
                                 </td>
                             </tr>
                         </table>
@@ -671,8 +699,7 @@
                         PopupControlID="pnlHolidayAndSubStituteDay" BehaviorID="mpeHolidayAndSubStituteDay"
                         DropShadow="false" />
                     <asp:Panel ID="pnlHolidayAndSubStituteDay" runat="server" BackColor="White" BorderColor="Black"
-                        Style="padding-top: 20px; padding-left: 10px; padding-right: 10px; display: none;"
-                        BorderWidth="2px" min-Height="100px" Width="280px" max-Height="205px">
+                        Style="padding-top: 20px; padding-left: 10px; padding-right: 10px; display: none;">
                         <table class="WholeWidth">
                             <tr>
                                 <td style="width: 40%; text-align: left; height: 20px;">
