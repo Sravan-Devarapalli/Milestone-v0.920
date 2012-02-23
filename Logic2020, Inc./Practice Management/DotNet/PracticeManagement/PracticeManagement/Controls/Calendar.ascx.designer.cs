@@ -625,49 +625,121 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.Label lbdateSingleDay;
         
         /// <summary>
-        /// DropDownList1 control.
+        /// hdnDateSingleDay control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownList1;
+        protected global::System.Web.UI.WebControls.HiddenField hdnDateSingleDay;
         
         /// <summary>
-        /// TextBox1 control.
+        /// ddlTimeTypesSingleDay control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox1;
+        protected global::System.Web.UI.WebControls.DropDownList ddlTimeTypesSingleDay;
         
         /// <summary>
-        /// btnOk_EditSingleDay control.
+        /// reqddlTimeTypesSingleDay control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnOk_EditSingleDay;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqddlTimeTypesSingleDay;
         
         /// <summary>
-        /// btnDelete_EditSingleDay control.
+        /// txtHoursSingleDay control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnDelete_EditSingleDay;
+        protected global::System.Web.UI.WebControls.TextBox txtHoursSingleDay;
         
         /// <summary>
-        /// btncancel_EditSingleDay control.
+        /// reqHoursSingleDay control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btncancel_EditSingleDay;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqHoursSingleDay;
+        
+        /// <summary>
+        /// compHoursSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compHoursSingleDay;
+        
+        /// <summary>
+        /// rangeHoursSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RangeValidator rangeHoursSingleDay;
+        
+        /// <summary>
+        /// fteHoursSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender fteHoursSingleDay;
+        
+        /// <summary>
+        /// btnOkSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnOkSingleDay;
+        
+        /// <summary>
+        /// btnDeleteSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnDeleteSingleDay;
+        
+        /// <summary>
+        /// btnCancelEditSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelEditSingleDay;
+        
+        /// <summary>
+        /// upnlErrorSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upnlErrorSingleDay;
+        
+        /// <summary>
+        /// valSumErrorSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSumErrorSingleDay;
         
         /// <summary>
         /// mpeHolidayAndSubStituteDay control.
