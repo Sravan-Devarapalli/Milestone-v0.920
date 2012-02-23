@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 6-5-2008
--- Updated by:	Anatoliy Lokshin
--- Update Date:	11-20-2008
+-- Updated by:	ThulasiRam.P
+-- Update Date:	02-22-2012
 -- Description:	Lists the days within the specified period
 -- =============================================
 CREATE PROCEDURE [dbo].[CalendarGet]
@@ -16,14 +16,12 @@ AS
 	SET NOCOUNT ON
 
 	DECLARE @DefaultMilestone INT,
-			@TimeTypeId INT
+			@PTOTimeTypeId INT
 	
 	SELECT @DefaultMilestone = DMS.MilestoneId
 	FROM DefaultMilestoneSetting DMS
 
-	SELECT @TimeTypeId = T.TimeTypeId
-	FROM TimeType T
-	WHERE Name = 'PTO'
+	SELECT  @PTOTimeTypeId = dbo.GetPTOTimeTypeId()
 	
 	SELECT cal.Date, cal.DayOff, CAST(NULL AS INT) AS PersonId,
 	       cal.DayOff AS CompanyDayOff,
@@ -47,7 +45,7 @@ AS
 		   cal.HolidayDescription,
 		   cal.RecurringHolidayDate,
 		   pcal.ActualHours,
-		   CONVERT(NVARCHAR(1), ISNULL(pcal.IsFloatingHoliday,0)) AS 'IsFloatingHoliday'
+		   CONVERT(NVARCHAR(1), pcal.IsFloatingHoliday) AS 'IsFloatingHoliday'
 	  FROM dbo.Calendar AS cal
 	       LEFT JOIN dbo.v_PersonCalendar AS pcal ON cal.Date = pcal.Date AND pcal.PersonId = @PersonId
 	       LEFT JOIN dbo.MilestonePerson MP ON MP.PersonId = pcal.PersonId AND MP.MilestoneId = @DefaultMilestone
@@ -63,14 +61,14 @@ AS
 		   cal.HolidayDescription,
 		   cal.RecurringHolidayDate,
 		   pcal.ActualHours,
-		   CONVERT(NVARCHAR(1), ISNULL(pcal.IsFloatingHoliday, 0)) AS 'IsFloatingHoliday'
+		   CONVERT(NVARCHAR(1), pcal.IsFloatingHoliday) AS 'IsFloatingHoliday'
 	  FROM dbo.Calendar AS cal
 	       LEFT JOIN dbo.v_PersonCalendar AS pcal ON cal.Date = pcal.Date AND pcal.PersonId = @PersonId
 	       INNER JOIN dbo.Person AS p ON p.PersonId = @PersonId
 	       LEFT JOIN dbo.MilestonePerson MP ON MP.PersonId = pcal.PersonId AND MP.MilestoneId = @DefaultMilestone
 	 WHERE cal.Date BETWEEN @StartDate AND @EndDate
 	   AND @PersonId IS NOT NULL /*AND @PracticeManagerId IS NOT NULL*/
---      As per 2961 any person can view any persons calender
+--      As per 2961 any person can view any persons calendar
 --	   AND (p.DefaultPractice <> 4 /* Administration */
 --			OR @PersonId = @PracticeManagerId)
 	   AND @PracticeManagerId IS NOT NULL
