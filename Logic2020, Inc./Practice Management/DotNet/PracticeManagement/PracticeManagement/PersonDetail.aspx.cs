@@ -297,7 +297,6 @@ namespace PraticeManagement
             HTMLToPdf(html);
         }
 
-
         public void HTMLToPdf(String HTML)
         {
             var document = new iTextSharp.text.Document();
@@ -1048,8 +1047,6 @@ namespace PraticeManagement
             }
         }
 
-
-
         private void SavePersonsPermissions(Person person, PersonServiceClient serviceClient)
         {
             if (bool.Parse(hfReloadPerms.Value))
@@ -1459,6 +1456,26 @@ namespace PraticeManagement
             }
         }
 
+        protected void cvInactiveStatus_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = true;
+            if (ddlPersonStatus.SelectedValue == 4.ToString() && PrevPersonStatusId == 1)//active to inactive status
+            {
+                //check future timeentries exists or not
+                bool tEsExistsAfterNow = false;
+                DateTime now = DateTime.Now;
+                using (PersonServiceClient serviceClient = new PersonServiceClient())
+                {
+                    tEsExistsAfterNow = serviceClient.CheckPersonTimeEntriesAfterTerminationDate(this.PersonId.Value, now.AddDays(-1));
+                }
+                if (tEsExistsAfterNow)
+                {
+                    cvInactiveStatus.ToolTip = cvInactiveStatus.ErrorMessage = string.Format(lblTimeEntriesExistFormat, now.ToString("MM/dd/yyy"));
+                    args.IsValid = false;
+                }
+            } 
+        }
+
         protected void custTerminationDateTE_ServerValidate(object source, ServerValidateEventArgs args)
         {
             DateTime? terminationDate = (this.dtpTerminationDate.DateValue != DateTime.MinValue) ? new DateTime?(this.dtpTerminationDate.DateValue) : null;
@@ -1672,9 +1689,17 @@ namespace PraticeManagement
 
             if (PersonId.HasValue)
             {
-                using (var serviceClient = new PersonServiceClient())
+
+                if (DateTime.Today >= startDate)
                 {
-                    result = serviceClient.IsPersonHaveActiveStatusDuringThisPeriod(PersonId.Value, startDate, endDate);
+                    using (var serviceClient = new PersonServiceClient())
+                    {
+                        result = serviceClient.IsPersonHaveActiveStatusDuringThisPeriod(PersonId.Value, startDate, endDate);
+                    }
+                }
+                else
+                {
+                    result = false;
                 }
 
                 if (result)
