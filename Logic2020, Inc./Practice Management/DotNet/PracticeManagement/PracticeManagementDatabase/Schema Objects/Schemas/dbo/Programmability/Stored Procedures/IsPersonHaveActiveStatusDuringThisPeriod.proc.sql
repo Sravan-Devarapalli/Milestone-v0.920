@@ -17,37 +17,30 @@ BEGIN
 	SET  @FutureDate = dbo.GetFutureDate()
 	SET  @NOW = dbo.GettingPMTime(GETUTCDATE())
 	
+	SET @IsPersonHasActiveStatus = 0
 	
 	
-	IF (@NOW < @StartDate)
+	IF EXISTS(SELECT 1 	FROM dbo.PersonStatusHistory PSH
+				WHERE PSH.PersonId = @PersonId AND PSH.PersonStatusId = 1 
+						AND ( PSH.StartDate <=  ISNULL(@EndDate,@FutureDate) 
+						AND ISNULL(PSH.EndDate,@FutureDate) >= @StartDate))
 	BEGIN
-			SET @IsPersonHasActiveStatus = 0
+		SET @IsPersonHasActiveStatus  = 1
 	END
-	ELSE
+	ELSE 
 		BEGIN
-			IF EXISTS(SELECT 1 	FROM dbo.PersonStatusHistory PSH
-						WHERE PSH.PersonId = @PersonId AND PSH.PersonStatusId = 1 
-								AND ( PSH.StartDate <=  ISNULL(@EndDate,@FutureDate) 
-								AND ISNULL(PSH.EndDate,@FutureDate) >= @StartDate))
-			BEGIN
-				SET @IsPersonHasActiveStatus  = 1
-			END
-			ELSE 
-				BEGIN
 	   
-					IF ((@StartDate < @MinStartDate) AND 
-					EXISTS(SELECT 1 FROM dbo.PersonStatusHistory PSH WHERE PSH.PersonId = @PersonId AND PSH.PersonStatusId = 1 AND PSH.StartDate = @MinStartDate))
-						BEGIN
-							SET @IsPersonHasActiveStatus  = 1
-						END
-					ELSE
-						BEGIN
-							SET @IsPersonHasActiveStatus = 0
-						END
+			IF ((@StartDate < @MinStartDate) AND 
+			EXISTS(SELECT 1 FROM dbo.PersonStatusHistory PSH WHERE PSH.PersonId = @PersonId AND PSH.PersonStatusId = 1 AND PSH.StartDate = @MinStartDate))
+				BEGIN
+					SET @IsPersonHasActiveStatus  = 1
+				END
+			ELSE
+				BEGIN
+					SET @IsPersonHasActiveStatus = 0
 				END
 		END
-	
-	
+		
 	SELECT @IsPersonHasActiveStatus
 
 END
