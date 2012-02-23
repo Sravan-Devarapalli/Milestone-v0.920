@@ -562,6 +562,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         bool IsPersonHaveActiveStatusDuringThisPeriod(int personId, DateTime startDate,DateTime? endDate);
+
+        [OperationContract]
+        List<Person> PersonsListHavingActiveStatusDuringThisPeriod(DateTime startDate, DateTime endDate);
     }
 }
 
