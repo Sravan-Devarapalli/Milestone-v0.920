@@ -494,6 +494,9 @@
                                             ErrorMessage="Only administrator can set a status to Active or Terminated." ToolTip="Only administrator can set a status to Active or Terminated."
                                             ValidationGroup="Person" Text="*" ValidateEmptyText="false" EnableClientScript="false"
                                             SetFocusOnError="true" Display="Dynamic" OnServerValidate="custPersonStatus_ServerValidate"></asp:CustomValidator>
+                                        <asp:CustomValidator ID="cvInactiveStatus" runat="server" ErrorMessage="" ToolTip=""
+                                            Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
+                                            OnServerValidate="cvInactiveStatus_ServerValidate"></asp:CustomValidator>
                                     </td>
                                 </tr>
                                 <tr>
