@@ -710,6 +710,7 @@
                 public const string SetRecurringHoliday = "dbo.SetRecurringHoliday";
                 public const string GetRecurringHolidaysInWeek = "dbo.GetRecurringHolidaysInWeek";
                 public const string DeleteSubstituteDayProcedure = "dbo.DeleteSubstituteDay";
+                public const string GetTimeOffSeriesPeriod = "dbo.GetTimeOffSeriesPeriod";
             }
 
             public class ProjectGroup
