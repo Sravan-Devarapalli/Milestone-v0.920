@@ -2,67 +2,6 @@
     Inherits="PraticeManagement.Controls.MonthCalendar" %>
 <asp:UpdatePanel ID="pnlMonth" runat="server">
     <ContentTemplate>
-        <script type="text/javascript" language="javascript">
-            function ClickSaveDay(btnOk) {
-                var noteText = $get(btnOk.attributes['TextID'].value);
-                var popupExtendar = $find(btnOk.attributes['ExtendarId'].value);
-                var actualHoursText = $get(btnOk.attributes['TxtActualHoursID'].value);
-                var errorText = $get(btnOk.attributes['ErrorMessageID'].value);
-                var rbFloating = $get(btnOk.attributes['RbFloatingID'].value);
-                
-                if (actualHoursText == null && noteText != '') {
-                    var noteTextStr = noteText.value.toString();
-                    if (noteTextStr.length > 0) {
-                        SaveDetails(popupExtendar, btnOk);
-                    }
-                    else {
-                        errorText.innerHTML = '* Please Enter Holiday Description.';
-                    }
-                }
-                else {
-                    var hdnDayOff = $get(btnOk.attributes['HiddenDayOffID'].value);
-                    
-                    if (rbFloating.checked) {
-                        hdnDayOff.value = 'false';//For Updating the Floating Holiday details.
-                        SaveDetails(popupExtendar, btnOk);
-                    }
-                    else {
-                        var hoursTextStr = actualHoursText.value.toString();
-                        if (hoursTextStr.length > 0) {
-                            var hours = parseFloat(hoursTextStr);
-                            if (hours >= 0.0 && hours <= 8.0 && hours == hoursTextStr) {
-                                hdnDayOff.value = 'false'; //For Updating the PTO details.
-                                SaveDetails( popupExtendar, btnOk );
-                            }
-                            else {
-                                errorText.innerHTML = '* Hours should be real and 0.00-8.00.';
-                            }
-                        }
-                        else {
-                            errorText.innerHTML = '* Please Enter Hours';
-                        }
-                    }
-                }
-                errorText.style.display = 'block';
-                return false;
-            }
-
-            function SaveDetails(popupExtendar, btnOk) {
-                btnSave = $get(btnOk.attributes['SaveDayButtonID'].value);
-                popupExtendar.hide();
-                btnSave.click();
-            }
-
-            function disableActualHours(txtBox, isFloatingHoliday) {
-                var item = txtBox;
-                if (isFloatingHoliday == 'true') {
-                    item.disabled = 'disabled';
-                }
-                else {
-                    item.disabled = '';
-                }
-            }
-        </script>
         <asp:DataList ID="lstCalendar" runat="server" RepeatColumns="7" RepeatDirection="Horizontal">
             <HeaderTemplate>
                 </td> </tr>
@@ -116,8 +55,6 @@
                         IsWeekEnd='<%# GetIsWeekend(((DateTime)Eval("Date"))) %>' Enabled='<%# NeedToEnable((DateTime)Eval("Date")) %>'
                         CompanyDayOff='<%# (bool)Eval("CompanyDayOff") ? "true" : "false" %>' ActualHours='<%# (double?)Eval("ActualHours") %>' IsFloatingHoliday='<%# (bool)Eval("IsFloatingHoliday") %>'></asp:LinkButton>
                     <asp:Label ID="lblDay" runat="server" Text='<%# Eval("Date.Day") %>' Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year &&  GetIsReadOnly((bool)Eval("ReadOnly"), (bool)Eval("DayOff"), (bool)Eval("CompanyDayOff"), (DateTime)Eval("Date")) %>'></asp:Label>
-                    <%--<asp:Label ID="lblDayOut" runat="server" Text='<%# Eval("Date.Day") %>'
-						Visible='<%# ((DateTime)Eval("Date")).Month != Month || ((DateTime)Eval("Date")).Year != Year %>'></asp:Label>--%>
                 </asp:Panel>
             </ItemTemplate>
         </asp:DataList>
@@ -177,12 +114,5 @@
         </asp:Panel>
     </ContentTemplate>
 </asp:UpdatePanel>
-<%--<AjaxControlToolkit:UpdatePanelAnimationExtender ID="pnlMonth_UpdatePanelAnimationExtender" 
-	runat="server" Enabled="True" TargetControlID="pnlMonth">
-	<Animations>
-		<OnUpdated>
-			<ScriptAction Script="hideInProcessImage($get('divWait1'));" />
-		</OnUpdated>
-	</Animations>
-</AjaxControlToolkit:UpdatePanelAnimationExtender>--%>
+
 
