@@ -3375,6 +3375,26 @@ namespace DataAccess
                 return ((bool)command.ExecuteScalar());
             }
         }
+
+        public static List<Person> PersonsListHavingActiveStatusDuringThisPeriod(DateTime startDate,DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonsListHavingActiveStatusDuringThisPeriodProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(StartDateParam, startDate);
+                command.Parameters.AddWithValue(EndDateParam, endDate);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<Person>();
+                    ReadPersonsShort(reader, result);
+                    return result;
+                }
+            }
+        }
     }
 }
 
