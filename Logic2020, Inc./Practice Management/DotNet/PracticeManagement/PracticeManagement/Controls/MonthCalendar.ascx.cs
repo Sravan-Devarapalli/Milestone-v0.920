@@ -30,7 +30,7 @@ namespace PraticeManagement.Controls
         #region Properties
 
         /// <summary>
-        /// Gest or sets a year to be displayed.
+        /// Get or sets a year to be displayed.
         /// </summary>
         public int Year
         {
@@ -107,25 +107,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public bool GetIsReadOnly(bool DateLevelReadonly)
-        {
-            if (IsPersonCalendar)
-            {
-                if (IsReadOnly)
-                {
-                    return true;
-                }
-                else
-                {
-                    return DateLevelReadonly;
-                }
-            }
-            else
-            {
-                return DateLevelReadonly;
-
-            }
-        }
         public bool IsPersonCalendar
         {
             get
@@ -256,7 +237,7 @@ namespace PraticeManagement.Controls
         {
             string toolTip = holidayDescription;
 
-            if(string.IsNullOrEmpty(holidayDescription) && IsPersonCalendar)
+            if (string.IsNullOrEmpty(holidayDescription) && IsPersonCalendar)
             {
                 toolTip = isFloatingHoliday ? FloatingHoliday : (personDayOff && !comapnyDayOff && actualHours.HasValue ? string.Format(PTOToolTipFormat, actualHours) : string.Empty);
             }
@@ -273,6 +254,39 @@ namespace PraticeManagement.Controls
                 return result;
             }
             return true;
+        }
+
+        public bool GetIsReadOnly(bool DateLevelReadonly, bool dayOff, bool companyDayOff, DateTime date)
+        {
+            if (IsPersonCalendar)
+            {
+                bool isReadOnly = dayOff
+                    ? (companyDayOff
+                        ? (date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday ? true : false)
+                        : (date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday ? true : false)
+                      )
+                    : (companyDayOff
+                        ? (date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday ? false : false)
+                        : (date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday ? false : true)
+                      );
+
+                if (!isReadOnly)
+                {
+                    if (IsReadOnly)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return DateLevelReadonly;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                return DateLevelReadonly;
+            }
         }
 
         #endregion
