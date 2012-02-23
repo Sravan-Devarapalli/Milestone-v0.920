@@ -362,7 +362,7 @@
     <EmbeddedResource Include="Controls\Generic\DuplicateOptionsRemove\DupilcateOptionsRemoveExtender.js" />
     <EmbeddedResource Include="Controls\Generic\EnableDisableExtender\EnableDisableExtender.js" />
     <EmbeddedResource Include="Controls\Generic\DirtyStateExtender\DirtyStateExtender.js" />
-    <Content Include="Controls\Generic\EnableDisableExtForAdminSection\EnableDisableExtForAdminSection.js" />
+    <EmbeddedResource Include="Controls\Generic\EnableDisableExtForAdminSection\EnableDisableExtForAdminSection.js" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
