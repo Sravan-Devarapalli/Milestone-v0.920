@@ -6,6 +6,7 @@
 <%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc3" %>
+<%@ Register Src="~/Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc" %>
 <script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
 <script type="text/javascript">
     var updatingCalendarContainer = null;
@@ -114,9 +115,18 @@
             }
         }
         else {
-            if (dayLink.attributes['CompanyDayOff'].value == 'false' && dayLink.attributes['IsWeekEnd'].value == 'false' && dayLink.attributes['HolidayDescription'].value == '') {
+            var date = new Date(hdnDate.value);
+            var hdnHolidayDate = document.getElementById('<%= hdnHolidayDate.ClientID %>');
 
-                var date = new Date(hdnDate.value);
+            if (dayLink.attributes['IsFloatingHoliday'].value.toLowerCase() == 'true') {
+                var lblDeleteSubstituteDay = document.getElementById('<%= lblDeleteSubstituteDay.ClientID %>');
+                lblDeleteSubstituteDay.innerHTML = hdnHolidayDate.value = date.format('MM/dd/yyyy');
+                var mpeDeleteSubstituteDay = $find('mpeDeleteSubstituteDay');
+                mpeDeleteSubstituteDay.show();
+            }
+            else if (dayLink.attributes['CompanyDayOff'].value == 'false' && dayLink.attributes['IsWeekEnd'].value == 'false' && dayLink.attributes['HolidayDescription'].value == '') {
+
+
                 var popupExtendar = $find(peBehaviourId);
                 var OkButton = $get(btnOkID);
                 var errorMessage = $get(ErrorMessageID);
@@ -140,7 +150,7 @@
                 else {
                     rbPTO.checked = true;
                 }
-                txtActualHours.value = (dayLink.attributes['DayOff'].value == 'false' || rbFloatingHoliday.checked ) ? '8.00' : parseFloat( dayLink.attributes['ActualHours'].value.toString() );
+                txtActualHours.value = (dayLink.attributes['DayOff'].value == 'false' || rbFloatingHoliday.checked) ? '8.00' : parseFloat(dayLink.attributes['ActualHours'].value.toString());
                 txtActualHours.disabled = rbFloatingHoliday.checked ? 'disabled' : '';
                 lblDateDescription.innerHTML = date.format('MM/dd/yyyy');
                 errorMessage.style.display = 'none';
@@ -149,8 +159,18 @@
                 chkMakeRecurringHoliday.style.display = 'none';
                 popupExtendar.show();
             }
-            else {
-                $get(saveDayButtonID).click();
+            else if (hndDayOff.value == 'true' && dayLink.attributes['CompanyDayOff'].value == 'true') {
+
+                var lblHolidayDate = document.getElementById('<%= lblHolidayDate.ClientID %>');
+                var lblHolidayName = document.getElementById('<%= lblHolidayName.ClientID %>');
+
+                lblHolidayDate.innerHTML = hdnHolidayDate.value = date.format('MM/dd/yyyy');
+                lblHolidayName.innerHTML = dayLink.attributes['HolidayDescription'].value;
+                var dpSubstituteDay = document.getElementById('<%= (dpSubstituteDay.FindControl("txtDate") as TextBox).ClientID %>');
+                dpSubstituteDay.value = '';
+
+                var mpeHolidayAndSubStituteDay = $find('mpeHolidayAndSubStituteDay');
+                mpeHolidayAndSubStituteDay.show();
             }
         }
         return false;
@@ -242,13 +262,17 @@
                                     </Animations>
                                 </AjaxControlToolkit:UpdatePanelAnimationExtender>
                             </td>
+                            <td style="text-align: right; vertical-align: middle; width: 10%">
+                                <asp:Button ID="btnAddTimeOff" runat="server" Text="Add Time Off" />
+                            </td>
                         </tr>
-                        <tr >
+                        <tr>
                             <td colspan="2" align="center" style="padding-top: 10px; padding-bottom: 10px;">
-                            <div id="trAlert" runat="server">
-                                <asp:Label ID="lbAlert1" runat="server" Text="Alert :" CssClass="AlertColor"></asp:Label>
-                                <asp:Label ID="lbAlert2" runat="server" Text=" You are viewing this calendar as READ-ONLY.  If you believe you should have permissions to make changes to this calendar, please "></asp:Label>
-                                <asp:HyperLink ID="contactSupportMailToLink" runat="server" Text="contact support" ForeColor="#0898E6"></asp:HyperLink>
+                                <div id="trAlert" runat="server">
+                                    <asp:Label ID="lbAlert1" runat="server" Text="Alert :" CssClass="AlertColor"></asp:Label>
+                                    <asp:Label ID="lbAlert2" runat="server" Text=" You are viewing this calendar as READ-ONLY.  If you believe you should have permissions to make changes to this calendar, please "></asp:Label>
+                                    <asp:HyperLink ID="contactSupportMailToLink" runat="server" Text="contact support"
+                                        ForeColor="#0898E6"></asp:HyperLink>
                                 </div>
                             </td>
                         </tr>
@@ -386,6 +410,167 @@
                             </td>
                         </tr>
                     </table>
+                    <AjaxControlToolkit:ModalPopupExtender ID="mpeAddTimeOffPopup" runat="server" TargetControlID="btnAddTimeOff"
+                        BackgroundCssClass="modalBackground" PopupControlID="pnlAddTimeOffPopup" DropShadow="false"
+                        CancelControlID="btncancel" />
+                    <asp:Panel ID="pnlAddTimeOffPopup" runat="server" BackColor="White" BorderColor="Black"
+                        CssClass="ConfirmBoxClassError" Style="display: none;" BorderWidth="2px" Height="250px"
+                        Width="320px">
+                        <table width="100%" class="calendarPopup">
+                            <tr>
+                                <td colspan="3" style="height: 20px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 30%; text-align: right; font-weight: bold; padding-right: 5px;">
+                                    Start Date:
+                                </td>
+                                <td style="width: 40%; text-align: left; padding-left: 5px;">
+                                    <uc:DatePicker ID="dtpStartDate" runat="server" TextBoxWidth="75px" />
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 30%; text-align: right; font-weight: bold; padding-right: 5px;">
+                                    End Date:
+                                </td>
+                                <td style="width: 40%; text-align: left; padding-left: 5px;">
+                                    <uc:DatePicker ID="dtpEndDate" runat="server" TextBoxWidth="75px" />
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding-left: 20px; text-align: left;">
+                                    1. Select type of time to be entered:
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding-left: 40px; text-align: left;">
+                                    <asp:DropDownList ID="ddlTimeTypes" runat="server" Style="width: 70%;">
+                                    </asp:DropDownList>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="height: 10px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding-left: 20px; text-align: left;">
+                                    2. Enter the number of hours (per day, if applicable):
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="10%" style="padding-left: 10px; text-align: right; padding-right: 5px;">
+                                    Hours:
+                                </td>
+                                <td width="10%" style="padding-left: 5px; text-align: left;">
+                                    <asp:TextBox ID="txthours" runat="server" Style="width: 50px;"></asp:TextBox>
+                                </td>
+                                <td width="80%">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="height: 10px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <asp:Button ID="btnok" Text="OK" runat="server" Style="padding-left: 10px" />
+                                    <asp:Button ID="btbnDelete" Text="Delete" runat="server" Style="padding-left: 10px" />
+                                    <asp:Button ID="btncancel" Text="cancel" runat="server" Style="padding-left: 10px" />
+                                </td>
+                            </tr>
+                        </table>
+                    </asp:Panel>
+                    <asp:HiddenField ID="hdnHolidayDate" runat="server" />
+                    <asp:HiddenField ID="HiddenField1" runat="server" />
+                    <AjaxControlToolkit:ModalPopupExtender ID="mpeHolidayAndSubStituteDay" runat="server"
+                        TargetControlID="hdnHolidayDate" CancelControlID="btnSubstituteDayCancel" BackgroundCssClass="modalBackground"
+                        PopupControlID="pnlHolidayAndSubStituteDay" BehaviorID="mpeHolidayAndSubStituteDay"
+                        DropShadow="false" />
+                    <asp:Panel ID="pnlHolidayAndSubStituteDay" runat="server" BackColor="White" BorderColor="Black"
+                        Style="padding-top: 20px; padding-left: 10px; padding-right: 10px; min-width: 250px;
+                        max-width: 700px; min-height: 60px; display: none;" BorderWidth="2px">
+                        <table class="WholeWidth">
+                            <tr>
+                                <td>
+                                    You have selected :
+                                </td>
+                                <td>
+                                    <asp:Label ID="lblHolidayDate" Font-Bold="true" runat="server"></asp:Label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                </td>
+                                <td>
+                                    <asp:Label ID="lblHolidayName" Font-Bold="true" runat="server"></asp:Label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    Please select substitute day for this holiday :
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" colspan="2">
+                                    <uc:DatePicker ID="dpSubstituteDay" runat="server" OnClientChange="return true;"
+                                        ValidationGroup="Substituteday" AutoPostBack="false" TextBoxWidth="90px" />
+                                    <asp:CustomValidator ID="cvSubstituteDay" EnableClientScript="false" EnableViewState="false"
+                                        Text="*" ValidateEmptyText="true" ToolTip="Selected date is not a Working day.Please select any Working day."
+                                        ErrorMessage="Selected date is not a Working day.Please select any Working day."
+                                        ValidationGroup="Substituteday" runat="server" OnServerValidate="cvSubstituteDay_ServerValidate"></asp:CustomValidator>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="padding: 10px 0px 10px 0px;">
+                                    <asp:Button ID="btnSubstituteDayOK" OnClick="btnSubstituteDayOK_Click" runat="server"
+                                        ValidationGroup="Substituteday" ToolTip="OK" Text="OK" />
+                                    &nbsp; &nbsp;
+                                    <asp:Button ID="btnSubstituteDayCancel" runat="server" Text="Cancel" ToolTip="Cancel" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <asp:UpdatePanel ID="upnlValsummary" runat="server" UpdateMode="Conditional">
+                                        <ContentTemplate>
+                                            <asp:ValidationSummary ID="valSumsubstituteday" runat="server" ValidationGroup="Substituteday" />
+                                        </ContentTemplate>
+                                    </asp:UpdatePanel>
+                                </td>
+                            </tr>
+                        </table>
+                    </asp:Panel>
+                    <AjaxControlToolkit:ModalPopupExtender ID="mpeDeleteSubstituteDay" runat="server"
+                        TargetControlID="HiddenField1" CancelControlID="btnCancelSubstituteDay" BackgroundCssClass="modalBackground"
+                        PopupControlID="pnlDeleteSubstituteDay" BehaviorID="mpeDeleteSubstituteDay" DropShadow="false" />
+                    <asp:Panel ID="pnlDeleteSubstituteDay" runat="server" BackColor="White" BorderColor="Black"
+                        Style="padding-top: 20px; padding-left: 10px; padding-right: 10px; min-width: 250px;
+                        max-width: 700px; min-height: 60px; display: none;" BorderWidth="2px">
+                        <table class="WholeWidth">
+                            <tr>
+                                <td colspan="2">
+                                    Date :
+                                    <asp:Label ID="lblDeleteSubstituteDay" Font-Bold="true" runat="server"></asp:Label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    Work type selected : Holiday
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="padding: 10px 0px 10px 0px;">
+                                    <asp:Button ID="btnDeleteSubstituteDay" OnClick="btnDeleteSubstituteDay_Click" runat="server"
+                                        Text="Delete" ToolTip="Delete" />
+                                    &nbsp; &nbsp;
+                                    <asp:Button ID="btnCancelSubstituteDay" runat="server" Text="Cancel" ToolTip="Cancel" />
+                                </td>
+                            </tr>
+                        </table>
+                    </asp:Panel>
                 </ContentTemplate>
                 <Triggers>
                     <asp:AsyncPostBackTrigger ControlID="btnPrevYear" EventName="Click" />
