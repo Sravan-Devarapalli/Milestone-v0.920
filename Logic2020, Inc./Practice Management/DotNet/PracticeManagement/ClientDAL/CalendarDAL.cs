@@ -416,6 +416,9 @@ namespace DataAccess
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
 
+                    command.Parameters.AddWithValue(Constants.ParameterNames.DateParam, date);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
+
                     connection.Open();
 
                     using (var reader = command.ExecuteReader())
