@@ -96,9 +96,10 @@ BEGIN
 		SELECT C.Date
 		FROM dbo.Calendar C
 		LEFT JOIN dbo.PersonCalendar PC ON PC.PersonId = @PersonId AND C.Date = PC.Date
-		WHERE C.Date BETWEEN @StartDate AND @EndDate 
-			AND DATEPART(DW, C.Date) NOT IN (1, 7)
-			AND (C.DayOff = 1  OR (PC.DayOff = 1 AND PC.TimeTypeId = @HolidayTimeTypeId))
+		WHERE C.Date BETWEEN @StartDate AND @EndDate
+			AND (C.DayOff = 0  
+				AND (PC.Date IS NULL OR ( PC.DATE IS NOT NULL AND PC.DayOff = 1 AND PC.TimeTypeId <> @HolidayTimeTypeId))
+				)
 
 		--Insert new Offs.
 		INSERT INTO PersonCalendar(PersonId, Date, DayOff, TimeTypeId, ActualHours, Description, IsSeries, IsFromTimeEntry)
@@ -111,7 +112,8 @@ BEGIN
 		UPDATE PC
 			SET TimeTypeId = @TimeTypeId,
 				ActualHours = @ActualHours,
-				IsSeries = @IsSeries
+				IsSeries = @IsSeries,
+				Description = @Description
 		FROM PersonCalendar PC
 		JOIN @DaysExceptHolidays DEH ON PC.PersonId = @PersonId AND PC.Date = DEH.Date AND (PC.TimeTypeId <> @TimeTypeId OR PC.ActualHours <> @ActualHours)
 
@@ -127,7 +129,7 @@ BEGIN
 													OR CD.date = DATEADD(DD, -1, PC.date)
 												)
 			GROUP BY PC.PersonId, PC.Date
-			HAVING COUNT(CD.Date) < 2
+			HAVING COUNT(CD.Date) < 1
 		)
 
 		--The days having IsSeries =1 and no consecutive days with IsSeries = 1 must be removed from series.
@@ -234,7 +236,6 @@ BEGIN
 																														ELSE pay.EndDate - 1
 																														END)
 	INNER JOIN dbo.ChargeCode CC ON CC.TimeTypeId = PC.TimeTypeId
-	INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId
 	LEFT JOIN dbo.TimeEntry TE ON TE.PersonId = P.PersonId AND TE.ChargeCodeId = CC.Id AND TE.ChargeCodeDate = PC.Date
 	WHERE  TE.TimeEntryId IS NULL
 
@@ -262,7 +263,7 @@ BEGIN
 					AND PC.Date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
 																														ELSE pay.EndDate - 1
 																														END)
-	INNER JOIN dbo.ChargeCode CC ON PC.Date = @StartDate AND PC.PersonId = @PersonId AND CC.TimeTypeId = @TimeTypeId AND PC.TimeTypeId = CC.TimeTypeId
+	INNER JOIN dbo.ChargeCode CC ON PC.TimeTypeId = CC.TimeTypeId
 	INNER JOIN dbo.TimeEntry TE ON TE.PersonId = PC.PersonId AND TE.ChargeCodeId = CC.Id AND TE.ChargeCodeDate = PC.Date
 	LEFT JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId
 	WHERE TEH.TimeEntryId IS NULL
