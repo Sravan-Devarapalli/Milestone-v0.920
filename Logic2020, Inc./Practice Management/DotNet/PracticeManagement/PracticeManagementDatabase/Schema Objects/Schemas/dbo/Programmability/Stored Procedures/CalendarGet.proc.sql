@@ -2,7 +2,7 @@
 -- Author:		Anatoliy Lokshin
 -- Create date: 6-5-2008
 -- Updated by:	ThulasiRam.P
--- Update Date:	02-22-2012
+-- Update Date:	02-24-2012
 -- Description:	Lists the days within the specified period
 -- =============================================
 CREATE PROCEDURE [dbo].[CalendarGet]
@@ -31,7 +31,8 @@ AS
 		   cal.HolidayDescription,
 		   cal.RecurringHolidayDate,
 		   null 'ActualHours',
-		   '0' 'IsFloatingHoliday'
+		   '0' 'IsFloatingHoliday',
+		   NULL AS TimeTypeId
 	  FROM dbo.Calendar AS cal
 	 WHERE cal.Date BETWEEN @StartDate AND @EndDate
 	   AND @PersonId IS NULL
@@ -42,10 +43,13 @@ AS
 	       CAST(CASE WHEN pcal.Date IS NULL THEN 1 ELSE 0 END AS BIT) AS [ReadOnly],
 		   cal.IsRecurring,
 		   cal.RecurringHolidayId,
-		   cal.HolidayDescription,
+		   (CASE WHEN cal.DayOff = 1 THEN cal.HolidayDescription
+		         WHEN pcal.DayOff = 1 THEN pcal.Description 
+				 ELSE '' END ) AS HolidayDescription,
 		   cal.RecurringHolidayDate,
 		   pcal.ActualHours,
-		   CONVERT(NVARCHAR(1), pcal.IsFloatingHoliday) AS 'IsFloatingHoliday'
+		   CONVERT(NVARCHAR(1), pcal.IsFloatingHoliday) AS 'IsFloatingHoliday',
+		   pcal.TimeTypeId
 	  FROM dbo.Calendar AS cal
 	       LEFT JOIN dbo.v_PersonCalendar AS pcal ON cal.Date = pcal.Date AND pcal.PersonId = @PersonId
 	       LEFT JOIN dbo.MilestonePerson MP ON MP.PersonId = pcal.PersonId AND MP.MilestoneId = @DefaultMilestone
@@ -58,7 +62,9 @@ AS
 	       CAST(CASE WHEN pcal.Date IS NULL OR CONVERT(DATE, pcal.Date) < CONVERT(DATE, dbo.GettingPMTime(GETUTCDATE())) THEN 1 ELSE 0 END AS BIT) AS [ReadOnly],
 		   cal.IsRecurring,
 		   cal.RecurringHolidayId,
-		   cal.HolidayDescription,
+		    (CASE WHEN cal.DayOff = 1 THEN cal.HolidayDescription
+		         WHEN pcal.DayOff = 1 THEN pcal.Description 
+				 ELSE '' END ) AS HolidayDescription,
 		   cal.RecurringHolidayDate,
 		   pcal.ActualHours,
 		   CONVERT(NVARCHAR(1), pcal.IsFloatingHoliday) AS 'IsFloatingHoliday'
