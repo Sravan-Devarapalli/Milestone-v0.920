@@ -115,6 +115,9 @@ namespace DataTransferObjects
             get;
             set;
         }
+
+        [DataMember]
+        public int? TimeTypeId { get; set; }
         
 
         #endregion
@@ -143,5 +146,7 @@ namespace DataTransferObjects
         {
             return new CalendarItem { Date = d };
         }
+
+       
     }
 }
