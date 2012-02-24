@@ -11,6 +11,7 @@ using System.ServiceModel;
 using System.Web.Security;
 using PraticeManagement.PersonService;
 using PraticeManagement.Utils;
+using AjaxControlToolkit;
 
 namespace PraticeManagement.Controls
 {
@@ -96,6 +97,122 @@ namespace PraticeManagement.Controls
             set
             {
                 ViewState[ViewStatePreviousRecurringList] = value;
+            }
+        }
+
+        public UpdatePanel pnlBodyUpdatePanel
+        {
+            get
+            {
+                return pnlBody;
+            }
+        }
+
+        public ModalPopupExtender mpeSelectEditCondtionPopUp
+        {
+            get
+            {
+                return mpeSelectEditCondtion;
+            }
+        }
+
+        public ModalPopupExtender mpeAddTimeOffPopup
+        {
+            get
+            {
+                return mpeAddTimeOff;
+            }
+        }
+
+        public ModalPopupExtender mpeEditSingleDayPopUp
+        {
+            get
+            {
+                return mpeEditSingleDay;
+            }
+        }
+
+        public DatePicker dtpStartDateTimeOffDatePicker
+        {
+            get
+            {
+                return dtpStartDateTimeOff;
+            }
+        }
+        public DatePicker dtpEndDateTimeOffDatePicker
+        {
+            get
+            {
+                return dtpEndDateTimeOff;
+            }
+        }
+
+        public DropDownList ddlTimeTypesTimeOffDropDown
+        {
+            get
+            {
+                return ddlTimeTypesTimeOff;
+            }
+        }
+        public TextBox txthoursTimeOffTextBox
+        {
+            get
+            {
+                return txthoursTimeOff;
+            }
+        }
+
+        public Label lbdateSingleDayLabel
+        {
+            get
+            {
+                return lbdateSingleDay;
+            }
+        }
+
+        public DropDownList ddlTimeTypesSingleDayDropDown
+        {
+            get
+            {
+                return ddlTimeTypesSingleDay;
+            }
+        }
+
+        public TextBox txtHoursSingleDayTextBox
+        {
+            get
+            {
+                return txtHoursSingleDay;
+            }
+        }
+        public HiddenField hdnDateSingleDayHiddenField
+        {
+            get
+            {
+                return hdnDateSingleDay;
+            }
+        }
+        public Label lbDateLabel
+        {
+            get
+            {
+                return lbDate;
+            }
+        }
+
+        public RadioButton rbEditSingleDayRadioButton
+        {
+            get
+            {
+                return rbEditSingleDay;
+            }
+        }
+
+        public RadioButton rbEditSeriesRadioButton
+        {
+            get
+            {
+                return rbEditSingleDay;
             }
         }
 
