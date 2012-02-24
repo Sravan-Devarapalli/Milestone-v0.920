@@ -418,22 +418,22 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.Button btncancel_EditCondtion;
         
         /// <summary>
-        /// mpeAddTimeOffPopup control.
+        /// mpeAddTimeOff control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.ModalPopupExtender mpeAddTimeOffPopup;
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeAddTimeOff;
         
         /// <summary>
-        /// pnlAddTimeOffPopup control.
+        /// pnlAddTimeOff control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlAddTimeOffPopup;
+        protected global::System.Web.UI.WebControls.Panel pnlAddTimeOff;
         
         /// <summary>
         /// dtpStartDateTimeOff control.
