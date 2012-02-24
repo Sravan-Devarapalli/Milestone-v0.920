@@ -3997,6 +3997,9 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetTimeOffSeriesPeriod.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_PersonCalendar_SubstituteDate.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Schema Comparisons\v0.850.dbschema">
