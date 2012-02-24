@@ -5,7 +5,7 @@
 	@DayOff			BIT,
 	@PersonId		INT,
 	@UserLogin		NVARCHAR(255),
-	@AcutalHours	REAL,
+	@ActualHours	REAL,
 	@TimeTypeId		INT
 )
 AS
@@ -102,7 +102,7 @@ BEGIN
 
 		--Insert new Offs.
 		INSERT INTO PersonCalendar(PersonId, Date, DayOff, TimeTypeId, ActualHours, Description, IsSeries, IsFromTimeEntry)
-		SELECT @PersonId, DEH.Date, @DayOff, @TimeTypeId, @AcutalHours, @Description, @IsSeries, 0
+		SELECT @PersonId, DEH.Date, @DayOff, @TimeTypeId, @ActualHours, @Description, @IsSeries, 0
 		FROM @DaysExceptHolidays DEH
 		LEFT JOIN PersonCalendar PC ON PC.Date = DEH.Date AND PC.PersonId = @PersonId
 		WHERE PC.Date IS NULL
@@ -110,10 +110,10 @@ BEGIN
 		--Update old Offs.
 		UPDATE PC
 			SET TimeTypeId = @TimeTypeId,
-				ActualHours = @AcutalHours,
+				ActualHours = @ActualHours,
 				IsSeries = @IsSeries
 		FROM PersonCalendar PC
-		JOIN @DaysExceptHolidays DEH ON PC.PersonId = @PersonId AND PC.Date = DEH.Date AND (PC.TimeTypeId <> @TimeTypeId OR PC.ActualHours <> @AcutalHours)
+		JOIN @DaysExceptHolidays DEH ON PC.PersonId = @PersonId AND PC.Date = DEH.Date AND (PC.TimeTypeId <> @TimeTypeId OR PC.ActualHours <> @ActualHours)
 
 		;WITH ExcludeDates AS
 		(
@@ -249,7 +249,7 @@ BEGIN
 						)
 	SELECT TE.TimeEntryId,
 			CASE PC.TimeTypeId WHEN @HolidayTimeTypeId THEN 8
-								ELSE @AcutalHours END,
+								ELSE @ActualHours END,
 			@CurrentPMTime,
 			@CurrentPMTime,
 			@ModifiedBy,
