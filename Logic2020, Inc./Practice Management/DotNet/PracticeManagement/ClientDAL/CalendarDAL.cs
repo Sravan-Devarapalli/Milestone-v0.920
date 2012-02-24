@@ -423,18 +423,15 @@ namespace DataAccess
 
                     using (var reader = command.ExecuteReader())
                     {
-                        var keyval = new KeyValuePair<DateTime, DateTime>();
-
-                        ReadGetTimeOffSeriesPeriod(reader, keyval);
-
-                        return keyval;
+                        return ReadGetTimeOffSeriesPeriod(reader);
                     }
                 }
             }
         }
 
-        private static void ReadGetTimeOffSeriesPeriod(SqlDataReader reader, KeyValuePair<DateTime, DateTime> keyval)
+        private static KeyValuePair<DateTime, DateTime> ReadGetTimeOffSeriesPeriod(SqlDataReader reader)
         {
+            KeyValuePair<DateTime, DateTime> keyval = new KeyValuePair<DateTime, DateTime>();
             if (reader.HasRows)
             {
 
@@ -445,7 +442,8 @@ namespace DataAccess
                 {
                     keyval = new KeyValuePair<DateTime, DateTime>(reader.GetDateTime(startDateIndex), reader.GetDateTime(endDateIndex));
                 }
-            }
+            } 
+            return keyval;
         }
 
 
