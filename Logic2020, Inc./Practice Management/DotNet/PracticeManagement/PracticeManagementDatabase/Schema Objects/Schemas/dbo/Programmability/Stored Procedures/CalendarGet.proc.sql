@@ -15,14 +15,12 @@ CREATE PROCEDURE [dbo].[CalendarGet]
 AS
 	SET NOCOUNT ON
 
-	DECLARE @DefaultMilestone INT,
-			@PTOTimeTypeId INT
+	DECLARE @DefaultMilestone INT
+	
 	
 	SELECT @DefaultMilestone = DMS.MilestoneId
 	FROM DefaultMilestoneSetting DMS
 
-	SELECT  @PTOTimeTypeId = dbo.GetPTOTimeTypeId()
-	
 	SELECT cal.Date, cal.DayOff, CAST(NULL AS INT) AS PersonId,
 	       cal.DayOff AS CompanyDayOff,
 	       CAST(0 AS BIT) AS [ReadOnly],
@@ -67,7 +65,8 @@ AS
 				 ELSE '' END ) AS HolidayDescription,
 		   cal.RecurringHolidayDate,
 		   pcal.ActualHours,
-		   CONVERT(NVARCHAR(1), pcal.IsFloatingHoliday) AS 'IsFloatingHoliday'
+		   CONVERT(NVARCHAR(1), pcal.IsFloatingHoliday) AS 'IsFloatingHoliday',
+		   pcal.TimeTypeId
 	  FROM dbo.Calendar AS cal
 	       LEFT JOIN dbo.v_PersonCalendar AS pcal ON cal.Date = pcal.Date AND pcal.PersonId = @PersonId
 	       INNER JOIN dbo.Person AS p ON p.PersonId = @PersonId
