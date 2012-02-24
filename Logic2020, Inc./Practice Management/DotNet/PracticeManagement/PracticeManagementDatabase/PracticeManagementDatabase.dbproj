@@ -42,8 +42,8 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>.\sql\debug\</OutputPath>
     <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
-    <TargetConnectionString>Data Source=server3;User ID=sa;Pooling=False</TargetConnectionString>
-    <TargetDatabase>ObfuscatedPMProd_20120215</TargetDatabase>
+    <TargetConnectionString>Data Source=localhost;Integrated Security=True;Pooling=False</TargetConnectionString>
+    <TargetDatabase>ObfuscatedPracticeManagement</TargetDatabase>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <SuppressWarnings>
     </SuppressWarnings>
@@ -4061,3 +4061,4 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
+
