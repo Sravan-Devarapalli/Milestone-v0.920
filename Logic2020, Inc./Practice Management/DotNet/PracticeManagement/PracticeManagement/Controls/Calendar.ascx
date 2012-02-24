@@ -112,7 +112,7 @@
                 chkMakeRecurringHoliday.checked = (dayLink.attributes['IsRecurringHoliday'].value == 'true');
                 popupExtendar.show();
             }
-        }
+        }//for person calander
         else {
             var date = new Date(hdnDate.value);
             var hdnHolidayDate = document.getElementById('<%= hdnHolidayDate.ClientID %>');
@@ -123,40 +123,9 @@
                 var mpeDeleteSubstituteDay = $find('mpeDeleteSubstituteDay');
                 mpeDeleteSubstituteDay.show();
             }
-            else if (dayLink.attributes['CompanyDayOff'].value == 'false' && dayLink.attributes['IsWeekEnd'].value == 'false' && dayLink.attributes['HolidayDescription'].value == '') {
+            else if (dayLink.attributes['CompanyDayOff'].value == 'false' && dayLink.attributes['IsWeekEnd'].value == 'false' ) {
 
-
-                var popupExtendar = $find(peBehaviourId);
-                var OkButton = $get(btnOkID);
-                var errorMessage = $get(ErrorMessageID);
-                var rbPTO = $get(rbPTOClientID);
-                var rbFloatingHoliday = $get(rbFloatingHolidayClientID);
-                OkButton.attributes['ErrorMessageID'].value = ErrorMessageID;
-                OkButton.attributes['SaveDayButtonID'].value = saveDayButtonID;
-                OkButton.attributes['TxtActualHoursID'].value = txtActualHoursID;
-                OkButton.attributes['ExtendarId'].value = peBehaviourId;
-                OkButton.attributes['RbFloatingID'].value = rbFloatingHolidayClientID;
-                OkButton.attributes['HiddenDayOffID'].value = hiddenDayOffID;
-                OkButton.attributes['PersonId'].value = personId;
-                OkButton.attributes['Date'].value = date.format('MM/dd/yyyy');
-                rbPTO.attributes['onclick'].value = "disableActualHours( " + txtActualHoursID + ", 'false')";
-                rbFloatingHoliday.attributes['onclick'].value = "disableActualHours( " + txtActualHoursID + ", 'true')";
-
-                DeleteButton.disabled = (dayLink.attributes['DayOff'].value == 'false') ? 'disabled' : '';
-                if (dayLink.attributes['IsFloatingHoliday'].value.toLowerCase() == 'true') {
-                    rbFloatingHoliday.checked = true;
-                }
-                else {
-                    rbPTO.checked = true;
-                }
-                txtActualHours.value = (dayLink.attributes['DayOff'].value == 'false' || rbFloatingHoliday.checked) ? '8.00' : parseFloat(dayLink.attributes['ActualHours'].value.toString());
-                txtActualHours.disabled = rbFloatingHoliday.checked ? 'disabled' : '';
-                lblDateDescription.innerHTML = date.format('MM/dd/yyyy');
-                errorMessage.style.display = 'none';
-                txtHolidayDescription.style.display = 'none';
-                chkMakeRecurringHoliday.nextSibling.style.display = 'none'
-                chkMakeRecurringHoliday.style.display = 'none';
-                popupExtendar.show();
+               return true;
             }
             else if (hndDayOff.value == 'true' && dayLink.attributes['CompanyDayOff'].value == 'true') {
 
@@ -254,15 +223,26 @@
         if (rbEditSingleDay.checked) {
             $find('mpeEditSingleDay').show();
         } else {
-            $find('mpeAddTimeOffPopup').show();
+            $find('mpeAddTimeOff').show();
         }
         return false;
     }
 
     function btnAddTimeOff_Click() {
-        $find( 'mpeAddTimeOffPopup' ).show();
+        $find( 'mpeAddTimeOff' ).show();
         var btnDeleteTimeOff = document.getElementById( '<%=btnDeleteTimeOff.ClientID %>' );
-        btnDeleteTimeOff.style.display = "none";
+        var dtpStartDateTimeOff = document.getElementById( '<%=dtpStartDateTimeOff.ClientID %>' );
+        var dtpEndDateTimeOff = document.getElementById( '<%=dtpEndDateTimeOff.ClientID %>' );
+        var ddlTimeTypesTimeOff = document.getElementById( '<%=ddlTimeTypesTimeOff.ClientID %>' );
+        var txthoursTimeOff = document.getElementById( '<%=txthoursTimeOff.ClientID %>' );
+        btnDeleteTimeOff.style.display = 'none';
+        txthoursTimeOff.value = '';
+        ddlTimeTypesTimeOff.value = '';
+        ddlTimeTypesTimeOff.removeAttribute( 'disabled' );
+        var txtStartDate = document.getElementById( '<%=(dtpStartDateTimeOff.FindControl("txtDate") as TextBox).ClientID %>' );
+        var txtEndDate = document.getElementById( '<%=(dtpEndDateTimeOff.FindControl("txtDate") as TextBox).ClientID %>' );
+        txtStartDate.value = '';
+        txtEndDate.value = '';
         return false;
     }
 </script>
@@ -513,7 +493,7 @@
                                     Date:
                                 </td>
                                 <td style="width: 40%; text-align: left; padding-left: 5px;">
-                                    <asp:Label ID="lbDate" runat="server" Text="2012/02/23"></asp:Label>
+                                    <asp:Label ID="lbDate" runat="server" ></asp:Label>
                                 </td>
                                 <td>
                                 </td>
@@ -542,10 +522,10 @@
                             </tr>
                         </table>
                     </asp:Panel>
-                    <AjaxControlToolkit:ModalPopupExtender ID="mpeAddTimeOffPopup" runat="server" TargetControlID="hfAddTimeOff"
-                        BackgroundCssClass="modalBackground" PopupControlID="pnlAddTimeOffPopup" DropShadow="false"
-                        BehaviorID="mpeAddTimeOffPopup" CancelControlID="btnCancelTimeOff" />
-                    <asp:Panel ID="pnlAddTimeOffPopup" runat="server" BackColor="White" BorderColor="Black" 
+                    <AjaxControlToolkit:ModalPopupExtender ID="mpeAddTimeOff" runat="server" TargetControlID="hfAddTimeOff"
+                        BackgroundCssClass="modalBackground" PopupControlID="pnlAddTimeOff" DropShadow="false"
+                        BehaviorID="mpeAddTimeOff" CancelControlID="btnCancelTimeOff" />
+                    <asp:Panel ID="pnlAddTimeOff" runat="server" BackColor="White" BorderColor="Black" 
                         CssClass="ConfirmBoxClassError" Style="display: none;" BorderWidth="2px" min-Height="270px" max-Height="500px"
                         Width="320px">
                         <table  class="calendarPopup">
@@ -684,7 +664,7 @@
                             <tr>
                                 <td class = "textCenter bold padRight5 width100P" colspan="3">
                                     Date:&nbsp;&nbsp;&nbsp;
-                                    <asp:Label ID="lbdateSingleDay" runat="server" Text="2012/02/23"></asp:Label>
+                                    <asp:Label ID="lbdateSingleDay" runat="server" ></asp:Label>
                                     <asp:HiddenField ID="hdnDateSingleDay" runat="server" ></asp:HiddenField>
                                 </td>
                             </tr>
