@@ -5,6 +5,8 @@ using DataTransferObjects;
 using PraticeManagement.CalendarService;
 using System.Web;
 using PraticeManagement.Utils;
+using System.Collections.Generic;
+using System.Web.UI;
 
 namespace PraticeManagement.Controls
 {
@@ -28,6 +30,20 @@ namespace PraticeManagement.Controls
         #endregion
 
         #region Properties
+
+        public PraticeManagement.Controls.Calendar HostingControl
+        {
+            get
+            {
+                if (Page is PraticeManagement.Calendar)
+                {
+                    var control = ((PraticeManagement.Calendar)Page).CalendarControl as PraticeManagement.Controls.Calendar;
+                    return control;
+
+                }
+                return null;
+            }
+        }
 
         /// <summary>
         /// Get or sets a year to be displayed.
@@ -157,6 +173,39 @@ namespace PraticeManagement.Controls
             }
         }
 
+        protected void btnDay_OnClick(object sender, EventArgs e)
+        { 
+            var btnDay = (LinkButton)sender;
+            var date = (DateTime)Convert.ToDateTime(btnDay.Attributes["Date"]);
+            string hours = btnDay.Attributes["ActualHours"];
+            string timeTypeId = btnDay.Attributes["TimeTypeId"] ;
+            KeyValuePair<DateTime, DateTime> series = ServiceCallers.Custom.Calendar(c => c.GetTimeOffSeriesPeriod(PersonId.Value, date));
+
+            HostingControl.lbdateSingleDayLabel.Text = date.ToString("dd/MM/yyyy");
+            HostingControl.hdnDateSingleDayHiddenField.Value = date.ToString();
+            HostingControl.ddlTimeTypesSingleDayDropDown.SelectedValue = timeTypeId;
+            HostingControl.txtHoursSingleDayTextBox.Text = hours;
+            HostingControl.ddlTimeTypesSingleDayDropDown.Enabled = false;
+            if (series.Key == series.Value)
+            {
+                HostingControl.mpeEditSingleDayPopUp.Show();
+            }
+            else
+            {
+                HostingControl.rbEditSeriesRadioButton.Checked = false;
+                HostingControl.rbEditSingleDayRadioButton.Checked = true;
+                HostingControl.dtpStartDateTimeOffDatePicker.DateValue = series.Key;
+                HostingControl.dtpEndDateTimeOffDatePicker.DateValue = series.Value;
+                HostingControl.ddlTimeTypesTimeOffDropDown.SelectedValue = timeTypeId;
+                HostingControl.txthoursTimeOffTextBox.Text = hours;
+                HostingControl.ddlTimeTypesTimeOffDropDown.Enabled = false;
+                HostingControl.lbDateLabel.Text = date.ToString("dd/MM/yyyy");
+                HostingControl.mpeSelectEditCondtionPopUp.Show();
+            }
+            HostingControl.pnlBodyUpdatePanel.Update();
+
+        }
+
         protected override void OnPreRender(EventArgs e)
         {
             base.OnPreRender(e);
@@ -233,14 +282,15 @@ namespace PraticeManagement.Controls
             return result;
         }
 
-        protected string GetToolTip(string holidayDescription, bool isFloatingHoliday, bool personDayOff, bool comapnyDayOff, double? actualHours)
+        protected string GetToolTip(string holidayDescription,double? actualHours)
         {
             string toolTip = holidayDescription;
 
-            if (string.IsNullOrEmpty(holidayDescription) && IsPersonCalendar)
+            if (actualHours.HasValue && IsPersonCalendar)
             {
-                toolTip = isFloatingHoliday ? FloatingHoliday : (personDayOff && !comapnyDayOff && actualHours.HasValue ? string.Format(PTOToolTipFormat, actualHours) : string.Empty);
+                toolTip = holidayDescription + " - " + actualHours +" hr(s)";
             }
+
             return toolTip;
         }
 
