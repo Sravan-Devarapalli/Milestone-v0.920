@@ -7,7 +7,7 @@ AS
 BEGIN
 	
 	IF 0 = (SELECT PC.IsSeries
-			FROM dbo.PersonCalendar PC
+		FROM dbo.PersonCalendar PC
 			WHERE PC.PersonId = @PersonId AND PC.Date = @Date)
 	BEGIN
 		SELECT @Date 'StartDate', @Date 'EndDate'
@@ -15,17 +15,29 @@ BEGIN
 	ELSE
 	BEGIN
 		
-		;WITH ConsecutiveDates AS
+		;WITH AfterConsecutiveDates AS
 		(
 			SELECT PCC.*
 			FROM PersonCalendar PCC
 			WHERE PCC.Date = @Date AND PCC.PersonId = @PersonId AND PCC.IsSeries = 1
 			UNION ALL
 			SELECT PC.*
-			FROM ConsecutiveDates CD
+			FROM AfterConsecutiveDates CD
 			JOIN PersonCalendar PC ON ((DATEPART(DW, CD.date) = 6 AND PC.date = DATEADD(DD,3, CD.date) )
-											OR (DATEPART(DW, CD.date) = 2 AND PC.date = DATEADD(DD, -3, CD.date))
 											OR  PC.date = DATEADD(DD,1, CD.date)
+										)
+									AND PC.PersonId = CD.PersonId AND PC.IsSeries = 1 AND PC.TimeTypeId = CD.TimeTypeId
+									AND PC.ActualHours = CD.ActualHours
+		),
+		BeforeConsecutiveDates AS
+		(
+			SELECT PCC.*
+			FROM PersonCalendar PCC
+			WHERE PCC.Date = @Date AND PCC.PersonId = @PersonId AND PCC.IsSeries = 1
+			UNION ALL
+			SELECT PC.*
+			FROM BeforeConsecutiveDates CD
+			JOIN PersonCalendar PC ON ((DATEPART(DW, CD.date) = 2 AND PC.date = DATEADD(DD, -3, CD.date))
 											OR  PC.date = DATEADD(DD, -1, CD.date)
 										)
 									AND PC.PersonId = CD.PersonId AND PC.IsSeries = 1 AND PC.TimeTypeId = CD.TimeTypeId
@@ -33,7 +45,12 @@ BEGIN
 		)
 
 		SELECT MIN(CD.Date) 'StartDate', MAX(CD.Date) 'EndDate'
-		FROM ConsecutiveDates CD
+		FROM 
+		(
+			SELECT * FROM BeforeConsecutiveDates BD
+			UNION
+			SELECT * FROM AfterConsecutiveDates AD
+		) CD
 		GROUP BY CD.PersonId
 
 	END
