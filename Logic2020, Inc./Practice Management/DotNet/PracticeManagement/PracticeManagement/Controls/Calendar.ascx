@@ -141,8 +141,7 @@
 
 
 
-</script>
-<script type="text/javascript" language="javascript">
+
     function ClickSaveDay(btnOk) {
         var noteText = $get(btnOk.attributes['TextID'].value);
         var popupExtendar = $find(btnOk.attributes['ExtendarId'].value);
@@ -213,6 +212,13 @@
             $find('mpeAddTimeOff').show();
         }
         return false;
+    }
+
+    function btnDeleteTimeOffDisable()
+    {
+        var btnDeleteTimeOff = document.getElementById( '<%=btnDeleteTimeOff.ClientID %>' );
+        if ( btnDeleteTimeOff != null && btnDeleteTimeOff != undefined )
+            btnDeleteTimeOff.setAttribute('disabled','disabled');
     }
 
 </script>
@@ -500,124 +506,135 @@
                                 BehaviorID="mpeAddTimeOff" CancelControlID="btnCancelTimeOff" />
                             <asp:Panel ID="pnlAddTimeOff" runat="server" BackColor="White" BorderColor="Black"
                                 CssClass="ConfirmBoxClassError" Style="display: none;" BorderWidth="2px" min-Height="270px"
-                                max-Height="500px" Width="320px">
+                                max-Height="500px" Width="360px">
                                 <table class="calendarPopup">
                                     <tr>
                                         <td colspan="3" style="height: 20px;">
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width: 30%; text-align: right; font-weight: bold; padding-right: 5px;">
-                                            Start Date:
-                                        </td>
-                                        <td style="width: 40%; text-align: left; padding-left: 5px;">
-                                            <uc:DatePicker ID="dtpStartDateTimeOff" runat="server" TextBoxWidth="75px" />
-                                            <asp:RequiredFieldValidator ID="reqStartDateTimeOff" runat="server" ControlToValidate="dtpStartDateTimeOff"
-                                                ErrorMessage="The Start Date is required." ToolTip="The Start Date is required."
-                                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                                ValidationGroup="TimeOff"></asp:RequiredFieldValidator>
-                                            <asp:CompareValidator ID="compStartDateTimeOff" runat="server" ControlToValidate="dtpStartDateTimeOff"
-                                                ErrorMessage="The Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
-                                                ToolTip="The Start Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
-                                                EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
-                                                Type="Date" ValidationGroup="TimeOff"></asp:CompareValidator>
-                                        </td>
-                                        <td>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="width: 30%; text-align: right; font-weight: bold; padding-right: 5px;">
-                                            End Date:
-                                        </td>
-                                        <td style="width: 40%; text-align: left; padding-left: 5px;">
-                                            <uc:DatePicker ID="dtpEndDateTimeOff" runat="server" TextBoxWidth="75px" />
-                                            <asp:RequiredFieldValidator ID="reqEndDateTimeOff" runat="server" ControlToValidate="dtpEndDateTimeOff"
-                                                ErrorMessage="The End Date is required." ToolTip="The End Date is required."
-                                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                                ValidationGroup="TimeOff"></asp:RequiredFieldValidator>
-                                            <asp:CompareValidator ID="compEndDateTimeOff" runat="server" ControlToValidate="dtpEndDateTimeOff"
-                                                ErrorMessage="The End Date has an incorrect format. It must be 'MM/dd/yyyy'."
-                                                ToolTip="The End Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
-                                                EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
-                                                Type="Date" ValidationGroup="TimeOff"></asp:CompareValidator>
-                                            <asp:CompareValidator ID="compStartDateEndDateTimeOff" runat="server" ControlToValidate="dtpEndDateTimeOff"
-                                                ControlToCompare="dtpStartDateTimeOff" ErrorMessage="The End Date must be greater than or equal to the Start Date."
-                                                ToolTip="The End Date must be greater than or equal to the Start Date." Text="*"
-                                                EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" ValidationGroup="TimeOff"
-                                                Operator="GreaterThanEqual" Type="Date"></asp:CompareValidator>
-                                        </td>
-                                        <td>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3" style="padding-left: 20px; text-align: left;">
-                                            1. Select type of time to be entered:
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3" style="padding-left: 40px; text-align: left;">
-                                            <asp:DropDownList ID="ddlTimeTypesTimeOff" runat="server" Style="width: 70%;">
-                                            </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="reqTimeTypesTimeOff" runat="server" ControlToValidate="ddlTimeTypesTimeOff"
-                                                ErrorMessage="The Work Type is required." ToolTip="The Work Type is required."
-                                                Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="TimeOff"></asp:RequiredFieldValidator>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3" style="height: 10px;">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3" style="padding-left: 20px; text-align: left;">
-                                            2. Enter the number of hours (per day, if applicable):
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td width="10%" style="padding-left: 10px; text-align: right; padding-right: 5px;">
-                                            Hours:
-                                        </td>
-                                        <td width="10%" style="padding-left: 5px; text-align: left;">
-                                            <asp:TextBox ID="txthoursTimeOff" runat="server" Style="width: 50px;"></asp:TextBox>
-                                            <asp:RequiredFieldValidator ID="reqtxthoursTimeOff" runat="server" ControlToValidate="txthoursTimeOff"
-                                                ErrorMessage="The Hours is required." ToolTip="The Hours is required." Text="*"
-                                                EnableClientScript="false" SetFocusOnError="true" ValidationGroup="TimeOff"></asp:RequiredFieldValidator>
-                                            <asp:CompareValidator ID="compHoursPerDay" runat="server" ControlToValidate="txthoursTimeOff"
-                                                ErrorMessage="A number with 2 decimal digits is allowed for the Hours Per Day."
-                                                ToolTip="A number with 2 decimal digits is allowed for the Hours Per Day." Text="*"
-                                                EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
-                                                Type="Currency" ValidationGroup="TimeOff"></asp:CompareValidator>
-                                            <asp:RangeValidator ID="rangHoursPerDay" runat="server" ControlToValidate="txthoursTimeOff"
-                                                ErrorMessage="The Hours Per Day must be greater than 0 and less or equals to 8."
-                                                ToolTip="The Hours Per Day must be greater than 0 and less or equals to 8." Text="*"
-                                                EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" MinimumValue="0.01"
-                                                MaximumValue="8" Type="Double" ValidationGroup="TimeOff"></asp:RangeValidator>
-                                            <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtHoursPerDayInsert" runat="server"
-                                                TargetControlID="txthoursTimeOff" FilterMode="ValidChars" FilterType="Custom,Numbers"
-                                                ValidChars=".">
-                                            </AjaxControlToolkit:FilteredTextBoxExtender>
-                                        </td>
-                                        <td width="80%">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3" style="height: 10px;">
+                                        <td colspan="3">
+                                            <table width="100%">
+                                                <tr>
+                                                    <td style="width: 40%; text-align: right; font-weight: bold; padding-right: 5px;padding-bottom:0px !important;padding-top:0px !important;">
+                                                        Start Date:
+                                                    </td>
+                                                    <td style="width: 40%; text-align: left; padding-left: 5px;padding-bottom:0px !important;padding-top:0px !important;">
+                                                        <uc:DatePicker ID="dtpStartDateTimeOff" runat="server" TextBoxWidth="75px" OnClientChange="btnDeleteTimeOffDisable();" />
+                                                        <asp:RequiredFieldValidator ID="reqStartDateTimeOff" runat="server" ControlToValidate="dtpStartDateTimeOff"
+                                                            ErrorMessage="The Start Date is required." ToolTip="The Start Date is required."
+                                                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                                            ValidationGroup="TimeOff"></asp:RequiredFieldValidator>
+                                                        <asp:CompareValidator ID="compStartDateTimeOff" runat="server" ControlToValidate="dtpStartDateTimeOff"
+                                                            ErrorMessage="The Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                                                            ToolTip="The Start Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
+                                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
+                                                            Type="Date" ValidationGroup="TimeOff"></asp:CompareValidator>
+                                                    </td>
+                                                    <td style="padding-bottom:0px !important;padding-top:0px !important;">
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="3">
-                                            <asp:Button ID="btnOkTimeOff" Text="OK" ValidationGroup="TimeOff" runat="server"
-                                                ToolTip="Ok" OnClick="btnOkTimeOff_Click" Style="padding-left: 10px" />
-                                            <asp:Button ID="btnDeleteTimeOff" Text="Delete" runat="server" ValidationGroup="TimeOff"
-                                                ToolTip="Delete" OnClick="btnDeleteTimeOff_Click" Style="padding-left: 10px" />
-                                            <asp:Button ID="btnCancelTimeOff" Text="Cancel" runat="server" Style="padding-left: 10px"
-                                                ToolTip="Cancel" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3" style="text-align: left; padding: 10px;">
-                                            <asp:ValidationSummary ID="valSumTimeOff" runat="server" ValidationGroup="TimeOff" />
-                                        </td>
-                                    </tr>
+                                            <table width="100%">
+                                                <tr>
+                                                    <td style="width: 40%; text-align: right; font-weight: bold; padding-right: 5px;padding-bottom:0px !important;padding-top:0px !important;">
+                                                        End Date:
+                                                    </td>
+                                                    <td style="width: 40%; text-align: left; padding-left: 5px;padding-bottom:1px !important;padding-top:1px !important;">
+                                                        <uc:DatePicker ID="dtpEndDateTimeOff" runat="server" TextBoxWidth="75px" OnClientChange="btnDeleteTimeOffDisable();" />
+                                                        <asp:RequiredFieldValidator ID="reqEndDateTimeOff" runat="server" ControlToValidate="dtpEndDateTimeOff"
+                                                            ErrorMessage="The End Date is required." ToolTip="The End Date is required."
+                                                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                                            ValidationGroup="TimeOff"></asp:RequiredFieldValidator>
+                                                        <asp:CompareValidator ID="compEndDateTimeOff" runat="server" ControlToValidate="dtpEndDateTimeOff"
+                                                            ErrorMessage="The End Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                                                            ToolTip="The End Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
+                                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
+                                                            Type="Date" ValidationGroup="TimeOff"></asp:CompareValidator>
+                                                        <asp:CompareValidator ID="compStartDateEndDateTimeOff" runat="server" ControlToValidate="dtpEndDateTimeOff"
+                                                            ControlToCompare="dtpStartDateTimeOff" ErrorMessage="The End Date must be greater than or equal to the Start Date."
+                                                            ToolTip="The End Date must be greater than or equal to the Start Date." Text="*"
+                                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" ValidationGroup="TimeOff"
+                                                            Operator="GreaterThanEqual" Type="Date"></asp:CompareValidator>
+                                                    </td>
+                                                    <td style="padding-bottom:0px !important;padding-top:0px !important;">
+                                                    </td>
+                                                </tr>
+                                </table>
+                                </td> </tr>
+                                <tr>
+                                    <td colspan="3" style="padding-left: 20px; text-align: left;">
+                                        1. Select type of time to be entered:
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" style="padding-left: 40px; text-align: left;">
+                                        <asp:DropDownList ID="ddlTimeTypesTimeOff" runat="server" Style="width: 70%;" onchange="btnDeleteTimeOffDisable();">
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="reqTimeTypesTimeOff" runat="server" ControlToValidate="ddlTimeTypesTimeOff"
+                                            ErrorMessage="The Work Type is required." ToolTip="The Work Type is required."
+                                            Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="TimeOff"></asp:RequiredFieldValidator>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" style="height: 10px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" style="padding-left: 20px; text-align: left;">
+                                        2. Enter the number of hours (per day, if applicable):
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="30%" style="padding-left: 10px; text-align: right; padding-right: 5px;">
+                                        Hours:
+                                    </td>
+                                    <td width="15%" style="padding-left: 5px; text-align: left;">
+                                        <asp:TextBox ID="txthoursTimeOff" runat="server" Style="width: 50px;" MaxLength="4" onchange="btnDeleteTimeOffDisable();"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="reqtxthoursTimeOff" runat="server" ControlToValidate="txthoursTimeOff"
+                                            ErrorMessage="The Hours is required." ToolTip="The Hours is required." Text="*"
+                                            EnableClientScript="false" SetFocusOnError="true" ValidationGroup="TimeOff"></asp:RequiredFieldValidator>
+                                        <asp:CompareValidator ID="compHoursPerDay" runat="server" ControlToValidate="txthoursTimeOff"
+                                            ErrorMessage="A number with 2 decimal digits is allowed for the Hours Per Day."
+                                            ToolTip="A number with 2 decimal digits is allowed for the Hours Per Day." Text="*"
+                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
+                                            Type="Currency" ValidationGroup="TimeOff"></asp:CompareValidator>
+                                        <asp:RangeValidator ID="rangHoursPerDay" runat="server" ControlToValidate="txthoursTimeOff"
+                                            ErrorMessage="The Hours Per Day must be greater than 0 and less or equals to 8."
+                                            ToolTip="The Hours Per Day must be greater than 0 and less or equals to 8." Text="*"
+                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" MinimumValue="0.01"
+                                            MaximumValue="8" Type="Double" ValidationGroup="TimeOff"></asp:RangeValidator>
+                                        <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtHoursPerDayInsert" runat="server"
+                                            TargetControlID="txthoursTimeOff" FilterMode="ValidChars" FilterType="Custom,Numbers"
+                                            ValidChars=".">
+                                        </AjaxControlToolkit:FilteredTextBoxExtender>
+                                    </td>
+                                    <td width="55%">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" style="height: 10px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <asp:Button ID="btnOkTimeOff" Text="OK" ValidationGroup="TimeOff" runat="server"
+                                            ToolTip="Ok" OnClick="btnOkTimeOff_Click" Style="padding-left: 10px" />
+                                        <asp:Button ID="btnDeleteTimeOff" Text="Delete" runat="server" ValidationGroup="TimeOff"
+                                            ToolTip="Delete" OnClick="btnDeleteTimeOff_Click" Style="padding-left: 10px" />
+                                        <asp:Button ID="btnCancelTimeOff" Text="Cancel" runat="server" Style="padding-left: 10px"
+                                            ToolTip="Cancel" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" style="text-align: left; padding: 10px;">
+                                        <asp:ValidationSummary ID="valSumTimeOff" runat="server" ValidationGroup="TimeOff" />
+                                    </td>
+                                </tr>
                                 </table>
                             </asp:Panel>
                         </ContentTemplate>
@@ -667,11 +684,11 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="padLeft10 textRight padRight5 width30P">
+                                        <td class="padLeft10 textRight padRight5 width30P" style="vertical-align:top;">
                                             Hours:
                                         </td>
-                                        <td class="width10P padLeft5 textLeft">
-                                            <asp:TextBox ID="txtHoursSingleDay" runat="server" CssClass="width50Px"></asp:TextBox>
+                                        <td class="padLeft5 textLeft" style="width:15%;">
+                                            <asp:TextBox ID="txtHoursSingleDay" runat="server" CssClass="width50Px" MaxLength="4"></asp:TextBox>
                                             <asp:RequiredFieldValidator ID="reqHoursSingleDay" runat="server" ControlToValidate="txtHoursSingleDay"
                                                 ErrorMessage="The Hours is required." ToolTip="The Hours is required." Text="*"
                                                 EnableClientScript="false" SetFocusOnError="true" ValidationGroup="SingleDay"></asp:RequiredFieldValidator>
@@ -690,7 +707,7 @@
                                                 ValidChars=".">
                                             </AjaxControlToolkit:FilteredTextBoxExtender>
                                         </td>
-                                        <td class="width60P">
+                                        <td style="width:55%;">
                                         </td>
                                     </tr>
                                     <tr>
@@ -800,18 +817,32 @@
                         max-width: 700px; min-height: 60px; display: none;" BorderWidth="2px">
                         <table class="WholeWidth">
                             <tr>
-                                <td colspan="2">
-                                    Date :
-                                    <asp:Label ID="lblDeleteSubstituteDay" Font-Bold="true" runat="server"></asp:Label>
+                                <td style="text-align: right; width: 50%">
+                                    Date
+                                </td>
+                                <td style="text-align: left; font-weight: bold;">
+                                    :
+                                    <asp:Label ID="lblDeleteSubstituteDay" runat="server"></asp:Label>
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="2">
-                                    Work type selected : Holiday
+                                <td style="height: 5px;" colspan="2">
                                 </td>
                             </tr>
                             <tr>
-                                <td align="center" style="padding: 10px 0px 10px 0px;">
+                                <td style="text-align: right;">
+                                    Work type selected
+                                </td>
+                                <td style="text-align: left; font-weight: bold;">
+                                    : Holiday
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height: 5px;" colspan="2">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="padding: 10px 0px 10px 0px;" colspan="2">
                                     <asp:Button ID="btnDeleteSubstituteDay" OnClick="btnDeleteSubstituteDay_Click" runat="server"
                                         Text="Delete" ToolTip="Delete" />
                                     &nbsp; &nbsp;
