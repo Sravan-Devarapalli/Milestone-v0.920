@@ -191,7 +191,7 @@ namespace PraticeManagement
 
         public bool IsValidHours { get; set; }
 
-        public bool IsValidPTOHours { get; set; }
+        public bool IsValidAdminstrativeHours { get; set; }
 
         public bool IsValidWorkType { get; set; }
 
@@ -475,9 +475,9 @@ namespace PraticeManagement
             args.IsValid = IsValidHours;
         }
 
-        protected void custPTOHours_ServerValidate(object source, ServerValidateEventArgs args)
+        protected void custAdminstrativeHours_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            args.IsValid = IsValidPTOHours;
+            args.IsValid = IsValidAdminstrativeHours;
         }
 
         protected void custNote_ServerValidate(object source, ServerValidateEventArgs args)
@@ -1434,7 +1434,7 @@ namespace PraticeManagement
 
         private void ValidateAll()
         {
-            IsValidDayTotal = IsValidHours = IsValidNote = IsValidWorkType = IsValidPTOHours = true;
+            IsValidDayTotal = IsValidHours = IsValidNote = IsValidWorkType = IsValidAdminstrativeHours = true;
 
             foreach (RepeaterItem barItem in repProjectSections.Items)
             {
