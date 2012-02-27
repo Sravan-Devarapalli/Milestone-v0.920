@@ -216,6 +216,15 @@ namespace PraticeManagement.Controls
             }
         }
 
+
+        public Button btnDeleteTimeOffControl
+        {
+            get
+            {
+                return btnDeleteTimeOff;
+            }
+        }
+
         #endregion
 
         private void UpdateCalendar()
