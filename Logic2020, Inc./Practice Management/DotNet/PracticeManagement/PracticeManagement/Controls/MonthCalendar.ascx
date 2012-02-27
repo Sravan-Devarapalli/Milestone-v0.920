@@ -57,7 +57,7 @@
                         IsWeekEnd='<%# GetIsWeekend(((DateTime)Eval("Date"))) %>' 
                         Enabled='<%# NeedToEnable((DateTime)Eval("Date")) %>'
                         CompanyDayOff='<%# (bool)Eval("CompanyDayOff") ? "true" : "false" %>' 
-                        ActualHours='<%# (double?)Eval("ActualHours") %>' 
+                        ActualHours='<%# GetDoubleFormat((double?)Eval("ActualHours")) %>' 
                         IsFloatingHoliday='<%# (bool)Eval("IsFloatingHoliday") %>' 
                         OnClick = "btnDay_OnClick"
                         TimeTypeId = '<%# (int?)Eval("TimeTypeId") %>' 
