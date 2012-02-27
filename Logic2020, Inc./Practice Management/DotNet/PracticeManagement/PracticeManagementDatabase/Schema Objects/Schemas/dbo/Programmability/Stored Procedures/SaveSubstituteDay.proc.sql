@@ -63,7 +63,10 @@ BEGIN
 	  SELECT @HolidayDescription = c.HolidayDescription
 	  FROM Calendar c WHERE c.[Date] = @Date
 
-	 SET @Note = 'Substitute for '+ CONVERT(NVARCHAR(10), @Date, 101) +' - ' +@HolidayDescription +'.Approved by '+ @UserLogin
+	  DECLARE @UserName NVARCHAR(MAX)
+	  SELECT @UserName =  (LastName +', '+ FirstName) FROM [PM_20120222].[dbo].[Person] WHERE [Alias] = @UserLogin
+
+	 SET @Note = 'Substitute for '+ CONVERT(NVARCHAR(10), @Date, 101) +' - ' +@HolidayDescription +'.Approved by '+ @UserName
 
 
 	INSERT INTO dbo.PersonCalendar(ActualHours,Date,DayOff,TimeTypeId,IsFromTimeEntry,PersonId,SubstituteDate,Description)
