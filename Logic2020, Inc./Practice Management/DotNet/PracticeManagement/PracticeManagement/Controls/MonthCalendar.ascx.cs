@@ -291,6 +291,10 @@ namespace PraticeManagement.Controls
 
             return result;
         }
+        protected string GetDoubleFormat(double? hours)
+        {
+            return hours.HasValue ? hours.Value.ToString("0.00") : "";
+        }
 
         protected string GetToolTip(string holidayDescription, double? actualHours)
         {
