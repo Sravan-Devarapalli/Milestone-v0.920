@@ -174,36 +174,45 @@ namespace PraticeManagement.Controls
         }
 
         protected void btnDay_OnClick(object sender, EventArgs e)
-        { 
+        {
+
             var btnDay = (LinkButton)sender;
             var date = (DateTime)Convert.ToDateTime(btnDay.Attributes["Date"]);
-            string hours = btnDay.Attributes["ActualHours"];
-            string timeTypeId = btnDay.Attributes["TimeTypeId"] ;
-            KeyValuePair<DateTime, DateTime> series = ServiceCallers.Custom.Calendar(c => c.GetTimeOffSeriesPeriod(PersonId.Value, date));
 
-            HostingControl.lbdateSingleDayLabel.Text = date.ToString("dd/MM/yyyy");
-            HostingControl.hdnDateSingleDayHiddenField.Value = date.ToString();
-            HostingControl.ddlTimeTypesSingleDayDropDown.SelectedValue = timeTypeId;
-            HostingControl.txtHoursSingleDayTextBox.Text = hours;
-            HostingControl.ddlTimeTypesSingleDayDropDown.Enabled = false;
-            if (series.Key == series.Value)
+            if (btnDay.Attributes["CompanyDayOff"].ToLower() == "false" && btnDay.Attributes["IsWeekEnd"].ToLower() == "false")
             {
-                HostingControl.mpeEditSingleDayPopUp.Show();
-            }
-            else
-            {
-                HostingControl.rbEditSeriesRadioButton.Checked = false;
-                HostingControl.rbEditSingleDayRadioButton.Checked = true;
-                HostingControl.dtpStartDateTimeOffDatePicker.DateValue = series.Key;
-                HostingControl.dtpEndDateTimeOffDatePicker.DateValue = series.Value;
-                HostingControl.ddlTimeTypesTimeOffDropDown.SelectedValue = timeTypeId;
-                HostingControl.txthoursTimeOffTextBox.Text = hours;
-                HostingControl.ddlTimeTypesTimeOffDropDown.Enabled = false;
-                HostingControl.lbDateLabel.Text = date.ToString("dd/MM/yyyy");
-                HostingControl.mpeSelectEditCondtionPopUp.Show();
-            }
-            HostingControl.pnlBodyUpdatePanel.Update();
+                string hours = btnDay.Attributes["ActualHours"];
+                string timeTypeId = btnDay.Attributes["TimeTypeId"];
+                KeyValuePair<DateTime, DateTime> series = ServiceCallers.Custom.Calendar(c => c.GetTimeOffSeriesPeriod(PersonId.Value, date));
 
+                HostingControl.lbdateSingleDayLabel.Text = date.ToString("MM/dd/yyyy");
+                HostingControl.hdnDateSingleDayHiddenField.Value = date.ToString();
+                HostingControl.ddlTimeTypesSingleDayDropDown.SelectedValue = timeTypeId;
+                HostingControl.txtHoursSingleDayTextBox.Text = hours;
+
+                if (series.Key == series.Value)
+                {
+                    HostingControl.mpeEditSingleDayPopUp.Show();
+                }
+                else
+                {
+                    HostingControl.rbEditSeriesRadioButton.Checked = true;
+                    HostingControl.rbEditSingleDayRadioButton.Checked = false;
+                    HostingControl.dtpStartDateTimeOffDatePicker.DateValue = series.Key;
+                    HostingControl.dtpEndDateTimeOffDatePicker.DateValue = series.Value;
+                    HostingControl.ddlTimeTypesTimeOffDropDown.SelectedValue = timeTypeId;
+                    HostingControl.txthoursTimeOffTextBox.Text = hours;
+                    HostingControl.lbDateLabel.Text = date.ToString("MM/dd/yyyy");
+
+                    HostingControl.mpeSelectEditCondtionPopUp.Show();
+                }
+
+                HostingControl.pnlBodyUpdatePanel.Update();
+            }
+            else if (hndDayOff.Value.ToLower() == "true" && btnDay.Attributes["CompanyDayOff"] == "true")
+            {
+                HostingControl.ShowHolidayAndSubStituteDay(date, btnDay.Attributes["HolidayDescription"]);
+            }
         }
 
         protected override void OnPreRender(EventArgs e)
@@ -282,13 +291,13 @@ namespace PraticeManagement.Controls
             return result;
         }
 
-        protected string GetToolTip(string holidayDescription,double? actualHours)
+        protected string GetToolTip(string holidayDescription, double? actualHours)
         {
             string toolTip = holidayDescription;
 
             if (actualHours.HasValue && IsPersonCalendar)
             {
-                toolTip = holidayDescription + " - " + actualHours +" hr(s)";
+                toolTip = holidayDescription + " - " + actualHours + " hr(s)";
             }
 
             return toolTip;
