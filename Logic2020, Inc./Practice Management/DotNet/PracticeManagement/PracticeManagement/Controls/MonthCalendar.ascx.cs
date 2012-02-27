@@ -298,7 +298,7 @@ namespace PraticeManagement.Controls
 
             if (actualHours.HasValue && IsPersonCalendar)
             {
-                toolTip = holidayDescription + " - " + actualHours + " hr(s)";
+                toolTip = holidayDescription + " - " + actualHours.Value.ToString("0.00") + " hr(s)";
             }
 
             return toolTip;
