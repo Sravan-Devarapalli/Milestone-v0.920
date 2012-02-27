@@ -95,7 +95,8 @@ AS
 		INNER JOIN @Dates dates ON dates.date = PC.Date AND PC.SubstituteDate IS NOT NULL
 	    
 		UPDATE PC
-		SET PC.TimeTypeId = @PTOTimeTypeId
+		SET PC.TimeTypeId = @PTOTimeTypeId,
+		PC.Description = 'PTO'
 		FROM dbo.PersonCalendar AS PC 
 		INNER JOIN @SubDates AS SUBDATES ON PC.Date = SUBDATES.date
 
