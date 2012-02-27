@@ -198,6 +198,10 @@ namespace PraticeManagement.Controls.TimeEntry
                         (HostingPage.SelectedPerson.TerminationDate.HasValue &&
                                     HostingPage.SelectedPerson.TerminationDate.Value >= DateBehind
                          ) ? "0" : "1";
+            if (IsAdminstrativeTimeType && TimeEntryRecordElement != null)
+            {
+                tbActualHours.Attributes["IsReviewed"] = TimeEntryRecordElement.Attribute(XName.Get("IsReviewed")).Value;
+            }
         }
 
         public void CanelControlStyle()
@@ -342,14 +346,9 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             var isValidNote = IsValidNote();
             var isValidHours = IsValidHours();
-            var isValidPTOHours = true;
-
-            if (IsPTO)
-            {
-                isValidPTOHours = IsValidPTOHours();
-                if (!isValidPTOHours)
-                    HostingPage.IsValidPTOHours = isValidPTOHours;
-            }
+            var isValidAdminstrativeHours = IsValidAdminstrativeHours();
+            if (!isValidAdminstrativeHours)
+                HostingPage.IsValidAdminstrativeHours = isValidAdminstrativeHours;
 
             if (!isValidNote)
                 HostingPage.IsValidNote = isValidNote;
@@ -357,7 +356,7 @@ namespace PraticeManagement.Controls.TimeEntry
             if (!isValidHours)
                 HostingPage.IsValidHours = isValidHours;
 
-            if (isValidNote && isValidHours && isValidPTOHours)
+            if (isValidNote && isValidHours && isValidAdminstrativeHours)
             {
                 tbActualHours.Style["background-color"] = "none";
             }
@@ -367,7 +366,7 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
-        private bool IsValidPTOHours()
+        private bool IsValidAdminstrativeHours()
         {
             double hours;
             if (string.IsNullOrEmpty(tbActualHours.Text))
@@ -379,7 +378,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 return false;
             }
-            //  Check that hours is double between 0.0 and 24.0
+            //  Check that hours is double between 0.0 and 8.0
             if (double.TryParse(tbActualHours.Text, out hours))
             {
                 if (hours > 0.0 && hours <= 8)
@@ -396,7 +395,7 @@ namespace PraticeManagement.Controls.TimeEntry
                         PraticeManagement.Constants.ApplicationResources.AddCommentIcon :
                         PraticeManagement.Constants.ApplicationResources.RecentCommentIcon;
 
-            if (IsPTO)
+            if (IsAdminstrativeTimeType)
                 return true;
 
             var note = tbNotes.Text;
