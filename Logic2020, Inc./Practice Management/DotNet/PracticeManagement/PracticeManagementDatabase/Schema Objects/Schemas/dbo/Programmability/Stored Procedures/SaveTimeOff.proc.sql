@@ -81,7 +81,7 @@ BEGIN
 												OR EDFS.date = DATEADD(DD, -1, AD.date)
 											)
 			GROUP BY PC.PersonId, AD.Date
-			HAVING COUNT(EDFS.Date) < 3
+			HAVING COUNT(EDFS.Date) < 2
 		)
 
 		--Days after EndDate and before StartDate must be exclude from the series 
@@ -279,3 +279,4 @@ BEGIN
 		RAISERROR(@Error, 16, 1)
 	END CATCH
 END
+
