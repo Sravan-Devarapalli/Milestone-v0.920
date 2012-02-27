@@ -128,12 +128,20 @@ PraticeManagement.Controls.Generic.EnableDisableExtForAdminSection.EnableDisable
     disableOtherColtrols: function ( index ) {
         var hoursControlIds = this.getControlIdList( this.hoursControlsToCheck );
         for ( var i = 0; i < hoursControlIds.length; i++ ) {
+            var isReviewed = false;
             var targetAcutalHours = document.getElementById( hoursControlIds[i] );
             if ( targetAcutalHours != null ) {
-                if ( i != index )
-                    targetAcutalHours.setAttribute( 'readonly', 'readonly' );
-                else
-                    targetAcutalHours.removeAttribute( 'readonly' );
+                if ( targetAcutalHours.getAttribute( 'IsReviewed' ) != undefined && targetAcutalHours.getAttribute( 'IsReviewed' ) != null ) {
+                    isReviewed = targetAcutalHours.getAttribute( 'IsReviewed' ).toLowerCase() == 'approved';
+                }
+                if ( !isReviewed ) {
+                    if ( i != index )
+                        targetAcutalHours.setAttribute( 'readonly', 'readonly' );
+                    else
+                        targetAcutalHours.removeAttribute( 'readonly' );
+                } else {
+                    targetAcutalHours.setAttribute( 'disabled', 'disabled' );
+                }
             }
         }
         var notesControlIds = this.getControlIdList( this.notesControlsToCheck );
@@ -162,9 +170,18 @@ PraticeManagement.Controls.Generic.EnableDisableExtForAdminSection.EnableDisable
     enableAllColtrols: function () {
         var hoursControlIds = this.getControlIdList( this.hoursControlsToCheck );
         for ( var i = 0; i < hoursControlIds.length; i++ ) {
+            var isReviewed = false;
             var targetAcutalHours = document.getElementById( hoursControlIds[i] );
             if ( targetAcutalHours != null ) {
-                targetAcutalHours.removeAttribute( 'readonly' );
+                if ( targetAcutalHours.getAttribute( 'IsReviewed' ) != undefined && targetAcutalHours.getAttribute( 'IsReviewed' ) != null ) {
+                    isReviewed = targetAcutalHours.getAttribute( 'IsReviewed' ).toLowerCase() == 'approved';
+                }
+                if ( !isReviewed ) {
+                    targetAcutalHours.removeAttribute( 'readonly' );
+                }
+                else {
+                    targetAcutalHours.setAttribute( 'disabled', 'disabled' );
+                }
             }
         }
         var notesControlIds = this.getControlIdList( this.notesControlsToCheck );
@@ -237,3 +254,4 @@ PraticeManagement.Controls.Generic.EnableDisableExtForAdminSection.EnableDisable
 }
 
 PraticeManagement.Controls.Generic.EnableDisableExtForAdminSection.EnableDisableExtForAdminSectionBehavior.registerClass( 'PraticeManagement.Controls.Generic.EnableDisableExtForAdminSection.EnableDisableExtForAdminSectionBehavior', AjaxControlToolkit.BehaviorBase );
+
