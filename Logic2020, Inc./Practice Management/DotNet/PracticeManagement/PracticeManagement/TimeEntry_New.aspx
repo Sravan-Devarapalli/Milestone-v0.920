@@ -46,9 +46,6 @@
         }
 
         function SetFocus(modalExId, tbNotesId, tbBillableHoursId, btnSaveNotesId, tbNonBillableHoursId) {
-
-            var tbActualHours = $find(tbBillableHours);
-
             var modalEx = $find(modalExId);
             modalEx.show();
             var tbNotes = $get(tbNotesId);
@@ -751,9 +748,9 @@
                                         ErrorMessage="Hours should be real and 0.01-24.00. Invalid entries are highlighted in red."
                                         SetFocusOnError="true" OnServerValidate="custActualHours_ServerValidate" EnableClientScript="false"
                                         Display="None" Text="*" ValidationGroup="TE" />
-                                    <asp:CustomValidator ID="cvPTOHours" runat="server" ToolTip="PTO Hours should be real and less than 8. Invalid entries are highlighted in red."
-                                        ErrorMessage="PTO Hours should be real and less than 8. Invalid entries are highlighted in red."
-                                        SetFocusOnError="true" OnServerValidate="custPTOHours_ServerValidate" EnableClientScript="false"
+                                    <asp:CustomValidator ID="cvAdminstrativeHours" runat="server" ToolTip="Adminstrative Work Type Hours should be real and less than 8. Invalid entries are highlighted in red."
+                                        ErrorMessage="Adminstrative Work Type Hours should be real and less than 8. Invalid entries are highlighted in red."
+                                        SetFocusOnError="true" OnServerValidate="custAdminstrativeHours_ServerValidate" EnableClientScript="false"
                                         Display="None" Text="*" ValidationGroup="TE" />
                                     <asp:CustomValidator ID="custNote" runat="server" ErrorMessage="Note should be 3-1000 characters long. Invalid entries are highlighted in red."
                                         OnServerValidate="custNote_ServerValidate" EnableClientScript="false" Text="*"
