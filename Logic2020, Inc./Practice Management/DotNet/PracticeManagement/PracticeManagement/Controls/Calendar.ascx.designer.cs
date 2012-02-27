@@ -310,15 +310,6 @@ namespace PraticeManagement.Controls {
         protected global::PraticeManagement.Controls.MonthCalendar mcDecember;
         
         /// <summary>
-        /// hdnHolidayDate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnHolidayDate;
-        
-        /// <summary>
         /// hdDeleteSubstituteDay control.
         /// </summary>
         /// <remarks>
@@ -328,15 +319,6 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.HiddenField hdDeleteSubstituteDay;
         
         /// <summary>
-        /// hdEditSingleDay control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdEditSingleDay;
-        
-        /// <summary>
         /// hdEditCondtion control.
         /// </summary>
         /// <remarks>
@@ -344,15 +326,6 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hdEditCondtion;
-        
-        /// <summary>
-        /// hfAddTimeOff control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hfAddTimeOff;
         
         /// <summary>
         /// mpeSelectEditCondtion control.
@@ -382,15 +355,6 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.Label lbDate;
         
         /// <summary>
-        /// rbEditSingleDay control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rbEditSingleDay;
-        
-        /// <summary>
         /// rbEditSeries control.
         /// </summary>
         /// <remarks>
@@ -398,6 +362,15 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RadioButton rbEditSeries;
+        
+        /// <summary>
+        /// rbEditSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbEditSingleDay;
         
         /// <summary>
         /// btnOk_EditCondtion control.
@@ -416,6 +389,24 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btncancel_EditCondtion;
+        
+        /// <summary>
+        /// upnlTimeOff control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upnlTimeOff;
+        
+        /// <summary>
+        /// hfAddTimeOff control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfAddTimeOff;
         
         /// <summary>
         /// mpeAddTimeOff control.
@@ -589,15 +580,6 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.Button btnCancelTimeOff;
         
         /// <summary>
-        /// upnlErrorsTimeOff control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upnlErrorsTimeOff;
-        
-        /// <summary>
         /// valSumTimeOff control.
         /// </summary>
         /// <remarks>
@@ -605,6 +587,24 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ValidationSummary valSumTimeOff;
+        
+        /// <summary>
+        /// upnlErrorSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upnlErrorSingleDay;
+        
+        /// <summary>
+        /// hdEditSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdEditSingleDay;
         
         /// <summary>
         /// mpeEditSingleDay control.
@@ -733,15 +733,6 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.Button btnCancelEditSingleDay;
         
         /// <summary>
-        /// upnlErrorSingleDay control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upnlErrorSingleDay;
-        
-        /// <summary>
         /// valSumErrorSingleDay control.
         /// </summary>
         /// <remarks>
@@ -749,6 +740,24 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ValidationSummary valSumErrorSingleDay;
+        
+        /// <summary>
+        /// upnlValsummary control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upnlValsummary;
+        
+        /// <summary>
+        /// hdnHolidayDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnHolidayDate;
         
         /// <summary>
         /// mpeHolidayAndSubStituteDay control.
@@ -796,6 +805,15 @@ namespace PraticeManagement.Controls {
         protected global::PraticeManagement.Controls.DatePicker dpSubstituteDay;
         
         /// <summary>
+        /// compdpSubstituteDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compdpSubstituteDay;
+        
+        /// <summary>
         /// cvSubstituteDay control.
         /// </summary>
         /// <remarks>
@@ -821,15 +839,6 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSubstituteDayCancel;
-        
-        /// <summary>
-        /// upnlValsummary control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upnlValsummary;
         
         /// <summary>
         /// valSumsubstituteday control.
