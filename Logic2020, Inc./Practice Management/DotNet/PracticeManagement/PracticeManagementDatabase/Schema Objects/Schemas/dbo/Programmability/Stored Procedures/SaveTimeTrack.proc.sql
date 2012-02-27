@@ -105,10 +105,11 @@ BEGIN
 				     )
 
 		UPDATE TE
-		SET	TE.Note = NEW.c.value('@Note', 'NVARCHAR(1000)')
+		SET	TE.Note = CASE WHEN TT.IsAdministrative = 1 AND NEW.c.value('@Note', 'NVARCHAR(1000)') = '' THEN TT.Name ELSE NEW.c.value('@Note', 'NVARCHAR(1000)') END
 		FROM dbo.TimeEntry TE
 		INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId   
 		INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId
+		INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId
 		INNER JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
 			ON NEW.c.value('..[1]/@Date', 'DATETIME') = TE.ChargeCodeDate
 				AND CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
@@ -141,18 +142,17 @@ BEGIN
 				CC.Id,
 				NEW.c.value('..[1]/@Date', 'DATETIME'),
 				ISNULL(FH.ForcastedHours, 0),
-				CASE WHEN TT.IsAdministrative = 1 THEN TT.Name ELSE NEW.c.value('@Note', 'NVARCHAR(1000)') END,
+				CASE WHEN TT.IsAdministrative = 1 AND NEW.c.value('@Note', 'NVARCHAR(1000)') = '' THEN TT.Name ELSE NEW.c.value('@Note', 'NVARCHAR(1000)') END,
 				1,
 				0
 		FROM @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
-		JOIN dbo.ChargeCode CC ON CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
+		INNER JOIN dbo.ChargeCode CC ON CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
 								AND CC.ProjectGroupId = NEW.c.value('..[1]/..[1]/..[1]/@BusinessUnitId', 'INT')
 								AND CC.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT')
 								AND CC.TimeTypeId = NEW.c.value('..[1]/..[1]/@Id', 'INT')
-		JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId
+		INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId
 		LEFT JOIN dbo.TimeEntry TE ON TE.ChargeCodeId = CC.Id AND TE.PersonId = @PersonId
 										AND TE.ChargeCodeDate = NEW.c.value('..[1]/@Date', 'DATETIME')
-										AND (TE.Note = NEW.c.value('@Note', 'NVARCHAR(1000)') )
 		LEFT JOIN ForecastedHours FH ON FH.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT') 
 										AND FH.Date = NEW.c.value('..[1]/@Date', 'DATETIME')
 		WHERE TE.TimeEntryId IS NULL
@@ -229,15 +229,20 @@ BEGIN
 		UPDATE PC
 		SET	ActualHours = Dates.c.value('@ActualHours', 'REAL'),
 			IsSeries = 0,
-			IsFromTimeEntry = 1
+			IsFromTimeEntry = 1,
+			TimeTypeId = Dates.c.value('..[1]/..[1]/@Id', 'INT'),
+			Description = CASE WHEN Dates.c.value('@Note', 'NVARCHAR(1000)') = '' THEN tt.Name ELSE Dates.c.value('@Note', 'NVARCHAR(1000)') END
 		FROM dbo.PersonCalendar PC
 		JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') Dates(c)
 			ON Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4
 				AND Dates.c.value('..[1]/@Date', 'DATETIME') = PC.Date
 				AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @HolidayTimeTypeId
 				AND Dates.c.value('@ActualHours', 'REAL') > 0
+			INNER JOIN dbo.TimeType tt ON tt.TimeTypeId = PC.TimeTypeId
 		WHERE PC.PersonId = @PersonId AND PC.Date BETWEEN @StartDate AND @EndDate AND PC.DayOff = 1
-			AND Dates.c.value('@ActualHours', 'REAL') <> PC.ActualHours
+			AND (Dates.c.value('@ActualHours', 'REAL') <> PC.ActualHours 
+				OR PC.TimeTypeId <> Dates.c.value('..[1]/..[1]/@Id', 'INT') 
+				OR PC.Description <> Dates.c.value('@Note', 'NVARCHAR(1000)'))
 
 		DECLARE @BeforeStartDate DATETIME,
 				@AfterEndDate	DATETIME
