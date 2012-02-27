@@ -212,7 +212,7 @@ namespace PraticeManagement.Controls
         {
             get
             {
-                return rbEditSingleDay;
+                return rbEditSeries;
             }
         }
 
@@ -257,8 +257,6 @@ namespace PraticeManagement.Controls
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            upnlValsummary.Update();
-            upnlErrorsTimeOff.Update();
             upnlErrorSingleDay.Update();
         }
 
@@ -361,7 +359,7 @@ namespace PraticeManagement.Controls
 
                 mpeEditSingleDay.Hide();
             }
- 
+
         }
 
         protected void btnOkSingleDay_OnClick(object sender, EventArgs e)
@@ -384,6 +382,19 @@ namespace PraticeManagement.Controls
 
                 mpeEditSingleDay.Hide();
             }
+
+        }
+
+
+        protected void btnAddTimeOff_Click(object sender, EventArgs e)
+        {
+            btnDeleteTimeOff.Visible = false;
+            dtpStartDateTimeOff.DateValue = DateTime.Today;
+            dtpEndDateTimeOff.DateValue = DateTime.Today;
+            ddlTimeTypesTimeOff.SelectedIndex = 0;
+            txthoursTimeOff.Text = "8";
+            mpeAddTimeOff.Show();
+            upnlTimeOff.Update();
         }
 
         protected void btnOkTimeOff_Click(object sender, EventArgs e)
@@ -392,18 +403,23 @@ namespace PraticeManagement.Controls
             if (Page.IsValid)
             {
                 ServiceCallers.Custom.Calendar(
-                    c => c.SaveTimeOff(dtpStartDateTimeOff.DateValue, 
-                                                                  dtpEndDateTimeOff.DateValue, 
+                    c => c.SaveTimeOff(dtpStartDateTimeOff.DateValue,
+                                                                  dtpEndDateTimeOff.DateValue,
                                                                   true,
-                                                                  SelectedPersonId.Value, 
-                                                                  (double?)Convert.ToDouble(txthoursTimeOff.Text), 
-                                                                  Convert.ToInt32(ddlTimeTypesTimeOff.SelectedValue), 
+                                                                  SelectedPersonId.Value,
+                                                                  (double?)Convert.ToDouble(txthoursTimeOff.Text),
+                                                                  Convert.ToInt32(ddlTimeTypesTimeOff.SelectedValue),
                                                                   Context.User.Identity.Name
                                                                   )
                                                );
 
-                mpeAddTimeOffPopup.Hide();
             }
+            else
+            {
+                mpeAddTimeOffPopup.Show();
+            }
+
+            upnlTimeOff.Update();
         }
 
         protected void btnDeleteTimeOff_Click(object sender, EventArgs e)
@@ -421,8 +437,14 @@ namespace PraticeManagement.Controls
                                                                  Context.User.Identity.Name
                                                                  )
                                               );
-                mpeAddTimeOffPopup.Hide();
             }
+            else
+            {
+                mpeAddTimeOffPopup.Show();
+            }
+
+
+            upnlTimeOff.Update();
         }
 
 
@@ -479,6 +501,8 @@ namespace PraticeManagement.Controls
             {
                 mpeHolidayAndSubStituteDay.Show();
             }
+
+            upnlValsummary.Update();
 
         }
 
@@ -631,6 +655,15 @@ namespace PraticeManagement.Controls
         }
 
 
+
+        internal void ShowHolidayAndSubStituteDay(DateTime date, string holiDayDescription)
+        {
+            hdnHolidayDate.Value = lblHolidayDate.Text = date.ToString("MM/dd/yyyy");
+            lblHolidayName.Text = holiDayDescription;
+            dpSubstituteDay.TextValue = "";
+            mpeHolidayAndSubStituteDay.Show();
+            upnlValsummary.Update();
+        }
     }
 }
 
