@@ -196,6 +196,7 @@ namespace PraticeManagement.Controls
                 }
                 else
                 {
+
                     HostingControl.rbEditSeriesRadioButton.Checked = true;
                     HostingControl.rbEditSingleDayRadioButton.Checked = false;
                     HostingControl.dtpStartDateTimeOffDatePicker.DateValue = series.Key;
@@ -203,7 +204,7 @@ namespace PraticeManagement.Controls
                     HostingControl.ddlTimeTypesTimeOffDropDown.SelectedValue = timeTypeId;
                     HostingControl.txthoursTimeOffTextBox.Text = hours;
                     HostingControl.lbDateLabel.Text = date.ToString("MM/dd/yyyy");
-
+                    HostingControl.btnDeleteTimeOffControl.Visible = true;
                     HostingControl.mpeSelectEditCondtionPopUp.Show();
                 }
 
