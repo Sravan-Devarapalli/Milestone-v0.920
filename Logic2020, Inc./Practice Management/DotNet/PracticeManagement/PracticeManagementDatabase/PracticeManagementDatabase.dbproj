@@ -4000,6 +4000,14 @@
     <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_PersonCalendar_SubstituteDate.fkey.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetSalariedConsultantsAssignedDaysByProjects.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetProjectManagerNames.function.sql">
+      <SubType>Code</SubType>
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Schema Comparisons\v0.850.dbschema">
@@ -4064,4 +4072,3 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
-
