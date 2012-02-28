@@ -22,6 +22,7 @@ namespace PraticeManagement.Controls
         private const string YearKey = "Year";
         private const string ViewStatePreviousRecurringList = "ViewStatePreviousRecurringHolidaysList";
         private const string MailToSubjectFormat = "mailto:{0}?subject=Permissions for {1}'s calendar";
+        public const String showEditSeriesOrSingleDayMessage = "Do you want to edit the series ({0} – {1}) or edit the single day ({2})?";
 
         private CalendarItem[] days;
         private bool userIsPracticeManager;
@@ -69,6 +70,7 @@ namespace PraticeManagement.Controls
                 return personId;
             }
         }
+        
         private bool SelectedPersonHasPermissionToEditCalender
         {
             get
@@ -82,6 +84,7 @@ namespace PraticeManagement.Controls
             }
 
         }
+        
         public bool CompanyHolidays
         {
             get;
@@ -116,14 +119,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public ModalPopupExtender mpeAddTimeOffPopup
-        {
-            get
-            {
-                return mpeAddTimeOff;
-            }
-        }
-
         public ModalPopupExtender mpeEditSingleDayPopUp
         {
             get
@@ -132,101 +127,35 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public DatePicker dtpStartDateTimeOffDatePicker
-        {
-            get
-            {
-                return dtpStartDateTimeOff;
-            }
-        }
-        public DatePicker dtpEndDateTimeOffDatePicker
-        {
-            get
-            {
-                return dtpEndDateTimeOff;
-            }
-        }
-
-        public DropDownList ddlTimeTypesTimeOffDropDown
-        {
-            get
-            {
-                return ddlTimeTypesTimeOff;
-            }
-        }
-        public TextBox txthoursTimeOffTextBox
-        {
-            get
-            {
-                return txthoursTimeOff;
-            }
-        }
-
-        public Label lbdateSingleDayLabel
-        {
-            get
-            {
-                return lbdateSingleDay;
-            }
-        }
-
-        public DropDownList ddlTimeTypesSingleDayDropDown
-        {
-            get
-            {
-                return ddlTimeTypesSingleDay;
-            }
-        }
-
-        public TextBox txtHoursSingleDayTextBox
-        {
-            get
-            {
-                return txtHoursSingleDay;
-            }
-        }
-        public HiddenField hdnDateSingleDayHiddenField
-        {
-            get
-            {
-                return hdnDateSingleDay;
-            }
-        }
-        public Label lbDateLabel
-        {
-            get
-            {
-                return lbDate;
-            }
-        }
-
-        public RadioButton rbEditSingleDayRadioButton
-        {
-            get
-            {
-                return rbEditSingleDay;
-            }
-        }
-
-        public RadioButton rbEditSeriesRadioButton
-        {
-            get
-            {
-                return rbEditSeries;
-            }
-        }
-
-
-        public Button btnDeleteTimeOffControl
-        {
-            get
-            {
-                return btnDeleteTimeOff;
-            }
-        }
-
         #endregion
 
+        public void PopulateSingleDayPopupControls(DateTime date, string timeTypeId, string hours)
+        {
+            lbdateSingleDay.Text = date.ToString("MM/dd/yyyy");
+            hdnDateSingleDay.Value = date.ToString();
+            ddlTimeTypesSingleDay.SelectedValue = timeTypeId;
+            txtHoursSingleDay.Text = Convert.ToDouble(hours).ToString("0.00");
+            hdIsSingleDayPopDirty.Value = false.ToString();
+            btnDeleteSingleDay.Enabled = true;
+        }
+
+        public void PopulateSeriesPopupControls(DateTime startDate, DateTime endDate, string timeTypeId, string hours)
+        {
+            dtpStartDateTimeOff.DateValue = startDate;
+            dtpEndDateTimeOff.DateValue = endDate;
+            ddlTimeTypesTimeOff.SelectedValue = timeTypeId;
+            txthoursTimeOff.Text = Convert.ToDouble(hours).ToString("0.00");
+            btnDeleteTimeOff.Visible = btnDeleteTimeOff.Enabled = true;
+            hdIsTimeOffPopUpDirty.Value = false.ToString(); 
+        }
+
+        public void PopulateEditConditionPopupControls(DateTime startDate, DateTime endDate,DateTime selectedDate)
+        {
+            rbEditSeries.Checked = true;
+            rbEditSingleDay.Checked = false;
+            lbDate.Text = String.Format(Calendar.showEditSeriesOrSingleDayMessage, startDate.ToString("MM/dd/yyyy"), endDate.ToString("MM/dd/yyyy"), selectedDate.ToString("MM/dd/yyyy"));
+
+        }
         private void UpdateCalendar()
         {
             mcJanuary.Year = mcFebruary.Year = mcMarch.Year =
@@ -256,10 +185,12 @@ namespace PraticeManagement.Controls
             if (SelectedPersonHasPermissionToEditCalender)
             {
                 trAlert.Visible = false;
+                btnAddTimeOff.Visible = true;
             }
             else
             {
                 trAlert.Visible = true;
+                btnAddTimeOff.Visible = false;
             }
             pnlBody.Update();
         }
@@ -348,7 +279,6 @@ namespace PraticeManagement.Controls
 
         }
 
-
         protected void btnDeleteSingleDay_OnClick(object sender, EventArgs e)
         {
             Page.Validate(valSumErrorSingleDay.ValidationGroup);
@@ -368,6 +298,13 @@ namespace PraticeManagement.Controls
 
                 mpeEditSingleDay.Hide();
             }
+            else
+            {
+                mpeEditSingleDay.Show();
+            }
+
+
+            upnlErrorSingleDay.Update();
 
         }
 
@@ -391,17 +328,31 @@ namespace PraticeManagement.Controls
 
                 mpeEditSingleDay.Hide();
             }
+            else
+            {
+                if (!String.IsNullOrEmpty(hdIsSingleDayPopDirty.Value))
+                {
+                    var isPopupDirty = Convert.ToBoolean(hdIsSingleDayPopDirty.Value);
+                    if (isPopupDirty)
+                    {
+                        btnDeleteSingleDay.Enabled = false;
+                    }
+                }
+                mpeEditSingleDay.Show();
+            }
+
+            upnlErrorSingleDay.Update();
 
         }
-
 
         protected void btnAddTimeOff_Click(object sender, EventArgs e)
         {
             btnDeleteTimeOff.Visible = false;
+            btnDeleteTimeOff.Enabled = true;
             dtpStartDateTimeOff.DateValue = DateTime.Today;
             dtpEndDateTimeOff.DateValue = DateTime.Today;
             ddlTimeTypesTimeOff.SelectedIndex = 0;
-            txthoursTimeOff.Text = "8";
+            txthoursTimeOff.Text = "8.00";
             mpeAddTimeOff.Show();
             upnlTimeOff.Update();
         }
@@ -425,7 +376,15 @@ namespace PraticeManagement.Controls
             }
             else
             {
-                mpeAddTimeOffPopup.Show();
+                if (!String.IsNullOrEmpty(hdIsTimeOffPopUpDirty.Value))
+                {
+                    var isPopupDirty = Convert.ToBoolean(hdIsTimeOffPopUpDirty.Value);
+                    if (isPopupDirty)
+                    {
+                        btnDeleteTimeOff.Enabled = false;
+                    }
+                }
+                mpeAddTimeOff.Show();
             }
 
             upnlTimeOff.Update();
@@ -449,13 +408,12 @@ namespace PraticeManagement.Controls
             }
             else
             {
-                mpeAddTimeOffPopup.Show();
+                mpeAddTimeOff.Show();
             }
 
 
             upnlTimeOff.Update();
         }
-
 
         protected void cvSubstituteDay_ServerValidate(object source, ServerValidateEventArgs args)
         {
@@ -465,6 +423,30 @@ namespace PraticeManagement.Controls
             }
         }
 
+        protected void cvHoursSingleDay_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (!string.IsNullOrEmpty(txtHoursSingleDay.Text))
+            {
+                var hours = Convert.ToDouble(txtHoursSingleDay.Text);
+                if (hours % 0.25 != 0)
+                {
+                    args.IsValid = false;
+                }
+            }
+        }
+
+        protected void cvHoursPerDay_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (!string.IsNullOrEmpty(txtHoursSingleDay.Text))
+            {
+                var hours = Convert.ToDouble(txthoursTimeOff.Text);
+                if (hours % 0.25 != 0)
+                {
+                    args.IsValid = false;
+                }
+            }
+        }
+      
         protected void btnDeleteSubstituteDay_Click(object sender, EventArgs e)
         {
             var userName = Context.User.Identity.Name;
@@ -605,11 +587,13 @@ namespace PraticeManagement.Controls
                 serviceClient.SetRecurringHoliday(id, isSet, user);
             }
         }
+
         private void SetMailToContactSupport()
         {
             var _contactSupport = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.SMTP, Constants.ResourceKeys.PMSupportEmailAddressKey);
             contactSupportMailToLink.NavigateUrl = string.Format(MailToSubjectFormat, _contactSupport, DataHelper.CurrentPerson.PersonLastFirstName);
         }
+        
         protected void calendar_PreRender(object sender, EventArgs e)
         {
             MonthCalendar calendar = sender as MonthCalendar;
@@ -656,14 +640,13 @@ namespace PraticeManagement.Controls
                     item.ReadOnly = true;
                 }
                 trAlert.Visible = true;
+                btnAddTimeOff.Visible = false;
                 pnlBody.Update();
                 // lblConsultantMessage.Visible = true;
             }
 
             calendar.CalendarItems = days;
         }
-
-
 
         internal void ShowHolidayAndSubStituteDay(DateTime date, string holiDayDescription)
         {
