@@ -490,6 +490,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.CompareValidator compStartDateEndDateTimeOff;
         
         /// <summary>
+        /// cvStartDateEndDateTimeOff control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvStartDateEndDateTimeOff;
+        
+        /// <summary>
         /// ddlTimeTypesTimeOff control.
         /// </summary>
         /// <remarks>
