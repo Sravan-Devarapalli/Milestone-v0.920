@@ -11,9 +11,9 @@
 <%@ Import Namespace="PraticeManagement.Controls.TimeEntry" %>
 <table class="WholeWidth">
     <tr class="time-entry-bar">
-        <td class="DeleteWidth">
+        <td id="tdplusProjectSection" runat="server" class="DeleteWidth">
         </td>
-        <td class="time-entry-bar-time-typesNew">
+        <td class="time-entry-bar-time-typesNew textCenter">
             <asp:DropDownList ID="ddlTimeTypes" runat="server" CssClass="time-entry-bar-time-typesNew-select-Normal"
                 OnDataBound="ddlTimeTypes_DataBound" DataTextField="Name" DataValueField="Id"
                 ValidationGroup='<%# ClientID %>' onchange="setDirty();" />
@@ -38,9 +38,9 @@
             <ext1:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lblTotalHours" />
             <ext2:EnableDisableExtender ID="extEnableDisable" runat="server" TargetControlID="ddlTimeTypes" />
         </td>
-         <td class="DeleteWidth">
-            <asp:ImageButton ID="imgDropTes" runat="server" OnClientClick='return confirm ("This will remove the Work Type as well as any time and notes entered!  Are you sure?")' ToolTip="Remove Work Type"
-                ImageUrl="~/Images/close_16.png" OnClick="imgDropTes_Click" />
+        <td class="DeleteWidth">
+            <asp:ImageButton ID="imgDropTes" runat="server" OnClientClick='return confirm ("This will remove the Work Type as well as any time and notes entered!  Are you sure?")'
+                ToolTip="Remove Work Type" ImageUrl="~/Images/close_16.png" OnClick="imgDropTes_Click" />
         </td>
     </tr>
 </table>
