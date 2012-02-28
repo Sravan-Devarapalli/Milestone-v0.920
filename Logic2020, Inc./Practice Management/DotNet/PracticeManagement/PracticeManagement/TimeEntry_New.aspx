@@ -25,6 +25,8 @@
 <%@ Register Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic"
     TagPrefix="pcg" %>
 <%@ Register Src="~/Controls/CalendarLegend.ascx" TagName="CalendarLegend" TagPrefix="uc2" %>
+<%@ Register TagPrefix="cc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
+
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Time Entry | Practice Management</title>
 </asp:Content>
@@ -298,7 +300,7 @@
                                 <td>
                                 </td>
                                 <td>
-                                    <asp:Button ID="btnAddProject" runat="server" OnClientClick="SelectDefaultValues('cddClientProjects');"
+                                    <asp:Button ID="btnAddProject" runat="server" OnClick="btnAddProject_Click"
                                         Text="Add Project" CssClass="mrg0" ToolTip="Add Project" />
                                 </td>
                             </tr>
@@ -914,8 +916,9 @@
                     </div>
                 </asp:Panel>
                 <uc2:CalendarLegend ID="CalendarLegend" runat="server" disableChevron="true" />
+                <asp:HiddenField ID="hdnAddProject" runat="server" />
                 <AjaxControlToolkit:ModalPopupExtender ID="mpeProjectSectionPopup" runat="server"
-                    TargetControlID="btnAddProject" CancelControlID="btnCancelProjectSection" BehaviorID="mpeProjectSectionPopup"
+                    TargetControlID="hdnAddProject" CancelControlID="btnCancelProjectSection" BehaviorID="mpeProjectSectionPopup"
                     BackgroundCssClass="modalBackground" PopupControlID="pnlProjectSectionPopup"
                     DropShadow="false" />
                 <asp:Panel ID="pnlProjectSectionPopup" runat="server" BackColor="White" BorderColor="Black"
@@ -938,7 +941,7 @@
                                             Account :
                                         </td>
                                         <td class="Width70Percent">
-                                            <asp:DropDownList ID="ddlAccountProjectSection" onchange="ddlParent_onchange(this);"
+                                            <asp:DropDownList ID="ddlAccountProjectSection" AutoPostBack="true" OnSelectedIndexChanged="ddlAccountProjectSection_SelectedIndexChanged"
                                                 Width="250px" runat="server" />
                                         </td>
                                     </tr>
@@ -947,14 +950,9 @@
                                             Project :
                                         </td>
                                         <td class="Width70Percent ModalPopUpDropDownPadding">
-                                            <asp:DropDownList ID="ddlProjectProjectSection" onchange="ddlChild_onchange(this);"
+                                            <cc:CustomDropDown ID="ddlProjectProjectSection" onchange="ddlChild_onchange(this);"
                                                 Width="250px" runat="server">
-                                            </asp:DropDownList>
-                                            <AjaxControlToolkit:CascadingDropDown ID="cddClientProjects" runat="server" ParentControlID="ddlAccountProjectSection"
-                                                TargetControlID="ddlProjectProjectSection" Category="Group" LoadingText="Loading Projects..."
-                                                EmptyText="No Projects found" ScriptPath="~/Scripts/CascadingDropDownBehavior.js"
-                                                BehaviorID="cddClientProjects" PromptText="- - Select Project - -" PromptValue="-1"
-                                                ServicePath="~/CompanyPerfomanceServ.asmx" ServiceMethod="GetProjectsList" UseContextKey="true" />
+                                            </cc:CustomDropDown>
                                         </td>
                                     </tr>
                                 </table>
