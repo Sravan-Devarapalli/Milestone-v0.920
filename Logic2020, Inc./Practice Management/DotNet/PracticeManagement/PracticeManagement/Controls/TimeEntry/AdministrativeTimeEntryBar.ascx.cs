@@ -138,7 +138,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 ste.HorizontalTotalCalculatorExtenderId = extTotalHours.ClientID;
                 ste.IsNoteRequired = calendarItem.Attribute(XName.Get(TimeEntry_New.IsNoteRequiredXname)).Value;
                 ste.IsChargeCodeTurnOff = calendarItem.Attribute(XName.Get(TimeEntry_New.IsChargeCodeOffXname)).Value;
-               
+
                 if (IsHoliday)
                 {
                     ste.Disabled = true;
@@ -150,6 +150,9 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 ste.IsPTO = IsPTO;
                 ste.IsHoliday = IsHoliday;
+
+                tdTimeTypes.Attributes["class"] ="time-entry-bar-time-typesNew " + GetDayCssClass();
+
                 ste.IsAdminstrativeTimeType = true;
                 DateTime date = Convert.ToDateTime(calendarItem.Attribute(XName.Get(TimeEntry_New.DateXname)).Value);
                 if (!HostingPage.AdminExtenderHoursControls.ContainsKey(date))
@@ -179,13 +182,13 @@ namespace PraticeManagement.Controls.TimeEntry
                 var imgClear = (ste.FindControl("imgClear") as HtmlGenericControl).ClientID;
                 var cpp = (ste.FindControl("cpp") as LinkButton).ClientID;
                 var btnSaveNotes = (ste.FindControl("btnSaveNotes") as Button).ClientID;
-                
+
                 HostingPage.AdminExtenderHoursControls[date] = textBoxId + ";" + HostingPage.AdminExtenderHoursControls[date];
                 HostingPage.AdminExtenderNotesControls[date] = tbNotesId + ";" + HostingPage.AdminExtenderNotesControls[date];
                 HostingPage.AdminExtenderHiddenNotesControls[date] = hdNotesId + ";" + HostingPage.AdminExtenderHiddenNotesControls[date];
                 HostingPage.AdminExtenderDeleteControls[date] = imgClear + ";" + HostingPage.AdminExtenderDeleteControls[date];
                 HostingPage.AdminExtenderCloseControls[date] = cpp + ";" + HostingPage.AdminExtenderCloseControls[date];
-                
+
                 ste.ParentCalendarItem = calendarItem;
 
                 var nbterecord = (calendarItem.HasElements && calendarItem.Descendants(XName.Get(TimeEntry_New.TimeEntryRecordXname)).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").ToList().Count > 0) ? calendarItem.Descendants(XName.Get("TimeEntryRecord")).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").First() : null;
@@ -234,6 +237,18 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             return calendarItem.Attribute(XName.Get(TimeEntry_New.CssClassXname)).Value;
         }
+
+
+        private string GetDayCssClass()
+        {
+            if (IsPTO || IsHoliday)
+            {
+                return "textLeft padLeft30";
+            }
+            return "textCenter";
+        }
+
+
 
         private void InitTimeEntryControl(SingleTimeEntry_New ste, DateTime date, XElement terXlement)
         {
@@ -383,7 +398,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
             if (workTypeId > 0 && !(IsPTO || IsHoliday))
             {
-                Triple<int,int,int> result = ServiceCallers.Custom.TimeType(tt => tt.GetAdministrativeChargeCodeValues(workTypeId));
+                Triple<int, int, int> result = ServiceCallers.Custom.TimeType(tt => tt.GetAdministrativeChargeCodeValues(workTypeId));
                 accountAndProjectSelectionElement.Attribute(XName.Get(TimeEntry_New.AccountIdXname)).Value = result.First.ToString();
                 accountAndProjectSelectionElement.Attribute(XName.Get(TimeEntry_New.ProjectIdXname)).Value = result.Second.ToString();
                 accountAndProjectSelectionElement.Attribute(XName.Get(TimeEntry_New.BusinessUnitIdXname)).Value = result.Third.ToString();
@@ -393,6 +408,8 @@ namespace PraticeManagement.Controls.TimeEntry
 
         #endregion
 
+
+        public string TdCellSectionClientID { get { return tdPlusSection.ClientID; } }
     }
 }
 
