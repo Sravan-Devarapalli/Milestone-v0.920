@@ -271,6 +271,8 @@
             public const string IsPTOColumn = "IsPTO";
             public const string IsHolidayColumn = "IsHoliday";
             public const string IsAdministrativeColumn = "IsAdministrative";
+            public const string AssignedProject = "AssignedProject";
+            
         }
 
         #endregion
