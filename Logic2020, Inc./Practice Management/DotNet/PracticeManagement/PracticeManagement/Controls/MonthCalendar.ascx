@@ -45,12 +45,12 @@
                       )
                 )
             )
-            ) : "" %>' ToolTip='<%# GetToolTip( (string)Eval("HolidayDescription"), (double?)Eval("ActualHours") )%>'>
+            ) : "" %>' ToolTip='<%# GetToolTip( (string)Eval("HolidayDescription"), (double?)Eval("ActualHours"),(bool)Eval("IsFloatingHoliday") )%>'>
                     <asp:LinkButton ID="btnDay" runat="server" Text='<%# Eval("Date.Day") %>' Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year && !(bool)GetIsReadOnly((bool)Eval("ReadOnly"), (bool)Eval("DayOff"), (bool)Eval("CompanyDayOff"), (DateTime)Eval("Date"))%>'
                         DayOff='<%# (bool)Eval("DayOff") ? "true":"false" %>' Date='<%# Eval("Date") %>'
                         OnClientClick='<%# DayOnClientClick((DateTime)Eval("Date")) %>' 
                         IsRecurringHoliday='<%# (bool)Eval("IsRecurringHoliday") %>'
-                        ToolTip='<%# GetToolTip( (string)Eval("HolidayDescription"), (double?)Eval("ActualHours") )%>'
+                        ToolTip='<%# GetToolTip( (string)Eval("HolidayDescription"), (double?)Eval("ActualHours"),(bool)Eval("IsFloatingHoliday") )%>'
                         HolidayDescription='<%# string.IsNullOrEmpty((string)Eval("HolidayDescription"))? "":((string)Eval("HolidayDescription"))%>'
                         RecurringHolidayId='<%# (int?) Eval("RecurringHolidayId")%>' 
                         RecurringHolidayDate='<%# (DateTime?) Eval("RecurringHolidayDate") %>'
