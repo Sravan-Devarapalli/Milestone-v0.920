@@ -526,6 +526,15 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.CalendarLegend CalendarLegend;
         
         /// <summary>
+        /// hdnAddProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnAddProject;
+        
+        /// <summary>
         /// mpeProjectSectionPopup control.
         /// </summary>
         /// <remarks>
@@ -568,16 +577,7 @@ namespace PraticeManagement {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlProjectProjectSection;
-        
-        /// <summary>
-        /// cddClientProjects control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.CascadingDropDown cddClientProjects;
+        protected global::PraticeManagement.Controls.CustomDropDown ddlProjectProjectSection;
         
         /// <summary>
         /// btnAddProjectSection control.
