@@ -792,6 +792,7 @@ namespace PraticeManagement
                 imgPlusInternalSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
                 imgPlusInternalSection.Attributes[PlaceHolderCell] = TdPlusSectionClientId;
                 imgPlusInternalSection.ToolTip = string.Format(PlusToolTipFormat, "Project");
+                
             }
         }
 
@@ -851,6 +852,8 @@ namespace PraticeManagement
 
                 bar.TimeTypes = AdministrativeTimeTypes;
                 bar.TeBarDataSource = teSectionDataItem.Descendants(XName.Get(CalendarItemXname)).ToList();
+
+                TdPlusSectionClientId = bar.TdCellSectionClientID;
                 bar.UpdateTimeEntries();
             }
             else if (e.Item.ItemType == ListItemType.Footer)
@@ -870,7 +873,7 @@ namespace PraticeManagement
                 var repProjectTesFooter = e.Item.FindControl(repAdministrativeTesFooterRepeater) as Repeater;
                 repProjectTesFooter.DataSource = SelectedDates;
                 repProjectTesFooter.DataBind();
-
+                imgPlus.Attributes[PlaceHolderCell] = TdPlusSectionClientId;
             }
         }
 
