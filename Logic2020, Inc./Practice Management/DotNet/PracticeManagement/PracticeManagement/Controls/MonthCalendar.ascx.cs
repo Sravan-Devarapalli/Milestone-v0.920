@@ -200,7 +200,7 @@ namespace PraticeManagement.Controls
 
                 HostingControl.pnlBodyUpdatePanel.Update();
             }
-            else if (hndDayOff.Value.ToLower() == "true" && btnDay.Attributes["CompanyDayOff"] == "true")
+            else if (btnDay.Attributes["CompanyDayOff"] == "true")
             {
                 HostingControl.ShowHolidayAndSubStituteDay(date, btnDay.Attributes["HolidayDescription"]);
             }
