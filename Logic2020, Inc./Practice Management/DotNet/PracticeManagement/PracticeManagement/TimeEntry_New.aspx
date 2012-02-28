@@ -251,7 +251,10 @@
 
                         var imgPlusInternalSectionList = $("[id$='imgPlusInternalSection']");
                         ReplaceHTML(imgPlusInternalSectionList);
-                        
+
+                        var imgPlusAdministrativeSectionList = $("[id$='imgPlusAdministrativeSection']");
+                        ReplaceHTML(imgPlusAdministrativeSectionList);
+
 
                     }
 
@@ -750,16 +753,8 @@
                                 <uc:AdministrativeTimeEntryBar runat="server" ID="bar" />
                             </ItemTemplate>
                             <FooterTemplate>
-                                <table cellpadding="0" cellspacing="0" class="PaddingClass WholeWidth">
-                                    <tr>
-                                        <td class="DeleteWidth" style="text-align: left !important;">
-                                            <asp:ImageButton ID="imgPlusAdministrativeSection" OnClick="imgPlusAdministrativeSection_OnClick"
-                                                runat="server" ImageUrl="~/Images/add_24.png" ToolTip="Add additional Administrative Work Type" />
-                                        </td>
-                                        <td colspan="10">
-                                        </td>
-                                    </tr>
-                                </table>
+                                <asp:ImageButton ID="imgPlusAdministrativeSection" OnClick="imgPlusAdministrativeSection_OnClick"
+                                    runat="server" ImageUrl="~/Images/add_24.png" ToolTip="Add additional Administrative Work Type" />
                                 <asp:Repeater ID="repAdministrativeTesFooter" runat="server" OnItemDataBound="repAdministrativeTesFooter_OnItemDataBound">
                                     <ItemTemplate>
                                         <asp:HiddenField ID="hdEnableDisableExtenderForAdminstratorSection" runat="server" />
