@@ -156,6 +156,7 @@ namespace PraticeManagement
         private const string SavedAllConfirmation = "Time Entries saved sucessfully.";
         private const string ChargeCodeAlertMessage = "There is a time entry for a date on which the selected ChargeCode is turned off.Please reassign the time entry to other ChargeCode or delete the time entry before changing.";
         public const string WeekChangeAlertMessage = "{0} is not active for the selected time period (i.e. {1} - {2}).";
+        public const string DDLProjectFirstItem = "- - Select Project - -";
 
         #endregion
 
@@ -1466,6 +1467,33 @@ namespace PraticeManagement
                 wsChoose.SetDate(Convert.ToDateTime(dp.Text));
             }
         }
+
+        protected void btnAddProject_Click(object sender, EventArgs e)
+        {
+            ddlAccountProjectSection.SelectedIndex = 0;
+
+            DataHelper.FillTimeEntryProjectList(ddlProjectProjectSection, DDLProjectFirstItem, null, string.Empty);
+            ddlProjectProjectSection.DataBind();
+            ddlProjectProjectSection.Enabled = false;
+
+            mpeProjectSectionPopup.Show();
+        }
+
+        protected void ddlAccountProjectSection_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var selectedClientId = Convert.ToInt32(ddlAccountProjectSection.SelectedValue);
+            var startDate = wsChoose.SelectedStartDate;
+            var endDate = wsChoose.SelectedEndDate;
+
+            var list = DataHelper.ListProjectsByClientAndPersonInPeriod(selectedClientId, true, true, SelectedPerson.Id.Value, startDate, endDate);
+
+            ddlProjectProjectSection.Enabled = true;
+            DataHelper.FillTimeEntryProjectList(ddlProjectProjectSection, DDLProjectFirstItem, list, string.Empty);
+            ddlProjectProjectSection.DataBind();
+
+            mpeProjectSectionPopup.Show();
+        }
+
 
         protected string GetDayOffCssCalss(CalendarItem calendarItem)
         {
