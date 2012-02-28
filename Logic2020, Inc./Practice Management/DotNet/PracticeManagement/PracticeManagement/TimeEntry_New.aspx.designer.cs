@@ -130,6 +130,24 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Panel pnlProjectSection;
         
         /// <summary>
+        /// pnlProjectSectionHeader control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlProjectSectionHeader;
+        
+        /// <summary>
+        /// repProjectSectionHeader control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater repProjectSectionHeader;
+        
+        /// <summary>
         /// repProjectSections control.
         /// </summary>
         /// <remarks>
@@ -184,6 +202,24 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Panel pnlBusinessDevelopmentSection;
         
         /// <summary>
+        /// pnlBusinessDevelopmentSectionHeader control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlBusinessDevelopmentSectionHeader;
+        
+        /// <summary>
+        /// repBusinessDevelopmentSectionHeader control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater repBusinessDevelopmentSectionHeader;
+        
+        /// <summary>
         /// repBusinessDevelopmentSections control.
         /// </summary>
         /// <remarks>
@@ -236,6 +272,24 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlInternalSection;
+        
+        /// <summary>
+        /// pnlInternalSectionHeader control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlInternalSectionHeader;
+        
+        /// <summary>
+        /// repInternalSectionHeader control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater repInternalSectionHeader;
         
         /// <summary>
         /// repInternalSections control.
@@ -391,15 +445,6 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.Generic.TotalCalculator.TotalCalculatorExtender extTotalHours;
         
         /// <summary>
-        /// mlConfirmation control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.MessageLabel mlConfirmation;
-        
-        /// <summary>
         /// btnSave control.
         /// </summary>
         /// <remarks>
@@ -407,6 +452,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSave;
+        
+        /// <summary>
+        /// mlConfirmation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.MessageLabel mlConfirmation;
         
         /// <summary>
         /// custWorkType control.
