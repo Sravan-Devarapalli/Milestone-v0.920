@@ -118,20 +118,20 @@
             imgNoteClientId.title = tbnote.value;
             changeIcon(tbnote.id, imgNoteClientId.id);
         }
-        function btnClose_OnClientClick( popup ) {
-            $find( popup ).hide();
+        function btnClose_OnClientClick(popup) {
+            $find(popup).hide();
             return false;
         }
 
         function IsrecusiveAllowed() {
-            $find( 'mpeRecurringAllowed' ).show();
+            $find('mpeRecurringAllowed').show();
             return false;
         }
-        function checkDirtyWithRedirectInTimeEntry( isFromWeekChange ) {
-            if ( !showDialod() ) {
+        function checkDirtyWithRedirectInTimeEntry(isFromWeekChange) {
+            if (!showDialod()) {
                 clearDirty();
             }
-            __doPostBack( "__Page", isFromWeekChange );
+            __doPostBack("__Page", isFromWeekChange);
             return false;
         }
     </script>
@@ -233,7 +233,9 @@
                     }
 
                     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+
                     function endRequestHandle(sender, Args) {
+                        
                         SetTooltipsForallDropDowns();
                         var hdIsWeekOrPersonChanged = document.getElementById('<%= hdIsWeekOrPersonChanged.ClientID %>');
                         if (hdIsWeekOrPersonChanged.value.toLowerCase() == 'true') {
@@ -256,7 +258,7 @@
                     <div class="buttons-block">
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
-                                <td style="font-size:14px;">
+                                <td style="font-size: 14px;">
                                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeProjectSection" runat="Server"
                                         CollapsedText="Expand Section" ExpandedText="Collapse Section" EnableViewState="false"
                                         TargetControlID="pnlProjectSection" ImageControlID="btnExpandCollapseFilter"
@@ -276,87 +278,125 @@
                         </table>
                     </div>
                     <asp:Panel ID="pnlProjectSection" runat="server" CssClass="cp bg-white">
+                        <asp:Panel ID="pnlProjectSectionHeader" runat="server" CssClass="WholeWidth">
+                            <table class="CompPerfTable WholeWidth">
+                                <tr class="CompPerfHeader WholeWidth">
+                                    <td class="DeleteWidth">
+                                        <div class="ie-bg">
+                                        </div>
+                                    </td>
+                                    <td class="time-entry-bar-time-typesNewHeader">
+                                        <div class="ie-bg">
+                                            Work Type</div>
+                                    </td>
+                                    <asp:Repeater ID="repProjectSectionHeader" runat="server">
+                                        <ItemTemplate>
+                                            <td class="time-entry-bar-single-teNew">
+                                                <div class="ie-bg">
+                                                    <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
+                                            </td>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                    <td class="time-entry-bar-total-hoursNew">
+                                        <div class="ie-bg">
+                                            TOTAL</div>
+                                    </td>
+                                    <td class="DeleteWidth">
+                                    </td>
+                                </tr>
+                            </table>
+                        </asp:Panel>
                         <asp:Repeater ID="repProjectSections" runat="server" OnItemDataBound="repProjectSections_OnItemDataBound">
                             <ItemTemplate>
-                                <table cellpadding="0" cellspacing="0" class="Section WholeWidth RemoveBorderLeftRight">
-                                    <tr>
-                                        <td class="DeleteWidth">
-                                            <div class="ie-bg">
-                                            </div>
-                                        </td>
-                                        <td class="SectionFirstTD" colspan="7">
-                                            <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
-                                        </td>
-                                        <td class="DeleteFixedWidth">
-                                            <div>
-                                                <asp:ImageButton ID="imgBtnDeleteProjectSection" runat="server" ImageUrl="~/Images/close_24.png"
-                                                    OnClick="imgBtnDeleteSection_OnClick" />
-                                            </div>
-                                            <div>
+                                <div class="WholeWidth White">
+                                    <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
+                                        <tr>
+                                            <td class="DeleteWidth">
+                                            </td>
+                                            <td class="time-entry-bar-time-typesNew ProjectAccountName">
+                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
+                                            </td>
+                                            <asp:Repeater ID="repAccountProjectSection" runat="server">
+                                                <ItemTemplate>
+                                                    <td class="time-entry-bar-single-teNew <%# GetDayOffCssCalss(((DataTransferObjects.CalendarItem)Container.DataItem)) %>">
+                                                    </td>
+                                                </ItemTemplate>
+                                            </asp:Repeater>
+                                            <td class="time-entry-bar-total-hoursNew textRight">
                                                 <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecursiveProjectSection" runat="server"
                                                     TargetControlID="imgBtnRecursiveProjectSection">
                                                 </AjaxControlToolkit:ConfirmButtonExtender>
                                                 <asp:ImageButton ID="imgBtnRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png"
                                                     OnClick="imgBtnRecursiveSection_OnClick" />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <asp:Repeater ID="repProjectTes" runat="server" OnItemDataBound="repProjectTes_ItemDataBound">
-                                    <HeaderTemplate>
-                                        <table class="CompPerfTable WholeWidth">
-                                            <tr class="CompPerfHeader WholeWidth">
-                                                <td class="DeleteWidth">
-                                                    <div class="ie-bg">
-                                                    </div>
-                                                </td>
-                                                <td class="time-entry-bar-time-typesNewHeader">
-                                                    <div class="ie-bg">
-                                                        Work Type</div>
-                                                </td>
-                                                <asp:Repeater ID="repProjectTesHeader" runat="server">
-                                                    <ItemTemplate>
-                                                        <td class="time-entry-bar-single-teNew">
-                                                            <div class="ie-bg">
-                                                                <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
-                                                        </td>
-                                                    </ItemTemplate>
-                                                </asp:Repeater>
-                                                <td class="time-entry-bar-total-hoursNew">
-                                                    <div class="ie-bg">
-                                                        TOTAL</div>
-                                                </td>
-                                                <td class="DeleteWidth">
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <uc:BillableAndNonBillableTimeEntryBar runat="server" ID="bar" />
-                                    </ItemTemplate>
-                                    <FooterTemplate>
-                                        <table cellpadding="0" cellspacing="0" class="PaddingClass WholeWidth">
-                                            <tr>
-                                                <td class="DeleteWidth">
-                                                    <asp:ImageButton ID="imgPlusProjectSection" OnClick="imgPlusProjectSection_OnClick"
-                                                        runat="server" ImageUrl="~/Images/add_24.png" />
-                                                </td>
-                                                <td colspan="10">
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </FooterTemplate>
-                                </asp:Repeater>
-                                <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
-                                    TargetControlID="lblDupilcateOptionsRemoveExtender" />
-                                <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
+                                            </td>
+                                            <td class="DeleteWidth">
+                                                <asp:ImageButton ID="imgBtnDeleteProjectSection" runat="server" ImageUrl="~/Images/close_24.png"
+                                                    OnClick="imgBtnDeleteSection_OnClick" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <asp:Repeater ID="repProjectTes" runat="server" OnItemDataBound="repProjectTes_ItemDataBound">
+                                        <ItemTemplate>
+                                            <uc:BillableAndNonBillableTimeEntryBar runat="server" ID="bar" />
+                                        </ItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:ImageButton ID="imgPlusProjectSection" OnClick="imgPlusProjectSection_OnClick"
+                                                runat="server" ImageUrl="~/Images/add_24.png" />
+                                        </FooterTemplate>
+                                    </asp:Repeater>
+                                    <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
+                                        TargetControlID="lblDupilcateOptionsRemoveExtender" />
+                                    <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
+                                </div>
                             </ItemTemplate>
+                            <AlternatingItemTemplate>
+                                <div class="WholeWidth f0f0f1">
+                                    <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
+                                        <tr>
+                                            <td class="DeleteWidth">
+                                            </td>
+                                            <td class="time-entry-bar-time-typesNew ProjectAccountName">
+                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
+                                            </td>
+                                            <asp:Repeater ID="repAccountProjectSection" runat="server">
+                                                <ItemTemplate>
+                                                    <td class="time-entry-bar-single-teNew <%# GetDayOffCssCalss(((DataTransferObjects.CalendarItem)Container.DataItem)) %>">
+                                                    </td>
+                                                </ItemTemplate>
+                                            </asp:Repeater>
+                                            <td class="time-entry-bar-total-hoursNew textRight">
+                                                <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecursiveProjectSection" runat="server"
+                                                    TargetControlID="imgBtnRecursiveProjectSection">
+                                                </AjaxControlToolkit:ConfirmButtonExtender>
+                                                <asp:ImageButton ID="imgBtnRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png"
+                                                    OnClick="imgBtnRecursiveSection_OnClick" />
+                                            </td>
+                                            <td class="DeleteWidth">
+                                                <asp:ImageButton ID="imgBtnDeleteProjectSection" runat="server" ImageUrl="~/Images/close_24.png"
+                                                    OnClick="imgBtnDeleteSection_OnClick" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <asp:Repeater ID="repProjectTes" runat="server" OnItemDataBound="repProjectTes_ItemDataBound">
+                                        <ItemTemplate>
+                                            <uc:BillableAndNonBillableTimeEntryBar runat="server" ID="bar" />
+                                        </ItemTemplate>
+                                        <FooterTemplate>
+                                            <asp:ImageButton ID="imgPlusProjectSection" OnClick="imgPlusProjectSection_OnClick"
+                                                runat="server" ImageUrl="~/Images/add_24.png" />
+                                        </FooterTemplate>
+                                    </asp:Repeater>
+                                    <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
+                                        TargetControlID="lblDupilcateOptionsRemoveExtender" />
+                                    <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
+                                </div>
+                            </AlternatingItemTemplate>
                         </asp:Repeater>
                     </asp:Panel>
                     <div class="buttons-block">
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
-                                <td style="font-size:14px;">
+                                <td style="font-size: 14px;">
                                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeBusinessDevelopmentSection" runat="Server"
                                         CollapsedText="Expand Section" ExpandedText="Collapse Section" EnableViewState="false"
                                         BehaviorID="cpeBusinessDevelopmentSection" TargetControlID="pnlBusinessDevelopmentSection"
@@ -376,88 +416,142 @@
                         </table>
                     </div>
                     <asp:Panel ID="pnlBusinessDevelopmentSection" runat="server" CssClass="cp bg-white">
+                        <asp:Panel ID="pnlBusinessDevelopmentSectionHeader" runat="server" CssClass="WholeWidth">
+                            <table class="CompPerfTable WholeWidth">
+                                <tr class="CompPerfHeader WholeWidth">
+                                    <td class="DeleteWidth">
+                                        <div class="ie-bg">
+                                        </div>
+                                    </td>
+                                    <td class="time-entry-bar-time-typesNewHeader">
+                                        <div class="ie-bg">
+                                            Work Type</div>
+                                    </td>
+                                    <asp:Repeater ID="repBusinessDevelopmentSectionHeader" runat="server">
+                                        <ItemTemplate>
+                                            <td class="time-entry-bar-single-teNew">
+                                                <div class="ie-bg">
+                                                    <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
+                                            </td>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                    <td class="time-entry-bar-total-hoursNew">
+                                        <div class="ie-bg">
+                                            TOTAL</div>
+                                    </td>
+                                    <td class="DeleteWidth">
+                                    </td>
+                                </tr>
+                            </table>
+                        </asp:Panel>
                         <asp:Repeater ID="repBusinessDevelopmentSections" OnItemDataBound="repBusinessDevelopmentSections_OnItemDataBound"
                             runat="server">
                             <ItemTemplate>
-                                <table cellpadding="0" cellspacing="0" class="Section WholeWidth RemoveBorderLeftRight">
-                                    <tr>
-                                        <td class="DeleteWidth">
-                                            <div class="ie-bg">
-                                            </div>
-                                        </td>
-                                        <td class="SectionFirstTD" colspan="7">
-                                            <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value %>
-                                        </td>
-                                        <td class="DeleteFixedWidth">
-                                            <div>
-                                                <asp:ImageButton ID="imgBtnDeleteBusinessDevelopmentSection" runat="server" ImageUrl="~/Images/close_24.png"
-                                                    OnClick="imgBtnDeleteSection_OnClick" />
-                                            </div>
-                                            <div>
+                                <div class="WholeWidth White">
+                                    <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
+                                        <tr>
+                                            <td class="DeleteWidth">
+                                            </td>
+                                            <td class="time-entry-bar-time-typesNew ProjectAccountName">
+                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value %>
+                                            </td>
+                                            <asp:Repeater ID="repAccountProjectSection" runat="server">
+                                                <ItemTemplate>
+                                                    <td class="time-entry-bar-single-teNew <%# GetDayOffCssCalss(((DataTransferObjects.CalendarItem)Container.DataItem)) %>">
+                                                    </td>
+                                                </ItemTemplate>
+                                            </asp:Repeater>
+                                            <td class="time-entry-bar-total-hoursNew textRight">
                                                 <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecurrenceBusinessDevelopmentSection"
                                                     runat="server" TargetControlID="imgBtnRecurrenceBusinessDevelopmentSection">
                                                 </AjaxControlToolkit:ConfirmButtonExtender>
                                                 <asp:ImageButton ID="imgBtnRecurrenceBusinessDevelopmentSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick" />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <asp:Repeater ID="repBusinessDevelopmentTes" OnItemDataBound="repBusinessDevelopmentTes_ItemDataBound"
-                                    runat="server">
-                                    <HeaderTemplate>
-                                        <table class="CompPerfTable WholeWidth">
-                                            <tr class="CompPerfHeader WholeWidth">
-                                                <td class="DeleteWidth">
-                                                    <div class="ie-bg">
-                                                    </div>
-                                                </td>
-                                                <td class="time-entry-bar-time-typesNewHeader">
-                                                    <div class="ie-bg">
-                                                        Work Type</div>
-                                                </td>
-                                                <asp:Repeater ID="repBusinessDevelopmentHeader" runat="server">
-                                                    <ItemTemplate>
-                                                        <td class="time-entry-bar-single-teNew">
-                                                            <div class="ie-bg">
-                                                                <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
-                                                        </td>
-                                                    </ItemTemplate>
-                                                </asp:Repeater>
-                                                <td class="time-entry-bar-total-hoursNew">
-                                                    <div class="ie-bg">
-                                                        TOTAL</div>
-                                                </td>
-                                                <td class="DeleteWidth">
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <uc:NonBillableTimeEntryBar runat="server" ID="bar" />
-                                    </ItemTemplate>
-                                    <FooterTemplate>
-                                        <table cellpadding="0" cellspacing="0" class="PaddingClass WholeWidth">
-                                            <tr>
-                                                <td class="DeleteWidth">
-                                                    <asp:ImageButton ID="imgPlusBusinessDevelopmentSection" OnClick="imgPlusBusinessDevelopmentSection_OnClick"
-                                                        runat="server" ImageUrl="~/Images/add_24.png" />
-                                                </td>
-                                                <td colspan="10">
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </FooterTemplate>
-                                </asp:Repeater>
-                                <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
-                                    TargetControlID="lblDupilcateOptionsRemoveExtender" />
-                                <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
+                                            </td>
+                                            <td class="DeleteWidth">
+                                                <asp:ImageButton ID="imgBtnDeleteBusinessDevelopmentSection" runat="server" ImageUrl="~/Images/close_24.png"
+                                                    OnClick="imgBtnDeleteSection_OnClick" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <asp:Repeater ID="repBusinessDevelopmentTes" OnItemDataBound="repBusinessDevelopmentTes_ItemDataBound"
+                                        runat="server">
+                                        <ItemTemplate>
+                                            <uc:NonBillableTimeEntryBar runat="server" ID="bar" />
+                                        </ItemTemplate>
+                                        <FooterTemplate>
+                                            <table cellpadding="0" cellspacing="0" class="PaddingClass WholeWidth">
+                                                <tr>
+                                                    <td class="DeleteWidth">
+                                                        <asp:ImageButton ID="imgPlusBusinessDevelopmentSection" OnClick="imgPlusBusinessDevelopmentSection_OnClick"
+                                                            runat="server" ImageUrl="~/Images/add_24.png" />
+                                                    </td>
+                                                    <td colspan="10">
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </FooterTemplate>
+                                    </asp:Repeater>
+                                    <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
+                                        TargetControlID="lblDupilcateOptionsRemoveExtender" />
+                                    <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
+                                </div>
                             </ItemTemplate>
+                            <AlternatingItemTemplate>
+                                <div class="WholeWidth f0f0f1">
+                                    <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
+                                        <tr>
+                                            <td class="DeleteWidth">
+                                            </td>
+                                            <td class="time-entry-bar-time-typesNew ProjectAccountName">
+                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value %>
+                                            </td>
+                                            <asp:Repeater ID="repAccountProjectSection" runat="server">
+                                                <ItemTemplate>
+                                                    <td class="time-entry-bar-single-teNew <%# GetDayOffCssCalss(((DataTransferObjects.CalendarItem)Container.DataItem)) %>">
+                                                    </td>
+                                                </ItemTemplate>
+                                            </asp:Repeater>
+                                            <td class="time-entry-bar-total-hoursNew textRight">
+                                                <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecurrenceBusinessDevelopmentSection"
+                                                    runat="server" TargetControlID="imgBtnRecurrenceBusinessDevelopmentSection">
+                                                </AjaxControlToolkit:ConfirmButtonExtender>
+                                                <asp:ImageButton ID="imgBtnRecurrenceBusinessDevelopmentSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick" />
+                                            </td>
+                                            <td class="DeleteWidth">
+                                                <asp:ImageButton ID="imgBtnDeleteBusinessDevelopmentSection" runat="server" ImageUrl="~/Images/close_24.png"
+                                                    OnClick="imgBtnDeleteSection_OnClick" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <asp:Repeater ID="repBusinessDevelopmentTes" OnItemDataBound="repBusinessDevelopmentTes_ItemDataBound"
+                                        runat="server">
+                                        <ItemTemplate>
+                                            <uc:NonBillableTimeEntryBar runat="server" ID="bar" />
+                                        </ItemTemplate>
+                                        <FooterTemplate>
+                                            <table cellpadding="0" cellspacing="0" class="PaddingClass WholeWidth">
+                                                <tr>
+                                                    <td class="DeleteWidth">
+                                                        <asp:ImageButton ID="imgPlusBusinessDevelopmentSection" OnClick="imgPlusBusinessDevelopmentSection_OnClick"
+                                                            runat="server" ImageUrl="~/Images/add_24.png" />
+                                                    </td>
+                                                    <td colspan="10">
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </FooterTemplate>
+                                    </asp:Repeater>
+                                    <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
+                                        TargetControlID="lblDupilcateOptionsRemoveExtender" />
+                                    <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
+                                </div>
+                            </AlternatingItemTemplate>
                         </asp:Repeater>
                     </asp:Panel>
                     <div class="buttons-block">
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
-                                <td style="font-size:14px;">
+                                <td style="font-size: 14px;">
                                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeInternalSection" runat="Server"
                                         BehaviorID="cpeInternalSection" CollapsedText="Expand Section" ExpandedText="Collapse Section"
                                         EnableViewState="false" TargetControlID="pnlInternalSection" ImageControlID="Image2"
@@ -476,88 +570,142 @@
                         </table>
                     </div>
                     <asp:Panel ID="pnlInternalSection" runat="server" CssClass="cp bg-white">
+                        <asp:Panel ID="pnlInternalSectionHeader" runat="server" CssClass="WholeWidth">
+                            <table class="CompPerfTable WholeWidth">
+                                <tr class="CompPerfHeader WholeWidth">
+                                    <td class="DeleteWidth">
+                                        <div class="ie-bg">
+                                        </div>
+                                    </td>
+                                    <td class="time-entry-bar-time-typesNewHeader">
+                                        <div class="ie-bg">
+                                            Work Type</div>
+                                    </td>
+                                    <asp:Repeater ID="repInternalSectionHeader" runat="server">
+                                        <ItemTemplate>
+                                            <td class="time-entry-bar-single-teNew">
+                                                <div class="ie-bg">
+                                                    <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
+                                            </td>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                    <td class="time-entry-bar-total-hoursNew">
+                                        <div class="ie-bg">
+                                            TOTAL</div>
+                                    </td>
+                                    <td class="DeleteWidth">
+                                    </td>
+                                </tr>
+                            </table>
+                        </asp:Panel>
                         <asp:Repeater ID="repInternalSections" OnItemDataBound="repInternalSections_ItemDataBound"
                             runat="server">
                             <ItemTemplate>
-                                <table cellpadding="0" cellspacing="0" class="Section WholeWidth RemoveBorderLeftRight">
-                                    <tr>
-                                        <td class="DeleteWidth">
-                                            <div class="ie-bg">
-                                            </div>
-                                        </td>
-                                        <td class="SectionFirstTD" colspan="7">
-                                            <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
-                                        </td>
-                                        <td class="DeleteFixedWidth">
-                                            <div>
-                                                <asp:ImageButton ID="imgBtnDeleteInternalSection" runat="server" ImageUrl="~/Images/close_24.png"
-                                                    OnClick="imgBtnDeleteSection_OnClick" />
-                                            </div>
-                                            <div>
+                                <div class="WholeWidth White">
+                                    <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
+                                        <tr>
+                                            <td class="DeleteWidth">
+                                            </td>
+                                            <td class="time-entry-bar-time-typesNew ProjectAccountName">
+                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
+                                            </td>
+                                            <asp:Repeater ID="repAccountProjectSection" runat="server">
+                                                <ItemTemplate>
+                                                    <td class="time-entry-bar-single-teNew <%# GetDayOffCssCalss(((DataTransferObjects.CalendarItem)Container.DataItem)) %>">
+                                                    </td>
+                                                </ItemTemplate>
+                                            </asp:Repeater>
+                                            <td class="time-entry-bar-total-hoursNew textRight">
                                                 <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecurrenceInternalSection"
                                                     runat="server" TargetControlID="imgBtnRecurrenceInternalSection">
                                                 </AjaxControlToolkit:ConfirmButtonExtender>
                                                 <asp:ImageButton ID="imgBtnRecurrenceInternalSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick" />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <asp:Repeater ID="repInternalTes" OnItemDataBound="repInternalTes_ItemDataBound"
-                                    runat="server">
-                                    <HeaderTemplate>
-                                        <table class="CompPerfTable WholeWidth">
-                                            <tr class="CompPerfHeader WholeWidth">
-                                                <td class="DeleteWidth">
-                                                    <div class="ie-bg">
-                                                    </div>
-                                                </td>
-                                                <td class="time-entry-bar-time-typesNewHeader">
-                                                    <div class="ie-bg">
-                                                        Work Type</div>
-                                                </td>
-                                                <asp:Repeater ID="repInternalTesHeader" runat="server">
-                                                    <ItemTemplate>
-                                                        <td class="time-entry-bar-single-teNew">
-                                                            <div class="ie-bg">
-                                                                <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
-                                                        </td>
-                                                    </ItemTemplate>
-                                                </asp:Repeater>
-                                                <td class="time-entry-bar-total-hoursNew">
-                                                    <div class="ie-bg">
-                                                        TOTAL</div>
-                                                </td>
-                                                <td class="DeleteWidth">
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <uc:NonBillableTimeEntryBar runat="server" ID="bar" />
-                                    </ItemTemplate>
-                                    <FooterTemplate>
-                                        <table cellpadding="0" cellspacing="0" class="PaddingClass WholeWidth">
-                                            <tr>
-                                                <td class="DeleteWidth">
-                                                    <asp:ImageButton ID="imgPlusInternalSection" OnClick="imgPlusInternalSection_OnClick"
-                                                        runat="server" ImageUrl="~/Images/add_24.png" />
-                                                </td>
-                                                <td colspan="10">
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </FooterTemplate>
-                                </asp:Repeater>
-                                <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
-                                    TargetControlID="lblDupilcateOptionsRemoveExtender" />
-                                <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
+                                            </td>
+                                            <td class="DeleteWidth">
+                                                <asp:ImageButton ID="imgBtnDeleteInternalSection" runat="server" ImageUrl="~/Images/close_24.png"
+                                                    OnClick="imgBtnDeleteSection_OnClick" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <asp:Repeater ID="repInternalTes" OnItemDataBound="repInternalTes_ItemDataBound"
+                                        runat="server">
+                                        <ItemTemplate>
+                                            <uc:NonBillableTimeEntryBar runat="server" ID="bar" />
+                                        </ItemTemplate>
+                                        <FooterTemplate>
+                                            <table cellpadding="0" cellspacing="0" class="PaddingClass WholeWidth">
+                                                <tr>
+                                                    <td class="DeleteWidth">
+                                                        <asp:ImageButton ID="imgPlusInternalSection" OnClick="imgPlusInternalSection_OnClick"
+                                                            runat="server" ImageUrl="~/Images/add_24.png" />
+                                                    </td>
+                                                    <td colspan="10">
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </FooterTemplate>
+                                    </asp:Repeater>
+                                    <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
+                                        TargetControlID="lblDupilcateOptionsRemoveExtender" />
+                                    <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
+                                </div>
                             </ItemTemplate>
+                            <AlternatingItemTemplate>
+                                <div class="WholeWidth f0f0f1">
+                                    <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
+                                        <tr>
+                                            <td class="DeleteWidth">
+                                            </td>
+                                            <td class="time-entry-bar-time-typesNew ProjectAccountName">
+                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
+                                            </td>
+                                            <asp:Repeater ID="repAccountProjectSection" runat="server">
+                                                <ItemTemplate>
+                                                    <td class="time-entry-bar-single-teNew <%# GetDayOffCssCalss(((DataTransferObjects.CalendarItem)Container.DataItem)) %>">
+                                                    </td>
+                                                </ItemTemplate>
+                                            </asp:Repeater>
+                                            <td class="time-entry-bar-total-hoursNew textRight">
+                                                <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgBtnRecurrenceInternalSection"
+                                                    runat="server" TargetControlID="imgBtnRecurrenceInternalSection">
+                                                </AjaxControlToolkit:ConfirmButtonExtender>
+                                                <asp:ImageButton ID="imgBtnRecurrenceInternalSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick" />
+                                            </td>
+                                            <td class="DeleteWidth">
+                                                <asp:ImageButton ID="imgBtnDeleteInternalSection" runat="server" ImageUrl="~/Images/close_24.png"
+                                                    OnClick="imgBtnDeleteSection_OnClick" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <asp:Repeater ID="repInternalTes" OnItemDataBound="repInternalTes_ItemDataBound"
+                                        runat="server">
+                                        <ItemTemplate>
+                                            <uc:NonBillableTimeEntryBar runat="server" ID="bar" />
+                                        </ItemTemplate>
+                                        <FooterTemplate>
+                                            <table cellpadding="0" cellspacing="0" class="PaddingClass WholeWidth">
+                                                <tr>
+                                                    <td class="DeleteWidth">
+                                                        <asp:ImageButton ID="imgPlusInternalSection" OnClick="imgPlusInternalSection_OnClick"
+                                                            runat="server" ImageUrl="~/Images/add_24.png" />
+                                                    </td>
+                                                    <td colspan="10">
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </FooterTemplate>
+                                    </asp:Repeater>
+                                    <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
+                                        TargetControlID="lblDupilcateOptionsRemoveExtender" />
+                                    <label id="lblDupilcateOptionsRemoveExtender" runat="server" />
+                                </div>
+                            </AlternatingItemTemplate>
                         </asp:Repeater>
                     </asp:Panel>
                     <div class="buttons-block">
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
-                                <td style="font-size:14px;">
+                                <td style="font-size: 14px;">
                                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeAdministrative" runat="Server"
                                         CollapsedText="Expand Section" ExpandedText="Collapse Section" EnableViewState="false"
                                         TargetControlID="pnlAdministrativeSection" ImageControlID="btnAdmistrativeExpandCollapseFilter"
@@ -612,9 +760,9 @@
                             <FooterTemplate>
                                 <table cellpadding="0" cellspacing="0" class="PaddingClass WholeWidth">
                                     <tr>
-                                        <td class="DeleteWidth" style="text-align:left !important;">
+                                        <td class="DeleteWidth" style="text-align: left !important;">
                                             <asp:ImageButton ID="imgPlusAdministrativeSection" OnClick="imgPlusAdministrativeSection_OnClick"
-                                                runat="server" ImageUrl="~/Images/add_24.png" ToolTip="Add additional Administrative Work Type"/>
+                                                runat="server" ImageUrl="~/Images/add_24.png" ToolTip="Add additional Administrative Work Type" />
                                         </td>
                                         <td colspan="10">
                                         </td>
@@ -728,6 +876,22 @@
                     <div class="buttons-block">
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
+                                <td colspan="3" style="text-align: right;">
+                                    <table class="WholeWidth">
+                                        <tr>
+                                            <td style="text-align: right;">
+                                                I certify that the time entered represents a true and accurate record of my time.
+                                                I am responsible for any changes made using my Practice Management Login.
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <asp:Button ID="btnSave" runat="server" OnClick="btnSave_OnClick" Text="Save All"
+                                                    ToolTip="Save All" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td style="width: 33%;">
                                 </td>
                                 <td style="width: 33%; font-size: 16px; text-align: center;">
@@ -735,8 +899,6 @@
                                         WarningColor="Orange" />
                                 </td>
                                 <td style="width: 33%; text-align: right;">
-                                    <asp:Button ID="btnSave" runat="server" OnClick="btnSave_OnClick" Text="Save All"
-                                        CssClass="mrg0" ToolTip="Save All" />
                                 </td>
                             </tr>
                             <tr>
@@ -750,8 +912,8 @@
                                         Display="None" Text="*" ValidationGroup="TE" />
                                     <asp:CustomValidator ID="cvAdminstrativeHours" runat="server" ToolTip="Adminstrative Work Type Hours should be real and less than 8. Invalid entries are highlighted in red."
                                         ErrorMessage="Adminstrative Work Type Hours should be real and less than 8. Invalid entries are highlighted in red."
-                                        SetFocusOnError="true" OnServerValidate="custAdminstrativeHours_ServerValidate" EnableClientScript="false"
-                                        Display="None" Text="*" ValidationGroup="TE" />
+                                        SetFocusOnError="true" OnServerValidate="custAdminstrativeHours_ServerValidate"
+                                        EnableClientScript="false" Display="None" Text="*" ValidationGroup="TE" />
                                     <asp:CustomValidator ID="custNote" runat="server" ErrorMessage="Note should be 3-1000 characters long. Invalid entries are highlighted in red."
                                         OnServerValidate="custNote_ServerValidate" EnableClientScript="false" Text="*"
                                         Display="None" SetFocusOnError="true" ValidationGroup="TE" ToolTip="Note should be 3-1000 characters long. Invalid entries are highlighted in red." />
@@ -1018,22 +1180,22 @@
                 </asp:Panel>
                 <asp:HiddenField ID="hdRecurringAllowed" runat="server" />
                 <AjaxControlToolkit:ModalPopupExtender ID="mpeRecurringAllowed" runat="server" BehaviorID="mpeRecurringAllowed"
-                    TargetControlID="hdRecurringAllowed" BackgroundCssClass="modalBackground"
-                    PopupControlID="pnlRecurringAllowed" DropShadow="false" CancelControlID="btnCloseRecurringAllowed" />
-                <asp:Panel ID="pnlRecurringAllowed" runat="server" BackColor="White" BorderColor="Black" Style="display: none"
-                    BorderWidth="2px" Width="380px">
+                    TargetControlID="hdRecurringAllowed" BackgroundCssClass="modalBackground" PopupControlID="pnlRecurringAllowed"
+                    DropShadow="false" CancelControlID="btnCloseRecurringAllowed" />
+                <asp:Panel ID="pnlRecurringAllowed" runat="server" BackColor="White" BorderColor="Black"
+                    Style="display: none" BorderWidth="2px" Width="380px">
                     <table width="100%" style="padding: 5px;">
                         <tr>
                             <th align="center" style="text-align: center; background-color: Gray;" valign="bottom">
                                 <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
-                                <asp:Button ID="btnCloseRecurringAllowed" runat="server" CssClass="mini-report-close" ToolTip="Close"
-                                    Style="float: right;" OnClientClick="return btnClose_OnClientClick('mpeRecurringAllowed');"
+                                <asp:Button ID="btnCloseRecurringAllowed" runat="server" CssClass="mini-report-close"
+                                    ToolTip="Close" Style="float: right;" OnClientClick="return btnClose_OnClientClick('mpeRecurringAllowed');"
                                     Text="X"></asp:Button>
                             </th>
                         </tr>
                         <tr>
                             <td style="font-weight: bold; padding: 8px;">
-                               Can't enable recurring behavior as project enddate is less than the week startdate.
+                            Can't enable recurring behavior as project enddate is less than the week startdate.
                         </tr>
                         <tr>
                             <td style="text-align: center; padding: 8px;">
