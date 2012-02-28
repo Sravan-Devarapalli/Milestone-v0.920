@@ -11,9 +11,9 @@
     Assembly="PraticeManagement" %>
 <table class="WholeWidth">
     <tr class="time-entry-bar">
-        <td class="DeleteWidth">
+        <td id="tdPlusSection" runat="server" class="DeleteWidth">
         </td>
-        <td class="time-entry-bar-time-typesNew textCenter">
+        <td id="tdTimeTypes" runat="server" >
             <asp:DropDownList ID="ddlTimeTypes" runat="server" CssClass="time-entry-bar-time-typesNew-select-Normal"
                 OnDataBound="ddlTimeTypes_DataBound" DataTextField="Name" DataValueField="Id"
                 ValidationGroup='<%# ClientID %>' onchange="setDirty();" />
