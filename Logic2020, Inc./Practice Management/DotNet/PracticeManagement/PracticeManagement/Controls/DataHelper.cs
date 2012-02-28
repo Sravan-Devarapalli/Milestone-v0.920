@@ -1183,6 +1183,31 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public static void FillTimeEntryProjectList(ListControl control, string firstItemText, Project[] projects, string firstItemValue)
+        {
+            control.Items.Clear();
+            
+            if (!string.IsNullOrEmpty(firstItemText))
+            {
+                var listitem = new ListItem() { Text = firstItemText, Value = firstItemValue };
+                control.Items.Add(listitem);
+            }
+            
+            if (projects != null && projects.Length > 0)
+            {
+                foreach (Project project in projects)
+                {
+                    var projectitem = new ListItem(
+                                          project.Name,
+                                          project.Id.Value.ToString());
+
+                    projectitem.Attributes[Constants.Variables.OptionGroup] = project.IsAssignedProject ? "Assigned to Me" : "All Projects";
+
+                    control.Items.Add(projectitem);
+                }
+            }
+        }
+
         public static void FillPersonListWithPersonFirstLastName(ListControl control, string firstItemText, string firstItemValue, int statusId)
         {
             using (var serviceClient = new PersonServiceClient())
@@ -2201,6 +2226,22 @@ namespace PraticeManagement.Controls
                 {
                     serviceClient.Abort();
                     throw;
+                }
+            }
+        }
+
+        public static Project[] ListProjectsByClientAndPersonInPeriod(int clientId, bool isOnlyActiveAndInternal, bool isOnlyEnternalProjects, int personId, DateTime startDate, DateTime endDate)
+        {
+            using (var serviceClient = new ProjectServiceClient())
+            {
+                try
+                {
+                    return serviceClient.ListProjectsByClientAndPersonInPeriod(clientId, isOnlyActiveAndInternal, isOnlyEnternalProjects, personId, startDate, endDate);
+                }
+                catch (Exception ex)
+                {
+                    serviceClient.Abort();
+                    throw ex;
                 }
             }
         }
