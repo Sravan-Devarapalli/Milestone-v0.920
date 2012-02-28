@@ -337,7 +337,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" align="center" style="padding-top: 10px; padding-bottom: 10px;">
+                            <td colspan="3" align="center" style="padding-top: 10px; padding-bottom: 10px;">
                                 <div id="trAlert" runat="server">
                                     <asp:Label ID="lbAlert1" runat="server" Text="Alert :" CssClass="AlertColor"></asp:Label>
                                     <asp:Label ID="lbAlert2" runat="server" Text=" You are viewing this calendar as READ-ONLY.  If you believe you should have permissions to make changes to this calendar, please "></asp:Label>
@@ -347,7 +347,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" align="center">
+                            <td colspan="3" align="center">
                                 <asp:Label ID="lblConsultantMessage" runat="server" Visible="false" Text="You can review your vacation days, but cannot change them. Please see your Practice Manager for updates to your vacation schedule."></asp:Label>
                             </td>
                         </tr>
@@ -590,6 +590,10 @@
                                                             ToolTip="The End Date must be greater than or equal to the Start Date." Text="*"
                                                             EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" ValidationGroup="TimeOff"
                                                             Operator="GreaterThanEqual" Type="Date"></asp:CompareValidator>
+                                                        <asp:CustomValidator ID="cvStartDateEndDateTimeOff" runat="server" ErrorMessage="Selected day(s) are not working day(s). Please select any working day(s)."
+                                                            ToolTip="Selected day(s) are not working day(s). Please select any working day(s)."
+                                                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                                            ValidationGroup="TimeOff" OnServerValidate="cvStartDateEndDateTimeOff_ServerValidate"></asp:CustomValidator>
                                                     </td>
                                                     <td style="padding-bottom: 0px !important; padding-top: 0px !important;">
                                                     </td>
