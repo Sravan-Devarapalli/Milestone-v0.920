@@ -866,12 +866,12 @@
                                 <td colspan="3" style="text-align: right;">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td style="text-align: right;">
+                                            <td style="text-align: right;color:black;font-size:11px;">
                                                 I certify that the time entered represents a true and accurate record of my time.
                                                 I am responsible for any changes made using my Practice Management Login.
                                             </td>
                                             <td style="text-align: right;">
-                                                <asp:Button ID="btnSave" runat="server" OnClick="btnSave_OnClick" Text="Save All"
+                                                <asp:Button ID="btnSave"  CssClass="mrg0"  runat="server" OnClick="btnSave_OnClick" Text="Save All"
                                                     ToolTip="Save All" />
                                             </td>
                                         </tr>
