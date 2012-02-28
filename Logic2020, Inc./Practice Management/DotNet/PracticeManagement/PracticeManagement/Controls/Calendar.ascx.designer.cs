@@ -922,6 +922,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.Label lblDeleteSubstituteDay;
         
         /// <summary>
+        /// lblDeleteSubstituteDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDeleteSubstituteDescription;
+        
+        /// <summary>
         /// btnDeleteSubstituteDay control.
         /// </summary>
         /// <remarks>
