@@ -93,11 +93,8 @@ namespace PraticeManagement
         private const string teBarId = "bar";
         private const string extDayTotalId = "extDayTotal";
         private const string repProjectTesRepeater = "repProjectTes";
-        private const string repProjectTesHeaderRepeater = "repProjectTesHeader";
         private const string repBusinessDevelopmentTesRepeater = "repBusinessDevelopmentTes";
-        private const string repBusinessDevelopmentHeaderRepeater = "repBusinessDevelopmentHeader";
         private const string repInternalTesRepeater = "repInternalTes";
-        private const string repInternalTesHeaderRepeater = "repInternalTesHeader";
         private const string repAdministrativeTesHeaderRepeater = "repAdministrativeTesHeader";
         private const string repAdministrativeTesFooterRepeater = "repAdministrativeTesFooter";
         private const string imgPlusProjectSectionImage = "imgPlusProjectSection";
@@ -125,6 +122,7 @@ namespace PraticeManagement
         public const string extEnableDisableExtenderForAdminstratorSectionId = "extEnableDisableExtenderForAdminstratorSection";
         public const string hdTargetNotesId = "hdTargetNotesClientId";
         public const string hdTargetHoursId = "hdTargetHoursClientId";
+        private const string repAccountProjectSectionRepeater = "repAccountProjectSection";
 
         #endregion
 
@@ -393,6 +391,12 @@ namespace PraticeManagement
             }
         }
 
+        public string TdPlusProjectSection
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         #region Control events
@@ -452,8 +456,31 @@ namespace PraticeManagement
             lbBusinessDevelopmentSection.Attributes[RowsCountAttribute] = repBusinessDevelopmentSections.Items.Count.ToString();
             lbInternalSection.Attributes[RowsCountAttribute] = repInternalSections.Items.Count.ToString();
             var administrativeXdoc = XDocument.Parse(AdministrativeSectionXml);
-            int administrativeTECount = administrativeXdoc.Descendants(XName.Get(TimeEntryRecordXname)).ToList().Count ;
+            int administrativeTECount = administrativeXdoc.Descendants(XName.Get(TimeEntryRecordXname)).ToList().Count;
             lbAdministrativeSection.Attributes[RowsCountAttribute] = administrativeTECount.ToString();
+
+            DataBindSectionHeader(repProjectSections, pnlProjectSectionHeader, repProjectSectionHeader);
+            DataBindSectionHeader(repInternalSections, pnlInternalSectionHeader, repInternalSectionHeader);
+            DataBindSectionHeader(repBusinessDevelopmentSections, pnlBusinessDevelopmentSectionHeader, repBusinessDevelopmentSectionHeader);
+
+        }
+
+        private void DataBindSectionHeader(Repeater sectionRepeater, Panel sectionHeaderPanel, Repeater sectionHeaderRepeater)
+        {
+            if (sectionRepeater.Items.Count > 0)
+            {
+                sectionHeaderPanel.Visible = true;
+
+                if (sectionHeaderRepeater.Items.Count < 1)
+                {
+                    sectionHeaderRepeater.DataSource = SelectedDates;
+                    sectionHeaderRepeater.DataBind();
+                }
+            }
+            else
+            {
+                sectionHeaderPanel.Visible = false;
+            }
         }
 
         #endregion
@@ -492,6 +519,7 @@ namespace PraticeManagement
 
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
+                var repAccountProjectSection = e.Item.FindControl(repAccountProjectSectionRepeater) as Repeater;
                 var repProjectTes = e.Item.FindControl(repProjectTesRepeater) as Repeater;
                 var teSectionDataItem = e.Item.DataItem as XElement;
                 var isRecursive = teSectionDataItem.Attribute(XName.Get(IsRecursiveXname)).Value;
@@ -502,8 +530,14 @@ namespace PraticeManagement
                 BusinessUnitId = teSectionDataItem.Attribute(XName.Get(BusinessUnitIdXname)).Value;
 
                 DdlWorkTypeIdsList = string.Empty;
-                repProjectTes.DataSource = teSectionDataItem.Descendants(XName.Get(WorkTypeXname)).ToList();
+                var workTypeList = teSectionDataItem.Descendants(XName.Get(WorkTypeXname)).ToList();
+                repProjectTes.DataSource = workTypeList;
                 repProjectTes.DataBind();
+
+                if (workTypeList.Count > 0)
+                {
+                    DataBindAccountProjectSectionRepeater(repAccountProjectSection);
+                }
 
                 var extOptionRemove = e.Item.FindControl(extDupilcateOptionsRemoveExtender) as DupilcateOptionsRemoveExtender;
 
@@ -540,15 +574,23 @@ namespace PraticeManagement
             {
                 var repBusinessDevelopmentTes = e.Item.FindControl(repBusinessDevelopmentTesRepeater) as Repeater;
                 var teSectionDataItem = e.Item.DataItem as XElement;
+                var repAccountProjectSection = e.Item.FindControl(repAccountProjectSectionRepeater) as Repeater;
 
                 AccountId = teSectionDataItem.Attribute(XName.Get(AccountIdXname)).Value;
                 ProjectId = teSectionDataItem.Attribute(XName.Get(ProjectIdXname)).Value;
                 BusinessUnitId = teSectionDataItem.Attribute(XName.Get(BusinessUnitIdXname)).Value;
                 var isRecursive = teSectionDataItem.Attribute(XName.Get(IsRecursiveXname)).Value;
+                var workTypeList = teSectionDataItem.Descendants(XName.Get(WorkTypeXname)).ToList();
 
                 DdlWorkTypeIdsList = string.Empty;
-                repBusinessDevelopmentTes.DataSource = teSectionDataItem.Descendants(XName.Get(WorkTypeXname)).ToList();
+                repBusinessDevelopmentTes.DataSource = workTypeList;
                 repBusinessDevelopmentTes.DataBind();
+
+
+                if (workTypeList.Count > 0)
+                {
+                    DataBindAccountProjectSectionRepeater(repAccountProjectSection);
+                }
 
                 var extOptionRemove = e.Item.FindControl(extDupilcateOptionsRemoveExtender) as DupilcateOptionsRemoveExtender;
 
@@ -560,7 +602,7 @@ namespace PraticeManagement
                 var cbeImgBtnRecurrenceBusinessDevelopmentSection = e.Item.FindControl(cbeImgBtnRecurrenceBusinessDevelopmentSectionExtender) as ConfirmButtonExtender;
                 imgBtnRecurrenceBusinessDevelopmentSection.ToolTip = Convert.ToBoolean(isRecursive) ? recursiveToolTip : nonRecursiveToolTip;
                 imgBtnRecurrenceBusinessDevelopmentSection.ImageUrl = Convert.ToBoolean(isRecursive) ? recursiveSectionImageUrl : nonRecursiveSectionImageUrl;
-                cbeImgBtnRecurrenceBusinessDevelopmentSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, "account","account is disabled");
+                cbeImgBtnRecurrenceBusinessDevelopmentSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, "account", "account is disabled");
                 imgBtnRecurrenceBusinessDevelopmentSection.Attributes[AccountIdXname] = AccountId;
                 imgBtnRecurrenceBusinessDevelopmentSection.Attributes[ProjectIdXname] = ProjectId;
                 imgBtnRecurrenceBusinessDevelopmentSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
@@ -581,6 +623,7 @@ namespace PraticeManagement
                 var repInternalTes = e.Item.FindControl(repInternalTesRepeater) as Repeater;
                 var teSectionDataItem = e.Item.DataItem as XElement;
                 var isRecursive = teSectionDataItem.Attribute(XName.Get(IsRecursiveXname)).Value;
+                var repAccountProjectSection = e.Item.FindControl(repAccountProjectSectionRepeater) as Repeater;
 
                 AccountId = teSectionDataItem.Attribute(XName.Get(AccountIdXname)).Value;
                 ProjectId = teSectionDataItem.Attribute(XName.Get(ProjectIdXname)).Value;
@@ -588,8 +631,15 @@ namespace PraticeManagement
 
 
                 DdlWorkTypeIdsList = string.Empty;
-                repInternalTes.DataSource = teSectionDataItem.Descendants(XName.Get(WorkTypeXname)).ToList();
+                var workTypeList = teSectionDataItem.Descendants(XName.Get(WorkTypeXname)).ToList();
+
+                repInternalTes.DataSource = workTypeList;
                 repInternalTes.DataBind();
+
+                if (workTypeList.Count > 0)
+                {
+                    DataBindAccountProjectSectionRepeater(repAccountProjectSection);
+                }
 
                 var extOptionRemove = e.Item.FindControl(extDupilcateOptionsRemoveExtender) as DupilcateOptionsRemoveExtender;
 
@@ -617,14 +667,7 @@ namespace PraticeManagement
 
         protected void repProjectTes_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-
-            if (e.Item.ItemType == ListItemType.Header)
-            {
-                var repProjectTesHeader = e.Item.FindControl(repProjectTesHeaderRepeater) as Repeater;
-                repProjectTesHeader.DataSource = SelectedDates;
-                repProjectTesHeader.DataBind();
-            }
-            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
                 var workTypeElement = ((XElement)e.Item.DataItem);
 
@@ -648,6 +691,7 @@ namespace PraticeManagement
                     imgDropTes.Attributes[workTypeOldId] = OldId;
                 imgDropTes.Attributes[WorkTypeXname] = workTypeElement.Attribute(XName.Get(IdXname)).Value;
 
+                TdPlusProjectSection = bar.TdCellProjectSectionClientID;
                 bar.UpdateTimeEntries();
             }
             else if (e.Item.ItemType == ListItemType.Footer)
@@ -655,19 +699,15 @@ namespace PraticeManagement
                 var imgPlusProjectSection = e.Item.FindControl(imgPlusProjectSectionImage) as ImageButton;
                 imgPlusProjectSection.Attributes[AccountIdXname] = AccountId;
                 imgPlusProjectSection.Attributes[ProjectIdXname] = ProjectId;
+                imgPlusProjectSection.Attributes["PlaceHolderCell"] = TdPlusProjectSection;
+                
                 imgPlusProjectSection.ToolTip = string.Format(PlusToolTipFormat, "Project");
             }
         }
 
         protected void repBusinessDevelopmentTes_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            if (e.Item.ItemType == ListItemType.Header)
-            {
-                var repProjectTesHeader = e.Item.FindControl(repBusinessDevelopmentHeaderRepeater) as Repeater;
-                repProjectTesHeader.DataSource = SelectedDates;
-                repProjectTesHeader.DataBind();
-            }
-            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
 
                 var workTypeElement = ((XElement)e.Item.DataItem);
@@ -709,13 +749,7 @@ namespace PraticeManagement
 
         protected void repInternalTes_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            if (e.Item.ItemType == ListItemType.Header)
-            {
-                var repProjectTesHeader = e.Item.FindControl(repInternalTesHeaderRepeater) as Repeater;
-                repProjectTesHeader.DataSource = SelectedDates;
-                repProjectTesHeader.DataBind();
-            }
-            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
                 var workTypeElement = ((XElement)e.Item.DataItem);
 
@@ -784,7 +818,7 @@ namespace PraticeManagement
 
                 var workTypeElement = teSectionDataItem.Descendants(XName.Get(WorkTypeXname)).ToList()[0];
 
-                AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(false,false));
+                AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(false, false));
 
                 if (bar.IsPTO || bar.IsHoliday)
                 {
@@ -816,7 +850,7 @@ namespace PraticeManagement
                 var imgPlus = e.Item.FindControl(imgPlusAdministrativeSectionImage) as ImageButton;
                 if (!IsPostBack)
                 {
-                    AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(false,false));
+                    AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(false, false));
 
                     if (AdministrativeTimeTypes.Count() < 1)
                         imgPlus.Style["display"] = "none";
@@ -1414,7 +1448,6 @@ namespace PraticeManagement
             if (pageBase.IsDirty && !SaveData())
             {
                 dp.Text = wsChoose.SelectedStartDate.ToShortDateString();
-                //   RaiseError();
             }
             else
             {
@@ -1426,6 +1459,16 @@ namespace PraticeManagement
         protected string GetDayOffCssCalss(CalendarItem calendarItem)
         {
             return Utils.Calendar.GetCssClassByCalendarItem(calendarItem);
+        }
+
+        private void DataBindAccountProjectSectionRepeater(Repeater repAccountProjectSection)
+        {
+            CalendarItems = CalendarItems ??
+                                  ServiceCallers.Custom.Calendar(
+                                                                   c => c.GetCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
+                                                                 );
+            repAccountProjectSection.DataSource = CalendarItems;
+            repAccountProjectSection.DataBind();
         }
 
         #endregion
@@ -1474,7 +1517,7 @@ namespace PraticeManagement
             foreach (RepeaterItem barItem in repAdministrativeTes.Items)
             {
                 var bar = barItem.FindControl(teBarId) as AdministrativeTimeEntryBar;
-                
+
                 bar.ValidateAll();
             }
 
