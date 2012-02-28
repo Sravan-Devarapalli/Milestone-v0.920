@@ -22,7 +22,9 @@ namespace PraticeManagement.Controls
         private const string YearKey = "Year";
         private const string ViewStatePreviousRecurringList = "ViewStatePreviousRecurringHolidaysList";
         private const string MailToSubjectFormat = "mailto:{0}?subject=Permissions for {1}'s calendar";
-        public const String showEditSeriesOrSingleDayMessage = "Do you want to edit the series ({0} – {1}) or edit the single day ({2})?";
+        public const string showEditSeriesOrSingleDayMessage = "Do you want to edit the series ({0} – {1}) or edit the single day ({2})?";
+        public const string HoursFormat = "0.00";
+        public const string TimeOffValidationMessage = "Selected day(s) are not working day(s). Please select any working day(s).";
 
         private CalendarItem[] days;
         private bool userIsPracticeManager;
@@ -131,10 +133,10 @@ namespace PraticeManagement.Controls
 
         public void PopulateSingleDayPopupControls(DateTime date, string timeTypeId, string hours)
         {
-            lbdateSingleDay.Text = date.ToString("MM/dd/yyyy");
+            lbdateSingleDay.Text = date.ToString(Constants.Formatting.EntryDateFormat);
             hdnDateSingleDay.Value = date.ToString();
             ddlTimeTypesSingleDay.SelectedValue = timeTypeId;
-            txtHoursSingleDay.Text = Convert.ToDouble(hours).ToString("0.00");
+            txtHoursSingleDay.Text = Convert.ToDouble(hours).ToString(HoursFormat);
             hdIsSingleDayPopDirty.Value = false.ToString();
             btnDeleteSingleDay.Enabled = true;
         }
@@ -144,7 +146,7 @@ namespace PraticeManagement.Controls
             dtpStartDateTimeOff.DateValue = startDate;
             dtpEndDateTimeOff.DateValue = endDate;
             ddlTimeTypesTimeOff.SelectedValue = timeTypeId;
-            txthoursTimeOff.Text = Convert.ToDouble(hours).ToString("0.00");
+            txthoursTimeOff.Text = Convert.ToDouble(hours).ToString(HoursFormat);
             btnDeleteTimeOff.Visible = btnDeleteTimeOff.Enabled = true;
             hdIsTimeOffPopUpDirty.Value = false.ToString(); 
         }
@@ -153,7 +155,7 @@ namespace PraticeManagement.Controls
         {
             rbEditSeries.Checked = true;
             rbEditSingleDay.Checked = false;
-            lbDate.Text = String.Format(Calendar.showEditSeriesOrSingleDayMessage, startDate.ToString("MM/dd/yyyy"), endDate.ToString("MM/dd/yyyy"), selectedDate.ToString("MM/dd/yyyy"));
+            lbDate.Text = String.Format(Calendar.showEditSeriesOrSingleDayMessage, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat), selectedDate.ToString(Constants.Formatting.EntryDateFormat));
 
         }
         private void UpdateCalendar()
@@ -185,12 +187,10 @@ namespace PraticeManagement.Controls
             if (SelectedPersonHasPermissionToEditCalender)
             {
                 trAlert.Visible = false;
-                btnAddTimeOff.Visible = true;
             }
             else
             {
                 trAlert.Visible = true;
-                btnAddTimeOff.Visible = false;
             }
             pnlBody.Update();
         }
@@ -362,17 +362,32 @@ namespace PraticeManagement.Controls
             Page.Validate(valSumTimeOff.ValidationGroup);
             if (Page.IsValid)
             {
-                ServiceCallers.Custom.Calendar(
-                    c => c.SaveTimeOff(dtpStartDateTimeOff.DateValue,
-                                                                  dtpEndDateTimeOff.DateValue,
-                                                                  true,
-                                                                  SelectedPersonId.Value,
-                                                                  (double?)Convert.ToDouble(txthoursTimeOff.Text),
-                                                                  Convert.ToInt32(ddlTimeTypesTimeOff.SelectedValue),
-                                                                  Context.User.Identity.Name
-                                                                  )
-                                               );
-
+                try
+                {
+                    ServiceCallers.Custom.Calendar(
+                        c => c.SaveTimeOff(dtpStartDateTimeOff.DateValue,
+                                                                      dtpEndDateTimeOff.DateValue,
+                                                                      true,
+                                                                      SelectedPersonId.Value,
+                                                                      (double?)Convert.ToDouble(txthoursTimeOff.Text),
+                                                                      Convert.ToInt32(ddlTimeTypesTimeOff.SelectedValue),
+                                                                      Context.User.Identity.Name
+                                                                      )
+                                                   );
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message == TimeOffValidationMessage)
+                    {
+                        ExceptionMessage = ex.Message;
+                        Page.Validate(valSumTimeOff.ValidationGroup);
+                        mpeAddTimeOff.Show();
+                    }
+                    else
+                    {
+                        throw ex;
+                    }
+                }
             }
             else
             {
@@ -388,6 +403,14 @@ namespace PraticeManagement.Controls
             }
 
             upnlTimeOff.Update();
+        }
+
+        protected void cvStartDateEndDateTimeOff_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (!string.IsNullOrEmpty(ExceptionMessage))
+            {
+                args.IsValid = false;
+            }
         }
 
         protected void btnDeleteTimeOff_Click(object sender, EventArgs e)
@@ -640,17 +663,18 @@ namespace PraticeManagement.Controls
                     item.ReadOnly = true;
                 }
                 trAlert.Visible = true;
-                btnAddTimeOff.Visible = false;
                 pnlBody.Update();
                 // lblConsultantMessage.Visible = true;
             }
+
+            btnAddTimeOff.Visible = !trAlert.Visible;
 
             calendar.CalendarItems = days;
         }
 
         internal void ShowHolidayAndSubStituteDay(DateTime date, string holiDayDescription)
         {
-            hdnHolidayDate.Value = lblHolidayDate.Text = date.ToString("MM/dd/yyyy");
+            hdnHolidayDate.Value = lblHolidayDate.Text = date.ToString(Constants.Formatting.EntryDateFormat);
             lblHolidayName.Text = holiDayDescription;
             dpSubstituteDay.TextValue = "";
             mpeHolidayAndSubStituteDay.Show();
