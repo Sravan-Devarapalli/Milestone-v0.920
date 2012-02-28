@@ -544,6 +544,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.RangeValidator rangHoursPerDay;
         
         /// <summary>
+        /// cvHoursPerDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvHoursPerDay;
+        
+        /// <summary>
         /// ftetxtHoursPerDayInsert control.
         /// </summary>
         /// <remarks>
@@ -551,6 +560,15 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.FilteredTextBoxExtender ftetxtHoursPerDayInsert;
+        
+        /// <summary>
+        /// hdIsTimeOffPopUpDirty control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdIsTimeOffPopUpDirty;
         
         /// <summary>
         /// btnOkTimeOff control.
@@ -697,6 +715,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.RangeValidator rangeHoursSingleDay;
         
         /// <summary>
+        /// cvHoursSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvHoursSingleDay;
+        
+        /// <summary>
         /// fteHoursSingleDay control.
         /// </summary>
         /// <remarks>
@@ -704,6 +731,15 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.FilteredTextBoxExtender fteHoursSingleDay;
+        
+        /// <summary>
+        /// hdIsSingleDayPopDirty control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdIsSingleDayPopDirty;
         
         /// <summary>
         /// btnOkSingleDay control.
