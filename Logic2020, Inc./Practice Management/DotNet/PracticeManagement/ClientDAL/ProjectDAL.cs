@@ -128,13 +128,15 @@ namespace DataAccess
                         {
                             int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
                             int nameIndex = reader.GetOrdinal(Constants.ColumnNames.NameColumn);
+                            int assignedProjectIndex = reader.GetOrdinal(Constants.ColumnNames.AssignedProject);
 
                             while (reader.Read())
                             {
                                 var project = new Project
                                 {
                                     Id = reader.GetInt32(projectIdIndex),
-                                    Name = reader.GetString(nameIndex)
+                                    Name = reader.GetString(nameIndex),
+                                    IsAssignedProject = reader.GetInt32(assignedProjectIndex) == 1
                                 };
                                 projectList.Add(project);
                             }
