@@ -11,7 +11,7 @@
 <%@ Import Namespace="PraticeManagement.Controls.TimeEntry" %>
 <table class="WholeWidth">
     <tr class="time-entry-bar">
-        <td class="DeleteWidth">
+        <td id="tdPlusSection" runat="server" class="DeleteWidth">
         </td>
         <td class="time-entry-bar-time-typesNew textCenter">
             <asp:DropDownList ID="ddlTimeTypes" runat="server" CssClass="time-entry-bar-time-typesNew-select-Normal"
