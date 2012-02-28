@@ -30,6 +30,8 @@ namespace PraticeManagement.Controls.TimeEntry
 
         public TimeTypeRecord SelectedTimeType { get; set; }
 
+        public string TdCellSectionClientID { get { return tdPlusSection.ClientID; } }
+
         public TimeEntry_New HostingPage
         {
             get
