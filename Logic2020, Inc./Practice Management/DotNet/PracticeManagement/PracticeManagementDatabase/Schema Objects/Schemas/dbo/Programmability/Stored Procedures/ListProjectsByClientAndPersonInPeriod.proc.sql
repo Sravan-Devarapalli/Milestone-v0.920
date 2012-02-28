@@ -54,7 +54,7 @@ BEGIN
 		AND ((@IsOnlyEnternalProjects  = 1 AND P.IsInternal = 0) OR @IsOnlyEnternalProjects = 0 )
 		AND (@IsOnlyActiveAndInternal = 1 AND P.ProjectStatusId IN (3,6))
 		AND P.ProjectId NOT IN (SELECT ProjectId FROM UsedProjectIds)
-	ORDER BY P.ProjectNumber
+	ORDER BY AssignedProject DESC ,P.ProjectNumber
 
 END
 	
