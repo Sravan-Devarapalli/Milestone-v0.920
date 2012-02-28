@@ -232,10 +232,34 @@
                         }
                     }
 
+                    function ReplaceHTML(imgPlusList) {
+                        for (var i = 0; i < imgPlusList.length; i++) {
+
+                            var tdElement = document.getElementById(imgPlusList[i].getAttribute('PlaceHolderCell'));
+                            tdElement.appendChild(imgPlusList[i]);
+                            imgPlusList[i].InnerHTML = "";
+                        }
+
+                    }
+
+                    function setFooterPlacementinLastItemTemplate() {
+                        var imgPlusProjectSectionList = $("[id$='imgPlusProjectSection']");
+                        ReplaceHTML(imgPlusProjectSectionList);
+
+                        var imgPlusBusinessDevelopmentSectionList = $("[id$='imgPlusBusinessDevelopmentSection']");
+                        ReplaceHTML(imgPlusBusinessDevelopmentSectionList);
+
+                        var imgPlusInternalSectionList = $("[id$='imgPlusInternalSection']");
+                        ReplaceHTML(imgPlusInternalSectionList);
+                        
+
+                    }
+
                     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
 
                     function endRequestHandle(sender, Args) {
-                        
+                        setFooterPlacementinLastItemTemplate();
+
                         SetTooltipsForallDropDowns();
                         var hdIsWeekOrPersonChanged = document.getElementById('<%= hdIsWeekOrPersonChanged.ClientID %>');
                         if (hdIsWeekOrPersonChanged.value.toLowerCase() == 'true') {
@@ -479,16 +503,8 @@
                                             <uc:NonBillableTimeEntryBar runat="server" ID="bar" />
                                         </ItemTemplate>
                                         <FooterTemplate>
-                                            <table cellpadding="0" cellspacing="0" class="PaddingClass WholeWidth">
-                                                <tr>
-                                                    <td class="DeleteWidth">
-                                                        <asp:ImageButton ID="imgPlusBusinessDevelopmentSection" OnClick="imgPlusBusinessDevelopmentSection_OnClick"
-                                                            runat="server" ImageUrl="~/Images/add_24.png" />
-                                                    </td>
-                                                    <td colspan="10">
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                            <asp:ImageButton ID="imgPlusBusinessDevelopmentSection" OnClick="imgPlusBusinessDevelopmentSection_OnClick"
+                                                runat="server" ImageUrl="~/Images/add_24.png" />
                                         </FooterTemplate>
                                     </asp:Repeater>
                                     <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
@@ -529,16 +545,8 @@
                                             <uc:NonBillableTimeEntryBar runat="server" ID="bar" />
                                         </ItemTemplate>
                                         <FooterTemplate>
-                                            <table cellpadding="0" cellspacing="0" class="PaddingClass WholeWidth">
-                                                <tr>
-                                                    <td class="DeleteWidth">
-                                                        <asp:ImageButton ID="imgPlusBusinessDevelopmentSection" OnClick="imgPlusBusinessDevelopmentSection_OnClick"
-                                                            runat="server" ImageUrl="~/Images/add_24.png" />
-                                                    </td>
-                                                    <td colspan="10">
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                            <asp:ImageButton ID="imgPlusBusinessDevelopmentSection" OnClick="imgPlusBusinessDevelopmentSection_OnClick"
+                                                runat="server" ImageUrl="~/Images/add_24.png" />
                                         </FooterTemplate>
                                     </asp:Repeater>
                                     <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
@@ -633,16 +641,8 @@
                                             <uc:NonBillableTimeEntryBar runat="server" ID="bar" />
                                         </ItemTemplate>
                                         <FooterTemplate>
-                                            <table cellpadding="0" cellspacing="0" class="PaddingClass WholeWidth">
-                                                <tr>
-                                                    <td class="DeleteWidth">
-                                                        <asp:ImageButton ID="imgPlusInternalSection" OnClick="imgPlusInternalSection_OnClick"
-                                                            runat="server" ImageUrl="~/Images/add_24.png" />
-                                                    </td>
-                                                    <td colspan="10">
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                            <asp:ImageButton ID="imgPlusInternalSection" OnClick="imgPlusInternalSection_OnClick"
+                                                runat="server" ImageUrl="~/Images/add_24.png" />
                                         </FooterTemplate>
                                     </asp:Repeater>
                                     <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
@@ -683,16 +683,8 @@
                                             <uc:NonBillableTimeEntryBar runat="server" ID="bar" />
                                         </ItemTemplate>
                                         <FooterTemplate>
-                                            <table cellpadding="0" cellspacing="0" class="PaddingClass WholeWidth">
-                                                <tr>
-                                                    <td class="DeleteWidth">
-                                                        <asp:ImageButton ID="imgPlusInternalSection" OnClick="imgPlusInternalSection_OnClick"
-                                                            runat="server" ImageUrl="~/Images/add_24.png" />
-                                                    </td>
-                                                    <td colspan="10">
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                            <asp:ImageButton ID="imgPlusInternalSection" OnClick="imgPlusInternalSection_OnClick"
+                                                runat="server" ImageUrl="~/Images/add_24.png" />
                                         </FooterTemplate>
                                     </asp:Repeater>
                                     <ext2:DupilcateOptionsRemoveExtender ID="extDupilcateOptionsRemoveExtender" runat="server"
