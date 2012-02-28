@@ -123,7 +123,7 @@ namespace PraticeManagement
         public const string hdTargetNotesId = "hdTargetNotesClientId";
         public const string hdTargetHoursId = "hdTargetHoursClientId";
         private const string repAccountProjectSectionRepeater = "repAccountProjectSection";
-
+        private const string PlaceHolderCell = "PlaceHolderCell";
         #endregion
 
         #region  Attributes
@@ -391,7 +391,7 @@ namespace PraticeManagement
             }
         }
 
-        public string TdPlusProjectSection
+        public string TdPlusSectionClientId
         {
             get;
             set;
@@ -438,6 +438,9 @@ namespace PraticeManagement
                 cpeInternalSection.Collapsed = !(repInternalSections.Items.Count > 0);
                 var xdoc = XDocument.Parse(AdministrativeSectionXml);
                 cpeAdministrative.Collapsed = !(xdoc.Descendants(XName.Get(TimeEntryRecordXname)).ToList().Count > 0);
+
+                ScriptManager.RegisterStartupScript(updTimeEntries, updTimeEntries.GetType(), "RegisterStartupScript", "setFooterPlacementinLastItemTemplate();", true);
+                
             }
 
             ddlAccountProjectSection.Attributes[personIdAttribute] =
@@ -691,7 +694,7 @@ namespace PraticeManagement
                     imgDropTes.Attributes[workTypeOldId] = OldId;
                 imgDropTes.Attributes[WorkTypeXname] = workTypeElement.Attribute(XName.Get(IdXname)).Value;
 
-                TdPlusProjectSection = bar.TdCellProjectSectionClientID;
+                TdPlusSectionClientId = bar.TdCellProjectSectionClientID;
                 bar.UpdateTimeEntries();
             }
             else if (e.Item.ItemType == ListItemType.Footer)
@@ -699,7 +702,7 @@ namespace PraticeManagement
                 var imgPlusProjectSection = e.Item.FindControl(imgPlusProjectSectionImage) as ImageButton;
                 imgPlusProjectSection.Attributes[AccountIdXname] = AccountId;
                 imgPlusProjectSection.Attributes[ProjectIdXname] = ProjectId;
-                imgPlusProjectSection.Attributes["PlaceHolderCell"] = TdPlusProjectSection;
+                imgPlusProjectSection.Attributes[PlaceHolderCell] = TdPlusSectionClientId;
                 
                 imgPlusProjectSection.ToolTip = string.Format(PlusToolTipFormat, "Project");
             }
@@ -724,6 +727,8 @@ namespace PraticeManagement
                 bar.BusinessUnitId = BusinessUnitId;
                 bar.ProjectId = ProjectId;
 
+                TdPlusSectionClientId = bar.TdCellSectionClientID;
+
                 var imgDropTes = bar.FindControl(imgDropTesImage) as ImageButton;
                 imgDropTes.Attributes[AccountIdXname] = AccountId;
                 imgDropTes.Attributes[BusinessUnitIdXname] = BusinessUnitId;
@@ -742,6 +747,7 @@ namespace PraticeManagement
                 imgPlusBusinessDevelopmentSection.Attributes[AccountIdXname] = AccountId;
                 imgPlusBusinessDevelopmentSection.Attributes[ProjectIdXname] = ProjectId;
                 imgPlusBusinessDevelopmentSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
+                imgPlusBusinessDevelopmentSection.Attributes[PlaceHolderCell] = TdPlusSectionClientId;
                 imgPlusBusinessDevelopmentSection.ToolTip = string.Format(PlusToolTipFormat, "Account");
             }
 
@@ -764,6 +770,7 @@ namespace PraticeManagement
                 bar.AccountId = AccountId;
                 bar.BusinessUnitId = BusinessUnitId;
                 bar.ProjectId = ProjectId;
+                TdPlusSectionClientId = bar.TdCellSectionClientID;
 
                 var imgDropTes = bar.FindControl(imgDropTesImage) as ImageButton;
                 imgDropTes.Attributes[AccountIdXname] = AccountId;
@@ -783,6 +790,7 @@ namespace PraticeManagement
                 imgPlusInternalSection.Attributes[AccountIdXname] = AccountId;
                 imgPlusInternalSection.Attributes[ProjectIdXname] = ProjectId;
                 imgPlusInternalSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
+                imgPlusInternalSection.Attributes[PlaceHolderCell] = TdPlusSectionClientId;
                 imgPlusInternalSection.ToolTip = string.Format(PlusToolTipFormat, "Project");
             }
         }
