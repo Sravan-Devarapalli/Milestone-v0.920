@@ -185,10 +185,7 @@ namespace PraticeManagement.Controls
                 string timeTypeId = btnDay.Attributes["TimeTypeId"];
                 KeyValuePair<DateTime, DateTime> series = ServiceCallers.Custom.Calendar(c => c.GetTimeOffSeriesPeriod(PersonId.Value, date));
 
-                HostingControl.lbdateSingleDayLabel.Text = date.ToString("MM/dd/yyyy");
-                HostingControl.hdnDateSingleDayHiddenField.Value = date.ToString();
-                HostingControl.ddlTimeTypesSingleDayDropDown.SelectedValue = timeTypeId;
-                HostingControl.txtHoursSingleDayTextBox.Text = hours;
+                HostingControl.PopulateSingleDayPopupControls(date, timeTypeId, hours);
 
                 if (series.Key == series.Value)
                 {
@@ -196,15 +193,8 @@ namespace PraticeManagement.Controls
                 }
                 else
                 {
-
-                    HostingControl.rbEditSeriesRadioButton.Checked = true;
-                    HostingControl.rbEditSingleDayRadioButton.Checked = false;
-                    HostingControl.dtpStartDateTimeOffDatePicker.DateValue = series.Key;
-                    HostingControl.dtpEndDateTimeOffDatePicker.DateValue = series.Value;
-                    HostingControl.ddlTimeTypesTimeOffDropDown.SelectedValue = timeTypeId;
-                    HostingControl.txthoursTimeOffTextBox.Text = hours;
-                    HostingControl.lbDateLabel.Text = date.ToString("MM/dd/yyyy");
-                    HostingControl.btnDeleteTimeOffControl.Visible = true;
+                    HostingControl.PopulateEditConditionPopupControls(series.Key, series.Value, date);
+                    HostingControl.PopulateSeriesPopupControls(series.Key, series.Value, timeTypeId, hours);
                     HostingControl.mpeSelectEditCondtionPopUp.Show();
                 }
 
@@ -296,11 +286,11 @@ namespace PraticeManagement.Controls
             return hours.HasValue ? hours.Value.ToString("0.00") : "";
         }
 
-        protected string GetToolTip(string holidayDescription, double? actualHours)
+        protected string GetToolTip(string holidayDescription, double? actualHours, bool isFloatingHoliday)
         {
             string toolTip = holidayDescription;
 
-            if (actualHours.HasValue && IsPersonCalendar)
+            if (actualHours.HasValue && IsPersonCalendar && !isFloatingHoliday)
             {
                 toolTip = holidayDescription + " - " + actualHours.Value.ToString("0.00") + " hr(s)";
             }
