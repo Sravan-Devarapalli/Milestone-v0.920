@@ -64,6 +64,14 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        public string TdCellProjectSectionClientID
+        {
+            get
+            {
+                return tdplusProjectSection.ClientID;
+            }
+        }
+
         public TimeTypeRecord[] WorkTypes { get; set; }
 
         public TimeTypeRecord SelectedWorkType { get; set; }
