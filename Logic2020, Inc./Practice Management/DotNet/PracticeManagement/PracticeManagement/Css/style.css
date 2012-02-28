@@ -2161,12 +2161,12 @@ table.CellPaddingClass td
     
 .time-entry-bar-time-typesNew-select-Normal
 {
-    width: 92% !important;
+    width: 85% !important;
 }
 
 .time-entry-bar-time-typesNew-select-Extended
 {
-    width: 92% !important;
+    width: 85% !important;
 }
 
 .time-entry-bar-single-teNew
@@ -2197,7 +2197,7 @@ table.CellPaddingClass td
 
 .time-entry-total-hoursNew
 {
-    text-align: right;
+    text-align: center;
     vertical-align: middle;
     padding-right:3px;
     width: 6%;
@@ -2208,7 +2208,7 @@ table.CellPaddingClass td
     padding-left:4px;
     padding-right:4px;
     width:3%;
-    text-align:right;
+    text-align:left;
 }
 
 .DeleteFixedWidth
@@ -2234,11 +2234,6 @@ TABLE.Section td
     padding: 4px 4px 4px 4px;
 }
 
-TABLE.Section
-{
- border:1px solid Gray;
-}
-
 .TopCenterAlignWithoutPaddingTop
 {
     text-align:center;
@@ -2249,14 +2244,14 @@ TABLE.Section
     padding-bottom: 5px;
 }
 
-.SectionFirstTD
+
+.ProjectAccountName
 {
-    width: 87%;
     font-weight: bold;
     font-style:italic;
     font-size: 14px;
- 
 }
+
 .TOTALHOURSTD
 {
     text-align: right; 
@@ -2322,11 +2317,6 @@ TABLE.Section
     padding-top:8px;
 }
 
-.RemoveBorderLeftRight
-{
-    border-left: 0px !important;
-    border-right: 0px !important;
-}
 .DayTotalCSS
 {
     padding : 2px 0px 0px 1px;
@@ -2438,3 +2428,15 @@ end pixcel
 {
   padding-left: 40px;
 }
+.White
+{
+    background-color:White;
+    border-bottom:1px solid Gray;
+}
+
+.f0f0f1
+{
+    background-color:#f0f0f1;
+    border-bottom:1px solid Gray;
+}
+
