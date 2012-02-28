@@ -27,16 +27,34 @@ BEGIN
 		AND ClientId = @ClientId 
 		AND StartDate <= @StartDate
 		AND @EndDate <= ISNULL(EndDate,dbo.GetFutureDate())  
+	),
+	AssignedProjects
+	AS
+	(
+		SELECT DISTINCT P.ProjectId
+		FROM dbo.Project P
+		INNER JOIN dbo.Milestone M ON P.ProjectId = M.ProjectId 
+								   AND P.ClientId = @ClientId 
+		INNER JOIN dbo.MilestonePerson MP ON M.MilestoneId = MP.MilestoneId 
+		INNER JOIN dbo.MilestonePersonEntry MPE ON MPE.MilestonePersonId =MP.MilestonePersonId 
+													AND (	@StartDate BETWEEN MPE.StartDate AND MPE.EndDate 
+															OR @EndDate BETWEEN MPE.StartDate AND MPE.EndDate
+															OR MPE.StartDate BETWEEN @StartDate AND @EndDate
+														)
+		INNER JOIN dbo.Person Per ON Per.PersonId = MP.PersonId AND Per.PersonId = @PersonId
 	)
-	SELECT p.ProjectId,
-			p.ProjectNumber +' - '+ p.Name as Name
-	FROM dbo.v_Project AS p
-	WHERE p.ClientId = @ClientId 
-		AND p.IsAllowedToShow = 1 
-		AND ((@IsOnlyEnternalProjects  = 1 AND p.IsInternal = 0) OR @IsOnlyEnternalProjects = 0 )
-		AND (@IsOnlyActiveAndInternal = 1 AND p.ProjectStatusId IN (3,6))
-		AND p.ProjectId NOT IN (SELECT ProjectId FROM UsedProjectIds)
-	ORDER BY p.ProjectNumber
+
+	SELECT P.ProjectId,
+			P.ProjectNumber +' - '+ P.Name as Name,
+			CASE WHEN AP.ProjectId IS NULL THEN 0 ELSE 1 END AS [AssignedProject]
+	FROM dbo.Project AS P
+	INNER JOIN dbo.Client AS C ON P.ClientId = C.ClientId AND P.ClientId = @ClientId 
+	LEFT JOIN AssignedProjects AP ON P.ProjectId = AP.ProjectId
+	WHERE P.IsAllowedToShow = 1 
+		AND ((@IsOnlyEnternalProjects  = 1 AND P.IsInternal = 0) OR @IsOnlyEnternalProjects = 0 )
+		AND (@IsOnlyActiveAndInternal = 1 AND P.ProjectStatusId IN (3,6))
+		AND P.ProjectId NOT IN (SELECT ProjectId FROM UsedProjectIds)
+	ORDER BY P.ProjectNumber
 
 END
 	
