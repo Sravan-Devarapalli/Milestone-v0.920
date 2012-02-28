@@ -1,4 +1,11 @@
-﻿CREATE PROCEDURE [dbo].[SaveTimeOff]
+﻿-- =============================================
+-- Author:		Srinivas.M
+-- Create date: 02-23-2012
+-- Updated by:	Srinivas.M
+-- Update date:	02-28-2012
+-- Description: Insert/Update/Delete Time Off(s) for a person.
+-- =============================================
+CREATE PROCEDURE [dbo].[SaveTimeOff]
 (
 	@StartDate		DATETIME,
 	@EndDate		DATETIME,
@@ -60,6 +67,21 @@ BEGIN
 				
 			Note:- If any changes(actualhours, worktype) done in PersonCalendar table then update those in TimeEntry table also.
 		*/
+
+		--If selected days has not atleast 1 working day, the we need to throw validation.
+		IF 1 > (SELECT COUNT(*)
+					FROM dbo.Calendar C
+					LEFT JOIN dbo.PersonCalendar PC ON PC.PersonId = @PersonId AND C.Date = PC.Date
+					LEFT JOIN dbo.PersonCalendar Holiday ON PC.Date = Holiday.SubstituteDate
+					WHERE C.Date BETWEEN @StartDate AND @EndDate
+						AND C.DayOff = 0
+						AND (PC.Date IS NULL
+							OR (PC.Date IS NOT NULL AND PC.DayOff = 1 AND Holiday.SubstituteDate IS NULL)
+							)
+				)
+		BEGIN
+			RAISERROR('Selected day(s) are not working day(s). Please select any working day(s).', 16, 1)
+		END
 
 		--AD:- AffectedDays
 		--EDFS:- ExcludeDaysFromSeries
