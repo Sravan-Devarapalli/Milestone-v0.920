@@ -2206,7 +2206,6 @@ table.CellPaddingClass td
 .DeleteWidth
 {
     padding-left:4px;
-    padding-right:4px;
     width:3%;
     text-align:left;
 }
@@ -2231,7 +2230,7 @@ table.CellPaddingClass td
 }
 TABLE.Section td 
 {
-    padding: 4px 4px 4px 4px;
+    padding: 4px 0px 0px 4px;
 }
 
 .TopCenterAlignWithoutPaddingTop
@@ -2424,6 +2423,11 @@ end pixcel
 {
   padding-left: 20px;
 }
+.padLeft30
+{
+  padding-left: 30px;
+}
+
 .padLeft40
 {
   padding-left: 40px;
