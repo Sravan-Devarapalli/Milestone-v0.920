@@ -448,7 +448,7 @@ namespace PraticeManagement.Controls
 
         protected void cvHoursSingleDay_OnServerValidate(object source, ServerValidateEventArgs args)
         {
-            if (!string.IsNullOrEmpty(txtHoursSingleDay.Text))
+            if (!string.IsNullOrEmpty(txtHoursSingleDay.Text) && compHoursSingleDay.IsValid && rangeHoursSingleDay.IsValid)
             {
                 var hours = Convert.ToDouble(txtHoursSingleDay.Text);
                 if (hours % 0.25 != 0)
@@ -460,7 +460,7 @@ namespace PraticeManagement.Controls
 
         protected void cvHoursPerDay_OnServerValidate(object source, ServerValidateEventArgs args)
         {
-            if (!string.IsNullOrEmpty(txtHoursSingleDay.Text))
+            if (!string.IsNullOrEmpty(txthoursTimeOff.Text) && compHoursPerDay.IsValid && rangHoursPerDay.IsValid)
             {
                 var hours = Convert.ToDouble(txthoursTimeOff.Text);
                 if (hours % 0.25 != 0)
