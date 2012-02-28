@@ -119,7 +119,9 @@
 
             if (dayLink.attributes['IsFloatingHoliday'].value.toLowerCase() == 'true') {
                 var lblDeleteSubstituteDay = document.getElementById('<%= lblDeleteSubstituteDay.ClientID %>');
+                var lblDeleteSubstituteDescription = document.getElementById('<%= lblDeleteSubstituteDescription.ClientID %>');
                 lblDeleteSubstituteDay.innerHTML = hdnHolidayDate.value = date.format('MM/dd/yyyy');
+                lblDeleteSubstituteDescription.innerHTML = dayLink.title.substring(0, dayLink.title.indexOf('Approved'));
                 var mpeDeleteSubstituteDay = $find('mpeDeleteSubstituteDay');
                 mpeDeleteSubstituteDay.show();
             }
@@ -215,41 +217,41 @@
     }
 
     function btnDeleteTimeOffDisable() {
-        var btnDeleteTimeOff = document.getElementById( '<%=btnDeleteTimeOff.ClientID %>' );
-        var hdIsTimeOffPopUpDirty = document.getElementById( '<%=hdIsTimeOffPopUpDirty.ClientID %>' );
-        if ( btnDeleteTimeOff != null && btnDeleteTimeOff != undefined ) {
-            btnDeleteTimeOff.setAttribute( 'disabled', 'disabled' );
+        var btnDeleteTimeOff = document.getElementById('<%=btnDeleteTimeOff.ClientID %>');
+        var hdIsTimeOffPopUpDirty = document.getElementById('<%=hdIsTimeOffPopUpDirty.ClientID %>');
+        if (btnDeleteTimeOff != null && btnDeleteTimeOff != undefined) {
+            btnDeleteTimeOff.setAttribute('disabled', 'disabled');
             hdIsTimeOffPopUpDirty.value = true;
         }
     }
 
     function btnDeleteSingleDayDisable() {
-        var btnDeleteSingleDay = document.getElementById( '<%=btnDeleteSingleDay.ClientID %>' );
-        var hdIsSingleDayPopDirty = document.getElementById( '<%=hdIsSingleDayPopDirty.ClientID %>' );
-        if ( btnDeleteSingleDay != null && btnDeleteSingleDay != undefined ) {
-            btnDeleteSingleDay.setAttribute( 'disabled', 'disabled' );
+        var btnDeleteSingleDay = document.getElementById('<%=btnDeleteSingleDay.ClientID %>');
+        var hdIsSingleDayPopDirty = document.getElementById('<%=hdIsSingleDayPopDirty.ClientID %>');
+        if (btnDeleteSingleDay != null && btnDeleteSingleDay != undefined) {
+            btnDeleteSingleDay.setAttribute('disabled', 'disabled');
             hdIsSingleDayPopDirty.value = true;
         }
     }
 
 
     function dtpStartDateTimeOff_OnClientChange() {
-        var dtpStartDateTimeOff = $find( 'dtpStartDateTimeOffBehaviorID' );
-        var dtpEndDateTimeOff = $find( 'dtpEndDateTimeOffBehaviorID' );
-        var startDate = new Date( dtpStartDateTimeOff._selectedDate );
-        var endDate = new Date( dtpEndDateTimeOff._selectedDate );
-        if ( startDate > endDate ) {
-            dtpEndDateTimeOff.set_selectedDate( startDate.format( "MM/dd/yyyy" ) );
+        var dtpStartDateTimeOff = $find('dtpStartDateTimeOffBehaviorID');
+        var dtpEndDateTimeOff = $find('dtpEndDateTimeOffBehaviorID');
+        var startDate = new Date(dtpStartDateTimeOff._selectedDate);
+        var endDate = new Date(dtpEndDateTimeOff._selectedDate);
+        if (startDate > endDate) {
+            dtpEndDateTimeOff.set_selectedDate(startDate.format("MM/dd/yyyy"));
         }
     }
 
     function dtpEndDateTimeOff_OnClientChange() {
-        var dtpStartDateTimeOff = $find( 'dtpStartDateTimeOffBehaviorID' );
-        var dtpEndDateTimeOff = $find( 'dtpEndDateTimeOffBehaviorID' );
-        var startDate = new Date( dtpStartDateTimeOff._selectedDate );
-        var endDate = new Date( dtpEndDateTimeOff._selectedDate );
-        if ( startDate > endDate ) {
-            dtpStartDateTimeOff.set_selectedDate( endDate.format( "MM/dd/yyyy" ) );
+        var dtpStartDateTimeOff = $find('dtpStartDateTimeOffBehaviorID');
+        var dtpEndDateTimeOff = $find('dtpEndDateTimeOffBehaviorID');
+        var startDate = new Date(dtpStartDateTimeOff._selectedDate);
+        var endDate = new Date(dtpEndDateTimeOff._selectedDate);
+        if (startDate > endDate) {
+            dtpStartDateTimeOff.set_selectedDate(endDate.format("MM/dd/yyyy"));
         }
     }
 
@@ -662,7 +664,7 @@
                                     </tr>
                                     <tr>
                                         <td colspan="3">
-                                            <asp:HiddenField ID="hdIsTimeOffPopUpDirty" runat="server"/>
+                                            <asp:HiddenField ID="hdIsTimeOffPopUpDirty" runat="server" />
                                             <asp:Button ID="btnOkTimeOff" Text="OK" ValidationGroup="TimeOff" runat="server"
                                                 ToolTip="Ok" OnClick="btnOkTimeOff_Click" />&nbsp; &nbsp;
                                             <asp:Button ID="btnDeleteTimeOff" Text="Delete" runat="server" ValidationGroup="TimeOff"
@@ -707,7 +709,7 @@
                                     </tr>
                                     <tr>
                                         <td colspan="3" class="textLeft padLeft40">
-                                            <asp:DropDownList ID="ddlTimeTypesSingleDay" CssClass="width70P" runat="server" onchange = "btnDeleteSingleDayDisable();">
+                                            <asp:DropDownList ID="ddlTimeTypesSingleDay" CssClass="width70P" runat="server" onchange="btnDeleteSingleDayDisable();">
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="reqddlTimeTypesSingleDay" runat="server" ControlToValidate="ddlTimeTypesSingleDay"
                                                 ErrorMessage="The Work Type is required." ToolTip="The Work Type is required."
@@ -728,7 +730,8 @@
                                             Hours:
                                         </td>
                                         <td class="padLeft5 textLeft" style="width: 25%;">
-                                            <asp:TextBox ID="txtHoursSingleDay" runat="server" CssClass="width50Px" MaxLength="4" onchange="btnDeleteSingleDayDisable();"></asp:TextBox>
+                                            <asp:TextBox ID="txtHoursSingleDay" runat="server" CssClass="width50Px" MaxLength="4"
+                                                onchange="btnDeleteSingleDayDisable();"></asp:TextBox>
                                             <asp:RequiredFieldValidator ID="reqHoursSingleDay" runat="server" ControlToValidate="txtHoursSingleDay"
                                                 ErrorMessage="The Hours is required." ToolTip="The Hours is required." Text="*"
                                                 EnableClientScript="false" SetFocusOnError="true" ValidationGroup="SingleDay"></asp:RequiredFieldValidator>
@@ -759,7 +762,7 @@
                                     </tr>
                                     <tr>
                                         <td colspan="3">
-                                            <asp:HiddenField ID="hdIsSingleDayPopDirty" runat="server"/>
+                                            <asp:HiddenField ID="hdIsSingleDayPopDirty" runat="server" />
                                             <asp:Button ID="btnOkSingleDay" OnClick="btnOkSingleDay_OnClick" Text="OK" ToolTip="OK"
                                                 ValidationGroup="SingleDay" runat="server" />&nbsp; &nbsp;
                                             <asp:Button ID="btnDeleteSingleDay" OnClick="btnDeleteSingleDay_OnClick" ValidationGroup="SingleDay"
@@ -860,32 +863,26 @@
                         max-width: 700px; min-height: 60px; display: none;" BorderWidth="2px">
                         <table class="WholeWidth">
                             <tr>
-                                <td style="text-align: right; width: 50%">
-                                    Date
-                                </td>
-                                <td style="text-align: left; font-weight: bold;">
-                                    :
-                                    <asp:Label ID="lblDeleteSubstituteDay" runat="server"></asp:Label>
+                                <td style="text-align: center;">
+                                    Date<span style="font-weight: bold;">:
+                                        <asp:Label ID="lblDeleteSubstituteDay" runat="server"></asp:Label></span>
                                 </td>
                             </tr>
                             <tr>
-                                <td style="height: 5px;" colspan="2">
+                                <td style="height: 5px;">
                                 </td>
                             </tr>
                             <tr>
-                                <td style="text-align: right;">
-                                    Work type selected
-                                </td>
-                                <td style="text-align: left; font-weight: bold;">
-                                    : Holiday
+                                <td>
+                                    <asp:Label ID="lblDeleteSubstituteDescription" runat="server"></asp:Label>
                                 </td>
                             </tr>
                             <tr>
-                                <td style="height: 5px;" colspan="2">
+                                <td style="height: 5px;">
                                 </td>
                             </tr>
                             <tr>
-                                <td align="center" style="padding: 10px 0px 10px 0px;" colspan="2">
+                                <td align="center" style="padding: 10px 0px 10px 0px;">
                                     <asp:Button ID="btnDeleteSubstituteDay" OnClick="btnDeleteSubstituteDay_Click" runat="server"
                                         Text="Delete" ToolTip="Delete" />
                                     &nbsp; &nbsp;
