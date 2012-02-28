@@ -2343,6 +2343,12 @@ TABLE.Section
     padding-top:3px;
     padding-bottom:3px;
 }
+
+.singleRowTableTd td
+{
+    padding-top:0px !important;
+    padding-bottom:0px !important; 
+}
 /*
 start percent
 */
