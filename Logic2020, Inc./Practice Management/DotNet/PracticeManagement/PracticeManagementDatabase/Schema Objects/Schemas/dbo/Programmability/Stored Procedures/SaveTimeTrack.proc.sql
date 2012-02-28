@@ -203,12 +203,13 @@ BEGIN
 				Dates.c.value('@ActualHours', 'REAL'),
 				0,
 				Dates.c.value('..[1]/..[1]/@Id', 'INT'),
-				Dates.c.value('@Note', 'NVARCHAR(1000)'),
+				CASE WHEN Dates.c.value('@Note', 'NVARCHAR(1000)') = '' THEN tt.Name ELSE Dates.c.value('@Note', 'NVARCHAR(1000)') END,
 				1
 		FROM PersonCalendar PC
 		RIGHT JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') Dates(c)
 				ON PC.PersonId =  @PersonId
 					AND Dates.c.value('..[1]/@Date', 'DATETIME') = PC.Date
+		INNER JOIN TimeType TT ON TT.TimeTypeId = Dates.c.value('..[1]/..[1]/@Id', 'INT')
 		WHERE Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4
 				AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @HolidayTimeTypeId
 				AND Dates.c.value('@ActualHours', 'REAL') > 0
