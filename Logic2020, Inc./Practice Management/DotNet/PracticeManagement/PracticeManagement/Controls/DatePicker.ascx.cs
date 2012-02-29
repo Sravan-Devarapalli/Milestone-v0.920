@@ -125,6 +125,40 @@ namespace PraticeManagement.Controls
                 txtDate_CalendarExtender.Enabled = !value;
             }
         }
+        
+        [Category("Appearance")]
+        [DefaultValue(true)]
+        [Localizable(false)]
+        public bool EnabledTextBox
+        {
+            get
+            {
+                EnsureChildControls();
+                return txtDate.Enabled;
+            }
+            set
+            {
+                EnsureChildControls();
+                txtDate.Enabled = value;
+            }
+        }
+
+        [Category("Appearance")]
+        [DefaultValue("visible")]
+        [Localizable(false)]
+        public string VisibleTextBox
+        {
+            get
+            {
+                EnsureChildControls();
+                return txtDate.Style["visibility"];
+            }
+            set
+            {
+                EnsureChildControls();
+                txtDate.Style.Add("visibility", value);
+            }
+        }
 
         /// <summary>
         /// Gets or sets a width for the text field.
