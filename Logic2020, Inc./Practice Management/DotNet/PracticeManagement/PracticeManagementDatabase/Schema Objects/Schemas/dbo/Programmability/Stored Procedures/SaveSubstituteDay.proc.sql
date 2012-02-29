@@ -39,7 +39,7 @@ BEGIN
 	   )
 	BEGIN
 		DECLARE @Error NVARCHAR(200)
-		SET @Error = 'Selected date is not a Working day.Please select any Working day.'
+		SET @Error = 'The selected date is not a working day.'
 		RAISERROR(@Error,16,1)
 	END
 
