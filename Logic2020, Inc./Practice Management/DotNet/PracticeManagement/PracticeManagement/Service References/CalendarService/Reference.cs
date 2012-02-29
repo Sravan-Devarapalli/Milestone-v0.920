@@ -44,6 +44,12 @@ namespace PraticeManagement.CalendarService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/GetTimeOffSeriesPeriod", ReplyAction="http://tempuri.org/ICalendarService/GetTimeOffSeriesPeriodResponse")]
         System.Collections.Generic.KeyValuePair<System.DateTime, System.DateTime> GetTimeOffSeriesPeriod(int personId, System.DateTime date);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/GetSubstituteDate", ReplyAction="http://tempuri.org/ICalendarService/GetSubstituteDateResponse")]
+        System.DateTime GetSubstituteDate(int personId, System.DateTime holidayDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/GetSubstituteDayDetails", ReplyAction="http://tempuri.org/ICalendarService/GetSubstituteDayDetailsResponse")]
+        System.Collections.Generic.KeyValuePair<System.DateTime, string> GetSubstituteDayDetails(int personId, System.DateTime substituteDate);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -53,7 +59,7 @@ namespace PraticeManagement.CalendarService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class CalendarServiceClient : System.ServiceModel.ClientBase<PraticeManagement.CalendarService.ICalendarService>, PraticeManagement.CalendarService.ICalendarService {
-      
+        
         public CalendarServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -108,6 +114,14 @@ namespace PraticeManagement.CalendarService {
         
         public System.Collections.Generic.KeyValuePair<System.DateTime, System.DateTime> GetTimeOffSeriesPeriod(int personId, System.DateTime date) {
             return base.Channel.GetTimeOffSeriesPeriod(personId, date);
+        }
+        
+        public System.DateTime GetSubstituteDate(int personId, System.DateTime holidayDate) {
+            return base.Channel.GetSubstituteDate(personId, holidayDate);
+        }
+        
+        public System.Collections.Generic.KeyValuePair<System.DateTime, string> GetSubstituteDayDetails(int personId, System.DateTime substituteDate) {
+            return base.Channel.GetSubstituteDayDetails(personId, substituteDate);
         }
     }
 }
