@@ -876,14 +876,16 @@
                                 BorderWidth="2px" min-Height="100px" Width="280px" max-Height="205px">
                                 <table class="WholeWidth">
                                     <tr>
-                                        <td>
+                                        <td colspan="2">
                                             <asp:Label ID="lblHolidayDetails" runat="server"></asp:Label>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="height: 40px; vertical-align: middle; min-height:10px;">
+                                        <td style="height: 30px; width:75%; text-align:right; vertical-align: middle; min-height:10px;">
                                             Substitute Date:&nbsp;
                                             <asp:Label ID="lblModifySubstituteday" runat="server" style="font-weight:bold;"></asp:Label>
+                                        </td>
+                                        <td style="height: 30px; width:25%; vertical-align: middle; text-align:left; min-height:10px;">
                                             <uc:DatePicker ID="dpModifySubstituteday" runat="server" OnClientChange="DisableButtons('dpModifySubstituteday')" VisibleTextBox="hidden"
                                                 ValidationGroup="Substituteday" AutoPostBack="false" TextBoxWidth="0px" BehaviorID="dpModifySubstituteday" />
                                             <asp:CustomValidator ID="cvModifySubstituteday" EnableClientScript="false" EnableViewState="false"
@@ -893,12 +895,12 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td  colspan="2">
                                             <asp:ValidationSummary ID="valSumModifySubstituteDay" runat="server" ValidationGroup="ModifySubstituteDay" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="padding: 10px;">
+                                        <td style="padding: 10px;"  colspan="2">
                                             <asp:Button ID="btnModifySubstituteDayOk" runat="server" Text="OK" ToolTip="OK" ValidationGroup="ModifySubstituteDay"
                                                 OnClick="btnModifySubstituteDayOk_Click" />
                                             &nbsp;<asp:Button ID="btnModifySubstituteDayDelete" runat="server" Text="Delete"
