@@ -129,10 +129,6 @@
             return false;
         }
 
-        function IsrecusiveAllowed() {
-            $find('mpeRecurringAllowed').show();
-            return false;
-        }
         function checkDirtyWithRedirectInTimeEntry() {
             if (!showDialod()) {
                 clearDirty();
@@ -463,7 +459,7 @@
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <td class="time-entry-bar-total-hoursNew">
-                                        TOTAL</div>
+                                        <div style="float:right; padding-right:5px;">TOTAL</div>
                                     </td>
                                     <td class="DeleteWidth">
                                     </td>
@@ -597,7 +593,7 @@
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <td class="time-entry-bar-total-hoursNew">
-                                        TOTAL</div>
+                                        <div style="float:right; padding-right:5px;">TOTAL</div>
                                     </td>
                                     <td class="DeleteWidth">
                                     </td>
@@ -733,7 +729,7 @@
                                             </ItemTemplate>
                                         </asp:Repeater>
                                         <td class="time-entry-bar-total-hoursNew">
-                                            TOTAL</div>
+                                           <div style="float:right; padding-right:5px;"> TOTAL</div>
                                         </td>
                                         <td class="DeleteWidth">
                                         </td>
@@ -815,8 +811,8 @@
                                 <td colspan="7" class="TOTALTD PaddingTop6">
                                     BILLABLE TOTAL :
                                 </td>
-                                <td class="time-entry-total-hoursNew">
-                                    <label id="lblBillableGrandTotal" runat="server" />
+                                <td class="time-entry-total-hoursNew-totalColoum">
+                                    <div style="float:right; padding-right:10px;"><label id="lblBillableGrandTotal" runat="server" /></div>
                                     <ext:TotalCalculatorExtender ID="extBillableGrandTotal" runat="server" TargetControlID="lblBillableGrandTotal" />
                                 </td>
                                 <td class="DeleteWidth">
@@ -830,8 +826,8 @@
                                 <td colspan="7" class="TOTALTD">
                                     NON-BILLABLE TOTAL :
                                 </td>
-                                <td class="time-entry-total-hoursNew">
-                                    <label id="lblNonBillableGrandTotal" runat="server" />
+                                <td class="time-entry-total-hoursNew-totalColoum">
+                                    <div style="float:right; padding-right:10px;"><label id="lblNonBillableGrandTotal" runat="server" /></div>
                                     <ext:TotalCalculatorExtender ID="extNonBillableGrandTotal" runat="server" TargetControlID="lblNonBillableGrandTotal" />
                                 </td>
                                 <td class="DeleteWidth">
@@ -845,8 +841,8 @@
                                 <td colspan="7" class="TOTALTD" style="padding-top: 15px;">
                                     TIME PERIOD GRAND TOTAL:
                                 </td>
-                                <td style="padding-top: 15px;" class="time-entry-total-hoursNew">
-                                    <label id="lbltimePeriodGrandTotal" runat="server" />
+                                <td style="padding-top: 15px;" class="time-entry-total-hoursNew-totalColoum">
+                                    <div style="float:right; padding-right:10px;"><label id="lbltimePeriodGrandTotal" runat="server" /></div>
                                     <ext:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lbltimePeriodGrandTotal" />
                                 </td>
                                 <td class="DeleteWidth">
@@ -1150,7 +1146,7 @@
                     TargetControlID="hdRecurringAllowed" BackgroundCssClass="modalBackground" PopupControlID="pnlRecurringAllowed"
                     DropShadow="false" CancelControlID="btnCloseRecurringAllowed" />
                 <asp:Panel ID="pnlRecurringAllowed" runat="server" BackColor="White" BorderColor="Black"
-                    Style="display: none" BorderWidth="2px" Width="380px">
+                    Style="display: none" BorderWidth="2px" Width="480px">
                     <table width="100%" style="padding: 5px;">
                         <tr>
                             <th align="center" style="text-align: center; background-color: Gray;" valign="bottom">
@@ -1162,7 +1158,10 @@
                         </tr>
                         <tr>
                             <td style="font-weight: bold; padding: 8px;">
-                            Can't enable recurring behavior as project enddate is less than the week startdate.
+                                It is not possible to enable recurring behavior for this Project. This project has
+                                an end date of
+                                <asp:Label ID="ldProjectEnddate" runat="server" Font-Bold="true"></asp:Label>
+                            . Please contact the Project Manager if this is incorrect.
                         </tr>
                         <tr>
                             <td style="text-align: center; padding: 8px;">
