@@ -21,13 +21,13 @@
     <MetadataSource Address="http://localhost/PracticeManagementService/CalendarService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="CalendarService3.xsd" MetadataType="Schema" ID="369d5efa-f86d-4e67-a838-7adbc4b29447" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd1" />
-    <MetadataFile FileName="CalendarService4.xsd" MetadataType="Schema" ID="77bf8410-7522-44a0-9e91-58f5db22eab1" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd0" />
-    <MetadataFile FileName="CalendarService5.xsd" MetadataType="Schema" ID="5572b0df-93e7-4f7d-8974-723b4a68e95f" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd3" />
-    <MetadataFile FileName="CalendarService6.xsd" MetadataType="Schema" ID="6dd683d9-437e-4711-9dbf-7e8597ae85ff" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd2" />
-    <MetadataFile FileName="CalendarService1.wsdl" MetadataType="Wsdl" ID="0cde71ee-3128-4f3a-8a8e-f25efe7d47e5" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/CalendarService.svc?wsdl" />
-    <MetadataFile FileName="CalendarService7.xsd" MetadataType="Schema" ID="12ac519d-9d99-4a05-84b4-3f244b14b415" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd4" />
-    <MetadataFile FileName="CalendarService1.disco" MetadataType="Disco" ID="158a859a-561c-462c-92d3-890e46ca1631" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/CalendarService.svc?disco" />
+    <MetadataFile FileName="CalendarService3.xsd" MetadataType="Schema" ID="a9b282f4-c3cf-42f6-b185-a21e14aad9fb" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd4" />
+    <MetadataFile FileName="CalendarService1.wsdl" MetadataType="Wsdl" ID="af9d5f98-5888-43bb-8a16-df3a9aef888b" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/CalendarService.svc?wsdl" />
+    <MetadataFile FileName="CalendarService1.disco" MetadataType="Disco" ID="bd411785-e311-41e1-a6a7-f77dc9fcc527" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/CalendarService.svc?disco" />
+    <MetadataFile FileName="CalendarService4.xsd" MetadataType="Schema" ID="559eb173-dc1a-4451-8686-ef871bbabfe3" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd2" />
+    <MetadataFile FileName="CalendarService5.xsd" MetadataType="Schema" ID="9985ef6a-ce86-479c-8ef6-8aa7b2f45437" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd3" />
+    <MetadataFile FileName="CalendarService6.xsd" MetadataType="Schema" ID="7ebef3b3-154c-4d32-aab4-ba7b9c40e215" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd0" />
+    <MetadataFile FileName="CalendarService7.xsd" MetadataType="Schema" ID="bfc72217-319e-46bb-92a9-667671d1b077" SourceId="1" SourceUrl="http://system58.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd1" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
