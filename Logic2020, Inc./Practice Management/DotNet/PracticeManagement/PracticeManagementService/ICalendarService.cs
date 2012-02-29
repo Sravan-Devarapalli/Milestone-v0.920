@@ -61,6 +61,12 @@ namespace PracticeManagementService
         [OperationContract]
         KeyValuePair<DateTime, DateTime> GetTimeOffSeriesPeriod(int personId, DateTime date);
 
+        [OperationContract]
+        DateTime GetSubstituteDate(int personId, DateTime holidayDate);
+
+        [OperationContract]
+        KeyValuePair<DateTime, string> GetSubstituteDayDetails(int personId, DateTime substituteDate);
+
     }
 }
 
