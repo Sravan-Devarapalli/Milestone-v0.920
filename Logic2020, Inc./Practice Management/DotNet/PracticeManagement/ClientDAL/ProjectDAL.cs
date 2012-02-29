@@ -2493,7 +2493,21 @@ namespace DataAccess
 
         private static Project ReadProjectShort(SqlDataReader reader)
         {
-            return new Project { Id = (int)reader[Constants.ColumnNames.ProjectIdColumn], Name = (string)reader[Constants.ColumnNames.NameColumn], ProjectNumber = (string)reader[Constants.ColumnNames.ProjectNumberColumn] };
+            Project project = new Project { Id = (int)reader[Constants.ColumnNames.ProjectIdColumn], Name = (string)reader[Constants.ColumnNames.NameColumn], ProjectNumber = (string)reader[Constants.ColumnNames.ProjectNumberColumn] };
+            int endDateIndex = -1;
+            try
+            {
+                endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
+            }
+            catch
+            {
+                endDateIndex = -1;
+            }
+            if (endDateIndex > -1)
+            {
+              project.EndDate = !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null;
+            }
+            return project;
         }
 
         public static List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId, bool IsOnlyActive,DateTime? startDate,DateTime? endDate)
