@@ -25,6 +25,8 @@ namespace PraticeManagement.Controls
         public const string showEditSeriesOrSingleDayMessage = "Do you want to edit the series ({0} – {1}) or edit the single day ({2})?";
         public const string HoursFormat = "0.00";
         public const string TimeOffValidationMessage = "Selected day(s) are not working day(s). Please select any working day(s).";
+        public const string SubstituteDateValidationMessage = "The selected date is not a working day.";
+        public const string HolidayDetails_Format = "{0} - {1}";
 
         private CalendarItem[] days;
         private bool userIsPracticeManager;
@@ -446,6 +448,14 @@ namespace PraticeManagement.Controls
             }
         }
 
+        protected void cvModifySubstituteday_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (!string.IsNullOrEmpty(ExceptionMessage))
+            {
+                args.IsValid = false;
+            }
+        }
+
         protected void cvHoursSingleDay_OnServerValidate(object source, ServerValidateEventArgs args)
         {
             if (!string.IsNullOrEmpty(txtHoursSingleDay.Text) && compHoursSingleDay.IsValid && rangeHoursSingleDay.IsValid)
@@ -472,14 +482,26 @@ namespace PraticeManagement.Controls
       
         protected void btnDeleteSubstituteDay_Click(object sender, EventArgs e)
         {
-            var userName = Context.User.Identity.Name;
-            ServiceCallers.Custom.Calendar(c => c.DeleteSubstituteDay(SelectedPersonId.Value, Convert.ToDateTime(hdnHolidayDate.Value), userName));
+            DeleteSubstituteDay(SelectedPersonId.Value, Convert.ToDateTime(hdnHolidayDate.Value));
             mpeDeleteSubstituteDay.Hide();
+        }
+
+        private void DeleteSubstituteDay(int personId, DateTime substituteDate)
+        {
+            var userName = Context.User.Identity.Name;
+            ServiceCallers.Custom.Calendar(c => c.DeleteSubstituteDay(personId, substituteDate, userName));
+        }
+
+        protected void btnModifySubstituteDayDelete_Click(object sender, EventArgs e)
+        {
+            DeleteSubstituteDay(SelectedPersonId.Value, Convert.ToDateTime(hdnSubstituteDate.Value));
+            mpeModifySubstituteDay.Hide();
         }
 
         protected void btnSubstituteDayOK_Click(object sender, EventArgs e)
         {
-            Page.Validate(cvSubstituteDay.ValidationGroup);
+            var validationGroup = ((Button)sender).ValidationGroup;
+            Page.Validate(validationGroup);
             if (Page.IsValid)
             {
                 CalendarItem ci = new CalendarItem()
@@ -489,26 +511,20 @@ namespace PraticeManagement.Controls
                     PersonId = SelectedPersonId
                 };
 
-                var userName = Context.User.Identity.Name;
-
                 try
                 {
-                    ServiceCallers.Custom.Calendar(c => c.SaveSubstituteDay(ci, userName));
-                    mpeHolidayAndSubStituteDay.Hide();
-                }
-                catch (Exception ex)
-                {
-                    if (ex.Message == "Selected date is not a Working day.Please select any Working day.")
+                    if (SaveSubstituteDay(ci, validationGroup))
                     {
-                        ExceptionMessage = ex.Message;
-                        Page.Validate(dpSubstituteDay.ValidationGroup);
-                        mpeHolidayAndSubStituteDay.Show();
+                        mpeHolidayAndSubStituteDay.Hide();
                     }
                     else
                     {
-                        throw ex;
+                        mpeHolidayAndSubStituteDay.Show();
                     }
-
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
                 }
             }
             else
@@ -518,6 +534,66 @@ namespace PraticeManagement.Controls
 
             upnlValsummary.Update();
 
+        }
+
+        private bool SaveSubstituteDay(CalendarItem item, string validationGroup)
+        {
+            try
+            {
+                var userName = Context.User.Identity.Name;
+                ServiceCallers.Custom.Calendar(c => c.SaveSubstituteDay(item, userName));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == SubstituteDateValidationMessage)
+                {
+                    ExceptionMessage = ex.Message;
+                    Page.Validate(validationGroup);
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
+            return false;
+        }
+
+        protected void btnModifySubstituteDayOk_Click(object sender, EventArgs e)
+        {
+            var validationGroup = ((Button)sender).ValidationGroup;
+            Page.Validate(validationGroup);
+            if (Page.IsValid)
+            {
+                CalendarItem ci = new CalendarItem()
+                {
+                    SubstituteDayDate = dpModifySubstituteday.DateValue,
+                    Date = Convert.ToDateTime(hdnHolidayDay.Value),
+                    PersonId = SelectedPersonId
+                };
+
+                try
+                {
+                    if (SaveSubstituteDay(ci, validationGroup))
+                    {
+                        mpeModifySubstituteDay.Hide();
+                    }
+                    else
+                    {
+                        mpeModifySubstituteDay.Show();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            else
+            {
+                mpeModifySubstituteDay.Show();
+            }
+
+            upnlModifySubstituteDay.Update();
         }
 
         protected void FillRecurringHolidaysList(CheckBoxList cblRecurringHolidays, string firstItem)
@@ -679,6 +755,25 @@ namespace PraticeManagement.Controls
             dpSubstituteDay.TextValue = "";
             mpeHolidayAndSubStituteDay.Show();
             upnlValsummary.Update();
+        }
+
+        internal void ShowModifySubstituteDay(DateTime holidayDate, string holidayDescription)
+        {
+            hdnHolidayDay.Value = holidayDate.ToShortDateString();
+            DateTime substituteDate = GetSubstituteDate(holidayDate, SelectedPersonId.Value);
+            hdnSubstituteDate.Value = substituteDate.ToShortDateString();
+            dpModifySubstituteday.DateValue = substituteDate;
+            lblModifySubstituteday.Text = substituteDate.ToString(Constants.Formatting.EntryDateFormat);
+            lblHolidayDetails.Text = string.Format(HolidayDetails_Format, holidayDate.ToString(Constants.Formatting.EntryDateFormat), holidayDescription);
+            btnModifySubstituteDayOk.Enabled = false;
+
+            mpeModifySubstituteDay.Show();
+            upnlModifySubstituteDay.Update();
+        }
+
+        private DateTime GetSubstituteDate(DateTime holidayDate, int personId)
+        {
+            return DataHelper.GetSubstituteDate(holidayDate, personId);
         }
     }
 }
