@@ -34,6 +34,7 @@
 
         function pageLoad() {
             SetTooltipsForallDropDowns();
+            setFooterPlacementinLastItemTemplate();
         }
 
         function SetTooltipsForallDropDowns() {
@@ -132,12 +133,11 @@
             $find('mpeRecurringAllowed').show();
             return false;
         }
-        function checkDirtyWithRedirectInTimeEntry(isFromWeekChange) {
+        function checkDirtyWithRedirectInTimeEntry() {
             if (!showDialod()) {
                 clearDirty();
             }
-            __doPostBack("__Page", isFromWeekChange);
-            return false;
+            return true;
         }
     </script>
 </asp:Content>
@@ -259,13 +259,14 @@
                         var imgPlusAdministrativeSectionList = $("[id$='imgPlusAdministrativeSection']");
                         ReplaceHTML(imgPlusAdministrativeSectionList);
 
-
                     }
 
                     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
 
                     function endRequestHandle(sender, Args) {
                         setFooterPlacementinLastItemTemplate();
+
+
 
                         if (getDirty()) {
                             EnableSaveButton(true);
@@ -312,26 +313,24 @@
                             </tr>
                         </table>
                     </div>
-                    <asp:Panel ID="pnlProjectSection" runat="server" CssClass="cp bg-white AutoHeight">
+                    <asp:Panel ID="pnlProjectSection" runat="server" CssClass="cp bg-white">
                         <asp:Panel ID="pnlProjectSectionHeader" runat="server" CssClass="WholeWidth">
                             <table class="CompPerfTable WholeWidth">
                                 <tr class="CompPerfHeader WholeWidth">
                                     <td class="DeleteWidth">
                                     </td>
                                     <td class="time-entry-bar-time-typesNewHeader">
-                                            Work Type
+                                        Work Type
                                     </td>
                                     <asp:Repeater ID="repProjectSectionHeader" runat="server">
                                         <ItemTemplate>
                                             <td class="time-entry-bar-single-teNew">
-                                               
-                                                    <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%>
+                                                <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%>
                                             </td>
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <td class="time-entry-bar-total-hoursNew">
-                                       
-                                            TOTAL
+                                        TOTAL
                                     </td>
                                     <td class="DeleteWidth">
                                     </td>
@@ -447,29 +446,24 @@
                             </tr>
                         </table>
                     </div>
-                    <asp:Panel ID="pnlBusinessDevelopmentSection" runat="server" CssClass="cp bg-white AutoHeight">
+                    <asp:Panel ID="pnlBusinessDevelopmentSection" runat="server" CssClass="cp bg-white">
                         <asp:Panel ID="pnlBusinessDevelopmentSectionHeader" runat="server" CssClass="WholeWidth">
                             <table class="CompPerfTable WholeWidth">
                                 <tr class="CompPerfHeader WholeWidth">
                                     <td class="DeleteWidth">
-                                       
-                                        
                                     </td>
                                     <td class="time-entry-bar-time-typesNewHeader">
-                                       
-                                            Work Type
+                                        Work Type
                                     </td>
                                     <asp:Repeater ID="repBusinessDevelopmentSectionHeader" runat="server">
                                         <ItemTemplate>
                                             <td class="time-entry-bar-single-teNew">
-                                               
-                                                    <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
+                                                <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
                                             </td>
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <td class="time-entry-bar-total-hoursNew">
-                                       
-                                            TOTAL</div>
+                                        TOTAL</div>
                                     </td>
                                     <td class="DeleteWidth">
                                     </td>
@@ -585,29 +579,25 @@
                             </tr>
                         </table>
                     </div>
-                    <asp:Panel ID="pnlInternalSection" runat="server" CssClass="cp bg-white AutoHeight">
+                    <asp:Panel ID="pnlInternalSection" runat="server" CssClass="cp bg-white">
                         <asp:Panel ID="pnlInternalSectionHeader" runat="server" CssClass="WholeWidth">
                             <table class="CompPerfTable WholeWidth">
                                 <tr class="CompPerfHeader WholeWidth">
                                     <td class="DeleteWidth">
-                                       
                                         </div>
                                     </td>
                                     <td class="time-entry-bar-time-typesNewHeader">
-                                       
-                                            Work Type</div>
+                                        Work Type</div>
                                     </td>
                                     <asp:Repeater ID="repInternalSectionHeader" runat="server">
                                         <ItemTemplate>
                                             <td class="time-entry-bar-single-teNew">
-                                               
-                                                    <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
+                                                <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
                                             </td>
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <td class="time-entry-bar-total-hoursNew">
-                                       
-                                            TOTAL</div>
+                                        TOTAL</div>
                                     </td>
                                     <td class="DeleteWidth">
                                     </td>
@@ -679,7 +669,7 @@
                                                 </AjaxControlToolkit:ConfirmButtonExtender>
                                                 <asp:ImageButton ID="imgBtnRecurrenceInternalSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick" />
                                             </td>
-                                            <td class="DeleteWidth textRight" >
+                                            <td class="DeleteWidth textRight">
                                                 <asp:ImageButton ID="imgBtnDeleteInternalSection" runat="server" ImageUrl="~/Images/close_24.png"
                                                     OnClick="imgBtnDeleteSection_OnClick" />
                                             </td>
@@ -723,31 +713,27 @@
                             </tr>
                         </table>
                     </div>
-                    <asp:Panel ID="pnlAdministrativeSection" runat="server" CssClass="cp bg-white AutoHeight">
+                    <asp:Panel ID="pnlAdministrativeSection" runat="server" CssClass="cp bg-white">
                         <asp:Repeater ID="repAdministrativeTes" OnItemDataBound="repAdministrativeTes_ItemDataBound"
                             runat="server">
                             <HeaderTemplate>
                                 <table class="CompPerfTable WholeWidth">
                                     <tr class="CompPerfHeader WholeWidth">
                                         <td class="DeleteWidth">
-                                           
                                             </div>
                                         </td>
                                         <td class="time-entry-bar-time-typesNewHeader">
-                                           
-                                                Work Type</div>
+                                            Work Type</div>
                                         </td>
                                         <asp:Repeater ID="repAdministrativeTesHeader" runat="server">
                                             <ItemTemplate>
                                                 <td class="time-entry-bar-single-teNew">
-                                                   
-                                                        <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
+                                                    <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
                                                 </td>
                                             </ItemTemplate>
                                         </asp:Repeater>
                                         <td class="time-entry-bar-total-hoursNew">
-                                           
-                                                TOTAL</div>
+                                            TOTAL</div>
                                         </td>
                                         <td class="DeleteWidth">
                                         </td>
@@ -777,18 +763,17 @@
                         <label id="lblDupilcateOptionsRemoveExtenderAdministrative" runat="server" />
                     </asp:Panel>
                     <asp:Panel ID="pnlTotalSection" runat="server" Style="padding: 10px 0px 10px 0px"
-                        CssClass="cp bg-white AutoHeight">
+                        CssClass="cp bg-white">
                         <table class="CompPerfTable WholeWidth">
                             <tr>
                                 <td class="DeleteWidth">
                                 </td>
                                 <td class="time-entry-bar-time-typesNew TOTALHOURSTD DayTotalHoursBorderRight">
                                 </td>
-                                <asp:Repeater ID="repTotalHoursHeader"  runat="server">
+                                <asp:Repeater ID="repTotalHoursHeader" runat="server">
                                     <ItemTemplate>
                                         <td class="time-entry-bar-single-teNew CompPerfTotalHeader DayTotalHours">
-                                           
-                                                <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
+                                            <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
                                         </td>
                                     </ItemTemplate>
                                 </asp:Repeater>
