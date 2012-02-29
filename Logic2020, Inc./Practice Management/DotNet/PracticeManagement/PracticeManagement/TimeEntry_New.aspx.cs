@@ -406,7 +406,6 @@ namespace PraticeManagement
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
             btnAddProjectSection.Attributes["onclick"] = "ExpandPanel('" + cpeProjectSection.BehaviorID + "');";
             btnAddInternalProjectSection.Attributes["onclick"] = "ExpandPanel('" + cpeInternalSection.BehaviorID + "');";
             btnAddBusinessDevelopmentSection.Attributes["onclick"] = "ExpandPanel('" + cpeBusinessDevelopmentSection.BehaviorID + "');";
