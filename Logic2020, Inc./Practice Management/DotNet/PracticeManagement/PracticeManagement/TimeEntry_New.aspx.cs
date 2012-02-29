@@ -439,7 +439,7 @@ namespace PraticeManagement
                 cpeAdministrative.Collapsed = !(xdoc.Descendants(XName.Get(TimeEntryRecordXname)).ToList().Count > 0);
 
                 ScriptManager.RegisterStartupScript(updTimeEntries, updTimeEntries.GetType(), "RegisterStartupScript", "setFooterPlacementinLastItemTemplate();", true);
-                
+
             }
 
             ddlAccountProjectSection.Attributes[personIdAttribute] =
@@ -472,12 +472,8 @@ namespace PraticeManagement
             if (sectionRepeater.Items.Count > 0)
             {
                 sectionHeaderPanel.Visible = true;
-
-                if (sectionHeaderRepeater.Items.Count < 1)
-                {
-                    sectionHeaderRepeater.DataSource = SelectedDates;
-                    sectionHeaderRepeater.DataBind();
-                }
+                sectionHeaderRepeater.DataSource = SelectedDates;
+                sectionHeaderRepeater.DataBind();
             }
             else
             {
@@ -701,7 +697,7 @@ namespace PraticeManagement
                 imgPlusProjectSection.Attributes[AccountIdXname] = AccountId;
                 imgPlusProjectSection.Attributes[ProjectIdXname] = ProjectId;
                 imgPlusProjectSection.Attributes[PlaceHolderCell] = TdPlusSectionClientId;
-                
+
                 imgPlusProjectSection.ToolTip = string.Format(PlusToolTipFormat, "Project");
             }
         }
@@ -790,7 +786,7 @@ namespace PraticeManagement
                 imgPlusInternalSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
                 imgPlusInternalSection.Attributes[PlaceHolderCell] = TdPlusSectionClientId;
                 imgPlusInternalSection.ToolTip = string.Format(PlusToolTipFormat, "Project");
-                
+
             }
         }
 
