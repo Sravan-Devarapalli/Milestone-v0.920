@@ -84,6 +84,16 @@ namespace PracticeManagementService
             return CalendarDAL.GetTimeOffSeriesPeriod(personId, date);
         }
 
+        public DateTime GetSubstituteDate(int personId, DateTime holidayDate)
+        {
+            return CalendarDAL.GetSubstituteDate(personId, holidayDate);
+        }
+
+        public KeyValuePair<DateTime, string> GetSubstituteDayDetails(int personId, DateTime substituteDate)
+        {
+            return CalendarDAL.GetSubstituteDayDetails(personId, substituteDate);
+        }
+
 
         #endregion
     }
