@@ -446,6 +446,63 @@ namespace DataAccess
             return keyval;
         }
 
+        public static DateTime GetSubstituteDate(int personId, DateTime holidayDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Calendar.GetSubstituteDate, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.HolidayDateParam, holidayDate);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
+
+                    connection.Open();
+
+                    return (DateTime)command.ExecuteScalar();
+                }
+            }
+        }
+
+        public static KeyValuePair<DateTime, string> GetSubstituteDayDetails(int personId, DateTime substituteDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Calendar.GetSubstituteDayDetails, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.SubstituteDayDateParam, substituteDate);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
+
+                    connection.Open();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        return ReadSubstituteDayDetails(reader);
+                    }
+                }
+            }
+        }
+
+        private static KeyValuePair<DateTime, string> ReadSubstituteDayDetails(SqlDataReader reader)
+        {
+            KeyValuePair<DateTime, string> keyval = new KeyValuePair<DateTime, string>();
+            if (reader.HasRows)
+            {
+                int holidayDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.HolidayDescriptionColumn);
+                int HolidayDateIndex = reader.GetOrdinal(Constants.ColumnNames.HolidayDateColumn);
+
+                while (reader.Read())
+                {
+                    keyval = new KeyValuePair<DateTime, string>(reader.GetDateTime(HolidayDateIndex), reader.GetString(holidayDescriptionIndex));
+                }
+            }
+            return keyval;
+        }
+
 
         #endregion
     }
