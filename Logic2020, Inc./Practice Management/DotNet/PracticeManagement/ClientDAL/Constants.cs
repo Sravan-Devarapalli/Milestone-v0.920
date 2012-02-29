@@ -272,6 +272,7 @@
             public const string IsHolidayColumn = "IsHoliday";
             public const string IsAdministrativeColumn = "IsAdministrative";
             public const string AssignedProject = "AssignedProject";
+            public const string HolidayDateColumn = "HolidayDate";
             
         }
 
@@ -534,6 +535,7 @@
             public const string IncludePTOParam = "@IncludePTO";
             public const string IncludeHolidayParam = "@IncludeHoliday";
             public const string SubstituteDayDateParam = "@SubstituteDayDate";
+            public const string HolidayDateParam = "@HolidayDate";
 
 
         }
@@ -713,6 +715,8 @@
                 public const string GetRecurringHolidaysInWeek = "dbo.GetRecurringHolidaysInWeek";
                 public const string DeleteSubstituteDayProcedure = "dbo.DeleteSubstituteDay";
                 public const string GetTimeOffSeriesPeriod = "dbo.GetTimeOffSeriesPeriod";
+                public const string GetSubstituteDate = "dbo.GetSubstituteDate";
+                public const string GetSubstituteDayDetails = "dbo.GetSubstituteDayDetails";
             }
 
             public class ProjectGroup
