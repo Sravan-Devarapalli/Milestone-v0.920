@@ -16,7 +16,7 @@
         <td class="time-entry-bar-time-typesNew textCenter">
             <asp:DropDownList ID="ddlTimeTypes" runat="server" CssClass="time-entry-bar-time-typesNew-select-Normal"
                 OnDataBound="ddlTimeTypes_DataBound" DataTextField="Name" DataValueField="Id"
-                ValidationGroup='<%# ClientID %>' onchange="setDirty();" />
+                ValidationGroup='<%# ClientID %>' onchange="setDirty();EnableSaveButton(true);" />
             <ext:SelectCutOffExtender ID="SelectCutOffExtender1" runat="server" NormalCssClass="time-entry-bar-time-typesNew-select-Normal"
                 ExtendedCssClass="time-entry-bar-time-typesNew-select-Extended" TargetControlID="ddlTimeTypes" />
         </td>
