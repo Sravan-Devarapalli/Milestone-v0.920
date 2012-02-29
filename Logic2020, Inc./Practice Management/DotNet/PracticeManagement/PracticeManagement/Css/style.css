@@ -2205,7 +2205,7 @@ table.CellPaddingClass td
 }
 .DeleteWidth
 {
-    padding-left:4px;
+    padding-left:0px;
     width:3%;
     text-align:left;
 }
@@ -2260,7 +2260,16 @@ TABLE.Section td
 
 .DayTotalHours
 {
-    border: 1px solid black; 
+    border-top: 1px solid black; 
+    border-bottom: 1px solid black; 
+}
+.DayTotalHoursBorderLeft
+{
+    border-left: 1px solid black; 
+}
+.DayTotalHoursBorderRight
+{
+    border-right: 1px solid black; 
 }
 
 .TOTALTD
@@ -2268,10 +2277,6 @@ TABLE.Section td
     width: 70%; 
     text-align: right; 
     font-weight: bold;
-}
-.PaddingLeft4
-{
-    padding-left: 4px;
 }
 .PaddingTop6
 {
@@ -2442,5 +2447,10 @@ end pixcel
 {
     background-color:#f0f0f1;
     border-bottom:1px solid Gray;
+}
+.AutoHeight
+{
+    height:auto !important;
+    overflow-y:hidden;
 }
 
