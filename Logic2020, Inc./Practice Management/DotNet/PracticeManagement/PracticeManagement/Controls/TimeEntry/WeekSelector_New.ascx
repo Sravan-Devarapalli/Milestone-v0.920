@@ -17,7 +17,7 @@
         <tr>
             <td>
                 <asp:ImageButton ID="imgbtnPrevWeek" runat="server" ImageUrl="~/Images/previous.gif" AlternateText="Previous" ToolTip="Previous"
-                 OnClick="imgbtnPrevWeek_OnClick" OnClientClick="return checkDirtyWithRedirect(true)" />
+                 OnClick="imgbtnPrevWeek_OnClick" OnClientClick="return checkDirtyWithRedirectInTimeEntry();" />
             </td>
             <td>
                 <table>
@@ -42,7 +42,7 @@
             </td>
             <td>
                 <asp:ImageButton ID="imgbtnNextWeek" runat="server" ImageUrl="~/Images/next.gif" AlternateText="Next" ToolTip="Next"
-                 OnClick="imgbtnNextWeek_OnClick" OnClientClick="return checkDirtyWithRedirect(true)" />
+                 OnClick="imgbtnNextWeek_OnClick" OnClientClick="return checkDirtyWithRedirectInTimeEntry();" />
                 <asp:HiddenField ID="hdPreviousWeekSelectedDay" runat="server" />
             </td>
         </tr>
