@@ -422,7 +422,6 @@ namespace PraticeManagement
 
                 AddAttributes();
             }
-            mlConfirmation.ClearMessage();
             SpreadSheetTotalCalculatorExtenderId = extTotalHours.ClientID + ";" + extNonBillableGrandTotal.ClientID + ";" + extBillableGrandTotal.ClientID;
         }
 
@@ -1646,7 +1645,6 @@ namespace PraticeManagement
             ClearDirty();
 
             IsSaving = false;
-            mlConfirmation.ShowInfoMessage(SavedAllConfirmation);
         }
 
         private XDocument PrePareXmlForProjectSectionFromData()
