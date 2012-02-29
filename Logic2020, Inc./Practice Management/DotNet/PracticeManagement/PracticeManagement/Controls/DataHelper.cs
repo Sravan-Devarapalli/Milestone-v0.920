@@ -2245,6 +2245,22 @@ namespace PraticeManagement.Controls
                 }
             }
         }
+
+        public static DateTime GetSubstituteDate(DateTime holidayDate, int personId)
+        {
+            using (var serviceClient = new CalendarServiceClient())
+            {
+                return serviceClient.GetSubstituteDate(personId, holidayDate);
+            }
+        }
+
+        public static KeyValuePair<DateTime, string> GetSubstituteDayDetails(int personId, DateTime substituteDate)
+        {
+            using (var serviceClient = new CalendarServiceClient())
+            {
+                return serviceClient.GetSubstituteDayDetails(personId, substituteDate);
+            }
+        }
     }
 }
 
