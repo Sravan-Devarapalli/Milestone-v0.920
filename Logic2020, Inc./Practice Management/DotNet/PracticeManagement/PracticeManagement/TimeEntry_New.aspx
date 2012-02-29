@@ -326,7 +326,7 @@
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <td class="time-entry-bar-total-hoursNew">
-                                        TOTAL
+                                        <div style="float:right; padding-right:5px;">TOTAL</div>
                                     </td>
                                     <td class="DeleteWidth">
                                     </td>
