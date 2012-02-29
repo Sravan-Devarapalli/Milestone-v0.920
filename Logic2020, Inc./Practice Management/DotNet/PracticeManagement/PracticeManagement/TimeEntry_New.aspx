@@ -26,7 +26,6 @@
     TagPrefix="pcg" %>
 <%@ Register Src="~/Controls/CalendarLegend.ascx" TagName="CalendarLegend" TagPrefix="uc2" %>
 <%@ Register TagPrefix="cc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
-
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Time Entry | Practice Management</title>
 </asp:Content>
@@ -112,7 +111,11 @@
         }
 
         function EnableSaveButton(enable) {
-
+            var button = document.getElementById("<%=btnSave.ClientID %>");
+            if (button != null) {
+                button.disabled = !enable;
+                button.title = button.value = "Save All";
+            }
         }
 
         function ChangeTooltip(tbnote) {
@@ -239,7 +242,6 @@
 
                             var tdElement = document.getElementById(imgPlusList[i].getAttribute('PlaceHolderCell'));
                             tdElement.appendChild(imgPlusList[i]);
-                            imgPlusList[i].InnerHTML = "";
                         }
 
                     }
@@ -264,6 +266,10 @@
 
                     function endRequestHandle(sender, Args) {
                         setFooterPlacementinLastItemTemplate();
+
+                        if (getDirty()) {
+                            EnableSaveButton(true);
+                        }
 
                         SetTooltipsForallDropDowns();
                         var hdIsWeekOrPersonChanged = document.getElementById('<%= hdIsWeekOrPersonChanged.ClientID %>');
@@ -300,35 +306,32 @@
                                 <td>
                                 </td>
                                 <td>
-                                    <asp:Button ID="btnAddProject" runat="server" OnClick="btnAddProject_Click"
-                                        Text="Add Project" CssClass="mrg0" ToolTip="Add Project" />
+                                    <asp:Button ID="btnAddProject" runat="server" OnClick="btnAddProject_Click" Text="Add Project"
+                                        CssClass="mrg0" ToolTip="Add Project" />
                                 </td>
                             </tr>
                         </table>
                     </div>
-                    <asp:Panel ID="pnlProjectSection" runat="server" CssClass="cp bg-white">
+                    <asp:Panel ID="pnlProjectSection" runat="server" CssClass="cp bg-white AutoHeight">
                         <asp:Panel ID="pnlProjectSectionHeader" runat="server" CssClass="WholeWidth">
                             <table class="CompPerfTable WholeWidth">
                                 <tr class="CompPerfHeader WholeWidth">
                                     <td class="DeleteWidth">
-                                        <div class="ie-bg">
-                                        </div>
                                     </td>
                                     <td class="time-entry-bar-time-typesNewHeader">
-                                        <div class="ie-bg">
-                                            Work Type</div>
+                                            Work Type
                                     </td>
                                     <asp:Repeater ID="repProjectSectionHeader" runat="server">
                                         <ItemTemplate>
                                             <td class="time-entry-bar-single-teNew">
-                                                <div class="ie-bg">
-                                                    <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
+                                               
+                                                    <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%>
                                             </td>
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <td class="time-entry-bar-total-hoursNew">
-                                        <div class="ie-bg">
-                                            TOTAL</div>
+                                       
+                                            TOTAL
                                     </td>
                                     <td class="DeleteWidth">
                                     </td>
@@ -358,7 +361,7 @@
                                                 <asp:ImageButton ID="imgBtnRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png"
                                                     OnClick="imgBtnRecursiveSection_OnClick" />
                                             </td>
-                                            <td class="DeleteWidth">
+                                            <td class="DeleteWidth textRight">
                                                 <asp:ImageButton ID="imgBtnDeleteProjectSection" runat="server" ImageUrl="~/Images/close_24.png"
                                                     OnClick="imgBtnDeleteSection_OnClick" />
                                             </td>
@@ -400,7 +403,7 @@
                                                 <asp:ImageButton ID="imgBtnRecursiveProjectSection" runat="server" ImageUrl="~/Images/Recursive.png"
                                                     OnClick="imgBtnRecursiveSection_OnClick" />
                                             </td>
-                                            <td class="DeleteWidth">
+                                            <td class="DeleteWidth textRight">
                                                 <asp:ImageButton ID="imgBtnDeleteProjectSection" runat="server" ImageUrl="~/Images/close_24.png"
                                                     OnClick="imgBtnDeleteSection_OnClick" />
                                             </td>
@@ -444,28 +447,28 @@
                             </tr>
                         </table>
                     </div>
-                    <asp:Panel ID="pnlBusinessDevelopmentSection" runat="server" CssClass="cp bg-white">
+                    <asp:Panel ID="pnlBusinessDevelopmentSection" runat="server" CssClass="cp bg-white AutoHeight">
                         <asp:Panel ID="pnlBusinessDevelopmentSectionHeader" runat="server" CssClass="WholeWidth">
                             <table class="CompPerfTable WholeWidth">
                                 <tr class="CompPerfHeader WholeWidth">
                                     <td class="DeleteWidth">
-                                        <div class="ie-bg">
-                                        </div>
+                                       
+                                        
                                     </td>
                                     <td class="time-entry-bar-time-typesNewHeader">
-                                        <div class="ie-bg">
-                                            Work Type</div>
+                                       
+                                            Work Type
                                     </td>
                                     <asp:Repeater ID="repBusinessDevelopmentSectionHeader" runat="server">
                                         <ItemTemplate>
                                             <td class="time-entry-bar-single-teNew">
-                                                <div class="ie-bg">
+                                               
                                                     <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
                                             </td>
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <td class="time-entry-bar-total-hoursNew">
-                                        <div class="ie-bg">
+                                       
                                             TOTAL</div>
                                     </td>
                                     <td class="DeleteWidth">
@@ -496,7 +499,7 @@
                                                 </AjaxControlToolkit:ConfirmButtonExtender>
                                                 <asp:ImageButton ID="imgBtnRecurrenceBusinessDevelopmentSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick" />
                                             </td>
-                                            <td class="DeleteWidth">
+                                            <td class="DeleteWidth textRight">
                                                 <asp:ImageButton ID="imgBtnDeleteBusinessDevelopmentSection" runat="server" ImageUrl="~/Images/close_24.png"
                                                     OnClick="imgBtnDeleteSection_OnClick" />
                                             </td>
@@ -538,7 +541,7 @@
                                                 </AjaxControlToolkit:ConfirmButtonExtender>
                                                 <asp:ImageButton ID="imgBtnRecurrenceBusinessDevelopmentSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick" />
                                             </td>
-                                            <td class="DeleteWidth">
+                                            <td class="DeleteWidth textRight">
                                                 <asp:ImageButton ID="imgBtnDeleteBusinessDevelopmentSection" runat="server" ImageUrl="~/Images/close_24.png"
                                                     OnClick="imgBtnDeleteSection_OnClick" />
                                             </td>
@@ -582,28 +585,28 @@
                             </tr>
                         </table>
                     </div>
-                    <asp:Panel ID="pnlInternalSection" runat="server" CssClass="cp bg-white">
+                    <asp:Panel ID="pnlInternalSection" runat="server" CssClass="cp bg-white AutoHeight">
                         <asp:Panel ID="pnlInternalSectionHeader" runat="server" CssClass="WholeWidth">
                             <table class="CompPerfTable WholeWidth">
                                 <tr class="CompPerfHeader WholeWidth">
                                     <td class="DeleteWidth">
-                                        <div class="ie-bg">
+                                       
                                         </div>
                                     </td>
                                     <td class="time-entry-bar-time-typesNewHeader">
-                                        <div class="ie-bg">
+                                       
                                             Work Type</div>
                                     </td>
                                     <asp:Repeater ID="repInternalSectionHeader" runat="server">
                                         <ItemTemplate>
                                             <td class="time-entry-bar-single-teNew">
-                                                <div class="ie-bg">
+                                               
                                                     <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
                                             </td>
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <td class="time-entry-bar-total-hoursNew">
-                                        <div class="ie-bg">
+                                       
                                             TOTAL</div>
                                     </td>
                                     <td class="DeleteWidth">
@@ -634,7 +637,7 @@
                                                 </AjaxControlToolkit:ConfirmButtonExtender>
                                                 <asp:ImageButton ID="imgBtnRecurrenceInternalSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick" />
                                             </td>
-                                            <td class="DeleteWidth">
+                                            <td class="DeleteWidth textRight">
                                                 <asp:ImageButton ID="imgBtnDeleteInternalSection" runat="server" ImageUrl="~/Images/close_24.png"
                                                     OnClick="imgBtnDeleteSection_OnClick" />
                                             </td>
@@ -676,7 +679,7 @@
                                                 </AjaxControlToolkit:ConfirmButtonExtender>
                                                 <asp:ImageButton ID="imgBtnRecurrenceInternalSection" runat="server" OnClick="imgBtnRecursiveSection_OnClick" />
                                             </td>
-                                            <td class="DeleteWidth">
+                                            <td class="DeleteWidth textRight" >
                                                 <asp:ImageButton ID="imgBtnDeleteInternalSection" runat="server" ImageUrl="~/Images/close_24.png"
                                                     OnClick="imgBtnDeleteSection_OnClick" />
                                             </td>
@@ -720,30 +723,30 @@
                             </tr>
                         </table>
                     </div>
-                    <asp:Panel ID="pnlAdministrativeSection" runat="server" CssClass="cp bg-white">
+                    <asp:Panel ID="pnlAdministrativeSection" runat="server" CssClass="cp bg-white AutoHeight">
                         <asp:Repeater ID="repAdministrativeTes" OnItemDataBound="repAdministrativeTes_ItemDataBound"
                             runat="server">
                             <HeaderTemplate>
                                 <table class="CompPerfTable WholeWidth">
                                     <tr class="CompPerfHeader WholeWidth">
                                         <td class="DeleteWidth">
-                                            <div class="ie-bg">
+                                           
                                             </div>
                                         </td>
                                         <td class="time-entry-bar-time-typesNewHeader">
-                                            <div class="ie-bg">
+                                           
                                                 Work Type</div>
                                         </td>
                                         <asp:Repeater ID="repAdministrativeTesHeader" runat="server">
                                             <ItemTemplate>
                                                 <td class="time-entry-bar-single-teNew">
-                                                    <div class="ie-bg">
+                                                   
                                                         <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
                                                 </td>
                                             </ItemTemplate>
                                         </asp:Repeater>
                                         <td class="time-entry-bar-total-hoursNew">
-                                            <div class="ie-bg">
+                                           
                                                 TOTAL</div>
                                         </td>
                                         <td class="DeleteWidth">
@@ -774,26 +777,30 @@
                         <label id="lblDupilcateOptionsRemoveExtenderAdministrative" runat="server" />
                     </asp:Panel>
                     <asp:Panel ID="pnlTotalSection" runat="server" Style="padding: 10px 0px 10px 0px"
-                        CssClass="cp bg-white">
+                        CssClass="cp bg-white AutoHeight">
                         <table class="CompPerfTable WholeWidth">
                             <tr>
                                 <td class="DeleteWidth">
                                 </td>
-                                <td class="time-entry-bar-time-typesNew TOTALHOURSTD">
+                                <td class="time-entry-bar-time-typesNew TOTALHOURSTD DayTotalHoursBorderRight">
                                 </td>
-                                <asp:Repeater ID="repTotalHoursHeader" runat="server">
+                                <asp:Repeater ID="repTotalHoursHeader"  runat="server">
                                     <ItemTemplate>
                                         <td class="time-entry-bar-single-teNew CompPerfTotalHeader DayTotalHours">
-                                            <div class="ie-bg">
+                                           
                                                 <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
                                         </td>
                                     </ItemTemplate>
                                 </asp:Repeater>
+                                <td class="time-entry-total-hoursNew DayTotalHoursBorderLeft">
+                                </td>
+                                <td class="DeleteWidth">
+                                </td>
                             </tr>
                             <tr class="time-entry-bar">
                                 <td class="DeleteWidth">
                                 </td>
-                                <td class="time-entry-bar-time-typesNew TOTALHOURSTD">
+                                <td class="time-entry-bar-time-typesNew TOTALHOURSTD DayTotalHoursBorderRight">
                                     TOTAL HOURS:
                                 </td>
                                 <asp:Repeater ID="repDayTotalHours" OnItemDataBound="repDayTotalHours_OnItemDataBound"
@@ -810,7 +817,7 @@
                                         </td>
                                     </ItemTemplate>
                                 </asp:Repeater>
-                                <td class="time-entry-total-hoursNew">
+                                <td class="time-entry-total-hoursNew DayTotalHoursBorderLeft">
                                 </td>
                                 <td class="DeleteWidth">
                                 </td>
@@ -823,7 +830,7 @@
                                 <td colspan="7" class="TOTALTD PaddingTop6">
                                     BILLABLE TOTAL :
                                 </td>
-                                <td class="time-entry-total-hoursNew PaddingLeft4">
+                                <td class="time-entry-total-hoursNew">
                                     <label id="lblBillableGrandTotal" runat="server" />
                                     <ext:TotalCalculatorExtender ID="extBillableGrandTotal" runat="server" TargetControlID="lblBillableGrandTotal" />
                                 </td>
@@ -836,9 +843,9 @@
                                 <td class="time-entry-bar-time-typesNew">
                                 </td>
                                 <td colspan="7" class="TOTALTD">
-                                    NON BILLABLE TOTAL :
+                                    NON-BILLABLE TOTAL :
                                 </td>
-                                <td class="time-entry-total-hoursNew PaddingLeft4">
+                                <td class="time-entry-total-hoursNew">
                                     <label id="lblNonBillableGrandTotal" runat="server" />
                                     <ext:TotalCalculatorExtender ID="extNonBillableGrandTotal" runat="server" TargetControlID="lblNonBillableGrandTotal" />
                                 </td>
@@ -853,7 +860,7 @@
                                 <td colspan="7" class="TOTALTD" style="padding-top: 15px;">
                                     TIME PERIOD GRAND TOTAL:
                                 </td>
-                                <td style="padding-top: 15px;" class="time-entry-total-hoursNew PaddingLeft4">
+                                <td style="padding-top: 15px;" class="time-entry-total-hoursNew">
                                     <label id="lbltimePeriodGrandTotal" runat="server" />
                                     <ext:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lbltimePeriodGrandTotal" />
                                 </td>
@@ -868,26 +875,16 @@
                                 <td colspan="3" style="text-align: right;">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td style="text-align: right;color:black;font-size:11px;">
+                                            <td style="text-align: right; color: black; font-size: 11px;">
                                                 I certify that the time entered represents a true and accurate record of my time.
                                                 I am responsible for any changes made using my Practice Management Login.
                                             </td>
                                             <td style="text-align: right;">
-                                                <asp:Button ID="btnSave"  CssClass="mrg0"  runat="server" OnClick="btnSave_OnClick" Text="Save All"
-                                                    ToolTip="Save All" />
+                                                <asp:Button ID="btnSave" CssClass="mrg0" Enabled="false" runat="server" OnClick="btnSave_OnClick"
+                                                    Text="Saved" ToolTip="Saved" />
                                             </td>
                                         </tr>
                                     </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 33%;">
-                                </td>
-                                <td style="width: 33%; font-size: 16px; text-align: center;">
-                                    <uc:MessageLabel ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green"
-                                        WarningColor="Orange" />
-                                </td>
-                                <td style="width: 33%; text-align: right;">
                                 </td>
                             </tr>
                             <tr>
