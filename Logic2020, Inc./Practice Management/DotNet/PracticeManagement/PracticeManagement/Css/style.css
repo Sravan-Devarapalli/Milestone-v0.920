@@ -2195,6 +2195,14 @@ table.CellPaddingClass td
     margin-bottom: -3px;
 }
 
+.time-entry-total-hoursNew-totalColoum
+{
+    text-align: right;
+    vertical-align: middle;   
+    width: 6%;
+    font-weight:bold;
+}
+
 .time-entry-total-hoursNew
 {
     text-align: center;
