@@ -35,8 +35,10 @@
                 </td>
             </ItemTemplate>
         </asp:Repeater>
-        <td class="time-entry-total-hoursNew">
+        <td class="time-entry-total-hoursNew-totalColoum">
+         <div style="float:right; padding-right:10px;">
             <label id="lblTotalHours" runat="server" />
+            </div>
             <label id="lblEnableDisable" runat="server" />
             <ext:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lblTotalHours" />
             <ext2:EnableDisableExtender ID="extEnableDisable" runat="server"  TargetControlID="ddlTimeTypes" />
