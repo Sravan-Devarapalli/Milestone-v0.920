@@ -35,6 +35,23 @@
         function pageLoad() {
             SetTooltipsForallDropDowns();
             setFooterPlacementinLastItemTemplate();
+
+            var pnlProjectSection = document.getElementById("<%=pnlProjectSection.ClientID %>");
+            if (pnlProjectSection.style.height != "0px") {
+                pnlProjectSection.style.height = "auto";
+            }
+            var pnlBusinessDevelopmentSection = document.getElementById("<%=pnlBusinessDevelopmentSection.ClientID %>");
+            if (pnlBusinessDevelopmentSection.style.height != "0px") {
+                pnlBusinessDevelopmentSection.style.height = "auto";
+            }
+            var pnlInternalSection = document.getElementById("<%=pnlInternalSection.ClientID %>");
+            if (pnlInternalSection.style.height != "0px") {
+                pnlInternalSection.style.height = "auto";
+            }
+            var pnlAdministrativeSection = document.getElementById("<%=pnlAdministrativeSection.ClientID %>");
+            if (pnlAdministrativeSection.style.height != "0px") {
+                pnlAdministrativeSection.style.height = "auto";
+            }
         }
 
         function SetTooltipsForallDropDowns() {
@@ -44,7 +61,7 @@
 
                 optionList[i].title = optionList[i].innerHTML;
             }
-
+             
         }
 
         function SetFocus(modalExId, tbNotesId, tbBillableHoursId, btnSaveNotesId, tbNonBillableHoursId) {
