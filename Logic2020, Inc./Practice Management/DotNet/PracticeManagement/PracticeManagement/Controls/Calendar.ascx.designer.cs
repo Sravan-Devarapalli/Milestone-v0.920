@@ -571,6 +571,15 @@ namespace PraticeManagement.Controls {
         protected global::AjaxControlToolkit.FilteredTextBoxExtender ftetxtHoursPerDayInsert;
         
         /// <summary>
+        /// valSumTimeOff control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSumTimeOff;
+        
+        /// <summary>
         /// hdIsTimeOffPopUpDirty control.
         /// </summary>
         /// <remarks>
@@ -605,15 +614,6 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancelTimeOff;
-        
-        /// <summary>
-        /// valSumTimeOff control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary valSumTimeOff;
         
         /// <summary>
         /// upnlErrorSingleDay control.
@@ -742,6 +742,15 @@ namespace PraticeManagement.Controls {
         protected global::AjaxControlToolkit.FilteredTextBoxExtender fteHoursSingleDay;
         
         /// <summary>
+        /// valSumErrorSingleDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSumErrorSingleDay;
+        
+        /// <summary>
         /// hdIsSingleDayPopDirty control.
         /// </summary>
         /// <remarks>
@@ -776,15 +785,6 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancelEditSingleDay;
-        
-        /// <summary>
-        /// valSumErrorSingleDay control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary valSumErrorSingleDay;
         
         /// <summary>
         /// upnlValsummary control.
@@ -868,6 +868,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.CustomValidator cvSubstituteDay;
         
         /// <summary>
+        /// valSumsubstituteday control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSumsubstituteday;
+        
+        /// <summary>
         /// btnSubstituteDayOK control.
         /// </summary>
         /// <remarks>
@@ -886,13 +895,121 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.Button btnSubstituteDayCancel;
         
         /// <summary>
-        /// valSumsubstituteday control.
+        /// upnlModifySubstituteDay control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary valSumsubstituteday;
+        protected global::System.Web.UI.UpdatePanel upnlModifySubstituteDay;
+        
+        /// <summary>
+        /// hdnHolidayDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnHolidayDay;
+        
+        /// <summary>
+        /// hdnSubstituteDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnSubstituteDate;
+        
+        /// <summary>
+        /// mpeModifySubstituteDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeModifySubstituteDay;
+        
+        /// <summary>
+        /// pnlModifySubstituteDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlModifySubstituteDay;
+        
+        /// <summary>
+        /// lblHolidayDetails control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblHolidayDetails;
+        
+        /// <summary>
+        /// lblModifySubstituteday control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblModifySubstituteday;
+        
+        /// <summary>
+        /// dpModifySubstituteday control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.DatePicker dpModifySubstituteday;
+        
+        /// <summary>
+        /// cvModifySubstituteday control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvModifySubstituteday;
+        
+        /// <summary>
+        /// valSumModifySubstituteDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSumModifySubstituteDay;
+        
+        /// <summary>
+        /// btnModifySubstituteDayOk control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnModifySubstituteDayOk;
+        
+        /// <summary>
+        /// btnModifySubstituteDayDelete control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnModifySubstituteDayDelete;
+        
+        /// <summary>
+        /// btnModifySubstituteDayCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnModifySubstituteDayCancel;
         
         /// <summary>
         /// mpeDeleteSubstituteDay control.
