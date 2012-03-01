@@ -894,8 +894,8 @@
                                         ErrorMessage="Hours should be real and 0.01-24.00. Invalid entries are highlighted in red."
                                         SetFocusOnError="true" OnServerValidate="custActualHours_ServerValidate" EnableClientScript="false"
                                         Display="None" Text="*" ValidationGroup="TE" />
-                                    <asp:CustomValidator ID="cvAdminstrativeHours" runat="server" ToolTip="Adminstrative Work Type Hours should be real and less than 8. Invalid entries are highlighted in red."
-                                        ErrorMessage="Adminstrative Work Type Hours should be real and less than 8. Invalid entries are highlighted in red."
+                                    <asp:CustomValidator ID="cvAdminstrativeHours" runat="server" ToolTip="Adminstrative Work Type Hours should be in 0.25 incr., greater than 0.25 and less or equals to 8. Invalid entries are highlighted in red."
+                                        ErrorMessage="Adminstrative Work Type Hours should be in 0.25 incr., greater than 0.25 and less or equals to 8. Invalid entries are highlighted in red."
                                         SetFocusOnError="true" OnServerValidate="custAdminstrativeHours_ServerValidate"
                                         EnableClientScript="false" Display="None" Text="*" ValidationGroup="TE" />
                                     <asp:CustomValidator ID="custNote" runat="server" ErrorMessage="Note should be 3-1000 characters long. Invalid entries are highlighted in red."
@@ -1174,7 +1174,7 @@
                             </th>
                         </tr>
                         <tr>
-                            <td style="font-weight: bold; padding: 8px;">
+                            <td style="padding: 8px;">
                                 It is not possible to enable recurring behavior for this Project. This project has
                                 an end date of
                                 <asp:Label ID="ldProjectEnddate" runat="server" Font-Bold="true"></asp:Label>
