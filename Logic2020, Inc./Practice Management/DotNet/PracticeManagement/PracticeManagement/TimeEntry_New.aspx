@@ -870,14 +870,14 @@
                     <div class="buttons-block">
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
-                                <td colspan="3" style="text-align: right;">
+                                <td colspan="3" class="textRight">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td style="text-align: right; color: black; font-size: 11px;">
+                                            <td class = "textRight font12Px padRight15">
                                                 I certify that the time entered represents a true and accurate record of my time.
                                                 I am responsible for any changes made using my Practice Management Login.
                                             </td>
-                                            <td style="text-align: right;">
+                                            <td class="textLeft">
                                                 <asp:Button ID="btnSave" CssClass="mrg0" Enabled="false" runat="server" OnClick="btnSave_OnClick"
                                                     Text="Saved" ToolTip="Saved" />
                                             </td>
