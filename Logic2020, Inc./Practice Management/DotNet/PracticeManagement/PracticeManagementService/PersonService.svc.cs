@@ -1072,6 +1072,11 @@ namespace PracticeManagementService
            return PersonDAL.PersonsListHavingActiveStatusDuringThisPeriod(startDate, endDate);
        }
 
+       public List<Person> GetCurrentActivePracticeAreaManagerList()
+       {
+           return PersonDAL.GetCurrentActivePracticeAreaManagerList();
+       }
+
         #endregion
     }
 }
