@@ -2424,6 +2424,10 @@ end pixcel
 {
   padding-right: 5px;
 }
+.padRight15
+{
+  padding-right: 15px;
+}
 .padLeft5
 {
   padding-left: 5px;
@@ -2455,5 +2459,10 @@ end pixcel
 {
     background-color:#f0f0f1;
     border-bottom:1px solid Gray;
+}
+.font12Px
+{
+    color: black; 
+    font-size: 12px;
 }
 
