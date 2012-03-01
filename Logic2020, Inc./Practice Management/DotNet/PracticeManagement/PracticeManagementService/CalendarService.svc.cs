@@ -79,7 +79,7 @@ namespace PracticeManagementService
             CalendarDAL.SaveTimeOff(startDate, endDate, dayOff, personId, actualHours, timeTypeId, userLogin, approvedBy);
         }
 
-        public Triple<DateTime, DateTime, int?> GetTimeOffSeriesPeriod(int personId, DateTime date)
+        public Quadruple<DateTime, DateTime, int?, string> GetTimeOffSeriesPeriod(int personId, DateTime date)
         {
             return CalendarDAL.GetTimeOffSeriesPeriod(personId, date);
         }
