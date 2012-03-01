@@ -23,7 +23,8 @@ BEGIN
 			@HolidayTimeTypeId INT,
 			@PTOChargeCodeId INT,
 			@HolidayChargeCodeId INT,
-			@IsW2SalaryPerson	BIT = 0
+			@IsW2SalaryPerson	BIT = 0,
+			@UserName NVARCHAR(MAX)
 
 	
 
@@ -54,7 +55,7 @@ BEGIN
 			@PTOTimeTypeId = dbo.GetPTOTimeTypeId(),
 			@HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
 				
-	SELECT @ModifiedBy = PersonId FROM Person WHERE Alias = @UserLogin
+	SELECT @ModifiedBy = PersonId, @UserName =  (FirstName +' '+ LastName) FROM Person WHERE Alias = @UserLogin
 	SELECT @PTOChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @PTOTimeTypeId
 	SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTimeTypeId
 
@@ -64,9 +65,6 @@ BEGIN
 
 	SELECT @HolidayDescription = c.HolidayDescription
 	FROM Calendar c WHERE c.[Date] = @Date
-
-	DECLARE @UserName NVARCHAR(MAX)
-	SELECT @UserName =  (FirstName +' '+ LastName) FROM [dbo].[Person] WHERE [Alias] = @UserLogin
 
 	SET @Note = 'Substitute for '+ CONVERT(NVARCHAR(10), @Date, 101) +' - ' +@HolidayDescription +'. Approved by '+ @UserName + '.'
 
@@ -89,7 +87,8 @@ BEGIN
 
 		UPDATE PC
 			SET PC.Date = @SubstituteDayDate,
-				Description = @Note
+				Description = @Note,
+				ApprovedBy = @ModifiedBy
 		FROM dbo.PersonCalendar PC
 		WHERE PC.PersonId = @PersonId AND PC.Date = @PreviousSubstituteDate AND PC.DayOff = 1
 		
@@ -109,10 +108,10 @@ BEGIN
 	ELSE
 	BEGIN
 
-		INSERT INTO dbo.PersonCalendar(ActualHours,Date,DayOff,TimeTypeId,IsFromTimeEntry,PersonId,SubstituteDate,Description)
-		SELECT NULL,@Date,0,NULL,0,@PersonId,@SubstituteDayDate ,NULL
+		INSERT INTO dbo.PersonCalendar(ActualHours,Date,DayOff,TimeTypeId,IsFromTimeEntry,PersonId,SubstituteDate,Description, ApprovedBy)
+		SELECT NULL,@Date,0,NULL,0,@PersonId,@SubstituteDayDate ,NULL, NULL
 		UNION 
-		SELECT 8,@SubstituteDayDate,1,@HolidayTimeTypeId ,0,@PersonId,NULL,@Note
+		SELECT 8,@SubstituteDayDate,1,@HolidayTimeTypeId ,0,@PersonId,NULL,@Note, @ModifiedBy
 				
 
 		--Delete holiday time type  Entry from TimeEntry table for holiday date.
