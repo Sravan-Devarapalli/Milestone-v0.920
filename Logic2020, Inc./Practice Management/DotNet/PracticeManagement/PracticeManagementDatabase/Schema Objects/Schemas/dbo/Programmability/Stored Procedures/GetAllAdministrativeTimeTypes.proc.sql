@@ -1,6 +1,8 @@
 ﻿-- =============================================
 -- Author:		ThulasiRam.P
 -- Create date: 2012-02-10
+-- Updated by:	Srinivas.M
+-- Update date: 03-01-2012
 -- Description:	Gets all administrative time types
 -- =============================================
 CREATE PROCEDURE dbo.GetAllAdministrativeTimeTypes
@@ -20,7 +22,8 @@ SELECT @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId(),
 
 
 	SELECT tt.TimeTypeId, 
-		   tt.[Name]
+		   tt.[Name],
+		   CASE tt.[Name] WHEN 'Other Reportable Time' THEN CONVERT(BIT, 1) ELSE CONVERT(BIT, 0) END 'IsORTTimeType'
 	FROM dbo.TimeType AS tt
 		INNER JOIN dbo.ProjectTimeType ptt ON tt.IsAdministrative = 1 AND tt.TimeTypeId = ptt.TimeTypeId AND ptt.IsAllowedToShow = 1 AND tt.IsActive = 1
 	WHERE
