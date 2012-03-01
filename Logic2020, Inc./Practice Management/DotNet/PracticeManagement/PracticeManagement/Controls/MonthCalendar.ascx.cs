@@ -183,18 +183,18 @@ namespace PraticeManagement.Controls
             {
                 string hours = btnDay.Attributes["ActualHours"];
                 string timeTypeId = btnDay.Attributes["TimeTypeId"];
-                KeyValuePair<DateTime, DateTime> series = ServiceCallers.Custom.Calendar(c => c.GetTimeOffSeriesPeriod(PersonId.Value, date));
+                Triple<DateTime, DateTime, int?> series = ServiceCallers.Custom.Calendar(c => c.GetTimeOffSeriesPeriod(PersonId.Value, date));
 
-                HostingControl.PopulateSingleDayPopupControls(date, timeTypeId, hours);
+                HostingControl.PopulateSingleDayPopupControls(date, timeTypeId, hours, series.Third);
 
-                if (series.Key == series.Value)
+                if (series.First == series.Second)
                 {
                     HostingControl.mpeEditSingleDayPopUp.Show();
                 }
                 else
                 {
-                    HostingControl.PopulateEditConditionPopupControls(series.Key, series.Value, date);
-                    HostingControl.PopulateSeriesPopupControls(series.Key, series.Value, timeTypeId, hours);
+                    HostingControl.PopulateEditConditionPopupControls(series.First, series.Second, date);
+                    HostingControl.PopulateSeriesPopupControls(series.First, series.Second, timeTypeId, hours, series.Third);
                     HostingControl.mpeSelectEditCondtionPopUp.Show();
                 }
 
