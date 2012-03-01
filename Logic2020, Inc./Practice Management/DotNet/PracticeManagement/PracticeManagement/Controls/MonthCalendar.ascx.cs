@@ -183,9 +183,9 @@ namespace PraticeManagement.Controls
             {
                 string hours = btnDay.Attributes["ActualHours"];
                 string timeTypeId = btnDay.Attributes["TimeTypeId"];
-                Triple<DateTime, DateTime, int?> series = ServiceCallers.Custom.Calendar(c => c.GetTimeOffSeriesPeriod(PersonId.Value, date));
+                Quadruple<DateTime, DateTime, int?, string> series = ServiceCallers.Custom.Calendar(c => c.GetTimeOffSeriesPeriod(PersonId.Value, date));
 
-                HostingControl.PopulateSingleDayPopupControls(date, timeTypeId, hours, series.Third);
+                HostingControl.PopulateSingleDayPopupControls(date, timeTypeId, hours, series.Third, series.Fourth);
 
                 if (series.First == series.Second)
                 {
@@ -194,7 +194,7 @@ namespace PraticeManagement.Controls
                 else
                 {
                     HostingControl.PopulateEditConditionPopupControls(series.First, series.Second, date);
-                    HostingControl.PopulateSeriesPopupControls(series.First, series.Second, timeTypeId, hours, series.Third);
+                    HostingControl.PopulateSeriesPopupControls(series.First, series.Second, timeTypeId, hours, series.Third, series.Fourth);
                     HostingControl.mpeSelectEditCondtionPopUp.Show();
                 }
 
