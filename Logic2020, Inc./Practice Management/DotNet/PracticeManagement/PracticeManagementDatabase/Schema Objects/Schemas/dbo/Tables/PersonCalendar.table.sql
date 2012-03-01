@@ -7,7 +7,6 @@
 	[TimeTypeId]		INT NULL,
 	[SubstituteDate]	DATETIME NULL,
 	[Description]		NVARCHAR(500) NULL,
-	[IsFromTimeEntry]	BIT NULL
+	[IsFromTimeEntry]	BIT NULL,
+	[ApprovedBy]		INT
 );
-
-
