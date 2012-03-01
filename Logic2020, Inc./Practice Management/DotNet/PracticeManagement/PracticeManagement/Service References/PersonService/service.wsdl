@@ -72,6 +72,12 @@
   <wsdl:message name="IPersonService_PersonsListHavingActiveStatusDuringThisPeriod_OutputMessage">
     <wsdl:part name="parameters" element="tns:PersonsListHavingActiveStatusDuringThisPeriodResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_GetCurrentActivePracticeAreaManagerList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCurrentActivePracticeAreaManagerList" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetCurrentActivePracticeAreaManagerList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCurrentActivePracticeAreaManagerListResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonDetail_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonDetail" />
   </wsdl:message>
@@ -500,6 +506,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/PersonsListHavingActiveStatusDuringThisPeriod" message="tns:IPersonService_PersonsListHavingActiveStatusDuringThisPeriod_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/PersonsListHavingActiveStatusDuringThisPeriodResponse" message="tns:IPersonService_PersonsListHavingActiveStatusDuringThisPeriod_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetCurrentActivePracticeAreaManagerList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetCurrentActivePracticeAreaManagerList" message="tns:IPersonService_GetCurrentActivePracticeAreaManagerList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetCurrentActivePracticeAreaManagerListResponse" message="tns:IPersonService_GetCurrentActivePracticeAreaManagerList_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetPersonDetail">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonDetail" message="tns:IPersonService_GetPersonDetail_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonDetailResponse" message="tns:IPersonService_GetPersonDetail_OutputMessage" />
@@ -843,6 +853,15 @@
     </wsdl:operation>
     <wsdl:operation name="PersonsListHavingActiveStatusDuringThisPeriod">
       <soap:operation soapAction="http://tempuri.org/IPersonService/PersonsListHavingActiveStatusDuringThisPeriod" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCurrentActivePracticeAreaManagerList">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetCurrentActivePracticeAreaManagerList" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1432,7 +1451,7 @@
   </wsdl:binding>
   <wsdl:service name="PersonService">
     <wsdl:port name="BasicHttpBinding_IPersonService" binding="tns:BasicHttpBinding_IPersonService">
-      <soap:address location="http://system44.ggk.com/PracticeManagementService/PersonService.svc" />
+      <soap:address location="http://system58.ggk.com/PracticeManagementService/PersonService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
