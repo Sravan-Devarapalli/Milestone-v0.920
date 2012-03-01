@@ -56,10 +56,10 @@ namespace PracticeManagementService
         void DeleteSubstituteDay(int personId, DateTime substituteDayDate, string userLogin);
 
         [OperationContract]
-        void SaveTimeOff(DateTime startDate, DateTime endDate, bool dayOff, int personId, double? actualHours, int timeTypeId, string userLogin);
+        void SaveTimeOff(DateTime startDate, DateTime endDate, bool dayOff, int personId, double? actualHours, int timeTypeId, string userLogin, int? approvedBy);
 
         [OperationContract]
-        KeyValuePair<DateTime, DateTime> GetTimeOffSeriesPeriod(int personId, DateTime date);
+        Triple<DateTime, DateTime, int?> GetTimeOffSeriesPeriod(int personId, DateTime date);
 
         [OperationContract]
         DateTime GetSubstituteDate(int personId, DateTime holidayDate);
