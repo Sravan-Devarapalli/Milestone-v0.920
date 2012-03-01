@@ -60,6 +60,7 @@ insert (startdate,enddate)
 				AND ProjectGroupId = @ProjectGroupId
 				AND ProjectId = @ProjectId
 				AND	TimeEntrySectionId = @TimeEntrySectionId
+				AND IsRecursive = 0
 				AND StartDate = @EndDate + 1
 
 		DECLARE @NextRecordEndDate DATETIME
@@ -71,6 +72,7 @@ insert (startdate,enddate)
 			AND ProjectGroupId = @ProjectGroupId
 			AND ProjectId = @ProjectId
 			AND	TimeEntrySectionId = @TimeEntrySectionId
+			AND IsRecursive = 0
 			AND StartDate = @StartDate
 
 		SELECT @NextRecordEndDate
@@ -85,6 +87,7 @@ insert (startdate,enddate)
 			AND ProjectGroupId = @ProjectGroupId
 			AND ProjectId = @ProjectId
 			AND	TimeEntrySectionId = @TimeEntrySectionId
+			AND IsRecursive = 0
 			AND EndDate + 1 = @StartDate
 		
 		IF 1 < (
@@ -94,6 +97,7 @@ insert (startdate,enddate)
 									AND ProjectGroupId = @ProjectGroupId
 									AND ProjectId = @ProjectId
 									AND	TimeEntrySectionId = @TimeEntrySectionId
+									AND IsRecursive = 0
 									AND StartDate < @EndDate 
 									AND ISNULL(EndDate,dbo.GetFutureDate()) > @StartDate
 								)
@@ -105,6 +109,7 @@ insert (startdate,enddate)
 			AND ProjectGroupId = @ProjectGroupId
 			AND ProjectId = @ProjectId
 			AND	TimeEntrySectionId = @TimeEntrySectionId
+			AND IsRecursive = 0
 			AND StartDate = @StartDate
 		END
 
@@ -114,6 +119,7 @@ insert (startdate,enddate)
 								AND ProjectGroupId = @ProjectGroupId
 								AND ProjectId = @ProjectId
 								AND	TimeEntrySectionId = @TimeEntrySectionId
+								AND IsRecursive = 0
 								AND (@StartDate BETWEEN StartDate AND ISNULL(EndDate,dbo.GetFutureDate()) + 1 OR @EndDate BETWEEN StartDate - 1 AND ISNULL(EndDate,dbo.GetFutureDate()) )
 						)
 		BEGIN
