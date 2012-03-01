@@ -345,13 +345,20 @@ namespace PraticeManagement.Controls.TimeEntry
         internal void ValidateNoteAndHours()
         {
             var isValidNote = IsValidNote();
-            var isValidHours = IsValidHours();
-            var isValidAdminstrativeHours = IsValidAdminstrativeHours();
-            if (!isValidAdminstrativeHours)
-                HostingPage.IsValidAdminstrativeHours = isValidAdminstrativeHours;
-
-            if (!isValidNote)
-                HostingPage.IsValidNote = isValidNote;
+            var isValidAdminstrativeHours = true;
+            var isValidHours = true;
+            if (IsAdminstrativeTimeType)
+            {
+                isValidAdminstrativeHours = IsValidAdminstrativeHours();
+                if (!isValidAdminstrativeHours)
+                    HostingPage.IsValidAdminstrativeHours = isValidAdminstrativeHours;
+            }
+            else
+            {
+                isValidHours = IsValidHours();
+                if (!isValidNote)
+                    HostingPage.IsValidNote = isValidNote;
+            }
 
             if (!isValidHours)
                 HostingPage.IsValidHours = isValidHours;
@@ -381,7 +388,7 @@ namespace PraticeManagement.Controls.TimeEntry
             //  Check that hours is double between 0.0 and 8.0
             if (double.TryParse(tbActualHours.Text, out hours))
             {
-                if (hours > 0.0 && hours <= 8)
+                if (hours > 0.0 && hours <= 8 && hours % 0.25 == 0 )
                 {
                     return true;
                 }
