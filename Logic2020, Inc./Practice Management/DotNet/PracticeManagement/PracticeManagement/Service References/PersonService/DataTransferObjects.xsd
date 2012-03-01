@@ -35,6 +35,7 @@
       <xs:element minOccurs="0" name="HasAttachments" type="xs:boolean" />
       <xs:element minOccurs="0" name="HasTimeEntries" type="xs:boolean" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="IsAssignedProject" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsHolidayProject" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsInternal" type="xs:boolean" />
