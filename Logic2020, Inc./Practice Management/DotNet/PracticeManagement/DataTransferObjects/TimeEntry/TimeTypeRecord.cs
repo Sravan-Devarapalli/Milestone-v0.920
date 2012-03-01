@@ -56,6 +56,9 @@ namespace DataTransferObjects.TimeEntry
         [DataMember]
         public bool IsActive { get; set; }
 
+        [DataMember]
+        public bool IsORTTimeType { get; set; }//ORT:- "Other Reportable Time" work type.
+
         #endregion
 
         #region Constructors
