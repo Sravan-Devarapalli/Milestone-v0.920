@@ -275,6 +275,7 @@
             public const string HolidayDateColumn = "HolidayDate";
             public const string IsORTTimeTypeColumn = "IsORTTimeType";
             public const string ApprovedByColumn = "ApprovedBy";
+            public const string ApprovedByNameColumn = "ApprovedByName";
             
         }
 
