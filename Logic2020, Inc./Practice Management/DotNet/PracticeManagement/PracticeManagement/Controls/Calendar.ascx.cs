@@ -133,7 +133,7 @@ namespace PraticeManagement.Controls
 
         #endregion
 
-        public void PopulateSingleDayPopupControls(DateTime date, string timeTypeId, string hours)
+        public void PopulateSingleDayPopupControls(DateTime date, string timeTypeId, string hours, int? approvedBy)
         {
             lbdateSingleDay.Text = date.ToString(Constants.Formatting.EntryDateFormat);
             hdnDateSingleDay.Value = date.ToString();
@@ -141,16 +141,33 @@ namespace PraticeManagement.Controls
             txtHoursSingleDay.Text = Convert.ToDouble(hours).ToString(HoursFormat);
             hdIsSingleDayPopDirty.Value = false.ToString();
             btnDeleteSingleDay.Enabled = true;
+            var timeTypeSelectedItem = ddlTimeTypesSingleDay.SelectedItem;
+            if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true")
+            {
+                if(approvedBy.HasValue)
+                    ddlSingleDayApprovedManagers.SelectedValue = approvedBy.Value.ToString();
+                trORTApprovedBy.Style.Add("display", "");
+                trORTManagersList.Style.Add("display", "");
+            }
         }
 
-        public void PopulateSeriesPopupControls(DateTime startDate, DateTime endDate, string timeTypeId, string hours)
+        public void PopulateSeriesPopupControls(DateTime startDate, DateTime endDate, string timeTypeId, string hours, int? approvedBy)
         {
             dtpStartDateTimeOff.DateValue = startDate;
             dtpEndDateTimeOff.DateValue = endDate;
             ddlTimeTypesTimeOff.SelectedValue = timeTypeId;
             txthoursTimeOff.Text = Convert.ToDouble(hours).ToString(HoursFormat);
             btnDeleteTimeOff.Visible = btnDeleteTimeOff.Enabled = true;
-            hdIsTimeOffPopUpDirty.Value = false.ToString(); 
+            hdIsTimeOffPopUpDirty.Value = false.ToString();
+
+            var timeTypeSelectedItem = ddlTimeTypesTimeOff.SelectedItem;
+            if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true")
+            {
+                if (approvedBy.HasValue)
+                    ddlApprovedManagers.SelectedValue = approvedBy.Value.ToString();
+                trAddORTApprovedBy.Style.Add("display", "");
+                trAddORTManagersList.Style.Add("display", "");
+            }
         }
 
         public void PopulateEditConditionPopupControls(DateTime startDate, DateTime endDate,DateTime selectedDate)
@@ -261,6 +278,12 @@ namespace PraticeManagement.Controls
                     DataHelper.FillListDefault(ddlTimeTypesSingleDay, "- - Make Selection - -", administrativeTimeTypes, false);
                     DataHelper.FillListDefault(ddlTimeTypesTimeOff, "- - Make Selection - -", administrativeTimeTypes, false);
 
+                    var managers = ServiceCallers.Custom.Person(p => p.GetCurrentActivePracticeAreaManagerList());
+                    DataHelper.FillListDefault(ddlApprovedManagers, "- - Select a Manager - -", managers, false);
+                    DataHelper.FillListDefault(ddlSingleDayApprovedManagers, "- - Select a Manager - -", managers, false);
+
+                    AddAttributesToTimeTypesDropdown(ddlTimeTypesSingleDay, administrativeTimeTypes);
+                    AddAttributesToTimeTypesDropdown(ddlTimeTypesTimeOff, administrativeTimeTypes);
                 }
                 else
                 {
@@ -281,11 +304,33 @@ namespace PraticeManagement.Controls
 
         }
 
+        private void AddAttributesToTimeTypesDropdown(CustomDropDown ddlTimeTypes, DataTransferObjects.TimeEntry.TimeTypeRecord[] data)
+        {
+            foreach (ListItem item in ddlTimeTypes.Items)
+            {
+                if (!string.IsNullOrEmpty(item.Value))
+                {
+                    var id = Convert.ToInt32(item.Value);
+                    var obj = data.Where(tt => tt.Id == id).FirstOrDefault();
+                    if (obj != null)
+                    {
+                        item.Attributes.Add("IsORT", obj.IsORTTimeType.ToString());
+                    }
+                }
+            }
+        }
+
         protected void btnDeleteSingleDay_OnClick(object sender, EventArgs e)
         {
             Page.Validate(valSumErrorSingleDay.ValidationGroup);
             if (Page.IsValid)
             {
+                int? approvedBy = null;
+                var timeTypeSelectedItem = ddlTimeTypesSingleDay.SelectedItem;
+                if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true")
+                {
+                    approvedBy = Convert.ToInt32(ddlSingleDayApprovedManagers.SelectedValue);
+                }
                 var date = Convert.ToDateTime(hdnDateSingleDay.Value);
                 ServiceCallers.Custom.Calendar(
                                                c => c.SaveTimeOff(date,
@@ -294,7 +339,8 @@ namespace PraticeManagement.Controls
                                                                   SelectedPersonId.Value,
                                                                   (double?)Convert.ToDouble(txtHoursSingleDay.Text),
                                                                   Convert.ToInt32(ddlTimeTypesSingleDay.SelectedValue),
-                                                                  Context.User.Identity.Name
+                                                                  Context.User.Identity.Name,
+                                                                  approvedBy
                                                                   )
                                                );
 
@@ -316,6 +362,12 @@ namespace PraticeManagement.Controls
             Page.Validate(valSumErrorSingleDay.ValidationGroup);
             if (Page.IsValid)
             {
+                int? approvedBy = null;
+                var timeTypeSelectedItem = ddlTimeTypesSingleDay.SelectedItem;
+                if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true")
+                {
+                    approvedBy = Convert.ToInt32(ddlSingleDayApprovedManagers.SelectedValue);
+                }
                 var date = Convert.ToDateTime(hdnDateSingleDay.Value);
                 ServiceCallers.Custom.Calendar(
                                                c => c.SaveTimeOff(date,
@@ -324,7 +376,8 @@ namespace PraticeManagement.Controls
                                                                   SelectedPersonId.Value,
                                                                   (double?)Convert.ToDouble(txtHoursSingleDay.Text),
                                                                   Convert.ToInt32(ddlTimeTypesSingleDay.SelectedValue),
-                                                                  Context.User.Identity.Name
+                                                                  Context.User.Identity.Name,
+                                                                  approvedBy
                                                                   )
                                                );
 
@@ -355,6 +408,9 @@ namespace PraticeManagement.Controls
             dtpEndDateTimeOff.DateValue = DateTime.Today;
             ddlTimeTypesTimeOff.SelectedIndex = 0;
             txthoursTimeOff.Text = "8.00";
+            ddlApprovedManagers.SelectedIndex = 0;
+            trAddORTApprovedBy.Style.Add("display", "none");
+            trAddORTManagersList.Style.Add("display", "none");
             mpeAddTimeOff.Show();
             upnlTimeOff.Update();
         }
@@ -366,6 +422,12 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
+                    int? approvedBy = null;
+                    var timeTypeSelectedItem = ddlTimeTypesTimeOff.SelectedItem;
+                    if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true")
+                    {
+                        approvedBy = Convert.ToInt32(ddlApprovedManagers.SelectedValue);
+                    }
                     ServiceCallers.Custom.Calendar(
                         c => c.SaveTimeOff(dtpStartDateTimeOff.DateValue,
                                                                       dtpEndDateTimeOff.DateValue,
@@ -373,7 +435,8 @@ namespace PraticeManagement.Controls
                                                                       SelectedPersonId.Value,
                                                                       (double?)Convert.ToDouble(txthoursTimeOff.Text),
                                                                       Convert.ToInt32(ddlTimeTypesTimeOff.SelectedValue),
-                                                                      Context.User.Identity.Name
+                                                                      Context.User.Identity.Name,
+                                                                      approvedBy
                                                                       )
                                                    );
                 }
@@ -420,6 +483,12 @@ namespace PraticeManagement.Controls
             Page.Validate(valSumTimeOff.ValidationGroup);
             if (Page.IsValid)
             {
+                int? approvedBy = null;
+                var timeTypeSelectedItem = ddlTimeTypesTimeOff.SelectedItem;
+                if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true")
+                {
+                    approvedBy = Convert.ToInt32(ddlApprovedManagers.SelectedValue);
+                }
                 ServiceCallers.Custom.Calendar(
                    c => c.SaveTimeOff(dtpStartDateTimeOff.DateValue,
                                                                  dtpEndDateTimeOff.DateValue,
@@ -427,7 +496,8 @@ namespace PraticeManagement.Controls
                                                                  SelectedPersonId.Value,
                                                                  (double?)Convert.ToDouble(txthoursTimeOff.Text),
                                                                  Convert.ToInt32(ddlTimeTypesTimeOff.SelectedValue),
-                                                                 Context.User.Identity.Name
+                                                                 Context.User.Identity.Name,
+                                                                 approvedBy
                                                                  )
                                               );
             }
