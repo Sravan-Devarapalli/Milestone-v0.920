@@ -574,6 +574,8 @@ namespace PraticeManagement.Controls
             if (ddlTimeTypesSingleDaySelectedItem.Attributes["IsORT"].ToLower() == "true" && ddlSingleDayApprovedManagers.SelectedIndex == 0)
             {
                 args.IsValid = false;
+                trORTApprovedBy.Style.Add(AttributeDisplay, string.Empty);
+                trORTManagersList.Style.Add(AttributeDisplay, string.Empty);
             }
         }
 
@@ -583,6 +585,8 @@ namespace PraticeManagement.Controls
             if (ddlTimeTypesSelectedItem.Attributes["IsORT"].ToLower() == "true" && ddlApprovedManagers.SelectedIndex == 0)
             {
                 args.IsValid = false;
+                trAddORTApprovedBy.Style.Add(AttributeDisplay, string.Empty);
+                trAddORTManagersList.Style.Add(AttributeDisplay, string.Empty);
             }
         }
 
