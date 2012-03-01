@@ -74,7 +74,7 @@ BEGIN
 		IF 1 > (SELECT COUNT(*)
 					FROM dbo.Calendar C
 					LEFT JOIN dbo.PersonCalendar PC ON PC.PersonId = @PersonId AND C.Date = PC.Date
-					LEFT JOIN dbo.PersonCalendar Holiday ON PC.Date = Holiday.SubstituteDate
+					LEFT JOIN dbo.PersonCalendar Holiday ON PC.Date = Holiday.SubstituteDate AND PC.PersonId = Holiday.PersonId
 					WHERE C.Date BETWEEN @StartDate AND @EndDate
 						AND C.DayOff = 0
 						AND (PC.Date IS NULL
@@ -92,13 +92,13 @@ BEGIN
 			SELECT PC.PersonId, AD.Date, CONVERT(BIT, 0) 'IsSeries'
 			FROM Calendar C
 			JOIN PersonCalendar PC ON PC.Date IN (@StartDate, @EndDate) AND PC.PersonId = @PersonId AND PC.DayOff = 1 AND PC.IsSeries = 1 AND C.Date = PC.Date
-			LEFT JOIN PersonCalendar AD ON PC.PersonId = AD.PersonId AND AD.DayOff = 1 AND AD.IsSeries = 1 AND PC.TimeTypeId = AD.TimeTypeId AND PC.ActualHours = AD.ActualHours
+			LEFT JOIN PersonCalendar AD ON PC.PersonId = AD.PersonId AND AD.DayOff = 1 AND AD.IsSeries = 1 AND PC.TimeTypeId = AD.TimeTypeId AND PC.ActualHours = AD.ActualHours AND ISNULL(PC.ApprovedBy, 0) = AD.ApprovedBy
 										AND ( (DATEPART(DW, @EndDate) = 6 AND AD.date = DATEADD(DD,3, @EndDate) )
 												OR (DATEPART(DW, @StartDate) = 2 AND AD.date = DATEADD(DD, -3, @StartDate))
 												OR AD.date = DATEADD(DD,1, @EndDate)
 												OR AD.date = DATEADD(DD, -1, @StartDate)
 											)
-			LEFT JOIN PersonCalendar EDFS ON AD.PersonId = EDFS.PersonId AND EDFS.DayOff = 1 AND EDFS.IsSeries = 1 AND EDFS.TimeTypeId = AD.TimeTypeId AND EDFS.ActualHours = AD.ActualHours
+			LEFT JOIN PersonCalendar EDFS ON AD.PersonId = EDFS.PersonId AND EDFS.DayOff = 1 AND EDFS.IsSeries = 1 AND EDFS.TimeTypeId = AD.TimeTypeId AND EDFS.ActualHours = AD.ActualHours AND ISNULL(EDFS.ApprovedBy, 0) = AD.ApprovedBy
 										AND ( (DATEPART(DW, AD.date) = 6 AND EDFS.date = DATEADD(DD,3, AD.date) )
 												OR (DATEPART(DW, AD.date) = 2 AND EDFS.date = DATEADD(DD, -3, AD.date))
 												OR EDFS.date = DATEADD(DD,1, AD.date)
@@ -140,14 +140,14 @@ BEGIN
 				Description = @Description,
 				ApprovedBy = @ApprovedBy
 		FROM PersonCalendar PC
-		JOIN @DaysExceptHolidays DEH ON PC.PersonId = @PersonId AND PC.Date = DEH.Date AND (PC.TimeTypeId <> @TimeTypeId OR PC.ActualHours <> @ActualHours)
+		JOIN @DaysExceptHolidays DEH ON PC.PersonId = @PersonId AND PC.Date = DEH.Date AND (PC.TimeTypeId <> @TimeTypeId OR PC.ActualHours <> @ActualHours OR ISNULL(PC.ApprovedBy, 0) <> @ApprovedBy)
 
 		;WITH ExcludeDates AS
 		(
 			SELECT PC.PersonId, PC.Date, CONVERT(BIT, 0) 'IsSeries'
 			FROM @DaysExceptHolidays DEH
 			JOIN PersonCalendar PC ON PC.Date = DEH.Date AND PC.PersonId = @PersonId
-			LEFT JOIN PersonCalendar CD ON CD.PersonId = PC.PersonId AND CD.IsSeries = 1 AND PC.TimeTypeId = CD.TimeTypeId AND PC.ActualHours = CD.ActualHours
+			LEFT JOIN PersonCalendar CD ON CD.PersonId = PC.PersonId AND CD.IsSeries = 1 AND PC.TimeTypeId = CD.TimeTypeId AND PC.ActualHours = CD.ActualHours AND ISNULL(PC.ApprovedBy, 0) = CD.ApprovedBy
 											AND ( (DATEPART(DW, PC.date) = 6 AND CD.date = DATEADD(DD,3, PC.date) )
 													OR (DATEPART(DW, PC.date) = 2 AND CD.date = DATEADD(DD, -3, PC.date))
 													OR CD.date = DATEADD(DD,1, PC.date)
