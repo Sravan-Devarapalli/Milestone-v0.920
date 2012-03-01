@@ -385,7 +385,7 @@ namespace DataAccess
             }
         }
 
-        public static void SaveTimeOff(DateTime startDate, DateTime endDate, bool dayOff, int personId, double? actualHours, int timeTypeId, string userLogin)
+        public static void SaveTimeOff(DateTime startDate, DateTime endDate, bool dayOff, int personId, double? actualHours, int timeTypeId, string userLogin, int? approvedBy)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Calendar.SaveTimeOffProcedure, connection))
@@ -400,6 +400,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ActualHoursParam, actualHours.HasValue ? (object)actualHours : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeId, timeTypeId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ApprovedByParam, approvedBy.HasValue ? (object)approvedBy : DBNull.Value);
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -407,7 +408,7 @@ namespace DataAccess
         }
 
 
-        public static KeyValuePair<DateTime, DateTime> GetTimeOffSeriesPeriod(int personId, DateTime date)
+        public static Triple<DateTime, DateTime, int?> GetTimeOffSeriesPeriod(int personId, DateTime date)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -429,21 +430,20 @@ namespace DataAccess
             }
         }
 
-        private static KeyValuePair<DateTime, DateTime> ReadGetTimeOffSeriesPeriod(SqlDataReader reader)
+        private static Triple<DateTime, DateTime, int?> ReadGetTimeOffSeriesPeriod(SqlDataReader reader)
         {
-            KeyValuePair<DateTime, DateTime> keyval = new KeyValuePair<DateTime, DateTime>();
             if (reader.HasRows)
             {
-
                 int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
                 int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
+                int approvedByIdIndex = reader.GetOrdinal(Constants.ColumnNames.ApprovedByColumn);
 
                 while (reader.Read())
                 {
-                    keyval = new KeyValuePair<DateTime, DateTime>(reader.GetDateTime(startDateIndex), reader.GetDateTime(endDateIndex));
+                    return new Triple<DateTime, DateTime, int?>(reader.GetDateTime(startDateIndex), reader.GetDateTime(endDateIndex), reader.IsDBNull(approvedByIdIndex) ? null : (int?)reader.GetInt32(approvedByIdIndex));
                 }
-            } 
-            return keyval;
+            }
+            return null;
         }
 
         public static DateTime GetSubstituteDate(int personId, DateTime holidayDate)
