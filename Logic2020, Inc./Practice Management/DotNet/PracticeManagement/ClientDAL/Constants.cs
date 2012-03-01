@@ -615,6 +615,7 @@
                 public const string IsHavingCustomRolePermission = "dbo.IsHavingCustomRolePermission";
                 public const string SaveCustomRolePagePermissions = "dbo.SaveCustomRolePagePermissions";
                 public const string PersonsListHavingActiveStatusDuringThisPeriodProcedure = "dbo.PersonsListHavingActiveStatusDuringThisPeriod";
+                public const string GetCurrentActivePracticeAreaManagerListProcedure = "dbo.GetCurrentActivePracticeAreaManagerList";
 
             }
 
