@@ -13,7 +13,8 @@ CREATE PROCEDURE [dbo].[SaveTimeOff]
 	@PersonId		INT,
 	@UserLogin		NVARCHAR(255),
 	@ActualHours	REAL,
-	@TimeTypeId		INT
+	@TimeTypeId		INT,
+	@ApprovedBy		INT
 )
 AS
 BEGIN
@@ -55,6 +56,7 @@ BEGIN
 	SELECT @ModifiedBy = PersonId FROM Person WHERE Alias = @UserLogin
 	SELECT @Description = Name FROM TimeType WHERE TimeTypeId = @TimeTypeId
 	SELECT @IsSeries = CASE WHEN DATEDIFF(DD, @StartDate, @EndDate) = 0 THEN 0 ELSE 1 END
+	SELECT @ApprovedBy = CASE WHEN @ApprovedBy IS NOT NULL THEN @ApprovedBy ELSE @ModifiedBy END
 
 	BEGIN TRY
 	BEGIN TRANSACTION tran_SaveTimeOff
@@ -124,8 +126,8 @@ BEGIN
 				)
 
 		--Insert new Offs.
-		INSERT INTO PersonCalendar(PersonId, Date, DayOff, TimeTypeId, ActualHours, Description, IsSeries, IsFromTimeEntry)
-		SELECT @PersonId, DEH.Date, @DayOff, @TimeTypeId, @ActualHours, @Description, @IsSeries, 0
+		INSERT INTO PersonCalendar(PersonId, Date, DayOff, TimeTypeId, ActualHours, Description, IsSeries, IsFromTimeEntry, ApprovedBy)
+		SELECT @PersonId, DEH.Date, @DayOff, @TimeTypeId, @ActualHours, @Description, @IsSeries, 0, @ApprovedBy
 		FROM @DaysExceptHolidays DEH
 		LEFT JOIN PersonCalendar PC ON PC.Date = DEH.Date AND PC.PersonId = @PersonId
 		WHERE PC.Date IS NULL
@@ -135,7 +137,8 @@ BEGIN
 			SET TimeTypeId = @TimeTypeId,
 				ActualHours = @ActualHours,
 				IsSeries = @IsSeries,
-				Description = @Description
+				Description = @Description,
+				ApprovedBy = @ApprovedBy
 		FROM PersonCalendar PC
 		JOIN @DaysExceptHolidays DEH ON PC.PersonId = @PersonId AND PC.Date = DEH.Date AND (PC.TimeTypeId <> @TimeTypeId OR PC.ActualHours <> @ActualHours)
 
