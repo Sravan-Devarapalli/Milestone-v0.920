@@ -505,7 +505,7 @@ namespace PraticeManagement.Controls {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlTimeTypesTimeOff;
+        protected global::PraticeManagement.Controls.CustomDropDown ddlTimeTypesTimeOff;
         
         /// <summary>
         /// reqTimeTypesTimeOff control.
@@ -515,6 +515,33 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqTimeTypesTimeOff;
+        
+        /// <summary>
+        /// trAddORTApprovedBy control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trAddORTApprovedBy;
+        
+        /// <summary>
+        /// trAddORTManagersList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trAddORTManagersList;
+        
+        /// <summary>
+        /// ddlApprovedManagers control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlApprovedManagers;
         
         /// <summary>
         /// txthoursTimeOff control.
@@ -676,7 +703,7 @@ namespace PraticeManagement.Controls {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlTimeTypesSingleDay;
+        protected global::PraticeManagement.Controls.CustomDropDown ddlTimeTypesSingleDay;
         
         /// <summary>
         /// reqddlTimeTypesSingleDay control.
@@ -686,6 +713,33 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqddlTimeTypesSingleDay;
+        
+        /// <summary>
+        /// trORTApprovedBy control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trORTApprovedBy;
+        
+        /// <summary>
+        /// trORTManagersList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trORTManagersList;
+        
+        /// <summary>
+        /// ddlSingleDayApprovedManagers control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlSingleDayApprovedManagers;
         
         /// <summary>
         /// txtHoursSingleDay control.
