@@ -3395,6 +3395,43 @@ namespace DataAccess
                 }
             }
         }
+
+        public static List<Person> GetCurrentActivePracticeAreaManagerList()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetCurrentActivePracticeAreaManagerListProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<Person>();
+
+                    if (reader.HasRows)
+                    {
+                        int personIdIndex = reader.GetOrdinal(PersonIdColumn);
+                        int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+                        int lastNameIndex = reader.GetOrdinal(LastNameColumn);
+                        while (reader.Read())
+                        {
+                            var personId = reader.GetInt32(personIdIndex);
+                            var person = new Person
+                            {
+                                Id = personId,
+                                FirstName = reader.GetString(firstNameIndex),
+                                LastName = reader.GetString(lastNameIndex)
+                            };
+                            result.Add(person);
+                        }
+                    }
+                    return result;
+                }
+            }
+        }
+
+
     }
 }
 
