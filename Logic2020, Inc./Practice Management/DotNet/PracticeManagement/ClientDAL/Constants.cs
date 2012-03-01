@@ -273,6 +273,8 @@
             public const string IsAdministrativeColumn = "IsAdministrative";
             public const string AssignedProject = "AssignedProject";
             public const string HolidayDateColumn = "HolidayDate";
+            public const string IsORTTimeTypeColumn = "IsORTTimeType";
+            public const string ApprovedByColumn = "ApprovedBy";
             
         }
 
@@ -536,6 +538,7 @@
             public const string IncludeHolidayParam = "@IncludeHoliday";
             public const string SubstituteDayDateParam = "@SubstituteDayDate";
             public const string HolidayDateParam = "@HolidayDate";
+            public const string ApprovedByParam = "@ApprovedBy";
 
 
         }
