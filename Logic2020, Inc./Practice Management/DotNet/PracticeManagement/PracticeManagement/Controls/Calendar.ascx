@@ -278,6 +278,41 @@
         }
     }
 
+    function addTimeOffPopupManagersList(ddl) {
+        var trApproved = document.getElementById('<%= trAddORTApprovedBy.ClientID %>');
+        var trManagerList = document.getElementById('<%= trAddORTManagersList.ClientID %>');
+
+        if (trApproved && trManagerList) {
+            visibleApprovedManagersList(ddl, trApproved, trManagerList);
+        }
+    }
+
+    function updateTimeOffPopupManagersList(ddl) {
+        var trApproved = document.getElementById('<%= trORTApprovedBy.ClientID %>');
+        var trManagerList = document.getElementById('<%= trORTManagersList.ClientID %>');
+
+        if (trApproved && trManagerList) {
+            visibleApprovedManagersList(ddl, trApproved, trManagerList);
+        }
+    }
+
+    function visibleApprovedManagersList(ddl, trApprovedtext, trManagerList) {
+        if (ddl) {
+            for (var i = 0; i < ddl.length; i++) {
+                if (ddl[i].selected) {
+                    if (ddl[i].getAttribute('IsORT') == 'True') {
+                        trApprovedtext.style.display = '';
+                        trManagerList.style.display = '';
+                    }
+                    else {
+                        trApprovedtext.style.display = 'none';
+                        trManagerList.style.display = 'none';
+                    }
+                }
+            }
+        }
+    }
+
 </script>
 <style>
     .setCheckboxesLeft TD, .setCheckboxesLeft div
@@ -629,11 +664,21 @@
                                     </tr>
                                     <tr>
                                         <td colspan="3" style="padding-left: 40px; text-align: left;">
-                                            <asp:DropDownList ID="ddlTimeTypesTimeOff" runat="server" Style="width: 70%;" onchange="btnDeleteTimeOffDisable();">
-                                            </asp:DropDownList>
+                                            <uc:CustomDropDown ID="ddlTimeTypesTimeOff" runat="server" IsOptionGroupRequired="false" CssClass="width70P" onchange="btnDeleteTimeOffDisable();  addTimeOffPopupManagersList(this);">
+                                            </uc:CustomDropDown>
                                             <asp:RequiredFieldValidator ID="reqTimeTypesTimeOff" runat="server" ControlToValidate="ddlTimeTypesTimeOff"
                                                 ErrorMessage="Work Type is required." ToolTip="Work Type is required." Text="*"
                                                 EnableClientScript="false" SetFocusOnError="true" ValidationGroup="TimeOff"></asp:RequiredFieldValidator>
+                                        </td>
+                                    </tr>
+                                    <tr id="trAddORTApprovedBy" runat="server" style="display:none;">
+                                        <td colspan="3" class="padLeft60 textLeft">
+                                            Approved by:
+                                        </td>
+                                    </tr>
+                                    <tr id="trAddORTManagersList" runat="server" style="display:none;">
+                                        <td colspan="3" class="padLeft60 textLeft">
+                                            <asp:DropDownList ID="ddlApprovedManagers" runat="server"></asp:DropDownList>
                                         </td>
                                     </tr>
                                     <tr>
@@ -722,11 +767,21 @@
                                     </tr>
                                     <tr>
                                         <td colspan="3" class="textLeft padLeft40">
-                                            <asp:DropDownList ID="ddlTimeTypesSingleDay" CssClass="width70P" runat="server" onchange="btnDeleteSingleDayDisable();">
-                                            </asp:DropDownList>
+                                            <uc:CustomDropDown ID="ddlTimeTypesSingleDay" IsOptionGroupRequired="false" CssClass="width70P" runat="server" onchange="btnDeleteSingleDayDisable(); updateTimeOffPopupManagersList(this);">
+                                            </uc:CustomDropDown>
                                             <asp:RequiredFieldValidator ID="reqddlTimeTypesSingleDay" runat="server" ControlToValidate="ddlTimeTypesSingleDay"
                                                 ErrorMessage="Work Type is required." ToolTip="Work Type is required." Text="*"
                                                 EnableClientScript="false" SetFocusOnError="true" ValidationGroup="SingleDay"></asp:RequiredFieldValidator>
+                                        </td>
+                                    </tr>
+                                    <tr id="trORTApprovedBy" runat="server" style="display:none;">
+                                        <td colspan="3" class="padLeft60 textLeft">
+                                            Approved by:
+                                        </td>
+                                    </tr>
+                                    <tr id="trORTManagersList" runat="server" style="display:none;">
+                                        <td colspan="3" class="padLeft60 textLeft">
+                                            <asp:DropDownList ID="ddlSingleDayApprovedManagers" runat="server"></asp:DropDownList>
                                         </td>
                                     </tr>
                                     <tr>
