@@ -673,12 +673,15 @@
                                     </tr>
                                     <tr id="trAddORTApprovedBy" runat="server" style="display:none;">
                                         <td colspan="3" class="padLeft60 textLeft">
-                                            Approved by:
+                                            <b>Approved by:</b>
                                         </td>
                                     </tr>
                                     <tr id="trAddORTManagersList" runat="server" style="display:none;">
                                         <td colspan="3" class="padLeft60 textLeft">
-                                            <asp:DropDownList ID="ddlApprovedManagers" runat="server"></asp:DropDownList>
+                                            <asp:DropDownList ID="ddlApprovedManagers" runat="server" CssClass="ApprovedManagerDropdown"></asp:DropDownList>
+                                            <asp:CustomValidator ID="cvApprovedManagers" runat="server" ValidateEmptyText="false"
+                                                ValidationGroup="TimeOff" ErrorMessage="Manager is required."
+                                                Text="*" ToolTip="Manager is required." OnServerValidate="cvApprovedManagers_OnServerValidate" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -776,12 +779,15 @@
                                     </tr>
                                     <tr id="trORTApprovedBy" runat="server" style="display:none;">
                                         <td colspan="3" class="padLeft60 textLeft">
-                                            Approved by:
+                                            <b>Approved by:</b>
                                         </td>
                                     </tr>
                                     <tr id="trORTManagersList" runat="server" style="display:none;">
                                         <td colspan="3" class="padLeft60 textLeft">
-                                            <asp:DropDownList ID="ddlSingleDayApprovedManagers" runat="server"></asp:DropDownList>
+                                            <asp:DropDownList ID="ddlSingleDayApprovedManagers" CssClass="ApprovedManagerDropdown" runat="server"></asp:DropDownList>
+                                            <asp:CustomValidator ID="cvSingleDayApprovedManagers" runat="server" ValidateEmptyText="false"
+                                                ValidationGroup="SingleDay" ErrorMessage="Manager is required."
+                                                Text="*" ToolTip="Manager is required." OnServerValidate="cvSingleDayApprovedManagers_OnServerValidate" />
                                         </td>
                                     </tr>
                                     <tr>
