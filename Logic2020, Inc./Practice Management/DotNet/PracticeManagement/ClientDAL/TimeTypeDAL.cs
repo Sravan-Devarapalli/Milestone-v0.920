@@ -202,6 +202,15 @@ namespace DataAccess
             {
                 int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
                 int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+                int isORTIndex = -1;
+                try
+                {
+                    isORTIndex = reader.GetOrdinal(Constants.ColumnNames.IsORTTimeTypeColumn);
+                }
+                catch
+                {
+                    isORTIndex = -1;
+                }
 
                 while (reader.Read())
                 {
@@ -211,6 +220,9 @@ namespace DataAccess
                         Name = reader.GetString(nameIndex),
 
                     };
+
+                    if (isORTIndex > -1)
+                        tt.IsORTTimeType = reader.GetBoolean(isORTIndex);
                     result.Add(tt);
 
                 }
