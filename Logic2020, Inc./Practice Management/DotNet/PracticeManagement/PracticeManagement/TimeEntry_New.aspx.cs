@@ -59,7 +59,6 @@ namespace PraticeManagement
         public const string EntryDateXname = "EntryDate";
         public const string IsHourlyRevenueXname = "IsHourlyRevenue";
         public const string IsRecursiveXname = "IsRecursive";
-        public const string IsRecursiveAllowedXname = "IsRecursiveAllowed";
         public const string workTypeOldId = "workTypeOldId";
         public const string CalendarItemXname = "CalendarItem";
         public const string AccountAndProjectSelectionXname = "AccountAndProjectSelection";
@@ -74,7 +73,7 @@ namespace PraticeManagement
         private const string internalSectionXmlClose = "</Section>";
         private const string administrativeSectionXmlOpen = "<Section Id=\"4\">";
         private const string administrativeSectionXmlClose = "</Section>";
-        private const string accountAndProjectSelectionXmlOpen = "<AccountAndProjectSelection AccountId=\"{0}\" AccountName=\"{1}\" ProjectId=\"{2}\" ProjectName=\"{3}\" ProjectNumber=\"{4}\" BusinessUnitId=\"{5}\" BusinessUnitName=\"{6}\" IsRecursive=\"{7}\"  IsPTO=\"{8}\"  IsHoliday=\"{9}\" IsRecursiveAllowed=\"{10}\" >";
+        private const string accountAndProjectSelectionXmlOpen = "<AccountAndProjectSelection AccountId=\"{0}\" AccountName=\"{1}\" ProjectId=\"{2}\" ProjectName=\"{3}\" ProjectNumber=\"{4}\" BusinessUnitId=\"{5}\" BusinessUnitName=\"{6}\" IsRecursive=\"{7}\"  IsPTO=\"{8}\"  IsHoliday=\"{9}\" >";
         private const string accountAndProjectSelectionXmlClose = "</AccountAndProjectSelection>";
         private const string workTypeXmlOpen = "<WorkType Id=\"{0}\" >";
         private const string workTypeXmlOpenWithOldId = "<WorkType Id=\"{0}\"  OldId=\"{1}\" >";
@@ -521,7 +520,6 @@ namespace PraticeManagement
                 var repProjectTes = e.Item.FindControl(repProjectTesRepeater) as Repeater;
                 var teSectionDataItem = e.Item.DataItem as XElement;
                 var isRecursive = teSectionDataItem.Attribute(XName.Get(IsRecursiveXname)).Value;
-                var isRecursiveAllowed = teSectionDataItem.Attribute(XName.Get(IsRecursiveAllowedXname)).Value;
 
                 AccountId = teSectionDataItem.Attribute(XName.Get(AccountIdXname)).Value;
                 ProjectId = teSectionDataItem.Attribute(XName.Get(ProjectIdXname)).Value;
@@ -548,11 +546,6 @@ namespace PraticeManagement
                 imgBtnRecursiveProjectSection.ImageUrl = Convert.ToBoolean(isRecursive) ? recursiveSectionImageUrl : nonRecursiveSectionImageUrl;
                 imgBtnRecursiveProjectSection.ToolTip = Convert.ToBoolean(isRecursive) ? recursiveToolTip : nonRecursiveToolTip;
                 cbeImgBtnRecursiveProjectSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, "project", "project end");
-                if (isRecursiveAllowed == false.ToString())
-                {
-                    cbeImgBtnRecursiveProjectSection.Enabled = false;
-                    imgBtnRecursiveProjectSection.Attributes[IsRecursiveAllowedXname] = isRecursiveAllowed;
-                }
                 imgBtnRecursiveProjectSection.Attributes[AccountIdXname] = AccountId;
                 imgBtnRecursiveProjectSection.Attributes[ProjectIdXname] = ProjectId;
                 imgBtnRecursiveProjectSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
@@ -1165,84 +1158,73 @@ namespace PraticeManagement
         protected void imgBtnRecursiveSection_OnClick(object sender, EventArgs args)
         {
             var imgBtnRecursiveSection = ((ImageButton)(sender));
-            bool showpopup = false;
-            var IsRecursiveAllowed = imgBtnRecursiveSection.Attributes[IsRecursiveAllowedXname];
             int projectId = Convert.ToInt32(imgBtnRecursiveSection.Attributes[ProjectIdXname]);
-            if (IsRecursiveAllowed == false.ToString())
+            var repeaterItem = imgBtnRecursiveSection.NamingContainer as RepeaterItem;
+            ConfirmButtonExtender cbeimgBtnRecursiveSection = null;
+            int accountId = Convert.ToInt32(imgBtnRecursiveSection.Attributes[AccountIdXname]);
+            int businessUnitId = Convert.ToInt32(imgBtnRecursiveSection.Attributes[BusinessUnitIdXname]);
+            int timeEntrySectionId = Convert.ToInt32(imgBtnRecursiveSection.Attributes[TimeEntrySectionIdXname]);
+            int personId = SelectedPerson.Id.Value;
+            DateTime[] dates = SelectedDates;
+            bool isRecursive = !Convert.ToBoolean(imgBtnRecursiveSection.Attributes[IsRecursiveXname]);
+            try
             {
-                showpopup = true;
-            }
-            else
-            {
-                var repeaterItem = imgBtnRecursiveSection.NamingContainer as RepeaterItem;
-                ConfirmButtonExtender cbeimgBtnRecursiveSection = null;
-                int accountId = Convert.ToInt32(imgBtnRecursiveSection.Attributes[AccountIdXname]);
-                int businessUnitId = Convert.ToInt32(imgBtnRecursiveSection.Attributes[BusinessUnitIdXname]);
-                int timeEntrySectionId = Convert.ToInt32(imgBtnRecursiveSection.Attributes[TimeEntrySectionIdXname]);
-                int personId = SelectedPerson.Id.Value;
-                DateTime[] dates = SelectedDates;
-                bool isRecursive = !Convert.ToBoolean(imgBtnRecursiveSection.Attributes[IsRecursiveXname]);
-                try
+
+                ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntryRecursiveSelection(personId, accountId, businessUnitId, projectId, timeEntrySectionId, isRecursive, dates[0]));
+
+                imgBtnRecursiveSection.Attributes[IsRecursiveXname] = (isRecursive).ToString();
+                imgBtnRecursiveSection.ImageUrl = isRecursive ? recursiveSectionImageUrl : nonRecursiveSectionImageUrl;
+                imgBtnRecursiveSection.ToolTip = isRecursive ? recursiveToolTip : nonRecursiveToolTip;
+
+                XDocument xdoc = null;
+                if ((int)TimeEntrySectionType.Project == timeEntrySectionId)
                 {
-
-                    ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntryRecursiveSelection(personId, accountId, businessUnitId, projectId, timeEntrySectionId, isRecursive, dates[0]));
-
-                    imgBtnRecursiveSection.Attributes[IsRecursiveXname] = (isRecursive).ToString();
-                    imgBtnRecursiveSection.ImageUrl = isRecursive ? recursiveSectionImageUrl : nonRecursiveSectionImageUrl;
-                    imgBtnRecursiveSection.ToolTip = isRecursive ? recursiveToolTip : nonRecursiveToolTip;
-
-                    XDocument xdoc = null;
-                    if ((int)TimeEntrySectionType.Project == timeEntrySectionId)
-                    {
-                        xdoc = PrePareXmlForProjectSectionFromRepeater();
-                        cbeimgBtnRecursiveSection = repeaterItem.FindControl(cbeImgBtnRecursiveProjectSectionExtender) as ConfirmButtonExtender;
-                        cbeimgBtnRecursiveSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, "project", "project end");
-                    }
-                    else if ((int)TimeEntrySectionType.BusinessDevelopment == timeEntrySectionId)
-                    {
-                        xdoc = PrePareXmlForBusinessDevelopmentSectionFromRepeater();
-                        cbeimgBtnRecursiveSection = repeaterItem.FindControl(cbeImgBtnRecurrenceBusinessDevelopmentSectionExtender) as ConfirmButtonExtender;
-                        cbeimgBtnRecursiveSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, "account", "account is disabled");
-                    }
-                    else if ((int)TimeEntrySectionType.Internal == timeEntrySectionId)
-                    {
-                        xdoc = PrePareXmlForInternalSectionFromRepeater();
-                        cbeimgBtnRecursiveSection = repeaterItem.FindControl(cbeImgBtnRecurrenceInternalSectionExtender) as ConfirmButtonExtender;
-                        cbeimgBtnRecursiveSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, "project", "project end");
-                    }
-
-                    List<XElement> xlist = xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
-                    XElement accountAndProjectSelectionElement = xlist.First(element => element.Attribute(XName.Get(AccountIdXname)).Value == accountId.ToString() && element.Attribute(XName.Get(ProjectIdXname)).Value == projectId.ToString() && element.Attribute(XName.Get(BusinessUnitIdXname)).Value == businessUnitId.ToString());
-                    accountAndProjectSelectionElement.SetAttributeValue(IsRecursiveXname, (isRecursive).ToString());
-
-
-                    if ((int)TimeEntrySectionType.Project == timeEntrySectionId)
-                    {
-                        ProjectSectionXml = xdoc.ToString();
-                    }
-                    else if ((int)TimeEntrySectionType.BusinessDevelopment == timeEntrySectionId)
-                    {
-                        BusinessDevelopmentSectionXml = xdoc.ToString();
-                    }
-                    else if ((int)TimeEntrySectionType.Internal == timeEntrySectionId)
-                    {
-                        InternalSectionXml = xdoc.ToString();
-                    }
+                    xdoc = PrePareXmlForProjectSectionFromRepeater();
+                    cbeimgBtnRecursiveSection = repeaterItem.FindControl(cbeImgBtnRecursiveProjectSectionExtender) as ConfirmButtonExtender;
+                    cbeimgBtnRecursiveSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, "project", "project end");
                 }
-                catch (Exception e)
+                else if ((int)TimeEntrySectionType.BusinessDevelopment == timeEntrySectionId)
                 {
-                    if (e.Message == "Can not enable recurring behavior as project enddate is less than the week startdate.")
-                    {
-                        showpopup = true;
-                    }
+                    xdoc = PrePareXmlForBusinessDevelopmentSectionFromRepeater();
+                    cbeimgBtnRecursiveSection = repeaterItem.FindControl(cbeImgBtnRecurrenceBusinessDevelopmentSectionExtender) as ConfirmButtonExtender;
+                    cbeimgBtnRecursiveSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, "account", "account is disabled");
+                }
+                else if ((int)TimeEntrySectionType.Internal == timeEntrySectionId)
+                {
+                    xdoc = PrePareXmlForInternalSectionFromRepeater();
+                    cbeimgBtnRecursiveSection = repeaterItem.FindControl(cbeImgBtnRecurrenceInternalSectionExtender) as ConfirmButtonExtender;
+                    cbeimgBtnRecursiveSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, "project", "project end");
+                }
+
+                List<XElement> xlist = xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
+                XElement accountAndProjectSelectionElement = xlist.First(element => element.Attribute(XName.Get(AccountIdXname)).Value == accountId.ToString() && element.Attribute(XName.Get(ProjectIdXname)).Value == projectId.ToString() && element.Attribute(XName.Get(BusinessUnitIdXname)).Value == businessUnitId.ToString());
+                accountAndProjectSelectionElement.SetAttributeValue(IsRecursiveXname, (isRecursive).ToString());
+
+
+                if ((int)TimeEntrySectionType.Project == timeEntrySectionId)
+                {
+                    ProjectSectionXml = xdoc.ToString();
+                }
+                else if ((int)TimeEntrySectionType.BusinessDevelopment == timeEntrySectionId)
+                {
+                    BusinessDevelopmentSectionXml = xdoc.ToString();
+                }
+                else if ((int)TimeEntrySectionType.Internal == timeEntrySectionId)
+                {
+                    InternalSectionXml = xdoc.ToString();
                 }
             }
-            if (showpopup)
+            catch (Exception e)
             {
-                Project project = ServiceCallers.Custom.Project(p => p.GetProjectByIdShort(projectId));
-                ldProjectEnddate.Text = project.EndDate.HasValue ? project.EndDate.Value.ToString("MM/dd/yyyy") : "";
-                mpeRecurringAllowed.Show();
+                if (e.Message == "Can not enable recurring behavior as project enddate is less than the week startdate.")
+                {
+                    Project project = ServiceCallers.Custom.Project(p => p.GetProjectByIdShort(projectId));
+                    ldProjectEnddate.Text = project.EndDate.HasValue ? project.EndDate.Value.ToString("MM/dd/yyyy") : "";
+                    mpeRecurringAllowed.Show();
+                }
             }
+
+
         }
 
         protected void imgBtnDeleteSection_OnClick(object sender, EventArgs args)
@@ -1745,9 +1727,8 @@ namespace PraticeManagement
             int personId = SelectedPerson.Id.Value;
             DateTime startDate = SelectedDates[0];
             DateTime endDate = SelectedDates[SelectedDates.Length - 1];
-            bool isRecursiveAllowed = teSection.Project.EndDate.HasValue ? teSection.Project.EndDate.Value > endDate : true;
 
-            xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive, teSection.Project.IsPTOProject.ToString(), teSection.Project.IsHolidayProject.ToString(), isRecursiveAllowed.ToString()));
+            xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive, teSection.Project.IsPTOProject.ToString(), teSection.Project.IsHolidayProject.ToString()));
 
 
             foreach (KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>> keyVal in teSection.TimeEntriesByTimeType)
