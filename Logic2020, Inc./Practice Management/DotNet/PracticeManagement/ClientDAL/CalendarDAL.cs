@@ -408,7 +408,7 @@ namespace DataAccess
         }
 
 
-        public static Triple<DateTime, DateTime, int?> GetTimeOffSeriesPeriod(int personId, DateTime date)
+        public static Quadruple<DateTime, DateTime, int?, string> GetTimeOffSeriesPeriod(int personId, DateTime date)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -430,17 +430,21 @@ namespace DataAccess
             }
         }
 
-        private static Triple<DateTime, DateTime, int?> ReadGetTimeOffSeriesPeriod(SqlDataReader reader)
+        private static Quadruple<DateTime, DateTime, int?, string> ReadGetTimeOffSeriesPeriod(SqlDataReader reader)
         {
             if (reader.HasRows)
             {
                 int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
                 int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
                 int approvedByIdIndex = reader.GetOrdinal(Constants.ColumnNames.ApprovedByColumn);
+                int approvedByNameIndex = reader.GetOrdinal(Constants.ColumnNames.ApprovedByNameColumn);
 
                 while (reader.Read())
                 {
-                    return new Triple<DateTime, DateTime, int?>(reader.GetDateTime(startDateIndex), reader.GetDateTime(endDateIndex), reader.IsDBNull(approvedByIdIndex) ? null : (int?)reader.GetInt32(approvedByIdIndex));
+                    return new Quadruple<DateTime, DateTime, int?, string>(reader.GetDateTime(startDateIndex), 
+                                                                reader.GetDateTime(endDateIndex), 
+                                                                reader.IsDBNull(approvedByIdIndex) ? null : (int?)reader.GetInt32(approvedByIdIndex),
+                                                                reader.IsDBNull(approvedByNameIndex) ? string.Empty : reader.GetString(approvedByNameIndex));
                 }
             }
             return null;
