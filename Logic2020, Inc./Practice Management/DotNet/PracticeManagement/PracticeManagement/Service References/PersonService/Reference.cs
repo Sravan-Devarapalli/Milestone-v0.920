@@ -50,6 +50,10 @@ namespace PraticeManagement.PersonService {
             "sponse")]
         DataTransferObjects.Person[] PersonsListHavingActiveStatusDuringThisPeriod(System.DateTime startDate, System.DateTime endDate);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetCurrentActivePracticeAreaManagerList", ReplyAction="http://tempuri.org/IPersonService/GetCurrentActivePracticeAreaManagerListResponse" +
+            "")]
+        DataTransferObjects.Person[] GetCurrentActivePracticeAreaManagerList();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonDetail", ReplyAction="http://tempuri.org/IPersonService/GetPersonDetailResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         DataTransferObjects.Person GetPersonDetail(int personId);
@@ -277,8 +281,6 @@ namespace PraticeManagement.PersonService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
         
-       
-        
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -333,6 +335,10 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.Person[] PersonsListHavingActiveStatusDuringThisPeriod(System.DateTime startDate, System.DateTime endDate) {
             return base.Channel.PersonsListHavingActiveStatusDuringThisPeriod(startDate, endDate);
+        }
+        
+        public DataTransferObjects.Person[] GetCurrentActivePracticeAreaManagerList() {
+            return base.Channel.GetCurrentActivePracticeAreaManagerList();
         }
         
         public DataTransferObjects.Person GetPersonDetail(int personId) {
