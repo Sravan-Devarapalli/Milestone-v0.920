@@ -565,6 +565,10 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Person> PersonsListHavingActiveStatusDuringThisPeriod(DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        List<Person> GetCurrentActivePracticeAreaManagerList();
+
     }
 }
 
