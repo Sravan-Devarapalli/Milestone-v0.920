@@ -125,6 +125,7 @@
         <xs:element minOccurs="0" name="actualHours" nillable="true" type="xs:double" />
         <xs:element minOccurs="0" name="timeTypeId" type="xs:int" />
         <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="approvedBy" nillable="true" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -144,7 +145,7 @@
   <xs:element name="GetTimeOffSeriesPeriodResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/System.Collections.Generic" minOccurs="0" name="GetTimeOffSeriesPeriodResult" type="q6:KeyValuePairOfdateTimedateTime" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetTimeOffSeriesPeriodResult" nillable="true" type="q6:TripleOfdateTimedateTimeNullableOfintxJG7nVzP" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
