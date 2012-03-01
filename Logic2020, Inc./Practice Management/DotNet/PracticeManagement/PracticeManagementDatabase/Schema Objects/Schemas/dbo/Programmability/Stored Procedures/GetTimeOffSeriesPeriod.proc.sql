@@ -10,7 +10,10 @@ BEGIN
 		FROM dbo.PersonCalendar PC
 			WHERE PC.PersonId = @PersonId AND PC.Date = @Date)
 	BEGIN
-		SELECT @Date 'StartDate', @Date 'EndDate', null 'ApprovedBy'
+		SELECT @Date 'StartDate', @Date 'EndDate', PC.ApprovedBy 'ApprovedBy', p.LastName + ', ' + p.FirstName 'ApprovedByName'
+		FROM PersonCalendar PC
+		LEFT JOIN Person P ON P.PersonId = PC.ApprovedBy
+		WHERE PC.PersonId = @PersonId AND PC.Date = @Date
 	END
 	ELSE
 	BEGIN
@@ -27,7 +30,7 @@ BEGIN
 											OR  PC.date = DATEADD(DD,1, CD.date)
 										)
 									AND PC.PersonId = CD.PersonId AND PC.IsSeries = 1 AND PC.TimeTypeId = CD.TimeTypeId
-									AND PC.ActualHours = CD.ActualHours AND PC.ApprovedBy = CD.ApprovedBy
+									AND PC.ActualHours = CD.ActualHours AND ISNULL(PC.ApprovedBy, 0) = ISNULL(CD.ApprovedBy, 0)
 		),
 		BeforeConsecutiveDates AS
 		(
@@ -41,17 +44,18 @@ BEGIN
 											OR  PC.date = DATEADD(DD, -1, CD.date)
 										)
 									AND PC.PersonId = CD.PersonId AND PC.IsSeries = 1 AND PC.TimeTypeId = CD.TimeTypeId
-									AND PC.ActualHours = CD.ActualHours AND PC.ApprovedBy = CD.ApprovedBy
+									AND PC.ActualHours = CD.ActualHours AND ISNULL(PC.ApprovedBy, 0) = ISNULL(CD.ApprovedBy, 0)
 		)
 
-		SELECT MIN(CD.Date) 'StartDate', MAX(CD.Date) 'EndDate', CD.ApprovedBy 'ApprovedBy'
+		SELECT MIN(CD.Date) 'StartDate', MAX(CD.Date) 'EndDate', CD.ApprovedBy 'ApprovedBy', p.LastName + ', ' + p.FirstName 'ApprovedByName'
 		FROM 
 		(
 			SELECT * FROM BeforeConsecutiveDates BD
 			UNION
 			SELECT * FROM AfterConsecutiveDates AD
 		) CD
-		GROUP BY CD.PersonId, CD.ApprovedBy
+		LEFT JOIN dbo.Person P ON P.PersonId = CD.ApprovedBy
+		GROUP BY CD.PersonId, CD.ApprovedBy, P.FirstName, P.LastName
 
 	END
 
