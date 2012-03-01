@@ -2316,6 +2316,11 @@ TABLE.Section td
     width:70%;
 }
 
+.Width50Percent
+{
+    width:50%;
+}
+
 .ModalPopUpSideHeading
 {
     width: 30%;
@@ -2466,3 +2471,7 @@ end pixcel
     font-size: 12px;
 }
 
+.padLeft60
+{
+    padding-left: 60px;
+}
