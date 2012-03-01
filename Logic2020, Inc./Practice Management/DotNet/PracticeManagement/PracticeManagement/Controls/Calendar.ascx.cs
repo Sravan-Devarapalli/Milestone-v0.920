@@ -27,6 +27,9 @@ namespace PraticeManagement.Controls
         public const string TimeOffValidationMessage = "Selected day(s) are not working day(s). Please select any working day(s).";
         public const string SubstituteDateValidationMessage = "The selected date is not a working day.";
         public const string HolidayDetails_Format = "{0} - {1}";
+        public const string AttributeDisplay = "display";
+        public const string AttributeValueNone = "none";
+        public const string ApprovedManagersViewState = "ApprovedManagersViewState";
 
         private CalendarItem[] days;
         private bool userIsPracticeManager;
@@ -131,9 +134,21 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public Person[] ApprovedManagers
+        {
+            get
+            {
+                if (ViewState[ApprovedManagersViewState] == null)
+                {
+                    ViewState[ApprovedManagersViewState] = ServiceCallers.Custom.Person(p => p.GetCurrentActivePracticeAreaManagerList());
+                }
+                return (Person[])ViewState[ApprovedManagersViewState];
+            }
+        }
+
         #endregion
 
-        public void PopulateSingleDayPopupControls(DateTime date, string timeTypeId, string hours, int? approvedBy)
+        public void PopulateSingleDayPopupControls(DateTime date, string timeTypeId, string hours, int? approvedById, string approvedByName)
         {
             lbdateSingleDay.Text = date.ToString(Constants.Formatting.EntryDateFormat);
             hdnDateSingleDay.Value = date.ToString();
@@ -144,14 +159,37 @@ namespace PraticeManagement.Controls
             var timeTypeSelectedItem = ddlTimeTypesSingleDay.SelectedItem;
             if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true")
             {
-                if(approvedBy.HasValue)
-                    ddlSingleDayApprovedManagers.SelectedValue = approvedBy.Value.ToString();
-                trORTApprovedBy.Style.Add("display", "");
-                trORTManagersList.Style.Add("display", "");
+                if (approvedById.HasValue)
+                {
+                    ddlSingleDayApprovedManagers.DataSource = ApprovedManagers;
+                    ddlSingleDayApprovedManagers.DataBind();
+                    if (ApprovedManagers.Where(p => p.Id == approvedById.Value).Count() > 0)
+                    {
+                        ddlSingleDayApprovedManagers.SelectedValue = approvedById.Value.ToString();
+                    }
+                    else
+                    {
+                        ddlSingleDayApprovedManagers.Items.Add(new ListItem(approvedByName, approvedById.Value.ToString()));
+                        ddlSingleDayApprovedManagers.SelectedValue = approvedById.Value.ToString();
+                    }
+                    
+                }
+                else
+                {
+                    ddlSingleDayApprovedManagers.SelectedIndex = 0;
+                }
+                trORTApprovedBy.Style.Add(AttributeDisplay, string.Empty);
+                trORTManagersList.Style.Add(AttributeDisplay, string.Empty);
+            }
+            else
+            {
+                ddlSingleDayApprovedManagers.SelectedIndex = 0;
+                trORTApprovedBy.Style.Add(AttributeDisplay, AttributeValueNone);
+                trORTManagersList.Style.Add(AttributeDisplay, AttributeValueNone);
             }
         }
 
-        public void PopulateSeriesPopupControls(DateTime startDate, DateTime endDate, string timeTypeId, string hours, int? approvedBy)
+        public void PopulateSeriesPopupControls(DateTime startDate, DateTime endDate, string timeTypeId, string hours, int? approvedById, string approvedByName)
         {
             dtpStartDateTimeOff.DateValue = startDate;
             dtpEndDateTimeOff.DateValue = endDate;
@@ -163,10 +201,32 @@ namespace PraticeManagement.Controls
             var timeTypeSelectedItem = ddlTimeTypesTimeOff.SelectedItem;
             if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true")
             {
-                if (approvedBy.HasValue)
-                    ddlApprovedManagers.SelectedValue = approvedBy.Value.ToString();
-                trAddORTApprovedBy.Style.Add("display", "");
-                trAddORTManagersList.Style.Add("display", "");
+                if (approvedById.HasValue)
+                {
+                    ddlApprovedManagers.DataSource = ApprovedManagers;
+                    ddlApprovedManagers.DataBind();
+                    if (ApprovedManagers.Where(p => p.Id == approvedById.Value).Count() > 0)
+                    {
+                        ddlApprovedManagers.SelectedValue = approvedById.Value.ToString();
+                    }
+                    else
+                    {
+                        ddlApprovedManagers.Items.Add(new ListItem(approvedByName, approvedById.Value.ToString()));
+                        ddlApprovedManagers.SelectedValue = approvedById.Value.ToString();
+                    }
+                }
+                else
+                {
+                    ddlApprovedManagers.SelectedIndex = 0;
+                }
+                trAddORTApprovedBy.Style.Add(AttributeDisplay, string.Empty);
+                trAddORTManagersList.Style.Add(AttributeDisplay, string.Empty);
+            }
+            else
+            {
+                ddlApprovedManagers.SelectedIndex = 0;
+                trAddORTApprovedBy.Style.Add(AttributeDisplay, AttributeValueNone);
+                trAddORTManagersList.Style.Add(AttributeDisplay, AttributeValueNone);
             }
         }
 
@@ -277,13 +337,11 @@ namespace PraticeManagement.Controls
                     var administrativeTimeTypes = ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(true, false));
                     DataHelper.FillListDefault(ddlTimeTypesSingleDay, "- - Make Selection - -", administrativeTimeTypes, false);
                     DataHelper.FillListDefault(ddlTimeTypesTimeOff, "- - Make Selection - -", administrativeTimeTypes, false);
-
-                    var managers = ServiceCallers.Custom.Person(p => p.GetCurrentActivePracticeAreaManagerList());
-                    DataHelper.FillListDefault(ddlApprovedManagers, "- - Select a Manager - -", managers, false);
-                    DataHelper.FillListDefault(ddlSingleDayApprovedManagers, "- - Select a Manager - -", managers, false);
-
                     AddAttributesToTimeTypesDropdown(ddlTimeTypesSingleDay, administrativeTimeTypes);
                     AddAttributesToTimeTypesDropdown(ddlTimeTypesTimeOff, administrativeTimeTypes);
+
+                    DataHelper.FillListDefault(ddlApprovedManagers, "- - Select a Manager - -", ApprovedManagers, false);
+                    DataHelper.FillListDefault(ddlSingleDayApprovedManagers, "- - Select a Manager - -", ApprovedManagers, false);
                 }
                 else
                 {
@@ -327,7 +385,7 @@ namespace PraticeManagement.Controls
             {
                 int? approvedBy = null;
                 var timeTypeSelectedItem = ddlTimeTypesSingleDay.SelectedItem;
-                if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true")
+                if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true" && !string.IsNullOrEmpty(ddlSingleDayApprovedManagers.SelectedValue))
                 {
                     approvedBy = Convert.ToInt32(ddlSingleDayApprovedManagers.SelectedValue);
                 }
@@ -364,7 +422,7 @@ namespace PraticeManagement.Controls
             {
                 int? approvedBy = null;
                 var timeTypeSelectedItem = ddlTimeTypesSingleDay.SelectedItem;
-                if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true")
+                if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true" && !string.IsNullOrEmpty(ddlSingleDayApprovedManagers.SelectedValue))
                 {
                     approvedBy = Convert.ToInt32(ddlSingleDayApprovedManagers.SelectedValue);
                 }
@@ -409,8 +467,8 @@ namespace PraticeManagement.Controls
             ddlTimeTypesTimeOff.SelectedIndex = 0;
             txthoursTimeOff.Text = "8.00";
             ddlApprovedManagers.SelectedIndex = 0;
-            trAddORTApprovedBy.Style.Add("display", "none");
-            trAddORTManagersList.Style.Add("display", "none");
+            trAddORTApprovedBy.Style.Add(AttributeDisplay, AttributeValueNone);
+            trAddORTManagersList.Style.Add(AttributeDisplay, AttributeValueNone);
             mpeAddTimeOff.Show();
             upnlTimeOff.Update();
         }
@@ -424,7 +482,7 @@ namespace PraticeManagement.Controls
                 {
                     int? approvedBy = null;
                     var timeTypeSelectedItem = ddlTimeTypesTimeOff.SelectedItem;
-                    if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true")
+                    if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true" && !string.IsNullOrEmpty(ddlApprovedManagers.SelectedValue))
                     {
                         approvedBy = Convert.ToInt32(ddlApprovedManagers.SelectedValue);
                     }
@@ -485,7 +543,7 @@ namespace PraticeManagement.Controls
             {
                 int? approvedBy = null;
                 var timeTypeSelectedItem = ddlTimeTypesTimeOff.SelectedItem;
-                if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true")
+                if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true" && !string.IsNullOrEmpty(ddlApprovedManagers.SelectedValue))
                 {
                     approvedBy = Convert.ToInt32(ddlApprovedManagers.SelectedValue);
                 }
@@ -508,6 +566,24 @@ namespace PraticeManagement.Controls
 
 
             upnlTimeOff.Update();
+        }
+
+        protected void cvSingleDayApprovedManagers_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var ddlTimeTypesSingleDaySelectedItem = ddlTimeTypesSingleDay.SelectedItem;
+            if (ddlTimeTypesSingleDaySelectedItem.Attributes["IsORT"].ToLower() == "true" && ddlSingleDayApprovedManagers.SelectedIndex == 0)
+            {
+                args.IsValid = false;
+            }
+        }
+
+        protected void cvApprovedManagers_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var ddlTimeTypesSelectedItem = ddlTimeTypesTimeOff.SelectedItem;
+            if (ddlTimeTypesSelectedItem.Attributes["IsORT"].ToLower() == "true" && ddlApprovedManagers.SelectedIndex == 0)
+            {
+                args.IsValid = false;
+            }
         }
 
         protected void cvSubstituteDay_ServerValidate(object source, ServerValidateEventArgs args)
