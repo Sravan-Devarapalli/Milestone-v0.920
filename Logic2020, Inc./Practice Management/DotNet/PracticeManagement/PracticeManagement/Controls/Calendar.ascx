@@ -139,6 +139,12 @@
     function endRequestHandle(sender, Args) {
 
         changeAlternateitemscolrsForCBL();
+        
+        var ddlTimeTypesSingleDay = document.getElementById('<%=ddlTimeTypesSingleDay.ClientID %>');
+        var ddlTimeTypesTimeOff = document.getElementById('<%=ddlTimeTypesTimeOff.ClientID %>');
+        updateTimeOffPopupManagersList(ddlTimeTypesSingleDay);
+        addTimeOffPopupManagersList(ddlTimeTypesTimeOff);
+
     }
 
 
