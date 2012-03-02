@@ -77,7 +77,7 @@ namespace PraticeManagement.Controls
                 return personId;
             }
         }
-        
+
         private bool SelectedPersonHasPermissionToEditCalender
         {
             get
@@ -91,7 +91,7 @@ namespace PraticeManagement.Controls
             }
 
         }
-        
+
         public bool CompanyHolidays
         {
             get;
@@ -161,8 +161,8 @@ namespace PraticeManagement.Controls
             {
                 if (approvedById.HasValue)
                 {
-                    ddlSingleDayApprovedManagers.DataSource = ApprovedManagers;
-                    ddlSingleDayApprovedManagers.DataBind();
+                    DataHelper.FillListDefault(ddlSingleDayApprovedManagers, "- - Select a Manager - -", ApprovedManagers, false);
+
                     if (ApprovedManagers.Where(p => p.Id == approvedById.Value).Count() > 0)
                     {
                         ddlSingleDayApprovedManagers.SelectedValue = approvedById.Value.ToString();
@@ -172,7 +172,7 @@ namespace PraticeManagement.Controls
                         ddlSingleDayApprovedManagers.Items.Add(new ListItem(approvedByName, approvedById.Value.ToString()));
                         ddlSingleDayApprovedManagers.SelectedValue = approvedById.Value.ToString();
                     }
-                    
+
                 }
                 else
                 {
@@ -203,8 +203,7 @@ namespace PraticeManagement.Controls
             {
                 if (approvedById.HasValue)
                 {
-                    ddlApprovedManagers.DataSource = ApprovedManagers;
-                    ddlApprovedManagers.DataBind();
+                    DataHelper.FillListDefault(ddlApprovedManagers, "- - Select a Manager - -", ApprovedManagers, false);
                     if (ApprovedManagers.Where(p => p.Id == approvedById.Value).Count() > 0)
                     {
                         ddlApprovedManagers.SelectedValue = approvedById.Value.ToString();
@@ -230,7 +229,7 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public void PopulateEditConditionPopupControls(DateTime startDate, DateTime endDate,DateTime selectedDate)
+        public void PopulateEditConditionPopupControls(DateTime startDate, DateTime endDate, DateTime selectedDate)
         {
             rbEditSeries.Checked = true;
             rbEditSingleDay.Checked = false;
@@ -374,6 +373,10 @@ namespace PraticeManagement.Controls
                     {
                         item.Attributes.Add("IsORT", obj.IsORTTimeType.ToString());
                     }
+                }
+                else
+                {
+                    item.Attributes.Add("IsORT", false.ToString());
                 }
             }
         }
@@ -629,7 +632,7 @@ namespace PraticeManagement.Controls
                 }
             }
         }
-      
+
         protected void btnDeleteSubstituteDay_Click(object sender, EventArgs e)
         {
             DeleteSubstituteDay(SelectedPersonId.Value, Convert.ToDateTime(hdnHolidayDate.Value));
@@ -842,7 +845,7 @@ namespace PraticeManagement.Controls
             var _contactSupport = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.SMTP, Constants.ResourceKeys.PMSupportEmailAddressKey);
             contactSupportMailToLink.NavigateUrl = string.Format(MailToSubjectFormat, _contactSupport, DataHelper.CurrentPerson.PersonLastFirstName);
         }
-        
+
         protected void calendar_PreRender(object sender, EventArgs e)
         {
             MonthCalendar calendar = sender as MonthCalendar;
