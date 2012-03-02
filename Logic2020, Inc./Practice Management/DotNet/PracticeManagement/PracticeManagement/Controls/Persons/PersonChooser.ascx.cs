@@ -11,6 +11,7 @@ namespace PraticeManagement.Controls.Persons
         #region Constants
 
         private const string SELECTED_PERSON_ID = "SelectedPersonId";
+        private const string SelectedPersonFormat = "{0}";
 
         #endregion
 
@@ -30,7 +31,7 @@ namespace PraticeManagement.Controls.Persons
 
         public Person SelectedPerson
         {
-            get { return (Person) ViewState[SELECTED_PERSON_ID]; }
+            get { return (Person)ViewState[SELECTED_PERSON_ID]; }
             set { ViewState[SELECTED_PERSON_ID] = value; }
         }
 
@@ -78,12 +79,11 @@ namespace PraticeManagement.Controls.Persons
                 {
                     ddlPersons.Visible = false;
                     lblTip.Text =
-                        string.Format(
-                            Resources.Controls.TE_SelectedPerson,
+                        string.Format(SelectedPersonFormat,
                             currentPerson);
                 }
 
-                SelectedPerson = personId == currentPerson.Id.Value ? currentPerson:DataHelper.GetPerson(personId);
+                SelectedPerson = personId == currentPerson.Id.Value ? currentPerson : DataHelper.GetPerson(personId);
             }
         }
 
