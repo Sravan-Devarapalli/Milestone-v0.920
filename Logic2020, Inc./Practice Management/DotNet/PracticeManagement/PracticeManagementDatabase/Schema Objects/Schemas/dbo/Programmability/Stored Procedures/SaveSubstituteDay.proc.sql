@@ -108,6 +108,10 @@ BEGIN
 	ELSE
 	BEGIN
 
+		DELETE PC
+		FROM dbo.PersonCalendar AS PC
+		WHERE PC.Date = @Date AND PC.PersonId =@PersonId
+
 		INSERT INTO dbo.PersonCalendar(ActualHours,Date,DayOff,TimeTypeId,IsFromTimeEntry,PersonId,SubstituteDate,Description, ApprovedBy)
 		SELECT NULL,@Date,0,NULL,0,@PersonId,@SubstituteDayDate ,NULL, NULL
 		UNION 
