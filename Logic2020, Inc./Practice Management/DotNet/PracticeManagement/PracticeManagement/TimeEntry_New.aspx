@@ -358,7 +358,7 @@
                                             <td class="DeleteWidth">
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
-                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
+                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
                                             </td>
                                             <asp:Repeater ID="repAccountProjectSection" runat="server">
                                                 <ItemTemplate>
@@ -400,7 +400,7 @@
                                             <td class="DeleteWidth">
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
-                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
+                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
                                             </td>
                                             <asp:Repeater ID="repAccountProjectSection" runat="server">
                                                 <ItemTemplate>
@@ -492,7 +492,7 @@
                                             <td class="DeleteWidth">
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
-                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value %>
+                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value %>
                                             </td>
                                             <asp:Repeater ID="repAccountProjectSection" runat="server">
                                                 <ItemTemplate>
@@ -534,7 +534,7 @@
                                             <td class="DeleteWidth">
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
-                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value %>
+                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value %>
                                             </td>
                                             <asp:Repeater ID="repAccountProjectSection" runat="server">
                                                 <ItemTemplate>
@@ -626,7 +626,7 @@
                                             <td class="DeleteWidth">
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
-                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
+                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
                                             </td>
                                             <asp:Repeater ID="repAccountProjectSection" runat="server">
                                                 <ItemTemplate>
@@ -668,7 +668,7 @@
                                             <td class="DeleteWidth">
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
-                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
+                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
                                             </td>
                                             <asp:Repeater ID="repAccountProjectSection" runat="server">
                                                 <ItemTemplate>
@@ -733,15 +733,14 @@
                                 <table class="CompPerfTable WholeWidth">
                                     <tr class="CompPerfHeader WholeWidth">
                                         <td class="DeleteWidth">
-                                            </div>
                                         </td>
                                         <td class="time-entry-bar-time-typesNewHeader">
-                                            Work Type</div>
+                                            Work Type
                                         </td>
                                         <asp:Repeater ID="repAdministrativeTesHeader" runat="server">
                                             <ItemTemplate>
                                                 <td class="time-entry-bar-single-teNew">
-                                                    <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%></div>
+                                                    <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%>
                                                 </td>
                                             </ItemTemplate>
                                         </asp:Repeater>
@@ -775,6 +774,9 @@
                             runat="server" TargetControlID="lblDupilcateOptionsRemoveExtenderAdministrative" />
                         <label id="lblDupilcateOptionsRemoveExtenderAdministrative" runat="server" />
                     </asp:Panel>
+                    <div class="buttons-block">
+                        <div style="font-size: 14px; font-weight:bold; margin-left:16px;">TOTAL HOURS</div>
+                    </div>
                     <asp:Panel ID="pnlTotalSection" runat="server" Style="padding: 10px 0px 10px 0px"
                         CssClass="cp bg-white">
                         <table class="CompPerfTable WholeWidth">
@@ -799,7 +801,6 @@
                                 <td class="DeleteWidth">
                                 </td>
                                 <td class="time-entry-bar-time-typesNew TOTALHOURSTD DayTotalHoursBorderRight">
-                                    TOTAL HOURS:
                                 </td>
                                 <asp:Repeater ID="repDayTotalHours" OnItemDataBound="repDayTotalHours_OnItemDataBound"
                                     runat="server">
@@ -910,7 +911,8 @@
                         </table>
                     </div>
                 </asp:Panel>
-                <uc2:CalendarLegend ID="CalendarLegend" runat="server" disableChevron="true" />
+                <div class="TimeEntry_New_Legend">
+                <uc2:CalendarLegend ID="CalendarLegend" runat="server" disableChevron="true" /></div>
                 <asp:HiddenField ID="hdnAddProject" runat="server" />
                 <AjaxControlToolkit:ModalPopupExtender ID="mpeProjectSectionPopup" runat="server"
                     TargetControlID="hdnAddProject" CancelControlID="btnCancelProjectSection" BehaviorID="mpeProjectSectionPopup"
