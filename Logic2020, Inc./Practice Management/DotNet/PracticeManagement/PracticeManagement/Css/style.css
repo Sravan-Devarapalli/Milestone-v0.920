@@ -1434,7 +1434,6 @@ table.sortable thead
 
 .time-entry-new-bg-light-frame
 {
-    background-color: #e2ebff;
     padding: 5px 0px 5px 0px;
     width: 100%;
 }
@@ -2479,4 +2478,16 @@ end pixcel
 .ApprovedManagerDropdown
 {
     width: 68%;
+}
+
+.TimeEntry_New_Legend .buttons-block
+{
+    background-color: White !important;
+}
+
+.TimeEntry_New_Legend .buttons-block .filters TD, .TimeEntry_New_Legend .buttons-block .filters div
+{
+    font-size: 11px !important;
+    height: 12px !important;
+    vertical-align: middle !important;
 }
