@@ -1329,13 +1329,18 @@ namespace DataAccess
                 int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
                 int isPTOIndex = reader.GetOrdinal(Constants.ColumnNames.IsPTOColumn);
                 int isHolidayIndex = reader.GetOrdinal(Constants.ColumnNames.IsHolidayColumn);
+                int isORTIndex = reader.GetOrdinal(Constants.ColumnNames.IsORTColumn);
 
                 while (reader.Read())
                 {
-                    var tesection = timeEntrySections.First(tes => tes.SectionId == TimeEntrySectionType.Administrative && tes.Project.Id == reader.GetInt32(projectIdIndex));
+                    if (timeEntrySections.Any(tes => tes.SectionId == TimeEntrySectionType.Administrative && tes.Project.Id == reader.GetInt32(projectIdIndex)))
+                    {
+                        var tesection = timeEntrySections.First(tes => tes.SectionId == TimeEntrySectionType.Administrative && tes.Project.Id == reader.GetInt32(projectIdIndex));
 
-                    tesection.Project.IsPTOProject = (reader.GetInt32(isPTOIndex) == 1);
-                    tesection.Project.IsHolidayProject = (reader.GetInt32(isHolidayIndex) == 1);
+                        tesection.Project.IsPTOProject = (reader.GetInt32(isPTOIndex) == 1);
+                        tesection.Project.IsHolidayProject = (reader.GetInt32(isHolidayIndex) == 1);
+                        tesection.Project.IsORTProject = (reader.GetInt32(isORTIndex) == 1);
+                    }
                 }
             }
            
@@ -1473,8 +1478,11 @@ namespace DataAccess
 
                     if (approvedByIdIndex > 0 && approvedByFirstNameIndex > 0 && approvedByLastNameIndex > 0)
                     {
-                        var approvedByPerson = new Person { Id = reader.GetInt32(approvedByIdIndex), FirstName = reader.GetString(approvedByFirstNameIndex), LastName = reader.GetString(approvedByLastNameIndex) };
-                        timeEntry.ApprovedBy = approvedByPerson;
+                        if (!reader.IsDBNull(approvedByIdIndex) && !reader.IsDBNull(approvedByFirstNameIndex) && !reader.IsDBNull(approvedByLastNameIndex))
+                        {
+                            var approvedByPerson = new Person { Id = reader.GetInt32(approvedByIdIndex), FirstName = reader.GetString(approvedByFirstNameIndex), LastName = reader.GetString(approvedByLastNameIndex) };
+                            timeEntry.ApprovedBy = approvedByPerson;
+                        }
                     }
 
                     timeEntries.Add(timeEntry);
