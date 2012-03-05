@@ -319,6 +319,25 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        internal void RoundActualHours(XElement element)
+        {
+            string hours = tbActualHours.Text;
+            if(!string.IsNullOrEmpty(hours))
+            {
+                double _hours = Convert.ToDouble(hours);
+                if (_hours % 0.25 < 0.125)
+                {
+                    _hours = _hours - _hours % 0.25;
+                }
+                else
+                {
+                    _hours = _hours + (0.25 - _hours % 0.25);
+                }
+                hours = _hours.ToString();
+                element.Attribute(XName.Get("ActualHours")).Value = hours;
+            }
+        }
+       
         internal void UpdateEditedValues(XElement element)
         {
             if (element.HasAttributes && element.Attribute(XName.Get("ActualHours")) != null)
@@ -385,10 +404,10 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 return false;
             }
-            //  Check that hours is double between 0.0 and 8.0
+            //  Check that hours is double between 0.25 and 8.0
             if (double.TryParse(tbActualHours.Text, out hours))
             {
-                if (hours > 0.0 && hours <= 8 && hours % 0.25 == 0 )
+                if (hours > 0.25 && hours <= 8)
                 {
                     return true;
                 }
