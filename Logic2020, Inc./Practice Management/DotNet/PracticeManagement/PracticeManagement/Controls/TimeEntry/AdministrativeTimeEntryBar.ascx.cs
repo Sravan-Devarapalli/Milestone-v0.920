@@ -303,6 +303,24 @@ namespace PraticeManagement.Controls.TimeEntry
             tes.DataBind();
         }
 
+        internal void RoundActualHours(List<XElement> calendarItemElements)
+        {
+            for (int k = 0; k < calendarItemElements.Count; k++)
+            {
+                var nonbillableSte = tes.Items[k].FindControl(steId) as SingleTimeEntry_New;
+                var calendarItemElement = calendarItemElements[k];
+                if (calendarItemElement.HasElements)
+                {
+                    var nonBillableElements = calendarItemElement.Descendants(XName.Get(TimeEntry_New.TimeEntryRecordXname)).ToList().Count > 0 ? calendarItemElement.Descendants(XName.Get(TimeEntry_New.TimeEntryRecordXname)).Where(ter => ter.Attribute(XName.Get(TimeEntry_New.IsChargeableXname)).Value.ToLowerInvariant() == "false").ToList() : null;
+                    if (nonBillableElements != null && nonBillableElements.Count > 0)
+                    {
+                        var nonbillableElement = nonBillableElements != null && nonBillableElements.Count > 0 ? nonBillableElements.First() : null;
+                        nonbillableSte.RoundActualHours(nonbillableElement);
+                    }
+                }
+            }
+        }
+
         internal void UpdateNoteAndActualHours(List<XElement> calendarItemElements)
         {
             for (int k = 0; k < calendarItemElements.Count; k++)
