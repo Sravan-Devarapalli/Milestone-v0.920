@@ -20,6 +20,7 @@ PraticeManagement.Controls.Generic.DuplicateOptionsRemove.DuplicateOptionsRemove
         }
         this.saveOptions();
         this.update();
+        this.showOrHideApprovedBy();
     },
     dispose: function () {
         // Cleanup code
@@ -41,7 +42,7 @@ PraticeManagement.Controls.Generic.DuplicateOptionsRemove.DuplicateOptionsRemove
                     if (opt.value == control.value) {
                         var jsonApprovedByClientIdsString = control.getAttribute('JsonApprovedByClientIds');
                         var approvedByClientIdsJson = jQuery.parseJSON(jsonApprovedByClientIdsString);
-                        
+
                         if (approvedByClientIdsJson != null) {
                             if (opt.getAttribute('IsORT') != null && opt.getAttribute('IsORT').toLowerCase() == 'true') {
 
