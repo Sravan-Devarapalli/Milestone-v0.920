@@ -278,6 +278,7 @@
             public const string ApprovedByNameColumn = "ApprovedByName";
             public const string ApprovedByFirstNameColumn = "ApprovedByFirstName";
             public const string ApprovedByLastNameColumn = "ApprovedByLastName";
+            public const string IsORTColumn = "IsORT";
             
         }
 
