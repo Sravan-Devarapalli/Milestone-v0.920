@@ -9,6 +9,7 @@ using DataTransferObjects.TimeEntry;
 using System.Xml.Linq;
 using PraticeManagement.Controls.Generic.EnableDisableExtForAdminSection;
 using System.Web.UI.HtmlControls;
+using System.Web.Script.Serialization;
 
 namespace PraticeManagement.Controls.TimeEntry
 {
@@ -24,6 +25,8 @@ namespace PraticeManagement.Controls.TimeEntry
         #endregion
 
         #region Properties
+
+        public string TdCellSectionClientID { get { return tdPlusSection.ClientID; } }
 
         public List<XElement> TeBarDataSource
         {
@@ -79,6 +82,19 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        public bool IsORT
+        {
+            get
+            {
+                return ViewState["IsORT_KEY"] != null ? (bool)ViewState["IsORT_KEY"] : false;
+            }
+            set
+            {
+                ViewState["IsORT_KEY"] = value;
+            }
+        }
+
+
         public TimeTypeRecord[] TimeTypes { get; set; }
 
         public TimeTypeRecord SelectedTimeType { get; set; }
@@ -103,6 +119,12 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        public List<string> TblApprovedByClientIds
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         #region Control events
@@ -117,13 +139,19 @@ namespace PraticeManagement.Controls.TimeEntry
             extEnableDisable.WeekStartDate = HostingPage.SelectedDates[0].ToString();
             extEnableDisable.PersonId = HostingPage.SelectedPerson.Id.ToString();
             extEnableDisable.PopUpBehaviourId = TimeEntry_New.mpeTimetypeAlertMessageBehaviourId;
+
+            AddAttributesToTimeTypesDropdown(ddlTimeTypes, TimeTypes);
         }
 
         protected void repEntries_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            if (e.Item.ItemType == ListItemType.Header)
             {
-                var ste = e.Item.FindControl(steId) as SingleTimeEntry_New;
+                TblApprovedByClientIds = new List<string>();
+            }
+            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var ste = e.Item.FindControl(steId) as AdministrativeSingleTimeEntry;
 
                 var calendarItem = (XElement)e.Item.DataItem;
 
@@ -150,10 +178,10 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 ste.IsPTO = IsPTO;
                 ste.IsHoliday = IsHoliday;
+                ste.IsORT = IsORT;
 
                 tdTimeTypes.Attributes["class"] ="time-entry-bar-time-typesNew " + GetDayCssClass();
 
-                ste.IsAdminstrativeTimeType = true;
                 DateTime date = Convert.ToDateTime(calendarItem.Attribute(XName.Get(TimeEntry_New.DateXname)).Value);
                 if (!HostingPage.AdminExtenderHoursControls.ContainsKey(date))
                 {
@@ -194,6 +222,13 @@ namespace PraticeManagement.Controls.TimeEntry
                 var nbterecord = (calendarItem.HasElements && calendarItem.Descendants(XName.Get(TimeEntry_New.TimeEntryRecordXname)).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").ToList().Count > 0) ? calendarItem.Descendants(XName.Get("TimeEntryRecord")).Where(ter => ter.Attribute(XName.Get("IsChargeable")).Value.ToLowerInvariant() == "false").First() : null;
                 InitTimeEntryControl(ste, date, nbterecord);
 
+                TblApprovedByClientIds.Add(ste.ApprovedByClientId);
+
+            }
+            else if (e.Item.ItemType == ListItemType.Footer)
+            {
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                ddlTimeTypes.Attributes["JsonApprovedByClientIds"] = serializer.Serialize(TblApprovedByClientIds);
             }
         }
 
@@ -212,7 +247,7 @@ namespace PraticeManagement.Controls.TimeEntry
             int workTypeOldID;
             int.TryParse(imgDropTes.Attributes[workTypeOldIdAttribute], out workTypeOldID);
 
-            //Remove Worktype from xml
+            //Remove Work type from xml
             HostingPage.RemoveWorktypeFromXMLForAdminstrativeSection(repItemIndex);
 
             //Delete TimeEntry from database
@@ -238,7 +273,6 @@ namespace PraticeManagement.Controls.TimeEntry
             return calendarItem.Attribute(XName.Get(TimeEntry_New.CssClassXname)).Value;
         }
 
-
         private string GetDayCssClass()
         {
             if (IsPTO || IsHoliday)
@@ -248,9 +282,7 @@ namespace PraticeManagement.Controls.TimeEntry
             return "textCenter";
         }
 
-
-
-        private void InitTimeEntryControl(SingleTimeEntry_New ste, DateTime date, XElement terXlement)
+        private void InitTimeEntryControl(AdministrativeSingleTimeEntry ste, DateTime date, XElement terXlement)
         {
             ste.DateBehind = date;
             ste.TimeEntryRecordElement = terXlement;
@@ -307,7 +339,7 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             for (int k = 0; k < calendarItemElements.Count; k++)
             {
-                var nonbillableSte = tes.Items[k].FindControl(steId) as SingleTimeEntry_New;
+                var nonbillableSte = tes.Items[k].FindControl(steId) as AdministrativeSingleTimeEntry;
                 var calendarItemElement = calendarItemElements[k];
                 if (calendarItemElement.HasElements)
                 {
@@ -326,7 +358,7 @@ namespace PraticeManagement.Controls.TimeEntry
             for (int k = 0; k < calendarItemElements.Count; k++)
             {
 
-                var nonbillableSte = tes.Items[k].FindControl(steId) as SingleTimeEntry_New;
+                var nonbillableSte = tes.Items[k].FindControl(steId) as AdministrativeSingleTimeEntry;
 
                 var calendarItemElement = calendarItemElements[k];
                 if (calendarItemElement.HasElements)
@@ -359,7 +391,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
         internal void UpdateVerticalTotalCalculatorExtenderId(int index, string clientId)
         {
-            var nonbillableSte = tes.Items[index].FindControl(steId) as SingleTimeEntry_New;
+            var nonbillableSte = tes.Items[index].FindControl(steId) as AdministrativeSingleTimeEntry;
             nonbillableSte.UpdateVerticalTotalCalculatorExtenderId(clientId);
         }
 
@@ -367,7 +399,7 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             if (IsPTO)
             {
-                var nonbillableSte = tes.Items[index].FindControl(steId) as SingleTimeEntry_New;
+                var nonbillableSte = tes.Items[index].FindControl(steId) as AdministrativeSingleTimeEntry;
                 nonbillableSte.AddAttributeToPTOTextBox(extTotalHours.ClientID);
             }
         }
@@ -393,7 +425,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
             foreach (RepeaterItem tesItem in tes.Items)
             {
-                var nonbillableSte = tesItem.FindControl(steId) as SingleTimeEntry_New;
+                var nonbillableSte = tesItem.FindControl(steId) as AdministrativeSingleTimeEntry;
 
                 if (!isThereAtleastOneTimeEntryrecord)
                 {
@@ -413,6 +445,7 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             var workTypeId = (IsPTO || IsHoliday) ? Convert.ToInt32(hdnworkTypeId.Value) : Convert.ToInt32(ddlTimeTypes.SelectedValue); ;
             workTypeElement.Attribute(XName.Get(TimeEntry_New.IdXname)).Value = workTypeId.ToString();
+            accountAndProjectSelectionElement.Attribute(XName.Get(TimeEntry_New.IsORTXname)).Value = ddlTimeTypes.SelectedItem.Attributes[TimeEntry_New.IsORTXname];
 
             if (workTypeId > 0 && !(IsPTO || IsHoliday))
             {
@@ -424,10 +457,28 @@ namespace PraticeManagement.Controls.TimeEntry
 
         }
 
+        private void AddAttributesToTimeTypesDropdown(CustomDropDown ddlTimeTypes, TimeTypeRecord[] data)
+        {
+            foreach (ListItem item in ddlTimeTypes.Items)
+            {
+                if (!string.IsNullOrEmpty(item.Value) && Convert.ToInt32(item.Value) >= 0 )
+                {
+                    var id = Convert.ToInt32(item.Value);
+                    var obj = data.Where(tt => tt.Id == id).FirstOrDefault();
+                    if (obj != null)
+                    {
+                        item.Attributes.Add(TimeEntry_New.IsORTXname, obj.IsORTTimeType.ToString());
+                    }
+                }
+                else
+                {
+                    item.Attributes.Add(TimeEntry_New.IsORTXname, false.ToString());
+                }
+            }
+        }
+
         #endregion
 
-
-        public string TdCellSectionClientID { get { return tdPlusSection.ClientID; } }
     }
 }
 
