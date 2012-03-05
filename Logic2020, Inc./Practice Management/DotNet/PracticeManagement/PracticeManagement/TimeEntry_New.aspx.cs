@@ -198,6 +198,8 @@ namespace PraticeManagement
 
         public bool IsValidDayTotal { get; set; }
 
+        public bool IsValidApprovedManager { get; set; }
+
         public bool IsWeekOrPersonChanged
         {
             set
@@ -510,6 +512,11 @@ namespace PraticeManagement
         protected void cvDayTotal_ServerValidate(object source, ServerValidateEventArgs args)
         {
             args.IsValid = IsValidDayTotal;
+        }
+
+        protected void cvApprovedManager_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = IsValidApprovedManager;
         }
 
         protected void custActualHours_ServerValidate(object source, ServerValidateEventArgs args)
@@ -1526,7 +1533,7 @@ namespace PraticeManagement
 
         private void ValidateAll()
         {
-            IsValidDayTotal = IsValidHours = IsValidNote = IsValidWorkType = IsValidAdminstrativeHours = true;
+            IsValidDayTotal = IsValidHours = IsValidNote = IsValidWorkType = IsValidAdminstrativeHours = IsValidApprovedManager = true;
 
             foreach (RepeaterItem barItem in repProjectSections.Items)
             {
