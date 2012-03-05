@@ -37,7 +37,7 @@ namespace PraticeManagement.Controls.TimeEntry {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlTimeTypes;
+        protected global::PraticeManagement.Controls.CustomDropDown ddlTimeTypes;
         
         /// <summary>
         /// SelectCutOffExtender1 control.
