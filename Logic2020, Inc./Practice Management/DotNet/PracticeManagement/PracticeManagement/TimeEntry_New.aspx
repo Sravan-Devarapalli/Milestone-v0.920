@@ -333,7 +333,7 @@
                                     <td class="DeleteWidth">
                                     </td>
                                     <td class="time-entry-bar-time-typesNewHeader">
-                                        Work Type
+                                        
                                     </td>
                                     <asp:Repeater ID="repProjectSectionHeader" runat="server">
                                         <ItemTemplate>
@@ -466,7 +466,7 @@
                                     <td class="DeleteWidth">
                                     </td>
                                     <td class="time-entry-bar-time-typesNewHeader">
-                                        Work Type
+                                        
                                     </td>
                                     <asp:Repeater ID="repBusinessDevelopmentSectionHeader" runat="server">
                                         <ItemTemplate>
@@ -597,10 +597,8 @@
                             <table class="CompPerfTable WholeWidth">
                                 <tr class="CompPerfHeader WholeWidth">
                                     <td class="DeleteWidth">
-                                        </div>
                                     </td>
                                     <td class="time-entry-bar-time-typesNewHeader">
-                                        Work Type</div>
                                     </td>
                                     <asp:Repeater ID="repInternalSectionHeader" runat="server">
                                         <ItemTemplate>
@@ -735,7 +733,7 @@
                                         <td class="DeleteWidth">
                                         </td>
                                         <td class="time-entry-bar-time-typesNewHeader">
-                                            Work Type
+                                            
                                         </td>
                                         <asp:Repeater ID="repAdministrativeTesHeader" runat="server">
                                             <ItemTemplate>
@@ -895,8 +893,8 @@
                                         ErrorMessage="Hours should be real and 0.01-24.00. Invalid entries are highlighted in red."
                                         SetFocusOnError="true" OnServerValidate="custActualHours_ServerValidate" EnableClientScript="false"
                                         Display="None" Text="*" ValidationGroup="TE" />
-                                    <asp:CustomValidator ID="cvAdminstrativeHours" runat="server" ToolTip="Adminstrative Work Type Hours should be in 0.25 incr., greater than 0.25 and less or equals to 8. Invalid entries are highlighted in red."
-                                        ErrorMessage="Adminstrative Work Type Hours should be in 0.25 incr., greater than 0.25 and less or equals to 8. Invalid entries are highlighted in red."
+                                    <asp:CustomValidator ID="cvAdminstrativeHours" runat="server" ToolTip="Adminstrative Work Type Hours must be between 0.25 and 8.00. Invalid entries are highlighted in red."
+                                        ErrorMessage="Adminstrative Work Type Hours must be between 0.25 and 8.00. Invalid entries are highlighted in red."
                                         SetFocusOnError="true" OnServerValidate="custAdminstrativeHours_ServerValidate"
                                         EnableClientScript="false" Display="None" Text="*" ValidationGroup="TE" />
                                     <asp:CustomValidator ID="custNote" runat="server" ErrorMessage="Note should be 3-1000 characters long. Invalid entries are highlighted in red."
