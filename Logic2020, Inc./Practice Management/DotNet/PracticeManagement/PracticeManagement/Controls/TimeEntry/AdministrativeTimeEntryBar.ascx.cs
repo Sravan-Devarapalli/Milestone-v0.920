@@ -425,14 +425,14 @@ namespace PraticeManagement.Controls.TimeEntry
 
             foreach (RepeaterItem tesItem in tes.Items)
             {
-                var nonbillableSte = tesItem.FindControl(steId) as AdministrativeSingleTimeEntry;
+                var nonbillableASte = tesItem.FindControl(steId) as AdministrativeSingleTimeEntry;
 
                 if (!isThereAtleastOneTimeEntryrecord)
                 {
-                    isThereAtleastOneTimeEntryrecord = nonbillableSte.IsThereAtleastOneTimeEntryrecord;
+                    isThereAtleastOneTimeEntryrecord = nonbillableASte.IsThereAtleastOneTimeEntryrecord;
                 }
 
-                nonbillableSte.ValidateNoteAndHours();
+                nonbillableASte.ValidateNoteAndHours(ddlTimeTypes.SelectedItem.Attributes[TimeEntry_New.IsORTXname] == true.ToString());
             }
 
             if (isThereAtleastOneTimeEntryrecord && !IsPTO && !IsHoliday && !ValideWorkTypeDropDown())
@@ -459,20 +459,26 @@ namespace PraticeManagement.Controls.TimeEntry
 
         private void AddAttributesToTimeTypesDropdown(CustomDropDown ddlTimeTypes, TimeTypeRecord[] data)
         {
-            foreach (ListItem item in ddlTimeTypes.Items)
+            if (data != null)
             {
-                if (!string.IsNullOrEmpty(item.Value) && Convert.ToInt32(item.Value) >= 0 )
+                foreach (ListItem item in ddlTimeTypes.Items)
                 {
-                    var id = Convert.ToInt32(item.Value);
-                    var obj = data.Where(tt => tt.Id == id).FirstOrDefault();
-                    if (obj != null)
+                    if (!string.IsNullOrEmpty(item.Value) && Convert.ToInt32(item.Value) >= 0)
                     {
-                        item.Attributes.Add(TimeEntry_New.IsORTXname, obj.IsORTTimeType.ToString());
+                        var id = Convert.ToInt32(item.Value);
+                        if (data.Any(tt => tt.Id == id))
+                        {
+                            var obj = data.Where(tt => tt.Id == id).First();
+                            if (obj != null)
+                            {
+                                item.Attributes.Add(TimeEntry_New.IsORTXname, obj.IsORTTimeType.ToString());
+                            }
+                        }
                     }
-                }
-                else
-                {
-                    item.Attributes.Add(TimeEntry_New.IsORTXname, false.ToString());
+                    else
+                    {
+                        item.Attributes.Add(TimeEntry_New.IsORTXname, false.ToString());
+                    }
                 }
             }
         }
