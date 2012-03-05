@@ -367,6 +367,7 @@
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
     <Content Include="Controls\Reports\TimeEntriesByPerson.ascx" />
+    <Content Include="Controls\TimeEntry\AdministrativeSingleTimeEntry.ascx" />
     <Content Include="Controls\TimeEntry\AdministrativeTimeEntryBar.ascx" />
     <Content Include="Controls\TimeEntry\BillableAndNonBillableSingleTimeEntry.ascx" />
     <Content Include="Controls\TimeEntry\BillableAndNonBillableTimeEntryBar.ascx" />
@@ -1193,6 +1194,13 @@
     </Compile>
     <Compile Include="Controls\Reports\TimeEntriesGetByPersonHandler.ashx.cs">
       <DependentUpon>TimeEntriesGetByPersonHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TimeEntry\AdministrativeSingleTimeEntry.ascx.cs">
+      <DependentUpon>AdministrativeSingleTimeEntry.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\TimeEntry\AdministrativeSingleTimeEntry.ascx.designer.cs">
+      <DependentUpon>AdministrativeSingleTimeEntry.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\TimeEntry\AdministrativeTimeEntryBar.ascx.cs">
       <DependentUpon>AdministrativeTimeEntryBar.ascx</DependentUpon>
