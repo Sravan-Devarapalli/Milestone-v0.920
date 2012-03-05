@@ -903,6 +903,9 @@
                                     <asp:CustomValidator ID="cvDayTotal" runat="server" ErrorMessage="Day Total hours must be lessthan or equals to 24."
                                         OnServerValidate="cvDayTotal_ServerValidate" EnableClientScript="false" Text="*"
                                         Display="None" SetFocusOnError="true" ValidationGroup="TE" ToolTip="Day Total hours must be lessthan or equals to 24." />
+                                    <asp:CustomValidator ID="cvApprovedManager" runat="server" ErrorMessage="Approved Manager required."
+                                        OnServerValidate="cvApprovedManager_ServerValidate" EnableClientScript="false" Text="*"
+                                        Display="None" SetFocusOnError="true" ValidationGroup="TE" ToolTip="Approved Manager required." />
                                     <asp:ValidationSummary ID="valSumSaveTimeEntries" runat="server" ValidationGroup="TE" />
                                 </td>
                             </tr>
