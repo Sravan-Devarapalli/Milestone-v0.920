@@ -1419,6 +1419,21 @@ namespace DataAccess
                 var isChargeableIndex = reader.GetOrdinal(Constants.ParameterNames.IsChargeable);
                 var isCorrectIndex = -1;
                 var revieweStatusIdIndex = reader.GetOrdinal(Constants.ParameterNames.ReviewStatusId);
+                int approvedByIdIndex = -1;
+                int approvedByFirstNameIndex = -1;
+                int approvedByLastNameIndex = -1;
+                try
+                {
+                    approvedByIdIndex = reader.GetOrdinal(Constants.ColumnNames.ApprovedByColumn);
+                    approvedByFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ApprovedByFirstNameColumn);
+                    approvedByLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ApprovedByLastNameColumn);
+                }
+                catch
+                {
+                    approvedByIdIndex = -1;
+                    approvedByFirstNameIndex = -1;
+                    approvedByLastNameIndex = -1;
+                }
 
                 try
                 {
@@ -1454,6 +1469,12 @@ namespace DataAccess
                     if (isCorrectIndex >= 0)
                     {
                         timeEntry.IsCorrect = reader.GetBoolean(isCorrectIndex);
+                    }
+
+                    if (approvedByIdIndex > 0 && approvedByFirstNameIndex > 0 && approvedByLastNameIndex > 0)
+                    {
+                        var approvedByPerson = new Person { Id = reader.GetInt32(approvedByIdIndex), FirstName = reader.GetString(approvedByFirstNameIndex), LastName = reader.GetString(approvedByLastNameIndex) };
+                        timeEntry.ApprovedBy = approvedByPerson;
                     }
 
                     timeEntries.Add(timeEntry);
