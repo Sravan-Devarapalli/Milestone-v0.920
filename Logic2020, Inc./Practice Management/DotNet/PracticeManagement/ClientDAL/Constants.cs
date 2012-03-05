@@ -276,6 +276,8 @@
             public const string IsORTTimeTypeColumn = "IsORTTimeType";
             public const string ApprovedByColumn = "ApprovedBy";
             public const string ApprovedByNameColumn = "ApprovedByName";
+            public const string ApprovedByFirstNameColumn = "ApprovedByFirstName";
+            public const string ApprovedByLastNameColumn = "ApprovedByLastName";
             
         }
 
