@@ -27,41 +27,6 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
-        public bool IsPTO
-        {
-            get
-            {
-                return ViewState["isPTOWOrktype"] != null ? (bool)ViewState["isPTOWOrktype"] : false;
-            }
-            set
-            {
-                ViewState["isPTOWOrktype"] = value;
-            }
-        }
-
-        public bool IsHoliday
-        {
-            get
-            {
-                return ViewState["IsHoliday"] != null ? (bool)ViewState["IsHoliday"] : false;
-            }
-            set
-            {
-                ViewState["IsHoliday"] = value;
-            }
-        }
-
-        public bool IsAdminstrativeTimeType
-        {
-            get
-            {
-                return ViewState["isAdminstrativeTimeType"] != null ? (bool)ViewState["isAdminstrativeTimeType"] : false;
-            }
-            set
-            {
-                ViewState["isAdminstrativeTimeType"] = value;
-            }
-        }
 
         public XElement TimeEntryRecordElement
         {
@@ -198,10 +163,6 @@ namespace PraticeManagement.Controls.TimeEntry
                         (HostingPage.SelectedPerson.TerminationDate.HasValue &&
                                     HostingPage.SelectedPerson.TerminationDate.Value >= DateBehind
                          ) ? "0" : "1";
-            if (IsAdminstrativeTimeType && TimeEntryRecordElement != null)
-            {
-                tbActualHours.Attributes["IsReviewed"] = TimeEntryRecordElement.Attribute(XName.Get("IsReviewed")).Value;
-            }
         }
 
         public void CanelControlStyle()
@@ -217,28 +178,10 @@ namespace PraticeManagement.Controls.TimeEntry
             if (TimeEntryRecordElement != null)
             {
                 FillControls();
-                if (IsAdminstrativeTimeType)
-                {
-                    HostingPage.AdminstratorSectionTargetHours[DateBehind].Value = tbActualHours.ClientID;
-                    HostingPage.AdminstratorSectionTargetNotes[DateBehind].Value = tbNotes.ClientID;
-                }
             }
-            if (IsPTO)
-            {
-                tbNotes.Enabled = false;
-                btnSaveNotes.Enabled = false;
-            }
-
-            if (IsHoliday)
-            {
-                imgClear.Style["display"] = "none";
-            }
-
+           
             CanelControlStyle();
             ApplyControlStyle();
-
-            tbActualHours.Attributes["IsPTO"] = IsPTO.ToString();
-            tbActualHours.Attributes["txtboxNoteClienId"] = tbNotes.ClientID;
 
             MaintainEditedtbActualHoursStyle();
         }
@@ -278,8 +221,6 @@ namespace PraticeManagement.Controls.TimeEntry
 
             var isReviewd = TimeEntryRecordElement.Attribute(XName.Get("IsReviewed")).Value;
             lblReview.Text = isReviewd;
-            if (isReviewd == ReviewStatus.Approved.ToString())
-                Disabled = true;
 
             hfDirtyHours.Value = TimeEntryRecordElement.Attribute(XName.Get("IsDirty")).Value;
 
@@ -322,7 +263,7 @@ namespace PraticeManagement.Controls.TimeEntry
         internal void RoundActualHours(XElement element)
         {
             string hours = tbActualHours.Text;
-            if(!string.IsNullOrEmpty(hours))
+            if (!string.IsNullOrEmpty(hours))
             {
                 double _hours = Convert.ToDouble(hours);
                 if (_hours % 0.25 < 0.125)
@@ -337,7 +278,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 element.Attribute(XName.Get("ActualHours")).Value = hours;
             }
         }
-       
+
         internal void UpdateEditedValues(XElement element)
         {
             if (element.HasAttributes && element.Attribute(XName.Get("ActualHours")) != null)
@@ -364,25 +305,17 @@ namespace PraticeManagement.Controls.TimeEntry
         internal void ValidateNoteAndHours()
         {
             var isValidNote = IsValidNote();
-            var isValidAdminstrativeHours = true;
             var isValidHours = true;
-            if (IsAdminstrativeTimeType)
-            {
-                isValidAdminstrativeHours = IsValidAdminstrativeHours();
-                if (!isValidAdminstrativeHours)
-                    HostingPage.IsValidAdminstrativeHours = isValidAdminstrativeHours;
-            }
-            else
-            {
-                isValidHours = IsValidHours();
-                if (!isValidNote)
-                    HostingPage.IsValidNote = isValidNote;
-            }
+
+            isValidHours = IsValidHours();
+            if (!isValidNote)
+                HostingPage.IsValidNote = isValidNote;
+
 
             if (!isValidHours)
                 HostingPage.IsValidHours = isValidHours;
 
-            if (isValidNote && isValidHours && isValidAdminstrativeHours)
+            if (isValidNote && isValidHours)
             {
                 tbActualHours.Style["background-color"] = "none";
             }
@@ -392,37 +325,12 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
-        private bool IsValidAdminstrativeHours()
-        {
-            double hours;
-            if (string.IsNullOrEmpty(tbActualHours.Text))
-            {
-                if (string.IsNullOrEmpty(tbNotes.Text))
-                {
-                    return true;
-                }
-
-                return false;
-            }
-            //  Check that hours is double between 0.25 and 8.0
-            if (double.TryParse(tbActualHours.Text, out hours))
-            {
-                if (hours > 0.25 && hours <= 8)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         private bool IsValidNote()
         {
             imgNote.ImageUrl = string.IsNullOrEmpty(tbNotes.Text) ?
                         PraticeManagement.Constants.ApplicationResources.AddCommentIcon :
                         PraticeManagement.Constants.ApplicationResources.RecentCommentIcon;
 
-            if (IsAdminstrativeTimeType)
-                return true;
 
             var note = tbNotes.Text;
 
@@ -467,11 +375,6 @@ namespace PraticeManagement.Controls.TimeEntry
             return false;
         }
 
-
-        internal void AddAttributeToPTOTextBox(string clientId)
-        {
-            tbActualHours.Attributes["HorizontalTotalCalculator"] = clientId;
-        }
 
         #endregion
 
