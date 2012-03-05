@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="AdministrativeTimeEntryBar.ascx.cs"
     Inherits="PraticeManagement.Controls.TimeEntry.AdministrativeTimeEntryBar" %>
-<%@ Register Src="~/Controls/TimeEntry/SingleTimeEntry_New.ascx" TagName="SingleTE"
+<%@ Register Src="~/Controls/TimeEntry/AdministrativeSingleTimeEntry.ascx" TagName="SingleTE"
     TagPrefix="te" %>
 <%@ Register TagPrefix="ext" Namespace="PraticeManagement.Controls.Generic.TotalCalculator"
     Assembly="PraticeManagement" %>
@@ -9,12 +9,13 @@
 <%@ Import Namespace="PraticeManagement.Controls.TimeEntry" %>
 <%@ Register TagPrefix="ext3" Namespace="PraticeManagement.Controls.Generic.SelectCutOff"
     Assembly="PraticeManagement" %>
+<%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <table class="WholeWidth">
     <tr class="time-entry-bar">
         <td id="tdPlusSection" runat="server" class="DeleteWidth">
         </td>
-        <td id="tdTimeTypes" runat="server" >
-            <asp:DropDownList ID="ddlTimeTypes" runat="server" CssClass="time-entry-bar-time-typesNew-select-Normal"
+        <td id="tdTimeTypes" runat="server">
+            <uc:CustomDropDown ID="ddlTimeTypes" runat="server" CssClass="time-entry-bar-time-typesNew-select-Normal"
                 OnDataBound="ddlTimeTypes_DataBound" DataTextField="Name" DataValueField="Id"
                 ValidationGroup='<%# ClientID %>' onchange="setDirty();EnableSaveButton(true);" />
             <ext3:SelectCutOffExtender ID="SelectCutOffExtender1" runat="server" NormalCssClass="time-entry-bar-time-typesNew-select-Normal"
@@ -23,6 +24,8 @@
             <asp:HiddenField ID="hdnworkTypeId" runat="server" />
         </td>
         <asp:Repeater ID="tes" runat="server" OnItemDataBound="repEntries_ItemDataBound">
+            <HeaderTemplate>
+            </HeaderTemplate>
             <ItemTemplate>
                 <td class="time-entry-bar-single-teNew <%# GetDayOffCssClass(((System.Xml.Linq.XElement)Container.DataItem)) %>">
                     <table class="WholeWidth">
@@ -34,17 +37,19 @@
                     </table>
                 </td>
             </ItemTemplate>
+            <FooterTemplate>
+            </FooterTemplate>
         </asp:Repeater>
         <td class="time-entry-total-hoursNew-totalColoum">
-         <div style="float:right; padding-right:10px;">
-            <label id="lblTotalHours" runat="server" />
+            <div style="float: right; padding-right: 10px;">
+                <label id="lblTotalHours" runat="server" />
             </div>
             <label id="lblEnableDisable" runat="server" />
             <ext:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lblTotalHours" />
-            <ext2:EnableDisableExtender ID="extEnableDisable" runat="server"  TargetControlID="ddlTimeTypes" />
+            <ext2:EnableDisableExtender ID="extEnableDisable" runat="server" TargetControlID="ddlTimeTypes" />
         </td>
         <td class="DeleteWidth">
-           <asp:ImageButton ID="imgDropTes" runat="server" OnClientClick='return confirm ("This will remove the Work Type as well as any time and notes entered!  Are you sure?")'
+            <asp:ImageButton ID="imgDropTes" runat="server" OnClientClick='return confirm ("This will remove the Work Type as well as any time and notes entered!  Are you sure?")'
                 ToolTip="Remove Work Type" ImageUrl="~/Images/close_16.png" OnClick="imgDropTes_Click" />
         </td>
     </tr>
