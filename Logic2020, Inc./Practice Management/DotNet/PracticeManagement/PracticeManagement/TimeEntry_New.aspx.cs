@@ -83,7 +83,9 @@ namespace PraticeManagement
         private const string billableXmlOpen = "<TimeEntryRecord  ActualHours=\"{0}\" Note=\"{1}\" IsChargeable=\"{2}\" EntryDate=\"{3}\" IsReviewed=\"{4}\" IsDirty=\"{5}\" >";
         private const string billableXmlClose = "</TimeEntryRecord>";
         private const string nonBillableXmlOpen = "<TimeEntryRecord  ActualHours=\"{0}\" Note=\"{1}\" IsChargeable=\"{2}\" EntryDate=\"{3}\"  IsReviewed=\"{4}\" IsDirty=\"{5}\" >";
+        private const string nonBillableWithApprovedAttributesXmlOpen = "<TimeEntryRecord  ActualHours=\"{0}\" Note=\"{1}\" IsChargeable=\"{2}\" EntryDate=\"{3}\"  IsReviewed=\"{4}\" IsDirty=\"{5}\" ApprovedById=\"{6}\" ApprovedByName=\"{7}\" >";
         private const string NonBillableXmlClose = "</TimeEntryRecord>";
+        private const string ApprovedByNameFormat = "{0}, {1}";
 
         #endregion
 
@@ -1776,7 +1778,14 @@ namespace PraticeManagement
 
                         if (nbterecord != null)
                         {
-                            xml.Append(string.Format(nonBillableXmlOpen, nbterecord.ActualHours.ToString(Constants.Formatting.DoubleFormat), nbterecord.HtmlEncodedNote, nbterecord.IsChargeable, nbterecord.EntryDate.ToString(Constants.Formatting.EntryDateFormat), nbterecord.IsReviewed.ToString(), "none"));
+                            if (nbterecord.ApprovedBy == null)
+                            {
+                                xml.Append(string.Format(nonBillableXmlOpen, nbterecord.ActualHours.ToString(Constants.Formatting.DoubleFormat), nbterecord.HtmlEncodedNote, nbterecord.IsChargeable, nbterecord.EntryDate.ToString(Constants.Formatting.EntryDateFormat), nbterecord.IsReviewed.ToString(), "none"));
+                            }
+                            else
+                            {
+                                xml.Append(string.Format(nonBillableWithApprovedAttributesXmlOpen, nbterecord.ActualHours.ToString(Constants.Formatting.DoubleFormat), nbterecord.HtmlEncodedNote, nbterecord.IsChargeable, nbterecord.EntryDate.ToString(Constants.Formatting.EntryDateFormat), nbterecord.IsReviewed.ToString(), "none", nbterecord.ApprovedBy.Id, string.Format(ApprovedByNameFormat, nbterecord.ApprovedBy.LastName, nbterecord.ApprovedBy.FirstName)));
+                            }
                             xml.Append(NonBillableXmlClose);
                         }
                     }
