@@ -75,6 +75,8 @@ namespace DataTransferObjects.TimeEntry
         [DataMember]
         public bool IsCorrect { get; set; }
 
+        [DataMember]
+        public Person ApprovedBy { get; set; }
 
         #endregion
 
