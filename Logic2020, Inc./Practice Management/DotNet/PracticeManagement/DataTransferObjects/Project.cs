@@ -376,6 +376,9 @@ namespace DataTransferObjects
         [DataMember]
         public bool IsAssignedProject { get; set; }
 
+        [DataMember]
+        public bool IsORTProject { get; set; }
+
         #endregion
 
         #region Formatting
