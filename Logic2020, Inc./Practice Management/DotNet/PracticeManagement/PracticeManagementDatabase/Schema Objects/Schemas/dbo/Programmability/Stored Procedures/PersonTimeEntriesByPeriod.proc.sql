@@ -11,10 +11,12 @@ BEGIN
 			@W2SalaryId			INT,
 			@FutureDateLocal	DATETIME,
 			@StartDateLocal		DATETIME,
-			@EndDateLocal		DATETIME
+			@EndDateLocal		DATETIME,
+			@ORTTimeTypeId		INT
 			 
 	SELECT @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId(), 
 		   @PTOTimeTypeId     = dbo.GetPTOTimeTypeId(),
+		   @ORTTimeTypeId	  = dbo.GetORTTimeTypeId(),
 		   @FutureDateLocal   = dbo.GetFutureDate(),
 		   @StartDateLocal    = @StartDate,
 		   @EndDateLocal      = @EndDate
@@ -43,10 +45,15 @@ BEGIN
 			TEH.IsChargeable,
 			TEH.ReviewStatusId,
 			CC.TimeTypeId,
-			TEH.ModifiedBy
+			TEH.ModifiedBy,
+			PC.ApprovedBy 'ApprovedBy',
+			AP.LastName 'ApprovedByLastName',
+			AP.FirstName 'ApprovedByFirstName'
 	FROM dbo.TimeEntry TE
 	INNER JOIN dbo.TimeEntryHours AS TEH  ON TE.TimeEntryId = TEH.TimeEntryId
 	INNER JOIN ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId AND TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal
+	LEFT JOIN PersonCalendar PC ON PC.PersonId = @PersonId AND PC.Date = TE.ChargeCodeDate AND PC.TimeTypeId = CC.TimeTypeId AND PC.TimeTypeId = @ORTTimeTypeId
+	LEFT JOIN Person AP ON AP.PersonId = PC.ApprovedBy
 
 	
 	--List of Charge codes with recursive flag.
@@ -88,14 +95,17 @@ BEGIN
 	INNER JOIN ProjectGroup PG ON PG.GroupId = CC.ProjectGroupId 
 
 	--List of Charge codes with ISPTO and IsHoliday
-	SELECT  CC.ProjectId AS 'ProjectId',1 IsPTO,0 IsHoliday 
+	SELECT  CC.ProjectId AS 'ProjectId', 1 IsPTO, 0 IsHoliday, 0 IsORT
 	FROM dbo.ChargeCode CC
 	WHERE CC.TimeTypeId = @PTOTimeTypeId
 	UNION ALL
-	SELECT  CC.ProjectId AS 'ProjectId',0 IsPTO,1 IsHoliday 
+	SELECT  CC.ProjectId AS 'ProjectId', 0 IsPTO, 1 IsHoliday, 0 IsORT
 	FROM dbo.ChargeCode CC
 	WHERE CC.TimeTypeId = @HolidayTimeTypeId AND @IsW2SalaryPerson = 1
-	
+	UNION ALL
+	SELECT CC.ProjectId AS 'ProjectId', 0 IsPTO, 0 IsHoliday, 1 IsORT
+	FROM dbo.ChargeCode CC
+	WHERE CC.TimeTypeId = @ORTTimeTypeId
 
 END
 
