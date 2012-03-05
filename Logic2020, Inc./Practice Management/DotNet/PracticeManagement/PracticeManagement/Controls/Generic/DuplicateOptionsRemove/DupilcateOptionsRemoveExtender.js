@@ -27,8 +27,44 @@ PraticeManagement.Controls.Generic.DuplicateOptionsRemove.DuplicateOptionsRemove
     },
     _onChange: function () {
         this.update();
+        this.showOrHideApprovedBy();
+    },
+    showOrHideApprovedBy: function () {
+
+        var controlIds = this.getControlIdList();
+        for (i = 0; i < controlIds.length; i++) {
+            var control = document.getElementById(controlIds[i]);
+            if (control) {
+                var optionsList = control.options;
+                for (var j = 0; j < optionsList.length; j++) {
+                    var opt = optionsList[j];
+                    if (opt.value == control.value) {
+                        var jsonApprovedByClientIdsString = control.getAttribute('JsonApprovedByClientIds');
+                        var approvedByClientIdsJson = jQuery.parseJSON(jsonApprovedByClientIdsString);
+                        
+                        if (approvedByClientIdsJson != null) {
+                            if (opt.getAttribute('IsORT') != null && opt.getAttribute('IsORT').toLowerCase() == 'true') {
+
+                                for (var k = 0; k < approvedByClientIdsJson.length; k++) {
+                                    (document.getElementById(approvedByClientIdsJson[k])).style.display = "";
+                                }
+                            }
+                            else {
+                                for (var k = 0; k < approvedByClientIdsJson.length; k++) {
+                                    (document.getElementById(approvedByClientIdsJson[k])).style.display = "none";
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+
     },
     saveOptions: function () {
+
         var controlIds = this.getControlIdList();
         for (i = 0; i < controlIds.length; i++) {
             var control = document.getElementById(controlIds[i]);
@@ -38,6 +74,11 @@ PraticeManagement.Controls.Generic.DuplicateOptionsRemove.DuplicateOptionsRemove
                 var ddlOptionList = new Array();
                 for (i = 0; i < items.length; i++) {
                     var opt = new Option(items[i].text, items[i].value);
+
+                    if (items[i].getAttribute('IsORT') != null) {
+                        opt.setAttribute('IsORT', items[i].getAttribute('IsORT'))
+                    }
+
                     if (isNaN(inActiveOptionValue) || inActiveOptionValue == null) {
                         Array.add(ddlOptionList, opt);
                     } else {
@@ -80,7 +121,11 @@ PraticeManagement.Controls.Generic.DuplicateOptionsRemove.DuplicateOptionsRemove
                         }
                     }
                     if (addOption) {
-                        control.add(new Option(optionList[j].text, optionList[j].value));
+                        var opt = new Option(optionList[j].text, optionList[j].value);
+                        if (optionList[j].getAttribute('IsORT') != null) {
+                            opt.setAttribute('IsORT', optionList[j].getAttribute('IsORT'))
+                        }
+                        control.add(opt);
                     }
                 }
                 if (!isNaN(inActiveOptionValue) && inActiveOptionValue != '' && inActiveOptionValue != null) {
