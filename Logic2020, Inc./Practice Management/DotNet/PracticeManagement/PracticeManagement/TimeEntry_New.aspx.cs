@@ -43,6 +43,7 @@ namespace PraticeManagement
         public const string BusinessUnitIdXname = "BusinessUnitId";
         public const string IsPTOXname = "IsPTO";
         public const string IsHolidayXname = "IsHoliday";
+        public const string IsORTXname = "IsORT";
         public const string IdXname = "Id";
         public const string OldIdXname = "OldId";
         public const string CssClassXname = "CssClass";
@@ -73,7 +74,7 @@ namespace PraticeManagement
         private const string internalSectionXmlClose = "</Section>";
         private const string administrativeSectionXmlOpen = "<Section Id=\"4\">";
         private const string administrativeSectionXmlClose = "</Section>";
-        private const string accountAndProjectSelectionXmlOpen = "<AccountAndProjectSelection AccountId=\"{0}\" AccountName=\"{1}\" ProjectId=\"{2}\" ProjectName=\"{3}\" ProjectNumber=\"{4}\" BusinessUnitId=\"{5}\" BusinessUnitName=\"{6}\" IsRecursive=\"{7}\"  IsPTO=\"{8}\"  IsHoliday=\"{9}\" >";
+        private const string accountAndProjectSelectionXmlOpen = "<AccountAndProjectSelection AccountId=\"{0}\" AccountName=\"{1}\" ProjectId=\"{2}\" ProjectName=\"{3}\" ProjectNumber=\"{4}\" BusinessUnitId=\"{5}\" BusinessUnitName=\"{6}\" IsRecursive=\"{7}\"  IsPTO=\"{8}\"  IsHoliday=\"{9}\" IsORT=\"{10}\" >";
         private const string accountAndProjectSelectionXmlClose = "</AccountAndProjectSelection>";
         private const string workTypeXmlOpen = "<WorkType Id=\"{0}\" >";
         private const string workTypeXmlOpenWithOldId = "<WorkType Id=\"{0}\"  OldId=\"{1}\" >";
@@ -82,8 +83,7 @@ namespace PraticeManagement
         private const string calendarItemXmlClose = "</CalendarItem>";
         private const string billableXmlOpen = "<TimeEntryRecord  ActualHours=\"{0}\" Note=\"{1}\" IsChargeable=\"{2}\" EntryDate=\"{3}\" IsReviewed=\"{4}\" IsDirty=\"{5}\" >";
         private const string billableXmlClose = "</TimeEntryRecord>";
-        private const string nonBillableXmlOpen = "<TimeEntryRecord  ActualHours=\"{0}\" Note=\"{1}\" IsChargeable=\"{2}\" EntryDate=\"{3}\"  IsReviewed=\"{4}\" IsDirty=\"{5}\" >";
-        private const string nonBillableWithApprovedAttributesXmlOpen = "<TimeEntryRecord  ActualHours=\"{0}\" Note=\"{1}\" IsChargeable=\"{2}\" EntryDate=\"{3}\"  IsReviewed=\"{4}\" IsDirty=\"{5}\" ApprovedById=\"{6}\" ApprovedByName=\"{7}\" >";
+        private const string nonBillableXmlOpen = "<TimeEntryRecord  ActualHours=\"{0}\" Note=\"{1}\" IsChargeable=\"{2}\" EntryDate=\"{3}\"  IsReviewed=\"{4}\" IsDirty=\"{5}\" ApprovedById=\"{6}\" ApprovedByName=\"{7}\" >";
         private const string NonBillableXmlClose = "</TimeEntryRecord>";
         private const string ApprovedByNameFormat = "{0}, {1}";
 
@@ -163,6 +163,7 @@ namespace PraticeManagement
 
         #region ViewStateKey
 
+        public const string ApprovedManagersViewState = "ApprovedManagers_Key";
         private const string projectSectionXmlKey = "ProjectSection_Key";
         private const string businessDevelopmentSectionXmlKey = "BusinessDevelopmentSection_Key";
         private const string internalSectionXmlKey = "InternalSection_Key";
@@ -397,6 +398,21 @@ namespace PraticeManagement
         {
             get;
             set;
+        }
+
+        public Person[] ApprovedManagers
+        {
+            get
+            {
+                if (ViewState[ApprovedManagersViewState] == null)
+                {
+                    Person[] persons = ServiceCallers.Custom.Person(p => p.GetCurrentActivePracticeAreaManagerList());
+                    ViewState[ApprovedManagersViewState] = persons;
+                    return persons;
+                }
+
+                return (Person[])ViewState[ApprovedManagersViewState];
+            }
         }
 
         #endregion
@@ -813,6 +829,7 @@ namespace PraticeManagement
 
                 bar.IsPTO = Convert.ToBoolean(teSectionDataItem.Attribute(XName.Get(IsPTOXname)).Value);
                 bar.IsHoliday = Convert.ToBoolean(teSectionDataItem.Attribute(XName.Get(IsHolidayXname)).Value);
+                bar.IsORT = Convert.ToBoolean(teSectionDataItem.Attribute(XName.Get(IsORTXname)).Value);
 
                 var workTypeElement = teSectionDataItem.Descendants(XName.Get(WorkTypeXname)).ToList()[0];
 
@@ -1730,7 +1747,7 @@ namespace PraticeManagement
             DateTime startDate = SelectedDates[0];
             DateTime endDate = SelectedDates[SelectedDates.Length - 1];
 
-            xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive, teSection.Project.IsPTOProject.ToString(), teSection.Project.IsHolidayProject.ToString()));
+            xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive, teSection.Project.IsPTOProject.ToString(), teSection.Project.IsHolidayProject.ToString(), teSection.Project.IsORTProject.ToString()));
 
 
             foreach (KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>> keyVal in teSection.TimeEntriesByTimeType)
@@ -1780,11 +1797,11 @@ namespace PraticeManagement
                         {
                             if (nbterecord.ApprovedBy == null)
                             {
-                                xml.Append(string.Format(nonBillableXmlOpen, nbterecord.ActualHours.ToString(Constants.Formatting.DoubleFormat), nbterecord.HtmlEncodedNote, nbterecord.IsChargeable, nbterecord.EntryDate.ToString(Constants.Formatting.EntryDateFormat), nbterecord.IsReviewed.ToString(), "none"));
+                                xml.Append(string.Format(nonBillableXmlOpen, nbterecord.ActualHours.ToString(Constants.Formatting.DoubleFormat), nbterecord.HtmlEncodedNote, nbterecord.IsChargeable, nbterecord.EntryDate.ToString(Constants.Formatting.EntryDateFormat), nbterecord.IsReviewed.ToString(), "none", string.Empty, string.Empty));
                             }
                             else
                             {
-                                xml.Append(string.Format(nonBillableWithApprovedAttributesXmlOpen, nbterecord.ActualHours.ToString(Constants.Formatting.DoubleFormat), nbterecord.HtmlEncodedNote, nbterecord.IsChargeable, nbterecord.EntryDate.ToString(Constants.Formatting.EntryDateFormat), nbterecord.IsReviewed.ToString(), "none", nbterecord.ApprovedBy.Id, string.Format(ApprovedByNameFormat, nbterecord.ApprovedBy.LastName, nbterecord.ApprovedBy.FirstName)));
+                                xml.Append(string.Format(nonBillableXmlOpen, nbterecord.ActualHours.ToString(Constants.Formatting.DoubleFormat), nbterecord.HtmlEncodedNote, nbterecord.IsChargeable, nbterecord.EntryDate.ToString(Constants.Formatting.EntryDateFormat), nbterecord.IsReviewed.ToString(), "none", nbterecord.ApprovedBy.Id, string.Format(ApprovedByNameFormat, nbterecord.ApprovedBy.LastName, nbterecord.ApprovedBy.FirstName)));
                             }
                             xml.Append(NonBillableXmlClose);
                         }
@@ -1950,32 +1967,25 @@ namespace PraticeManagement
             pnlShowTimeEntries.Visible = showGrid;
             if (showGrid)
             {
-                if (SelectedDates.Length > 0)
+                if (SelectedDates.Length > 0 && SelectedPerson != null)
                 {
-                    if (SelectedPerson != null)
-                    {
+                    var projectSection = PrePareXmlForProjectSectionFromData();
+                    List<XElement> xProjectSelectionlist = projectSection.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
 
-                        var projectSection = PrePareXmlForProjectSectionFromData();
-                        List<XElement> xProjectSelectionlist = projectSection.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
+                    var businessDevelopmentSection = PrePareXmlForBusinessDevelopmentSectionFromData();
+                    List<XElement> xbusinessDevelopmentlist = businessDevelopmentSection.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
 
-                        var businessDevelopmentSection = PrePareXmlForBusinessDevelopmentSectionFromData();
-                        List<XElement> xbusinessDevelopmentlist = businessDevelopmentSection.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
+                    var internalSection = PrePareXmlForInternalSectionFromData();
+                    List<XElement> xinternalSectionlist = internalSection.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
 
-                        var internalSection = PrePareXmlForInternalSectionFromData();
-                        List<XElement> xinternalSectionlist = internalSection.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
+                    var adminiStrativeSection = PrePareXmlForAdminiStrativeSectionFromData();
+                    List<XElement> xadminiStrativeSectionlist = adminiStrativeSection.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
 
-                        var adminiStrativeSection = PrePareXmlForAdminiStrativeSectionFromData();
-                        List<XElement> xadminiStrativeSectionlist = adminiStrativeSection.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
+                    DatabindRepeater(repProjectSections, xProjectSelectionlist, false);
+                    DatabindRepeater(repBusinessDevelopmentSections, xbusinessDevelopmentlist, false);
+                    DatabindRepeater(repInternalSections, xinternalSectionlist, false);
+                    DatabindRepeater(repAdministrativeTes, xadminiStrativeSectionlist);
 
-                        DatabindRepeater(repProjectSections, xProjectSelectionlist, false);
-                        DatabindRepeater(repBusinessDevelopmentSections, xbusinessDevelopmentlist, false);
-                        DatabindRepeater(repInternalSections, xinternalSectionlist, false);
-                        DatabindRepeater(repAdministrativeTes, xadminiStrativeSectionlist);
-                    }
-                    else
-                    {
-                        //mlMessage.ShowInfoMessage(Resources.Messages.PersonIsNotAssgned);
-                    }
                 }
             }
             else
