@@ -390,9 +390,10 @@ namespace PraticeManagement.Controls.TimeEntry
             VerticalTotalCalculatorExtenderId = clientId;
         }
 
-        internal void ValidateNoteAndHours()
+        internal void ValidateNoteAndHours(bool isORT)
         {
             var isValidNote = IsValidNote();
+            var isValidApprovedManager = isORT ? IsValidApprovedManager() : true;
             var isValidAdminstrativeHours = true;
             var isValidHours = true;
 
@@ -400,12 +401,13 @@ namespace PraticeManagement.Controls.TimeEntry
             if (!isValidAdminstrativeHours)
                 HostingPage.IsValidAdminstrativeHours = isValidAdminstrativeHours;
 
-
+            if (!isValidApprovedManager)
+                HostingPage.IsValidApprovedManager = isValidApprovedManager;
 
             if (!isValidHours)
                 HostingPage.IsValidHours = isValidHours;
 
-            if (isValidNote && isValidHours && isValidAdminstrativeHours)
+            if (isValidNote && isValidHours && isValidAdminstrativeHours && isValidApprovedManager)
             {
                 tbActualHours.Style["background-color"] = "none";
             }
@@ -413,6 +415,19 @@ namespace PraticeManagement.Controls.TimeEntry
             {
                 tbActualHours.Style["background-color"] = "red";
             }
+        }
+
+        private bool IsValidApprovedManager()
+        {
+            if (string.IsNullOrEmpty(tbActualHours.Text) && string.IsNullOrEmpty(tbNotes.Text))
+            {
+                return true;
+            }
+            if (ddlApprovedManagers.SelectedIndex == 0)
+            {
+                return false;
+            }
+            return true;
         }
 
         private bool IsValidAdminstrativeHours()
