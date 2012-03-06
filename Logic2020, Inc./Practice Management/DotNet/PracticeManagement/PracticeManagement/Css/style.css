@@ -2459,6 +2459,11 @@ end pixcel
     border-bottom:1px solid Gray;
 }
 
+.TextBlack
+{
+    color: Black !important;
+}
+
 .f0f0f1
 {
     background-color:#f0f0f1;
