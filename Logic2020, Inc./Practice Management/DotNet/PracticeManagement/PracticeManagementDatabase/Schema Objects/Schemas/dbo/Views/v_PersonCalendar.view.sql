@@ -14,7 +14,8 @@ AS
 		   (CASE WHEN ISNULL(pcal.TimeTypeId, 0) = dbo.GetHolidayTimeTypeId()  THEN 1 ELSE 0 END)   AS 'IsFloatingHoliday',
 		   pcal.ActualHours,
 		   pcal.TimeTypeId,
-		   pcal.Description
+		   pcal.Description,
+		   pcal.ApprovedBy
 	  FROM dbo.Calendar AS cal
 	       INNER JOIN dbo.Person AS p ON cal.Date >= p.HireDate AND cal.Date < ISNULL(p.TerminationDate, dbo.GetFutureDate())
 	       LEFT JOIN dbo.PersonCalendar AS pcal ON pcal.Date = cal.Date AND pcal.PersonId = p.PersonId
