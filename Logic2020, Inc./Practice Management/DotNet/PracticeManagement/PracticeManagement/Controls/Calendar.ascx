@@ -714,13 +714,10 @@
                                                 EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
                                                 Type="Currency" ValidationGroup="TimeOff"></asp:CompareValidator>
                                             <asp:RangeValidator ID="rangHoursPerDay" runat="server" ControlToValidate="txthoursTimeOff"
-                                                ErrorMessage="Hours Per Day must be greater than 0.25 and less or equals to 8."
-                                                ToolTip="Hours Per Day must be greater than 0.25 and less or equals to 8." Text="*"
+                                                ErrorMessage="Hours must be between 0.25 and 8.00."
+                                                ToolTip="Hours must be between 0.25 and 8.00." Text="*"
                                                 EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" MinimumValue="0.25"
                                                 MaximumValue="8" Type="Double" ValidationGroup="TimeOff"></asp:RangeValidator>
-                                            <asp:CustomValidator ID="cvHoursPerDay" runat="server" ValidationGroup="TimeOff"
-                                                ErrorMessage="Hours must be in the multiples of '0.25'." Text="*" ToolTip="Hours must be in the multiples of '0.25'."
-                                                ControlToValidate="txthoursTimeOff" OnServerValidate="cvHoursPerDay_OnServerValidate" />
                                             <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtHoursPerDayInsert" runat="server"
                                                 TargetControlID="txthoursTimeOff" FilterMode="ValidChars" FilterType="Custom,Numbers"
                                                 ValidChars=".">
@@ -819,13 +816,10 @@
                                                 EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
                                                 Type="Currency" ValidationGroup="SingleDay"></asp:CompareValidator>
                                             <asp:RangeValidator ID="rangeHoursSingleDay" runat="server" ControlToValidate="txtHoursSingleDay"
-                                                ErrorMessage="Hours Per Day must be greater than 0.25 and less or equals to 8."
-                                                ToolTip="Hours Per Day must be greater than 0.25 and less or equals to 8." Text="*"
+                                                ErrorMessage="Hours must be between 0.25 and 8.00."
+                                                ToolTip="Hours must be between 0.25 and 8.00." Text="*"
                                                 EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" MinimumValue="0.25"
                                                 MaximumValue="8" Type="Double" ValidationGroup="SingleDay"></asp:RangeValidator>
-                                            <asp:CustomValidator ID="cvHoursSingleDay" runat="server" ValidateEmptyText="false"
-                                                ValidationGroup="SingleDay" ErrorMessage="Hours should be in the multiple of '0.25'."
-                                                Text="*" ToolTip="Hours should be in the multiple of '0.25'." OnServerValidate="cvHoursSingleDay_OnServerValidate" />
                                             <AjaxControlToolkit:FilteredTextBoxExtender ID="fteHoursSingleDay" runat="server"
                                                 TargetControlID="txtHoursSingleDay" FilterMode="ValidChars" FilterType="Custom,Numbers"
                                                 ValidChars=".">
