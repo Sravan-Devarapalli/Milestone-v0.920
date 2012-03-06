@@ -115,7 +115,7 @@ AS
 
 		DELETE PC
 		FROM dbo.PersonCalendar AS PC 
-		WHERE PC.Date = @Date
+		WHERE PC.Date = @Date AND PC.DayOff = 0
 
 	END
 	ELSE 
@@ -131,13 +131,13 @@ AS
 			SELECT  PC.PersonId, APC.Date 'Date', CONVERT(BIT, 0) 'IsSeries'
 			FROM @Dates C
 			JOIN PersonCalendar PC ON C.Date = PC.Date AND PC.DayOff = 1 AND PC.IsSeries = 1
-			LEFT JOIN PersonCalendar APC ON PC.PersonId = APC.PersonId AND APC.DayOff = 1 AND APC.IsSeries = 1 AND APC.TimeTypeId = PC.TimeTypeId AND APC.ActualHours = PC.ActualHours
+			LEFT JOIN PersonCalendar APC ON PC.PersonId = APC.PersonId AND APC.DayOff = 1 AND APC.IsSeries = 1 AND APC.TimeTypeId = PC.TimeTypeId AND APC.ActualHours = PC.ActualHours AND ISNULL(APC.ApprovedBy, 0) = ISNULL(PC.ApprovedBy, 0)
 						AND ((DATEPART(DW, C.date) = 6 AND APC.date = DATEADD(DD,3, C.date) ) 
 								OR (DATEPART(DW, C.date) = 2 AND APC.date = DATEADD(DD, -3, C.date))
 								OR  APC.date = DATEADD(DD,1, C.date)
 								OR  APC.date = DATEADD(DD, -1, C.date)
 							)
-			LEFT JOIN PersonCalendar AFAPC ON APC.PersonId = AFAPC.PersonId AND AFAPC.DayOff = 1 AND AFAPC.IsSeries = 1 AND AFAPC.TimeTypeId = APC.TimeTypeId AND AFAPC.ActualHours = APC.ActualHours
+			LEFT JOIN PersonCalendar AFAPC ON APC.PersonId = AFAPC.PersonId AND AFAPC.DayOff = 1 AND AFAPC.IsSeries = 1 AND AFAPC.TimeTypeId = APC.TimeTypeId AND AFAPC.ActualHours = APC.ActualHours AND ISNULL(AFAPC.ApprovedBy, 0) = ISNULL(APC.ApprovedBy, 0)
 						AND ((DATEPART(DW, APC.date) = 6 AND AFAPC.date = DATEADD(DD,3, APC.date) )
 								OR (DATEPART(DW, APC.date) = 2 AND AFAPC.date = DATEADD(DD, -3, APC.date))
 								OR AFAPC.date = DATEADD(DD,1, APC.date)
