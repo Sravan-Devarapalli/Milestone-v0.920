@@ -107,6 +107,7 @@ AS
 		SELECT m.ClientId,
 			   m.ProjectId,
 			   m.MilestoneId,
+			   m.StartDate AS MilestoneStartDate,
 			   m.ClientName,
 			   m.ProjectName,
 			   m.Description,
@@ -137,6 +138,7 @@ AS
 		SELECT p.ClientId,
 			   p.ProjectId,
 			   NULL AS MilestoneId,
+			   NULL AS MilestoneStartDate,
 			   p.ClientName,
 			   p.Name AS ProjectName,
 			   NULL AS Description,
@@ -173,5 +175,5 @@ AS
 					OR @UserHasHighRoleThanProjectLead <> 0
 					OR (@UserHasHighRoleThanProjectLead = 0 AND (PM.ProjectManagerId = @PersonId OR C.PersonId = @PersonId ))
 				)
-		ORDER BY FP.ProjectName, Description
+		ORDER BY FP.ProjectName, FP.MilestoneStartDate
 
