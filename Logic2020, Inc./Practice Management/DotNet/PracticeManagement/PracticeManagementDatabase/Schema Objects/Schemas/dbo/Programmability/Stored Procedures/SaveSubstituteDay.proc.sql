@@ -23,9 +23,7 @@ BEGIN
 			@HolidayTimeTypeId INT,
 			@PTOChargeCodeId INT,
 			@HolidayChargeCodeId INT,
-			@IsW2SalaryPerson	BIT = 0,
-			@UserName NVARCHAR(MAX)
-
+			@IsW2SalaryPerson	BIT = 0
 	
 
 	BEGIN TRY
@@ -55,7 +53,7 @@ BEGIN
 			@PTOTimeTypeId = dbo.GetPTOTimeTypeId(),
 			@HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
 				
-	SELECT @ModifiedBy = PersonId, @UserName =  (FirstName +' '+ LastName) FROM Person WHERE Alias = @UserLogin
+	SELECT @ModifiedBy = PersonId FROM Person WHERE Alias = @UserLogin
 	SELECT @PTOChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @PTOTimeTypeId
 	SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTimeTypeId
 
@@ -66,7 +64,7 @@ BEGIN
 	SELECT @HolidayDescription = c.HolidayDescription
 	FROM Calendar c WHERE c.[Date] = @Date
 
-	SET @Note = 'Substitute for '+ CONVERT(NVARCHAR(10), @Date, 101) +' - ' +@HolidayDescription +'. Approved by '+ @UserName + '.'
+	SET @Note = 'Substitute for '+ CONVERT(NVARCHAR(10), @Date, 101) +' - ' +@HolidayDescription +'.'
 
 
 	IF EXISTS (SELECT 1 
