@@ -1905,6 +1905,32 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public static void FillApprovedManagersList(ListControl control, string firstItemText, Person[] persons, bool noFirstItem)
+        {
+            control.AppendDataBoundItems = true;
+            control.Items.Clear();
+            if (!noFirstItem && persons != null && persons.Length > 0)
+            {
+                control.Items.Add(new ListItem(firstItemText, String.Empty));
+            }
+            if (persons == null || !persons.Any())
+            {
+                var item = new ListItem(firstItemText, String.Empty);
+                item.Enabled = false;
+                control.Items.Add(item);
+            }
+            else
+            {
+                foreach (var person in persons)
+                {
+                    var itemText = person.FirstName + ", " + person.LastName;
+                    var item = new ListItem(itemText, person.Id.Value.ToString());
+
+                    control.Items.Add(item);
+                }
+            }
+        }
+
         public static int CloneProject(ProjectCloningContext context)
         {
             using (var serviceClient = new ProjectServiceClient())
