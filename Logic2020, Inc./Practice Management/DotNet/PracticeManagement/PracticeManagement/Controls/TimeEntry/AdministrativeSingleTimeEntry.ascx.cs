@@ -175,11 +175,6 @@ namespace PraticeManagement.Controls.TimeEntry
             tbNotes.Attributes["imgNoteClientId"] = imgNote.ClientID;
         }
 
-        protected void ddlApprovedManagers_OnDataBound(object sender, EventArgs e)
-        {
-            ddlApprovedManagers.Items.Insert(0, new ListItem() { Text = "- - Select a Manager - -", Value = "" });
-        }
-
         protected void Page_PreRender(object sender, EventArgs e)
         {
             SpreadSheetTotalCalculatorExtenderId = HostingPage.SpreadSheetTotalCalculatorExtenderId;
@@ -312,13 +307,9 @@ namespace PraticeManagement.Controls.TimeEntry
 
         internal void DataBindApprovedManagers()
         {
-            ddlApprovedManagers.Items.Clear();
             var managers = HostingPage.ApprovedManagers;
-
-            ddlApprovedManagers.DataValueField = DefaultIdFieldName;
-            ddlApprovedManagers.DataTextField = DefaultNameFieldName;
-            ddlApprovedManagers.DataSource = managers;
-            ddlApprovedManagers.DataBind();
+            DataHelper.FillApprovedManagersList(ddlApprovedManagers, "- - Select a Manager - -", managers, false);
+            ddlApprovedManagers.AppendDataBoundItems = false;
         }
 
         protected string GetNowDate()
@@ -481,3 +472,4 @@ namespace PraticeManagement.Controls.TimeEntry
         #endregion
     }
 }
+
