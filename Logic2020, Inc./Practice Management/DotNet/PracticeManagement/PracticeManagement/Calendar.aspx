@@ -13,7 +13,9 @@ MasterPageFile="~/PracticeManagementMain.Master" Title="Calendar | Practice Mana
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <uc:Calendar ID="calendar" runat="server" CompanyHolidays="false" />
     <br />
+    <div class="TimeEntry_New_Legend">
     <uc2:CalendarLegend ID="CalendarLegend" runat="server" disableChevron="true" />
+    </div>
     <br />
 </asp:Content>
 
