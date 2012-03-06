@@ -423,6 +423,15 @@ namespace PraticeManagement.Controls
             Page.Validate(valSumErrorSingleDay.ValidationGroup);
             if (Page.IsValid)
             {
+                double hours = Convert.ToDouble(txtHoursSingleDay.Text);
+                if (hours % 0.25 < 0.125)
+                {
+                    hours = hours - hours % 0.25;
+                }
+                else
+                {
+                    hours = hours + (0.25 - hours % 0.25);
+                }
                 int? approvedBy = null;
                 var timeTypeSelectedItem = ddlTimeTypesSingleDay.SelectedItem;
                 if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true" && !string.IsNullOrEmpty(ddlSingleDayApprovedManagers.SelectedValue))
@@ -435,7 +444,7 @@ namespace PraticeManagement.Controls
                                                                   date,
                                                                   true,
                                                                   SelectedPersonId.Value,
-                                                                  (double?)Convert.ToDouble(txtHoursSingleDay.Text),
+                                                                  (double?)hours,
                                                                   Convert.ToInt32(ddlTimeTypesSingleDay.SelectedValue),
                                                                   Context.User.Identity.Name,
                                                                   approvedBy
@@ -483,6 +492,15 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
+                    double hours = Convert.ToDouble(txthoursTimeOff.Text);
+                    if (hours % 0.25 < 0.125)
+                    {
+                       hours = hours - hours % 0.25;
+                    }
+                    else
+                    {
+                        hours = hours + (0.25 - hours % 0.25);
+                    }
                     int? approvedBy = null;
                     var timeTypeSelectedItem = ddlTimeTypesTimeOff.SelectedItem;
                     if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true" && !string.IsNullOrEmpty(ddlApprovedManagers.SelectedValue))
@@ -494,7 +512,7 @@ namespace PraticeManagement.Controls
                                                                       dtpEndDateTimeOff.DateValue,
                                                                       true,
                                                                       SelectedPersonId.Value,
-                                                                      (double?)Convert.ToDouble(txthoursTimeOff.Text),
+                                                                      (double?)hours,
                                                                       Convert.ToInt32(ddlTimeTypesTimeOff.SelectedValue),
                                                                       Context.User.Identity.Name,
                                                                       approvedBy
@@ -606,30 +624,6 @@ namespace PraticeManagement.Controls
             if (!string.IsNullOrEmpty(ExceptionMessage))
             {
                 args.IsValid = false;
-            }
-        }
-
-        protected void cvHoursSingleDay_OnServerValidate(object source, ServerValidateEventArgs args)
-        {
-            if (!string.IsNullOrEmpty(txtHoursSingleDay.Text) && compHoursSingleDay.IsValid && rangeHoursSingleDay.IsValid)
-            {
-                var hours = Convert.ToDouble(txtHoursSingleDay.Text);
-                if (hours % 0.25 != 0)
-                {
-                    args.IsValid = false;
-                }
-            }
-        }
-
-        protected void cvHoursPerDay_OnServerValidate(object source, ServerValidateEventArgs args)
-        {
-            if (!string.IsNullOrEmpty(txthoursTimeOff.Text) && compHoursPerDay.IsValid && rangHoursPerDay.IsValid)
-            {
-                var hours = Convert.ToDouble(txthoursTimeOff.Text);
-                if (hours % 0.25 != 0)
-                {
-                    args.IsValid = false;
-                }
             }
         }
 
