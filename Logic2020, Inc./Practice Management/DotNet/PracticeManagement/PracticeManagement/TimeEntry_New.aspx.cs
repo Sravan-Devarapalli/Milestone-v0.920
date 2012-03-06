@@ -1808,7 +1808,7 @@ namespace PraticeManagement
                             }
                             else
                             {
-                                xml.Append(string.Format(nonBillableXmlOpen, nbterecord.ActualHours.ToString(Constants.Formatting.DoubleFormat), nbterecord.HtmlEncodedNote, nbterecord.IsChargeable, nbterecord.EntryDate.ToString(Constants.Formatting.EntryDateFormat), nbterecord.IsReviewed.ToString(), "none", nbterecord.ApprovedBy.Id, string.Format(ApprovedByNameFormat, nbterecord.ApprovedBy.LastName, nbterecord.ApprovedBy.FirstName)));
+                                xml.Append(string.Format(nonBillableXmlOpen, nbterecord.ActualHours.ToString(Constants.Formatting.DoubleFormat), nbterecord.HtmlEncodedNote, nbterecord.IsChargeable, nbterecord.EntryDate.ToString(Constants.Formatting.EntryDateFormat), nbterecord.IsReviewed.ToString(), "none", nbterecord.ApprovedBy.Id, string.Format(ApprovedByNameFormat, nbterecord.ApprovedBy.FirstName, nbterecord.ApprovedBy.LastName)));
                             }
                             xml.Append(NonBillableXmlClose);
                         }
