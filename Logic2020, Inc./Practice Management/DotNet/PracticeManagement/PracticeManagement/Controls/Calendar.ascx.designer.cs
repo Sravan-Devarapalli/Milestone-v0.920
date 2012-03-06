@@ -544,6 +544,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.DropDownList ddlApprovedManagers;
         
         /// <summary>
+        /// cvApprovedManagers control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvApprovedManagers;
+        
+        /// <summary>
         /// txthoursTimeOff control.
         /// </summary>
         /// <remarks>
@@ -578,15 +587,6 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RangeValidator rangHoursPerDay;
-        
-        /// <summary>
-        /// cvHoursPerDay control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvHoursPerDay;
         
         /// <summary>
         /// ftetxtHoursPerDayInsert control.
@@ -742,6 +742,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.DropDownList ddlSingleDayApprovedManagers;
         
         /// <summary>
+        /// cvSingleDayApprovedManagers control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvSingleDayApprovedManagers;
+        
+        /// <summary>
         /// txtHoursSingleDay control.
         /// </summary>
         /// <remarks>
@@ -776,15 +785,6 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RangeValidator rangeHoursSingleDay;
-        
-        /// <summary>
-        /// cvHoursSingleDay control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvHoursSingleDay;
         
         /// <summary>
         /// fteHoursSingleDay control.
