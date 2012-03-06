@@ -47,7 +47,7 @@ AS
 		   cal.IsRecurring,
 		   cal.RecurringHolidayId,
 		   (CASE WHEN cal.DayOff = 1 THEN cal.HolidayDescription
-		         WHEN pcal.DayOff = 1 AND pcal.TimeTypeId IN (@HolidayTimeTypeId, @ORTTimeTypeId) THEN pcal.Description + ' Approved by '+ AP.LastName + ' ' + AP.FirstName + '.'
+		         WHEN pcal.DayOff = 1 AND pcal.TimeTypeId IN (@HolidayTimeTypeId, @ORTTimeTypeId) THEN pcal.Description + ' Approved by '+ AP.FirstName + ' ' + AP.LastName + '.'
 				 WHEN pcal.DayOff = 1 THEN pcal.Description
 				 ELSE '' END ) AS HolidayDescription,
 		   cal.RecurringHolidayDate,
@@ -68,7 +68,7 @@ AS
 		   cal.IsRecurring,
 		   cal.RecurringHolidayId,
 		    (CASE WHEN cal.DayOff = 1 THEN cal.HolidayDescription
-		         WHEN pcal.DayOff = 1 AND pcal.TimeTypeId IN (@HolidayTimeTypeId, @ORTTimeTypeId) THEN pcal.Description + ' Approved by '+ AP.LastName + ' ' + AP.FirstName + '.'
+		         WHEN pcal.DayOff = 1 AND pcal.TimeTypeId IN (@HolidayTimeTypeId, @ORTTimeTypeId) THEN pcal.Description + ' Approved by '+ AP.FirstName + ' ' + AP.LastName + '.'
 				 WHEN pcal.DayOff = 1 THEN pcal.Description
 				 ELSE '' END ) AS HolidayDescription,
 		   cal.RecurringHolidayDate,
