@@ -10,7 +10,7 @@ BEGIN
 		FROM dbo.PersonCalendar PC
 			WHERE PC.PersonId = @PersonId AND PC.Date = @Date)
 	BEGIN
-		SELECT @Date 'StartDate', @Date 'EndDate', PC.ApprovedBy 'ApprovedBy', p.LastName + ', ' + p.FirstName 'ApprovedByName'
+		SELECT @Date 'StartDate', @Date 'EndDate', PC.ApprovedBy 'ApprovedBy', p.FirstName + ', ' + p.LastName 'ApprovedByName'
 		FROM PersonCalendar PC
 		LEFT JOIN Person P ON P.PersonId = PC.ApprovedBy
 		WHERE PC.PersonId = @PersonId AND PC.Date = @Date
@@ -47,7 +47,7 @@ BEGIN
 									AND PC.ActualHours = CD.ActualHours AND ISNULL(PC.ApprovedBy, 0) = ISNULL(CD.ApprovedBy, 0)
 		)
 
-		SELECT MIN(CD.Date) 'StartDate', MAX(CD.Date) 'EndDate', CD.ApprovedBy 'ApprovedBy', p.LastName + ', ' + p.FirstName 'ApprovedByName'
+		SELECT MIN(CD.Date) 'StartDate', MAX(CD.Date) 'EndDate', CD.ApprovedBy 'ApprovedBy', p.FirstName + ', ' + p.LastName 'ApprovedByName'
 		FROM 
 		(
 			SELECT * FROM BeforeConsecutiveDates BD
