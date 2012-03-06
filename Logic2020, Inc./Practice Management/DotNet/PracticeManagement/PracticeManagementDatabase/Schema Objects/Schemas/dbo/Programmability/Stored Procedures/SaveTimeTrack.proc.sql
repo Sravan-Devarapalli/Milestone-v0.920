@@ -187,6 +187,11 @@ BEGIN
 		WHERE TEH.TimeEntryId IS NULL
 			AND NEW.c.value('@ActualHours', 'REAL') > 0
 
+		/*
+			Delete PersonCalendar Entry Only,
+			1. if Time Off entered from Calendar page and w2salaried person on that date and there is no entry in XML.
+			2. if Time Off entered from any where / updated time Off from time Entry page and now there is no entry in XML.
+		*/
 		--Delete PTO entry from PersonCalendar only if the Person has PTO not Floating Holiday.
 		DELETE PC
 		FROM dbo.PersonCalendar PC
@@ -195,7 +200,11 @@ BEGIN
 				ON Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4
 					AND Dates.c.value('..[1]/@Date', 'DATETIME') = PC.Date
 					AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @HolidayTimeTypeId
-		WHERE PC.TimeTypeId <> @HolidayTimeTypeId AND C.DayOff <> 1 AND PC.IsFromTimeEntry = 1 --can delete only if it is entered for the timeentry page and not floating holiday
+		INNER JOIN Person P ON P.PersonId = PC.PersonId AND P.IsStrawman = 0 AND PC.TimeTypeId <> @HolidayTimeTypeId AND C.DayOff <> 1 
+		LEFT JOIN dbo.Pay pay ON pay.Person = P.PersonId AND PC.Date BETWEEN pay.StartDate AND (pay.EndDate - 1) AND pay.Timescale = 2--Here 2 is W2Salaried person.
+		WHERE (PC.IsFromTimeEntry = 1
+				OR (PC.IsFromTimeEntry = 0 AND pay.Person IS NOT NULL) 
+				)--can delete only if it is entered for the timeentry page and not floating holiday
 			AND ( ISNULL(Dates.c.value('@ActualHours', 'REAL'), 0) = 0)
 
 		--Update PTO actual hours.
@@ -212,7 +221,7 @@ BEGIN
 				AND Dates.c.value('..[1]/@Date', 'DATETIME') = PC.Date
 				AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @HolidayTimeTypeId
 				AND Dates.c.value('@ActualHours', 'REAL') > 0
-			INNER JOIN dbo.TimeType tt ON tt.TimeTypeId = PC.TimeTypeId
+			INNER JOIN dbo.TimeType tt ON tt.TimeTypeId = Dates.c.value('..[1]/..[1]/@Id', 'INT')
 		WHERE PC.PersonId = @PersonId AND PC.Date BETWEEN @StartDate AND @EndDate AND PC.DayOff = 1
 			AND (Dates.c.value('@ActualHours', 'REAL') <> PC.ActualHours 
 				OR PC.TimeTypeId <> Dates.c.value('..[1]/..[1]/@Id', 'INT') 
@@ -269,8 +278,8 @@ BEGIN
 		(
 			SELECT  PC.PersonId, C.Date, CONVERT(BIT, 0) 'IsSeries'
 			FROM Calendar C
-			JOIN PersonCalendar PC ON C.Date BETWEEN @BeforeStartDate AND @AfterEndDate AND C.Date = PC.Date AND PC.DayOff = 1 AND PC.IsSeries = 1
-			LEFT JOIN PersonCalendar APC ON PC.PersonId = APC.PersonId AND APC.DayOff = 1 AND APC.IsSeries = 1 AND APC.TimeTypeId = PC.TimeTypeId AND ISNULL(APC.ApprovedBy, 0) = ISNULL(PC.ApprovedBy, 0)--APC:- AffectedPersonCalendar
+			JOIN PersonCalendar PC ON C.Date BETWEEN @BeforeStartDate AND @AfterEndDate AND PC.PersonId = @PersonId AND C.Date = PC.Date AND PC.DayOff = 1 AND PC.IsSeries = 1
+			LEFT JOIN PersonCalendar APC ON PC.PersonId = APC.PersonId AND APC.DayOff = 1 AND APC.IsSeries = 1 AND APC.ActualHours = PC.ActualHours AND APC.TimeTypeId = PC.TimeTypeId AND ISNULL(APC.ApprovedBy, 0) = ISNULL(PC.ApprovedBy, 0)--APC:- AffectedPersonCalendar
 						AND ((DATEPART(DW, C.date) = 6 AND APC.date = DATEADD(DD,3, C.date) )
 								OR (DATEPART(DW, C.date) = 2 AND APC.date = DATEADD(DD, -3, C.date))
 								OR  APC.date = DATEADD(DD,1, C.date)
