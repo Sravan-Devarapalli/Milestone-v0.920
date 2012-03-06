@@ -600,12 +600,6 @@ namespace PracticeManagementService
             }
             catch (Exception e)
             {
-                if (e.Message != "Can not enable recurring behavior as project enddate is less than the week startdate.")
-                {
-                    string logData = string.Format(Constants.Formatting.ErrorLogMessage, "SetPersonTimeEntryRecursiveSelection", "TimeEntryService.svc", string.Empty,
-                        HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
-                    ActivityLogDAL.ActivityLogInsert(20, logData);
-                }
                 throw e;
             }
         }
