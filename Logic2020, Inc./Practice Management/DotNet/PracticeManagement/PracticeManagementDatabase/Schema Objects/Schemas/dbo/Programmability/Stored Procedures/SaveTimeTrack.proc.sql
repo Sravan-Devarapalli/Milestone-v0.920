@@ -12,7 +12,7 @@ BEGIN
 			<AccountAndProjectSelection AccountId="" AccountName="" ProjectId="" ProjectName="" ProjectNumber="" BusinessUnitId="" BusinessUnitName="">
 				<WorkType Id="">
 					<CalendarItem Date="" CssClass="">
-						<TimeEntryRecord ActualHours="" Note="" IsChargeable="" EntryDate="" IsCorrect="" IsReviewed=""></TimeEntryRecord>
+						<TimeEntryRecord ActualHours="" Note="" IsChargeable="" EntryDate="" IsCorrect="" IsReviewed="" ApprovedById=""></TimeEntryRecord>
 							.
 							.
 					</CalendarItem>
@@ -32,11 +32,13 @@ BEGIN
 	DECLARE @PTOTimeTypeId	INT,
 			@CurrentPMTime	DATETIME,
 			@ModifiedBy		INT,
-			@HolidayTimeTypeId INT
+			@HolidayTimeTypeId INT,
+			@ORTTimeTypeId	INT
 
 	SET @PTOTimeTypeId = dbo.GetPTOTimeTypeId()
 	SET @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
 	SET @CurrentPMTime = dbo.InsertingTime()
+	SET @ORTTimeTypeId = dbo.GetORTTimeTypeId()
 
 	SELECT @ModifiedBy = P.PersonId
 	FROM Person P
@@ -100,8 +102,7 @@ BEGIN
 				AND CC.TimeTypeId = NEW.c.value('..[1]/..[1]/@Id', 'INT')	
 				AND TEH.IsChargeable = NEW.c.value('@IsChargeable', 'BIT')
 				AND (
-						TEH.ActualHours <> NEW.c.value('@ActualHours', 'REAL')  
-						OR TE.Note <> NEW.c.value('@Note', 'NVARCHAR(1000)')
+						TEH.ActualHours <> NEW.c.value('@ActualHours', 'REAL')
 				     )
 
 		UPDATE TE
@@ -142,7 +143,7 @@ BEGIN
 				CC.Id,
 				NEW.c.value('..[1]/@Date', 'DATETIME'),
 				ISNULL(FH.ForcastedHours, 0),
-				CASE WHEN TT.IsAdministrative = 1 AND NEW.c.value('@Note', 'NVARCHAR(1000)') = '' THEN TT.Name ELSE NEW.c.value('@Note', 'NVARCHAR(1000)') END,
+				CASE WHEN TT.IsAdministrative = 1 AND NEW.c.value('@Note', 'NVARCHAR(1000)') = '' THEN TT.Name + '.' ELSE NEW.c.value('@Note', 'NVARCHAR(1000)') END,
 				1,
 				0
 		FROM @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
@@ -172,7 +173,7 @@ BEGIN
 				@CurrentPMTime,
 				@CurrentPMTime,
 				@ModifiedBy,
-				1 -- pending status
+				1-- pending status
 		FROM @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
 		JOIN dbo.ChargeCode CC ON CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
 								AND CC.ProjectGroupId = NEW.c.value('..[1]/..[1]/..[1]/@BusinessUnitId', 'INT')
@@ -185,35 +186,6 @@ BEGIN
 											)
 		WHERE TEH.TimeEntryId IS NULL
 			AND NEW.c.value('@ActualHours', 'REAL') > 0
-			
-		
-		--Insert PTO.
-		INSERT INTO PersonCalendar(Date,
-									PersonId,
-									DayOff,
-									ActualHours,
-									IsSeries,
-									TimeTypeId,
-									Description,
-									IsFromTimeEntry
-									)
-		SELECT Dates.c.value('..[1]/@Date', 'DATETIME'),
-				@PersonId,
-				1,
-				Dates.c.value('@ActualHours', 'REAL'),
-				0,
-				Dates.c.value('..[1]/..[1]/@Id', 'INT'),
-				CASE WHEN Dates.c.value('@Note', 'NVARCHAR(1000)') = '' THEN tt.Name ELSE Dates.c.value('@Note', 'NVARCHAR(1000)') END,
-				1
-		FROM PersonCalendar PC
-		RIGHT JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') Dates(c)
-				ON PC.PersonId =  @PersonId
-					AND Dates.c.value('..[1]/@Date', 'DATETIME') = PC.Date
-		INNER JOIN TimeType TT ON TT.TimeTypeId = Dates.c.value('..[1]/..[1]/@Id', 'INT')
-		WHERE Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4
-				AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @HolidayTimeTypeId
-				AND Dates.c.value('@ActualHours', 'REAL') > 0
-				AND PC.Date IS NULL
 
 		--Delete PTO entry from PersonCalendar only if the Person has PTO not Floating Holiday.
 		DELETE PC
@@ -232,7 +204,8 @@ BEGIN
 			IsSeries = 0,
 			IsFromTimeEntry = 1,
 			TimeTypeId = Dates.c.value('..[1]/..[1]/@Id', 'INT'),
-			Description = CASE WHEN Dates.c.value('@Note', 'NVARCHAR(1000)') = '' THEN tt.Name ELSE Dates.c.value('@Note', 'NVARCHAR(1000)') END
+			Description = CASE WHEN Dates.c.value('@Note', 'NVARCHAR(1000)') = '' THEN tt.Name + '.' ELSE Dates.c.value('@Note', 'NVARCHAR(1000)') END,
+			ApprovedBy = CASE Dates.c.value('..[1]/..[1]/@Id', 'INT') WHEN @ORTTimeTypeId THEN Dates.c.value('@ApprovedById', 'INT') ELSE NULL END
 		FROM dbo.PersonCalendar PC
 		JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') Dates(c)
 			ON Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4
@@ -243,7 +216,39 @@ BEGIN
 		WHERE PC.PersonId = @PersonId AND PC.Date BETWEEN @StartDate AND @EndDate AND PC.DayOff = 1
 			AND (Dates.c.value('@ActualHours', 'REAL') <> PC.ActualHours 
 				OR PC.TimeTypeId <> Dates.c.value('..[1]/..[1]/@Id', 'INT') 
-				OR PC.Description <> Dates.c.value('@Note', 'NVARCHAR(1000)'))
+				OR PC.Description <> Dates.c.value('@Note', 'NVARCHAR(1000)')
+				OR (PC.TimeTypeId = @ORTTimeTypeId AND PC.ApprovedBy <> Dates.c.value('@ApprovedById', 'INT')))
+				
+		
+		--Insert PTO.
+		INSERT INTO PersonCalendar(Date,
+									PersonId,
+									DayOff,
+									ActualHours,
+									IsSeries,
+									TimeTypeId,
+									Description,
+									IsFromTimeEntry,
+									ApprovedBy
+									)
+		SELECT Dates.c.value('..[1]/@Date', 'DATETIME'),
+				@PersonId,
+				1,
+				Dates.c.value('@ActualHours', 'REAL'),
+				0,
+				Dates.c.value('..[1]/..[1]/@Id', 'INT'),
+				CASE WHEN Dates.c.value('@Note', 'NVARCHAR(1000)') = '' THEN tt.Name + '.' ELSE Dates.c.value('@Note', 'NVARCHAR(1000)') END,
+				1,
+				CASE TT.TimeTypeId WHEN @ORTTimeTypeId THEN Dates.c.value('@ApprovedById', 'INT') ELSE NULL END
+		FROM PersonCalendar PC
+		RIGHT JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') Dates(c)
+				ON PC.PersonId =  @PersonId
+					AND Dates.c.value('..[1]/@Date', 'DATETIME') = PC.Date
+		INNER JOIN TimeType TT ON TT.TimeTypeId = Dates.c.value('..[1]/..[1]/@Id', 'INT')
+		WHERE Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4
+				AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @HolidayTimeTypeId
+				AND Dates.c.value('@ActualHours', 'REAL') > 0
+				AND PC.Date IS NULL
 
 		DECLARE @BeforeStartDate DATETIME,
 				@AfterEndDate	DATETIME
@@ -265,7 +270,7 @@ BEGIN
 			SELECT  PC.PersonId, C.Date, CONVERT(BIT, 0) 'IsSeries'
 			FROM Calendar C
 			JOIN PersonCalendar PC ON C.Date BETWEEN @BeforeStartDate AND @AfterEndDate AND C.Date = PC.Date AND PC.DayOff = 1 AND PC.IsSeries = 1
-			LEFT JOIN PersonCalendar APC ON PC.PersonId = APC.PersonId AND APC.IsSeries = 1 AND APC.TimeTypeId = PC.TimeTypeId--APC:- AffectedPersonCalendar
+			LEFT JOIN PersonCalendar APC ON PC.PersonId = APC.PersonId AND APC.DayOff = 1 AND APC.IsSeries = 1 AND APC.TimeTypeId = PC.TimeTypeId AND ISNULL(APC.ApprovedBy, 0) = ISNULL(PC.ApprovedBy, 0)--APC:- AffectedPersonCalendar
 						AND ((DATEPART(DW, C.date) = 6 AND APC.date = DATEADD(DD,3, C.date) )
 								OR (DATEPART(DW, C.date) = 2 AND APC.date = DATEADD(DD, -3, C.date))
 								OR  APC.date = DATEADD(DD,1, C.date)
@@ -285,7 +290,7 @@ BEGIN
 		   SET DayOff = pc.DayOff
 		FROM dbo.PersonCalendarAuto AS ca
 		INNER JOIN dbo.v_PersonCalendar AS pc
-			ON ca.date = pc.Date AND ca.PersonId = pc.PersonId AND pc.Date BETWEEN @StartDate AND @EndDate AND ca.PersonId = @PersonId 
+			ON pc.Date BETWEEN @StartDate AND @EndDate AND ca.PersonId = @PersonId AND ca.DayOff <> pc.DayOff AND ca.date = pc.Date AND ca.PersonId = pc.PersonId
 
 		 EXEC dbo.SessionLogUnprepare
 
