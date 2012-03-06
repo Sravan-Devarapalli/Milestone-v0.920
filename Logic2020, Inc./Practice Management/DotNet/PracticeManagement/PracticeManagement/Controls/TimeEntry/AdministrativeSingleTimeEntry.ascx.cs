@@ -277,6 +277,7 @@ namespace PraticeManagement.Controls.TimeEntry
             hdnActualHours.Value = tbActualHours.Text;
 
             var selectedVal = TimeEntryRecordElement.Attribute(XName.Get("ApprovedById")).Value.ToLower();
+            //hdnNotes
 
             if (selectedVal != string.Empty)
             {
