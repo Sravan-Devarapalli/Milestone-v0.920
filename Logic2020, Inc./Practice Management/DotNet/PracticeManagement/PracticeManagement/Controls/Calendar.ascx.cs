@@ -161,7 +161,7 @@ namespace PraticeManagement.Controls
             {
                 if (approvedById.HasValue)
                 {
-                    DataHelper.FillListDefault(ddlSingleDayApprovedManagers, "- - Select a Manager - -", ApprovedManagers, false);
+                    DataHelper.FillApprovedManagersList(ddlSingleDayApprovedManagers, "- - Select a Manager - -", ApprovedManagers, false);
 
                     if (ApprovedManagers.Where(p => p.Id == approvedById.Value).Count() > 0)
                     {
@@ -203,7 +203,7 @@ namespace PraticeManagement.Controls
             {
                 if (approvedById.HasValue)
                 {
-                    DataHelper.FillListDefault(ddlApprovedManagers, "- - Select a Manager - -", ApprovedManagers, false);
+                    DataHelper.FillApprovedManagersList(ddlApprovedManagers, "- - Select a Manager - -", ApprovedManagers, false);
                     if (ApprovedManagers.Where(p => p.Id == approvedById.Value).Count() > 0)
                     {
                         ddlApprovedManagers.SelectedValue = approvedById.Value.ToString();
@@ -339,8 +339,8 @@ namespace PraticeManagement.Controls
                     AddAttributesToTimeTypesDropdown(ddlTimeTypesSingleDay, administrativeTimeTypes);
                     AddAttributesToTimeTypesDropdown(ddlTimeTypesTimeOff, administrativeTimeTypes);
 
-                    DataHelper.FillListDefault(ddlApprovedManagers, "- - Select a Manager - -", ApprovedManagers, false);
-                    DataHelper.FillListDefault(ddlSingleDayApprovedManagers, "- - Select a Manager - -", ApprovedManagers, false);
+                    DataHelper.FillApprovedManagersList(ddlApprovedManagers, "- - Select a Manager - -", ApprovedManagers, false);
+                    DataHelper.FillApprovedManagersList(ddlSingleDayApprovedManagers, "- - Select a Manager - -", ApprovedManagers, false);
                 }
                 else
                 {
