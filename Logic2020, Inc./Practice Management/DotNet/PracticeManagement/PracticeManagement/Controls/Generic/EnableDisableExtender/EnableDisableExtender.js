@@ -47,7 +47,7 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                         var isChargeCodeTurnOffDisable = 0;
                         var isTerminationDateDisable = 0;
                         var isHireDateDisable = 0;
-                        var isPTO = false
+                        var isPTO = false;
                         if (control != null) {
                             if (control.getAttribute('isHourlyRevenueDisable') != undefined && control.getAttribute('isHourlyRevenueDisable') != null) {
                                 isHourlyRevenueDisable = control.getAttribute('isHourlyRevenueDisable');
@@ -166,6 +166,7 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                 var isChargeCodeTurnOffDisable = 0;
                 var isTerminationDateDisable = 0;
                 var isHireDateDisable = 0;
+                var isPTO = false;
                 if (control != null) {
                     if (control.getAttribute('isHourlyRevenueDisable') != undefined && control.getAttribute('isHourlyRevenueDisable') != null) {
                         isHourlyRevenueDisable = control.getAttribute('isHourlyRevenueDisable');
