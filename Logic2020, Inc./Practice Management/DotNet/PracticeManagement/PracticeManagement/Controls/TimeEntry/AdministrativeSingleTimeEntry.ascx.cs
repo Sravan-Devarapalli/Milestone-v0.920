@@ -172,14 +172,6 @@ namespace PraticeManagement.Controls.TimeEntry
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            ddlApprovedManagers.Items.Clear();
-            var managers = HostingPage.ApprovedManagers;
-
-            ddlApprovedManagers.DataValueField = DefaultIdFieldName;
-            ddlApprovedManagers.DataTextField = DefaultNameFieldName;
-            ddlApprovedManagers.DataSource = managers;
-            ddlApprovedManagers.DataBind();
-
             tbNotes.Attributes["imgNoteClientId"] = imgNote.ClientID;
         }
 
@@ -317,6 +309,17 @@ namespace PraticeManagement.Controls.TimeEntry
 
         }
 
+        internal void DataBindApprovedManagers()
+        {
+            ddlApprovedManagers.Items.Clear();
+            var managers = HostingPage.ApprovedManagers;
+
+            ddlApprovedManagers.DataValueField = DefaultIdFieldName;
+            ddlApprovedManagers.DataTextField = DefaultNameFieldName;
+            ddlApprovedManagers.DataSource = managers;
+            ddlApprovedManagers.DataBind();
+        }
+
         protected string GetNowDate()
         {
             return DateTime.Now.ToString(Constants.Formatting.EntryDateFormat);
@@ -367,13 +370,15 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
-        internal void UpdateEditedValues(XElement element)
+        internal void UpdateEditedValues(XElement element, bool isORT)
         {
             if (element.HasAttributes && element.Attribute(XName.Get("ActualHours")) != null)
             {
                 element.Attribute(XName.Get("ActualHours")).Value = tbActualHours.Text;
                 element.Attribute(XName.Get("Note")).Value = tbNotes.Text;
                 element.Attribute(XName.Get("IsDirty")).Value = hfDirtyHours.Value;
+                element.Attribute(XName.Get("ApprovedById")).Value = isORT ? ddlApprovedManagers.SelectedValue : string.Empty;
+                element.Attribute(XName.Get("ApprovedByName")).Value = isORT ? ddlApprovedManagers.SelectedItem.Text : string.Empty;
             }
             else
             {
@@ -382,6 +387,8 @@ namespace PraticeManagement.Controls.TimeEntry
                 element.SetAttributeValue(XName.Get("Note"), tbNotes.Text);
                 element.SetAttributeValue(XName.Get("EntryDate"), time.ToString(Constants.Formatting.EntryDateFormat));
                 element.SetAttributeValue(XName.Get("IsDirty"), hfDirtyHours.Value);
+                element.SetAttributeValue(XName.Get("ApprovedById"), isORT ? ddlApprovedManagers.SelectedValue : string.Empty);
+                element.SetAttributeValue(XName.Get("ApprovedByName"), isORT ? ddlApprovedManagers.SelectedItem.Text : string.Empty);
             }
         }
 
