@@ -157,6 +157,8 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 var textBoxId = ste.Controls[1].ClientID;
 
+                ste.DataBindApprovedManagers();
+
                 TbAcutualHoursClientIds = TbAcutualHoursClientIds ?? new Dictionary<int, string>();
 
                 TbAcutualHoursClientIds.Add(e.Item.ItemIndex, textBoxId);
@@ -367,7 +369,7 @@ namespace PraticeManagement.Controls.TimeEntry
                     if (nonBillableElements != null && nonBillableElements.Count > 0)
                     {
                         var nonbillableElement = nonBillableElements != null && nonBillableElements.Count > 0 ? nonBillableElements.First() : null;
-                        nonbillableSte.UpdateEditedValues(nonbillableElement);
+                        nonbillableSte.UpdateEditedValues(nonbillableElement, ddlTimeTypes.SelectedItem.Attributes[TimeEntry_New.IsORTXname] == true.ToString());
                     }
                 }
                 else
@@ -376,7 +378,7 @@ namespace PraticeManagement.Controls.TimeEntry
                     var nonBillableElement = new XElement(TimeEntry_New.TimeEntryRecordXname);
                     nonBillableElement.SetAttributeValue(XName.Get(TimeEntry_New.IsChargeableXname), "false");
                     nonBillableElement.SetAttributeValue(XName.Get(TimeEntry_New.IsReviewedXname), "Pending");
-                    nonbillableSte.UpdateEditedValues(nonBillableElement);
+                    nonbillableSte.UpdateEditedValues(nonBillableElement, ddlTimeTypes.SelectedItem.Attributes[TimeEntry_New.IsORTXname] == true.ToString());
 
                     if (nonBillableElement.Attribute(XName.Get(TimeEntry_New.ActualHoursXname)).Value != "" || nonBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value != "")
                     {
