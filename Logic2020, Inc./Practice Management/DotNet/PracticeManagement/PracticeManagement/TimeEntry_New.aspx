@@ -136,7 +136,8 @@
             }
         }
 
-        function ChangeTooltip(tbnote) {
+        function ChangeTooltip(tbnoteClientID) {
+            var tbnote = document.getElementById(tbnoteClientID);
             var imgNoteClientId = document.getElementById(tbnote.attributes["imgNoteClientId"].value);
             imgNoteClientId.title = tbnote.value;
             changeIcon(tbnote.id, imgNoteClientId.id);
