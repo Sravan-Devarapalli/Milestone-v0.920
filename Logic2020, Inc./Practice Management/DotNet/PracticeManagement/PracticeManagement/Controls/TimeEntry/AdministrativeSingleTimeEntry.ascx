@@ -54,7 +54,7 @@
         <tr>
             <td class="comment">
                 <asp:TextBox ID="tbNotes" runat="server" Columns="50" MaxLength="1000" Rows="5" TextMode="MultiLine"
-                    onchange="ChangeTooltip(this);" Style="resize: none; overflow-y: auto;" TabIndex="1" />
+                    Style="resize: none; overflow-y: auto;" TabIndex="1" />
                 <asp:HiddenField ID="hdnNotes" runat="server" Value="" />
             </td>
         </tr>
@@ -74,13 +74,14 @@
                                         <asp:DropDownList ID="ddlApprovedManagers" OnDataBound="ddlApprovedManagers_OnDataBound"
                                             AppendDataBoundItems="false" runat="server">
                                         </asp:DropDownList>
+                                        <asp:HiddenField ID="hdnApprovedManagerId" runat="server" Value="" />
                                     </td>
                                 </tr>
                             </table>
                         </td>
                         <td align="right" style="padding-right: 4px; padding-bottom: 8px; vertical-align:bottom;">
                             <asp:Button ID="btnSaveNotes" runat="server" CausesValidation="false" Text="Save Notes"
-                                OnClientClick='<%# "$find(\"" + deActualHours.ClientID + "\").checkDirty(); assignHiddenValues(\"" + hdnNotes.ClientID + "\",\"" + tbNotes.ClientID + "\"); changeIcon(\"" + tbNotes.ClientID + "\",\"" + imgNote.ClientID + "\"); $find(\"" + modalEx.ClientID + "\").hide(); $find(\"" + deActualHours.ClientID + "\").makeDirty(); return false;"%>' />
+                                OnClientClick='<%# "$find(\"" + deActualHours.ClientID + "\").checkDirty(); assignHiddenValues(\"" + hdnNotes.ClientID + "\",\"" + tbNotes.ClientID + "\"); changeIcon(\"" + tbNotes.ClientID + "\",\"" + imgNote.ClientID + "\"); $find(\"" + modalEx.ClientID + "\").hide(); $find(\"" + deActualHours.ClientID + "\").makeDirty(); ChangeTooltip(tbNotes); return false;"%>' />
                         </td>
                     </tr>
                     <tr>
