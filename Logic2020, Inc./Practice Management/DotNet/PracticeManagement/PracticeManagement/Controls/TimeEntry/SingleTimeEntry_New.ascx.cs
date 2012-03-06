@@ -121,18 +121,6 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
-        public string EnableDisableExtForAdminSectionBehaviourId
-        {
-            get
-            {
-                return hdEnableDisableExtenderId.Value;
-            }
-            set
-            {
-                hdEnableDisableExtenderId.Value = value;
-            }
-        }
-
         #endregion
 
         #region Control events
