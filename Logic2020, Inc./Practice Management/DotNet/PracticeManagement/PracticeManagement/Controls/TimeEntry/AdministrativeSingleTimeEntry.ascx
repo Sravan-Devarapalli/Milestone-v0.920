@@ -71,8 +71,7 @@
                                 </tr>
                                 <tr>
                                     <td class="textLeft padLeft5">
-                                        <asp:DropDownList ID="ddlApprovedManagers" OnDataBound="ddlApprovedManagers_OnDataBound"
-                                            AppendDataBoundItems="false" runat="server">
+                                        <asp:DropDownList ID="ddlApprovedManagers" AppendDataBoundItems="false" runat="server">
                                         </asp:DropDownList>
                                         <asp:HiddenField ID="hdnApprovedManagerId" runat="server" Value="" />
                                     </td>
@@ -81,7 +80,7 @@
                         </td>
                         <td align="right" style="padding-right: 4px; padding-bottom: 8px; vertical-align:bottom;">
                             <asp:Button ID="btnSaveNotes" runat="server" CausesValidation="false" Text="Save Notes"
-                                OnClientClick='<%# "$find(\"" + deActualHours.ClientID + "\").checkDirty(); assignHiddenValues(\"" + hdnNotes.ClientID + "\",\"" + tbNotes.ClientID + "\"); changeIcon(\"" + tbNotes.ClientID + "\",\"" + imgNote.ClientID + "\"); $find(\"" + modalEx.ClientID + "\").hide(); $find(\"" + deActualHours.ClientID + "\").makeDirty(); ChangeTooltip(tbNotes); return false;"%>' />
+                                OnClientClick='<%# "$find(\"" + deActualHours.ClientID + "\").checkDirty(); assignHiddenValues(\"" + hdnNotes.ClientID + "\",\"" + tbNotes.ClientID + "\"); changeIcon(\"" + tbNotes.ClientID + "\",\"" + imgNote.ClientID + "\"); $find(\"" + modalEx.ClientID + "\").hide(); $find(\"" + deActualHours.ClientID + "\").makeDirty(); ChangeTooltip(\"" + tbNotes.ClientID + "\"); return false;"%>' />
                         </td>
                     </tr>
                     <tr>
