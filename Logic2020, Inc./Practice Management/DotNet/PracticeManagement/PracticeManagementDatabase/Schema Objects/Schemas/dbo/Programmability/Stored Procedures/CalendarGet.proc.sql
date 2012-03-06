@@ -15,7 +15,12 @@ CREATE PROCEDURE [dbo].[CalendarGet]
 AS
 	SET NOCOUNT ON
 
-	DECLARE @DefaultMilestone INT
+	DECLARE @DefaultMilestone INT,
+			@HolidayTimeTypeId INT,
+			@ORTTimeTypeId		INT
+
+	SELECT @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId(),
+			@ORTTimeTypeId = dbo.GetORTTimeTypeId()
 	
 	
 	SELECT @DefaultMilestone = DMS.MilestoneId
@@ -42,7 +47,8 @@ AS
 		   cal.IsRecurring,
 		   cal.RecurringHolidayId,
 		   (CASE WHEN cal.DayOff = 1 THEN cal.HolidayDescription
-		         WHEN pcal.DayOff = 1 THEN pcal.Description 
+		         WHEN pcal.DayOff = 1 AND pcal.TimeTypeId IN (@HolidayTimeTypeId, @ORTTimeTypeId) THEN pcal.Description + ' Approved by '+ AP.LastName + ' ' + AP.FirstName + '.'
+				 WHEN pcal.DayOff = 1 THEN pcal.Description
 				 ELSE '' END ) AS HolidayDescription,
 		   cal.RecurringHolidayDate,
 		   pcal.ActualHours,
@@ -51,6 +57,7 @@ AS
 	  FROM dbo.Calendar AS cal
 	       LEFT JOIN dbo.v_PersonCalendar AS pcal ON cal.Date = pcal.Date AND pcal.PersonId = @PersonId
 	       LEFT JOIN dbo.MilestonePerson MP ON MP.PersonId = pcal.PersonId AND MP.MilestoneId = @DefaultMilestone
+		   LEFT JOIN dbo.Person AS AP ON AP.PersonId = pcal.ApprovedBy
 	 WHERE cal.Date BETWEEN @StartDate AND @EndDate
 	   AND @PersonId IS NOT NULL
 	   AND @PracticeManagerId IS NULL
@@ -61,7 +68,8 @@ AS
 		   cal.IsRecurring,
 		   cal.RecurringHolidayId,
 		    (CASE WHEN cal.DayOff = 1 THEN cal.HolidayDescription
-		         WHEN pcal.DayOff = 1 THEN pcal.Description 
+		         WHEN pcal.DayOff = 1 AND pcal.TimeTypeId IN (@HolidayTimeTypeId, @ORTTimeTypeId) THEN pcal.Description + ' Approved by '+ AP.LastName + ' ' + AP.FirstName + '.'
+				 WHEN pcal.DayOff = 1 THEN pcal.Description
 				 ELSE '' END ) AS HolidayDescription,
 		   cal.RecurringHolidayDate,
 		   pcal.ActualHours,
@@ -71,6 +79,7 @@ AS
 	       LEFT JOIN dbo.v_PersonCalendar AS pcal ON cal.Date = pcal.Date AND pcal.PersonId = @PersonId
 	       INNER JOIN dbo.Person AS p ON p.PersonId = @PersonId
 	       LEFT JOIN dbo.MilestonePerson MP ON MP.PersonId = pcal.PersonId AND MP.MilestoneId = @DefaultMilestone
+		   LEFT JOIN dbo.Person AS AP ON AP.PersonId = pcal.ApprovedBy
 	 WHERE cal.Date BETWEEN @StartDate AND @EndDate
 	   AND @PersonId IS NOT NULL /*AND @PracticeManagerId IS NOT NULL*/
 --      As per 2961 any person can view any persons calendar
