@@ -11,6 +11,6 @@ BEGIN
 	INNER JOIN dbo.aspnet_Roles AS r ON ur.RoleId = r.RoleId
 	WHERE r.RoleName = 'Practice Area Manager' 
 		AND p.PersonStatusId = 1
-	ORDER BY 2,3
+	ORDER BY 3,2
 
 END
