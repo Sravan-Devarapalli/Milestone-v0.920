@@ -144,9 +144,13 @@
     <Compile Include="EmailData.cs" />
     <Compile Include="EmailTemplate.cs" />
     <Compile Include="OpurtunityPerson.cs" />
+    <Compile Include="Reports\GroupedHours.cs" />
+    <Compile Include="Reports\PersonLevelGroupedHours.cs" />
+    <Compile Include="Reports\ProjectLevelGroupedHours.cs" />
     <Compile Include="Reports\TimeEntriesGroupByDate.cs" />
     <Compile Include="Reports\TimeEntryByWorkType.cs" />
     <Compile Include="Reports\TimeEntriesGroupByClientAndProject.cs" />
+    <Compile Include="Reports\WorkTypeLevelGroupedHours.cs" />
     <Compile Include="Skills\ContactInfoType.cs" />
     <Compile Include="Skills\DocumentType.cs" />
     <Compile Include="Skills\Employer.cs" />
