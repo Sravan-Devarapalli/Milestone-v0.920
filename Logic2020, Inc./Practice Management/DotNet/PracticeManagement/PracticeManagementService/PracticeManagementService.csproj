@@ -116,6 +116,7 @@
     <Content Include="PracticeService.svc" />
     <Content Include="ProjectService.svc" />
     <Content Include="ProjectStatusService.svc" />
+    <Content Include="ReportService.svc" />
     <Content Include="TimeTypeService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -146,6 +147,7 @@
     <Compile Include="ConfigurationService.svc.cs">
       <DependentUpon>ConfigurationService.svc</DependentUpon>
     </Compile>
+    <Compile Include="IReportService.cs" />
     <Compile Include="ITimeTypeService.cs" />
     <Compile Include="CustomMembershipProvider.cs" />
     <Compile Include="IPersonSkillService.cs" />
@@ -161,6 +163,9 @@
     </Compile>
     <Compile Include="ProjectGroupService.svc.cs">
       <DependentUpon>ProjectGroupService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="ReportService.svc.cs">
+      <DependentUpon>ReportService.svc</DependentUpon>
     </Compile>
     <Compile Include="ServiceConstants.cs" />
     <Compile Include="DefaultCommissionService.svc.cs">
