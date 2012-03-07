@@ -207,7 +207,7 @@ PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateBehavior.prototy
 
     _clearData: function () {
         var actualHours = $get(this.get_ActualHoursIdValue());
-        var isPTO = actualHours.getAttribute('IsPTO').toString().toLowerCase();
+        var isPTO = actualHours.getAttribute('IsPTO') == null ? false : actualHours.getAttribute('IsPTO').toString().toLowerCase();
 
         if ((!$get(this.get_NoteIdValue()).disabled && !actualHours.disabled) || (isPTO && !actualHours.disabled)) {
 
