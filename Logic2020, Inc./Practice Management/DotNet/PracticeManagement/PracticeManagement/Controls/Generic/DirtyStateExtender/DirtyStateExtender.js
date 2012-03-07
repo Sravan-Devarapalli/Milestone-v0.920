@@ -11,6 +11,8 @@ PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateBehavior = funct
     this._VerticalTotalCalculatorExtenderIdValue = null;
     this._SpreadSheetExtenderIdValue = null;
     this._IsNoteRequired = null;
+    this._ApprovedManagersIdValue = null;
+    this._HiddenApprovedManagersIdValue = null;
 }
 
 PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateBehavior.prototype = {
@@ -46,8 +48,9 @@ PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateBehavior.prototy
 
         var note = new String($get(this.get_NoteIdValue()).value);
         var hours = new String($get(this.get_ActualHoursIdValue()).value);
+        var approvedManagerId = this.get_ApprovedManagersIdValue() == null ? '' : ($get(this.get_ApprovedManagersIdValue()) == null ? '' : new String($get(this.get_ApprovedManagersIdValue()).value) );
 
-        var stuff = new String(note + hours);
+        var stuff = new String(note + hours + approvedManagerId);
 
         if (stuff.trim().length == 0)
             this.get_element().value = "";
@@ -72,12 +75,14 @@ PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateBehavior.prototy
     _checkDirty: function () {
         var note = new String($get(this.get_NoteIdValue()).value);
         var hours = new String($get(this.get_ActualHoursIdValue()).value);
+        var approvedManagerId = this.get_ApprovedManagersIdValue() == null ? '' : ($get(this.get_ApprovedManagersIdValue()) == null ? '' : new String($get(this.get_ApprovedManagersIdValue()).value));
+        var hdnApprovedManagerId = this.get_HiddenApprovedManagersIdValue() == null ? '' : ($get(this.get_HiddenApprovedManagersIdValue()) == null ? '' : new String($get(this.get_HiddenApprovedManagersIdValue()).value));
 
-        var stuff = new String(note + hours);
+        var stuff = new String(note + hours + approvedManagerId);
 
         if (stuff.trim().length == 0)
             this.get_element().value = "";
-        else if (note == $get(this.get_HiddenNoteIdValue()).value) {
+        else if (note == $get(this.get_HiddenNoteIdValue()).value && approvedManagerId == hdnApprovedManagerId) {
 
             this.get_element().value = "";
         }
@@ -159,6 +164,23 @@ PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateBehavior.prototy
     get_IsNoteRequired: function () {
         return this._IsNoteRequired;
     },
+
+    get_ApprovedManagersIdValue: function () {
+        return this._ApprovedManagersIdValue;
+    },
+
+    set_ApprovedManagersIdValue: function (value) {
+        this._ApprovedManagersIdValue = value;
+    },
+
+    get_HiddenApprovedManagersIdValue: function () {
+        return this._HiddenApprovedManagersIdValue;
+    },
+
+    set_HiddenApprovedManagersIdValue: function (value) {
+        this._HiddenApprovedManagersIdValue = value;
+    },
+
     showErrorMessageColor: function () {
         this._setBackground('red');
     },
@@ -191,6 +213,9 @@ PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateBehavior.prototy
 
             actualHours.value = '';
             $get(this.get_NoteIdValue()).value = '';
+            if (this.get_ApprovedManagersIdValue() != null && $get(this.get_ApprovedManagersIdValue()) != null) {
+                $get(this.get_ApprovedManagersIdValue())[0].selected = true;
+            }
 
             var horizontalExtenderId = $get(this.get_HorizontalTotalCalculatorExtenderIdValue()).value;
             var verticalExtenderId = $get(this.get_VerticalTotalCalculatorExtenderIdValue()).value;
@@ -220,9 +245,12 @@ PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateBehavior.prototy
     },
 
     _makeDirty: function () {
+        var approvedManager = this.get_ApprovedManagersIdValue() == null ? '' : ($get(this.get_ApprovedManagersIdValue()) == null ? '' : $get(this.get_ApprovedManagersIdValue()).value);
+
         if ($get(this.get_HiddenActualHoursIdValue()).value == ''
             && $get(this.get_ActualHoursIdValue()).value == ''
-            && $get(this.get_NoteIdValue()).value == '') {
+            && $get(this.get_NoteIdValue()).value == ''
+            && approvedManager == '') {
             this.get_element().value = '';
         }
         else {
@@ -234,7 +262,13 @@ PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateBehavior.prototy
     _clearNotes: function () {
         if (!$get(this.get_NoteIdValue()).disabled) {
             $get(this.get_NoteIdValue()).value = $get(this.get_HiddenNoteIdValue()).value;
+
+            if (this.get_ApprovedManagersIdValue() != null && this.get_ApprovedManagersIdValue() != "" && $get(this.get_ApprovedManagersIdValue())) {
+                $get(this.get_ApprovedManagersIdValue()).value = $get(this.get_HiddenApprovedManagersIdValue()).value;
+            }
+
             if ($get(this.get_ActualHoursIdValue()).value == '' && $get(this.get_HiddenNoteIdValue()).value == '') this.cancelBackground();
+
         }
     }
 }
