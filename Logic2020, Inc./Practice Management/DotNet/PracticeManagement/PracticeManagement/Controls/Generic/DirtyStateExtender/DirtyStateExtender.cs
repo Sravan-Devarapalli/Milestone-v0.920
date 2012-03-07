@@ -23,6 +23,8 @@ namespace PraticeManagement.Controls.Generic.DirtyStateExtender
         private const string HORIZONTAL_TCEXTENDER_ID = "HorizontalTotalCalculatorExtenderIdValue";
         private const string VERTICAL_TCEXTENDER_ID = "VerticalTotalCalculatorExtenderIdValue";
         private const string SPREADSHEET_TCEXTENDER_ID = "SpreadSheetExtenderIdValue";
+        private const string APPROVEDMANAGERSID_ID = "ApprovedManagersIdValue";
+        private const string HIDDENAPPROVEDMANAGERSID_ID = "HiddenApprovedManagersIdValue";
 
         #endregion
 
@@ -137,6 +139,38 @@ namespace PraticeManagement.Controls.Generic.DirtyStateExtender
             set
             {
                 SetPropertyValue(SPREADSHEET_TCEXTENDER_ID, value);
+            }
+        }
+
+        [ExtenderControlProperty]
+        [DefaultValue("")]
+        [IDReferenceProperty(typeof(HiddenField))]
+        [ClientPropertyName("ApprovedManagersIdValue")]
+        public string ApprovedManagersIdValue
+        {
+            get
+            {
+                return GetPropertyValue(APPROVEDMANAGERSID_ID, string.Empty);
+            }
+            set
+            {
+                SetPropertyValue(APPROVEDMANAGERSID_ID, value);
+            }
+        }
+
+        [ExtenderControlProperty]
+        [DefaultValue("")]
+        [IDReferenceProperty(typeof(HiddenField))]
+        [ClientPropertyName("HiddenApprovedManagersIdValue")]
+        public string HiddenApprovedManagersIdValue
+        {
+            get
+            {
+                return GetPropertyValue(HIDDENAPPROVEDMANAGERSID_ID, string.Empty);
+            }
+            set
+            {
+                SetPropertyValue(HIDDENAPPROVEDMANAGERSID_ID, value);
             }
         }
 
