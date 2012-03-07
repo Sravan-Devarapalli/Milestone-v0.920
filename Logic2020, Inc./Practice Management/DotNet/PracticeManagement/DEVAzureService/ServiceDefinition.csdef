@@ -53,6 +53,7 @@
       <Setting name="ShowWithoutDirector" />
       <Setting name="AttachmentServiceURL" />
       <Setting name="PopupTimebeforeFormsAuthTimeOutSec" />
+      <Setting name="ReportServiceClient"/>
     </ConfigurationSettings>
   </WebRole>
 </ServiceDefinition>
