@@ -256,6 +256,9 @@ namespace PraticeManagement.Controls.TimeEntry
             if (workTypeOldID > 0)
             {
                 ServiceCallers.Custom.TimeEntry(te => te.DeleteTimeEntry(accountId, projectId, personId, workTypeOldID, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
+                var calendarItems = ServiceCallers.Custom.Calendar(c => c.GetCalendar(dates[0], dates[dates.Length - 1], personId, null));
+
+                HostingPage.UpdateCalendarItemAndBind(calendarItems);
             }
 
         }
