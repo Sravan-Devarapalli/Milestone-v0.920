@@ -4047,6 +4047,9 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\ProjectSummaryReportByWorkType.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Indexes\IX_TimeEntry_ChargeCodeDate.index.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Schema Comparisons\v0.850.dbschema">
