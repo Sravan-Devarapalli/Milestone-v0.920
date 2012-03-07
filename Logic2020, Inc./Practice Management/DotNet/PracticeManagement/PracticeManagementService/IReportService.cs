@@ -12,7 +12,7 @@ namespace PracticeManagementService
     [ServiceContract]
     public interface IReportService
     {
-
+        [OperationContract]
         List<TimeEntriesGroupByClientAndProject> GetPersonTimeEntriesDetails(int personId, DateTime startDate, DateTime endDate);
         
     }
