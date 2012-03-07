@@ -272,7 +272,7 @@ namespace PraticeManagement.Controls.TimeEntry
             hdnActualHours.Value = tbActualHours.Text;
 
             var selectedVal = TimeEntryRecordElement.Attribute(XName.Get("ApprovedById")).Value.ToLower();
-            //hdnNotes
+            hdnApprovedManagerId.Value = TimeEntryRecordElement.Attribute(XName.Get("ApprovedById")).Value.ToLower();
 
             if (selectedVal != string.Empty)
             {
@@ -287,7 +287,7 @@ namespace PraticeManagement.Controls.TimeEntry
             }
             else
             {
-                var approvedByName = TimeEntryRecordElement.Attribute(XName.Get("ApprovedByName")).Value.ToLower();
+                var approvedByName = TimeEntryRecordElement.Attribute(XName.Get("ApprovedByName")).Value;
                 selectedItem = new ListItem(approvedByName, selectedVal);
                 ddlApprovedManagers.Items.Add(selectedItem);
                 ddlApprovedManagers.SelectedValue = selectedVal;
@@ -406,6 +406,9 @@ namespace PraticeManagement.Controls.TimeEntry
             if (!isValidHours)
                 HostingPage.IsValidHours = isValidHours;
 
+            if (!isValidNote)
+                HostingPage.IsValidNote = isValidNote;
+
             if (isValidNote && isValidHours && isValidAdminstrativeHours && isValidApprovedManager)
             {
                 tbActualHours.Style["background-color"] = "none";
@@ -458,7 +461,10 @@ namespace PraticeManagement.Controls.TimeEntry
                         PraticeManagement.Constants.ApplicationResources.AddCommentIcon :
                         PraticeManagement.Constants.ApplicationResources.RecentCommentIcon;
 
-
+            if (!string.IsNullOrEmpty(tbNotes.Text) && (tbNotes.Text.Length < 3 || tbNotes.Text.Length > 1000))
+            {
+                return false;
+            }
 
             return true;
         }
