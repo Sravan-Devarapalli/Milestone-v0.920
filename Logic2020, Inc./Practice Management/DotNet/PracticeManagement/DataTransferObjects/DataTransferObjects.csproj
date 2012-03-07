@@ -144,6 +144,9 @@
     <Compile Include="EmailData.cs" />
     <Compile Include="EmailTemplate.cs" />
     <Compile Include="OpurtunityPerson.cs" />
+    <Compile Include="Reports\TimeEntriesGroupByDate.cs" />
+    <Compile Include="Reports\TimeEntryByWorkType.cs" />
+    <Compile Include="Reports\TimeEntriesGroupByClientAndProject.cs" />
     <Compile Include="Skills\ContactInfoType.cs" />
     <Compile Include="Skills\DocumentType.cs" />
     <Compile Include="Skills\Employer.cs" />
@@ -260,6 +263,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
