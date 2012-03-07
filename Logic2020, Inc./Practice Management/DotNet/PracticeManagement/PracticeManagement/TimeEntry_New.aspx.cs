@@ -2179,6 +2179,54 @@ namespace PraticeManagement
 
         }
 
+        public void UpdateCalendarItemAndBind(CalendarItem[] calendarItems)
+        {
+            CalendarItems = calendarItems;
+            var projectSectionXdoc =  UpdateCalendarItems(PrePareXmlForProjectSectionFromRepeater());
+            var businessDevelopmentSectionXdoc = UpdateCalendarItems(PrePareXmlForBusinessDevelopmentSectionFromRepeater());
+            var internalSectionXdoc = UpdateCalendarItems(PrePareXmlForInternalSectionFromRepeater());
+            var administrativeSectionXdoc = UpdateCalendarItems(XDocument.Parse(AdministrativeSectionXml));
+
+            List<XElement> xProjectSelectionlist = projectSectionXdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
+
+            List<XElement> xbusinessDevelopmentlist = businessDevelopmentSectionXdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
+
+            List<XElement> xinternalSectionlist = internalSectionXdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
+
+            List<XElement> xadminiStrativeSectionlist = administrativeSectionXdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
+
+            DatabindRepeater(repProjectSections, xProjectSelectionlist, false);
+            DatabindRepeater(repBusinessDevelopmentSections, xbusinessDevelopmentlist, false);
+            DatabindRepeater(repInternalSections, xinternalSectionlist, false);
+            DatabindRepeater(repAdministrativeTes, xadminiStrativeSectionlist);
+
+            ProjectSectionXml = projectSectionXdoc.ToString();
+            BusinessDevelopmentSectionXml = businessDevelopmentSectionXdoc.ToString();
+            InternalSectionXml = internalSectionXdoc.ToString();
+            AdministrativeSectionXml = administrativeSectionXdoc.ToString();
+        }
+
+        private XDocument UpdateCalendarItems(XDocument xdoc)
+        {
+            var calendarItemElements = xdoc.Descendants(XName.Get(CalendarItemXname)).ToList();
+
+            foreach (var element in calendarItemElements)
+            {
+                var date = Convert.ToDateTime(element.Attribute(XName.Get(DateXname)).Value);
+                var previousCssClass = element.Attribute(XName.Get(CssClassXname)).Value;
+                if (CalendarItems.Any(c => c.Date == date))
+                {
+                    var cssClass = Utils.Calendar.GetCssClassByCalendarItem(CalendarItems.First(c => c.Date == date));
+
+                    if (previousCssClass != cssClass)
+                    {
+                        element.SetAttributeValue(XName.Get(CssClassXname), cssClass);
+                    }
+                }
+            }
+            return xdoc;
+        }
+
         #endregion
 
     }
