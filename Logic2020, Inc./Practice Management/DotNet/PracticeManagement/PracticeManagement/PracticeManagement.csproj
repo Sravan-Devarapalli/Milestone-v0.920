@@ -456,6 +456,7 @@
     <Content Include="Controls\Generic\Filtering\OpportunityFilter.ascx" />
     <Content Include="Controls\Generic\Filtering\PersonReportFilter.ascx" />
     <Content Include="Controls\Generic\RecentNotes.ascx" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject.datasource" />
     <None Include="Service References\CalendarService\CalendarService1.wsdl" />
     <None Include="Service References\CalendarService\CalendarService3.xsd">
       <SubType>Designer</SubType>
@@ -509,6 +510,28 @@
     <None Include="Service References\ProjectGroupService\ProjectGroupService1.disco" />
     <None Include="Service References\ProjectGroupService\ProjectGroupService2.disco" />
     <None Include="Service References\ProjectGroupService\ProjectGroupService3.disco" />
+    <None Include="Service References\ReportService\ReportService.wsdl" />
+    <None Include="Service References\ReportService\ReportService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\ReportService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\ReportService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\ReportService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\ReportService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\ReportService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\ReportService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\TimeEntryService\TimeEntryService36.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -549,6 +572,13 @@
     </None>
     <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
     <None Include="Service References\CalendarService\CalendarService1.disco" />
+    <None Include="Service References\ReportService\ReportService.disco" />
+    <None Include="Service References\ReportService\configuration91.svcinfo" />
+    <None Include="Service References\ReportService\configuration.svcinfo" />
+    <None Include="Service References\ReportService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -1964,6 +1994,11 @@
       <DependentUpon>SecuritySetting.aspx</DependentUpon>
     </Compile>
     <Compile Include="Service References\PersonSkillService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\ReportService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -3399,6 +3434,7 @@
     <WCFMetadataStorage Include="Service References\ProjectGroupService\" />
     <WCFMetadataStorage Include="Service References\ProjectService\" />
     <WCFMetadataStorage Include="Service References\ProjectStatusService\" />
+    <WCFMetadataStorage Include="Service References\ReportService\" />
     <WCFMetadataStorage Include="Service References\RoleService\" />
     <WCFMetadataStorage Include="Service References\TimeEntryService\" />
     <WCFMetadataStorage Include="Service References\TimescaleService\" />
