@@ -7,7 +7,7 @@
     [ModifiedDate]      DATETIME	NOT NULL,
     [ModifiedBy]        INT			NOT NULL, 
     [IsChargeable]      BIT			NOT NULL,
-    [ReviewStatusId]    INT			NOT NULL CONSTRAINT DF_TimeEntryHours DEFAULT  1--default constraint to pending status.
-	, CONSTRAINT PK_TimeEntryHours_Id PRIMARY KEY CLUSTERED(Id)
+    [ReviewStatusId]    INT			NOT NULL CONSTRAINT DF_TimeEntryHours_ReviewStatusId DEFAULT  1--default constraint to pending status.
+	, CONSTRAINT PK_TimeEntryHours PRIMARY KEY CLUSTERED(TimeEntryId ASC ,Id ASC )
 )
 
