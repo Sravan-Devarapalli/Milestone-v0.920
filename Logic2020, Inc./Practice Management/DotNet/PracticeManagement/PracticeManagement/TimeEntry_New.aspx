@@ -106,6 +106,19 @@
             hiddenNote.value = note.value;
         }
 
+        function assignHiddenValues(hiddenNoteId, noteId, hiddenApprovedManagersId, approvedManagersId) {
+            var hiddenNote = $get(hiddenNoteId);
+            var note = $get(noteId);
+            hiddenNote.value = note.value;
+
+            var hiddenApprovedManagerId = $get(hiddenApprovedManagersId);
+            var approvedManagerId = $get(approvedManagersId);
+
+            if (hiddenApprovedManagerId && approvedManagerId) {
+                hiddenApprovedManagerId.value = approvedManagerId.value;
+            }
+        }
+
         function ddlChild_onchange(ddl) {
 
             var btnAdd = document.getElementById(ddl.attributes["add"].value);
@@ -904,9 +917,9 @@
                                     <asp:CustomValidator ID="cvDayTotal" runat="server" ErrorMessage="Day Total hours must be lessthan or equals to 24."
                                         OnServerValidate="cvDayTotal_ServerValidate" EnableClientScript="false" Text="*"
                                         Display="None" SetFocusOnError="true" ValidationGroup="TE" ToolTip="Day Total hours must be lessthan or equals to 24." />
-                                    <asp:CustomValidator ID="cvApprovedManager" runat="server" ErrorMessage="Approved Manager required."
+                                    <asp:CustomValidator ID="cvApprovedManager" runat="server" ErrorMessage="Approved By Manager required. Invalid entries are highlighted in red."
                                         OnServerValidate="cvApprovedManager_ServerValidate" EnableClientScript="false" Text="*"
-                                        Display="None" SetFocusOnError="true" ValidationGroup="TE" ToolTip="Approved Manager required." />
+                                        Display="None" SetFocusOnError="true" ValidationGroup="TE" ToolTip="Approved By Manager required. Invalid entries are highlighted in red." />
                                     <asp:ValidationSummary ID="valSumSaveTimeEntries" runat="server" ValidationGroup="TE" />
                                 </td>
                             </tr>
