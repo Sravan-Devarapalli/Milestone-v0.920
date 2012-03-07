@@ -279,6 +279,8 @@
             public const string ApprovedByFirstNameColumn = "ApprovedByFirstName";
             public const string ApprovedByLastNameColumn = "ApprovedByLastName";
             public const string IsORTColumn = "IsORT";
+            public const string BillableHours = "BillableHours";
+            public const string NonBillableHours = "NonBillableHours";
             
         }
 
@@ -707,6 +709,11 @@
                 public const string Update = "dbo.PracticeUpdate";
                 public const string Insert = "dbo.PracticeInsert";
                 public const string Delete = "dbo.PracticeDelete";
+            }
+
+            public class Reports
+            {
+                public const string GetPersonTimeEntriesDetails = "dbo.GetPersonTimeEntriesDetails";
             }
 
             public class Calendar
