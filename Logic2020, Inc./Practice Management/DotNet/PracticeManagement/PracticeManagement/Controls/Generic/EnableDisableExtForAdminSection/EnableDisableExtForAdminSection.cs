@@ -43,6 +43,21 @@ namespace PraticeManagement.Controls.Generic.EnableDisableExtForAdminSection
 
         [ExtenderControlProperty]
         [DefaultValue("")]
+        [ClientPropertyName("targetManagersHiddenFieldId")]
+        public string TargetManagersHiddenFieldId
+        {
+            get
+            {
+                return GetPropertyValue("targetManagersHiddenFieldId", string.Empty);
+            }
+            set
+            {
+                SetPropertyValue("targetManagersHiddenFieldId", value);
+            }
+        }
+
+        [ExtenderControlProperty]
+        [DefaultValue("")]
         [ClientPropertyName("hoursControlsToCheck")]
         public string HoursControlsToCheck
         {
@@ -73,6 +88,22 @@ namespace PraticeManagement.Controls.Generic.EnableDisableExtForAdminSection
 
         [ExtenderControlProperty]
         [DefaultValue("")]
+        [ClientPropertyName("managersControlsToCheck")]
+        public string ManagersControlsToCheck
+        {
+            get
+            {
+                return GetPropertyValue("managersControlsToCheck", string.Empty);
+            }
+            set
+            {
+                SetPropertyValue("managersControlsToCheck", value);
+            }
+        }
+
+
+        [ExtenderControlProperty]
+        [DefaultValue("")]
         [ClientPropertyName("hiddenNotesControlsToCheck")]
         public string HiddenNotesControlsToCheck
         {
@@ -83,6 +114,22 @@ namespace PraticeManagement.Controls.Generic.EnableDisableExtForAdminSection
             set
             {
                 SetPropertyValue("hiddenNotesControlsToCheck", value);
+            }
+        }
+
+
+        [ExtenderControlProperty]
+        [DefaultValue("")]
+        [ClientPropertyName("hiddenManagersControlsToCheck")]
+        public string HiddenManagersControlsToCheck
+        {
+            get
+            {
+                return GetPropertyValue("hiddenManagersControlsToCheck", string.Empty);
+            }
+            set
+            {
+                SetPropertyValue("hiddenManagersControlsToCheck", value);
             }
         }
 
