@@ -26,7 +26,7 @@ namespace DataTransferObjects.Reports
         }
 
         [DataMember]
-        public double Value { get; set; }
+        public double BillableValue { get; set; }
 
         [DataMember]
         public double BillableHours { get; set; }
