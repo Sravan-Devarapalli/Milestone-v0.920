@@ -22,7 +22,7 @@ namespace DataTransferObjects.Reports
 
 
         [DataMember]
-        List<GroupedHours> GroupedHoursList
+        public List<GroupedHours> GroupedHoursList
         {
             get;
             set;
