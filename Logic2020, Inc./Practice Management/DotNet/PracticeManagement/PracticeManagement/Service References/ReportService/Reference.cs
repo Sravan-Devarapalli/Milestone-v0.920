@@ -15,8 +15,26 @@ namespace PraticeManagement.ReportService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ReportService.IReportService")]
     public interface IReportService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/GetPersonTimeEntriesDetails", ReplyAction="http://tempuri.org/IReportService/GetPersonTimeEntriesDetailsResponse")]
-        DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] GetPersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails", ReplyAction="http://tempuri.org/IReportService/PersonTimeEntriesDetailsResponse")]
+        DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/PersonTimeEntriesSummary", ReplyAction="http://tempuri.org/IReportService/PersonTimeEntriesSummaryResponse")]
+        DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesSummary(int personId, System.DateTime startDate, System.DateTime endDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByResource", ReplyAction="http://tempuri.org/IReportService/TimePeriodSummaryReportByResourceResponse")]
+        DataTransferObjects.Reports.PersonLevelGroupedHours[] TimePeriodSummaryReportByResource(System.DateTime startDate, System.DateTime endDate, string seniorityIds, string orderByCerteria);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByProject", ReplyAction="http://tempuri.org/IReportService/TimePeriodSummaryReportByProjectResponse")]
+        DataTransferObjects.Reports.ProjectLevelGroupedHours[] TimePeriodSummaryReportByProject(System.DateTime startDate, System.DateTime endDate, string clientIds, string personStatusIds, string orderByCerteria);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByWorkType", ReplyAction="http://tempuri.org/IReportService/TimePeriodSummaryReportByWorkTypeResponse")]
+        DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] TimePeriodSummaryReportByWorkType(System.DateTime startDate, System.DateTime endDate, string timeTypeCategoryIds, string orderByCerteria);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ProjectSummaryReportByResource", ReplyAction="http://tempuri.org/IReportService/ProjectSummaryReportByResourceResponse")]
+        DataTransferObjects.Reports.PersonLevelGroupedHours[] ProjectSummaryReportByResource(int projectId, string personRoleIds, string orderByCerteria);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ProjectSummaryReportByWorkType", ReplyAction="http://tempuri.org/IReportService/ProjectSummaryReportByWorkTypeResponse")]
+        DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] ProjectSummaryReportByWorkType(int projectId, string timeTypeCategoryIds, string orderByCerteria);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -27,7 +45,7 @@ namespace PraticeManagement.ReportService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
         
-     
+      
         
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -45,8 +63,32 @@ namespace PraticeManagement.ReportService {
                 base(binding, remoteAddress) {
         }
         
-        public DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] GetPersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate) {
-            return base.Channel.GetPersonTimeEntriesDetails(personId, startDate, endDate);
+        public DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.PersonTimeEntriesDetails(personId, startDate, endDate);
+        }
+        
+        public DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesSummary(int personId, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.PersonTimeEntriesSummary(personId, startDate, endDate);
+        }
+        
+        public DataTransferObjects.Reports.PersonLevelGroupedHours[] TimePeriodSummaryReportByResource(System.DateTime startDate, System.DateTime endDate, string seniorityIds, string orderByCerteria) {
+            return base.Channel.TimePeriodSummaryReportByResource(startDate, endDate, seniorityIds, orderByCerteria);
+        }
+        
+        public DataTransferObjects.Reports.ProjectLevelGroupedHours[] TimePeriodSummaryReportByProject(System.DateTime startDate, System.DateTime endDate, string clientIds, string personStatusIds, string orderByCerteria) {
+            return base.Channel.TimePeriodSummaryReportByProject(startDate, endDate, clientIds, personStatusIds, orderByCerteria);
+        }
+        
+        public DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] TimePeriodSummaryReportByWorkType(System.DateTime startDate, System.DateTime endDate, string timeTypeCategoryIds, string orderByCerteria) {
+            return base.Channel.TimePeriodSummaryReportByWorkType(startDate, endDate, timeTypeCategoryIds, orderByCerteria);
+        }
+        
+        public DataTransferObjects.Reports.PersonLevelGroupedHours[] ProjectSummaryReportByResource(int projectId, string personRoleIds, string orderByCerteria) {
+            return base.Channel.ProjectSummaryReportByResource(projectId, personRoleIds, orderByCerteria);
+        }
+        
+        public DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] ProjectSummaryReportByWorkType(int projectId, string timeTypeCategoryIds, string orderByCerteria) {
+            return base.Channel.ProjectSummaryReportByWorkType(projectId, timeTypeCategoryIds, orderByCerteria);
         }
     }
 }
