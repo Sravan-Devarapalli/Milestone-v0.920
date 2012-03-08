@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
+using PraticeManagement.Controls;
+
 
 namespace PraticeManagement.Reporting
 {
@@ -89,16 +91,18 @@ namespace PraticeManagement.Reporting
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
-
-
+            if (!IsPostBack)
+            {
+                DataHelper.FillPersonList(ddlPerson, "Please Select a Person", 1);
+                ddlPerson.SelectedValue = DataHelper.CurrentPerson.Id.Value.ToString();
+            }
         }
 
         protected void btnView_Command(object sender, CommandEventArgs e)
         {
             int viewIndex = int.Parse((string)e.CommandArgument);
             SelectView((Control)sender, viewIndex);
-            
+            LoadActiveView();
         }
 
 
@@ -117,6 +121,22 @@ namespace PraticeManagement.Reporting
             SetCssClassEmpty();
 
             ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
+        }
+
+        private void LoadActiveView()
+        {
+            if (mvPersonDetailReport.ActiveViewIndex == 0)
+            {
+                int personId =Convert.ToInt32(ddlPerson.SelectedValue);
+                DateTime startDate =new DateTime(DateTime.Now.Year,DateTime.Now.Month,1).Date;
+
+                var list = ServiceCallers.Custom.Report(r=>r.PersonTimeEntriesSummary(personId,startDate,startDate.AddMonths(10).Date)).ToList();
+                ucpersonSummaryReport.DatabindRepepeaterSummary(list);
+            }
+            else
+            {
+ 
+            }
         }
 
 
@@ -150,6 +170,11 @@ namespace PraticeManagement.Reporting
             hdnEndDateTxtBoxId.Value = tbTo.ClientID;
             hdnStartDateCalExtenderBehaviourId.Value = clFromDate.BehaviorID;
             hdnEndDateCalExtenderBehaviourId.Value = clToDate.BehaviorID;
+
+            if (!IsPostBack)
+            {
+                LoadActiveView();
+            }
 
         }
     }
