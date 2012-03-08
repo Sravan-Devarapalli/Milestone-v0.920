@@ -12,6 +12,7 @@ using PraticeManagement.MembershipService;
 using PraticeManagement.AuthService;
 using PraticeManagement.TimeEntryService;
 using PraticeManagement.TimeTypeService;
+using PraticeManagement.ReportService;
 
 namespace PraticeManagement
 {
@@ -139,11 +140,23 @@ namespace PraticeManagement
                 Invoke(action);
             }
 
-
             public static TResult TimeType<TResult>(Func<TimeTypeServiceClient, TResult> func)
             {
                 return Invoke(func);
             }
+
+
+
+            public static void Report(Action<ReportServiceClient> action)
+            {
+                Invoke(action);
+            }
+
+            public static TResult Report<TResult>(Func<ReportServiceClient, TResult> func)
+            {
+                return Invoke(func);
+            }
+            
 
             public static TResult Calendar<TResult>(Func<CalendarServiceClient, TResult> func)
             {
