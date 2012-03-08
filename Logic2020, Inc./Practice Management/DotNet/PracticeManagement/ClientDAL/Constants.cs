@@ -283,6 +283,8 @@
             public const string BillableHours = "BillableHours";
             public const string NonBillableHours = "NonBillableHours";
             public const string GroupByCerteria = "GroupByCerteria";
+            public const string BillableValue = "BillableValue";
+            
         }
 
         #endregion
@@ -719,7 +721,8 @@
 
             public class Reports
             {
-                public const string GetPersonTimeEntriesDetails = "dbo.GetPersonTimeEntriesDetails";
+                public const string PersonTimeEntriesDetails = "dbo.PersonTimeEntriesDetails";
+                public const string PersonTimeEntriesSummary = "dbo.PersonTimeEntriesSummary";
                 public const string TimePeriodSummaryReportByResource = "dbo.TimePeriodSummaryReportByResource";
                 public const string TimePeriodSummaryReportByProject = "dbo.TimePeriodSummaryReportByProject";
                 public const string TimePeriodSummaryReportByWorkType = "dbo.TimePeriodSummaryReportByWorkType";
