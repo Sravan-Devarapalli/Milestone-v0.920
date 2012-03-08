@@ -34,6 +34,7 @@ namespace DataTransferObjects.Reports
         [DataMember]
         public double NonBillableHours { get; set; }
 
+
         [DataMember]
         public List<TimeEntriesGroupByDate> DayTotalHours
         {
@@ -41,6 +42,22 @@ namespace DataTransferObjects.Reports
             set;
         }
 
+
+        public int BillablePercent
+        {
+            get
+            {
+                return (int)(100 * BillableHours / (BillableHours + NonBillableHours));
+            }
+        }
+
+        public int NonBillablePercent
+        {
+            get
+            {
+                return (100 - BillablePercent);
+            }
+        }
 
 
         public double TotalHours
