@@ -13,7 +13,25 @@ namespace PracticeManagementService
     public interface IReportService
     {
         [OperationContract]
-        List<TimeEntriesGroupByClientAndProject> GetPersonTimeEntriesDetails(int personId, DateTime startDate, DateTime endDate);
+        List<TimeEntriesGroupByClientAndProject> PersonTimeEntriesDetails(int personId, DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        List<TimeEntriesGroupByClientAndProject> PersonTimeEntriesSummary(int personId, DateTime startDate, DateTime endDate);
+        
+        [OperationContract]
+        List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate, string seniorityIds, string orderByCerteria);
+
+        [OperationContract]
+        List<ProjectLevelGroupedHours> TimePeriodSummaryReportByProject(DateTime startDate, DateTime endDate, string clientIds, string personStatusIds, string orderByCerteria);
+
+        [OperationContract]
+        List<WorkTypeLevelGroupedHours> TimePeriodSummaryReportByWorkType(DateTime startDate, DateTime endDate, string timeTypeCategoryIds, string orderByCerteria);
+
+        [OperationContract]
+        List<PersonLevelGroupedHours> ProjectSummaryReportByResource(int projectId, string personRoleIds, string orderByCerteria);
+
+        [OperationContract]
+        List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(int projectId, string timeTypeCategoryIds, string orderByCerteria);
         
     }
 }
