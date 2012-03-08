@@ -456,7 +456,10 @@
     <Content Include="Controls\Generic\Filtering\OpportunityFilter.ascx" />
     <Content Include="Controls\Generic\Filtering\PersonReportFilter.ascx" />
     <Content Include="Controls\Generic\RecentNotes.ascx" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.PersonLevelGroupedHours2.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.ProjectLevelGroupedHours2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.WorkTypeLevelGroupedHours2.datasource" />
     <None Include="Service References\CalendarService\CalendarService1.wsdl" />
     <None Include="Service References\CalendarService\CalendarService3.xsd">
       <SubType>Designer</SubType>
