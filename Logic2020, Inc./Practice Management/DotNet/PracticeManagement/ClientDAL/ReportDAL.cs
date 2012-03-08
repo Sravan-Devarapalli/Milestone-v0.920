@@ -14,10 +14,10 @@ namespace DataAccess
     public static class ReportDAL
     {
 
-        public static List<TimeEntriesGroupByClientAndProject> GetPersonTimeEntriesDetails(int personId, DateTime startDate, DateTime endDate)
+        public static List<TimeEntriesGroupByClientAndProject> PersonTimeEntriesDetails(int personId, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetPersonTimeEntriesDetails, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.PersonTimeEntriesDetails, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
@@ -106,6 +106,71 @@ namespace DataAccess
                     {
                         result.Add(ptd);
                     }
+
+                }
+            }
+        }
+
+        public static List<TimeEntriesGroupByClientAndProject> PersonTimeEntriesSummary(int personId, DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.PersonTimeEntriesSummary, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<TimeEntriesGroupByClientAndProject>();
+                    ReadPersonTimeEntriesSummary(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadPersonTimeEntriesSummary(SqlDataReader reader, List<TimeEntriesGroupByClientAndProject> result)
+        {
+            if (reader.HasRows)
+            {
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNameColumn);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
+                int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIdColumn);
+                int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
+                int chargeCodeDateIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeDate);
+                int timeTypeNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeName);
+                int noteIndex = reader.GetOrdinal(Constants.ColumnNames.Note);
+                int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
+                int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
+                int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
+                
+
+
+                while (reader.Read())
+                {
+                    
+                    var ptd = new TimeEntriesGroupByClientAndProject
+                    {
+                        Project = new Project()
+                        {
+                            Id = reader.GetInt32(projectIdIndex),
+                            Name = reader.GetString(projectNameIndex),
+                            ProjectNumber = reader.GetString(projectNumberIndex)
+                        }
+                        ,
+                        Client = new Client()
+                        {
+                            Id = reader.GetInt32(clientIdIndex),
+                            Name = reader.GetString(clientNameIndex)
+                        },
+                        BillableHours = reader.GetDouble(billableHoursIndex),
+                        NonBillableHours = reader.GetDouble(nonBillableHoursIndex),
+                        BillableValue = reader.GetDouble(billableValueindex)
+                    };
 
                 }
             }
@@ -295,6 +360,19 @@ namespace DataAccess
         {
 
         }
+
+        public static List<PersonLevelGroupedHours> ProjectSummaryReportByResource(int projectId, string personRoleIds, string orderByCerteria)
+        {
+            List<PersonLevelGroupedHours> result = new List<PersonLevelGroupedHours>();
+            return result;
+        }
+
+        public static List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(int projectId, string timeTypeCategoryIds, string orderByCerteria)
+        {
+            List<WorkTypeLevelGroupedHours> result = new List<WorkTypeLevelGroupedHours>();
+            return result;
+        }
+
     }
 }
 
