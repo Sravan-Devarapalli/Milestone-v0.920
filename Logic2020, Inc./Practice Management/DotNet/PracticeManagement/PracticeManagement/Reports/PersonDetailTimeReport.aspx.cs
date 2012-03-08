@@ -13,7 +13,7 @@ namespace PraticeManagement.Reporting
     public partial class PersonDetailTimeReport : System.Web.UI.Page
     {
 
-        public DateTime StartPeriod
+        public DateTime StartDate
         {
             get
             {
@@ -64,7 +64,7 @@ namespace PraticeManagement.Reporting
         }
 
 
-        public DateTime EndPeriod
+        public DateTime EndDate
         {
             get
             {
@@ -130,7 +130,7 @@ namespace PraticeManagement.Reporting
                 int personId =Convert.ToInt32(ddlPerson.SelectedValue);
                 DateTime startDate =new DateTime(DateTime.Now.Year,DateTime.Now.Month,1).Date;
 
-                var list = ServiceCallers.Custom.Report(r=>r.PersonTimeEntriesSummary(personId,startDate,startDate.AddMonths(10).Date)).ToList();
+                var list = ServiceCallers.Custom.Report(r=>r.PersonTimeEntriesSummary(personId,StartDate,EndDate)).ToList();
                 ucpersonSummaryReport.DatabindRepepeaterSummary(list);
             }
             else
@@ -142,8 +142,8 @@ namespace PraticeManagement.Reporting
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            diRange.FromDate = StartPeriod;
-            diRange.ToDate = EndPeriod;
+            diRange.FromDate = StartDate;
+            diRange.ToDate = EndDate;
             lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
                     diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat),
                     diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat)
