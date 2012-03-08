@@ -778,6 +778,7 @@
                                         </ext4:EnableDisableExtForAdminSection>
                                         <asp:HiddenField ID="hdTargetHoursClientId" runat="server" />
                                         <asp:HiddenField ID="hdTargetNotesClientId" runat="server" />
+                                        <asp:HiddenField ID="hdTargetApprovedByClientId" runat="server" />
                                     </ItemTemplate>
                                 </asp:Repeater>
                             </FooterTemplate>
