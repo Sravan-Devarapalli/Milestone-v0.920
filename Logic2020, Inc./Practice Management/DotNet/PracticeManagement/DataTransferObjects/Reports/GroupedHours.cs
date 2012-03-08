@@ -33,6 +33,31 @@ namespace DataTransferObjects.Reports
                 return BillabileTotal + NonBillableTotal;
             }
         }
+
+        public void SetEnddate(string groupByCerteria)
+        {
+            if(StartDate != null)
+            {
+                switch (groupByCerteria)
+                { 
+                    case "day":
+                        EndDate = StartDate;
+                        break;
+                    case "week":
+                       EndDate = StartDate.AddDays(6);
+                       break;
+                    case "month":
+                       EndDate = StartDate.AddMonths(1).AddDays(-1);
+                       break;
+                    case "year":
+                       EndDate = StartDate.AddYears(1).AddDays(-1);
+                       break;
+
+                }
+
+            }
+        }
+
     }
 }
 
