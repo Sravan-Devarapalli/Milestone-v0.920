@@ -193,9 +193,17 @@ namespace PraticeManagement.Controls.TimeEntry
                 {
                     HostingPage.AdminExtenderNotesControls.Add(date, "");
                 }
+                if (!HostingPage.AdminExtenderApprovedManagersControls.ContainsKey(date))
+                {
+                    HostingPage.AdminExtenderApprovedManagersControls.Add(date, "");
+                }
                 if (!HostingPage.AdminExtenderHiddenNotesControls.ContainsKey(date))
                 {
                     HostingPage.AdminExtenderHiddenNotesControls.Add(date, "");
+                }
+                if (!HostingPage.AdminExtenderHiddenManagersControls.ContainsKey(date))
+                {
+                    HostingPage.AdminExtenderHiddenManagersControls.Add(date, "");
                 }
                 if (!HostingPage.AdminExtenderDeleteControls.ContainsKey(date))
                 {
@@ -209,13 +217,17 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 var tbNotesId = (ste.FindControl("tbNotes") as TextBox).ClientID;
                 var hdNotesId = (ste.FindControl("hdnNotes") as HiddenField).ClientID;
+                var ddlManagerId = (ste.FindControl("ddlApprovedManagers") as DropDownList).ClientID;
+                var hdnManagerId = (ste.FindControl("hdnApprovedManagerId") as HiddenField).ClientID;
                 var imgClear = (ste.FindControl("imgClear") as HtmlGenericControl).ClientID;
                 var cpp = (ste.FindControl("cpp") as LinkButton).ClientID;
                 var btnSaveNotes = (ste.FindControl("btnSaveNotes") as Button).ClientID;
 
                 HostingPage.AdminExtenderHoursControls[date] = textBoxId + ";" + HostingPage.AdminExtenderHoursControls[date];
                 HostingPage.AdminExtenderNotesControls[date] = tbNotesId + ";" + HostingPage.AdminExtenderNotesControls[date];
+                HostingPage.AdminExtenderApprovedManagersControls[date] = ddlManagerId + ";" + HostingPage.AdminExtenderApprovedManagersControls[date];
                 HostingPage.AdminExtenderHiddenNotesControls[date] = hdNotesId + ";" + HostingPage.AdminExtenderHiddenNotesControls[date];
+                HostingPage.AdminExtenderHiddenManagersControls[date] = hdnManagerId + ";" + HostingPage.AdminExtenderHiddenManagersControls[date];
                 HostingPage.AdminExtenderDeleteControls[date] = imgClear + ";" + HostingPage.AdminExtenderDeleteControls[date];
                 HostingPage.AdminExtenderCloseControls[date] = cpp + ";" + HostingPage.AdminExtenderCloseControls[date];
 
