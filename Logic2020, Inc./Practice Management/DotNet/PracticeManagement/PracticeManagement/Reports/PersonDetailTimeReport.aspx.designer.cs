@@ -265,13 +265,13 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Panel pnlPersonSummaryReport;
         
         /// <summary>
-        /// personSummaryReport control.
+        /// ucpersonSummaryReport control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Reports.PersonSummaryReport personSummaryReport;
+        protected global::PraticeManagement.Controls.Reports.PersonSummaryReport ucpersonSummaryReport;
         
         /// <summary>
         /// vwPersonDetailReport control.
@@ -292,13 +292,13 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Panel pnlPersonDetailReport;
         
         /// <summary>
-        /// personDetailReport control.
+        /// ucpersonDetailReport control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Reports.PersonDetailReport personDetailReport;
+        protected global::PraticeManagement.Controls.Reports.PersonDetailReport ucpersonDetailReport;
     }
 }
 
