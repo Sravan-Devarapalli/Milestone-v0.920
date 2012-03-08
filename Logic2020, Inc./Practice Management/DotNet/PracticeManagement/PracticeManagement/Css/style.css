@@ -2496,3 +2496,7 @@ end pixcel
     height: 12px !important;
     vertical-align: middle !important;
 }
+.displayNone
+{
+    display: none;
+}
