@@ -5,6 +5,8 @@
 <%@ Register Src="~/Controls/Reports/PersonDetailReport.ascx" TagPrefix="uc" TagName="PersonDetailReport" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
+<%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
@@ -103,6 +105,71 @@
             }
         }
     </script>
+    <style>
+        /* --------- Tabs for person and project details pages ------ */
+        
+        .CustomTabStyle tr
+        {
+            height: 30px;
+        }
+        
+        .CustomTabStyle td
+        {
+            background-color: White;
+            float: left;
+            padding: 8px 0px 15px 0px;
+            position: relative;
+        }
+        
+        .CustomTabStyle td a
+        {
+            text-decoration: none;
+        }
+        
+        .CustomTabStyle td span a
+        {
+            border-bottom: 1px dashed #0898e6;
+        }
+        
+        .CustomTabStyle td span a:hover
+        {
+            border-bottom: 1px dashed #006699;
+        }
+        
+        .CustomTabStyle td a.collapse
+        {
+            display: none;
+            position: absolute;
+        }
+        
+        .CustomTabStyle .SelectedSwitch a.collapse
+        {
+            display: block;
+            right: 2px;
+            top: 10px;
+        }
+        
+        .CustomTabStyle td span.bg
+        {
+            padding: 8px 10px 7px 10px;
+        }
+        
+        .CustomTabStyle .SelectedSwitch span.bg
+        {
+            background-color: #e2ebff;
+        }
+        
+        .tab-pane
+        {
+            background-color: #e2ebff;
+            padding: 5px;
+        }
+        
+        .info-field
+        {
+            width: 152px;
+        }
+    </style>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
@@ -122,6 +189,7 @@
         }
 
     </script>
+    <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
             <asp:DropDownList ID="ddlPerson" runat="server">
@@ -177,7 +245,7 @@
             </asp:Panel>
             <asp:Table ID="tblPersonViewSwitch" runat="server" CssClass="CustomTabStyle">
                 <asp:TableRow ID="rowSwitcher" runat="server">
-                    <asp:TableCell ID="cellSummary" runat="server">
+                    <asp:TableCell ID="cellSummary"  CssClass="SelectedSwitch" runat="server">
                         <span class="bg"><span>
                             <asp:LinkButton ID="lnkbtnSummary" runat="server" Text="Summary" CausesValidation="false"
                                 OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
@@ -191,13 +259,13 @@
                     </asp:TableCell>
                 </asp:TableRow>
             </asp:Table>
-            <asp:MultiView ID="mvPersonDetailReport" runat="server" ActiveViewIndex="1">
-                <asp:View ID="vwRecruiter" runat="server">
+            <asp:MultiView ID="mvPersonDetailReport" runat="server" ActiveViewIndex="0">
+                <asp:View ID="vwPersonSummaryReport" runat="server">
                     <asp:Panel ID="pnlPersonSummaryReport" runat="server" CssClass="tab-pane WholeWidth">
                         <uc:PersonSummaryReport ID="personSummaryReport" runat="server" />
                     </asp:Panel>
                 </asp:View>
-                <asp:View ID="vwProjects" runat="server">
+                <asp:View ID="vwPersonDetailReport" runat="server">
                     <asp:Panel ID="pnlPersonDetailReport" runat="server" CssClass="tab-pane WholeWidth">
                         <uc:PersonDetailReport ID="personDetailReport" runat="server" />
                     </asp:Panel>
