@@ -97,8 +97,26 @@ namespace PraticeManagement.Reporting
         protected void btnView_Command(object sender, CommandEventArgs e)
         {
             int viewIndex = int.Parse((string)e.CommandArgument);
-
+            SelectView((Control)sender, viewIndex);
             
+        }
+
+
+        private void SetCssClassEmpty()
+        {
+            foreach (TableCell cell in tblPersonViewSwitch.Rows[0].Cells)
+            {
+                cell.CssClass = string.Empty;
+            }
+        }
+
+        private void SelectView(Control sender, int viewIndex)
+        {
+            mvPersonDetailReport.ActiveViewIndex = viewIndex;
+
+            SetCssClassEmpty();
+
+            ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
         }
 
 
