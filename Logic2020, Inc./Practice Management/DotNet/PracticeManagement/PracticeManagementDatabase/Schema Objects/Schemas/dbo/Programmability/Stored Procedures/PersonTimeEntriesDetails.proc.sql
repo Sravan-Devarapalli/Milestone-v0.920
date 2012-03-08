@@ -43,6 +43,6 @@ BEGIN
 				TE.ChargeCodeDate,
 				TT.Name,
 				TE.Note
-	  ORDER BY  Pro.Name
+	  ORDER BY  Pro.Name,TE.ChargeCodeDate,TT.Name
 END	
 	
