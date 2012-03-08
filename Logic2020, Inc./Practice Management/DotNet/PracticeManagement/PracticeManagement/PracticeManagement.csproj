@@ -366,6 +366,8 @@
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
+    <Content Include="Controls\Reports\PersonDetailReport.ascx" />
+    <Content Include="Controls\Reports\PersonSummaryReport.ascx" />
     <Content Include="Controls\Reports\TimeEntriesByPerson.ascx" />
     <Content Include="Controls\TimeEntry\AdministrativeSingleTimeEntry.ascx" />
     <Content Include="Controls\TimeEntry\AdministrativeTimeEntryBar.ascx" />
@@ -447,6 +449,7 @@
     <Content Include="Reports\ConsultingCapacity.aspx" />
     <Content Include="Reports\ConsultingDemand.aspx" />
     <Content Include="Reports\Expenses.aspx" />
+    <Content Include="Reports\PersonDetailTimeReport.aspx" />
     <Content Include="RevenueGoals.aspx" />
     <Content Include="Controls\BudgetEntries.ascx" />
     <Content Include="Controls\ClientListControl.ascx" />
@@ -1218,6 +1221,20 @@
     <Compile Include="Controls\Reports\ConsultingDemand.ascx.designer.cs">
       <DependentUpon>ConsultingDemand.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Reports\PersonDetailReport.ascx.cs">
+      <DependentUpon>PersonDetailReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\PersonDetailReport.ascx.designer.cs">
+      <DependentUpon>PersonDetailReport.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\PersonSummaryReport.ascx.cs">
+      <DependentUpon>PersonSummaryReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\PersonSummaryReport.ascx.designer.cs">
+      <DependentUpon>PersonSummaryReport.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Reports\TimeEntriesByPerson.ascx.cs">
       <DependentUpon>TimeEntriesByPerson.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1584,6 +1601,13 @@
     </Compile>
     <Compile Include="Reports\Expenses.aspx.designer.cs">
       <DependentUpon>Expenses.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\PersonDetailTimeReport.aspx.cs">
+      <DependentUpon>PersonDetailTimeReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\PersonDetailTimeReport.aspx.designer.cs">
+      <DependentUpon>PersonDetailTimeReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="RevenueGoals.aspx.cs">
       <DependentUpon>RevenueGoals.aspx</DependentUpon>
