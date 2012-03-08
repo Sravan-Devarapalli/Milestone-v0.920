@@ -136,14 +136,13 @@ namespace DataAccess
         {
             if (reader.HasRows)
             {
-                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+               
                 int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNameColumn);
                 int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
-                int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIdColumn);
+                
                 int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
-                int chargeCodeDateIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeDate);
-                int timeTypeNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeName);
-                int noteIndex = reader.GetOrdinal(Constants.ColumnNames.Note);
+               
+              
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
                 int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
@@ -157,20 +156,21 @@ namespace DataAccess
                     {
                         Project = new Project()
                         {
-                            Id = reader.GetInt32(projectIdIndex),
+                           
                             Name = reader.GetString(projectNameIndex),
                             ProjectNumber = reader.GetString(projectNumberIndex)
                         }
                         ,
                         Client = new Client()
                         {
-                            Id = reader.GetInt32(clientIdIndex),
                             Name = reader.GetString(clientNameIndex)
                         },
                         BillableHours = reader.GetDouble(billableHoursIndex),
                         NonBillableHours = reader.GetDouble(nonBillableHoursIndex),
                         BillableValue = reader.GetDouble(billableValueindex)
                     };
+
+                    result.Add(ptd);
 
                 }
             }
