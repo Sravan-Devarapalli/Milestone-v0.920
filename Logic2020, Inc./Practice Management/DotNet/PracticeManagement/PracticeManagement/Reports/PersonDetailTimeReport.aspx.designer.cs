@@ -13,6 +13,15 @@ namespace PraticeManagement.Reporting {
     public partial class PersonDetailTimeReport {
         
         /// <summary>
+        /// LoadingProgress1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.LoadingProgress LoadingProgress1;
+        
+        /// <summary>
         /// upnlBody control.
         /// </summary>
         /// <remarks>
@@ -238,13 +247,13 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.MultiView mvPersonDetailReport;
         
         /// <summary>
-        /// vwRecruiter control.
+        /// vwPersonSummaryReport control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.View vwRecruiter;
+        protected global::System.Web.UI.WebControls.View vwPersonSummaryReport;
         
         /// <summary>
         /// pnlPersonSummaryReport control.
@@ -265,13 +274,13 @@ namespace PraticeManagement.Reporting {
         protected global::PraticeManagement.Controls.Reports.PersonSummaryReport personSummaryReport;
         
         /// <summary>
-        /// vwProjects control.
+        /// vwPersonDetailReport control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.View vwProjects;
+        protected global::System.Web.UI.WebControls.View vwPersonDetailReport;
         
         /// <summary>
         /// pnlPersonDetailReport control.
