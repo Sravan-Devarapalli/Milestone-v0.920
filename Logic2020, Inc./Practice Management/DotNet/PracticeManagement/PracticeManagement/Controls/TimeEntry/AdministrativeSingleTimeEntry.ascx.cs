@@ -331,6 +331,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 btnSaveNotes.Enabled =
                 tbNotes.Enabled =
+                ddlApprovedManagers.Enabled =
                 tbActualHours.Enabled = enabled;
             }
         }
@@ -396,7 +397,7 @@ namespace PraticeManagement.Controls.TimeEntry
             var isValidAdminstrativeHours = true;
             var isValidHours = true;
 
-            isValidAdminstrativeHours = IsValidAdminstrativeHours();
+            isValidAdminstrativeHours = IsValidAdminstrativeHours(isORT);
             if (!isValidAdminstrativeHours)
                 HostingPage.IsValidAdminstrativeHours = isValidAdminstrativeHours;
 
@@ -432,14 +433,15 @@ namespace PraticeManagement.Controls.TimeEntry
             return true;
         }
 
-        private bool IsValidAdminstrativeHours()
+        private bool IsValidAdminstrativeHours(bool isORT)
         {
             double hours;
             if (string.IsNullOrEmpty(tbActualHours.Text))
             {
                 if (string.IsNullOrEmpty(tbNotes.Text))
                 {
-                    return true;
+                    if (!isORT || (isORT && ddlApprovedManagers.SelectedIndex == 0))
+                        return true;
                 }
 
                 return false;
