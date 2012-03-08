@@ -39,9 +39,9 @@ BEGIN
 													ELSE 0	
 													END
 											  )
-				) AS TotalValue,
+				) AS BillableValue,
 			PRO.ProjectNumber,
-			C.Name AS  ClentName
+			C.Name AS  ClientName
 	FROM dbo.TimeEntry AS TE 
 	JOIN dbo.TimeEntryHours AS TEH  ON TEH.TimeEntryId = TE.TimeEntryId 
 	JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
@@ -55,5 +55,6 @@ BEGIN
 			 PRO.Name,
 			 C.Name,
 			 PRO.ProjectNumber
+	ORDER BY PRO.Name
 END	
 	
