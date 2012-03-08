@@ -31,6 +31,7 @@
         <siteMapNode url="~/Reports/PersonStats.aspx" title="Person Stats" roles="Administrator"  VirtualPath="~/Reports/PersonStats.aspx" QuickLinkTitle="Person Stats"  description="Person Stats" ShowURL="true" />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Time Entry" title="Time">
+        <siteMapNode url="~/Reports/PersonDetailTimeReport.aspx" title="Person Detail Time Report"  VirtualPath="~/Reports/PersonDetailTimeReport.aspx" QuickLinkTitle="Person Detail Time Report"  description="Person Detail Time Report" ShowURL="true"/>
         <siteMapNode url="~/Reports/TimeEntryReport.aspx" title="Generic Time Entry"  VirtualPath="~/Reports/TimeEntryReport.aspx" QuickLinkTitle="Generic Time Entry"  roles="Administrator"  description="Generic Time Entry" ShowURL="true"/>
         <siteMapNode url="~/Reports/TimeEntriesByProject.aspx?from=reports"  VirtualPath="~/Reports/TimeEntriesByProject.aspx?from=reports" QuickLinkTitle="Time Entry by Project"  title="Time Entry by Project" roles="Administrator" description="Time Entry by Project" ShowURL="true" />
         <siteMapNode url="~/Reports/TimeEntriesByPerson.aspx?from=reports"  VirtualPath="~/Reports/TimeEntriesByPerson.aspx?from=reports" QuickLinkTitle="Time Entry by Person"  title="Time Entry by Person"  description="Time Entry by Person" ShowURL="true" />
