@@ -123,6 +123,7 @@ namespace PraticeManagement
         public const string extEnableDisableExtenderForAdminstratorSectionId = "extEnableDisableExtenderForAdminstratorSection";
         public const string hdTargetNotesId = "hdTargetNotesClientId";
         public const string hdTargetHoursId = "hdTargetHoursClientId";
+        public const string hdTargetApprovedManagersId = "hdTargetApprovedByClientId";
         private const string repAccountProjectSectionRepeater = "repAccountProjectSection";
         private const string PlaceHolderCell = "PlaceHolderCell";
         #endregion
@@ -224,6 +225,12 @@ namespace PraticeManagement
             set;
         }
 
+        public Dictionary<DateTime, HiddenField> AdminstratorSectionTargetApprovedMangers
+        {
+            get;
+            set;
+        }
+
         public Dictionary<DateTime, string> AdminExtenderHoursControls
         {
             get;
@@ -236,7 +243,19 @@ namespace PraticeManagement
             set;
         }
 
+        public Dictionary<DateTime, string> AdminExtenderApprovedManagersControls
+        {
+            get;
+            set;
+        }
+
         public Dictionary<DateTime, string> AdminExtenderHiddenNotesControls
+        {
+            get;
+            set;
+        }
+
+        public Dictionary<DateTime, string> AdminExtenderHiddenManagersControls
         {
             get;
             set;
@@ -818,9 +837,12 @@ namespace PraticeManagement
                 repProjectTesHeader.DataBind();
                 AdminstratorSectionTargetHours = new Dictionary<DateTime, HiddenField>();
                 AdminstratorSectionTargetNotes = new Dictionary<DateTime, HiddenField>();
+                AdminstratorSectionTargetApprovedMangers = new Dictionary<DateTime, HiddenField>();
                 AdminExtenderHoursControls = new Dictionary<DateTime, string>();
                 AdminExtenderNotesControls = new Dictionary<DateTime, string>();
+                AdminExtenderApprovedManagersControls = new Dictionary<DateTime, string>();
                 AdminExtenderHiddenNotesControls = new Dictionary<DateTime, string>();
+                AdminExtenderHiddenManagersControls = new Dictionary<DateTime, string>();
                 AdminExtenderDeleteControls = new Dictionary<DateTime, string>();
                 AdminExtenderCloseControls = new Dictionary<DateTime, string>();
             }
@@ -898,13 +920,18 @@ namespace PraticeManagement
                 var extEnableDisableExtenderForAdminstratorSection = e.Item.FindControl(extEnableDisableExtenderForAdminstratorSectionId) as EnableDisableExtForAdminSection;
                 var hdTargetHours = e.Item.FindControl(hdTargetHoursId) as HiddenField;
                 var hdTargetNotes = e.Item.FindControl(hdTargetNotesId) as HiddenField;
+                var hdnTargetApprovedManagers = e.Item.FindControl(hdTargetApprovedManagersId) as HiddenField;
                 extEnableDisableExtenderForAdminstratorSection.TargetAcutalHoursHiddenFieldId = hdTargetHours.ClientID;
                 extEnableDisableExtenderForAdminstratorSection.TargetNotesHiddenFieldId = hdTargetNotes.ClientID;
+                extEnableDisableExtenderForAdminstratorSection.TargetManagersHiddenFieldId = hdnTargetApprovedManagers.ClientID;
                 AdminstratorSectionTargetNotes.Add(date, hdTargetNotes);
                 AdminstratorSectionTargetHours.Add(date, hdTargetHours);
+                AdminstratorSectionTargetApprovedMangers.Add(date, hdnTargetApprovedManagers);
                 extEnableDisableExtenderForAdminstratorSection.HoursControlsToCheck = AdminExtenderHoursControls[date];
                 extEnableDisableExtenderForAdminstratorSection.NotesControlsToCheck = AdminExtenderNotesControls[date];
+                extEnableDisableExtenderForAdminstratorSection.ManagersControlsToCheck = AdminExtenderApprovedManagersControls[date];
                 extEnableDisableExtenderForAdminstratorSection.HiddenNotesControlsToCheck = AdminExtenderHiddenNotesControls[date];
+                extEnableDisableExtenderForAdminstratorSection.HiddenManagersControlsToCheck = AdminExtenderHiddenManagersControls[date];
                 extEnableDisableExtenderForAdminstratorSection.DeleteControlsToCheck = AdminExtenderDeleteControls[date];
                 extEnableDisableExtenderForAdminstratorSection.CloseControlsToCheck = AdminExtenderCloseControls[date];
             }
