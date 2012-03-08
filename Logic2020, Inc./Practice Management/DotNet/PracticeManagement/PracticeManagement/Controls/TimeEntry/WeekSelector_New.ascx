@@ -48,7 +48,7 @@
         </tr>
     </table>
 </asp:Panel>
-<asp:Panel ID="pnlPopupCalendar" runat="server" class="calendarWrapper">
+<asp:Panel ID="pnlPopupCalendar" runat="server" class="calendarWrapper" style="display:none;">
     <asp:Calendar ID="calendar" runat="server" SelectionMode="Day" OnSelectionChanged="calendar_SelectionChanged"
         OnVisibleMonthChanged="calendar_OnVisibleMonthChanged">
         <DayHeaderStyle CssClass="calendarDayHeader" />
