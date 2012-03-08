@@ -6,7 +6,6 @@
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
-
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
@@ -245,7 +244,7 @@
             </asp:Panel>
             <asp:Table ID="tblPersonViewSwitch" runat="server" CssClass="CustomTabStyle">
                 <asp:TableRow ID="rowSwitcher" runat="server">
-                    <asp:TableCell ID="cellSummary"  CssClass="SelectedSwitch" runat="server">
+                    <asp:TableCell ID="cellSummary" CssClass="SelectedSwitch" runat="server">
                         <span class="bg"><span>
                             <asp:LinkButton ID="lnkbtnSummary" runat="server" Text="Summary" CausesValidation="false"
                                 OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
@@ -262,12 +261,12 @@
             <asp:MultiView ID="mvPersonDetailReport" runat="server" ActiveViewIndex="0">
                 <asp:View ID="vwPersonSummaryReport" runat="server">
                     <asp:Panel ID="pnlPersonSummaryReport" runat="server" CssClass="tab-pane WholeWidth">
-                        <uc:PersonSummaryReport ID="personSummaryReport" runat="server" />
+                        <uc:PersonSummaryReport ID="ucpersonSummaryReport" runat="server" />
                     </asp:Panel>
                 </asp:View>
                 <asp:View ID="vwPersonDetailReport" runat="server">
                     <asp:Panel ID="pnlPersonDetailReport" runat="server" CssClass="tab-pane WholeWidth">
-                        <uc:PersonDetailReport ID="personDetailReport" runat="server" />
+                        <uc:PersonDetailReport ID="ucpersonDetailReport" runat="server" />
                     </asp:Panel>
                 </asp:View>
             </asp:MultiView>
