@@ -25,7 +25,6 @@ namespace DataTransferObjects.Reports
         [DataMember]
         public int NonBillableTotal { get; set; }
 
-        [DataMember]
         public int CombinedTotal
         {
             get
