@@ -11,22 +11,136 @@
       <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IReportService_GetPersonTimeEntriesDetails_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonTimeEntriesDetails" />
+  <wsdl:message name="IReportService_PersonTimeEntriesDetails_InputMessage">
+    <wsdl:part name="parameters" element="tns:PersonTimeEntriesDetails" />
   </wsdl:message>
-  <wsdl:message name="IReportService_GetPersonTimeEntriesDetails_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonTimeEntriesDetailsResponse" />
+  <wsdl:message name="IReportService_PersonTimeEntriesDetails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PersonTimeEntriesDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_PersonTimeEntriesSummary_InputMessage">
+    <wsdl:part name="parameters" element="tns:PersonTimeEntriesSummary" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_PersonTimeEntriesSummary_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PersonTimeEntriesSummaryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimePeriodSummaryReportByResource_InputMessage">
+    <wsdl:part name="parameters" element="tns:TimePeriodSummaryReportByResource" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimePeriodSummaryReportByResource_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TimePeriodSummaryReportByResourceResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimePeriodSummaryReportByProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:TimePeriodSummaryReportByProject" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimePeriodSummaryReportByProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TimePeriodSummaryReportByProjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimePeriodSummaryReportByWorkType_InputMessage">
+    <wsdl:part name="parameters" element="tns:TimePeriodSummaryReportByWorkType" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimePeriodSummaryReportByWorkType_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TimePeriodSummaryReportByWorkTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectSummaryReportByResource_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectSummaryReportByResource" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectSummaryReportByResource_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectSummaryReportByResourceResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectSummaryReportByWorkType_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectSummaryReportByWorkType" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectSummaryReportByWorkType_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectSummaryReportByWorkTypeResponse" />
   </wsdl:message>
   <wsdl:portType name="IReportService">
-    <wsdl:operation name="GetPersonTimeEntriesDetails">
-      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/GetPersonTimeEntriesDetails" message="tns:IReportService_GetPersonTimeEntriesDetails_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/GetPersonTimeEntriesDetailsResponse" message="tns:IReportService_GetPersonTimeEntriesDetails_OutputMessage" />
+    <wsdl:operation name="PersonTimeEntriesDetails">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails" message="tns:IReportService_PersonTimeEntriesDetails_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesDetailsResponse" message="tns:IReportService_PersonTimeEntriesDetails_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PersonTimeEntriesSummary">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesSummary" message="tns:IReportService_PersonTimeEntriesSummary_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesSummaryResponse" message="tns:IReportService_PersonTimeEntriesSummary_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TimePeriodSummaryReportByResource">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByResource" message="tns:IReportService_TimePeriodSummaryReportByResource_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByResourceResponse" message="tns:IReportService_TimePeriodSummaryReportByResource_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TimePeriodSummaryReportByProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByProject" message="tns:IReportService_TimePeriodSummaryReportByProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByProjectResponse" message="tns:IReportService_TimePeriodSummaryReportByProject_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TimePeriodSummaryReportByWorkType">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByWorkType" message="tns:IReportService_TimePeriodSummaryReportByWorkType_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByWorkTypeResponse" message="tns:IReportService_TimePeriodSummaryReportByWorkType_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ProjectSummaryReportByResource">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectSummaryReportByResource" message="tns:IReportService_ProjectSummaryReportByResource_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ProjectSummaryReportByResourceResponse" message="tns:IReportService_ProjectSummaryReportByResource_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ProjectSummaryReportByWorkType">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectSummaryReportByWorkType" message="tns:IReportService_ProjectSummaryReportByWorkType_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ProjectSummaryReportByWorkTypeResponse" message="tns:IReportService_ProjectSummaryReportByWorkType_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IReportService" type="tns:IReportService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="GetPersonTimeEntriesDetails">
-      <soap:operation soapAction="http://tempuri.org/IReportService/GetPersonTimeEntriesDetails" style="document" />
+    <wsdl:operation name="PersonTimeEntriesDetails">
+      <soap:operation soapAction="http://tempuri.org/IReportService/PersonTimeEntriesDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PersonTimeEntriesSummary">
+      <soap:operation soapAction="http://tempuri.org/IReportService/PersonTimeEntriesSummary" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TimePeriodSummaryReportByResource">
+      <soap:operation soapAction="http://tempuri.org/IReportService/TimePeriodSummaryReportByResource" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TimePeriodSummaryReportByProject">
+      <soap:operation soapAction="http://tempuri.org/IReportService/TimePeriodSummaryReportByProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TimePeriodSummaryReportByWorkType">
+      <soap:operation soapAction="http://tempuri.org/IReportService/TimePeriodSummaryReportByWorkType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProjectSummaryReportByResource">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ProjectSummaryReportByResource" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProjectSummaryReportByWorkType">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ProjectSummaryReportByWorkType" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
