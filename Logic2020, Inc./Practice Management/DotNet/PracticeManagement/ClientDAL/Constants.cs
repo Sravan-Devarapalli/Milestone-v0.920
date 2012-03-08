@@ -125,6 +125,7 @@
             public const string PersonRoleId = "PersonRoleId";
             public const string PersonRoleName = "RoleName";
             public const string PersonSeniorityId = "SeniorityId";
+            public const string PersonSeniorityName = "SeniorityName";
             public const string PersonVacationsOnMilestone = "VacationDays";
             public const string ProjectEndDate = "ProjectEndDate";
             public const string PracticesOwned = "PracticesOwned";
@@ -281,7 +282,7 @@
             public const string IsORTColumn = "IsORT";
             public const string BillableHours = "BillableHours";
             public const string NonBillableHours = "NonBillableHours";
-            
+            public const string GroupByCerteria = "GroupByCerteria";
         }
 
         #endregion
@@ -545,6 +546,11 @@
             public const string SubstituteDayDateParam = "@SubstituteDayDate";
             public const string HolidayDateParam = "@HolidayDate";
             public const string ApprovedByParam = "@ApprovedBy";
+            public const string PersonStatusIdsParam = "@PersonStatusIds";
+            public const string OrderByCerteriaParam = "@OrderByCerteria";
+            public const string SeniorityIdsParam = "@SeniorityIds";
+            public const string TimeTypeCategoryIdsParam = "@TimeTypeCategoryIds";
+
 
 
         }
@@ -714,6 +720,10 @@
             public class Reports
             {
                 public const string GetPersonTimeEntriesDetails = "dbo.GetPersonTimeEntriesDetails";
+                public const string TimePeriodSummaryReportByResource = "dbo.TimePeriodSummaryReportByResource";
+                public const string TimePeriodSummaryReportByProject = "dbo.TimePeriodSummaryReportByProject";
+                public const string TimePeriodSummaryReportByWorkType = "dbo.TimePeriodSummaryReportByWorkType";
+                
             }
 
             public class Calendar
