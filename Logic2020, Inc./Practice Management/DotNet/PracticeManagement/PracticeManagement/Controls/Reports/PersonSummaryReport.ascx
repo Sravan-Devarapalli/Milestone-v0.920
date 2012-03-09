@@ -3,22 +3,37 @@
 <asp:Repeater ID="repSummary" runat="server">
     <HeaderTemplate>
         <table class="CompPerfTable WholeWidth">
-            <tr>
-                <td>
-                    Project Name
-                </td>
-                <td>
-                    Billable
-                </td>
-                <td>
-                    Value
-                </td>
-                <td>
-                    Non-Billable
-                </td>
-                <td>
-                    Total Percent of Total Hours this Period
-                </td>
+            <tr class="CompPerfHeader">
+                <th>
+                    <div class="ie-bg">
+                        Project Name
+                    </div>
+                </th>
+                <th>
+                    <div class="ie-bg">
+                        Billable
+                    </div>
+                </th>
+                <th>
+                    <div class="ie-bg">
+                        Value
+                    </div>
+                </th>
+                <th>
+                    <div class="ie-bg">
+                        Non-Billable
+                    </div>
+                </th>
+                 <th>
+                    <div class="ie-bg">
+                        Total
+                    </div>
+                </th>
+                <th>
+                    <div class="ie-bg">
+                        Total Percent of Total Hours this Period
+                    </div>
+                </th>
             </tr>
     </HeaderTemplate>
     <ItemTemplate>
@@ -47,6 +62,9 @@
             </td>
             <td>
                 <%# Eval("NonBillableHours")%>
+            </td>
+            <td>
+                <%# Eval("TotalHours")%>
             </td>
             <td>
                 <table>
