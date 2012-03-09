@@ -242,6 +242,92 @@
                     </tr>
                 </table>
             </asp:Panel>
+            <br />
+            <table style="width: 100%;">
+                <tr>
+                    <td style="width: 50%;">
+                        <asp:Label ID="lblPersonname" runat="server"></asp:Label>
+                    </td>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>
+                                    Total Hours
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <asp:Literal ID="ltrlTotalHours" runat="server"></asp:Literal>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>
+                                    Total Value
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <asp:Literal ID="ltrlTotalValue" runat="server"></asp:Literal>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>
+                                    Billable
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <asp:Literal ID="ltrlBillableHours" runat="server"></asp:Literal>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    NonBillable
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <asp:Literal ID="ltrlNonBillableHours" runat="server"></asp:Literal>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table style="height: 60px;">
+                            <tr>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr id="trBillable" runat="server" >
+                                <td valign="middle" style="width: 20px; text-align: center; background-color: Green;">
+                                    <asp:Literal ID="ltrlBillablePercent" runat="server"></asp:Literal>%
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table style="height: 60px;">
+                            <tr>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr id="trNonBillable" runat="server"  >
+                                <td valign="middle" style="width: 20px; text-align: center; background-color: Gray;">
+                                    <asp:Literal ID="ltrlNonBillablePercent" runat="server"></asp:Literal>%
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
             <asp:Table ID="tblPersonViewSwitch" runat="server" CssClass="CustomTabStyle">
                 <asp:TableRow ID="rowSwitcher" runat="server">
                     <asp:TableCell ID="cellSummary" CssClass="SelectedSwitch" runat="server">
