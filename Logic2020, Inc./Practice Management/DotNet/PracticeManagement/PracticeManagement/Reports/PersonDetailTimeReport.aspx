@@ -11,39 +11,9 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
     <script language="javascript" type="text/javascript">
 
-        function CheckAndShowCustomDatesPoup(ddlPeriod) {
-            imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
-            lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
-            if (ddlPeriod.value == '0') {
-                imgCalender.attributes["class"].value = "";
-                lblCustomDateRange.attributes["class"].value = "";
-                if (imgCalender.fireEvent) {
-                    imgCalender.style.display = "";
-                    lblCustomDateRange.style.display = "";
-                    imgCalender.click();
-                }
-                if (document.createEvent) {
-                    var event = document.createEvent('HTMLEvents');
-                    event.initEvent('click', true, true);
-                    imgCalender.dispatchEvent(event);
-                }
-            }
-            else {
-                imgCalender.attributes["class"].value = "displayNone";
-                lblCustomDateRange.attributes["class"].value = "displayNone";
-                if (imgCalender.fireEvent) {
-                    imgCalender.style.display = "none";
-                    lblCustomDateRange.style.display = "none";
-                }
-            }
-        }
-
         function ReAssignStartDateEndDates() {
             hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
             hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
-            hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
-            txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
-            txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
             hdnStartDateCalExtenderBehaviourId = document.getElementById('<%= hdnStartDateCalExtenderBehaviourId.ClientID %>');
             hdnEndDateCalExtenderBehaviourId = document.getElementById('<%= hdnEndDateCalExtenderBehaviourId.ClientID %>');
 
@@ -55,53 +25,9 @@
             if (endDateCalExtender != null) {
                 endDateCalExtender.set_selectedDate(hdnEndDate.value);
             }
-            btnCustDatesOK = document.getElementById('<%= btnCustDatesOK.ClientID %>');
-            btnCustDatesOK.click();
-        }
 
-        function CheckIfDatesValid() {
-            hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
-            hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
-            txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
-            txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
-            var startDate = new Date(txtStartDate.value);
-            var endDate = new Date(txtEndDate.value);
-            if (txtStartDate.value != '' && txtEndDate.value != ''
-            && startDate <= endDate) {
-                var startYear = parseInt(startDate.format('yyyy'));
-                var endYear = parseInt(endDate.format('yyyy'));
-                var startMonth = 0;
-                var endMonth = 0;
-                if (startDate.format('MM')[0] == '0') {
-                    startMonth = parseInt(startDate.format('MM')[1]);
-                }
-                else {
-                    startMonth = parseInt(startDate.format('MM'));
-                }
-                if (endDate.format('MM')[0] == '0') {
-                    endMonth = parseInt(endDate.format('MM')[1]);
-                }
-                else {
-                    endMonth = parseInt(endDate.format('MM'));
-                }
-                if ((startYear == endYear && ((endMonth - startMonth + 1) <= 3))
-            || (((((endYear - startYear) * 12 + endMonth) - startMonth + 1)) <= 3)
-            || ((endDate - startDate) / (1000 * 60 * 60 * 24)) < 90
-            ) {
-                    var btnCustDatesClose = document.getElementById('<%= btnCustDatesClose.ClientID %>');
-                    hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
-                    hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
-                    lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
-                    var startDate = new Date(txtStartDate.value);
-                    var endDate = new Date(txtEndDate.value);
-                    var startDateStr = startDate.format("MM/dd/yyyy");
-                    var endDateStr = endDate.format("MM/dd/yyyy");
-                    hdnStartDate.value = startDateStr;
-                    hdnEndDate.value = endDateStr;
-                    lblCustomDateRange.innerHTML = '(' + startDateStr + '&nbsp;-&nbsp;' + endDateStr + ')';
-                    btnCustDatesClose.click();
-                }
-            }
+            var valSummary = document.getElementById('<%= valSumDateRange.ClientID %>');
+            valSummary.style.display = 'none';
         }
     </script>
     <style>
@@ -193,7 +119,7 @@
         <ContentTemplate>
             <asp:DropDownList ID="ddlPerson" runat="server">
             </asp:DropDownList>
-            <asp:DropDownList ID="ddlPeriod" onchange="CheckAndShowCustomDatesPoup(this);" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
+            <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
                 <asp:ListItem Selected="True" Text="This Week" Value="7"></asp:ListItem>
                 <asp:ListItem Text="This Month" Value="30"></asp:ListItem>
                 <asp:ListItem Text="This Year" Value="365"></asp:ListItem>
@@ -204,8 +130,6 @@
             </asp:DropDownList>
             <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
             <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
-            <asp:HiddenField ID="hdnStartDateTxtBoxId" runat="server" Value="" />
-            <asp:HiddenField ID="hdnEndDateTxtBoxId" runat="server" Value="" />
             <asp:HiddenField ID="hdnStartDateCalExtenderBehaviourId" runat="server" Value="" />
             <asp:HiddenField ID="hdnEndDateCalExtenderBehaviourId" runat="server" Value="" />
             &nbsp;
@@ -213,9 +137,9 @@
             <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
             &nbsp;
             <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
-                CancelControlID="btnCustDatesCancel" OkControlID="btnCustDatesClose" BackgroundCssClass="modalBackground"
+                CancelControlID="btnCustDatesCancel" BackgroundCssClass="modalBackground"
                 PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates" DropShadow="false"
-                OnCancelScript="ReAssignStartDateEndDates();" OnOkScript="return false;" />
+                OnCancelScript="ReAssignStartDateEndDates();" />
             <asp:Panel ID="pnlCustomDates" runat="server" BackColor="White" BorderColor="Black"
                 CssClass="ConfirmBoxClass" Style="padding-top: 20px; display: none;" BorderWidth="2px">
                 <table class="WholeWidth">
@@ -227,17 +151,15 @@
                     </tr>
                     <tr>
                         <td align="center" style="padding: 10px 0px 10px 0px;">
-                            <asp:Button ID="btnCustDatesOK" runat="server" OnClientClick="CheckIfDatesValid();"
-                                Text="OK" Style="float: none !Important;" CausesValidation="true" />
-                            <asp:Button ID="btnCustDatesClose" runat="server" Style="display: none;" CausesValidation="true"
-                                OnClientClick="return false;" />
+                            <asp:Button ID="btnCustDatesOK" runat="server" OnClick="btnCustDatesOK_Click" Text="OK"
+                                Style="float: none !Important;" CausesValidation="true" />
                             &nbsp; &nbsp;
                             <asp:Button ID="btnCustDatesCancel" runat="server" Text="Cancel" Style="float: none !Important;" />
                         </td>
                     </tr>
                     <tr>
                         <td align="center">
-                            <asp:ValidationSummary ID="valSum" runat="server" />
+                            <asp:ValidationSummary ID="valSumDateRange" runat="server" ValidationGroup='<%# ClientID %>' />
                         </td>
                     </tr>
                 </table>
@@ -306,7 +228,7 @@
                                 <td>
                                 </td>
                             </tr>
-                            <tr id="trBillable" runat="server" >
+                            <tr id="trBillable" runat="server">
                                 <td valign="middle" style="width: 20px; text-align: center; background-color: Green;">
                                     <asp:Literal ID="ltrlBillablePercent" runat="server"></asp:Literal>%
                                 </td>
@@ -319,7 +241,7 @@
                                 <td>
                                 </td>
                             </tr>
-                            <tr id="trNonBillable" runat="server"  >
+                            <tr id="trNonBillable" runat="server">
                                 <td valign="middle" style="width: 20px; text-align: center; background-color: Gray;">
                                     <asp:Literal ID="ltrlNonBillablePercent" runat="server"></asp:Literal>%
                                 </td>
