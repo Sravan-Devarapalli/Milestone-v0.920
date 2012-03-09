@@ -261,8 +261,8 @@ namespace DataAccess
                         GroupedHours GH = new GroupedHours();
                         GH.StartDate = reader.GetDateTime(startDateIndex);
                         GH.SetEnddate(reader.GetString(groupByCerteriaIndex));
-                        GH.BillabileTotal = reader.GetInt32(billableHoursIndex);
-                        GH.NonBillableTotal = reader.GetInt32(nonBillableHoursIndex);
+                        GH.BillabileTotal = reader.GetDouble(billableHoursIndex);
+                        GH.NonBillableTotal = reader.GetDouble(nonBillableHoursIndex);
 
                         PLGH.GroupedHoursList = new List<GroupedHours>();
                         PLGH.GroupedHoursList.Add(GH);
@@ -274,8 +274,8 @@ namespace DataAccess
                         GroupedHours GH = new GroupedHours();
                         GH.StartDate = reader.GetDateTime(startDateIndex);
                         GH.SetEnddate(reader.GetString(groupByCerteriaIndex));
-                        GH.BillabileTotal = reader.GetInt32(billableHoursIndex);
-                        GH.NonBillableTotal = reader.GetInt32(nonBillableHoursIndex);
+                        GH.BillabileTotal = reader.GetDouble(billableHoursIndex);
+                        GH.NonBillableTotal = reader.GetDouble(nonBillableHoursIndex);
 
                         PLGH.GroupedHoursList.Add(GH);
                     }
@@ -341,8 +341,8 @@ namespace DataAccess
                         GroupedHours GH = new GroupedHours();
                         GH.StartDate = reader.GetDateTime(startDateIndex);
                         GH.SetEnddate(reader.GetString(groupByCerteriaIndex));
-                        GH.BillabileTotal = reader.GetInt32(billableHoursIndex);
-                        GH.NonBillableTotal = reader.GetInt32(nonBillableHoursIndex);
+                        GH.BillabileTotal = reader.GetDouble(billableHoursIndex);
+                        GH.NonBillableTotal = reader.GetDouble(nonBillableHoursIndex);
 
                         plgh.GroupedHoursList = new List<GroupedHours>();
                         plgh.GroupedHoursList.Add(GH);
@@ -354,8 +354,8 @@ namespace DataAccess
                         GroupedHours gh = new GroupedHours();
                         gh.StartDate = reader.GetDateTime(startDateIndex);
                         gh.SetEnddate(reader.GetString(groupByCerteriaIndex));
-                        gh.BillabileTotal = reader.GetInt32(billableHoursIndex);
-                        gh.NonBillableTotal = reader.GetInt32(nonBillableHoursIndex);
+                        gh.BillabileTotal = reader.GetDouble(billableHoursIndex);
+                        gh.NonBillableTotal = reader.GetDouble(nonBillableHoursIndex);
 
                         plgh.GroupedHoursList.Add(gh);
                     }
