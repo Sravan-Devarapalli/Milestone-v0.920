@@ -193,7 +193,7 @@
         <ContentTemplate>
             <asp:DropDownList ID="ddlPerson" runat="server">
             </asp:DropDownList>
-            <asp:DropDownList ID="ddlPeriod" onchange="CheckAndShowCustomDatesPoup(this);" runat="server">
+            <asp:DropDownList ID="ddlPeriod" onchange="CheckAndShowCustomDatesPoup(this);" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
                 <asp:ListItem Selected="True" Text="This Week" Value="7"></asp:ListItem>
                 <asp:ListItem Text="This Month" Value="30"></asp:ListItem>
                 <asp:ListItem Text="This Year" Value="365"></asp:ListItem>
