@@ -28,7 +28,7 @@ namespace DataTransferObjects.Reports
             set;
         }
 
-        public int BillabileTotal
+        public double BillabileTotal
         {
             get
             {
@@ -36,7 +36,7 @@ namespace DataTransferObjects.Reports
             }
         }
 
-        public int NonBillableTotal
+        public double NonBillableTotal
         {
             get
             {
@@ -44,7 +44,7 @@ namespace DataTransferObjects.Reports
             }
         }
 
-        public int CombinedTotal
+        public double CombinedTotal
         {
             get
             {
