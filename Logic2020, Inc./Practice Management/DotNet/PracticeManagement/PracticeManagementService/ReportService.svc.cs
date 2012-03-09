@@ -7,6 +7,7 @@ using System.Text;
 using System.ServiceModel.Activation;
 using DataTransferObjects.Reports;
 using DataAccess;
+using DataTransferObjects;
 
 namespace PracticeManagementService
 {
@@ -21,6 +22,11 @@ namespace PracticeManagementService
         public List<TimeEntriesGroupByClientAndProject> PersonTimeEntriesSummary(int personId, DateTime startDate, DateTime endDate)
         {
             return ReportDAL.PersonTimeEntriesSummary(personId, startDate, endDate);
+        }
+
+        public Triple<double, double, double> GetPersonTimeEntriesTotalsByPeriod(int personId, DateTime startDate, DateTime endDate)
+        {
+            return ReportDAL.GetPersonTimeEntriesTotalsByPeriod(personId, startDate, endDate);
         }
 
         public List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate, string seniorityIds, string orderByCerteria)
