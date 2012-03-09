@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" />
+  <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
   <xs:element name="PersonTimeEntriesDetails">
     <xs:complexType>
       <xs:sequence>
@@ -33,6 +34,22 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetPersonTimeEntriesTotalsByPeriod">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="personId" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPersonTimeEntriesTotalsByPeriodResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPersonTimeEntriesTotalsByPeriodResult" nillable="true" type="q3:TripleOfdoubledoubledouble" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="TimePeriodSummaryReportByResource">
     <xs:complexType>
       <xs:sequence>
@@ -46,7 +63,7 @@
   <xs:element name="TimePeriodSummaryReportByResourceResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryReportByResourceResult" nillable="true" type="q3:ArrayOfPersonLevelGroupedHours" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryReportByResourceResult" nillable="true" type="q4:ArrayOfPersonLevelGroupedHours" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -64,7 +81,7 @@
   <xs:element name="TimePeriodSummaryReportByProjectResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryReportByProjectResult" nillable="true" type="q4:ArrayOfProjectLevelGroupedHours" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryReportByProjectResult" nillable="true" type="q5:ArrayOfProjectLevelGroupedHours" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -81,7 +98,7 @@
   <xs:element name="TimePeriodSummaryReportByWorkTypeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryReportByWorkTypeResult" nillable="true" type="q5:ArrayOfWorkTypeLevelGroupedHours" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryReportByWorkTypeResult" nillable="true" type="q6:ArrayOfWorkTypeLevelGroupedHours" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -97,7 +114,7 @@
   <xs:element name="ProjectSummaryReportByResourceResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectSummaryReportByResourceResult" nillable="true" type="q6:ArrayOfPersonLevelGroupedHours" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectSummaryReportByResourceResult" nillable="true" type="q7:ArrayOfPersonLevelGroupedHours" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -113,7 +130,7 @@
   <xs:element name="ProjectSummaryReportByWorkTypeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectSummaryReportByWorkTypeResult" nillable="true" type="q7:ArrayOfWorkTypeLevelGroupedHours" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectSummaryReportByWorkTypeResult" nillable="true" type="q8:ArrayOfWorkTypeLevelGroupedHours" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
