@@ -23,6 +23,12 @@
   <wsdl:message name="IReportService_PersonTimeEntriesSummary_OutputMessage">
     <wsdl:part name="parameters" element="tns:PersonTimeEntriesSummaryResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_GetPersonTimeEntriesTotalsByPeriod_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonTimeEntriesTotalsByPeriod" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetPersonTimeEntriesTotalsByPeriod_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonTimeEntriesTotalsByPeriodResponse" />
+  </wsdl:message>
   <wsdl:message name="IReportService_TimePeriodSummaryReportByResource_InputMessage">
     <wsdl:part name="parameters" element="tns:TimePeriodSummaryReportByResource" />
   </wsdl:message>
@@ -62,6 +68,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesSummary" message="tns:IReportService_PersonTimeEntriesSummary_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesSummaryResponse" message="tns:IReportService_PersonTimeEntriesSummary_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetPersonTimeEntriesTotalsByPeriod">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/GetPersonTimeEntriesTotalsByPeriod" message="tns:IReportService_GetPersonTimeEntriesTotalsByPeriod_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/GetPersonTimeEntriesTotalsByPeriodResponse" message="tns:IReportService_GetPersonTimeEntriesTotalsByPeriod_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="TimePeriodSummaryReportByResource">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByResource" message="tns:IReportService_TimePeriodSummaryReportByResource_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByResourceResponse" message="tns:IReportService_TimePeriodSummaryReportByResource_OutputMessage" />
@@ -96,6 +106,15 @@
     </wsdl:operation>
     <wsdl:operation name="PersonTimeEntriesSummary">
       <soap:operation soapAction="http://tempuri.org/IReportService/PersonTimeEntriesSummary" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonTimeEntriesTotalsByPeriod">
+      <soap:operation soapAction="http://tempuri.org/IReportService/GetPersonTimeEntriesTotalsByPeriod" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
