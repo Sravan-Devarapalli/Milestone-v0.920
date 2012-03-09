@@ -20,12 +20,12 @@ namespace DataTransferObjects.Reports
         public DateTime EndDate { get; set; }
 
         [DataMember]
-        public int BillabileTotal { get; set; }
+        public double BillabileTotal { get; set; }
 
         [DataMember]
-        public int NonBillableTotal { get; set; }
+        public double NonBillableTotal { get; set; }
 
-        public int CombinedTotal
+        public double CombinedTotal
         {
             get
             {
