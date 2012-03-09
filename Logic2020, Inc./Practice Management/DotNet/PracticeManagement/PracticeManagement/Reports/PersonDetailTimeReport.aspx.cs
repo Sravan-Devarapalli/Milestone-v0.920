@@ -32,32 +32,36 @@ namespace PraticeManagement.Reporting
                         //365
                         if (selectedVal == 7)
                         {
-                            return now.AddDays(1 - now.Day).Date;
+                            return Utils.Calendar.WeekStartDate(now);
                         }
                         else if (selectedVal == 30)
                         {
-                            return now.AddMonths(1 - now.Day).Date;
+                            return Utils.Calendar.MonthStartDate(now);
                         }
                         else 
                         {
-                            return now.AddYears(1 - now.Day).Date;
+                            return Utils.Calendar.YearStartDate(now);
                         }
                         
                     }
-                    else
+                    else if (selectedVal < 0)
                     {
                         if (selectedVal == -7)
                         {
-                            return now.AddDays(1 - now.Day).Date;
+                            return Utils.Calendar.LastWeekStartDate(now);
                         }
                         else if (selectedVal == -30)
                         {
-                            return now.AddDays(1 - now.Day).AddMonths(selectedVal + 1).Date;
+                            return Utils.Calendar.LastMonthStartDate(now);
                         }
                         else
                         {
-                            return now.AddYears(1 - now.Day).Date;
+                            return Utils.Calendar.LastYearStartDate(now);
                         }
+                    }
+                    else
+                    {
+                        return diRange.FromDate.Value;
                     }
                 }
             }
@@ -79,11 +83,40 @@ namespace PraticeManagement.Reporting
                     DateTime firstDay = new DateTime(now.Year, now.Month, 1);
                     if (selectedVal > 0)
                     {
-                        return firstDay.AddMonths(selectedVal).AddDays(-1).Date;
+                        //7
+                        //30
+                        //365
+                        if (selectedVal == 7)
+                        {
+                            return Utils.Calendar.WeekEndDate(now);
+                        }
+                        else if (selectedVal == 30)
+                        {
+                            return Utils.Calendar.MonthEndDate(now);
+                        }
+                        else
+                        {
+                            return Utils.Calendar.YearEndDate(now);
+                        }
+                    }
+                    else if (selectedVal < 0)
+                    {
+                        if (selectedVal == -7)
+                        {
+                            return Utils.Calendar.LastWeekEndDate(now);
+                        }
+                        else if (selectedVal == -30)
+                        {
+                            return Utils.Calendar.LastMonthEndDate(now);
+                        }
+                        else
+                        {
+                            return Utils.Calendar.LastYearEndDate(now);
+                        }
                     }
                     else
                     {
-                        return firstDay.AddMonths(1).AddDays(-1).Date;
+                        return diRange.ToDate.Value;
                     }
                 }
             }
@@ -96,6 +129,11 @@ namespace PraticeManagement.Reporting
                 DataHelper.FillPersonList(ddlPerson, "Please Select a Person", 1);
                 ddlPerson.SelectedValue = DataHelper.CurrentPerson.Id.Value.ToString();
             }
+        }
+
+        protected void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadActiveView();
         }
 
         protected void btnView_Command(object sender, CommandEventArgs e)
@@ -128,14 +166,15 @@ namespace PraticeManagement.Reporting
             if (mvPersonDetailReport.ActiveViewIndex == 0)
             {
                 int personId =Convert.ToInt32(ddlPerson.SelectedValue);
-                DateTime startDate =new DateTime(DateTime.Now.Year,DateTime.Now.Month,1).Date;
 
                 var list = ServiceCallers.Custom.Report(r=>r.PersonTimeEntriesSummary(personId,StartDate,EndDate)).ToList();
                 ucpersonSummaryReport.DatabindRepepeaterSummary(list);
             }
             else
             {
- 
+                int personId = Convert.ToInt32(ddlPerson.SelectedValue);
+                var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(1, StartDate, EndDate)).ToList();
+                ucpersonDetailReport.DatabindRepepeaterProjectDetails(list);
             }
         }
 
