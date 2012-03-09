@@ -67,7 +67,6 @@ namespace PraticeManagement.Reporting
             }
         }
 
-
         public DateTime EndDate
         {
             get
@@ -131,9 +130,31 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        protected void btnCustDatesOK_Click(object sender, EventArgs e)
+        {
+            Page.Validate(valSumDateRange.ValidationGroup);
+            if (Page.IsValid)
+            {
+                hdnStartDate.Value = StartDate.Date.ToShortDateString();
+                hdnEndDate.Value = EndDate.Date.ToShortDateString();
+                LoadActiveView();
+            }
+            else
+            {
+                mpeCustomDates.Show();
+            }
+        }
+
         protected void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadActiveView();
+            if (ddlPeriod.SelectedValue != "0")
+            {
+                LoadActiveView();
+            }
+            else
+            {
+                mpeCustomDates.Show();
+            }
         }
 
         protected void btnView_Command(object sender, CommandEventArgs e)
@@ -169,16 +190,20 @@ namespace PraticeManagement.Reporting
             }
             else
             {
-                int personId = Convert.ToInt32(ddlPerson.SelectedValue);
-                var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(personId, StartDate, EndDate)).ToList();
-                ucpersonDetailReport.DatabindRepepeaterProjectDetails(list);
+                PopulatePersonDetailReportDetails();
             }
+        }
+
+        private void PopulatePersonDetailReportDetails()
+        {
+            int personId = Convert.ToInt32(ddlPerson.SelectedValue);
+            var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(personId, StartDate, EndDate)).ToList();
+            ucpersonDetailReport.DatabindRepepeaterProjectDetails(list);
         }
 
         private void PopulateSummaryDetails()
         {
             int personId = Convert.ToInt32(ddlPerson.SelectedValue);
-            DateTime startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).Date;
 
             var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesSummary(personId, StartDate, EndDate)).ToList();
 
@@ -226,12 +251,8 @@ namespace PraticeManagement.Reporting
 
             hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
             hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
-            var tbFrom = diRange.FindControl("tbFrom") as TextBox;
-            var tbTo = diRange.FindControl("tbTo") as TextBox;
             var clFromDate = diRange.FindControl("clFromDate") as CalendarExtender;
             var clToDate = diRange.FindControl("clToDate") as CalendarExtender;
-            hdnStartDateTxtBoxId.Value = tbFrom.ClientID;
-            hdnEndDateTxtBoxId.Value = tbTo.ClientID;
             hdnStartDateCalExtenderBehaviourId.Value = clFromDate.BehaviorID;
             hdnEndDateCalExtenderBehaviourId.Value = clToDate.BehaviorID;
 
