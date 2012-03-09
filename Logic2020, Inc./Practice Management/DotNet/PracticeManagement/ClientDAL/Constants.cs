@@ -723,6 +723,7 @@
             {
                 public const string PersonTimeEntriesDetails = "dbo.PersonTimeEntriesDetails";
                 public const string PersonTimeEntriesSummary = "dbo.PersonTimeEntriesSummary";
+                public const string GetPersonTimeEntriesTotalsByPeriod = "dbo.GetPersonTimeEntriesTotalsByPeriod";
                 public const string TimePeriodSummaryReportByResource = "dbo.TimePeriodSummaryReportByResource";
                 public const string TimePeriodSummaryReportByProject = "dbo.TimePeriodSummaryReportByProject";
                 public const string TimePeriodSummaryReportByWorkType = "dbo.TimePeriodSummaryReportByWorkType";
