@@ -110,5 +110,10 @@ namespace DataTransferObjects.Utils
         {
             return groupedTimeEtnries.SelectMany(etnry => etnry.Value).Sum(record => record.ActualHours);
         }
+
+        public static int GetBillablePercentage(double billableHours, double nonBillableHours)
+        {
+            return (int)(100 * billableHours / (billableHours + nonBillableHours));
+        }
     }
 }
