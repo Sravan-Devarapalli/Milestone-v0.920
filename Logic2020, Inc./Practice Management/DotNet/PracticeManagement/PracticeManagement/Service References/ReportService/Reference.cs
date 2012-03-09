@@ -21,6 +21,9 @@ namespace PraticeManagement.ReportService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/PersonTimeEntriesSummary", ReplyAction="http://tempuri.org/IReportService/PersonTimeEntriesSummaryResponse")]
         DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesSummary(int personId, System.DateTime startDate, System.DateTime endDate);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/GetPersonTimeEntriesTotalsByPeriod", ReplyAction="http://tempuri.org/IReportService/GetPersonTimeEntriesTotalsByPeriodResponse")]
+        DataTransferObjects.Triple<double, double, double> GetPersonTimeEntriesTotalsByPeriod(int personId, System.DateTime startDate, System.DateTime endDate);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByResource", ReplyAction="http://tempuri.org/IReportService/TimePeriodSummaryReportByResourceResponse")]
         DataTransferObjects.Reports.PersonLevelGroupedHours[] TimePeriodSummaryReportByResource(System.DateTime startDate, System.DateTime endDate, string seniorityIds, string orderByCerteria);
         
@@ -69,6 +72,10 @@ namespace PraticeManagement.ReportService {
         
         public DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesSummary(int personId, System.DateTime startDate, System.DateTime endDate) {
             return base.Channel.PersonTimeEntriesSummary(personId, startDate, endDate);
+        }
+        
+        public DataTransferObjects.Triple<double, double, double> GetPersonTimeEntriesTotalsByPeriod(int personId, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.GetPersonTimeEntriesTotalsByPeriod(personId, startDate, endDate);
         }
         
         public DataTransferObjects.Reports.PersonLevelGroupedHours[] TimePeriodSummaryReportByResource(System.DateTime startDate, System.DateTime endDate, string seniorityIds, string orderByCerteria) {
