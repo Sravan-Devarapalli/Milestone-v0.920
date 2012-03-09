@@ -648,4 +648,21 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectStatus" nillable="true" type="tns:ProjectStatus" />
+  <xs:complexType name="TripleOfdoubledoubledouble">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="TripleOf{0}{1}{2}{#}" Namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="double" Namespace="http://www.w3.org/2001/XMLSchema" />
+          <GenericParameter Name="double" Namespace="http://www.w3.org/2001/XMLSchema" />
+          <GenericParameter Name="double" Namespace="http://www.w3.org/2001/XMLSchema" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="First" type="xs:double" />
+      <xs:element minOccurs="0" name="Second" type="xs:double" />
+      <xs:element minOccurs="0" name="Third" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TripleOfdoubledoubledouble" nillable="true" type="tns:TripleOfdoubledoubledouble" />
 </xs:schema>
