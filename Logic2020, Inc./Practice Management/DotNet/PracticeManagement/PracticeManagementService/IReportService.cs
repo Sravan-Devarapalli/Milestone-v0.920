@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using DataTransferObjects.Reports;
+using DataTransferObjects;
 
 namespace PracticeManagementService
 {
@@ -17,6 +18,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<TimeEntriesGroupByClientAndProject> PersonTimeEntriesSummary(int personId, DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        Triple<double, double, double> GetPersonTimeEntriesTotalsByPeriod(int personId, DateTime startDate, DateTime endDate);
         
         [OperationContract]
         List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate, string seniorityIds, string orderByCerteria);
