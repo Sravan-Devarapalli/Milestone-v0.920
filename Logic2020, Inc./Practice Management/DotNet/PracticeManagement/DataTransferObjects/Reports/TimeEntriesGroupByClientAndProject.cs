@@ -47,7 +47,7 @@ namespace DataTransferObjects.Reports
         {
             get
             {
-                return (int)(100 * BillableHours / (BillableHours + NonBillableHours));
+                return Utils.Generic.GetBillablePercentage(BillableHours, NonBillableHours); 
             }
         }
 
