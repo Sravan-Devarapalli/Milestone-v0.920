@@ -165,10 +165,7 @@ namespace PraticeManagement.Reporting
         {
             if (mvPersonDetailReport.ActiveViewIndex == 0)
             {
-                int personId =Convert.ToInt32(ddlPerson.SelectedValue);
-
-                var list = ServiceCallers.Custom.Report(r=>r.PersonTimeEntriesSummary(personId,StartDate,EndDate)).ToList();
-                ucpersonSummaryReport.DatabindRepepeaterSummary(list);
+               PopulateSummaryDetails();
             }
             else
             {
@@ -178,9 +175,37 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        private void PopulateSummaryDetails()
+        {
+            int personId = Convert.ToInt32(ddlPerson.SelectedValue);
+            DateTime startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).Date;
+
+            var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesSummary(personId, StartDate, EndDate)).ToList();
+
+            ucpersonSummaryReport.DatabindRepepeaterSummary(list);
+
+            PopulateTotalSection(list.Sum(l => l.BillableHours), list.Sum(l => l.NonBillableHours), list.Sum(l => l.BillableValue));
+        }
+
+        private void PopulateTotalSection(double billableHours, double nonBillableHours, double totalValue)
+        {
+            var billablePercent = DataTransferObjects.Utils.Generic.GetBillablePercentage(billableHours, nonBillableHours);
+            var nonBillablePercent = (100 - billablePercent);
+
+            ltrlBillableHours.Text = billableHours.ToString();
+            ltrlNonBillableHours.Text = nonBillableHours.ToString();
+            ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString();
+            ltrlBillablePercent.Text = billablePercent.ToString();
+            ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
+            ltrlTotalValue.Text = totalValue.ToString();
+            trBillable.Height= ((60 / 100) * billablePercent).ToString() + "px";
+            trNonBillable.Height = ((60 / 100) * nonBillablePercent).ToString() + "px";
+        }
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
+
+            lblPersonname.ToolTip = lblPersonname.Text = ddlPerson.SelectedItem.Text;
             diRange.FromDate = StartDate;
             diRange.ToDate = EndDate;
             lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
@@ -218,3 +243,4 @@ namespace PraticeManagement.Reporting
         }
     }
 }
+
