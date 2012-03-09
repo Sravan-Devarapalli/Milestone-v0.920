@@ -74,8 +74,9 @@ namespace DataTransferObjects.Reports
         {
             if (DayTotalHours.Any(dth => dth.Date == dt.Date))
             {
+                var workType = dt.DayTotalHoursList[0];
                 dt = DayTotalHours.First(dth => dth.Date == dt.Date);
-                 dt.DayTotalHoursList.Add(dt.DayTotalHoursList[0]);
+                dt.DayTotalHoursList.Add(workType);
             }
             else
             {
