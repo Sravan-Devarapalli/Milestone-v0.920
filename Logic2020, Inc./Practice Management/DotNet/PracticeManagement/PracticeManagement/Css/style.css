@@ -2500,3 +2500,14 @@ end pixcel
 {
     display: none;
 }
+.WholeWidthWithHeight
+{
+    width:100%;
+    border: 1px solid #aaa;    
+}
+.WholeWidthWithHeight td
+{
+    height:30px;
+    padding-left :5px;
+}
+
