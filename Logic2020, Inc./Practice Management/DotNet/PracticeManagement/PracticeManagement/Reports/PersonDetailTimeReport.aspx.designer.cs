@@ -67,24 +67,6 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.HiddenField hdnEndDate;
         
         /// <summary>
-        /// hdnStartDateTxtBoxId control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnStartDateTxtBoxId;
-        
-        /// <summary>
-        /// hdnEndDateTxtBoxId control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnEndDateTxtBoxId;
-        
-        /// <summary>
         /// hdnStartDateCalExtenderBehaviourId control.
         /// </summary>
         /// <remarks>
@@ -157,15 +139,6 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Button btnCustDatesOK;
         
         /// <summary>
-        /// btnCustDatesClose control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCustDatesClose;
-        
-        /// <summary>
         /// btnCustDatesCancel control.
         /// </summary>
         /// <remarks>
@@ -175,13 +148,13 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Button btnCustDatesCancel;
         
         /// <summary>
-        /// valSum control.
+        /// valSumDateRange control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary valSum;
+        protected global::System.Web.UI.WebControls.ValidationSummary valSumDateRange;
         
         /// <summary>
         /// lblPersonname control.
