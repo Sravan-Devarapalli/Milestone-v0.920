@@ -230,7 +230,8 @@ namespace DataAccess
             if (reader.HasRows)
             {
                 int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
-                int personNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonName);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
                 int personSeniorityIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityId);
                 int personSeniorityNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityName);
                 int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
@@ -248,7 +249,8 @@ namespace DataAccess
                         Person person = new Person
                                                 {
                                                     Id = reader.GetInt32(personIdIndex),
-                                                    Name = reader.GetString(personNameIndex),
+                                                    FirstName = reader.GetString(firstNameIndex),
+                                                    LastName = reader.GetString(lastNameIndex),
                                                     Seniority = new Seniority
                                                     {
                                                         Id = reader.GetInt32(personSeniorityIdIndex),
