@@ -173,7 +173,7 @@ namespace PraticeManagement.Reporting
             else
             {
                 int personId = Convert.ToInt32(ddlPerson.SelectedValue);
-                var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(1, StartDate, EndDate)).ToList();
+                var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(personId, StartDate, EndDate)).ToList();
                 ucpersonDetailReport.DatabindRepepeaterProjectDetails(list);
             }
         }
