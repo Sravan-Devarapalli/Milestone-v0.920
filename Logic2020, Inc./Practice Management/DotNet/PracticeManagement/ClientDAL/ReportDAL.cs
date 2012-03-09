@@ -139,16 +139,11 @@ namespace DataAccess
                
                 int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNameColumn);
                 int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
-                
                 int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
-               
-              
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
                 int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
                 
-
-
                 while (reader.Read())
                 {
                     
@@ -176,6 +171,38 @@ namespace DataAccess
             }
         }
 
+        public static Triple<double, double, double> GetPersonTimeEntriesTotalsByPeriod(int personId, DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetPersonTimeEntriesTotalsByPeriod, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    Triple<double, double, double> result = new Triple<double, double, double>(0d, 0d, 0d);
+                    if (reader.HasRows)
+                    {
+                        int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
+                        int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
+                        int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
+                        while (reader.Read())
+                        {
+                            result.First = !reader.IsDBNull(billableHoursIndex) ? (double)reader.GetDouble(billableHoursIndex) : 0d;
+                            result.Second = !reader.IsDBNull(billableHoursIndex) ? (double)reader.GetDouble(nonBillableHoursIndex) : 0d;
+                            result.Third = !reader.IsDBNull(billableHoursIndex) ? (double)reader.GetDouble(billableValueindex) : 0d;
+                        }
+                    }
+                    return result;
+                }
+            }
+        }
+
         public static List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate, string seniorityIds, string orderByCerteria)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -184,8 +211,8 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
-                command.Parameters.AddWithValue(Constants.ParameterNames.SeniorityIdsParam, seniorityIds);
-                command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, orderByCerteria);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SeniorityIdsParam, !string.IsNullOrEmpty(seniorityIds) ? seniorityIds : (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, !string.IsNullOrEmpty(orderByCerteria) ? orderByCerteria : (Object)DBNull.Value);
 
                 connection.Open();
 
@@ -262,9 +289,9 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
-                command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdsParam, clientIds);
-                command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusIdsParam, personStatusIds);
-                command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, orderByCerteria);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdsParam,!string.IsNullOrEmpty(clientIds) ? clientIds : (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusIdsParam, !string.IsNullOrEmpty(personStatusIds) ? personStatusIds : (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, !string.IsNullOrEmpty(orderByCerteria) ? orderByCerteria : (Object)DBNull.Value);
 
                 connection.Open();
 
@@ -342,8 +369,8 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
-                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeCategoryIdsParam, timeTypeCategoryIds);
-                command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, orderByCerteria);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeCategoryIdsParam, !string.IsNullOrEmpty(timeTypeCategoryIds) ? timeTypeCategoryIds : (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, !string.IsNullOrEmpty(orderByCerteria) ? orderByCerteria : (Object)DBNull.Value);
 
                 connection.Open();
 
