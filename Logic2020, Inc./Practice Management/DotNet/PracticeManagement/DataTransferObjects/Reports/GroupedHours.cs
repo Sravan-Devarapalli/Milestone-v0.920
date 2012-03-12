@@ -46,10 +46,10 @@ namespace DataTransferObjects.Reports
                        EndDate = StartDate.AddDays(6);
                        break;
                     case "month":
-                       EndDate = StartDate.AddMonths(1).AddDays(-1);
+                       EndDate = StartDate.AddMonths(1).AddDays(-StartDate.AddMonths(1).Day);
                        break;
                     case "year":
-                       EndDate = StartDate.AddYears(1).AddDays(-1);
+                       EndDate = StartDate.AddYears(1).AddDays(-StartDate.AddYears(1).DayOfYear);
                        break;
 
                 }
