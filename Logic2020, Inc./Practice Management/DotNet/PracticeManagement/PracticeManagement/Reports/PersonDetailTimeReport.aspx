@@ -42,7 +42,7 @@
         {
             background-color: White;
             float: left;
-            padding: 8px 0px 15px 0px;
+            padding: 8px 0px 5px 0px;
             position: relative;
         }
         
@@ -88,11 +88,22 @@
         {
             background-color: #e2ebff;
             padding: 5px;
+            width: 98%;
         }
         
         .info-field
         {
             width: 152px;
+        }
+        .wrapword
+        {
+            white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+            white-space: -pre-wrap; /* Opera 4-6 */
+            white-space: -o-pre-wrap; /* Opera 7 */
+            white-space: pre-wrap; /* css-3 */
+            word-wrap: break-word; /* Internet Explorer 5.5+ */
+            word-break: break-all;
+            white-space: normal;
         }
     </style>
 </asp:Content>
@@ -117,17 +128,55 @@
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
-            <asp:DropDownList ID="ddlPerson" runat="server">
-            </asp:DropDownList>
-            <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
-                <asp:ListItem Selected="True" Text="This Week" Value="7"></asp:ListItem>
-                <asp:ListItem Text="This Month" Value="30"></asp:ListItem>
-                <asp:ListItem Text="This Year" Value="365"></asp:ListItem>
-                <asp:ListItem Text="Last Week" Value="-7"></asp:ListItem>
-                <asp:ListItem Text="Last Month" Value="-30"></asp:ListItem>
-                <asp:ListItem Text="Last Year" Value="-365"></asp:ListItem>
-                <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
-            </asp:DropDownList>
+            <table width="100%">
+                <tr>
+                    <td style="width: 70%">
+                    </td>
+                    <td style="padding-bottom: 10px;">
+                        <table>
+                            <tr>
+                                <td style="width: 40%; text-align: right;">
+                                    <b>Person:&nbsp; </b>
+                                </td>
+                                <td style="text-align: left;">
+                                    <asp:DropDownList ID="ddlPerson" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPerson_SelectedIndexChanged"
+                                        Width="150px">
+                                    </asp:DropDownList>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 70%">
+                    </td>
+                    <td style="padding-bottom: 10px;">
+                        <table>
+                            <tr>
+                                <td style="text-align: right; width: 40%">
+                                    <b>Range:&nbsp;</b>
+                                </td>
+                                <td style="text-align: left;">
+                                    <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
+                                        Width="150px">
+                                        <asp:ListItem Selected="True" Text="This Week" Value="7"></asp:ListItem>
+                                        <asp:ListItem Text="This Month" Value="30"></asp:ListItem>
+                                        <asp:ListItem Text="This Year" Value="365"></asp:ListItem>
+                                        <asp:ListItem Text="Last Week" Value="-7"></asp:ListItem>
+                                        <asp:ListItem Text="Last Month" Value="-30"></asp:ListItem>
+                                        <asp:ListItem Text="Last Year" Value="-365"></asp:ListItem>
+                                        <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
+                                    </asp:DropDownList>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="border-bottom: 3px solid black; width: 100%;">
+                    </td>
+                </tr>
+            </table>
             <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
             <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
             <asp:HiddenField ID="hdnStartDateCalExtenderBehaviourId" runat="server" Value="" />
@@ -167,52 +216,52 @@
             <br />
             <table style="width: 100%;">
                 <tr>
-                    <td style="width: 50%;">
+                    <td style="width: 55%; font-size: 15px; font-weight: bold;">
                         <asp:Label ID="lblPersonname" runat="server"></asp:Label>
                     </td>
-                    <td>
+                    <td style="width: 10%;">
                         <table>
                             <tr>
-                                <td>
+                                <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
                                     Total Hours
                                 </td>
                             </tr>
                             <tr>
-                                <td>
+                                <td style="font-size: 25px; text-align: center;">
                                     <asp:Literal ID="ltrlTotalHours" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td>
+                    <td style="width: 10%;">
                         <table>
                             <tr>
-                                <td>
+                                <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
                                     Total Value
                                 </td>
                             </tr>
                             <tr>
-                                <td>
+                                <td style="font-size: 25px; text-align: center;">
                                     <asp:Literal ID="ltrlTotalValue" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td>
+                    <td style="width: 12%;">
                         <table>
                             <tr>
                                 <td>
-                                    Billable
+                                    BILLABLE
                                 </td>
                             </tr>
                             <tr>
-                                <td>
+                                <td style="padding-bottom: 5px;">
                                     <asp:Literal ID="ltrlBillableHours" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    NonBillable
+                                    NON-BILLABLE
                                 </td>
                             </tr>
                             <tr>
@@ -222,31 +271,27 @@
                             </tr>
                         </table>
                     </td>
-                    <td>
-                        <table style="height: 60px;">
-                            <tr>
-                                <td>
-                                </td>
-                            </tr>
+                    <td style="vertical-align: bottom; width: 5%">
+                        <table width="100%">
                             <tr id="trBillable" runat="server">
-                                <td valign="middle" style="width: 20px; text-align: center; background-color: Green;">
-                                    <asp:Literal ID="ltrlBillablePercent" runat="server"></asp:Literal>%
+                                <td style="width: 20px; text-align: center; background-color: #7FD13B; border: 1px solid Gray;">
+                                    <asp:Literal ID="ltrlBillablePercent" runat="server"></asp:Literal>
+                                    %
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td>
-                        <table style="height: 60px;">
-                            <tr>
-                                <td>
-                                </td>
-                            </tr>
+                    <td style="vertical-align: bottom; width: 5%">
+                        <table width="100%">
                             <tr id="trNonBillable" runat="server">
-                                <td valign="middle" style="width: 20px; text-align: center; background-color: Gray;">
-                                    <asp:Literal ID="ltrlNonBillablePercent" runat="server"></asp:Literal>%
+                                <td style="width: 20px; text-align: center; background-color: Gray; border: 1px solid Gray;">
+                                    <asp:Literal ID="ltrlNonBillablePercent" runat="server"></asp:Literal>
+                                    %
                                 </td>
                             </tr>
                         </table>
+                    </td>
+                    <td style="width: 3%;">
                     </td>
                 </tr>
             </table>
@@ -268,12 +313,12 @@
             </asp:Table>
             <asp:MultiView ID="mvPersonDetailReport" runat="server" ActiveViewIndex="0">
                 <asp:View ID="vwPersonSummaryReport" runat="server">
-                    <asp:Panel ID="pnlPersonSummaryReport" runat="server" CssClass="tab-pane WholeWidth">
+                    <asp:Panel ID="pnlPersonSummaryReport" runat="server" CssClass="tab-pane">
                         <uc:PersonSummaryReport ID="ucpersonSummaryReport" runat="server" />
                     </asp:Panel>
                 </asp:View>
                 <asp:View ID="vwPersonDetailReport" runat="server">
-                    <asp:Panel ID="pnlPersonDetailReport" runat="server" CssClass="tab-pane WholeWidth">
+                    <asp:Panel ID="pnlPersonDetailReport" runat="server" CssClass="tab-pane">
                         <uc:PersonDetailReport ID="ucpersonDetailReport" runat="server" />
                     </asp:Panel>
                 </asp:View>
