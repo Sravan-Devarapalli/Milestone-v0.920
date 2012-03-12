@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
 using PraticeManagement.Controls;
+using DataTransferObjects;
 
 
 namespace PraticeManagement.Reporting
@@ -125,106 +126,9 @@ namespace PraticeManagement.Reporting
         {
             if (!IsPostBack)
             {
-                DataHelper.FillPersonList(ddlPerson, "Please Select a Person", 1);
+                DataHelper.FillPersonList(ddlPerson, null, 1);
                 ddlPerson.SelectedValue = DataHelper.CurrentPerson.Id.Value.ToString();
             }
-        }
-
-        protected void btnCustDatesOK_Click(object sender, EventArgs e)
-        {
-            Page.Validate(valSumDateRange.ValidationGroup);
-            if (Page.IsValid)
-            {
-                hdnStartDate.Value = StartDate.Date.ToShortDateString();
-                hdnEndDate.Value = EndDate.Date.ToShortDateString();
-                LoadActiveView();
-            }
-            else
-            {
-                mpeCustomDates.Show();
-            }
-        }
-
-        protected void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ddlPeriod.SelectedValue != "0")
-            {
-                LoadActiveView();
-            }
-            else
-            {
-                mpeCustomDates.Show();
-            }
-        }
-
-        protected void btnView_Command(object sender, CommandEventArgs e)
-        {
-            int viewIndex = int.Parse((string)e.CommandArgument);
-            SelectView((Control)sender, viewIndex);
-            LoadActiveView();
-        }
-
-
-        private void SetCssClassEmpty()
-        {
-            foreach (TableCell cell in tblPersonViewSwitch.Rows[0].Cells)
-            {
-                cell.CssClass = string.Empty;
-            }
-        }
-
-        private void SelectView(Control sender, int viewIndex)
-        {
-            mvPersonDetailReport.ActiveViewIndex = viewIndex;
-
-            SetCssClassEmpty();
-
-            ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
-        }
-
-        private void LoadActiveView()
-        {
-            if (mvPersonDetailReport.ActiveViewIndex == 0)
-            {
-               PopulateSummaryDetails();
-            }
-            else
-            {
-                PopulatePersonDetailReportDetails();
-            }
-        }
-
-        private void PopulatePersonDetailReportDetails()
-        {
-            int personId = Convert.ToInt32(ddlPerson.SelectedValue);
-            var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(personId, StartDate, EndDate)).ToList();
-            ucpersonDetailReport.DatabindRepepeaterProjectDetails(list);
-        }
-
-        private void PopulateSummaryDetails()
-        {
-            int personId = Convert.ToInt32(ddlPerson.SelectedValue);
-
-            var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesSummary(personId, StartDate, EndDate)).ToList();
-
-            ucpersonSummaryReport.DatabindRepepeaterSummary(list);
-
-            PopulateTotalSection(list.Sum(l => l.BillableHours), list.Sum(l => l.NonBillableHours), list.Sum(l => l.BillableValue));
-        }
-
-        private void PopulateTotalSection(double billableHours, double nonBillableHours, double totalValue)
-        {
-            var billablePercent = DataTransferObjects.Utils.Generic.GetBillablePercentage(billableHours, nonBillableHours);
-            var nonBillablePercent = (100 - billablePercent);
-
-            ltrlBillableHours.Text = billableHours.ToString();
-            ltrlNonBillableHours.Text = nonBillableHours.ToString();
-            ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString();
-            ltrlBillablePercent.Text = billablePercent.ToString();
-            ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
-            ltrlTotalValue.Text = totalValue.ToString();
-            trBillable.Height= ((60 / 100) * billablePercent).ToString() + "px";
-            trNonBillable.Height = ((60 / 100) * nonBillablePercent).ToString() + "px";
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -262,6 +166,142 @@ namespace PraticeManagement.Reporting
             }
 
         }
+
+        protected void ddlPerson_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ddlPeriod.SelectedValue = "7";
+            LoadActiveView();
+        }
+
+        protected void btnCustDatesOK_Click(object sender, EventArgs e)
+        {
+            Page.Validate(valSumDateRange.ValidationGroup);
+            if (Page.IsValid)
+            {
+                hdnStartDate.Value = StartDate.Date.ToShortDateString();
+                hdnEndDate.Value = EndDate.Date.ToShortDateString();
+                LoadActiveView();
+            }
+            else
+            {
+                mpeCustomDates.Show();
+            }
+        }
+
+        protected void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ddlPeriod.SelectedValue != "0")
+            {
+                LoadActiveView();
+            }
+            else
+            {
+                mpeCustomDates.Show();
+            }
+        }
+
+        protected void btnView_Command(object sender, CommandEventArgs e)
+        {
+            int viewIndex = int.Parse((string)e.CommandArgument);
+            SelectView((Control)sender, viewIndex);
+            LoadActiveView();
+        }
+
+        private void SetCssClassEmpty()
+        {
+            foreach (TableCell cell in tblPersonViewSwitch.Rows[0].Cells)
+            {
+                cell.CssClass = string.Empty;
+            }
+        }
+
+        private void SelectView(Control sender, int viewIndex)
+        {
+            mvPersonDetailReport.ActiveViewIndex = viewIndex;
+
+            SetCssClassEmpty();
+
+            ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
+        }
+
+        private void LoadActiveView()
+        {
+            if (mvPersonDetailReport.ActiveViewIndex == 0)
+            {
+                PopulateSummaryDetails();
+            }
+            else
+            {
+                PopulatePersonDetailReportDetails();
+            }
+        }
+        private void PopulatePersonDetailReportDetails()
+        {
+            int personId = Convert.ToInt32(ddlPerson.SelectedValue);
+            var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(personId, StartDate, EndDate)).ToList();
+            ucpersonDetailReport.DatabindRepepeaterProjectDetails(list);
+            Triple<double, double, double> result = ServiceCallers.Custom.Report(r => r.GetPersonTimeEntriesTotalsByPeriod(personId, StartDate, EndDate));
+            PopulateTotalSection(result.First, result.Second, result.Third);
+        }
+
+        private void PopulateSummaryDetails()
+        {
+            int personId = Convert.ToInt32(ddlPerson.SelectedValue);
+            var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesSummary(personId, StartDate, EndDate)).ToList();
+            ucpersonSummaryReport.DatabindRepepeaterSummary(list);
+            PopulateTotalSection(list.Sum(l => l.BillableHours), list.Sum(l => l.NonBillableHours), list.Sum(l => l.BillableValue));
+        }
+
+
+        private void PopulateTotalSection(double billableHours, double nonBillableHours, double totalValue)
+        {
+            billableHours = Math.Round(billableHours, 2);
+            nonBillableHours = Math.Round(nonBillableHours, 2);
+            totalValue = Math.Round(totalValue, 2);
+            var billablePercent = 0;
+            var nonBillablePercent = 0;
+            if (billableHours != 0 || nonBillableHours != 0)
+            {
+                billablePercent = DataTransferObjects.Utils.Generic.GetBillablePercentage(billableHours, nonBillableHours);
+                nonBillablePercent = (100 - billablePercent);
+            }
+
+            ltrlBillableHours.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
+            ltrlNonBillableHours.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
+            ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValueWithZeroPadding);
+            ltrlBillablePercent.Text = billablePercent.ToString();
+            ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
+            ltrlTotalValue.Text = totalValue.ToString("C2");
+            
+            if (billablePercent == 0)
+            {
+                trBillable.Visible = false;
+                if (nonBillablePercent == 0)
+                {
+                    trNonBillable.Visible = false;
+                }
+                else
+                {
+                    trNonBillable.Visible = true;
+                    trNonBillable.Height = "60px";
+                }
+            }
+            else if (billablePercent == 100)
+            {
+                trBillable.Visible = true;
+                trNonBillable.Visible = false;
+                trBillable.Height = "60px";
+            }
+            else
+            {
+		int billablebarHeight = (int)(((float)60 / (float)100) * billablePercent);
+                trBillable.Visible = trNonBillable.Visible = true;
+                trBillable.Height = billablebarHeight.ToString() + "px";
+                trNonBillable.Height = (60 - billablebarHeight).ToString() + "px";
+            }
+
+        }
+
     }
 }
 
