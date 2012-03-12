@@ -137,9 +137,9 @@ namespace PraticeManagement.Reporting
                     //Single Week.
                     DateTime _startDate = StartDate ;
                     DateTime _endDate = Utils.Calendar.WeekEndDate(_startDate);
-                    while (_endDate <= EndDate)
+                    while (_startDate <= EndDate)
                     {
-                        list.Add(_startDate, _startDate.ToString("MM/dd/yyyy") + " - " + _endDate.ToString("MM/dd/yyyy"));
+                        list.Add(_startDate, _startDate.ToString("MM/dd/yyyy") + " - " + (_endDate <= EndDate ? _endDate.ToString("MM/dd/yyyy") : EndDate.ToString("MM/dd/yyyy")));
                         _startDate = Utils.Calendar.WeekStartDate(_endDate.AddDays(1));
                         _endDate = Utils.Calendar.WeekEndDate(_endDate.AddDays(1));
                     }
@@ -149,9 +149,9 @@ namespace PraticeManagement.Reporting
                     //Single Month.
                     DateTime _startDate = StartDate;
                     DateTime _endDate = Utils.Calendar.MonthEndDate(_startDate);
-                    while (_endDate <= EndDate)
+                    while (_startDate <= EndDate)
                     {
-                        list.Add(_startDate, _startDate.ToString("mon - yyyy"));
+                        list.Add(_startDate, _startDate.ToString("MMM - yyyy"));
                         _startDate = Utils.Calendar.MonthStartDate(_endDate.AddDays(1));
                         _endDate = Utils.Calendar.MonthEndDate(_endDate.AddDays(1));
                     }
@@ -161,7 +161,7 @@ namespace PraticeManagement.Reporting
                     //Single Year.
                     DateTime _startDate = StartDate;
                     DateTime _endDate = Utils.Calendar.YearEndDate(_startDate);
-                    while (_endDate <= EndDate)
+                    while (_startDate <= EndDate)
                     {
                         list.Add(_startDate, _startDate.ToString("yyyy"));
                         _startDate = Utils.Calendar.YearStartDate(_endDate.AddDays(1));
@@ -290,3 +290,4 @@ namespace PraticeManagement.Reporting
         }
     }
 }
+
