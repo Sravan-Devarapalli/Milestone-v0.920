@@ -369,6 +369,8 @@
     <Content Include="Controls\Reports\PersonDetailReport.ascx" />
     <Content Include="Controls\Reports\PersonSummaryReport.ascx" />
     <Content Include="Controls\Reports\TimeEntriesByPerson.ascx" />
+    <Content Include="Controls\Reports\TimePeriodSummaryByProject.ascx" />
+    <Content Include="Controls\Reports\TimePeriodSummaryByResource.ascx" />
     <Content Include="Controls\TimeEntry\AdministrativeSingleTimeEntry.ascx" />
     <Content Include="Controls\TimeEntry\AdministrativeTimeEntryBar.ascx" />
     <Content Include="Controls\TimeEntry\BillableAndNonBillableSingleTimeEntry.ascx" />
@@ -450,6 +452,7 @@
     <Content Include="Reports\ConsultingDemand.aspx" />
     <Content Include="Reports\Expenses.aspx" />
     <Content Include="Reports\PersonDetailTimeReport.aspx" />
+    <Content Include="Reports\TimePeriodSummaryReport.aspx" />
     <Content Include="RevenueGoals.aspx" />
     <Content Include="Controls\BudgetEntries.ascx" />
     <Content Include="Controls\ClientListControl.ascx" />
@@ -1245,6 +1248,20 @@
     <Compile Include="Controls\Reports\TimeEntriesGetByPersonHandler.ashx.cs">
       <DependentUpon>TimeEntriesGetByPersonHandler.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Reports\TimePeriodSummaryByProject.ascx.cs">
+      <DependentUpon>TimePeriodSummaryByProject.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\TimePeriodSummaryByProject.ascx.designer.cs">
+      <DependentUpon>TimePeriodSummaryByProject.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\TimePeriodSummaryByResource.ascx.cs">
+      <DependentUpon>TimePeriodSummaryByResource.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\TimePeriodSummaryByResource.ascx.designer.cs">
+      <DependentUpon>TimePeriodSummaryByResource.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TimeEntry\AdministrativeSingleTimeEntry.ascx.cs">
       <DependentUpon>AdministrativeSingleTimeEntry.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1608,6 +1625,13 @@
     </Compile>
     <Compile Include="Reports\PersonDetailTimeReport.aspx.designer.cs">
       <DependentUpon>PersonDetailTimeReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\TimePeriodSummaryReport.aspx.cs">
+      <DependentUpon>TimePeriodSummaryReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\TimePeriodSummaryReport.aspx.designer.cs">
+      <DependentUpon>TimePeriodSummaryReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="RevenueGoals.aspx.cs">
       <DependentUpon>RevenueGoals.aspx</DependentUpon>
