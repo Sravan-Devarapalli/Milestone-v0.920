@@ -569,6 +569,12 @@ namespace PracticeManagementService
         [OperationContract]
         List<Person> GetCurrentActivePracticeAreaManagerList();
 
+        [OperationContract]
+        List<Person> GetPersonListByPayTypeIdsAndStatusIds(String payTypeIds, String statusIds);
+
+        [OperationContract]
+        List<Timescale> GetAllPayTypes();
+
     }
 }
 
