@@ -21,5 +21,10 @@ namespace PraticeManagement.Controls.Reports
             repSummary.DataSource = timeEntriesGroupByClientAndProjectList;
             repSummary.DataBind();
         }
+
+        protected string GetDoubleFormat(double value)
+        {
+            return value.ToString(Constants.Formatting.DoubleValue);
+        }
     }
 }
