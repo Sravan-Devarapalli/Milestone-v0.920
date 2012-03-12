@@ -42,6 +42,11 @@ namespace PraticeManagement.Controls.Reports
                 repWorktype.DataBind();
             }
         }
+
+        protected string GetDoubleFormat(double value)
+        {
+            return value.ToString(Constants.Formatting.DoubleValue);
+        }
         
     }
 }
