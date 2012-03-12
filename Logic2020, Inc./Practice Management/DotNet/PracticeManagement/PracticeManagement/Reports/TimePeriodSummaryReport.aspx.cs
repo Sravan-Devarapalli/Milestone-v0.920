@@ -117,34 +117,55 @@ namespace PraticeManagement.Reporting
             }
         }
 
-        public List<DateTime> DatesList
+        public Dictionary<DateTime,String> DatesList
         {
             get
             {
-                var list = new List<DateTime>();
+                var list = new Dictionary<DateTime, String>();
                 var days = EndDate.Subtract(StartDate).Days;
                 if (days <= 7)
                 {
                     //Single Day.
                     for (int day = 0; day < EndDate.Subtract(StartDate).Days; day++)
                     {
-                        list.Add(StartDate.AddDays(day));
+                        DateTime _startDate = StartDate.AddDays(day);
+                        list.Add(_startDate,_startDate.ToString("MM/dd/yyyy"));
                     }
                 }
                 else if(days > 7 && days <= 31)
                 {
                     //Single Week.
-                    for (DateTime day = StartDate; day <= EndDate; day = day.AddDays(6))
+                    DateTime _startDate = StartDate ;
+                    DateTime _endDate = Utils.Calendar.WeekEndDate(_startDate);
+                    while (_endDate <= EndDate)
                     {
-                        list.Add(day);
+                        list.Add(_startDate, _startDate.ToString("MM/dd/yyyy") + " - " + _endDate.ToString("MM/dd/yyyy"));
+                        _startDate = Utils.Calendar.WeekStartDate(_endDate.AddDays(1));
+                        _endDate = Utils.Calendar.WeekEndDate(_endDate.AddDays(1));
                     }
                 }
                 else if (days > 31 && days <= 366)
                 {
                     //Single Month.
-                    for (DateTime day = StartDate; day <= EndDate; day = Utils.Calendar.MonthEndDate(day))
+                    DateTime _startDate = StartDate;
+                    DateTime _endDate = Utils.Calendar.MonthEndDate(_startDate);
+                    while (_endDate <= EndDate)
                     {
-                        list.Add(day);
+                        list.Add(_startDate, _startDate.ToString("mon - yyyy"));
+                        _startDate = Utils.Calendar.MonthStartDate(_endDate.AddDays(1));
+                        _endDate = Utils.Calendar.MonthEndDate(_endDate.AddDays(1));
+                    }
+                }
+                else if (days > 366)
+                {
+                    //Single Year.
+                    DateTime _startDate = StartDate;
+                    DateTime _endDate = Utils.Calendar.YearEndDate(_startDate);
+                    while (_endDate <= EndDate)
+                    {
+                        list.Add(_startDate, _startDate.ToString("yyyy"));
+                        _startDate = Utils.Calendar.YearStartDate(_endDate.AddDays(1));
+                        _endDate = Utils.Calendar.YearEndDate(_endDate.AddDays(1));
                     }
                 }
                 return list;
@@ -247,6 +268,10 @@ namespace PraticeManagement.Reporting
             {
                 PopulateByResourceData();
             }
+            else if (mvTimePeriodReport.ActiveViewIndex == 1)
+            {
+                PopulateByProjectData();
+            }
         }
 
         private void PopulateByResourceData()
@@ -255,6 +280,13 @@ namespace PraticeManagement.Reporting
             var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(StartDate, EndDate, null, orderByCerteria));
 
             tpByResource.DataBindResource(data, DatesList);
+        }
+
+        private void PopulateByProjectData()
+        {
+            string orderByCerteria = string.Empty;
+            var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(StartDate, EndDate, null,null, orderByCerteria));
+            tpByProject.DataBindProject(data, DatesList);
         }
     }
 }
