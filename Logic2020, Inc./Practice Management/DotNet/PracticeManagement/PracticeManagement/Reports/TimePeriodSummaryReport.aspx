@@ -4,6 +4,7 @@
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc" TagName="DateInterval" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <%@ Register Src="~/Controls/Reports/TimePeriodSummaryByResource.ascx" TagPrefix="uc" TagName="ByResource" %>
+<%@ Register Src="~/Controls/Reports/TimePeriodSummaryByProject.ascx" TagPrefix="uc" TagName="Byproject" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
@@ -177,6 +178,7 @@
                 </asp:View>
                 <asp:View ID="vwProjectReport" runat="server">
                     <asp:Panel ID="pnlProjectReport" runat="server" CssClass="tab-pane WholeWidth">
+                     <uc:Byproject Id="tpByProject" runat="server"></uc:Byproject>
                     </asp:Panel>
                 </asp:View>
                 <asp:View ID="vwWorkTypeReport" runat="server">
