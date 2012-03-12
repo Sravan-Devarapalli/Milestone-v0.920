@@ -87,6 +87,7 @@ namespace DataAccess
         private const string AlphabetParam = "@Alphabet";
         private const string CounselorIdParam = "@CounselorId";
         private const string TimeScaleIdsParam = "@TimescaleIds";
+        private const string PersonStatusIdsParam = "@PersonStatusIds";
 
         //StrawMan Puppose.
         private const string AmountParam = "@Amount";
@@ -3431,7 +3432,72 @@ namespace DataAccess
             }
         }
 
+        public static List<Person> GetPersonListByPayTypeIdsAndStatusIds(String payTypeIds,String statusIds)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPersonListByPayTypeIdsAndStatusIdsProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(TimeScaleIdsParam, string.IsNullOrEmpty(payTypeIds) ? DBNull.Value : (object)payTypeIds);
+                command.Parameters.AddWithValue(PersonStatusIdsParam, string.IsNullOrEmpty(statusIds) ? DBNull.Value : (object)statusIds);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<Person>();
 
+                    if (reader.HasRows)
+                    {
+                        int personIdIndex = reader.GetOrdinal(PersonIdColumn);
+                        int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+                        int lastNameIndex = reader.GetOrdinal(LastNameColumn);
+                        while (reader.Read())
+                        {
+                            var personId = reader.GetInt32(personIdIndex);
+                            var person = new Person
+                            {
+                                Id = personId,
+                                FirstName = reader.GetString(firstNameIndex),
+                                LastName = reader.GetString(lastNameIndex)
+                            };
+                            result.Add(person);
+                        }
+                    }
+                    return result;
+                }
+            }
+        }
+
+        public static List<Timescale> GetAllPayTypes()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPersonListByPayTypeIdsAndStatusIdsProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<Timescale>();
+
+                    if (reader.HasRows)
+                    {
+                        int timescaleNameIndex = reader.GetOrdinal(TimescaleColumn);
+                        int timescaleIdIndex = reader.GetOrdinal(TimescaleIdColumn);
+                        while (reader.Read())
+                        {
+                            var timescale = new Timescale
+                            {
+                                Id = reader.GetInt32(timescaleIdIndex),
+                                Name = reader.GetString(timescaleNameIndex)
+                            };
+                            result.Add(timescale);
+                        }
+                    }
+                    return result;
+                }
+            }
+        }
     }
 }
 
