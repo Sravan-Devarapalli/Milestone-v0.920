@@ -363,6 +363,7 @@
     <EmbeddedResource Include="Controls\Generic\EnableDisableExtender\EnableDisableExtender.js" />
     <EmbeddedResource Include="Controls\Generic\DirtyStateExtender\DirtyStateExtender.js" />
     <EmbeddedResource Include="Controls\Generic\EnableDisableExtForAdminSection\EnableDisableExtForAdminSection.js" />
+    <EmbeddedResource Include="Controls\Generic\BillableNonBillableAndTotal\BillableNonBillableAndTotalExtender.js" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
@@ -1193,6 +1194,7 @@
     <Compile Include="Controls\Calendar.ascx.designer.cs">
       <DependentUpon>Calendar.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Generic\BillableNonBillableAndTotal\BillableNonBillableAndTotalExtender.cs" />
     <Compile Include="Controls\Generic\CustomCheckBoxList.cs" />
     <Compile Include="Controls\Generic\DirtyStateExtender\DirtyStateExtender.cs" />
     <Compile Include="Controls\Generic\DuplicateOptionsRemove\DupilcateOptionsRemoveExtender.cs" />
