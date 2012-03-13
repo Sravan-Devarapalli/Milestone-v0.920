@@ -36,7 +36,9 @@
         }
         function btnResetFilter_OnClientClick() {
             var dlPersonDiv = document.getElementById('<%= dlPersonDiv.ClientID %>');
-            dlPersonDiv.style.display = 'none';
+            if (dlPersonDiv != null) {
+                dlPersonDiv.style.display = 'none';
+            }
             var chblPayTypes = document.getElementById('<%= chblPayTypes.ClientID %>');
             var chblPayTypesInputTagList = chblPayTypes.getElementsByTagName('input');
             for (var i = 0; i < chblPayTypesInputTagList.length; i++) {
