@@ -126,7 +126,7 @@ namespace PraticeManagement.Reporting
                 if (days <= 7)
                 {
                     //Single Day.
-                    for (int day = 0; day < EndDate.Subtract(StartDate).Days; day++)
+                    for (int day = 0; day <= EndDate.Subtract(StartDate).Days; day++)
                     {
                         DateTime _startDate = StartDate.AddDays(day);
                         list.Add(_startDate,_startDate.ToString("MM/dd/yyyy"));
@@ -286,7 +286,7 @@ namespace PraticeManagement.Reporting
         {
             string orderByCerteria = string.Empty;
             var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(StartDate, EndDate, null,null, orderByCerteria));
-            tpByProject.DataBindProject(data, DatesList);
+            //tpByProject.DataBindProject(data, DatesList);
         }
     }
 }
