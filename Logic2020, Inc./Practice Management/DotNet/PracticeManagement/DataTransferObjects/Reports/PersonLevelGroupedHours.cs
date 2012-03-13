@@ -32,7 +32,16 @@ namespace DataTransferObjects.Reports
         {
             get
             {
-                return GroupedHoursList.Sum(G => G.BillabileTotal);
+                if (GroupedHoursList != null)
+                {
+                    return GroupedHoursList.Sum(G => G.BillabileTotal);
+                }
+                else
+                {
+                    return 0d;
+                }
+
+
             }
         }
 
@@ -40,7 +49,14 @@ namespace DataTransferObjects.Reports
         {
             get
             {
-                return GroupedHoursList.Sum(G => G.NonBillableTotal);
+                if (GroupedHoursList != null)
+                {
+                    return GroupedHoursList.Sum(G => G.NonBillableTotal);
+                }
+                else
+                {
+                    return 0d;
+                }
             }
         }
 
@@ -48,7 +64,14 @@ namespace DataTransferObjects.Reports
         {
             get
             {
-                return GroupedHoursList.Sum(G => G.CombinedTotal);
+                if (GroupedHoursList != null)
+                {
+                    return GroupedHoursList.Sum(G => G.CombinedTotal);
+                }
+                else
+                {
+                    return 0d;
+                }
             }
         }
 
