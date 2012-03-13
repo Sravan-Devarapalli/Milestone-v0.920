@@ -19,7 +19,7 @@ namespace PraticeManagement.Controls.Reports {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rbBillable;
+        protected global::System.Web.UI.HtmlControls.HtmlInputRadioButton rbBillable;
         
         /// <summary>
         /// rbNonBillable control.
@@ -28,7 +28,7 @@ namespace PraticeManagement.Controls.Reports {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rbNonBillable;
+        protected global::System.Web.UI.HtmlControls.HtmlInputRadioButton rbNonBillable;
         
         /// <summary>
         /// rbCombined control.
@@ -37,7 +37,7 @@ namespace PraticeManagement.Controls.Reports {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rbCombined;
+        protected global::System.Web.UI.HtmlControls.HtmlInputRadioButton rbCombined;
         
         /// <summary>
         /// repResource control.
@@ -47,6 +47,24 @@ namespace PraticeManagement.Controls.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater repResource;
+        
+        /// <summary>
+        /// lblTotalHours control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblTotalHours;
+        
+        /// <summary>
+        /// extBillableNonBillableAndTotalExtender control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.BillableNonBillableAndTotal.BillableNonBillableAndTotalExtender extBillableNonBillableAndTotalExtender;
     }
 }
 
