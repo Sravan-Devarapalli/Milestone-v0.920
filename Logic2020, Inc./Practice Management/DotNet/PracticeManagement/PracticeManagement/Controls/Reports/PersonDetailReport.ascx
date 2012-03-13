@@ -3,7 +3,7 @@
 <%@ Import Namespace="DataTransferObjects.Reports" %>
 <asp:HiddenField ID="hdncpeExtendersIds" runat="server" Value="" />
 <asp:HiddenField ID="hdnCollapsed" runat="server" Value="false" />
-<table class="WholeWidth">
+<table class="WholeWidthWithHeight">
     <tr>
         <td colspan="4" style="width: 85%;">
             <asp:Button ID="btnExpandOrCollapseAll" runat="server" Text="Collapse All" UseSubmitBehavior="false"
@@ -16,10 +16,12 @@
                         Export:
                     </td>
                     <td>
-                        <asp:Button ID="btnExcel" runat="server" Text="Excel" />
+                        <asp:Button ID="btnExportToExcel" runat="server" Text="Excel" OnClick="btnExportToExcel_OnClick"
+                            ToolTip="Export To Excel" />
                     </td>
                     <td>
-                        <asp:Button ID="btnPDF" runat="server" Text="PDF" />
+                        <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick"
+                            ToolTip="Export To PDF" />
                     </td>
                 </tr>
             </table>
@@ -146,11 +148,13 @@
                         </table>
                     </asp:Panel>
                 </ItemTemplate>
-                
             </asp:Repeater>
         </asp:Panel>
     </ItemTemplate>
     <FooterTemplate>
     </FooterTemplate>
 </asp:Repeater>
+<div id="divEmptyMessage" style="text-align:center;font-size:15px; display:none;" runat="server">
+    The Person has not entered Timeentries for the selected period. 
+</div>
 
