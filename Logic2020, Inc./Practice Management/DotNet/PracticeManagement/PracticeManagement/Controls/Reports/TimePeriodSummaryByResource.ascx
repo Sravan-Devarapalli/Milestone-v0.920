@@ -1,10 +1,15 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TimePeriodSummaryByResource.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.TimePeriodSummaryByResource" %>
+<%@ Register TagPrefix="ext" Namespace="PraticeManagement.Controls.Generic.BillableNonBillableAndTotal"
+    Assembly="PraticeManagement" %>
 <div class="PaddingBottom6 PaddingTop6 textCenter">
     Show:
-    <asp:RadioButton ID="rbBillable" runat="server" GroupName="ByResource" Text="Billable" />
-    <asp:RadioButton ID="rbNonBillable" runat="server" GroupName="ByResource" Text="NonBillable" />
-    <asp:RadioButton ID="rbCombined" runat="server" GroupName="ByResource" Text="Combined Total" Checked="true" />
+    <input type="radio" id="rbBillable" runat="server" name="ByResource" displayvaluetype="billabletotal" />
+    Billable
+    <input type="radio" id="rbNonBillable" runat="server" name="ByResource" displayvaluetype="nonbillabletotal" />
+    Non-Billable
+    <input type="radio" id="rbCombined" runat="server" checked="true" name="ByResource" displayvaluetype="combinedtotal" />
+    Combined Total
 </div>
 <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
     <HeaderTemplate>
@@ -28,14 +33,12 @@
                             </div>
                         </th>
                     </ItemTemplate>
-                    <FooterTemplate>
-                        <th>
-                            <div class="ie-bg">
-                                Total
-                            </div>
-                        </th>
-                    </FooterTemplate>
                 </asp:Repeater>
+                <th>
+                    <div class="ie-bg">
+                        Total
+                    </div>
+                </th>
             </tr>
     </HeaderTemplate>
     <ItemTemplate>
@@ -46,19 +49,20 @@
             <td class="padLeft5">
                 <%# Eval("person.Seniority.Name") %>
             </td>
-            <asp:Repeater ID="repResourceHoursPerDay" runat="server" OnItemDataBound="repResourceHoursPerDay_ItemDataBound">
-            <HeaderTemplate></HeaderTemplate>
+            <asp:Repeater ID="repResourceHoursPerDay" OnItemDataBound="repResourceHoursPerDay_OnItemDataBound"
+                runat="server">
                 <ItemTemplate>
-                    <td class="textCenter">
-                        <%# ((double)Eval("Value")).ToString("0.00") %>
+                    <td id="tdDayTotalHours" billabletotal='<%# ((double)Eval("Value.BillabileTotal")).ToString("0.00") %>'
+                        nonbillabletotal='<%# ((double)Eval("Value.NonBillableTotal")).ToString("0.00") %>'
+                        combinedtotal='<%# ((double)Eval("Value.CombinedTotal")).ToString("0.00") %>'
+                        runat="server" class="textCenter">
                     </td>
                 </ItemTemplate>
-                <FooterTemplate>
-                    <td class="textCenter">
-                        <asp:Label ID="lblTotal" runat="server"></asp:Label>
-                    </td>
-                </FooterTemplate>
             </asp:Repeater>
+            <td id="tdPersonTotalHours" class="textCenter" billabletotal='<%# ((double)Eval("BillabileTotal")).ToString("0.00") %>'
+                nonbillabletotal='<%# ((double)Eval("NonBillableTotal")).ToString("0.00") %>'
+                combinedtotal='<%# ((double)Eval("CombinedTotal")).ToString("0.00") %>' runat="server">
+            </td>
         </tr>
     </ItemTemplate>
     <AlternatingItemTemplate>
@@ -69,23 +73,28 @@
             <td class="padLeft5">
                 <%# Eval("person.Seniority.Name") %>
             </td>
-            <asp:Repeater ID="repResourceHoursPerDay" runat="server" OnItemDataBound="repResourceHoursPerDay_ItemDataBound">
-            <HeaderTemplate></HeaderTemplate>
+            <asp:Repeater ID="repResourceHoursPerDay" OnItemDataBound="repResourceHoursPerDay_OnItemDataBound"
+                runat="server">
                 <ItemTemplate>
-                    <td class="textCenter">
-                        <%# ((double)Eval("Value")).ToString("0.00") %>
+                    <td id="tdDayTotalHours" billabletotal='<%# ((double)Eval("Value.BillabileTotal")).ToString("0.00") %>'
+                        nonbillabletotal='<%# ((double)Eval("Value.NonBillableTotal")).ToString("0.00") %>'
+                        combinedtotal='<%# ((double)Eval("Value.CombinedTotal")).ToString("0.00") %>'
+                        runat="server" class="textCenter">
                     </td>
                 </ItemTemplate>
-                <FooterTemplate>
-                    <td class="textCenter">
-                        <asp:Label ID="lblTotal" runat="server"></asp:Label>
-                    </td>
-                </FooterTemplate>
             </asp:Repeater>
+            <td id="tdPersonTotalHours" class="textCenter" billabletotal='<%# ((double)Eval("BillabileTotal")).ToString("0.00") %>'
+                nonbillabletotal='<%# ((double)Eval("NonBillableTotal")).ToString("0.00") %>'
+                combinedtotal='<%# ((double)Eval("CombinedTotal")).ToString("0.00") %>' runat="server">
+            </td>
         </tr>
     </AlternatingItemTemplate>
     <FooterTemplate>
         </table>
     </FooterTemplate>
 </asp:Repeater>
+<label id="lblTotalHours" runat="server" />
+<ext:BillableNonBillableAndTotalExtender ID="extBillableNonBillableAndTotalExtender"
+    runat="server" TargetControlID="lblTotalHours">
+</ext:BillableNonBillableAndTotalExtender>
 
