@@ -38,8 +38,18 @@ namespace PraticeManagement.Controls.Reports
 
         public void DatabindRepepeaterProjectDetails(List<TimeEntriesGroupByClientAndProject> timeEntriesGroupByClientAndProjectList)
         {
-            repProjects.DataSource = timeEntriesGroupByClientAndProjectList;
-            repProjects.DataBind();
+             if(timeEntriesGroupByClientAndProjectList.Count > 0)
+            {
+                divEmptyMessage.Style["display"] = "none";
+                repProjects.Visible = btnExpandOrCollapseAll.Visible = true;
+                repProjects.DataSource = timeEntriesGroupByClientAndProjectList;
+                repProjects.DataBind();
+            }
+            else
+            {
+                divEmptyMessage.Style["display"] = "";
+                repProjects.Visible = btnExpandOrCollapseAll.Visible = false;
+            }
         }
 
         protected void repProjects_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -77,11 +87,6 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
-
-       
-
-
-
         protected void repDate_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Header)
@@ -106,6 +111,16 @@ namespace PraticeManagement.Controls.Reports
         protected string GetDoubleFormat(double value)
         {
             return value.ToString(Constants.Formatting.DoubleValue);
+        }
+
+        protected void btnExportToExcel_OnClick(object sender, EventArgs e)
+        { 
+        
+        }
+
+        protected void btnExportToPDF_OnClick(object sender, EventArgs e)
+        {
+
         }
 
     }
