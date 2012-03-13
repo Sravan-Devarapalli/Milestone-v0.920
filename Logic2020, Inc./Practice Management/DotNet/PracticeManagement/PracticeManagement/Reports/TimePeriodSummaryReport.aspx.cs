@@ -278,7 +278,6 @@ namespace PraticeManagement.Reporting
         {
             string orderByCerteria = string.Empty;
             var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(StartDate, EndDate, null, orderByCerteria));
-
             tpByResource.DataBindResource(data, DatesList);
         }
 
@@ -286,7 +285,7 @@ namespace PraticeManagement.Reporting
         {
             string orderByCerteria = string.Empty;
             var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(StartDate, EndDate, null,null, orderByCerteria));
-            //tpByProject.DataBindProject(data, DatesList);
+            tpByProject.DataBindProject(data, DatesList);
         }
     }
 }
