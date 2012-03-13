@@ -3451,6 +3451,9 @@ namespace DataAccess
                         int personIdIndex = reader.GetOrdinal(PersonIdColumn);
                         int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
                         int lastNameIndex = reader.GetOrdinal(LastNameColumn);
+                        int timeScaleIndex = reader.GetOrdinal(TimescaleColumn);
+                        int statusNameIndex = reader.GetOrdinal(PersonStatusNameColumn);
+
                         while (reader.Read())
                         {
                             var personId = reader.GetInt32(personIdIndex);
@@ -3458,7 +3461,15 @@ namespace DataAccess
                             {
                                 Id = personId,
                                 FirstName = reader.GetString(firstNameIndex),
-                                LastName = reader.GetString(lastNameIndex)
+                                LastName = reader.GetString(lastNameIndex),
+                                Status = new PersonStatus
+                                {
+                                    Name = reader.GetString(statusNameIndex)
+                                },
+                                CurrentPay = new Pay 
+                                {
+                                TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
+                                }
                             };
                             result.Add(person);
                         }
