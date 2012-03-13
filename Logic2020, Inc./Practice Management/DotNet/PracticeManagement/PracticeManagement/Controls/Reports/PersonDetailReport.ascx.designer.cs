@@ -13,6 +13,33 @@ namespace PraticeManagement.Controls.Reports {
     public partial class PersonDetailReport {
         
         /// <summary>
+        /// hdncpeExtendersIds control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdncpeExtendersIds;
+        
+        /// <summary>
+        /// hdnCollapsed control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnCollapsed;
+        
+        /// <summary>
+        /// btnExpandOrCollapseAll control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExpandOrCollapseAll;
+        
+        /// <summary>
         /// btnExcel control.
         /// </summary>
         /// <remarks>
