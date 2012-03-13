@@ -1,9 +1,13 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="PersonDetailReport.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.PersonDetailReport" %>
 <%@ Import Namespace="DataTransferObjects.Reports" %>
-<table class="WholeWidthWithHeight">
+<asp:HiddenField ID="hdncpeExtendersIds" runat="server" Value="" />
+<asp:HiddenField ID="hdnCollapsed" runat="server" Value="false" />
+<table class="WholeWidth">
     <tr>
         <td colspan="4" style="width: 85%;">
+            <asp:Button ID="btnExpandOrCollapseAll" runat="server" Text="Collapse All" UseSubmitBehavior="false"
+                ToolTip="Collapse All" />
         </td>
         <td style="text-align: right; width: 15%; padding-right: 5px;">
             <table width="100%" style="text-align: right;">
@@ -23,6 +27,8 @@
     </tr>
 </table>
 <asp:Repeater ID="repProjects" runat="server" OnItemDataBound="repProjects_ItemDataBound">
+    <HeaderTemplate>
+    </HeaderTemplate>
     <ItemTemplate>
         <table class="WholeWidthWithHeight">
             <tr style="text-align: left; background-color: #D4DFF8;">
@@ -47,6 +53,8 @@
         </table>
         <asp:Panel ID="pnlProjectDetails" runat="server" CssClass="cp bg-white">
             <asp:Repeater ID="repDate" runat="server" OnItemDataBound="repDate_ItemDataBound">
+                <HeaderTemplate>
+                </HeaderTemplate>
                 <ItemTemplate>
                     <table class="WholeWidthWithHeight">
                         <tr style="text-align: left; background-color: #D4D0C9;">
@@ -138,8 +146,11 @@
                         </table>
                     </asp:Panel>
                 </ItemTemplate>
+                
             </asp:Repeater>
         </asp:Panel>
     </ItemTemplate>
+    <FooterTemplate>
+    </FooterTemplate>
 </asp:Repeater>
 
