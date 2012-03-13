@@ -2289,6 +2289,10 @@ TABLE.Section td
 {
     padding-top: 6px;
 }
+.PaddingBottom6
+{
+    padding-bottom: 6px;
+}
 
 .Width2Percent
 {
@@ -2508,5 +2512,20 @@ end pixcel
 {
     height:30px;
     padding-left :5px;
+}
+
+.ReportItemTemplate
+{
+    background-color: #f9faff;
+}
+.ReportItemTemplate td, .ReportAlternateItemTemplate td
+{
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.ReportAlternateItemTemplate
+{
+    background-color: White;
 }
 
