@@ -2,6 +2,8 @@
 -- Author:		ThulasiRam.P
 -- Create date: 03-05-2012
 -- Description: Person TimeEntries Summary By Period.
+-- Updated By : Sainath CH
+-- Modified Date : 03-13-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonTimeEntriesSummary]
 (
@@ -13,6 +15,9 @@ AS
 BEGIN
 
 	SET NOCOUNT ON;
+
+	SET @StartDate = CONVERT(DATE,@StartDate)
+	SET @EndDate = CONVERT(DATE,@EndDate)
 
 	;WITH PersonDayBillratesByProjects AS
 	(
@@ -28,18 +33,19 @@ BEGIN
 	  GROUP BY M.ProjectId,
 			   C.Date
 	)
+
 	SELECT  PRO.Name AS ProjectName,
-			SUM(CASE WHEN TEH.IsChargeable = 1 THEN TEH.ActualHours 
+			ROUND(SUM(CASE WHEN TEH.IsChargeable = 1 THEN TEH.ActualHours 
 					 ELSE 0 
-				END) AS BillableHours,
-			SUM(CASE WHEN TEH.IsChargeable = 0 THEN TEH.ActualHours 
+				END),2) AS BillableHours,
+			ROUND(SUM(CASE WHEN TEH.IsChargeable = 0 THEN TEH.ActualHours 
 					 ELSE 0 
-				END) AS NonBillableHours,
-			SUM(ISNULL(PDBR.AvgBillRate,0) * ( CASE WHEN TEH.IsChargeable = 1 THEN TEH.ActualHours 
+				END),2) AS NonBillableHours,
+			ROUND(SUM(ISNULL(PDBR.AvgBillRate,0) * ( CASE WHEN TEH.IsChargeable = 1 THEN TEH.ActualHours 
 													ELSE 0	
 													END
 											  )
-				) AS BillableValue,
+				),2) AS BillableValue,
 			PRO.ProjectNumber,
 			C.Name AS  ClientName
 	FROM dbo.TimeEntry AS TE 
