@@ -248,6 +248,7 @@ namespace PraticeManagement.Reporting
         {
             int personId = Convert.ToInt32(ddlPerson.SelectedValue);
             var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesSummary(personId, StartDate, EndDate)).ToList();
+
             ucpersonSummaryReport.DatabindRepepeaterSummary(list);
             PopulateTotalSection(list.Sum(l => l.BillableHours), list.Sum(l => l.NonBillableHours), list.Sum(l => l.BillableValue));
         }
