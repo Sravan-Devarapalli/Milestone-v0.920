@@ -14,6 +14,22 @@ namespace PraticeManagement.Reporting
     public partial class PersonDetailTimeReport : System.Web.UI.Page
     {
 
+        public int PersonId
+        {
+            get
+            {
+                int personId;
+                if (!string.IsNullOrEmpty(Page.Request.QueryString["id"]) && int.TryParse(Page.Request.QueryString["id"], out personId))
+                {
+                    return personId;
+                }
+                else
+                {
+                    return DataHelper.CurrentPerson.Id.Value;
+                }
+            }
+        }
+
         public DateTime StartDate
         {
             get
@@ -127,7 +143,27 @@ namespace PraticeManagement.Reporting
             if (!IsPostBack)
             {
                 DataHelper.FillPersonList(ddlPerson, null, 1);
-                ddlPerson.SelectedValue = DataHelper.CurrentPerson.Id.Value.ToString();
+                ddlPerson.SelectedValue = PersonId.ToString();
+                if (ddlPerson.SelectedValue != PersonId.ToString())
+                { 
+                    Person person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(PersonId));
+                    ddlPerson.Items.Add(new ListItem(person.PersonLastFirstName, PersonId.ToString()));
+                    ddlPerson.SelectedValue = PersonId.ToString();
+                }
+
+                var payTypes = ServiceCallers.Custom.Person(p=>p.GetAllPayTypes());
+                chblPayTypes.DataSource = payTypes;
+                chblPayTypes.DataTextField = "Name";
+                chblPayTypes.DataValueField = "Id";
+                chblPayTypes.DataBind();
+
+                var personStatuses = ServiceCallers.Custom.PersonStatus(p => p.GetPersonStatuses());
+                chblStatus.DataSource = personStatuses;
+                chblStatus.DataTextField = "Name";
+                chblStatus.DataValueField =  "Id";
+                chblStatus.DataBind();
+
+                dlPersonDiv.Visible = false;
             }
         }
 
@@ -248,7 +284,6 @@ namespace PraticeManagement.Reporting
         {
             int personId = Convert.ToInt32(ddlPerson.SelectedValue);
             var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesSummary(personId, StartDate, EndDate)).ToList();
-
             ucpersonSummaryReport.DatabindRepepeaterSummary(list);
             PopulateTotalSection(list.Sum(l => l.BillableHours), list.Sum(l => l.NonBillableHours), list.Sum(l => l.BillableValue));
         }
@@ -303,6 +338,25 @@ namespace PraticeManagement.Reporting
 
         }
 
+        protected String GetPersonDetailTimeReportUrl(String personId)
+        {
+            return "~/Reports/PersonDetailTimeReport.aspx?Id=" + personId; 
+        }
+
+        protected String GetPersonFirstLastName(Person person)
+        {
+            return person.PersonLastFirstName; 
+        }
+        protected void btnApplyFilter_OnClick(object sender, EventArgs e)
+        { 
+            string selectedstatueIds = chblStatus.SelectedValue;
+            string selectedPayTypeIds = chblPayTypes.SelectedValue;
+            var personList = ServiceCallers.Custom.Person(p=>p.GetPersonListByPayTypeIdsAndStatusIds(selectedPayTypeIds,selectedstatueIds));
+            dlPersonDiv.Visible = true;
+            dlPerson.DataSource = personList;
+            dlPerson.DataBind();
+            mpePersonSearch.Show();
+        }
     }
 }
 
