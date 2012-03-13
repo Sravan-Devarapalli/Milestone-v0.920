@@ -1,11 +1,13 @@
 ﻿<%@ Page Title="Time Period Summary Report" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="TimePeriodSummaryReport.aspx.cs" Inherits="PraticeManagement.Reporting.TimePeriodSummaryReport" %>
-    
-<%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc" TagName="DateInterval" %>
-<%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
-<%@ Register Src="~/Controls/Reports/TimePeriodSummaryByResource.ascx" TagPrefix="uc" TagName="ByResource" %>
-<%@ Register Src="~/Controls/Reports/TimePeriodSummaryByProject.ascx" TagPrefix="uc" TagName="Byproject" %>
 
+<%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
+    TagName="DateInterval" %>
+<%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
+<%@ Register Src="~/Controls/Reports/TimePeriodSummaryByResource.ascx" TagPrefix="uc"
+    TagName="ByResource" %>
+<%@ Register Src="~/Controls/Reports/TimePeriodSummaryByProject.ascx" TagPrefix="uc"
+    TagName="Byproject" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
@@ -42,7 +44,7 @@
         {
             background-color: White;
             float: left;
-            padding: 8px 0px 15px 0px;
+            padding: 8px 0px 5px 0px;
             position: relative;
         }
         
@@ -101,7 +103,8 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
-        <ContentTemplate>Range: 
+        <ContentTemplate>
+            Range:
             <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
                 <asp:ListItem Selected="True" Text="This Week" Value="7"></asp:ListItem>
                 <asp:ListItem Text="This Month" Value="30"></asp:ListItem>
@@ -148,37 +151,43 @@
             </asp:Panel>
             <br />
             <hr />
-            <asp:Table ID="tblTimePeriodReportViewSwitch" runat="server" CssClass="CustomTabStyle">
-                <asp:TableRow ID="rowSwitcher" runat="server">
-                    <asp:TableCell ID="cellResource" CssClass="SelectedSwitch" runat="server">
-                        <span class="bg"><span>
-                            <asp:LinkButton ID="lnkbtnResource" runat="server" Text="By Resource" CausesValidation="false"
-                                OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
-                        </span>
-                    </asp:TableCell>
-                    <asp:TableCell ID="cellProject" runat="server">
-                        <span class="bg"><span>
-                            <asp:LinkButton ID="lnkbtnProject" runat="server" Text="By Project" CausesValidation="false"
-                                OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
-                        </span>
-                    </asp:TableCell>
-                    <asp:TableCell ID="cellWorkType" runat="server">
-                        <span class="bg"><span>
-                            <asp:LinkButton ID="lnkbtnWorkType" runat="server" Text="By Work Type" CausesValidation="false"
-                                OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
-                        </span>
-                    </asp:TableCell>
-                </asp:TableRow>
-            </asp:Table>
+            <table class="WholeWidth">
+                <tr>
+                    <td align="center">
+                        <asp:Table ID="tblTimePeriodReportViewSwitch" runat="server" CssClass="CustomTabStyle">
+                            <asp:TableRow ID="rowSwitcher" runat="server">
+                                <asp:TableCell ID="cellResource" CssClass="SelectedSwitch" runat="server">
+                                    <span class="bg"><span>
+                                        <asp:LinkButton ID="lnkbtnResource" runat="server" Text="By Resource" CausesValidation="false"
+                                            OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
+                                    </span>
+                                </asp:TableCell>
+                                <asp:TableCell ID="cellProject" runat="server">
+                                    <span class="bg"><span>
+                                        <asp:LinkButton ID="lnkbtnProject" runat="server" Text="By Project" CausesValidation="false"
+                                            OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
+                                    </span>
+                                </asp:TableCell>
+                                <asp:TableCell ID="cellWorkType" runat="server">
+                                    <span class="bg"><span>
+                                        <asp:LinkButton ID="lnkbtnWorkType" runat="server" Text="By Work Type" CausesValidation="false"
+                                            OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
+                                    </span>
+                                </asp:TableCell>
+                            </asp:TableRow>
+                        </asp:Table>
+                    </td>
+                </tr>
+            </table>
             <asp:MultiView ID="mvTimePeriodReport" runat="server" ActiveViewIndex="0">
                 <asp:View ID="vwResourceReport" runat="server">
                     <asp:Panel ID="pnlResourceReport" runat="server" CssClass="tab-pane WholeWidth">
-                        <uc:ByResource Id="tpByResource" runat="server"></uc:ByResource>
+                        <uc:ByResource ID="tpByResource" runat="server"></uc:ByResource>
                     </asp:Panel>
                 </asp:View>
                 <asp:View ID="vwProjectReport" runat="server">
                     <asp:Panel ID="pnlProjectReport" runat="server" CssClass="tab-pane WholeWidth">
-                     <uc:Byproject Id="tpByProject" runat="server"></uc:Byproject>
+                        <uc:Byproject ID="tpByProject" runat="server"></uc:Byproject>
                     </asp:Panel>
                 </asp:View>
                 <asp:View ID="vwWorkTypeReport" runat="server">
