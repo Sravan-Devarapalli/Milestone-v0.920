@@ -315,6 +315,8 @@ namespace DataAccess
                 int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
                 int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
                 int projectNumberindex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
+                int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusIdColumn);
+                int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
                 int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
@@ -331,10 +333,16 @@ namespace DataAccess
                         {
                             Id = reader.GetInt32(projectIdIndex),
                             Name = reader.GetString(projectNameIndex),
+                            ProjectNumber = reader.GetString(projectNumberindex),
                             Client = new Client
                             {
                                 Id = reader.GetInt32(clientIdIndex),
                                 Name = reader.GetString(clientNameIndex)
+                            },
+                            Status = new ProjectStatus
+                            {
+                                Id = reader.GetInt32(projectStatusIdIndex),
+                                Name = reader.GetString(projectStatusNameIndex)
                             }
                         };
                         plgh.Project = project;
