@@ -29,6 +29,57 @@
             var valSummary = document.getElementById('<%= valSumDateRange.ClientID %>');
             valSummary.style.display = 'none';
         }
+
+        function CollapseOrExpandAll(btnExpandOrCollapseAllClientId, hdnCollapsedClientId, hdncpeExtendersIds) {
+            var btn = btnExpandOrCollapseAllClientId;
+            var hdnCollapsed = hdnCollapsedClientId;
+            var isExpand = false;
+            if (btn != null) {
+                if (btn.value == "Expand All") {
+                    isExpand = true;
+                    btn.value = "Collapse All";
+                    btn.title = "Collapse All";
+                    hdnCollapsed.value = 'false';
+                }
+                else {
+                    btn.value = "Expand All";
+                    btn.title = "Expand All";
+                    hdnCollapsed.value = 'true';
+                }
+                var projectPanelskvPair = jQuery.parseJSON(hdncpeExtendersIds.value);
+
+                ExpandOrCollapsePanels(projectPanelskvPair, isExpand);
+
+            }
+
+            return false;
+
+        }
+
+        function ExpandOrcollapseExtender(cpe, isExpand) {
+            if (cpe != null) {
+                if (isExpand)
+                    cpe._doOpen();
+                else
+                    cpe._doClose();
+            }
+        }
+
+        function ExpandOrCollapsePanels(ids, isExpand) {
+            for (var i = 0; i < ids.length; i++) {
+
+                var cpe = $find(ids[i].Key);
+                var datePanels = jQuery.parseJSON(ids[i].Value);
+                ExpandOrcollapseExtender(cpe, isExpand);
+                for (var j = 0; j < datePanels.length; j++) {
+                    var cpeDate = $find(datePanels[j]);
+                    ExpandOrcollapseExtender(cpeDate, isExpand);
+                }
+            }
+        }
+
+
+       
     </script>
     <style>
         /* --------- Tabs for person and project details pages ------ */
@@ -186,9 +237,8 @@
             <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
             &nbsp;
             <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
-                CancelControlID="btnCustDatesCancel" BackgroundCssClass="modalBackground"
-                PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates" DropShadow="false"
-                OnCancelScript="ReAssignStartDateEndDates();" />
+                CancelControlID="btnCustDatesCancel" BackgroundCssClass="modalBackground" PopupControlID="pnlCustomDates"
+                BehaviorID="bhCustomDates" DropShadow="false" OnCancelScript="ReAssignStartDateEndDates();" />
             <asp:Panel ID="pnlCustomDates" runat="server" BackColor="White" BorderColor="Black"
                 CssClass="ConfirmBoxClass" Style="padding-top: 20px; display: none;" BorderWidth="2px">
                 <table class="WholeWidth">
