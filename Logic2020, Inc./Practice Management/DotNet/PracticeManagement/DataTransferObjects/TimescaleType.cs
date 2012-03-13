@@ -8,6 +8,8 @@ namespace DataTransferObjects
 	[DataContract]
 	public enum TimescaleType
 	{
+        	[EnumMember]
+        	Undefined = 0,
 		/// <summary>
 		/// An employee recieve a hourly earnings.
 		/// </summary>
