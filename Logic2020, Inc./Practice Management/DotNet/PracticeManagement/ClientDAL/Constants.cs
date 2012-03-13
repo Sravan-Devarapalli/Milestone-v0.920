@@ -634,6 +634,7 @@
                 public const string PersonsListHavingActiveStatusDuringThisPeriodProcedure = "dbo.PersonsListHavingActiveStatusDuringThisPeriod";
                 public const string GetCurrentActivePracticeAreaManagerListProcedure = "dbo.GetCurrentActivePracticeAreaManagerList";
                 public const string GetPersonListByPayTypeIdsAndStatusIdsProcedure = "dbo.GetPersonListByPayTypeIdsAndStatusIds";
+                public const string GetAllPayTypesProcedure = "dbo.GetAllPayTypes";
                 
             }
 
