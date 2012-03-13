@@ -11,10 +11,12 @@
                         Export:
                     </td>
                     <td>
-                        <asp:Button ID="btnExcel" runat="server" Text="Excel" />
+                        <asp:Button ID="btnExportToExcel" runat="server" Text="Excel" OnClick="btnExportToExcel_OnClick"
+                            ToolTip="Export To Excel" />
                     </td>
                     <td>
-                        <asp:Button ID="btnPDF" runat="server" Text="PDF" />
+                        <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick"
+                            ToolTip="Export To PDF" />
                     </td>
                 </tr>
             </table>
@@ -173,4 +175,7 @@
         </table>
     </FooterTemplate>
 </asp:Repeater>
+<div id="divEmptyMessage" style="text-align:center;font-size:15px; display:none;" runat="server">
+    The person has not entered TimeEntries for the selected period. 
+</div>
 
