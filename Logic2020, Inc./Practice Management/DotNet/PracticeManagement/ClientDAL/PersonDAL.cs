@@ -3471,7 +3471,7 @@ namespace DataAccess
         public static List<Timescale> GetAllPayTypes()
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPersonListByPayTypeIdsAndStatusIdsProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetAllPayTypesProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
