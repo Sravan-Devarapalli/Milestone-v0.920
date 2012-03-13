@@ -13,6 +13,33 @@ namespace PraticeManagement.Controls.Reports {
     public partial class TimePeriodSummaryByResource {
         
         /// <summary>
+        /// rbBillable control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbBillable;
+        
+        /// <summary>
+        /// rbNonBillable control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbNonBillable;
+        
+        /// <summary>
+        /// rbCombined control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbCombined;
+        
+        /// <summary>
         /// repResource control.
         /// </summary>
         /// <remarks>
