@@ -552,6 +552,7 @@
             public const string OrderByCerteriaParam = "@OrderByCerteria";
             public const string SeniorityIdsParam = "@SeniorityIds";
             public const string TimeTypeCategoryIdsParam = "@TimeTypeCategoryIds";
+            public const string PersonRoleIdsParam = "@PersonRoleIds";
 
 
 
@@ -729,6 +730,7 @@
                 public const string TimePeriodSummaryReportByResource = "dbo.TimePeriodSummaryReportByResource";
                 public const string TimePeriodSummaryReportByProject = "dbo.TimePeriodSummaryReportByProject";
                 public const string TimePeriodSummaryReportByWorkType = "dbo.TimePeriodSummaryReportByWorkType";
+                public const string ProjectSummaryReportByResource = "dbo.ProjectSummaryReportByResource";
                 
             }
 
