@@ -5,12 +5,24 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects.Reports;
+using System.Text;
 
 namespace PraticeManagement.Controls.Reports
 {
     public partial class PersonSummaryReport : System.Web.UI.UserControl
     {
-       
+        public List<TimeEntriesGroupByClientAndProject> TimeEntriesGroupByClientAndProjectList
+        {
+            get 
+            {
+                return ViewState["TimeEntriesGroupByClientAndProjectList_Key"] as List<TimeEntriesGroupByClientAndProject>;
+            }
+            set 
+            {
+                ViewState["TimeEntriesGroupByClientAndProjectList_Key"] = value;
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -18,6 +30,8 @@ namespace PraticeManagement.Controls.Reports
 
         public void DatabindRepepeaterSummary(List<TimeEntriesGroupByClientAndProject> timeEntriesGroupByClientAndProjectList)
         {
+            TimeEntriesGroupByClientAndProjectList = timeEntriesGroupByClientAndProjectList;
+
             if(timeEntriesGroupByClientAndProjectList.Count > 0)
             {
                 divEmptyMessage.Style["display"] = "none";
@@ -39,6 +53,9 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+              //TimeEntriesGroupByClientAndProjectList
+            StringBuilder sb = new StringBuilder();
+            //sb.Append();
 
         }
 
@@ -46,5 +63,7 @@ namespace PraticeManagement.Controls.Reports
         {
 
         }
+
+        
     }
 }
