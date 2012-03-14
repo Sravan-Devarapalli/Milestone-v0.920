@@ -3106,10 +3106,10 @@ namespace DataAccess
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
 
-                   
+
                     command.Parameters.AddWithValue(FirstNameParam, newFirstName);
                     command.Parameters.AddWithValue(LastNameParam, newLastName);
-                   
+
                     var personIdParameter = new SqlParameter();
                     personIdParameter.ParameterName = PersonIdParam;
                     personIdParameter.SqlDbType = SqlDbType.Int;
@@ -3377,7 +3377,7 @@ namespace DataAccess
             }
         }
 
-        public static List<Person> PersonsListHavingActiveStatusDuringThisPeriod(DateTime startDate,DateTime endDate)
+        public static List<Person> PersonsListHavingActiveStatusDuringThisPeriod(DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonsListHavingActiveStatusDuringThisPeriodProcedure, connection))
@@ -3432,15 +3432,15 @@ namespace DataAccess
             }
         }
 
-        public static List<Person> GetPersonListByPayTypeIdsAndStatusIds(String payTypeIds,String statusIds)
+        public static List<Person> GetPersonListByPayTypeIdsAndStatusIds(String payTypeIds, String statusIds)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPersonListByPayTypeIdsAndStatusIdsProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
-                command.Parameters.AddWithValue(TimeScaleIdsParam, string.IsNullOrEmpty(payTypeIds) ? DBNull.Value : (object)payTypeIds);
-                command.Parameters.AddWithValue(PersonStatusIdsParam, string.IsNullOrEmpty(statusIds) ? DBNull.Value : (object)statusIds);
+                command.Parameters.AddWithValue(TimeScaleIdsParam,  payTypeIds);
+                command.Parameters.AddWithValue(PersonStatusIdsParam, statusIds);
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
