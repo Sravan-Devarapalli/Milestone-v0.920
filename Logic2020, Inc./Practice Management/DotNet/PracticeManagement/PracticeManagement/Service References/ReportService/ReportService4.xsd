@@ -211,34 +211,11 @@
   <xs:element name="NumberFormatStyle" nillable="true" type="tns:NumberFormatStyle" />
   <xs:simpleType name="TimescaleType">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Hourly">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Salary">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="_1099Ctc">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="PercRevenue">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
+      <xs:enumeration value="Undefined" />
+      <xs:enumeration value="Hourly" />
+      <xs:enumeration value="Salary" />
+      <xs:enumeration value="_1099Ctc" />
+      <xs:enumeration value="PercRevenue" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="TimescaleType" nillable="true" type="tns:TimescaleType" />
