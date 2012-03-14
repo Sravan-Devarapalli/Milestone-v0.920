@@ -33,7 +33,7 @@
     </HeaderTemplate>
     <ItemTemplate>
         <table class="WholeWidthWithHeight">
-            <tr style="text-align: left; background-color: #D4DFF8;">
+            <tr style="text-align: left;">
                 <td colspan="4" class="ProjectAccountName" style="width: 95%">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeProject" runat="Server" CollapsedText="Expand Project Details"
                         ExpandedText="Collapse Project Details" EnableViewState="false" BehaviorID="cpeProject"
@@ -155,6 +155,6 @@
     </FooterTemplate>
 </asp:Repeater>
 <div id="divEmptyMessage" style="text-align:center;font-size:15px; display:none;" runat="server">
-    The Person has not entered Timeentries for the selected period. 
+   The person has not entered Time Entries for the selected period. 
 </div>
 
