@@ -391,15 +391,6 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Button btnclose;
         
         /// <summary>
-        /// chblPayTypes control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBoxList chblPayTypes;
-        
-        /// <summary>
         /// chblStatus control.
         /// </summary>
         /// <remarks>
@@ -407,6 +398,15 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBoxList chblStatus;
+        
+        /// <summary>
+        /// chblPayTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBoxList chblPayTypes;
         
         /// <summary>
         /// btnApplyFilter control.
