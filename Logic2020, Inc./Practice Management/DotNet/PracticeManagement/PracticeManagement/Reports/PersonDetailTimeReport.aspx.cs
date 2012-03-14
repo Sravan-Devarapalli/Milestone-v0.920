@@ -14,22 +14,6 @@ namespace PraticeManagement.Reporting
     public partial class PersonDetailTimeReport : System.Web.UI.Page
     {
 
-        public int PersonId
-        {
-            get
-            {
-                int personId;
-                if (!string.IsNullOrEmpty(Page.Request.QueryString["id"]) && int.TryParse(Page.Request.QueryString["id"], out personId))
-                {
-                    return personId;
-                }
-                else
-                {
-                    return DataHelper.CurrentPerson.Id.Value;
-                }
-            }
-        }
-
         public DateTime StartDate
         {
             get
@@ -44,9 +28,6 @@ namespace PraticeManagement.Reporting
                     var now = Utils.Generic.GetNowWithTimeZone();
                     if (selectedVal > 0)
                     {
-                        //7
-                        //30
-                        //365
                         if (selectedVal == 7)
                         {
                             return Utils.Calendar.WeekStartDate(now);
@@ -55,11 +36,11 @@ namespace PraticeManagement.Reporting
                         {
                             return Utils.Calendar.MonthStartDate(now);
                         }
-                        else 
+                        else
                         {
                             return Utils.Calendar.YearStartDate(now);
                         }
-                        
+
                     }
                     else if (selectedVal < 0)
                     {
@@ -99,9 +80,6 @@ namespace PraticeManagement.Reporting
                     DateTime firstDay = new DateTime(now.Year, now.Month, 1);
                     if (selectedVal > 0)
                     {
-                        //7
-                        //30
-                        //365
                         if (selectedVal == 7)
                         {
                             return Utils.Calendar.WeekEndDate(now);
@@ -143,15 +121,9 @@ namespace PraticeManagement.Reporting
             if (!IsPostBack)
             {
                 DataHelper.FillPersonList(ddlPerson, null, 1);
-                ddlPerson.SelectedValue = PersonId.ToString();
-                if (ddlPerson.SelectedValue != PersonId.ToString())
-                { 
-                    Person person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(PersonId));
-                    ddlPerson.Items.Add(new ListItem(person.PersonLastFirstName, PersonId.ToString()));
-                    ddlPerson.SelectedValue = PersonId.ToString();
-                }
+                ddlPerson.SelectedValue = DataHelper.CurrentPerson.Id.Value.ToString();
 
-                var payTypes = ServiceCallers.Custom.Person(p=>p.GetAllPayTypes());
+                var payTypes = ServiceCallers.Custom.Person(p => p.GetAllPayTypes());
                 chblPayTypes.DataSource = payTypes;
                 chblPayTypes.DataTextField = "Name";
                 chblPayTypes.DataValueField = "Id";
@@ -160,7 +132,7 @@ namespace PraticeManagement.Reporting
                 var personStatuses = ServiceCallers.Custom.PersonStatus(p => p.GetPersonStatuses());
                 chblStatus.DataSource = personStatuses;
                 chblStatus.DataTextField = "Name";
-                chblStatus.DataValueField =  "Id";
+                chblStatus.DataValueField = "Id";
                 chblStatus.DataBind();
 
                 dlPersonDiv.Visible = false;
@@ -204,6 +176,11 @@ namespace PraticeManagement.Reporting
         }
 
         protected void ddlPerson_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PopulatePersonData();
+        }
+
+        private void PopulatePersonData()
         {
             ddlPeriod.SelectedValue = "7";
             LoadActiveView();
@@ -271,6 +248,7 @@ namespace PraticeManagement.Reporting
                 PopulatePersonDetailReportDetails();
             }
         }
+
         private void PopulatePersonDetailReportDetails()
         {
             int personId = Convert.ToInt32(ddlPerson.SelectedValue);
@@ -287,7 +265,6 @@ namespace PraticeManagement.Reporting
             ucpersonSummaryReport.DatabindRepepeaterSummary(list);
             PopulateTotalSection(list.Sum(l => l.BillableHours), list.Sum(l => l.NonBillableHours), list.Sum(l => l.BillableValue));
         }
-
 
         private void PopulateTotalSection(double billableHours, double nonBillableHours, double totalValue)
         {
@@ -308,7 +285,7 @@ namespace PraticeManagement.Reporting
             ltrlBillablePercent.Text = billablePercent.ToString();
             ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
             ltrlTotalValue.Text = totalValue.ToString("C2");
-            
+
             if (billablePercent == 0)
             {
                 trBillable.Visible = false;
@@ -319,43 +296,69 @@ namespace PraticeManagement.Reporting
                 else
                 {
                     trNonBillable.Visible = true;
-                    trNonBillable.Height = "60px";
+                    trNonBillable.Height = "80px";
                 }
             }
             else if (billablePercent == 100)
             {
                 trBillable.Visible = true;
                 trNonBillable.Visible = false;
-                trBillable.Height = "60px";
+                trBillable.Height = "80px";
             }
             else
             {
-		int billablebarHeight = (int)(((float)60 / (float)100) * billablePercent);
+                int billablebarHeight = (int)(((float)80 / (float)100) * billablePercent);
                 trBillable.Visible = trNonBillable.Visible = true;
                 trBillable.Height = billablebarHeight.ToString() + "px";
-                trNonBillable.Height = (60 - billablebarHeight).ToString() + "px";
+                trNonBillable.Height = (80 - billablebarHeight).ToString() + "px";
             }
 
         }
 
-        protected String GetPersonDetailTimeReportUrl(String personId)
+        protected void lnkPerson_OnClick(object sender, EventArgs e)
         {
-            return "~/Reports/PersonDetailTimeReport.aspx?Id=" + personId; 
+            LinkButton lbtn = sender as LinkButton;
+
+            int personId = Convert.ToInt32(lbtn.Attributes["PersonId"]);
+
+            ddlPerson.SelectedValue = personId.ToString();
+            if (ddlPerson.SelectedValue != personId.ToString())
+            {
+                Person person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(personId));
+                ddlPerson.Items.Add(new ListItem(person.PersonLastFirstName, personId.ToString()));
+                ddlPerson.SelectedValue = personId.ToString();
+            }
+
+            PopulatePersonData();
         }
 
         protected String GetPersonFirstLastName(Person person)
         {
-            return person.PersonLastFirstName; 
+            return person.PersonLastFirstName;
         }
+
         protected void btnApplyFilter_OnClick(object sender, EventArgs e)
-        { 
-            string selectedstatueIds = chblStatus.SelectedValue;
-            string selectedPayTypeIds = chblPayTypes.SelectedValue;
-            var personList = ServiceCallers.Custom.Person(p=>p.GetPersonListByPayTypeIdsAndStatusIds(selectedPayTypeIds,selectedstatueIds));
+        {
+            string selectedstatueIds = GetSelectedValues(chblStatus);
+            string selectedPayTypeIds = GetSelectedValues(chblPayTypes);
+            var personList = ServiceCallers.Custom.Person(p => p.GetPersonListByPayTypeIdsAndStatusIds(selectedPayTypeIds, selectedstatueIds));
             dlPersonDiv.Visible = true;
             dlPerson.DataSource = personList;
             dlPerson.DataBind();
             mpePersonSearch.Show();
+        }
+
+
+        public string GetSelectedValues(CheckBoxList chbl)
+        {
+            var res = string.Empty;
+            foreach (ListItem itm in chbl.Items)
+                if (itm.Selected)
+                {
+                    res += itm.Value + ",";
+                }
+
+            return res;
         }
     }
 }
