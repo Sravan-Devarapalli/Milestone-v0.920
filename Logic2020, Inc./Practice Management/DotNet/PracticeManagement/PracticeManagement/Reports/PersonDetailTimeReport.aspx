@@ -90,12 +90,12 @@
         function ExpandOrCollapsePanels(ids, isExpand) {
             for (var i = 0; i < ids.length; i++) {
                 var cpe = $find(ids[i].Key);
-                var datePanels = jQuery.parseJSON(ids[i].Value);
+                //var datePanels = jQuery.parseJSON(ids[i].Value);
                 ExpandOrcollapseExtender(cpe, isExpand);
-                for (var j = 0; j < datePanels.length; j++) {
-                    var cpeDate = $find(datePanels[j]);
-                    ExpandOrcollapseExtender(cpeDate, isExpand);
-                }
+                //                for (var j = 0; j < datePanels.length; j++) {
+                //                    var cpeDate = $find(datePanels[j]);
+                //                    ExpandOrcollapseExtender(cpeDate, isExpand);
+                //                }
             }
         }
     </script>
@@ -225,14 +225,22 @@
                     <td style="padding-bottom: 10px;">
                         <table width="100%">
                             <tr>
-                                <td style="width: 40%; text-align: right;">
-                                    <b>Person:&nbsp; </b>
+                                <td style="width: 40%; text-align: right; font-weight: bold;">
+                                    Person:&nbsp;
                                 </td>
                                 <td style="text-align: left;">
-                                    <asp:DropDownList ID="ddlPerson" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPerson_SelectedIndexChanged"
-                                        Width="150px">
-                                    </asp:DropDownList>
-                                    <asp:Image ID="imgSearch" runat="server" ImageUrl="~/Images/add_16.png" />
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <asp:DropDownList ID="ddlPerson" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPerson_SelectedIndexChanged"
+                                                    Width="150px">
+                                                </asp:DropDownList>
+                                            </td>
+                                            <td>
+                                                <asp:Image ID="imgSearch" runat="server" ImageUrl="~/Images/search_24.png" />
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </td>
                             </tr>
                         </table>
@@ -244,8 +252,8 @@
                     <td style="padding-bottom: 10px;">
                         <table width="100%">
                             <tr>
-                                <td style="text-align: right; width: 40%">
-                                    <b>Range:&nbsp;</b>
+                                <td style="text-align: right; width: 40%; font-weight: bold;">
+                                    Range:&nbsp;
                                 </td>
                                 <td style="text-align: left;">
                                     <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
@@ -304,12 +312,12 @@
                 </table>
             </asp:Panel>
             <br />
-            <table style="width: 100%;">
+            <table class="PaddingTenPx" style="width: 100%;">
                 <tr>
-                    <td style="width: 55%; font-size: 18px; font-weight: bold;vertical-align: top;">
+                    <td style="width: 54%; font-size: 18px; font-weight: bold; vertical-align: top;">
                         <asp:Label ID="lblPersonname" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 10%;">
+                    <td style="width: 11%;">
                         <table>
                             <tr>
                                 <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
@@ -323,7 +331,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 10%;">
+                    <td style="width: 11%;">
                         <table>
                             <tr>
                                 <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
@@ -361,27 +369,25 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="vertical-align: bottom; width: 5%">
-                        <table width="65%" align="right">
+                    <td style="vertical-align: bottom; width: 4%; padding: 0px;">
+                        <table width="100%">
                             <tr id="trBillable" runat="server" title="Billable Percentage.">
-                                <td style="width: 20px; text-align: center; background-color: #7FD13B; border: 1px solid Gray;">
-                                    <asp:Literal ID="ltrlBillablePercent" runat="server"></asp:Literal>
-                                    %
+                                <td style="text-align: center; background-color: #7FD13B; border: 1px solid Gray;">
+                                    <asp:Literal ID="ltrlBillablePercent" runat="server"></asp:Literal>%
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="vertical-align: bottom; width: 5%">
-                        <table width="65%" align="left">
+                    <td style="vertical-align: bottom; width: 4%; padding: 0px;">
+                        <table width="100%">
                             <tr id="trNonBillable" runat="server" title="Non-Billable Percentage.">
-                                <td style="width: 20px; text-align: center; background-color: Gray; border: 1px solid Gray;">
-                                    <asp:Literal ID="ltrlNonBillablePercent" runat="server"></asp:Literal>
-                                    %
+                                <td style="text-align: center; background-color: Gray; border: 1px solid Gray;">
+                                    <asp:Literal ID="ltrlNonBillablePercent" runat="server"></asp:Literal>%
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 3%;">
+                    <td style="width: 5%;">
                     </td>
                 </tr>
             </table>
@@ -433,23 +439,17 @@
                             <td style="width: 3%;">
                             </td>
                             <td style="text-align: center; border-bottom: 1px solid gray;">
-                                <b>Pay Type</b>
+                                <b>Person Status</b>
                             </td>
                             <td style="width: 3%;">
                             </td>
                             <td style="text-align: center; border-bottom: 1px solid gray;">
-                                <b>Person Status</b>
+                                <b>Pay Type</b>
                             </td>
                             <td style="width: 3%;">
                             </td>
                         </tr>
                         <tr>
-                            <td style="width: 3%;">
-                            </td>
-                            <td style="padding-left: 35px;">
-                                <asp:CheckBoxList ID="chblPayTypes" runat="server" RepeatColumns="2">
-                                </asp:CheckBoxList>
-                            </td>
                             <td style="width: 3%;">
                             </td>
                             <td style="padding-left: 35px;">
@@ -458,10 +458,16 @@
                             </td>
                             <td style="width: 3%;">
                             </td>
+                            <td style="padding-left: 35px;">
+                                <asp:CheckBoxList ID="chblPayTypes" runat="server" RepeatColumns="2">
+                                </asp:CheckBoxList>
+                            </td>
+                            <td style="width: 3%;">
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="5" style="text-align: center; padding: 10px;">
-                                <asp:Button ID="btnApplyFilter" runat="server" Text="Apply Filter" OnClick="btnApplyFilter_OnClick" /> 
+                                <asp:Button ID="btnApplyFilter" runat="server" Text="Apply Filter" OnClick="btnApplyFilter_OnClick" />
                                 <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" OnClientClick="return btnResetFilter_OnClientClick();" />
                             </td>
                         </tr>
@@ -472,19 +478,19 @@
                                         <HeaderTemplate>
                                             <table class="CompPerfTable WholeWidth">
                                                 <tr class="CompPerfHeader">
-                                                    <th style="width:20%;">
+                                                    <th style="width: 20%; text-align: left;">
                                                         <div class="ie-bg">
                                                             Person Name
                                                         </div>
                                                     </th>
-                                                    <th style="width:15%;">
-                                                        <div class="ie-bg">
-                                                            PayType
-                                                        </div>
-                                                    </th>
-                                                    <th style="width:15%;">
+                                                    <th style="width: 15%;">
                                                         <div class="ie-bg">
                                                             Status
+                                                        </div>
+                                                    </th>
+                                                    <th style="width: 15%;">
+                                                        <div class="ie-bg">
+                                                            PayType
                                                         </div>
                                                     </th>
                                                 </tr>
@@ -492,30 +498,30 @@
                                         <ItemTemplate>
                                             <tr>
                                                 <td class="padLeft5">
-                                                    <asp:HyperLink ID="hlPerson" NavigateUrl='<%# GetPersonDetailTimeReportUrl(((DataTransferObjects.Person)Container.DataItem).Id.ToString()) %>'
-                                                        Text="<%# GetPersonFirstLastName(((DataTransferObjects.Person)Container.DataItem))  %>"
-                                                        runat="server"></asp:HyperLink>
+                                                    <asp:LinkButton ID="lnkPerson" OnClick="lnkPerson_OnClick" Text="<%# GetPersonFirstLastName(((DataTransferObjects.Person)Container.DataItem))  %>"
+                                                        PersonId='<%# ((DataTransferObjects.Person)Container.DataItem).Id.ToString() %>'
+                                                        runat="server"></asp:LinkButton>
+                                                </td>
+                                                <td class="textCenter">
+                                                    <%# Eval("CurrentPay.TimescaleName")%>
                                                 </td>
                                                 <td class="textCenter">
                                                     <%# Eval("Status.Name")%>
-                                                </td>
-                                                <td class="textCenter"> 
-                                                    <%# Eval("CurrentPay.TimescaleName")%>
                                                 </td>
                                             </tr>
                                         </ItemTemplate>
                                         <AlternatingItemTemplate>
-                                        <tr style="background-color:#f9faff;">
-                                               <td class="padLeft5">
-                                                    <asp:HyperLink ID="hlPerson" NavigateUrl='<%# GetPersonDetailTimeReportUrl(((DataTransferObjects.Person)Container.DataItem).Id.ToString()) %>'
-                                                        Text="<%# GetPersonFirstLastName(((DataTransferObjects.Person)Container.DataItem))  %>"
-                                                        runat="server"></asp:HyperLink>
-                                                </td>
-                                                <td class="textCenter">
-                                                    <%# Eval("Status.Name")%>
+                                            <tr style="background-color: #f9faff;">
+                                                 <td class="padLeft5">
+                                                    <asp:LinkButton ID="lnkPerson" OnClick="lnkPerson_OnClick" Text="<%# GetPersonFirstLastName(((DataTransferObjects.Person)Container.DataItem))  %>"
+                                                        PersonId='<%# ((DataTransferObjects.Person)Container.DataItem).Id.ToString() %>'
+                                                        runat="server"></asp:LinkButton>
                                                 </td>
                                                 <td class="textCenter">
                                                     <%# Eval("CurrentPay.TimescaleName")%>
+                                                </td>
+                                                <td class="textCenter">
+                                                    <%# Eval("Status.Name")%>
                                                 </td>
                                             </tr>
                                         </AlternatingItemTemplate>
