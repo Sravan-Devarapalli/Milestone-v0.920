@@ -9,7 +9,7 @@ using DataTransferObjects;
 
 namespace PracticeManagementService
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IReportService" in both code and config file together.
+    // NOTE: You can use the "Rename" command on the "Refractor" menu to change the interface name "IReportService" in both code and config file together.
     [ServiceContract]
     public interface IReportService
     {
@@ -32,7 +32,7 @@ namespace PracticeManagementService
         List<WorkTypeLevelGroupedHours> TimePeriodSummaryReportByWorkType(DateTime startDate, DateTime endDate, string timeTypeCategoryIds, string orderByCerteria);
 
         [OperationContract]
-        List<PersonLevelGroupedHours> ProjectSummaryReportByResource(int projectId, string personRoleIds, string orderByCerteria);
+        List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber, string personRoleIds, string orderByCerteria);
 
         [OperationContract]
         List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(int projectId, string timeTypeCategoryIds, string orderByCerteria);
