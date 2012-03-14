@@ -105,7 +105,7 @@
   <xs:element name="ProjectSummaryReportByResource">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="projectId" type="xs:int" />
+        <xs:element minOccurs="0" name="projectNumber" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="personRoleIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="orderByCerteria" nillable="true" type="xs:string" />
       </xs:sequence>
