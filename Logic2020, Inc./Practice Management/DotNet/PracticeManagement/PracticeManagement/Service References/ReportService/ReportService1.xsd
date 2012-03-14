@@ -68,9 +68,9 @@
   <xs:element name="ArrayOfGroupedHours" nillable="true" type="tns:ArrayOfGroupedHours" />
   <xs:complexType name="GroupedHours">
     <xs:sequence>
-      <xs:element minOccurs="0" name="BillabileTotal" type="xs:int" />
+      <xs:element minOccurs="0" name="BillabileTotal" type="xs:double" />
       <xs:element minOccurs="0" name="EndDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="NonBillableTotal" type="xs:int" />
+      <xs:element minOccurs="0" name="NonBillableTotal" type="xs:double" />
       <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
     </xs:sequence>
   </xs:complexType>
