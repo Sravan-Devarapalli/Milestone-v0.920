@@ -25,51 +25,39 @@
 </table>
 <asp:Repeater ID="repSummary" runat="server">
     <HeaderTemplate>
-        <table class="CompPerfTable WholeWidth">
-            <tr class="CompPerfHeader">
-                <th>
-                    <div class="ie-bg">
-                        Project Name
-                    </div>
+        <table class="PersonSummaryReport" style="width: 88%;">
+            <tr>
+                <th style="text-align: left;">
+                    Project Name
                 </th>
                 <th>
-                    <div class="ie-bg">
-                        Billable
-                    </div>
+                    Billable
                 </th>
                 <th>
-                    <div class="ie-bg">
-                        Value
-                    </div>
+                    Value
                 </th>
                 <th>
-                    <div class="ie-bg">
-                        Non-Billable
-                    </div>
+                    Non-Billable
                 </th>
                 <th>
-                    <div class="ie-bg">
-                        Total
-                    </div>
+                    Total
                 </th>
                 <th>
-                    <div class="ie-bg">
-                        Billable Percent of Total Hours this Period
-                    </div>
+                    Billable Percent of Total Hours this Period
                 </th>
             </tr>
     </HeaderTemplate>
     <ItemTemplate>
-        <tr style="background-color: #f9faff;">
-            <td>
-                <table>
+        <tr style="background-color: White;">
+            <td style="text-align: left;">
+                <table class="TdLevelNoBorder">
                     <tr>
-                        <td style="color: Gray; padding-bottom: 3px; padding-left: 2px;">
+                        <td style="color: Gray; padding-bottom: 3px; padding-left: 2px; text-align: left;">
                             <%# Eval("Client.Name") %>
                         </td>
                     </tr>
                     <tr>
-                        <td style="font-weight: bold; padding-bottom: 5px; padding-left: 2px;">
+                        <td style="font-weight: bold; padding-bottom: 5px; padding-left: 2px; text-align: left;">
                             <%# Eval("Project.ProjectNumber")%>
                             -
                             <%# Eval("Project.Name")%>
@@ -77,24 +65,24 @@
                     </tr>
                 </table>
             </td>
-            <td style="text-align: center;">
+            <td>
                 <%# GetDoubleFormat((double)Eval("BillableHours"))%>
             </td>
-            <td style="text-align: center;">
+            <td>
                 <%# GetDoubleFormat((double)Eval("BillableValue"))%>
             </td>
-            <td style="text-align: center;">
+            <td>
                 <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
             </td>
-            <td style="text-align: center;">
+            <td>
                 <%# GetDoubleFormat((double)Eval("TotalHours"))%>
             </td>
-            <td style="text-align: center;">
-                <table width="100%">
+            <td>
+                <table class="TdLevelNoBorder" width="100%">
                     <tr>
-                        <td style="width: 10%">
+                        <td style="width: 20%">
                         </td>
-                        <td style="text-align: right; width:67%">
+                        <td style="text-align: right; width: 60%">
                             <table style="border: 1px solid black; width: 240px; height: 18px; padding-left: 5px;">
                                 <tr>
                                     <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("BillablePercent")%>%">
@@ -104,11 +92,10 @@
                                 </tr>
                             </table>
                         </td>
-                        <td style="padding-left: 5px; text-align: right;width:13%">
-                            <%# Eval("BillablePercent")%>
-                            %
+                        <td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<%# Eval("BillablePercent")%>%
                         </td>
-                        <td style="width: 10%">
+                        <td style="width: 20%">
                         </td>
                     </tr>
                 </table>
@@ -116,16 +103,16 @@
         </tr>
     </ItemTemplate>
     <AlternatingItemTemplate>
-        <tr style="background-color: White; padding-bottom: 2px;">
-            <td>
-                <table>
+        <tr style="background-color: #f9faff;">
+             <td style="text-align: left;">
+                <table class="TdLevelNoBorder">
                     <tr>
-                        <td style="color: Gray; padding-bottom: 3px; padding-left: 2px;">
+                        <td style="color: Gray; padding-bottom: 3px; padding-left: 2px; text-align: left;">
                             <%# Eval("Client.Name") %>
                         </td>
                     </tr>
                     <tr>
-                        <td style="font-weight: bold; padding-bottom: 5px; padding-left: 2px;">
+                        <td style="font-weight: bold; padding-bottom: 5px; padding-left: 2px; text-align: left;">
                             <%# Eval("Project.ProjectNumber")%>
                             -
                             <%# Eval("Project.Name")%>
@@ -133,24 +120,24 @@
                     </tr>
                 </table>
             </td>
-            <td style="text-align: center;">
+            <td>
                 <%# GetDoubleFormat((double)Eval("BillableHours"))%>
             </td>
-            <td style="text-align: center;">
+            <td>
                 <%# GetDoubleFormat((double)Eval("BillableValue"))%>
             </td>
-            <td style="text-align: center;">
+            <td>
                 <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
             </td>
-            <td style="text-align: center;">
+            <td>
                 <%# GetDoubleFormat((double)Eval("TotalHours"))%>
             </td>
-            <td style="text-align: center;">
-                <table width="100%">
+            <td>
+                <table class="TdLevelNoBorder" width="100%">
                     <tr>
-                        <td style="width: 10%">
+                        <td style="width: 20%">
                         </td>
-                        <td style="text-align: right;width:67%;">
+                        <td style="text-align: right; width: 60%">
                             <table style="border: 1px solid black; width: 240px; height: 18px; padding-left: 5px;">
                                 <tr>
                                     <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("BillablePercent")%>%">
@@ -160,11 +147,10 @@
                                 </tr>
                             </table>
                         </td>
-                        <td style="padding-left: 5px; text-align: right;width:13%;">
-                            <%# Eval("BillablePercent")%>
-                            %
+                        <td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<%# Eval("BillablePercent")%>%
                         </td>
-                        <td style="width: 10%">
+                        <td style="width: 20%">
                         </td>
                     </tr>
                 </table>
@@ -175,7 +161,8 @@
         </table>
     </FooterTemplate>
 </asp:Repeater>
-<div id="divEmptyMessage" style="text-align:center;font-size:15px; display:none;" runat="server">
-    The person has not entered TimeEntries for the selected period. 
+<div id="divEmptyMessage" style="text-align: center; font-size: 15px; display: none;"
+    runat="server">
+    The person has not entered Time Entries for the selected period.
 </div>
 
