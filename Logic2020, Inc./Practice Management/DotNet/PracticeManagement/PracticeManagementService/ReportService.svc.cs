@@ -45,9 +45,9 @@ namespace PracticeManagementService
         }
 
    
-        public List<PersonLevelGroupedHours> ProjectSummaryReportByResource(int projectId, string personRoleIds, string orderByCerteria)
+        public List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber, string personRoleIds, string orderByCerteria)
         {
-            return ReportDAL.ProjectSummaryReportByResource(projectId, personRoleIds, orderByCerteria);
+            return ReportDAL.ProjectSummaryReportByResource(projectNumber, personRoleIds, orderByCerteria);
         }
 
         public List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(int projectId, string timeTypeCategoryIds, string orderByCerteria)
