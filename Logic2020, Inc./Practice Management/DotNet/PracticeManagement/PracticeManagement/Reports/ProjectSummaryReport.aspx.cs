@@ -146,6 +146,9 @@ namespace PraticeManagement.Reporting
             var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResourceAndWorkType("P081100", string.Empty, string.Empty));
 
             ucByMatrix.DataBindResource(data);
+            ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
+            ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
+
         }
 
         private void PopulateByResourceData()
@@ -169,6 +172,9 @@ namespace PraticeManagement.Reporting
             }
 
             ucByResource.DataBindResource(data, DatesList);
+            ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
+            ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
+
         }
 
         private void PopulateByWorkTypeData()
@@ -190,7 +196,11 @@ namespace PraticeManagement.Reporting
                 }
             }
 
+
             ucByWorktype.DataBindResource(data, DatesList);
+            ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
+            ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
+
         }
     }
 }
