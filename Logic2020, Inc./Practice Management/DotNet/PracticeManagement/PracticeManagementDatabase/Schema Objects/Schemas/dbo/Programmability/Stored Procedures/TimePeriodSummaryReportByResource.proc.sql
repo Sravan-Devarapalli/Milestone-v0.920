@@ -1,6 +1,8 @@
 ﻿-- =========================================================================
 -- Author:		Sainath.CH
 -- Create date: 03-05-2012
+-- Updated by : Thulasiram.P
+-- Update Date: 03-15-2012
 -- Description:  Time Entries grouped by Resource for a particular period.
 -- =========================================================================
 CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByResource]
@@ -12,6 +14,9 @@ CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByResource]
 )
 AS
 BEGIN
+
+	SET @StartDate = CONVERT(DATE,@StartDate)
+	SET @EndDate = CONVERT(DATE,@EndDate)
 
 	DECLARE @GroupByCerteria NVARCHAR(20),@DaysDiff INT 
 	SET @DaysDiff = DATEDIFF(dd,@StartDate,@EndDate)
@@ -38,42 +43,42 @@ BEGIN
 	FROM [dbo].[ConvertStringListIntoTable] (@SeniorityIds)
 
 
-	SELECT	Date.PersonId,
-			P.LastName +', ' + P.FirstName AS PersonName,
-			IsChargeable,
+	SELECT	P.PersonId,
+			P.LastName,
+			P.FirstName,
 			S.SeniorityId,
-			S.Name,
+			S.Name SeniorityName,
 			StartDate,
 			GroupByCerteria,
-			TotalHours
+			BillableHours,
+			NonBillableHours
 	FROM  (
 			SELECT  TE.PersonId,
-				TEH.IsChargeable,
-				Round(SUM(TEH.ActualHours),2) AS TotalHours,
-				CASE WHEN @GroupByCerteria = 'day' THEN TE.ChargeCodeDate -- date
-					WHEN @GroupByCerteria = 'week' THEN (TE.ChargeCodeDate - (DATEPART(dw,TE.ChargeCodeDate) -1 ))  --week startdate 
-					WHEN @GroupByCerteria = 'month' THEN TE.ChargeCodeDate - (DAY(TE.ChargeCodeDate)-1)  -- month StartDate
-					WHEN @GroupByCerteria = 'year' THEN TE.ChargeCodeDate - (DATEPART(DAYOFYEAR,TE.ChargeCodeDate)-1)-- year StartDate
-				END as StartDate,
-				@GroupByCerteria 'GroupByCerteria'
-				FROM dbo.TimeEntry TE
-					INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = te.TimeEntryId AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate 
-					INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
-				GROUP BY 
-						TE.PersonId,
-						TEH.IsChargeable,
-						CASE WHEN @GroupByCerteria = 'day' THEN TE.ChargeCodeDate -- date
-							  WHEN @GroupByCerteria = 'week' THEN (TE.ChargeCodeDate - (DATEPART(dw,TE.ChargeCodeDate) -1 ))  --week startdate 
-							  WHEN @GroupByCerteria = 'month' THEN TE.ChargeCodeDate - (DAY(TE.ChargeCodeDate)-1)  -- month StartDate
-							  WHEN @GroupByCerteria = 'year' THEN TE.ChargeCodeDate - (DATEPART(DAYOFYEAR,TE.ChargeCodeDate)-1)-- year StartDate
-						 END
-		) Date 
-		INNER JOIN dbo.Person P ON P.PersonId = Date.PersonId
+					ROUND(SUM(CASE WHEN TEH.IsChargeable = 1 THEN TEH.ActualHours ELSE 0 END),2) AS BillableHours,
+					ROUND(SUM(CASE WHEN TEH.IsChargeable = 0 THEN TEH.ActualHours ELSE 0 END),2) AS NonBillableHours,
+					CASE WHEN @GroupByCerteria = 'day' THEN TE.ChargeCodeDate -- date
+						WHEN @GroupByCerteria = 'week' THEN (TE.ChargeCodeDate - (DATEPART(dw,TE.ChargeCodeDate) -1 ))  --week startdate 
+						WHEN @GroupByCerteria = 'month' THEN TE.ChargeCodeDate - (DAY(TE.ChargeCodeDate)-1)  -- month StartDate
+						WHEN @GroupByCerteria = 'year' THEN TE.ChargeCodeDate - (DATEPART(DAYOFYEAR,TE.ChargeCodeDate)-1)-- year StartDate
+					END as StartDate,
+					@GroupByCerteria 'GroupByCerteria'
+					FROM dbo.TimeEntry TE
+						INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = te.TimeEntryId AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate 
+						INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
+					GROUP BY 
+							TE.PersonId,
+							CASE WHEN @GroupByCerteria = 'day' THEN TE.ChargeCodeDate -- date
+								  WHEN @GroupByCerteria = 'week' THEN (TE.ChargeCodeDate - (DATEPART(dw,TE.ChargeCodeDate) -1 ))  --week startdate 
+								  WHEN @GroupByCerteria = 'month' THEN TE.ChargeCodeDate - (DAY(TE.ChargeCodeDate)-1)  -- month StartDate
+								  WHEN @GroupByCerteria = 'year' THEN TE.ChargeCodeDate - (DATEPART(DAYOFYEAR,TE.ChargeCodeDate)-1)-- year StartDate
+							 END
+		) Data 
+		INNER JOIN dbo.Person P ON P.PersonId = Data.PersonId
 		INNER JOIN dbo.Seniority S ON S.SeniorityId = P.SeniorityId
 		WHERE (S.SeniorityId in (SELECT * FROM @SeniorityIdsTable) OR @SeniorityIds IS NULL)
-		ORDER BY CASE WHEN @OrderByCerteria = 'name' THEN 2
+		ORDER BY CASE WHEN @OrderByCerteria = 'name' THEN P.LastName +', ' + P.FirstName
 						WHEN @OrderByCerteria = 'seniority' THEN 5
-						WHEN @OrderByCerteria = 'total' THEN 6
+						WHEN @OrderByCerteria = 'total' THEN BillableHours+NonBillableHours
 					END,
-					CASE WHEN @OrderByCerteria = 'seniority' THEN 2 END
+					CASE WHEN @OrderByCerteria = 'seniority' THEN P.LastName +', ' + P.FirstName END
 END
