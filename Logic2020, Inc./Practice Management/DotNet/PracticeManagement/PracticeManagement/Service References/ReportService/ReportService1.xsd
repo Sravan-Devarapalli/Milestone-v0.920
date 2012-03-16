@@ -56,6 +56,7 @@
   <xs:complexType name="PersonLevelGroupedHours">
     <xs:sequence>
       <xs:element minOccurs="0" name="GroupedHoursList" nillable="true" type="tns:ArrayOfGroupedHours" />
+      <xs:element minOccurs="0" name="GroupedWorkTypeHoursList" nillable="true" type="tns:ArrayOfWorkTypeLevelGroupedHours" />
       <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q4:Person" />
     </xs:sequence>
   </xs:complexType>
@@ -75,6 +76,21 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="GroupedHours" nillable="true" type="tns:GroupedHours" />
+  <xs:complexType name="ArrayOfWorkTypeLevelGroupedHours">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="WorkTypeLevelGroupedHours" nillable="true" type="tns:WorkTypeLevelGroupedHours" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfWorkTypeLevelGroupedHours" nillable="true" type="tns:ArrayOfWorkTypeLevelGroupedHours" />
+  <xs:complexType name="WorkTypeLevelGroupedHours">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BillabileHours" type="xs:double" />
+      <xs:element minOccurs="0" name="GroupedHoursList" nillable="true" type="tns:ArrayOfGroupedHours" />
+      <xs:element minOccurs="0" name="NonBillabileHours" type="xs:double" />
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="WorkType" nillable="true" type="q5:TimeTypeRecord" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="WorkTypeLevelGroupedHours" nillable="true" type="tns:WorkTypeLevelGroupedHours" />
   <xs:complexType name="ArrayOfProjectLevelGroupedHours">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectLevelGroupedHours" nillable="true" type="tns:ProjectLevelGroupedHours" />
@@ -84,21 +100,8 @@
   <xs:complexType name="ProjectLevelGroupedHours">
     <xs:sequence>
       <xs:element minOccurs="0" name="GroupedHoursList" nillable="true" type="tns:ArrayOfGroupedHours" />
-      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Project" nillable="true" type="q5:Project" />
+      <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Project" nillable="true" type="q6:Project" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectLevelGroupedHours" nillable="true" type="tns:ProjectLevelGroupedHours" />
-  <xs:complexType name="ArrayOfWorkTypeLevelGroupedHours">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="WorkTypeLevelGroupedHours" nillable="true" type="tns:WorkTypeLevelGroupedHours" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfWorkTypeLevelGroupedHours" nillable="true" type="tns:ArrayOfWorkTypeLevelGroupedHours" />
-  <xs:complexType name="WorkTypeLevelGroupedHours">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="GroupedHoursList" nillable="true" type="tns:ArrayOfGroupedHours" />
-      <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="WorkType" nillable="true" type="q6:TimeTypeRecord" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="WorkTypeLevelGroupedHours" nillable="true" type="tns:WorkTypeLevelGroupedHours" />
 </xs:schema>
