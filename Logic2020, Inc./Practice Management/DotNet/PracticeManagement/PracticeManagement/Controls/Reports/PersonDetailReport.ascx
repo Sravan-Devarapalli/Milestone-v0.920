@@ -48,7 +48,7 @@
                     -
                     <%# Eval("Project.Name")%>
                 </td>
-                <td style="width: 5%; font-weight: bolder; font-size: 15px;">
+                <td style="width: 5%; font-weight: bolder; font-size: 15px;text-align:right;padding-right:10px;">
                     <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                 </td>
             </tr>
@@ -70,7 +70,7 @@
                                 <asp:Label ID="lbDate" Style="display: none;" runat="server"></asp:Label>
                                 <%# DataBinder.Eval(Container.DataItem, "Date", "{0:MM/dd/yyyy}")%>
                             </td>
-                            <td style="width: 10%; font-weight: bold;" colspan="2">
+                            <td style="width: 10%; font-weight: bold;text-align:right;padding-right:10px;" colspan="2">
                                 <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                             </td>
                         </tr>
