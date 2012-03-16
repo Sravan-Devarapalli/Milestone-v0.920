@@ -62,7 +62,7 @@ namespace PraticeManagement.Utils
 
         public static DateTime YearEndDate(DateTime now)
         {
-            return now.AddYears(1).AddDays(-now.AddYears(1).DayOfYear);
+            return  now.AddYears(1).AddDays(-now.AddYears(1).DayOfYear);
         }
 
         public static DateTime LastWeekStartDate(DateTime now)
