@@ -366,6 +366,7 @@
     <EmbeddedResource Include="Controls\Generic\BillableNonBillableAndTotal\BillableNonBillableAndTotalExtender.js" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
+    <Content Include="Controls\Reports\BillableAndNonBillableGraph.ascx" />
     <Content Include="Controls\Reports\ByworkType.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
     <Content Include="Controls\Reports\PersonDetailReport.ascx" />
@@ -1223,6 +1224,13 @@
     </Compile>
     <Compile Include="Controls\Projects\ProjectTimeTypes.ascx.designer.cs">
       <DependentUpon>ProjectTimeTypes.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\BillableAndNonBillableGraph.ascx.cs">
+      <DependentUpon>BillableAndNonBillableGraph.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\BillableAndNonBillableGraph.ascx.designer.cs">
+      <DependentUpon>BillableAndNonBillableGraph.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reports\ByworkType.ascx.cs">
       <DependentUpon>ByworkType.ascx</DependentUpon>
