@@ -366,9 +366,11 @@
     <EmbeddedResource Include="Controls\Generic\BillableNonBillableAndTotal\BillableNonBillableAndTotalExtender.js" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
+    <Content Include="Controls\Reports\ByworkType.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
     <Content Include="Controls\Reports\PersonDetailReport.ascx" />
     <Content Include="Controls\Reports\PersonSummaryReport.ascx" />
+    <Content Include="Controls\Reports\ProjectSummaryByMatrix.ascx" />
     <Content Include="Controls\Reports\ProjectSummaryByResource.ascx" />
     <Content Include="Controls\Reports\TimeEntriesByPerson.ascx" />
     <Content Include="Controls\Reports\TimePeriodSummaryByProject.ascx" />
@@ -1222,6 +1224,13 @@
     <Compile Include="Controls\Projects\ProjectTimeTypes.ascx.designer.cs">
       <DependentUpon>ProjectTimeTypes.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Reports\ByworkType.ascx.cs">
+      <DependentUpon>ByworkType.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ByworkType.ascx.designer.cs">
+      <DependentUpon>ByworkType.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Reports\ConsultingDemand.ascx.cs">
       <DependentUpon>ConsultingDemand.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1242,6 +1251,13 @@
     </Compile>
     <Compile Include="Controls\Reports\PersonSummaryReport.ascx.designer.cs">
       <DependentUpon>PersonSummaryReport.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ProjectSummaryByMatrix.ascx.cs">
+      <DependentUpon>ProjectSummaryByMatrix.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ProjectSummaryByMatrix.ascx.designer.cs">
+      <DependentUpon>ProjectSummaryByMatrix.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reports\ProjectSummaryByResource.ascx.cs">
       <DependentUpon>ProjectSummaryByResource.ascx</DependentUpon>
