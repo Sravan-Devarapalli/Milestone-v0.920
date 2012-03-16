@@ -180,6 +180,11 @@
             overflow: auto;
             width: 100%;
         }
+        
+        TABLE.PaddingRightTen TD
+        {
+            padding-right: 25px;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
@@ -237,7 +242,7 @@
                                                 </asp:DropDownList>
                                             </td>
                                             <td>
-                                                <asp:Image ID="imgSearch" runat="server" ImageUrl="~/Images/search_24.png" />
+                                                <asp:Image ID="imgSearch" runat="server" ToolTip="Person Search" ImageUrl="~/Images/search_24.png" />
                                             </td>
                                         </tr>
                                     </table>
@@ -423,7 +428,7 @@
                 CancelControlID="btnclose" BackgroundCssClass="modalBackground" PopupControlID="pnlPersonSearch"
                 BehaviorID="mpePersonSearch" DropShadow="false" />
             <asp:Panel ID="pnlPersonSearch" runat="server" BackColor="White" BorderColor="Black"
-                Style="display: none;" BorderWidth="2px" Width="460px">
+                Style="display: none;" BorderWidth="2px" Width="560px">
                 <table width="100%" style="padding: 5px;">
                     <tr>
                         <tr>
@@ -453,13 +458,13 @@
                             <td style="width: 3%;">
                             </td>
                             <td style="padding-left: 35px;">
-                                <asp:CheckBoxList ID="chblStatus" runat="server" RepeatColumns="2">
+                                <asp:CheckBoxList ID="chblStatus" CssClass="PaddingRightTen" runat="server" RepeatColumns="2">
                                 </asp:CheckBoxList>
                             </td>
                             <td style="width: 3%;">
                             </td>
                             <td style="padding-left: 35px;">
-                                <asp:CheckBoxList ID="chblPayTypes" runat="server" RepeatColumns="2">
+                                <asp:CheckBoxList ID="chblPayTypes" CssClass="PaddingRightTen" runat="server" RepeatColumns="2">
                                 </asp:CheckBoxList>
                             </td>
                             <td style="width: 3%;">
@@ -512,7 +517,7 @@
                                         </ItemTemplate>
                                         <AlternatingItemTemplate>
                                             <tr style="background-color: #f9faff;">
-                                                 <td class="padLeft5">
+                                                <td class="padLeft5">
                                                     <asp:LinkButton ID="lnkPerson" OnClick="lnkPerson_OnClick" Text="<%# GetPersonFirstLastName(((DataTransferObjects.Person)Container.DataItem))  %>"
                                                         PersonId='<%# ((DataTransferObjects.Person)Container.DataItem).Id.ToString() %>'
                                                         runat="server"></asp:LinkButton>
