@@ -3,6 +3,10 @@ Inherits="PraticeManagement.Reporting.ProjectSummaryReport" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <%@ Register Src="~/Controls/Reports/ProjectSummaryByResource.ascx" TagPrefix="uc"
     TagName="ByResource" %>
+<%@ Register Src="~/Controls/Reports/ProjectSummaryByMatrix.ascx" TagPrefix="uc"
+    TagName="ByMatrix" %>
+    <%@ Register Src="~/Controls/Reports/ByworkType.ascx" TagPrefix="uc"
+    TagName="ByWorkType" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
@@ -113,16 +117,17 @@ Inherits="PraticeManagement.Reporting.ProjectSummaryReport" %>
             <asp:MultiView ID="mvProjectSummaryReport" runat="server" ActiveViewIndex="0">
                 <asp:View ID="vwResourceReport" runat="server">
                     <asp:Panel ID="pnlResourceReport" runat="server" CssClass="tab-pane WholeWidth">
-                        <uc:ByResource ID="tpByResource" runat="server"></uc:ByResource>
+                        <uc:ByResource ID="ucByResource" runat="server"></uc:ByResource>
                     </asp:Panel>
                 </asp:View>
                 <asp:View ID="vwProjectReport" runat="server">
                     <asp:Panel ID="pnlProjectReport" runat="server" CssClass="tab-pane WholeWidth">
-                      
+                      <uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByworkType>
                     </asp:Panel>
                 </asp:View>
                 <asp:View ID="vwWorkTypeReport" runat="server">
                     <asp:Panel ID="pnlWorkTypeReport" runat="server" CssClass="tab-pane WholeWidth">
+                     <uc:ByMatrix ID="ucByMatrix" runat="server"></uc:ByMatrix>
                     </asp:Panel>
                 </asp:View>
             </asp:MultiView>
