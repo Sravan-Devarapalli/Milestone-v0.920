@@ -116,6 +116,14 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public string SelectedPersonName
+        {
+            get
+            {
+                return ddlPerson.SelectedItem.Text;
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -321,8 +329,13 @@ namespace PraticeManagement.Reporting
 
             int personId = Convert.ToInt32(lbtn.Attributes["PersonId"]);
 
-            ddlPerson.SelectedValue = personId.ToString();
-            if (ddlPerson.SelectedValue != personId.ToString())
+            var selectedItem = ddlPerson.Items.FindByValue(personId.ToString());
+
+            if (selectedItem != null)
+            {
+                ddlPerson.SelectedValue = personId.ToString();
+            }
+            else
             {
                 Person person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(personId));
                 ddlPerson.Items.Add(new ListItem(person.PersonLastFirstName, personId.ToString()));
@@ -360,6 +373,8 @@ namespace PraticeManagement.Reporting
 
             return res;
         }
+
+      
     }
 }
 
