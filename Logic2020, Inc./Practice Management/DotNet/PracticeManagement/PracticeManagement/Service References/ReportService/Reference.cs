@@ -37,7 +37,11 @@ namespace PraticeManagement.ReportService {
         DataTransferObjects.Reports.PersonLevelGroupedHours[] ProjectSummaryReportByResource(string projectNumber, string personRoleIds, string orderByCerteria);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ProjectSummaryReportByWorkType", ReplyAction="http://tempuri.org/IReportService/ProjectSummaryReportByWorkTypeResponse")]
-        DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] ProjectSummaryReportByWorkType(int projectId, string timeTypeCategoryIds, string orderByCerteria);
+        DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] ProjectSummaryReportByWorkType(string projectNumber, string timeTypeCategoryIds, string orderByCerteria);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ProjectSummaryReportByResourceAndWorkType", ReplyAction="http://tempuri.org/IReportService/ProjectSummaryReportByResourceAndWorkTypeRespon" +
+            "se")]
+        DataTransferObjects.Reports.PersonLevelGroupedHours[] ProjectSummaryReportByResourceAndWorkType(string projectNumber, string personRoleIds, string orderByCerteria);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -47,8 +51,7 @@ namespace PraticeManagement.ReportService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
-        
-        
+      
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -93,8 +96,12 @@ namespace PraticeManagement.ReportService {
             return base.Channel.ProjectSummaryReportByResource(projectNumber, personRoleIds, orderByCerteria);
         }
         
-        public DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] ProjectSummaryReportByWorkType(int projectId, string timeTypeCategoryIds, string orderByCerteria) {
-            return base.Channel.ProjectSummaryReportByWorkType(projectId, timeTypeCategoryIds, orderByCerteria);
+        public DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] ProjectSummaryReportByWorkType(string projectNumber, string timeTypeCategoryIds, string orderByCerteria) {
+            return base.Channel.ProjectSummaryReportByWorkType(projectNumber, timeTypeCategoryIds, orderByCerteria);
+        }
+        
+        public DataTransferObjects.Reports.PersonLevelGroupedHours[] ProjectSummaryReportByResourceAndWorkType(string projectNumber, string personRoleIds, string orderByCerteria) {
+            return base.Channel.ProjectSummaryReportByResourceAndWorkType(projectNumber, personRoleIds, orderByCerteria);
         }
     }
 }
