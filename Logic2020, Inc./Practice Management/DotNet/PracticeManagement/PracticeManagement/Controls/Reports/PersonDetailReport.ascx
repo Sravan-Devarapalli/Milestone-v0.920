@@ -61,8 +61,8 @@
                     <table class="WholeWidthWithHeight">
                         <tr style="text-align: left; background-color: #D4D0C9;">
                             <td colspan="3" style="width: 90%; padding-left: 20px;">
-                                <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDate" runat="Server" CollapsedText="Expand Date Details"
-                                    ExpandedText="Collapse Date Details" EnableViewState="false" BehaviorID="cpeDate"
+                                <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDate"  runat="Server" CollapsedText="Expand Date Details"
+                                    ExpandedText="Collapse Date Details" EnableViewState="false" BehaviorID="cpeDate" Collapsed="true"
                                     TargetControlID="pnlDateDetails" ImageControlID="imgDate" CollapsedImage="~/Images/expand.jpg"
                                     ExpandedImage="~/Images/collapse.jpg" CollapseControlID="imgDate" ExpandControlID="imgDate"
                                     TextLabelID="lbDate" />
