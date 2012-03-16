@@ -8,6 +8,7 @@
     TagName="ByResource" %>
 <%@ Register Src="~/Controls/Reports/TimePeriodSummaryByProject.ascx" TagPrefix="uc"
     TagName="Byproject" %>
+<%@ Register Src="~/Controls/Reports/ByworkType.ascx" TagPrefix="uc" TagName="ByWorkType" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
@@ -192,6 +193,7 @@
                 </asp:View>
                 <asp:View ID="vwWorkTypeReport" runat="server">
                     <asp:Panel ID="pnlWorkTypeReport" runat="server" CssClass="tab-pane WholeWidth">
+                        <uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByworkType>
                     </asp:Panel>
                 </asp:View>
             </asp:MultiView>
