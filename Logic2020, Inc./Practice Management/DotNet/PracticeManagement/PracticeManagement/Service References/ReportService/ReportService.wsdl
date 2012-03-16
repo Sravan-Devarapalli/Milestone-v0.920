@@ -59,6 +59,12 @@
   <wsdl:message name="IReportService_ProjectSummaryReportByWorkType_OutputMessage">
     <wsdl:part name="parameters" element="tns:ProjectSummaryReportByWorkTypeResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_ProjectSummaryReportByResourceAndWorkType_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectSummaryReportByResourceAndWorkType" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectSummaryReportByResourceAndWorkType_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectSummaryReportByResourceAndWorkTypeResponse" />
+  </wsdl:message>
   <wsdl:portType name="IReportService">
     <wsdl:operation name="PersonTimeEntriesDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails" message="tns:IReportService_PersonTimeEntriesDetails_InputMessage" />
@@ -91,6 +97,10 @@
     <wsdl:operation name="ProjectSummaryReportByWorkType">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectSummaryReportByWorkType" message="tns:IReportService_ProjectSummaryReportByWorkType_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ProjectSummaryReportByWorkTypeResponse" message="tns:IReportService_ProjectSummaryReportByWorkType_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ProjectSummaryReportByResourceAndWorkType">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectSummaryReportByResourceAndWorkType" message="tns:IReportService_ProjectSummaryReportByResourceAndWorkType_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ProjectSummaryReportByResourceAndWorkTypeResponse" message="tns:IReportService_ProjectSummaryReportByResourceAndWorkType_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IReportService" type="tns:IReportService">
@@ -160,6 +170,15 @@
     </wsdl:operation>
     <wsdl:operation name="ProjectSummaryReportByWorkType">
       <soap:operation soapAction="http://tempuri.org/IReportService/ProjectSummaryReportByWorkType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProjectSummaryReportByResourceAndWorkType">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ProjectSummaryReportByResourceAndWorkType" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
