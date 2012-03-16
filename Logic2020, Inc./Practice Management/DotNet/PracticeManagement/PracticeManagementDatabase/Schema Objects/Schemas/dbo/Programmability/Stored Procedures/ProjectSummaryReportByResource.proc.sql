@@ -1,13 +1,24 @@
-﻿CREATE PROCEDURE [dbo].[ProjectSummaryReportByResource]
+﻿-- =========================================================================
+-- Author:		ThulasiRam.P
+-- Create date: 03-15-2012
+-- Description:  Time Entries grouped by workType and Resource for a Project.
+-- =========================================================================
+CREATE PROCEDURE [dbo].[ProjectSummaryReportByResource]
 (
-	@ProjectId INT,
+	@ProjectNumber NVARCHAR(12),
 	@PersonRoleIds NVARCHAR(MAX) = NULL,
-	@OrderByCerteria NVARCHAR(20) = 'resource'-- resource,personrole,total
+	@OrderByCerteria NVARCHAR(20) = 'resource'-- resource,person role,total
 )
 AS
 BEGIN
 
-	--Presently @PersonRoleIds is not used as personrole is based on milestone. After the personrole is linked to project we need to include  @PersonRoleIds.
+	DECLARE @ProjectId INT 
+
+	SELECT @ProjectId = P.ProjectId
+	FROM dbo.Project AS P
+	WHERE P.ProjectNumber = @ProjectNumber 
+
+	--Presently @PersonRoleIds is not used as person role is based on milestone. After the person role is linked to project we need to include  @PersonRoleIds.
 	DECLARE @MinimumTimeEntryDate DATETIME,@MaximumTimeEntryDate DATETIME,@GroupByCerteria NVARCHAR(20),@DaysDiff INT 
 
 	SELECT @MinimumTimeEntryDate = MIN(TE.ChargeCodeDate), 
@@ -25,7 +36,7 @@ BEGIN
 	BEGIN
 		SET @GroupByCerteria = 'week'
 	END
-	ELSE IF(@DaysDiff > 31 AND @DaysDiff <= 365 )
+	ELSE IF(@DaysDiff > 31 AND @DaysDiff <= 366 )
 	BEGIN
 		SET @GroupByCerteria = 'month'
 	END
@@ -40,9 +51,10 @@ BEGIN
 	FROM [dbo].[ConvertStringListIntoTable] (@PersonRoleIds)
 
 	SELECT P.PersonId,
-	P.LastName + ', ' + P.FirstName AS PersonName,
-	Data.IsChargeable,
-	Data.TotalHours,
+	P.LastName,
+	P.FirstName,
+	Data.BillableHours,
+	Data.NonBillableHours,
 	Data.StartDate,
 	GroupByCerteria
 
@@ -50,10 +62,10 @@ BEGIN
 	(
 	SELECT TE.PersonId,
 	CC.ProjectId,
-	TEH.IsChargeable,
-	Round(SUM(TEH.ActualHours),2) AS TotalHours,
+	Round(SUM(CASE WHEN TEH.IsChargeable = 1 THEN TEH.ActualHours ELSE 0 END),2) AS BillableHours,
+	Round(SUM(CASE WHEN TEH.IsChargeable = 0 THEN TEH.ActualHours ELSE 0 END),2) AS NonBillableHours,
 	CASE WHEN @GroupByCerteria = 'day' THEN TE.ChargeCodeDate -- date
-			WHEN @GroupByCerteria = 'week' THEN (TE.ChargeCodeDate - (DATEPART(dw,TE.ChargeCodeDate) -1 ))  --week startdate 
+			WHEN @GroupByCerteria = 'week' THEN (TE.ChargeCodeDate - (DATEPART(dw,TE.ChargeCodeDate) -1 ))  --week start date 
 			WHEN @GroupByCerteria = 'month' THEN TE.ChargeCodeDate - (DAY(TE.ChargeCodeDate)-1)  -- month StartDate
 			WHEN @GroupByCerteria = 'year' THEN TE.ChargeCodeDate - (DATEPART(DAYOFYEAR,TE.ChargeCodeDate)-1)-- year StartDate
 	END as StartDate,
@@ -63,9 +75,8 @@ BEGIN
 	INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND CC.ProjectId = @ProjectId
 	GROUP BY TE.PersonId,
 			 CC.ProjectId,
-			TEH.IsChargeable,
 			CASE WHEN @GroupByCerteria = 'day' THEN TE.ChargeCodeDate -- date
-				WHEN @GroupByCerteria = 'week' THEN (TE.ChargeCodeDate - (DATEPART(dw,TE.ChargeCodeDate) -1 ))  --week startdate 
+				WHEN @GroupByCerteria = 'week' THEN (TE.ChargeCodeDate - (DATEPART(dw,TE.ChargeCodeDate) -1 ))  --week start date 
 				WHEN @GroupByCerteria = 'month' THEN TE.ChargeCodeDate - (DAY(TE.ChargeCodeDate)-1)  -- month StartDate
 				WHEN @GroupByCerteria = 'year' THEN TE.ChargeCodeDate - (DATEPART(DAYOFYEAR,TE.ChargeCodeDate)-1)-- year StartDate
 			END
@@ -74,7 +85,8 @@ BEGIN
 	INNER JOIN dbo.Project Pro ON Pro.ProjectId = Data.ProjectId 
 
 	ORDER BY CASE WHEN @OrderByCerteria = 'resource' THEN 2
-					WHEN @OrderByCerteria = 'total' THEN 4
+					WHEN @OrderByCerteria = 'total' THEN BillableHours+NonBillableHours
 			END
 
 END
+
