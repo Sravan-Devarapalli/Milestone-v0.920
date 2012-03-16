@@ -121,7 +121,7 @@
   <xs:element name="ProjectSummaryReportByWorkType">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="projectId" type="xs:int" />
+        <xs:element minOccurs="0" name="projectNumber" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="timeTypeCategoryIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="orderByCerteria" nillable="true" type="xs:string" />
       </xs:sequence>
@@ -131,6 +131,22 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectSummaryReportByWorkTypeResult" nillable="true" type="q8:ArrayOfWorkTypeLevelGroupedHours" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectSummaryReportByResourceAndWorkType">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="projectNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="personRoleIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="orderByCerteria" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectSummaryReportByResourceAndWorkTypeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectSummaryReportByResourceAndWorkTypeResult" nillable="true" type="q9:ArrayOfPersonLevelGroupedHours" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
