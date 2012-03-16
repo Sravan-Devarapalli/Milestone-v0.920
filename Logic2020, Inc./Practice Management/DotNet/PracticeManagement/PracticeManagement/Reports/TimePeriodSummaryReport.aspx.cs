@@ -117,7 +117,7 @@ namespace PraticeManagement.Reporting
             }
         }
 
-        public Dictionary<DateTime,String> DatesList
+        public Dictionary<DateTime, String> DatesList
         {
             get
             {
@@ -129,13 +129,13 @@ namespace PraticeManagement.Reporting
                     for (int day = 0; day <= EndDate.Subtract(StartDate).Days; day++)
                     {
                         DateTime _startDate = StartDate.AddDays(day);
-                        list.Add(_startDate,_startDate.ToString("MM/dd/yyyy"));
+                        list.Add(_startDate, _startDate.ToString("MM/dd/yyyy"));
                     }
                 }
-                else if(days > 7 && days <= 31)
+                else if (days > 7 && days <= 31)
                 {
                     //Single Week.
-                    DateTime _startDate = StartDate ;
+                    DateTime _startDate = StartDate;
                     DateTime _endDate = Utils.Calendar.WeekEndDate(_startDate);
                     while (_startDate <= EndDate)
                     {
@@ -280,8 +280,10 @@ namespace PraticeManagement.Reporting
 
         private void PopulateByWorkTypeData()
         {
-            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType("P081100", string.Empty, string.Empty));
+            var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByWorkType(StartDate,EndDate,string.Empty,string.Empty));
             ucByWorktype.DataBindResource(data, DatesList);
+            ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
+            ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
         }
 
         private void PopulateByResourceData()
@@ -289,13 +291,18 @@ namespace PraticeManagement.Reporting
             string orderByCerteria = string.Empty;
             var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(StartDate, EndDate, null, orderByCerteria));
             tpByResource.DataBindResource(data, DatesList);
+            ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
+            ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
         }
 
         private void PopulateByProjectData()
         {
             string orderByCerteria = string.Empty;
-            var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(StartDate, EndDate, null,null, orderByCerteria));
+            var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(StartDate, EndDate, null, null, orderByCerteria));
             tpByProject.DataBindProject(data, DatesList);
+
+            ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
+            ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
         }
     }
 }
