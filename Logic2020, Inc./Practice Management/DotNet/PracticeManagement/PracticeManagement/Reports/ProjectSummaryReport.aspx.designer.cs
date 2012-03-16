@@ -130,13 +130,13 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Panel pnlResourceReport;
         
         /// <summary>
-        /// tpByResource control.
+        /// ucByResource control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Reports.ProjectSummaryByResource tpByResource;
+        protected global::PraticeManagement.Controls.Reports.ProjectSummaryByResource ucByResource;
         
         /// <summary>
         /// vwProjectReport control.
@@ -157,6 +157,15 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Panel pnlProjectReport;
         
         /// <summary>
+        /// ucByWorktype control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Reports.ByworkType ucByWorktype;
+        
+        /// <summary>
         /// vwWorkTypeReport control.
         /// </summary>
         /// <remarks>
@@ -173,6 +182,15 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlWorkTypeReport;
+        
+        /// <summary>
+        /// ucByMatrix control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Reports.ProjectSummaryByMatrix ucByMatrix;
     }
 }
 
