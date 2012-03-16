@@ -8,6 +8,8 @@
     TagName="ByResource" %>
 <%@ Register Src="~/Controls/Reports/TimePeriodSummaryByProject.ascx" TagPrefix="uc"
     TagName="Byproject" %>
+<%@ Register Src="~/Controls/Reports/BillableAndNonBillableGraph.ascx" TagPrefix="uc"
+    TagName="BillableAndNonBillableGraph" %>
 <%@ Register Src="~/Controls/Reports/ByworkType.ascx" TagPrefix="uc" TagName="ByWorkType" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
@@ -152,6 +154,13 @@
             </asp:Panel>
             <br />
             <hr />
+            <table style="width: 100%;">
+                <tr>
+                    <td align="center">
+                        <uc:BillableAndNonBillableGraph ID="ucBillableAndNonBillable" runat="server"></uc:BillableAndNonBillableGraph>
+                    </td>
+                </tr>
+            </table>
             <table class="WholeWidth">
                 <tr>
                     <td align="center">
@@ -193,7 +202,7 @@
                 </asp:View>
                 <asp:View ID="vwWorkTypeReport" runat="server">
                     <asp:Panel ID="pnlWorkTypeReport" runat="server" CssClass="tab-pane WholeWidth">
-                        <uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByworkType>
+                        <uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByWorkType>
                     </asp:Panel>
                 </asp:View>
             </asp:MultiView>
