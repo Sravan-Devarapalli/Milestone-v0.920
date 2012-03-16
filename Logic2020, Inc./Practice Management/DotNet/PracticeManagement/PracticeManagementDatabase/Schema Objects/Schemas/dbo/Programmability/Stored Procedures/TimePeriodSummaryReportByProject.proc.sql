@@ -1,6 +1,8 @@
 ﻿-- =========================================================================
 -- Author:		Sainath.CH
 -- Create date: 03-05-2012
+-- Updated by : Thulasiram.P
+-- Update Date: 03-15-2012
 -- Description:  Time Entries grouped by Project for a particular period.
 -- =========================================================================
 CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByProject]
@@ -8,11 +10,14 @@ CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByProject]
 	@StartDate DATETIME,
 	@EndDate   DATETIME,
 	@ClientIds NVARCHAR(MAX) = NULL,
-	@StatusIds NVARCHAR(MAX) = NULL,
+	@PersonStatusIds NVARCHAR(MAX) = NULL,
 	@OrderByCerteria NVARCHAR(20) = 'client' -- client,projectStatus,total
 )
 AS
 BEGIN
+
+	SET @StartDate = CONVERT(DATE,@StartDate)
+	SET @EndDate = CONVERT(DATE,@EndDate)
 
 	DECLARE @GroupByCerteria NVARCHAR(20),@DaysDiff INT 
 	SET @DaysDiff = DATEDIFF(dd,@StartDate,@EndDate)
@@ -38,10 +43,10 @@ BEGIN
 	SELECT ResultId 
 	FROM [dbo].[ConvertStringListIntoTable] (@ClientIds)
 
-	DECLARE @StatusIdsTable TABLE(ID INT)
-	INSERT INTO @StatusIdsTable
+	DECLARE @PersonStatusIdsTable TABLE(ID INT)
+	INSERT INTO @PersonStatusIdsTable
 	SELECT ResultId 
-	FROM [dbo].[ConvertStringListIntoTable] (@StatusIds)
+	FROM [dbo].[ConvertStringListIntoTable] (@PersonStatusIds)
 
 
 SELECT		Data.ClientId,
@@ -50,15 +55,19 @@ SELECT		Data.ClientId,
 			P.Name AS ProjectName,
 			P.ProjectNumber,
 			Data.IsChargeable,
-			PS.Name AS Status,
-			TotalHours,
+			PS.Name AS ProjectStatusName,
+			BillableHours,
+			NonBillableHours,
 			Data.StartDate,
-			GroupByCerteria
+			GroupByCerteria,
+			P.ProjectNumber,
+			PS.ProjectStatusId
 FROM(
 	SELECT  CC.ClientId,
 			CC.ProjectId,
 			TEH.IsChargeable,
-			Round(SUM(TEH.ActualHours),2) AS 'TotalHours',
+			Round(SUM(CASE WHEN TEH.IsChargeable = 1 THEN TEH.ActualHours ELSE 0 END),2) AS BillableHours,
+			Round(SUM(CASE WHEN TEH.IsChargeable = 0 THEN TEH.ActualHours ELSE 0 END),2) AS NonBillableHours,
 			CASE WHEN @GroupByCerteria = 'day' THEN TE.ChargeCodeDate -- date
 				WHEN @GroupByCerteria = 'week' THEN (TE.ChargeCodeDate - (DATEPART(dw,TE.ChargeCodeDate) -1 ))  --week startdate 
 				WHEN @GroupByCerteria = 'month' THEN TE.ChargeCodeDate - (DAY(TE.ChargeCodeDate)-1)  -- month StartDate
@@ -79,7 +88,7 @@ FROM(
 	) Data
 	INNER JOIN dbo.Project P ON P.ProjectId = Data.ProjectId
 	INNER JOIN dbo.Client C ON C.ClientId = Data.ClientId 
-	INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = P.ProjectStatusId AND (PS.ProjectStatusId IN (SELECT * FROM @StatusIdsTable) OR @StatusIds IS NULL)
+	INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = P.ProjectStatusId AND (PS.ProjectStatusId IN (SELECT * FROM @PersonStatusIdsTable) OR @PersonStatusIds IS NULL)
 
 	ORDER BY CASE WHEN @OrderByCerteria = 'client' THEN 2
 				  WHEN @OrderByCerteria = 'projectStatus' THEN 7
