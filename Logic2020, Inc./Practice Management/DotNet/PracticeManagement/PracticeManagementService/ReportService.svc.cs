@@ -16,7 +16,7 @@ namespace PracticeManagementService
     {
         public List<TimeEntriesGroupByClientAndProject> PersonTimeEntriesDetails(int personId, DateTime startDate, DateTime endDate)
         {
-            return ReportDAL.PersonTimeEntriesDetails(personId,  startDate, endDate);
+            return ReportDAL.PersonTimeEntriesDetails(personId, startDate, endDate);
         }
 
         public List<TimeEntriesGroupByClientAndProject> PersonTimeEntriesSummary(int personId, DateTime startDate, DateTime endDate)
@@ -31,7 +31,7 @@ namespace PracticeManagementService
 
         public List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate, string seniorityIds, string orderByCerteria)
         {
-            return ReportDAL.TimePeriodSummaryReportByResource( startDate,  endDate,  seniorityIds,  orderByCerteria);
+            return ReportDAL.TimePeriodSummaryReportByResource(startDate, endDate, seniorityIds, orderByCerteria);
         }
 
         public List<ProjectLevelGroupedHours> TimePeriodSummaryReportByProject(DateTime startDate, DateTime endDate, string clientIds, string personStatusIds, string orderByCerteria)
@@ -41,18 +41,23 @@ namespace PracticeManagementService
 
         public List<WorkTypeLevelGroupedHours> TimePeriodSummaryReportByWorkType(DateTime startDate, DateTime endDate, string timeTypeCategoryIds, string orderByCerteria)
         {
-            return TimePeriodSummaryReportByWorkType( startDate,  endDate,  timeTypeCategoryIds,  orderByCerteria);
+            return ReportDAL.TimePeriodSummaryReportByWorkType(startDate, endDate, timeTypeCategoryIds, orderByCerteria);
         }
 
-   
+
         public List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber, string personRoleIds, string orderByCerteria)
         {
             return ReportDAL.ProjectSummaryReportByResource(projectNumber, personRoleIds, orderByCerteria);
         }
 
-        public List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(int projectId, string timeTypeCategoryIds, string orderByCerteria)
+        public List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(string projectNumber, string timeTypeCategoryIds, string orderByCerteria)
         {
-            return ReportDAL.ProjectSummaryReportByWorkType( projectId, timeTypeCategoryIds, orderByCerteria);
+            return ReportDAL.ProjectSummaryReportByWorkType(projectNumber, timeTypeCategoryIds, orderByCerteria);
+        }
+
+        public List<PersonLevelGroupedHours> ProjectSummaryReportByResourceAndWorkType(string projectNumber, string personRoleIds, string orderByCerteria)
+        {
+            return ReportDAL.ProjectSummaryReportByResourceAndWorkType(projectNumber, personRoleIds, orderByCerteria);
         }
 
     }
