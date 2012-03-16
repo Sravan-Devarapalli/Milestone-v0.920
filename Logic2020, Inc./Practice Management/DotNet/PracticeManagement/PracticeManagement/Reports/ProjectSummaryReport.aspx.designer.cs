@@ -31,6 +31,15 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.UpdatePanel upnlBody;
         
         /// <summary>
+        /// ucBillableAndNonBillable control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Reports.BillableAndNonBillableGraph ucBillableAndNonBillable;
+        
+        /// <summary>
         /// tblProjectsummaryReportViewSwitch control.
         /// </summary>
         /// <remarks>
