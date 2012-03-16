@@ -22,11 +22,37 @@ namespace DataTransferObjects.Reports
         }
 
         [DataMember]
-        List<GroupedHours> GroupedHoursList
+        public double BillabileHours
         {
             get;
             set;
         }
+
+        [DataMember]
+        public double NonBillabileHours
+        {
+            get;
+            set;
+        }
+
+        
+        public double TotalHours
+        {
+            get 
+            {
+                return BillabileHours + NonBillabileHours;
+            }
+        }
+
+
+        [DataMember]
+        public List<GroupedHours> GroupedHoursList
+        {
+            get;
+            set;
+        }
+
+
 
         public double BillabileTotal
         {
