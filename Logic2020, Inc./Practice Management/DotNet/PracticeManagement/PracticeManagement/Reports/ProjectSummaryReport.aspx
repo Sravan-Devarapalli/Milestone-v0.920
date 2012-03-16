@@ -1,13 +1,14 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true" CodeBehind="ProjectSummaryReport.aspx.cs" 
-Inherits="PraticeManagement.Reporting.ProjectSummaryReport" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
+    AutoEventWireup="true" CodeBehind="ProjectSummaryReport.aspx.cs" Inherits="PraticeManagement.Reporting.ProjectSummaryReport" %>
+
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <%@ Register Src="~/Controls/Reports/ProjectSummaryByResource.ascx" TagPrefix="uc"
     TagName="ByResource" %>
 <%@ Register Src="~/Controls/Reports/ProjectSummaryByMatrix.ascx" TagPrefix="uc"
     TagName="ByMatrix" %>
-    <%@ Register Src="~/Controls/Reports/ByworkType.ascx" TagPrefix="uc"
-    TagName="ByWorkType" %>
-
+<%@ Register Src="~/Controls/Reports/ByworkType.ascx" TagPrefix="uc" TagName="ByWorkType" %>
+<%@ Register Src="~/Controls/Reports/BillableAndNonBillableGraph.ascx" TagPrefix="uc"
+    TagName="BillableAndNonBillableGraph" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
@@ -83,9 +84,15 @@ Inherits="PraticeManagement.Reporting.ProjectSummaryReport" %>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
-           
             <br />
             <hr />
+            <table style="width: 100%;">
+                <tr>
+                    <td align="center">
+                        <uc:BillableAndNonBillableGraph ID="ucBillableAndNonBillable" runat="server"></uc:BillableAndNonBillableGraph>
+                    </td>
+                </tr>
+            </table>
             <table class="WholeWidth">
                 <tr>
                     <td align="center">
@@ -97,7 +104,7 @@ Inherits="PraticeManagement.Reporting.ProjectSummaryReport" %>
                                             OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
-                                 <asp:TableCell ID="cellWorkType" runat="server">
+                                <asp:TableCell ID="cellWorkType" runat="server">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="lnkbtnWorkType" runat="server" Text="By Work Type" CausesValidation="false"
                                             OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
@@ -122,17 +129,16 @@ Inherits="PraticeManagement.Reporting.ProjectSummaryReport" %>
                 </asp:View>
                 <asp:View ID="vwProjectReport" runat="server">
                     <asp:Panel ID="pnlProjectReport" runat="server" CssClass="tab-pane WholeWidth">
-                      <uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByworkType>
+                        <uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByWorkType>
                     </asp:Panel>
                 </asp:View>
                 <asp:View ID="vwWorkTypeReport" runat="server">
                     <asp:Panel ID="pnlWorkTypeReport" runat="server" CssClass="tab-pane WholeWidth">
-                     <uc:ByMatrix ID="ucByMatrix" runat="server"></uc:ByMatrix>
+                        <uc:ByMatrix ID="ucByMatrix" runat="server"></uc:ByMatrix>
                     </asp:Panel>
                 </asp:View>
             </asp:MultiView>
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>
-
 
