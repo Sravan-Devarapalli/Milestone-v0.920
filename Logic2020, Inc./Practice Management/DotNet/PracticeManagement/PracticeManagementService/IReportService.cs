@@ -35,7 +35,10 @@ namespace PracticeManagementService
         List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber, string personRoleIds, string orderByCerteria);
 
         [OperationContract]
-        List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(int projectId, string timeTypeCategoryIds, string orderByCerteria);
+        List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(string projectNumber, string timeTypeCategoryIds, string orderByCerteria);
+
+        [OperationContract]
+        List<PersonLevelGroupedHours> ProjectSummaryReportByResourceAndWorkType(string projectNumber, string personRoleIds, string orderByCerteria);
         
     }
 }
