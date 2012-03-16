@@ -11,13 +11,19 @@ namespace PraticeManagement.Controls.Reports
 {
     public partial class PersonSummaryReport : System.Web.UI.UserControl
     {
+
+        private PraticeManagement.Reporting.PersonDetailTimeReport HostingPage
+        {
+            get { return ((PraticeManagement.Reporting.PersonDetailTimeReport)Page); }
+        }
+
         public List<TimeEntriesGroupByClientAndProject> TimeEntriesGroupByClientAndProjectList
         {
-            get 
+            get
             {
                 return ViewState["TimeEntriesGroupByClientAndProjectList_Key"] as List<TimeEntriesGroupByClientAndProject>;
             }
-            set 
+            set
             {
                 ViewState["TimeEntriesGroupByClientAndProjectList_Key"] = value;
             }
@@ -32,7 +38,7 @@ namespace PraticeManagement.Controls.Reports
         {
             TimeEntriesGroupByClientAndProjectList = timeEntriesGroupByClientAndProjectList;
 
-            if(timeEntriesGroupByClientAndProjectList.Count > 0)
+            if (timeEntriesGroupByClientAndProjectList.Count > 0)
             {
                 divEmptyMessage.Style["display"] = "none";
                 repSummary.Visible = true;
@@ -53,9 +59,52 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
-              //TimeEntriesGroupByClientAndProjectList
+            
             StringBuilder sb = new StringBuilder();
-            //sb.Append();
+            sb.Append(HostingPage.SelectedPersonName);
+            sb.Append(",");
+            sb.Append(HostingPage.StartDate.ToString("MM/dd/yyyy") + " - " + HostingPage.EndDate.ToString("MM/dd/yyyy"));
+            sb.Append(",");
+            
+            //Header
+            sb.Append("Client");
+            sb.Append(",");
+            sb.Append("Project Number");
+            sb.Append(",");
+            sb.Append("Project Name");
+            sb.Append(",");
+            sb.Append("Billable");
+            sb.Append(",");
+            sb.Append("Value");
+            sb.Append(",");
+            sb.Append("Non-Billable");
+            sb.Append(",");
+            sb.Append("Total");
+            sb.Append(",");
+            sb.AppendLine();
+           
+            //Data
+            foreach (var timeEntriesGroupByClientAndProject in TimeEntriesGroupByClientAndProjectList)
+            {
+                sb.Append(timeEntriesGroupByClientAndProject.Client.Name);
+                sb.Append(",");
+                sb.Append(timeEntriesGroupByClientAndProject.Project.ProjectNumber);
+                sb.Append(",");
+                sb.Append(timeEntriesGroupByClientAndProject.Project.Name);
+                sb.Append(",");
+                sb.Append(timeEntriesGroupByClientAndProject.BillableHours);
+                sb.Append(",");
+                sb.Append(timeEntriesGroupByClientAndProject.BillableValue);
+                sb.Append(",");
+                sb.Append(timeEntriesGroupByClientAndProject.NonBillableHours);
+                sb.Append(",");
+                sb.Append(timeEntriesGroupByClientAndProject.TotalHours);
+                sb.Append(",");
+                sb.AppendLine();
+            }
+
+
+
 
         }
 
@@ -64,6 +113,6 @@ namespace PraticeManagement.Controls.Reports
 
         }
 
-        
+
     }
 }
