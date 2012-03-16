@@ -272,6 +272,16 @@ namespace PraticeManagement.Reporting
             {
                 PopulateByProjectData();
             }
+            else
+            {
+                PopulateByWorkTypeData();
+            }
+        }
+
+        private void PopulateByWorkTypeData()
+        {
+            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType("P081100", string.Empty, string.Empty));
+            ucByWorktype.DataBindResource(data, DatesList);
         }
 
         private void PopulateByResourceData()
