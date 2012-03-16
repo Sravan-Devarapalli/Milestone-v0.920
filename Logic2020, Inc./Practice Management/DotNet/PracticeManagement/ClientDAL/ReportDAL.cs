@@ -136,22 +136,22 @@ namespace DataAccess
         {
             if (reader.HasRows)
             {
-               
+
                 int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNameColumn);
                 int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
                 int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
                 int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
-                
+
                 while (reader.Read())
                 {
-                    
+
                     var ptd = new TimeEntriesGroupByClientAndProject
                     {
                         Project = new Project()
                         {
-                           
+
                             Name = reader.GetString(projectNameIndex),
                             ProjectNumber = reader.GetString(projectNumberIndex)
                         }
@@ -291,7 +291,7 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
-                command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdsParam,!string.IsNullOrEmpty(clientIds) ? clientIds : (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdsParam, !string.IsNullOrEmpty(clientIds) ? clientIds : (Object)DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusIdsParam, !string.IsNullOrEmpty(personStatusIds) ? personStatusIds : (Object)DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, !string.IsNullOrEmpty(orderByCerteria) ? orderByCerteria : (Object)DBNull.Value);
 
@@ -387,15 +387,68 @@ namespace DataAccess
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     var result = new List<WorkTypeLevelGroupedHours>();
-                    ReadTimePeriodSummaryReportByWorkType(reader, result);
+                    ReadByWorkType(reader, result);
                     return result;
                 }
             }
         }
 
-        private static void ReadTimePeriodSummaryReportByWorkType(SqlDataReader reader, List<WorkTypeLevelGroupedHours> result)
+        private static void ReadByWorkType(SqlDataReader reader, List<WorkTypeLevelGroupedHours> result)
         {
+            if (reader.HasRows)
+            {
+               
+                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+                int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
+                int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
+                int timeTypeNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeName);
+                int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
+                int groupByCerteriaIndex = reader.GetOrdinal(Constants.ColumnNames.GroupByCerteria);
+                int isDefaultIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefault);
+                int isInternalColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsInternalColumn);
+                int isAdministrativeColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsAdministrativeColumn);
+                int categoryIndex = reader.GetOrdinal(Constants.ColumnNames.Category);
 
+                while (reader.Read())
+                {
+                    int workTypeId = reader.GetInt32(timeTypeIdIndex);
+
+                    GroupedHours GH = new GroupedHours();
+                    GH.StartDate = reader.GetDateTime(startDateIndex);
+                    GH.SetEnddate(reader.GetString(groupByCerteriaIndex));
+                    GH.BillabileTotal = reader.GetDouble(billableHoursIndex);
+                    GH.NonBillableTotal = reader.GetDouble(nonBillableHoursIndex);
+
+
+                    if (!result.Any(p => p.WorkType.Id == workTypeId))
+                    {
+
+                        WorkTypeLevelGroupedHours worktypeLGH = new WorkTypeLevelGroupedHours();
+
+                        var tt = new TimeTypeRecord
+                        {
+                            Id = workTypeId,
+                            Name = reader.GetString(timeTypeNameIndex),
+                            IsDefault = reader.GetBoolean(isDefaultIndex),
+                            IsInternal = reader.GetBoolean(isInternalColumnIndex),
+                            IsAdministrative = reader.GetBoolean(isAdministrativeColumnIndex),
+                            Category = reader.GetString(categoryIndex)
+                            
+                        };
+
+                        worktypeLGH.WorkType = tt;
+                        
+                        worktypeLGH.GroupedHoursList = new List<GroupedHours>();
+                        worktypeLGH.GroupedHoursList.Add(GH);
+                        result.Add(worktypeLGH);
+                    }
+                    else
+                    {
+                        WorkTypeLevelGroupedHours worktypeLGH = result.First(w => w.WorkType.Id == workTypeId);
+                        worktypeLGH.GroupedHoursList.Add(GH);
+                    }
+                }
+            }
         }
 
         public static List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber, string personRoleIds, string orderByCerteria)
@@ -417,7 +470,7 @@ namespace DataAccess
                     return result;
                 }
             }
-        
+
         }
 
 
@@ -432,6 +485,8 @@ namespace DataAccess
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
                 int groupByCerteriaIndex = reader.GetOrdinal(Constants.ColumnNames.GroupByCerteria);
+                
+                
 
                 while (reader.Read())
                 {
@@ -472,12 +527,109 @@ namespace DataAccess
             }
         }
 
-        public static List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(int projectId, string timeTypeCategoryIds, string orderByCerteria)
+        public static List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(string projectNumber, string timeTypeCategoryIds, string orderByCerteria)
         {
-            List<WorkTypeLevelGroupedHours> result = new List<WorkTypeLevelGroupedHours>();
-            return result;
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ProjectSummaryReportByWorkType, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectNumber, projectNumber);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeCategoryIdsParam, !string.IsNullOrEmpty(timeTypeCategoryIds) ? timeTypeCategoryIds : (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, !string.IsNullOrEmpty(orderByCerteria) ? orderByCerteria : (Object)DBNull.Value);
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<WorkTypeLevelGroupedHours>();
+                    ReadByWorkType(reader, result);
+                    return result;
+                }
+            }
         }
 
+
+        public static List<PersonLevelGroupedHours> ProjectSummaryReportByResourceAndWorkType(string projectNumber, string personRoleIds, string orderByCerteria)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ProjectSummaryReportByResourceAndWorkType, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectNumber, projectNumber);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonRoleIdsParam, personRoleIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, !string.IsNullOrEmpty(orderByCerteria) ? orderByCerteria : (Object)DBNull.Value);
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<PersonLevelGroupedHours>();
+                    ReadProjectSummaryReportByResourceAndWorkType(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadProjectSummaryReportByResourceAndWorkType(SqlDataReader reader, List<PersonLevelGroupedHours> result)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
+                int timeTypeNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeName);
+                int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
+                int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
+                
+
+                while (reader.Read())
+                {
+                    int personId = reader.GetInt32(personIdIndex);
+
+                    TimeTypeRecord timetype = new TimeTypeRecord()
+                    {
+                        Id = reader.GetInt32(timeTypeIdIndex),
+                        Name = reader.GetString(timeTypeNameIndex)
+
+                    };
+
+                    WorkTypeLevelGroupedHours wlgh = new WorkTypeLevelGroupedHours()
+                    {
+                        WorkType = timetype,
+                        BillabileHours = reader.GetDouble(billableHoursIndex),
+                        NonBillabileHours = reader.GetDouble(nonBillableHoursIndex)
+                    };
+
+
+                    if (!result.Any(p => p.person.Id == personId))
+                    {
+
+                        PersonLevelGroupedHours PLGH = new PersonLevelGroupedHours();
+                        Person person = new Person
+                        {
+                            Id = personId,
+                            FirstName = reader.GetString(firstNameIndex),
+                            LastName = reader.GetString(lastNameIndex)
+                        };
+
+                        PLGH.person = person;
+                        PLGH.GroupedWorkTypeHoursList = new List<WorkTypeLevelGroupedHours>() 
+                        {
+                            wlgh
+                        };
+
+                        result.Add(PLGH);
+                    }
+                    else
+                    {
+                        PersonLevelGroupedHours PLGH = result.First(p => p.person.Id == personId);
+
+                        PLGH.GroupedWorkTypeHoursList.Add(wlgh);
+                    }
+                }
+            }
+        }
     }
 }
 
