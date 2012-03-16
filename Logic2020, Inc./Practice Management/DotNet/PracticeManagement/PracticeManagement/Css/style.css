@@ -2538,7 +2538,7 @@ TABLE.PersonSummaryReport TD
 {
   padding: 2px 2px 2px 2px;
   border:1px solid black;
-  text-align:center;
+  text-align:right;
 }
 TABLE.PersonSummaryReport TH
 {
@@ -2547,12 +2547,14 @@ TABLE.PersonSummaryReport TH
  background-color:White;
  font-weight:bold;
  font-size:14px;
+ text-align:center;
+ width:8%;
 }
 
 TABLE.TdLevelNoBorder TD
 {
  border:0px solid black;
- padding: 2px 0px 2px 0px;
+ padding: 0px 0px 0px 0px;
 }
 TABLE.TdLevelNoBorder TH
 {
