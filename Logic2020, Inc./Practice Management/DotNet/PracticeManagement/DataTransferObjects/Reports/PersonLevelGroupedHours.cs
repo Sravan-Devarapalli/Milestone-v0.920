@@ -20,6 +20,12 @@ namespace DataTransferObjects.Reports
             set;
         }
 
+        [DataMember]
+        public List<WorkTypeLevelGroupedHours> GroupedWorkTypeHoursList
+        {
+            get;
+            set;
+        }
 
         [DataMember]
         public List<GroupedHours> GroupedHoursList
@@ -34,7 +40,11 @@ namespace DataTransferObjects.Reports
             {
                 if (GroupedHoursList != null)
                 {
-                    return GroupedHoursList.Sum(G => G.BillabileTotal);
+                    return GroupedHoursList.Count > 0 ? GroupedHoursList.Sum(G => G.BillabileTotal) : 0d;
+                }
+                else if (GroupedWorkTypeHoursList != null)
+                {
+                    return GroupedWorkTypeHoursList.Count > 0 ? GroupedWorkTypeHoursList.Sum(G => G.BillabileHours) : 0d;
                 }
                 else
                 {
@@ -51,7 +61,11 @@ namespace DataTransferObjects.Reports
             {
                 if (GroupedHoursList != null)
                 {
-                    return GroupedHoursList.Sum(G => G.NonBillableTotal);
+                    return GroupedHoursList.Count > 0 ? GroupedHoursList.Sum(G => G.NonBillableTotal) : 0d;
+                }
+                else if (GroupedWorkTypeHoursList != null)
+                {
+                    return GroupedWorkTypeHoursList.Count > 0 ? GroupedWorkTypeHoursList.Sum(G => G.NonBillabileHours) : 0d;
                 }
                 else
                 {
@@ -66,7 +80,11 @@ namespace DataTransferObjects.Reports
             {
                 if (GroupedHoursList != null)
                 {
-                    return GroupedHoursList.Sum(G => G.CombinedTotal);
+                    return GroupedHoursList.Count > 0 ? GroupedHoursList.Sum(G => G.CombinedTotal) : 0d;
+                }
+                else if (GroupedWorkTypeHoursList != null)
+                {
+                    return GroupedWorkTypeHoursList.Count > 0 ? GroupedWorkTypeHoursList.Sum(G => G.TotalHours) : 0d;
                 }
                 else
                 {
