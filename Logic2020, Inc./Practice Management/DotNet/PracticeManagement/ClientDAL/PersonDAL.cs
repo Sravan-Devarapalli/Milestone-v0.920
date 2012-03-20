@@ -3432,15 +3432,14 @@ namespace DataAccess
             }
         }
 
-        public static List<Person> GetPersonListByPayTypeIdsAndStatusIds(String payTypeIds, String statusIds)
+        public static List<Person> GetPersonListBySearchKeyword(String looked)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPersonListByPayTypeIdsAndStatusIdsProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPersonListBySearchKeywordProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
-                command.Parameters.AddWithValue(TimeScaleIdsParam,  payTypeIds);
-                command.Parameters.AddWithValue(PersonStatusIdsParam, statusIds);
+                command.Parameters.AddWithValue(LookedParam,!string.IsNullOrEmpty(looked) ? (object)looked : DBNull.Value);
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
