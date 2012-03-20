@@ -3,7 +3,7 @@
 -- Create date: 03-05-2012
 -- Description: Person TimeEntries Summary By Period.
 -- Updated By : Sainath CH
--- Modified Date : 03-13-2012
+-- Modified Date : 03-20-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonTimeEntriesSummary]
 (
@@ -29,12 +29,12 @@ BEGIN
 	  INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
 	  INNER JOIN dbo.Calendar C ON C.Date BETWEEN MPE.StartDate AND MPE.EndDate
 	  WHERE MP.PersonId = @PersonId 
-			AND C.Date BETWEEN @StartDate AND @EndDate
+			AND C.Date BETWEEN @StartDate AND @EndDate 
 	  GROUP BY M.ProjectId,
 			   C.Date
 	)
-
-	SELECT  PRO.Name AS ProjectName,
+	SELECT  PRO.ProjectId,
+			PRO.Name AS ProjectName,
 			ROUND(SUM(CASE WHEN TEH.IsChargeable = 1 THEN TEH.ActualHours 
 					 ELSE 0 
 				END),2) AS BillableHours,
@@ -49,12 +49,12 @@ BEGIN
 			PRO.ProjectNumber,
 			C.Name AS  ClientName
 	FROM dbo.TimeEntry AS TE 
-	JOIN dbo.TimeEntryHours AS TEH  ON TEH.TimeEntryId = TE.TimeEntryId 
-	JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
-	JOIN dbo.Client C ON CC.ClientId = C.ClientId
-	JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
+	INNER JOIN dbo.TimeEntryHours AS TEH  ON TEH.TimeEntryId = TE.TimeEntryId 
+	INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
+	INNER JOIN dbo.Client C ON CC.ClientId = C.ClientId
+	INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
 	LEFT JOIN PersonDayBillratesByProjects PDBR ON PDBR.ProjectId = CC.ProjectId 
-													AND TE.ChargeCodeDate = PDBR.Date
+							AND TE.ChargeCodeDate = PDBR.Date
 	WHERE TE.PersonId = @PersonId 
 		AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate
 	GROUP BY PRO.ProjectId,
@@ -64,3 +64,4 @@ BEGIN
 	ORDER BY PRO.Name
 END	
 	
+
