@@ -73,55 +73,53 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
-            
+
             StringBuilder sb = new StringBuilder();
-            sb.Append(HostingPage.SelectedPersonName);
-            sb.Append(",");
+            sb.Append(HttpUtility.HtmlEncode(HostingPage.SelectedPersonName));
+            sb.Append("\t");
             sb.Append(HostingPage.StartDate.ToString("MM/dd/yyyy") + " - " + HostingPage.EndDate.ToString("MM/dd/yyyy"));
-            sb.Append(",");
-            
+            sb.Append("\t");
+            sb.AppendLine();
+
             //Header
             sb.Append("Client");
-            sb.Append(",");
+            sb.Append("\t");
             sb.Append("Project Number");
-            sb.Append(",");
+            sb.Append("\t");
             sb.Append("Project Name");
-            sb.Append(",");
+            sb.Append("\t");
             sb.Append("Billable");
-            sb.Append(",");
+            sb.Append("\t");
             sb.Append("Value");
-            sb.Append(",");
+            sb.Append("\t");
             sb.Append("Non-Billable");
-            sb.Append(",");
+            sb.Append("\t");
             sb.Append("Total");
-            sb.Append(",");
+            sb.Append("\t");
             sb.AppendLine();
-           
+
             //Data
             foreach (var timeEntriesGroupByClientAndProject in TimeEntriesGroupByClientAndProjectList)
             {
                 sb.Append(timeEntriesGroupByClientAndProject.Client.Name);
-                sb.Append(",");
+                sb.Append("\t");
                 sb.Append(timeEntriesGroupByClientAndProject.Project.ProjectNumber);
-                sb.Append(",");
+                sb.Append("\t");
                 sb.Append(timeEntriesGroupByClientAndProject.Project.Name);
-                sb.Append(",");
+                sb.Append("\t");
                 sb.Append(timeEntriesGroupByClientAndProject.BillableHours);
-                sb.Append(",");
+                sb.Append("\t");
                 sb.Append(timeEntriesGroupByClientAndProject.BillableValue);
-                sb.Append(",");
+                sb.Append("\t");
                 sb.Append(timeEntriesGroupByClientAndProject.NonBillableHours);
-                sb.Append(",");
+                sb.Append("\t");
                 sb.Append(timeEntriesGroupByClientAndProject.TotalHours);
-                sb.Append(",");
+                sb.Append("\t");
                 sb.AppendLine();
             }
 
-
-
-
+            GridViewExportUtil.Export("Person_Summary_Report.xls", sb);
         }
-
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
         {
 
@@ -130,3 +128,4 @@ namespace PraticeManagement.Controls.Reports
 
     }
 }
+
