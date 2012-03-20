@@ -918,9 +918,9 @@
                                     <asp:CustomValidator ID="cvDayTotal" runat="server" ErrorMessage="Day Total hours must be lessthan or equals to 24."
                                         OnServerValidate="cvDayTotal_ServerValidate" EnableClientScript="false" Text="*"
                                         Display="None" SetFocusOnError="true" ValidationGroup="TE" ToolTip="Day Total hours must be lessthan or equals to 24." />
-                                    <asp:CustomValidator ID="cvApprovedManager" runat="server" ErrorMessage="Approved By Manager required. Invalid entries are highlighted in red."
+                                    <asp:CustomValidator ID="cvApprovedManager" runat="server" ErrorMessage="You must select an approving Manager from the drop-down in notes entry for the highlighted entries."
                                         OnServerValidate="cvApprovedManager_ServerValidate" EnableClientScript="false" Text="*"
-                                        Display="None" SetFocusOnError="true" ValidationGroup="TE" ToolTip="Approved By Manager required. Invalid entries are highlighted in red." />
+                                        Display="None" SetFocusOnError="true" ValidationGroup="TE" ToolTip="You must select an approving Manager from the drop-down in notes entry for the highlighted entries." />
                                     <asp:ValidationSummary ID="valSumSaveTimeEntries" runat="server" ValidationGroup="TE" />
                                 </td>
                             </tr>
