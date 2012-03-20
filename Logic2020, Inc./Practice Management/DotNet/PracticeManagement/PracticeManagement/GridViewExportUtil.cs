@@ -2,6 +2,7 @@
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Text;
 
 /// <summary>
 /// 
@@ -198,6 +199,20 @@ public class GridViewExportUtil
             {
                 GridViewExportUtil.PrepareControlForExport(current);
             }
+        }
+    }
+
+    public static void Export(string fileName, StringBuilder data)
+    {
+        HttpContext.Current.Response.Clear();
+        HttpContext.Current.Response.AddHeader(
+            "content-disposition", string.Format("attachment; filename={0}", fileName));
+        HttpContext.Current.Response.ContentType = "application/ms-excel";
+
+        using (StringWriter sw = new StringWriter(data))
+        {
+            HttpContext.Current.Response.Write(sw.ToString());
+            HttpContext.Current.Response.End();
         }
     }
 
