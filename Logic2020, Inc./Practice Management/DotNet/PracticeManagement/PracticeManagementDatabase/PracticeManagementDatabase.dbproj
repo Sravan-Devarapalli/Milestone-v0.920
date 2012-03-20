@@ -4053,7 +4053,7 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetPersonTimeEntriesTotalsByPeriod.proc.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetPersonListByPayTypeIdsAndStatusIds.proc.sql">
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetPersonListBySearchKeyword.proc.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetAllPayTypes.proc.sql">
