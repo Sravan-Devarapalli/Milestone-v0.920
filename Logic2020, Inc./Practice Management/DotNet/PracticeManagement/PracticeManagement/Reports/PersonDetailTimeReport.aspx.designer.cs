@@ -13,6 +13,15 @@ namespace PraticeManagement.Reporting {
     public partial class PersonDetailTimeReport {
         
         /// <summary>
+        /// timeEntryReportHeader control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Reports.TimeEntryReportsHeader timeEntryReportHeader;
+        
+        /// <summary>
         /// LoadingProgress1 control.
         /// </summary>
         /// <remarks>
@@ -211,15 +220,6 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Literal ltrlNonBillableHours;
         
         /// <summary>
-        /// trBillable control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow trBillable;
-        
-        /// <summary>
         /// ltrlBillablePercent control.
         /// </summary>
         /// <remarks>
@@ -229,13 +229,13 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Literal ltrlBillablePercent;
         
         /// <summary>
-        /// trNonBillable control.
+        /// trBillable control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow trNonBillable;
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trBillable;
         
         /// <summary>
         /// ltrlNonBillablePercent control.
@@ -245,6 +245,15 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal ltrlNonBillablePercent;
+        
+        /// <summary>
+        /// trNonBillable control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trNonBillable;
         
         /// <summary>
         /// tblPersonViewSwitch control.
@@ -391,40 +400,31 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Button btnclose;
         
         /// <summary>
-        /// chblStatus control.
+        /// txtSearch control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBoxList chblStatus;
+        protected global::System.Web.UI.WebControls.TextBox txtSearch;
         
         /// <summary>
-        /// chblPayTypes control.
+        /// waterMarkTxtSearch control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBoxList chblPayTypes;
+        protected global::AjaxControlToolkit.TextBoxWatermarkExtender waterMarkTxtSearch;
         
         /// <summary>
-        /// btnApplyFilter control.
+        /// btnSearch control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnApplyFilter;
-        
-        /// <summary>
-        /// btnResetFilter control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnResetFilter;
+        protected global::System.Web.UI.WebControls.Button btnSearch;
         
         /// <summary>
         /// dlPersonDiv control.
@@ -436,13 +436,13 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl dlPersonDiv;
         
         /// <summary>
-        /// dlPerson control.
+        /// gvPerson control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DataList dlPerson;
+        protected global::System.Web.UI.WebControls.GridView gvPerson;
     }
 }
 
