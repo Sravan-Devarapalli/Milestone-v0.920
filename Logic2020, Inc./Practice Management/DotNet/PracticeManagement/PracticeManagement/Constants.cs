@@ -211,6 +211,7 @@ namespace PraticeManagement
             public const string GreetingUserName = "{0} {1}";
             public const string DoubleValueWithZeroPadding = "00.00";
             public const string DoubleValue = "0.00";
+            public const string CurrencyFormat = "$###,###,###,###,###,###,###";
             
         }
 
