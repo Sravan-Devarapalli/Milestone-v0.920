@@ -1077,9 +1077,9 @@ namespace PracticeManagementService
            return PersonDAL.GetCurrentActivePracticeAreaManagerList();
        }
 
-       public List<Person> GetPersonListByPayTypeIdsAndStatusIds(String payTypeIds, String statusIds)
-       { 
-            return PersonDAL.GetPersonListByPayTypeIdsAndStatusIds(payTypeIds,statusIds);
+       public List<Person> GetPersonListBySearchKeyword(String looked)
+       {
+           return PersonDAL.GetPersonListBySearchKeyword(looked);
        }
        public List<Timescale> GetAllPayTypes()
        {
