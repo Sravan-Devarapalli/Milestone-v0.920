@@ -27,8 +27,8 @@ namespace PraticeManagement.PersonService {
             "")]
         DataTransferObjects.Person[] GetCurrentActivePracticeAreaManagerList();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListByPayTypeIdsAndStatusIds", ReplyAction="http://tempuri.org/IPersonService/GetPersonListByPayTypeIdsAndStatusIdsResponse")]
-        DataTransferObjects.Person[] GetPersonListByPayTypeIdsAndStatusIds(string payTypeIds, string statusIds);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListBySearchKeyword", ReplyAction="http://tempuri.org/IPersonService/GetPersonListBySearchKeywordResponse")]
+        DataTransferObjects.Person[] GetPersonListBySearchKeyword(string looked);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetAllPayTypes", ReplyAction="http://tempuri.org/IPersonService/GetAllPayTypesResponse")]
         DataTransferObjects.Timescale[] GetAllPayTypes();
@@ -287,7 +287,7 @@ namespace PraticeManagement.PersonService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
         
-       
+      
         
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -317,8 +317,8 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetCurrentActivePracticeAreaManagerList();
         }
         
-        public DataTransferObjects.Person[] GetPersonListByPayTypeIdsAndStatusIds(string payTypeIds, string statusIds) {
-            return base.Channel.GetPersonListByPayTypeIdsAndStatusIds(payTypeIds, statusIds);
+        public DataTransferObjects.Person[] GetPersonListBySearchKeyword(string looked) {
+            return base.Channel.GetPersonListBySearchKeyword(looked);
         }
         
         public DataTransferObjects.Timescale[] GetAllPayTypes() {
