@@ -8,10 +8,29 @@ using DataTransferObjects.Reports;
 using AjaxControlToolkit;
 using System.Web.UI.HtmlControls;
 using System.Web.Script.Serialization;
+using System.Text;
 namespace PraticeManagement.Controls.Reports
 {
     public partial class PersonDetailReport : System.Web.UI.UserControl
     {
+        private PraticeManagement.Reporting.PersonDetailTimeReport HostingPage
+        {
+            get { return ((PraticeManagement.Reporting.PersonDetailTimeReport)Page); }
+        }
+
+
+        public List<TimeEntriesGroupByClientAndProject> TimeEntriesGroupByClientAndProjectList
+        {
+            get
+            {
+                return ViewState["TimeEntriesGroupByClientAndProjectList_Key_Detail"] as List<TimeEntriesGroupByClientAndProject>;
+            }
+            set
+            {
+                ViewState["TimeEntriesGroupByClientAndProjectList_Key_Detail"] = value;
+            }
+        }
+
 
         private List<KeyValuePair<string, string>> CollapsiblePanelExtenderClientIds
         {
@@ -37,6 +56,8 @@ namespace PraticeManagement.Controls.Reports
 
         public void DatabindRepepeaterProjectDetails(List<TimeEntriesGroupByClientAndProject> timeEntriesGroupByClientAndProjectList)
         {
+            TimeEntriesGroupByClientAndProjectList = timeEntriesGroupByClientAndProjectList;
+
             if (timeEntriesGroupByClientAndProjectList.Count > 0)
             {
                 divEmptyMessage.Style["display"] = "none";
@@ -130,6 +151,67 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(HttpUtility.HtmlEncode(HostingPage.SelectedPersonName));
+            sb.Append("\t");
+            sb.Append(HostingPage.StartDate.ToString("MM/dd/yyyy") + " - " + HostingPage.EndDate.ToString("MM/dd/yyyy"));
+            sb.Append("\t");
+            sb.AppendLine();
+
+            //Header
+            //Client	Project Number	Project Name	Date	Work Type	Billable hours	Non-Billable hours	Note
+            sb.Append("Client");
+            sb.Append("\t");
+            sb.Append("Project Number");
+            sb.Append("\t");
+            sb.Append("Project Name");
+            sb.Append("\t");
+            sb.Append("Date");
+            sb.Append("\t");
+            sb.Append("Work Type");
+            sb.Append("\t");
+            sb.Append("Billable hours");
+            sb.Append("\t");
+            sb.Append("Non-Billable hours");
+            sb.Append("\t");
+            sb.Append("Note");
+            sb.Append("\t");
+            sb.AppendLine();
+
+            //Data
+            foreach (var timeEntriesGroupByClientAndProject in TimeEntriesGroupByClientAndProjectList)
+            {
+
+                foreach (var byDateList in timeEntriesGroupByClientAndProject.DayTotalHours)
+                {
+
+                    foreach (var byWorkType in byDateList.DayTotalHoursList)
+                    {
+                        sb.Append(timeEntriesGroupByClientAndProject.Client.Name);
+                        sb.Append("\t");
+                        sb.Append(timeEntriesGroupByClientAndProject.Project.ProjectNumber);
+                        sb.Append("\t");
+                        sb.Append(timeEntriesGroupByClientAndProject.Project.Name);
+                        sb.Append("\t");
+                        sb.Append(byDateList.Date.ToString("MM/dd/yyyy"));
+                        sb.Append("\t");
+                        sb.Append(byWorkType.TimeType.Name);
+                        sb.Append("\t");
+                        sb.Append(byWorkType.BillableHours);
+                        sb.Append("\t");
+                        sb.Append(byWorkType.NonBillableHours);
+                        sb.Append("\t");
+                        sb.Append(byWorkType.Note);
+                        sb.Append("\t");
+                        sb.AppendLine();
+                    }
+
+
+                }
+
+            }
+
+            GridViewExportUtil.Export("Person_Detail_Report.xls", sb);
 
         }
 
