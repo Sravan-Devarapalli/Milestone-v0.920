@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.Security;
+using PraticeManagement.Controls;
 
 namespace PraticeManagement.Reporting
 {
@@ -89,6 +91,17 @@ namespace PraticeManagement.Reporting
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+            {
+                var clients = DataHelper.GetAllClientsSecure(null, true, true);
+                DataHelper.FillListDefault(ddlClients, "-- Select an Account -- ", clients as object[], false);
+            }
+        }
+
+
+        protected void txtProjectNumber_OnTextChanged(object sender, EventArgs e)
+        {
+            LoadActiveView();
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -143,7 +156,7 @@ namespace PraticeManagement.Reporting
         private void PopulateMatrixData()
         {
 
-            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResourceAndWorkType("P081100", string.Empty, string.Empty));
+            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResourceAndWorkType(txtProjectNumber.Text, string.Empty, string.Empty));
 
             ucByMatrix.DataBindResource(data);
             ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
@@ -154,7 +167,7 @@ namespace PraticeManagement.Reporting
         private void PopulateByResourceData()
         {
 
-            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource("P081100", string.Empty, string.Empty));
+            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(txtProjectNumber.Text, string.Empty, string.Empty));
 
             foreach (var personLevelGroupedHour in data)
             {
@@ -179,7 +192,7 @@ namespace PraticeManagement.Reporting
 
         private void PopulateByWorkTypeData()
         {
-            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType("P081100", string.Empty, string.Empty));
+            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType(txtProjectNumber.Text, string.Empty, string.Empty));
 
             foreach (var personLevelGroupedHour in data)
             {
@@ -201,6 +214,57 @@ namespace PraticeManagement.Reporting
             ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
             ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
 
+        }
+
+        protected void ddlClients_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListItem firstItem = new ListItem("-- Select a Project --", string.Empty);
+            ddlProjects.Items.Clear();
+            ddlProjects.Enabled = false;
+            if (ddlClients.SelectedIndex != 0)
+            {
+                ddlProjects.Enabled = true;
+
+                int? clientId = Convert.ToInt32(ddlClients.SelectedItem.Value);
+                //  If current user is administrator, don't apply restrictions
+                //bool isUserAdministrator = Roles.IsUserInRole(DataHelper.CurrentPerson.Alias, DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+                ////  adding SeniorLeadership role as per #2930.
+                //bool isUserSeniorLeadership = Roles.IsUserInRole(DataHelper.CurrentPerson.Alias, DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);
+
+                //int? personId = (isUserAdministrator || isUserSeniorLeadership) ? null : DataHelper.CurrentPerson.Id;
+                var projects = DataHelper.GetTimeEntryProjectsByClientId(clientId, null, false);
+
+                ListItem[] items = projects.Select(
+                                                     project => new ListItem(
+                                                                             project.Name + " - " + project.ProjectNumber,
+                                                                             project.ProjectNumber.ToString()
+                                                                            )
+                                                   ).ToArray();
+                ddlProjects.Items.Add(firstItem);
+                ddlProjects.Items.AddRange(items);
+            }
+            else
+            {
+                ddlProjects.Items.Add(firstItem);
+            }
+
+            mpeProjectSearch.Show();
+        }
+
+        protected void ddlProjects_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ddlProjects.SelectedValue != string.Empty)
+            {
+                var projectNumber = ddlProjects.SelectedItem.Value;
+
+                txtProjectNumber.Text = projectNumber;
+                LoadActiveView();
+                ddlProjects.SelectedIndex = ddlClients.SelectedIndex = 0;
+            }
+            else
+            {
+                mpeProjectSearch.Show();
+            }
         }
     }
 }
