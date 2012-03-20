@@ -294,7 +294,7 @@ namespace PraticeManagement.Controls.TimeEntry
         {
             if (IsPTO || IsHoliday)
             {
-                return "textLeft padLeft30";
+                return "textLeft padLeft3P";
             }
             return "textCenter";
         }
