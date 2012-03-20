@@ -17,6 +17,22 @@ namespace DataTransferObjects.Reports
             set;
         }
 
+
+        public double NonBillableHours
+        {
+            get
+            {
+                if (DayTotalHoursList != null)
+                {
+                    return DayTotalHoursList.Sum(d => d.NonBillableHours);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
         public double TotalHours
         {
             get
