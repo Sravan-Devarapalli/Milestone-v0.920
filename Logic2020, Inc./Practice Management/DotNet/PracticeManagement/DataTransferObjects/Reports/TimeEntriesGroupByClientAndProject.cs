@@ -42,23 +42,19 @@ namespace DataTransferObjects.Reports
             set;
         }
 
+        public int ProjectTotalHoursPercent
+        {
+            get;
+            set;
+        }
 
-        public int BillablePercent
+        public int TotalHoursPercentExceptThisProject
         {
             get
             {
-                return Utils.Generic.GetBillablePercentage(BillableHours, NonBillableHours); 
+                return 100 - ProjectTotalHoursPercent;
             }
         }
-
-        public int NonBillablePercent
-        {
-            get
-            {
-                return (100 - BillablePercent);
-            }
-        }
-
 
         public double TotalHours
         {
