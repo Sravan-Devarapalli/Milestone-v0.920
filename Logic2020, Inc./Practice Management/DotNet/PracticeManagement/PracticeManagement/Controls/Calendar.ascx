@@ -598,7 +598,7 @@
                                 BehaviorID="mpeAddTimeOff" CancelControlID="btnCancelTimeOff" />
                             <asp:Panel ID="pnlAddTimeOff" runat="server" BackColor="White" BorderColor="Black"
                                 CssClass="ConfirmBoxClassError" Style="display: none;" BorderWidth="2px" min-Height="270px"
-                                max-Height="500px" Width="380px">
+                                max-Height="500px" min-Width="380px" max--Width="500px">
                                 <table class="calendarPopup">
                                     <tr>
                                         <td colspan="3" style="height: 20px;">
@@ -686,8 +686,8 @@
                                         <td colspan="3" class="padLeft60 textLeft">
                                             <asp:DropDownList ID="ddlApprovedManagers" runat="server" CssClass="ApprovedManagerDropdown" onchange="btnDeleteTimeOffDisable();"></asp:DropDownList>
                                             <asp:CustomValidator ID="cvApprovedManagers" runat="server" ValidateEmptyText="false"
-                                                ValidationGroup="TimeOff" ErrorMessage="Manager is required."
-                                                Text="*" ToolTip="Manager is required." OnServerValidate="cvApprovedManagers_OnServerValidate" />
+                                                ValidationGroup="TimeOff" ErrorMessage="You must select an approving Manager from the drop-down above."
+                                                Text="*" ToolTip="You must select an approving Manager from the drop-down above." OnServerValidate="cvApprovedManagers_OnServerValidate" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -753,7 +753,7 @@
                                 BehaviorID="mpeEditSingleDay" CancelControlID="btnCancelEditSingleDay" />
                             <asp:Panel ID="pnlEditSingleDay" runat="server" BackColor="White" BorderColor="Black"
                                 CssClass="ConfirmBoxClassError" Style="display: none;" BorderWidth="2px" min-Height="230px"
-                                max-Height="500px" Width="320px">
+                                max-Height="500px" min-Width="320px" max-Width="500px">
                                 <table class="calendarPopup">
                                     <tr>
                                         <td colspan="3" class="height20P">
@@ -789,8 +789,8 @@
                                         <td colspan="3" class="padLeft60 textLeft">
                                             <asp:DropDownList ID="ddlSingleDayApprovedManagers" CssClass="ApprovedManagerDropdown" runat="server" onchange="btnDeleteTimeOffDisable();"></asp:DropDownList>
                                             <asp:CustomValidator ID="cvSingleDayApprovedManagers" runat="server" ValidateEmptyText="false"
-                                                ValidationGroup="SingleDay" ErrorMessage="Manager is required."
-                                                Text="*" ToolTip="Manager is required." OnServerValidate="cvSingleDayApprovedManagers_OnServerValidate" />
+                                                ValidationGroup="SingleDay" ErrorMessage="You must select an approving Manager from the drop-down above."
+                                                Text="*" ToolTip="You must select an approving Manager from the drop-down above." OnServerValidate="cvSingleDayApprovedManagers_OnServerValidate" />
                                         </td>
                                     </tr>
                                     <tr>
