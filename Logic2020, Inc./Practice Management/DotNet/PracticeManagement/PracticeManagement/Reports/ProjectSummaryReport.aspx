@@ -77,6 +77,13 @@
             width: 152px;
         }
     </style>
+    <script src="../Scripts/sorttable.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+        function btnClose_OnClientClick(popup) {
+            $find(popup).hide();
+            return false;
+        }
+    </script>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
@@ -84,7 +91,76 @@
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
-            <br />
+            <table style="width: 100%;">
+                <tr>
+                    <td style="width:33%;">
+                        &nbsp;
+                    </td>
+                    <td style="width:34%;" align="center" style="text-align: center;">
+                        <table class="PaddingTenPx" >
+                            <tr>
+                                <td>
+                                    Project Number:
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="txtProjectNumber" AutoPostBack="true" OnTextChanged="txtProjectNumber_OnTextChanged"
+                                        runat="server"></asp:TextBox>
+                                </td>
+                                <td>
+                                    <asp:Image ID="imgProjectSearch" runat="server" ToolTip="Project Search" ImageUrl="~/Images/search_24.png" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="width:33%;">
+                        &nbsp;
+                    </td>
+                </tr>
+            </table>
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeProjectSearch" runat="server" TargetControlID="imgProjectSearch"
+                CancelControlID="btnclose" BackgroundCssClass="modalBackground" PopupControlID="pnlProjectSearch"
+                BehaviorID="mpeProjectSearch" DropShadow="false" />
+            <asp:Panel ID="pnlProjectSearch" runat="server" BackColor="White" BorderColor="Black"
+                Style="display: none;" BorderWidth="2px" Width="350px">
+                <table width="100%" class="ProjectSearchPopup">
+                    <tr>
+                        <th align="center" style="text-align: center; background-color: Gray;" valign="bottom"
+                            colspan="2">
+                            <b style="font-size: 14px; padding-top: 2px;">Project Search</b>
+                            <asp:Button ID="btnclose" runat="server" CssClass="mini-report-close" ToolTip="Close"
+                                Style="float: right;" OnClientClick="return btnClose_OnClientClick('mpeProjectSearch');"
+                                Text="X"></asp:Button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            Account
+                        </td>
+                        <td>
+                            <asp:DropDownList ID="ddlClients" runat="server" Width="250" OnSelectedIndexChanged="ddlClients_OnSelectedIndexChanged"
+                                AutoPostBack="true">
+                            </asp:DropDownList>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Project
+                        </td>
+                        <td>
+                            <asp:DropDownList ID="ddlProjects" runat="server" Enabled="false" AutoPostBack="true"
+                                Width="250" OnSelectedIndexChanged="ddlProjects_OnSelectedIndexChanged">
+                                <asp:ListItem Text="-- Select a Project --" Value=""></asp:ListItem>
+                            </asp:DropDownList>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
             <hr />
             <table style="width: 100%;">
                 <tr>
