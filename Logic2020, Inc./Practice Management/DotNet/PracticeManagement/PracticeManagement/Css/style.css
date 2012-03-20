@@ -2457,6 +2457,12 @@ end pixcel
 {
   padding-left: 40px;
 }
+
+.padLeft3P
+{
+  padding-left: 3%;
+}
+
 .White
 {
     background-color:White;
@@ -2538,7 +2544,7 @@ TABLE.PersonSummaryReport TD
 {
   padding: 2px 2px 2px 2px;
   border:1px solid black;
-  text-align:right;
+  text-align:center;
 }
 TABLE.PersonSummaryReport TH
 {
@@ -2556,9 +2562,26 @@ TABLE.TdLevelNoBorder TD
  border:0px solid black;
  padding: 0px 0px 0px 0px;
 }
+
 TABLE.TdLevelNoBorder TH
 {
   border:0px solid black;
   padding: 2px 0px 2px 0px;
   
-}     
+}
+TABLE.TimeEntruReportHeader
+{
+    width:100%;
+}
+
+TABLE.TimeEntruReportHeader TH
+{
+    border:1px solid black;
+    height:30px;
+    font-size:15px;
+    vertical-align:middle;
+    width:33%;
+}
+
+ 
+
