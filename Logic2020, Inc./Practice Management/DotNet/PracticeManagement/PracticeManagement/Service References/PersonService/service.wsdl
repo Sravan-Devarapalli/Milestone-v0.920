@@ -30,11 +30,11 @@
   <wsdl:message name="IPersonService_GetCurrentActivePracticeAreaManagerList_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetCurrentActivePracticeAreaManagerListResponse" />
   </wsdl:message>
-  <wsdl:message name="IPersonService_GetPersonListByPayTypeIdsAndStatusIds_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonListByPayTypeIdsAndStatusIds" />
+  <wsdl:message name="IPersonService_GetPersonListBySearchKeyword_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonListBySearchKeyword" />
   </wsdl:message>
-  <wsdl:message name="IPersonService_GetPersonListByPayTypeIdsAndStatusIds_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonListByPayTypeIdsAndStatusIdsResponse" />
+  <wsdl:message name="IPersonService_GetPersonListBySearchKeyword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonListBySearchKeywordResponse" />
   </wsdl:message>
   <wsdl:message name="IPersonService_GetAllPayTypes_InputMessage">
     <wsdl:part name="parameters" element="tns:GetAllPayTypes" />
@@ -490,9 +490,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetCurrentActivePracticeAreaManagerList" message="tns:IPersonService_GetCurrentActivePracticeAreaManagerList_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetCurrentActivePracticeAreaManagerListResponse" message="tns:IPersonService_GetCurrentActivePracticeAreaManagerList_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetPersonListByPayTypeIdsAndStatusIds">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonListByPayTypeIdsAndStatusIds" message="tns:IPersonService_GetPersonListByPayTypeIdsAndStatusIds_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonListByPayTypeIdsAndStatusIdsResponse" message="tns:IPersonService_GetPersonListByPayTypeIdsAndStatusIds_OutputMessage" />
+    <wsdl:operation name="GetPersonListBySearchKeyword">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonListBySearchKeyword" message="tns:IPersonService_GetPersonListBySearchKeyword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonListBySearchKeywordResponse" message="tns:IPersonService_GetPersonListBySearchKeyword_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetAllPayTypes">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetAllPayTypes" message="tns:IPersonService_GetAllPayTypes_InputMessage" />
@@ -817,8 +817,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetPersonListByPayTypeIdsAndStatusIds">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonListByPayTypeIdsAndStatusIds" style="document" />
+    <wsdl:operation name="GetPersonListBySearchKeyword">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonListBySearchKeyword" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
