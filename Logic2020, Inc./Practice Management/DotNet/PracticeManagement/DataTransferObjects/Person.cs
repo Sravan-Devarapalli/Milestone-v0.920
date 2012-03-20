@@ -471,6 +471,14 @@ namespace DataTransferObjects
             }
         }
 
+        public string PersonFirstLastName
+        {
+            get
+            {
+                return FirstName + " " + LastName;
+            }
+        }
+
         #endregion
 
         #region Constructors
