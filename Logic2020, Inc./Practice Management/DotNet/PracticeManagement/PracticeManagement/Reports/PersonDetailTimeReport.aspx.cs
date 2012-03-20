@@ -14,6 +14,34 @@ namespace PraticeManagement.Reporting
     public partial class PersonDetailTimeReport : System.Web.UI.Page
     {
 
+        private const string ViewStateSortColumnId = "SortColumnId";
+        private const string ViewStateSortExpression = "SortExpression";
+        private const string ViewStateSortDirection = "SortDirection";
+
+        private string PrevGridViewSortExpression
+        {
+            get
+            {
+                return (string)ViewState[ViewStateSortExpression];
+            }
+            set
+            {
+                ViewState[ViewStateSortExpression] = value;
+            }
+        }
+
+        private string GridViewSortDirection
+        {
+            get
+            {
+                return (string)ViewState[ViewStateSortDirection];
+            }
+            set
+            {
+                ViewState[ViewStateSortDirection] = value;
+            }
+        }
+
         public DateTime StartDate
         {
             get
@@ -128,20 +156,8 @@ namespace PraticeManagement.Reporting
         {
             if (!IsPostBack)
             {
-                DataHelper.FillPersonList(ddlPerson, null, 1);
+                DataHelper.FillPersonList(ddlPerson, null, 1, true);
                 ddlPerson.SelectedValue = DataHelper.CurrentPerson.Id.Value.ToString();
-
-                var payTypes = ServiceCallers.Custom.Person(p => p.GetAllPayTypes());
-                chblPayTypes.DataSource = payTypes;
-                chblPayTypes.DataTextField = "Name";
-                chblPayTypes.DataValueField = "Id";
-                chblPayTypes.DataBind();
-
-                var personStatuses = ServiceCallers.Custom.PersonStatus(p => p.GetPersonStatuses());
-                chblStatus.DataSource = personStatuses;
-                chblStatus.DataTextField = "Name";
-                chblStatus.DataValueField = "Id";
-                chblStatus.DataBind();
 
                 dlPersonDiv.Visible = false;
             }
@@ -292,31 +308,26 @@ namespace PraticeManagement.Reporting
             ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValueWithZeroPadding);
             ltrlBillablePercent.Text = billablePercent.ToString();
             ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
-            ltrlTotalValue.Text = totalValue.ToString("C2");
+            ltrlTotalValue.Text = totalValue > 0 ? totalValue.ToString(Constants.Formatting.CurrencyFormat) : "$0";
 
-            if (billablePercent == 0)
+            if (billablePercent == 0 && nonBillablePercent == 0)
             {
-                trBillable.Visible = false;
-                if (nonBillablePercent == 0)
-                {
-                    trNonBillable.Visible = false;
-                }
-                else
-                {
-                    trNonBillable.Visible = true;
-                    trNonBillable.Height = "80px";
-                }
+                trBillable.Height = "1px";
+                trNonBillable.Height = "1px";
             }
             else if (billablePercent == 100)
             {
-                trBillable.Visible = true;
-                trNonBillable.Visible = false;
                 trBillable.Height = "80px";
+                trNonBillable.Height = "1px";
+            }
+            else if (billablePercent == 0 && nonBillablePercent == 100)
+            {
+                trBillable.Height = "1px";
+                trNonBillable.Height = "80px";
             }
             else
             {
                 int billablebarHeight = (int)(((float)80 / (float)100) * billablePercent);
-                trBillable.Visible = trNonBillable.Visible = true;
                 trBillable.Height = billablebarHeight.ToString() + "px";
                 trNonBillable.Height = (80 - billablebarHeight).ToString() + "px";
             }
@@ -350,31 +361,47 @@ namespace PraticeManagement.Reporting
             return person.PersonLastFirstName;
         }
 
-        protected void btnApplyFilter_OnClick(object sender, EventArgs e)
+        protected void btnSearch_OnClick(object sender, EventArgs e)
         {
-            string selectedstatueIds = GetSelectedValues(chblStatus);
-            string selectedPayTypeIds = GetSelectedValues(chblPayTypes);
-            var personList = ServiceCallers.Custom.Person(p => p.GetPersonListByPayTypeIdsAndStatusIds(selectedPayTypeIds, selectedstatueIds));
-            dlPersonDiv.Visible = true;
-            dlPerson.DataSource = personList;
-            dlPerson.DataBind();
+            string looked = txtSearch.Text;
+            if (!string.IsNullOrEmpty(looked))
+            {
+                var personList = ServiceCallers.Custom.Person(p => p.GetPersonListBySearchKeyword(looked));
+                dlPersonDiv.Visible = true;
+                gvPerson.DataSource = personList;
+                gvPerson.DataBind();
+                btnSearch.Attributes.Remove("disabled");
+            }
             mpePersonSearch.Show();
         }
 
-
-        public string GetSelectedValues(CheckBoxList chbl)
+        private string GetSortDirection()
         {
-            var res = string.Empty;
-            foreach (ListItem itm in chbl.Items)
-                if (itm.Selected)
-                {
-                    res += itm.Value + ",";
-                }
-
-            return res;
+            switch (GridViewSortDirection)
+            {
+                case "Ascending":
+                    GridViewSortDirection = "Descending";
+                    break;
+                case "Descending":
+                    GridViewSortDirection = "Ascending";
+                    break;
+            }
+            return GridViewSortDirection;
         }
 
-      
+        protected void gvPerson_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            if (PrevGridViewSortExpression != e.SortExpression)
+            {
+                PrevGridViewSortExpression = e.SortExpression;
+                GridViewSortDirection = e.SortDirection.ToString();
+            }
+            else
+            {
+                GridViewSortDirection = GetSortDirection();
+            }
+            mpePersonSearch.Show();
+        }
     }
 }
 
