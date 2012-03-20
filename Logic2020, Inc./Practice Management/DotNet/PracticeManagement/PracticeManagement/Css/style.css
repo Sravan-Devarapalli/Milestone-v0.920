@@ -2583,5 +2583,9 @@ TABLE.TimeEntruReportHeader TH
     width:33%;
 }
 
+TABLE.ProjectSearchPopup TD
+{
+    padding:10px;
+}   
  
 
