@@ -55,7 +55,7 @@ namespace DataAccess
                 {
                     var dayTotalHoursbyWorkType = new TimeEntryByWorkType()
                     {
-                        Note = reader.GetString(noteIndex),
+                        Note = !reader.IsDBNull(noteIndex) ? reader.GetString(noteIndex) : string.Empty,
                         BillableHours = reader.GetDouble(billableHoursIndex),
                         NonBillableHours = reader.GetDouble(nonBillableHoursIndex),
                         TimeType = new TimeTypeRecord()
@@ -397,7 +397,6 @@ namespace DataAccess
         {
             if (reader.HasRows)
             {
-               
                 int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
@@ -433,11 +432,9 @@ namespace DataAccess
                             IsInternal = reader.GetBoolean(isInternalColumnIndex),
                             IsAdministrative = reader.GetBoolean(isAdministrativeColumnIndex),
                             Category = reader.GetString(categoryIndex)
-                            
                         };
 
                         worktypeLGH.WorkType = tt;
-                        
                         worktypeLGH.GroupedHoursList = new List<GroupedHours>();
                         worktypeLGH.GroupedHoursList.Add(GH);
                         result.Add(worktypeLGH);
@@ -485,9 +482,6 @@ namespace DataAccess
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
                 int groupByCerteriaIndex = reader.GetOrdinal(Constants.ColumnNames.GroupByCerteria);
-                
-                
-
                 while (reader.Read())
                 {
                     int personId = reader.GetInt32(personIdIndex);
@@ -581,8 +575,6 @@ namespace DataAccess
                 int timeTypeNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeName);
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
-                
-
                 while (reader.Read())
                 {
                     int personId = reader.GetInt32(personIdIndex);
