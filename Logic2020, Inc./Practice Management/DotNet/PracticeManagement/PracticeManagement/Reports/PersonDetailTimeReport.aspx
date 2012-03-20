@@ -1,6 +1,9 @@
 ﻿<%@ Page Title="Person Detail Time Report" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="PersonDetailTimeReport.aspx.cs" Inherits="PraticeManagement.Reporting.PersonDetailTimeReport" %>
 
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
+<%@ Register Src="~/Controls/Reports/TimeEntryReportsHeader.ascx" TagPrefix="uc"
+    TagName="TimeEntryReportsHeader" %>
 <%@ Register Src="~/Controls/Reports/PersonSummaryReport.ascx" TagPrefix="uc" TagName="PersonSummaryReport" %>
 <%@ Register Src="~/Controls/Reports/PersonDetailReport.ascx" TagPrefix="uc" TagName="PersonDetailReport" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
@@ -30,32 +33,18 @@
             valSummary.style.display = 'none';
         }
         function btnClose_OnClientClick(popup) {
-            btnResetFilter_OnClientClick();
+            var dlPersonDiv = document.getElementById('<%= dlPersonDiv.ClientID %>');
+            var txtSearch = document.getElementById('<%= txtSearch.ClientID %>');
+            if (dlPersonDiv != null && dlPersonDiv != undefined) {
+                dlPersonDiv.style.display = 'none';
+            }
+            var waterMarkTxtSearch = $find('waterMarkTxtSearch');
+            waterMarkTxtSearch.set_Text('');
+            var btnSearch = document.getElementById('<%= btnSearch.ClientID %>');
+            btnSearch.setAttribute('disabled', 'disabled');
             $find(popup).hide();
             return false;
         }
-        function btnResetFilter_OnClientClick() {
-            var dlPersonDiv = document.getElementById('<%= dlPersonDiv.ClientID %>');
-            if (dlPersonDiv != null) {
-                dlPersonDiv.style.display = 'none';
-            }
-            var chblPayTypes = document.getElementById('<%= chblPayTypes.ClientID %>');
-            var chblPayTypesInputTagList = chblPayTypes.getElementsByTagName('input');
-            for (var i = 0; i < chblPayTypesInputTagList.length; i++) {
-                if (chblPayTypesInputTagList[i].type == 'checkbox') {
-                    chblPayTypesInputTagList[i].checked = false;
-                }
-            }
-            var chblStatus = document.getElementById('<%= chblStatus.ClientID %>');
-            var chblStatusInputTagList = chblStatus.getElementsByTagName('input');
-            for (var i = 0; i < chblStatusInputTagList.length; i++) {
-                if (chblStatusInputTagList[i].type == 'checkbox') {
-                    chblStatusInputTagList[i].checked = false;
-                }
-            }
-            return false;
-        }
-
         function CollapseOrExpandAll(btnExpandOrCollapseAllClientId, hdnCollapsedClientId, hdncpeExtendersIds) {
             var btn = btnExpandOrCollapseAllClientId;
             var hdnCollapsed = hdnCollapsedClientId;
@@ -98,6 +87,38 @@
                 //                }
             }
         }
+
+        function txtSearch_onkeypress(e) {
+            var keynum;
+            if (window.event) // IE8 and earlier
+            {
+                keynum = e.keyCode;
+            }
+            else if (e.which) // IE9/Firefox/Chrome/Opera/Safari
+            {
+                keynum = e.which;
+            }
+            if (keynum == 13) {
+                var btnSearch = document.getElementById('<%= btnSearch.ClientID %>');
+                btnSearch.click();
+                return false;
+            }
+            return true;
+        }
+
+        function txtSearch_onkeyup(e) {
+
+            var txtSearch = document.getElementById('<%= txtSearch.ClientID %>');
+            var btnSearch = document.getElementById('<%= btnSearch.ClientID %>');
+            if (txtSearch.value != '') {
+                btnSearch.removeAttribute('disabled');
+            }
+            else {
+                btnSearch.setAttribute('disabled', 'disabled');
+            }
+            return true;
+        }
+
     </script>
     <style>
         /* --------- Tabs for person and project details pages ------ */
@@ -176,8 +197,9 @@
         }
         .searchResult
         {
-            height: 150px;
-            overflow: auto;
+            max-height: 150px;
+            min-height: 50px;
+            overflow-y: auto;
             width: 100%;
         }
         
@@ -194,16 +216,26 @@
 
         function pageLoad() {
             SetTooltipsForallDropDowns();
+            intializeExpandAll();
         }
 
         function SetTooltipsForallDropDowns() {
             var optionList = document.getElementsByTagName('option');
-
             for (var i = 0; i < optionList.length; ++i) {
-
                 optionList[i].title = optionList[i].innerHTML;
             }
+        }
 
+        function intializeExpandAll() {
+            var panels = $("[id$='pnlProjectDetails']")
+            for (var i = 0; i < panels.length; i++) {
+                var panel = panels[i];
+                if (panel != null) {
+                    if (panel.style.height != "0px") {
+                        panel.style.height = "auto";
+                    }
+                }
+            }
         }
 
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
@@ -220,17 +252,18 @@
         }
 
     </script>
+    <uc:TimeEntryReportsHeader ID="timeEntryReportHeader" runat="server"></uc:TimeEntryReportsHeader>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
             <table width="100%">
                 <tr>
-                    <td style="width: 53%">
+                    <td style="width: 65%">
                     </td>
-                    <td style="padding-bottom: 10px;">
-                        <table width="100%">
+                    <td style="padding-bottom: 10px; text-align:center;">
+                        <table width="100%" align="center" >
                             <tr>
-                                <td style="width: 40%; text-align: right; font-weight: bold;">
+                                <td style="width: 30%; text-align: right; font-weight: bold;">
                                     Person:&nbsp;
                                 </td>
                                 <td style="text-align: left;">
@@ -252,12 +285,12 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="width: 53%">
+                    <td style="width: 65%">
                     </td>
-                    <td style="padding-bottom: 10px;">
-                        <table width="100%">
+                    <td style="padding-bottom: 10px; text-align:center;">
+                        <table width="100%" align="center">
                             <tr>
-                                <td style="text-align: right; width: 40%; font-weight: bold;">
+                                <td style="text-align: right; width: 30%; font-weight: bold;">
                                     Range:&nbsp;
                                 </td>
                                 <td style="text-align: left;">
@@ -271,14 +304,26 @@
                                         <asp:ListItem Text="Last Year" Value="-365"></asp:ListItem>
                                         <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
                                     </asp:DropDownList>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 65%">
+                    </td>
+                    <td style="padding-bottom: 10px;text-align:center;">
+                        <table width="100%" align="center">
+                            <tr>
+                                <td style="width: 30%;">
+                                </td>
+                                <td style="text-align: left;">
                                     <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnStartDateCalExtenderBehaviourId" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnEndDateCalExtenderBehaviourId" runat="server" Value="" />
-                                    &nbsp;
                                     <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
                                     <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
-                                    &nbsp;
                                 </td>
                             </tr>
                         </table>
@@ -319,80 +364,110 @@
             <br />
             <table class="PaddingTenPx" style="width: 100%;">
                 <tr>
-                    <td style="width: 54%; font-size: 18px; font-weight: bold; vertical-align: top;">
+                    <td style="font-size: 18px; font-weight: bold; vertical-align: top;">
                         <asp:Label ID="lblPersonname" runat="server"></asp:Label>
                     </td>
-                    <td style="width: 11%;">
-                        <table>
+                    <td style="text-align: right; width: 510px">
+                        <table style="table-layout: fixed; width: 100%;">
                             <tr>
-                                <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
-                                    Total Hours
+                                <td style="width: 7%;">
+                                    <table>
+                                        <tr>
+                                            <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
+                                                Total Hours
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 25px; text-align: center;">
+                                                <asp:Literal ID="ltrlTotalHours" runat="server"></asp:Literal>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td style="font-size: 25px; text-align: center;">
-                                    <asp:Literal ID="ltrlTotalHours" runat="server"></asp:Literal>
+                                <td style="width: 7%;">
+                                    <table>
+                                        <tr>
+                                            <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
+                                                Total Value
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 25px; text-align: center;">
+                                                <asp:Literal ID="ltrlTotalValue" runat="server"></asp:Literal>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="width: 7%;">
+                                    <table>
+                                        <tr>
+                                            <td style="text-align: center;">
+                                                BILLABLE
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-bottom: 5px; text-align: center;">
+                                                <asp:Literal ID="ltrlBillableHours" runat="server"></asp:Literal>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center;">
+                                                NON-BILLABLE
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center;">
+                                                <asp:Literal ID="ltrlNonBillableHours" runat="server"></asp:Literal>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="vertical-align: bottom; width: 2%; padding: 0px !important;">
+                                    <table width="100%">
+                                        <tr>
+                                            <td style="padding: 0px !important;">
+                                                <table width="100%" style="table-layout: fixed;">
+                                                    <tr>
+                                                        <td style="text-align: center;">
+                                                            <asp:Literal ID="ltrlBillablePercent" runat="server"></asp:Literal>%
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <table width="100%">
+                                                    <tr id="trBillable" runat="server" title="Billable Percentage.">
+                                                        <td style="background-color: #7FD13B; border: 1px solid Gray;">
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="vertical-align: bottom; width: 2%; padding: 0px;">
+                                    <table width="100%">
+                                        <tr>
+                                            <td style="padding: 0px !important;">
+                                                <table width="100%" style="table-layout: fixed;">
+                                                    <tr>
+                                                        <td style="text-align: center;">
+                                                            <asp:Literal ID="ltrlNonBillablePercent" runat="server"></asp:Literal>%
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <table width="100%">
+                                                    <tr id="trNonBillable" runat="server" title="Non-Billable Percentage.">
+                                                        <td style="background-color: Gray; border: 1px solid Gray;">
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="width: 2%;">
                                 </td>
                             </tr>
                         </table>
-                    </td>
-                    <td style="width: 11%;">
-                        <table>
-                            <tr>
-                                <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
-                                    Total Value
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="font-size: 25px; text-align: center;">
-                                    <asp:Literal ID="ltrlTotalValue" runat="server"></asp:Literal>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td style="width: 12%;">
-                        <table>
-                            <tr>
-                                <td>
-                                    BILLABLE
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding-bottom: 5px;">
-                                    <asp:Literal ID="ltrlBillableHours" runat="server"></asp:Literal>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    NON-BILLABLE
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <asp:Literal ID="ltrlNonBillableHours" runat="server"></asp:Literal>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td style="vertical-align: bottom; width: 4%; padding: 0px;">
-                        <table width="100%">
-                            <tr id="trBillable" runat="server" title="Billable Percentage.">
-                                <td style="text-align: center; background-color: #7FD13B; border: 1px solid Gray;">
-                                    <asp:Literal ID="ltrlBillablePercent" runat="server"></asp:Literal>%
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td style="vertical-align: bottom; width: 4%; padding: 0px;">
-                        <table width="100%">
-                            <tr id="trNonBillable" runat="server" title="Non-Billable Percentage.">
-                                <td style="text-align: center; background-color: Gray; border: 1px solid Gray;">
-                                    <asp:Literal ID="ltrlNonBillablePercent" runat="server"></asp:Literal>%
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td style="width: 5%;">
                     </td>
                 </tr>
             </table>
@@ -428,115 +503,83 @@
                 CancelControlID="btnclose" BackgroundCssClass="modalBackground" PopupControlID="pnlPersonSearch"
                 BehaviorID="mpePersonSearch" DropShadow="false" />
             <asp:Panel ID="pnlPersonSearch" runat="server" BackColor="White" BorderColor="Black"
-                Style="display: none;" BorderWidth="2px" Width="560px">
+                Style="display: none; min-height: 100px;" BorderWidth="2px" Width="400px">
                 <table width="100%" style="padding: 5px;">
                     <tr>
-                        <tr>
-                            <th align="center" style="text-align: center; background-color: Gray;" valign="bottom"
-                                colspan="5">
-                                <b style="font-size: 14px; padding-top: 2px;">Person Search</b>
-                                <asp:Button ID="btnclose" runat="server" CssClass="mini-report-close" ToolTip="Close"
-                                    Style="float: right;" OnClientClick="return btnClose_OnClientClick('mpePersonSearch');"
-                                    Text="X"></asp:Button>
-                            </th>
-                        </tr>
-                        <tr>
-                            <td style="width: 3%;">
-                            </td>
-                            <td style="text-align: center; border-bottom: 1px solid gray;">
-                                <b>Person Status</b>
-                            </td>
-                            <td style="width: 3%;">
-                            </td>
-                            <td style="text-align: center; border-bottom: 1px solid gray;">
-                                <b>Pay Type</b>
-                            </td>
-                            <td style="width: 3%;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="width: 3%;">
-                            </td>
-                            <td style="padding-left: 35px;">
-                                <asp:CheckBoxList ID="chblStatus" CssClass="PaddingRightTen" runat="server" RepeatColumns="2">
-                                </asp:CheckBoxList>
-                            </td>
-                            <td style="width: 3%;">
-                            </td>
-                            <td style="padding-left: 35px;">
-                                <asp:CheckBoxList ID="chblPayTypes" CssClass="PaddingRightTen" runat="server" RepeatColumns="2">
-                                </asp:CheckBoxList>
-                            </td>
-                            <td style="width: 3%;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="5" style="text-align: center; padding: 10px;">
-                                <asp:Button ID="btnApplyFilter" runat="server" Text="Apply Filter" OnClick="btnApplyFilter_OnClick" />
-                                <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" OnClientClick="return btnResetFilter_OnClientClick();" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="left" style="padding-left: 20px;" colspan="5">
-                                <div id="dlPersonDiv" class="searchResult" runat="server">
-                                    <asp:DataList ID="dlPerson" runat="server" Width="100%">
-                                        <HeaderTemplate>
-                                            <table class="CompPerfTable WholeWidth">
-                                                <tr class="CompPerfHeader">
-                                                    <th style="width: 20%; text-align: left;">
-                                                        <div class="ie-bg">
-                                                            Person Name
-                                                        </div>
-                                                    </th>
-                                                    <th style="width: 15%;">
-                                                        <div class="ie-bg">
-                                                            Status
-                                                        </div>
-                                                    </th>
-                                                    <th style="width: 15%;">
-                                                        <div class="ie-bg">
-                                                            PayType
-                                                        </div>
-                                                    </th>
-                                                </tr>
-                                        </HeaderTemplate>
-                                        <ItemTemplate>
-                                            <tr>
-                                                <td class="padLeft5">
-                                                    <asp:LinkButton ID="lnkPerson" OnClick="lnkPerson_OnClick" Text="<%# GetPersonFirstLastName(((DataTransferObjects.Person)Container.DataItem))  %>"
-                                                        PersonId='<%# ((DataTransferObjects.Person)Container.DataItem).Id.ToString() %>'
-                                                        runat="server"></asp:LinkButton>
-                                                </td>
-                                                <td class="textCenter">
-                                                    <%# Eval("CurrentPay.TimescaleName")%>
-                                                </td>
-                                                <td class="textCenter">
-                                                    <%# Eval("Status.Name")%>
-                                                </td>
-                                            </tr>
-                                        </ItemTemplate>
-                                        <AlternatingItemTemplate>
-                                            <tr style="background-color: #f9faff;">
-                                                <td class="padLeft5">
-                                                    <asp:LinkButton ID="lnkPerson" OnClick="lnkPerson_OnClick" Text="<%# GetPersonFirstLastName(((DataTransferObjects.Person)Container.DataItem))  %>"
-                                                        PersonId='<%# ((DataTransferObjects.Person)Container.DataItem).Id.ToString() %>'
-                                                        runat="server"></asp:LinkButton>
-                                                </td>
-                                                <td class="textCenter">
-                                                    <%# Eval("CurrentPay.TimescaleName")%>
-                                                </td>
-                                                <td class="textCenter">
-                                                    <%# Eval("Status.Name")%>
-                                                </td>
-                                            </tr>
-                                        </AlternatingItemTemplate>
-                                        <FooterTemplate>
-                                            </table>
-                                        </FooterTemplate>
-                                    </asp:DataList>
-                                </div>
-                            </td>
-                        </tr>
+                        <th align="center" style="text-align: center; background-color: Gray;" valign="baseline"
+                            colspan="2">
+                            <b style="font-size: 14px; padding-top: 2px;">Person Search</b>
+                            <asp:Button ID="btnclose" runat="server" CssClass="mini-report-close" ToolTip="Close"
+                                UseSubmitBehavior="false" Style="float: right;" OnClientClick="return btnClose_OnClientClick('mpePersonSearch');"
+                                Text="X"></asp:Button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="width: 95%; padding: 10px; padding-right: 0px;">
+                            <asp:TextBox runat="server" ID="txtSearch" Style="text-align: left; margin-right: 0px !important; width:300px;"
+                                onkeypress="return txtSearch_onkeypress(event);" onkeyup="return txtSearch_onkeyup(event);" 
+                                ></asp:TextBox>
+                            <ajaxToolkit:TextBoxWatermarkExtender ID="waterMarkTxtSearch" runat="server" TargetControlID="txtSearch"
+                                BehaviorID="waterMarkTxtSearch" WatermarkCssClass="watermarkedtext" WatermarkText="To search for a person, click here to begin typing...">
+                            </ajaxToolkit:TextBoxWatermarkExtender>
+                        </td>
+                        <td style="width: 5%; padding: 0px; padding-right: 10px;">
+                            <asp:Button ID="btnSearch" runat="server" Text="Search" OnClick="btnSearch_OnClick"
+                                disabled="disabled" UseSubmitBehavior="false" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; width: 100%;" colspan="2">
+                            <div id="dlPersonDiv" class="searchResult" runat="server">
+                                <asp:GridView ID="gvPerson" runat="server" Width="100%" OnSorting="gvPerson_Sorting"
+                                    AutoGenerateColumns="false" AllowSorting="true" CssClass="CompPerfTable WholeWidth"
+                                    EmptyDataText="No Results found." HeaderStyle-CssClass="CompPerfHeader" HeaderStyle-HorizontalAlign="Center">
+                                    <AlternatingRowStyle BackColor="#F9FAFF" />
+                                    <Columns>
+                                        <asp:TemplateField>
+                                            <HeaderTemplate>
+                                                <div class="ie-bg">
+                                                    <asp:LinkButton ID="lnkPersonName" CommandName="Sort" CommandArgument="PersonName"
+                                                        runat="server">Person Name</asp:LinkButton>
+                                                </div>
+                                            </HeaderTemplate>
+                                            <HeaderStyle Width="50%" />
+                                            <ItemTemplate>
+                                                <asp:LinkButton ID="lnkPerson" OnClick="lnkPerson_OnClick" Text="<%# GetPersonFirstLastName(((DataTransferObjects.Person)Container.DataItem))  %>"
+                                                    PersonId='<%# ((DataTransferObjects.Person)Container.DataItem).Id.ToString() %>'
+                                                    runat="server"></asp:LinkButton>
+                                            </ItemTemplate>
+                                            <ItemStyle CssClass="padLeft5" />
+                                        </asp:TemplateField>
+                                        <asp:TemplateField>
+                                            <HeaderTemplate>
+                                                <div class="ie-bg">
+                                                    <asp:LinkButton ID="lnkStatus" CommandName="Sort" CommandArgument="Status" runat="server">Status</asp:LinkButton>
+                                                </div>
+                                            </HeaderTemplate>
+                                            <HeaderStyle Width="25%" />
+                                            <ItemTemplate>
+                                                <asp:Label Text='<%# Eval("CurrentPay.TimescaleName") %>' ID="lbTimescale" runat="server"></asp:Label>
+                                            </ItemTemplate>
+                                            <ItemStyle CssClass="textCenter" />
+                                        </asp:TemplateField>
+                                        <asp:TemplateField>
+                                            <HeaderTemplate>
+                                                <div class="ie-bg">
+                                                    <asp:LinkButton ID="lnkPayType" CommandName="Sort" CommandArgument="PayType" runat="server">PayType</asp:LinkButton>
+                                                </div>
+                                            </HeaderTemplate>
+                                            <HeaderStyle Width="25%" />
+                                            <ItemTemplate>
+                                                <asp:Label Text='<%# Eval("Status.Name")%>' ID="lbStatus" runat="server"></asp:Label>
+                                            </ItemTemplate>
+                                            <ItemStyle CssClass="textCenter" />
+                                        </asp:TemplateField>
+                                    </Columns>
+                                </asp:GridView>
+                            </div>
+                        </td>
+                    </tr>
                 </table>
             </asp:Panel>
         </ContentTemplate>
