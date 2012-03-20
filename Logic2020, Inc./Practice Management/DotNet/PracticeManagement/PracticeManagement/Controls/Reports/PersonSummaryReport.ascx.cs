@@ -42,6 +42,15 @@ namespace PraticeManagement.Controls.Reports
             {
                 divEmptyMessage.Style["display"] = "none";
                 repSummary.Visible = true;
+                double grandTotal = timeEntriesGroupByClientAndProjectList.Sum(t => t.TotalHours);
+                grandTotal = Math.Round(grandTotal, 2);
+                if (grandTotal > 0)
+                {
+                    foreach (TimeEntriesGroupByClientAndProject timeEntries in timeEntriesGroupByClientAndProjectList)
+                    {
+                        timeEntries.ProjectTotalHoursPercent = Convert.ToInt32((timeEntries.TotalHours / grandTotal)*100);
+                    }
+                }
                 repSummary.DataSource = timeEntriesGroupByClientAndProjectList;
                 repSummary.DataBind();
             }
@@ -55,6 +64,11 @@ namespace PraticeManagement.Controls.Reports
         protected string GetDoubleFormat(double value)
         {
             return value.ToString(Constants.Formatting.DoubleValue);
+        }
+
+        protected string GetCurrencyFormat(double value)
+        {
+            return value > 0 ? value.ToString(Constants.Formatting.CurrencyFormat):"$0";
         }
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
