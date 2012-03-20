@@ -684,9 +684,9 @@ namespace PraticeManagement.Controls
         /// </summary>
         /// <param name="control">The control to be filled.</param>
         /// <param name="firstItemText">The text to be displayed by default.</param>
-        public static void FillPersonList(ListControl control, string firstItemText, int? statusId = null)
+        public static void FillPersonList(ListControl control, string firstItemText, int? statusId = null, bool fillWithPersonFirstLastName = false)
         {
-            FillPersonList(control, firstItemText, DateTime.MinValue, DateTime.MinValue, statusId);
+            FillPersonList(control, firstItemText, DateTime.MinValue, DateTime.MinValue, statusId, fillWithPersonFirstLastName);
         }
 
         /// <summary>
@@ -697,7 +697,7 @@ namespace PraticeManagement.Controls
         /// <param name="startDate">mileStone start date</param>
         /// <param name="endDate">mileStone end date</param>
         public static void FillPersonList(ListControl control, string firstItemText, DateTime startDate,
-                                          DateTime endDate, int? statusId = null)
+                                          DateTime endDate, int? statusId = null, bool fillWithPersonFirstLastName = false)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -707,7 +707,7 @@ namespace PraticeManagement.Controls
 
                     Array.Sort(persons);
 
-                    FillPersonList(control, firstItemText, persons, String.Empty);
+                    FillPersonList(control, firstItemText, persons, String.Empty, fillWithPersonFirstLastName);
                 }
                 catch (CommunicationException)
                 {
@@ -1153,7 +1153,7 @@ namespace PraticeManagement.Controls
         }
 
         public static void FillPersonList(ListControl control, string firstItemText, Person[] persons,
-                                           string firstItemValue)
+                                           string firstItemValue, bool fillWithPersonFirstLastName = false)
         {
             control.Items.Clear();
 
@@ -1166,14 +1166,27 @@ namespace PraticeManagement.Controls
 
             if (persons.Length > 0)
             {
-                persons = persons.OrderBy(p => p.IsStrawMan).ThenBy(p => p.PersonLastFirstName).ToArray();
+                if (fillWithPersonFirstLastName)
+                {
+                    persons = persons.OrderBy(p => p.IsStrawMan).ThenBy(p => p.PersonFirstLastName).ToArray();
+                }
+                else
+                {
+                    persons = persons.OrderBy(p => p.IsStrawMan).ThenBy(p => p.PersonLastFirstName).ToArray();
+                }
 
                 foreach (Person person in persons)
                 {
-                    var personitem = new ListItem(
-                                          person.PersonLastFirstName,
-                                          person.Id.Value.ToString());
-
+                    var personitem = new ListItem();
+                    personitem.Value = person.Id.Value.ToString();
+                    if (fillWithPersonFirstLastName)
+                    {
+                        personitem.Text = person.PersonFirstLastName;
+                    }
+                    else
+                    {
+                        personitem.Text = person.PersonLastFirstName;
+                    }
 
                     personitem.Attributes[Constants.Variables.IsStrawMan] = person.IsStrawMan.ToString().ToLowerInvariant();
                     personitem.Attributes[Constants.Variables.OptionGroup] = person.IsStrawMan ? "Strawmen" : "Persons";
