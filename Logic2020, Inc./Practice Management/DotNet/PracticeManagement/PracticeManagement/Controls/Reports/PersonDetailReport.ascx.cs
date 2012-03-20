@@ -33,12 +33,11 @@ namespace PraticeManagement.Controls.Reports
                                                             ");";
 
             btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = (hdnCollapsed.Value.ToLower() == "true") ? "Expand All" : "Collapse All";
-
         }
 
         public void DatabindRepepeaterProjectDetails(List<TimeEntriesGroupByClientAndProject> timeEntriesGroupByClientAndProjectList)
         {
-             if(timeEntriesGroupByClientAndProjectList.Count > 0)
+            if (timeEntriesGroupByClientAndProjectList.Count > 0)
             {
                 divEmptyMessage.Style["display"] = "none";
                 repProjects.Visible = btnExpandOrCollapseAll.Visible = true;
@@ -80,7 +79,6 @@ namespace PraticeManagement.Controls.Reports
             {
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 var output = jss.Serialize(CollapsiblePanelExtenderClientIds);
-
                 hdncpeExtendersIds.Value = output;
                 btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = "Collapse All";
                 hdnCollapsed.Value = "false";
@@ -103,6 +101,7 @@ namespace PraticeManagement.Controls.Reports
                 cpeDate.BehaviorID = Guid.NewGuid().ToString();
                 CollapsiblePanelDateExtenderClientIds.Add(cpeDate.BehaviorID);
 
+
                 repWorktype.DataSource = dataitem.DayTotalHoursList;
                 repWorktype.DataBind();
             }
@@ -113,9 +112,25 @@ namespace PraticeManagement.Controls.Reports
             return value.ToString(Constants.Formatting.DoubleValue);
         }
 
+        protected bool GetNonBillableImageVisibility(double nonBillableHours)
+        {
+            return nonBillableHours > 0;
+        }
+
+        protected bool GetNoteVisibility(String note)
+        {
+            if (String.IsNullOrEmpty(note))
+            {
+                return false;
+            }
+            return true;
+
+        }
+
+
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
-        { 
-        
+        {
+
         }
 
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
