@@ -2,20 +2,20 @@
     Inherits="PraticeManagement.Controls.Reports.PersonSummaryReport" %>
 <table class="WholeWidthWithHeight">
     <tr>
-        <td colspan="4" style="width: 85%;">
+        <td colspan="4" style="width: 90%;">
         </td>
-        <td style="text-align: right; width: 15%; padding-right: 5px;">
+        <td style="text-align: right; width: 10%; padding-right: 5px;">
             <table width="100%" style="text-align: right;">
                 <tr>
                     <td>
                         Export:
                     </td>
                     <td>
-                        <asp:Button ID="btnExportToExcel" runat="server" Text="Excel" OnClick="btnExportToExcel_OnClick"
+                        <asp:Button ID="btnExportToExcel" runat="server" Text="Excel" OnClick="btnExportToExcel_OnClick" UseSubmitBehavior="false"
                             ToolTip="Export To Excel" />
                     </td>
                     <td>
-                        <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick"
+                        <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick" UseSubmitBehavior="false"
                             ToolTip="Export To PDF" />
                     </td>
                 </tr>
@@ -27,7 +27,7 @@
     <HeaderTemplate>
         <table class="PersonSummaryReport" style="width: 100%;">
             <tr>
-                <th style="text-align: left; width: 25%;">
+                <th style="text-align: left; width: 35%;">
                     Project Name
                 </th>
                 <th>
@@ -42,8 +42,8 @@
                 <th>
                     Total
                 </th>
-                <th style="width: 42%;">
-                    Billable Percent of Total Hours this Period
+                <th style="width: 25%;">
+                    Percent of Total Hours this Period
                 </th>
             </tr>
     </HeaderTemplate>
@@ -66,48 +66,16 @@
                 </table>
             </td>
             <td>
-                <table class="TdLevelNoBorder" width="100%">
-                    <tr>
-                        <td style="width: 65%;">
-                            <%# GetDoubleFormat((double)Eval("BillableHours"))%>
-                        </td>
-                        <td style="width: 35%;">
-                        </td>
-                    </tr>
-                </table>
+                <%# GetDoubleFormat((double)Eval("BillableHours"))%>
             </td>
             <td>
-                <table class="TdLevelNoBorder" width="100%">
-                    <tr>
-                        <td style="width: 65%;">
-                            <%# GetDoubleFormat((double)Eval("BillableValue"))%>
-                        </td>
-                        <td style="width: 35%;">
-                        </td>
-                    </tr>
-                </table>
+                <%# GetCurrencyFormat((double)Eval("BillableValue"))%>
             </td>
             <td>
-                <table class="TdLevelNoBorder" width="100%">
-                    <tr>
-                        <td style="width: 65%;">
-                            <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
-                        </td>
-                        <td style="width: 35%;">
-                        </td>
-                    </tr>
-                </table>
+                <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
             </td>
             <td>
-                <table class="TdLevelNoBorder" width="100%">
-                    <tr>
-                        <td style="width: 65%;">
-                            <%# GetDoubleFormat((double)Eval("TotalHours"))%>
-                        </td>
-                        <td style="width: 35%;">
-                        </td>
-                    </tr>
-                </table>
+                <%# GetDoubleFormat((double)Eval("TotalHours"))%>
             </td>
             <td>
                  <table class="TdLevelNoBorder" width="100%">
@@ -117,15 +85,15 @@
                         <td style="text-align: right; width:65%">
                             <table style="border: 1px solid black; width: 100%; height: 18px; padding-left: 5px;">
                                 <tr>
-                                    <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("BillablePercent")%>%">
+                                    <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("ProjectTotalHoursPercent")%>%">
                                     </td>
-                                    <td style="background-color: White; height: 18px;" width="<%# Eval("NonBillablePercent")%>%">
+                                    <td style="background-color: White; height: 18px;" width="<%# Eval("TotalHoursPercentExceptThisProject")%>%">
                                     </td>
                                 </tr>
                             </table>
                         </td>
                         <td style="width: 15%; text-align: right; padding-left: 10px;">
-                            <%# Eval("BillablePercent")%>%
+                            <%# Eval("ProjectTotalHoursPercent")%>%
                         </td>
                         <td style="width: 10%;">
                         </td>
@@ -152,49 +120,17 @@
                     </tr>
                 </table>
             </td>
-            <td>
-                <table class="TdLevelNoBorder" width="100%">
-                    <tr>
-                        <td style="width: 65%;">
-                            <%# GetDoubleFormat((double)Eval("BillableHours"))%>
-                        </td>
-                        <td style="width: 35%;">
-                        </td>
-                    </tr>
-                </table>
+                       <td>
+     <%# GetDoubleFormat((double)Eval("BillableHours"))%>
             </td>
             <td>
-                <table class="TdLevelNoBorder" width="100%">
-                    <tr>
-                        <td style="width: 65%;">
-                            <%# GetDoubleFormat((double)Eval("BillableValue"))%>
-                        </td>
-                        <td style="width: 35%;">
-                        </td>
-                    </tr>
-                </table>
+                <%# GetCurrencyFormat((double)Eval("BillableValue"))%>
             </td>
             <td>
-                <table class="TdLevelNoBorder" width="100%">
-                    <tr>
-                        <td style="width: 65%;">
-                            <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
-                        </td>
-                        <td style="width: 35%;">
-                        </td>
-                    </tr>
-                </table>
+                <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
             </td>
             <td>
-                <table class="TdLevelNoBorder" width="100%">
-                    <tr>
-                        <td style="width: 65%;">
-                            <%# GetDoubleFormat((double)Eval("TotalHours"))%>
-                        </td>
-                        <td style="width: 35%;">
-                        </td>
-                    </tr>
-                </table>
+                <%# GetDoubleFormat((double)Eval("TotalHours"))%>
             </td>
             <td>
                 <table class="TdLevelNoBorder" width="100%">
@@ -204,15 +140,15 @@
                         <td style="text-align: right; width:65%">
                             <table style="border: 1px solid black; width: 100%; height: 18px; padding-left: 5px;">
                                 <tr>
-                                    <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("BillablePercent")%>%">
+                                    <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("ProjectTotalHoursPercent")%>%">
                                     </td>
-                                    <td style="background-color: White; height: 18px;" width="<%# Eval("NonBillablePercent")%>%">
+                                    <td style="background-color: White; height: 18px;" width="<%# Eval("TotalHoursPercentExceptThisProject")%>%">
                                     </td>
                                 </tr>
                             </table>
                         </td>
                         <td style="width: 15%; text-align: right; padding-left: 10px;">
-                            <%# Eval("BillablePercent")%>%
+                            <%# Eval("ProjectTotalHoursPercent")%>%
                         </td>
                         <td style="width: 10%;">
                         </td>
