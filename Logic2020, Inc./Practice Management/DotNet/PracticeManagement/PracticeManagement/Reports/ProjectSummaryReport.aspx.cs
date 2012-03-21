@@ -13,79 +13,6 @@ namespace PraticeManagement.Reporting
     {
         #region Properties
 
-        public Dictionary<DateTime, String> DatesList
-        {
-            get
-            {
-                var list = new Dictionary<DateTime, String>();
-
-                if (StartDate != null && EndDate != null)
-                {
-                    var days = EndDate.Value.Subtract(StartDate.Value).Days;
-                    if (days <= 7)
-                    {
-                        //Single Day.
-                        for (int day = 0; day <= days; day++)
-                        {
-                            DateTime _startDate = StartDate.Value.AddDays(day);
-                            list.Add(_startDate, _startDate.ToString("MM/dd/yyyy"));
-                        }
-                    }
-                    else if (days > 7 && days <= 31)
-                    {
-                        //Single Week.
-                        DateTime _startDate = StartDate.Value;
-                        DateTime _endDate = Utils.Calendar.WeekEndDate(_startDate);
-                        while (_startDate <= EndDate)
-                        {
-                            list.Add(_startDate, _startDate.ToString("MM/dd/yyyy") + " - " + (_endDate <= EndDate ? _endDate.ToString("MM/dd/yyyy") : EndDate.Value.ToString("MM/dd/yyyy")));
-                            _startDate = Utils.Calendar.WeekStartDate(_endDate.AddDays(1));
-                            _endDate = Utils.Calendar.WeekEndDate(_endDate.AddDays(1));
-                        }
-                    }
-                    else if (days > 31 && days <= 366)
-                    {
-                        //Single Month.
-                        DateTime _startDate = StartDate.Value;
-                        DateTime _endDate = Utils.Calendar.MonthEndDate(_startDate);
-                        while (_startDate <= EndDate)
-                        {
-                            list.Add(_startDate, _startDate.ToString("MMM - yyyy"));
-                            _startDate = Utils.Calendar.MonthStartDate(_endDate.AddDays(1));
-                            _endDate = Utils.Calendar.MonthEndDate(_endDate.AddDays(1));
-                        }
-                    }
-                    else if (days > 366)
-                    {
-                        //Single Year.
-                        DateTime _startDate = StartDate.Value;
-                        DateTime _endDate = Utils.Calendar.YearEndDate(_startDate);
-                        while (_startDate <= EndDate)
-                        {
-                            list.Add(_startDate, _startDate.ToString("yyyy"));
-                            _startDate = Utils.Calendar.YearStartDate(_endDate.AddDays(1));
-                            _endDate = Utils.Calendar.YearEndDate(_endDate.AddDays(1));
-                        }
-                    }
-                }
-
-                return list;
-            }
-        }
-
-
-        public DateTime? StartDate
-        {
-            get;
-            set;
-        }
-
-        public DateTime? EndDate
-        {
-            get;
-            set;
-        }
-
         public String ProjectNumber
         {
             get
@@ -158,10 +85,6 @@ namespace PraticeManagement.Reporting
                 {
                     PopulateByWorkTypeData();
                 }
-                else
-                {
-                    PopulateMatrixData();
-                }
             }
             else
             {
@@ -169,39 +92,16 @@ namespace PraticeManagement.Reporting
             }
         }
 
-        private void PopulateMatrixData()
-        {
-            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResourceAndWorkType(ProjectNumber, string.Empty, string.Empty));
-
-            ucByMatrix.DataBindResource(data);
-            ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
-            ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
-
-        }
+      
 
         private void PopulateByResourceData()
         {
 
-            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(ProjectNumber, string.Empty, string.Empty));
+            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(ProjectNumber));
 
-            foreach (var personLevelGroupedHour in data)
-            {
-                foreach (var item in personLevelGroupedHour.GroupedHoursList)
-                {
-                    if (StartDate == null || StartDate.Value > item.StartDate)
-                    {
-                        StartDate = item.StartDate;
-                    }
-                    if (EndDate == null || EndDate.Value < item.StartDate)
-                    {
-                        EndDate = item.StartDate;
-                    }
-                }
-            }
-
-            ucByResource.DataBindResource(data, DatesList);
-            ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
-            ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
+            ucByResource.DataBindResource(data);
+            ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileHours).ToString() : "0";
+            ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableHours).ToString() : "0";
 
         }
 
@@ -209,23 +109,8 @@ namespace PraticeManagement.Reporting
         {
             var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType(ProjectNumber, string.Empty, string.Empty));
 
-            foreach (var personLevelGroupedHour in data)
-            {
-                foreach (var item in personLevelGroupedHour.GroupedHoursList)
-                {
-                    if (StartDate == null || StartDate.Value > item.StartDate)
-                    {
-                        StartDate = item.StartDate;
-                    }
-                    if (EndDate == null || EndDate.Value < item.StartDate)
-                    {
-                        EndDate = item.StartDate;
-                    }
-                }
-            }
 
-
-            ucByWorktype.DataBindResource(data, DatesList);
+            ucByWorktype.DataBindResource(data, null);
             ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
             ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
 
