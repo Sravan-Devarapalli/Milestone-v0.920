@@ -46,7 +46,7 @@
 </script>
 <asp:HiddenField ID="hdnBillable" runat="server" />
 <asp:HiddenField ID="hdnNonBillable" runat="server" />
-<table style="width: 600px;">
+<table style="width: 600px;height:90px;">
     <tr style="height: 54px; border: 1px solid black;">
         <td valign="middle" id="billableTD" runat="server" style="text-align: center; color: Black;
             vertical-align: middle; height: 54px;">
