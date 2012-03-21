@@ -48,7 +48,7 @@ namespace PraticeManagement.Controls.Reports
                 {
                     foreach (TimeEntriesGroupByClientAndProject timeEntries in timeEntriesGroupByClientAndProjectList)
                     {
-                        timeEntries.ProjectTotalHoursPercent = Convert.ToInt32((timeEntries.TotalHours / grandTotal)*100);
+                        timeEntries.ProjectTotalHoursPercent = Convert.ToInt32((timeEntries.TotalHours / grandTotal) * 100);
                     }
                 }
                 repSummary.DataSource = timeEntriesGroupByClientAndProjectList;
@@ -68,21 +68,28 @@ namespace PraticeManagement.Controls.Reports
 
         protected string GetCurrencyFormat(double value)
         {
-            return value > 0 ? value.ToString(Constants.Formatting.CurrencyFormat):"$0";
+            return value > 0 ? value.ToString(Constants.Formatting.CurrencyFormat) : "$0";
         }
+
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            // mso-number-format:"0\.00"
+
+            int personId = HostingPage.SelectedPersonId;
+            var person = ServiceCallers.Custom.Person(p => p.GetPersonById(personId));
 
             StringBuilder sb = new StringBuilder();
-            sb.Append(HttpUtility.HtmlEncode(HostingPage.SelectedPersonName));
+            sb.Append(person.FirstName + " " + person.LastName);
             sb.Append("\t");
             sb.Append(HostingPage.StartDate.ToString("MM/dd/yyyy") + " - " + HostingPage.EndDate.ToString("MM/dd/yyyy"));
             sb.Append("\t");
             sb.AppendLine();
 
             //Header
-            sb.Append("Client");
+            sb.Append("Account");
+            sb.Append("\t");
+            sb.Append("Business Unit");
             sb.Append("\t");
             sb.Append("Project Number");
             sb.Append("\t");
@@ -103,22 +110,27 @@ namespace PraticeManagement.Controls.Reports
             {
                 sb.Append(timeEntriesGroupByClientAndProject.Client.Name);
                 sb.Append("\t");
+                sb.Append(timeEntriesGroupByClientAndProject.Project.Group.Name);
+                sb.Append("\t");
                 sb.Append(timeEntriesGroupByClientAndProject.Project.ProjectNumber);
                 sb.Append("\t");
                 sb.Append(timeEntriesGroupByClientAndProject.Project.Name);
                 sb.Append("\t");
-                sb.Append(timeEntriesGroupByClientAndProject.BillableHours);
+                sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.BillableHours));
                 sb.Append("\t");
-                sb.Append(timeEntriesGroupByClientAndProject.BillableValue);
+                sb.Append("$" + timeEntriesGroupByClientAndProject.BillableValue);
                 sb.Append("\t");
-                sb.Append(timeEntriesGroupByClientAndProject.NonBillableHours);
+                sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.NonBillableHours));
                 sb.Append("\t");
-                sb.Append(timeEntriesGroupByClientAndProject.TotalHours);
+                sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.TotalHours));
                 sb.Append("\t");
                 sb.AppendLine();
             }
 
-            GridViewExportUtil.Export("Person_Summary_Report.xls", sb);
+            //“[LastName]_[FirstName]-[“Summary” or “Detail”]-[StartOfRange]_[EndOfRange].xls”.  
+            //example :Hong-Turney_Jason-Summary-03.01.2012_03.31.2012.xlsx
+            var filename = string.Format("{0}_{1}_{2}_{3}_{4}.xls", person.LastName, person.FirstName, "Summary", HostingPage.StartDate.ToString("MM.dd.yyyy"), HostingPage.EndDate.ToString("MM.dd.yyyy"));
+            GridViewExportUtil.Export(filename, sb);
         }
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
         {
