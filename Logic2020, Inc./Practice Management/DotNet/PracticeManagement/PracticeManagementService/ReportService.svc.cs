@@ -24,7 +24,7 @@ namespace PracticeManagementService
             return ReportDAL.PersonTimeEntriesSummary(personId, startDate, endDate);
         }
 
-        public Triple<double, double, double> GetPersonTimeEntriesTotalsByPeriod(int personId, DateTime startDate, DateTime endDate)
+        public Quadruple<double, double, double, double> GetPersonTimeEntriesTotalsByPeriod(int personId, DateTime startDate, DateTime endDate)
         {
             return ReportDAL.GetPersonTimeEntriesTotalsByPeriod(personId, startDate, endDate);
         }
