@@ -42,105 +42,113 @@ namespace PraticeManagement.Reporting
             }
         }
 
-        public DateTime StartDate
+        public DateTime? StartDate
         {
             get
             {
-                var selectedVal = int.Parse(ddlPeriod.SelectedValue);
-                if (selectedVal == 0)
+                int selectedVal = 0;
+                if (int.TryParse(ddlPeriod.SelectedValue, out selectedVal))
                 {
-                    return diRange.FromDate.Value;
-                }
-                else
-                {
-                    var now = Utils.Generic.GetNowWithTimeZone();
-                    if (selectedVal > 0)
-                    {
-                        if (selectedVal == 7)
-                        {
-                            return Utils.Calendar.WeekStartDate(now);
-                        }
-                        else if (selectedVal == 30)
-                        {
-                            return Utils.Calendar.MonthStartDate(now);
-                        }
-                        else
-                        {
-                            return Utils.Calendar.YearStartDate(now);
-                        }
-
-                    }
-                    else if (selectedVal < 0)
-                    {
-                        if (selectedVal == -7)
-                        {
-                            return Utils.Calendar.LastWeekStartDate(now);
-                        }
-                        else if (selectedVal == -30)
-                        {
-                            return Utils.Calendar.LastMonthStartDate(now);
-                        }
-                        else
-                        {
-                            return Utils.Calendar.LastYearStartDate(now);
-                        }
-                    }
-                    else
+                    if (selectedVal == 0)
                     {
                         return diRange.FromDate.Value;
                     }
+                    else
+                    {
+                        var now = Utils.Generic.GetNowWithTimeZone();
+                        if (selectedVal > 0)
+                        {
+                            if (selectedVal == 7)
+                            {
+                                return Utils.Calendar.WeekStartDate(now);
+                            }
+                            else if (selectedVal == 30)
+                            {
+                                return Utils.Calendar.MonthStartDate(now);
+                            }
+                            else
+                            {
+                                return Utils.Calendar.YearStartDate(now);
+                            }
+
+                        }
+                        else if (selectedVal < 0)
+                        {
+                            if (selectedVal == -7)
+                            {
+                                return Utils.Calendar.LastWeekStartDate(now);
+                            }
+                            else if (selectedVal == -30)
+                            {
+                                return Utils.Calendar.LastMonthStartDate(now);
+                            }
+                            else
+                            {
+                                return Utils.Calendar.LastYearStartDate(now);
+                            }
+                        }
+                        else
+                        {
+                            return diRange.FromDate.Value;
+                        }
+                    }
                 }
+                return null;
             }
         }
 
-        public DateTime EndDate
+        public DateTime? EndDate
         {
             get
             {
-                var selectedVal = int.Parse(ddlPeriod.SelectedValue);
-                if (selectedVal == 0)
+                int selectedVal = 0;
+                if (int.TryParse(ddlPeriod.SelectedValue, out selectedVal))
                 {
-                    return diRange.ToDate.Value;
-                }
-                else
-                {
-                    var now = Utils.Generic.GetNowWithTimeZone();
-                    DateTime firstDay = new DateTime(now.Year, now.Month, 1);
-                    if (selectedVal > 0)
-                    {
-                        if (selectedVal == 7)
-                        {
-                            return Utils.Calendar.WeekEndDate(now);
-                        }
-                        else if (selectedVal == 30)
-                        {
-                            return Utils.Calendar.MonthEndDate(now);
-                        }
-                        else
-                        {
-                            return Utils.Calendar.YearEndDate(now);
-                        }
-                    }
-                    else if (selectedVal < 0)
-                    {
-                        if (selectedVal == -7)
-                        {
-                            return Utils.Calendar.LastWeekEndDate(now);
-                        }
-                        else if (selectedVal == -30)
-                        {
-                            return Utils.Calendar.LastMonthEndDate(now);
-                        }
-                        else
-                        {
-                            return Utils.Calendar.LastYearEndDate(now);
-                        }
-                    }
-                    else
+                    if (selectedVal == 0)
                     {
                         return diRange.ToDate.Value;
                     }
+                    else
+                    {
+                        var now = Utils.Generic.GetNowWithTimeZone();
+                        DateTime firstDay = new DateTime(now.Year, now.Month, 1);
+                        if (selectedVal > 0)
+                        {
+                            if (selectedVal == 7)
+                            {
+                                return Utils.Calendar.WeekEndDate(now);
+                            }
+                            else if (selectedVal == 30)
+                            {
+                                return Utils.Calendar.MonthEndDate(now);
+                            }
+                            else
+                            {
+                                return Utils.Calendar.YearEndDate(now);
+                            }
+                        }
+                        else if (selectedVal < 0)
+                        {
+                            if (selectedVal == -7)
+                            {
+                                return Utils.Calendar.LastWeekEndDate(now);
+                            }
+                            else if (selectedVal == -30)
+                            {
+                                return Utils.Calendar.LastMonthEndDate(now);
+                            }
+                            else
+                            {
+                                return Utils.Calendar.LastYearEndDate(now);
+                            }
+                        }
+                        else
+                        {
+                            return diRange.ToDate.Value;
+                        }
+                    }
                 }
+                return null;
             }
         }
 
@@ -167,8 +175,9 @@ namespace PraticeManagement.Reporting
         {
 
             lblPersonname.ToolTip = lblPersonname.Text = ddlPerson.SelectedItem.Text;
-            diRange.FromDate = StartDate;
-            diRange.ToDate = EndDate;
+            var now = Utils.Generic.GetNowWithTimeZone();
+            diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
+            diRange.ToDate = EndDate.HasValue ? EndDate : Utils.Calendar.WeekEndDate(now);
             lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
                     diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat),
                     diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat)
@@ -201,13 +210,7 @@ namespace PraticeManagement.Reporting
 
         protected void ddlPerson_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PopulatePersonData();
-        }
-
-        private void PopulatePersonData()
-        {
-            ddlPeriod.SelectedValue = "7";
-            LoadActiveView();
+            ddlPeriod.SelectedValue = "Please Select";
         }
 
         protected void btnCustDatesOK_Click(object sender, EventArgs e)
@@ -215,8 +218,8 @@ namespace PraticeManagement.Reporting
             Page.Validate(valSumDateRange.ValidationGroup);
             if (Page.IsValid)
             {
-                hdnStartDate.Value = StartDate.Date.ToShortDateString();
-                hdnEndDate.Value = EndDate.Date.ToShortDateString();
+                hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
+                hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
                 LoadActiveView();
             }
             else
@@ -227,13 +230,22 @@ namespace PraticeManagement.Reporting
 
         protected void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddlPeriod.SelectedValue != "0")
+
+            if (ddlPeriod.SelectedValue != "Please Select")
             {
-                LoadActiveView();
+                if (ddlPeriod.SelectedValue != "0")
+                {
+                    LoadActiveView();
+                }
+                else
+                {
+                    mpeCustomDates.Show();
+                }
             }
             else
             {
-                mpeCustomDates.Show();
+                mvPersonDetailReport.ActiveViewIndex = 0;
+                LoadActiveView();
             }
         }
 
@@ -263,38 +275,40 @@ namespace PraticeManagement.Reporting
 
         private void LoadActiveView()
         {
-            if (mvPersonDetailReport.ActiveViewIndex == 0)
+            if (StartDate.HasValue && EndDate.HasValue)
             {
-                PopulateSummaryDetails();
+                divWholePage.Style.Remove("display");
+                Quadruple<double, double, double, double> result = ServiceCallers.Custom.Report(r => r.GetPersonTimeEntriesTotalsByPeriod(SelectedPersonId, StartDate.Value, EndDate.Value));
+                PopulateTotalSection(result.First, result.Second, result.Third, result.Fourth);
+                if (mvPersonDetailReport.ActiveViewIndex == 0)
+                {
+                    PopulateSummaryDetails();
+                }
+                else
+                {
+                    PopulatePersonDetailReportDetails();
+                }
             }
             else
             {
-                PopulatePersonDetailReportDetails();
+                divWholePage.Style.Add("display", "none");
             }
         }
 
         private void PopulatePersonDetailReportDetails()
         {
-            int personId = Convert.ToInt32(ddlPerson.SelectedValue);
-            var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(personId, StartDate, EndDate)).ToList();
+            var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(SelectedPersonId, StartDate.Value, EndDate.Value)).ToList();
             ucpersonDetailReport.DatabindRepepeaterProjectDetails(list);
-            Triple<double, double, double> result = ServiceCallers.Custom.Report(r => r.GetPersonTimeEntriesTotalsByPeriod(personId, StartDate, EndDate));
-            PopulateTotalSection(result.First, result.Second, result.Third);
         }
 
         private void PopulateSummaryDetails()
         {
-            int personId = Convert.ToInt32(ddlPerson.SelectedValue);
-            var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesSummary(personId, StartDate, EndDate)).ToList();
+            var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesSummary(SelectedPersonId, StartDate.Value, EndDate.Value)).ToList();
             ucpersonSummaryReport.DatabindRepepeaterSummary(list);
-            PopulateTotalSection(list.Sum(l => l.BillableHours), list.Sum(l => l.NonBillableHours), list.Sum(l => l.BillableValue));
         }
 
-        private void PopulateTotalSection(double billableHours, double nonBillableHours, double totalValue)
+        private void PopulateTotalSection(double billableHours, double nonBillableHours, double totalValue, double utlizationPercentage)
         {
-            billableHours = Math.Round(billableHours, 2);
-            nonBillableHours = Math.Round(nonBillableHours, 2);
-            totalValue = Math.Round(totalValue, 2);
             var billablePercent = 0;
             var nonBillablePercent = 0;
             if (billableHours != 0 || nonBillableHours != 0)
@@ -303,6 +317,7 @@ namespace PraticeManagement.Reporting
                 nonBillablePercent = (100 - billablePercent);
             }
 
+            ltrlUtilization.Text = ((int)utlizationPercentage).ToString() + "%";
             ltrlBillableHours.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlNonBillableHours.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValueWithZeroPadding);
@@ -353,7 +368,8 @@ namespace PraticeManagement.Reporting
                 ddlPerson.SelectedValue = personId.ToString();
             }
 
-            PopulatePersonData();
+            ddlPeriod.SelectedValue = "Please Select";
+            LoadActiveView();
         }
 
         protected String GetPersonFirstLastName(Person person)
