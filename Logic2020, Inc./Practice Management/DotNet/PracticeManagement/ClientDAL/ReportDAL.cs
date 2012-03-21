@@ -49,7 +49,7 @@ namespace DataAccess
                 int noteIndex = reader.GetOrdinal(Constants.ColumnNames.Note);
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
-
+                int groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
 
                 while (reader.Read())
                 {
@@ -80,7 +80,11 @@ namespace DataAccess
                         {
                             Id = reader.GetInt32(projectIdIndex),
                             Name = reader.GetString(projectNameIndex),
-                            ProjectNumber = reader.GetString(projectNumberIndex)
+                            ProjectNumber = reader.GetString(projectNumberIndex),
+                            Group = new ProjectGroup()
+                            {
+                                Name = reader.GetString(groupNameIndex)
+                            }
                         }
                         ,
                         Client = new Client()
@@ -143,6 +147,7 @@ namespace DataAccess
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
                 int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
+                int groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
 
                 while (reader.Read())
                 {
@@ -153,7 +158,11 @@ namespace DataAccess
                         {
 
                             Name = reader.GetString(projectNameIndex),
-                            ProjectNumber = reader.GetString(projectNumberIndex)
+                            ProjectNumber = reader.GetString(projectNumberIndex),
+                            Group = new ProjectGroup() 
+                            {
+                                Name = reader.GetString(groupNameIndex)
+                            }
                         }
                         ,
                         Client = new Client()
