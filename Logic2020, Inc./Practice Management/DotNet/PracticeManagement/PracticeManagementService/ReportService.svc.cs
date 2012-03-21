@@ -45,19 +45,14 @@ namespace PracticeManagementService
         }
 
 
-        public List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber, string personRoleIds, string orderByCerteria)
+        public List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber)
         {
-            return ReportDAL.ProjectSummaryReportByResource(projectNumber, personRoleIds, orderByCerteria);
+            return ReportDAL.ProjectSummaryReportByResource(projectNumber);
         }
 
         public List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(string projectNumber, string timeTypeCategoryIds, string orderByCerteria)
         {
             return ReportDAL.ProjectSummaryReportByWorkType(projectNumber, timeTypeCategoryIds, orderByCerteria);
-        }
-
-        public List<PersonLevelGroupedHours> ProjectSummaryReportByResourceAndWorkType(string projectNumber, string personRoleIds, string orderByCerteria)
-        {
-            return ReportDAL.ProjectSummaryReportByResourceAndWorkType(projectNumber, personRoleIds, orderByCerteria);
         }
 
     }
