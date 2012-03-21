@@ -2,8 +2,8 @@
 -- Author:		ThulasiRam.P
 -- Create date: 03-05-2012
 -- Description: Person TimeEntries Summary By Period.
--- Updated By : Sainath CH
--- Modified Date : 03-20-2012
+-- Updated By : ThulasiRam.P
+-- Modified Date : 03-21-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonTimeEntriesSummary]
 (
@@ -34,7 +34,7 @@ BEGIN
 			   C.Date
 	)
 	SELECT  PRO.ProjectId,
-			PRO.Name AS ProjectName,
+			PRO.Name AS ProjectName, 
 			ROUND(SUM(CASE WHEN TEH.IsChargeable = 1 THEN TEH.ActualHours 
 					 ELSE 0 
 				END),2) AS BillableHours,
@@ -47,10 +47,13 @@ BEGIN
 											  )
 				),2) AS BillableValue,
 			PRO.ProjectNumber,
-			C.Name AS  ClientName
+			C.Name AS  ClientName,
+			BU.Name AS GroupName,
+			CC.TimeEntrySectionId
 	FROM dbo.TimeEntry AS TE 
 	INNER JOIN dbo.TimeEntryHours AS TEH  ON TEH.TimeEntryId = TE.TimeEntryId 
 	INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
+	INNER JOIN dbo.ProjectGroup BU ON BU.GroupId = CC.ProjectGroupId
 	INNER JOIN dbo.Client C ON CC.ClientId = C.ClientId
 	INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
 	LEFT JOIN PersonDayBillratesByProjects PDBR ON PDBR.ProjectId = CC.ProjectId 
@@ -60,8 +63,10 @@ BEGIN
 	GROUP BY PRO.ProjectId,
 			 PRO.Name,
 			 C.Name,
-			 PRO.ProjectNumber
-	ORDER BY PRO.Name
+			 PRO.ProjectNumber,
+			 BU.Name,
+			 CC.TimeEntrySectionId
+	ORDER BY CC.TimeEntrySectionId,PRO.ProjectNumber
 END	
 	
 
