@@ -285,6 +285,7 @@
             public const string GroupByCerteria = "GroupByCerteria";
             public const string BillableValue = "BillableValue";
             public const string Category = "Category";
+            public const string UtlizationPercent = "UtlizationPercent";
             
         }
 
