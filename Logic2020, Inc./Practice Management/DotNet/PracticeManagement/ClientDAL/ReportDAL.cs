@@ -180,7 +180,7 @@ namespace DataAccess
             }
         }
 
-        public static Triple<double, double, double> GetPersonTimeEntriesTotalsByPeriod(int personId, DateTime startDate, DateTime endDate)
+        public static Quadruple<double, double, double, double> GetPersonTimeEntriesTotalsByPeriod(int personId, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetPersonTimeEntriesTotalsByPeriod, connection))
@@ -194,17 +194,20 @@ namespace DataAccess
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    Triple<double, double, double> result = new Triple<double, double, double>(0d, 0d, 0d);
+                    Quadruple<double, double, double, double> result = new Quadruple<double, double, double, double>(0d, 0d, 0d, 0d);
                     if (reader.HasRows)
                     {
                         int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                         int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
                         int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
+                        int utlizationPercentIndex = reader.GetOrdinal(Constants.ColumnNames.UtlizationPercent);
+
                         while (reader.Read())
                         {
                             result.First = !reader.IsDBNull(billableHoursIndex) ? (double)reader.GetDouble(billableHoursIndex) : 0d;
-                            result.Second = !reader.IsDBNull(billableHoursIndex) ? (double)reader.GetDouble(nonBillableHoursIndex) : 0d;
-                            result.Third = !reader.IsDBNull(billableHoursIndex) ? (double)reader.GetDouble(billableValueindex) : 0d;
+                            result.Second = !reader.IsDBNull(nonBillableHoursIndex) ? (double)reader.GetDouble(nonBillableHoursIndex) : 0d;
+                            result.Third = !reader.IsDBNull(billableValueindex) ? (double)reader.GetDouble(billableValueindex) : 0d;
+                            result.Fourth = !reader.IsDBNull(utlizationPercentIndex) ? (int)reader.GetDouble(utlizationPercentIndex) : 0d;
                         }
                     }
                     return result;
