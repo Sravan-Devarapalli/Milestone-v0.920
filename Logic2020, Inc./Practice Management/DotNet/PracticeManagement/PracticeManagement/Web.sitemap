@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
   <siteMapNode url="" roles="*">
-    
     <siteMapNode url="~/Temp.aspx?from=toolbar"   title="Projects" description="Company Performance page" >
       <siteMapNode url="~/ProjectDetail.aspx?from=sub_toolbar"  VirtualPath="~/ProjectDetail.aspx" QuickLinkTitle="Add Project" title="Add Project" roles="Administrator, Salesperson, Practice Area Manager, Client Director, Senior Leadership" description="Add Project" ShowURL="true"  />
       <siteMapNode url="~/ProjectSearch.aspx" VirtualPath="~/ProjectSearch.aspx" QuickLinkTitle="Project Search" title="Search" description="Project Search" ShowURL="true" />
@@ -9,8 +8,7 @@
       <siteMapNode url="~/GroupBy.aspx"  VirtualPath="~/GroupBy.aspx" QuickLinkTitle="Group By..."  title="Group By..."  description="Group By..." ShowURL="true"/>
       <siteMapNode url="~/RevenueGoals.aspx"  VirtualPath="~/RevenueGoals.aspx" QuickLinkTitle="Revenue Goals View"  title="Revenue Goals" description="Revenue Goals" ShowURL="true" />
       <siteMapNode url="~/ProjectCalendar.aspx" VirtualPath="~/ProjectCalendar.aspx" QuickLinkTitle="Project Calendar"  title="Project Calendar" description="Project Calendar" ShowURL="true" />
-    </siteMapNode> 
-    
+    </siteMapNode>
     <siteMapNode url="~/DiscussionReview2.aspx?from=toolbar" title="Opportunities" description="Opportunity List page" >
       <siteMapNode url="~/OpportunityDetail.aspx?from=sub_toolbar"  VirtualPath="~/OpportunityDetail.aspx" QuickLinkTitle="Add Opportunity" title="Add Opportunity" description="Add Opportunity" ShowURL="true" />
       <siteMapNode url="~/OpportunitySearch.aspx" title="Search" VirtualPath="~/OpportunitySearch.aspx" QuickLinkTitle="Opportunity Search" description="Opportunity Search" ShowURL="true" />
@@ -30,9 +28,9 @@
         <siteMapNode url="~/Reports/ConsultingDemand.aspx" title="Consulting Demand"  VirtualPath="~/Reports/ConsultingDemand.aspx" QuickLinkTitle="Consulting Demand"  description="Consulting Demand" ShowURL="true" />
         <siteMapNode url="~/Reports/PersonStats.aspx" title="Person Stats" roles="Administrator"  VirtualPath="~/Reports/PersonStats.aspx" QuickLinkTitle="Person Stats"  description="Person Stats" ShowURL="true" />
       </siteMapNode>
-<siteMapNode url="Temp.aspx?from=Time Entry" title="Time">      
-<siteMapNode url="~/Reports/PersonDetailTimeReport.aspx" title="Report"  VirtualPath="~/Reports/PersonDetailTimeReport.aspx" QuickLinkTitle="Report"  description="Report" ShowURL="true"/>
-     </siteMapNode> 
+      <siteMapNode url="Temp.aspx?from=Time Entry" title="Time">
+        <siteMapNode url="~/Reports/TimeEntryReport_new.aspx" title="Reports"  VirtualPath="~/Reports/TimeEntryReport_new.aspx" QuickLinkTitle="Reports"  description="Reports" ShowURL="true"/>
+      </siteMapNode>
     </siteMapNode>
     <siteMapNode url="~/TimeEntry_new.aspx?from=sub_toolbar" title="Time" description="Time Entry records">
       <siteMapNode url="~/TimeEntry_new.aspx" VirtualPath="~/TimeEntry_new.aspx" QuickLinkTitle="Time Entry"  title="Time Entry" description="Time Entry" ShowURL="true" />
@@ -87,7 +85,6 @@
         <siteMapNode url="~/Config/SupportLink.aspx"  VirtualPath="~/Config/SupportLink.aspx" QuickLinkTitle="Support Link"  title="Support Link" description="Support Link"  />
       </siteMapNode>
     </siteMapNode>
-
   </siteMapNode>
 </siteMap>
 
