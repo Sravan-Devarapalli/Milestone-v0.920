@@ -461,6 +461,7 @@
     <Content Include="Reports\Expenses.aspx" />
     <Content Include="Reports\PersonDetailTimeReport.aspx" />
     <Content Include="Reports\ProjectSummaryReport.aspx" />
+    <Content Include="Reports\TimeEntryReport_new.aspx" />
     <Content Include="Reports\TimePeriodSummaryReport.aspx" />
     <Content Include="RevenueGoals.aspx" />
     <Content Include="Controls\BudgetEntries.ascx" />
@@ -1677,6 +1678,13 @@
     </Compile>
     <Compile Include="Reports\ProjectSummaryReport.aspx.designer.cs">
       <DependentUpon>ProjectSummaryReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\TimeEntryReport_new.aspx.cs">
+      <DependentUpon>TimeEntryReport_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\TimeEntryReport_new.aspx.designer.cs">
+      <DependentUpon>TimeEntryReport_new.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\TimePeriodSummaryReport.aspx.cs">
       <DependentUpon>TimePeriodSummaryReport.aspx</DependentUpon>
