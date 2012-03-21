@@ -2390,6 +2390,10 @@ start percent
 {
   height:20px;    
 }
+.height30P
+{
+  height:30px;    
+}
 /*
 end percent
 */
@@ -2408,10 +2412,18 @@ start pixcel
 /*
 end pixcel
 */
-
-
-
-
+.vTop
+{
+    vertical-align:top;
+}
+.vMiddle
+{
+    vertical-align:middle;
+}
+.vBottom
+{
+    vertical-align:bottom;
+}
 .textLeft
 {
  text-align: left;
@@ -2472,6 +2484,10 @@ end pixcel
 .TextBlack
 {
     color: Black !important;
+}
+.fontBold
+{
+    font-weight:bold;
 }
 
 .f0f0f1
