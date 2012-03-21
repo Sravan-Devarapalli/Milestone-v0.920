@@ -168,6 +168,6 @@
 </asp:Repeater>
 <div id="divEmptyMessage" style="text-align: center; font-size: 15px; display: none;"
     runat="server">
-    The person has not entered Time Entries for the selected period.
+    This person has not entered Time Entries for the selected period.
 </div>
 
