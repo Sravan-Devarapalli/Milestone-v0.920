@@ -1,6 +1,6 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
+﻿<%@ Page Title="Project Summary Report" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="ProjectSummaryReport.aspx.cs" Inherits="PraticeManagement.Reporting.ProjectSummaryReport" %>
-
+<%@ Register Src="~/Controls/Reports/TimeEntryReportsHeader.ascx" TagPrefix="uc" TagName="TimeEntryReportsHeader" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <%@ Register Src="~/Controls/Reports/ProjectSummaryByResource.ascx" TagPrefix="uc"
     TagName="ByResource" %>
@@ -88,9 +88,17 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
+ <uc:TimeEntryReportsHeader id="timeEntryReportHeader" runat="server"></uc:TimeEntryReportsHeader>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
+             <table width="100%">
+                <tr>
+                    <td class="height30P vBottom fontBold">
+                        2.&nbsp;Select report parameters:
+                    </td>
+                </tr>
+            </table>
             <table style="width: 100%;">
                 <tr>
                     <td style="width:33%;">
@@ -116,6 +124,10 @@
                         &nbsp;
                     </td>
                 </tr>
+                  <tr>
+                    <td colspan="3" style="border-bottom: 3px solid black; width: 100%; padding-top:10px;">
+                    </td>
+                </tr>
             </table>
             <AjaxControlToolkit:ModalPopupExtender ID="mpeProjectSearch" runat="server" TargetControlID="imgProjectSearch"
                 CancelControlID="btnclose" BackgroundCssClass="modalBackground" PopupControlID="pnlProjectSearch"
@@ -134,7 +146,7 @@
                     </tr>
                     <tr>
                         <td>
-                            Account
+                            Account:
                         </td>
                         <td>
                             <asp:DropDownList ID="ddlClients" runat="server" Width="250" OnSelectedIndexChanged="ddlClients_OnSelectedIndexChanged"
@@ -144,7 +156,7 @@
                     </tr>
                     <tr>
                         <td>
-                            Project
+                            Project:
                         </td>
                         <td>
                             <asp:DropDownList ID="ddlProjects" runat="server" Enabled="false" AutoPostBack="true"
@@ -161,10 +173,10 @@
                     </tr>
                 </table>
             </asp:Panel>
-            <hr />
+            <div id="divWholePage" runat="server">
             <table style="width: 100%;">
                 <tr>
-                    <td align="center">
+                    <td align="center" style="padding:10px;">
                         <uc:BillableAndNonBillableGraph ID="ucBillableAndNonBillable" runat="server"></uc:BillableAndNonBillableGraph>
                     </td>
                 </tr>
@@ -214,6 +226,7 @@
                     </asp:Panel>
                 </asp:View>
             </asp:MultiView>
+            </div>
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>
