@@ -75,62 +75,65 @@ namespace PraticeManagement.Controls.Reports
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
             // mso-number-format:"0\.00"
-
-            int personId = HostingPage.SelectedPersonId;
-            var person = ServiceCallers.Custom.Person(p => p.GetPersonById(personId));
-
-            StringBuilder sb = new StringBuilder();
-            sb.Append(person.FirstName + " " + person.LastName);
-            sb.Append("\t");
-            sb.Append(HostingPage.StartDate.ToString("MM/dd/yyyy") + " - " + HostingPage.EndDate.ToString("MM/dd/yyyy"));
-            sb.Append("\t");
-            sb.AppendLine();
-
-            //Header
-            sb.Append("Account");
-            sb.Append("\t");
-            sb.Append("Business Unit");
-            sb.Append("\t");
-            sb.Append("Project Number");
-            sb.Append("\t");
-            sb.Append("Project Name");
-            sb.Append("\t");
-            sb.Append("Billable");
-            sb.Append("\t");
-            sb.Append("Value");
-            sb.Append("\t");
-            sb.Append("Non-Billable");
-            sb.Append("\t");
-            sb.Append("Total");
-            sb.Append("\t");
-            sb.AppendLine();
-
-            //Data
-            foreach (var timeEntriesGroupByClientAndProject in TimeEntriesGroupByClientAndProjectList)
+            if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-                sb.Append(timeEntriesGroupByClientAndProject.Client.Name);
+
+                int personId = HostingPage.SelectedPersonId;
+                var person = ServiceCallers.Custom.Person(p => p.GetPersonById(personId));
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append(person.FirstName + " " + person.LastName);
                 sb.Append("\t");
-                sb.Append(timeEntriesGroupByClientAndProject.Project.Group.Name);
-                sb.Append("\t");
-                sb.Append(timeEntriesGroupByClientAndProject.Project.ProjectNumber);
-                sb.Append("\t");
-                sb.Append(timeEntriesGroupByClientAndProject.Project.Name);
-                sb.Append("\t");
-                sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.BillableHours));
-                sb.Append("\t");
-                sb.Append("$" + timeEntriesGroupByClientAndProject.BillableValue);
-                sb.Append("\t");
-                sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.NonBillableHours));
-                sb.Append("\t");
-                sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.TotalHours));
+                sb.Append(HostingPage.StartDate.Value.ToString("MM/dd/yyyy") + " - " + HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
                 sb.Append("\t");
                 sb.AppendLine();
-            }
 
-            //“[LastName]_[FirstName]-[“Summary” or “Detail”]-[StartOfRange]_[EndOfRange].xls”.  
-            //example :Hong-Turney_Jason-Summary-03.01.2012_03.31.2012.xlsx
-            var filename = string.Format("{0}_{1}_{2}_{3}_{4}.xls", person.LastName, person.FirstName, "Summary", HostingPage.StartDate.ToString("MM.dd.yyyy"), HostingPage.EndDate.ToString("MM.dd.yyyy"));
-            GridViewExportUtil.Export(filename, sb);
+                //Header
+                sb.Append("Account");
+                sb.Append("\t");
+                sb.Append("Business Unit");
+                sb.Append("\t");
+                sb.Append("Project Number");
+                sb.Append("\t");
+                sb.Append("Project Name");
+                sb.Append("\t");
+                sb.Append("Billable");
+                sb.Append("\t");
+                sb.Append("Value");
+                sb.Append("\t");
+                sb.Append("Non-Billable");
+                sb.Append("\t");
+                sb.Append("Total");
+                sb.Append("\t");
+                sb.AppendLine();
+
+                //Data
+                foreach (var timeEntriesGroupByClientAndProject in TimeEntriesGroupByClientAndProjectList)
+                {
+                    sb.Append(timeEntriesGroupByClientAndProject.Client.Name);
+                    sb.Append("\t");
+                    sb.Append(timeEntriesGroupByClientAndProject.Project.Group.Name);
+                    sb.Append("\t");
+                    sb.Append(timeEntriesGroupByClientAndProject.Project.ProjectNumber);
+                    sb.Append("\t");
+                    sb.Append(timeEntriesGroupByClientAndProject.Project.Name);
+                    sb.Append("\t");
+                    sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.BillableHours));
+                    sb.Append("\t");
+                    sb.Append("$" + timeEntriesGroupByClientAndProject.BillableValue);
+                    sb.Append("\t");
+                    sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.NonBillableHours));
+                    sb.Append("\t");
+                    sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.TotalHours));
+                    sb.Append("\t");
+                    sb.AppendLine();
+                }
+
+                //“[LastName]_[FirstName]-[“Summary” or “Detail”]-[StartOfRange]_[EndOfRange].xls”.  
+                //example :Hong-Turney_Jason-Summary-03.01.2012_03.31.2012.xlsx
+                var filename = string.Format("{0}_{1}_{2}_{3}_{4}.xls", person.LastName, person.FirstName, "Summary", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
+                GridViewExportUtil.Export(filename, sb);
+            }
         }
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
         {
