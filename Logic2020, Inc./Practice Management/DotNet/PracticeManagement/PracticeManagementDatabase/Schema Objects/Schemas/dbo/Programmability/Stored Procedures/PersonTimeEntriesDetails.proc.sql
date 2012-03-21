@@ -3,8 +3,7 @@
 -- Create date: 03-05-2012
 -- Description: Person TimeEntries Details By Period.
 -- Updated by : Thulasiram.P
--- Update Date: 03-15-2012
--- Modified Date : 03-13-2012
+-- Modified Date : 03-21-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonTimeEntriesDetails]
 (
@@ -42,10 +41,12 @@ BEGIN
 				  END),2) AS BillableHours,
 			 ROUND(SUM(CASE WHEN TEH.IsChargeable = 0 THEN TEH.ActualHours 
 				      ELSE 0 
-				 END),2) AS NonBillableHours
+				 END),2) AS NonBillableHours,
+			BU.Name AS GroupName
 	  FROM dbo.TimeEntry AS TE 
 	  JOIN dbo.TimeEntryHours AS TEH  ON TEH.TimeEntryId = TE.TimeEntryId 
 	  JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
+	  INNER JOIN dbo.ProjectGroup BU ON BU.GroupId = CC.ProjectGroupId
 	  JOIN dbo.Client C ON CC.ClientId = C.ClientId
 	  JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
 	  JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId
@@ -58,7 +59,8 @@ BEGIN
 				TE.ChargeCodeDate,
 				TT.TimeTypeId,
 				TT.Name,
-				TE.Note
+				TE.Note,
+				BU.Name
 	  ORDER BY  Pro.Name,TE.ChargeCodeDate,TT.Name
 END	
 	
