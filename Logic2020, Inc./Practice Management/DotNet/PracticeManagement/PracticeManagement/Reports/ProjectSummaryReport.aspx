@@ -4,8 +4,6 @@
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <%@ Register Src="~/Controls/Reports/ProjectSummaryByResource.ascx" TagPrefix="uc"
     TagName="ByResource" %>
-<%@ Register Src="~/Controls/Reports/ProjectSummaryByMatrix.ascx" TagPrefix="uc"
-    TagName="ByMatrix" %>
 <%@ Register Src="~/Controls/Reports/ByworkType.ascx" TagPrefix="uc" TagName="ByWorkType" %>
 <%@ Register Src="~/Controls/Reports/BillableAndNonBillableGraph.ascx" TagPrefix="uc"
     TagName="BillableAndNonBillableGraph" %>
@@ -198,12 +196,6 @@
                                             OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
-                                <asp:TableCell ID="cellProject" runat="server">
-                                    <span class="bg"><span>
-                                        <asp:LinkButton ID="lnkbtnProject" runat="server" Text="Matrix" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
-                                    </span>
-                                </asp:TableCell>
                             </asp:TableRow>
                         </asp:Table>
                     </td>
@@ -218,11 +210,6 @@
                 <asp:View ID="vwProjectReport" runat="server">
                     <asp:Panel ID="pnlProjectReport" runat="server" CssClass="tab-pane WholeWidth">
                         <uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByWorkType>
-                    </asp:Panel>
-                </asp:View>
-                <asp:View ID="vwWorkTypeReport" runat="server">
-                    <asp:Panel ID="pnlWorkTypeReport" runat="server" CssClass="tab-pane WholeWidth">
-                        <uc:ByMatrix ID="ucByMatrix" runat="server"></uc:ByMatrix>
                     </asp:Panel>
                 </asp:View>
             </asp:MultiView>
