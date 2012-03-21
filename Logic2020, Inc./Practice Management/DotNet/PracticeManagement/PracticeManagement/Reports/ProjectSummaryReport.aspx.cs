@@ -86,6 +86,14 @@ namespace PraticeManagement.Reporting
             set;
         }
 
+        public String ProjectNumber
+        {
+            get
+            {
+                return txtProjectNumber.Text;
+            }
+        }
+
 
         #endregion
 
@@ -139,24 +147,31 @@ namespace PraticeManagement.Reporting
 
         private void LoadActiveView()
         {
-            if (mvProjectSummaryReport.ActiveViewIndex == 0)
+            if (!string.IsNullOrEmpty(ProjectNumber))
             {
-                PopulateByResourceData();
-            }
-            else if (mvProjectSummaryReport.ActiveViewIndex == 1)
-            {
-                PopulateByWorkTypeData();
+                divWholePage.Style.Remove("display");
+                if (mvProjectSummaryReport.ActiveViewIndex == 0)
+                {
+                    PopulateByResourceData();
+                }
+                else if (mvProjectSummaryReport.ActiveViewIndex == 1)
+                {
+                    PopulateByWorkTypeData();
+                }
+                else
+                {
+                    PopulateMatrixData();
+                }
             }
             else
             {
-                PopulateMatrixData();
+                divWholePage.Style.Add("display", "none");
             }
         }
 
         private void PopulateMatrixData()
         {
-
-            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResourceAndWorkType(txtProjectNumber.Text, string.Empty, string.Empty));
+            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResourceAndWorkType(ProjectNumber, string.Empty, string.Empty));
 
             ucByMatrix.DataBindResource(data);
             ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
@@ -167,7 +182,7 @@ namespace PraticeManagement.Reporting
         private void PopulateByResourceData()
         {
 
-            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(txtProjectNumber.Text, string.Empty, string.Empty));
+            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(ProjectNumber, string.Empty, string.Empty));
 
             foreach (var personLevelGroupedHour in data)
             {
@@ -192,7 +207,7 @@ namespace PraticeManagement.Reporting
 
         private void PopulateByWorkTypeData()
         {
-            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType(txtProjectNumber.Text, string.Empty, string.Empty));
+            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType(ProjectNumber, string.Empty, string.Empty));
 
             foreach (var personLevelGroupedHour in data)
             {
