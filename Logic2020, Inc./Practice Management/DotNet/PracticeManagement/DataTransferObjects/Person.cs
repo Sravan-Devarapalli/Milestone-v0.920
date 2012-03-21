@@ -140,6 +140,14 @@ namespace DataTransferObjects
             set;
         }
 
+
+        [DataMember]
+        public string ProjectRoleName
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Person telephone number.
         /// </summary>
