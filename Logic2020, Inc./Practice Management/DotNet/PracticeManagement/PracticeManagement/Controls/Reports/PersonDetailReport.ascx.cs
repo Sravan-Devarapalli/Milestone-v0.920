@@ -151,16 +151,21 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            int personId = HostingPage.SelectedPersonId;
+            var person = ServiceCallers.Custom.Person(p => p.GetPersonById(personId));
+
             StringBuilder sb = new StringBuilder();
-            sb.Append(HttpUtility.HtmlEncode(HostingPage.SelectedPersonName));
+            sb.Append(person.FirstName+ ", " + person.LastName);
             sb.Append("\t");
             sb.Append(HostingPage.StartDate.ToString("MM/dd/yyyy") + " - " + HostingPage.EndDate.ToString("MM/dd/yyyy"));
             sb.Append("\t");
             sb.AppendLine();
 
             //Header
-            //Client	Project Number	Project Name	Date	Work Type	Billable hours	Non-Billable hours	Note
-            sb.Append("Client");
+            //Account Business Unit	Project Number	Project Name	Date Phase	Work Type Name 	Billable hours	Non-Billable hours	Note
+            sb.Append("Account");
+            sb.Append("\t");
+            sb.Append("Business Unit");
             sb.Append("\t");
             sb.Append("Project Number");
             sb.Append("\t");
@@ -168,7 +173,9 @@ namespace PraticeManagement.Controls.Reports
             sb.Append("\t");
             sb.Append("Date");
             sb.Append("\t");
-            sb.Append("Work Type");
+            sb.Append("Phase");
+            sb.Append("\t");
+            sb.Append("Work Type Name");
             sb.Append("\t");
             sb.Append("Billable hours");
             sb.Append("\t");
@@ -189,11 +196,15 @@ namespace PraticeManagement.Controls.Reports
                     {
                         sb.Append(timeEntriesGroupByClientAndProject.Client.Name);
                         sb.Append("\t");
+                        sb.Append(timeEntriesGroupByClientAndProject.Project.Group.Name);
+                        sb.Append("\t");
                         sb.Append(timeEntriesGroupByClientAndProject.Project.ProjectNumber);
                         sb.Append("\t");
                         sb.Append(timeEntriesGroupByClientAndProject.Project.Name);
                         sb.Append("\t");
                         sb.Append(byDateList.Date.ToString("MM/dd/yyyy"));
+                        sb.Append("\t");
+                        sb.Append("01");
                         sb.Append("\t");
                         sb.Append(byWorkType.TimeType.Name);
                         sb.Append("\t");
@@ -211,7 +222,8 @@ namespace PraticeManagement.Controls.Reports
 
             }
 
-            GridViewExportUtil.Export("Person_Detail_Report.xls", sb);
+            var filename = string.Format("{0}_{1}_{2}_{3}_{4}.xls", person.LastName, person.FirstName, "Detail", HostingPage.StartDate.ToString("MM.dd.yyyy"), HostingPage.EndDate.ToString("MM.dd.yyyy"));
+            GridViewExportUtil.Export(filename, sb);
 
         }
 
