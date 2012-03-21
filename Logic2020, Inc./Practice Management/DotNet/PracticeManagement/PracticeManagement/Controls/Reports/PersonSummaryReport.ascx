@@ -11,12 +11,12 @@
                         Export:
                     </td>
                     <td>
-                        <asp:Button ID="btnExportToExcel" runat="server" Text="Excel" OnClick="btnExportToExcel_OnClick" UseSubmitBehavior="false"
-                            ToolTip="Export To Excel" />
+                        <asp:Button ID="btnExportToExcel" runat="server" Text="Excel" OnClick="btnExportToExcel_OnClick"
+                            UseSubmitBehavior="false" ToolTip="Export To Excel" />
                     </td>
                     <td>
-                        <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick" UseSubmitBehavior="false"
-                            ToolTip="Export To PDF" />
+                        <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick"
+                            UseSubmitBehavior="false" ToolTip="Export To PDF" />
                     </td>
                 </tr>
             </table>
@@ -36,7 +36,7 @@
                 <th>
                     Value
                 </th>
-                <th  style="width: 10%;">
+                <th style="width: 10%;">
                     Non-Billable
                 </th>
                 <th>
@@ -54,6 +54,8 @@
                     <tr>
                         <td style="color: Gray; padding-bottom: 3px; padding-left: 2px; text-align: left;">
                             <%# Eval("Client.Name") %>
+                            >
+                            <%# Eval("Project.Group.Name")%>
                         </td>
                     </tr>
                     <tr>
@@ -78,11 +80,11 @@
                 <%# GetDoubleFormat((double)Eval("TotalHours"))%>
             </td>
             <td>
-                 <table class="TdLevelNoBorder" width="100%">
+                <table class="TdLevelNoBorder" width="100%">
                     <tr>
                         <td style="width: 10%">
                         </td>
-                        <td style="text-align: right; width:65%">
+                        <td style="text-align: right; width: 65%">
                             <table style="border: 1px solid black; width: 100%; height: 18px; padding-left: 5px;">
                                 <tr>
                                     <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("ProjectTotalHoursPercent")%>%">
@@ -104,11 +106,13 @@
     </ItemTemplate>
     <AlternatingItemTemplate>
         <tr style="background-color: #f9faff;">
-             <td style="text-align: left;">
+            <td style="text-align: left;">
                 <table class="TdLevelNoBorder">
                     <tr>
                         <td style="color: Gray; padding-bottom: 3px; padding-left: 2px; text-align: left;">
                             <%# Eval("Client.Name") %>
+                            >
+                            <%# Eval("Project.Group.Name")%>
                         </td>
                     </tr>
                     <tr>
@@ -120,8 +124,8 @@
                     </tr>
                 </table>
             </td>
-                       <td>
-     <%# GetDoubleFormat((double)Eval("BillableHours"))%>
+            <td>
+                <%# GetDoubleFormat((double)Eval("BillableHours"))%>
             </td>
             <td>
                 <%# GetCurrencyFormat((double)Eval("BillableValue"))%>
@@ -137,7 +141,7 @@
                     <tr>
                         <td style="width: 10%">
                         </td>
-                        <td style="text-align: right; width:65%">
+                        <td style="text-align: right; width: 65%">
                             <table style="border: 1px solid black; width: 100%; height: 18px; padding-left: 5px;">
                                 <tr>
                                     <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("ProjectTotalHoursPercent")%>%">
