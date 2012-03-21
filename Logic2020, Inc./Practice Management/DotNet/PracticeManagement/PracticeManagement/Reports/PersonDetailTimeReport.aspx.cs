@@ -144,11 +144,11 @@ namespace PraticeManagement.Reporting
             }
         }
 
-        public string SelectedPersonName
+        public int SelectedPersonId
         {
             get
             {
-                return ddlPerson.SelectedItem.Text;
+                return Convert.ToInt32(ddlPerson.SelectedValue);
             }
         }
 
@@ -156,7 +156,7 @@ namespace PraticeManagement.Reporting
         {
             if (!IsPostBack)
             {
-                DataHelper.FillPersonList(ddlPerson, null, 1, true);
+                DataHelper.FillPersonList(ddlPerson, null, 1, false);
                 ddlPerson.SelectedValue = DataHelper.CurrentPerson.Id.Value.ToString();
 
                 dlPersonDiv.Visible = false;
