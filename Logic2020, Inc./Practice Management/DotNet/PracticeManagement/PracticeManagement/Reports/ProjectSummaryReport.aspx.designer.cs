@@ -175,24 +175,6 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.LinkButton lnkbtnWorkType;
         
         /// <summary>
-        /// cellProject control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TableCell cellProject;
-        
-        /// <summary>
-        /// lnkbtnProject control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkbtnProject;
-        
-        /// <summary>
         /// mvProjectSummaryReport control.
         /// </summary>
         /// <remarks>
@@ -254,33 +236,6 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Reports.ByworkType ucByWorktype;
-        
-        /// <summary>
-        /// vwWorkTypeReport control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.View vwWorkTypeReport;
-        
-        /// <summary>
-        /// pnlWorkTypeReport control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlWorkTypeReport;
-        
-        /// <summary>
-        /// ucByMatrix control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.Reports.ProjectSummaryByMatrix ucByMatrix;
     }
 }
 
