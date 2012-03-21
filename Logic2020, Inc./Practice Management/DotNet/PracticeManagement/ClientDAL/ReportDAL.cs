@@ -159,7 +159,7 @@ namespace DataAccess
 
                             Name = reader.GetString(projectNameIndex),
                             ProjectNumber = reader.GetString(projectNumberIndex),
-                            Group = new ProjectGroup() 
+                            Group = new ProjectGroup()
                             {
                                 Name = reader.GetString(groupNameIndex)
                             }
@@ -254,7 +254,7 @@ namespace DataAccess
                 while (reader.Read())
                 {
                     int personId = reader.GetInt32(personIdIndex);
-                    if (!result.Any(p => p.person.Id == personId))
+                    if (!result.Any(p => p.Person.Id == personId))
                     {
 
                         PersonLevelGroupedHours PLGH = new PersonLevelGroupedHours();
@@ -269,27 +269,27 @@ namespace DataAccess
                                                         Name = reader.GetString(personSeniorityNameIndex)
                                                     }
                                                 };
-                        PLGH.person = person;
+                        PLGH.Person = person;
                         GroupedHours GH = new GroupedHours();
                         GH.StartDate = reader.GetDateTime(startDateIndex);
                         GH.SetEnddate(reader.GetString(groupByCerteriaIndex));
                         GH.BillabileTotal = reader.GetDouble(billableHoursIndex);
                         GH.NonBillableTotal = reader.GetDouble(nonBillableHoursIndex);
 
-                        PLGH.GroupedHoursList = new List<GroupedHours>();
-                        PLGH.GroupedHoursList.Add(GH);
+                        //PLGH.GroupedHoursList = new List<GroupedHours>();
+                        //PLGH.GroupedHoursList.Add(GH);
                         result.Add(PLGH);
                     }
                     else
                     {
-                        PersonLevelGroupedHours PLGH = result.First(p => p.person.Id == personId);
+                        PersonLevelGroupedHours PLGH = result.First(p => p.Person.Id == personId);
                         GroupedHours GH = new GroupedHours();
                         GH.StartDate = reader.GetDateTime(startDateIndex);
                         GH.SetEnddate(reader.GetString(groupByCerteriaIndex));
                         GH.BillabileTotal = reader.GetDouble(billableHoursIndex);
                         GH.NonBillableTotal = reader.GetDouble(nonBillableHoursIndex);
 
-                        PLGH.GroupedHoursList.Add(GH);
+                        //PLGH.GroupedHoursList.Add(GH);
                     }
                 }
             }
@@ -460,15 +460,13 @@ namespace DataAccess
             }
         }
 
-        public static List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber, string personRoleIds, string orderByCerteria)
+        public static List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ProjectSummaryReportByResource, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectNumber, projectNumber);
-                command.Parameters.AddWithValue(Constants.ParameterNames.PersonRoleIdsParam, personRoleIds);
-                command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, !string.IsNullOrEmpty(orderByCerteria) ? orderByCerteria : (Object)DBNull.Value);
 
                 connection.Open();
 
@@ -490,45 +488,30 @@ namespace DataAccess
                 int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
                 int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
                 int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
-                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
-                int groupByCerteriaIndex = reader.GetOrdinal(Constants.ColumnNames.GroupByCerteria);
+                int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
+                int projectRoleNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectRoleName);
+
                 while (reader.Read())
                 {
                     int personId = reader.GetInt32(personIdIndex);
-                    if (!result.Any(p => p.person.Id == personId))
+
+
+                    PersonLevelGroupedHours PLGH = new PersonLevelGroupedHours();
+                    Person person = new Person
                     {
+                        Id = reader.GetInt32(personIdIndex),
+                        FirstName = reader.GetString(firstNameIndex),
+                        LastName = reader.GetString(lastNameIndex),
+                        ProjectRoleName = reader.GetString(projectRoleNameIndex)
+                    };
+                    PLGH.BillabileHours = reader.GetDouble(billableHoursIndex);
+                    PLGH.NonBillableHours = reader.GetDouble(nonBillableHoursIndex);
+                    PLGH.BillableValue = reader.GetDouble(billableValueindex);
 
-                        PersonLevelGroupedHours PLGH = new PersonLevelGroupedHours();
-                        Person person = new Person
-                        {
-                            Id = reader.GetInt32(personIdIndex),
-                            FirstName = reader.GetString(firstNameIndex),
-                            LastName = reader.GetString(lastNameIndex)
-                        };
-                        PLGH.person = person;
-                        GroupedHours GH = new GroupedHours();
-                        GH.StartDate = reader.GetDateTime(startDateIndex);
-                        GH.SetEnddate(reader.GetString(groupByCerteriaIndex));
-                        GH.BillabileTotal = reader.GetDouble(billableHoursIndex);
-                        GH.NonBillableTotal = reader.GetDouble(nonBillableHoursIndex);
-
-                        PLGH.GroupedHoursList = new List<GroupedHours>();
-                        PLGH.GroupedHoursList.Add(GH);
-                        result.Add(PLGH);
-                    }
-                    else
-                    {
-                        PersonLevelGroupedHours PLGH = result.First(p => p.person.Id == personId);
-                        GroupedHours GH = new GroupedHours();
-                        GH.StartDate = reader.GetDateTime(startDateIndex);
-                        GH.SetEnddate(reader.GetString(groupByCerteriaIndex));
-                        GH.BillabileTotal = reader.GetDouble(billableHoursIndex);
-                        GH.NonBillableTotal = reader.GetDouble(nonBillableHoursIndex);
-
-                        PLGH.GroupedHoursList.Add(GH);
-                    }
+                    PLGH.Person = person;
+                    result.Add(PLGH);
                 }
             }
         }
@@ -554,86 +537,6 @@ namespace DataAccess
             }
         }
 
-
-        public static List<PersonLevelGroupedHours> ProjectSummaryReportByResourceAndWorkType(string projectNumber, string personRoleIds, string orderByCerteria)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ProjectSummaryReportByResourceAndWorkType, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectNumber, projectNumber);
-                command.Parameters.AddWithValue(Constants.ParameterNames.PersonRoleIdsParam, personRoleIds);
-                command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, !string.IsNullOrEmpty(orderByCerteria) ? orderByCerteria : (Object)DBNull.Value);
-
-                connection.Open();
-
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    var result = new List<PersonLevelGroupedHours>();
-                    ReadProjectSummaryReportByResourceAndWorkType(reader, result);
-                    return result;
-                }
-            }
-        }
-
-        private static void ReadProjectSummaryReportByResourceAndWorkType(SqlDataReader reader, List<PersonLevelGroupedHours> result)
-        {
-            if (reader.HasRows)
-            {
-                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
-                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
-                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
-                int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
-                int timeTypeNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeName);
-                int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
-                int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
-                while (reader.Read())
-                {
-                    int personId = reader.GetInt32(personIdIndex);
-
-                    TimeTypeRecord timetype = new TimeTypeRecord()
-                    {
-                        Id = reader.GetInt32(timeTypeIdIndex),
-                        Name = reader.GetString(timeTypeNameIndex)
-
-                    };
-
-                    WorkTypeLevelGroupedHours wlgh = new WorkTypeLevelGroupedHours()
-                    {
-                        WorkType = timetype,
-                        BillabileHours = reader.GetDouble(billableHoursIndex),
-                        NonBillabileHours = reader.GetDouble(nonBillableHoursIndex)
-                    };
-
-
-                    if (!result.Any(p => p.person.Id == personId))
-                    {
-
-                        PersonLevelGroupedHours PLGH = new PersonLevelGroupedHours();
-                        Person person = new Person
-                        {
-                            Id = personId,
-                            FirstName = reader.GetString(firstNameIndex),
-                            LastName = reader.GetString(lastNameIndex)
-                        };
-
-                        PLGH.person = person;
-                        PLGH.GroupedWorkTypeHoursList = new List<WorkTypeLevelGroupedHours>() 
-                        {
-                            wlgh
-                        };
-
-                        result.Add(PLGH);
-                    }
-                    else
-                    {
-                        PersonLevelGroupedHours PLGH = result.First(p => p.person.Id == personId);
-
-                        PLGH.GroupedWorkTypeHoursList.Add(wlgh);
-                    }
-                }
-            }
-        }
     }
 }
 
