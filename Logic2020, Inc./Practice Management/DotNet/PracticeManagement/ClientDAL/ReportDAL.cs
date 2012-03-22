@@ -50,6 +50,9 @@ namespace DataAccess
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
                 int groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
+                int groupCodeIndex = reader.GetOrdinal(Constants.ColumnNames.GroupCodeColumn);
+                int clientCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ClientCodeColumn);
+                int timeTypeCodeIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeCodeColumn);
 
                 while (reader.Read())
                 {
@@ -60,7 +63,8 @@ namespace DataAccess
                         NonBillableHours = reader.GetDouble(nonBillableHoursIndex),
                         TimeType = new TimeTypeRecord()
                         {
-                            Name = reader.GetString(timeTypeNameIndex)
+                            Name = reader.GetString(timeTypeNameIndex),
+                            Code = reader.GetString(timeTypeCodeIndex)
                         }
                     };
 
@@ -83,14 +87,16 @@ namespace DataAccess
                             ProjectNumber = reader.GetString(projectNumberIndex),
                             Group = new ProjectGroup()
                             {
-                                Name = reader.GetString(groupNameIndex)
+                                Name = reader.GetString(groupNameIndex),
+                                Code = reader.GetString(groupCodeIndex)
                             }
                         }
                         ,
                         Client = new Client()
                         {
                             Id = reader.GetInt32(clientIdIndex),
-                            Name = reader.GetString(clientNameIndex)
+                            Name = reader.GetString(clientNameIndex),
+                            Code = reader.GetString(clientCodeIndex)
                         },
                         DayTotalHours = new List<TimeEntriesGroupByDate>() 
                         {
@@ -144,10 +150,13 @@ namespace DataAccess
                 int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNameColumn);
                 int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
                 int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
+               
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
                 int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
                 int groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
+                int groupCodeIndex = reader.GetOrdinal(Constants.ColumnNames.GroupCodeColumn);
+                int clientCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ClientCodeColumn);
 
                 while (reader.Read())
                 {
@@ -161,14 +170,17 @@ namespace DataAccess
                             ProjectNumber = reader.GetString(projectNumberIndex),
                             Group = new ProjectGroup()
                             {
-                                Name = reader.GetString(groupNameIndex)
+                                Name = reader.GetString(groupNameIndex),
+                                Code = reader.GetString(groupCodeIndex)
                             }
-                        }
-                        ,
+                        },
+
                         Client = new Client()
                         {
-                            Name = reader.GetString(clientNameIndex)
+                            Name = reader.GetString(clientNameIndex),
+                            Code = reader.GetString(clientCodeIndex)
                         },
+
                         BillableHours = reader.GetDouble(billableHoursIndex),
                         NonBillableHours = reader.GetDouble(nonBillableHoursIndex),
                         BillableValue = reader.GetDouble(billableValueindex)
