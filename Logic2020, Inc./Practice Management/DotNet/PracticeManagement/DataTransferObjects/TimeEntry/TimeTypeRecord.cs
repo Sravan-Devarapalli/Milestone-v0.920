@@ -22,6 +22,9 @@ namespace DataTransferObjects.TimeEntry
         public string Name { get; set; }
 
         [DataMember]
+        public string Code { get; set; }
+
+        [DataMember]
         public bool InUse { get; set; }
 
         [DataMember]
