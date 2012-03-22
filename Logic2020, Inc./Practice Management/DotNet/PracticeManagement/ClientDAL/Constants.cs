@@ -287,6 +287,9 @@
             public const string Category = "Category";
             public const string UtlizationPercent = "UtlizationPercent";
             public const string ProjectRoleName = "ProjectRoleName";
+            public const string ClientCodeColumn = "ClientCode";
+            public const string GroupCodeColumn = "GroupCode";
+            public const string TimeTypeCodeColumn = "TimeTypeCode";
             
         }
 
