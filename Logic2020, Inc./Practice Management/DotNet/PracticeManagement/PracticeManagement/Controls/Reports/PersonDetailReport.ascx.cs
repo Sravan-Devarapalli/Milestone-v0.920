@@ -159,29 +159,39 @@ namespace PraticeManagement.Controls.Reports
                 StringBuilder sb = new StringBuilder();
                 sb.Append(person.FirstName + ", " + person.LastName);
                 sb.Append("\t");
+                sb.AppendLine();
                 sb.Append(HostingPage.StartDate.Value.ToString("MM/dd/yyyy") + " - " + HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
                 sb.Append("\t");
                 sb.AppendLine();
 
                 //Header
-                //Account Business Unit	Project Number	Project Name	Date Phase	Work Type Name 	Billable hours	Non-Billable hours	Note
+                /* Account	Account Name	Business Unit	Business Unit Name	Project	Project Name	Phase	
+                Work Type	Work Type Name	Date	Billable Hours	Non-Billable Hours	Total Hours	Note */
                 sb.Append("Account");
+                sb.Append("\t");
+                sb.Append("Account Name");
                 sb.Append("\t");
                 sb.Append("Business Unit");
                 sb.Append("\t");
-                sb.Append("Project Number");
+                sb.Append("Business Unit Name");
+                sb.Append("\t");
+                sb.Append("Project");
                 sb.Append("\t");
                 sb.Append("Project Name");
                 sb.Append("\t");
-                sb.Append("Date");
-                sb.Append("\t");
                 sb.Append("Phase");
+                sb.Append("\t");
+                sb.Append("Work Type");
                 sb.Append("\t");
                 sb.Append("Work Type Name");
                 sb.Append("\t");
-                sb.Append("Billable hours");
+                sb.Append("Date");
                 sb.Append("\t");
-                sb.Append("Non-Billable hours");
+                sb.Append("Billable Hours");
+                sb.Append("\t");
+                sb.Append("Non-Billable Hours");
+                sb.Append("\t");
+                sb.Append("Total Hours");
                 sb.Append("\t");
                 sb.Append("Note");
                 sb.Append("\t");
@@ -196,7 +206,12 @@ namespace PraticeManagement.Controls.Reports
 
                         foreach (var byWorkType in byDateList.DayTotalHoursList)
                         {
+                            sb.Append(timeEntriesGroupByClientAndProject.Client.Code);
+                            sb.Append("\t");
                             sb.Append(timeEntriesGroupByClientAndProject.Client.Name);
+                            sb.Append("\t");
+
+                            sb.Append(timeEntriesGroupByClientAndProject.Project.Group.Code);
                             sb.Append("\t");
                             sb.Append(timeEntriesGroupByClientAndProject.Project.Group.Name);
                             sb.Append("\t");
@@ -204,15 +219,19 @@ namespace PraticeManagement.Controls.Reports
                             sb.Append("\t");
                             sb.Append(timeEntriesGroupByClientAndProject.Project.Name);
                             sb.Append("\t");
-                            sb.Append(byDateList.Date.ToString("MM/dd/yyyy"));
+                            sb.Append("01");//phase
                             sb.Append("\t");
-                            sb.Append("01");
+                            sb.Append(byWorkType.TimeType.Code);
                             sb.Append("\t");
                             sb.Append(byWorkType.TimeType.Name);
+                            sb.Append("\t");
+                            sb.Append(byDateList.Date.ToString("MM/dd/yyyy"));
                             sb.Append("\t");
                             sb.Append(byWorkType.BillableHours);
                             sb.Append("\t");
                             sb.Append(byWorkType.NonBillableHours);
+                            sb.Append("\t");
+                            sb.Append(byWorkType.TotalHours);
                             sb.Append("\t");
                             sb.Append(byWorkType.Note);
                             sb.Append("\t");
