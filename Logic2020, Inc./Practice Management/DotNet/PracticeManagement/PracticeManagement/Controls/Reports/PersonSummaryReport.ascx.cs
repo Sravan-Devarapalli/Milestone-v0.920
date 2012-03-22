@@ -84,6 +84,7 @@ namespace PraticeManagement.Controls.Reports
                 StringBuilder sb = new StringBuilder();
                 sb.Append(person.FirstName + " " + person.LastName);
                 sb.Append("\t");
+                sb.AppendLine();
                 sb.Append(HostingPage.StartDate.Value.ToString("MM/dd/yyyy") + " - " + HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
                 sb.Append("\t");
                 sb.AppendLine();
@@ -91,26 +92,34 @@ namespace PraticeManagement.Controls.Reports
                 //Header
                 sb.Append("Account");
                 sb.Append("\t");
+                sb.Append("Account Name");
+                sb.Append("\t");
                 sb.Append("Business Unit");
                 sb.Append("\t");
-                sb.Append("Project Number");
+                sb.Append("Business Unit Name");
+                sb.Append("\t");
+                sb.Append("Project");
                 sb.Append("\t");
                 sb.Append("Project Name");
                 sb.Append("\t");
                 sb.Append("Billable");
                 sb.Append("\t");
-                sb.Append("Value");
-                sb.Append("\t");
                 sb.Append("Non-Billable");
                 sb.Append("\t");
                 sb.Append("Total");
+                sb.Append("\t");
+                sb.Append("Value");
                 sb.Append("\t");
                 sb.AppendLine();
 
                 //Data
                 foreach (var timeEntriesGroupByClientAndProject in TimeEntriesGroupByClientAndProjectList)
                 {
+                    sb.Append(timeEntriesGroupByClientAndProject.Client.Code);
+                    sb.Append("\t");
                     sb.Append(timeEntriesGroupByClientAndProject.Client.Name);
+                    sb.Append("\t");
+                    sb.Append(timeEntriesGroupByClientAndProject.Project.Group.Code);
                     sb.Append("\t");
                     sb.Append(timeEntriesGroupByClientAndProject.Project.Group.Name);
                     sb.Append("\t");
@@ -120,11 +129,11 @@ namespace PraticeManagement.Controls.Reports
                     sb.Append("\t");
                     sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.BillableHours));
                     sb.Append("\t");
-                    sb.Append("$" + timeEntriesGroupByClientAndProject.BillableValue);
-                    sb.Append("\t");
                     sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.NonBillableHours));
                     sb.Append("\t");
                     sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.TotalHours));
+                    sb.Append("\t");
+                    sb.Append("$" + timeEntriesGroupByClientAndProject.BillableValue);
                     sb.Append("\t");
                     sb.AppendLine();
                 }
