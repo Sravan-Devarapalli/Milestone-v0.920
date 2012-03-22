@@ -164,6 +164,13 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public string Code 
+        {
+            get; 
+            set; 
+        }
+
 		#endregion
 
 		#region Construction
@@ -189,6 +196,8 @@ namespace DataTransferObjects
         }
 
         #endregion
-	}
+
+      
+    }
 }
 
