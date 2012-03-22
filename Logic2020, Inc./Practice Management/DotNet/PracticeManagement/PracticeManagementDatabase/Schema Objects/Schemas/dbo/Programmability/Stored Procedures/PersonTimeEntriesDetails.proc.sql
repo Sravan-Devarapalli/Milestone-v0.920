@@ -3,7 +3,7 @@
 -- Create date: 03-05-2012
 -- Description: Person TimeEntries Details By Period.
 -- Updated by : Thulasiram.P
--- Modified Date : 03-21-2012
+-- Modified Date : 03-22-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonTimeEntriesDetails]
 (
@@ -24,7 +24,8 @@ BEGIN
 	SET @ORTTimeTypeId = dbo.GetORTTimeTypeId()
 	
 
-	  SELECT C.ClientId,
+	  SELECT C.Code AS ClientCode,
+			 C.ClientId,
 			 PRO.ProjectId,
 			 PRO.Name AS ProjectName,
 			 PRO.ProjectNumber,
@@ -42,7 +43,9 @@ BEGIN
 			 ROUND(SUM(CASE WHEN TEH.IsChargeable = 0 THEN TEH.ActualHours 
 				      ELSE 0 
 				 END),2) AS NonBillableHours,
-			BU.Name AS GroupName
+			BU.Name AS GroupName,
+			BU.Code AS GroupCode,
+			TT.Code AS TimeTypeCode
 	  FROM dbo.TimeEntry AS TE 
 	  JOIN dbo.TimeEntryHours AS TEH  ON TEH.TimeEntryId = TE.TimeEntryId 
 	  JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
@@ -60,7 +63,10 @@ BEGIN
 				TT.TimeTypeId,
 				TT.Name,
 				TE.Note,
-				BU.Name
+				BU.Name,
+				BU.Code,
+				C.Code,
+				TT.Code
 	  ORDER BY  Pro.Name,TE.ChargeCodeDate,TT.Name
 END	
 	
