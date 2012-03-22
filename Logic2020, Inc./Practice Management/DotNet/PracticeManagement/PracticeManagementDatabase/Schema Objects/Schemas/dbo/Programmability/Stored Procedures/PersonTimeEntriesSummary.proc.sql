@@ -3,7 +3,7 @@
 -- Create date: 03-05-2012
 -- Description: Person TimeEntries Summary By Period.
 -- Updated By : ThulasiRam.P
--- Modified Date : 03-21-2012
+-- Modified Date : 03-22-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonTimeEntriesSummary]
 (
@@ -48,8 +48,10 @@ BEGIN
 				),2) AS BillableValue,
 			PRO.ProjectNumber,
 			C.Name AS  ClientName,
+			C.Code AS ClientCode,
 			BU.Name AS GroupName,
-			CC.TimeEntrySectionId
+			CC.TimeEntrySectionId,
+			BU.Code AS GroupCode
 	FROM dbo.TimeEntry AS TE 
 	INNER JOIN dbo.TimeEntryHours AS TEH  ON TEH.TimeEntryId = TE.TimeEntryId 
 	INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
@@ -65,7 +67,9 @@ BEGIN
 			 C.Name,
 			 PRO.ProjectNumber,
 			 BU.Name,
-			 CC.TimeEntrySectionId
+			 CC.TimeEntrySectionId,
+			 C.Code,
+			 BU.Code
 	ORDER BY CC.TimeEntrySectionId,PRO.ProjectNumber
 END	
 	
