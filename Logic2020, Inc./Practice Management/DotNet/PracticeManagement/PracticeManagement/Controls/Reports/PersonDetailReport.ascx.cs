@@ -163,84 +163,91 @@ namespace PraticeManagement.Controls.Reports
                 sb.Append(HostingPage.StartDate.Value.ToString("MM/dd/yyyy") + " - " + HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
                 sb.Append("\t");
                 sb.AppendLine();
-
-                //Header
-                /* Account	Account Name	Business Unit	Business Unit Name	Project	Project Name	Phase	
-                Work Type	Work Type Name	Date	Billable Hours	Non-Billable Hours	Total Hours	Note */
-                sb.Append("Account");
-                sb.Append("\t");
-                sb.Append("Account Name");
-                sb.Append("\t");
-                sb.Append("Business Unit");
-                sb.Append("\t");
-                sb.Append("Business Unit Name");
-                sb.Append("\t");
-                sb.Append("Project");
-                sb.Append("\t");
-                sb.Append("Project Name");
-                sb.Append("\t");
-                sb.Append("Phase");
-                sb.Append("\t");
-                sb.Append("Work Type");
-                sb.Append("\t");
-                sb.Append("Work Type Name");
-                sb.Append("\t");
-                sb.Append("Date");
-                sb.Append("\t");
-                sb.Append("Billable Hours");
-                sb.Append("\t");
-                sb.Append("Non-Billable Hours");
-                sb.Append("\t");
-                sb.Append("Total Hours");
-                sb.Append("\t");
-                sb.Append("Note");
-                sb.Append("\t");
                 sb.AppendLine();
-
-                //Data
-                foreach (var timeEntriesGroupByClientAndProject in TimeEntriesGroupByClientAndProjectList)
+                if (TimeEntriesGroupByClientAndProjectList.Count > 0)
                 {
+                    //Header
+                    /* Account	Account Name	Business Unit	Business Unit Name	Project	Project Name	Phase	
+                    Work Type	Work Type Name	Date	Billable Hours	Non-Billable Hours	Total Hours	Note */
+                    sb.Append("Account");
+                    sb.Append("\t");
+                    sb.Append("Account Name");
+                    sb.Append("\t");
+                    sb.Append("Business Unit");
+                    sb.Append("\t");
+                    sb.Append("Business Unit Name");
+                    sb.Append("\t");
+                    sb.Append("Project");
+                    sb.Append("\t");
+                    sb.Append("Project Name");
+                    sb.Append("\t");
+                    sb.Append("Phase");
+                    sb.Append("\t");
+                    sb.Append("Work Type");
+                    sb.Append("\t");
+                    sb.Append("Work Type Name");
+                    sb.Append("\t");
+                    sb.Append("Date");
+                    sb.Append("\t");
+                    sb.Append("Billable Hours");
+                    sb.Append("\t");
+                    sb.Append("Non-Billable Hours");
+                    sb.Append("\t");
+                    sb.Append("Total Hours");
+                    sb.Append("\t");
+                    sb.Append("Note");
+                    sb.Append("\t");
+                    sb.AppendLine();
 
-                    foreach (var byDateList in timeEntriesGroupByClientAndProject.DayTotalHours)
+                    //Data
+                    foreach (var timeEntriesGroupByClientAndProject in TimeEntriesGroupByClientAndProjectList)
                     {
 
-                        foreach (var byWorkType in byDateList.DayTotalHoursList)
+                        foreach (var byDateList in timeEntriesGroupByClientAndProject.DayTotalHours)
                         {
-                            sb.Append(timeEntriesGroupByClientAndProject.Client.Code);
-                            sb.Append("\t");
-                            sb.Append(timeEntriesGroupByClientAndProject.Client.Name);
-                            sb.Append("\t");
 
-                            sb.Append(timeEntriesGroupByClientAndProject.Project.Group.Code);
-                            sb.Append("\t");
-                            sb.Append(timeEntriesGroupByClientAndProject.Project.Group.Name);
-                            sb.Append("\t");
-                            sb.Append(timeEntriesGroupByClientAndProject.Project.ProjectNumber);
-                            sb.Append("\t");
-                            sb.Append(timeEntriesGroupByClientAndProject.Project.Name);
-                            sb.Append("\t");
-                            sb.Append("01");//phase
-                            sb.Append("\t");
-                            sb.Append(byWorkType.TimeType.Code);
-                            sb.Append("\t");
-                            sb.Append(byWorkType.TimeType.Name);
-                            sb.Append("\t");
-                            sb.Append(byDateList.Date.ToString("MM/dd/yyyy"));
-                            sb.Append("\t");
-                            sb.Append(byWorkType.BillableHours);
-                            sb.Append("\t");
-                            sb.Append(byWorkType.NonBillableHours);
-                            sb.Append("\t");
-                            sb.Append(byWorkType.TotalHours);
-                            sb.Append("\t");
-                            sb.Append(byWorkType.Note);
-                            sb.Append("\t");
-                            sb.AppendLine();
+                            foreach (var byWorkType in byDateList.DayTotalHoursList)
+                            {
+                                sb.Append(timeEntriesGroupByClientAndProject.Client.Code);
+                                sb.Append("\t");
+                                sb.Append(timeEntriesGroupByClientAndProject.Client.Name);
+                                sb.Append("\t");
+
+                                sb.Append(timeEntriesGroupByClientAndProject.Project.Group.Code);
+                                sb.Append("\t");
+                                sb.Append(timeEntriesGroupByClientAndProject.Project.Group.Name);
+                                sb.Append("\t");
+                                sb.Append(timeEntriesGroupByClientAndProject.Project.ProjectNumber);
+                                sb.Append("\t");
+                                sb.Append(timeEntriesGroupByClientAndProject.Project.Name);
+                                sb.Append("\t");
+                                sb.Append("01");//phase
+                                sb.Append("\t");
+                                sb.Append(byWorkType.TimeType.Code);
+                                sb.Append("\t");
+                                sb.Append(byWorkType.TimeType.Name);
+                                sb.Append("\t");
+                                sb.Append(byDateList.Date.ToString("MM/dd/yyyy"));
+                                sb.Append("\t");
+                                sb.Append(byWorkType.BillableHours);
+                                sb.Append("\t");
+                                sb.Append(byWorkType.NonBillableHours);
+                                sb.Append("\t");
+                                sb.Append(byWorkType.TotalHours);
+                                sb.Append("\t");
+                                sb.Append(byWorkType.Note);
+                                sb.Append("\t");
+                                sb.AppendLine();
+                            }
                         }
-
-
                     }
+                }
+                else
+                {
 
+                }
+                {
+                    sb.Append("This person has not entered Time Entries for the selected period.");
                 }
                 var filename = string.Format("{0}_{1}_{2}_{3}_{4}.xls", person.LastName, person.FirstName, "Detail", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
                 GridViewExportUtil.Export(filename, sb);
