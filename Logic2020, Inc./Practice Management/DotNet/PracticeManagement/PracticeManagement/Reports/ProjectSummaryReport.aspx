@@ -99,26 +99,30 @@
                     6: {
                         sorter: false
                     }
-                }
+                },
+                sortList: [[0, 0]],
+                sortForce: [[0, 0]]
             }
 
             );
         });
 
+
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
         function endRequestHandle(sender, Args) {
-            $(document).ready(function () {
-                $("#tblProjectSummaryByResource").tablesorter(
+
+            $("#tblProjectSummaryByResource").tablesorter(
                 {
                     headers: {
                         6: {
                             sorter: false
                         }
-                    }
+                    },
+                    sortList: [[0, 0]],
+                    sortForce: [[0, 0]]
                 }
 
                 );
-            });
         }
 
 
