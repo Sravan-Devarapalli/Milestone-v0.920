@@ -100,27 +100,26 @@ namespace PraticeManagement.Reporting
             var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(ProjectNumber));
 
             ucByResource.DataBindResource(data);
-            ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileHours).ToString() : "0";
-            ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableHours).ToString() : "0";
+            //ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileHours).ToString() : "0";
+            //ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableHours).ToString() : "0";
 
         }
 
         private void PopulateByWorkTypeData()
         {
-            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType(ProjectNumber, string.Empty, string.Empty));
+            //var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType(ProjectNumber, string.Empty, string.Empty));
 
 
-            ucByWorktype.DataBindResource(data, null);
-            ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
-            ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
+            //ucByWorktype.DataBindResource(data, null);
+            //ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
+            //ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
 
         }
 
         protected void ddlClients_OnSelectedIndexChanged(object sender, EventArgs e)
         {
-            ListItem firstItem = new ListItem("-- Select a Project --", string.Empty);
-            ddlProjects.Items.Clear();
-            ddlProjects.Enabled = false;
+            ClearAndAddFirsItemForDdlProjects();
+            
             if (ddlClients.SelectedIndex != 0)
             {
                 ddlProjects.Enabled = true;
@@ -140,15 +139,20 @@ namespace PraticeManagement.Reporting
                                                                              project.ProjectNumber.ToString()
                                                                             )
                                                    ).ToArray();
-                ddlProjects.Items.Add(firstItem);
+               
                 ddlProjects.Items.AddRange(items);
-            }
-            else
-            {
-                ddlProjects.Items.Add(firstItem);
             }
 
             mpeProjectSearch.Show();
+        }
+
+        private void ClearAndAddFirsItemForDdlProjects()
+        {
+            ListItem firstItem = new ListItem("-- Select a Project --", string.Empty);
+            ddlProjects.Items.Clear();
+            ddlProjects.Items.Add(firstItem);
+            ddlProjects.Enabled = false;
+
         }
 
         protected void ddlProjects_OnSelectedIndexChanged(object sender, EventArgs e)
@@ -159,6 +163,7 @@ namespace PraticeManagement.Reporting
 
                 txtProjectNumber.Text = projectNumber;
                 LoadActiveView();
+                ClearAndAddFirsItemForDdlProjects();
                 ddlProjects.SelectedIndex = ddlClients.SelectedIndex = 0;
             }
             else
