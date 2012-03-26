@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Person Detail Time Report" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
+﻿<%@ Page Title="By Person" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="PersonDetailTimeReport.aspx.cs" Inherits="PraticeManagement.Reporting.PersonDetailTimeReport" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
@@ -373,8 +373,20 @@
             <div id="divWholePage" runat="server">
                 <table class="PaddingTenPx" style="width: 100%;">
                     <tr>
-                        <td style="font-size: 18px; font-weight: bold; vertical-align: top;">
+                        <td style="font-size: 18px; font-weight: bold;">
+                        <table height="100%" >
+                        <tr>
+                        <td style="padding-bottom:10px; vertical-align:top;">
                             <asp:Label ID="lblPersonname" runat="server"></asp:Label>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td style="padding-top:10px;vertical-align:bottom;">
+                            <asp:Label ID="lbRange" runat="server"></asp:Label>
+                        </td>
+                        </tr>
+                        </table>
+                        
                         </td>
                         <td style="text-align: right; width: 610px">
                             <table style="table-layout: fixed; width: 100%;">
@@ -479,7 +491,7 @@
                                                     </table>
                                                     <table width="100%">
                                                         <tr id="trNonBillable" runat="server" title="Non-Billable Percentage.">
-                                                            <td style="background-color: Gray; border: 1px solid Gray;">
+                                                            <td style="background-color: #BEBEBE ; border: 1px solid Gray;">
                                                             </td>
                                                         </tr>
                                                     </table>
