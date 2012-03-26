@@ -504,6 +504,9 @@ namespace DataAccess
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
                 int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
                 int projectRoleNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectRoleName);
+                int billableHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHoursUntilToday);
+                int forecastedHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHoursUntilToday);
+                int isPersonNotAssignedToFixedProjectIndex = reader.GetOrdinal(Constants.ColumnNames.IsPersonNotAssignedToFixedProject);
 
                 while (reader.Read())
                 {
@@ -518,11 +521,16 @@ namespace DataAccess
                         LastName = reader.GetString(lastNameIndex),
                         ProjectRoleName = reader.GetString(projectRoleNameIndex)
                     };
-                    PLGH.BillabileHours = reader.GetDouble(billableHoursIndex);
+
+                    PLGH.BillableHours = reader.GetDouble(billableHoursIndex);
                     PLGH.NonBillableHours = reader.GetDouble(nonBillableHoursIndex);
                     PLGH.BillableValue = reader.GetDouble(billableValueindex);
+                    PLGH.BillableHoursUntilToday = reader.GetDouble(billableHoursUntilTodayIndex);
+                    PLGH.ForecastedHoursUntilToday = Convert.ToDouble(reader[forecastedHoursUntilTodayIndex]);
+                    PLGH.IsPersonNotAssignedToFixedProject = reader.GetInt32(isPersonNotAssignedToFixedProjectIndex) == 1;
 
                     PLGH.Person = person;
+
                     result.Add(PLGH);
                 }
             }
@@ -535,9 +543,7 @@ namespace DataAccess
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectNumber, projectNumber);
-                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeCategoryIdsParam, !string.IsNullOrEmpty(timeTypeCategoryIds) ? timeTypeCategoryIds : (Object)DBNull.Value);
-                command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, !string.IsNullOrEmpty(orderByCerteria) ? orderByCerteria : (Object)DBNull.Value);
-
+               
                 connection.Open();
 
                 using (SqlDataReader reader = command.ExecuteReader())
