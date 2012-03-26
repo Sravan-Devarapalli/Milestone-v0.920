@@ -9,6 +9,7 @@
 <%@ Register Src="~/Controls/Reports/ByworkType.ascx" TagPrefix="uc" TagName="ByWorkType" %>
 <%@ Register Src="~/Controls/Reports/BillableAndNonBillableGraph.ascx" TagPrefix="uc"
     TagName="BillableAndNonBillableGraph" %>
+<%@ Register Src="~/Controls/MessageLabel.ascx" TagName="MessageLabel" TagPrefix="uc" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
@@ -152,6 +153,12 @@
                                     <asp:Image ID="imgProjectSearch" runat="server" ToolTip="Project Search" ImageUrl="~/Images/search_24.png" />
                                 </td>
                             </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <uc:MessageLabel ID="msgError" runat="server" ErrorColor="Red" InfoColor="Green"
+                                        WarningColor="Orange" EnableViewState="false" />
+                                </td>
+                            </tr>
                         </table>
                     </td>
                     <td style="width: 33%;">
@@ -223,15 +230,15 @@
                                     <asp:TableCell ID="cellResource" CssClass="SelectedSwitch" runat="server">
                                         <span class="bg"><span>
                                             <asp:LinkButton ID="lnkbtnResource" runat="server" Text="By Resource" CausesValidation="false"
-                                                OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
+                                                ToolTip="By Resource" OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
                                         </span>
                                     </asp:TableCell>
-                                    <asp:TableCell ID="cellWorkType" runat="server">
+                                    <%-- <asp:TableCell ID="cellWorkType" runat="server">
                                         <span class="bg"><span>
                                             <asp:LinkButton ID="lnkbtnWorkType" runat="server" Text="By Work Type" CausesValidation="false"
                                                 OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
                                         </span>
-                                    </asp:TableCell>
+                                    </asp:TableCell>--%>
                                 </asp:TableRow>
                             </asp:Table>
                         </td>
@@ -243,11 +250,11 @@
                             <uc:ByResource ID="ucByResource" runat="server"></uc:ByResource>
                         </asp:Panel>
                     </asp:View>
-                    <asp:View ID="vwProjectReport" runat="server">
+                    <%--<asp:View ID="vwProjectReport" runat="server">
                         <asp:Panel ID="pnlProjectReport" runat="server" CssClass="tab-pane WholeWidth">
-                            <%--<uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByWorkType>--%>
+                           <uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByWorkType>
                         </asp:Panel>
-                    </asp:View>
+                    </asp:View>--%>
                 </asp:MultiView>
             </div>
         </ContentTemplate>
