@@ -6,6 +6,7 @@
   <xs:complexType name="Client">
     <xs:sequence>
       <xs:element minOccurs="0" name="ClientMarginInfo" nillable="true" type="tns:ArrayOfClientMarginColorInfo" />
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DefaultDirectorId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="DefaultDiscount" type="xs:decimal" />
       <xs:element minOccurs="0" name="DefaultSalespersonId" type="xs:int" />
@@ -261,6 +262,7 @@
       <xs:element minOccurs="0" name="TelephoneNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TerminationDate" nillable="true" type="xs:dateTime" />
       <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Trainings" nillable="true" type="q10:ArrayOfPersonTraining" />
+      <xs:element minOccurs="0" name="UtlizationPercent" type="xs:double" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Person" nillable="true" type="tns:Person" />
