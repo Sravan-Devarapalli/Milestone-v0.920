@@ -193,6 +193,15 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Label lblPersonname;
         
         /// <summary>
+        /// lbRange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbRange;
+        
+        /// <summary>
         /// ltrlTotalHours control.
         /// </summary>
         /// <remarks>
