@@ -29,7 +29,7 @@
         <table id="tblProjectSummaryByResource" class="tablesorter PersonSummaryReport WholeWidth">
             <thead>
                 <tr>
-                    <th style="width: 18%;">
+                    <th  class="t-left padLeft5" style="width: 18%;">
                         Resource
                     </th>
                     <th style="width: 13%;">
