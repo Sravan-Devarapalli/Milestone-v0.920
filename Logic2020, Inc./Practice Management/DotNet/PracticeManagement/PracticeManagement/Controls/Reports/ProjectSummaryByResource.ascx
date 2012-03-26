@@ -1,5 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProjectSummaryByResource.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.ProjectSummaryByResource" %>
+
 <table class="WholeWidthWithHeight">
     <tr>
         <td colspan="4" style="width: 90%;">
@@ -28,25 +29,25 @@
         <table id="tblProjectSummaryByResource" class="tablesorter PersonSummaryReport WholeWidth">
             <thead>
                 <tr>
-                    <th style="width:18%;" >
+                    <th style="width: 18%;">
                         Resource
                     </th>
-                    <th style="width:13%;">
+                    <th style="width: 13%;">
                         Project Role
                     </th>
-                    <th style="width:10%;">
+                    <th style="width: 10%;">
                         Billable
                     </th>
-                    <th style="width:13%;">
+                    <th style="width: 13%;">
                         Non-Billable
                     </th>
-                    <th style="width:10%;">
+                    <th style="width: 10%;">
                         Total
                     </th>
-                    <th style="width:10%;">
+                    <th style="width: 10%;">
                         Value
                     </th>
-                    <th style="width:26%;">
+                    <th style="width: 26%;">
                         Project Variance (in Hours)
                     </th>
                 </tr>
@@ -70,7 +71,7 @@
             <td>
                 <%# GetDoubleFormat((double)Eval("TotalHours"))%>
             </td>
-           <td sorttable_customkey='<%# GetBillableSortValue((double)Eval("BillableValue"), (bool)Eval("IsPersonNotAssignedToFixedProject"))%>' >
+            <td sorttable_customkey='<%# GetBillableSortValue((double)Eval("BillableValue"), (bool)Eval("IsPersonNotAssignedToFixedProject"))%>'>
                 <%# GetCurrencyFormat((double)Eval("BillableValue"), (bool)Eval("IsPersonNotAssignedToFixedProject"))%>
             </td>
             <td>
@@ -105,7 +106,7 @@
                         <td style="width: 25%;">
                             <table class="WholeWidth">
                                 <tr>
-                                    <td style="text-align:left;padding-left:4px;"  >
+                                    <td style="text-align: right; padding-right: 3px;">
                                         <%# Eval("Variance")%>
                                     </td>
                                 </tr>
@@ -120,4 +121,10 @@
         </tbody></table>
     </FooterTemplate>
 </asp:Repeater>
+<br />
+
+<div id="divEmptyMessage" style="text-align: center; font-size: 15px; display: none;"
+    runat="server">
+    There are no Time Entries towards this project.
+</div>
 
