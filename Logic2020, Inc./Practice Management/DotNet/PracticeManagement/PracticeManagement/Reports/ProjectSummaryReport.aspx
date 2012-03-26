@@ -228,7 +228,7 @@
             </table>--%>
                 <table class="WholeWidth">
                     <tr>
-                        <td align="center">
+                        <td style="padding-top:10px;" align="center">
                             <asp:Table ID="tblProjectsummaryReportViewSwitch" runat="server" CssClass="CustomTabStyle">
                                 <asp:TableRow ID="rowSwitcher" runat="server">
                                     <asp:TableCell ID="cellResource" CssClass="SelectedSwitch" runat="server">
@@ -249,7 +249,7 @@
                     </tr>
                 </table>
                 <asp:MultiView ID="mvProjectSummaryReport" runat="server" ActiveViewIndex="0">
-                    <asp:View ID="vwResourceReport" runat="server">
+                    <asp:View ID="vwResourceReport"  runat="server">
                         <asp:Panel ID="pnlResourceReport" runat="server" CssClass="tab-pane WholeWidth">
                             <uc:ByResource ID="ucByResource" runat="server"></uc:ByResource>
                         </asp:Panel>
