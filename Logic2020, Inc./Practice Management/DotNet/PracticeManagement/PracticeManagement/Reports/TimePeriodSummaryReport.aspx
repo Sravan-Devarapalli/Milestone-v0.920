@@ -1,6 +1,8 @@
-﻿<%@ Page Title="Time Period Summary Report" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
+﻿<%@ Page Title="By Time Period" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="TimePeriodSummaryReport.aspx.cs" Inherits="PraticeManagement.Reporting.TimePeriodSummaryReport" %>
 
+<%@ Register Src="~/Controls/Reports/TimeEntryReportsHeader.ascx" TagPrefix="uc"
+    TagName="TimeEntryReportsHeader" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
@@ -100,31 +102,87 @@
             width: 152px;
         }
     </style>
+    <link href="../Css/TableSortStyle.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
+    <script src="../Scripts/jquery-1.4.1.js" type="text/javascript"></script>
+    <script src="../Scripts/jquery.tablesorter.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#tblTimePeriodSummaryByResource").tablesorter();
+        });
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+        function endRequestHandle(sender, Args) {
+            $("#tblTimePeriodSummaryByResource").tablesorter();
+        }
+    </script>
+    <uc:TimeEntryReportsHeader ID="timeEntryReportHeader" runat="server"></uc:TimeEntryReportsHeader>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
-            Range:
-            <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
-                <asp:ListItem Selected="True" Text="This Week" Value="7"></asp:ListItem>
-                <asp:ListItem Text="This Month" Value="30"></asp:ListItem>
-                <asp:ListItem Text="This Year" Value="365"></asp:ListItem>
-                <asp:ListItem Text="Last Week" Value="-7"></asp:ListItem>
-                <asp:ListItem Text="Last Month" Value="-30"></asp:ListItem>
-                <asp:ListItem Text="Last Year" Value="-365"></asp:ListItem>
-                <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
-            </asp:DropDownList>
-            <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
-            <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
-            <asp:HiddenField ID="hdnStartDateCalExtenderBehaviourId" runat="server" Value="" />
-            <asp:HiddenField ID="hdnEndDateCalExtenderBehaviourId" runat="server" Value="" />
-            &nbsp;
-            <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
-            <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
-            &nbsp;
+            <table width="100%">
+                <tr>
+                    <td class="height30P vBottom fontBold">
+                        2.&nbsp;Select report parameters:
+                    </td>
+                </tr>
+            </table>
+            <table width="100%">
+                <tr>
+                <td style="width:5%;"></td>
+                    <td style="padding-bottom: 10px; padding-top: 10px; padding-left:5px;">
+                        <table width="100%" align="center">
+                            <tr>
+                                <td style="font-weight: bold;width: 13%;">
+                                    Range:&nbsp;
+                                     </td>
+                                    <td style="text-align: left;">
+                                    <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
+                                        Width="150px">
+                                        <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
+                                        <asp:ListItem Text="This Week" Value="7"></asp:ListItem>
+                                        <asp:ListItem Text="This Month" Value="30"></asp:ListItem>
+                                        <asp:ListItem Text="This Year" Value="365"></asp:ListItem>
+                                        <asp:ListItem Text="Last Week" Value="-7"></asp:ListItem>
+                                        <asp:ListItem Text="Last Month" Value="-30"></asp:ListItem>
+                                        <asp:ListItem Text="Last Year" Value="-365"></asp:ListItem>
+                                        <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
+                                    </asp:DropDownList>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="width: 65%">
+                    </td>
+                </tr>
+                <tr>
+                <td style="width:5%;"></td>
+                    <td style="padding-bottom: 10px; text-align: center;">
+                        <table width="100%" align="center">
+                            <tr>
+                                <td style="width: 13%;">
+                                </td>
+                                <td style="text-align: left;">
+                                    <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
+                                    <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
+                                    <asp:HiddenField ID="hdnStartDateCalExtenderBehaviourId" runat="server" Value="" />
+                                    <asp:HiddenField ID="hdnEndDateCalExtenderBehaviourId" runat="server" Value="" />
+                                    <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
+                                    <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="width: 65%">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="border-bottom: 3px solid black; width: 100%;">
+                    </td>
+                </tr>
+            </table>
             <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
                 CancelControlID="btnCustDatesCancel" BackgroundCssClass="modalBackground" PopupControlID="pnlCustomDates"
                 BehaviorID="bhCustomDates" DropShadow="false" OnCancelScript="ReAssignStartDateEndDates();" />
@@ -153,60 +211,64 @@
                 </table>
             </asp:Panel>
             <br />
-            <hr />
-            <table style="width: 100%;">
-                <tr>
-                    <td align="center">
-                        <uc:BillableAndNonBillableGraph ID="ucBillableAndNonBillable" runat="server"></uc:BillableAndNonBillableGraph>
-                    </td>
-                </tr>
-            </table>
-            <table class="WholeWidth">
-                <tr>
-                    <td align="center">
-                        <asp:Table ID="tblTimePeriodReportViewSwitch" runat="server" CssClass="CustomTabStyle">
-                            <asp:TableRow ID="rowSwitcher" runat="server">
-                                <asp:TableCell ID="cellResource" CssClass="SelectedSwitch" runat="server">
-                                    <span class="bg"><span>
-                                        <asp:LinkButton ID="lnkbtnResource" runat="server" Text="By Resource" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
-                                    </span>
-                                </asp:TableCell>
-                                <asp:TableCell ID="cellProject" runat="server">
-                                    <span class="bg"><span>
-                                        <asp:LinkButton ID="lnkbtnProject" runat="server" Text="By Project" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
-                                    </span>
-                                </asp:TableCell>
-                                <asp:TableCell ID="cellWorkType" runat="server">
-                                    <span class="bg"><span>
-                                        <asp:LinkButton ID="lnkbtnWorkType" runat="server" Text="By Work Type" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
-                                    </span>
-                                </asp:TableCell>
-                            </asp:TableRow>
-                        </asp:Table>
-                    </td>
-                </tr>
-            </table>
-            <asp:MultiView ID="mvTimePeriodReport" runat="server" ActiveViewIndex="0">
-                <asp:View ID="vwResourceReport" runat="server">
-                    <asp:Panel ID="pnlResourceReport" runat="server" CssClass="tab-pane WholeWidth">
-                        <uc:ByResource ID="tpByResource" runat="server"></uc:ByResource>
-                    </asp:Panel>
-                </asp:View>
-                <asp:View ID="vwProjectReport" runat="server">
-                    <asp:Panel ID="pnlProjectReport" runat="server" CssClass="tab-pane WholeWidth">
-                        <uc:Byproject ID="tpByProject" runat="server"></uc:Byproject>
-                    </asp:Panel>
-                </asp:View>
-                <asp:View ID="vwWorkTypeReport" runat="server">
-                    <asp:Panel ID="pnlWorkTypeReport" runat="server" CssClass="tab-pane WholeWidth">
-                        <uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByWorkType>
-                    </asp:Panel>
-                </asp:View>
-            </asp:MultiView>
+            <div id="divWholePage" runat="server">
+                <table style="width: 100%;">
+                    <tr>
+                        <td align="center" style="padding: 10px;">
+                            <uc:BillableAndNonBillableGraph ID="ucBillableAndNonBillable" runat="server"></uc:BillableAndNonBillableGraph>
+                        </td>
+                    </tr>
+                </table>
+                <table class="WholeWidth">
+                    <tr>
+                        <td align="center">
+                            <asp:Table ID="tblTimePeriodReportViewSwitch" runat="server" CssClass="CustomTabStyle">
+                                <asp:TableRow ID="rowSwitcher" runat="server">
+                                    <asp:TableCell ID="cellResource" CssClass="SelectedSwitch" runat="server">
+                                        <span class="bg"><span>
+                                            <asp:LinkButton ID="lnkbtnResource" runat="server" Text="By Resource" CausesValidation="false" ToolTip="By Resource"
+                                                OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
+                                        </span>
+                                    </asp:TableCell>
+                                    <asp:TableCell ID="cellProject" runat="server">
+                                        <span class="bg"><span>
+                                            <asp:LinkButton ID="lnkbtnProject" runat="server" Text="By Project" CausesValidation="false" ToolTip="By Project"
+                                                OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
+                                        </span>
+                                    </asp:TableCell>
+                                    <asp:TableCell ID="cellWorkType" runat="server">
+                                        <span class="bg"><span>
+                                            <asp:LinkButton ID="lnkbtnWorkType" runat="server" Text="By Work Type" CausesValidation="false" ToolTip="By Work Type"
+                                                OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
+                                        </span>
+                                    </asp:TableCell>
+                                </asp:TableRow>
+                            </asp:Table>
+                        </td>
+                    </tr>
+                </table>
+                <asp:MultiView ID="mvTimePeriodReport" runat="server" ActiveViewIndex="0">
+                    <asp:View ID="vwResourceReport" runat="server">
+                        <asp:Panel ID="pnlResourceReport" runat="server" CssClass="tab-pane WholeWidth">
+                            <uc:ByResource ID="tpByResource" runat="server"></uc:ByResource>
+                        </asp:Panel>
+                    </asp:View>
+                    <asp:View ID="vwProjectReport" runat="server">
+                        <asp:Panel ID="pnlProjectReport" runat="server" CssClass="tab-pane WholeWidth">
+                            <uc:Byproject ID="tpByProject" runat="server"></uc:Byproject>
+                        </asp:Panel>
+                    </asp:View>
+                    <asp:View ID="vwWorkTypeReport" runat="server">
+                        <asp:Panel ID="pnlWorkTypeReport" runat="server" CssClass="tab-pane WholeWidth">
+                            <uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByWorkType>
+                        </asp:Panel>
+                    </asp:View>
+                </asp:MultiView>
+            </div>
         </ContentTemplate>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="tpByResource$btnExportToExcel" />
+        </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
 
