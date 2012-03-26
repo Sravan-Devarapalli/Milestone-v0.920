@@ -13,16 +13,16 @@
             <table class="TimeEntruReportHeader">
                 <tr>
                     <th id="thTimePeriod" runat="server">
-                        <asp:HyperLink ID="hlByTimePeriod" runat="server" Text="By Time Period" NavigateUrl="~/Reports/TimePeriodSummaryReport.aspx"
-                            ForeColor="Black" Font-Underline="false"></asp:HyperLink>
+                        <asp:HyperLink ID="hlByTimePeriod" Width="100%" Height="100%" runat="server" NavigateUrl="~/Reports/TimePeriodSummaryReport.aspx"
+                            ForeColor="Black" Font-Underline="false"><div class="PaddingTop6">By Time Period</div></asp:HyperLink>
                     </th>
                     <th id="thProject" runat="server">
-                        <asp:HyperLink ID="hlByProject" runat="server" Text="By Project" NavigateUrl="~/Reports/ProjectSummaryReport.aspx"
-                            ForeColor="Black" Font-Underline="false"></asp:HyperLink>
+                        <asp:HyperLink ID="hlByProject" Width="100%" Height="100%" runat="server" NavigateUrl="~/Reports/ProjectSummaryReport.aspx"
+                            ForeColor="Black" Font-Underline="false" ><div class="PaddingTop6">By Project</div></asp:HyperLink>
                     </th>
                     <th id="thPerson" runat="server">
-                        <asp:HyperLink ID="hlByPerson" runat="server" Text="By Person" NavigateUrl="~/Reports/PersonDetailTimeReport.aspx"
-                            ForeColor="Black" Font-Underline="false"></asp:HyperLink>
+                        <asp:HyperLink ID="hlByPerson" Width="100%" Height="100%" runat="server" NavigateUrl="~/Reports/PersonDetailTimeReport.aspx" style="vertical-align:baseline !important;"
+                            ForeColor="Black" Font-Underline="false"><div class="PaddingTop6">By Person</div></asp:HyperLink>
                     </th>
                 </tr>
             </table>
