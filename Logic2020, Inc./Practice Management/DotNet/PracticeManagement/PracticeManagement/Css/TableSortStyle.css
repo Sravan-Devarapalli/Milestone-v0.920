@@ -16,6 +16,7 @@ table.tablesorter thead tr .header
     background-repeat: no-repeat;
     background-position: center right;
     cursor: pointer;
+    position:static;
     height:auto;
 }
 table.tablesorter tbody td
