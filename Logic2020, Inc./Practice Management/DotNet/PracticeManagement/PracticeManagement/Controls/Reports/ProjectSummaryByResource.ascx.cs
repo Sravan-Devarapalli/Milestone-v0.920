@@ -32,7 +32,7 @@ namespace PraticeManagement.Controls.Reports
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         protected void repResource_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -46,8 +46,19 @@ namespace PraticeManagement.Controls.Reports
         public void DataBindResource(PersonLevelGroupedHours[] reportData)
         {
             TimeEntriesGroupByPerson = reportData.ToList();
-            repResource.DataSource = reportData;
-            repResource.DataBind();
+
+            if (reportData.Count() > 0)
+            {
+                divEmptyMessage.Style["display"] = "none";
+                repResource.Visible =  true;
+                repResource.DataSource = reportData;
+                repResource.DataBind();
+            }
+            else
+            {
+                divEmptyMessage.Style["display"] = "";
+                repResource.Visible = false;
+            }
         }
 
 
@@ -134,5 +145,7 @@ namespace PraticeManagement.Controls.Reports
 
         }
 
+
+       
     }
 }
