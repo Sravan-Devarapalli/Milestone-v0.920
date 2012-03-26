@@ -70,6 +70,7 @@ namespace PraticeManagement.Controls.Reports
             sb.Append(HostingPage.ProjectNumber);
             sb.Append("\t");
             sb.AppendLine();
+            sb.AppendLine();
 
             //Header
             sb.Append("Resource");
