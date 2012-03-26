@@ -150,13 +150,14 @@ namespace DataAccess
                 int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNameColumn);
                 int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
                 int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
-               
+
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
                 int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
                 int groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
                 int groupCodeIndex = reader.GetOrdinal(Constants.ColumnNames.GroupCodeColumn);
                 int clientCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ClientCodeColumn);
+                int isPersonNotAssignedToFixedProjectIndex = reader.GetOrdinal(Constants.ColumnNames.IsPersonNotAssignedToFixedProject);
 
                 while (reader.Read())
                 {
@@ -183,7 +184,9 @@ namespace DataAccess
 
                         BillableHours = reader.GetDouble(billableHoursIndex),
                         NonBillableHours = reader.GetDouble(nonBillableHoursIndex),
-                        BillableValue = reader.GetDouble(billableValueindex)
+                        BillableValue = reader.GetDouble(billableValueindex),
+                        IsPersonNotAssignedToFixedProject = reader.GetInt32(isPersonNotAssignedToFixedProjectIndex) == 0 ?  false : true
+
                     };
 
                     result.Add(ptd);
@@ -213,13 +216,26 @@ namespace DataAccess
                         int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
                         int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
                         int utlizationPercentIndex = reader.GetOrdinal(Constants.ColumnNames.UtlizationPercent);
+                        int isPersonNotAssignedToFixedProjectIndex = reader.GetOrdinal(Constants.ColumnNames.IsPersonNotAssignedToFixedProject);
 
                         while (reader.Read())
                         {
                             result.First = !reader.IsDBNull(billableHoursIndex) ? (double)reader.GetDouble(billableHoursIndex) : 0d;
                             result.Second = !reader.IsDBNull(nonBillableHoursIndex) ? (double)reader.GetDouble(nonBillableHoursIndex) : 0d;
-                            result.Third = !reader.IsDBNull(billableValueindex) ? (double)reader.GetDouble(billableValueindex) : 0d;
+                            
                             result.Fourth = !reader.IsDBNull(utlizationPercentIndex) ? (int)reader.GetDouble(utlizationPercentIndex) : 0d;
+                            bool isPersonNotAssignedToFixedProject = !reader.IsDBNull(isPersonNotAssignedToFixedProjectIndex) ? reader.GetInt32(isPersonNotAssignedToFixedProjectIndex) == 0 ? false : true : true;
+                            if (isPersonNotAssignedToFixedProject)
+                            {
+                                //hourly
+                                result.Third = !reader.IsDBNull(billableValueindex) ? (double)reader.GetDouble(billableValueindex) : 0d;    
+                            }
+                            else
+                            {
+                                //fixed
+                                result.Third = -1d;
+                            }
+                            
                         }
                     }
                     return result;
@@ -227,7 +243,7 @@ namespace DataAccess
             }
         }
 
-        public static List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate, string seniorityIds, string orderByCerteria)
+        public static List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate, string seniorityIds)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimePeriodSummaryReportByResource, connection))
@@ -236,7 +252,6 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.SeniorityIdsParam, !string.IsNullOrEmpty(seniorityIds) ? seniorityIds : (Object)DBNull.Value);
-                command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, !string.IsNullOrEmpty(orderByCerteria) ? orderByCerteria : (Object)DBNull.Value);
 
                 connection.Open();
 
@@ -256,19 +271,19 @@ namespace DataAccess
                 int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
                 int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
                 int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
-                int personSeniorityIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityId);
-                int personSeniorityNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityName);
-                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
-                int groupByCerteriaIndex = reader.GetOrdinal(Constants.ColumnNames.GroupByCerteria);
+                int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
+                int personSeniorityIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityId);
+                int personSeniorityNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityName);
+                int utlizationPercentIndex = reader.GetOrdinal(Constants.ColumnNames.UtlizationPercent);
+                int isPersonNotAssignedToFixedProjectIndex = reader.GetOrdinal(Constants.ColumnNames.IsPersonNotAssignedToFixedProject);
 
                 while (reader.Read())
                 {
                     int personId = reader.GetInt32(personIdIndex);
                     if (!result.Any(p => p.Person.Id == personId))
                     {
-
                         PersonLevelGroupedHours PLGH = new PersonLevelGroupedHours();
                         Person person = new Person
                                                 {
@@ -279,35 +294,24 @@ namespace DataAccess
                                                     {
                                                         Id = reader.GetInt32(personSeniorityIdIndex),
                                                         Name = reader.GetString(personSeniorityNameIndex)
-                                                    }
+                                                    },
+                                                    UtlizationPercent = !reader.IsDBNull(utlizationPercentIndex) ? (int)reader.GetDouble(utlizationPercentIndex) : 0d
                                                 };
                         PLGH.Person = person;
-                        GroupedHours GH = new GroupedHours();
-                        GH.StartDate = reader.GetDateTime(startDateIndex);
-                        GH.SetEnddate(reader.GetString(groupByCerteriaIndex));
-                        GH.BillabileTotal = reader.GetDouble(billableHoursIndex);
-                        GH.NonBillableTotal = reader.GetDouble(nonBillableHoursIndex);
 
-                        //PLGH.GroupedHoursList = new List<GroupedHours>();
-                        //PLGH.GroupedHoursList.Add(GH);
+                        PLGH.BillableHours = reader.GetDouble(billableHoursIndex);
+                        PLGH.NonBillableHours = reader.GetDouble(nonBillableHoursIndex);
+                        PLGH.BillableValue = reader.GetDouble(billableValueindex);
+                        PLGH.IsPersonNotAssignedToFixedProject = reader.GetInt32(isPersonNotAssignedToFixedProjectIndex) == 0 ? false : true;
+                        PLGH.Person = person;
+
                         result.Add(PLGH);
-                    }
-                    else
-                    {
-                        PersonLevelGroupedHours PLGH = result.First(p => p.Person.Id == personId);
-                        GroupedHours GH = new GroupedHours();
-                        GH.StartDate = reader.GetDateTime(startDateIndex);
-                        GH.SetEnddate(reader.GetString(groupByCerteriaIndex));
-                        GH.BillabileTotal = reader.GetDouble(billableHoursIndex);
-                        GH.NonBillableTotal = reader.GetDouble(nonBillableHoursIndex);
-
-                        //PLGH.GroupedHoursList.Add(GH);
                     }
                 }
             }
         }
 
-        public static List<ProjectLevelGroupedHours> TimePeriodSummaryReportByProject(DateTime startDate, DateTime endDate, string clientIds, string personStatusIds, string orderByCerteria)
+        public static List<ProjectLevelGroupedHours> TimePeriodSummaryReportByProject(DateTime startDate, DateTime endDate, string clientIds, string personStatusIds)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimePeriodSummaryReportByProject, connection))
@@ -317,7 +321,6 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdsParam, !string.IsNullOrEmpty(clientIds) ? clientIds : (Object)DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusIdsParam, !string.IsNullOrEmpty(personStatusIds) ? personStatusIds : (Object)DBNull.Value);
-                command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, !string.IsNullOrEmpty(orderByCerteria) ? orderByCerteria : (Object)DBNull.Value);
 
                 connection.Open();
 
@@ -341,10 +344,12 @@ namespace DataAccess
                 int projectNumberindex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
                 int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusIdColumn);
                 int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
-                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
-                int groupByCerteriaIndex = reader.GetOrdinal(Constants.ColumnNames.GroupByCerteria);
+                int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
+                int billableHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHoursUntilToday);
+                int forecastedHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHoursUntilToday);
+                int isFixedProjectIndex = reader.GetOrdinal(Constants.ColumnNames.IsFixedProject);
 
                 while (reader.Read())
                 {
@@ -370,27 +375,17 @@ namespace DataAccess
                             }
                         };
                         plgh.Project = project;
-                        GroupedHours GH = new GroupedHours();
-                        GH.StartDate = reader.GetDateTime(startDateIndex);
-                        GH.SetEnddate(reader.GetString(groupByCerteriaIndex));
-                        GH.BillabileTotal = reader.GetDouble(billableHoursIndex);
-                        GH.NonBillableTotal = reader.GetDouble(nonBillableHoursIndex);
 
-                        plgh.GroupedHoursList = new List<GroupedHours>();
-                        plgh.GroupedHoursList.Add(GH);
+                        plgh.BillableHours = reader.GetDouble(billableHoursIndex);
+                        plgh.NonBillableHours = reader.GetDouble(nonBillableHoursIndex);
+                        plgh.BillableValue = reader.GetDouble(billableValueindex);
+                        plgh.BillableHoursUntilToday = reader.GetDouble(billableHoursUntilTodayIndex);
+                        plgh.ForecastedHoursUntilToday = Convert.ToDouble(reader[forecastedHoursUntilTodayIndex]);
+                        plgh.IsFixedProject = reader.GetInt32(isFixedProjectIndex) == 1;
+
                         result.Add(plgh);
                     }
-                    else
-                    {
-                        ProjectLevelGroupedHours plgh = result.First(p => p.Project.Id == projectId);
-                        GroupedHours gh = new GroupedHours();
-                        gh.StartDate = reader.GetDateTime(startDateIndex);
-                        gh.SetEnddate(reader.GetString(groupByCerteriaIndex));
-                        gh.BillabileTotal = reader.GetDouble(billableHoursIndex);
-                        gh.NonBillableTotal = reader.GetDouble(nonBillableHoursIndex);
-
-                        plgh.GroupedHoursList.Add(gh);
-                    }
+                  
                 }
             }
         }
@@ -491,7 +486,6 @@ namespace DataAccess
             }
 
         }
-
 
         private static void ReadProjectSummaryReportByResource(SqlDataReader reader, List<PersonLevelGroupedHours> result)
         {
