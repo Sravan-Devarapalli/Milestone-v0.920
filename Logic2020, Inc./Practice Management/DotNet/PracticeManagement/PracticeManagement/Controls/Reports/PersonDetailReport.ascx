@@ -20,7 +20,7 @@
                             UseSubmitBehavior="false" ToolTip="Export To Excel" />
                     </td>
                     <td>
-                        <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick"
+                        <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick" Enabled="false"
                             UseSubmitBehavior="false" ToolTip="Export To PDF" />
                     </td>
                 </tr>
