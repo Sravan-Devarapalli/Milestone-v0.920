@@ -293,6 +293,8 @@
             public static string BillableHoursUntilToday = "BillableHoursUntilToday";
             public static string ForecastedHoursUntilToday = "ForecastedHoursUntilToday";
             public static string IsPersonNotAssignedToFixedProject = "IsPersonNotAssignedToFixedProject";
+            public static string IsFixedProject = "IsFixedProject";
+            
             
         }
 
