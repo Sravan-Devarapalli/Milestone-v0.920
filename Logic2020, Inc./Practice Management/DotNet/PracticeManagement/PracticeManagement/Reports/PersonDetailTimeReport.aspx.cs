@@ -152,6 +152,30 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public String Range
+        {
+            get
+            {
+                string range = string.Empty;
+                if (StartDate.HasValue && EndDate.HasValue)
+                {
+                    if (StartDate.Value == Utils.Calendar.MonthStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.MonthEndDate(StartDate.Value))
+                    {
+                        range = StartDate.Value.ToString("MMMM - yyyy");
+                    }
+                    else if (StartDate.Value == Utils.Calendar.YearStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.YearEndDate(StartDate.Value))
+                    {
+                        range = StartDate.Value.ToString("Year, yyyy");
+                    }
+                    else
+                    {
+                        range = StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                    }
+                }
+                return range;
+            }
+        }
+
         public int SelectedPersonId
         {
             get
@@ -175,6 +199,7 @@ namespace PraticeManagement.Reporting
         {
 
             lblPersonname.ToolTip = lblPersonname.Text = ddlPerson.SelectedItem.Text;
+            lbRange.ToolTip = lbRange.Text = Range;
             var now = Utils.Generic.GetNowWithTimeZone();
             diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
             diRange.ToDate = EndDate.HasValue ? EndDate : Utils.Calendar.WeekEndDate(now);
@@ -211,6 +236,7 @@ namespace PraticeManagement.Reporting
         protected void ddlPerson_SelectedIndexChanged(object sender, EventArgs e)
         {
             ddlPeriod.SelectedValue = "Please Select";
+            SwitchView(lnkbtnSummary, 0);
         }
 
         protected void btnCustDatesOK_Click(object sender, EventArgs e)
@@ -244,15 +270,19 @@ namespace PraticeManagement.Reporting
             }
             else
             {
-                mvPersonDetailReport.ActiveViewIndex = 0;
-                LoadActiveView();
+                SwitchView(lnkbtnSummary, 0);
             }
         }
 
         protected void btnView_Command(object sender, CommandEventArgs e)
         {
             int viewIndex = int.Parse((string)e.CommandArgument);
-            SelectView((Control)sender, viewIndex);
+            SwitchView((Control)sender, viewIndex);
+        }
+
+        private void SwitchView(Control control, int viewIndex)
+        {
+            SelectView(control, viewIndex);
             LoadActiveView();
         }
 
@@ -323,7 +353,7 @@ namespace PraticeManagement.Reporting
             ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValueWithZeroPadding);
             ltrlBillablePercent.Text = billablePercent.ToString();
             ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
-            ltrlTotalValue.Text = totalValue > 0 ? totalValue.ToString(Constants.Formatting.CurrencyFormat) : "$0";
+            ltrlTotalValue.Text = totalValue < 0 ? "Fixed" : totalValue == 0 ? "$0" : totalValue.ToString(Constants.Formatting.CurrencyFormat);
 
             if (billablePercent == 0 && nonBillablePercent == 0)
             {
