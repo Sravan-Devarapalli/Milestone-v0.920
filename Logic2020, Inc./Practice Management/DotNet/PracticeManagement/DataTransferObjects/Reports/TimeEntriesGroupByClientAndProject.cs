@@ -34,6 +34,8 @@ namespace DataTransferObjects.Reports
         [DataMember]
         public double NonBillableHours { get; set; }
 
+        [DataMember]
+        public bool IsPersonNotAssignedToFixedProject { get; set; }
 
         [DataMember]
         public List<TimeEntriesGroupByDate> DayTotalHours
