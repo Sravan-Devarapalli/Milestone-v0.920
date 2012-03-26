@@ -6,84 +6,156 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects.Reports;
 using System.Web.UI.HtmlControls;
+using System.Text;
 
 namespace PraticeManagement.Controls.Reports
 {
     public partial class TimePeriodSummaryByResource : System.Web.UI.UserControl
     {
-        #region Constants
+        private PraticeManagement.Reporting.TimePeriodSummaryReport HostingPage
+        {
+            get { return ((PraticeManagement.Reporting.TimePeriodSummaryReport)Page); }
+        }
 
-        private const string Repeater_ResourceHeaders = "repResourceHeaders";
-        private const string Repeater_ResourceHoursPerDay = "repResourceHoursPerDay";
+        public List<PersonLevelGroupedHours> PersonLevelGroupedHoursList
+        {
+            get
+            {
+                return ViewState["PersonLevelGroupedHoursList_Key"] as List<PersonLevelGroupedHours>;
+            }
+            set
+            {
+                ViewState["PersonLevelGroupedHoursList_Key"] = value;
+            }
 
-        #endregion
+        }
+        protected string GetDoubleFormat(double value)
+        {
+            return value.ToString(Constants.Formatting.DoubleValue);
+        }
 
-        #region Properties
+        protected string GetCurrencyFormat(double value)
+        {
+            return value > 0 ? value.ToString(Constants.Formatting.CurrencyFormat) : "$0";
+        }
 
-        public Dictionary<DateTime, String> Dates { get; set; }
+        protected string GetBillableValue(double billableValue, bool isPersonNotAssignedToFixedProject)
+        {
+            if (!isPersonNotAssignedToFixedProject)
+            {
+                return "Fixed";
+            }
+            else
+            {
+                return billableValue > 0 ? billableValue.ToString(Constants.Formatting.CurrencyFormat) : "$0";
+            }
+        }
 
+        protected string GetBillableSortValue(double billableValue, bool isPersonNotAssignedToFixedProject)
+        {
+            if (!isPersonNotAssignedToFixedProject)
+            {
+                return "-1";
+            }
+            else
+            {
+                return billableValue > 0 ? billableValue.ToString() : "0";
+            }
+        }
 
-        #endregion
+        protected void btnExportToExcel_OnClick(object sender, EventArgs e)
+        {
+          
+            if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
+            {
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("Time Period Summary Report");
+                sb.Append("\t");
+                sb.AppendLine();
+                sb.Append(HostingPage.StartDate.Value.ToString("MM/dd/yyyy") + " - " + HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
+                sb.Append("\t");
+                sb.AppendLine();
+                sb.AppendLine();
+
+                if (PersonLevelGroupedHoursList.Count > 0)
+                {
+                    //Header
+                    sb.Append("Resource");
+                    sb.Append("\t");
+                    sb.Append("Seniority");
+                    sb.Append("\t");
+                    sb.Append("Billable");
+                    sb.Append("\t");
+                    sb.Append("Non-Billable");
+                    sb.Append("\t");
+                    sb.Append("Total");
+                    sb.Append("\t");
+                    sb.Append("Value");
+                    sb.Append("\t");
+                    sb.Append("Utlization Percent this Period");
+                    sb.Append("\t");
+                    sb.AppendLine();
+
+                    //Data
+                    foreach (var personLevelGroupedHours in PersonLevelGroupedHoursList)
+                    {
+                        sb.Append(personLevelGroupedHours.Person.PersonLastFirstName);
+                        sb.Append("\t");
+                        sb.Append(personLevelGroupedHours.Person.Seniority.Name);
+                        sb.Append("\t");
+                        sb.Append(GetDoubleFormat(personLevelGroupedHours.BillableHours));
+                        sb.Append("\t");
+                        sb.Append(GetDoubleFormat(personLevelGroupedHours.NonBillableHours));
+                        sb.Append("\t");
+                        sb.Append(GetDoubleFormat(personLevelGroupedHours.TotalHours));
+                        sb.Append("\t");
+                        sb.Append("$" + personLevelGroupedHours.BillableValue);
+                        sb.Append("\t");
+                        sb.Append(personLevelGroupedHours.Person.UtlizationPercent + "%");
+                        sb.Append("\t");
+                        sb.AppendLine();
+                    }
+
+                }
+                else
+                {
+                    sb.Append("There are no Time Entries towards this project.");
+                }
+                //“TimePeriod_ByResource_[StartOfRange]_[EndOfRange].xls”.  
+                var filename = string.Format("{0}_{1}_{2}.xls", "TimePeriod_ByResource", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
+                GridViewExportUtil.Export(filename, sb);
+            }
+        }
+
+        protected void btnExportToPDF_OnClick(object sender, EventArgs e)
+        {
+
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            extBillableNonBillableAndTotalExtender.ControlsToCheck = rbBillable.ClientID + ";" + rbCombined.ClientID + ";" + rbNonBillable.ClientID;
+           
         }
 
-        protected void repResource_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        public void DataBindResource(PersonLevelGroupedHours[] reportData)
         {
-            if (e.Item.ItemType == ListItemType.Header)
+            PersonLevelGroupedHoursList = reportData.ToList();
+            if (PersonLevelGroupedHoursList.Count > 0)
             {
-                var repResourceHeaders = e.Item.FindControl(Repeater_ResourceHeaders) as Repeater;
-                repResourceHeaders.DataSource = Dates;
-                repResourceHeaders.DataBind();
-                extBillableNonBillableAndTotalExtender.TargetControlsToCheck = string.Empty;
+                HostingPage.SetGraphVisibility(true);
+                divEmptyMessage.Style["display"] = "none";
+                repResource.Visible = true;
+                repResource.DataSource = reportData;
+                repResource.DataBind();
             }
-            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            else
             {
-                var repResourceHoursPerDay = e.Item.FindControl(Repeater_ResourceHoursPerDay) as Repeater;
-                var tdPersonTotalHours = e.Item.FindControl("tdPersonTotalHours") as HtmlTableCell;
-                extBillableNonBillableAndTotalExtender.TargetControlsToCheck += tdPersonTotalHours.ClientID + ";";
-                var resourceHoursPerDay = new Dictionary<DateTime, GroupedHours>();
-                var groupedHours = ((PersonLevelGroupedHours)e.Item.DataItem).GroupedHoursList;
-
-                foreach (var day in Dates)
-                {
-                    resourceHoursPerDay.Add(day.Key, GetHours(groupedHours, day));
-                }
-
-                repResourceHoursPerDay.DataSource = resourceHoursPerDay;
-                repResourceHoursPerDay.DataBind();
+                divEmptyMessage.Style["display"] = "";
+                repResource.Visible = false;
+                HostingPage.SetGraphVisibility(false);
             }
         }
-
-        protected void repResourceHoursPerDay_OnItemDataBound(object sender, RepeaterItemEventArgs e)
-        {
-
-            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-            {
-                var tdDayTotalHours = e.Item.FindControl("tdDayTotalHours") as HtmlTableCell;
-                extBillableNonBillableAndTotalExtender.TargetControlsToCheck += tdDayTotalHours.ClientID + ";";
-            }
-        }
-
-
-        private GroupedHours GetHours(List<GroupedHours> groupedHours, KeyValuePair<DateTime, string> day)
-        {
-            if (groupedHours.Any(d => d.StartDate.Date == day.Key.Date))
-            {
-                return groupedHours.First(gh => gh.StartDate.Date == day.Key.Date);
-            }
-
-            return new GroupedHours();
-        }
-
-        public void DataBindResource(PersonLevelGroupedHours[] reportData, Dictionary<DateTime, String> datesList)
-        {
-            Dates = datesList;
-            repResource.DataSource = reportData;
-            repResource.DataBind();
-        }
-    }
+     }
 }
 
