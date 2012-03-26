@@ -21,58 +21,50 @@ namespace DataTransferObjects.Reports
         }
 
         [DataMember]
-        public List<GroupedHours> GroupedHoursList
+        public double BillableHours
+        {
+            get;
+            set;
+
+        }
+
+        [DataMember]
+        public double BillableValue
         {
             get;
             set;
         }
 
-        public double BillabileTotal
+        [DataMember]
+        public double NonBillableHours
+        {
+            get;
+            set;
+
+        }
+
+        [DataMember]
+        public bool IsFixedProject { get; set; }
+
+        [DataMember]
+        public double BillableHoursUntilToday { get; set; }
+
+
+        [DataMember]
+        public double ForecastedHoursUntilToday
+        {
+            get;
+            set;
+        }
+
+        public double TotalHours
         {
             get
             {
-                if (GroupedHoursList != null)
-                {
-                    return GroupedHoursList.Sum(G => G.BillabileTotal);
-                }
-                else
-                {
-                    return 0d;
-                }
-
-
+                return BillableHours + NonBillableHours;
             }
         }
 
-        public double NonBillableTotal
-        {
-            get
-            {
-                if (GroupedHoursList != null)
-                {
-                    return GroupedHoursList.Sum(G => G.NonBillableTotal);
-                }
-                else
-                {
-                    return 0d;
-                }
-            }
-        }
-
-        public double CombinedTotal
-        {
-            get
-            {
-                if (GroupedHoursList != null)
-                {
-                    return GroupedHoursList.Sum(G => G.CombinedTotal);
-                }
-                else
-                {
-                    return 0d;
-                }
-            }
-        }
     }
 }
 
