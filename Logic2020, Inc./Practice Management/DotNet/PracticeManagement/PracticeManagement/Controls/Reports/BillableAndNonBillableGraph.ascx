@@ -11,35 +11,36 @@
         var lblBillablePercent = document.getElementById('<%= lblBillablePercent.ClientID %>');
         var billableTD = document.getElementById('<%= billableTD.ClientID %>');
         var nonbillableTD = document.getElementById('<%= nonbillableTD.ClientID %>');
-        var biilableval = Number(biilable.value);
-        var nonbiilableval = Number(nonbiilable.value);
+        if (billableTD != null && nonbillableTD != null) {
+            var biilableval = Number(biilable.value);
+            var nonbiilableval = Number(nonbiilable.value);
+            if (biilableval == 0 && nonbiilableval == 0) {
 
-        if (biilableval == 0 && nonbiilableval == 0) {
+                billableTD.style.backgroundColor = "white";
+                billableTD.style.width = "600px";
+                billableTD.innerHTML = "";
 
-            billableTD.style.backgroundColor = "white";
-            billableTD.style.width = "600px";
-            billableTD.innerHTML = "";
+                nonbillableTD.style.width = "0px";
+                nonbillableTD.style.backgroundColor = "white";
+                nonbillableTD.innerHTML = "";
 
-            nonbillableTD.style.width = "0px";
-            nonbillableTD.style.backgroundColor = "white";
-            nonbillableTD.innerHTML = "";
+                lblBillablePercent.innerHTML = "";
 
-            lblBillablePercent.innerHTML = "";
+            }
+            else {
+                var billablePercent = parseInt((100 * biilableval / (biilableval + nonbiilableval)));
+                var nonbillablePercent = 100 - billablePercent;
 
-        }
-        else {
-            var billablePercent = parseInt((100 * biilableval / (biilableval + nonbiilableval)));
-            var nonbillablePercent = 100 - billablePercent;
+                billableTD.style.backgroundColor = "#7fd13b";
+                billableTD.style.width = (billablePercent * 6) + "px";
+                billableTD.innerHTML = biilableval != 0 ? biilableval : "";
 
-            billableTD.style.backgroundColor = "green";
-            billableTD.style.width = (billablePercent * 6) + "px";
-            billableTD.innerHTML = biilableval != 0 ? biilableval : "";
+                nonbillableTD.style.backgroundColor = "#BEBEBE";
+                nonbillableTD.style.width = (nonbillablePercent * 6) + "px";
+                nonbillableTD.innerHTML = nonbiilableval != 0 ? nonbiilableval : "";
 
-            nonbillableTD.style.backgroundColor = "gray";
-            nonbillableTD.style.width = (nonbillablePercent * 6) + "px";
-            nonbillableTD.innerHTML = nonbiilableval != 0 ? nonbiilableval : "";
-
-            lblBillablePercent.innerHTML = billablePercent + "%";
+                lblBillablePercent.innerHTML = billablePercent + "% Billable";
+            }
         }
     }
 
