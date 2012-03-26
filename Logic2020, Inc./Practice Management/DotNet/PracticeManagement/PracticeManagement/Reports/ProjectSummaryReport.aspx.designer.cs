@@ -58,6 +58,15 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Image imgProjectSearch;
         
         /// <summary>
+        /// msgError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.MessageLabel msgError;
+        
+        /// <summary>
         /// mpeProjectSearch control.
         /// </summary>
         /// <remarks>
@@ -148,24 +157,6 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.LinkButton lnkbtnResource;
         
         /// <summary>
-        /// cellWorkType control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TableCell cellWorkType;
-        
-        /// <summary>
-        /// lnkbtnWorkType control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkbtnWorkType;
-        
-        /// <summary>
         /// mvProjectSummaryReport control.
         /// </summary>
         /// <remarks>
@@ -200,24 +191,6 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Reports.ProjectSummaryByResource ucByResource;
-        
-        /// <summary>
-        /// vwProjectReport control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.View vwProjectReport;
-        
-        /// <summary>
-        /// pnlProjectReport control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlProjectReport;
     }
 }
 
