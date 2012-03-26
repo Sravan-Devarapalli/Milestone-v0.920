@@ -15,7 +15,7 @@
                             UseSubmitBehavior="false" ToolTip="Export To Excel" />
                     </td>
                     <td>
-                        <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick"
+                        <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick" Enabled="false"
                             UseSubmitBehavior="false" ToolTip="Export To PDF" />
                     </td>
                 </tr>
@@ -34,13 +34,13 @@
                     Billable
                 </th>
                 <th>
-                    Value
-                </th>
-                <th style="width: 10%;">
-                    Non-Billable
+                  Non-Billable
                 </th>
                 <th>
-                    Total
+                  Total
+                </th>
+                <th>
+                    Value
                 </th>
                 <th style="width: 25%;">
                     Percent of Total Hours this Period
@@ -71,13 +71,13 @@
                 <%# GetDoubleFormat((double)Eval("BillableHours"))%>
             </td>
             <td>
-                <%# GetCurrencyFormat((double)Eval("BillableValue"))%>
-            </td>
-            <td>
                 <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
             </td>
             <td>
                 <%# GetDoubleFormat((double)Eval("TotalHours"))%>
+            </td>
+            <td>
+                <%# GetBillableValue((double)Eval("BillableValue"), (bool)Eval("IsPersonNotAssignedToFixedProject"))%>
             </td>
             <td>
                 <table class="TdLevelNoBorder" width="100%">
@@ -128,13 +128,13 @@
                 <%# GetDoubleFormat((double)Eval("BillableHours"))%>
             </td>
             <td>
-                <%# GetCurrencyFormat((double)Eval("BillableValue"))%>
-            </td>
-            <td>
-                <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
+               <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
             </td>
             <td>
                 <%# GetDoubleFormat((double)Eval("TotalHours"))%>
+            </td>
+            <td>
+                <%# GetBillableValue((double)Eval("BillableValue"), (bool)Eval("IsPersonNotAssignedToFixedProject"))%>
             </td>
             <td>
                 <table class="TdLevelNoBorder" width="100%">
