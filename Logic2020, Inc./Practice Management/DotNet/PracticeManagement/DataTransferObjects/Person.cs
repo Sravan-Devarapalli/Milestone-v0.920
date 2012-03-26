@@ -383,6 +383,9 @@ namespace DataTransferObjects
         [DataMember]
         public bool IsStrawMan { get; set; }
 
+        [DataMember]
+        public double UtlizationPercent{ get; set; }
+
         #endregion
 
         #region Properties - calculated
