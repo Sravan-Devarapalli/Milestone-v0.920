@@ -729,7 +729,7 @@
                                         BehaviorID="cpeAdministrative" />
                                     <asp:Label ID="lbAdministrativeSection" Style="display: none;" runat="server"></asp:Label>
                                     <asp:Image ID="btnAdmistrativeExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg"
-                                        ToolTip="Expand Section" />&nbsp;<b>ADMINISTRATIVE</b>
+                                        ToolTip="Expand Section" />&nbsp;<b>TIME-OFF</b>
                                 </td>
                                 <td>
                                 </td>
@@ -769,7 +769,7 @@
                             </ItemTemplate>
                             <FooterTemplate>
                                 <asp:ImageButton ID="imgPlusAdministrativeSection" OnClick="imgPlusAdministrativeSection_OnClick"
-                                    runat="server" ImageUrl="~/Images/add_24.png" ToolTip="Add additional Administrative Work Type" />
+                                    runat="server" ImageUrl="~/Images/add_24.png" ToolTip="Add additional Work Type" />
                                 <asp:Repeater ID="repAdministrativeTesFooter" runat="server" OnItemDataBound="repAdministrativeTesFooter_OnItemDataBound">
                                     <ItemTemplate>
                                         <asp:HiddenField ID="hdEnableDisableExtenderForAdminstratorSection" runat="server" />
