@@ -1,30 +1,53 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProjectSummaryByResource.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.ProjectSummaryByResource" %>
+<table class="WholeWidthWithHeight">
+    <tr>
+        <td colspan="4" style="width: 90%;">
+        </td>
+        <td style="text-align: right; width: 10%; padding-right: 5px;">
+            <table width="100%" style="text-align: right;">
+                <tr>
+                    <td>
+                        Export:
+                    </td>
+                    <td>
+                        <asp:Button ID="btnExportToExcel" runat="server" Text="Excel" OnClick="btnExportToExcel_OnClick"
+                            UseSubmitBehavior="false" ToolTip="Export To Excel" />
+                    </td>
+                    <td>
+                        <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick"
+                            UseSubmitBehavior="false" ToolTip="Export To PDF" />
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
     <HeaderTemplate>
-        <table class="PersonSummaryReport WholeWidth">
+        <table id="tblProjectSummaryByResource" class="tablesorter PersonSummaryReport WholeWidth">
             <thead>
                 <tr>
-                    <th>
+                    <th style="width:18%;" >
                         Resource
                     </th>
-                    <th>
+                    <th style="width:13%;">
                         Project Role
                     </th>
-                    <th>
+                    <th style="width:10%;">
                         Billable
                     </th>
-                    <th>
+                    <th style="width:13%;">
                         Non-Billable
                     </th>
-                    <th>
+                    <th style="width:10%;">
                         Total
                     </th>
-                    <th>
+                    <th style="width:10%;">
                         Value
                     </th>
-                    <th>
-                        Person Variance Percentage
+                    <th style="width:26%;">
+                        Project Variance (in Hours)
                     </th>
                 </tr>
             </thead>
@@ -32,52 +55,67 @@
     </HeaderTemplate>
     <ItemTemplate>
         <tr class="ReportItemTemplate">
-            <td class="padLeft5">
+            <td class="t-left padLeft5">
                 <%# Eval("Person.PersonLastFirstName")%>
             </td>
-            <td>
+            <td class="t-left padLeft5">
                 <%# Eval("Person.ProjectRoleName")%>
             </td>
             <td>
-                <%# Eval("BillabileHours")%>
+                <%# GetDoubleFormat((double)Eval("BillableHours"))%>
             </td>
             <td>
-                <%# Eval("NonBillableHours")%>
+                <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
             </td>
             <td>
-                <%# Eval("TotalHours")%>
+                <%# GetDoubleFormat((double)Eval("TotalHours"))%>
+            </td>
+           <td sorttable_customkey='<%# GetBillableSortValue((double)Eval("BillableValue"), (bool)Eval("IsPersonNotAssignedToFixedProject"))%>' >
+                <%# GetCurrencyFormat((double)Eval("BillableValue"), (bool)Eval("IsPersonNotAssignedToFixedProject"))%>
             </td>
             <td>
-                <%# Eval("BillableValue")%>
-            </td>
-            <td>
+                <table class="WholeWidth  TdLevelNoBorder">
+                    <tr>
+                        <td style="width: 75%;">
+                            <table class="WholeWidth">
+                                <tr style="border: 1px solid black;">
+                                    <td style="width: 50%; border-right: 1px solid black;">
+                                        <table width="100%">
+                                            <tr>
+                                                <td style="<%# Eval("BillableFirstHalfHtmlStyle")%>">
+                                                </td>
+                                                <td style="<%# Eval("BillableSecondHalfHtmlStyle")%>">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="width: 50%; border-left: 1px solid black;">
+                                        <table width="100%">
+                                            <tr>
+                                                <td style="<%# Eval("ForecastedFirstHalfHtmlStyle")%>">
+                                                </td>
+                                                <td style="<%# Eval("ForecastedSecondHalfHtmlStyle")%>">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table class="WholeWidth">
+                                <tr>
+                                    <td style="text-align:left;padding-left:4px;"  >
+                                        <%# Eval("Variance")%>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </ItemTemplate>
-    <AlternatingItemTemplate>
-        <tr class="ReportAlternateItemTemplate">
-            <td class="padLeft5">
-                <%# Eval("Person.PersonLastFirstName")%>
-            </td>
-            <td>
-                <%# Eval("Person.ProjectRoleName")%>
-            </td>
-            <td>
-                <%# Eval("BillabileHours")%>
-            </td>
-            <td>
-                <%# Eval("NonBillableHours")%>
-            </td>
-            <td>
-                <%# Eval("TotalHours")%>
-            </td>
-            <td>
-                <%# Eval("BillableValue")%>
-            </td>
-            <td>
-            </td>
-        </tr>
-    </AlternatingItemTemplate>
     <FooterTemplate>
         </tbody></table>
     </FooterTemplate>
