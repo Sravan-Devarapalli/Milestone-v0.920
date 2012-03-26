@@ -12,163 +12,116 @@ namespace PraticeManagement.Reporting
     {
         #region Properties
 
-        public DateTime StartDate
+        public DateTime? StartDate
         {
             get
             {
-                var selectedVal = int.Parse(ddlPeriod.SelectedValue);
-                if (selectedVal == 0)
+                int selectedVal = 0;
+                if (int.TryParse(ddlPeriod.SelectedValue, out selectedVal))
                 {
-                    return diRange.FromDate.Value;
-                }
-                else
-                {
-                    var now = Utils.Generic.GetNowWithTimeZone();
-                    if (selectedVal > 0)
-                    {
-                        if (selectedVal == 7)
-                        {
-                            return Utils.Calendar.WeekStartDate(now);
-                        }
-                        else if (selectedVal == 30)
-                        {
-                            return Utils.Calendar.MonthStartDate(now);
-                        }
-                        else
-                        {
-                            return Utils.Calendar.YearStartDate(now);
-                        }
-
-                    }
-                    else if (selectedVal < 0)
-                    {
-                        if (selectedVal == -7)
-                        {
-                            return Utils.Calendar.LastWeekStartDate(now);
-                        }
-                        else if (selectedVal == -30)
-                        {
-                            return Utils.Calendar.LastMonthStartDate(now);
-                        }
-                        else
-                        {
-                            return Utils.Calendar.LastYearStartDate(now);
-                        }
-                    }
-                    else
+                    if (selectedVal == 0)
                     {
                         return diRange.FromDate.Value;
                     }
+                    else
+                    {
+                        var now = Utils.Generic.GetNowWithTimeZone();
+                        if (selectedVal > 0)
+                        {
+                            if (selectedVal == 7)
+                            {
+                                return Utils.Calendar.WeekStartDate(now);
+                            }
+                            else if (selectedVal == 30)
+                            {
+                                return Utils.Calendar.MonthStartDate(now);
+                            }
+                            else
+                            {
+                                return Utils.Calendar.YearStartDate(now);
+                            }
+
+                        }
+                        else if (selectedVal < 0)
+                        {
+                            if (selectedVal == -7)
+                            {
+                                return Utils.Calendar.LastWeekStartDate(now);
+                            }
+                            else if (selectedVal == -30)
+                            {
+                                return Utils.Calendar.LastMonthStartDate(now);
+                            }
+                            else
+                            {
+                                return Utils.Calendar.LastYearStartDate(now);
+                            }
+                        }
+                        else
+                        {
+                            return diRange.FromDate.Value;
+                        }
+                    }
                 }
+                return null;
             }
         }
 
-        public DateTime EndDate
+        public DateTime? EndDate
         {
             get
             {
-                var selectedVal = int.Parse(ddlPeriod.SelectedValue);
-                if (selectedVal == 0)
+                int selectedVal = 0;
+                if (int.TryParse(ddlPeriod.SelectedValue, out selectedVal))
                 {
-                    return diRange.ToDate.Value;
-                }
-                else
-                {
-                    var now = Utils.Generic.GetNowWithTimeZone();
-                    DateTime firstDay = new DateTime(now.Year, now.Month, 1);
-                    if (selectedVal > 0)
-                    {
-                        //7
-                        //30
-                        //365
-                        if (selectedVal == 7)
-                        {
-                            return Utils.Calendar.WeekEndDate(now);
-                        }
-                        else if (selectedVal == 30)
-                        {
-                            return Utils.Calendar.MonthEndDate(now);
-                        }
-                        else
-                        {
-                            return Utils.Calendar.YearEndDate(now);
-                        }
-                    }
-                    else if (selectedVal < 0)
-                    {
-                        if (selectedVal == -7)
-                        {
-                            return Utils.Calendar.LastWeekEndDate(now);
-                        }
-                        else if (selectedVal == -30)
-                        {
-                            return Utils.Calendar.LastMonthEndDate(now);
-                        }
-                        else
-                        {
-                            return Utils.Calendar.LastYearEndDate(now);
-                        }
-                    }
-                    else
+                    if (selectedVal == 0)
                     {
                         return diRange.ToDate.Value;
                     }
-                }
-            }
-        }
-
-        public Dictionary<DateTime, String> DatesList
-        {
-            get
-            {
-                var list = new Dictionary<DateTime, String>();
-                var days = EndDate.Subtract(StartDate).Days;
-                if (days <= 7)
-                {
-                    //Single Day.
-                    for (int day = 0; day <= EndDate.Subtract(StartDate).Days; day++)
+                    else
                     {
-                        DateTime _startDate = StartDate.AddDays(day);
-                        list.Add(_startDate, _startDate.ToString("MM/dd/yyyy"));
+                        var now = Utils.Generic.GetNowWithTimeZone();
+                        DateTime firstDay = new DateTime(now.Year, now.Month, 1);
+                        if (selectedVal > 0)
+                        {
+                            //7
+                            //30
+                            //365
+                            if (selectedVal == 7)
+                            {
+                                return Utils.Calendar.WeekEndDate(now);
+                            }
+                            else if (selectedVal == 30)
+                            {
+                                return Utils.Calendar.MonthEndDate(now);
+                            }
+                            else
+                            {
+                                return Utils.Calendar.YearEndDate(now);
+                            }
+                        }
+                        else if (selectedVal < 0)
+                        {
+                            if (selectedVal == -7)
+                            {
+                                return Utils.Calendar.LastWeekEndDate(now);
+                            }
+                            else if (selectedVal == -30)
+                            {
+                                return Utils.Calendar.LastMonthEndDate(now);
+                            }
+                            else
+                            {
+                                return Utils.Calendar.LastYearEndDate(now);
+                            }
+                        }
+                        else
+                        {
+                            return diRange.ToDate.Value;
+                        }
                     }
                 }
-                else if (days > 7 && days <= 31)
-                {
-                    //Single Week.
-                    DateTime _startDate = StartDate;
-                    DateTime _endDate = Utils.Calendar.WeekEndDate(_startDate);
-                    while (_startDate <= EndDate)
-                    {
-                        list.Add(_startDate, _startDate.ToString("MM/dd/yyyy") + " - " + (_endDate <= EndDate ? _endDate.ToString("MM/dd/yyyy") : EndDate.ToString("MM/dd/yyyy")));
-                        _startDate = Utils.Calendar.WeekStartDate(_endDate.AddDays(1));
-                        _endDate = Utils.Calendar.WeekEndDate(_endDate.AddDays(1));
-                    }
-                }
-                else if (days > 31 && days <= 366)
-                {
-                    //Single Month.
-                    DateTime _startDate = StartDate;
-                    DateTime _endDate = Utils.Calendar.MonthEndDate(_startDate);
-                    while (_startDate <= EndDate)
-                    {
-                        list.Add(_startDate, _startDate.ToString("MMM - yyyy"));
-                        _startDate = Utils.Calendar.MonthStartDate(_endDate.AddDays(1));
-                        _endDate = Utils.Calendar.MonthEndDate(_endDate.AddDays(1));
-                    }
-                }
-                else if (days > 366)
-                {
-                    //Single Year.
-                    DateTime _startDate = StartDate;
-                    DateTime _endDate = Utils.Calendar.YearEndDate(_startDate);
-                    while (_startDate <= EndDate)
-                    {
-                        list.Add(_startDate, _startDate.ToString("yyyy"));
-                        _startDate = Utils.Calendar.YearStartDate(_endDate.AddDays(1));
-                        _endDate = Utils.Calendar.YearEndDate(_endDate.AddDays(1));
-                    }
-                }
-                return list;
+                return null;
             }
         }
 
@@ -180,8 +133,9 @@ namespace PraticeManagement.Reporting
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            diRange.FromDate = StartDate;
-            diRange.ToDate = EndDate;
+            var now = Utils.Generic.GetNowWithTimeZone();
+            diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
+            diRange.ToDate = EndDate.HasValue ? EndDate : Utils.Calendar.WeekEndDate(now);
             lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
                     diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat),
                     diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat)
@@ -218,6 +172,12 @@ namespace PraticeManagement.Reporting
             LoadActiveView();
         }
 
+        private void SwitchView(Control control, int viewIndex)
+        {
+            SelectView(control, viewIndex);
+            LoadActiveView();
+        }
+
         private void SelectView(Control sender, int viewIndex)
         {
             mvTimePeriodReport.ActiveViewIndex = viewIndex;
@@ -240,8 +200,8 @@ namespace PraticeManagement.Reporting
             Page.Validate(valSumDateRange.ValidationGroup);
             if (Page.IsValid)
             {
-                hdnStartDate.Value = StartDate.Date.ToShortDateString();
-                hdnEndDate.Value = EndDate.Date.ToShortDateString();
+                hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
+                hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
                 LoadActiveView();
             }
             else
@@ -252,57 +212,78 @@ namespace PraticeManagement.Reporting
 
         protected void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddlPeriod.SelectedValue != "0")
+            if (ddlPeriod.SelectedValue != "Please Select")
             {
-                LoadActiveView();
+                if (ddlPeriod.SelectedValue != "0")
+                {
+                    LoadActiveView();
+                }
+                else
+                {
+                    mpeCustomDates.Show();
+                }
             }
             else
             {
-                mpeCustomDates.Show();
+                SwitchView(lnkbtnResource, 0);
             }
         }
 
         private void LoadActiveView()
         {
-            if (mvTimePeriodReport.ActiveViewIndex == 0)
+            if (StartDate.HasValue && EndDate.HasValue)
             {
-                PopulateByResourceData();
-            }
-            else if (mvTimePeriodReport.ActiveViewIndex == 1)
-            {
-                PopulateByProjectData();
+                divWholePage.Style.Remove("display");
+                if (mvTimePeriodReport.ActiveViewIndex == 0)
+                {
+                    PopulateByResourceData();
+                }
+                else if (mvTimePeriodReport.ActiveViewIndex == 1)
+                {
+                    PopulateByProjectData();
+                }
+                else
+                {
+                    PopulateByWorkTypeData();
+                }
             }
             else
             {
-                PopulateByWorkTypeData();
+                divWholePage.Style.Add("display", "none");
             }
-        }
-
-        private void PopulateByWorkTypeData()
-        {
-            var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByWorkType(StartDate,EndDate,string.Empty,string.Empty));
-            ucByWorktype.DataBindResource(data, DatesList);
-            ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
-            ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
         }
 
         private void PopulateByResourceData()
         {
-            string orderByCerteria = string.Empty;
-            var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(StartDate, EndDate, null, orderByCerteria));
-            tpByResource.DataBindResource(data, DatesList);
-            ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
-            ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
+            var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(StartDate.Value, EndDate.Value, null));
+            tpByResource.DataBindResource(data);
+            int billableHours = (int)data.Sum(p=>p.BillableHours);
+            int nonBillableHours = (int)data.Sum(p=>p.NonBillableHours);
+            ucBillableAndNonBillable.BillablValue = billableHours.ToString();
+            ucBillableAndNonBillable.NonBillablValue = nonBillableHours.ToString();
         }
 
         private void PopulateByProjectData()
         {
-            string orderByCerteria = string.Empty;
-            var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(StartDate, EndDate, null, null, orderByCerteria));
-            tpByProject.DataBindProject(data, DatesList);
+            //string orderByCerteria = string.Empty;
+            //var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(StartDate.Value, EndDate.Value, null, null, orderByCerteria));
+            //tpByProject.DataBindProject(data, DatesList);
 
-            ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
-            ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
+            //ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
+            //ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
+        }
+
+        private void PopulateByWorkTypeData()
+        {
+            //var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByWorkType(StartDate.Value, EndDate.Value, string.Empty, string.Empty));
+            //ucByWorktype.DataBindResource(data, DatesList);
+            //ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
+            //ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
+        }
+
+        public void SetGraphVisibility(bool visible)
+        {
+            ucBillableAndNonBillable.Visible = visible;
         }
     }
 }
