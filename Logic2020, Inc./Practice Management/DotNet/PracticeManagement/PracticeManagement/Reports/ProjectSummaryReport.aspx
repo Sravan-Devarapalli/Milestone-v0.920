@@ -1,6 +1,8 @@
 ﻿<%@ Page Title="Project Summary Report" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="ProjectSummaryReport.aspx.cs" Inherits="PraticeManagement.Reporting.ProjectSummaryReport" %>
-<%@ Register Src="~/Controls/Reports/TimeEntryReportsHeader.ascx" TagPrefix="uc" TagName="TimeEntryReportsHeader" %>
+
+<%@ Register Src="~/Controls/Reports/TimeEntryReportsHeader.ascx" TagPrefix="uc"
+    TagName="TimeEntryReportsHeader" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <%@ Register Src="~/Controls/Reports/ProjectSummaryByResource.ascx" TagPrefix="uc"
     TagName="ByResource" %>
@@ -75,7 +77,7 @@
             width: 152px;
         }
     </style>
-    <script src="../Scripts/sorttable.js" type="text/javascript"></script>
+    <link href="../Css/TableSortStyle.css" rel="stylesheet" type="text/css" />
     <script language="javascript" type="text/javascript">
         function btnClose_OnClientClick(popup) {
             $find(popup).hide();
@@ -86,11 +88,45 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
- <uc:TimeEntryReportsHeader id="timeEntryReportHeader" runat="server"></uc:TimeEntryReportsHeader>
+    <script src="../Scripts/jquery-1.4.1.js" type="text/javascript"></script>
+    <script src="../Scripts/jquery.tablesorter.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#tblProjectSummaryByResource").tablesorter(
+            {
+                headers: {
+                    6: {
+                        sorter: false
+                    }
+                }
+            }
+
+            );
+        });
+
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+        function endRequestHandle(sender, Args) {
+            $(document).ready(function () {
+                $("#tblProjectSummaryByResource").tablesorter(
+                {
+                    headers: {
+                        6: {
+                            sorter: false
+                        }
+                    }
+                }
+
+                );
+            });
+        }
+
+
+    </script>
+    <uc:TimeEntryReportsHeader ID="timeEntryReportHeader" runat="server"></uc:TimeEntryReportsHeader>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
-             <table width="100%">
+            <table width="100%">
                 <tr>
                     <td class="height30P vBottom fontBold">
                         2.&nbsp;Select report parameters:
@@ -99,11 +135,11 @@
             </table>
             <table style="width: 100%;">
                 <tr>
-                    <td style="width:33%;">
+                    <td style="width: 33%;">
                         &nbsp;
                     </td>
-                    <td style="width:34%;" align="center" style="text-align: center;">
-                        <table class="PaddingTenPx" >
+                    <td style="width: 34%;" align="center" style="text-align: center;">
+                        <table class="PaddingTenPx">
                             <tr>
                                 <td>
                                     Project Number:
@@ -118,12 +154,12 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width:33%;">
+                    <td style="width: 33%;">
                         &nbsp;
                     </td>
                 </tr>
-                  <tr>
-                    <td colspan="3" style="border-bottom: 3px solid black; width: 100%; padding-top:10px;">
+                <tr>
+                    <td colspan="3" style="border-bottom: 3px solid black; width: 100%; padding-top: 10px;">
                     </td>
                 </tr>
             </table>
@@ -172,49 +208,52 @@
                 </table>
             </asp:Panel>
             <div id="divWholePage" runat="server">
-            <table style="width: 100%;">
+                <%--          <table style="width: 100%;">
                 <tr>
                     <td align="center" style="padding:10px;">
                         <uc:BillableAndNonBillableGraph ID="ucBillableAndNonBillable" runat="server"></uc:BillableAndNonBillableGraph>
                     </td>
                 </tr>
-            </table>
-            <table class="WholeWidth">
-                <tr>
-                    <td align="center">
-                        <asp:Table ID="tblProjectsummaryReportViewSwitch" runat="server" CssClass="CustomTabStyle">
-                            <asp:TableRow ID="rowSwitcher" runat="server">
-                                <asp:TableCell ID="cellResource" CssClass="SelectedSwitch" runat="server">
-                                    <span class="bg"><span>
-                                        <asp:LinkButton ID="lnkbtnResource" runat="server" Text="By Resource" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
-                                    </span>
-                                </asp:TableCell>
-                                <asp:TableCell ID="cellWorkType" runat="server">
-                                    <span class="bg"><span>
-                                        <asp:LinkButton ID="lnkbtnWorkType" runat="server" Text="By Work Type" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
-                                    </span>
-                                </asp:TableCell>
-                            </asp:TableRow>
-                        </asp:Table>
-                    </td>
-                </tr>
-            </table>
-            <asp:MultiView ID="mvProjectSummaryReport" runat="server" ActiveViewIndex="0">
-                <asp:View ID="vwResourceReport" runat="server">
-                    <asp:Panel ID="pnlResourceReport" runat="server" CssClass="tab-pane WholeWidth">
-                        <uc:ByResource ID="ucByResource" runat="server"></uc:ByResource>
-                    </asp:Panel>
-                </asp:View>
-                <asp:View ID="vwProjectReport" runat="server">
-                    <asp:Panel ID="pnlProjectReport" runat="server" CssClass="tab-pane WholeWidth">
-                        <uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByWorkType>
-                    </asp:Panel>
-                </asp:View>
-            </asp:MultiView>
+            </table>--%>
+                <table class="WholeWidth">
+                    <tr>
+                        <td align="center">
+                            <asp:Table ID="tblProjectsummaryReportViewSwitch" runat="server" CssClass="CustomTabStyle">
+                                <asp:TableRow ID="rowSwitcher" runat="server">
+                                    <asp:TableCell ID="cellResource" CssClass="SelectedSwitch" runat="server">
+                                        <span class="bg"><span>
+                                            <asp:LinkButton ID="lnkbtnResource" runat="server" Text="By Resource" CausesValidation="false"
+                                                OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
+                                        </span>
+                                    </asp:TableCell>
+                                    <asp:TableCell ID="cellWorkType" runat="server">
+                                        <span class="bg"><span>
+                                            <asp:LinkButton ID="lnkbtnWorkType" runat="server" Text="By Work Type" CausesValidation="false"
+                                                OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
+                                        </span>
+                                    </asp:TableCell>
+                                </asp:TableRow>
+                            </asp:Table>
+                        </td>
+                    </tr>
+                </table>
+                <asp:MultiView ID="mvProjectSummaryReport" runat="server" ActiveViewIndex="0">
+                    <asp:View ID="vwResourceReport" runat="server">
+                        <asp:Panel ID="pnlResourceReport" runat="server" CssClass="tab-pane WholeWidth">
+                            <uc:ByResource ID="ucByResource" runat="server"></uc:ByResource>
+                        </asp:Panel>
+                    </asp:View>
+                    <asp:View ID="vwProjectReport" runat="server">
+                        <asp:Panel ID="pnlProjectReport" runat="server" CssClass="tab-pane WholeWidth">
+                            <%--<uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByWorkType>--%>
+                        </asp:Panel>
+                    </asp:View>
+                </asp:MultiView>
             </div>
         </ContentTemplate>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="ucByResource$btnExportToExcel" />
+        </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
 
