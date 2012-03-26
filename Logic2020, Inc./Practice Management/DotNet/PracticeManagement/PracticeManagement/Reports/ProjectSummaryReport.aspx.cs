@@ -41,7 +41,6 @@ namespace PraticeManagement.Reporting
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-
             if (!IsPostBack)
             {
                 LoadActiveView();
@@ -92,14 +91,23 @@ namespace PraticeManagement.Reporting
             }
         }
 
-      
+
 
         private void PopulateByResourceData()
         {
 
-            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(ProjectNumber));
-
-            ucByResource.DataBindResource(data);
+            try
+            {
+                msgError.ClearMessage();
+                divWholePage.Style.Remove("display");
+                var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(ProjectNumber));
+                ucByResource.DataBindResource(data);
+            }
+            catch (Exception ex)
+            {
+                msgError.ShowErrorMessage(ex.Message);
+                divWholePage.Style.Add("display", "none");
+            }
             //ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileHours).ToString() : "0";
             //ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableHours).ToString() : "0";
 
@@ -119,7 +127,7 @@ namespace PraticeManagement.Reporting
         protected void ddlClients_OnSelectedIndexChanged(object sender, EventArgs e)
         {
             ClearAndAddFirsItemForDdlProjects();
-            
+
             if (ddlClients.SelectedIndex != 0)
             {
                 ddlProjects.Enabled = true;
@@ -139,7 +147,7 @@ namespace PraticeManagement.Reporting
                                                                              project.ProjectNumber.ToString()
                                                                             )
                                                    ).ToArray();
-               
+
                 ddlProjects.Items.AddRange(items);
             }
 
