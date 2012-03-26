@@ -290,6 +290,9 @@
             public const string ClientCodeColumn = "ClientCode";
             public const string GroupCodeColumn = "GroupCode";
             public const string TimeTypeCodeColumn = "TimeTypeCode";
+            public static string BillableHoursUntilToday = "BillableHoursUntilToday";
+            public static string ForecastedHoursUntilToday = "ForecastedHoursUntilToday";
+            public static string IsPersonNotAssignedToFixedProject = "IsPersonNotAssignedToFixedProject";
             
         }
 
