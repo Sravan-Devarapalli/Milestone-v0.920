@@ -185,7 +185,7 @@ namespace DataAccess
                         BillableHours = reader.GetDouble(billableHoursIndex),
                         NonBillableHours = reader.GetDouble(nonBillableHoursIndex),
                         BillableValue = reader.GetDouble(billableValueindex),
-                        IsPersonNotAssignedToFixedProject = reader.GetInt32(isPersonNotAssignedToFixedProjectIndex) == 0 ?  false : true
+                        IsPersonNotAssignedToFixedProject = reader.GetInt32(isPersonNotAssignedToFixedProjectIndex) != 0
 
                     };
 
@@ -302,7 +302,7 @@ namespace DataAccess
                         PLGH.BillableHours = reader.GetDouble(billableHoursIndex);
                         PLGH.NonBillableHours = reader.GetDouble(nonBillableHoursIndex);
                         PLGH.BillableValue = reader.GetDouble(billableValueindex);
-                        PLGH.IsPersonNotAssignedToFixedProject = reader.GetInt32(isPersonNotAssignedToFixedProjectIndex) == 0 ? false : true;
+                        PLGH.IsPersonNotAssignedToFixedProject = reader.GetInt32(isPersonNotAssignedToFixedProjectIndex) != 0;
                         PLGH.Person = person;
 
                         result.Add(PLGH);
@@ -339,6 +339,9 @@ namespace DataAccess
             {
                 int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
                 int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientName);
+                int clientCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ClientCodeColumn);
+                int groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
+                int groupCodeIndex = reader.GetOrdinal(Constants.ColumnNames.GroupCodeColumn);
                 int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
                 int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
                 int projectNumberindex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
@@ -347,16 +350,16 @@ namespace DataAccess
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
                 int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
+                int isFixedProjectIndex = reader.GetOrdinal(Constants.ColumnNames.IsFixedProject);
                 int billableHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHoursUntilToday);
                 int forecastedHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHoursUntilToday);
-                int isFixedProjectIndex = reader.GetOrdinal(Constants.ColumnNames.IsFixedProject);
+                int timeEntrySectionIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeEntrySectionId);
 
                 while (reader.Read())
                 {
                     int projectId = reader.GetInt32(projectIdIndex);
                     if (!result.Any(p => p.Project.Id == projectId))
                     {
-
                         ProjectLevelGroupedHours plgh = new ProjectLevelGroupedHours();
                         Project project = new Project
                         {
@@ -366,26 +369,30 @@ namespace DataAccess
                             Client = new Client
                             {
                                 Id = reader.GetInt32(clientIdIndex),
-                                Name = reader.GetString(clientNameIndex)
+                                Name = reader.GetString(clientNameIndex),
+                                Code = reader.GetString(clientCodeIndex)
+                            },
+                            Group = new ProjectGroup
+                            {
+                                Name = reader.GetString(groupNameIndex),
+                                Code = reader.GetString(groupCodeIndex)
                             },
                             Status = new ProjectStatus
                             {
                                 Id = reader.GetInt32(projectStatusIdIndex),
                                 Name = reader.GetString(projectStatusNameIndex)
-                            }
+                            },
+                            TimeEntrySectionId = reader.GetInt32(timeEntrySectionIdIndex)
                         };
                         plgh.Project = project;
-
                         plgh.BillableHours = reader.GetDouble(billableHoursIndex);
                         plgh.NonBillableHours = reader.GetDouble(nonBillableHoursIndex);
                         plgh.BillableValue = reader.GetDouble(billableValueindex);
                         plgh.BillableHoursUntilToday = reader.GetDouble(billableHoursUntilTodayIndex);
                         plgh.ForecastedHoursUntilToday = Convert.ToDouble(reader[forecastedHoursUntilTodayIndex]);
-                        plgh.IsFixedProject = reader.GetInt32(isFixedProjectIndex) == 1;
-
+                        plgh.IsFixedProject = reader.GetInt32(isFixedProjectIndex) == 0;
                         result.Add(plgh);
                     }
-                  
                 }
             }
         }
@@ -521,7 +528,7 @@ namespace DataAccess
                     PLGH.BillableValue = reader.GetDouble(billableValueindex);
                     PLGH.BillableHoursUntilToday = reader.GetDouble(billableHoursUntilTodayIndex);
                     PLGH.ForecastedHoursUntilToday = Convert.ToDouble(reader[forecastedHoursUntilTodayIndex]);
-                    PLGH.IsPersonNotAssignedToFixedProject = reader.GetInt32(isPersonNotAssignedToFixedProjectIndex) == 1;
+                    PLGH.IsPersonNotAssignedToFixedProject = reader.GetInt32(isPersonNotAssignedToFixedProjectIndex) != 0;
 
                     PLGH.Person = person;
 
