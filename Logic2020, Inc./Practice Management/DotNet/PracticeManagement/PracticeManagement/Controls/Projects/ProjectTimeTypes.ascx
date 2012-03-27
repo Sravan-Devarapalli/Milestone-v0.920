@@ -30,13 +30,13 @@
         <td align="left" valign="middle" style="width: 75%; vertical-align: middle;">
             <table class="WholeWidth">
                 <tr style="padding-top: 2px;">
-                    <td align="center" style="padding-left: 6px; padding-right: 6px; padding-top: 2px;
+                    <td align="center" style="padding-left: 6px; padding-right: 6px; padding-top: 2px; padding-bottom:3px;
                         vertical-align: top; text-align: center; width: 44%">
                         <b>Work Types Not Assigned to Project</b>
                     </td>
                     <td valign="middle" align="center" style="width: 12%">
                     </td>
-                    <td align="center" style="padding-left: 6px; padding-right: 6px; text-align: center;
+                    <td align="center" style="padding-left: 6px; padding-right: 6px; text-align: center; padding-bottom:3px;
                         padding-top: 2px; width: 44%">
                         <b>Work Types Assigned to Project</b>
                         <asp:CustomValidator ID="cvTimetype" runat="server" ValidationGroup="Project" OnServerValidate="cvTimetype_OnServerValidate"
@@ -49,7 +49,8 @@
                 <tr>
                     <td style="padding-left: 6px; padding-right: 6px; padding-top: 0px; width: 44%; margin: auto;
                         vertical-align: middle;">
-                        <asp:TextBox ID="txtTimeTypesNotAssignedToProject" runat="server" Width="98%" MaxLength="50"></asp:TextBox>
+                        <asp:TextBox ID="txtTimeTypesNotAssignedToProject" runat="server" Width="100%" 
+                            Style="border: 1px solid black; padding-left: 1px; padding-right: 1px;"></asp:TextBox>
                         <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmTimeTypesNotAssignedToProject"
                             runat="server" TargetControlID="txtTimeTypesNotAssignedToProject" WatermarkText="Begin typing to sort list below..."
                             WatermarkCssClass="watermarkedtext" />
@@ -58,7 +59,8 @@
                     </td>
                     <td style="padding-left: 6px; padding-right: 6px; padding-top: 0px; width: 44%; margin: auto;
                         vertical-align: middle;">
-                        <asp:TextBox ID="txtTimeTypesAssignedToProject" runat="server" Width="98%" MaxLength="50"></asp:TextBox>
+                        <asp:TextBox ID="txtTimeTypesAssignedToProject" runat="server" Width="100%" MaxLength="50"
+                            Style="border: 1px solid black; padding-left: 1px; padding-right: 1px;"></asp:TextBox>
                         <AjaxControlToolkit:TextBoxWatermarkExtender ID="TextBoxWatermarkExtender1" runat="server"
                             TargetControlID="txtTimeTypesAssignedToProject" WatermarkText="Begin typing to sort list below..."
                             WatermarkCssClass="watermarkedtext" />
@@ -69,7 +71,7 @@
                         line-height: 19px; vertical-align: middle;">
                         <div id="divTimeTypesNotAssignedToProject" runat="server" class="cbfloatRight" style="height: 150px !important;
                             margin: auto; width: 100%; overflow-y: auto; border: 1px solid black; background: white;
-                            padding-left: 1px;">
+                            padding: 1px;">
                             <uc:CustomCheckBoxList ID="cblTimeTypesNotAssignedToProject" runat="server" AutoPostBack="false"
                                 BackColor="White" CssClass="WholeWidth" Width="100%" DataTextField="Name" DataValueField="id"
                                 CellPadding="0" CellSpacing="0">
@@ -78,22 +80,22 @@
                     </td>
                     <td valign="middle" align="center" style="width: 12%">
                         <input id="btnAssignAll" type="button" onclick="AssignAllTimeTypes_Click();SetTimeTypesAssignedToProject();"
-                            title="Remove All" value=">>" />
+                            title="Add All" value=">>" />
                         <br />
                         <input id="btnAssign" type="button" onclick="AssignTimeType_Click();SetTimeTypesAssignedToProject();"
-                            title="Remove Selected" value=">" />
+                            title="Add Selected" value=">" />
                         <br />
                         <br />
                         <input id="btnUnAssign" type="button" onclick="UnAssignTimeType_Click();SetTimeTypesAssignedToProject();"
-                            title="Add Selected" value="<" />
+                            title="Remove Selected" value="<" />
                         <br />
                         <input id="btnUnAssignAll" type="button" onclick="UnAssignAllTimeTypes_Click();SetTimeTypesAssignedToProject();"
-                            title="Add All" value="<<" />
+                            title="Remove All" value="<<" />
                     </td>
                     <td style="padding-left: 6px; padding-right: 6px; padding-top: 0px; width: 44%; margin: auto;">
                         <div id="divTimeTypesAssignedToProject" runat="server" class="cbfloatRight" style="height: 150px !important;
                             margin: auto; width: 100%; overflow-y: auto; border: 1px solid black; background: white;
-                            line-height: 19px; vertical-align: middle; padding-left: 1px;">
+                            line-height: 19px; vertical-align: middle; padding: 1px;">
                             <uc:CustomCheckBoxList ID="cblTimeTypesAssignedToProject" runat="server" Width="100%"
                                 BackColor="White" CssClass="WholeWidth" AutoPostBack="false" DataTextField="Name"
                                 DataValueField="id" CellSpacing="0" CellPadding="0">
