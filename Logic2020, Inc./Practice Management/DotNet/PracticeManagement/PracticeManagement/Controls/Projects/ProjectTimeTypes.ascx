@@ -17,7 +17,7 @@
                 CausesValidation="false" CssClass="add-btn" Text="Add Work Type" />
             <AjaxControlToolkit:ModalPopupExtender ID="mpeAddTimeType" runat="server" TargetControlID="btnAddNewTimeType"
                 BackgroundCssClass="modalBackground" PopupControlID="pnlAddNewTimeType" DropShadow="false"
-                BehaviorID="mpeAddTimeType" CancelControlID="btnCancleTimeType" />
+                BehaviorID="mpeAddTimeType" />
             <br />
         </td>
     </tr>
@@ -109,8 +109,7 @@
             </th>
             <th style="width: 15px;">
                 <asp:Button ID="btnCloseWorkType" runat="server" CssClass="mini-report-close" ToolTip="Close"
-                    Style="float: right;" OnClientClick="return btnCloseWorkType_OnClientClick();"
-                    Text="X"></asp:Button>
+                    Style="float: right;" OnClick="btnCloseWorkType_OnClick" Text="X"></asp:Button>
             </th>
         </tr>
         <tr style="height: 5px;">
@@ -149,7 +148,7 @@
                 <asp:Button ID="btnInsertTimeType" runat="server" OnClick="btnInsertTimeType_OnClick"
                     ToolTip="Confirm" Text="Add" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <asp:Button ID="btnCancleTimeType" runat="server" ToolTip="Cancel" Text="Cancel"
-                    OnClientClick="return btnCloseWorkType_OnClientClick();" />
+                    OnClick="btnCloseWorkType_OnClick" />
             </td>
             <td style="width: 15px;">
             </td>
