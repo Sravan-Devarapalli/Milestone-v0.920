@@ -308,17 +308,12 @@
             }
             return false;
         }
+
         function btnClose_OnClientClick() {
             $find("mpeTimetypeAlertMessage").hide();
             return false;
         }
-        function btnCloseWorkType_OnClientClick() {
-            $find("mpeAddTimeType").hide();
-            var txtNewTimeType = document.getElementById('<%= (ucProjectTimeTypes.FindControl("txtNewTimeType") as TextBox).ClientID%>');
-            txtNewTimeType.value = '';
-
-            return false;
-        }
+        
         function UnAssignTimeType_Click() {
             var cblTimeTypesNotAssignedToProject = document.getElementById('<%= (ucProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID%>');
             var cblTimeTypesAssignedToProject = document.getElementById('<%= (ucProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID%>');
