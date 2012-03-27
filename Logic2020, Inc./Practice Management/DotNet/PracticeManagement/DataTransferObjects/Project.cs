@@ -379,6 +379,9 @@ namespace DataTransferObjects
         [DataMember]
         public bool IsORTProject { get; set; }
 
+        [DataMember]
+        public int TimeEntrySectionId { get; set; }
+
         #endregion
 
         #region Formatting
