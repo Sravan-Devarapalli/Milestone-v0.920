@@ -68,7 +68,7 @@ namespace PraticeManagement.Controls.Projects
             if (AllTimeTypes == null && ProjectTimetypes == null)
             {
                 AllTimeTypes = ServiceCallers.Invoke<TimeTypeServiceClient, TimeTypeRecord[]>(TimeType => TimeType.GetAllTimeTypes());
-                TimeTypeRecord[] NotIncludedTimeTypes = AllTimeTypes.AsQueryable().Where(T => T.Name == "PTO" || T.Name == "Holiday").ToArray();
+                TimeTypeRecord[] NotIncludedTimeTypes = AllTimeTypes.AsQueryable().Where(T => T.IsAdministrative).ToArray();
                 AllTimeTypes = AllTimeTypes.AsQueryable().Except(NotIncludedTimeTypes).ToArray();
 
                 if (Page is ProjectDetail && ((ProjectDetail)Page).ProjectId != null)
@@ -181,6 +181,13 @@ namespace PraticeManagement.Controls.Projects
             }
         }
 
+
+        protected void btnCloseWorkType_OnClick(object sender, EventArgs e)
+        {
+            mpeAddTimeType.Hide();
+            txtNewTimeType.Text = string.Empty;
+
+        }
 
         protected void btnInsertTimeType_OnClick(object sender, EventArgs e)
         {
