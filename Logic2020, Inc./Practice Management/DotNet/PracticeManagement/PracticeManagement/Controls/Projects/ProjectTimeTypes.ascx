@@ -48,15 +48,28 @@
             <table class="WholeWidth">
                 <tr>
                     <td style="padding-left: 6px; padding-right: 6px; padding-top: 0px; width: 44%; margin: auto;
+                        vertical-align: middle;">
+                        <asp:TextBox ID="txtTimeTypesNotAssignedToProject" runat="server" Width="98%" MaxLength="50"></asp:TextBox>
+                        <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmTimeTypesNotAssignedToProject"
+                            runat="server" TargetControlID="txtTimeTypesNotAssignedToProject" WatermarkText="Begin typing to sort list below..."
+                            WatermarkCssClass="watermarkedtext" />
+                    </td>
+                    <td valign="middle" align="center" style="width: 12%">
+                    </td>
+                    <td style="padding-left: 6px; padding-right: 6px; padding-top: 0px; width: 44%; margin: auto;
+                        vertical-align: middle;">
+                        <asp:TextBox ID="txtTimeTypesAssignedToProject" runat="server" Width="98%" MaxLength="50"></asp:TextBox>
+                        <AjaxControlToolkit:TextBoxWatermarkExtender ID="TextBoxWatermarkExtender1" runat="server"
+                            TargetControlID="txtTimeTypesAssignedToProject" WatermarkText="Begin typing to sort list below..."
+                            WatermarkCssClass="watermarkedtext" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 6px; padding-right: 6px; padding-top: 0px; width: 44%; margin: auto;
                         line-height: 19px; vertical-align: middle;">
                         <div id="divTimeTypesNotAssignedToProject" runat="server" class="cbfloatRight" style="height: 150px !important;
                             margin: auto; width: 100%; overflow-y: auto; border: 1px solid black; background: white;
                             padding-left: 1px;">
-                            <asp:TextBox ID="txtTimeTypesNotAssignedToProject" runat="server" Width="97%" Style="padding: 4px;"
-                                MaxLength="50"></asp:TextBox>
-                            <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmTimeTypesNotAssignedToProject"
-                                runat="server" TargetControlID="txtTimeTypesNotAssignedToProject" WatermarkText="Begin typing to sort list below..."
-                                WatermarkCssClass="watermarkedtext" />
                             <uc:CustomCheckBoxList ID="cblTimeTypesNotAssignedToProject" runat="server" AutoPostBack="false"
                                 BackColor="White" CssClass="WholeWidth" Width="100%" DataTextField="Name" DataValueField="id"
                                 CellPadding="0" CellSpacing="0">
@@ -81,11 +94,6 @@
                         <div id="divTimeTypesAssignedToProject" runat="server" class="cbfloatRight" style="height: 150px !important;
                             margin: auto; width: 100%; overflow-y: auto; border: 1px solid black; background: white;
                             line-height: 19px; vertical-align: middle; padding-left: 1px;">
-                            <asp:TextBox ID="txtTimeTypesAssignedToProject" runat="server" Width="97%" Style="padding: 4px;"
-                                MaxLength="50"></asp:TextBox>
-                            <AjaxControlToolkit:TextBoxWatermarkExtender ID="TextBoxWatermarkExtender1" runat="server"
-                                TargetControlID="txtTimeTypesAssignedToProject" WatermarkText="Begin typing to sort list below..."
-                                WatermarkCssClass="watermarkedtext" />
                             <uc:CustomCheckBoxList ID="cblTimeTypesAssignedToProject" runat="server" Width="100%"
                                 BackColor="White" CssClass="WholeWidth" AutoPostBack="false" DataTextField="Name"
                                 DataValueField="id" CellSpacing="0" CellPadding="0">
