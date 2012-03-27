@@ -1,6 +1,6 @@
-﻿<%@ Page Title="Project Summary Report" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
+﻿<%@ Page Title="By Project" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="ProjectSummaryReport.aspx.cs" Inherits="PraticeManagement.Reporting.ProjectSummaryReport" %>
-
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register Src="~/Controls/Reports/TimeEntryReportsHeader.ascx" TagPrefix="uc"
     TagName="TimeEntryReportsHeader" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
@@ -149,9 +149,12 @@
                                 <td>
                                     Project Number:
                                 </td>
-                                <td>
-                                    <asp:TextBox ID="txtProjectNumber" AutoPostBack="true" OnTextChanged="txtProjectNumber_OnTextChanged"
+                                <td style="width:105px">
+                                    <asp:TextBox ID="txtProjectNumber" AutoPostBack="true" OnTextChanged="txtProjectNumber_OnTextChanged" Width="100px"
                                         runat="server"></asp:TextBox>
+                                         <ajaxToolkit:TextBoxWatermarkExtender ID="waterMarkTxtProjectNumber" runat="server" TargetControlID="txtProjectNumber"
+                                BehaviorID="waterMarkTxtProjectNumber" WatermarkCssClass="watermarkedtext" WatermarkText="P1234567">
+                            </ajaxToolkit:TextBoxWatermarkExtender>
                                 </td>
                                 <td>
                                     <asp:Image ID="imgProjectSearch" runat="server" ToolTip="Project Search" ImageUrl="~/Images/search_24.png" />
