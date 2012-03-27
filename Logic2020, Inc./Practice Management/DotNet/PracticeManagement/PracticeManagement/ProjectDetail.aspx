@@ -31,6 +31,7 @@
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
     <script src="Scripts/ScrollinDropDown.js" type="text/javascript"></script>
+    <script src="Scripts/FilterTable.js" type="text/javascript"></script>
     <script type="text/javascript">
         function checkDirty(target, entityId) {
             if (showDialod()) {
@@ -211,20 +212,20 @@
         function changeAlternateitemscolrsForCBL() {
             var cblTimeTypesAssignedToProjectItemsCount = 0;
             var cblTimeTypesNotAssignedToProjectItemsCount = 0;
-            var cblTimeTypesAssignedToProject = document.getElementById('<%=(ProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID %>');
+            var cblTimeTypesAssignedToProject = document.getElementById('<%=(ucProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID %>');
             if (cblTimeTypesAssignedToProject != null) {
                 SetAlternateColors(cblTimeTypesAssignedToProject);
                 cblTimeTypesAssignedToProjectItemsCount = cblTimeTypesAssignedToProject.children[0].children.length;
             }
 
-            var cblTimeTypesNotAssignedToProject = document.getElementById('<%=(ProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID %>');
+            var cblTimeTypesNotAssignedToProject = document.getElementById('<%=(ucProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID %>');
             if (cblTimeTypesNotAssignedToProject != null) {
                 SetAlternateColors(cblTimeTypesNotAssignedToProject);
                 cblTimeTypesNotAssignedToProjectItemsCount = cblTimeTypesNotAssignedToProject.children[0].children.length;
             }
 
-            var divTimeTypesAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("divTimeTypesAssignedToProject") as HtmlGenericControl).ClientID%>');
-            var divTimeTypesNotAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("divTimeTypesNotAssignedToProject") as HtmlGenericControl).ClientID%>');
+            var divTimeTypesAssignedToProject = document.getElementById('<%= (ucProjectTimeTypes.FindControl("divTimeTypesAssignedToProject") as HtmlGenericControl).ClientID%>');
+            var divTimeTypesNotAssignedToProject = document.getElementById('<%= (ucProjectTimeTypes.FindControl("divTimeTypesNotAssignedToProject") as HtmlGenericControl).ClientID%>');
 
         }
 
@@ -248,7 +249,7 @@
         }
 
         function UnAssignAllTimeTypes_Click() {
-            var cblTimeTypesAssignedToProjectCheckboxes = $('#<%=(ProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID %> tr td :input');
+            var cblTimeTypesAssignedToProjectCheckboxes = $('#<%=(ucProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID %> tr td :input');
             for (var i = 0; i < cblTimeTypesAssignedToProjectCheckboxes.length; ++i) {
                 cblTimeTypesAssignedToProjectCheckboxes[i].checked = true;
             }
@@ -256,7 +257,7 @@
         }
 
         function AssignAllTimeTypes_Click() {
-            var cblTimeTypesNotAssignedToProjectCheckboxes = $('#<%=(ProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID %> tr td :input');
+            var cblTimeTypesNotAssignedToProjectCheckboxes = $('#<%=(ucProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID %> tr td :input');
             for (var i = 0; i < cblTimeTypesNotAssignedToProjectCheckboxes.length; ++i) {
                 cblTimeTypesNotAssignedToProjectCheckboxes[i].checked = true;
             }
@@ -264,19 +265,19 @@
         }
 
         function AssignTimeType_Click() {
-            var cblTimeTypesNotAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID%>');
-            var cblTimeTypesAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID%>');
+            var cblTimeTypesNotAssignedToProject = document.getElementById('<%= (ucProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID%>');
+            var cblTimeTypesAssignedToProject = document.getElementById('<%= (ucProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID%>');
 
-            var cblTimeTypesNotAssignedToProjectCheckboxes = $('#<%=(ProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID %> tr td :input');
+            var cblTimeTypesNotAssignedToProjectCheckboxes = $('#<%=(ucProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID %> tr td :input');
 
             for (var i = 0; i < cblTimeTypesNotAssignedToProjectCheckboxes.length; ++i) {
 
                 if (cblTimeTypesNotAssignedToProjectCheckboxes[i].checked) {
 
                     if (cblTimeTypesAssignedToProject == null) {
-                        var divTimeTypesAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("divTimeTypesAssignedToProject") as HtmlGenericControl).ClientID%>');
+                        var divTimeTypesAssignedToProject = document.getElementById('<%= (ucProjectTimeTypes.FindControl("divTimeTypesAssignedToProject") as HtmlGenericControl).ClientID%>');
                         cblTimeTypesAssignedToProject = document.createElement('table');
-                        cblTimeTypesAssignedToProject.setAttribute('id', '<%= (ProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID%>');
+                        cblTimeTypesAssignedToProject.setAttribute('id', '<%= (ucProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID%>');
                         cblTimeTypesAssignedToProject.setAttribute('cellpadding', '0');
                         cblTimeTypesAssignedToProject.setAttribute('border', '0');
                         cblTimeTypesAssignedToProject.setAttribute('style', 'background-color:White;width:100%;');
@@ -297,7 +298,7 @@
             changeAlternateitemscolrsForCBL();
         }
         function IsTimeTypeHasAnyTimeEntriesForTheProject(timetypeId) {
-            var hdnProjectTimeTypesInUse = document.getElementById('<%= (ProjectTimeTypes.FindControl("hdnProjectTimeTypesInUse") as HiddenField).ClientID%>');
+            var hdnProjectTimeTypesInUse = document.getElementById('<%= (ucProjectTimeTypes.FindControl("hdnProjectTimeTypesInUse") as HiddenField).ClientID%>');
             //check weather the timetypeId is in hdnProjectTimeTypesInUse if yes return true else return false
             var ids = hdnProjectTimeTypesInUse.value.split(',');
             for (var i = 0; i < ids.length; ++i) {
@@ -313,15 +314,15 @@
         }
         function btnCloseWorkType_OnClientClick() {
             $find("mpeAddTimeType").hide();
-            var txtNewTimeType = document.getElementById('<%= (ProjectTimeTypes.FindControl("txtNewTimeType") as TextBox).ClientID%>');
+            var txtNewTimeType = document.getElementById('<%= (ucProjectTimeTypes.FindControl("txtNewTimeType") as TextBox).ClientID%>');
             txtNewTimeType.value = '';
 
             return false;
         }
         function UnAssignTimeType_Click() {
-            var cblTimeTypesNotAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID%>');
-            var cblTimeTypesAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID%>');
-            var cblTimeTypesAssignedToProjectCheckboxes = $('#<%=(ProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID %> tr td :input');
+            var cblTimeTypesNotAssignedToProject = document.getElementById('<%= (ucProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID%>');
+            var cblTimeTypesAssignedToProject = document.getElementById('<%= (ucProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID%>');
+            var cblTimeTypesAssignedToProjectCheckboxes = $('#<%=(ucProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID %> tr td :input');
 
             var timeTypesHavingTimeEntries = "<br/>";
 
@@ -335,7 +336,7 @@
             }
 
             if (timeTypesHavingTimeEntries != "<br/>") {
-                var lbAlertMessage = document.getElementById('<%= (ProjectTimeTypes.FindControl("lbAlertMessage") as Label).ClientID%>');
+                var lbAlertMessage = document.getElementById('<%= (ucProjectTimeTypes.FindControl("lbAlertMessage") as Label).ClientID%>');
                 lbAlertMessage.innerHTML = timeTypesHavingTimeEntries;
                 $find("mpeTimetypeAlertMessage").show();
             }
@@ -343,9 +344,9 @@
                 for (var i = 0; i < cblTimeTypesAssignedToProjectCheckboxes.length; ++i) {
                     if (cblTimeTypesAssignedToProjectCheckboxes[i].checked) {
                         if (cblTimeTypesNotAssignedToProject == null) {
-                            var divTimeTypesNotAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("divTimeTypesNotAssignedToProject") as HtmlGenericControl).ClientID%>');
+                            var divTimeTypesNotAssignedToProject = document.getElementById('<%= (ucProjectTimeTypes.FindControl("divTimeTypesNotAssignedToProject") as HtmlGenericControl).ClientID%>');
                             cblTimeTypesNotAssignedToProject = document.createElement('table');
-                            cblTimeTypesNotAssignedToProject.setAttribute('id', '<%= (ProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID%>');
+                            cblTimeTypesNotAssignedToProject.setAttribute('id', '<%= (ucProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID%>');
                             cblTimeTypesNotAssignedToProject.setAttribute('cellpadding', '0');
                             cblTimeTypesNotAssignedToProject.setAttribute('border', '0');
                             cblTimeTypesNotAssignedToProject.setAttribute('style', 'background-color:White;width:100%;');
@@ -410,8 +411,8 @@
         }
 
         function SetTimeTypesAssignedToProject() {
-            var cblTimeTypesAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID%>');
-            var hdnTimeTypesAssignedToProject = document.getElementById('<%= (ProjectTimeTypes.FindControl("hdnTimeTypesAssignedToProject") as HiddenField).ClientID%>');
+            var cblTimeTypesAssignedToProject = document.getElementById('<%= (ucProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID%>');
+            var hdnTimeTypesAssignedToProject = document.getElementById('<%= (ucProjectTimeTypes.FindControl("hdnTimeTypesAssignedToProject") as HiddenField).ClientID%>');
             if (cblTimeTypesAssignedToProject != null && hdnTimeTypesAssignedToProject != null) {
                 var TimeTypesAssignedToProject = ',';
                 if (cblTimeTypesAssignedToProject != null) {
@@ -423,36 +424,6 @@
             }
         }
 
-        function chbCanCreateCustomWorkTypes_Change() {
-
-            var chbIsInternal = document.getElementById('<%= chbIsInternal.ClientID%>');
-            var chbCanCreateCustomWorkTypes = document.getElementById('<%= chbCanCreateCustomWorkTypes.ClientID%>');
-            var btnAddNewTimeType = document.getElementById('<%= (ProjectTimeTypes.FindControl("btnAddNewTimeType") as LinkButton).ClientID%>');
-            if (btnAddNewTimeType != null && chbCanCreateCustomWorkTypes != null) {
-                if (chbCanCreateCustomWorkTypes.checked && !chbIsInternal.checked) {
-                    btnAddNewTimeType.style.display = "";
-                }
-                else {
-                    btnAddNewTimeType.style.display = "none";
-                }
-            }
-
-        }
-
-        function chbIsInternal_Change() {
-            var chbIsInternal = document.getElementById('<%= chbIsInternal.ClientID%>');
-            var chbCanCreateCustomWorkTypes = document.getElementById('<%= chbCanCreateCustomWorkTypes.ClientID%>');
-            if (chbIsInternal.checked) {
-                chbCanCreateCustomWorkTypes.checked = false;
-                chbCanCreateCustomWorkTypes.setAttribute('disabled', 'disabled');
-            }
-            else {
-                chbCanCreateCustomWorkTypes.checked = true;
-                chbCanCreateCustomWorkTypes.removeAttribute('disabled');
-                chbCanCreateCustomWorkTypes.parentNode.removeAttribute('disabled');
-            }
-            chbCanCreateCustomWorkTypes_Change();
-        }
         // End Region projecttimetypes script
 
     
@@ -591,9 +562,9 @@
                                             ErrorMessage="The Account Name is required." ToolTip="The Account Name is required."
                                             ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
                                         <asp:CustomValidator ID="cvClient" runat="server" ErrorMessage="Project's account cannot be modified as some time entered towards this Account-BusinessUnit-Project."
-                                            ToolTip="Project's account cannot be modified as some time entered towards this Account-BusinessUnit-Project." ValidationGroup="Project"
-                                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                            OnServerValidate="cvClient_ServerValidate"></asp:CustomValidator>
+                                            ToolTip="Project's account cannot be modified as some time entered towards this Account-BusinessUnit-Project."
+                                            ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                            Display="Dynamic" OnServerValidate="cvClient_ServerValidate"></asp:CustomValidator>
                                     </td>
                                     <td>
                                         Business Unit
@@ -603,9 +574,9 @@
                                             OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged" AutoPostBack="true">
                                         </asp:DropDownList>
                                         <asp:CustomValidator ID="cvGroup" runat="server" ErrorMessage="Project's business unit cannot be modified as some time entered towards this Account-BusinessUnit-Project."
-                                            ToolTip="Project's business unit cannot be modified as some time entered towards this Account-BusinessUnit-Project." ValidationGroup="Project"
-                                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                            OnServerValidate="cvGroup_ServerValidate"></asp:CustomValidator>
+                                            ToolTip="Project's business unit cannot be modified as some time entered towards this Account-BusinessUnit-Project."
+                                            ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                            Display="Dynamic" OnServerValidate="cvGroup_ServerValidate"></asp:CustomValidator>
                                     </td>
                                     <td colspan="2" style="white-space: nowrap">
                                         Practice Area
@@ -707,23 +678,16 @@
                                             ToolTip="A number with 2 decimal digits is allowed for the Account Discount."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="Project"
                                             Operator="DataTypeCheck" Type="Currency"></asp:CompareValidator>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="8">
-                                        <asp:CheckBox ID="chbIsInternal" runat="server" Text="IsInternal" Enabled="false"
-                                            onclick="chbIsInternal_Change();" />
                                         <asp:CustomValidator ID="cvIsInternal" runat="server" EnableClientScript="false"
                                             ErrorMessage="Can not change project status as some work types are already in use."
                                             ValidateEmptyText="true" Text="*" ToolTip="Can not change project status as some timetypes are already in use."></asp:CustomValidator>
                                         <asp:HiddenField ID="hdIsInternal" runat="server" />
-                                        <asp:CheckBox ID="chbCanCreateCustomWorkTypes" onclick="chbCanCreateCustomWorkTypes_Change();" 
-                                            runat="server" Text="Can Add New Custom Work Types." Enabled="false"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td valign="middle">
-                                        <asp:Button ID="btnAttachSOW" runat="server" Text="Attach SOW" ToolTip="Attach SOW"  UseSubmitBehavior="false" OnClientClick="return false;"/>
+                                        <asp:Button ID="btnAttachSOW" runat="server" Text="Attach SOW" ToolTip="Attach SOW"
+                                            UseSubmitBehavior="false" OnClientClick="return false;" />
                                         <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachSOW" runat="server" TargetControlID="btnAttachSOW"
                                             BackgroundCssClass="modalBackground" PopupControlID="pnlAttachSOW" DropShadow="false" />
                                     </td>
@@ -829,46 +793,46 @@
                                             OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
+                                <asp:TableCell ID="CellProjectTimeTypes" runat="server" Visible="false">
+                                    <span class="bg"><span>
+                                        <asp:LinkButton ID="btnProjectTimeTypes" runat="server" Text="Project Work Types"
+                                            CausesValidation="false" OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
+                                    </span>
+                                </asp:TableCell>
                                 <asp:TableCell ID="cellCommissions" runat="server">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnCommissions" runat="server" Text="Commissions" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="3"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellExpenses" runat="server">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnExpenses" runat="server" Text="Expenses" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="3"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="4"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellPersons" runat="server">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnPersons" runat="server" Text="Persons" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="4"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellBillingInfo" runat="server">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnBillingInfo" runat="server" Text="Billing Info" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="TableCellHistoryg" runat="server" Visible="false">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnHstory" runat="server" Text="History" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellProjectTools" runat="server" Visible="false">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnProjectTools" runat="server" Text="Tools" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton></span>
-                                    </span>
-                                </asp:TableCell>
-                                <asp:TableCell ID="CellProjectTimeTypes" runat="server" Visible="false">
-                                    <span class="bg"><span>
-                                        <asp:LinkButton ID="btnProjectTimeTypes" runat="server" Text="Project Work Types"
-                                            CausesValidation="false" OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                             </asp:TableRow>
@@ -880,6 +844,11 @@
                             <asp:View ID="vwMilestones" runat="server">
                                 <asp:Panel ID="pnlRevenueMilestones" runat="server" CssClass="tab-pane">
                                     <uc:ProjectMilestonesFinancials ID="milestones" runat="server" />
+                                </asp:Panel>
+                            </asp:View>
+                            <asp:View ID="vwProjectTimeTypes" runat="server">
+                                <asp:Panel ID="pnlProjectTimeTypes" runat="server" CssClass="tab-pane">
+                                    <uc:ProjectTimeTypes ID="ucProjectTimeTypes" runat="server" />
                                 </asp:Panel>
                             </asp:View>
                             <asp:View ID="vwCommissions" runat="server">
@@ -994,11 +963,6 @@
                                     <asp:ObjectDataSource ID="odsProjectStatus" runat="server" SelectMethod="GetProjectStatuses"
                                         TypeName="PraticeManagement.ProjectStatusService.ProjectStatusServiceClient">
                                     </asp:ObjectDataSource>
-                                </asp:Panel>
-                            </asp:View>
-                            <asp:View ID="vwProjectTimeTypes" runat="server">
-                                <asp:Panel ID="pnlProjectTimeTypes" runat="server" CssClass="tab-pane">
-                                    <uc:ProjectTimeTypes ID="ProjectTimeTypes" runat="server" />
                                 </asp:Panel>
                             </asp:View>
                         </asp:MultiView>
