@@ -59,7 +59,7 @@
             <td class="t-left padLeft5">
                 <%# Eval("Person.PersonLastFirstName")%>
             </td>
-            <td class="t-left padLeft5">
+            <td class="t-center padLeft5">
                 <%# Eval("Person.ProjectRoleName")%>
             </td>
             <td>
