@@ -58,24 +58,6 @@ namespace PraticeManagement.Controls.Projects {
         protected global::System.Web.UI.WebControls.CustomValidator cvTimetype;
         
         /// <summary>
-        /// divTimeTypesAssignedToProject control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divTimeTypesAssignedToProject;
-        
-        /// <summary>
-        /// cblTimeTypesAssignedToProject control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.CustomCheckBoxList cblTimeTypesAssignedToProject;
-        
-        /// <summary>
         /// divTimeTypesNotAssignedToProject control.
         /// </summary>
         /// <remarks>
@@ -85,6 +67,24 @@ namespace PraticeManagement.Controls.Projects {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divTimeTypesNotAssignedToProject;
         
         /// <summary>
+        /// txtTimeTypesNotAssignedToProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtTimeTypesNotAssignedToProject;
+        
+        /// <summary>
+        /// wmTimeTypesNotAssignedToProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TextBoxWatermarkExtender wmTimeTypesNotAssignedToProject;
+        
+        /// <summary>
         /// cblTimeTypesNotAssignedToProject control.
         /// </summary>
         /// <remarks>
@@ -92,6 +92,42 @@ namespace PraticeManagement.Controls.Projects {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Generic.CustomCheckBoxList cblTimeTypesNotAssignedToProject;
+        
+        /// <summary>
+        /// divTimeTypesAssignedToProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divTimeTypesAssignedToProject;
+        
+        /// <summary>
+        /// txtTimeTypesAssignedToProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtTimeTypesAssignedToProject;
+        
+        /// <summary>
+        /// TextBoxWatermarkExtender1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TextBoxWatermarkExtender TextBoxWatermarkExtender1;
+        
+        /// <summary>
+        /// cblTimeTypesAssignedToProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.CustomCheckBoxList cblTimeTypesAssignedToProject;
         
         /// <summary>
         /// pnlAddNewTimeType control.
@@ -148,6 +184,15 @@ namespace PraticeManagement.Controls.Projects {
         protected global::System.Web.UI.WebControls.CustomValidator cvNewTimeTypeName;
         
         /// <summary>
+        /// vsumNewTimeType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary vsumNewTimeType;
+        
+        /// <summary>
         /// btnInsertTimeType control.
         /// </summary>
         /// <remarks>
@@ -164,15 +209,6 @@ namespace PraticeManagement.Controls.Projects {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancleTimeType;
-        
-        /// <summary>
-        /// vsumNewTimeType control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary vsumNewTimeType;
         
         /// <summary>
         /// hdTimetypeAlertMessage control.
