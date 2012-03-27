@@ -70,7 +70,7 @@ namespace PraticeManagement.Controls.Reports
             {
 
                 StringBuilder sb = new StringBuilder();
-                sb.Append("Time Period Summary Report");
+                sb.Append("TimePeriod_ByResource Report");
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.Append(HostingPage.StartDate.Value.ToString("MM/dd/yyyy") + " - " + HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
@@ -110,7 +110,7 @@ namespace PraticeManagement.Controls.Reports
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(personLevelGroupedHours.TotalHours));
                         sb.Append("\t");
-                        sb.Append("$" + personLevelGroupedHours.BillableValue);
+                        sb.Append(GetBillableValue(personLevelGroupedHours.BillableValue, personLevelGroupedHours.IsPersonNotAssignedToFixedProject));
                         sb.Append("\t");
                         sb.Append(personLevelGroupedHours.Person.UtlizationPercent + "%");
                         sb.Append("\t");
@@ -120,7 +120,7 @@ namespace PraticeManagement.Controls.Reports
                 }
                 else
                 {
-                    sb.Append("There are no Time Entries towards this project.");
+                    sb.Append("There are no Time Entries towards this range selected.");
                 }
                 //“TimePeriod_ByResource_[StartOfRange]_[EndOfRange].xls”.  
                 var filename = string.Format("{0}_{1}_{2}.xls", "TimePeriod_ByResource", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
