@@ -27,30 +27,30 @@ namespace PraticeManagement.Controls.Reports
 
         protected void repProject_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            if (e.Item.ItemType == ListItemType.Header)
-            {
-                var repProjectHeaders = e.Item.FindControl(Repeater_ProjectHeaders) as Repeater;
-                repProjectHeaders.DataSource = Dates;
-                repProjectHeaders.DataBind();
-                extBillableNonBillableAndTotalExtender.TargetControlsToCheck = string.Empty;
-            }
-            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-            {
-                var repProjectHoursPerDay = e.Item.FindControl(Repeater_ProjectHoursPerDay) as Repeater;
-                var tdProjectTotalHours = e.Item.FindControl("tdProjectTotalHours") as HtmlTableCell;
-                extBillableNonBillableAndTotalExtender.TargetControlsToCheck += tdProjectTotalHours.ClientID + ";";
+            //if (e.Item.ItemType == ListItemType.Header)
+            //{
+            //    var repProjectHeaders = e.Item.FindControl(Repeater_ProjectHeaders) as Repeater;
+            //    repProjectHeaders.DataSource = Dates;
+            //    repProjectHeaders.DataBind();
+            //    extBillableNonBillableAndTotalExtender.TargetControlsToCheck = string.Empty;
+            //}
+            //else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            //{
+            //    var repProjectHoursPerDay = e.Item.FindControl(Repeater_ProjectHoursPerDay) as Repeater;
+            //    var tdProjectTotalHours = e.Item.FindControl("tdProjectTotalHours") as HtmlTableCell;
+            //    extBillableNonBillableAndTotalExtender.TargetControlsToCheck += tdProjectTotalHours.ClientID + ";";
 
-                var projectHoursPerDay = new Dictionary<DateTime, GroupedHours>();
-                var groupedHours = ((ProjectLevelGroupedHours)e.Item.DataItem).GroupedHoursList;
+            //    var projectHoursPerDay = new Dictionary<DateTime, GroupedHours>();
+            //    var groupedHours = ((ProjectLevelGroupedHours)e.Item.DataItem).GroupedHoursList;
 
-                foreach (var day in Dates)
-                {
-                    projectHoursPerDay.Add(day.Key, GetHours(groupedHours, day));
-                }
+            //    foreach (var day in Dates)
+            //    {
+            //        projectHoursPerDay.Add(day.Key, GetHours(groupedHours, day));
+            //    }
 
-                repProjectHoursPerDay.DataSource = projectHoursPerDay;
-                repProjectHoursPerDay.DataBind();
-            }
+            //    repProjectHoursPerDay.DataSource = projectHoursPerDay;
+            //    repProjectHoursPerDay.DataBind();
+            //}
         }
 
         protected void reProjectHoursPerDay_OnItemDataBound(object sender, RepeaterItemEventArgs e)
