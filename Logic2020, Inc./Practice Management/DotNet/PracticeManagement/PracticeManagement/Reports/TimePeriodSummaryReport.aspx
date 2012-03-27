@@ -111,11 +111,29 @@
     <script src="../Scripts/jquery.tablesorter.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#tblTimePeriodSummaryByResource").tablesorter();
+            $("#tblTimePeriodSummaryByResource").tablesorter(
+                {
+                    sortList: [[0, 0]]
+                }
+                );
+            $("#tblProjectSummaryByProject").tablesorter(
+                {
+                    sortList: [[0, 0]]
+                }
+                );
         });
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
         function endRequestHandle(sender, Args) {
-            $("#tblTimePeriodSummaryByResource").tablesorter();
+            $("#tblTimePeriodSummaryByResource").tablesorter(
+                {
+                    sortList: [[0, 0]]
+                }
+                );
+            $("#tblProjectSummaryByProject").tablesorter(
+                {
+                    sortList: [[0, 0]]
+                }
+                );
         }
     </script>
     <uc:TimeEntryReportsHeader ID="timeEntryReportHeader" runat="server"></uc:TimeEntryReportsHeader>
@@ -131,14 +149,15 @@
             </table>
             <table width="100%">
                 <tr>
-                <td style="width:5%;"></td>
-                    <td style="padding-bottom: 10px; padding-top: 10px; padding-left:5px;">
+                    <td style="width: 5%;">
+                    </td>
+                    <td style="padding-bottom: 10px; padding-top: 10px; padding-left: 5px;text-align:center;">
                         <table width="100%" align="center">
                             <tr>
-                                <td style="font-weight: bold;width: 13%;">
+                                <td style="font-weight: bold; width: 30%; text-align:right;">
                                     Range:&nbsp;
-                                     </td>
-                                    <td style="text-align: left;">
+                                </td>
+                                <td style="text-align: left;">
                                     <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
                                         Width="150px">
                                         <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
@@ -158,13 +177,14 @@
                     </td>
                 </tr>
                 <tr>
-                <td style="width:5%;"></td>
+                    <td style="width: 5%;">
+                    </td>
                     <td style="padding-bottom: 10px; text-align: center;">
                         <table width="100%" align="center">
                             <tr>
-                                <td style="width: 13%;">
+                                <td style="width: 30%;">
                                 </td>
-                                <td style="text-align: left;">
+                                <td style="text-align: left;height:15px;">
                                     <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnStartDateCalExtenderBehaviourId" runat="server" Value="" />
@@ -226,20 +246,20 @@
                                 <asp:TableRow ID="rowSwitcher" runat="server">
                                     <asp:TableCell ID="cellResource" CssClass="SelectedSwitch" runat="server">
                                         <span class="bg"><span>
-                                            <asp:LinkButton ID="lnkbtnResource" runat="server" Text="By Resource" CausesValidation="false" ToolTip="By Resource"
-                                                OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
+                                            <asp:LinkButton ID="lnkbtnResource" runat="server" Text="By Resource" CausesValidation="false"
+                                                ToolTip="By Resource" OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
                                         </span>
                                     </asp:TableCell>
                                     <asp:TableCell ID="cellProject" runat="server">
                                         <span class="bg"><span>
-                                            <asp:LinkButton ID="lnkbtnProject" runat="server" Text="By Project" CausesValidation="false" ToolTip="By Project"
-                                                OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
+                                            <asp:LinkButton ID="lnkbtnProject" runat="server" Text="By Project" CausesValidation="false"
+                                                ToolTip="By Project" OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
                                         </span>
                                     </asp:TableCell>
                                     <asp:TableCell ID="cellWorkType" runat="server">
                                         <span class="bg"><span>
-                                            <asp:LinkButton ID="lnkbtnWorkType" runat="server" Text="By Work Type" CausesValidation="false" ToolTip="By Work Type"
-                                                OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
+                                            <asp:LinkButton ID="lnkbtnWorkType" runat="server" Text="By Work Type" CausesValidation="false"
+                                                ToolTip="By Work Type" OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
                                         </span>
                                     </asp:TableCell>
                                 </asp:TableRow>
@@ -268,6 +288,7 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="tpByResource$btnExportToExcel" />
+            <asp:PostBackTrigger ControlID="tpByProject$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
