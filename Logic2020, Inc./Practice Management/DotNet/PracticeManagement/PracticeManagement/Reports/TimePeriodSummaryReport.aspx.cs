@@ -265,12 +265,12 @@ namespace PraticeManagement.Reporting
 
         private void PopulateByProjectData()
         {
-            //string orderByCerteria = string.Empty;
-            //var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(StartDate.Value, EndDate.Value, null, null, orderByCerteria));
-            //tpByProject.DataBindProject(data, DatesList);
-
-            //ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
-            //ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
+            var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(StartDate.Value, EndDate.Value, null, null));
+            tpByProject.DataBindProject(data);
+            int billableHours = (int)data.Sum(p => p.BillableHours);
+            int nonBillableHours = (int)data.Sum(p => p.NonBillableHours);
+            ucBillableAndNonBillable.BillablValue = billableHours.ToString();
+            ucBillableAndNonBillable.NonBillablValue = nonBillableHours.ToString();
         }
 
         private void PopulateByWorkTypeData()
