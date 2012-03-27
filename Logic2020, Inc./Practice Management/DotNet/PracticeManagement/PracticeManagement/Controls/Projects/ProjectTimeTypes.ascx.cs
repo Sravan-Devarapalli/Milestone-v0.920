@@ -43,6 +43,26 @@ namespace PraticeManagement.Controls.Projects
 
         }
 
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            var timeTypesAssignedToProject = "filterTableRows('" + txtTimeTypesAssignedToProject.ClientID + "','" + cblTimeTypesAssignedToProject.ClientID + "', true);";
+            var timeTypesNotAssignedToProject = "filterTableRows('" + txtTimeTypesNotAssignedToProject.ClientID + "','" + cblTimeTypesNotAssignedToProject.ClientID + "', true);";
+
+            txtTimeTypesAssignedToProject.Attributes["onkeyup"] = timeTypesAssignedToProject;
+            txtTimeTypesNotAssignedToProject.Attributes["onkeyup"] = timeTypesNotAssignedToProject;
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "filterTableRows", timeTypesAssignedToProject + timeTypesNotAssignedToProject, true);
+        }
+
+
+        public void ResetSearchTextFilters()
+        {
+            txtTimeTypesAssignedToProject.Text = string.Empty;
+            txtTimeTypesNotAssignedToProject.Text = string.Empty;
+        }
+
+
         public void PopulateControls()
         {
             if (AllTimeTypes == null && ProjectTimetypes == null)
@@ -54,16 +74,16 @@ namespace PraticeManagement.Controls.Projects
                 if (Page is ProjectDetail && ((ProjectDetail)Page).ProjectId != null)
                 {
                     Project project = ((ProjectDetail)Page).Project;
-                    if (project.IsInternal) //defalult and internal timetypes for all internal projects
+                    if (project.IsInternal) //default and internal time types for all internal projects
                     {
                         AllTimeTypes = AllTimeTypes.AsQueryable().Where(T => T.IsDefault || T.IsInternal).ToArray();
                     }
-                    else //default and external timetypes for all external projects
+                    else //default and external time types for all external projects
                     {
                         AllTimeTypes = AllTimeTypes.AsQueryable().Where(T => T.IsDefault || !T.IsInternal).ToArray();
                     }
                     int projectId = ((ProjectDetail)Page).ProjectId.Value;
-                    ProjectTimetypes = ServiceCallers.Invoke<ProjectServiceClient, TimeTypeRecord[]>(Project => Project.GetTimeTypesByProjectId(projectId, false,null,null));
+                    ProjectTimetypes = ServiceCallers.Invoke<ProjectServiceClient, TimeTypeRecord[]>(Project => Project.GetTimeTypesByProjectId(projectId, false, null, null));
                     string projectTimeTypesInUseIds = "";
                     string ProjectTimetypesIds = "";
                     foreach (TimeTypeRecord ptt in ProjectTimetypes)
@@ -76,11 +96,6 @@ namespace PraticeManagement.Controls.Projects
                     }
                     ProjectTimetypes = GetSelectedList(AllTimeTypes.ToList(), ProjectTimetypesIds).ToArray();
                     hdnProjectTimeTypesInUse.Value = projectTimeTypesInUseIds;
-
-                    if (project.CanCreateCustomWorkTypes)
-                    {
-                        btnAddNewTimeType.Style["display"] = "none";
-                    }
                 }
                 else
                 {
@@ -89,12 +104,12 @@ namespace PraticeManagement.Controls.Projects
                 }
                 AllTimeTypes = AllTimeTypes.AsQueryable().Except(ProjectTimetypes).ToArray();
 
-                /*intially hdnTimeTypesAssignedToProject value will be empty if there is is 
-                any change in the worktypes hidden field will be assigned the worktypeid's in javascript */
+                /* initially hdnTimeTypesAssignedToProject value will be empty if there is is 
+                any change in the work types hidden field will be assigned the worktypeid's in javascript */
                 hdnTimeTypesAssignedToProject.Value = "";
             }
 
-            
+
             if (!String.IsNullOrEmpty(hdnTimeTypesAssignedToProject.Value))
             {
                 string TimeTypesAssignedToProject = hdnTimeTypesAssignedToProject.Value;
@@ -111,7 +126,7 @@ namespace PraticeManagement.Controls.Projects
             cblTimeTypesNotAssignedToProject.DataBind();
             AddAttributescblTimeTypesNotAssignedToProject();
             AddAttributesTocblTimeTypesAssignedToProject();
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTimeTypesAssignedToProject", "SetTimeTypesAssignedToProject();changeAlternateitemscolrsForCBL();chbCanCreateCustomWorkTypes_Change();", true);
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTimeTypesAssignedToProject", "SetTimeTypesAssignedToProject();changeAlternateitemscolrsForCBL();", true);
         }
 
         private List<TimeTypeRecord> GetSelectedList(List<TimeTypeRecord> CombinedList, string Ids)
@@ -192,17 +207,17 @@ namespace PraticeManagement.Controls.Projects
                     customTimeType.Id = customTimeTypeId;
 
                     if (String.IsNullOrEmpty(hdnTimeTypesAssignedToProject.Value))
-                    { 
-                     string TimeTypesAssignedToProject = ",";
-                     foreach (ListItem item in cblTimeTypesAssignedToProject.Items)
+                    {
+                        string TimeTypesAssignedToProject = ",";
+                        foreach (ListItem item in cblTimeTypesAssignedToProject.Items)
                         {
                             TimeTypesAssignedToProject = TimeTypesAssignedToProject + item.Value + ",";
                         }
-                    hdnTimeTypesAssignedToProject.Value = TimeTypesAssignedToProject;
+                        hdnTimeTypesAssignedToProject.Value = TimeTypesAssignedToProject;
                     }
 
                     hdnTimeTypesAssignedToProject.Value += customTimeType.Id;
-                    
+
                     var att = AllTimeTypes.ToList();
                     att.Add(customTimeType);
                     AllTimeTypes = att.ToArray();
@@ -211,12 +226,13 @@ namespace PraticeManagement.Controls.Projects
                 }
                 catch (Exception e1)
                 {
-                    cvNewTimeTypeName.ToolTip = "Error Occured.";
+                    cvNewTimeTypeName.ToolTip = "Error Occurred.";
                     cvNewTimeTypeName.IsValid = false;
                     mpeAddTimeType.Show();
                 }
             }
         }
+
         private bool IsTimeTypeAlreadyExisting(string newTimeType)
         {
             using (var serviceClient = new TimeTypeServiceClient())
@@ -236,6 +252,14 @@ namespace PraticeManagement.Controls.Projects
         }
 
 
+
+        public string HdnTimeTypesAssignedToProjectValue
+        {
+            get
+            {
+                return hdnTimeTypesAssignedToProject.Value;
+            }
+        }
     }
 }
 
