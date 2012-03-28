@@ -130,9 +130,13 @@ namespace DataTransferObjects.Reports
                 {
                     sb.Append("Gray;");
                 }
-                else
+                else if (!IsFixedProject)
                 {
                     sb.Append("Red;");
+                }
+                else if (IsFixedProject)
+                {
+                    sb.Append("Green;");
                 }
 
                 sb.Append("height: 20px;");
@@ -169,9 +173,14 @@ namespace DataTransferObjects.Reports
                 {
                     sb.Append("Gray;");
                 }
-                else
+                else if (!IsFixedProject)
                 {
+
                     sb.Append("Green;");
+                }
+                else if (IsFixedProject)
+                {
+                    sb.Append("Red;");
                 }
 
                 sb.Append("height: 20px;");
