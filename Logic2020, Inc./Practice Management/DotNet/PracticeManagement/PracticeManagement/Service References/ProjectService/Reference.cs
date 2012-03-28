@@ -58,6 +58,11 @@ namespace PraticeManagement.ProjectService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetIsHourlyRevenueByPeriod", ReplyAction="http://tempuri.org/IProjectService/GetIsHourlyRevenueByPeriodResponse")]
         System.Collections.Generic.Dictionary<System.DateTime, bool> GetIsHourlyRevenueByPeriod(int projectId, int personId, System.DateTime startDate, System.DateTime endDate);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectShortByProjectNumber", ReplyAction="http://tempuri.org/IProjectService/GetProjectShortByProjectNumberResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
+        DataTransferObjects.Project GetProjectShortByProjectNumber(string projectNumber);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectGetById", ReplyAction="http://tempuri.org/IProjectService/ProjectGetByIdResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
@@ -191,8 +196,6 @@ namespace PraticeManagement.ProjectService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
         
-      
-        
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -255,6 +258,10 @@ namespace PraticeManagement.ProjectService {
         
         public System.Collections.Generic.Dictionary<System.DateTime, bool> GetIsHourlyRevenueByPeriod(int projectId, int personId, System.DateTime startDate, System.DateTime endDate) {
             return base.Channel.GetIsHourlyRevenueByPeriod(projectId, personId, startDate, endDate);
+        }
+        
+        public DataTransferObjects.Project GetProjectShortByProjectNumber(string projectNumber) {
+            return base.Channel.GetProjectShortByProjectNumber(projectNumber);
         }
         
         public DataTransferObjects.Project ProjectGetById(int projectId) {
