@@ -529,10 +529,34 @@
     <None Include="Service References\ProjectGroupService\ProjectGroupService9.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\ProjectGroupService\ProjectGroupService1.disco" />
     <None Include="Service References\ProjectGroupService\ProjectGroupService2.disco" />
     <None Include="Service References\ProjectGroupService\ProjectGroupService3.disco" />
+    <None Include="Service References\ProjectService\ProjectService1.wsdl" />
+    <None Include="Service References\ProjectService\ProjectService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService14.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService15.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService16.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService17.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService18.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService20.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService22.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ReportService\ReportService.wsdl" />
     <None Include="Service References\ReportService\ReportService.xsd">
       <SubType>Designer</SubType>
@@ -604,6 +628,7 @@
     </None>
     <Content Include="Scripts\FilterTable.js" />
     <Content Include="Scripts\jquery.tablesorter.js" />
+    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -955,35 +980,10 @@
     <None Include="Service References\PersonStatusService\PersonStatusService5.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ProjectService\ProjectService1.wsdl" />
-    <None Include="Service References\ProjectService\ProjectService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ProjectService\ProjectService14.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ProjectService\ProjectService15.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ProjectService\ProjectService16.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ProjectService\ProjectService17.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ProjectService\ProjectService18.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\ProjectService\ProjectService19.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ProjectService\ProjectService20.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\ProjectService\ProjectService21.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ProjectService\ProjectService22.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ProjectStatusService\ProjectStatusService1.wsdl" />
