@@ -118,7 +118,52 @@ namespace PraticeManagement.Reporting {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlProjects;
+        protected global::PraticeManagement.Controls.CustomDropDown ddlProjects;
+        
+        /// <summary>
+        /// txtProjectSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtProjectSearch;
+        
+        /// <summary>
+        /// wmeProjectSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TextBoxWatermarkExtender wmeProjectSearch;
+        
+        /// <summary>
+        /// btnProjectSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnProjectSearch;
+        
+        /// <summary>
+        /// repProjectNamesList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater repProjectNamesList;
+        
+        /// <summary>
+        /// ltrlNoProjectsText control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlNoProjectsText;
         
         /// <summary>
         /// divWholePage control.
