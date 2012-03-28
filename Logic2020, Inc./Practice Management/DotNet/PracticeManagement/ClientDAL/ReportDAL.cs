@@ -6,13 +6,58 @@ using DataTransferObjects.Reports;
 using System.Data.SqlClient;
 using DataAccess.Other;
 using System.Data;
-using DataTransferObjects;
+using DataTransferObjects; 
 using DataTransferObjects.TimeEntry;
+using System.Data.Common;
 
 namespace DataAccess
 {
     public static class ReportDAL
     {
+
+        public static List<Project> ProjectSearchByName(string name)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Project.ProjectSearchByName, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.LookedParam,
+                    !string.IsNullOrEmpty(name) ? (object)name : DBNull.Value);
+
+                connection.Open();
+
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<Project>();
+                    ReadProjectSearchList(reader, result);
+                    return result;
+                }
+            }
+        }
+
+
+        private static void ReadProjectSearchList(DbDataReader reader, List<Project> result)
+        {
+            if (reader.HasRows)
+            {
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNameColumn);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
+              
+
+                while (reader.Read())
+                {
+                    Project project = new Project();
+
+                    project.Name = reader.GetString(projectNameIndex);
+                    project.ProjectNumber = reader.GetString(projectNumberIndex);
+
+                    result.Add(project);
+                }
+            }
+        }
+
 
         public static List<TimeEntriesGroupByClientAndProject> PersonTimeEntriesDetails(int personId, DateTime startDate, DateTime endDate)
         {
@@ -20,6 +65,8 @@ namespace DataAccess
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.PersonTimeEntriesDetails, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
@@ -130,6 +177,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.CommandTimeout = connection.ConnectionTimeout;
 
                 connection.Open();
 
@@ -204,6 +252,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.CommandTimeout = connection.ConnectionTimeout;
 
                 connection.Open();
 
@@ -222,7 +271,7 @@ namespace DataAccess
                         {
                             result.First = !reader.IsDBNull(billableHoursIndex) ? (double)reader.GetDouble(billableHoursIndex) : 0d;
                             result.Second = !reader.IsDBNull(nonBillableHoursIndex) ? (double)reader.GetDouble(nonBillableHoursIndex) : 0d;
-                            
+
                             result.Fourth = !reader.IsDBNull(utlizationPercentIndex) ? (int)reader.GetDouble(utlizationPercentIndex) : 0d;
                             bool isPersonNotAssignedToFixedProject = !reader.IsDBNull(isPersonNotAssignedToFixedProjectIndex) ? reader.GetInt32(isPersonNotAssignedToFixedProjectIndex) == 0 ? false : true : true;
                             if (isPersonNotAssignedToFixedProject)
@@ -252,6 +301,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.SeniorityIdsParam, !string.IsNullOrEmpty(seniorityIds) ? seniorityIds : (Object)DBNull.Value);
+                command.CommandTimeout = connection.ConnectionTimeout;
 
                 connection.Open();
 
@@ -321,6 +371,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdsParam, !string.IsNullOrEmpty(clientIds) ? clientIds : (Object)DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusIdsParam, !string.IsNullOrEmpty(personStatusIds) ? personStatusIds : (Object)DBNull.Value);
+                command.CommandTimeout = connection.ConnectionTimeout;
 
                 connection.Open();
 
@@ -407,6 +458,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeCategoryIdsParam, !string.IsNullOrEmpty(timeTypeCategoryIds) ? timeTypeCategoryIds : (Object)DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, !string.IsNullOrEmpty(orderByCerteria) ? orderByCerteria : (Object)DBNull.Value);
+                command.CommandTimeout = connection.ConnectionTimeout;
 
                 connection.Open();
 
@@ -481,6 +533,7 @@ namespace DataAccess
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectNumber, projectNumber);
+                command.CommandTimeout = connection.ConnectionTimeout;
 
                 connection.Open();
 
@@ -544,7 +597,8 @@ namespace DataAccess
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectNumber, projectNumber);
-               
+                command.CommandTimeout = connection.ConnectionTimeout;
+
                 connection.Open();
 
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -556,6 +610,57 @@ namespace DataAccess
             }
         }
 
+
+        public static List<Project> GetProjectsByClientId(int clientId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Project.GetProjectsByClientId, connection))
+            {
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.ClientId, clientId);
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+
+                var result = new List<Project>();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            var proj =  ReadProject(reader);
+                            result.Add(proj);
+                        }
+                    }
+                }
+
+
+                return result;
+            }
+        }
+
+
+        private static Project ReadProject(DbDataReader reader)
+        {
+            int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
+
+            var project = new Project
+            {
+                Id = reader.GetInt32(reader.GetOrdinal(Constants.ParameterNames.ProjectId)),
+                Name = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ProjectName)),
+                ProjectNumber = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ProjectNumber)),
+                Status = new ProjectStatus
+                {
+                    Name = reader.GetString(projectStatusNameIndex)
+                }
+            };
+
+
+            return project;
+        }
     }
 }
 
