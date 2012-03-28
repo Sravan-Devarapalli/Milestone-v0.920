@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.Security;
 using PraticeManagement.Controls;
+using DataTransferObjects;
 
 namespace PraticeManagement.Reporting
 {
@@ -31,6 +32,7 @@ namespace PraticeManagement.Reporting
                 var clients = DataHelper.GetAllClientsSecure(null, true, true);
                 DataHelper.FillListDefault(ddlClients, "-- Select an Account -- ", clients as object[], false);
             }
+
         }
 
 
@@ -95,7 +97,6 @@ namespace PraticeManagement.Reporting
 
         private void PopulateByResourceData()
         {
-
             try
             {
                 msgError.ClearMessage();
@@ -111,6 +112,51 @@ namespace PraticeManagement.Reporting
             //ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileHours).ToString() : "0";
             //ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableHours).ToString() : "0";
 
+        }
+
+
+        protected void btnclose_OnClick(object sender, EventArgs e)
+        {
+            ClearFilters();
+        }
+
+        private void ClearFilters()
+        {
+            ltrlNoProjectsText.Visible = repProjectNamesList.Visible = false;
+            ClearAndAddFirsItemForDdlProjects();
+            ddlProjects.SelectedIndex = ddlClients.SelectedIndex = 0;
+            txtProjectSearch.Text = string.Empty;
+            btnProjectSearch.Attributes["disabled"] = "disabled";
+        }
+
+        protected void btnProjectSearch_Click(object sender, EventArgs e)
+        {
+            List<Project> list = ServiceCallers.Custom.Report(r => r.ProjectSearchByName(txtProjectSearch.Text)).ToList();
+
+            btnProjectSearch.Attributes.Remove("disabled");
+
+            if (list.Count > 0)
+            {
+                ltrlNoProjectsText.Visible = false;
+                repProjectNamesList.Visible = true;
+                repProjectNamesList.DataSource = list;
+                repProjectNamesList.DataBind();
+            }
+            else
+            {
+                repProjectNamesList.Visible = false;
+                ltrlNoProjectsText.Visible = true;
+            }
+
+            mpeProjectSearch.Show();
+
+        }
+
+
+        protected void lnkProjectNumber_OnClick(object sender, EventArgs e)
+        {
+            var lnkProjectNumber = sender as LinkButton;
+            PopulateControls(lnkProjectNumber.Attributes["ProjectNumber"]);
         }
 
         private void PopulateByWorkTypeData()
@@ -132,23 +178,22 @@ namespace PraticeManagement.Reporting
             {
                 ddlProjects.Enabled = true;
 
-                int? clientId = Convert.ToInt32(ddlClients.SelectedItem.Value);
-                //  If current user is administrator, don't apply restrictions
-                //bool isUserAdministrator = Roles.IsUserInRole(DataHelper.CurrentPerson.Alias, DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
-                ////  adding SeniorLeadership role as per #2930.
-                //bool isUserSeniorLeadership = Roles.IsUserInRole(DataHelper.CurrentPerson.Alias, DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);
+                int clientId = Convert.ToInt32(ddlClients.SelectedItem.Value);
 
-                //int? personId = (isUserAdministrator || isUserSeniorLeadership) ? null : DataHelper.CurrentPerson.Id;
-                var projects = DataHelper.GetTimeEntryProjectsByClientId(clientId, null, false);
+                var projects = DataHelper.GetProjectsByClientId(clientId);
 
-                ListItem[] items = projects.Select(
-                                                     project => new ListItem(
-                                                                             project.Name + " - " + project.ProjectNumber,
-                                                                             project.ProjectNumber.ToString()
-                                                                            )
-                                                   ).ToArray();
+                projects = projects.OrderBy(p => p.Status.Name).ThenBy(p => p.ProjectNumber).ToArray();
 
-                ddlProjects.Items.AddRange(items);
+                foreach (var project in projects)
+                {
+                    var li = new ListItem(project.ProjectNumber + " - " + project.Name,
+                                           project.ProjectNumber.ToString());
+
+                    li.Attributes[Constants.Variables.OptionGroup] = project.Status.Name;
+
+                    ddlProjects.Items.Add(li);
+
+                }
             }
 
             mpeProjectSearch.Show();
@@ -169,15 +214,20 @@ namespace PraticeManagement.Reporting
             {
                 var projectNumber = ddlProjects.SelectedItem.Value;
 
-                txtProjectNumber.Text = projectNumber;
-                LoadActiveView();
-                ClearAndAddFirsItemForDdlProjects();
-                ddlProjects.SelectedIndex = ddlClients.SelectedIndex = 0;
+                PopulateControls(projectNumber);
             }
             else
             {
                 mpeProjectSearch.Show();
             }
         }
+
+        private void PopulateControls(string projectNumber)
+        {
+            txtProjectNumber.Text = projectNumber;
+            LoadActiveView();
+            ClearFilters();
+        }
     }
 }
+
