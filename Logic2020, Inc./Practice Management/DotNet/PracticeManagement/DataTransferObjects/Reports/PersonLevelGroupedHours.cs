@@ -128,9 +128,13 @@ namespace DataTransferObjects.Reports
                 {
                     sb.Append("Gray;");
                 }
-                else
+                else if (IsPersonNotAssignedToFixedProject)
                 {
                     sb.Append("Red;");
+                }
+                else if (!IsPersonNotAssignedToFixedProject)
+                {
+                    sb.Append("Green;");
                 }
 
                 sb.Append("height: 20px;");
@@ -140,7 +144,7 @@ namespace DataTransferObjects.Reports
                 return sb.ToString();
             }
         }
-        
+
         private int ForecastedFirstHalfWidth
         {
             get
@@ -167,9 +171,14 @@ namespace DataTransferObjects.Reports
                 {
                     sb.Append("Gray;");
                 }
-                else
+                else if (IsPersonNotAssignedToFixedProject)
                 {
+
                     sb.Append("Green;");
+                }
+                else if (!IsPersonNotAssignedToFixedProject)
+                {
+                    sb.Append("Red;");
                 }
 
                 sb.Append("height: 20px;");
