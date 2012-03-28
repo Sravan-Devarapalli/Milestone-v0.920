@@ -35,6 +35,7 @@ using PraticeManagement.Controls.Generic.Filtering;
 using PraticeManagement.Controls.Generic;
 using PraticeManagement.ConfigurationService;
 using PraticeManagement.Controls.Opportunities;
+using PraticeManagement.ReportService;
 
 #endregion
 
@@ -2298,6 +2299,24 @@ namespace PraticeManagement.Controls
             using (var serviceClient = new CalendarServiceClient())
             {
                 return serviceClient.GetSubstituteDayDetails(personId, substituteDate);
+            }
+        }
+
+        public static Project[] GetProjectsByClientId(int clientId)
+        {
+            using (var serviceClient = new ReportServiceClient())
+            {
+                try
+                {
+                    Project[] projects = serviceClient.GetProjectsByClientId(clientId);
+
+                    return projects;
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
             }
         }
     }
