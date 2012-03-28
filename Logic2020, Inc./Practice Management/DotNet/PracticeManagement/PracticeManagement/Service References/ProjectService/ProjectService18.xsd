@@ -1,23 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:complexType name="ArrayOfTimeTypeRecord">
+<xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/Arrays" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://system66.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+  <xs:complexType name="ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5">
+    <xs:annotation>
+      <xs:appinfo>
+        <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
+      </xs:appinfo>
+    </xs:annotation>
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="TimeTypeRecord" nillable="true" type="tns:TimeTypeRecord" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfdateTimeComputedFinancialsfLTn8SS5">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Key" type="xs:dateTime" />
+            <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" name="Value" nillable="true" type="q1:ComputedFinancials" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfTimeTypeRecord" nillable="true" type="tns:ArrayOfTimeTypeRecord" />
-  <xs:complexType name="TimeTypeRecord">
+  <xs:element name="ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" nillable="true" type="tns:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
+  <xs:complexType name="ArrayOfstring">
     <xs:sequence>
-      <xs:element minOccurs="0" name="Id" type="xs:int" />
-      <xs:element minOccurs="0" name="InFutureUse" type="xs:boolean" />
-      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsAllowedToEdit" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsDefault" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsInternal" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsSystemTimeType" type="xs:boolean" />
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="TimeTypeRecord" nillable="true" type="tns:TimeTypeRecord" />
+  <xs:element name="ArrayOfstring" nillable="true" type="tns:ArrayOfstring" />
+  <xs:complexType name="ArrayOfKeyValueOfdateTimeboolean">
+    <xs:annotation>
+      <xs:appinfo>
+        <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfdateTimeboolean">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Key" type="xs:dateTime" />
+            <xs:element name="Value" type="xs:boolean" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfKeyValueOfdateTimeboolean" nillable="true" type="tns:ArrayOfKeyValueOfdateTimeboolean" />
 </xs:schema>
