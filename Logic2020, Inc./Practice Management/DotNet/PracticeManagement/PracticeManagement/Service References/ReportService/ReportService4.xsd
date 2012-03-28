@@ -100,6 +100,7 @@
       <xs:element minOccurs="0" name="StartDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Status" nillable="true" type="tns:ProjectStatus" />
       <xs:element minOccurs="0" name="Terms" type="xs:int" />
+      <xs:element minOccurs="0" name="TimeEntrySectionId" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Project" nillable="true" type="tns:Project" />
@@ -647,4 +648,10 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="QuadrupleOfdoubledoubledoubledouble" nillable="true" type="tns:QuadrupleOfdoubledoubledoubledouble" />
+  <xs:complexType name="ArrayOfProject">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Project" nillable="true" type="tns:Project" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfProject" nillable="true" type="tns:ArrayOfProject" />
 </xs:schema>
