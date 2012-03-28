@@ -593,6 +593,9 @@ namespace PracticeManagementService
             }
         }
 
+
+        
+
         /// <summary>
         /// Reatrives a project with a specified ID.
         /// </summary>
@@ -866,6 +869,20 @@ namespace PracticeManagementService
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectId", "ProjectService.svc", string.Empty,
                     HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
+        }
+
+        public Project GetProjectShortByProjectNumber(string projectNumber)
+        {
+            try
+            {
+                return ProjectDAL.GetProjectShortByProjectNumber(projectNumber);
+            }
+            catch (Exception e)
+            {
+                
                 throw e;
             }
 
