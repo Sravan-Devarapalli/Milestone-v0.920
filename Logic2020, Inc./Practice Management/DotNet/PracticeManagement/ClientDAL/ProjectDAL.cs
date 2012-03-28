@@ -1093,7 +1093,7 @@ namespace DataAccess
                     {
                         IsInternalIndex = -1;
                     }
-                     try
+                    try
                     {
                         ClientIsInternalIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIsInternal);
                     }
@@ -1102,15 +1102,15 @@ namespace DataAccess
                         ClientIsInternalIndex = -1;
                     }
 
-                     try
-                     {
-                         hasTimeEntriesIndex = reader.GetOrdinal(Constants.ParameterNames.HasTimeEntries);
-                     }
-                     catch
-                     {
-                         hasTimeEntriesIndex = -1;
-                     }
-                    
+                    try
+                    {
+                        hasTimeEntriesIndex = reader.GetOrdinal(Constants.ParameterNames.HasTimeEntries);
+                    }
+                    catch
+                    {
+                        hasTimeEntriesIndex = -1;
+                    }
+
                     while (reader.Read())
                     {
                         var project = new Project
@@ -2416,7 +2416,7 @@ namespace DataAccess
             }
         }
 
-        public static List<Project> GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal,int personId,DateTime startDate, DateTime endDate)
+        public static List<Project> GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, DateTime startDate, DateTime endDate)
         {
             var projectList = new List<Project>();
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -2440,7 +2440,7 @@ namespace DataAccess
                             var project = new Project
                                             {
                                                 Id = (int)reader[Constants.ColumnNames.ProjectIdColumn],
-                                                Name = (string)reader[Constants.ColumnNames.NameColumn]                                                
+                                                Name = (string)reader[Constants.ColumnNames.NameColumn]
                                             };
                             projectList.Add(project);
                         }
@@ -2505,12 +2505,12 @@ namespace DataAccess
             }
             if (endDateIndex > -1)
             {
-              project.EndDate = !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null;
+                project.EndDate = !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null;
             }
             return project;
         }
 
-        public static List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId, bool IsOnlyActive,DateTime? startDate,DateTime? endDate)
+        public static List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId, bool IsOnlyActive, DateTime? startDate, DateTime? endDate)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (SqlCommand command = new SqlCommand(GetTimeTypesByProjectIdProcedure, connection))
@@ -2590,7 +2590,7 @@ namespace DataAccess
         }
 
 
-        public static Dictionary<DateTime,bool> GetIsHourlyRevenueByPeriod(int projectId, int personId, DateTime startDate, DateTime endDate)
+        public static Dictionary<DateTime, bool> GetIsHourlyRevenueByPeriod(int projectId, int personId, DateTime startDate, DateTime endDate)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -2615,7 +2615,7 @@ namespace DataAccess
                             {
                                 DateTime key = reader.GetDateTime(chargeCodeDateIndex);
                                 bool value = reader.GetBoolean(isHourlyRevenueIndex);
-                                result.Add(key,value);
+                                result.Add(key, value);
                             }
                         }
                         return result;
@@ -2623,8 +2623,53 @@ namespace DataAccess
                 }
             }
         }
-        
 
+
+
+        public static Project GetProjectShortByProjectNumber(string projectNumber)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Project.ProjectShortGetByNumber, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ColumnNames.ProjectNumberColumn, projectNumber);
+
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader != null && reader.HasRows)
+                    {
+                        if (reader.Read())
+                        {
+                            int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+                            int nameIndex = reader.GetOrdinal(Constants.ColumnNames.NameColumn);
+                            int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
+                            int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
+
+
+                            var project = new Project
+                              {
+                                  Id = reader.GetInt32(projectIdIndex),
+
+                                  Name = reader.GetString(nameIndex),
+                                  StartDate =
+                                      !reader.IsDBNull(startDateIndex) ? (DateTime?)reader.GetDateTime(startDateIndex) : null,
+                                  EndDate =
+                                      !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
+                                  ProjectNumber = projectNumber,
+                              };
+
+                            return project;
+
+                        }
+                    }
+
+                    return null;
+                }
+            }
+        }
     }
 }
 
