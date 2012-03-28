@@ -28,7 +28,7 @@
             public const string LoadedHourlyPayRate = "LoadedHourlyPayRate";
             public const string Id = "Id";
             public const string EntryId = "EntryId";
-            public const string Date = "Date"; 
+            public const string Date = "Date";
             public const string DayOff = "DayOff";
             public const string CompanyDayOff = "CompanyDayOff";
             public const string ReadOnly = "ReadOnly";
@@ -294,8 +294,8 @@
             public static string ForecastedHoursUntilToday = "ForecastedHoursUntilToday";
             public static string IsPersonNotAssignedToFixedProject = "IsPersonNotAssignedToFixedProject";
             public static string IsFixedProject = "IsFixedProject";
-            
-            
+
+
         }
 
         #endregion
@@ -647,7 +647,7 @@
                 public const string GetCurrentActivePracticeAreaManagerListProcedure = "dbo.GetCurrentActivePracticeAreaManagerList";
                 public const string GetPersonListBySearchKeywordProcedure = "dbo.GetPersonListBySearchKeyword";
                 public const string GetAllPayTypesProcedure = "dbo.GetAllPayTypes";
-                
+
             }
 
             #endregion
@@ -785,6 +785,7 @@
 
             public class Project
             {
+                public static string GetProjectsByClientId = "dbo.GetProjectsByClientId";
                 public const string GetProjectListByDateRange = "dbo.GetProjectListByDateRange";
                 public const string ProjectListAll = "dbo.ProjectListAll";
                 public const string ProjectListAllMultiParameters = "dbo.ProjectListAllMultiParameters";
@@ -801,6 +802,7 @@
                 public const string ProjectSearchText = "dbo.ProjectSearchText";
                 public const string CloneProject = "dbo.CloneProject";
                 public const string ProjectGetByNumber = "dbo.ProjectGetByNumber";
+                public const string ProjectShortGetByNumber = "dbo.ProjectShortGetByNumber";
                 public const string ProjectMilestonesFinancials = "dbo.ProjectMilestonesFinancials";
                 public static string GetProjectListWithFinancials = "dbo.GetProjectListWithFinancials";
                 public static string GetProjectListForGroupingPracticeManagers = "dbo.GetProjectListForGroupingPracticeManagers";
@@ -819,6 +821,7 @@
                 public const string GetProjectByIdShort = "dbo.GetProjectByIdShort";
                 public const string GetIsHourlyRevenueByPeriod = "dbo.GetIsHourlyRevenueByPeriod";
                 public const string ListProjectsByClientAndPersonInPeriod = "dbo.ListProjectsByClientAndPersonInPeriod";
+                public const string ProjectSearchByName = "dbo.ProjectSearchByName";
 
 
             }
