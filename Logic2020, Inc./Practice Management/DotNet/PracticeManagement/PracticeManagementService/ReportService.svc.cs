@@ -55,6 +55,25 @@ namespace PracticeManagementService
             return ReportDAL.ProjectSummaryReportByWorkType(projectNumber, timeTypeCategoryIds, orderByCerteria);
         }
 
+
+        public List<Project> GetProjectsByClientId(int clientId)
+        {
+            return ReportDAL.GetProjectsByClientId(clientId);
+        }
+
+
+        public List<Project> ProjectSearchByName(string name)
+        {
+            try
+            {
+                return ReportDAL.ProjectSearchByName(name);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
     }
 }
 
