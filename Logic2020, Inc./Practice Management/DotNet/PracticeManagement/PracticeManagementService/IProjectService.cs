@@ -368,6 +368,10 @@ namespace PracticeManagementService
 
         [OperationContract]
         Dictionary<DateTime, bool> GetIsHourlyRevenueByPeriod(int projectId, int personId, DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        Project GetProjectShortByProjectNumber(string projectNumber);
+
     }
 }
 
