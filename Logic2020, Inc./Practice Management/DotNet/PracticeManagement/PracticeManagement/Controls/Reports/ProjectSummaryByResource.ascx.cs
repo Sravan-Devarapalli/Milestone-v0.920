@@ -65,9 +65,14 @@ namespace PraticeManagement.Controls.Reports
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
 
+            var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber));
 
             StringBuilder sb = new StringBuilder();
-            sb.Append(HostingPage.ProjectNumber);
+            //P081003 - [ProjectName]
+            sb.Append(string.Format("{0} - {1}", project.ProjectNumber, project.Name));
+            sb.Append("\t");
+            sb.AppendLine();
+            sb.Append(string.Format("{0} - {1}", project.StartDate.HasValue ? project.StartDate.Value.ToString("MM/dd/yyyy") : "", project.EndDate.HasValue ? project.EndDate.Value.ToString("MM/dd/yyyy") : ""));
             sb.Append("\t");
             sb.AppendLine();
             sb.AppendLine();
@@ -85,10 +90,14 @@ namespace PraticeManagement.Controls.Reports
             sb.Append("\t");
             sb.Append("Value");
             sb.Append("\t");
+            sb.Append("Person Variance (in Hours)");
+            sb.Append("\t");
             sb.AppendLine();
 
+            var list = TimeEntriesGroupByPerson.OrderBy(p=>p.Person.PersonLastFirstName);
+
             //Data
-            foreach (var byPerson in TimeEntriesGroupByPerson)
+            foreach (var byPerson in list)
             {
                 sb.Append(byPerson.Person.PersonLastFirstName);
                 sb.Append("\t");
@@ -102,11 +111,13 @@ namespace PraticeManagement.Controls.Reports
                 sb.Append("\t");
                 sb.Append(GetCurrencyFormat(byPerson.BillableValue, byPerson.IsPersonNotAssignedToFixedProject));
                 sb.Append("\t");
+                sb.Append(byPerson.Variance);
+                sb.Append("\t");
                 sb.AppendLine();
             }
 
 
-            var filename = string.Format("{0}_{1}.xls", HostingPage.ProjectNumber, "_ByResource");
+            var filename = string.Format("{0}_{1}_{2}.xls", project.ProjectNumber, project.Name, "_ByResource");
             GridViewExportUtil.Export(filename, sb);
 
         }
@@ -147,6 +158,7 @@ namespace PraticeManagement.Controls.Reports
         }
 
 
-       
+
     }
 }
+
