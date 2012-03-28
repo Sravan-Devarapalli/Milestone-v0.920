@@ -37,6 +37,12 @@ namespace PracticeManagementService
         [OperationContract]
         List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(string projectNumber, string timeTypeCategoryIds, string orderByCerteria);
 
+        [OperationContract]
+        List<Project> GetProjectsByClientId(int clientId);
+
+        [OperationContract]
+        List<Project> ProjectSearchByName(string name);
+
     }
 }
 
