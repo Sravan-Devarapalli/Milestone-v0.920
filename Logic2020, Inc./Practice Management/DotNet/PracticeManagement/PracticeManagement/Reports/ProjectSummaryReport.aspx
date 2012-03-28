@@ -1,5 +1,6 @@
 ﻿<%@ Page Title="By Project" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="ProjectSummaryReport.aspx.cs" Inherits="PraticeManagement.Reporting.ProjectSummaryReport" %>
+
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register Src="~/Controls/Reports/TimeEntryReportsHeader.ascx" TagPrefix="uc"
     TagName="TimeEntryReportsHeader" %>
@@ -10,6 +11,7 @@
 <%@ Register Src="~/Controls/Reports/BillableAndNonBillableGraph.ascx" TagPrefix="uc"
     TagName="BillableAndNonBillableGraph" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="MessageLabel" TagPrefix="uc" %>
+<%@ Register TagPrefix="cc3" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
@@ -79,12 +81,6 @@
         }
     </style>
     <link href="../Css/TableSortStyle.css" rel="stylesheet" type="text/css" />
-    <script language="javascript" type="text/javascript">
-        function btnClose_OnClientClick(popup) {
-            $find(popup).hide();
-            return false;
-        }
-    </script>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
@@ -126,6 +122,37 @@
         }
 
 
+        function txtSearch_onkeypress(e) {
+            var keynum;
+            if (window.event) // IE8 and earlier
+            {
+                keynum = e.keyCode;
+            }
+            else if (e.which) // IE9/Firefox/Chrome/Opera/Safari
+            {
+                keynum = e.which;
+            }
+            if (keynum == 13) {
+                var btnSearch = document.getElementById('<%= btnProjectSearch.ClientID %>');
+                btnSearch.click();
+                return false;
+            }
+            return true;
+        }
+
+        function txtSearch_onkeyup(e) {
+
+            var txtProjectSearch = document.getElementById('<%= txtProjectSearch.ClientID %>');
+            var btnSearch = document.getElementById('<%= btnProjectSearch.ClientID %>');
+            if (txtProjectSearch.value != '') {
+                btnSearch.removeAttribute('disabled');
+            }
+            else {
+                btnSearch.setAttribute('disabled', 'disabled');
+            }
+            return true;
+        }
+
     </script>
     <uc:TimeEntryReportsHeader ID="timeEntryReportHeader" runat="server"></uc:TimeEntryReportsHeader>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
@@ -149,12 +176,13 @@
                                 <td>
                                     Project Number:
                                 </td>
-                                <td style="width:105px">
-                                    <asp:TextBox ID="txtProjectNumber" AutoPostBack="true" OnTextChanged="txtProjectNumber_OnTextChanged" Width="100px"
-                                        runat="server"></asp:TextBox>
-                                         <ajaxToolkit:TextBoxWatermarkExtender ID="waterMarkTxtProjectNumber" runat="server" TargetControlID="txtProjectNumber"
-                                BehaviorID="waterMarkTxtProjectNumber" WatermarkCssClass="watermarkedtext" WatermarkText="P1234567">
-                            </ajaxToolkit:TextBoxWatermarkExtender>
+                                <td style="width: 105px">
+                                    <asp:TextBox ID="txtProjectNumber" AutoPostBack="true" OnTextChanged="txtProjectNumber_OnTextChanged"
+                                        Width="100px" runat="server"></asp:TextBox>
+                                    <ajaxToolkit:TextBoxWatermarkExtender ID="waterMarkTxtProjectNumber" runat="server"
+                                        TargetControlID="txtProjectNumber" BehaviorID="waterMarkTxtProjectNumber" WatermarkCssClass="watermarkedtext"
+                                        WatermarkText="P1234567">
+                                    </ajaxToolkit:TextBoxWatermarkExtender>
                                 </td>
                                 <td>
                                     <asp:Image ID="imgProjectSearch" runat="server" ToolTip="Project Search" ImageUrl="~/Images/search_24.png" />
@@ -178,45 +206,101 @@
                 </tr>
             </table>
             <AjaxControlToolkit:ModalPopupExtender ID="mpeProjectSearch" runat="server" TargetControlID="imgProjectSearch"
-                CancelControlID="btnclose" BackgroundCssClass="modalBackground" PopupControlID="pnlProjectSearch"
-                BehaviorID="mpeProjectSearch" DropShadow="false" />
+                BackgroundCssClass="modalBackground" PopupControlID="pnlProjectSearch" BehaviorID="mpeProjectSearch"
+                DropShadow="false" />
             <asp:Panel ID="pnlProjectSearch" runat="server" BackColor="White" BorderColor="Black"
-                Style="display: none;" BorderWidth="2px" Width="350px">
+                Style="display: none;" BorderWidth="2px" Width="430px">
                 <table width="100%" class="ProjectSearchPopup">
                     <tr>
-                        <th align="center" style="text-align: center; background-color: Gray;" valign="bottom"
-                            colspan="2">
+                        <th align="center" style="text-align: center; background-color: Gray;" valign="bottom">
                             <b style="font-size: 14px; padding-top: 2px;">Project Search</b>
                             <asp:Button ID="btnclose" runat="server" CssClass="mini-report-close" ToolTip="Close"
-                                Style="float: right;" OnClientClick="return btnClose_OnClientClick('mpeProjectSearch');"
-                                Text="X"></asp:Button>
+                                Style="float: right;" OnClick="btnclose_OnClick" Text="X"></asp:Button>
                         </th>
                     </tr>
                     <tr>
-                        <td>
-                            Account:
-                        </td>
-                        <td>
-                            <asp:DropDownList ID="ddlClients" runat="server" Width="250" OnSelectedIndexChanged="ddlClients_OnSelectedIndexChanged"
-                                AutoPostBack="true">
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Project:
-                        </td>
-                        <td>
-                            <asp:DropDownList ID="ddlProjects" runat="server" Enabled="false" AutoPostBack="true"
-                                Width="250" OnSelectedIndexChanged="ddlProjects_OnSelectedIndexChanged">
-                                <asp:ListItem Text="-- Select a Project --" Value=""></asp:ListItem>
-                            </asp:DropDownList>
+                        <td class="WholeWidth">
+                            <table class="WholeWidth">
+                                <tr>
+                                    <td style="width: 100px; text-align: right;">
+                                        Account:
+                                    </td>
+                                    <td>
+                                        <asp:DropDownList ID="ddlClients" runat="server" Width="250px" OnSelectedIndexChanged="ddlClients_OnSelectedIndexChanged"
+                                            AutoPostBack="true">
+                                        </asp:DropDownList>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td class="WholeWidth">
+                            <table class="WholeWidth">
+                                <tr>
+                                    <td style="width: 100px; text-align: right;">
+                                        Project:
+                                    </td>
+                                    <td>
+                                        <cc3:CustomDropDown ID="ddlProjects" runat="server" Enabled="false" AutoPostBack="true"
+                                            Width="250px" OnSelectedIndexChanged="ddlProjects_OnSelectedIndexChanged">
+                                            <asp:ListItem Text="-- Select a Project --" Value=""></asp:ListItem>
+                                        </cc3:CustomDropDown>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
-                        <td>
+                    </tr>
+                    <tr>
+                        <td class="WholeWidth">
+                            <table class="WholeWidth">
+                                <tr>
+                                    <td>
+                                        <asp:TextBox ID="txtProjectSearch" onkeypress="return txtSearch_onkeypress(event);"
+                                            onkeyup="return txtSearch_onkeyup(event);" Width="330px" runat="server"></asp:TextBox>
+                                        <ajaxToolkit:TextBoxWatermarkExtender ID="wmeProjectSearch" runat="server" TargetControlID="txtProjectSearch"
+                                            WatermarkCssClass="watermarkedtext" WatermarkText="To search for a project, click here to begin typing...">
+                                        </ajaxToolkit:TextBoxWatermarkExtender>
+                                    </td>
+                                    <td>
+                                        <asp:Button ID="btnProjectSearch" UseSubmitBehavior="false" disabled="disabled" runat="server"
+                                            Text="Search" ToolTip="Search" OnClick="btnProjectSearch_Click" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="WholeWidth">
+                            <asp:Repeater ID="repProjectNamesList" runat="server">
+                                <HeaderTemplate>
+                                    <table class="WholeWidth">
+                                        <tr>
+                                            <td style="font-weight: bold; padding: 2px;">
+                                                Projects List:
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div style="max-height: 200px; overflow-y: auto;">
+                                        <table class="WholeWidth">
+                                </HeaderTemplate>
+                                <ItemTemplate>
+                                    <tr>
+                                        <td style="padding: 2px;">
+                                            <asp:LinkButton ID="lnkProjectNumber" ProjectNumber='<%# Eval("ProjectNumber")%>'
+                                                OnClick="lnkProjectNumber_OnClick" runat="server"><%# Eval("Name")%></asp:LinkButton>
+                                        </td>
+                                    </tr>
+                                </ItemTemplate>
+                                <FooterTemplate>
+                                    </table></div>
+                                </FooterTemplate>
+                            </asp:Repeater>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 8px;">
+                            <asp:Literal ID="ltrlNoProjectsText" Visible="false" runat="server" Text="No Projects found."></asp:Literal>
                         </td>
                     </tr>
                 </table>
@@ -231,7 +315,7 @@
             </table>--%>
                 <table class="WholeWidth">
                     <tr>
-                        <td style="padding-top:10px;" align="center">
+                        <td style="padding-top: 10px;" align="center">
                             <asp:Table ID="tblProjectsummaryReportViewSwitch" runat="server" CssClass="CustomTabStyle">
                                 <asp:TableRow ID="rowSwitcher" runat="server">
                                     <asp:TableCell ID="cellResource" CssClass="SelectedSwitch" runat="server">
@@ -252,7 +336,7 @@
                     </tr>
                 </table>
                 <asp:MultiView ID="mvProjectSummaryReport" runat="server" ActiveViewIndex="0">
-                    <asp:View ID="vwResourceReport"  runat="server">
+                    <asp:View ID="vwResourceReport" runat="server">
                         <asp:Panel ID="pnlResourceReport" runat="server" CssClass="tab-pane WholeWidth">
                             <uc:ByResource ID="ucByResource" runat="server"></uc:ByResource>
                         </asp:Panel>
