@@ -3339,13 +3339,17 @@ namespace DataAccess
                 int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
                 int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
                 int isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
+                int timeScaleIndex = reader.GetOrdinal(TimescaleColumn);
 
                 while (reader.Read())
                 {
                     person.FirstName = reader.GetString(firstNameIndex);
                     person.LastName = reader.GetString(lastNameIndex);
                     person.IsStrawMan = reader.IsDBNull(isStrawManIndex) ? false : reader.GetBoolean(isStrawManIndex);
-
+                    person.CurrentPay = new Pay
+                                {
+                                    TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
+                                };
                     if (!string.IsNullOrEmpty(person.FirstName) && !string.IsNullOrEmpty(person.LastName))
                     {
                         break;
