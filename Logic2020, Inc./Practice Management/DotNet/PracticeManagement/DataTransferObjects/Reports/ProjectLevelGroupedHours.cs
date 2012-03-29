@@ -29,13 +29,6 @@ namespace DataTransferObjects.Reports
         }
 
         [DataMember]
-        public double BillableValue
-        {
-            get;
-            set;
-        }
-
-        [DataMember]
         public double NonBillableHours
         {
             get;
@@ -44,7 +37,7 @@ namespace DataTransferObjects.Reports
         }
 
         [DataMember]
-        public bool IsFixedProject { get; set; }
+        public string BillingType { get; set; }
 
         [DataMember]
         public double BillableHoursUntilToday { get; set; }
@@ -112,7 +105,7 @@ namespace DataTransferObjects.Reports
                     sb.Append("White;");
                 }
 
-                sb.Append("height: 20px;");
+                sb.Append("height: 24px;");
                 sb.Append("width: ");
                 sb.Append(BillableFirstHalfWidth + "%;");
 
@@ -130,16 +123,16 @@ namespace DataTransferObjects.Reports
                 {
                     sb.Append("Gray;");
                 }
-                else if (!IsFixedProject)
+                else if (!BillingType.Equals("Fixed"))
                 {
                     sb.Append("Red;");
                 }
-                else if (IsFixedProject)
+                else if (BillingType.Equals("Fixed"))
                 {
                     sb.Append("Green;");
                 }
 
-                sb.Append("height: 20px;");
+                sb.Append("height: 24px;");
                 sb.Append("width: ");
                 sb.Append(BillableSecondHalfWidth + "%;");
 
@@ -173,17 +166,17 @@ namespace DataTransferObjects.Reports
                 {
                     sb.Append("Gray;");
                 }
-                else if (!IsFixedProject)
+                else if (!BillingType.Equals("Fixed"))
                 {
 
                     sb.Append("Green;");
                 }
-                else if (IsFixedProject)
+                else if (BillingType.Equals("Fixed"))
                 {
                     sb.Append("Red;");
                 }
 
-                sb.Append("height: 20px;");
+                sb.Append("height: 24px;");
                 sb.Append("width: ");
                 sb.Append(ForecastedFirstHalfWidth + "%;");
 
@@ -206,7 +199,7 @@ namespace DataTransferObjects.Reports
                     sb.Append("White;");
                 }
 
-                sb.Append("height: 20px;");
+                sb.Append("height: 24px;");
                 sb.Append("width: ");
                 sb.Append(ForecastedSecondHalfWidth + "%;");
 
