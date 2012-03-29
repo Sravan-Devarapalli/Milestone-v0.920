@@ -26,16 +26,13 @@ namespace DataTransferObjects.Reports
         }
 
         [DataMember]
-        public double BillableValue { get; set; }
-
-        [DataMember]
         public double BillableHours { get; set; }
 
         [DataMember]
         public double NonBillableHours { get; set; }
 
         [DataMember]
-        public bool IsPersonNotAssignedToFixedProject { get; set; }
+        public string BillableType { get; set; }
 
         [DataMember]
         public List<TimeEntriesGroupByDate> DayTotalHours
