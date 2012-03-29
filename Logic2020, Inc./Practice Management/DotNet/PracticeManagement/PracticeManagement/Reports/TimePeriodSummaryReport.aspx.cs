@@ -32,7 +32,7 @@ namespace PraticeManagement.Reporting
                             {
                                 return Utils.Calendar.WeekStartDate(now);
                             }
-                            else if (selectedVal == 30)
+                            else if (selectedVal == 30 || selectedVal == 15)
                             {
                                 return Utils.Calendar.MonthStartDate(now);
                             }
@@ -47,6 +47,10 @@ namespace PraticeManagement.Reporting
                             if (selectedVal == -7)
                             {
                                 return Utils.Calendar.LastWeekStartDate(now);
+                            }
+                            else if (selectedVal == -15)
+                            {
+                                return Utils.Calendar.LastMonthSecondHalfStartDate(now);
                             }
                             else if (selectedVal == -30)
                             {
@@ -91,6 +95,10 @@ namespace PraticeManagement.Reporting
                             {
                                 return Utils.Calendar.WeekEndDate(now);
                             }
+                            else if (selectedVal == 15)
+                            {
+                                return Utils.Calendar.MonthFirstHalfEndDate(now);
+                            }
                             else if (selectedVal == 30)
                             {
                                 return Utils.Calendar.MonthEndDate(now);
@@ -106,7 +114,7 @@ namespace PraticeManagement.Reporting
                             {
                                 return Utils.Calendar.LastWeekEndDate(now);
                             }
-                            else if (selectedVal == -30)
+                            else if (selectedVal == -30 || selectedVal == -15)
                             {
                                 return Utils.Calendar.LastMonthEndDate(now);
                             }
@@ -122,6 +130,38 @@ namespace PraticeManagement.Reporting
                     }
                 }
                 return null;
+            }
+        }
+
+        public String Range
+        {
+            get
+            {
+                string range = string.Empty;
+                if (StartDate.HasValue && EndDate.HasValue)
+                {
+                    if (StartDate.Value == Utils.Calendar.MonthStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.MonthEndDate(StartDate.Value))
+                    {
+                        range = StartDate.Value.ToString("MMMM - yyyy");
+                    }
+                    else if (StartDate.Value == Utils.Calendar.YearStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.YearEndDate(StartDate.Value))
+                    {
+                        range = StartDate.Value.ToString("Year, yyyy");
+                    }
+                    else
+                    {
+                        range = StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                    }
+                }
+                return range;
+            }
+        }
+
+        public bool IncludePersonWithNoTimeEntries
+        {
+            get
+            {
+                return chkIncludePersons.Checked;
             }
         }
 
@@ -165,34 +205,19 @@ namespace PraticeManagement.Reporting
             }
         }
 
-        protected void btnView_Command(object sender, CommandEventArgs e)
+        private void SelectView()
         {
-            int viewIndex = int.Parse((string)e.CommandArgument);
-            SelectView((Control)sender, viewIndex);
-            LoadActiveView();
-        }
-
-        private void SwitchView(Control control, int viewIndex)
-        {
-            SelectView(control, viewIndex);
-            LoadActiveView();
-        }
-
-        private void SelectView(Control sender, int viewIndex)
-        {
-            mvTimePeriodReport.ActiveViewIndex = viewIndex;
-
-            SetCssClassEmpty();
-
-            ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
-        }
-
-        private void SetCssClassEmpty()
-        {
-            foreach (TableCell cell in tblTimePeriodReportViewSwitch.Rows[0].Cells)
+            if (ddlPeriod.SelectedValue != "Please Select" && ddlView.SelectedValue != "Please Select")
             {
-                cell.CssClass = string.Empty;
+                divWholePage.Style.Remove("display");
+                int viewIndex = int.Parse(ddlView.SelectedValue);
+                mvTimePeriodReport.ActiveViewIndex = viewIndex;
+                LoadActiveView();
             }
+            else {
+                divWholePage.Style.Add("display", "none");
+            }
+
         }
 
         protected void btnCustDatesOK_Click(object sender, EventArgs e)
@@ -212,28 +237,30 @@ namespace PraticeManagement.Reporting
 
         protected void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddlPeriod.SelectedValue != "Please Select")
+            if (ddlPeriod.SelectedValue != "0")
             {
-                if (ddlPeriod.SelectedValue != "0")
-                {
-                    LoadActiveView();
-                }
-                else
-                {
-                    mpeCustomDates.Show();
-                }
+                SelectView();
             }
             else
             {
-                SwitchView(lnkbtnResource, 0);
+                mpeCustomDates.Show();
             }
+        }
+
+        protected void ddlView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectView();
+        }
+
+        protected void chkIncludePersons_CheckedChanged(object sender, EventArgs e)
+        {
+            SelectView();
         }
 
         private void LoadActiveView()
         {
             if (StartDate.HasValue && EndDate.HasValue)
-            {
-                divWholePage.Style.Remove("display");
+            {                
                 if (mvTimePeriodReport.ActiveViewIndex == 0)
                 {
                     PopulateByResourceData();
@@ -246,31 +273,19 @@ namespace PraticeManagement.Reporting
                 {
                     PopulateByWorkTypeData();
                 }
-            }
-            else
-            {
-                divWholePage.Style.Add("display", "none");
-            }
+            }          
         }
 
         private void PopulateByResourceData()
         {
             var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(StartDate.Value, EndDate.Value, null));
             tpByResource.DataBindResource(data);
-            int billableHours = (int)data.Sum(p=>p.BillableHours);
-            int nonBillableHours = (int)data.Sum(p=>p.NonBillableHours);
-            ucBillableAndNonBillable.BillablValue = billableHours.ToString();
-            ucBillableAndNonBillable.NonBillablValue = nonBillableHours.ToString();
         }
 
         private void PopulateByProjectData()
         {
             var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(StartDate.Value, EndDate.Value, null, null));
             tpByProject.DataBindProject(data);
-            int billableHours = (int)data.Sum(p => p.BillableHours);
-            int nonBillableHours = (int)data.Sum(p => p.NonBillableHours);
-            ucBillableAndNonBillable.BillablValue = billableHours.ToString();
-            ucBillableAndNonBillable.NonBillablValue = nonBillableHours.ToString();
         }
 
         private void PopulateByWorkTypeData()
@@ -281,10 +296,6 @@ namespace PraticeManagement.Reporting
             //ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
         }
 
-        public void SetGraphVisibility(bool visible)
-        {
-            ucBillableAndNonBillable.Visible = visible;
-        }
     }
 }
 
