@@ -6,7 +6,7 @@ using DataTransferObjects.Reports;
 using System.Data.SqlClient;
 using DataAccess.Other;
 using System.Data;
-using DataTransferObjects; 
+using DataTransferObjects;
 using DataTransferObjects.TimeEntry;
 using System.Data.Common;
 
@@ -44,7 +44,7 @@ namespace DataAccess
             {
                 int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNameColumn);
                 int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
-              
+
 
                 while (reader.Read())
                 {
@@ -201,7 +201,6 @@ namespace DataAccess
 
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
-                int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
                 int groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
                 int groupCodeIndex = reader.GetOrdinal(Constants.ColumnNames.GroupCodeColumn);
                 int clientCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ClientCodeColumn);
@@ -232,7 +231,6 @@ namespace DataAccess
 
                         BillableHours = reader.GetDouble(billableHoursIndex),
                         NonBillableHours = reader.GetDouble(nonBillableHoursIndex),
-                        BillableValue = reader.GetDouble(billableValueindex),
                         IsPersonNotAssignedToFixedProject = reader.GetInt32(isPersonNotAssignedToFixedProjectIndex) != 0
 
                     };
@@ -263,7 +261,7 @@ namespace DataAccess
                     {
                         int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                         int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
-                        int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
+               
                         int utlizationPercentIndex = reader.GetOrdinal(Constants.ColumnNames.UtlizationPercent);
                         int isPersonNotAssignedToFixedProjectIndex = reader.GetOrdinal(Constants.ColumnNames.IsPersonNotAssignedToFixedProject);
 
@@ -274,17 +272,7 @@ namespace DataAccess
 
                             result.Fourth = !reader.IsDBNull(utlizationPercentIndex) ? (int)reader.GetDouble(utlizationPercentIndex) : 0d;
                             bool isPersonNotAssignedToFixedProject = !reader.IsDBNull(isPersonNotAssignedToFixedProjectIndex) ? reader.GetInt32(isPersonNotAssignedToFixedProjectIndex) == 0 ? false : true : true;
-                            if (isPersonNotAssignedToFixedProject)
-                            {
-                                //hourly
-                                result.Third = !reader.IsDBNull(billableValueindex) ? (double)reader.GetDouble(billableValueindex) : 0d;    
-                            }
-                            else
-                            {
-                                //fixed
-                                result.Third = -1d;
-                            }
-                            
+                           
                         }
                     }
                     return result;
@@ -326,7 +314,7 @@ namespace DataAccess
                 int businessDevelopmentHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessDevelopmentHours);
                 int internalHoursIndex = reader.GetOrdinal(Constants.ColumnNames.InternalHours);
                 int adminstrativeHoursIndex = reader.GetOrdinal(Constants.ColumnNames.AdminstrativeHours);
-                int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
+              
                 int personSeniorityIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityId);
                 int personSeniorityNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityName);
                 int utlizationPercentIndex = reader.GetOrdinal(Constants.ColumnNames.UtlizationPercent);
@@ -335,39 +323,36 @@ namespace DataAccess
 
                 while (reader.Read())
                 {
-                    int personId = reader.GetInt32(personIdIndex);
-                    if (!result.Any(p => p.Person.Id == personId))
-                    {
-                        PersonLevelGroupedHours PLGH = new PersonLevelGroupedHours();
-                        Person person = new Person
+
+                    PersonLevelGroupedHours PLGH = new PersonLevelGroupedHours();
+                    Person person = new Person
+                                            {
+                                                Id = reader.GetInt32(personIdIndex),
+                                                FirstName = reader.GetString(firstNameIndex),
+                                                LastName = reader.GetString(lastNameIndex),
+                                                Seniority = new Seniority
                                                 {
-                                                    Id = reader.GetInt32(personIdIndex),
-                                                    FirstName = reader.GetString(firstNameIndex),
-                                                    LastName = reader.GetString(lastNameIndex),
-                                                    Seniority = new Seniority
-                                                    {
-                                                        Id = reader.GetInt32(personSeniorityIdIndex),
-                                                        Name = reader.GetString(personSeniorityNameIndex)
-                                                    },
-                                                    CurrentPay = new Pay
-                                                    {
-                                                        TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
-                                                    },
-                                                    UtlizationPercent = !reader.IsDBNull(utlizationPercentIndex) ? (int)reader.GetDouble(utlizationPercentIndex) : 0d
-                                                };
-                        PLGH.Person = person;
+                                                    Id = reader.GetInt32(personSeniorityIdIndex),
+                                                    Name = reader.GetString(personSeniorityNameIndex)
+                                                },
+                                                CurrentPay = new Pay
+                                                {
+                                                    TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
+                                                },
+                                                UtlizationPercent = !reader.IsDBNull(utlizationPercentIndex) ? (int)reader.GetDouble(utlizationPercentIndex) : 0d
+                                            };
+                    PLGH.Person = person;
 
-                        PLGH.BillableHours = reader.GetDouble(billableHoursIndex);
-                        PLGH.ProjectNonBillableHours = reader.GetDouble(projectNonBillableHoursIndex);
-                        PLGH.BusinessDevelopmentHours = reader.GetDouble(businessDevelopmentHoursIndex);
-                        PLGH.InternalHours = reader.GetDouble(internalHoursIndex);
-                        PLGH.AdminstrativeHours = reader.GetDouble(adminstrativeHoursIndex);
-                        PLGH.BillableValue = reader.GetDouble(billableValueindex);
-                        PLGH.IsPersonNotAssignedToFixedProject = reader.GetInt32(isPersonNotAssignedToFixedProjectIndex) != 0;
-                        PLGH.Person = person;
+                    PLGH.BillableHours = reader.GetDouble(billableHoursIndex);
+                    PLGH.ProjectNonBillableHours = reader.GetDouble(projectNonBillableHoursIndex);
+                    PLGH.BusinessDevelopmentHours = reader.GetDouble(businessDevelopmentHoursIndex);
+                    PLGH.InternalHours = reader.GetDouble(internalHoursIndex);
+                    PLGH.AdminstrativeHours = reader.GetDouble(adminstrativeHoursIndex);
+                    PLGH.Person = person;
+                   
 
-                        result.Add(PLGH);
-                    }
+                    result.Add(PLGH);
+
                 }
             }
         }
@@ -411,7 +396,6 @@ namespace DataAccess
                 int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
-                int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
                 int isFixedProjectIndex = reader.GetOrdinal(Constants.ColumnNames.IsFixedProject);
                 int billableHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHoursUntilToday);
                 int forecastedHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHoursUntilToday);
@@ -449,10 +433,8 @@ namespace DataAccess
                         plgh.Project = project;
                         plgh.BillableHours = reader.GetDouble(billableHoursIndex);
                         plgh.NonBillableHours = reader.GetDouble(nonBillableHoursIndex);
-                        plgh.BillableValue = reader.GetDouble(billableValueindex);
                         plgh.BillableHoursUntilToday = reader.GetDouble(billableHoursUntilTodayIndex);
                         plgh.ForecastedHoursUntilToday = Convert.ToDouble(reader[forecastedHoursUntilTodayIndex]);
-                        plgh.IsFixedProject = reader.GetInt32(isFixedProjectIndex) == 0;
                         result.Add(plgh);
                     }
                 }
@@ -537,13 +519,15 @@ namespace DataAccess
             }
         }
 
-        public static List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber)
+        public static List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber, int? milestoneId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ProjectSummaryReportByResource, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectNumber, projectNumber);
+                command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, milestoneId.HasValue ? (object)milestoneId : DBNull.Value);
+
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 connection.Open();
@@ -567,11 +551,11 @@ namespace DataAccess
                 int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
-                int billableValueindex = reader.GetOrdinal(Constants.ColumnNames.BillableValue);
                 int projectRoleNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectRoleName);
                 int billableHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHoursUntilToday);
                 int forecastedHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHoursUntilToday);
-                int isPersonNotAssignedToFixedProjectIndex = reader.GetOrdinal(Constants.ColumnNames.IsPersonNotAssignedToFixedProject);
+                int forecastedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHours);
+                int billingTypeIndex = reader.GetOrdinal(Constants.ColumnNames.BillingType);
 
                 while (reader.Read())
                 {
@@ -589,12 +573,11 @@ namespace DataAccess
 
                     PLGH.BillableHours = reader.GetDouble(billableHoursIndex);
                     PLGH.ProjectNonBillableHours = reader.GetDouble(nonBillableHoursIndex);
-                    PLGH.BillableValue = reader.GetDouble(billableValueindex);
                     PLGH.BillableHoursUntilToday = reader.GetDouble(billableHoursUntilTodayIndex);
                     PLGH.ForecastedHoursUntilToday = Convert.ToDouble(reader[forecastedHoursUntilTodayIndex]);
-                    PLGH.IsPersonNotAssignedToFixedProject = reader.GetInt32(isPersonNotAssignedToFixedProjectIndex) != 0;
-
+                    PLGH.BillingType = reader.GetString(billingTypeIndex);
                     PLGH.Person = person;
+                    PLGH.ForecastedHours = Convert.ToDouble(reader[forecastedHoursUntilTodayIndex]);
 
                     result.Add(PLGH);
                 }
@@ -642,7 +625,7 @@ namespace DataAccess
                     {
                         while (reader.Read())
                         {
-                            var proj =  ReadProject(reader);
+                            var proj = ReadProject(reader);
                             result.Add(proj);
                         }
                     }
@@ -671,6 +654,48 @@ namespace DataAccess
 
 
             return project;
+        }
+
+        public static List<Milestone> GetMilestonesForProject(string projectNumber)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetMilestonesForProject, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectNumber, projectNumber);
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<Milestone>();
+                    ReadMilestonesByProject(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadMilestonesByProject(SqlDataReader reader, List<Milestone> result)
+        {
+            if (reader.HasRows)
+            {
+
+                while (reader.Read())
+                {
+
+                    int mileStoneIdIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneId);
+                    int mileStoneNameIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneName);
+
+                    var milestone = new Milestone
+                    {
+                        Description = reader.GetString(mileStoneNameIndex),
+                        Id = reader.GetInt32(mileStoneIdIndex)
+                    };
+
+                    result.Add(milestone);
+                }
+            }
         }
     }
 }
