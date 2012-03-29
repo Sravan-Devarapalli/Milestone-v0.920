@@ -290,12 +290,16 @@
             public const string ClientCodeColumn = "ClientCode";
             public const string GroupCodeColumn = "GroupCode";
             public const string TimeTypeCodeColumn = "TimeTypeCode";
-            public static string BillableHoursUntilToday = "BillableHoursUntilToday";
-            public static string ForecastedHoursUntilToday = "ForecastedHoursUntilToday";
-            public static string IsPersonNotAssignedToFixedProject = "IsPersonNotAssignedToFixedProject";
-            public static string IsFixedProject = "IsFixedProject";
-
-
+            public const string BillableHoursUntilToday = "BillableHoursUntilToday";
+            public const string ForecastedHoursUntilToday = "ForecastedHoursUntilToday";
+            public const string IsPersonNotAssignedToFixedProject = "IsPersonNotAssignedToFixedProject";
+            public const string IsFixedProject = "IsFixedProject";
+            public const string ProjectNonBillableHours = "ProjectNonBillableHours";
+            public const string BusinessDevelopmentHours = "BusinessDevelopmentHours";
+            public const string InternalHours = "InternalHours";
+            public const string AdminstrativeHours = "AdminstrativeHours";
+            public const string TimescaleColumn = "Timescale";
+            
         }
 
         #endregion
@@ -785,7 +789,7 @@
 
             public class Project
             {
-                public static string GetProjectsByClientId = "dbo.GetProjectsByClientId";
+                public const string GetProjectsByClientId = "dbo.GetProjectsByClientId";
                 public const string GetProjectListByDateRange = "dbo.GetProjectListByDateRange";
                 public const string ProjectListAll = "dbo.ProjectListAll";
                 public const string ProjectListAllMultiParameters = "dbo.ProjectListAllMultiParameters";
