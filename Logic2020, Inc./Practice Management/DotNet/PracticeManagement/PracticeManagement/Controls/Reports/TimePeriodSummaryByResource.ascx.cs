@@ -40,35 +40,6 @@ namespace PraticeManagement.Controls.Reports
             return value.ToString(Constants.Formatting.DoubleValue);
         }
 
-        protected string GetCurrencyFormat(double value)
-        {
-            return value > 0 ? value.ToString(Constants.Formatting.CurrencyFormat) : "$0";
-        }
-
-        protected string GetBillableValue(double billableValue, bool isPersonNotAssignedToFixedProject)
-        {
-            if (!isPersonNotAssignedToFixedProject)
-            {
-                return "Fixed";
-            }
-            else
-            {
-                return billableValue > 0 ? billableValue.ToString(Constants.Formatting.CurrencyFormat) : "$0";
-            }
-        }
-
-        protected string GetBillableSortValue(double billableValue, bool isPersonNotAssignedToFixedProject)
-        {
-            if (!isPersonNotAssignedToFixedProject)
-            {
-                return "-1";
-            }
-            else
-            {
-                return billableValue > 0 ? billableValue.ToString() : "0";
-            }
-        }
-
         protected string GetPayTypeSortValue(string payType, string name)
         {
             if (string.IsNullOrEmpty(payType))
@@ -117,8 +88,6 @@ namespace PraticeManagement.Controls.Reports
                     sb.Append("\t");
                     sb.Append("Total");
                     sb.Append("\t");
-                    sb.Append("Value");
-                    sb.Append("\t");
                     sb.Append("Utilization Percent this Period");
                     sb.Append("\t");
                     sb.AppendLine();
@@ -143,8 +112,6 @@ namespace PraticeManagement.Controls.Reports
                         sb.Append(GetDoubleFormat(personLevelGroupedHours.AdminstrativeHours));
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(personLevelGroupedHours.TotalHours));
-                        sb.Append("\t");
-                        //sb.Append(GetBillableValue(personLevelGroupedHours.BillableValue, personLevelGroupedHours.IsPersonNotAssignedToFixedProject));
                         sb.Append("\t");
                         sb.Append(personLevelGroupedHours.Person.UtlizationPercent + "%");
                         sb.Append("\t");
