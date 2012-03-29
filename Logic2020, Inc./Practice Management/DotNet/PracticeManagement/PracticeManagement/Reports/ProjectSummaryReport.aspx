@@ -79,6 +79,11 @@
         {
             width: 152px;
         }
+        
+        TABLE.CustomViewStyle TD
+        {
+            padding: 4px;
+        }
     </style>
     <link href="../Css/TableSortStyle.css" rel="stylesheet" type="text/css" />
 </asp:Content>
@@ -165,38 +170,71 @@
                     </td>
                 </tr>
             </table>
-            <table style="width: 100%;height:120px; ">
+            <table style="width: 100%; height: 120px;">
                 <tr>
-                    <td style="width: 33%;">
+                    <td style="width: 34%;">
                         &nbsp;
                     </td>
-                    <td style="width: 34%; vertical-align:top;" align="center">
-                        <table class="PaddingTenPx" >
+                    <td style="width: 32%; vertical-align: top;" align="center">
+                        <table class="WholeWidth CustomViewStyle">
                             <tr>
-                                <td style="font-weight:bold;">
+                                <td style="font-weight: bold; text-align: right; width: 110px;">
                                     Project Number:
                                 </td>
-                                <td style="width: 105px">
-                                    <asp:TextBox ID="txtProjectNumber" AutoPostBack="true" OnTextChanged="txtProjectNumber_OnTextChanged"
-                                        Width="100px" runat="server"></asp:TextBox>
+                                <td style="width: 150px;">
+                                    <asp:TextBox ID="txtProjectNumber" Width="96%" AutoPostBack="true" OnTextChanged="txtProjectNumber_OnTextChanged"
+                                        runat="server"></asp:TextBox>
                                     <ajaxToolkit:TextBoxWatermarkExtender ID="waterMarkTxtProjectNumber" runat="server"
                                         TargetControlID="txtProjectNumber" BehaviorID="waterMarkTxtProjectNumber" WatermarkCssClass="watermarkedtext"
-                                        WatermarkText="P1234567">
+                                        WatermarkText="Ex: P1234767">
                                     </ajaxToolkit:TextBoxWatermarkExtender>
                                 </td>
-                                <td>
+                                <td style="width: 40px;">
                                     <asp:Image ID="imgProjectSearch" runat="server" ToolTip="Project Search" ImageUrl="~/Images/search_24.png" />
                                 </td>
                             </tr>
+                        </table>
+                        <table class="WholeWidth CustomViewStyle">
                             <tr>
-                                <td colspan="3">
+                                <td style="font-weight: bold; text-align: right; width: 110px;">
+                                    Range:
+                                </td>
+                                <td style="width: 150px;">
+                                    <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
+                                        Width="100%">
+                                        <asp:ListItem Selected="True" Text="Entire Project" Value="*"></asp:ListItem>
+                                    </asp:DropDownList>
+                                </td>
+                                <td style="width: 40px;">
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="WholeWidth CustomViewStyle">
+                            <tr>
+                                <td style="font-weight: bold; text-align: right; width: 110px;">
+                                    View:
+                                </td>
+                                <td style="width: 150px;">
+                                    <asp:DropDownList ID="ddlView" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlView_SelectedIndexChanged"
+                                        Width="100%">
+                                        <asp:ListItem Selected="True" Text="Please Select" Value=""></asp:ListItem>
+                                        <asp:ListItem Text="By Resource" Value="0"></asp:ListItem>
+                                    </asp:DropDownList>
+                                </td>
+                                <td style="width: 40px;">
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="WholeWidth CustomViewStyle">
+                            <tr>
+                                <td style="width: 300px;" colspan="3">
                                     <uc:MessageLabel ID="msgError" runat="server" ErrorColor="Red" InfoColor="Green"
                                         WarningColor="Orange" EnableViewState="false" />
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 33%;">
+                    <td style="width: 34%;">
                         &nbsp;
                     </td>
                 </tr>
@@ -306,35 +344,6 @@
                 </table>
             </asp:Panel>
             <div id="divWholePage" runat="server">
-                <%--          <table style="width: 100%;">
-                <tr>
-                    <td align="center" style="padding:10px;">
-                        <uc:BillableAndNonBillableGraph ID="ucBillableAndNonBillable" runat="server"></uc:BillableAndNonBillableGraph>
-                    </td>
-                </tr>
-            </table>--%>
-                <table class="WholeWidth">
-                    <tr>
-                        <td style="padding-top: 10px;" align="center">
-                            <asp:Table ID="tblProjectsummaryReportViewSwitch" runat="server" CssClass="CustomTabStyle">
-                                <asp:TableRow ID="rowSwitcher" runat="server">
-                                    <asp:TableCell ID="cellResource" CssClass="SelectedSwitch" runat="server">
-                                        <span class="bg"><span>
-                                            <asp:LinkButton ID="lnkbtnResource" runat="server" Text="By Resource" CausesValidation="false"
-                                                ToolTip="By Resource" OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
-                                        </span>
-                                    </asp:TableCell>
-                                    <%-- <asp:TableCell ID="cellWorkType" runat="server">
-                                        <span class="bg"><span>
-                                            <asp:LinkButton ID="lnkbtnWorkType" runat="server" Text="By Work Type" CausesValidation="false"
-                                                OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
-                                        </span>
-                                    </asp:TableCell>--%>
-                                </asp:TableRow>
-                            </asp:Table>
-                        </td>
-                    </tr>
-                </table>
                 <asp:MultiView ID="mvProjectSummaryReport" runat="server" ActiveViewIndex="0">
                     <asp:View ID="vwResourceReport" runat="server">
                         <asp:Panel ID="pnlResourceReport" runat="server" CssClass="tab-pane WholeWidth">
