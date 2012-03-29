@@ -7,7 +7,7 @@
 <%@ Register Src="~/Controls/Reports/PersonSummaryReport.ascx" TagPrefix="uc" TagName="PersonSummaryReport" %>
 <%@ Register Src="~/Controls/Reports/PersonDetailReport.ascx" TagPrefix="uc" TagName="PersonDetailReport" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
-    TagName="DateInterval" %> 
+    TagName="DateInterval" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
@@ -67,25 +67,59 @@
             return false;
         }
 
-        function ExpandOrcollapseExtender(cpe, isExpand) {
-            if (cpe != null) {
-                if (isExpand)
-                    cpe._doOpen();
-                else
-                    cpe._doClose();
+
+        function setAutoOrZeroHeight() {
+
+            var pnlDateDetailsList = $("[id$='pnlDateDetails']");
+
+            var pnlProjectDetailsList = $("[id$='pnlProjectDetails']");
+
+            for (var i = 0; i < pnlProjectDetailsList.length; i++) {
+
+                if (pnlProjectDetailsList[i].style.height != "0px") {
+                    pnlProjectDetailsList[i].style.height = "auto";
+                }
+
+            }
+
+            for (var i = 0; i < pnlDateDetailsList.length; i++) {
+
+                if (pnlDateDetailsList[i].style.height != "0px") {
+                    pnlDateDetailsList[i].style.height = "auto";
+                }
+
             }
         }
 
-        function ExpandOrCollapsePanels(ids, isExpand) {
-            for (var i = 0; i < ids.length; i++) {
-                var cpe = $find(ids[i].Key);
-                //var datePanels = jQuery.parseJSON(ids[i].Value);
-                ExpandOrcollapseExtender(cpe, isExpand);
-                //                for (var j = 0; j < datePanels.length; j++) {
-                //                    var cpeDate = $find(datePanels[j]);
-                //                    ExpandOrcollapseExtender(cpeDate, isExpand);
-                //                }
+        function ExpandOrcollapseExtender(cpe, isExpand) {
+            if (cpe != null) {
+                if (isExpand) {
+                    ExpandPanel(cpe)
+                }
+                else {
+                    var isCollapsed = cpe.get_Collapsed();
+                    if (!isCollapsed)
+                        cpe._doClose();
+                }
             }
+        }
+
+
+        function ExpandPanel(cpe) {
+            var isCollapsed = cpe.get_Collapsed();
+            if (isCollapsed) {
+                cpe.expandPanel();
+            }
+        }
+
+
+        function ExpandOrCollapsePanels(datePanels, isExpand) {
+
+            for (var j = 0; j < datePanels.length; j++) {
+                var cpeDate = $find(datePanels[j]);
+                ExpandOrcollapseExtender(cpeDate, isExpand);
+            }
+
         }
 
         function txtSearch_onkeypress(e) {
@@ -263,12 +297,12 @@
                     </td>
                 </tr>
             </table>
-            <table width="100%" style="height:120px;">
+            <table width="100%" style="height: 120px;">
                 <tr>
                     <td style="width: 65%">
                     </td>
-                    <td style="padding-bottom: 10px; text-align:center">
-                        <table width="100%" align="center" style="vertical-align:top;">
+                    <td style="padding-bottom: 10px; text-align: center">
+                        <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 30%; text-align: right; font-weight: bold;">
                                     Person:&nbsp;
@@ -320,12 +354,12 @@
                 <tr>
                     <td style="width: 65%">
                     </td>
-                    <td style="padding-bottom: 10px;text-align:center;">
+                    <td style="padding-bottom: 10px; text-align: center;">
                         <table width="100%" align="center">
                             <tr>
                                 <td style="width: 30%;">
                                 </td>
-                                <td style="text-align: left;height:15px;">
+                                <td style="text-align: left; height: 15px;">
                                     <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnStartDateCalExtenderBehaviourId" runat="server" Value="" />
@@ -373,25 +407,24 @@
             <div id="divWholePage" runat="server">
                 <table class="PaddingTenPx" style="width: 100%;">
                     <tr>
-                        <td style="font-size: 18px; font-weight: bold;padding-bottom:10px;">
-                        <table>
-                        <tr>
-                        <td style="vertical-align:top;">
-                            <asp:Label ID="lblPersonname" runat="server"></asp:Label>
-                        </td>
-                        </tr>
-                        <tr>
-                        <td style="vertical-align:top;font-size: 13px">
-                            <asp:Label ID="lblPersonStatus" runat="server"></asp:Label>
-                        </td>
-                        </tr>
-                        <tr>
-                        <td style="padding-top:5px;vertical-align:bottom;">
-                            <asp:Label ID="lbRange" runat="server"></asp:Label>
-                        </td>
-                        </tr>
-                        </table>
-                        
+                        <td style="font-size: 18px; font-weight: bold; padding-bottom: 10px;">
+                            <table>
+                                <tr>
+                                    <td style="vertical-align: top;">
+                                        <asp:Label ID="lblPersonname" runat="server"></asp:Label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: top; font-size: 13px">
+                                        <asp:Label ID="lblPersonStatus" runat="server"></asp:Label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top: 5px; vertical-align: bottom;">
+                                        <asp:Label ID="lbRange" runat="server"></asp:Label>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td style="text-align: right; width: 610px">
                             <table style="table-layout: fixed; width: 100%;">
@@ -496,7 +529,7 @@
                                                     </table>
                                                     <table width="100%">
                                                         <tr id="trNonBillable" runat="server" title="Non-Billable Percentage.">
-                                                            <td style="background-color: #BEBEBE ; border: 1px solid Gray;">
+                                                            <td style="background-color: #BEBEBE; border: 1px solid Gray;">
                                                             </td>
                                                         </tr>
                                                     </table>
