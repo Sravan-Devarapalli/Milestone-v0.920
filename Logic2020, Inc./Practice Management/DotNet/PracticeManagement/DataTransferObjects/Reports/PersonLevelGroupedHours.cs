@@ -46,12 +46,6 @@ namespace DataTransferObjects.Reports
             }
         }
 
-        [DataMember]
-        public double BillableValue
-        {
-            get;
-            set;
-        }
 
         [DataMember]
         public double ProjectNonBillableHours
@@ -95,8 +89,13 @@ namespace DataTransferObjects.Reports
         [DataMember]
         public double BillableHoursUntilToday { get; set; }
 
+
         [DataMember]
-        public bool IsPersonNotAssignedToFixedProject { get; set; }
+        public string BillingType { get; set; }
+
+        [DataMember]
+        public double ForecastedHours { get; set; }
+
 
         public double TotalHours
         {
@@ -154,7 +153,7 @@ namespace DataTransferObjects.Reports
                     sb.Append("White;");
                 }
 
-                sb.Append("height: 20px;");
+                sb.Append("height: 24px;");
                 sb.Append("width: ");
                 sb.Append(BillableFirstHalfWidth + "%;");
 
@@ -172,16 +171,16 @@ namespace DataTransferObjects.Reports
                 {
                     sb.Append("Gray;");
                 }
-                else if (IsPersonNotAssignedToFixedProject)
+                else if (!BillingType.Equals("Fixed"))
                 {
                     sb.Append("Red;");
                 }
-                else if (!IsPersonNotAssignedToFixedProject)
+                else if (BillingType.Equals("Fixed"))
                 {
                     sb.Append("Green;");
                 }
 
-                sb.Append("height: 20px;");
+                sb.Append("height: 24px;");
                 sb.Append("width: ");
                 sb.Append(BillableSecondHalfWidth + "%;");
 
@@ -215,17 +214,17 @@ namespace DataTransferObjects.Reports
                 {
                     sb.Append("Gray;");
                 }
-                else if (IsPersonNotAssignedToFixedProject)
+                else if (!BillingType.Equals("Fixed"))
                 {
 
                     sb.Append("Green;");
                 }
-                else if (!IsPersonNotAssignedToFixedProject)
+                else if (BillingType.Equals("Fixed"))
                 {
                     sb.Append("Red;");
                 }
 
-                sb.Append("height: 20px;");
+                sb.Append("height: 24px;");
                 sb.Append("width: ");
                 sb.Append(ForecastedFirstHalfWidth + "%;");
 
@@ -248,13 +247,15 @@ namespace DataTransferObjects.Reports
                     sb.Append("White;");
                 }
 
-                sb.Append("height: 20px;");
+                sb.Append("height: 24px;");
                 sb.Append("width: ");
                 sb.Append(ForecastedSecondHalfWidth + "%;");
 
                 return sb.ToString();
             }
         }
+
+
 
 
     }
