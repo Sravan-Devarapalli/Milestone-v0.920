@@ -99,6 +99,12 @@
                 headers: {
                     6: {
                         sorter: false
+                    },
+                    1: {
+                        sorter: false
+                    },
+                    7: {
+                        sorter: false
                     }
                 },
                 sortList: [[0, 0]],
@@ -116,6 +122,12 @@
                 {
                     headers: {
                         6: {
+                            sorter: false
+                        },
+                        1: {
+                            sorter: false
+                        },
+                        7: {
                             sorter: false
                         }
                     },
