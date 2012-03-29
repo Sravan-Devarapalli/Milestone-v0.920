@@ -30,6 +30,7 @@
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Time Entry" title="Time">
         <siteMapNode url="~/Reports/TimeEntryReport_new.aspx" title="Reports"  VirtualPath="~/Reports/TimeEntryReport_new.aspx" QuickLinkTitle="Reports"  description="Reports" ShowURL="true"/>
+        <siteMapNode url="~/Reports/TimeEntriesByPerson.aspx?from=reports"  VirtualPath="~/Reports/TimeEntriesByPerson.aspx?from=reports" QuickLinkTitle="Time Entry by Person"  title="Time Entry by Person"  description="Time Entry by Person" ShowURL="true" />
       </siteMapNode>
     </siteMapNode>
     <siteMapNode url="~/TimeEntry_new.aspx?from=sub_toolbar" title="Time" description="Time Entry records">
