@@ -71,6 +71,12 @@
   <wsdl:message name="IReportService_ProjectSearchByName_OutputMessage">
     <wsdl:part name="parameters" element="tns:ProjectSearchByNameResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_GetMilestonesForProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestonesForProject" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetMilestonesForProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestonesForProjectResponse" />
+  </wsdl:message>
   <wsdl:portType name="IReportService">
     <wsdl:operation name="PersonTimeEntriesDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails" message="tns:IReportService_PersonTimeEntriesDetails_InputMessage" />
@@ -111,6 +117,10 @@
     <wsdl:operation name="ProjectSearchByName">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectSearchByName" message="tns:IReportService_ProjectSearchByName_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ProjectSearchByNameResponse" message="tns:IReportService_ProjectSearchByName_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestonesForProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/GetMilestonesForProject" message="tns:IReportService_GetMilestonesForProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/GetMilestonesForProjectResponse" message="tns:IReportService_GetMilestonesForProject_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IReportService" type="tns:IReportService">
@@ -198,6 +208,15 @@
     </wsdl:operation>
     <wsdl:operation name="ProjectSearchByName">
       <soap:operation soapAction="http://tempuri.org/IReportService/ProjectSearchByName" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestonesForProject">
+      <soap:operation soapAction="http://tempuri.org/IReportService/GetMilestonesForProject" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
