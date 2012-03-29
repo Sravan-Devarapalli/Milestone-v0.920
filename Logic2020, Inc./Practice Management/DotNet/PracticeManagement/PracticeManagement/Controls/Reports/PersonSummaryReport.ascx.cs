@@ -65,24 +65,7 @@ namespace PraticeManagement.Controls.Reports
         {
             return value.ToString(Constants.Formatting.DoubleValue);
         }
-
-        protected string GetCurrencyFormat(double value)
-        {
-            return value > 0 ? value.ToString(Constants.Formatting.CurrencyFormat) : "$0";
-        }
-
-        protected string GetBillableValue(double billableValue, bool isPersonNotAssignedToFixedProject)
-        {
-            if (!isPersonNotAssignedToFixedProject)
-            {
-                return "Fixed";
-            }
-            else
-            {
-                return billableValue > 0 ? billableValue.ToString(Constants.Formatting.CurrencyFormat) : "$0";
-            }
-        }
-
+     
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
             // mso-number-format:"0\.00"
@@ -90,10 +73,13 @@ namespace PraticeManagement.Controls.Reports
             {
 
                 int personId = HostingPage.SelectedPersonId;
-                var person = ServiceCallers.Custom.Person(p => p.GetPersonById(personId));
+                var person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(personId));
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append(person.FirstName + " " + person.LastName);
+                sb.Append("\t");
+                sb.AppendLine();
+                sb.Append(person.CurrentPay.TimescaleName);
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.Append(HostingPage.StartDate.Value.ToString("MM/dd/yyyy") + " - " + HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
@@ -115,13 +101,18 @@ namespace PraticeManagement.Controls.Reports
                     sb.Append("\t");
                     sb.Append("Project Name");
                     sb.Append("\t");
+                    sb.Append("Status");
+                    sb.Append("\t");
+                    sb.Append("Billing");
+                    sb.Append("\t");
                     sb.Append("Billable");
                     sb.Append("\t");
                     sb.Append("Non-Billable");
                     sb.Append("\t");
                     sb.Append("Total");
                     sb.Append("\t");
-                    sb.Append("Value");
+                    sb.Append("Percent of Total Hours this Period");
+                   
                     sb.Append("\t");
                     sb.AppendLine();
 
@@ -140,13 +131,17 @@ namespace PraticeManagement.Controls.Reports
                         sb.Append("\t");
                         sb.Append(timeEntriesGroupByClientAndProject.Project.Name);
                         sb.Append("\t");
+                        sb.Append(timeEntriesGroupByClientAndProject.Project.Status.Name);
+                        sb.Append("\t");
+                        sb.Append(timeEntriesGroupByClientAndProject.BillableType);
+                        sb.Append("\t");
                         sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.BillableHours));
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.NonBillableHours));
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.TotalHours));
                         sb.Append("\t");
-                        sb.Append("$" + timeEntriesGroupByClientAndProject.BillableValue);
+                        sb.Append(timeEntriesGroupByClientAndProject.ProjectTotalHoursPercent+ "%");
                         sb.Append("\t");
                         sb.AppendLine();
                     }
