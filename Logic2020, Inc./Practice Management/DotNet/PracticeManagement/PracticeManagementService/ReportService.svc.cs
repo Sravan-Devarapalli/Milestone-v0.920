@@ -45,9 +45,9 @@ namespace PracticeManagementService
         }
 
 
-        public List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber)
+        public List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber,int? mileStoneId)
         {
-            return ReportDAL.ProjectSummaryReportByResource(projectNumber);
+            return ReportDAL.ProjectSummaryReportByResource(projectNumber, mileStoneId);
         }
 
         public List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(string projectNumber, string timeTypeCategoryIds, string orderByCerteria)
@@ -67,6 +67,19 @@ namespace PracticeManagementService
             try
             {
                 return ReportDAL.ProjectSearchByName(name);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+
+        public List<Milestone> GetMilestonesForProject(string projectNumber)
+        {
+            try
+            {
+                return ReportDAL.GetMilestonesForProject(projectNumber);
             }
             catch (Exception e)
             {
