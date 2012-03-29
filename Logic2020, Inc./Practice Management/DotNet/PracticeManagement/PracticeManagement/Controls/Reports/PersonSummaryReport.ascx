@@ -15,8 +15,8 @@
                             UseSubmitBehavior="false" ToolTip="Export To Excel" />
                     </td>
                     <td>
-                        <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick" Enabled="false"
-                            UseSubmitBehavior="false" ToolTip="Export To PDF" />
+                        <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick"
+                            Enabled="false" UseSubmitBehavior="false" ToolTip="Export To PDF" />
                     </td>
                 </tr>
             </table>
@@ -27,22 +27,25 @@
     <HeaderTemplate>
         <table class="PersonSummaryReport" style="width: 100%;">
             <tr>
-                <th style="text-align: left; width: 35%;">
+                <th style="text-align: left; width: 550px;">
                     Project Name
                 </th>
-                <th>
+                <th style="width: 110px;">
+                    Status
+                </th>
+                <th style="width: 110px;">
+                    Billing
+                </th>
+                <th style="width: 100px;">
                     Billable
                 </th>
-                <th>
-                  Non-Billable
+                <th style="width: 100px;">
+                    Non-Billable
                 </th>
-                <th>
-                  Total
+                <th style="width: 100px;">
+                    Total
                 </th>
-                <th>
-                    Value
-                </th>
-                <th style="width: 25%;">
+                <th style="width: 325px;">
                     Percent of Total Hours this Period
                 </th>
             </tr>
@@ -68,6 +71,12 @@
                 </table>
             </td>
             <td>
+                <%# Eval("Project.Status.Name")%>
+            </td>
+            <td>
+                <%# Eval("BillableType")%>
+            </td>
+            <td>
                 <%# GetDoubleFormat((double)Eval("BillableHours"))%>
             </td>
             <td>
@@ -75,9 +84,6 @@
             </td>
             <td>
                 <%# GetDoubleFormat((double)Eval("TotalHours"))%>
-            </td>
-            <td>
-                <%# GetBillableValue((double)Eval("BillableValue"), (bool)Eval("IsPersonNotAssignedToFixedProject"))%>
             </td>
             <td>
                 <table class="TdLevelNoBorder" width="100%">
@@ -124,17 +130,20 @@
                     </tr>
                 </table>
             </td>
+             <td>
+                <%# Eval("Project.Status.Name")%>
+            </td>
+            <td>
+                <%# Eval("BillableType")%>
+            </td>
             <td>
                 <%# GetDoubleFormat((double)Eval("BillableHours"))%>
             </td>
             <td>
-               <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
+                <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
             </td>
             <td>
                 <%# GetDoubleFormat((double)Eval("TotalHours"))%>
-            </td>
-            <td>
-                <%# GetBillableValue((double)Eval("BillableValue"), (bool)Eval("IsPersonNotAssignedToFixedProject"))%>
             </td>
             <td>
                 <table class="TdLevelNoBorder" width="100%">
