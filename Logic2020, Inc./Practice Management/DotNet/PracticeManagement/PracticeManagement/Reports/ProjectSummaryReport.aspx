@@ -165,15 +165,15 @@
                     </td>
                 </tr>
             </table>
-            <table style="width: 100%;">
+            <table style="width: 100%;height:120px; ">
                 <tr>
                     <td style="width: 33%;">
                         &nbsp;
                     </td>
-                    <td style="width: 34%;" align="center" style="text-align: center;">
-                        <table class="PaddingTenPx">
+                    <td style="width: 34%; vertical-align:top;" align="center">
+                        <table class="PaddingTenPx" >
                             <tr>
-                                <td>
+                                <td style="font-weight:bold;">
                                     Project Number:
                                 </td>
                                 <td style="width: 105px">
