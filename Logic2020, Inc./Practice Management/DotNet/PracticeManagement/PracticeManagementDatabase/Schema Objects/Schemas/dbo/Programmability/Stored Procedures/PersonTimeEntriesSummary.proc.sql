@@ -19,59 +19,62 @@ BEGIN
 	SET @StartDate = CONVERT(DATE,@StartDate)
 	SET @EndDate = CONVERT(DATE,@EndDate)
 
-	;WITH PersonDayBillratesByProjects AS
+	;WITH PersonByProjectsBillableTypes AS
 	(
 	  SELECT M.ProjectId,
-			 C.Date,
-			 AVG(ISNULL(MPE.Amount,0)) AS AvgBillRate,
-			 MIN(CAST(M.IsHourlyAmount AS INT)) IsPersonNotAssignedToFixedProject --if return 0 then fixed Amount else not fixed Amount
+			MIN(CAST(M.IsHourlyAmount AS INT)) MinimumValue,
+			MAX(CAST(M.IsHourlyAmount AS INT)) MaximumValue
 	  FROM  dbo.MilestonePersonEntry AS MPE 
 	  INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
 	  INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
-	  INNER JOIN dbo.Calendar C ON C.Date BETWEEN MPE.StartDate AND MPE.EndDate
 	  WHERE MP.PersonId = @PersonId 
-			AND C.Date BETWEEN @StartDate AND @EndDate
-	  GROUP BY M.ProjectId,
-			   C.Date
+			AND M.StartDate BETWEEN @StartDate AND @EndDate 
+			AND M.ProjectedDeliveryDate  BETWEEN @StartDate AND @EndDate 
+	  GROUP BY M.ProjectId
 	)
-	SELECT  PRO.ProjectId,
+	SELECT  CC.TimeEntrySectionId,
+			C.Name AS  ClientName,
+			C.Code AS ClientCode,
+			BU.Name AS GroupName,
+			BU.Code AS GroupCode,
+			PRO.ProjectId,
 			PRO.Name AS ProjectName, 
+			PRO.ProjectNumber,
+			(CASE WHEN (CC.TimeEntrySectionId <> 1 ) THEN '' ELSE PS.Name  END ) AS PersonStatusName,
+			(CASE WHEN (PDBR.MinimumValue IS NULL OR CC.TimeEntrySectionId <> 1 ) THEN '' 
+			WHEN (PDBR.MinimumValue = PDBR.MaximumValue AND PDBR.MinimumValue = 0) THEN 'Fixed'
+			WHEN (PDBR.MinimumValue = PDBR.MaximumValue AND PDBR.MinimumValue = 1) THEN 'Hourly'
+			ELSE 'Both' END) AS BillingType,
 			ROUND(SUM(CASE WHEN TEH.IsChargeable = 1 THEN TEH.ActualHours 
 					 ELSE 0 
 				END),2) AS BillableHours,
 			ROUND(SUM(CASE WHEN TEH.IsChargeable = 0 THEN TEH.ActualHours 
 					 ELSE 0 
-				END),2) AS NonBillableHours,
-			ROUND(SUM(ISNULL(PDBR.AvgBillRate,0) * ( CASE WHEN TEH.IsChargeable = 1 THEN TEH.ActualHours 
-													ELSE 0	
-													END
-											  )
-				),2) AS BillableValue,
-			MIN(ISNULL(PDBR.IsPersonNotAssignedToFixedProject,2))  AS IsPersonNotAssignedToFixedProject, --if return 0 then fixed Amount else if return 1 not fixed Amount else if return 2 not fixed
-			PRO.ProjectNumber,
-			C.Name AS  ClientName,
-			C.Code AS ClientCode,
-			BU.Name AS GroupName,
-			CC.TimeEntrySectionId,
-			BU.Code AS GroupCode
+				END),2) AS NonBillableHours
 	FROM dbo.TimeEntry AS TE 
 	INNER JOIN dbo.TimeEntryHours AS TEH  ON TEH.TimeEntryId = TE.TimeEntryId 
 	INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
 	INNER JOIN dbo.ProjectGroup BU ON BU.GroupId = CC.ProjectGroupId
 	INNER JOIN dbo.Client C ON CC.ClientId = C.ClientId
 	INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
-	LEFT JOIN PersonDayBillratesByProjects PDBR ON PDBR.ProjectId = CC.ProjectId 
-							AND TE.ChargeCodeDate = PDBR.Date
+	INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = PRO.ProjectStatusId
+	LEFT JOIN PersonByProjectsBillableTypes PDBR ON PDBR.ProjectId = CC.ProjectId 
 	WHERE TE.PersonId = @PersonId 
 		AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate
-	GROUP BY PRO.ProjectId,
-			 PRO.Name,
-			 C.Name,
-			 PRO.ProjectNumber,
-			 BU.Name,
-			 CC.TimeEntrySectionId,
-			 C.Code,
-			 BU.Code
+	GROUP BY CC.TimeEntrySectionId,
+			C.Name,
+			C.Code,
+			BU.Name,
+			BU.Code,
+			PRO.ProjectId,
+			PRO.Name,
+			PRO.ProjectNumber, 
+			(CASE WHEN (CC.TimeEntrySectionId <> 1 ) THEN '' ELSE PS.Name  END ),
+			(CASE WHEN (PDBR.MinimumValue IS NULL OR CC.TimeEntrySectionId <> 1 ) THEN '' 
+			WHEN (PDBR.MinimumValue = PDBR.MaximumValue AND PDBR.MinimumValue = 0) THEN 'Fixed'
+			WHEN (PDBR.MinimumValue = PDBR.MaximumValue AND PDBR.MinimumValue = 1) THEN 'Hourly'
+			ELSE 'Both' END)
+			
 	ORDER BY CC.TimeEntrySectionId,PRO.ProjectNumber
 END	
 	
