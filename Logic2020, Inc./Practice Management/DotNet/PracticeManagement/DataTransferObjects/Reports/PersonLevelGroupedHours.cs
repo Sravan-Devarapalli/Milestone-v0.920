@@ -26,6 +26,26 @@ namespace DataTransferObjects.Reports
 
         }
 
+        public double NonBillableHours
+        {
+            get
+            {
+                return ProjectNonBillableHours + BusinessDevelopmentHours + InternalHours + AdminstrativeHours;
+            }
+        }
+
+        public bool IsPersonTimeEntered
+        {
+            get
+            {
+                if (BillableHours == 0 && NonBillableHours == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
         [DataMember]
         public double BillableValue
         {
@@ -34,7 +54,31 @@ namespace DataTransferObjects.Reports
         }
 
         [DataMember]
-        public double NonBillableHours
+        public double ProjectNonBillableHours
+        {
+            get;
+            set;
+
+        }
+
+        [DataMember]
+        public double BusinessDevelopmentHours
+        {
+            get;
+            set;
+
+        }
+
+        [DataMember]
+        public double InternalHours
+        {
+            get;
+            set;
+
+        }
+
+        [DataMember]
+        public double AdminstrativeHours
         {
             get;
             set;
