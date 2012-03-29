@@ -24,19 +24,19 @@ namespace PracticeManagementService
             return ReportDAL.PersonTimeEntriesSummary(personId, startDate, endDate);
         }
 
-        public Quadruple<double, double, double, double> GetPersonTimeEntriesTotalsByPeriod(int personId, DateTime startDate, DateTime endDate)
+        public Triple<double, double, double> GetPersonTimeEntriesTotalsByPeriod(int personId, DateTime startDate, DateTime endDate)
         {
             return ReportDAL.GetPersonTimeEntriesTotalsByPeriod(personId, startDate, endDate);
         }
 
-        public List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate, string seniorityIds)
+        public List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate)
         {
-            return ReportDAL.TimePeriodSummaryReportByResource(startDate, endDate, seniorityIds);
+            return ReportDAL.TimePeriodSummaryReportByResource(startDate, endDate);
         }
 
-        public List<ProjectLevelGroupedHours> TimePeriodSummaryReportByProject(DateTime startDate, DateTime endDate, string clientIds, string personStatusIds)
+        public List<ProjectLevelGroupedHours> TimePeriodSummaryReportByProject(DateTime startDate, DateTime endDate)
         {
-            return ReportDAL.TimePeriodSummaryReportByProject(startDate, endDate, clientIds, personStatusIds);
+            return ReportDAL.TimePeriodSummaryReportByProject(startDate, endDate);
         }
 
         public List<WorkTypeLevelGroupedHours> TimePeriodSummaryReportByWorkType(DateTime startDate, DateTime endDate, string timeTypeCategoryIds, string orderByCerteria)
