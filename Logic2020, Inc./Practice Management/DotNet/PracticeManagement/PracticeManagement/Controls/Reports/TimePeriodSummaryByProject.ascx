@@ -1,11 +1,12 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TimePeriodSummaryByProject.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.TimePeriodSummaryByProject" %>
-<table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom:5px !important;" id="tbHeader" runat="server">
+<table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;"
+    id="tbHeader" runat="server">
     <tr>
         <td style="font-size: 16px; font-weight: bold;">
             <table>
                 <tr>
-                    <td style="vertical-align: top; padding-bottom:10px;">
+                    <td style="vertical-align: top; padding-bottom: 10px;">
                         <asp:Literal ID="ltProjectCount" runat="server"></asp:Literal>
                     </td>
                 </tr>
@@ -16,11 +17,11 @@
                 </tr>
             </table>
         </td>
-        <td style="text-align: right; width: 450px; padding-bottom:10px;">
+        <td style="text-align: right; width: 470px; padding-bottom: 10px;">
             <table style="table-layout: fixed; width: 100%;">
                 <tr>
-                    <td style="width: 7%;">
-                        <table>
+                    <td style="width: 27%;">
+                        <table width="100%">
                             <tr>
                                 <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
                                     Total Hours
@@ -33,8 +34,8 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 7%;">
-                        <table>
+                    <td style="width: 27%;">
+                        <table width="100%">
                             <tr>
                                 <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
                                     Avg Hours
@@ -47,8 +48,8 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 7%; vertical-align: bottom;">
-                        <table>
+                    <td style="width: 27%; vertical-align: bottom;">
+                        <table width="100%">
                             <tr>
                                 <td style="text-align: center;">
                                     BILLABLE
@@ -71,7 +72,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="vertical-align: bottom; width: 2%; padding: 0px !important;">
+                    <td style="vertical-align: bottom; width: 8%; padding: 0px !important;">
                         <table width="100%">
                             <tr>
                                 <td style="padding: 0px !important;">
@@ -92,7 +93,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="vertical-align: bottom; width: 2%; padding: 0px;">
+                    <td style="vertical-align: bottom; width: 8%; padding: 0px;">
                         <table width="100%">
                             <tr>
                                 <td style="padding: 0px !important;">
@@ -149,25 +150,25 @@
             <table id="tblProjectSummaryByProject" class="tablesorter PersonSummaryReport WholeWidth">
                 <thead>
                     <tr>
-                        <th class="t-left padLeft5" style="width: 23%;">
+                        <th class="t-left padLeft5" style="width: 500px;height:30px;">
                             Project
                         </th>
-                        <th style="width: 10%;">
+                        <th style="width: 110px;height:30px;">
                             Status
                         </th>
-                        <th style="width: 10%;">
+                        <th style="width: 110px;height:30px;">
+                            Billing
+                        </th>
+                        <th style="width: 100px;height:30px;">
                             Billable
                         </th>
-                        <th style="width: 12%;">
+                        <th style="width: 100px;height:30px;">
                             Non-Billable
                         </th>
-                        <th style="width: 10%;">
+                        <th style="width: 100px;height:30px;">
                             Total
                         </th>
-                        <th style="width: 10%;">
-                            Value
-                        </th>
-                        <th style="width: 26%;">
+                        <th style="width: 325px;height:30px;">
                             Project Variance (in Hours)
                         </th>
                     </tr>
@@ -198,6 +199,9 @@
                     <%# Eval("Project.Status.Name")%>
                 </td>
                 <td>
+                    <%# Eval("BillingType")%>
+                </td>
+                <td>
                     <%# GetDoubleFormat((double)Eval("BillableHours"))%>
                 </td>
                 <td>
@@ -206,13 +210,12 @@
                 <td>
                     <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                 </td>
-                <td sorttable_customkey='<%# GetBillableSortValue((double)Eval("BillableValue"), (bool)Eval("IsFixedProject"))%>'>
-                    <%# GetBillableValue((double)Eval("BillableValue"), (bool)Eval("IsFixedProject"))%>
-                </td>
                 <td sorttable_customkey='<%# GetVarianceSortValue((string)Eval("Variance"))%>'>
                     <table class="WholeWidth  TdLevelNoBorder">
                         <tr>
-                            <td style="width: 75%;">
+                            <td style="width: 5%;">
+                            </td>
+                            <td style="width: 70%; text-align: right;">
                                 <table class="WholeWidth">
                                     <tr style="border: 1px solid black;">
                                         <td style="width: 50%; border-right: 1px solid black;">
@@ -238,7 +241,7 @@
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width: 25%;">
+                            <td style="width: 20%;">
                                 <table class="WholeWidth">
                                     <tr>
                                         <td style="text-align: right; padding-right: 3px;">
@@ -246,6 +249,8 @@
                                         </td>
                                     </tr>
                                 </table>
+                            </td>
+                             <td style="width: 5%;">
                             </td>
                         </tr>
                     </table>
