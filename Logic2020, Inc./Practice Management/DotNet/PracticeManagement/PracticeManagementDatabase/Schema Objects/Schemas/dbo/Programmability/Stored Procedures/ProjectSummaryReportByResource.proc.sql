@@ -2,8 +2,8 @@
 -- Author:		ThulasiRam.P
 -- Create date: 03-15-2012
 -- Description:  Time Entries grouped by workType and Resource for a Project.
--- Updated by : Thulasiram.P
--- Update Date: 03-28-2012
+-- Updated by : Sainath.CH
+-- Update Date: 03-29-2012
 -- =========================================================================
 CREATE PROCEDURE [dbo].[ProjectSummaryReportByResource]
 (
@@ -76,7 +76,7 @@ BEGIN
 	INNER JOIN dbo.TimeEntryHours AS TEH ON TEH.TimeEntryId = TE.TimeEntryId 
 	INNER JOIN dbo.ChargeCode AS CC ON CC.Id = TE.ChargeCodeId AND CC.ProjectId = @ProjectId
 	FULL  JOIN PersonMaxRoleValues AS PMRV ON PMRV.PersonId = TE.PersonId 
-	INNER JOIN dbo.Person AS P ON (P.PersonId = TE.PersonId OR  PMRV.PersonId = P.PersonId)  
+	INNER JOIN dbo.Person AS P ON (P.PersonId = TE.PersonId OR  PMRV.PersonId = P.PersonId) AND p.IsStrawman = 0
 	LEFT  JOIN PersonForeCastedHoursUntilToday AS PFH ON PFH.PersonId = P.PersonId  AND PFH.PersonId= PMRV.PersonId 
 	LEFT  JOIN dbo.PersonRole AS PR ON PR.RoleValue = PMRV.MaxRoleValue
 	LEFT  JOIN PersonBillrates AS PersonBillRate  ON PersonBillRate.PersonId = P.PersonId AND PersonBillRate.PersonId = PMRV.PersonId AND PersonBillRate.PersonId =PFH.PersonId 
