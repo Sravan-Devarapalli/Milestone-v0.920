@@ -14,8 +14,14 @@ BEGIN
 	SELECT P.ProjectId,
 		   P.StartDate,
 		   P.EndDate,
-		   P.Name	      
+		   P.Name,
+		   C.Name AS ClientName,
+		   PG.Name AS GroupName,
+		   PS.Name AS ProjectStatusName	      
 	  FROM dbo.Project AS P
-	 WHERE P.ProjectNumber = @ProjectNumber     
+	  INNER JOIN dbo.Client AS C ON C.ClientId = P.ClientId
+	  INNER JOIN dbo.ProjectGroup AS PG ON PG.GroupId = P.GroupId
+	  INNER JOIN dbo.ProjectStatus AS PS ON PS.ProjectStatusId = P.ProjectStatusId
+	  WHERE P.ProjectNumber = @ProjectNumber     
 
 END
