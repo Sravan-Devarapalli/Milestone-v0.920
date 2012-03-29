@@ -2,8 +2,8 @@
 -- Author:		ThulasiRam.P
 -- Create date: 03-05-2012
 -- Description: Person TimeEntries Details By Period.
--- Updated by : Thulasiram.P
--- Modified Date : 03-22-2012
+-- Updated by : Sainath.CH
+-- Update Date: 03-29-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonTimeEntriesDetails]
 (
@@ -66,8 +66,9 @@ BEGIN
 				BU.Name,
 				BU.Code,
 				C.Code,
-				TT.Code
-	  ORDER BY  Pro.Name,TE.ChargeCodeDate,TT.Name
+				TT.Code,
+				CC.TimeEntrySectionId
+	  ORDER BY  CC.TimeEntrySectionId,PRO.ProjectNumber,TE.ChargeCodeDate,TT.Name
 END	
 	
 
