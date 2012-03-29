@@ -358,7 +358,7 @@
             <div id="divWholePage" runat="server">
                 <asp:MultiView ID="mvProjectSummaryReport" runat="server" ActiveViewIndex="0">
                     <asp:View ID="vwResourceReport" runat="server">
-                        <asp:Panel ID="pnlResourceReport" runat="server" CssClass="tab-pane WholeWidth">
+                        <asp:Panel style="padding-top:10px;" ID="pnlResourceReport" runat="server" CssClass="WholeWidth">
                             <uc:ByResource ID="ucByResource" runat="server"></uc:ByResource>
                         </asp:Panel>
                     </asp:View>
