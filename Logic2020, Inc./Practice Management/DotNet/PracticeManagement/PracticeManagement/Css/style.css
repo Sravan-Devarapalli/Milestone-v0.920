@@ -2559,13 +2559,14 @@ TABLE.PaddingTenPx td
 TABLE.PersonSummaryReport TD
 {
   padding: 2px 2px 2px 2px;
-  border:1px solid black;
+  border-bottom:1px solid black;
   text-align:center;
 }
 TABLE.PersonSummaryReport TH
 {
  padding: 2px 2px 2px 2px;
- border:1px solid black;
+ border-bottom:1px solid black;
+ border-top:1px solid black;
  background-color:White;
  font-weight:bold;
  font-size:14px;
