@@ -2,8 +2,8 @@
 -- Author:		ThulasiRam.P
 -- Create date: 03-05-2012
 -- Description: Person TimeEntries Summary By Period.
--- Updated By : ThulasiRam.P
--- Modified Date : 03-22-2012
+-- Updated by : Sainath.CH
+-- Update Date: 03-29-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonTimeEntriesSummary]
 (
@@ -23,13 +23,14 @@ BEGIN
 	(
 	  SELECT M.ProjectId,
 			 C.Date,
-			 AVG(ISNULL(MPE.Amount,0)) AS AvgBillRate
+			 AVG(ISNULL(MPE.Amount,0)) AS AvgBillRate,
+			 MIN(CAST(M.IsHourlyAmount AS INT)) IsPersonNotAssignedToFixedProject --if return 0 then fixed Amount else not fixed Amount
 	  FROM  dbo.MilestonePersonEntry AS MPE 
 	  INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
 	  INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
 	  INNER JOIN dbo.Calendar C ON C.Date BETWEEN MPE.StartDate AND MPE.EndDate
 	  WHERE MP.PersonId = @PersonId 
-			AND C.Date BETWEEN @StartDate AND @EndDate 
+			AND C.Date BETWEEN @StartDate AND @EndDate
 	  GROUP BY M.ProjectId,
 			   C.Date
 	)
@@ -46,6 +47,7 @@ BEGIN
 													END
 											  )
 				),2) AS BillableValue,
+			MIN(ISNULL(PDBR.IsPersonNotAssignedToFixedProject,2))  AS IsPersonNotAssignedToFixedProject, --if return 0 then fixed Amount else if return 1 not fixed Amount else if return 2 not fixed
 			PRO.ProjectNumber,
 			C.Name AS  ClientName,
 			C.Code AS ClientCode,
