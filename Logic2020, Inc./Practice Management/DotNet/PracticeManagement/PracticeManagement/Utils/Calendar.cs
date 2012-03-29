@@ -79,7 +79,16 @@ namespace PraticeManagement.Utils
         {
             return now.AddMonths(-1).AddDays(1 - now.AddMonths(-1).Day);
         }
-
+        //return 16th of the last month
+        public static DateTime LastMonthSecondHalfStartDate(DateTime now)
+        {
+            return now.AddMonths(-1).AddDays(16 - now.AddMonths(-1).Day);
+        }
+        //returns 15th of the current month
+        public static DateTime MonthFirstHalfEndDate(DateTime now)
+        {
+            return now.AddDays(15 - now.Day);
+        }
         public static DateTime LastMonthEndDate(DateTime now)
         {
             return now.AddDays(-now.Day);
