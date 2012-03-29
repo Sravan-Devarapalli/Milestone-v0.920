@@ -44,30 +44,6 @@ namespace PraticeManagement.Controls.Reports
             return value > 0 ? value.ToString(Constants.Formatting.CurrencyFormat) : "$0";
         }
 
-        protected string GetBillableValue(double billableValue, bool isFixedProject)
-        {
-            if (isFixedProject)
-            {
-                return "Fixed";
-            }
-            else
-            {
-                return billableValue > 0 ? billableValue.ToString(Constants.Formatting.CurrencyFormat) : "$0";
-            }
-        }
-
-        protected string GetBillableSortValue(double billableValue, bool isFixedProject)
-        {
-            if (isFixedProject)
-            {
-                return "-1";
-            }
-            else
-            {
-                return billableValue > 0 ? billableValue.ToString() : "0";
-            }
-        }
-
         protected string GetVarianceSortValue(string variance)
         {
             if (variance.Equals("N/A"))
@@ -109,13 +85,13 @@ namespace PraticeManagement.Controls.Reports
                     sb.Append("\t");
                     sb.Append("Status");
                     sb.Append("\t");
+                    sb.Append("Billing");
+                    sb.Append("\t");
                     sb.Append("Billable");
                     sb.Append("\t");
                     sb.Append("Non-Billable");
                     sb.Append("\t");
                     sb.Append("Total");
-                    sb.Append("\t");
-                    sb.Append("Value");
                     sb.Append("\t");
                     sb.Append("Project Variance (in Hours)");
                     sb.Append("\t");
@@ -138,6 +114,8 @@ namespace PraticeManagement.Controls.Reports
                         sb.Append("\t");
                         sb.Append(projectLevelGroupedHours.Project.Status.Name);
                         sb.Append("\t");
+                        sb.Append(projectLevelGroupedHours.BillingType);
+                        sb.Append("\t");
                         sb.Append(GetDoubleFormat(projectLevelGroupedHours.BillableHours));
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(projectLevelGroupedHours.NonBillableHours));
@@ -154,8 +132,8 @@ namespace PraticeManagement.Controls.Reports
                 {
                     sb.Append("There are no Time Entries towards this range selected.");
                 }
-                //“TimePeriod_ByProject_Excel.xls”.  
-                var filename = "TimePeriod_ByProject_Excel.xls";
+                //“TimePeriod_ByProject_DateRange.xls”.  
+                var filename = string.Format("TimePeriod_ByProject_{0}-{1}.xls", HostingPage.StartDate.Value.ToString("MM/dd/yyyy") , HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
                 GridViewExportUtil.Export(filename, sb);
             }
         }
@@ -232,3 +210,4 @@ namespace PraticeManagement.Controls.Reports
 
     }
 }
+
