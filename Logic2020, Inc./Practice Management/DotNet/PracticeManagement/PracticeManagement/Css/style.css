@@ -2556,11 +2556,19 @@ TABLE.PaddingTenPx td
    /* border:1px solid black;*/
 }
 
+TABLE.PersonSummaryReport
+{
+  border-left:1px solid black;
+  border-right:1px solid black;
+}
+
 TABLE.PersonSummaryReport TD
 {
   padding: 2px 2px 2px 2px;
   border-bottom:1px solid black;
   text-align:center;
+  height:24px;
+  vertical-align:middle;
 }
 TABLE.PersonSummaryReport TH
 {
@@ -2572,6 +2580,8 @@ TABLE.PersonSummaryReport TH
  font-size:14px;
  text-align:center;
  width:8%;
+ height:24px;
+ vertical-align:middle;
 }
 
 TABLE.TdLevelNoBorder TD
