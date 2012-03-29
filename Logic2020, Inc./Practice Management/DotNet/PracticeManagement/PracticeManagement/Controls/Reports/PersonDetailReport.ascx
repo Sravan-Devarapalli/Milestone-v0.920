@@ -2,7 +2,7 @@
     Inherits="PraticeManagement.Controls.Reports.PersonDetailReport" %>
 <%@ Import Namespace="DataTransferObjects.Reports" %>
 <asp:HiddenField ID="hdncpeExtendersIds" runat="server" Value="" />
-<asp:HiddenField ID="hdnCollapsed" runat="server" Value="false" />
+<asp:HiddenField ID="hdnCollapsed" runat="server" Value="true" />
 <table class="WholeWidthWithHeight">
     <tr>
         <td colspan="4" style="width: 90%;">
@@ -35,13 +35,6 @@
         <table class="WholeWidthWithHeight">
             <tr style="text-align: left;">
                 <td colspan="4" class="ProjectAccountName" style="width: 95%">
-                    <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeProject" runat="Server" CollapsedText="Expand Project Details"
-                        ExpandedText="Collapse Project Details" EnableViewState="false" BehaviorID="cpeProject"
-                        TargetControlID="pnlProjectDetails" ImageControlID="imgProject" CollapsedImage="~/Images/expand.jpg"
-                        ExpandedImage="~/Images/collapse.jpg" CollapseControlID="imgProject" ExpandControlID="imgProject"
-                        TextLabelID="lbProject" />
-                    <asp:Image ID="imgProject" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Project Details" />
-                    <asp:Label ID="lbProject" Style="display: none;" runat="server"></asp:Label>
                     <%# Eval("Client.Name") %>
                     >
                     <%# Eval("Project.ProjectNumber")%>
@@ -62,7 +55,7 @@
                         <tr style="text-align: left; background-color: #D4D0C9;">
                             <td style="width: 80%; padding-left: 20px;">
                                 <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDate" runat="Server" CollapsedText="Expand Date Details"
-                                    ExpandedText="Collapse Date Details" EnableViewState="false" BehaviorID="cpeDate"
+                                    ExpandedText="Collapse Date Details" EnableViewState="true" BehaviorID="cpeDate"
                                     Collapsed="true" TargetControlID="pnlDateDetails" ImageControlID="imgDate" CollapsedImage="~/Images/expand.jpg"
                                     ExpandedImage="~/Images/collapse.jpg" CollapseControlID="imgDate" ExpandControlID="imgDate"
                                     TextLabelID="lbDate" />
