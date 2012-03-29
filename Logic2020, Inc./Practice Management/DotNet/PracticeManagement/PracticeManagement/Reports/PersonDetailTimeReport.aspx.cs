@@ -198,7 +198,10 @@ namespace PraticeManagement.Reporting
         protected void Page_PreRender(object sender, EventArgs e)
         {
 
+            int personId = int.Parse(ddlPerson.SelectedItem.Value);
+            Person person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(personId));
             lblPersonname.ToolTip = lblPersonname.Text = ddlPerson.SelectedItem.Text;
+            lblPersonStatus.ToolTip = lblPersonStatus.Text = person.CurrentPay.TimescaleName;
             lbRange.ToolTip = lbRange.Text = Range;
             var now = Utils.Generic.GetNowWithTimeZone();
             diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
