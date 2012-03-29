@@ -71,6 +71,11 @@ namespace PraticeManagement.Controls.Reports
             var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber));
 
             StringBuilder sb = new StringBuilder();
+            sb.Append(project.Client.Name);
+            sb.Append("\t");
+            sb.Append(project.Group.Name);
+            sb.Append("\t");
+            sb.AppendLine();
             //P081003 - [ProjectName]
             sb.Append(string.Format("{0} - {1}", project.ProjectNumber, project.Name));
             sb.Append("\t");
@@ -90,8 +95,6 @@ namespace PraticeManagement.Controls.Reports
             sb.Append("Non-Billable");
             sb.Append("\t");
             sb.Append("Total");
-            sb.Append("\t");
-            sb.Append("Value");
             sb.Append("\t");
             sb.Append("Person Variance (in Hours)");
             sb.Append("\t");
