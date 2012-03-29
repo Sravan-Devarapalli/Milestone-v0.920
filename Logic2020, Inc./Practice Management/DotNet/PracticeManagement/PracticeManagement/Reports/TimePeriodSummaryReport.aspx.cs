@@ -249,6 +249,14 @@ namespace PraticeManagement.Reporting
 
         protected void ddlView_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (ddlView.SelectedValue == "0")
+            {
+                chkIncludePersons.Enabled = true;
+            }
+            else if (ddlView.SelectedValue == "1")
+            {
+                chkIncludePersons.Enabled = false;
+            }
             SelectView();
         }
 
@@ -278,13 +286,13 @@ namespace PraticeManagement.Reporting
 
         private void PopulateByResourceData()
         {
-            var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(StartDate.Value, EndDate.Value, null));
+            var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(StartDate.Value, EndDate.Value));
             tpByResource.DataBindResource(data);
         }
 
         private void PopulateByProjectData()
         {
-            var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(StartDate.Value, EndDate.Value, null, null));
+            var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(StartDate.Value, EndDate.Value));
             tpByProject.DataBindProject(data);
         }
 
